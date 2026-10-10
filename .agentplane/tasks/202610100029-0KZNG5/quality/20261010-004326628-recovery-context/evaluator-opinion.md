@@ -1,0 +1,32 @@
+# EVALUATOR opinion: pass
+
+Reviewed committed66b35611daf3ebb4be831e7bbe53f078d87d3cb5: original whole-block emptying and next-category bodies preserve actual shared field/callback/iterator responsibilities and focused acceptance evidence.
+
+## Findings
+- Compared original main_def.inl2567-2620 and4514-4526 with committed body: overwrite false resize0 before delete helper; predicates after deletion; both/previous/next/neither branches preserve size arithmetic, exact metadata erases and actual iterator parent/index. Existing borrowed-store original-member convention retained; unused TS7 wrapper removed without public visibility, dummy call or suppression. Existing main.ts unchanged.
+- Read-only independent audit of committed fixture validates15076whole sequences/136144complete states, all13432prior sequences/final logs unchanged, actual binary byte replay,13headers/2archives/driverhashes. Actual native bridges invoke unchanged private originals;2544whole-empty calls include1272eachoverwrite and allfour neighbor choices;2028next-category calls. Full values/otherowners/logicalsize/capacity/return/events and forwarding callback order are audited.
+- Actual raw Istanbul s/f/b counters positive in17Calcsourcefiles and2affectedsharedowners;100allfour metrics. Calc104/23,affectedshared21/7,14requiredstaticgatespass,3upstream-absent portablegroupspass,exactsymlinks restored. Initial TS6133/docs failures preserved and bounded corrections revalidated; criteria/heap/gates unchanged.
+- New capability implementedtrue with whole contract/behavior/default/verifiedfalse and actual source mapping; public set_empty/custom/managed/throwing/invalid/overflow/fullQA/document/browser gaps retained. Source-shaped files978unchanged/374/688/934below1000; noWriter-only edits, newupstreamfix or fullsuiteclaim at cycle2task8/10.
+
+## Evidence
+- .agentplane/tasks/202610100029-0KZNG5/README.md
+- git:66b35611daf3ebb4be831e7bbe53f078d87d3cb5
+- output/playwright/task28-verification.md
+- output/playwright/task28-audit.json
+- output/playwright/task28-audit-final.log
+- output/playwright/task28-callback-audit.json
+- output/playwright/task28-gate-results.initial.json
+- output/playwright/task28-gate-results.json
+- output/playwright/task28-portable-results.json
+- output/playwright/task28-shared-final.log
+- Read-only committed-fixture review: all15076nativecases/136144records/full13432prefix,actualbyte replay,positive17+2rawcoverage,14gates/3portable/exactlinks/wholeflagsfalse
+- ap doctor0errors/2inheritedwarnings; policy routing OK; git diff HEAD --exit-code clean
+
+## Missing Tests
+- Full original contextual QA/public set_empty and wholecontainer/default/document/browser are not certified; fullsuite due after task10 under user cadence.
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Finite valid unmanaged/no_trace/default execution only; custom/managed/throwing/ABI/instrumentation/reentrancy/invalidnative inputs/overflow remain outside parity scope. Borrowed-field syntax is existing source-shaped adaptation, not a public original private API.
