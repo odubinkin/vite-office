@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610101401-QJ0FFB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T15:03:17.357Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-SHA review passes native right item/context and history copy scope; broad native graph/UI parity remains incomplete.",
+  "evaluated_sha": "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f",
+  "blueprint_digest": "520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3",
+  "findings": [
+    "Exact d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f owns native typed right and independent history Clone values; direct caller regression retained. Final nine full maps actual100all-four,14117accepted50fresh32Chromium,nine metadata;18histories preserved and declaration owner moved honestly. No raw source/helper/maps in artifacts, no passing type/helper/metadata replay, no IO/recovery deviation changes."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610101401-QJ0FFB/README.md",
+    ".agentplane/tasks/202610101401-QJ0FFB/evidence/verification.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Rich native right graph transport/font-context UI and complete native history/hash/presentation/general UNO/VCL remain unverified; review is explicitly not independent."
+  ]
+}

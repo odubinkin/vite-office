@@ -4,7 +4,7 @@ title: "Restore native typed right paragraph margin item"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,37 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-10T15:04:29.142Z"
+  updated_by: "CODER"
+  note: "Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T15:03:17.357Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact-SHA review passes native right item/context and history copy scope; broad native graph/UI parity remains incomplete."
+  evaluated_sha: "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f"
+  blueprint_digest: "520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3"
+  evidence_refs:
+    - ".agentplane/tasks/202610101401-QJ0FFB/README.md"
+    - ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610101401-QJ0FFB/evidence/verification.json"
+  findings:
+    - "Exact d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f owns native typed right and independent history Clone values; direct caller regression retained. Final nine full maps actual100all-four,14117accepted50fresh32Chromium,nine metadata;18histories preserved and declaration owner moved honestly. No raw source/helper/maps in artifacts, no passing type/helper/metadata replay, no IO/recovery deviation changes."
+commit:
+  hash: "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f"
+  message: "🧩 QJ0FFB writer: restore native right margin ownership"
 comments:
   -
     author: "CODER"
     body: "Start: original typed right paragraph native contracts;8prod7oldfiles2fresh16canonical, preserve existing scalar wire and explicit unsupported rich rejection. Related/new100 absent bothrefs restoredmetadata exactSHA quality, broadgoal active2/10 no full."
+  -
+    author: "CODER"
+    body: "Start: associate verified native right ownership and independent paragraph history with exact semantic commit."
 events:
   -
     type: "status"
@@ -35,8 +56,27 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: original typed right paragraph native contracts;8prod7oldfiles2fresh16canonical, preserve existing scalar wire and explicit unsupported rich rejection. Related/new100 absent bothrefs restoredmetadata exactSHA quality, broadgoal active2/10 no full."
+  -
+    type: "status"
+    at: "2026-10-10T15:03:15.560Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: associate verified native right ownership and independent paragraph history with exact semantic commit."
+  -
+    type: "verify"
+    at: "2026-10-10T15:03:16.037Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final14117/14117 cases501files50fresh, nine current whole modules actual Istanbul100all-four1696/1844/524/1422,32Chromium,current TS7/static/build and nine restored metadata audits pass. Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f; native history owns Clone values, no caller workaround, all18canonical histories and exact legacy migrations preserved."
+  -
+    type: "verify"
+    at: "2026-10-10T15:04:29.142Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full."
 doc_version: 3
-doc_updated_at: "2026-10-10T15:00:44.272Z"
+doc_updated_at: "2026-10-10T15:04:29.195Z"
 doc_updated_by: "CODER"
 description: "Atomic2/10 after N337G1; replace numeric right paragraph item with original lrspitem.hxx measure/proportion/default/value/copy/getter/setter/resolution/scaling/represented UNO5/7/14/0 contracts. Native pool/paragraph/style/ODF/shell ingress authors explicit twips; frmitems retains export alias. Existing legacy scalar persistence stays browser-owned and admits only its old integer-TWIP/default-proportion domain, rejects newly unrepresented state instead of loss; full native right/LR graph transport remains incomplete. Eight production modules, seven exact old-test migrations, two fresh native item/history files, sixteen canonical append records, parent/task facts; suspected-source doc if a new questionable original condition is found. Related/new entire changed-module100 upstream absent including both ignored references, static/browser, restored metadata/source hashes, exact-SHA non-independent quality clean close. No network/delegation/full run/IO deviations."
 sections:
@@ -60,7 +100,73 @@ sections:
     4. Static/TS7/build/JSDoc/dependency/file-size/related Chromium pass absent bothrefs, restored in finally. Separate restored9metadata/source audits pass; suspicious source conditions if found recorded in Writer document with source/example/evidence/uncertainty/preservation and original behavior retained. Bounded English facts/hashes only AgentPlane; helpers/raw/maps ignored node_modules cache. ExactSHA explicitly same-agent non-independent quality, concrete result and clean writer branch. Broad goal active incomplete.
     5. Four browser fixture constructor inputs retain all authored values/cases/sibling/history text; all other original browser files byte-identical. Query observer type-only repairs have compiled runtime AST equivalence; no passing unit replay.
     6. Pass the original mutable typed right item directly; mutate the still unpooled authoring argument after acceptance and verify stored item plus three Redo cycles keep the independent original value/unit/proportion. Original history capture uses native Clone; do not hide caller/history aliasing with a clone in the test call. Original broader native history architecture remains unverified.
-  Verification: "Pass: final current-source native history profile14117/14117 in501files50fresh. Nine whole changed modules actual Istanbul100 lines/statements/functions/branches1696/1844/524/1422; complete current maps/nonnegative and current source hashes. Current TS7/static/build/dependencies/JSDoc/file-size and32Chromium pass absent both ignored references, restored in finally. Nine metadata and five pinned source hashes pass. Eighteen canonical histories retained, one current declaration owner migration, seven exact unit and three exact browser fixture migrations;671other old unit files and other browser files unchanged. New native mutable-caller history defect fixed in production, not hidden through caller Clone. No passing replay for type/helper/metadata-only repairs; genuine source-owner/history changes revalidated. WRITER-002 documented and preserved, full rich transport/general native parity remains unverified. Bounded evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow. Goal active incomplete;2/10, latest conditional pause after accepted full persists."
+  Verification: |-
+    Pass: final current-source native history profile14117/14117 in501files50fresh. Nine whole changed modules actual Istanbul100 lines/statements/functions/branches1696/1844/524/1422; complete current maps/nonnegative and current source hashes. Current TS7/static/build/dependencies/JSDoc/file-size and32Chromium pass absent both ignored references, restored in finally. Nine metadata and five pinned source hashes pass. Eighteen canonical histories retained, one current declaration owner migration, seven exact unit and three exact browser fixture migrations;671other old unit files and other browser files unchanged. New native mutable-caller history defect fixed in production, not hidden through caller Clone. No passing replay for type/helper/metadata-only repairs; genuine source-owner/history changes revalidated. WRITER-002 documented and preserved, full rich transport/general native parity remains unverified. Bounded evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow. Goal active incomplete;2/10, latest conditional pause after accepted full persists.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T15:03:16.037Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final14117/14117 cases501files50fresh, nine current whole modules actual Istanbul100all-four1696/1844/524/1422,32Chromium,current TS7/static/build and nine restored metadata audits pass. Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f; native history owns Clone values, no caller workaround, all18canonical histories and exact legacy migrations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:03:15.560Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+    - old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101401-QJ0FFB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-10T15:04:29.142Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:04:28.761Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+    - old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101401-QJ0FFB --result verified-202610101401-QJ0FFB --commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+
+    Exact semantic commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f reviewed by the same current agent as EVALUATOR; explicitly non-independent pass, with nine current-source hashes checked against the committed blobs and native caller independence/32browser/eighteen-history/metadata evidence inspected. Quality report .agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json. Broad goal incomplete; latest requested pause follows the next accepted full run.
   Rollback Plan: "Revert semantic task commit without rewriting history; restore both ignored reference symlinks in finally."
   Findings: |-
     Previous turn progressed: HB1SPN DONE17ab2ec6d1208582a910d4519ed6e195d79da3c5 close91210399681c;154related22fresh24browser whole2modules100 and WRITER-001. Active goal, clean writer at preflight, cadence1/10 after N337G1. Original scalar right class lacks native mutable/typed/proportion/default/copy/metrics/UNO contracts. Original native class has no public independent proportion setter for65535; SetRight rescales its input and PutValue7 excludes65535. Do not add private/inverse marshaling hacks. Port live native contracts now and keep old scalar boundary only, explicitly reject new unsupported states; complete rich right/LR graph preservation remains later architectural work. Initial tool orchestration syntax error executed no shell mutation; task route revalidated before retry.
@@ -121,6 +227,71 @@ Finish original native right-state ownership by correcting the existing paragrap
 ## Verification
 
 Pass: final current-source native history profile14117/14117 in501files50fresh. Nine whole changed modules actual Istanbul100 lines/statements/functions/branches1696/1844/524/1422; complete current maps/nonnegative and current source hashes. Current TS7/static/build/dependencies/JSDoc/file-size and32Chromium pass absent both ignored references, restored in finally. Nine metadata and five pinned source hashes pass. Eighteen canonical histories retained, one current declaration owner migration, seven exact unit and three exact browser fixture migrations;671other old unit files and other browser files unchanged. New native mutable-caller history defect fixed in production, not hidden through caller Clone. No passing replay for type/helper/metadata-only repairs; genuine source-owner/history changes revalidated. WRITER-002 documented and preserved, full rich transport/general native parity remains unverified. Bounded evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow. Goal active incomplete;2/10, latest conditional pause after accepted full persists.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T15:03:16.037Z — VERIFY — ok
+
+By: CODER
+
+Note: Final14117/14117 cases501files50fresh, nine current whole modules actual Istanbul100all-four1696/1844/524/1422,32Chromium,current TS7/static/build and nine restored metadata audits pass. Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f; native history owns Clone values, no caller workaround, all18canonical histories and exact legacy migrations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:03:15.560Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+- old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101401-QJ0FFB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-10T15:04:29.142Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:04:28.761Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+- old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101401-QJ0FFB --result verified-202610101401-QJ0FFB --commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+Exact semantic commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f reviewed by the same current agent as EVALUATOR; explicitly non-independent pass, with nine current-source hashes checked against the committed blobs and native caller independence/32browser/eighteen-history/metadata evidence inspected. Quality report .agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json. Broad goal incomplete; latest requested pause follows the next accepted full run.
 
 ## Rollback Plan
 
