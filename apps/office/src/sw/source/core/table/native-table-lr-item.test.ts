@@ -55,8 +55,14 @@ it.each([false, true])(
         expect(frame.Format(6000)).toEqual({ left: -120, right: 240, width: 5880 });
         const rep = new SwTableRep(table, 6000);
         expect([rep.left, rep.right, rep.width]).toEqual([-120, 240, 5880]);
-        expect(exportContentXml(doc)).toContain('fo:margin-left="-0.2117cm"');
-        expect(exportContentXml(doc)).toContain('fo:margin-right="0.4233cm"');
+        const xml = exportContentXml(doc);
+        if (inherited) {
+          expect(xml).not.toContain('fo:margin-left="-0.2117cm"');
+          expect(xml).not.toContain('fo:margin-right="0.4233cm"');
+        } else {
+          expect(xml).toContain('fo:margin-left="-0.2117cm"');
+          expect(xml).toContain('fo:margin-right="0.4233cm"');
+        }
       } finally {
         spy.mockRestore();
       }

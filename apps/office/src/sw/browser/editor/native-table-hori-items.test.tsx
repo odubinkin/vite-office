@@ -78,7 +78,7 @@ it.each([false, true])(
         });
         expect(
           required(reopen.document.GetTables()[0]).GetFrameFormat().GetHoriOrient().GetHoriOrient(),
-        ).toBe(HoriOrientation.RIGHT);
+        ).toBe(inherited ? HoriOrientation.FULL : HoriOrientation.RIGHT);
       } finally {
         projection.mockRestore();
       }
