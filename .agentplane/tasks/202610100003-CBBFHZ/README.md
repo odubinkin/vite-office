@@ -4,7 +4,7 @@ title: "Port original shared SoA empty insertion and previous-block admission"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,34 @@ verification:
   updated_by: "CODER"
   note: "Verified: original empty insertion/previous-category group matches13432native complete sequences with unchanged7600prefix; Calc and2changedshared owners actual100positive coverage,14gates and3portable groups pass, exactlinks restored, default formatting/import fixed losslessly and honest inventory updated."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T00:27:17.195Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed committed 074ce074dd2fb85e7b6cf87014907da325bb69e3: original empty insertion and previous-category bodies preserve source ordering, complete native observations, focused coverage and honest inventory scope."
+  evaluated_sha: "074ce074dd2fb85e7b6cf87014907da325bb69e3"
+  blueprint_digest: "0c3f2c1403c26030ee4bf2f04b3859b940ab186bff3a98476c84c92c366c2613"
+  evidence_refs:
+    - ".agentplane/tasks/202610100003-CBBFHZ/README.md"
+    - ".agentplane/tasks/202610100003-CBBFHZ/quality/20261010-002717195-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610100003-CBBFHZ/quality/20261010-002717195-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610100003-CBBFHZ/quality/20261010-002717195-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610100003-CBBFHZ/blueprint/resolved-snapshot.json"
+    - "git:074ce074dd2fb85e7b6cf87014907da325bb69e3"
+    - "output/playwright/task27-verification.md"
+    - "output/playwright/task27-audit.json"
+    - "output/playwright/task27-raw-audit-final.log"
+    - "output/playwright/task27-callback-audit.json"
+    - "output/playwright/task27-gate-results.json"
+    - "output/playwright/task27-full-results.json"
+    - "output/playwright/task27-format-fixture-final.log"
+    - "Independent read-only committed-fixture review: complete13432nativecases/7600prefix/121372states and positive17+2rawcoverage verified"
+    - "ap doctor:0errors/2inherited warnings; policy routing OK; git diff HEAD --exit-code clean"
+  findings:
+    - "Compared native main_def.inl 1225-1300,2369-2465,4501-4513 with committed main.ts/main_def.ts: zero-length before lookup; exact diagnostics; null/previous-empty expansion; acquire-before-assignment; smaller-side/equal-upper copy; resize versus erase/slot swap; original position/logical-size ordering and borrowed-store predicate."
+    - "Independently decoded actual committed fixture against every raw native record: 13432 complete sequences/121372 states, all7600 earlier full sequences/final events unchanged; actual driver/13headers/2archives hashes match. Existing byte replay and callback audit show original native calls, complete values/events/ownership/capacities,2028 standard-category calls and1680split callback traces."
+    - "Actual Istanbul raw s/f/b counters are positive in17Calcsourcefiles and2changedsharedowners; all four metrics100.14declared static gates and3upstream-absent portable groups exit0; exact link targets restored; default-heap fixture formatting and full format check pass."
+    - "Inventory records implemented capability with whole contract/behavior/default/verified flags false and explicit custom/managed/throwing/overflow/remaining-mutator/document/browser gaps. Source-shaped owners978/319/662/844lines below hard limit. No Writer-only edits, no invented upstream fix, no full-suite claim at task7/10."
 commit: null
 comments:
   -
