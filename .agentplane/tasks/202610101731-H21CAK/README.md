@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 28
+revision: 33
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved original locale-aware case value dependency in calc checkout, reusing actual shared string/Unicode owners and preserving native source contracts; no fake service/type substitutes."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:38:08.554Z"
+doc_updated_at: "2026-10-10T18:46:22.240Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -93,6 +93,20 @@ sections:
       Result: pass.
       Evidence: Fresh serial gates in ascii-gates-fixed-manifest.json and prior typecheck/lint logs;30 tooling tests, zero semantic violations; doctor0 errors/two inherited warnings. JSDoc initially rejected an undocumented test assertion callback, now documented without behavior changes.
       Scope: Bounded shared SAL addition and full metadata. Full getValue/getConditionalValue/native generated Locale/UNO exception contract stays mandatory and pending; no ap verify --ok, EVALUATOR pass or finish.
+
+    Native type build preparation (not generated-type/native mapping verification):
+    - Command: node scripts/casefolding-native-types.mjs --compile.
+      Result: pass for the explicitly bounded object compilation stage.
+      Evidence:21 complete actual translation units compile; genuine unchanged cppumaker/codemaker/unoidl/legacy-provider/SAL-helper declarations; original Bison/Flex grammars generate parser/scanner;112 complete pinned LibreOffice source/header/build-rule blobs and original pinned cached Boost/mdds archives verified. Exact tool versions/arguments/diagnostics/source/generated hashes retained in output/playwright/task39-native-types/objects-manifest.json, state objects-complete. This reproduces only compilation; no handwritten native facade.
+      Scope: Required real native generator dependency preparation. Linking, generated Locale/UNO and full getValue/getConditionalValue behavior remain mandatory and incomplete.
+    - Command: clang++ with -Wl,-dead_strip -pthread and all21 actual objects; exact argv in output/playwright/task39-native-types/link-manifest.json.
+      Result: fail, exit1, recorded as a dependency diagnostic.
+      Evidence: Linker reports missing actual SAL/OSL/registry symbols; full stderr retained. No binary is claimed executable and no stub owner is introduced.
+      Scope: Pending native library closure; not an external blocker and not a skipped task criterion.
+    - Command: npx eslint scripts/casefolding-native-types.mjs --max-warnings 0; npm run typecheck; npm run check:docs; npm run check:file-size; npx prettier --check scripts/casefolding-native-types.mjs; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check.
+      Result: pass.
+      Evidence: Exact argv/full logs in output/playwright/task39-checks/types-helper-gates.json; doctor0 errors and two inherited warnings. Runtime Calc/shared portable100 evidence above remains applicable because this subsequent addition changes only the offline native preparation helper and documentation.
+      Scope: The preparation helper, preserving full task39 scope and pending verification; no full suite before41 or Writer-only coverage repair.
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
     - Observation: Preflight confirms calc branch and clean checkout, direct workflow, previous task38 DONE. The only other active tasks are inherited C9TN6M/X6VV8G; neither is reused for new source work. Read-only discovery guessed Locale under offapi instead of its actual udkapi path, and guessed two absent native helper filenames.
@@ -150,6 +164,18 @@ sections:
     - Observation: The serial ASCII gate runner stops at check:docs: ascii-equality.test.ts line89 has an undocumented assertion callback.
       Impact: Lint and portable Calc/shared coverage pass, but the remaining serial gates have not yet run; this is not a completed task checkpoint.
       Resolution: Document the existing callback without changing its assertion, then rerun the unchanged gate selection within approved scope.
+
+    - Observation: Compiling the complete unchanged cppumaker objects succeeds for all six emitter units and exceptiontree, then global.cxx fails because the caller configuration lacks the original UNX platform define. A read-only guess at separate YaccTarget/LexTarget makefiles is absent.
+      Impact: No generated native Locale or linked cppumaker execution is claimed. Original source files are unchanged; the owned compile process is terminal.
+      Resolution: Discover the actual gbuild grammar/scanner rules and apply the real platform configuration before continuing the original native dependency build; retain full object hashes and diagnostics.
+
+    - Observation: After applying original UNX configuration, all13 complete cppumaker/codemaker/commoncpp object files compile. The true unoidl sourcefileprovider stops because sourceprovider-parser.hxx has not yet been generated; guessed standalone grammar target files do not exist.
+      Impact: This proves only object compilation, not a linked or executed generator, generated Locale, or native case mapping. Original sources remain unchanged.
+      Resolution: Use discovered solenv/gbuild/LinkTarget.mk Bison/Flex contracts and complete original grammars to generate the required ignored parser/scanner artifacts, then compile the real providers.
+
+    - Observation: The reproducible native helper compiles21 actual cppumaker/codemaker/unoidl/SAL-helper units, including unchanged legacy provider and original Bison/Flex outputs;112 full LibreOffice blobs and pinned Boost/mdds archives are verified. Direct linking remains unresolved because real SAL/OSL/registry library owners are not yet supplied.
+      Impact: No generated Locale/UNO header, completed native getValue/getConditionalValue verification, or full task closure is claimed. The native object run is confirmed terminal and complete; the link diagnostic is terminal with exit1.
+      Resolution: Continue the actual remaining native library closure using recorded linker symbols and original build rules. Keep full task39 verification mandatory, use no fake native owners, and preserve the validated shared ASCII implementation checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -217,6 +243,20 @@ ASCII dependency checkpoint (not full task39 verification):
   Evidence: Fresh serial gates in ascii-gates-fixed-manifest.json and prior typecheck/lint logs;30 tooling tests, zero semantic violations; doctor0 errors/two inherited warnings. JSDoc initially rejected an undocumented test assertion callback, now documented without behavior changes.
   Scope: Bounded shared SAL addition and full metadata. Full getValue/getConditionalValue/native generated Locale/UNO exception contract stays mandatory and pending; no ap verify --ok, EVALUATOR pass or finish.
 
+Native type build preparation (not generated-type/native mapping verification):
+- Command: node scripts/casefolding-native-types.mjs --compile.
+  Result: pass for the explicitly bounded object compilation stage.
+  Evidence:21 complete actual translation units compile; genuine unchanged cppumaker/codemaker/unoidl/legacy-provider/SAL-helper declarations; original Bison/Flex grammars generate parser/scanner;112 complete pinned LibreOffice source/header/build-rule blobs and original pinned cached Boost/mdds archives verified. Exact tool versions/arguments/diagnostics/source/generated hashes retained in output/playwright/task39-native-types/objects-manifest.json, state objects-complete. This reproduces only compilation; no handwritten native facade.
+  Scope: Required real native generator dependency preparation. Linking, generated Locale/UNO and full getValue/getConditionalValue behavior remain mandatory and incomplete.
+- Command: clang++ with -Wl,-dead_strip -pthread and all21 actual objects; exact argv in output/playwright/task39-native-types/link-manifest.json.
+  Result: fail, exit1, recorded as a dependency diagnostic.
+  Evidence: Linker reports missing actual SAL/OSL/registry symbols; full stderr retained. No binary is claimed executable and no stub owner is introduced.
+  Scope: Pending native library closure; not an external blocker and not a skipped task criterion.
+- Command: npx eslint scripts/casefolding-native-types.mjs --max-warnings 0; npm run typecheck; npm run check:docs; npm run check:file-size; npx prettier --check scripts/casefolding-native-types.mjs; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check.
+  Result: pass.
+  Evidence: Exact argv/full logs in output/playwright/task39-checks/types-helper-gates.json; doctor0 errors and two inherited warnings. Runtime Calc/shared portable100 evidence above remains applicable because this subsequent addition changes only the offline native preparation helper and documentation.
+  Scope: The preparation helper, preserving full task39 scope and pending verification; no full suite before41 or Writer-only coverage repair.
+
 ## Rollback Plan
 
 Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete.
@@ -278,3 +318,15 @@ Revert only intentional task39 implementation/metadata commits if needed and rer
 - Observation: The serial ASCII gate runner stops at check:docs: ascii-equality.test.ts line89 has an undocumented assertion callback.
   Impact: Lint and portable Calc/shared coverage pass, but the remaining serial gates have not yet run; this is not a completed task checkpoint.
   Resolution: Document the existing callback without changing its assertion, then rerun the unchanged gate selection within approved scope.
+
+- Observation: Compiling the complete unchanged cppumaker objects succeeds for all six emitter units and exceptiontree, then global.cxx fails because the caller configuration lacks the original UNX platform define. A read-only guess at separate YaccTarget/LexTarget makefiles is absent.
+  Impact: No generated native Locale or linked cppumaker execution is claimed. Original source files are unchanged; the owned compile process is terminal.
+  Resolution: Discover the actual gbuild grammar/scanner rules and apply the real platform configuration before continuing the original native dependency build; retain full object hashes and diagnostics.
+
+- Observation: After applying original UNX configuration, all13 complete cppumaker/codemaker/commoncpp object files compile. The true unoidl sourcefileprovider stops because sourceprovider-parser.hxx has not yet been generated; guessed standalone grammar target files do not exist.
+  Impact: This proves only object compilation, not a linked or executed generator, generated Locale, or native case mapping. Original sources remain unchanged.
+  Resolution: Use discovered solenv/gbuild/LinkTarget.mk Bison/Flex contracts and complete original grammars to generate the required ignored parser/scanner artifacts, then compile the real providers.
+
+- Observation: The reproducible native helper compiles21 actual cppumaker/codemaker/unoidl/SAL-helper units, including unchanged legacy provider and original Bison/Flex outputs;112 full LibreOffice blobs and pinned Boost/mdds archives are verified. Direct linking remains unresolved because real SAL/OSL/registry library owners are not yet supplied.
+  Impact: No generated Locale/UNO header, completed native getValue/getConditionalValue verification, or full task closure is claimed. The native object run is confirmed terminal and complete; the link diagnostic is terminal with exit1.
+  Resolution: Continue the actual remaining native library closure using recorded linker symbols and original build rules. Keep full task39 verification mandatory, use no fake native owners, and preserve the validated shared ASCII implementation checkpoint.

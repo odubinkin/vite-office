@@ -2013,3 +2013,17 @@ This completes the literal-equality dependency only. Native generated Locale,
 true UNO exception/reference boundaries, complete getValue/getConditionalValue,
 CharClass/SharedStringPool and document/edit/UI remain required; task39 stays
 DOING. This is still the eighth active task after full31, with next full41.
+
+
+The task39 native type dependency build is now reproducible via
+`node scripts/casefolding-native-types.mjs --compile`. It compiles21 true
+cppumaker/codemaker/unoidl/SAL-helper translation units, including the genuine
+legacy provider and parser/scanner generated from unchanged Bison/Flex grammars.
+The compiler dependency manifest verifies112 full pinned LibreOffice blobs and
+the cached Boost/mdds archives against original download.lst. All original
+class declarations and method bodies are compiled unchanged. This is object
+compilation evidence only: direct linking still needs real SAL/OSL/registry
+library owners; generated Locale/UNO headers and native case mapping execution
+remain pending. The helper adds no native substitute class or application
+runtime dependency. Related type/lint/JSDoc/size/format/routing/doctor checks
+pass; task39 remains DOING and the next full run remains41.
