@@ -1,10 +1,11 @@
 ---
 id: "202610101723-QH6XM1"
 title: "Restore native MoveLeftMargin range and attribute history"
-status: "DOING"
+result_summary: "Replaced scalar per-node margin undo synthesis with native document-owned range and SwRegHistory attribute history; undo preserves full values/directness/current slots and redo recomputes current tabs.13888related/492files,40fresh,23Chromium/10files, eight actual whole modules100% allfour; eighteen inventory records and WRITER-004 updated. Correction2/10 after BZ14P4; goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Implemented: native typed range margin mutation and original direct/reset attribute history; current source whole-module coverage and related/browser validation pass."
+  -
+    author: "CODER"
+    body: "Verified: restored native typed margin range mutation and original direct/reset history;13888related cases,40fresh,23Chromium scenarios and actual whole eight-module100% allfour pass with current source hashes and references absent during testing. Inventory/source/static gates and exact same-agent semantic review pass; registered deviations and broader native gaps retained."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Current native range/history correction passes13888related cases/492files including40fresh, actual whole eight modules100% allfour with current hashes and nonnegative counters;23Chromium/10files; upstream-absent static gates and restored nine metadata audits pass. Original804tests and historical canonical statuses/defaults preserved with explicit bounded migrations. Evidence: evidence/verification.json; semantic b6fbc1920747ea4d6eae28e727263b0067015eb5."
+  -
+    type: "status"
+    at: "2026-10-10T18:09:28.891Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: restored native typed margin range mutation and original direct/reset history;13888related cases,40fresh,23Chromium scenarios and actual whole eight-module100% allfour pass with current source hashes and references absent during testing. Inventory/source/static gates and exact same-agent semantic review pass; registered deviations and broader native gaps retained."
 doc_version: 3
-doc_updated_at: "2026-10-10T18:08:19.037Z"
+doc_updated_at: "2026-10-10T18:09:28.893Z"
 doc_updated_by: "CODER"
 description: "Replace per-node scalar margin action/group with original SwDoc range mutation and SwUndoMoveLeftMargin retained SwHistory; native attr-set deltas feed SwRegHistory, preserving direct/inherited typed left/first state and recomputing redo from document tabs. One correction2/10 after BZ14P4."
 sections:
@@ -161,6 +172,10 @@ sections:
     - Observation: Registry rebuild rejects prefix-related operation IDs because file ordering with the .json suffix differs from strict ID ordering.
       Impact: The two newly authored records need distinct non-prefix stable IDs; runtime/source results are unchanged.
       Resolution: Name the document operation writer.internal.move-left-margin-core and retain writer.internal.move-left-margin-at-shell, both matching their actual native owner/symbol. Repeat only the failed/dependent metadata route, preserving the prior failed report.
+extensions:
+  implementation_commit:
+    hash: "b6fbc1920747ea4d6eae28e727263b0067015eb5"
+    message: "🧩 QH6XM1 code: restore native range margin history"
 id_source: "generated"
 ---
 ## Summary
