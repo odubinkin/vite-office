@@ -1,10 +1,11 @@
 ---
 id: "202610100029-0KZNG5"
 title: "Port original shared SoA whole-block emptying and next-block admission"
-status: "DOING"
+result_summary: "verified-202610100029-0KZNG5"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T00:41:55.816Z"
+  updated_at: "2026-10-10T00:43:35.330Z"
   updated_by: "CODER"
-  note: "Verified: genuine native15076sequences/136144full records preserve all13432priorprefix; actual private bridges,2544whole-empty/2028next-category calls; Calc104/23and100,affectedshared21/7and100bothactualowners;14requiredgatespass,3portablegroupspassandexactlinksrestored; honestinventorygaps,originalborrowedmemberbodies,noWriter/gatechanges,cycle2task8/10."
+  note: "verified-202610100029-0KZNG5"
   attempts: 0
 quality_review:
   state: "pass"
@@ -51,11 +52,16 @@ quality_review:
     - "Read-only independent audit of committed fixture validates15076whole sequences/136144complete states, all13432prior sequences/final logs unchanged, actual binary byte replay,13headers/2archives/driverhashes. Actual native bridges invoke unchanged private originals;2544whole-empty calls include1272eachoverwrite and allfour neighbor choices;2028next-category calls. Full values/otherowners/logicalsize/capacity/return/events and forwarding callback order are audited."
     - "Actual raw Istanbul s/f/b counters positive in17Calcsourcefiles and2affectedsharedowners;100allfour metrics. Calc104/23,affectedshared21/7,14requiredstaticgatespass,3upstream-absent portablegroupspass,exactsymlinks restored. Initial TS6133/docs failures preserved and bounded corrections revalidated; criteria/heap/gates unchanged."
     - "New capability implementedtrue with whole contract/behavior/default/verifiedfalse and actual source mapping; public set_empty/custom/managed/throwing/invalid/overflow/fullQA/document/browser gaps retained. Source-shaped files978unchanged/374/688/934below1000; noWriter-only edits, newupstreamfix or fullsuiteclaim at cycle2task8/10."
-commit: null
+commit:
+  hash: "2ab83810e93df99364527f7c7b4f8f75c43212dd"
+  message: "🔎 0KZNG5 review: verify original whole-block emptying ownership and native records"
 comments:
   -
     author: "CODER"
     body: "Start: Port approved original whole-block emptying and next-category bodies using actual shared owner fields and genuine native callers, cycle2task8/10 in calc."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610100029-0KZNG5. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -70,8 +76,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: genuine native15076sequences/136144full records preserve all13432priorprefix; actual private bridges,2544whole-empty/2028next-category calls; Calc104/23and100,affectedshared21/7and100bothactualowners;14requiredgatespass,3portablegroupspassandexactlinksrestored; honestinventorygaps,originalborrowedmemberbodies,noWriter/gatechanges,cycle2task8/10."
+  -
+    type: "verify"
+    at: "2026-10-10T00:43:35.330Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610100029-0KZNG5"
+  -
+    type: "status"
+    at: "2026-10-10T00:43:35.467Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610100029-0KZNG5. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:41:55.870Z"
+doc_updated_at: "2026-10-10T00:44:03.826Z"
 doc_updated_by: "CODER"
 description: "Cycle2 task8/10. Implement unchanged original set_whole_block_empty and is_next_block_of_type over actual shared ownership, callback and three-vector storage; preserve original returned iterator, overwrite false zero-size-before-delete order, adjacent empty merges and all13432prior complete native sequences. User ongoing Calc implementation approval applies; all changes in calc checkout, shared reused, inventory and suspicious journal maintained honestly."
 sections:
@@ -165,6 +184,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T00:43:35.330Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610100029-0KZNG5
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:41:55.870Z, excerpt_hash=sha256:d1fd4c69b9732f4aa41d7311ea161d9bbcfe2398522ed3495cd251885c96596f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100029-0KZNG5/blueprint/resolved-snapshot.json
+    - old_digest: 970fe52f58d49e27a674c1a480b307382d0695a6d84cc1815a5474b645fef3ec
+    - current_digest: 970fe52f58d49e27a674c1a480b307382d0695a6d84cc1815a5474b645fef3ec
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100029-0KZNG5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100029-0KZNG5 --result verified-202610100029-0KZNG5 --commit 2ab83810e93df99364527f7c7b4f8f75c43212dd
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task-scoped implementation/registry/docs commits through user-approved ordinary Git recovery if requested; preserve all prior shared behavior and fixture sequences. No merges or history rewrite."
   Findings: |-
@@ -185,6 +234,18 @@ sections:
     - Observation: Required docs check failed for two new native-caller enumeration arrow callbacks at543/584 lacking JSDoc; original native/body/observations unchanged.
       Impact: Caller documentation gate needs exact callback comments; no algorithm or acceptance change.
       Resolution: Add JSDoc describing long-block index and repeated whole-empty command enumeration within existing approved native probe; preserve generated native driver, all commands and fixture. Re-run docs and ordinary formatting without modifying validator.
+
+    - Observation: Exact emitted task complete with2ab83810e93d exited5 E_GIT commit subject is too generic. Actual task DONE with pending README artifact; same installed deterministic-close subject conflict as prior tasks.
+      Impact: Committed implementation and quality evidence remain intact/pass; only task-artifact closure pending, no scope or criteria change.
+      Resolution: Recomputed route direct_done_pending_artifact_commit; execute emitted ap commit ID --close --unstage-others once, inspect resulting route before bounded supported specific-subject fallback. Do not alter hooks/CLI/policy.
+
+    - Observation: Exact emitted --close --unstage-others artifact recovery exited5 with same generic subject conflict; recomputed route still pending only current task README artifact.
+      Impact: No implementation or verification failure; installed deterministic close subject rejected by policy. Preserve passing code and gates.
+      Resolution: Supported explicit ap commit --allow-tasks with specific finalize subject closes only intentional active task artifacts. Inspect actual amended HEAD, clean all-untracked status, calc branch and DONE route; no hook/CLI/policy bypass.
+extensions:
+  implementation_commit:
+    hash: "66b35611daf3ebb4be831e7bbe53f078d87d3cb5"
+    message: "✨ 0KZNG5 core: port original whole-block emptying and next-category admission"
 id_source: "generated"
 ---
 ## Summary
@@ -290,6 +351,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T00:43:35.330Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610100029-0KZNG5
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T00:41:55.870Z, excerpt_hash=sha256:d1fd4c69b9732f4aa41d7311ea161d9bbcfe2398522ed3495cd251885c96596f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100029-0KZNG5/blueprint/resolved-snapshot.json
+- old_digest: 970fe52f58d49e27a674c1a480b307382d0695a6d84cc1815a5474b645fef3ec
+- current_digest: 970fe52f58d49e27a674c1a480b307382d0695a6d84cc1815a5474b645fef3ec
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100029-0KZNG5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100029-0KZNG5 --result verified-202610100029-0KZNG5 --commit 2ab83810e93df99364527f7c7b4f8f75c43212dd
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -315,3 +406,11 @@ No new upstream suspicion established at planning. Original helper assumes valid
 - Observation: Required docs check failed for two new native-caller enumeration arrow callbacks at543/584 lacking JSDoc; original native/body/observations unchanged.
   Impact: Caller documentation gate needs exact callback comments; no algorithm or acceptance change.
   Resolution: Add JSDoc describing long-block index and repeated whole-empty command enumeration within existing approved native probe; preserve generated native driver, all commands and fixture. Re-run docs and ordinary formatting without modifying validator.
+
+- Observation: Exact emitted task complete with2ab83810e93d exited5 E_GIT commit subject is too generic. Actual task DONE with pending README artifact; same installed deterministic-close subject conflict as prior tasks.
+  Impact: Committed implementation and quality evidence remain intact/pass; only task-artifact closure pending, no scope or criteria change.
+  Resolution: Recomputed route direct_done_pending_artifact_commit; execute emitted ap commit ID --close --unstage-others once, inspect resulting route before bounded supported specific-subject fallback. Do not alter hooks/CLI/policy.
+
+- Observation: Exact emitted --close --unstage-others artifact recovery exited5 with same generic subject conflict; recomputed route still pending only current task README artifact.
+  Impact: No implementation or verification failure; installed deterministic close subject rejected by policy. Preserve passing code and gates.
+  Resolution: Supported explicit ap commit --allow-tasks with specific finalize subject closes only intentional active task artifacts. Inspect actual amended HEAD, clean all-untracked status, calc branch and DONE route; no hook/CLI/policy bypass.
