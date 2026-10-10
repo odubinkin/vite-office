@@ -1,10 +1,11 @@
 ---
 id: "202610101340-HB1SPN"
 title: "Correct native LR font-unit UNO member routing"
-status: "DOING"
+result_summary: "Original LR font-unit identities and side routing restored;154related/24browser cases and whole-module100 pass; Writer suspected-source document records preserved WRITER-001 contract."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Start: record semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5 after native member routing and user-authorized Writer observation document acceptance; refresh exact-SHA verification and explicit same-agent non-independent quality before concrete closure."
+  -
+    author: "CODER"
+    body: "Verified: native LR UNO font-unit13 first/14 right/15 text-left restores original source sides and named constants, removing wrong private mapping.154related22fresh and24Chromium passed upstream absent; two whole production modules actual100 all four metrics complete current nonnegative maps.675old tests identical2exact wrong-protocol migrations, four canonical records/history preserved; TS7 type-only repair runtime-identical no replay and nine restored metadata gates/source-ID proof pass. Writer WRITER-001 document records preserved suspicious hanging-indent source behavior per latest user edit, exact pinned lines/local evidence validated. Reference restored, explicitly same-agent exact-SHA quality pass; goal remains active incomplete1/10."
 events:
   -
     type: "status"
@@ -85,8 +89,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All five acceptance criteria pass at semantic17ab2ec6d1208582a910d4519ed6e195d79da3c5, explicit same-agent exact-SHA quality pass persisted in evidence.154related22fresh24browser upstream absent; whole native modules100 complete nonnegative maps; preserved historical tests/canonical prefixes, TS7 runtime-equivalent type repair no replay, nine metadata/source IDs and Writer suspected-source doc validated. Concrete closure next; broad goal active1/10."
+  -
+    type: "status"
+    at: "2026-10-10T13:56:14.984Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native LR UNO font-unit13 first/14 right/15 text-left restores original source sides and named constants, removing wrong private mapping.154related22fresh and24Chromium passed upstream absent; two whole production modules actual100 all four metrics complete current nonnegative maps.675old tests identical2exact wrong-protocol migrations, four canonical records/history preserved; TS7 type-only repair runtime-identical no replay and nine restored metadata gates/source-ID proof pass. Writer WRITER-001 document records preserved suspicious hanging-indent source behavior per latest user edit, exact pinned lines/local evidence validated. Reference restored, explicitly same-agent exact-SHA quality pass; goal remains active incomplete1/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T13:56:01.762Z"
+doc_updated_at: "2026-10-10T13:56:14.985Z"
 doc_updated_by: "CODER"
 description: "Atomic1/10 after accepted N337G1 full cadence. Pinned memberids.h defines right-unit14 and left-unit15; current LR queries/setters swap sides and old tests encode the wrong protocol. Restore source-defined routing with three named native member constants, preserve independent fields and direct native lifetimes. Two production modules incl new matching memberids owner; exact mechanical source-backed migrations in two old tests, one fresh routing/atomic/context/history acceptance; four canonical records and parent bounded progress. Related/new-only Istanbul whole changed modules100, static/build/browser checks upstream absent once and restored metadata, exact-SHA same-agent quality clean close. No full cadence run, no network/delegation/IO exception changes."
 sections:
@@ -165,6 +176,10 @@ sections:
     Result: pass.
     Evidence: exact pinned native constants13/14/15 and actual query/setter routing, three doc source line references and local evidence links verified.
     Scope: restored source metadata only, tests never execute pinned upstream.
+extensions:
+  implementation_commit:
+    hash: "17ab2ec6d1208582a910d4519ed6e195d79da3c5"
+    message: "🧩 HB1SPN writer: correct native LR font-unit member routing"
 id_source: "generated"
 ---
 ## Summary
