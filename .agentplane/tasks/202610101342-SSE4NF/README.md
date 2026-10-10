@@ -4,7 +4,7 @@ title: "Prioritize Calc UI prerequisites and port original cell type and text me
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -25,6 +25,29 @@ verification:
   updated_by: "CODER"
   note: "Native complete metadata/enum capture and absent-upstream Calc106/shared1 tests pass; actual four-metric100 with raw counters, all declared source/inventory/static gates pass; journal preserved and renamed. Full cadence1/10, next41. See task32 audit/manifests."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T14:01:18.614Z"
+  updated_by: "EVALUATOR"
+  note: "Original cell metadata/types and shared script discriminator satisfy approved UI-prerequisite foundation scope; complete native and portable evidence verified against commit0206d33c."
+  evaluated_sha: "0206d33c1077ef869f6f89e4e544032230db05ee"
+  blueprint_digest: "f8bd16df9f0ba17b91d771d3b25b9a805f0b7b719fcfd419b9adc2c8ef14f0c9"
+  evidence_refs:
+    - ".agentplane/tasks/202610101342-SSE4NF/README.md"
+    - ".agentplane/tasks/202610101342-SSE4NF/quality/20261010-140118614-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101342-SSE4NF/quality/20261010-140118614-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101342-SSE4NF/quality/20261010-140118614-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101342-SSE4NF/blueprint/resolved-snapshot.json"
+    - "output/playwright/task32-audit.json"
+    - "output/playwright/task32-tests/manifest.json"
+    - "output/playwright/task32-gates/manifest.json"
+    - "apps/office/coverage/calc/coverage-final.json"
+    - "apps/office/coverage/script-types/coverage-final.json"
+    - "output/playwright/calc-celltextattr-native/driver.cpp"
+    - "output/playwright/calc-celltextattr-native/output.json"
+  findings:
+    - "Exact original default constructor/declarations and implicit scalar value semantics retained at header/core-data boundaries; Calc reuses shared svl script tags. All154 sequences/1232 full three-owner states and original source/scope hashes retained."
+    - "Actual Calc106/24 and shared1/1 tests pass under absent upstream with exact restore; all four coverage metrics100 and raw present counters positive. Declared gates, registry atomic records and journal31-entry preservation pass. No Writer/config/assertion weakening or full-suite run at task1/10."
 commit: null
 comments:
   -
