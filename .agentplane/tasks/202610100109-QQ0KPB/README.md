@@ -1,10 +1,11 @@
 ---
 id: "202610100109-QQ0KPB"
 title: "Port original shared SoA range release and retain lifetime body boundaries"
-status: "DOING"
+result_summary: "verified-202610100109-QQ0KPB"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T01:47:10.998Z"
+  updated_at: "2026-10-10T01:51:31.441Z"
   updated_by: "CODER"
-  note: "Original35740sequences/284896fullstates/all28204prefix preserved and actualnative/byte/raw audit pass. Calc104/23/relatedshared23/7 actual100bothchangedowners;14static+3extra+8combined full/portable gates pass. Fullofficefinal14279/550 actualIstanbul100, inventory123/38 V8100, tooling14/3,browser303,static2JS. Initialaggregate timeout corrected by3originalgroups with unchangedbudget/allfields, onlyfailedoffice rerun; exactlinksrestored. Cycle2task10/10 completed; wholeparityflagsfalse."
+  note: "verified-202610100109-QQ0KPB"
   attempts: 0
 quality_review:
   state: "pass"
@@ -50,11 +51,16 @@ quality_review:
     - "Independent committed-fixture audit verifies all 35740 sequences, 249156 operations, 284896 complete states, byte replay, 13 header and 2 archive hashes; all prior 28204 sequences and 227296 states remain unchanged."
     - "Initial aggregate timeout retained. Final three operation groups share the unchanged observer/decoder/seed and cover every case exactly once with unchanged 30000ms limit; full office 14279 tests in 550 files and all four actual Istanbul metrics at 100%, including positive raw counters across 346 owners."
     - "Affected shared 23 tests/7 files and Calc 104/23 pass at 100% all four metrics. Full inventory 123/38 at 100% all four metrics, tooling 14/3, browser 303 (301 Writer and 2 shared), static, portable checks, 14 gates and 3 inventory/resource checks pass. Both reference links restored exactly, scoped physical sizes remain below 1000, inventory whole-parity claims remain false."
-commit: null
+commit:
+  hash: "2d2d5c431648c5d85bc5b89311ccd3e33fcebe73"
+  message: "🔎 QQ0KPB quality: audit range release and full suite evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved original shared release_range and main_def body boundary alignment on calc; cycle2task10/10 includes fullsuite after scoped verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610100109-QQ0KPB. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original35740sequences/284896fullstates/all28204prefix preserved and actualnative/byte/raw audit pass. Calc104/23/relatedshared23/7 actual100bothchangedowners;14static+3extra+8combined full/portable gates pass. Fullofficefinal14279/550 actualIstanbul100, inventory123/38 V8100, tooling14/3,browser303,static2JS. Initialaggregate timeout corrected by3originalgroups with unchangedbudget/allfields, onlyfailedoffice rerun; exactlinksrestored. Cycle2task10/10 completed; wholeparityflagsfalse."
+  -
+    type: "verify"
+    at: "2026-10-10T01:51:31.441Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610100109-QQ0KPB"
+  -
+    type: "status"
+    at: "2026-10-10T01:51:31.575Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610100109-QQ0KPB. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T01:47:11.062Z"
+doc_updated_at: "2026-10-10T01:51:51.334Z"
 doc_updated_by: "CODER"
 description: "Cycle2task10/10; full validation due. Add original plain/hinted release_range through existing actual shared set_empty_impl overwritefalse, exact guards and metadata/callback/iterator contracts. Align original whole clear/release store bodies with native main_def source boundary while retaining logical size reset in owner and complete prior native prefix. Reuse shared modules; actual fullnative/coverage/static/upstream-absent fullsuite evidence, no Writer-only coverage repairs. Persistent user implementation approval applies."
 sections:
@@ -263,6 +282,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T01:51:31.441Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610100109-QQ0KPB
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T01:47:11.062Z, excerpt_hash=sha256:b612d66da87b8a461b95cba65e5cd46bc3c56d12618689ac5b20854fa843a240
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100109-QQ0KPB/blueprint/resolved-snapshot.json
+    - old_digest: f2a9bc124177a64d7f2ed6d23a8af816709aa5e0ea082ffe880a6d73ffbc8d5d
+    - current_digest: f2a9bc124177a64d7f2ed6d23a8af816709aa5e0ea082ffe880a6d73ffbc8d5d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610100109-QQ0KPB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610100109-QQ0KPB --result verified-202610100109-QQ0KPB --commit 2d2d5c431648c5d85bc5b89311ccd3e33fcebe73
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only active task source/registry/docs commits via ordinary user-approved Git recovery if requested; no history rewrite, merges or unrelated task changes."
   Findings: |-
@@ -283,6 +332,18 @@ sections:
     - Observation: Full office terminal exited1: one aggregate native container test timed out in30000ms at31826ms; 14276other tests/549other files passed, actual550files14277tests. Full Istanbul already100allfourmetricsS24892/B17593/F5490/L22563. Complete initial log task30-full-office.log retained; other fullgroups proceed independently.
       Impact: The growing complete native corpus exceeds one aggregate test budget. No native mismatch or Writer coverage shortage observed; mandatory full office gate needs corrected verification.
       Resolution: Within approved container.test.ts/core-doc paths, reuse one complete observer and register three original operation groups (base15076/rangeempty13128/rangerelease7536), each preserving every case/state/final log. Retain all35740inputs/284896records/default30000ms/coverage gates. Exact old marker becomes enclosing describe for all groups. Run final affected shared100coverage/typing/lint/docs/size/format and corrected upstream-absent ordinary groups; then rerun only failed fulloffice suite with exact coverage command after independent heavy browser/static jobs terminate. Preserve all initial artifacts, no source algorithm/gate/heap/Writer edits.
+
+    - Observation: Exact direct-close route task complete with quality commit 2d2d5c431648c5d85bc5b89311ccd3e33fcebe73 exited 5 E_GIT: commit subject is too generic; task state transitioned to DONE with only its README dirty.
+      Impact: Verified implementation and quality review remain intact; only task artifact cleanup is pending.
+      Resolution: Recomputed next-action: direct_done_pending_artifact_commit emits exact agentplane commit --close --unstage-others. Execute this bounded supported recovery once; retain concrete approved scope.
+
+    - Observation: Exact bounded recovery agentplane commit 202610100109-QQ0KPB --close --unstage-others also exited 5 with identical generated generic-subject E_GIT rejection. Recomputed route remains task-artifact cleanup only.
+      Impact: No implementation, checks, or quality criteria changed; deterministic message generation alone prevents clean artifact closure.
+      Resolution: Use supported task-scoped ap commit with explicit specific finalize subject and --allow-tasks, retaining CLI lifecycle and existing verified SHA rather than altering enforcement or retrying the same generated message.
+extensions:
+  implementation_commit:
+    hash: "4b45c7cc3e05398a788dceafcc2c1f11c7edc1ab"
+    message: "🧮 QQ0KPB shared: release original ranges and preserve lifetime bodies"
 id_source: "generated"
 ---
 ## Summary
@@ -487,6 +548,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T01:51:31.441Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610100109-QQ0KPB
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T01:47:11.062Z, excerpt_hash=sha256:b612d66da87b8a461b95cba65e5cd46bc3c56d12618689ac5b20854fa843a240
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610100109-QQ0KPB/blueprint/resolved-snapshot.json
+- old_digest: f2a9bc124177a64d7f2ed6d23a8af816709aa5e0ea082ffe880a6d73ffbc8d5d
+- current_digest: f2a9bc124177a64d7f2ed6d23a8af816709aa5e0ea082ffe880a6d73ffbc8d5d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610100109-QQ0KPB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610100109-QQ0KPB --result verified-202610100109-QQ0KPB --commit 2d2d5c431648c5d85bc5b89311ccd3e33fcebe73
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -512,3 +603,11 @@ Existing shared actual store/events/blockfuncs/iterator and complete native obse
 - Observation: Full office terminal exited1: one aggregate native container test timed out in30000ms at31826ms; 14276other tests/549other files passed, actual550files14277tests. Full Istanbul already100allfourmetricsS24892/B17593/F5490/L22563. Complete initial log task30-full-office.log retained; other fullgroups proceed independently.
   Impact: The growing complete native corpus exceeds one aggregate test budget. No native mismatch or Writer coverage shortage observed; mandatory full office gate needs corrected verification.
   Resolution: Within approved container.test.ts/core-doc paths, reuse one complete observer and register three original operation groups (base15076/rangeempty13128/rangerelease7536), each preserving every case/state/final log. Retain all35740inputs/284896records/default30000ms/coverage gates. Exact old marker becomes enclosing describe for all groups. Run final affected shared100coverage/typing/lint/docs/size/format and corrected upstream-absent ordinary groups; then rerun only failed fulloffice suite with exact coverage command after independent heavy browser/static jobs terminate. Preserve all initial artifacts, no source algorithm/gate/heap/Writer edits.
+
+- Observation: Exact direct-close route task complete with quality commit 2d2d5c431648c5d85bc5b89311ccd3e33fcebe73 exited 5 E_GIT: commit subject is too generic; task state transitioned to DONE with only its README dirty.
+  Impact: Verified implementation and quality review remain intact; only task artifact cleanup is pending.
+  Resolution: Recomputed next-action: direct_done_pending_artifact_commit emits exact agentplane commit --close --unstage-others. Execute this bounded supported recovery once; retain concrete approved scope.
+
+- Observation: Exact bounded recovery agentplane commit 202610100109-QQ0KPB --close --unstage-others also exited 5 with identical generated generic-subject E_GIT rejection. Recomputed route remains task-artifact cleanup only.
+  Impact: No implementation, checks, or quality criteria changed; deterministic message generation alone prevents clean artifact closure.
+  Resolution: Use supported task-scoped ap commit with explicit specific finalize subject and --allow-tasks, retaining CLI lifecycle and existing verified SHA rather than altering enforcement or retrying the same generated message.
