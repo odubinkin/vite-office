@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610101854-FSYVCZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T19:19:31.781Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review of exact semantic3e4a04a9c4c60bbc13868c86a8ce5d994157e58c: approved original text-frame ownership/lifetime scope accepted with actual entire five-module100%,13925related and22Chromium cases, current hashes and preserved old acceptance.",
+  "evaluated_sha": "3e4a04a9c4c60bbc13868c86a8ce5d994157e58c",
+  "blueprint_digest": "d16694b347c9124af8bd9f5a54f2a4ff0817c35d5e18df378460d34f86b16632",
+  "findings": [
+    "Original SwTextNode clients now follow SwContentFrame/SwFrame with Txt and unmerged GetTextNodeFirst, receive native pooled invalidation, and release on cursor replacement, pagination candidate reuse/discard/error, document replacement and per-view close. Required real owner input prevents the old detached frozen frame path.",
+    "810old test files:802byte-identical and8native owner fixture migrations; all other AST tokens/cases/matrices/device inputs/expected matcher arguments preserved. Eight canonical prefixes/status/default/classification/exception values retained, two new ssfrm unverified records; nine metadata gates pass. Runtime/static/build/browser upstream-absent, refs restored."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610101854-FSYVCZ/README.md",
+    "apps/office/src/sw/source/core/layout/native-text-frame-owner.test.ts",
+    "apps/office/src/sw/browser/editor/native-text-frame-owner.test.tsx",
+    "apps/office/e2e/writer-native-text-frame-owner.spec.ts",
+    "docs/program/registry/writer/runtime/sw/source/core/layout/ssfrm.ts.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Review is same-agent and non-independent. Native SwFlowFrame/follow/root/page/content hierarchy, merged/vertical/native geometry, redlines/text Prepare/callbacks and actual per-node width guards remain unrepresented or unverified; the per-view root and device fragment geometry remain explicit browser accommodations. No complete module or goal parity claim."
+  ]
+}
