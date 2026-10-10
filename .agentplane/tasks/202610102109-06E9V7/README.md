@@ -1,10 +1,11 @@
 ---
 id: "202610102109-06E9V7"
 title: "Publish original cursor frame chains from mounted Writer fragments"
-status: "DOING"
+result_summary: "Actual body master/follow cursor measurements and source GetFollow margins wired; singular API and length continuation proxy removed. Native full query/formatter/geometry/table follows and duplicate cursor registry remain explicit follow-ups."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -56,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Actual mounted body cursor chains and original native follows replace standalone API/text-length proxy; scoped current evidence/inventory retained."
+  -
+    author: "CODER"
+    body: "Verified: Native mounted body fragment chains replace standalone cursor publication and continuation length proxy.7160related/306+24Chromium/13,9fresh core/React+1fresh browser pass;entire4modules100allfour/1700nonnegative counters1284current TS/TSX/MJS hashes and explicit browser formatting AST equivalence.822oldfiles818same/4API migrations2real-follow fixtures;8historical canonical records9metadata gates preserved. Exact1b3be0438b363c43e23c54131ab7a03b097f1786 same-agent non-independent review; references restored. Task9 after BZ14P4;next full task10 then repair and pause."
 events:
   -
     type: "status"
@@ -77,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "7160related/306 plus24Chromium/13 and9fresh core/React+1fresh browser pass. Entire4modules758lines831statements142functions727branches100,1700nonnegative counters1284currentTS/TSX/MJS hashes.822oldfiles818same/4literal-preserving API migrations2real-follow fixtures;8canonical histories9metadata gates. Initial fresh static/format/helper-only repairs documented; explicit final browser AST equality and no acceptance replay. Native query/formatter/geometry/table-follow and duplicate cursor registry remain unverified. Full next task10 then pause after repairs."
+  -
+    type: "status"
+    at: "2026-10-10T21:23:13.365Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native mounted body fragment chains replace standalone cursor publication and continuation length proxy.7160related/306+24Chromium/13,9fresh core/React+1fresh browser pass;entire4modules100allfour/1700nonnegative counters1284current TS/TSX/MJS hashes and explicit browser formatting AST equivalence.822oldfiles818same/4API migrations2real-follow fixtures;8historical canonical records9metadata gates preserved. Exact1b3be0438b363c43e23c54131ab7a03b097f1786 same-agent non-independent review; references restored. Task9 after BZ14P4;next full task10 then repair and pause."
 doc_version: 3
-doc_updated_at: "2026-10-10T21:22:59.563Z"
+doc_updated_at: "2026-10-10T21:23:13.366Z"
 doc_updated_by: "CODER"
 description: "Correction9 after BZ14P4: replace standalone cursor-frame device publication with full actual body fragment chain, isolate repeated cell occurrences, remove end-versus-node-length continuation proxy and retain native model/view adjacency. Then full checkpoint as task10 and pause after repairs."
 sections:
@@ -193,6 +204,10 @@ sections:
     - Observation: Final formatting check found fresh Chromium spec needing a second Prettier pass despite initial write. Preservation helper initially compared inverse API migration before formatting and rejected a trailing comma; optional browser-helper discovery returned no match.
       Impact: No runtime failure; all7160 related and24Chromium scenarios pass. Production and existing acceptance unchanged by helper/format repairs.
       Resolution: Current affected spec format/check/lint pass. Verified every fresh spec AST leaf literal/case/matcher unchanged; all other1283 current source/test hashes unchanged and whole4 coverage maps retained. Preservation helper canonicalizes both versions with repository Prettier config and proves822old files:818byte-identical and4literal-preserving API migrations, including2actual-follow fixtures. No passing acceptance replay; no helper/source/log artifacts in AgentPlane.
+extensions:
+  implementation_commit:
+    hash: "1b3be0438b363c43e23c54131ab7a03b097f1786"
+    message: "🧩 06E9V7 code: Publish native cursor follows and remove length proxy"
 id_source: "generated"
 ---
 ## Summary
