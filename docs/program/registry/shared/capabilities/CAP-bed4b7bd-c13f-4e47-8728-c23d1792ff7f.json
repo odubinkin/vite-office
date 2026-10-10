@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-bed4b7bd-c13f-4e47-8728-c23d1792ff7f",
+    "capabilityId": "CAP-bed4b7bd-c13f-4e47-8728-c23d1792ff7f",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "All22 original functions/four constants, ASCII predicates/conversions/difference, Unicode/surrogate/scalar classification and ordered native assertions.",
+      "Every1114112 native codepoint row, all1048576 surrogate pairs and complete initialized split output preserve original mutation.",
+      "All67300 comparison outputs, native integral conversions,25 runtime guards and24 deleted-overload compiler rejections; complete raw digest restored losslessly."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owners and algorithms retained with explicit C++ lifetime/type/reference language adapters."
+    },
+    "capability": "Complete original shared RTL Unicode character runtime contracts",
+    "gaps": [
+      "All22 original RTL character runtime functions and four detail constants retain original numeric predicates, ASCII-only transformations/difference, scalar short-circuit, ordered assertions and UTF16 split/combine semantics. Integral JS number boundaries apply original sal_uInt32 conversion; detail readonly fields adapt the native namespace, and Uint16Array output adapts caller pointer storage for original valid buffers. Full unmodified pinned character.hxx and actual original dependencies/config templates compile natively with7 full blob hashes. All1114112 codepoints and every1048576 supplementary codepoint/surrogate pair retain24 complete initialized row fields. Full106954752-byte original raw output is encoded with2082 generic neighboring-delta runs and reconstructed byte-for-byte. Native defined ASan/UBSan output agrees completely. All67300 ASCII-byte/cross-boundary comparison results, native UInt32 conversions, four constants,25 original runtime assertions and24 deleted char/signed-char native overload rejections are preserved separately. Portable full-state replay verifies every native field and exact whole raw SHA without original sources. C++ deleted-overload/constexpr/template/physical ABI/invalid pointer enforcement, nonintegral or unsafe JS numeric inputs and complete consumer QA remain unverified. The original locale-aware CharClass/UNO/i18nutil/ICU78.3 service, SharedStringPool and actual Calc cell/column/document/UI are still missing; no JavaScript Unicode casing or fake owner replaces them."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/rtl/character.hxx",
+          "marker": "splitSurrogates"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/oustringbuffer/test_oustringbuffer_utf32.cxx",
+          "marker": "CPPUNIT_TEST(appendUtf32)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/character.hxx",
+          "marker": "isUnicodeScalarValue"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/character.ts",
+          "marker": "splitSurrogates"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/character.test.ts",
+          "marker": "matches every initialized original Unicode codepoint and surrogate-pair observation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Complete shared RTL character contracts"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Classify, compare, split and combine original Unicode codepoints and UTF16 units",
+    "scopeLimitations": [
+      "All22 original RTL character runtime functions and four detail constants retain original numeric predicates, ASCII-only transformations/difference, scalar short-circuit, ordered assertions and UTF16 split/combine semantics. Integral JS number boundaries apply original sal_uInt32 conversion; detail readonly fields adapt the native namespace, and Uint16Array output adapts caller pointer storage for original valid buffers. Full unmodified pinned character.hxx and actual original dependencies/config templates compile natively with7 full blob hashes. All1114112 codepoints and every1048576 supplementary codepoint/surrogate pair retain24 complete initialized row fields. Full106954752-byte original raw output is encoded with2082 generic neighboring-delta runs and reconstructed byte-for-byte. Native defined ASan/UBSan output agrees completely. All67300 ASCII-byte/cross-boundary comparison results, native UInt32 conversions, four constants,25 original runtime assertions and24 deleted char/signed-char native overload rejections are preserved separately. Portable full-state replay verifies every native field and exact whole raw SHA without original sources. C++ deleted-overload/constexpr/template/physical ABI/invalid pointer enforcement, nonintegral or unsafe JS numeric inputs and complete consumer QA remain unverified. The original locale-aware CharClass/UNO/i18nutil/ICU78.3 service, SharedStringPool and actual Calc cell/column/document/UI are still missing; no JavaScript Unicode casing or fake owner replaces them.",
+      "Generated exhaustive original-header caller evidence is separate from literal upstream consumer QA; full Unicode case service and Calc document/UI parity is not claimed.",
+      "Original referenced QA is the UTF32 string-buffer consumer, whose sal/rtl/ustrbuf.cxx insert path invokes rtl::splitSurrogates. Its literal QA suite has not been ported; current acceptance is the generated complete original-header native caller corpus."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

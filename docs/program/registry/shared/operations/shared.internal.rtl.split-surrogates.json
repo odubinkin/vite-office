@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.rtl.split-surrogates",
+    "modulePath": "apps/office/src/sal/inc/rtl/character.ts",
+    "symbol": "splitSurrogates",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-bed4b7bd-c13f-4e47-8728-c23d1792ff7f",
+    "description": "Original RTL Unicode codepoint split writes the first caller UTF16 slot, preserves the second slot for BMP points and writes both original high/low units for supplementary points after ordered assertions."
+  }
+}

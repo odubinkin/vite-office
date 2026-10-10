@@ -1820,3 +1820,41 @@ Calc cell store, column/document or editable UI. Shortened/string-view template
 comparison overloads, remaining OUString algorithms, native ABI/concurrency and
 complete original consumer QA remain unverified. This is task5/10 since full
 task31; the next scheduled full run is task41.
+
+## Complete shared RTL character contracts
+
+Task37 (`202610101620-25HQ9X`) ports the complete runtime owner from original
+`include/rtl/character.hxx` into shared `sal/inc/rtl/character.ts`. Its22
+functions and four detail constants preserve Unicode/scalar/surrogate predicates,
+ASCII-only classification/conversion/comparison, ordered assertions and UTF16
+split/combine semantics. Scalar detection short-circuits before validating a
+surrogate; splitting a BMP point writes only the first output slot.
+
+Original integral sal_uInt32 conversion is explicit at the JavaScript numeric
+boundary. A readonly named object represents the original detail namespace;
+Uint16Array represents the caller's valid output pointer storage. Native deleted
+char/signed-char overloads and constant-expression/type/physical pointer rules
+remain separate original compiler evidence, not synthetic runtime guarantees.
+
+The original i18nutil casefolding owner directly depends on these functions.
+This adds the actual shared decoding dependency required before its real
+locale-aware service and SharedStringPool can be connected. It provides no
+JavaScript Unicode casing replacement, fake CharClass or document model.
+
+`scripts/rtl-character-native-probe.mjs` compiles the entire unchanged original
+header with7 pinned full header/config-template blobs. It captures24 initialized
+fields for all1114112 codepoints, including every1048576 supplementary point
+and surrogate pair. Full native output is106954752 bytes, SHA256
+`3ac04bb39846c8a0a4682442d1bdf7be9b3a45976a2fb295846b6012b0424511`.
+A generic2082-run neighboring-delta encoding restores every original byte;
+portable acceptance compares every field and the complete raw digest. It also
+checks67300 ASCII-byte/cross-boundary comparisons, UInt32 conversion witnesses,
+four constants,25 original runtime assertions and24 original rejected char
+overloads. ASan/UBSan gives identical defined outputs. The original UTF32-buffer
+consumer QA reference remains distinct from the generated header caller corpus.
+
+Invalid physical pointers/undersized output, nonintegral or unsafe JavaScript
+inputs, native ABI/template/constant-evaluation enforcement and complete original
+consumer QA remain unverified. Actual CharClass/UNO/i18npool/i18nutil/ICU78.3,
+SharedStringPool and Calc cell/column/document/editable UI owners remain required.
+This is task6/10 since full task31; the next scheduled full run is task41.
