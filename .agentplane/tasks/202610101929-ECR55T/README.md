@@ -1,10 +1,11 @@
 ---
 id: "202610101929-ECR55T"
 title: "Restore native text-frame master and follow chains"
-status: "DOING"
+result_summary: "Original text-frame follow ownership and native UI classification restored with targeted coverage and inventory evidence; complete query/root parity remains unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Original native master/follow chains, typed content links, unmerged frame-position affinity and UI native classification; targeted checks and inventory passed."
+  -
+    author: "CODER"
+    body: "Verified: Original native master/follow chains and represented affinity replace stored classification;7113 related plus23 Chromium pass, actual entire5 modules100 all-four, current hashes/old acceptance/canonical prefixes preserved and9 metadata gates pass. Exact semantic7d151660ea9771b2046e21efcb4485c3f6ae671d same-agent non-independent quality recorded; source references restored. Correction5/10; stop after next full and required repairs."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "7113 related cases/297 files and23 Chromium/12 files pass; actual entire5 modules494 lines533 statements124 functions434 branches100 all-four,1091 nonnegative raw counters/current production and Vitest hashes; old813 tests810 byte-identical+3 native API-only migrations,8 historical canonical prefixes retained+2 new unverified mappings;9 metadata gates pass. Runtime/static/build/browser upstream-absent and restored finally; fixture-only failures repaired with affected checks. No complete native query/root parity claim. Same-agent exact semantic review follows."
+  -
+    type: "status"
+    at: "2026-10-10T19:56:27.711Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original native master/follow chains and represented affinity replace stored classification;7113 related plus23 Chromium pass, actual entire5 modules100 all-four, current hashes/old acceptance/canonical prefixes preserved and9 metadata gates pass. Exact semantic7d151660ea9771b2046e21efcb4485c3f6ae671d same-agent non-independent quality recorded; source references restored. Correction5/10; stop after next full and required repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T19:55:36.845Z"
+doc_updated_at: "2026-10-10T19:56:27.712Z"
 doc_updated_by: "CODER"
 description: "Fifth correction after full BZ14P4 under the standing human iterative goal: replace stored text-frame follow booleans with original SwFlowFrame preceding/follow links, source re-chaining and destruction, native position/affinity lookup and direct UI IsFollow calls. Preserve device geometry/native query/root/merged/lock/layout gaps and registered recovery/open/save settings; pause after next full and required repairs."
 sections:
@@ -163,6 +174,10 @@ sections:
     Command: related Chromium. Result: fail with22 passing and only1 fresh fixture failure. Evidence: clicking the middle of a multi-line first fragment followed by Home correctly starts that visual line, inserting X inside the text. Scope: keep original X+text expectation and use actual Control+Home native section-start gesture before editing; no production or old acceptance change. Preserve22 passing results and rerun only failed fresh scenario plus affected format/lint/types. Coverage7113/297 and whole5 all-four100 remain valid; only fresh Chromium input changed after that producer.
 
     Resolved: type/format/React/browser fixture failures repaired within the approved scope;15 fresh core+1 fresh React+1 fresh Chromium checks pass. No production runtime failure remains. Read-only missing-path probes and one invalid AP doc-set flag were corrected after route recomputation. Preservation-helper declaration collision and formatting-only trailing comma comparison were corrected without changing tests or rerunning passing runtime checks; same Prettier normalization plus exact AST leaf comparison passes. Current maps remain raw complete five-module100 all-four with1091 nonnegative counters; all production/Vitest hashes unchanged after profile, only fresh Chromium input changed Home to Control+Home and passed its affected checks. No helper/source/Python/raw map or log in AP artifacts.
+extensions:
+  implementation_commit:
+    hash: "7d151660ea9771b2046e21efcb4485c3f6ae671d"
+    message: "🧩 ECR55T code: Restore original text-frame follow ownership"
 id_source: "generated"
 ---
 ## Summary
