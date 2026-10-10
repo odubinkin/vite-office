@@ -1,0 +1,551 @@
+{
+  "task": "202610092353-WHACNF",
+  "scope": "Complete original native table frame-size and horizontal-orientation transport correction",
+  "cadence": {
+    "fullBaseline": "202610092229-BZQGYC",
+    "correctionSinceFull": 4,
+    "fullNotDue": true,
+    "goalStatus": "active,incomplete"
+  },
+  "sourcePin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeSourceContracts": [
+    "fmtfsize.hxx complete dimensions/types/percentages/reference fields",
+    "fmtornt.hxx original position/orientation/relation/toggle",
+    "atrfrm.cxx257..272 frame-size complete equality/copy",
+    "atrfrm.cxx1561..1573 horizontal complete equality/copy",
+    "swtable.hxx200 native capped headline getter and independent raw counter contract"
+  ],
+  "implementation": "Current graph transport encodes original direct8-field frame-size and4-field horizontal-orientation items with no outgoing scalar width/horiOrient/align. Current native geometry restores direct native frame attrs including absence and wins conflicting legacy scalar geometry. Prior snapshots without nativeGeometry use legacy constructor ingress. Remaining raw headline/spacing/flag projection and row/box boundaries explicitly remain separate partial responsibilities.",
+  "productionSourceHashes": {
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "1fecb21ca7157521ac8bdb54c9f1e1bbb34841e5579c1317e6c8dbc4c74ecdfd",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "d716023ae8047d079021d976914189099e458ed8f70bd072c48aab37bea1e880"
+  },
+  "freshTestHashes": {
+    "apps/office/src/sw/browser/filter/xml/native-table-geometry-transport.test.ts": "350e19426568f4db66f5efd8bba25dc7edb4d666dcbd74da1f6118458e69257e",
+    "apps/office/src/sw/browser/presentation/native-table-geometry-transport.test.tsx": "1866a3522459bf0d52882d12b1e46a1f5be238b9ab35a8a4c3407159b34d8bc3"
+  },
+  "coverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "1fecb21ca7157521ac8bdb54c9f1e1bbb34841e5579c1317e6c8dbc4c74ecdfd",
+      "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "d716023ae8047d079021d976914189099e458ed8f70bd072c48aab37bea1e880"
+    },
+    "actualCoverage": {
+      "lines": {
+        "total": 264,
+        "covered": 264,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 283,
+        "covered": 283,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 48,
+        "covered": 48,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 354,
+        "covered": 354,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": {
+        "lines": {
+          "total": 221,
+          "covered": 221,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 236,
+          "covered": 236,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 295,
+          "covered": 295,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": {
+        "lines": {
+          "total": 43,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 47,
+          "covered": 47,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 59,
+          "covered": 59,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "zeroNegativeCounters": true,
+    "completeCurrentSourceMapIdentity": true,
+    "onlyActualCurrentTaskCounters": true,
+    "allCasesPassedFirstAttempt": true,
+    "acceptedUniqueCases": 1703,
+    "relatedFiles": 115,
+    "freshCases": 28,
+    "profiles": [
+      {
+        "label": "related-geometry",
+        "mapSha256": "ec881b2f048152b8499c0bbab4ff5a93992c09b3a8c19dcb7321eaf3e752c276",
+        "reportSha256": "193f6c8ae4c3c338bb0fde454927f85d661e8d4a4f03d3147df6bf3144adfb12"
+      }
+    ],
+    "passingReplayForHelperRepairs": 0,
+    "oldMapOrCounterReuse": false
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 1746,
+    "unchangedOriginalPaths": 1740,
+    "changedPaths": [
+      "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts",
+      "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-table-item-codec.ts.json",
+      "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-table-item-codec.ts.json"
+    ],
+    "oldTestFiles": 595,
+    "oldTestsByteIdentical": 595,
+    "oldTestMigrations": 0,
+    "canonicalHistoricalPrefixes": 4,
+    "parentFindingsPrefixPreserved": true
+  },
+  "verification": {
+    "unitCasesAccepted": 1703,
+    "relatedFiles": 115,
+    "freshCases": 28,
+    "allUnitCasesPassedFirstAttempt": true,
+    "failures": 0,
+    "skips": 0,
+    "fullSizeAndOrientationFieldsRetained": true,
+    "nativeDirectAbsencePreserved": true,
+    "conflictingLegacyFieldsLoseToNative": true,
+    "rawHeadline9RetainedWithOneActualRow": true,
+    "primitiveBoundaries": [
+      "structuredClone",
+      "JSON",
+      "ODT Worker envelope"
+    ],
+    "ordinaryOdtScope": "Represented table width and content verified;full size/orientation fields retained on original model,full ODT field mapping remains incomplete",
+    "mountedOriginalOwnerAndCursorHistoryCycles": 3,
+    "browser": {
+      "startTime": "2026-10-09T23:59:29.473Z",
+      "duration": 19230.798000000003,
+      "expected": 24,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "unitCommand": {
+      "label": "related-geometry",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "src/editeng/source/items/textitem.test.ts",
+        "src/xmloff/source/style/native-bullet-scalar.test.ts",
+        "src/sw/browser/editor/native-table-headlines.test.tsx",
+        "src/xmloff/source/style/native-legacy-bullet-symbol.test.ts",
+        "src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+        "src/sw/inc/lineinfo.test.ts",
+        "src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+        "src/sw/source/filter/xml/odt-layout-parity.test.ts",
+        "src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts",
+        "src/sw/browser/presentation/native-table-geometry-transport.test.tsx",
+        "src/sw/source/filter/xml/odt-list-position-mode-roundtrip.test.ts",
+        "src/sw/source/core/txtnode/nesting-attribute-ownership.test.ts",
+        "src/sw/browser/presentation/native-attribute-portions.test.tsx",
+        "src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+        "src/sw/source/filter/xml/native-none-numbering.test.ts",
+        "src/sw/browser/filter/xml/native-table-geometry-transport.test.ts",
+        "src/sw/browser/filter/xml/native-row-split-item-transport.test.ts",
+        "src/sw/source/core/txtnode/list-restart-contract.test.ts",
+        "src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+        "src/sw/source/core/txtnode/internet-style-id-transport.test.ts",
+        "src/sw/source/core/txtnode/internet-item-defaults.test.ts",
+        "src/sw/source/core/txtnode/number-classification.test.ts",
+        "src/sw/source/filter/xml/odt-embedded-fonts.test.ts",
+        "src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+        "src/sw/source/filter/xml/odt-list-marker-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-worker-client.test.ts",
+        "src/sw/source/filter/xml/odt-list-implicit-restart.test.ts",
+        "src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
+        "src/sw/source/core/txtnode/text-attribute-lookup.test.ts",
+        "src/sw/source/filter/xml/odt-list-continuation.test.ts",
+        "src/sw/source/filter/xml/native-independent-column-odf.test.ts",
+        "src/sw/source/filter/xml/odt-font-style-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-list-rule-application.test.ts",
+        "src/sw/source/filter/xml/odt-list-declaration-defaults.test.ts",
+        "src/sw/source/filter/xml/odt-filter-service.test.ts",
+        "src/sw/source/core/txtnode/internet-node-transitions.test.ts",
+        "src/sw/source/filter/xml/odt-list-sublist-restart.test.ts",
+        "src/sw/source/core/txtnode/native-hyperlink-boundaries.test.ts",
+        "src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts",
+        "src/sw/source/filter/xml/native-row-frame-size-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+        "src/sw/source/filter/xml/native-cell-alignment-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-list-start-normalization.test.ts",
+        "src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-table-cell-lists.test.ts",
+        "src/sw/source/filter/xml/odt-table-alignment.test.ts",
+        "src/sw/source/filter/xml/odt-text-collection-numbering.test.ts",
+        "src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-markers.test.ts",
+        "src/sw/source/core/table/native-table-headline-counter.test.ts",
+        "src/sw/source/core/text/native-numbering-font.test.ts",
+        "src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts",
+        "src/sw/source/core/attr/list-restart-default.test.ts",
+        "src/sw/source/core/table/native-column-insertion.test.ts",
+        "src/sw/source/core/doc/automatic-style-handles.test.ts",
+        "src/sw/source/core/doc/number-ownership.test.ts",
+        "src/sw/source/core/doc/writer.test.ts",
+        "src/sw/source/uibase/wrtsh/native-typing-internet-ownership.test.ts",
+        "src/sw/source/core/doc/number-format.test.ts",
+        "src/sw/source/core/doc/number-pointer.test.ts",
+        "src/sw/source/core/doc/number-list-format.test.ts",
+        "src/sw/source/core/doc/writer-boundaries.test.ts",
+        "src/sw/source/core/doc/number-rule-lifecycle.test.ts",
+        "src/sw/source/core/doc/text-hint-copy.test.ts",
+        "src/sw/source/core/doc/writer-attributes.test.ts",
+        "src/sw/source/core/doc/writer-model.test.ts",
+        "src/sw/source/core/edit/native-numbering-indent.test.ts",
+        "src/sw/source/core/unocore/native-numbering-publication.test.ts",
+        "src/sw/source/core/undo/undobj.test.ts",
+        "src/sw/source/filter/xml/odt-span-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-page-style-errors.test.ts",
+        "src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-alignment-validation.test.ts",
+        "src/sw/source/filter/xml/odt-list-label-alignment-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-table-print-area.test.ts",
+        "src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-line-numbering.test.ts",
+        "src/sw/source/filter/xml/native-table-import-items.test.ts",
+        "src/sw/source/filter/xml/odt-canonical-state.test.ts",
+        "src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+        "src/sw/source/filter/xml/xmltbli-default-cell.test.ts",
+        "src/sw/source/filter/xml/native-row-cell-export-items.test.ts",
+        "src/sw/source/filter/xml/odt-hyperlink-roundtrip.test.ts",
+        "src/sw/source/filter/xml/odt-style-container-roundtrip.test.ts",
+        "src/sw/source/filter/xml/native-table-export-items.test.ts",
+        "src/sw/source/filter/xml/odt-import-diagnostics.test.ts",
+        "src/sw/source/filter/xml/odt-declarations.test.ts",
+        "src/sw/source/filter/xml/odt-scale.test.ts",
+        "src/sw/source/filter/xml/hyperlink-item-codec.test.ts",
+        "src/sw/browser/presentation/native-row-split-core-items.test.tsx",
+        "src/sw/browser/presentation/native-table-text-flow-split.test.tsx",
+        "src/sw/browser/presentation/native-table-column-page.test.tsx",
+        "src/sw/browser/presentation/native-table-itemset-restore.test.tsx",
+        "src/sw/browser/presentation/native-table-properties-reset.test.tsx",
+        "src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+        "src/sw/browser/presentation/native-table-property-output.test.tsx",
+        "src/sw/browser/presentation/native-table-alignment.test.tsx",
+        "src/sw/browser/presentation/native-table-properties.test.tsx",
+        "src/sw/browser/presentation/native-table-name-page.test.tsx",
+        "src/sw/browser/presentation/native-table-attr-notify.test.tsx",
+        "src/sw/browser/presentation/native-table-import-items.test.tsx",
+        "src/sw/browser/presentation/native-table-attribute-set.test.tsx",
+        "src/sw/browser/presentation/native-table-height-delta.test.tsx",
+        "src/sw/browser/presentation/native-row-frame-format.test.tsx",
+        "src/sw/browser/presentation/native-table-split-items.test.tsx",
+        "src/sw/browser/presentation/native-table-border-changed-items.test.tsx",
+        "src/sw/browser/presentation/native-table-export-items.test.tsx",
+        "src/sw/browser/presentation/native-row-split-dialog-input.test.tsx",
+        "src/sw/browser/presentation/native-row-cell-export-items.test.tsx",
+        "src/sw/browser/presentation/native-table-text-flow-headline.test.tsx",
+        "src/sw/browser/presentation/native-table-border-owner-history.test.tsx",
+        "src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+        "src/sw/browser/presentation/native-table-format-lifecycle.test.tsx",
+        "--coverage.include=src/sw/browser/filter/xml/writer-document-codec.ts",
+        "--coverage.include=src/sw/browser/filter/xml/writer-table-item-codec.ts",
+        "--coverage.reportOnFailure",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/WHACNF/related-geometry-tests.json",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/WHACNF/related-geometry-coverage"
+      ]
+    },
+    "unitResult": [
+      {
+        "label": "related-geometry",
+        "status": 0,
+        "upstreamAbsent": true
+      }
+    ],
+    "statics": [
+      {
+        "label": "format-check",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "format:check"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "lint",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "lint"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "typecheck",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "check-dependencies",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "check:dependencies"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "check-docs",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "check:docs"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "check-file-size",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "check:file-size"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "current-build",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "run",
+          "build"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "static-build",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "exec",
+          "--",
+          "node",
+          "scripts/check-static-build.mjs"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      },
+      {
+        "label": "review-browser",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "exec",
+          "--",
+          "playwright",
+          "test",
+          "--config",
+          "apps/office/playwright.config.ts",
+          "--project=writer",
+          "writer-native-table-column-drag.spec.ts",
+          "writer-native-table-text-flow-headline.spec.ts",
+          "writer-table-properties-history.spec.ts",
+          "writer-native-cell-alignment.spec.ts",
+          "writer-table-alignment.spec.ts",
+          "--reporter=list,json"
+        ],
+        "status": 0,
+        "upstreamAbsent": true
+      }
+    ],
+    "metadata": [
+      {
+        "label": "registry-build",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:registry:build"
+        ],
+        "status": 0,
+        "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+        "metadataOnly": true
+      },
+      {
+        "label": "source-tree",
+        "bin": "npm",
+        "args": [
+          "run",
+          "check:source-tree"
+        ],
+        "status": 0,
+        "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+        "metadataOnly": true
+      },
+      {
+        "label": "source-provenance",
+        "bin": "npm",
+        "args": [
+          "run",
+          "check:source-provenance"
+        ],
+        "status": 0,
+        "rawHash": "6254cd84ffd0c48086c7f42fd3cd1c4aa2d546fdaf62a670474f9e9aa6a42ac1",
+        "metadataOnly": true
+      },
+      {
+        "label": "registry-check",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:registry:check"
+        ],
+        "status": 0,
+        "rawHash": "c3bd87bf567d0c55ff00c505ff4032afab59d9f250293f1f01fb920ea0c92def",
+        "metadataOnly": true
+      },
+      {
+        "label": "writer-resources",
+        "bin": "node_modules/.bin/tsx",
+        "args": [
+          "scripts/generate-writer-ui-resources.ts",
+          "--check"
+        ],
+        "status": 0,
+        "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "metadataOnly": true
+      },
+      {
+        "label": "inventory-invariants",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:invariants"
+        ],
+        "status": 0,
+        "rawHash": "3cbacf2010fc72ee35723bf43d657798960f390b26c6ca5f10d30eceafbd9b85",
+        "metadataOnly": true
+      },
+      {
+        "label": "inventory-parity",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:parity"
+        ],
+        "status": 0,
+        "rawHash": "197b802599991c7c3b793223a870be9789f124890c498d7420ce4c18ee1e737f",
+        "metadataOnly": true
+      },
+      {
+        "label": "routing",
+        "bin": "node",
+        "args": [
+          ".agentplane/policy/check-routing.mjs"
+        ],
+        "status": 0,
+        "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+        "metadataOnly": true
+      },
+      {
+        "label": "doctor",
+        "bin": "ap",
+        "args": [
+          "doctor"
+        ],
+        "status": 0,
+        "rawHash": "c5307a83c1423670cd2267dbfb701e79d8a77c2e994cf484a23ba552339707f8",
+        "metadataOnly": true
+      }
+    ],
+    "doctor": "doctor (OK)\ndoctor: checking workspace\ndoctor: checking branch_pr drift\ndoctor: checking runtime source\ndoctor: checking project-local blueprints\ndoctor: checking prompt graph\ndoctor: checking recent task archive\ndoctor: checking workflow contract\n{\"ts\":\"2026-10-10T00:00:09.151Z\",\"component\":\"workflow-runtime\",\"event\":\"workflow_doctor_check\",\"details\":{\"ok\":true,\"findings\":0}}\nwarning: doctor findings: errors=0 warnings=2 info=1\n- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches\nLikely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery\nNext action: agentplane hooks install (rewrite the shim with the current fallback chain)\nDetails: Shim path: .agentplane/bin/agentplane\n  - AGENTPLANE_HOOK_RUNNER fallback: present\n  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present\n  - Runner startup readiness: missing\n- [INFO] Project blueprint compatibility: compatible; trusted=0\n- [WARN] DONE task is missing implementation commit hash: 202610090715-PJV0JK (finish with --commit <hash>).\n",
+    "testsBuildStaticsUpstreamPhysicallyAbsent": true,
+    "referenceRestoredInFinally": true,
+    "sourceAuditsAfterRestoreOnly": true
+  },
+  "constraints": {
+    "oldTestsUnchanged": true,
+    "oldInventoryHistoryDefaultsStatusesClassificationsUnchanged": true,
+    "deliberateRecoveryOpenSaveSettingsUiDeviationsUnchanged": true,
+    "noUpstreamSourceOrPythonInAgentPlane": true,
+    "rawHelpersSourceSnapshotsMapsLogsOnlyIgnoredCache": true,
+    "noExternalActionsOrSubagents": true
+  },
+  "residualGaps": [
+    "Remaining scalar LR/UL spacing/flags and explicit raw-headline snapshot projection",
+    "Complete LR proportion/context/gutter/zero flags",
+    "Inherited/shared native frame graph serialization",
+    "Row and box legacy format projections",
+    "Generic native XML style/item mapper,percentage/relative/layout width",
+    "Whole native layout/filter/UI/UNO/VCL parity"
+  ],
+  "quality": {
+    "independence": "Same implementing agent in EVALUATOR role; explicitly non-independent",
+    "status": "pending exact semantic SHA review"
+  },
+  "final": {
+    "branch": "writer",
+    "referenceRestored": true
+  }
+}

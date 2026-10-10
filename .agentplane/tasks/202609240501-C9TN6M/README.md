@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 309
+revision: 311
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-09T23:48:12.104Z"
+doc_updated_at: "2026-10-10T00:01:23.994Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1419,6 +1419,14 @@ sections:
     - Observation: Verified A8T5K0 correction3/10:535related89files16fresh24Chromium; XML-layer scalar replay removed.
       Impact: Original native table,row,box attributes and header counter retain full item fields and original owners through3mounted history cycles; whole final xmltbli actual101lines108statements16functions84branches100all-four,current source/map identity and zero negatives.
       Resolution: Initial1fresh assertion repaired failed-only; TS7 type-only repair emits identical runtime JS.593old tests and2canonical history prefixes unchanged,statics/build and9restored metadata pass. Reference restored,IO exceptions unchanged,general mapper/pooling/full layout/filter/UI/UNO/VCL incomplete. Goal remains active; full not due3/10. Exact-SHA non-independent quality follows.
+
+    - Observation: Correction WHACNF4/10 preserves complete original native table size and horizontal orientation across primitive transport.
+      Impact: Original8size/4orientation fields and direct absence replace outgoing scalar width/horiOrient/align; native restore wins conflicting legacy geometry while older scalar records still enter only legacy path.
+      Resolution: Fresh Worker/structured-clone/JSON/ODT/mounted and related whole2module actual Istanbul100 checks underway. Raw headline and remaining spacing/flags still use existing explicit projection; LR/shared/inherited/row-box/general mapper/full layout/filter/UI/UNO/VCL remain incomplete.4canonical histories and IO deviations preserved; goal active.
+
+    - Observation: Verified WHACNF correction4/10:1703related115files28fresh24Chromium all first attempt,zero failures/skips.
+      Impact: Entire final two transport modules actual Istanbul264lines283statements48functions354branches100all-four,current complete source/map identity and zero negatives. Original complete size/orientation survive structured-clone/JSON/Worker,direct absence/native precedence/legacy admission;raw header9 and3mounted original owner/cursor history cycles retained.
+      Resolution: 595old tests4canonical prefixes unchanged,statics/current build and9restored metadata pass,IO deviations preserved. Remaining raw-headline/spacing/flags/LR/inherited/shared/row-box/general mapper/full UI/layout/filter/UNO/VCL incomplete;goal active,full not due4/10. Exact-SHA non-independent quality follows.
 id_source: "generated"
 ---
 ## Summary
@@ -2811,3 +2819,11 @@ VerificationYCZ38R:519 unique current-source related cases87files and20fresh pas
 - Observation: Verified A8T5K0 correction3/10:535related89files16fresh24Chromium; XML-layer scalar replay removed.
   Impact: Original native table,row,box attributes and header counter retain full item fields and original owners through3mounted history cycles; whole final xmltbli actual101lines108statements16functions84branches100all-four,current source/map identity and zero negatives.
   Resolution: Initial1fresh assertion repaired failed-only; TS7 type-only repair emits identical runtime JS.593old tests and2canonical history prefixes unchanged,statics/build and9restored metadata pass. Reference restored,IO exceptions unchanged,general mapper/pooling/full layout/filter/UI/UNO/VCL incomplete. Goal remains active; full not due3/10. Exact-SHA non-independent quality follows.
+
+- Observation: Correction WHACNF4/10 preserves complete original native table size and horizontal orientation across primitive transport.
+  Impact: Original8size/4orientation fields and direct absence replace outgoing scalar width/horiOrient/align; native restore wins conflicting legacy geometry while older scalar records still enter only legacy path.
+  Resolution: Fresh Worker/structured-clone/JSON/ODT/mounted and related whole2module actual Istanbul100 checks underway. Raw headline and remaining spacing/flags still use existing explicit projection; LR/shared/inherited/row-box/general mapper/full layout/filter/UI/UNO/VCL remain incomplete.4canonical histories and IO deviations preserved; goal active.
+
+- Observation: Verified WHACNF correction4/10:1703related115files28fresh24Chromium all first attempt,zero failures/skips.
+  Impact: Entire final two transport modules actual Istanbul264lines283statements48functions354branches100all-four,current complete source/map identity and zero negatives. Original complete size/orientation survive structured-clone/JSON/Worker,direct absence/native precedence/legacy admission;raw header9 and3mounted original owner/cursor history cycles retained.
+  Resolution: 595old tests4canonical prefixes unchanged,statics/current build and9restored metadata pass,IO deviations preserved. Remaining raw-headline/spacing/flags/LR/inherited/shared/row-box/general mapper/full UI/layout/filter/UNO/VCL incomplete;goal active,full not due4/10. Exact-SHA non-independent quality follows.
