@@ -16,9 +16,11 @@ import type { SwFormat } from "../attr/format";
 import type { SwFrameFormat } from "./atrfrm";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwTabFrame } from "./tabfrm";
+import type { SwRootFrame } from "./newfrm";
 /** Native represented frame type bits from frame.hxx. */
 export enum SwFrameType {
   None = 0,
+  Root = 0x0001,
   Tab = 0x0800,
   Row = 0x1000,
   Cell = 0x2000,
@@ -50,13 +52,15 @@ export class SwFrame extends SwClient {
   private mbFrameAreaSizeValid = false;
   private mbFramePrintAreaValid = false;
   private mbCompletePaint = true;
+  private mpRoot: SwRootFrame | undefined;
   private mpUpper: SwLayoutFrame | undefined;
   private mpNext: SwFrame | undefined;
   private mpPrev: SwFrame | undefined;
-  /** Registers an original frame. @param format - Native modify owner. @returns Nothing. */
-  protected constructor(format: SwModify) {
+  /** Registers an original frame. @param format - Native modify owner. @param sibling - Existing native frame supplying the original root. @returns Nothing. */
+  protected constructor(format: SwModify, sibling?: SwFrame) {
     super();
     this.RegisterToModify(format);
+    this.mpRoot = sibling?.getRootFrame();
   }
   /** Native base preparation does not require a content-frame action. @param hint - Native preparation kind. @returns False for the base frame. */
   public Prepare(hint = PrepareHint.Clear): boolean {
@@ -330,6 +334,14 @@ export class SwFrame extends SwClient {
   public RegisterToFormat(format: SwFormat): void {
     this.RegisterToModify(format);
   }
+  /** Reads the source constructor-owned original root. @returns Native root or absent for detached construction. */
+  public getRootFrame(): SwRootFrame | undefined {
+    return this.mpRoot;
+  }
+  /** Assigns the original root, as its native constructor does. @param root - Actual root owner. @returns Nothing. */
+  protected setRootFrame(root: SwRootFrame): void {
+    this.mpRoot = root;
+  }
   /** Reads the original parent frame. @returns Parent or absent. */
   public GetUpper(): SwLayoutFrame | undefined {
     return this.mpUpper;
@@ -379,9 +391,9 @@ export class SwFrame extends SwClient {
 export class SwLayoutFrame extends SwFrame {
   /** Native lower pointer; public within this module to model C++ SwFrame friendship without a side map. */
   public m_pLower: SwFrame | undefined;
-  /** Binds the original frame format. @param format - Native frame owner. @returns Nothing. */
-  protected constructor(format: SwFrameFormat) {
-    super(format);
+  /** Binds the original frame format. @param format - Native frame owner. @param sibling - Existing original root-bearing frame. @returns Nothing. */
+  protected constructor(format: SwFrameFormat, sibling?: SwFrame) {
+    super(format, sibling);
   }
   /** Reads the registered original frame format. @returns Native owner. */
   public GetFormat(): SwFrameFormat {

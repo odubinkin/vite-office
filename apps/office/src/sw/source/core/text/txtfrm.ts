@@ -5,7 +5,7 @@ import type { SwPageFrame } from "../layout/newfrm";
 import type { SwDoc } from "../doc/doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwContentFrame } from "../layout/ssfrm";
-import { SwFrameType } from "../layout/wsfrm";
+import { SwFrameType, type SwFrame } from "../layout/wsfrm";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -162,7 +162,7 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 /** A master or follow frame; offsets always refer to the same source text node. */
 export class SwTextFrame extends SwContentFrame {
   readonly #lines: readonly SwTextLine[];
-  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @returns Frame. */
+  /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @param sibling - Existing native frame supplying the original root. @returns Frame. */
   public constructor(
     node: SwTextNode,
     public readonly nodeId: string,
@@ -170,8 +170,9 @@ export class SwTextFrame extends SwContentFrame {
     public readonly end: number,
     public readonly topSpacing: number,
     lines: readonly SwTextLine[],
+    sibling?: SwFrame,
   ) {
-    super(node);
+    super(node, sibling);
     this.mnFrameType = SwFrameType.Txt;
     this.#lines = lines;
   }
@@ -223,12 +224,13 @@ export function getSwTextFrameGap(
   return Math.max(lower, upper);
 }
 
-/** Makes one frame from a consecutive range of measured lines. @param input - Source text node lines. @param firstLine - First line index. @param lastLine - Last line index. @param topSpacing - Gap before the frame. @returns Master or follow frame. */
+/** Makes one frame from a consecutive range of measured lines. @param input - Source text node lines. @param firstLine - First line index. @param lastLine - Last line index. @param topSpacing - Gap before the frame. @param sibling - Existing native frame supplying the original root. @returns Master or follow frame. */
 export function makeSwTextFrame(
   input: SwTextFrameInput,
   firstLine: number,
   lastLine: number,
   topSpacing: number,
+  sibling?: SwFrame,
 ): SwTextFrame {
   const first = input.lines[firstLine];
   const last = input.lines[lastLine];
@@ -241,6 +243,7 @@ export function makeSwTextFrame(
     last.end,
     topSpacing,
     input.lines.slice(firstLine, lastLine + 1),
+    sibling,
   );
   return frame;
 }

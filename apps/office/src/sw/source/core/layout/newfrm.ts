@@ -11,7 +11,8 @@ import type { SwDoc } from "../doc/doc";
 import { SwTableNode } from "../docnode/node";
 import type { SwTable } from "../table/swtable";
 import { SwTabFrame, SwRowFrame, type SwTablePrintArea } from "./tabfrm";
-import { SwFrame } from "./wsfrm";
+import { SwFrame, SwFrameType, SwLayoutFrame } from "./wsfrm";
+import { SwFrameFormat } from "./atrfrm";
 import {
   createSwTextFrameInputs,
   getSwTextFrameGap,
@@ -98,7 +99,7 @@ export interface SwRootFrameSnapshot {
 }
 
 /** Persistent Writer layout root owning page and text-frame identity over device measurements. */
-export class SwRootFrame {
+export class SwRootFrame extends SwLayoutFrame {
   private readonly cursorFrames = new Map<
     SwTextNode,
     { readonly text: string; readonly frame: SwTextFrame }
@@ -110,11 +111,12 @@ export class SwRootFrame {
     start: number,
     end: number,
   ): void {
+    this.BindRootFormat(this.getDocument());
     const previous = this.cursorFrames.get(node);
     if (previous !== undefined) SwFrame.DestroyFrame(previous.frame);
     this.cursorFrames.set(node, {
       text: node.GetText(),
-      frame: new SwTextFrame(node, String(node.GetIndex()), start, end, 0, lines),
+      frame: new SwTextFrame(node, String(node.GetIndex()), start, end, 0, lines, this),
     });
   }
   /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
@@ -125,7 +127,10 @@ export class SwRootFrame {
       : undefined;
   }
   /** Releases original text-frame clients before their view/document owners close. @returns Nothing. */
-  public DestroyImpl(): void {
+  public override DestroyImpl(): void {
+    if (this.IsInDtor()) return;
+    const format = this.GetFormat();
+    format.DisposeModify();
     for (const measured of this.cursorFrames.values()) SwFrame.DestroyFrame(measured.frame);
     this.cursorFrames.clear();
     for (const page of this.snapshot?.pages ?? [])
@@ -134,6 +139,7 @@ export class SwRootFrame {
     this.lastInputs = [];
     this.lastDocument = undefined;
     this.dirty = true;
+    super.DestroyImpl();
   }
   private dirty = true;
   private dirtyFrom = 0;
@@ -149,7 +155,24 @@ export class SwRootFrame {
   private revision = 0;
 
   /** Binds the root to its current Writer document while allowing document-shell replacement. @param getDocument - Active canonical document. @returns Nothing. */
-  public constructor(private readonly getDocument: () => SwDoc) {}
+  public constructor(private readonly getDocument: () => SwDoc) {
+    const document = getDocument();
+    super(
+      new SwFrameFormat(document.GetAttrPool(), "Root", undefined, document.GetDfltFrameFormat()),
+    );
+    this.mnFrameType = SwFrameType.Root;
+    this.setRootFrame(this);
+  }
+
+  /** Preserves the existing browser document-shell replacement boundary with an original derived root format. @param document - Current native document. @returns Nothing. */
+  private BindRootFormat(document: SwDoc): void {
+    const format = this.GetFormat();
+    if (format.GetDoc() === document) return;
+    format.DisposeModify();
+    this.RegisterToFormat(
+      new SwFrameFormat(document.GetAttrPool(), "Root", undefined, document.GetDfltFrameFormat()),
+    );
+  }
 
   /** Invalidates the formatted graph from a changed Writer node onward. @param nodeIndex - Optional SwNodes index; absent means all frames. @returns Nothing. */
   public Invalidate(nodeIndex?: number): void {
@@ -176,6 +199,7 @@ export class SwRootFrame {
     tableMeasurements: readonly SwTableFrameMeasurement[] = [],
   ): SwRootFrameSnapshot {
     const document = this.getDocument();
+    this.BindRootFormat(document);
     for (const [node, measured] of this.cursorFrames)
       if (node.GetDoc() !== document) {
         SwFrame.DestroyFrame(measured.frame);
@@ -227,7 +251,7 @@ export class SwRootFrame {
         ),
     );
     const layoutGeometryUnchanged = sameDescriptor && sameSettings;
-    const created = createSwPageFrames(paragraphs, descriptor, settings, tableInputs);
+    const created = createSwPageFrames(paragraphs, descriptor, settings, tableInputs, this);
     const pages = Object.freeze(
       created.map(
         /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
@@ -562,12 +586,13 @@ function tableFramesEqual(left: readonly SwTableFrame[], right: readonly SwTable
   );
 }
 
-/** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @param tables - Ordered table frames. @returns Ordered page frames. */
+/** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @param tables - Ordered table frames. @param sibling - Existing native frame supplying the original root. @returns Ordered page frames. */
 export function createSwPageFrames(
   paragraphs: readonly SwTextFrameInput[],
   descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,
   settings?: SwTextFrameSettings,
   tables: readonly SwTableFrameInput[] = [],
+  sibling?: SwFrame,
 ): readonly SwPageFrame[] {
   const descriptorRecords =
     "descriptors" in descriptor
@@ -824,7 +849,7 @@ export function createSwPageFrames(
           startFollowPage();
           continue;
         }
-        page.push(makeSwTextFrame(paragraph, firstLine, lastLine, topSpacing));
+        page.push(makeSwTextFrame(paragraph, firstLine, lastLine, topSpacing, sibling));
         used += height;
         firstLine = lastLine + 1;
         if (firstLine < paragraph.lines.length) {

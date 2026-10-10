@@ -6,9 +6,9 @@ import type { SwContentNode } from "../docnode/node";
 /** Native content-frame base registering the original content node rather than a projected geometry owner. */
 export abstract class SwContentFrame extends SwFrame {
   protected readonly flow: SwFlowFrame;
-  /** Registers the original native content owner. @param node - Existing source node. @returns Nothing. */
-  protected constructor(node: SwContentNode) {
-    super(node);
+  /** Registers the original native content owner. @param node - Existing source node. @param sibling - Existing original root-bearing frame. @returns Nothing. */
+  protected constructor(node: SwContentNode, sibling?: SwFrame) {
+    super(node, sibling);
     this.flow = new SwFlowFrame(this);
   }
   /** Reads the next original native content frame. @returns Follow frame. */
