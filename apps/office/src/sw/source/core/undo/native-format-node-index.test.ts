@@ -25,7 +25,9 @@ import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { moveLeftMargin } from "../doc/docfmt";
+import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { RES_PARATR_TABSTOP, RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 
 const documents: SwDoc[] = [];
@@ -220,8 +222,19 @@ function direct(
           expect(current.GetParagraphAlignment()).toBe(applied ? "center" : "right");
         },
     };
+  const tabs = owner.doc
+    .GetAttrPool()
+    .GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem;
+  tabs.Remove(0, tabs.Count());
+  tabs.Insert(new SvxTabStop(240));
+  const range = new SwPaM(
+      owner.shell.getShellCursor().GetPoint(),
+      marked ? owner.shell.getShellCursor().GetMark() : undefined,
+    ),
+    action = new SwUndoMoveLeftMargin(range, true, false, state);
+  range.Dispose();
   return {
-    action: new SwUndoMoveLeftMargin(node, 120, 360, state, state),
+    action,
     check:
       /** Checks direct left margin. @param current - Current slot. @param applied - Applied state. @returns Nothing. */ (
         current,
@@ -256,7 +269,27 @@ it.each(directCases)(
       { action, check } = direct(owner, kind, marked),
       pending = owner.shell.CaptureCursorState().pendingCharacterItems;
     let current = replace(original);
-    expect(owner.shell.ApplyAction(action)).toBe(true);
+    expect(
+      owner.shell.ApplyAction(
+        action,
+        false,
+        action instanceof SwUndoMoveLeftMargin
+          ? /** Performs native initial mutation against the replacement slot. @param context - Actual native graph. @returns Nothing. */ (
+              context,
+            ) => {
+              const range = new SwPaM(
+                owner.shell.getShellCursor().GetPoint(),
+                marked ? owner.shell.getShellCursor().GetMark() : undefined,
+              );
+              try {
+                moveLeftMargin(context.GetDoc(), range, true, false, action.GetHistory());
+              } finally {
+                range.Dispose();
+              }
+            }
+          : undefined,
+      ),
+    ).toBe(true);
     check(current, true);
     for (let cycle = 0; cycle < 3; cycle++) {
       current = replace(current);

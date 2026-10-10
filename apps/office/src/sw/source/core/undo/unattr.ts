@@ -4,6 +4,9 @@ import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../tx
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwDoc } from "../doc/doc";
+import { SwHistory } from "./rolbck";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
 import { getTextFormatCollNodes } from "../doc/docfmt";
 import { SwpHints } from "../txtnode/ndhints";
 import { resetFullParagraphAutoFormat, resetParagraphTextAttributes } from "../txtnode/txtedt";
@@ -261,41 +264,86 @@ export class SwUndoParagraphFormat extends SwUndo {
   }
 }
 
-/** Reversible direct text-left margin change for one paragraph. */
+/** Original range margin action owns old native history and reexecutes the document mutation on redo. */
 export class SwUndoMoveLeftMargin extends SwUndo {
+  private readonly range: SwUndRng;
   private readonly m_rDoc: SwDoc;
-  private readonly m_nNode: number;
-  /** Creates a margin action. @param paragraph - Target paragraph. @param beforeMargin - Original twip margin. @param afterMargin - New twip margin. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
+  private readonly m_pHistory = new SwHistory();
+  private readonly hasCursorState: boolean;
+  /** Captures native range, direction and modulus, with an optional shell cursor adjunct. @param range - Original selection. @param right - Increase direction. @param m_bModulus - Snapping policy. @param state - Optional shell cursor state. @returns Nothing. */
   public constructor(
-    paragraph: SwTextNode,
-    private readonly beforeMargin: number,
-    private readonly afterMargin: number,
-    before: SwUndoCursorState,
-    after: SwUndoCursorState,
+    range: SwPaM,
+    private readonly right: boolean,
+    private readonly m_bModulus: boolean,
+    state?: SwUndoCursorState,
   ) {
-    super("Move Left Margin", before, after);
-    this.m_rDoc = paragraph.GetDoc();
-    this.m_nNode = paragraph.GetIndex();
+    super("Move Left Margin", state, state);
+    this.range = new SwUndRng(range);
+    this.m_rDoc = range.GetPoint().GetNode().GetDoc();
+    this.hasCursorState = state !== undefined;
   }
-
-  /** Reports two scalar margin values. @returns Payload units. */
+  /** Borrows the original retained history for initial registered mutation. @returns Original history. */
+  public GetHistory(): SwHistory {
+    return this.m_pHistory;
+  }
+  /** Reports native retained history entries rather than obsolete scalar margin pairs. @returns Entries. */
   public override GetPayloadSize(): number {
-    return 2;
+    return this.m_pHistory.Count();
   }
-
-  /** Restores the previous direct text-left margin. @param context - Active Writer context. @returns Nothing. */
+  /** Restores old direct/reset entries and reenables them for the next undo cycle. @param context - Native undo owner. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(
-      context.GetDoc(),
-      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
-    ).SetParagraphTextLeftMargin(this.beforeMargin);
+    this.m_pHistory.TmpRollback(this.GetDoc(context), 0);
+    this.m_pHistory.SetTmpEnd(this.m_pHistory.Count());
+    const range = this.AddUndoRedoPaM(context);
+    range.Dispose();
   }
-
-  /** Reapplies the direct text-left margin. @param context - Active Writer context. @returns Nothing. */
+  /** Reexecutes native document semantics with current defaults and undo disabled by the manager. @param context - Native redo owner. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
+    const range = this.AddUndoRedoPaM(context);
+    try {
+      context.GetDoc().MoveLeftMargin(range, this.right, this.m_bModulus);
+    } finally {
+      range.Dispose();
+    }
+  }
+  /** Repeats the original command on the current repeat selection. @param context - Native repeat owner and selection. @returns Nothing. */
+  public RepeatImpl(context: { GetDoc(): SwDoc; GetRepeatPaM(): SwPaM }): void {
+    context.GetDoc().MoveLeftMargin(context.GetRepeatPaM(), this.right, this.m_bModulus);
+  }
+  /** Validates original document ownership before modifying history or constructing a range. @param context - Current undo owner. @returns Matching original document. */
+  private GetDoc(context: SwUndoRedoContext): SwDoc {
     GetUndoTextNode(
       context.GetDoc(),
-      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
-    ).SetParagraphTextLeftMargin(this.afterMargin);
+      this.m_rDoc.GetNodes().at(this.range.m_nSttNode) as SwTextNode,
+    );
+    return context.GetDoc();
+  }
+  /** Reconstructs the original numeric range against current native indices. @param context - Current graph and cursor destination. @returns Independent disposable native range. */
+  private AddUndoRedoPaM(context: SwUndoRedoContext): SwPaM {
+    const doc = this.GetDoc(context),
+      position = new SwPosition(doc.GetNodes().at(this.range.m_nSttNode) as SwTextNode, 0),
+      range = new SwPaM(position);
+    position.Dispose();
+    this.range.SetPaM(range);
+    if (!this.hasCursorState)
+      context.RestoreCursor({
+        activeParagraph: range.GetPoint().GetNode() as SwTextNode,
+        pendingCharacterItems: new SfxItemSet(doc.GetAttrPool(), [
+          [RES_CHRATR_BEGIN, RES_CHRATR_END - 1],
+        ]),
+        point: {
+          node: range.GetPoint().GetNode() as SwTextNode,
+          offset: range.GetPoint().GetContentIndex(),
+        },
+        ...(range.HasMark()
+          ? {
+              mark: {
+                node: range.GetMark().GetNode() as SwTextNode,
+                offset: range.GetMark().GetContentIndex(),
+              },
+            }
+          : {}),
+      });
+    return range;
   }
 }

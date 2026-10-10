@@ -152,6 +152,31 @@ this is not a confirmed upstream defect. Decision: retain unsupported member0
 and the original explicit native members. Do not add a status struct or keep
 the old scalar/automatic tuple inside the core QueryValue contract.
 
+## WRITER-004: Table attribute history resets only the first recorded WhichId
+
+Baseline: LibreOffice26.8.0.2, commit
+`9bc445578031fecf56086729d8e4940c77e14d65`. Source:
+`sw/source/core/undo/rolbck.cxx`,
+`SwHistorySetAttrSet::SetInDoc` around lines936..958.
+
+The constructor partitions changed items into copied old values and a reset
+array according to the originally present direct WhichIds. Content-node rollback
+applies the old set and resets the whole array. Table-node rollback applies the
+old frame set, then calls ResetFormatAttr with only the first array element.
+
+A defined initialized table example has direct LR Which98 and UL Which99, with
+both identities in the history reset partition. Rollback removes direct LR and
+leaves direct UL in place. The portable acceptance preserves this literal result
+in native-margin-history-boundaries.test.ts. Both items are real native pooled
+format values; tests execute without either upstream reference.
+
+This is an observation, not a confirmed upstream defect: whether original table
+callers can produce more than one reset identity and whether surrounding
+consumer contracts intentionally constrain the array remains unreviewed.
+Decision: preserve the table first-only reset, retain the content-node complete
+reset and do not normalize the two branches. Task202610101723-QH6XM1 records
+source hashes and current portable acceptance evidence.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

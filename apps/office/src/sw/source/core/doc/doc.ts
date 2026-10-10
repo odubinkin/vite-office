@@ -70,6 +70,8 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { OutlineUpDown as moveOutlineLevels } from "./docnum";
+import { moveLeftMargin } from "./docfmt";
+import { SwUndoMoveLeftMargin } from "../undo/unattr";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
@@ -407,6 +409,20 @@ export class SwDoc {
   public GetDocumentStylePoolManager(): DocumentStylePoolManager {
     return this.stylePoolManager;
   }
+  /** Appends one original range undo before applying typed paragraph attributes. @param range - Native selected range. @param right - Increase direction. @param modulus - Native snapping policy. @param state - Optional browser shell cursor adjunct. @returns Nothing. */
+  public MoveLeftMargin(
+    range: SwPaM,
+    right: boolean,
+    modulus: boolean,
+    state?: SwUndoCursorState,
+  ): void {
+    const action = this.GetUndoManager().DoesUndo()
+      ? new SwUndoMoveLeftMargin(range, right, modulus, state)
+      : undefined;
+    if (action !== undefined) this.GetUndoManager().AddUndoAction(action);
+    moveLeftMargin(this, range, right, modulus, action?.GetHistory());
+  }
+
   /** Returns Writer's document-owned undo manager. @returns Undo manager. */
   public GetUndoManager(): UndoManager {
     return this.undoManager;

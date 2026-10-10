@@ -1,4 +1,8 @@
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
+import { SwClient, type SwModify } from "../../../inc/calbck";
+import { SwFormat } from "../attr/format";
+import type { SwModelHint } from "../../../inc/hints";
+import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE } from "../../../inc/hintids";
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
@@ -6,8 +10,8 @@ import type { SwpHints } from "../txtnode/ndhints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwContentNode, type SwNodeType } from "../docnode/node";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwContentNode, SwTableNode, type SwNode, type SwNodeType } from "../docnode/node";
 import type { SwFormatColl, SwTextFormatColl } from "../doc/fmtcol";
 
 /** Native history discriminants;registered old ranged text,direct format and text collection entries are implemented. */
@@ -61,10 +65,75 @@ export class SwHistorySetFormat extends SwHistoryHint {
   public override SetInDoc(doc: SwDoc, tmp: boolean): void {
     const node = doc.GetNodes().at(this.m_nNodeIndex);
     if (node instanceof SwContentNode) node.SetAttr(this.m_pAttr as SfxPoolItem);
+    else if (node instanceof SwTableNode)
+      node
+        .GetTable()
+        .GetFrameFormat()
+        .SetFormatAttr(this.m_pAttr as SfxPoolItem);
     if (!tmp) this.m_pAttr = undefined;
   }
 }
 
+/** Original reset history stores only Which and node index, restoring inherited formatting. */
+export class SwHistoryResetFormat extends SwHistoryHint {
+  private readonly m_nWhich: number;
+  /** Records the changed identity without retaining or flattening its value. @param item - New original item. @param m_nNodeIndex - Native index. @returns Nothing. */
+  public constructor(
+    item: SfxPoolItem,
+    private readonly m_nNodeIndex: number,
+  ) {
+    super(HISTORY_HINT.HSTRY_RESETFMTHNT);
+    this.m_nWhich = item.Which();
+  }
+  /** Clears only the recorded direct item at the current native slot. @param doc - Native graph. @param tmp - Temporary policy, identical for resets. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc, tmp: boolean): void {
+    void tmp;
+    const node = doc.GetNodes().at(this.m_nNodeIndex);
+    if (node instanceof SwContentNode) node.ResetAttr(this.m_nWhich);
+    else if (node instanceof SwTableNode)
+      node.GetTable().GetFrameFormat().ResetFormatAttr(this.m_nWhich);
+  }
+}
+/** Original multi-item history partitions old direct items from reset WhichIds. */
+export class SwHistorySetAttrSet extends SwHistoryHint {
+  private readonly m_OldSet: SfxItemSet;
+  private readonly m_ResetArray: number[] = [];
+  /** Copies generic represented format values and records newly authored identities. @param set - Original old delta. @param m_nNodeIndex - Original slot. @param whichIds - Direct identities before mutation. @returns Nothing. */
+  public constructor(
+    set: SfxItemSet,
+    private readonly m_nNodeIndex: number,
+    whichIds: ReadonlySet<number>,
+  ) {
+    super(HISTORY_HINT.HSTRY_SETATTRSET);
+    this.m_OldSet = new SfxItemSet(set.GetPool(), set.GetRanges());
+    for (const item of set.entries()) {
+      if (!whichIds.has(item.Which())) this.m_ResetArray.push(item.Which());
+      else if (item.Which() === RES_BOXATR_FORMULA)
+        throw new Error("Writer history formula external-name conversion is not implemented.");
+      else if (item.Which() !== RES_BOXATR_VALUE) this.m_OldSet.Put(item.Clone() as SfxPoolItem);
+    }
+  }
+  /** Restores old items before source-defined resets without recording nested history. @param doc - Native graph. @param tmp - Temporary policy; owned items remain available. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc, tmp: boolean): void {
+    void tmp;
+    const manager = doc.GetUndoManager(),
+      enabled = manager.DoesUndo();
+    manager.DoUndo(false);
+    try {
+      const node = doc.GetNodes().at(this.m_nNodeIndex);
+      if (node instanceof SwContentNode) {
+        node.SetAttr(this.m_OldSet);
+        if (this.m_ResetArray.length !== 0) node.ResetAttr(this.m_ResetArray);
+      } else if (node instanceof SwTableNode) {
+        const format = node.GetTable().GetFrameFormat();
+        format.SetFormatAttrSet(this.m_OldSet);
+        if (this.m_ResetArray.length !== 0) format.ResetFormatAttr(this.m_ResetArray[0] as number);
+      }
+    } finally {
+      manager.DoUndo(enabled);
+    }
+  }
+}
 /** Native collection identity and content type,with a live-owner check before restoration. */
 export class SwHistoryChangeFormatColl extends SwHistoryHint {
   /** Records the collection pointer rather than its name. @param m_pColl - Original collection. @param m_nNodeIndex - Original index. @param m_nNodeType - Content category. @returns Nothing. */
@@ -122,6 +191,10 @@ export class SwHistorySetText extends SwHistoryHint {
 export class SwHistory {
   private readonly m_SwpHstry: SwHistoryHint[] = [];
   private m_nEndDiff = 0;
+  /** Appends the original friend-owned history entry without serialization. @param hint - Native record. @returns Nothing. */
+  public AddHint(hint: SwHistoryHint): void {
+    this.m_SwpHstry.push(hint);
+  }
   /** Reads retained entries. @returns Count. */
   public Count(): number {
     return this.m_SwpHstry.length;
@@ -198,5 +271,54 @@ export class SwHistory {
     const old = this.GetTmpEnd();
     this.m_nEndDiff = this.Count() - end;
     return old;
+  }
+}
+
+/** Original scoped native client records old format deltas with pre-mutation directness. */
+export class SwRegHistory extends SwClient {
+  private readonly m_WhichIdSet = new Set<number>();
+  private readonly m_nNodeIndex: number;
+  /** Registers at the original node or format for one native mutation scope. @param source - Native emitting owner or absent. @param node - Target slot. @param m_pHistory - Optional original history. @returns Nothing. */
+  public constructor(
+    source: SwModify | undefined,
+    node: SwNode,
+    private readonly m_pHistory?: SwHistory,
+  ) {
+    super();
+    this.m_nNodeIndex = node.GetIndex();
+    if (source !== undefined) this.RegisterToModify(source);
+    if (m_pHistory !== undefined) {
+      const set =
+        source instanceof SwContentNode
+          ? source.GetpSwAttrSet()
+          : source instanceof SwFormat
+            ? source.GetAttrSet()
+            : undefined;
+      if (set !== undefined) for (const item of set.entries()) this.m_WhichIdSet.add(item.Which());
+    }
+  }
+  /** Records original old deltas only while a distinct new delta exists. @param source - Original emitting modify. @param hint - Borrowed source hint. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    void source;
+    if (
+      hint.kind !== "attr-set-change" ||
+      this.m_pHistory === undefined ||
+      hint.m_pNew === undefined ||
+      hint.m_pOld === hint.m_pNew ||
+      hint.m_pOld === undefined
+    )
+      return;
+    const set = hint.m_pOld.GetChgSet();
+    if (set.Count() > 1)
+      this.m_pHistory.AddHint(new SwHistorySetAttrSet(set, this.m_nNodeIndex, this.m_WhichIdSet));
+    else {
+      const item = set.entries()[0];
+      if (item !== undefined)
+        this.m_pHistory.AddHint(
+          this.m_WhichIdSet.has(item.Which())
+            ? new SwHistorySetFormat(item, this.m_nNodeIndex)
+            : new SwHistoryResetFormat(item, this.m_nNodeIndex),
+        );
+    }
   }
 }

@@ -4,6 +4,7 @@
 
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { AttrSetChangeHint, SwAttrSetChg } from "../../../inc/hints";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { SwAttrSet } from "../attr/swatrset";
 import { SwContentIndexRegistry } from "../bastyp/index";
@@ -189,7 +190,7 @@ export abstract class SwContentNode extends SwNode {
     const oldSet = new SwAttrSet(set.GetPool(), set.GetRanges());
     const newSet = new SwAttrSet(set.GetPool(), set.GetRanges());
     const changed = AttrSetHandleHelper.Put_BC(this.mpAttrSet, itemOrSet, oldSet, newSet);
-    if (changed) this.NotifyAttrChange();
+    if (changed) this.NotifyAttrChange(oldSet, newSet);
     return changed;
   }
 
@@ -204,7 +205,7 @@ export abstract class SwContentNode extends SwNode {
       const changed =
         AttrSetHandleHelper.ClearItem_BC(this.mpAttrSet, which, last, oldSet, newSet) !== 0;
       if (changed) {
-        this.NotifyAttrChange();
+        this.NotifyAttrChange(oldSet, newSet);
         if ((this.mpAttrSet.value as SwAttrSet).Count() === 0) this.mpAttrSet.value = undefined;
       }
       return changed;
@@ -213,7 +214,7 @@ export abstract class SwContentNode extends SwNode {
     for (const id of which)
       if (AttrSetHandleHelper.ClearItem_BC(this.mpAttrSet, id, undefined, oldSet, newSet) !== 0)
         count++;
-    if (count !== 0) this.NotifyAttrChange();
+    if (count !== 0) this.NotifyAttrChange(oldSet, newSet);
     if ((this.mpAttrSet.value as SwAttrSet).Count() === 0) this.mpAttrSet.value = undefined;
     return count !== 0;
   }
@@ -227,14 +228,18 @@ export abstract class SwContentNode extends SwNode {
     const changed =
       AttrSetHandleHelper.ClearItem_BC(this.mpAttrSet, 0, undefined, oldSet, newSet) !== 0;
     if (changed) {
-      this.NotifyAttrChange();
+      this.NotifyAttrChange(oldSet, newSet);
       if ((this.mpAttrSet.value as SwAttrSet).Count() === 0) this.mpAttrSet.value = undefined;
     }
     return newSet.Count();
   }
 
-  /** Sends the existing model observer adapter after handle commit and before empty-handle release. @returns Nothing. */
-  private NotifyAttrChange(): void {
+  /** Publishes original native deltas before the document observer while the changed set remains owned. @param oldSet - Borrowed old delta. @param newSet - Borrowed accepted delta. @returns Nothing. */
+  private NotifyAttrChange(oldSet: SwAttrSet, newSet: SwAttrSet): void {
+    const current = this.mpAttrSet.value as SwAttrSet;
+    this.CallSwClientNotify(
+      new AttrSetChangeHint(new SwAttrSetChg(current, oldSet), new SwAttrSetChg(current, newSet)),
+    );
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),

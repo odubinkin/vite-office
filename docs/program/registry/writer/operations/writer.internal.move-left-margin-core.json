@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "writer.internal.move-left-margin-core",
+    "modulePath": "apps/office/src/sw/source/core/doc/docfmt.ts",
+    "symbol": "moveLeftMargin",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-0107",
+    "description": "Native SwDoc::MoveLeftMargin typed first/left item mutation over an inclusive range with scoped original attribute history."
+  }
+}

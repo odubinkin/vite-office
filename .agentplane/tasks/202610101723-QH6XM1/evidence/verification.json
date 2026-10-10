@@ -1,0 +1,1079 @@
+{
+  "task": "202610101723-QH6XM1",
+  "status": "pass",
+  "branch": "writer",
+  "scope": "Native MoveLeftMargin range and attribute history; eight production modules, sixteen existing canonical records and two required mutation operation records",
+  "upstream": {
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "sourceHashes": {
+      "sw/source/core/doc/docfmt.cxx": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b",
+      "sw/source/core/edit/edattr.cxx": "c12c601bd4f1e660bd7cc9d54a3a8b1bab5b11fba5ac1ea3ad3d5f791e6e8a1c",
+      "sw/source/core/undo/unattr.cxx": "18888b58d07725197cb70b069c2e11e90c4aaa8cf8c43f288017d3cefdd65786",
+      "sw/source/core/undo/rolbck.cxx": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17",
+      "sw/inc/node.hxx": "92f1e375ba39481d1fcd231e58eebd9a57aa17840844db4ac31ccb6c309b9fea",
+      "sw/inc/contentindex.hxx": "71e19ae10da507de79f4abb30f206964fd16593a28de834bbbfce78c5404bafc"
+    },
+    "sourceOnly": true,
+    "compiledDifferential": "not run"
+  },
+  "cadence": {
+    "previousAcceptedFull": "202610101614-BZ14P4",
+    "completedCorrectionAfterFinish": 2,
+    "fullEvery": 10,
+    "fullRunThisTask": false,
+    "goal": "active after explicit human resume; pause after next full run and any required repairs"
+  },
+  "runtime": {
+    "checks": [
+      {
+        "label": "native-range-related-final",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+        "args": [
+          "exec",
+          "--",
+          "vitest",
+          "related",
+          "src/sw/source/core/bastyp/index.ts",
+          "src/sw/source/core/docnode/node.ts",
+          "src/sw/source/core/doc/doc.ts",
+          "src/sw/source/core/doc/docfmt.ts",
+          "src/sw/source/core/edit/edattr.ts",
+          "src/sw/source/core/undo/rolbck.ts",
+          "src/sw/source/core/undo/unattr.ts",
+          "src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "--run",
+          "--coverage",
+          "--coverage.include=src/sw/source/core/bastyp/index.ts",
+          "--coverage.include=src/sw/source/core/docnode/node.ts",
+          "--coverage.include=src/sw/source/core/doc/doc.ts",
+          "--coverage.include=src/sw/source/core/doc/docfmt.ts",
+          "--coverage.include=src/sw/source/core/edit/edattr.ts",
+          "--coverage.include=src/sw/source/core/undo/rolbck.ts",
+          "--coverage.include=src/sw/source/core/undo/unattr.ts",
+          "--coverage.include=src/sw/source/uibase/wrtsh/wrtsh1.ts",
+          "--coverage.reportOnFailure",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/QH6XM1/native-range-related-final-tests.json",
+          "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/QH6XM1/native-range-related-final-coverage"
+        ],
+        "status": 0,
+        "upstreamAbsent": true,
+        "mddsAbsent": true
+      },
+      {
+        "label": "browser-native-range-final",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "exec",
+          "--",
+          "playwright",
+          "test",
+          "--config",
+          "apps/office/playwright.config.ts",
+          "--project=writer",
+          "writer-ruler-indent-items.spec.ts",
+          "writer-ruler-indent-pixels.spec.ts",
+          "writer-ruler-auto-first.spec.ts",
+          "writer-counted-list-layout.spec.ts",
+          "writer-uncounted-list-layout.spec.ts",
+          "writer-auto-first-layout.spec.ts",
+          "writer-manual-first-layout.spec.ts",
+          "writer-named-style-history.spec.ts",
+          "writer-style-selector.spec.ts",
+          "writer-cell-paragraph-format.spec.ts",
+          "--reporter=list,json"
+        ],
+        "status": 0,
+        "upstreamAbsent": true,
+        "mddsAbsent": true
+      }
+    ],
+    "initialFailure": {
+      "cases": 13883,
+      "passed": 13882,
+      "failed": 1,
+      "browserNotLaunched": true,
+      "defect": "Missing source document ownership validation before rollback/range reconstruction",
+      "repair": "Existing GetUndoTextNode ownership validation before any rollback or range construction",
+      "initialMapsSupersededAndNotMerged": true
+    },
+    "coverage": {
+      "status": "pass",
+      "cases": 13888,
+      "files": 492,
+      "freshCases": 40,
+      "actualWholeChangedModules": {
+        "apps/office/src/sw/source/core/bastyp/index.ts": {
+          "lines": {
+            "total": 71,
+            "covered": 71,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 80,
+            "covered": 80,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 53,
+            "covered": 53,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/core/doc/doc.ts": {
+          "lines": {
+            "total": 327,
+            "covered": 327,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 98,
+            "covered": 98,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 363,
+            "covered": 363,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 245,
+            "covered": 245,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/core/doc/docfmt.ts": {
+          "lines": {
+            "total": 74,
+            "covered": 74,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 8,
+            "covered": 8,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 87,
+            "covered": 87,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 73,
+            "covered": 73,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/core/docnode/node.ts": {
+          "lines": {
+            "total": 86,
+            "covered": 86,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 32,
+            "covered": 32,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 97,
+            "covered": 97,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 49,
+            "covered": 49,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/core/edit/edattr.ts": {
+          "lines": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 7,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 21,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 7,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/core/undo/rolbck.ts": {
+          "lines": {
+            "total": 134,
+            "covered": 134,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 27,
+            "covered": 27,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 162,
+            "covered": 162,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 84,
+            "covered": 84,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/core/undo/unattr.ts": {
+          "lines": {
+            "total": 85,
+            "covered": 85,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 30,
+            "covered": 30,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 86,
+            "covered": 86,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 14,
+            "covered": 14,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": {
+          "lines": {
+            "total": 325,
+            "covered": 325,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 115,
+            "covered": 115,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 348,
+            "covered": 348,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 219,
+            "covered": 219,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      "aggregate": {
+        "lines": {
+          "total": 1122,
+          "covered": 1122,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1244,
+          "covered": 1244,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 337,
+          "covered": 337,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 744,
+          "covered": 744,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "completeCurrentMaps": true,
+      "currentHashes": {
+        "apps/office/src/sw/source/core/bastyp/index.ts": "dbe334c675c85ec417aa57f1e7c69fc2d5fd4d5fd4386df5cf4657de8a7eaa4b",
+        "apps/office/src/sw/source/core/docnode/node.ts": "1b6064c5dae6ba40984a06addd8011b3d453b56183dc270dc218bbe476846f6c",
+        "apps/office/src/sw/source/core/doc/doc.ts": "1f08e0cc57e0e1373c1125d7d4b68d49de63c9b0a7899c9b75c38855ccd54e58",
+        "apps/office/src/sw/source/core/doc/docfmt.ts": "9be7629f2078e9c54bc76287ab0befdaa7e7a0858396d5fcdcd3b296d1c714fc",
+        "apps/office/src/sw/source/core/edit/edattr.ts": "e89ee6da579f0b1dc223cd359ebb1ce6cf8f2e910068d99bc66e0baa0a66fed2",
+        "apps/office/src/sw/source/core/undo/rolbck.ts": "1c96d9c63677ce08a2e987b440356fce45577db8c31c06b5335c8c143de64fe9",
+        "apps/office/src/sw/source/core/undo/unattr.ts": "b6dd8265ad624b1cdf08a423ddc7ed05999ed00e05c1e1e312e3546a2a548f84",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "c366ee32ef29b4a2eebc693d736d7b1716aae2ed4b580aa18f2bc3cee25b91ba"
+      },
+      "nonnegativeCounters": true,
+      "checkedCounters": 2325,
+      "noEarlierMapReuseOrCounterFiltering": true,
+      "mapHash": "eb179589b0e89c9c0a6b86321b777d1aec4be9d258a5bd1e172b6a7327d5b507",
+      "reportHash": "384ac32ae76e17f82a94c1f11266492a517de964fe721118da8861169a37d029"
+    },
+    "browser": {
+      "status": "pass",
+      "cases": 23,
+      "files": 10,
+      "skipped": 0,
+      "flaky": 0,
+      "unexpected": 0,
+      "reportHash": "6f09807cf4354c8a81da742cadfc782dd71f77cd9f06e231ca373f76da3b24fe",
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  },
+  "statics": [
+    {
+      "label": "format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/bastyp/index.ts",
+        "apps/office/src/sw/source/core/docnode/node.ts",
+        "apps/office/src/sw/source/core/doc/doc.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/core/undo/rolbck.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+        "apps/office/src/sw/source/core/undo/undobj.test.ts",
+        "apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts",
+        "apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "changed-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/bastyp/index.ts",
+        "apps/office/src/sw/source/core/docnode/node.ts",
+        "apps/office/src/sw/source/core/doc/doc.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/core/undo/rolbck.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+        "apps/office/src/sw/source/core/undo/undobj.test.ts",
+        "apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts",
+        "apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "changed-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/bastyp/index.ts",
+        "apps/office/src/sw/source/core/docnode/node.ts",
+        "apps/office/src/sw/source/core/doc/doc.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/core/undo/rolbck.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+        "apps/office/src/sw/source/core/undo/undobj.test.ts",
+        "apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts",
+        "apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 1,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "repaired-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/undo/rolbck.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "repaired-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/undo/rolbck.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "repaired-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/undo/rolbck.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 1,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "fresh-repair-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts",
+        "apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "fresh-repair-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts",
+        "apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "fresh-repair-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/undo/native-format-delta-history.test.ts",
+        "apps/office/src/sw/source/core/undo/native-move-left-margin-history.test.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 1,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "shell-repair-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "shell-repair-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "shell-repair-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 1,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "node-doc-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/docnode/node.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "node-doc-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/docnode/node.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "node-doc-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/docnode/node.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "range-repair-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "range-repair-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "range-repair-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "rebound-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "rebound-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "rebound-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/undo/native-margin-history-boundaries.test.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "rebound-typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "sourceMetadataAudits": {
+    "referencesRestored": true,
+    "checks": [
+      {
+        "label": "source-tree",
+        "bin": "npm",
+        "args": [
+          "run",
+          "check:source-tree"
+        ],
+        "status": 0,
+        "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+        "metadataOnly": true
+      },
+      {
+        "label": "source-provenance",
+        "bin": "npm",
+        "args": [
+          "run",
+          "check:source-provenance"
+        ],
+        "status": 0,
+        "rawHash": "359dab860a727a8600a8a5a97b7a513e7c6675e2affb0af67dc9e9910c78aa0a",
+        "metadataOnly": true
+      },
+      {
+        "label": "registry-build",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:registry:build"
+        ],
+        "status": 0,
+        "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+        "metadataOnly": true
+      },
+      {
+        "label": "registry-check",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:registry:check"
+        ],
+        "status": 0,
+        "rawHash": "aa9f3f8f8693168a1a17b7e95d932ade742e960e0a8013bacf1ae7afa66f1157",
+        "metadataOnly": true
+      },
+      {
+        "label": "writer-resources",
+        "bin": "node_modules/.bin/tsx",
+        "args": [
+          "scripts/generate-writer-ui-resources.ts",
+          "--check"
+        ],
+        "status": 0,
+        "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "metadataOnly": true
+      },
+      {
+        "label": "inventory-invariants",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:invariants"
+        ],
+        "status": 0,
+        "rawHash": "65785b54ce885a56701afd88dec2e78f6184cf7ee6a35bd982ec58045f96b269",
+        "metadataOnly": true
+      },
+      {
+        "label": "inventory-parity",
+        "bin": "npm",
+        "args": [
+          "run",
+          "inventory:parity"
+        ],
+        "status": 0,
+        "rawHash": "f3ce637f916feff996256608747496e6dd44d3dbc6ee3f6c844e1e8b64f29c95",
+        "metadataOnly": true
+      },
+      {
+        "label": "routing",
+        "bin": "node",
+        "args": [
+          ".agentplane/policy/check-routing.mjs"
+        ],
+        "status": 0,
+        "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+        "metadataOnly": true
+      },
+      {
+        "label": "doctor",
+        "bin": "ap",
+        "args": [
+          "doctor"
+        ],
+        "status": 0,
+        "rawHash": "4ccd150b8cd332016476609191651c2b8275008b58c8ed349cdd0599e15be32b",
+        "metadataOnly": true
+      }
+    ],
+    "repairs": [
+      "Registered the two newly exported native mutation helpers",
+      "Used distinct non-prefix operation IDs consistent with canonical filename and ID order"
+    ],
+    "runtimeNotReplayedForMetadataRepairs": true
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 9016,
+    "changedOriginalPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/src/sw/source/core/bastyp/index.ts",
+      "apps/office/src/sw/source/core/doc/doc.ts",
+      "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "apps/office/src/sw/source/core/docnode/node.ts",
+      "apps/office/src/sw/source/core/edit/edattr.ts",
+      "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "apps/office/src/sw/source/core/undo/rolbck.ts",
+      "apps/office/src/sw/source/core/undo/unattr.ts",
+      "apps/office/src/sw/source/core/undo/undobj.test.ts",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "docs/program/registry/writer/provenance/sw/source/core/bastyp/index.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/doc/doc.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/docnode/node.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/edit/edattr.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/undo/rolbck.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/undo/unattr.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/uibase/wrtsh/wrtsh1.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/bastyp/index.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/doc/doc.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/docnode/node.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/edit/edattr.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/undo/rolbck.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/undo/unattr.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/uibase/wrtsh/wrtsh1.ts.json",
+      "docs/program/writer-upstream-suspected-issues.md"
+    ],
+    "oldTestFiles": 804,
+    "oldTestsByteIdentical": 802,
+    "migratedOldTests": 2,
+    "casesAndMatrixInputsPreserved": true,
+    "oldExpectedArgumentsPreservedExceptNativeEmptyHistoryPayload": true,
+    "canonicalHistoricalPrefixes": 16,
+    "explicitRetiredFactoryOwnerAndEvidenceOnly": true,
+    "parentFindingsPrefixPreserved": true
+  },
+  "residualLimits": [
+    "TypeScript linear BroadcastingModify/content-index/node hierarchy accommodates identity; independent C++ bases and general node/style/client lifetime remain unverified",
+    "Native numbering profile represents first-line TWIP only; complete numbering-unit state unverified",
+    "Formula external-name history conversion remains explicitly unsupported; table multi-reset first-only source behavior preserved as WRITER-004",
+    "Existing edit-shell admission guard, rings, frame/vertical/redline/merged-layout and global Repeat dispatch remain separate work",
+    "Optional existing UI cursor adjunct retained; direct native core point/mark path tested without it",
+    "Full core/UI/default parity remains unclaimed; registered recovery/open/save/settings deviations preserved"
+  ],
+  "review": "Same current agent, explicitly non-independent; exact semantic SHA recorded and reviewed through AgentPlane CLI after commit",
+  "artifacts": "Bounded facts/commands/hashes only; no upstream sources, source snapshots, helpers, raw maps or logs in AgentPlane"
+}

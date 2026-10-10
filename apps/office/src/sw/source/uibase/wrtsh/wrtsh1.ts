@@ -63,7 +63,7 @@ import {
   MergeParagraphWithPrevious,
   MergeParagraphWithNext,
 } from "./wrtsh-editing";
-import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/edattr";
+import { isMoveLeftMargin, moveLeftMarginAtShell } from "../../core/edit/edattr";
 import { pasteWriterTransfer, type WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
@@ -785,14 +785,14 @@ export class SwWrtShell extends SwFEShell {
 
   /** Executes the upstream edit-shell margin operation on the whole selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether changed. */
   public MoveLeftMargin(right: boolean, modulus = true): boolean {
-    const action = createMoveLeftMarginAction(
-      this.GetDoc(),
-      this.getShellCursor(),
-      right,
-      modulus,
-      this.CaptureCursorState(),
+    if (!this.IsMoveLeftMargin(right, modulus)) return false;
+    return this.RunNotificationTransaction(
+      /** Executes native range history and one shell cursor invalidation. @returns True. */ () => {
+        moveLeftMarginAtShell(this, right, modulus);
+        this.NotifySelection();
+        return true;
+      },
     );
-    return action === undefined ? false : this.ApplyAction(action);
   }
 
   /** Reports upstream edit-shell margin availability for the selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether enabled. */

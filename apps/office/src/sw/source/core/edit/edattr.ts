@@ -1,13 +1,10 @@
 /** @fileoverview Ports the supported SwEditShell::IsMoveLeftMargin and MoveLeftMargin selection traversal from pinned `sw/source/core/edit/edattr.cxx`. */
 
-import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwDoc } from "../doc/doc";
 import { getMoveLeftMarginDistance, getMovedLeftMargin } from "../doc/docfmt";
 import type { SwPaM } from "../crsr/pam";
+import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTextNode } from "../txtnode/ndtxt";
-import { SwUndoMoveLeftMargin } from "../undo/unattr";
-import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
-import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 
 /** Text nodes in the inclusive point-and-mark range, in document order. @param document - Writer document. @param cursor - Selection. @returns Selected nodes. */
 export function getMoveLeftMarginNodes(document: SwDoc, cursor: SwPaM): readonly SwTextNode[] {
@@ -46,27 +43,17 @@ export function isMoveLeftMargin(
   );
 }
 
-/** Builds one undo unit for SwDoc::MoveLeftMargin across the selected text nodes. @param document - Writer document. @param cursor - Selection. @param right - Increase direction. @param modulus - Snap to default tabs. @param state - Cursor history boundary. @returns One action or undefined for a no-op. */
-export function createMoveLeftMarginAction(
-  document: SwDoc,
-  cursor: SwPaM,
+/** Runs the native edit-shell model bracket without building a scalar action or group. @param target - Original editing shell methods. @param right - Increase direction. @param modulus - Native tab snapping. @returns Nothing. */
+export function moveLeftMarginAtShell(
+  target: { GetDoc(): SwDoc; getShellCursor(): SwPaM; CaptureCursorState(): SwUndoCursorState },
   right: boolean,
   modulus: boolean,
-  state: SwUndoCursorState,
-): SfxUndoAction<SwUndoRedoContext> | undefined {
-  if (!isMoveLeftMargin(document, cursor, right, modulus)) return undefined;
-  const distance = getMoveLeftMarginDistance(document);
-  const actions = getMoveLeftMarginNodes(document, cursor).flatMap(
-    /** Builds one node's undo transition. @param node - Selected text node. @returns Zero or one action. */ (
-      node,
-    ) => {
-      const before = node.GetParagraphTextLeftMargin();
-      const after = getMovedLeftMargin(node, distance, right, modulus);
-      return before === after ? [] : [new SwUndoMoveLeftMargin(node, before, after, state, state)];
-    },
+): void {
+  const document = target.GetDoc(),
+    cursor = target.getShellCursor(),
+    state = target.CaptureCursorState();
+  document.RunModelTransaction(
+    /** Executes the document-owned range history once. @returns Nothing. */ () =>
+      document.MoveLeftMargin(cursor, right, modulus, state),
   );
-  if (actions.length === 1) return actions[0];
-  const group = new SfxListUndoAction<SwUndoRedoContext>("Move Left Margin");
-  for (const action of actions) group.AddAction(action);
-  return group;
 }
