@@ -1,10 +1,11 @@
 ---
 id: "202610092353-WHACNF"
 title: "Preserve complete native table size and orientation across browser graph transport"
-status: "DOING"
+result_summary: "Preserve complete native table size and orientation across browser graph transport"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: bind complete native table geometry transport to exact semantic commit before quality."
+  -
+    author: "CODER"
+    body: "Verified: browser graph transport preserves complete original table size/orientation and direct absence without outgoing scalar geometry duplication;1703related28fresh24Chromium pass first attempt,whole2modules actual Istanbul100all-four,current complete source/maps and zero negatives.595old tests4canonical histories retained,statics9metadata and exact-SHA explicitly same-agent non-independent quality pass;reference restored,writer branch. Broader parity incomplete,full not due4/10."
 events:
   -
     type: "status"
@@ -84,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Refreshed after exact-SHA same-agent non-independent quality passc1d68cd7.1703related28fresh24Chromium first attempt,whole2modules100all-four/current complete source/maps/zero negatives,595old tests4histories retained,statics9metadata pass;reference restored,full not due4/10."
+  -
+    type: "status"
+    at: "2026-10-10T00:03:31.709Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: browser graph transport preserves complete original table size/orientation and direct absence without outgoing scalar geometry duplication;1703related28fresh24Chromium pass first attempt,whole2modules actual Istanbul100all-four,current complete source/maps and zero negatives.595old tests4canonical histories retained,statics9metadata and exact-SHA explicitly same-agent non-independent quality pass;reference restored,writer branch. Broader parity incomplete,full not due4/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:03:01.775Z"
+doc_updated_at: "2026-10-10T00:03:31.710Z"
 doc_updated_by: "CODER"
 description: "Correction4/10 after BZQGYC: replace scalar table size/orientation encoding with complete original native geometry items and direct restoration; retain raw headline and legacy ingress contracts, represented other items and registered IO deviations. Fresh structured-clone/JSON/Worker/ODT/mounted ownership cases, current whole changed-module Istanbul100 upstream absent."
 sections:
@@ -199,6 +210,10 @@ sections:
     - Observation: Exact semanticc1d68cd7 quality pass;1703related28fresh24Chromium and9metadata all first attempt.
       Impact: Both whole modules actual100all-four,current complete source/maps/zero negatives;original full size/orientation/direct absence/native precedence and3mounted history cycles meet scoped acceptance.595old tests4histories retained;broader parity incomplete.
       Resolution: Same implementing agent EVALUATOR review explicitly non-independent;report quality/20261010-000230106-recovery-context/quality-report.json binds exact semantic production/fresh hashes. Refresh verification,persist evidence/quality,then canonical finish with concrete result. No changes after semantic review;writer branch/reference restored.
+extensions:
+  implementation_commit:
+    hash: "c1d68cd780ba43e3c6b9eb381120282902b8846a"
+    message: "🚧 WHACNF writer: preserve complete native table geometry in transport"
 id_source: "generated"
 ---
 ## Summary
