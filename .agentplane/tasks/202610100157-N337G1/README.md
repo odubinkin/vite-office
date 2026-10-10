@@ -1,10 +1,11 @@
 ---
 id: "202610100157-N337G1"
 title: "Transport native table layout-split and collapsing-border items"
-status: "DOING"
+result_summary: "Native table split/border item transport replaces outgoing scalar twins; one full cadence run passed app14756 plus303 browser cases, actual whole app/inventory/codecs100 and preserved old tests/history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -52,6 +53,9 @@ comments:
   -
     author: "CODER"
     body: "Start: implementation cbdb013687a163084e58c4d7ebc341a14b6aabff recorded after one green complete cadence run; refresh verification and perform explicitly same-agent exact-SHA quality, then concrete close and user-requested goal pause."
+  -
+    author: "CODER"
+    body: "Verified: original direct native table split and border items now cross Writer graph/JSON/Worker boundaries without scalar twins, retaining legacy ingress and native ownership. One upstream-absent full cadence app14756 tooling23 inventory122 resources2 browser303 passed; whole app/inventory/two entire codecs100 all four metrics and zero negative complete maps.653 old tests unchanged four canonical histories retained; nine metadata and TS7/static/build passed; reference restored and exact-SHA explicitly non-independent quality pass. Broad goal incomplete and user-requested pause follows clean closure."
 events:
   -
     type: "status"
@@ -85,8 +89,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Semantic cbdb013687a163084e58c4d7ebc341a14b6aabff exact-SHA same-agent quality pass persisted in verification evidence. All full cadence/static/metadata checks passed, actual app/inventory/two entire codecs100 and complete nonnegative current maps. Concrete task closure next; user-requested incomplete goal pause."
+  -
+    type: "status"
+    at: "2026-10-10T02:34:49.311Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original direct native table split and border items now cross Writer graph/JSON/Worker boundaries without scalar twins, retaining legacy ingress and native ownership. One upstream-absent full cadence app14756 tooling23 inventory122 resources2 browser303 passed; whole app/inventory/two entire codecs100 all four metrics and zero negative complete maps.653 old tests unchanged four canonical histories retained; nine metadata and TS7/static/build passed; reference restored and exact-SHA explicitly non-independent quality pass. Broad goal incomplete and user-requested pause follows clean closure."
 doc_version: 3
-doc_updated_at: "2026-10-10T02:34:27.337Z"
+doc_updated_at: "2026-10-10T02:34:49.314Z"
 doc_updated_by: "CODER"
 description: "Atomic10/10 after BZQGYC. Internal Writer graph/Worker table transport carries direct original native RES_LAYOUT_SPLIT and RES_COLLAPSING_BORDERS item presence/value via existing pool codec, removes outgoing scalar layoutSplit/borderModel twins and preserves old-marker ingress. Native live frame/item/history ownership unchanged; registered open/save/recovery/settings exceptions preserved. New graph/JSON/Worker and mounted native UndoRedo tests; whole production-module and complete cadence application/inventory coverage100, all full tooling/resource/browser/static gates upstream absent, restored metadata and exact-SHA same-agent quality/clean close. Full LR arbitrary-state marshaling and paragraph typed margin contracts remain separate incomplete work, no private-field or inverse reconstruction."
 sections:
@@ -149,6 +160,10 @@ sections:
     Result: pass.
     Evidence: nine restored-reference metadata checks status0.
     Scope: registry/source-tree/provenance/resources/invariants/parity/routing/doctor.
+extensions:
+  implementation_commit:
+    hash: "cbdb013687a163084e58c4d7ebc341a14b6aabff"
+    message: "🧩 N337G1 writer: transport native table flow and border items"
 id_source: "generated"
 ---
 ## Summary
