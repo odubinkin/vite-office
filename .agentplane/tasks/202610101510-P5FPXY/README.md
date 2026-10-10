@@ -4,7 +4,7 @@ title: "Restore native typed first-line paragraph indent item"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,29 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T16:03:41.234Z"
+  updated_at: "2026-10-10T16:09:38.942Z"
   updated_by: "CODER"
-  note: "Current native first-line contracts, original mutable caller3history cycles, existing scalar/automatic wire,14188related cases71fresh, whole ten modules actual100all-four,27Chromium,current static/TS7 and nine metadata pass; source/mdds restored. Rich native wire/font UI and broad parity unverified; exactSHA same-agent quality and concrete closure pending."
+  note: "Exact semantic064cdbc517e4 quality pass explicitly same-agent non-independent.14188related71fresh,entire ten actual current modules100all-four,27Chromium,current static/TS7,nine restored metadata,inventory/history and original contract source scope all pass. Broad goal incomplete and3/10; pause after next accepted full/repairs."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T16:07:40.908Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact semantic064cdbc517e4: original typed first-line ownership/defaults/units/proportions/auto/UNO, stable direct absolute writes and test-only scalar wrapper retirement match approved source scope.14188related71fresh,whole ten modules actual100all-four,27Chromium,current static/TS7 and nine metadata pass; inventory/history preserved. Broad goal incomplete;3/10 and pause after next accepted full plus repairs."
+  evaluated_sha: "064cdbc517e4fe88655b86d045ba746a68912ff1"
+  blueprint_digest: "f7618fcb9bd32a77b1ca0b49dfca215c581c951c6cba977ab2454aea404c7a13"
+  evidence_refs:
+    - ".agentplane/tasks/202610101510-P5FPXY/README.md"
+    - ".agentplane/tasks/202610101510-P5FPXY/quality/20261010-160740908-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101510-P5FPXY/quality/20261010-160740908-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101510-P5FPXY/quality/20261010-160740908-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101510-P5FPXY/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610101510-P5FPXY/evidence/verification.json"
+  findings:
+    - "Native general lifetime/hash/presentation/UNO/VCL/full history, rich first-line/right wire and actual font-relative paragraph UI remain unverified. Source compiled native differential was not run; no standalone independent agent review. Preserve unsupported default query WRITER-003 and registered IO exceptions."
+commit:
+  hash: "064cdbc517e4fe88655b86d045ba746a68912ff1"
+  message: "🧩 P5FPXY writer: restore native first-line indent ownership"
 comments:
   -
     author: "CODER"
@@ -30,6 +48,9 @@ comments:
   -
     author: "CODER"
     body: "Start: approved removal of test-only non-native first-line numeric wrapper and four exact call-site migrations; preserve native SetAttr lifecycle and all historical expected values."
+  -
+    author: "CODER"
+    body: "Start: bind accepted native first-line implementation and all original contract/current source evidence to semantic SHA064cdbc517e4, prior setup SHA is not implementation evidence."
 events:
   -
     type: "status"
@@ -51,8 +72,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "Current native first-line contracts, original mutable caller3history cycles, existing scalar/automatic wire,14188related cases71fresh, whole ten modules actual100all-four,27Chromium,current static/TS7 and nine metadata pass; source/mdds restored. Rich native wire/font UI and broad parity unverified; exactSHA same-agent quality and concrete closure pending."
+  -
+    type: "status"
+    at: "2026-10-10T16:07:39.859Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: bind accepted native first-line implementation and all original contract/current source evidence to semantic SHA064cdbc517e4, prior setup SHA is not implementation evidence."
+  -
+    type: "verify"
+    at: "2026-10-10T16:07:40.311Z"
+    author: "CODER"
+    state: "ok"
+    note: "Semantic064cdbc517e4 unchanged at all ten accepted source hashes;14188/14188 related71fresh, whole ten modules actual100all-four,27Chromium12files,current static/TS7 and nine restored audits pass.32exact old test migrations,768unchanged old files,20preserved canonical records,original direct native authors/history. Same-agent non-independent exactSHA quality pending."
+  -
+    type: "verify"
+    at: "2026-10-10T16:09:38.942Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic064cdbc517e4 quality pass explicitly same-agent non-independent.14188related71fresh,entire ten actual current modules100all-four,27Chromium,current static/TS7,nine restored metadata,inventory/history and original contract source scope all pass. Broad goal incomplete and3/10; pause after next accepted full/repairs."
 doc_version: 3
-doc_updated_at: "2026-10-10T16:03:41.284Z"
+doc_updated_at: "2026-10-10T16:09:38.999Z"
 doc_updated_by: "CODER"
 description: "Replace immutable numeric first-line adapter with original typed ownership, native units/proportions/auto/UNO contracts and independent native history; migrate all current authors and preserve existing integer browser records, inventory history and IO exceptions. Third correction after N337G1; related current whole modules coverage100 only, full run after ten and then requested pause."
 sections:
@@ -67,19 +107,19 @@ sections:
     5. All current root formatting/lint/TS7/dependency/build/static/JSDoc/file-size gates and related first-line/manual/ruler/list Chromium pass absent bothrefs; separate source-tree/provenance/registry-build/registry-check/resources/invariants/parity/routing/doctor after restoration. Bounded English hashes/facts only task artifacts, exactSHA same-agent non-independent quality and concrete clean finish. No full suite in this third correction.
     6. No production or test caller of SetParagraphFirstLineIndent remains. Every prior scalar helper call becomes direct native SetAttr with the same receiver/argument/Which, every authored old expected value/sibling/history retained; four new migration files join original manifest. Native SetAttr lifecycle and all whole changed modules still pass actual current-source100all-four related coverage. No source snapshots/test helper in AgentPlane.
   Verification: |-
-    VerifiedP5FPXY: original typed first-line item owns double/signed16 unit,uint16 percentage and auto mode under lrspitem native declaration; same export identity retained and obsolete test-only numeric SwTextNode helper removed. Original constructors,setters,stable constant measure,copy/equality,context resolution,metric scaling and UNO8/9/10/13 implemented; absolute writes directly assign measure and reset percentage100, original Any2Bool and unsupported default0 preserved. Mutable original caller acceptance plus3UndoRedo cycles retain independent item,node,cursor,style client; old scalar/automatic graph,JSON,Worker records unchanged at browser boundaries. Current final related14188/14188 cases503files71fresh; entire ten changed modules actual Istanbul100all-four1904lines2083statements566functions1707branches, complete current nonnegative maps; no superseded/earlier maps,filter,counter or threshold modifications. Thirty-two exact historical fixture/observer files preserve original cases and expected arguments except one source-backed fractional constructor contract; fourteen retired wrapper calls now direct native SetAttr, all768other repository historical test files byte-identical. Twenty canonical histories/status/default/classification records preserved with actual current declaration-owner migration. Current static/TS7/build/JSDoc/dependency/size and27Chromium cases12files passed once absent both references; separate nine source/metadata audits passed after restoration,source proof eight pinned files. WRITER-003 records preserved original unsupported default query. Exact-SHA same-agent non-independent quality pending commit. Rich unit/percentage wire,font-relative UI,general native lifetime/hash/presentation/UNO/VCL/history architecture remain unverified; registered IO deviations unchanged. Broad goal incomplete, cadence3/10 after N337G1; pause after next accepted full run and repairs.
-    Command: npm exec -- vitest related ten approved production paths --run --coverage with explicit whole-module include paths and original100all-four thresholds. Exact argv/current hashes are in evidence/verification.json. Result: pass. Scope: current related/native contracts; no full-suite claim.
-    Current changed formatting/lint plus whole TS7/dependency/size/build/JSDoc/static,27Chromium and restored nine metadata gates: pass. Doctor errors0; existing warnings retained. Source and mdds symlinks restored. Quality/concrete finish pending exact semantic SHA.
+    Implementation064cdbc517e4fe88655b86d045ba746a68912ff1. Accepted final native absolute/retirement profile:14188/14188 cases in503files,71fresh; entire ten changed production modules actual Istanbul100all-four1904lines2083statements566functions1707branches, complete current nonnegative maps, no earlier/superseded map/filter/counter/threshold edits. Source/contract/ownership/history/legacy graph/Worker acceptance and27Chromium12files pass; current formatting/lint/TS7/dependency/size/build/JSDoc/static plus9restored metadata gates pass. Reference and mdds symlinks restored. Twenty canonical histories/status/default/classification preserved with one actual current native declaration owner migration;32old case/argument-preserving test migrations,768other historical repository testfiles byte-identical. Original14test-only numeric node calls use direct native SetAttr. WRITER-003 unsupported default query retained and documented.
+    Exact-SHA quality pass in quality/20261010-160740908-recovery-context/quality-report.json is same-agent/non-independent; compiled native differential not run and not claimed. No passing test replay after helper/type-only/metadata repairs. Initial size/unused import findings repaired under approved native code scope; earlier successful profiles are superseded and not current coverage evidence.
+    Command/result/hash facts: evidence/verification.json. Broad Writer parity and rich wire/font UI/general native pooling/history/hash/presentation/UNO/VCL unverified; registered IO deviations unchanged. No full suite; cadence3/10 after N337G1. User stop rule: pause after next accepted full and repair failures first. Concrete finish and clean writer remain pending.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-10T16:03:41.234Z — VERIFY — ok
+    ### 2026-10-10T16:09:38.942Z — VERIFY — ok
 
     By: CODER
 
-    Note: Current native first-line contracts, original mutable caller3history cycles, existing scalar/automatic wire,14188related cases71fresh, whole ten modules actual100all-four,27Chromium,current static/TS7 and nine metadata pass; source/mdds restored. Rich native wire/font UI and broad parity unverified; exactSHA same-agent quality and concrete closure pending.
+    Note: Exact semantic064cdbc517e4 quality pass explicitly same-agent non-independent.14188related71fresh,entire ten actual current modules100all-four,27Chromium,current static/TS7,nine restored metadata,inventory/history and original contract source scope all pass. Broad goal incomplete and3/10; pause after next accepted full/repairs.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:03:39.638Z, excerpt_hash=sha256:5d62eda8e827e7ef44375959f0c3ba1b90a81036bc664ecba89644b08f7fca65
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:09:38.465Z, excerpt_hash=sha256:5d62eda8e827e7ef44375959f0c3ba1b90a81036bc664ecba89644b08f7fca65
 
     Details:
 
@@ -94,7 +134,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane commit 202610101510-P5FPXY -m 🧩 P5FPXY task: persist canonical task artifacts --allow-tasks
+    - safe_command: agentplane task complete 202610101510-P5FPXY --result verified-202610101510-P5FPXY --commit 064cdbc517e4fe88655b86d045ba746a68912ff1
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -139,19 +179,19 @@ Ten production modules: editeng/inc/lrspitem.ts and memberids.ts, editeng/source
 
 ## Verification
 
-VerifiedP5FPXY: original typed first-line item owns double/signed16 unit,uint16 percentage and auto mode under lrspitem native declaration; same export identity retained and obsolete test-only numeric SwTextNode helper removed. Original constructors,setters,stable constant measure,copy/equality,context resolution,metric scaling and UNO8/9/10/13 implemented; absolute writes directly assign measure and reset percentage100, original Any2Bool and unsupported default0 preserved. Mutable original caller acceptance plus3UndoRedo cycles retain independent item,node,cursor,style client; old scalar/automatic graph,JSON,Worker records unchanged at browser boundaries. Current final related14188/14188 cases503files71fresh; entire ten changed modules actual Istanbul100all-four1904lines2083statements566functions1707branches, complete current nonnegative maps; no superseded/earlier maps,filter,counter or threshold modifications. Thirty-two exact historical fixture/observer files preserve original cases and expected arguments except one source-backed fractional constructor contract; fourteen retired wrapper calls now direct native SetAttr, all768other repository historical test files byte-identical. Twenty canonical histories/status/default/classification records preserved with actual current declaration-owner migration. Current static/TS7/build/JSDoc/dependency/size and27Chromium cases12files passed once absent both references; separate nine source/metadata audits passed after restoration,source proof eight pinned files. WRITER-003 records preserved original unsupported default query. Exact-SHA same-agent non-independent quality pending commit. Rich unit/percentage wire,font-relative UI,general native lifetime/hash/presentation/UNO/VCL/history architecture remain unverified; registered IO deviations unchanged. Broad goal incomplete, cadence3/10 after N337G1; pause after next accepted full run and repairs.
-Command: npm exec -- vitest related ten approved production paths --run --coverage with explicit whole-module include paths and original100all-four thresholds. Exact argv/current hashes are in evidence/verification.json. Result: pass. Scope: current related/native contracts; no full-suite claim.
-Current changed formatting/lint plus whole TS7/dependency/size/build/JSDoc/static,27Chromium and restored nine metadata gates: pass. Doctor errors0; existing warnings retained. Source and mdds symlinks restored. Quality/concrete finish pending exact semantic SHA.
+Implementation064cdbc517e4fe88655b86d045ba746a68912ff1. Accepted final native absolute/retirement profile:14188/14188 cases in503files,71fresh; entire ten changed production modules actual Istanbul100all-four1904lines2083statements566functions1707branches, complete current nonnegative maps, no earlier/superseded map/filter/counter/threshold edits. Source/contract/ownership/history/legacy graph/Worker acceptance and27Chromium12files pass; current formatting/lint/TS7/dependency/size/build/JSDoc/static plus9restored metadata gates pass. Reference and mdds symlinks restored. Twenty canonical histories/status/default/classification preserved with one actual current native declaration owner migration;32old case/argument-preserving test migrations,768other historical repository testfiles byte-identical. Original14test-only numeric node calls use direct native SetAttr. WRITER-003 unsupported default query retained and documented.
+Exact-SHA quality pass in quality/20261010-160740908-recovery-context/quality-report.json is same-agent/non-independent; compiled native differential not run and not claimed. No passing test replay after helper/type-only/metadata repairs. Initial size/unused import findings repaired under approved native code scope; earlier successful profiles are superseded and not current coverage evidence.
+Command/result/hash facts: evidence/verification.json. Broad Writer parity and rich wire/font UI/general native pooling/history/hash/presentation/UNO/VCL unverified; registered IO deviations unchanged. No full suite; cadence3/10 after N337G1. User stop rule: pause after next accepted full and repair failures first. Concrete finish and clean writer remain pending.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-10T16:03:41.234Z — VERIFY — ok
+### 2026-10-10T16:09:38.942Z — VERIFY — ok
 
 By: CODER
 
-Note: Current native first-line contracts, original mutable caller3history cycles, existing scalar/automatic wire,14188related cases71fresh, whole ten modules actual100all-four,27Chromium,current static/TS7 and nine metadata pass; source/mdds restored. Rich native wire/font UI and broad parity unverified; exactSHA same-agent quality and concrete closure pending.
+Note: Exact semantic064cdbc517e4 quality pass explicitly same-agent non-independent.14188related71fresh,entire ten actual current modules100all-four,27Chromium,current static/TS7,nine restored metadata,inventory/history and original contract source scope all pass. Broad goal incomplete and3/10; pause after next accepted full/repairs.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:03:39.638Z, excerpt_hash=sha256:5d62eda8e827e7ef44375959f0c3ba1b90a81036bc664ecba89644b08f7fca65
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:09:38.465Z, excerpt_hash=sha256:5d62eda8e827e7ef44375959f0c3ba1b90a81036bc664ecba89644b08f7fca65
 
 Details:
 
@@ -166,7 +206,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane commit 202610101510-P5FPXY -m 🧩 P5FPXY task: persist canonical task artifacts --allow-tasks
+- safe_command: agentplane task complete 202610101510-P5FPXY --result verified-202610101510-P5FPXY --commit 064cdbc517e4fe88655b86d045ba746a68912ff1
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
