@@ -1,10 +1,11 @@
 ---
 id: "202610102025-0MZPHY"
 title: "Restore frame-owned native paragraph lines and cursor iteration"
-status: "DOING"
+result_summary: "Original frame-owned native paragraph and linked text iterator now drive visual-line margins; full native formatter/query/geometry/intermediate inheritance remain unverified."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Original frame-owned linked paragraph and native iterator replace duplicate line array/cursor adapter; actual Home End uses native objects, accepted targeted evidence/inventory recorded."
+  -
+    author: "CODER"
+    body: "Verified: Original frame-owned paragraph/linked native iterator replaces detached line array/cursor adapter in actual Home End. Accepted7142/304 plus23Chromium/12,11fresh cases;whole6modules175lines197statements48functions141branches100 and386nonnegative raw counters/current1244hashes.818old tests817unchanged+1native API migration,8canonical prefixes+4new unverified mappings and9metadata gates retained. Exact semantic b4db68d8f00ca6425a7e836345baf4091b6de8d8 reviewed same-agent non-independently; refs restored. Correction7/10; after next full and repairs pause goal."
 events:
   -
     type: "status"
@@ -76,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Accepted7142related/304 plus23Chromium/12,11fresh core/React;entire6modules175lines197statements48functions141branches100,386nonnegative raw counters/current1244hashes.818old tests817byte-identical+1native API migration;8canonical prefixes+4new unverified mappings,9metadata gates pass. Failed/new-only repair with unchanged-source maps, no passing replay; refs restored. Full formatting/query/geometry/intermediate cursor inheritance remain explicit gaps. Same-agent exact semantic review follows."
+  -
+    type: "status"
+    at: "2026-10-10T20:42:40.168Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original frame-owned paragraph/linked native iterator replaces detached line array/cursor adapter in actual Home End. Accepted7142/304 plus23Chromium/12,11fresh cases;whole6modules175lines197statements48functions141branches100 and386nonnegative raw counters/current1244hashes.818old tests817unchanged+1native API migration,8canonical prefixes+4new unverified mappings and9metadata gates retained. Exact semantic b4db68d8f00ca6425a7e836345baf4091b6de8d8 reviewed same-agent non-independently; refs restored. Correction7/10; after next full and repairs pause goal."
 doc_version: 3
-doc_updated_at: "2026-10-10T20:42:01.116Z"
+doc_updated_at: "2026-10-10T20:42:40.169Z"
 doc_updated_by: "CODER"
 description: "Correction7/10 after BZ14P4: replace text cursor array/index adapter with original frame-owned SwParaPortion/SwLineLayout, native SwTextInfo and linked SwTextIter traversal used by actual Home End; preserve registered IO boundaries and pause after next full and repairs."
 sections:
@@ -183,6 +194,10 @@ sections:
     - Observation: Native paragraph/iterator correction has accepted7142/304 plus23Chromium/12, whole6 modules175lines197statements48functions141branches100 and386nonnegative raw counters/1244current hashes. Fresh caret/API fixtures and ignored helper format/skipped/duplicate-title handling repaired; production unchanged across coverage maps.
       Impact: 818old tests817byte-identical+1explicit native API migration;8canonical prefixes retained,4new mappings unverified,9metadata checks pass. No full7/10 and no whole native-format/query/geometry/intermediate inheritance claim.
       Resolution: All authorized checks pass and refs restored; exact semantic same-agent non-independent review and clean closure remain.
+extensions:
+  implementation_commit:
+    hash: "b4db68d8f00ca6425a7e836345baf4091b6de8d8"
+    message: "🧩 0MZPHY code: Restore original paragraph line ownership"
 id_source: "generated"
 ---
 ## Summary
