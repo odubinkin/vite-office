@@ -1,4 +1,5 @@
 /** @fileoverview Observes genuine generated/C type classes, initialized real header records and original CPPU/RTL comparisons; type registration and reference lifecycle remain separate. */
+import { registryDriver } from "./uno-registry-native-driver.mjs";
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
@@ -60,6 +61,7 @@ const records = [
 );
 if (records.length !== 15) throw new Error("Incomplete genuine C type records");
 const driver = String.raw`#include <typelib/typedescription.h>
+#include "typelib.hxx"
 #include <osl/interlck.h>
 #include <algorithm>
 #include <thread>
@@ -74,7 +76,9 @@ const driver = String.raw`#include <typelib/typedescription.h>
 #include <vector>
 static_assert(std::endian::native == std::endian::little);
 template<size_t N>void emit(std::array<sal_Int32,N>const&row){if(std::fwrite(row.data(),sizeof(sal_Int32),N,stdout)!=N)std::exit(3);}
+${registryDriver}
 int main(int argc,char**argv){std::string mode=argc>1?argv[1]:"enums";
+if(registryCases(mode))return 0;
 if(mode=="enums"){std::cout<<'[';bool comma=false;
 ${names
   .map(
@@ -141,6 +145,7 @@ function build(sanitized) {
     [
       ...native.flags,
       ...(sanitized ? ["-fsanitize=address,undefined", "-fno-omit-frame-pointer", "-g"] : []),
+      "-Ivendor/libreoffice-reference/cppu/source/typelib",
       "-MMD",
       "-MF",
       dependency,
@@ -185,7 +190,7 @@ function capture(binary, mode) {
 const binary = build(false),
   sanitized = build(true),
   captures = {};
-for (const mode of ["enums", "units", "equals", "records", "counts", "threads"]) {
+for (const mode of ["enums", "units", "equals", "records", "counts", "threads", "registry"]) {
   captures[mode] = capture(binary, mode);
   if (!capture(sanitized, mode).equals(captures[mode]))
     throw new Error(`Sanitized native output differs: ${mode}`);
@@ -265,11 +270,17 @@ const result = {
     rawHash: hash(captures.threads),
     gzipBase64: gzipSync(captures.threads, { level: 9 }).toString("base64"),
   },
+  registry: {
+    rawHash: hash(captures.registry),
+    gzipBase64: gzipSync(captures.registry, { level: 9 }).toString("base64"),
+    fields:
+      "Original full common/specific initialized fields, live name/type counts and pointer identity witnesses after every operation; unspecified native fields are never read",
+  },
   bothNullEquals: captures.equals.readInt32LE(captures.equals.length - 4),
   nullWrapperAssertion: "SIGABRT",
   sanitizedIdentical: true,
   scope:
-    "Complete original enum values and C record declarations/layout, real header weak classifier, original const CPPU record comparison, selected real SAL Unicode/NoShortening comparator and original OSL adjusted atomic count operations including concurrent returns. Layout observations do not certify a portable C ABI or initialize unspecified native fields. Initialized genuine C records expose const predicate inputs only; no native type factory/registry/reference lifecycle or portable UNO exception/service/reflection claim. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
+    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
 };
 if (write) writeFileSync(fixture, JSON.stringify(result) + "\n");
 else if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(result))

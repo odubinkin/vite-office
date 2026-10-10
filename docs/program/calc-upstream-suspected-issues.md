@@ -945,3 +945,31 @@ not a demonstrated defect of valid registered type names.
 Decision: preserve the original terminated comparison and length guard. Do not
 replace it with known-length comparison, normalize names, or silently repair
 the upstream function.
+
+## CALC-040: Conflicting enum completion default does not replace the existing default
+
+Status: synthetic conflicting-provider condition reproduced with normal and
+ASan/UBSan-identical output; ordinary consumer reachability remains unverified.
+
+[Original typelib registration](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1443)
+completes an already initialized incomplete enum by swapping its value count,
+name array and value array. It retains the existing nDefaultEnumValue. A raw
+uninitialized reference takes the separate whole-specific-record transfer path.
+
+Initialized caller example: an incomplete registered enum has default0 and no
+values. A new complete description with the same name/class supplies default42
+and values42/51. Registration returns the existing allocation, now with both
+values and names, but its default remains0. The complete native lifecycle trace
+retains every field/count/identity observation; portable replay matches it.
+
+Evidence: [the genuine original registry caller](../../scripts/uno-registry-native-driver.mjs),
+the registry stream in native-type-primitives-cases.json, and
+[complete portable ownership replay](../../apps/office/src/cppu/source/typelib/registry.test.ts).
+[Original Test::testEnum](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/qa/typelib.cxx#L38)
+expects the initial default0 to remain0 for a consistent provider. Preserving
+known static metadata may therefore be intentional; this conflicting caller
+is not proof of a defect in valid ordinary UNO enum completion.
+
+Decision: retain the original selected-field swaps, including the unchanged
+existing default. Do not copy the incoming default, normalize enum values or
+claim an ordinary consumer failure from this witness.

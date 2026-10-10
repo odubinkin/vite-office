@@ -2186,3 +2186,42 @@ The actual UNO default exception/type owners and getValue/getConditionalValue,
 locale/string service/pool, document/edit/view/UI remain required. Task39 stays
 DOING. The next full suite remains task41, followed by required Calc/shared
 repairs and the user-requested goal pause; Writer-only coverage remains excluded.
+
+## Original CPPU type registry ownership
+
+Task39 implements original empty type allocations, common-prefix field/counter
+ownership, acquire/release, complete specific-member destruction, name-only
+reference lookup/creation, callback order and duplicate removal, registration,
+identity-preserving specific-field transfer and late completion, on-demand
+retention and the original256-entry typedef callback cache. Public C exports
+stay at the original header boundary; internal newEmpty/getByName stay in the
+source owner. Original completion/getDescription/full factories/static types
+and Type/Any/Reference/default exception owners remain required and unfinished.
+
+Each browser allocation has canonical typed views sharing its original atomic
+signed32 count and common fields. Reference pType aliases description pSelf;
+sequence's specific pType remains a separate slot. The nested aBase prefixes
+identify the same allocation. Only actual original initialization writes are
+ported; uninitialized positions/flags/Uik fields are absent. Actual specific-byte
+memset during registration supplies its original zero values. Storage becomes
+eligible for browser garbage collection after its owners are released. Full
+native pointer ABI, cross-thread registry synchronization and singleton shutdown
+remain unverified. Registry accesses are synchronous within one browser realm.
+
+The true native probe calls unchanged full SAL/CPPU owners, genuine public and
+internal headers, and original allocators. It retains all initialized fields,
+name/type reference counts and identity witnesses after each operation, including
+complete specific ownership graphs, late enum/compound/interface completion,
+callback duplicates/misses/aliases, replacement output slots and256-entry cache
+eviction. Normal and ASan/UBSan results must match byte-for-byte. Uninitialized
+native fields and freed pointers are never read. Initialized counter-zero and
+empty weak-pointer state witnesses exercise original safeguard branches;
+they do not establish actual interleavings or ordinary user-level reachability.
+Original cppu/qa/typelib.cxx tests are related references only; full static-type
+and completion providers are still needed to port/execute them unchanged.
+
+Calc and affected shared owners retain the100% coverage requirement with all
+original source links absent. Native/provenance checks run with links restored.
+The next scheduled full application run remains task41; fix Calc/affected shared
+failures, leave Writer-only coverage for its branch, then pause the goal as the
+user requested. This prerequisite does not establish editable Calc UI readiness.
