@@ -1,0 +1,19 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "sc/inc/celltextattr.hxx": "0365421452ced8629a4eff7dc95408941547df41979b3d4162f98d08c778089c",
+    "sc/source/core/data/celltextattr.cxx": "4c4d925b81b31a57f6c432aac788e28205fd1864b7cae7fa122ec696c38363e1",
+    "sc/inc/globalnames.hxx": "cc0063e81094a182ceb9410ba96bcc5f8f9d672d62d804c61f132f366a32b381",
+    "sc/inc/global.hxx": "e590e3314be2d0eaee00c282c849a93f1240297f8f98a634a53518a222f1e11b",
+    "include/svl/languageoptions.hxx": "813460d1a94b627fc985c86ac39258df2f133ce59ea52953a367b4e30a044bdf"
+  },
+  "scopeHashes": {
+    "script": "226dc6e9cb124b321e0732ad1d2c0b792af5aa19df2c2577ea17f07818d8fa96",
+    "cell": "e16da96bbab5adf2a592bd8041d63ab8c656d1fc40724517fbd5a34c22098516",
+    "declaration": "abf83c8efc08c0786de367a81c57c51a45d6b012779c8fe2777a4efd02fcc5f8",
+    "constructor": "b3ab302c26245250fce6d22f34e61a077a0d20f925d675bc070768604f1a14ac",
+    "dirty": "5b20b7c4818adbbbc946728f4259a99063d629b815a87c1e1834904d6f73f79b"
+  },
+  "driverHash": "7c034503499a697b1acf5e56f44ce14612d892ed81d0a42d28a365ab7a562db5",
+  "scriptTypes": [0, 1, 2, 4, 8]
+}

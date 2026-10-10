@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4fe2508f-fc15-42e8-b0cd-9edb7caa8206",
+    "capabilityId": "CAP-4fe2508f-fc15-42e8-b0cd-9edb7caa8206",
+    "suite": "calc",
+    "subsystem": "cell-metadata",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original NONE0/VALUE1/STRING2/FORMULA3/EDIT4 declaration values."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owner and declarations retained; native scalar representation and implicit value operations have explicit TS adapters."
+    },
+    "capability": "Calc original cell variant discriminator",
+    "gaps": [
+      "The original CellType discriminator is retained in sc/inc/global with names and implicit native declaration values NONE0,VALUE1,STRING2,FORMULA3,EDIT4. Complete unchanged enum compilation captures the exact values. No ScCellValue union, ownership, formulas, rich text or document model is implemented by this enum. Other global declarations and full Calc parity remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/global.hxx",
+          "marker": "enum CellType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "CELLTYPE_NONE, aCell.getType()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/global.hxx",
+          "marker": "enum CellType"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "CellType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+          "marker": "retains original cell variants and native default discriminators"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "UI prerequisite priority"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Represent original cell variant tags",
+    "scopeLimitations": [
+      "The original CellType discriminator is retained in sc/inc/global with names and implicit native declaration values NONE0,VALUE1,STRING2,FORMULA3,EDIT4. Complete unchanged enum compilation captures the exact values. No ScCellValue union, ownership, formulas, rich text or document model is implemented by this enum. Other global declarations and full Calc parity remain unverified.",
+      "Generated finite input sequences observe actual unchanged native definitions; they are not claimed as original upstream unit scenarios.",
+      "The original ucalc declaration/script cache consumer is contextual evidence, not a claim that this leaf implements the document-level QA scenario. Portable native value observations certify only the stated finite declaration/metadata scope."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

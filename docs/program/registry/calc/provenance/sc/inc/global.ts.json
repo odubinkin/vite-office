@@ -20,6 +20,14 @@
         {
           "path": "apps/office/src/sc/inc/global.ts",
           "marker": "CRFlags"
+        },
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "CellType"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+          "marker": "retains original cell variants and native default discriminators"
         }
       ],
       "upstream": [
@@ -34,6 +42,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
           "marker": "enum class CRFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/global.hxx",
+          "marker": "enum CellType"
         }
       ]
     },
@@ -41,7 +53,8 @@
     "localSymbols": [
       "UpdateRefMode",
       "ScGlobal",
-      "CRFlags"
+      "CRFlags",
+      "CellType"
     ],
     "omittedResponsibilities": [
       "Other global.hxx declarations, document/compiler consumers and whole Calc parity remain unverified."
@@ -49,14 +62,16 @@
     "preservedResponsibilities": [
       "Original UpdateRefMode names, declaration order and numeric values0..3.",
       "Header boundary re-exports the original ScGlobal process-state owner; false initializer remains at core/data/global.",
-      "Original UInt8 CRFlags names and values0/1/2/4/8/15; valid four-bit result mask in numerical compressed arrays."
+      "Original UInt8 CRFlags names and values0/1/2/4/8/15; valid four-bit result mask in numerical compressed arrays.",
+      "Original CellType names and declaration values0..4; exact unchanged native enum compilation."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/global.hxx",
     "upstreamSymbols": [
       "UpdateRefMode",
       "bThreadedGroupCalcInProgress",
-      "CRFlags"
+      "CRFlags",
+      "CellType"
     ]
   }
 }

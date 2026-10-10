@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/inc/languageoptions.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-options",
+    "capabilityIds": [
+      "CAP-a6727c23-e1bb-472c-95b0-3a2da4dda275"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/inc/languageoptions.ts#SvtScriptType",
+        "apps/office/src/svl/inc/languageoptions.test.ts#retains all original shared UInt8 script values",
+        "vendor/libreoffice-reference/include/svl/languageoptions.hxx#enum class SvtScriptType"
+      ],
+      "justification": "The original shared SvtScriptType discriminator is owned once under svl/inc/languageoptions, corresponding to include/svl/languageoptions.hxx. Exact NONE/LATIN/ASIAN/COMPLEX/UNKNOWN values0/1/2/4/8 are captured from the complete unchanged pinned native declaration. Calc imports this shared owner rather than duplicating script types. Other language-option services, i18n ScriptType conversion, native o3tl typed flag operators, native ABI and full shared module parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvtScriptType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/svl/languageoptions.hxx",
+      "upstreamSymbols": [
+        "enum class SvtScriptType"
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/celltextattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-metadata",
+    "capabilityIds": [
+      "CAP-1417aed9-e1b8-480c-9cdc-12df17b46d6f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/celltextattr.ts#CellTextAttr",
+        "apps/office/src/sc/source/core/data/celltextattr.test.ts#matches all154 unchanged native metadata sequences and complete owner fields",
+        "vendor/libreoffice-reference/sc/source/core/data/celltextattr.cxx#CellTextAttr::CellTextAttr()"
+      ],
+      "justification": "Original CellTextAttr two-field metadata and default constructor are retained at the original header/core-data boundary. Width starts at TEXTWIDTH_DIRTY=65535 and script at shared SvtScriptType.UNKNOWN=8. Public field accessors adapt implicit UInt16/UInt8 assignment for initialized finite integer inputs; optional-source construction and assign adapt compiler-provided memberwise copy/assignment, including scalar trivial move and self-assignment. Complete unchanged original enum, constant, declaration and constructor scopes compile with verified pinned full source blobs and SHA256 under ASan/UBSan. All154 input sequences compare1232 complete three-owner field states, including narrowing, independent copies and unchanged move sources. This is a metadata value owner, not text layout or a document substitute. Native ABI, allocation, C++ address/reference identity, undefined casts and full Calc storage/document/UI integration remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CellTextAttr"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/source/core/data/celltextattr.cxx",
+      "upstreamSymbols": [
+        "CellTextAttr::CellTextAttr()"
+      ]
+    }
+  }
+}

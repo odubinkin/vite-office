@@ -1,5 +1,70 @@
 # Calc coordinate foundation
 
+## UI prerequisite priority
+
+The user resumed the goal after task31's full run and requires the missing
+core components for a real Calc UI first. The following dependencies take
+priority over unrelated completion of generic mdds or formula features:
+
+1. Original cell values and the shared string/text dependencies they actually
+   use, with original variant tags and text metadata.
+2. Required shared storage writes and original Calc cell-store registrations;
+   reuse shared owners rather than build a parallel document model.
+3. Original `ScColumn`, `ScTable` and `ScDocument` owners and the document
+   operations required by the first editable sheet.
+4. Original edit notifications and undo, reusing existing shared Svt/Sfx
+   services where their contracts apply.
+5. Original Calc view/input owners and browser presentation connected to those
+   document operations, using the existing shared command/UI infrastructure.
+
+Dependencies still control execution: a leaf declaration does not establish
+document or UI readiness. Original formula and rich-text cell owners must be
+ported where the actual cell-store contract needs them; they cannot be
+replaced by synthetic browser cell variants. The existing browser Foundation
+and coordinate/selection services do not yet provide an editable Calc sheet.
+
+Task32 (`202610101342-SSE4NF`), the first task since task31's full run, ports
+original `CellType` at `sc/inc/global`, `TEXTWIDTH_DIRTY` at
+`sc/inc/globalnames`, and `CellTextAttr` at its original header/core-data
+boundaries. Its width starts at65535 and its script at `UNKNOWN`8. The shared
+`SvtScriptType` declaration lives once under `svl/inc/languageoptions`, mapped
+to original `include/svl/languageoptions.hxx`; Calc imports that owner.
+
+Public accessors adapt implicit native UInt16/UInt8 field assignment for
+initialized finite integers. Optional-source construction and `assign` adapt
+compiler-provided memberwise value copy/assignment, including self-assignment
+and scalar trivial moves which leave their source fields unchanged. This
+metadata owner adds no text measurement or document substitute.
+
+`scripts/calc-celltextattr-native-probe.mjs` verifies all five complete pinned
+source blobs and extracts the complete original enum, struct, constructor and
+constant scopes unchanged. Its C++ wrapper supplies scalar SAL aliases and
+input/output only, then compiles with ASan/UBSan. Portable fixtures retain
+154 sequences and1232 complete three-owner field states covering boundaries,
+copies, mutations and assignment; native field widths are2/1 bytes. The tests
+do not require upstream files or a compiler. Native ABI/reference lifetime,
+undefined casts, actual storage/document/view integration and complete shared
+language services remain unverified. The three independent contracts have
+separate capabilities for metadata, cell tags and shared script tags; broader
+runtime semantic parity flags remain unverified.
+
+All suspicious Calc cases are recorded in
+[calc-upstream-suspected-issues.md](calc-upstream-suspected-issues.md), retaining
+the original behavior. Other applications can own separate journals. The next
+scheduled full run is task41; intervening tasks run Calc coverage and the
+tests of affected shared modules.
+
+Task32 verification passes with upstream symlinks absent: all106 Calc tests
+in24 files and the shared script enum test. Actual Istanbul Calc counters
+are2920 statements,2055 branches,474 functions and2564 lines, all100%; the
+shared enum has6 statements,1 function and6 lines, all100%, with no branches.
+Every recorded statement/function/branch counter is positive. Native
+`--check`, typecheck, lint, JSDoc, size, dependencies, source tree/provenance,
+both scoped inventories, routing and doctor pass. Source-provenance3 cases
+and registry12 cases pass; doctor's two existing warnings are unchanged.
+Journal body and all31 cases are preserved byte-for-byte. No Writer coverage
+or implementation changes and no full run occur in this task.
+
 ## Shared container utilities and traits
 
 Task `202610092012-8RZCZ1` ports original mdds `util.hpp`: empty events,
@@ -595,7 +660,7 @@ Inventory stays semantically unverified. This is task5 of the resumed interval;
 full verification remains due at task10.
 
 Suspicious source conditions observed during these ports are tracked separately
-in [upstream-suspected-issues.md](upstream-suspected-issues.md). Recording them
+in [calc-upstream-suspected-issues.md](calc-upstream-suspected-issues.md). Recording them
 does not authorize changing upstream behavior; the user explicitly reaffirmed
 that preservation requirement.
 
@@ -1519,7 +1584,7 @@ corpus. Complete native values, output/iterator results, operations, ownership,
 payloads, capacities, metadata, endpoints and event logs remain portable through
 the existing common decoder and observer.
 
-[CALC-031](upstream-suspected-issues.md#calc-031-hinted-scalar-release-reads-empty-metadata-before-its-row-guard)
+[CALC-031](calc-upstream-suspected-issues.md#calc-031-hinted-scalar-release-reads-empty-metadata-before-its-row-guard)
 records the independently reproduced original hinted-empty-destination native
 undefined behavior, even with a valid foreign hint. The implementation preserves
 the lookup order; native UB has no defined portable expected result.

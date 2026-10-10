@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/celltextattr.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/celltextattr.cxx",
+    "localSymbols": [
+      "CellTextAttr"
+    ],
+    "upstreamSymbols": [
+      "CellTextAttr::CellTextAttr()"
+    ],
+    "preservedResponsibilities": [
+      "Original text-width dirty and UNKNOWN script defaults, public UInt16/UInt8 fields and implicit independent memberwise copying/assignment."
+    ],
+    "omittedResponsibilities": [
+      "Text measurement, column storage, document/UI consumers and native ABI/reference lifetime remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.ts",
+          "marker": "CellTextAttr"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+          "marker": "matches all154 unchanged native metadata sequences and complete owner fields"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/celltextattr.cxx",
+          "marker": "CellTextAttr::CellTextAttr()"
+        }
+      ]
+    }
+  }
+}

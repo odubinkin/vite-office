@@ -78,7 +78,7 @@
           "marker": "Shared SoA range erase and adjacent-tail merge"
         },
         {
-          "path": "docs/program/upstream-suspected-issues.md",
+          "path": "docs/program/calc-upstream-suspected-issues.md",
           "marker": "CALC-030"
         }
       ]

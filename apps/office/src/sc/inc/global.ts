@@ -1,5 +1,13 @@
-/** @fileoverview Original reference modes, row/column flags and ScGlobal boundary from pinned sc/inc/global.hxx. */
+/** @fileoverview Original cell types, reference modes, row/column flags and ScGlobal boundary from pinned sc/inc/global.hxx. */
 export { ScGlobal } from "../source/core/data/global";
+/** Original cell variant discriminator; declaration order defines native values zero through four. */
+export enum CellType {
+  CELLTYPE_NONE = 0,
+  CELLTYPE_VALUE = 1,
+  CELLTYPE_STRING = 2,
+  CELLTYPE_FORMULA = 3,
+  CELLTYPE_EDIT = 4,
+}
 /** Original insertion/deletion, copy, movement and sheet reorder discriminator. */
 export enum UpdateRefMode {
   URM_INSDEL = 0,

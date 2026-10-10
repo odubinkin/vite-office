@@ -1,0 +1,76 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a6727c23-e1bb-472c-95b0-3a2da4dda275",
+    "capabilityId": "CAP-a6727c23-e1bb-472c-95b0-3a2da4dda275",
+    "suite": "shared",
+    "subsystem": "language-options",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original shared NONE0/LATIN1/ASIAN2/COMPLEX4/UNKNOWN8 values.",
+      "Calc imports the common svl owner without a second discriminator."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owner and declarations retained; native scalar representation and implicit value operations have explicit TS adapters."
+    },
+    "capability": "Shared original script discriminator",
+    "gaps": [
+      "The original shared SvtScriptType discriminator is owned once under svl/inc/languageoptions, corresponding to include/svl/languageoptions.hxx. Exact NONE/LATIN/ASIAN/COMPLEX/UNKNOWN values0/1/2/4/8 are captured from the complete unchanged pinned native declaration. Calc imports this shared owner rather than duplicating script types. Other language-option services, i18n ScriptType conversion, native o3tl typed flag operators, native ABI and full shared module parity remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/svl/languageoptions.hxx",
+          "marker": "enum class SvtScriptType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "SvtScriptType::LATIN | SvtScriptType::ASIAN"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/languageoptions.hxx",
+          "marker": "enum class SvtScriptType"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/inc/languageoptions.ts",
+          "marker": "SvtScriptType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/inc/languageoptions.test.ts",
+          "marker": "retains all original shared UInt8 script values"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "UI prerequisite priority"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Represent original shared script classification bits",
+    "scopeLimitations": [
+      "The original shared SvtScriptType discriminator is owned once under svl/inc/languageoptions, corresponding to include/svl/languageoptions.hxx. Exact NONE/LATIN/ASIAN/COMPLEX/UNKNOWN values0/1/2/4/8 are captured from the complete unchanged pinned native declaration. Calc imports this shared owner rather than duplicating script types. Other language-option services, i18n ScriptType conversion, native o3tl typed flag operators, native ABI and full shared module parity remain unverified.",
+      "Generated finite input sequences observe actual unchanged native definitions; they are not claimed as original upstream unit scenarios.",
+      "The original ucalc declaration/script cache consumer is contextual evidence, not a claim that this leaf implements the document-level QA scenario. Portable native value observations certify only the stated finite declaration/metadata scope."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

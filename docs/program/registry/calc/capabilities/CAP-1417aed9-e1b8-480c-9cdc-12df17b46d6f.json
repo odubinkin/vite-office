@@ -1,0 +1,93 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1417aed9-e1b8-480c-9cdc-12df17b46d6f",
+    "capabilityId": "CAP-1417aed9-e1b8-480c-9cdc-12df17b46d6f",
+    "suite": "calc",
+    "subsystem": "cell-metadata",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original text-width dirty65535 and UNKNOWN8 defaults.",
+      "Original initialized UInt16 width and UInt8 script narrowing.",
+      "Independent memberwise copies and scalar assignment/self-assignment/trivial move semantics."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original owner and declarations retained; native scalar representation and implicit value operations have explicit TS adapters."
+    },
+    "capability": "Calc original cell text metadata",
+    "gaps": [
+      "Original CellTextAttr two-field metadata and default constructor are retained at the original header/core-data boundary. Width starts at TEXTWIDTH_DIRTY=65535 and script at shared SvtScriptType.UNKNOWN=8. Public field accessors adapt implicit UInt16/UInt8 assignment for initialized finite integer inputs; optional-source construction and assign adapt compiler-provided memberwise copy/assignment, including scalar trivial move and self-assignment. Complete unchanged original enum, constant, declaration and constructor scopes compile with verified pinned full source blobs and SHA256 under ASan/UBSan. All154 input sequences compare1232 complete three-owner field states, including narrowing, independent copies and unchanged move sources. This is a metadata value owner, not text layout or a document substitute. Native ABI, allocation, C++ address/reference identity, undefined casts and full Calc storage/document/UI integration remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/celltextattr.hxx",
+          "marker": "struct CellTextAttr"
+        },
+        {
+          "path": "sc/source/core/data/celltextattr.cxx",
+          "marker": "CellTextAttr::CellTextAttr()"
+        },
+        {
+          "path": "sc/inc/globalnames.hxx",
+          "marker": "constexpr sal_uInt32 TEXTWIDTH_DIRTY"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "m_pDoc->SetScriptType(ScAddress(1,11,0)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/celltextattr.hxx",
+          "marker": "struct CellTextAttr"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.ts",
+          "marker": "CellTextAttr"
+        },
+        {
+          "path": "apps/office/src/sc/inc/globalnames.ts",
+          "marker": "TEXTWIDTH_DIRTY"
+        },
+        {
+          "path": "scripts/calc-celltextattr-native-probe.mjs",
+          "marker": "const scopes"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+          "marker": "matches all154 unchanged native metadata sequences and complete owner fields"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "UI prerequisite priority"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Construct and copy original cell text measurement metadata",
+    "scopeLimitations": [
+      "Original CellTextAttr two-field metadata and default constructor are retained at the original header/core-data boundary. Width starts at TEXTWIDTH_DIRTY=65535 and script at shared SvtScriptType.UNKNOWN=8. Public field accessors adapt implicit UInt16/UInt8 assignment for initialized finite integer inputs; optional-source construction and assign adapt compiler-provided memberwise copy/assignment, including scalar trivial move and self-assignment. Complete unchanged original enum, constant, declaration and constructor scopes compile with verified pinned full source blobs and SHA256 under ASan/UBSan. All154 input sequences compare1232 complete three-owner field states, including narrowing, independent copies and unchanged move sources. This is a metadata value owner, not text layout or a document substitute. Native ABI, allocation, C++ address/reference identity, undefined casts and full Calc storage/document/UI integration remain unverified.",
+      "Generated finite input sequences observe actual unchanged native definitions; they are not claimed as original upstream unit scenarios.",
+      "The original ucalc declaration/script cache consumer is contextual evidence, not a claim that this leaf implements the document-level QA scenario. Portable native value observations certify only the stated finite declaration/metadata scope."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

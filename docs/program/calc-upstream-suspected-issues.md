@@ -1,4 +1,4 @@
-# Observed upstream cases requiring review
+# Calc: observed upstream cases requiring review
 
 These observations come from the pinned LibreOffice baseline
 `9bc445578031fecf56086729d8e4940c77e14d65` (`libreoffice-26.8.0.2`). They document

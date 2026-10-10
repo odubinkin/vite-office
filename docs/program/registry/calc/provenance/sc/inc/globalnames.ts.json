@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/globalnames.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/globalnames.hxx",
+    "localSymbols": [
+      "TEXTWIDTH_DIRTY"
+    ],
+    "upstreamSymbols": [
+      "constexpr sal_uInt32 TEXTWIDTH_DIRTY"
+    ],
+    "preservedResponsibilities": [
+      "Original UInt32 text-width dirty constant65535 used by the original UInt16 metadata initializer."
+    ],
+    "omittedResponsibilities": [
+      "Other global name and value constants remain absent; full header parity unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/globalnames.ts",
+          "marker": "TEXTWIDTH_DIRTY"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/celltextattr.test.ts",
+          "marker": "retains original cell variants and native default discriminators"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/globalnames.hxx",
+          "marker": "constexpr sal_uInt32 TEXTWIDTH_DIRTY"
+        }
+      ]
+    }
+  }
+}
