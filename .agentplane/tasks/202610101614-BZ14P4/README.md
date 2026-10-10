@@ -4,7 +4,7 @@ title: "Run current full upstream-absent validation and pause goal"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the explicitly requested current full checkpoint without both upstream references; preserve actual TS7/Istanbul outcomes, repair detected failures before pausing, and keep raw evidence in ignored cache."
 doc_version: 3
-doc_updated_at: "2026-10-10T16:15:25.834Z"
+doc_updated_at: "2026-10-10T16:36:20.259Z"
 doc_updated_by: "CODER"
 description: "User-requested full checkpoint after native paragraph indent corrections and merged TS7/Istanbul tooling. Run complete current suites once without both reference links, repair actual failures if any, record honest coverage and pause the incomplete goal after closure."
 sections:
@@ -49,9 +49,9 @@ sections:
     3. Require every discovered acceptance file executed, all assertions pass without skips/flaky cases, nonnegative complete current maps and actual 100 percent line/statement/function/branch coverage for configured application and inventory targets. Record failures honestly and repair before pause.
     4. After references restored run source-tree/provenance, writer resource generation check, inventory invariants/parity/registry check, policy routing, ap doctor and git diff --check. Compare original hashes and reference targets, retain pin and intentional deviations. No upstream sources, Python, helpers or raw maps in AgentPlane.
     5. Persist bounded evidence, exact-SHA same-agent review, verify and finish task with concrete result. Confirm clean writer checkout and pause goal under explicit user instruction. Whole upstream goal remains incomplete.
-  Verification: "Pending current full checkpoint. Historical X6VV8G failures are not current evidence."
+  Verification: "Command: exact current command arrays in evidence/verification.json. Result: pass. Evidence: Complete current upstream-absent profile passed: application15104/15104 in635 files, tooling24/24 in8, inventory123/123 in38, resources2/2 in1, Chromium303/303 in120 browser files; total15556/15556 across802 discovered files, zero failures/skips/flaky/retries. Actual full app and inventory line/statement/function/branch coverage100 percent;351 and42 complete current maps with nonnegative counters; tooling coverage100 percent. Eight static and nine restored-reference metadata checks passed. All2417 original tracked non-AgentPlane files byte-identical. Both reference targets restored; exact pinned HEAD retained. One full profile, no repairs or passing replays. Bounded evidence: evidence/verification.json; raw reporters/maps/helpers remain ignored. Scope: complete current writer checkout."
   Rollback Plan: "Restore both reference symlinks in finally; no planned implementation changes. Preserve actual failed outputs in ignored cache and repair source defects through atomic tasks without resetting history or altering thresholds."
-  Findings: "The user explicitly requests stopping after this full run and previously requires fixing failures before pausing. This checkpoint is requested now after three accepted corrections since N337G1, overriding the scheduled ten-correction cadence for this stop boundary. No network or subagents; current agent performs all roles, quality review is not independent."
+  Findings: "The latest user instruction requires pausing after this successful full profile. Prior native margin corrections HB1SPN/QJ0FFB/P5FPXY remain accepted; this user-requested full checkpoint resets the next resumed full-run cadence to0/10. The broad parity goal remains incomplete. Current agent review is explicitly non-independent. Historical X6VV8G evidence remains unchanged; it is not reused as current evidence. No new implementation or inventory mutation and no compiled native differential were performed."
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +76,7 @@ Capture current tracked source/test/metadata hashes and discovery inventory. Hid
 
 ## Verification
 
-Pending current full checkpoint. Historical X6VV8G failures are not current evidence.
+Command: exact current command arrays in evidence/verification.json. Result: pass. Evidence: Complete current upstream-absent profile passed: application15104/15104 in635 files, tooling24/24 in8, inventory123/123 in38, resources2/2 in1, Chromium303/303 in120 browser files; total15556/15556 across802 discovered files, zero failures/skips/flaky/retries. Actual full app and inventory line/statement/function/branch coverage100 percent;351 and42 complete current maps with nonnegative counters; tooling coverage100 percent. Eight static and nine restored-reference metadata checks passed. All2417 original tracked non-AgentPlane files byte-identical. Both reference targets restored; exact pinned HEAD retained. One full profile, no repairs or passing replays. Bounded evidence: evidence/verification.json; raw reporters/maps/helpers remain ignored. Scope: complete current writer checkout.
 
 ## Rollback Plan
 
@@ -84,4 +84,4 @@ Restore both reference symlinks in finally; no planned implementation changes. P
 
 ## Findings
 
-The user explicitly requests stopping after this full run and previously requires fixing failures before pausing. This checkpoint is requested now after three accepted corrections since N337G1, overriding the scheduled ten-correction cadence for this stop boundary. No network or subagents; current agent performs all roles, quality review is not independent.
+The latest user instruction requires pausing after this successful full profile. Prior native margin corrections HB1SPN/QJ0FFB/P5FPXY remain accepted; this user-requested full checkpoint resets the next resumed full-run cadence to0/10. The broad parity goal remains incomplete. Current agent review is explicitly non-independent. Historical X6VV8G evidence remains unchanged; it is not reused as current evidence. No new implementation or inventory mutation and no compiled native differential were performed.
