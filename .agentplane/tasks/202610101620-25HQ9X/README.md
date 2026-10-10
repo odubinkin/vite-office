@@ -1,10 +1,11 @@
 ---
 id: "202610101620-25HQ9X"
 title: "Port complete original shared RTL Unicode character contracts"
-status: "DOING"
+result_summary: "verified-202610101620-25HQ9X"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-10T16:35:40.412Z"
+  updated_at: "2026-10-10T16:38:55.478Z"
   updated_by: "CODER"
-  note: "Complete original RTL character owner matches all1114112 native rows, every1048576 surrogate pair,67300 comparisons and full106954752-byte SHA; portable Calc106/shared11/tooling28, complete raw-positive allfour100 sources and all declared scoped gates pass."
+  note: "verified-202610101620-25HQ9X"
   attempts: 0
 quality_review:
   state: "pass"
@@ -49,11 +50,16 @@ quality_review:
     - "Entire original character.hxx and all7 full original dependencies/config templates were pinned-hash audited. Full106954752-byte native output contains every1114112 codepoint with24 initialized fields; generic2082-run fixture reconstructs every native byte and rawSHA3ac04bb3. Independent bitset audit proves all1048576 actual high/low pairs occur exactly once. Current rendered driver still matches11b105b5 after documentation-only callback changes. ASan/UBSan defined output identical; all67300 pair outputs, conversions, constants,25 SIGABRT assertions and24 actual deleted-overload compiler diagnostics retained."
     - "Portable full-row replay matches the complete raw hash without upstream checkout. Calc106 and affected shared11 tests pass with19/10 complete executable source sets and raw-positive strict allfour100: Calc S2920 B2055 F474 L2564; shared S536 B302 F121 L430. All28 unique affected tooling cases pass after bounded source-backed splitSurrogates mutation inventory correction; initial failures remain recorded. Both vendor links absent during portable tests and restored before native/provenance gates."
     - "All10 implementation commit paths belong to approved source/native fixture/test/registry/ledger/core/task scope. Calc49 capabilities175 modules and shared26 capabilities145 modules show0 semantic violations and conservative unverified broad parity flags. Initial unsupported QA path is replaced with actual original UTF32-buffer consumer reference, without claiming literal QA was ported. Types/lint/docs/size/dependencies/tree/provenance/format/routing/doctor/diff gates pass; doctor0 errors/two inherited warnings. No Writer, network, branch, merge or policy edits; next full41."
-commit: null
+commit:
+  hash: "62e9bf6ca447a0d2016852a720e46d5e7aa46278"
+  message: "✅ 25HQ9X quality: verify complete shared Unicode character contracts"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete original shared character header with exhaustive native Unicode evidence and strict scoped checks under the continued Calc goal."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101620-25HQ9X. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original RTL character owner matches all1114112 native rows, every1048576 surrogate pair,67300 comparisons and full106954752-byte SHA; portable Calc106/shared11/tooling28, complete raw-positive allfour100 sources and all declared scoped gates pass."
+  -
+    type: "verify"
+    at: "2026-10-10T16:38:55.478Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101620-25HQ9X"
+  -
+    type: "status"
+    at: "2026-10-10T16:38:55.630Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101620-25HQ9X. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-10T16:35:40.465Z"
+doc_updated_at: "2026-10-10T16:40:02.603Z"
 doc_updated_by: "CODER"
 description: "Task37 UI prerequisite: complete rtl/character.hxx runtime owner used by original casefolding Unicode service; preserve all22 character, surrogate and ASCII operations plus original assertions/4 detail constants, full original-header native exhaustive Unicode/surrogate and ASCII-pair evidence, portable strict100 coverage, exhaustive shared inventory and clean direct closure. No JS Unicode casing, fake service or document substitute."
 sections:
@@ -133,6 +152,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-10T16:38:55.478Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101620-25HQ9X
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:35:40.465Z, excerpt_hash=sha256:be805e9f260d359c67682da2a8bd872090e46f78bd5508b4683b3dda446d1330
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101620-25HQ9X/blueprint/resolved-snapshot.json
+    - old_digest: 7d24b18931208aaab1cafa977f3b4edc7a421187b3cd91ac45cfd07c00f0f081
+    - current_digest: 7d24b18931208aaab1cafa977f3b4edc7a421187b3cd91ac45cfd07c00f0f081
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101620-25HQ9X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101620-25HQ9X --result verified-202610101620-25HQ9X --commit 62e9bf6ca447a0d2016852a720e46d5e7aa46278
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "A new forward task may revert task37 shared character/native/test/registry/docs changes and rerun scoped checks. Never reset history, rewrite upstream or alter acceptance/policy/Writer. Local vendor links are restored in finally."
   Findings: |-
@@ -157,6 +206,18 @@ sections:
     - Observation: Terminology clarification: the native pair loop exhausts all256x256 byte-value pairs, including all128x128 ASCII pairs, plus42x42 cross-boundary pairs; total67300.
       Impact: The earlier shorthand ASCII-byte pairs was imprecise; actual input range, expected outputs and verification criteria remain unchanged.
       Resolution: Record precise byte-value range and total in final evidence; retain the entire unchanged original caller corpus and all strict gates.
+
+    - Observation: Exact direct task complete exited5 because generated close subject is too generic, after marking the verified task DONE; same installed close defect as preceding Calc tasks.
+      Impact: Implementation627d4677 and quality62e9bf6c are persisted; active-task close README remains uncommitted.
+      Resolution: Follow recomputed DONE artifact-cleanup route once; if generated-subject validator recurs, persist only task README with a descriptive allowlisted ap commit and verify clean DONE without history/policy changes.
+
+    - Observation: Recomputed exact ap commit --close --unstage-others also exited5 with generated subject too generic.
+      Impact: Only final canonical task README artifact persistence remains; verification/evaluator and runtime implementation are already recorded.
+      Resolution: Use descriptive installed ap commit with only active task artifacts staged, retaining original implementation/quality hashes and unchanged CLI/policy; verify DONE and clean tracked/untracked calc afterwards.
+extensions:
+  implementation_commit:
+    hash: "627d4677ada90ec0900860eede7f2582d88e4436"
+    message: "✨ 25HQ9X port: complete original shared Unicode character contracts"
 id_source: "generated"
 ---
 ## Summary
@@ -231,6 +292,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-10T16:38:55.478Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101620-25HQ9X
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T16:35:40.465Z, excerpt_hash=sha256:be805e9f260d359c67682da2a8bd872090e46f78bd5508b4683b3dda446d1330
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101620-25HQ9X/blueprint/resolved-snapshot.json
+- old_digest: 7d24b18931208aaab1cafa977f3b4edc7a421187b3cd91ac45cfd07c00f0f081
+- current_digest: 7d24b18931208aaab1cafa977f3b4edc7a421187b3cd91ac45cfd07c00f0f081
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101620-25HQ9X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101620-25HQ9X --result verified-202610101620-25HQ9X --commit 62e9bf6ca447a0d2016852a720e46d5e7aa46278
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -260,3 +351,11 @@ Preflight clean branchcalc, task36 DONE; unrelated C9TN6M/X6VV8G remain untouche
 - Observation: Terminology clarification: the native pair loop exhausts all256x256 byte-value pairs, including all128x128 ASCII pairs, plus42x42 cross-boundary pairs; total67300.
   Impact: The earlier shorthand ASCII-byte pairs was imprecise; actual input range, expected outputs and verification criteria remain unchanged.
   Resolution: Record precise byte-value range and total in final evidence; retain the entire unchanged original caller corpus and all strict gates.
+
+- Observation: Exact direct task complete exited5 because generated close subject is too generic, after marking the verified task DONE; same installed close defect as preceding Calc tasks.
+  Impact: Implementation627d4677 and quality62e9bf6c are persisted; active-task close README remains uncommitted.
+  Resolution: Follow recomputed DONE artifact-cleanup route once; if generated-subject validator recurs, persist only task README with a descriptive allowlisted ap commit and verify clean DONE without history/policy changes.
+
+- Observation: Recomputed exact ap commit --close --unstage-others also exited5 with generated subject too generic.
+  Impact: Only final canonical task README artifact persistence remains; verification/evaluator and runtime implementation are already recorded.
+  Resolution: Use descriptive installed ap commit with only active task artifacts staged, retaining original implementation/quality hashes and unchanged CLI/policy; verify DONE and clean tracked/untracked calc afterwards.
