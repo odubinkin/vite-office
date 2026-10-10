@@ -1,10 +1,11 @@
 ---
 id: "202610100036-WQ0NE8"
 title: "Restore native UL spacing contracts and complete browser item state"
-status: "DOING"
+result_summary: "Restore native UL spacing contracts and lossless five-field browser item state"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -53,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Start: semantic8a5e0bd90d14 complete native UL state landed; record exact-SHA verification and non-independent quality before canonical finish."
+  -
+    author: "CODER"
+    body: "Verified: native five-field UL state and native value contracts now source-owned; browser codec preserves full spacing proportions through pool/history/Worker.3936related64fresh24Chromium accepted;4whole-module Istanbul100all-four,9statics9metadata and exact-SHA same-agent quality pass. Inventory and registered deviations preserved;goalactive7/10."
 events:
   -
     type: "status"
@@ -86,8 +90,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact-SHA8a5e0bd90d14 same-agent/non-independent quality passes;bounded evidence refreshed.3936related64fresh24Chromium all accepted;Istanbul4wholemodules100all-four;9statics9metadata,original acceptance/inventory preserved,goalactive7/10."
+  -
+    type: "status"
+    at: "2026-10-10T00:55:07.049Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native five-field UL state and native value contracts now source-owned; browser codec preserves full spacing proportions through pool/history/Worker.3936related64fresh24Chromium accepted;4whole-module Istanbul100all-four,9statics9metadata and exact-SHA same-agent quality pass. Inventory and registered deviations preserved;goalactive7/10."
 doc_version: 3
-doc_updated_at: "2026-10-10T00:54:55.963Z"
+doc_updated_at: "2026-10-10T00:55:07.051Z"
 doc_updated_by: "CODER"
 description: "Atomic task7/10 after BZQGYC. Native SvxULSpaceItem lacks source-owned proportion fields, setters, native constructor/default QueryValue/PutValue and complete clone/equality. Port exact pinned five-field native state and value quirks; move old tuple representation into existing browser item codec and preserve old tuple admission while transporting full proportions through registered pool boundary. Preserve table/paragraph original ItemSet/history/UI and conscious I/O deviations. Native LR/UL table-format transport follows in another atomic task; no inverse/private field adapters."
 sections:
@@ -196,6 +207,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the semantic implementation commit without rewriting history; restore ignored upstream symlink in finally for every validation profile. Retain traceability and source-backed expectation history."
   Findings: "Current UL core previously owned upper/lower/context only and returned browser tuple from QueryValue. Pinned native item owns both proportion fields, public raw/proportion setters and UNO contracts. Literal aggregate Lower=nPropUpper and ScaleLower-to-nPropUpper write quirks retained. Compiler preservation proof resolves26 Query expressions across12 original files plus1 native uint16 constructor assertion (the planning count27 included that assertion); all original expected metrics/context and sibling text preserved. Initial367files3936cases3931passed5new failures were Vitest tuple parameterization, fixed to object rows including malformed tuple cases previously flattened by Vitest. Repaired file22/22assertions pass; its exit1 is only global100coverage thresholds for four whole modules under a one-file selection. Initial unchanged production-source complete maps already100all-four; exact map identities and source hashes checked, no passing test replay. Full table LR/UL transport remains pending; goalactive7/10."
+extensions:
+  implementation_commit:
+    hash: "8a5e0bd90d14179a711e3b543e3856b6f13e7fc4"
+    message: "🧩 WQ0NE8 writer: restore native UL spacing contracts and complete browser state"
 id_source: "generated"
 ---
 ## Summary
