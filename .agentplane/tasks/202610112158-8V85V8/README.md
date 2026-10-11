@@ -4,7 +4,7 @@ title: "Open native Writer text and table context menus"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 34
+revision: 36
 origin:
   system: "manual"
 depends_on:
@@ -98,7 +98,7 @@ events:
     from: "DOING"
     to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-11T23:39:23.243Z"
+doc_updated_at: "2026-10-11T23:41:43.778Z"
 doc_updated_by: "CODER"
 description: "Route real mouse and keyboard popup requests through original SwEditWin selection policy and SfxDispatcher resource ownership; reuse shared bindings-backed menu rendering for generated text/table resources, preserve native selection and focus through cancellation and execution. Correction10/10, followed by the next full suites and required repairs then human pause."
 sections:
@@ -186,6 +186,14 @@ sections:
     - Observation: First quality recording refused E_USAGE: dirty tracked parent README outside current task artifact subtree. Parent summary wording had an uncertain inventory count token and was corrected through ap task doc set; no source/test change.
       Impact: Cannot record review while the parent documentation correction is uncommitted; all accepted runtime/source hashes remain identical.
       Resolution: Commit only corrected parent/task documentation first, retain original semantic implementation5d39898e7ba0, then review the exact clean evidence head with byte equality to original accepted source profile and record both commit identities explicitly. No criterion change, bypass or test replay.
+
+    - Observation: First finish rejected E_VALIDATION: explicitly supplied implementation SHA5d39898e differed from reviewed evidence headc3dce0d; finish freshness gate compares implementation-commit rather than source byte equivalence.
+      Impact: No closure accepted yet. Both heads carry exactly the same39 accepted source/test/canonical bytes; c3dce0d also includes corrected and recorded final task/parent documentation.
+      Resolution: Use the completed reviewed implementation versionc3dce0d for finish commit/implementation-commit; retain first code-origin5d39898e explicitly in evidence and Findings. Exact evaluator SHA is c3dce0d, quality-only commitcb79ce1c follows. No history reset, false independent review, source/test change, criteria bypass or test replay.
+
+    - Observation: Second finish passed SHA selection but refused E_GIT because the just-added active task Findings were uncommitted; deterministic direct closure requires every tracked path clean first.
+      Impact: Task remains unclosed, with accepted semantic/source/test evidence unchanged.
+      Resolution: Commit lifecycle-only Findings under active task scope, then run canonical finish with reviewed implementation versionc3dce0d. Preserve exact quality receipt and source-origin5d39898e; no source/test mutation or bypass.
 id_source: "generated"
 ---
 ## Summary
@@ -290,3 +298,11 @@ Native edtwin6370+ uses TestCurrPam before cursor movement and retains selected 
 - Observation: First quality recording refused E_USAGE: dirty tracked parent README outside current task artifact subtree. Parent summary wording had an uncertain inventory count token and was corrected through ap task doc set; no source/test change.
   Impact: Cannot record review while the parent documentation correction is uncommitted; all accepted runtime/source hashes remain identical.
   Resolution: Commit only corrected parent/task documentation first, retain original semantic implementation5d39898e7ba0, then review the exact clean evidence head with byte equality to original accepted source profile and record both commit identities explicitly. No criterion change, bypass or test replay.
+
+- Observation: First finish rejected E_VALIDATION: explicitly supplied implementation SHA5d39898e differed from reviewed evidence headc3dce0d; finish freshness gate compares implementation-commit rather than source byte equivalence.
+  Impact: No closure accepted yet. Both heads carry exactly the same39 accepted source/test/canonical bytes; c3dce0d also includes corrected and recorded final task/parent documentation.
+  Resolution: Use the completed reviewed implementation versionc3dce0d for finish commit/implementation-commit; retain first code-origin5d39898e explicitly in evidence and Findings. Exact evaluator SHA is c3dce0d, quality-only commitcb79ce1c follows. No history reset, false independent review, source/test change, criteria bypass or test replay.
+
+- Observation: Second finish passed SHA selection but refused E_GIT because the just-added active task Findings were uncommitted; deterministic direct closure requires every tracked path clean first.
+  Impact: Task remains unclosed, with accepted semantic/source/test evidence unchanged.
+  Resolution: Commit lifecycle-only Findings under active task scope, then run canonical finish with reviewed implementation versionc3dce0d. Preserve exact quality receipt and source-origin5d39898e; no source/test mutation or bypass.
