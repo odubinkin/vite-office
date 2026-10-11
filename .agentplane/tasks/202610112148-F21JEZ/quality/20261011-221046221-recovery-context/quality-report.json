@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610112148-F21JEZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T22:10:46.221Z",
+  "verdict": "pass",
+  "summary": "Task50 accepted against implementatione530b7a257f6: source-complete actually declared cppuhelper helpers, genuine native full streams and raw100 independently verified.",
+  "evaluated_sha": "e530b7a257f6cbd740a5ef7fe3b43086b7d27537",
+  "blueprint_digest": "5c831f64acffd438838a70f7569109f64704af470b3d0e1cd71af2f779aeae91",
+  "findings": [
+    "Compared complete original queryinterface.hxx/supportsservice.cxx/IDL and source diff: explicit static_type/pointer list preserves source order/first match including typed NULL, no virtual query or inferred pointer type. Actual Type/Any/C Sequence/OUString owners reused; one returned local Sequence searched with exact string equality and destroyed through finally. Structural/reexport boundaries introduce no duplicate method/type/default provider.",
+    "Original15/16 overloads absent; native compiler rejects both with complete exact source/diagnostic hashes. Runtime arity contract preserves1..14/17..19 and CALC-057 records suspicious gap without claiming a consumer defect. NULL assertion remains separate native SIGABRT/browser Error adaptation.",
+    "Independent audit confirms375 full source/15 genuine generated hashes, actual driver/configurations and161 terminal commands:157 exit0,2 exact SIGABRT,2 genuine missing-overload exit1. Full cold716/queries455732/services23136 streams equal normal-ASan/UB and fixture gzip/length/hash; no uninitialized bytes or fake source/provider.",
+    "Whole19/61 owners every raw S/F/B counter positive; Calc106/shared154 tests source-absent with exact restored links. Task49 profile retained append-only. All13 final scoped gates/8 source Prettier checks0 and35 related tooling tests pass; source graph only original cppuhelper->cppu/SAL with reverse/application/browser gates retained. Inventory broad flags false."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610112148-F21JEZ/README.md",
+    "output/playwright/task50-checks/evaluator-audit.json",
+    "output/playwright/cppuhelper-service-native/manifest.json",
+    "output/playwright/task50-checks/value-gates-final-manifest.json",
+    "output/playwright/task50-checks/prettier-final.log",
+    "docs/program/calc-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Generated XServiceInfo static helpers and actual weak object/adapter/listener/ImplHelper/service manager/context/locale/CharClass/pool/Calc document/edit/view/UI remain subsequent. Physical pointer ABI/resources/native const/compiler-only/concurrency/shutdown/full consumer QA unverified. Full41 latest,next51; no Writer-only repair."
+  ]
+}

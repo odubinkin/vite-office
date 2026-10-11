@@ -4,7 +4,7 @@ title: "Port original cppuhelper interface and service support helpers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,33 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T22:09:13.275Z"
+  updated_at: "2026-10-11T22:11:09.405Z"
   updated_by: "CODER"
-  note: "Task50 original helpers accepted:74 genuine unchanged TUs/375 source hashes/15 generated headers;161 terminal commands including original compiler1/SIGABRT rejections; normal-ASan/UB streams byte-identical; source-absent Calc106/shared154 whole19/61 raw100;13 scoped gates/8 Prettier checks pass. CALC-057 source hole preserved; full41 latest,next51; separate quality follows implementation commit."
+  note: "Final Task50 owner verification after last documentation update: implementatione530b7a257f6, separate EVALUATOR pass20261011-221046221, genuine native write/check/full hashes and source-absent Calc106/shared154 whole19/61 raw100;13 gates/8 Prettier checks pass. CALC-057 preserved; full41 latest,next51; goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T22:10:46.221Z"
+  updated_by: "EVALUATOR"
+  note: "Task50 accepted against implementatione530b7a257f6: source-complete actually declared cppuhelper helpers, genuine native full streams and raw100 independently verified."
+  evaluated_sha: "e530b7a257f6cbd740a5ef7fe3b43086b7d27537"
+  blueprint_digest: "5c831f64acffd438838a70f7569109f64704af470b3d0e1cd71af2f779aeae91"
+  evidence_refs:
+    - ".agentplane/tasks/202610112148-F21JEZ/README.md"
+    - ".agentplane/tasks/202610112148-F21JEZ/quality/20261011-221046221-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112148-F21JEZ/quality/20261011-221046221-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112148-F21JEZ/quality/20261011-221046221-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112148-F21JEZ/blueprint/resolved-snapshot.json"
+    - "output/playwright/task50-checks/evaluator-audit.json"
+    - "output/playwright/cppuhelper-service-native/manifest.json"
+    - "output/playwright/task50-checks/value-gates-final-manifest.json"
+    - "output/playwright/task50-checks/prettier-final.log"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "Compared complete original queryinterface.hxx/supportsservice.cxx/IDL and source diff: explicit static_type/pointer list preserves source order/first match including typed NULL, no virtual query or inferred pointer type. Actual Type/Any/C Sequence/OUString owners reused; one returned local Sequence searched with exact string equality and destroyed through finally. Structural/reexport boundaries introduce no duplicate method/type/default provider."
+    - "Original15/16 overloads absent; native compiler rejects both with complete exact source/diagnostic hashes. Runtime arity contract preserves1..14/17..19 and CALC-057 records suspicious gap without claiming a consumer defect. NULL assertion remains separate native SIGABRT/browser Error adaptation."
+    - "Independent audit confirms375 full source/15 genuine generated hashes, actual driver/configurations and161 terminal commands:157 exit0,2 exact SIGABRT,2 genuine missing-overload exit1. Full cold716/queries455732/services23136 streams equal normal-ASan/UB and fixture gzip/length/hash; no uninitialized bytes or fake source/provider."
+    - "Whole19/61 owners every raw S/F/B counter positive; Calc106/shared154 tests source-absent with exact restored links. Task49 profile retained append-only. All13 final scoped gates/8 source Prettier checks0 and35 related tooling tests pass; source graph only original cppuhelper->cppu/SAL with reverse/application/browser gates retained. Inventory broad flags false."
 commit: null
 comments:
   -
@@ -41,8 +64,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task50 original helpers accepted:74 genuine unchanged TUs/375 source hashes/15 generated headers;161 terminal commands including original compiler1/SIGABRT rejections; normal-ASan/UB streams byte-identical; source-absent Calc106/shared154 whole19/61 raw100;13 scoped gates/8 Prettier checks pass. CALC-057 source hole preserved; full41 latest,next51; separate quality follows implementation commit."
+  -
+    type: "verify"
+    at: "2026-10-11T22:11:09.405Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final Task50 owner verification after last documentation update: implementatione530b7a257f6, separate EVALUATOR pass20261011-221046221, genuine native write/check/full hashes and source-absent Calc106/shared154 whole19/61 raw100;13 gates/8 Prettier checks pass. CALC-057 preserved; full41 latest,next51; goal active."
 doc_version: 3
-doc_updated_at: "2026-10-11T22:09:13.326Z"
+doc_updated_at: "2026-10-11T22:11:09.464Z"
 doc_updated_by: "CODER"
 description: "Task50 real service prerequisites: complete queryInterface1..19 template family and supportsService with actual shared Type/Any/Sequence/OUString owners, real XServiceInfo IDL contract, source-shaped cppuhelper boundary, genuine original native acceptance, Calc/shared whole raw100 and inventory. Full41 latest,next51."
 sections:
@@ -74,17 +103,20 @@ sections:
     Evidence: value-gates-final-manifest.json/gates-complete-final.log/prettier-final.log.
     Scope: TS7/exact lint/format/docs/size/dependencies/provenance/tree/shared+Calc inventories,35 tests in four related tooling files/routing/doctor/diff. Structural XServiceInfo/reexport records own no invented executable methods. CAP-897b212d-fad9-4e9f-a1e1-bcfe0df8d9e0 broad parity/default/verified flags false. Only original cppuhelper->cppu/SAL module graph and protected inc/source ownership; reverse/application/browser gates retained.
 
-    Intentional implementation commit and separate EVALUATOR evidence will follow; final owner verify occurs after last documentation update before clean calc closure. Whole goal active; no full suite, merge, publication or delegation.
+    Command: intentional ap commit allowlist; python3 output/playwright/task50-checks/evaluator-audit.py; exact prior-profile append-only audit; ap evaluator run 202610112148-F21JEZ --verdict pass.
+    Result: pass.
+    Evidence: implementatione530b7a257f6cbd740a5ef7fe3b43086b7d27537; output/playwright/task50-checks/evaluator-audit.json; .agentplane/tasks/202610112148-F21JEZ/quality/20261011-221046221-recovery-context/quality-report.json. Separate EVALUATOR phase independently validates actual SHA/full source/native/driver/gzip/hash/terminal status/raw/profile/gate/cap facts, without implementation edits.
+    Scope: Task50 only. Final owner verify after this last task-doc update; committed quality artifacts, clean calc closure. Whole goal active, latest full41,next full51. No Writer-only repair/merge/publication/branch/worktree/delegation.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-11T22:09:13.275Z — VERIFY — ok
+    ### 2026-10-11T22:11:09.405Z — VERIFY — ok
 
     By: CODER
 
-    Note: Task50 original helpers accepted:74 genuine unchanged TUs/375 source hashes/15 generated headers;161 terminal commands including original compiler1/SIGABRT rejections; normal-ASan/UB streams byte-identical; source-absent Calc106/shared154 whole19/61 raw100;13 scoped gates/8 Prettier checks pass. CALC-057 source hole preserved; full41 latest,next51; separate quality follows implementation commit.
+    Note: Final Task50 owner verification after last documentation update: implementatione530b7a257f6, separate EVALUATOR pass20261011-221046221, genuine native write/check/full hashes and source-absent Calc106/shared154 whole19/61 raw100;13 gates/8 Prettier checks pass. CALC-057 preserved; full41 latest,next51; goal active.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:09:12.872Z, excerpt_hash=sha256:08d974333c11530eda2de921ba0029142465413a9021f512a8c6446677744eee
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:11:07.104Z, excerpt_hash=sha256:08d974333c11530eda2de921ba0029142465413a9021f512a8c6446677744eee
 
     Details:
 
@@ -99,12 +131,12 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610112148-F21JEZ
+    - safe_command: agentplane task complete 202610112148-F21JEZ --result verified-202610112148-F21JEZ --commit e530b7a257f6cbd740a5ef7fe3b43086b7d27537
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -160,17 +192,20 @@ Result: pass.
 Evidence: value-gates-final-manifest.json/gates-complete-final.log/prettier-final.log.
 Scope: TS7/exact lint/format/docs/size/dependencies/provenance/tree/shared+Calc inventories,35 tests in four related tooling files/routing/doctor/diff. Structural XServiceInfo/reexport records own no invented executable methods. CAP-897b212d-fad9-4e9f-a1e1-bcfe0df8d9e0 broad parity/default/verified flags false. Only original cppuhelper->cppu/SAL module graph and protected inc/source ownership; reverse/application/browser gates retained.
 
-Intentional implementation commit and separate EVALUATOR evidence will follow; final owner verify occurs after last documentation update before clean calc closure. Whole goal active; no full suite, merge, publication or delegation.
+Command: intentional ap commit allowlist; python3 output/playwright/task50-checks/evaluator-audit.py; exact prior-profile append-only audit; ap evaluator run 202610112148-F21JEZ --verdict pass.
+Result: pass.
+Evidence: implementatione530b7a257f6cbd740a5ef7fe3b43086b7d27537; output/playwright/task50-checks/evaluator-audit.json; .agentplane/tasks/202610112148-F21JEZ/quality/20261011-221046221-recovery-context/quality-report.json. Separate EVALUATOR phase independently validates actual SHA/full source/native/driver/gzip/hash/terminal status/raw/profile/gate/cap facts, without implementation edits.
+Scope: Task50 only. Final owner verify after this last task-doc update; committed quality artifacts, clean calc closure. Whole goal active, latest full41,next full51. No Writer-only repair/merge/publication/branch/worktree/delegation.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-11T22:09:13.275Z — VERIFY — ok
+### 2026-10-11T22:11:09.405Z — VERIFY — ok
 
 By: CODER
 
-Note: Task50 original helpers accepted:74 genuine unchanged TUs/375 source hashes/15 generated headers;161 terminal commands including original compiler1/SIGABRT rejections; normal-ASan/UB streams byte-identical; source-absent Calc106/shared154 whole19/61 raw100;13 scoped gates/8 Prettier checks pass. CALC-057 source hole preserved; full41 latest,next51; separate quality follows implementation commit.
+Note: Final Task50 owner verification after last documentation update: implementatione530b7a257f6, separate EVALUATOR pass20261011-221046221, genuine native write/check/full hashes and source-absent Calc106/shared154 whole19/61 raw100;13 gates/8 Prettier checks pass. CALC-057 preserved; full41 latest,next51; goal active.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:09:12.872Z, excerpt_hash=sha256:08d974333c11530eda2de921ba0029142465413a9021f512a8c6446677744eee
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:11:07.104Z, excerpt_hash=sha256:08d974333c11530eda2de921ba0029142465413a9021f512a8c6446677744eee
 
 Details:
 
@@ -185,12 +220,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610112148-F21JEZ
+- safe_command: agentplane task complete 202610112148-F21JEZ --result verified-202610112148-F21JEZ --commit e530b7a257f6cbd740a5ef7fe3b43086b7d27537
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
