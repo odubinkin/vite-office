@@ -1,10 +1,11 @@
 ---
 id: "202610112135-Z1SPQ3"
 title: "Register native Writer popup ownership and table resources"
-status: "DOING"
+result_summary: "Native original interfaces and local dispatcher own text/table popup resources; generated table graph preserved existing dispositions; browser popup event/presentation next task10."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: semantic native popup ownership and generated table resources implemented and validated at recorded SHA."
+  -
+    author: "CODER"
+    body: "Verified: native text/table popup ownership and generated resources pass7204 assertions, whole five original modules100allfour,884 old acceptance files preserved and required static/build/metadata gates; exact-SHA same-agent review, correction9/10."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native independent popup registration/local traversal and text/table generated ownership pass7204 unique assertions, whole five modules100allfour and1214 original positive counters;884 prior tests preserved. Static/build/tooling/nine metadata gates pass with runtime references absent and restored exactly. Visible popup event/presentation remains next task10."
+  -
+    type: "status"
+    at: "2026-10-11T21:56:38.612Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native text/table popup ownership and generated resources pass7204 assertions, whole five original modules100allfour,884 old acceptance files preserved and required static/build/metadata gates; exact-SHA same-agent review, correction9/10."
 doc_version: 3
-doc_updated_at: "2026-10-11T21:56:01.386Z"
+doc_updated_at: "2026-10-11T21:56:38.613Z"
 doc_updated_by: "CODER"
 description: "Restore native SfxInterface popup registration/defaults and non-quiet local-shell SfxDispatcher ExecutePopup traversal; Writer text/table interfaces own upstream resource names and generated table resource graph follows existing supported-command/exclusion dispositions. Browser popup event/presentation hookup is the next atomic step."
 sections:
@@ -134,6 +145,10 @@ sections:
     - Observation: Fresh resource fixture initially expected SelectTable although the pinned native table popup omits it; corrected only new fixture to assert absence. Static fixture initially treated generated unsupported metadata as an array rather than the existing keyed map. Cache hash preparation used source-relative apps paths rather than production paths and failed before producer; shell then repeated the already passing fresh-only run, with no accepted certificate produced.
       Impact: No production semantic failure or old acceptance change. Failed preparation and earlier fixture attempts are not final verification evidence.
       Resolution: Use full production paths, preserve attempt manifests, and start the final runtime producer only after preparation exits successfully.
+extensions:
+  implementation_commit:
+    hash: "8032c3f9ddf50bd25278639a7dbe8c83203fcfbb"
+    message: "🧩 Z1SPQ3 fix: restore native text and table popup resource ownership"
 id_source: "generated"
 ---
 ## Summary
