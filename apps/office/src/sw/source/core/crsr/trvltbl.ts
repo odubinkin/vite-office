@@ -9,6 +9,7 @@ import type { SwUndoCursorState } from "../undo/undobj";
 import type { SwTableLine } from "../table/swtable";
 import { SwRootFrame } from "../layout/newfrm";
 import { SwViewOption } from "../../../inc/viewopt";
+import type { SwPosition } from "./pam";
 
 /** Native extended range retains the first structural node and trailing table owners. */
 export type ExtendedSelection = readonly [SwNode, readonly SwTableNode[]];
@@ -293,6 +294,23 @@ export abstract class SwCursorShell extends SwModify {
   /** Reports native table mode from the actual table cursor. @returns Whether a table cursor exists. */
   public IsTableMode(): boolean {
     return this.tableCursor !== undefined;
+  }
+  /** Tests a device-resolved original model position against current native selections. Native pixel-to-model resolution and complete cell/follow geometry remain device-owned. @param position - Current document position from actual view hit testing. @returns Whether an original selection contains the hit, with native exclusive text end. */
+  public TestCurrPam(position: SwPosition): boolean {
+    if (position.GetNode().GetDoc() !== this.GetDoc()) return false;
+    if (this.tableCursor !== undefined)
+      return this.tableCursor.GetSelectedBoxes().some(
+        /** Matches the actual selected cell section, including its interior padding hit. @param box - Original selected box. @returns Whether it owns the device-resolved node. */
+        (box) => box.GetStartNode() === position.GetNode().StartOfSectionNode(),
+      );
+    for (const cursor of this.cursor.GetRingContainer())
+      if (
+        cursor.HasMark() &&
+        cursor.Start().compare(position) <= 0 &&
+        cursor.End().compare(position) > 0
+      )
+        return true;
+    return false;
   }
   /** Releases the table cursor without changing the persistent ordinary cursor. @returns Nothing. */
   protected ClearTableCursor(): void {

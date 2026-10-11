@@ -19,6 +19,10 @@ import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-l
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
 export interface WriterPlainTextEditorProps {
+  readonly onContextPopup?: (
+    resourceName: string,
+    position: Readonly<{ x: number; y: number }>,
+  ) => void;
   readonly onNumLabelMouseDown?: (event: React.MouseEvent<HTMLElement>) => boolean;
   readonly activeParagraphId: string;
   readonly cursorSelection: WriterCursorSelection;
@@ -457,7 +461,24 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             }
           }
         }
-        onKeyDown={controller.HandleKeyDown}
+        onContextMenu={
+          /** Keeps context selection in the persistent original edit-window owner. @param event - Actual context input. @returns Nothing. */
+          (event) => {
+            if (props.onContextPopup !== undefined)
+              controller.HandleContextMenu(event, props.onContextPopup);
+          }
+        }
+        onKeyDown={
+          /** Offers keyboard popup input before ordinary native editing keys. @param event - Actual keyboard input. @returns Nothing. */
+          (event) => {
+            if (
+              props.onContextPopup !== undefined &&
+              controller.HandleContextMenuKey(event, props.onContextPopup)
+            )
+              return;
+            controller.HandleKeyDown(event);
+          }
+        }
         onMouseDown={
           /** Routes admitted native label gestures before pointer text selection. @param event - Actual document mouse input. @returns Nothing. */ (
             event,

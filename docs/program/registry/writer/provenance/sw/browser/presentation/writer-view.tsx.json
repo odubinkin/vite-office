@@ -352,6 +352,18 @@
         {
           "path": "apps/office/src/sw/browser/presentation/native-workbench-view-owner.test.tsx",
           "marker": "native workbench view ownership"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+          "marker": "WriterWorkbench"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-context-menu.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
+          "marker": "Writer native context menu"
         }
       ],
       "upstream": [
@@ -470,6 +482,26 @@
         {
           "path": "sw/inc/swtypes.hxx",
           "marker": "MIN_BORDER_DIST"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "void SwEditWin::SelectMenuPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "bool SwCursorShell::TestCurrPam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+          "marker": "sal_uInt16 PopupMenu::Execute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "case KEY_RETURN:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+          "marker": "<prop oor:name=\"PopupLabel\""
         }
       ]
     },
@@ -486,7 +518,8 @@
       "Iteration172 restores native document-origin list-label ruler admission through the existing browser ruler tracking owner. Actual label identity resolves an actual SwTextNode only while copying StateTabWin geometry; pinned edtwin clears this borrowed node immediately after StartDocDrag. Signed-short offset and native SetLeft negative-first adjustment feed bottom-indent document hit testing with explicit tab precedence and right-before-left order. Accepted changed copied geometry applies to current paragraph selection through existing SetParagraphRulerIndents and real item UndoRedo, not a retained label rule update. Native mouse admission preserves cursor and label rule/list ownership; cancellation, zero movement, hide/inactive/unmount/document replacement discard preview and history. No synthetic handle event, text-run conversion, new DTO/model or competing gesture owner. Prior contracts/evidence and conscious IO exceptions retained. Full native RTL/vertical/table-column/protection/style-autoupdate/modifier-clipping/platform/framework/ruler/list/table/core/UI behavior remains unverified.",
       "Iteration176 removes React table-property writes through inherited SwFEShell and native ItemSetToTableParam. Existing document history groups seven attribute operations into one Table Properties Undo; SwUndoAttrTable swaps attribute-only table/column/row/box payload at the numeric table index while retaining original graph/text/cursor owners. Borders/row-split without selection apply to the whole table; selected-cell alignment and current/selected-row height use native cursor rings. New native owners remain unverified. Native Sfx frame-format item model,change-only dialog items,distinct native per-format undo classes,layout-cache lifetime,merged/nested/protected selection,full alignment/spacing/relative-width controls,insertion and complete UI/core parity remain unverified. Prior259semantic states/defaults/classes/IOexceptions/evidence preserved;conscious save/open/recovery deviations unchanged.",
       "Iteration178 moves represented Insert Table defaults, filtered/collision-sensitive names, native spin limits/nonblocking warning, header/repeat sensitivity and manual repeat-row restoration into SwInsTableDlg. React renders one native input owner and properties has a separate draft. Full autoformat,HTML/LOK,selection conversion,insertion kernel/history and complete UI/core parity remain unverified. All prior264 protected semantic fields and evidence prefixes and registered IO/recovery deviations are preserved.",
-      "Iteration253 removes the production React-owned testLayout and duplicate layout prop, borrowing the existing original SwEditWin view-shell layout for all browser formatting. Renderer/cursor ownership follows the same native root and current edit-window view; test ownership is explicit. Targeted verification pending. Native root frame-format/page/body/follows and overall parity remain unverified; historical statuses/defaults/classifications and registered recovery/open/save/settings exceptions preserved. No full253; last247,next257 then fix failures and pause the goal."
+      "Iteration253 removes the production React-owned testLayout and duplicate layout prop, borrowing the existing original SwEditWin view-shell layout for all browser formatting. Renderer/cursor ownership follows the same native root and current edit-window view; test ownership is explicit. Targeted verification pending. Native root frame-format/page/body/follows and overall parity remain unverified; historical statuses/defaults/classifications and registered recovery/open/save/settings exceptions preserved. No full253; last247,next257 then fix failures and pause the goal.",
+      "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

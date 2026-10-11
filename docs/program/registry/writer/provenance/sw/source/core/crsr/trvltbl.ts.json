@@ -7,7 +7,8 @@
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/trvltbl.cxx",
     "localSymbols": [
-      "SwCursorShell"
+      "SwCursorShell",
+      "TestCurrPam"
     ],
     "upstreamSymbols": [
       "SwCursorShell::GoNextCell",
@@ -26,7 +27,8 @@
       "Iteration215 verified bounded Home End closure: native text frames, cursor and shell execute visual-line margins from browser device lines; right-margin affinity, hard-break exclusion, interactive/API spaces, Shift marks, source native label state, cursor stack/pending input/history and body/cell Chromium1280/390 pass.13532app110inventory14infrastructure276Chromium; ONE upstream-absent full profile and3genuinely new port cases plus1original-failure retry only,0passing replay; strict current-source actual100 app/inventory. Nullable text tested by explicit device port fault injection, not normal-browser parity. Full frame graph/bidi/RTL/readonly/fly/merged paragraphs and DOM label painting/marked-list-level integration remain unverified; all prior fields/statuses/defaults/registered deviations retained.",
       "Iteration218 native cursor marked-list integration pending verification: cursor ID/depth bookkeeping, source field-shading gate, counted-rule query and forced label-to-label refresh; existing actual view options shared without duplicate presentation state. Marker painting/ruler/config persistence and hidden-redline tree variants remain unverified; no prior status/default/exception promotion.",
       "Iteration218 verified native cursor-mark ownership: empty list ID/level0 defaults, exact pair noop, field-shading-gated former clear/new mark with bookkeeping retained while disabled; original counted-rule/membership query and nontext early return; SetInFrontOfLabel update plus forced refresh on label-to-label admission. Existing actual view-option identity shared through cursor-shell ancestor; native appearance bits and configured desktop defaults retained, setters do not implicitly redraw. SwCallLink-shaped SetPaM transaction publishes repaint and final cursor state together; original587 acceptance untouched. Full color/config persistence, marker painting/ruler and hidden-redline property/tree variants remain unverified. All prior states/defaults/exceptions preserved.",
-      "Iteration227 removes duplicate editing-shell layout storage and the subclass GetLayout override. Existing SwCursorShell retains the real shared view root passed through its constructor, while detached core shells retain its single lazy current-document factory. The same SwView owns the persistent edit window and editing shell; child GetView references remain their creation owner across document replacement and another active view. This is a native ownership prerequisite, not a completed SvxRuler/SvxColumnItem/slot pipeline. Original constructor inputs, list/table/cursor/history contracts and registered IO deviations are retained."
+      "Iteration227 removes duplicate editing-shell layout storage and the subclass GetLayout override. Existing SwCursorShell retains the real shared view root passed through its constructor, while detached core shells retain its single lazy current-document factory. The same SwView owns the persistent edit window and editing shell; child GetView references remain their creation owner across document replacement and another active view. This is a native ownership prerequisite, not a completed SvxRuler/SvxColumnItem/slot pipeline. Original constructor inputs, list/table/cursor/history contracts and registered IO deviations are retained.",
+      "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification."
     ],
     "omittedResponsibilities": [
       "Full native cursor-shell and table contracts remain unverified."
@@ -60,6 +62,18 @@
         {
           "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
           "marker": "PopMode.DeleteStack"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/trvltbl.ts",
+          "marker": "TestCurrPam"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/native-context-menu.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
+          "marker": "Writer native context menu"
         }
       ],
       "upstream": [
@@ -110,6 +124,26 @@
         {
           "path": "vendor/libreoffice-reference/sw/inc/crsrsh.hxx",
           "marker": "enum class PopMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "void SwEditWin::SelectMenuPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "bool SwCursorShell::TestCurrPam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+          "marker": "sal_uInt16 PopupMenu::Execute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "case KEY_RETURN:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+          "marker": "<prop oor:name=\"PopupLabel\""
         }
       ]
     }

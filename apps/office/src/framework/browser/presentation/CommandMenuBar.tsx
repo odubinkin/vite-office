@@ -503,20 +503,33 @@ export function CommandMenuBar({
 }
 
 /** Keeps an owned popup anchored and scrollable within the available viewport. @param props - Menu attributes and placement direction. @returns Floating menu. */
-function CommandMenuPopup({
+export function CommandMenuPopup({
   submenu = false,
+  anchorPoint,
   ...props
-}: Readonly<React.HTMLAttributes<HTMLDivElement> & { submenu?: boolean }>): React.JSX.Element {
+}: Readonly<
+  React.HTMLAttributes<HTMLDivElement> & {
+    submenu?: boolean;
+    anchorPoint?: Readonly<{ x: number; y: number }>;
+  }
+>): React.JSX.Element {
   const popupRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(
     /** Tracks viewport and ancestor scrolling while the popup is mounted. @returns Listener cleanup. */ () => {
       const popup = popupRef.current as HTMLDivElement;
-      const anchor = popup.previousElementSibling as HTMLElement;
       /** Places the popup without scrolling or resizing the document. @returns Nothing. */
       function updatePosition(): void {
-        const rect = anchor.getBoundingClientRect();
+        const rect =
+          anchorPoint === undefined
+            ? (popup.previousElementSibling as HTMLElement).getBoundingClientRect()
+            : {
+                top: anchorPoint.y,
+                bottom: anchorPoint.y,
+                left: anchorPoint.x,
+                right: anchorPoint.x,
+              };
         const margin = 8;
-        const gap = 4;
+        const gap = anchorPoint === undefined ? 4 : 0;
         popup.style.maxWidth = `${Math.max(0, window.innerWidth - 2 * margin)}px`;
         const below = window.innerHeight - rect.bottom - gap - margin;
         const above = rect.top - gap - margin;
@@ -546,7 +559,7 @@ function CommandMenuPopup({
         document.removeEventListener("scroll", updatePosition, true);
       };
     },
-    [submenu],
+    [submenu, anchorPoint],
   );
   return (
     <div
@@ -559,7 +572,7 @@ function CommandMenuPopup({
 }
 
 /** Renders one menu command through a persistent slot controller item. @param props - Command/menu inputs. @returns Bindings-backed menu item. */
-function BindingsMenuCommand({
+export function BindingsMenuCommand({
   closeMenu,
   commandSource,
   getCommandResource,

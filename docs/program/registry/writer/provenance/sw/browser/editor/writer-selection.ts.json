@@ -36,6 +36,18 @@
         {
           "path": "apps/office/e2e/writer-headline-selection.spec.ts",
           "marker": "Writer native table range"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+          "marker": "getWriterDomPosition"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-context-menu.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
+          "marker": "Writer native context menu"
         }
       ],
       "upstream": [
@@ -70,6 +82,26 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/trvlfrm.cxx",
           "marker": "pTab->IsFollow() && pTab->IsInHeadline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "void SwEditWin::SelectMenuPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "bool SwCursorShell::TestCurrPam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+          "marker": "sal_uInt16 PopupMenu::Execute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "case KEY_RETURN:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+          "marker": "<prop oor:name=\"PopupLabel\""
         }
       ]
     },
@@ -80,7 +112,8 @@
       "Iteration170 removes blanket row click inference so table interior padding uses the existing BrowserWriterPointerSelectionController/selection mapper/SwEditWin/native cursor rather than selecting a whole row. Removing the row handler also removes synthetic row inference from list-marker hits. Native number labels instead invoke RulerMarginDrag/StartDocDrag(Indent); that label/ruler behavior remains unverified. The mounted injected marker caret test proves browser geometry only. Initial real-browser MKeep expectations were source-confirmed incorrect and are excluded; marker checks retain no synthetic row selection and unchanged text. The existing explicit row selector is placed in an absolute left gutter with hover/focus arrow, outside cell text and measurement flow. Actual element hit and native caret range are authoritative within the hit cell; otherwise bounded nearest paragraph and clipped native hit resolution reuse existing text-caret helper for empty/formatted boundary fallback. Browser geometry remains an explicit DOM adaptation, not full VCL layout. Existing helper is exported directly for reuse without a duplicate walker, manager, model, DTO or compatibility wrapper. New owned geometry/mounted DOM/Chromium cases verify the represented flat LTR table pointer, actual native box/caret/history and neighbor behavior. RTL/vertical/nested/merged/protected/column/resizing/full layout/portion/core/UI/list/table remain unverified; prior states/defaults/classes/IO exceptions and evidence prefixes are retained.",
       "Iteration174 restores represented flat same-table cross-cell cursor admission and repeated headline restrictions through existing owners. Native moving/fixed endpoints, selected boxes and ordinary cell history are preserved; selected original boxes do not paint on repeated headline copies. Actual native, mounted and Chromium cases cover bounded behavior. Full nested/merged/rowspan/split rows/cross-table/vertical/RTL/protection/frame/core/UI parity remains unverified; states/defaults/classes/IO exceptions and prior evidence preserved.",
       "Iteration216 pending: native before-label affinity is distinct from text offset0 through SwEditWin and shell publication, browser DOM Selection before marker and caret painting. Seven changed boundaries under verification; marked-list-level shading, ruler/RTL/bidi/full geometry and whole parity remain unverified. Existing statuses/defaults/registered save/open/recovery exceptions retained.",
-      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged."
+      "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
+      "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

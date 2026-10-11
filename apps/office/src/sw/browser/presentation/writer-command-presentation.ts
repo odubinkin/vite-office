@@ -21,3 +21,20 @@ export function selectWriterCommandResource(
     label: localization.GetText(`writer.command.${commandUrl}.label`, resource.label),
   };
 }
+
+/** Selects the original native PopupLabel for context menus while retaining general resource defaults and localization elsewhere. @param localization - Active browser locale. @param commandUrl - Native slot URL. @returns Localized popup resource. */
+export function selectWriterPopupCommandResource(
+  localization: BrowserLocalizationService,
+  commandUrl: string,
+): WriterCommandResource {
+  const resource = selectWriterCommandResource(localization, commandUrl);
+  return resource.popupLabel === undefined
+    ? resource
+    : {
+        ...resource,
+        label: localization.GetText(
+          `writer.command.${commandUrl}.popup-label`,
+          resource.popupLabel,
+        ),
+      };
+}

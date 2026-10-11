@@ -294,6 +294,7 @@
       "capabilityId": "CAP-0135",
       "controlLabel": "Hyperlink",
       "label": "Hyperlink",
+      "popupLabel": "Edit Hyperlink",
       "iconName": "lc_edithyperlink.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -942,6 +943,7 @@
       "capabilityId": "CAP-0137",
       "controlLabel": "Table Properties",
       "label": "Table Properties",
+      "popupLabel": "Table Properties",
       "iconName": "lc_tabledialog.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",

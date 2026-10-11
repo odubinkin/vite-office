@@ -37,6 +37,7 @@ import {
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
+import { useWriterContextMenu } from "./WriterContextMenu";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import {
   createBrowserCommandSource,
@@ -397,6 +398,14 @@ export function WriterWorkbench({
     [localization],
   );
 
+  const getLocalizedMenuLabel = useCallback(
+    /** Localizes an original generated menu for both presentation surfaces. @param id - Native menu identity. @param fallback - Resource label. @returns Localized label. */ (
+      id: string,
+      fallback: string,
+    ) => localization.GetText(`writer.menu.${id}.label`, fallback),
+    [localization],
+  );
+
   useCommandShortcuts({
     dispatcher: view.GetViewFrame().GetDispatcher(),
     executeCommand: commandSource.Execute,
@@ -410,6 +419,11 @@ export function WriterWorkbench({
     tableDialog === undefined &&
     rowHeightDialog === undefined &&
     !lineNumberingDialog;
+  const [onContextPopup, contextMenu] = useWriterContextMenu(
+    isInputEnabled,
+    commandSource,
+    resolveCommandArguments,
+  );
   useEffect(
     /** Routes the active frame's direct document focus key. @returns Listener cleanup. */
     function installDocumentFocusKey(): () => void {
@@ -528,12 +542,7 @@ export function WriterWorkbench({
             ariaLabel="Writer menu bar"
             commandSource={commandSource}
             getCommandResource={getLocalizedCommandResource}
-            getMenuLabel={
-              /** Localizes a generated menu label. @param id - Menu identity. @param fallback - Generated label. @returns Localized label. */ (
-                id,
-                fallback,
-              ) => localization.GetText(`writer.menu.${id}.label`, fallback)
-            }
+            getMenuLabel={getLocalizedMenuLabel}
             focusDocument={
               /** Focuses this Writer frame's mounted client. @returns Nothing. */ () =>
                 (editingHostRef.current as HTMLElement).focus()
@@ -637,6 +646,7 @@ export function WriterWorkbench({
         }
       >
         <WriterPlainTextEditor
+          {...(onContextPopup === undefined ? {} : { onContextPopup })}
           onNumLabelMouseDown={
             /** Uses an actual label node only while updating ruler state and admitting the native document gesture. @param event - Actual document mouse input. @returns Whether ordinary pointer selection is bypassed. */ (
               event,
@@ -697,6 +707,7 @@ export function WriterWorkbench({
           }
         />
       </WriterWorkspaceChrome>
+      {contextMenu}
       {tableDialog === undefined ? null : (
         <WriterTableDialog
           boxAlign={view.GetWrtShell().GetBoxAlign()}

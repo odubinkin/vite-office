@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 340
+revision: 341
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T21:55:39.460Z"
+doc_updated_at: "2026-10-11T23:37:36.115Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1512,6 +1512,10 @@ sections:
     - Observation: Correction9/10 Z1SPQ3 restores independent native SfxInterface popup registration, non-quiet local dispatcher resource-owner selection and real text/table shell ownership; pinned table popup metadata joins the existing generated supported-command graph.
       Impact: 7204 unique accepted assertions, whole five app modules100allfour with1214 positive original counters;884 old acceptance files byte-identical;20 intentional semantic paths and append-only inventory records verified. No browser event/popup presenter parity claim yet.
       Resolution: Proceed to native browser popup event/presenter task10, then next full suite and repair any failures before the human-requested goal pause. References remain source-audit-only and are physically absent for runtime/static producers.
+
+    - Observation: Correction10/10 task8V85V8 implements original SwCursorShell marked-ring/cell selection, SwEditWin context events and actual dispatcher text/table resource ownership; shared bindings popup and menubar renderer, native PopupLabel localization, independent Writer popup presentation state. Scheduled full campaign15740Vitest/761files plus316Chromium=16056 unique cases,0failure/skip/retry; app417modules/inventory42? tool configuration coverage100allfour. Raw app56446 positive counters and eleven full changed modules3189positive current-source counters;887 old test files unchanged.
+      Impact: Full campaign exposed and repaired old marker default-event regression, fresh test ownership placement and platform Control-column context popup stealing Undo focus; original failed reports retained honestly. Registry statuses/classes/defaults and IO/recovery exceptions preserved; complete upstream parity remains unfinished.
+      Resolution: Canonical22 append/new records and generated old prefixes preserved; all nine restored-only metadata gates pass. No upstream/Python/helper/rawmaps in Agentplane. Safe local semantic and exact-SHA same-agent quality closure pending, then explicit human goal pause; no next feature task. Cadence resets after this accepted scheduled full campaign.
 id_source: "generated"
 ---
 ## Summary
@@ -2997,3 +3001,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction9/10 Z1SPQ3 restores independent native SfxInterface popup registration, non-quiet local dispatcher resource-owner selection and real text/table shell ownership; pinned table popup metadata joins the existing generated supported-command graph.
   Impact: 7204 unique accepted assertions, whole five app modules100allfour with1214 positive original counters;884 old acceptance files byte-identical;20 intentional semantic paths and append-only inventory records verified. No browser event/popup presenter parity claim yet.
   Resolution: Proceed to native browser popup event/presenter task10, then next full suite and repair any failures before the human-requested goal pause. References remain source-audit-only and are physically absent for runtime/static producers.
+
+- Observation: Correction10/10 task8V85V8 implements original SwCursorShell marked-ring/cell selection, SwEditWin context events and actual dispatcher text/table resource ownership; shared bindings popup and menubar renderer, native PopupLabel localization, independent Writer popup presentation state. Scheduled full campaign15740Vitest/761files plus316Chromium=16056 unique cases,0failure/skip/retry; app417modules/inventory42? tool configuration coverage100allfour. Raw app56446 positive counters and eleven full changed modules3189positive current-source counters;887 old test files unchanged.
+  Impact: Full campaign exposed and repaired old marker default-event regression, fresh test ownership placement and platform Control-column context popup stealing Undo focus; original failed reports retained honestly. Registry statuses/classes/defaults and IO/recovery exceptions preserved; complete upstream parity remains unfinished.
+  Resolution: Canonical22 append/new records and generated old prefixes preserved; all nine restored-only metadata gates pass. No upstream/Python/helper/rawmaps in Agentplane. Safe local semantic and exact-SHA same-agent quality closure pending, then explicit human goal pause; no next feature task. Cadence resets after this accepted scheduled full campaign.
