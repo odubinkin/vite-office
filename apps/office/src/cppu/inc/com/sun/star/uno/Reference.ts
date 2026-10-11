@@ -1,12 +1,8 @@
 /** @fileoverview Original Reference.h/hxx direct pointer ownership and implicit value operations; query/throwing/Any/interface-identity comparison families remain separate unfinished responsibilities. */
 import type { __sal_NoAcquire } from "../../../../../../sal/inc/types";
-/** TypeScript structural cast of the original XInterface pointer for its two selected virtual calls. It supplies no object/provider implementation or pointer identity conversion. */
-interface InterfacePointer {
-  /** Original virtual acquisition. @returns Nothing. */
-  acquire(): void;
-  /** Original virtual release. @returns Nothing. */
-  release(): void;
-}
+import type { XInterface } from "./XInterface";
+/** Existing direct ownership members use the original common interface contract's two selected virtual methods, without requiring a query provider. */
+type InterfacePointer = Pick<XInterface, "acquire" | "release">;
 /** Original deprecated no-acquire discriminator. */
 export enum UnoReference_NoAcquire {
   UNO_REF_NO_ACQUIRE,

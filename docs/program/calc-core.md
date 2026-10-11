@@ -2813,3 +2813,24 @@ Undefined original expressions and initialized unsupported diagnostic inputs are
 bounded separately; physical ABI/allocation/debug/thread/full consumer QA remain
 unverified. Public Any/genfunc/Sequence and service/CharClass/pool/Calc document
 and UI owners remain subsequent. Task41 is the last full run; next scheduled51.
+
+### Original public Any ownership and C++ interface callbacks
+
+Task46 adds original Any.h/Any.hxx ownership and metadata, with complete
+original genfunc.h/hxx C++ acquire/release/query callbacks. Existing C Any,
+copy/default/destruction, canonical reserved field address, Type/UnoType,
+OUString and generated RuntimeException owners are reused. XInterface provides
+only the genuine three-virtual-method declaration; Reference now borrows its
+two-method projection instead of a duplicate contract.
+
+Constructors, copy/self/move swaps, inline address repair, stable borrowed Type
+view, metadata/setValue/clear and query reserved-interface transfer follow source.
+Explicit source addresses/type arguments adapt erased C++ templates without type
+inference or a runtime provider. Finally/dispose pairs adapt real returned Any
+and caught RuntimeException destruction; other exceptions propagate.
+Native --write/--check pass: 72 complete original translation units (69 genuine dependencies plus any/data/sequence), 367 complete source hashes and 13 genuine generated headers; four full initialized normal-ASan/UBSan streams identical (constructors266088, histories5871200, templates70928, callbacks13612 bytes). With all3 upstream links absent, Calc106/24 and related shared138/41 tests pass; 19/57 executable owners have every raw S/F/B counter positive and whole S/B/F/L100 (Calc2920/2055/474/2564; shared3754/2040/481/3353). All13 scoped gates and9 exact authored-source Prettier checks pass.
+CALC-055 records the original intentional moved-from VOID data pointer; preserve it. Empty/moved VOID reserved
+bytes and physical ABI/allocation/compile-only/debug/thread/full QA are unverified.
+Any extraction/comparison/get/query/fromAny/toAny/ostream and public Sequence,
+Reference/service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent.
+Next full51; task41 remains the last full regression.

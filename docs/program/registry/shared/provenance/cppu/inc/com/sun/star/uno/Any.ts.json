@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+    "status": "mapped",
+    "upstreamPath": "include/com/sun/star/uno/Any.h",
+    "localSymbols": [
+      "Any",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "Any",
+      "getCppuType"
+    ],
+    "preservedResponsibilities": [
+      "Task46 ports original public Any ownership/metadata and genfunc C++ callbacks using existing actual C Any/default/copy/destruction, canonical reserved field address, Type/UnoType/OUString/generated RuntimeException owners. Explicit source-address/type arguments adapt erased template selection without JS value inference or a type/provider factory. Preserve constructor/type/name/acquired description ownership, copy self shortcut, three-field move swaps and reserved alias repair, moved VOID non-null source pointer, stable borrowed Type live pType view, setValue and clear. Original cpp_acquire/cpp_release invoke real supplied virtual methods. cpp_queryInterface uses a borrowed Type view, transfers returned Any reserved interface pointer before real destruction, catches only actual generated RuntimeException and adapts its throw-object/returned-value RAII cleanup with dispose/finally; other exceptions propagate. XInterface supplies only actual IDL/cppumaker three-method structural contract, and Reference uses its two-method projection without duplication. Native --write/--check pass: 72 complete original translation units (69 genuine dependencies plus any/data/sequence), 367 complete source hashes and 13 genuine generated headers; four full initialized normal-ASan/UBSan streams identical (constructors266088, histories5871200, templates70928, callbacks13612 bytes). With all3 upstream links absent, Calc106/24 and related shared138/41 tests pass; 19/57 executable owners have every raw S/F/B counter positive and whole S/B/F/L100 (Calc2920/2055/474/2564; shared3754/2040/481/3353). All13 scoped gates and9 exact authored-source Prettier checks pass. Unobserved empty/moved VOID reserved bytes, physical ABI/pointer/object/allocator/resource/compile-only/debug/thread/shutdown/full QA remain unverified; later Any extraction/comparison/get/query/fromAny/toAny/ostream, XInterface static helpers, Sequence/Reference/service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Broad parity/default/verified flags false."
+    ],
+    "omittedResponsibilities": [
+      "Later public Any extraction/comparison/get/query/fromAny/toAny/ostream, XInterface static helpers, Sequence/Reference/services/CharClass/pool/Calc document/UI remain subsequent. Physical ABI/allocator/resource/uninitialized reserved bytes/compile-only/debug/thread/shutdown/full consumer QA unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+          "marker": "Any"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts",
+          "marker": "matches complete original Any pointer Type description copy construction and metadata"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/com/sun/star/uno/Any.h",
+          "marker": "Any"
+        },
+        {
+          "path": "include/com/sun/star/uno/Any.hxx",
+          "marker": "inline Any::Any()"
+        }
+      ]
+    }
+  }
+}

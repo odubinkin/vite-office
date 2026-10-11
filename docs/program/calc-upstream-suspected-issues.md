@@ -1323,3 +1323,29 @@ compound metadata in the same diagnostic mode certifies no ordinary producer.
 
 Decision: retain the flattened address shortcut and its lack of a second type
 check. Add no compatibility repair or extra value conversion.
+
+## CALC-055: Any move construction leaves a non-null moved-from VOID address
+
+Status: reproduced and explicitly documented as intentional in upstream. This
+looks like a dangling pointer, but no incorrect ordinary consumer result is proven.
+
+Pinned `include/com/sun/star/uno/Any.hxx::Any(Any&&)` first constructs an empty
+Any, swaps pType/pData/pReserved, then repairs only the destination's inline
+reserved-data address. The moved-from object becomes VOID while its pData points
+to the new Any's original empty-data address. That address can later dangle.
+Upstream explicitly says only non-nullness is relevant: assignment treats a null
+source as a request for default construction. Native VOID operations do not read
+a value through this pointer. Move assignment has different behavior: it swaps
+both existing values and repairs both inline aliases.
+
+Evidence: `scripts/uno-any-ownership-native-probe.mjs` histories mode records all
+initialized supported type pairs, move/copy/clear/setValue operations, actual
+borrowed Type/name/description/ref/value fields and ordered virtual callbacks.
+The complete 5871200-byte normal/ASan/UBSan histories agree. It directly observes
+the moved-from VOID type and pData equal to the new Any's empty address, remaining
+non-null. Empty/moved VOID reserved contents and dangling-pointer dereferences are
+not observed or certified; physical/native uninitialized byte semantics remain
+unverified.
+
+Decision: preserve both original move variants and the moved-from non-null
+address. Add no source reset, null normalization or dangling-pointer dereference.
