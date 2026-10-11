@@ -4,7 +4,7 @@ title: "Restore native content-node layout-frame lookup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,40 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T17:29:16.394Z"
+  updated_by: "CODER"
+  note: "13990 related cases in507 files including12 fresh plus25 tooling/resource cases pass without reference sources. Both whole production modules93lines104statements35functions62branches100 with201 current valid counters and identical executed source hashes. All863old acceptance files unchanged; old canonical scalars/prefixes preserved, new records broadly unverified. Type/build fixture errors repaired with scoped12then2case revalidation; current static/build pass. Nine restored-source metadata gates pass after ignored local ICU reference link setup. Native geometric lookup/Calc and cursor-map integration remain unported; broad goal active, no full run."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T17:29:58.875Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact semantic SHA b682d0ff7bf365e424875c878a5442dfb3b9f394: original no-view registered content-frame query and bounded evidence satisfy approved correction1. No complete UI lookup or broader parity promotion."
+  evaluated_sha: "b682d0ff7bf365e424875c878a5442dfb3b9f394"
+  blueprint_digest: "00d0d920c32fe36a1631d38ee5d9b400368e37678cd41659d29b1b388da7227a"
+  evidence_refs:
+    - ".agentplane/tasks/202610111710-QJTZN0/README.md"
+    - ".agentplane/tasks/202610111710-QJTZN0/quality/20261011-172958875-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111710-QJTZN0/quality/20261011-172958875-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111710-QJTZN0/quality/20261011-172958875-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111710-QJTZN0/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/QJTZN0/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/QJTZN0/related-coverage/coverage-final.json"
+    - "apps/office/node_modules/.cache/parity-coverage/QJTZN0/final-repair-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/QJTZN0/audit-final-results.json"
+  findings:
+    - "Actual production lookup borrows registered native SwFrame clients and original root/position identities with type mask, master-only admission and original GetFrameAtPos. Native pagination, retained/reflowed owner identities and12fresh literal cases are verified within13990related cases plus25root tooling. Current complete whole-file maps for both changed modules are100 across93lines104statements35functions62branches/201raw counters, production hashes unchanged since execution. All863old acceptance files and two canonical scalar/history prefixes preserved. Final fixture/static repairs and9metadata gates pass; initial failures retained. Semantic commit changes only seven approved source/test/canonical files and task/parent evidence."
+commit:
+  hash: "b682d0ff7bf365e424875c878a5442dfb3b9f394"
+  message: "🧩 QJTZN0 code: Restore native registered content-frame lookup"
 comments:
   -
     author: "CODER"
     body: "Start: port original no-view-position registered content-node layout lookup and root/master/follow selection, preserve canonical history and IO exceptions, verify actual current-source 100 percent without upstream; correction1 after full checkpoint."
+  -
+    author: "CODER"
+    body: "Checkpoint: original no-view content-frame query implemented with current whole-module100 coverage and preserved acceptance/history. Static fixture failures repaired and all metadata gates pass; exact semantic quality review next."
 events:
   -
     type: "status"
@@ -35,8 +59,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port original no-view-position registered content-node layout lookup and root/master/follow selection, preserve canonical history and IO exceptions, verify actual current-source 100 percent without upstream; correction1 after full checkpoint."
+  -
+    type: "status"
+    at: "2026-10-11T17:29:15.141Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Checkpoint: original no-view content-frame query implemented with current whole-module100 coverage and preserved acceptance/history. Static fixture failures repaired and all metadata gates pass; exact semantic quality review next."
+  -
+    type: "verify"
+    at: "2026-10-11T17:29:16.394Z"
+    author: "CODER"
+    state: "ok"
+    note: "13990 related cases in507 files including12 fresh plus25 tooling/resource cases pass without reference sources. Both whole production modules93lines104statements35functions62branches100 with201 current valid counters and identical executed source hashes. All863old acceptance files unchanged; old canonical scalars/prefixes preserved, new records broadly unverified. Type/build fixture errors repaired with scoped12then2case revalidation; current static/build pass. Nine restored-source metadata gates pass after ignored local ICU reference link setup. Native geometric lookup/Calc and cursor-map integration remain unported; broad goal active, no full run."
 doc_version: 3
-doc_updated_at: "2026-10-11T17:28:32.582Z"
+doc_updated_at: "2026-10-11T17:29:16.471Z"
 doc_updated_by: "CODER"
 description: "First correction after full A77JR3: port the original GetFrameOfModify no-view-position branch and SwContentNode.getLayoutFrame over actual registered frame clients, preserving root/master/follow/native position identity. Restore the native query contract as a prerequisite for replacing the measured cursor registry; geometric selection, Calc and margin integration remain explicit further work. Preserve historical inventory and registered IO deviations."
 sections:
@@ -120,6 +157,39 @@ sections:
     Evidence paths: ignored apps/office/node_modules/.cache/parity-coverage/QJTZN0/{proof.json,results.json,repair-results.json,final-repair-results.json,audit-results.json,audit-final-results.json,execution-hashes.json,before-hashes.json,related-tests.json,tooling-tests.json,related-coverage/coverage-final.json}. Maps/logs/cache helper scripts remain only there.
 
     Residual: SwIterator native client order/UnwrapMulti/reentry/deletion holders, view-position rectangles/distance/page query, Calc/fly formatting and native non-text content are not represented. SwCursor still uses measured cursor registry; this query is a native foundation, not a claim that UI margin integration or duplicate clients are resolved. Full root/page/content hierarchy/formatter/merged/geometry/table follows and overall core/UI parity incomplete. No suspicious source logic found in represented no-view branch; no suspected-issues entry fabricated. Same-agent non-independent exact semantic review pending; close clean writer and leave goal active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T17:29:16.394Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 13990 related cases in507 files including12 fresh plus25 tooling/resource cases pass without reference sources. Both whole production modules93lines104statements35functions62branches100 with201 current valid counters and identical executed source hashes. All863old acceptance files unchanged; old canonical scalars/prefixes preserved, new records broadly unverified. Type/build fixture errors repaired with scoped12then2case revalidation; current static/build pass. Nine restored-source metadata gates pass after ignored local ICU reference link setup. Native geometric lookup/Calc and cursor-map integration remain unported; broad goal active, no full run.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T17:29:15.141Z, excerpt_hash=sha256:fa1f97438b676d1131cb068738a48ce5a4cc4776e4e0222808750b5db4b8cd53
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111710-QJTZN0/blueprint/resolved-snapshot.json
+    - old_digest: 00d0d920c32fe36a1631d38ee5d9b400368e37678cd41659d29b1b388da7227a
+    - current_digest: 00d0d920c32fe36a1631d38ee5d9b400368e37678cd41659d29b1b388da7227a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111710-QJTZN0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610111710-QJTZN0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this task semantic production and canonical-record diff through a separately approved traceable correction if needed. Restore the original reference link targets in finally. No network or upstream execution."
   Findings: |-
     Authoritative resumed baseline is clean writer HEAD9100ec1c after user integration of Writer and Calc, not the old A77JR3 close SHA. AP direct mode retained. No gateway user-instructions file found. Earlier read-only guesses content-frame.ts/cntfrm.ts/calbck path were absent; rerouted and discovered actual ssfrm.ts/sw/inc/calbck.ts. Prior checkpoint was completed progress. Native view-position selection calls Calc and relies on frame/page geometry and changed-client iteration; these are prerequisites to replacing margin cursor map faithfully and are explicitly not falsely represented by this no-view query.
@@ -229,6 +299,39 @@ Result: all9 restored-source metadata gates pass. Initial provenance ENOENT ICU 
 Evidence paths: ignored apps/office/node_modules/.cache/parity-coverage/QJTZN0/{proof.json,results.json,repair-results.json,final-repair-results.json,audit-results.json,audit-final-results.json,execution-hashes.json,before-hashes.json,related-tests.json,tooling-tests.json,related-coverage/coverage-final.json}. Maps/logs/cache helper scripts remain only there.
 
 Residual: SwIterator native client order/UnwrapMulti/reentry/deletion holders, view-position rectangles/distance/page query, Calc/fly formatting and native non-text content are not represented. SwCursor still uses measured cursor registry; this query is a native foundation, not a claim that UI margin integration or duplicate clients are resolved. Full root/page/content hierarchy/formatter/merged/geometry/table follows and overall core/UI parity incomplete. No suspicious source logic found in represented no-view branch; no suspected-issues entry fabricated. Same-agent non-independent exact semantic review pending; close clean writer and leave goal active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T17:29:16.394Z — VERIFY — ok
+
+By: CODER
+
+Note: 13990 related cases in507 files including12 fresh plus25 tooling/resource cases pass without reference sources. Both whole production modules93lines104statements35functions62branches100 with201 current valid counters and identical executed source hashes. All863old acceptance files unchanged; old canonical scalars/prefixes preserved, new records broadly unverified. Type/build fixture errors repaired with scoped12then2case revalidation; current static/build pass. Nine restored-source metadata gates pass after ignored local ICU reference link setup. Native geometric lookup/Calc and cursor-map integration remain unported; broad goal active, no full run.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T17:29:15.141Z, excerpt_hash=sha256:fa1f97438b676d1131cb068738a48ce5a4cc4776e4e0222808750b5db4b8cd53
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111710-QJTZN0/blueprint/resolved-snapshot.json
+- old_digest: 00d0d920c32fe36a1631d38ee5d9b400368e37678cd41659d29b1b388da7227a
+- current_digest: 00d0d920c32fe36a1631d38ee5d9b400368e37678cd41659d29b1b388da7227a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111710-QJTZN0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610111710-QJTZN0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
