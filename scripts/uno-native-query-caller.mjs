@@ -1,0 +1,7 @@
+/** @fileoverview Shared pure native binary query/dispatcher observations extracted unchanged from the equality caller; actual runtime query/Any/type owners remain linked upstream. */
+export const unoNativeQueryCaller = String.raw`struct QW{W w;W*root;int mode;};
+void*queried(void*p,R*r){auto*q=static_cast<QW*>(p);emit({4,q->w.id,r->eTypeClass,q->mode});if(q->root){acquire(q->root);return q->root;}return nullptr;}
+Types*dispatchTypes;D const*seenMethod=nullptr;
+void dispatch(uno_Interface*p,D const*member,void*out,void**args,uno_Any**exc){auto*q=reinterpret_cast<QW*>(p);emit({5,q->w.id,member->eTypeClass,*exc!=nullptr,(*static_cast<R**>(args[0]))->eTypeClass});emit({seenMethod==member});seenMethod=member;desc(const_cast<D*>(member));auto*ret=static_cast<uno_Any*>(out);if(q->mode==3){rtl::OUString held=rtl::OUString::createFromAscii("dispatch");void*src=sample(dispatchTypes->exc->pWeakRef,dispatchTypes->exc,*dispatchTypes,held.pData,&q->w,1);uno_type_any_construct(*exc,src,dispatchTypes->exc->pWeakRef,acquire);uno_type_destructData(src,dispatchTypes->exc->pWeakRef,release);std::free(src);return;}
+*exc=nullptr;if(q->mode==0){void*root=q->root;uno_type_any_construct(ret,&root,type(typelib_TypeClass_INTERFACE),acquire);}else if(q->mode==1)uno_type_any_construct(ret,nullptr,type(typelib_TypeClass_VOID),nullptr);else{rtl::OUString held=rtl::OUString::createFromAscii("other");uno_type_any_construct(ret,&held.pData,type(typelib_TypeClass_STRING),nullptr);}}
+`;

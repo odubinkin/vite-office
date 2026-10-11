@@ -2786,3 +2786,30 @@ counter is positive. All13 scoped gates and exact Prettier pass. Physical ABI,
 compiler-only enforcement, external SDK sal_Unicode alias configuration and full
 consumer QA remain unverified. Public Any/genfunc/Sequence and original services,
 CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Next full51.
+
+### Original CPPu data assignment and value compatibility
+
+Task45 adds original assign.hxx and data.cxx assignment prerequisites for public
+Any extraction/isExtractableTo/has and genfunc. The exact numeric switches live
+in adjacent assign-numeric.ts; actual C entry points and compound recursion stay
+at data.ts. Existing shared type/default/copy/destruction/string/sequence/query
+owners are reused. Native JS width operators, BigInt and Math.fround represent
+these defined assignments without another library or conversion policy.
+
+Initial self-address/type equality, null-source reset, Any flattening and alias
+shortcut, type release-before-acquire, base-first/reverse compound partial writes,
+sequence type-before-pointer equality and interface base/query/callback ordering
+follow original source. Original --write and --check verify358 complete source hashes and13 generated
+inputs, rebuilding all72 real translation units normal/ASan/UBSan. The five
+defined/initialized diagnostic modes match completely: numeric174096,
+matrix2594720, compounds54368, interfaces123792 and diagnostics180 bytes.
+The separate interface-chain normal24896-byte stream has original assign.hxx422
+UBSan SIGABRT, with no defined/UB/sanitizer parity claim. All six complete portable
+replays match. Source-absent Calc106/24 and shared134/39 tests pass with raw
+S/B/F/L100 across19/55 executable owners, every raw counter positive. The equality
+caller remains byte-identical after observer extraction; all five old equality
+replays still match. All13 scoped gates pass. CALC-053/054 record source quirks.
+Undefined original expressions and initialized unsupported diagnostic inputs are
+bounded separately; physical ABI/allocation/debug/thread/full consumer QA remain
+unverified. Public Any/genfunc/Sequence and service/CharClass/pool/Calc document
+and UI owners remain subsequent. Task41 is the last full run; next scheduled51.

@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
 import { unoNativeValueCaller } from "./uno-native-value-caller.mjs";
+import { unoNativeQueryCaller } from "./uno-native-query-caller.mjs";
 import { prepareCaseNative } from "./casefolding-native-build.mjs";
 import { hash, loadUnicodeOriginal, pin, upstream } from "./rtl-ustring-native-sources.mjs";
 import { originalDependency } from "./casefolding-native-libraries.mjs";
@@ -25,12 +26,7 @@ const driver = String.raw`${unoNativeValueCaller}
 #include "eq.hxx"
 #include <limits>
 #include <cmath>
-struct QW{W w;W*root;int mode;};
-void*queried(void*p,R*r){auto*q=static_cast<QW*>(p);emit({4,q->w.id,r->eTypeClass,q->mode});if(q->root){acquire(q->root);return q->root;}return nullptr;}
-Types*dispatchTypes;D const*seenMethod=nullptr;
-void dispatch(uno_Interface*p,D const*member,void*out,void**args,uno_Any**exc){auto*q=reinterpret_cast<QW*>(p);emit({5,q->w.id,member->eTypeClass,*exc!=nullptr,(*static_cast<R**>(args[0]))->eTypeClass});emit({seenMethod==member});seenMethod=member;desc(const_cast<D*>(member));auto*ret=static_cast<uno_Any*>(out);if(q->mode==3){rtl::OUString held=rtl::OUString::createFromAscii("dispatch");void*src=sample(dispatchTypes->exc->pWeakRef,dispatchTypes->exc,*dispatchTypes,held.pData,&q->w,1);uno_type_any_construct(*exc,src,dispatchTypes->exc->pWeakRef,acquire);uno_type_destructData(src,dispatchTypes->exc->pWeakRef,release);std::free(src);return;}
-*exc=nullptr;if(q->mode==0){void*root=q->root;uno_type_any_construct(ret,&root,type(typelib_TypeClass_INTERFACE),acquire);}else if(q->mode==1)uno_type_any_construct(ret,nullptr,type(typelib_TypeClass_VOID),nullptr);else{rtl::OUString held=rtl::OUString::createFromAscii("other");uno_type_any_construct(ret,&held.pData,type(typelib_TypeClass_STRING),nullptr);}}
-bool compare(int api,void*a,R*ar,D*ad,void*b,R*br,D*bd,uno_QueryInterfaceFunc query,uno_ReleaseFunc rel){return api==0?cppu::_equalData(a,ar,nullptr,b,br,query,rel):api==1?uno_type_equalData(a,ar,b,br,query,rel):uno_equalData(a,ad,b,bd,query,rel);}
+${unoNativeQueryCaller}bool compare(int api,void*a,R*ar,D*ad,void*b,R*br,D*bd,uno_QueryInterfaceFunc query,uno_ReleaseFunc rel){return api==0?cppu::_equalData(a,ar,nullptr,b,br,query,rel):api==1?uno_type_equalData(a,ar,b,br,query,rel):uno_equalData(a,ad,b,bd,query,rel);}
 const sal_uInt64 seeds[]={0,1,2,127,128,255,32767,32768,65535,0x7fffffffULL,0xffffffffULL,0xffffffffffffffffULL,0x8000000000000000ULL,0x7fffffffffffffffULL,0x20000000000001ULL,0x4000004000000001ULL,0x4000004000000000ULL,0x4000004000000002ULL,0x400000c000000000ULL,0xbfffff4000000000ULL,0x4000014000000000ULL};
 union N{sal_Int8 b;sal_Int16 s;sal_uInt16 us;sal_Int32 l;sal_uInt32 ul;sal_Int64 h;sal_uInt64 uh;float f;double d;};
 void set(N&v,int c,int k){sal_uInt64 n=k<21?seeds[k]:0;switch(c){case 3:v.b=n;break;case 4:v.s=n;break;case 5:v.us=n;break;case 6:v.l=n;break;case 7:v.ul=n;break;case 8:v.h=n;break;case 9:v.uh=n;break;case 10:v.f=k==21?std::numeric_limits<float>::quiet_NaN():k==22?0.5f:k==23?-0.5f:k==24?-0.0f:k==25?std::numeric_limits<float>::infinity():static_cast<float>(static_cast<sal_Int64>(n));break;case 11:v.d=k==21?std::numeric_limits<double>::quiet_NaN():k==22?0.5:k==23?-0.5:k==24?-0.0:k==25?std::numeric_limits<double>::infinity():static_cast<double>(static_cast<sal_Int64>(n));break;}}

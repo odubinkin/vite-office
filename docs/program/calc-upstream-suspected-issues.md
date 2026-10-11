@@ -1274,3 +1274,52 @@ and do not participate in this observation.
 
 Decision: preserve the source destination/source switches and signed reads.
 Add no mathematical equality repair, symmetric dispatch or numeric coercion gate.
+
+## CALC-053: Interface assignment takes a base member address through null
+
+Status: reproduced in complete unchanged original assignment with real registered
+interface types. Normal build observations are bounded; native undefined behavior
+and ordinary application reachability remain unverified.
+
+Pinned `cppu/source/uno/assign.hxx::_assignData` walks a supplied interface
+description's first-base chain using `&pBaseTypeDescription->aBase`. When a
+nonmatching chain reaches the root interface, its base is null. The original
+expression takes the common-prefix member address through that null pointer.
+In the tested normal LP64 build, the resulting pointer becomes null and assignment
+continues to queryInterface. UBSan rejects this expression at assign.hxx422 with
+"member access within null pointer"; the process aborts under the existing halt
+configuration. The types come from the real original interface factory; no fake
+provider or substitute type descriptor participates.
+
+Evidence: `scripts/uno-assignment-native-probe.mjs` separates `interface-chain`
+from the five defined modes. Its normal capture is 24896 bytes; its sanitized
+capture terminates with SIGABRT and the exact original null-member diagnostic.
+The other five modes have identical complete normal/ASan/UBSan streams. This
+observes a source expression and a compiler configuration, without claiming
+stable native undefined behavior or a Calc consumer bug.
+
+Decision: preserve the original normal control flow using the existing common
+record identity. Add no rejection or alternate interface conversion. Record the
+sanitizer result separately; do not label this path defined or sanitizer parity.
+
+## CALC-054: Flattened Any address alias bypasses assignment type compatibility
+
+Status: reproduced with original Any construction and initialized caller addresses.
+Supported ordinary producer reachability and upstream intent remain unverified.
+
+Pinned `cppu/source/uno/assign.hxx::_assignData` checks type equality when the
+initial destination and source addresses are identical. After flattening a source
+Any, it instead returns true immediately if the destination address matches the
+flattened data address. It does not repeat the type check. In the bounded caller,
+an original CHAR Any holds 0xd800 and the destination names SHORT while pointing
+to that Any's actual data. Assignment returns true without a value write; ordinary
+CHAR-to-SHORT assignment otherwise returns false. Only the actual initialized
+CHAR value is observed, with no reinterpretation claim for a SHORT object.
+
+Evidence: the native assignment `diagnostics` mode includes this real constructor
+and alias shortcut. Complete normal/ASan/UBSan streams match (180 bytes), including
+original result, Any type/name/count and CHAR observations. Unsupported initialized
+compound metadata in the same diagnostic mode certifies no ordinary producer.
+
+Decision: retain the flattened address shortcut and its lack of a second type
+check. Add no compatibility repair or extra value conversion.

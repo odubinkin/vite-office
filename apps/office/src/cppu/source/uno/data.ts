@@ -1,4 +1,4 @@
-/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps selected default/copy/destruction wrappers in their actual source owner. */
+/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps original default/copy/destruction/equality/assignment/query boundaries in their actual source owner. */
 import { _copyConstructStruct, _copyConstructData, icopyConstructSequence } from "./copy";
 import type { uno_AcquireFunc } from "../../inc/uno/data";
 import type { uno_Mapping } from "../../inc/uno/mapping";
@@ -27,6 +27,9 @@ import { _destructAny } from "./destr";
 import { uno_any_destruct } from "./any";
 import { _equalStruct, _equalData } from "./eq";
 import { _equalSequence } from "./eq-sequence";
+import { _assignStruct, _assignData } from "./assign";
+import { _release } from "./prim";
+import { typelib_typedescriptionreference_isAssignableFrom } from "../../inc/typelib/typedescription";
 /** Intrinsic storage for the addressed original signed32 sequence count. */
 const emptyCount = new Int32Array([1]);
 /** Original static empty sequence initializer {1,0,{0}}, reusing the SAL record and keeping its live count. */
@@ -241,4 +244,68 @@ export function uno_equalData(
     query,
     release,
   );
+}
+
+/** Original recursive assignment wrapper. @param dest - Actual destination. @param source - Actual source. @param description - Actual compound description. @param query - Query callback. @param acquire - Acquire callback. @param release - Release callback. @returns Original result. */
+export function assignStruct(
+  dest: unknown,
+  source: unknown,
+  description: P,
+  query: uno_QueryInterfaceFunc | null,
+  acquire: uno_AcquireFunc | null,
+  release: uno_ReleaseFunc | null,
+): boolean {
+  return _assignStruct(dest, source, description, query, acquire, release);
+}
+/** Original reference-only C assignment boundary. @param dest - Destination address. @param destType - Actual destination type. @param source - Source address or null default request. @param sourceType - Actual source type. @param query - Query callback. @param acquire - Acquire callback. @param release - Release callback. @returns Original result. */
+export function uno_type_assignData(
+  dest: unknown,
+  destType: R,
+  source: unknown,
+  sourceType: R | null,
+  query: uno_QueryInterfaceFunc | null,
+  acquire: uno_AcquireFunc | null,
+  release: uno_ReleaseFunc | null,
+): boolean {
+  return _assignData(dest, destType, null, source, sourceType, null, query, acquire, release);
+}
+/** Original full-description assignment boundary, borrowing both actual descriptions. @param dest - Destination address. @param destDescription - Actual destination description. @param source - Source address or null default request. @param sourceDescription - Actual source description. @param query - Query callback. @param acquire - Acquire callback. @param release - Release callback. @returns Original result. */
+export function uno_assignData(
+  dest: unknown,
+  destDescription: D,
+  source: unknown,
+  sourceDescription: D,
+  query: uno_QueryInterfaceFunc | null,
+  acquire: uno_AcquireFunc | null,
+  release: uno_ReleaseFunc | null,
+): boolean {
+  return _assignData(
+    dest,
+    destDescription.pWeakRef as R,
+    destDescription,
+    source,
+    sourceDescription.pWeakRef as R,
+    sourceDescription,
+    query,
+    acquire,
+    release,
+  );
+}
+/** Original data compatibility first uses actual reference compatibility, then only the two-interface value/query path; acquired query result is released even when null. No Any flattening or converter substitute is added. @param assignable - Original destination reference. @param from - Original addressed source value. @param fromType - Original source reference. @param query - Caller or original binary query. @param release - Caller/default release. @returns Original compatibility. */
+export function uno_type_isAssignableFromData(
+  assignable: R,
+  from: unknown,
+  fromType: R,
+  query: uno_QueryInterfaceFunc | null,
+  release: uno_ReleaseFunc | null,
+): boolean {
+  if (typelib_typedescriptionreference_isAssignableFrom(assignable, fromType)) return true;
+  if (fromType.eTypeClass !== C.INTERFACE || assignable.eTypeClass !== C.INTERFACE) return false;
+  if (from === null) return false;
+  const iface = (from as [unknown])[0];
+  if (iface === null) return false;
+  if (query === null) query = binuno_queryInterface;
+  const p = query(iface, assignable);
+  _release(p, release);
+  return p !== null;
 }

@@ -1,7 +1,7 @@
 /** @fileoverview Complete original eq.hxx/native data-query observations through actual shared CPPu/SAL owners; caller inputs and FFI callbacks reuse the existing native-value helpers. */
 import { it } from "vitest";
 import fixture from "./native-equality-cases.json";
-import { createUnoNativeInputs } from "../../../test/uno-native-values";
+import { createUnoNativeQueryInputs } from "../../../test/uno-native-query-values";
 import { typelib_TypeClass as C } from "../../inc/typelib/typeclass";
 import type {
   typelib_TypeDescription as D,
@@ -11,70 +11,14 @@ import type {
 import type { uno_Sequence } from "../../inc/uno/sequence2";
 import type { uno_Any } from "../../inc/uno/any2";
 import type { uno_QueryInterfaceFunc as Q, uno_ReleaseFunc as Release } from "../../inc/uno/data";
-import type { uno_DispatchMethod } from "../../inc/uno/dispatcher";
 /** Source logical byte addresses reuse actual common allocation. */
 type Elements = Pick<ReadonlyMap<number, unknown>, "get">;
 /** Actual equality engine plus the unchanged common type/value/callback observers. @param mode - Complete native mode. @returns Actual library and caller operations. */
 async function caller(mode: keyof typeof fixture.captures) {
-  const x = await createUnoNativeInputs(fixture.captures[mode], true),
+  const x = await createUnoNativeQueryInputs(fixture.captures[mode]),
     eq = await import("./eq"),
     seq = await import("./eq-sequence"),
     numeric = await import("./eq-numeric");
-  let seenMethod: D | null = null;
-  /** Caller interface acquires its supplied root; this implements only the authored FFI witness. @param p - Witness. @param r - Actual demanded type. @returns Caller root. */
-  function query(p: unknown, r: R): unknown {
-    const w = p as ReturnType<typeof witness>;
-    x.emit(4, w.id, r.eTypeClass, w.mode);
-    if (w.root) {
-      x.acquire(w.root);
-      return w.root;
-    }
-    return null;
-  }
-  /** Creates the same binary callback record with caller-owned root and mode. @param id - Source label. @param root - Supplied root. @returns Caller FFI record. */
-  function witness(id: number, root: ReturnType<typeof x.witness> | null) {
-    const w = Object.assign(x.witness(id), { root, mode: 0 });
-    w.count = 1000;
-    const dispatch: uno_DispatchMethod =
-      /** Real caller dispatcher observes only arguments and constructs actual original Any values, never a library substitute. @param p - Witness. @param member - Borrowed actual method. @param output - Return Any. @param args - Original type-reference argument. @param exception - In/out exception. @returns Nothing. */ (
-        p,
-        member,
-        output,
-        args,
-        exception,
-      ): void => {
-        const q = p as unknown as typeof w,
-          returned = output as uno_Any;
-        x.emit(5, q.id, member.eTypeClass, exception[0] !== null, (args[0] as [R])[0].eTypeClass);
-        x.emit(seenMethod === member);
-        seenMethod = member as D;
-        x.desc(member as D);
-        if (q.mode === 3) {
-          const held = x.name("dispatch"),
-            src = x.sample(x.exc.pWeakRef as R, held.pData, q, 1);
-          x.any.uno_type_any_construct(
-            exception[0] as uno_Any,
-            src,
-            x.exc.pWeakRef as R,
-            x.acquire,
-          );
-          x.globals.uno_type_destructData(src, x.exc.pWeakRef as R, x.release);
-          held.dispose();
-          return;
-        }
-        exception[0] = null;
-        if (q.mode === 0)
-          x.any.uno_type_any_construct(returned, [q.root], x.type(C.INTERFACE), x.acquire);
-        else if (q.mode === 1) x.any.uno_type_any_construct(returned, null, x.type(C.VOID), null);
-        else {
-          const held = x.name("other");
-          x.any.uno_type_any_construct(returned, [held.pData], x.type(C.STRING), null);
-          held.dispose();
-        }
-      };
-    Object.defineProperty(w, "pDispatcher", { value: dispatch, writable: true });
-    return w;
-  }
   /** Native internal/reference/full-description comparison forms. @param api - Source API. @param a - First value. @param ar - First reference. @param ad - First description. @param b - Second value. @param br - Second reference. @param bd - Second description. @param q - Callback. @param rel - Callback. @returns Original comparison. */
   function compare(
     api: number,
@@ -99,7 +43,7 @@ async function caller(mode: keyof typeof fixture.captures) {
     x.f.typelib_typedescriptionreference_getDescription(slot, r);
     return slot[0] as D;
   }
-  return { ...x, eq, seq, numeric, query, witness, compare, description };
+  return { ...x, eq, seq, numeric, compare, description };
 }
 const seeds = [
   0n,
