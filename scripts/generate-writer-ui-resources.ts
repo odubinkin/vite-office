@@ -283,6 +283,7 @@ const resourcePaths = [
   "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
   "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
   "sw/uiconfig/swriter/popupmenu/text.xml",
+  "sw/uiconfig/swriter/popupmenu/table.xml",
 ] as const;
 
 const sdiPaths = ["sw/sdi/swriter.sdi", "sfx2/sdi/sfx.sdi", "svx/sdi/svx.sdi"] as const;
@@ -405,6 +406,7 @@ const surfaces = {
   menubar: augmentedMenu,
   numobjectbar: resourceGraphs[resourcePaths[3]]?.nodes ?? [],
   popupText: resourceGraphs[resourcePaths[4]]?.nodes ?? [],
+  popupTable: resourceGraphs[resourcePaths[5]]?.nodes ?? [],
   standardbar: resourceGraphs[resourcePaths[1]]?.nodes ?? [],
   textobjectbar: resourceGraphs[resourcePaths[2]]?.nodes ?? [],
 };

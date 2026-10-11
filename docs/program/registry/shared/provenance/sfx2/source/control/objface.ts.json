@@ -8,6 +8,10 @@
         {
           "marker": "SfxInterface",
           "path": "apps/office/src/sfx2/source/control/objface.ts"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/control/native-popup-owner.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -25,7 +29,8 @@
       "Native object bars, child windows, popup menus, status bars, and interface inheritance remain outside the supported slice."
     ],
     "preservedResponsibilities": [
-      "Preserves immutable generated slot maps and lookup by numeric slot or command URL."
+      "Preserves immutable generated slot maps and lookup by numeric slot or command URL.",
+      "Task202610112135-Z1SPQ3 restores own default-empty SfxInterface RegisterPopupMenu/GetPopupMenuName metadata with exact replacement and no superclass inheritance; represented local non-quiet SfxDispatcher ExecutePopup selects the first nonempty original interface top-to-bottom, invoking final browser presentation once. Real Writer text/table shells register text/table, and generated table popup graph shares the existing recursive resource adapter with upstream order and explicit unsupported dispositions. Original active SwView contexts select actual owners; no TextRuns context/state translation or popup registry proxy. Full parent/global application dispatcher/quiet mode, per-class static topology, UNO/vcl popup manager/interception and visible browser CommandEvent/position/focus handling remain unverified and are not promoted; browser event/presenter wiring is the next correction. No historical statuses/defaults/classifications or registered save/open/recovery changes."
     ],
     "status": "mapped",
     "upstreamPath": "sfx2/source/control/objface.cxx",

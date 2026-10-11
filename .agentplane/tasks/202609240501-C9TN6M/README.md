@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 339
+revision: 340
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T21:27:14.155Z"
+doc_updated_at: "2026-10-11T21:55:39.460Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1508,6 +1508,10 @@ sections:
     - Observation: Correction8/10 JZ2G62 completes native selected mixed hyperlink Remove and moves single-INET native SfxItemSet query to edattr; no TextRuns command-state projection. Actual marked body/cell/node/rings reset original INET family with one undo; ApplyExact preserves ring during initial mutation.
       Impact: Mixed selected links and plain gaps now admit Remove and execute; inventory ten canonical records updated append-only. Full history/caret/readonly/generic query and generated popup presentation remain pending, without parity promotion.
       Resolution: Accepted14140 distinct assertions,100allfour for five modules1222positive counters,881 old acceptance bytes preserved; final nine metadata gates and fresh static137build verified. Next prioritize actual native popup UI; pause goal after next full and required repairs.
+
+    - Observation: Correction9/10 Z1SPQ3 restores independent native SfxInterface popup registration, non-quiet local dispatcher resource-owner selection and real text/table shell ownership; pinned table popup metadata joins the existing generated supported-command graph.
+      Impact: 7204 unique accepted assertions, whole five app modules100allfour with1214 positive original counters;884 old acceptance files byte-identical;20 intentional semantic paths and append-only inventory records verified. No browser event/popup presenter parity claim yet.
+      Resolution: Proceed to native browser popup event/presenter task10, then next full suite and repair any failures before the human-requested goal pause. References remain source-audit-only and are physically absent for runtime/static producers.
 id_source: "generated"
 ---
 ## Summary
@@ -2989,3 +2993,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction8/10 JZ2G62 completes native selected mixed hyperlink Remove and moves single-INET native SfxItemSet query to edattr; no TextRuns command-state projection. Actual marked body/cell/node/rings reset original INET family with one undo; ApplyExact preserves ring during initial mutation.
   Impact: Mixed selected links and plain gaps now admit Remove and execute; inventory ten canonical records updated append-only. Full history/caret/readonly/generic query and generated popup presentation remain pending, without parity promotion.
   Resolution: Accepted14140 distinct assertions,100allfour for five modules1222positive counters,881 old acceptance bytes preserved; final nine metadata gates and fresh static137build verified. Next prioritize actual native popup UI; pause goal after next full and required repairs.
+
+- Observation: Correction9/10 Z1SPQ3 restores independent native SfxInterface popup registration, non-quiet local dispatcher resource-owner selection and real text/table shell ownership; pinned table popup metadata joins the existing generated supported-command graph.
+  Impact: 7204 unique accepted assertions, whole five app modules100allfour with1214 positive original counters;884 old acceptance files byte-identical;20 intentional semantic paths and append-only inventory records verified. No browser event/popup presenter parity claim yet.
+  Resolution: Proceed to native browser popup event/presenter task10, then next full suite and repair any failures before the human-requested goal pause. References remain source-audit-only and are physically absent for runtime/static producers.

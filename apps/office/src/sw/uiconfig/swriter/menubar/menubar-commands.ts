@@ -130,3 +130,16 @@ export const writerMenuCommandIds = writerMenuPlacements.flatMap(
   /** Collects one generated menu. @param menu - Menu placement. @returns Command IDs. */ (menu) =>
     collectCommandIds(menu.items),
 );
+
+/** Supported native popup graphs generated in pinned resource order, sharing the existing recursive placement adapter. */
+const writerPopupPlacements = new Map<string, readonly WriterMenuItemPlacement[]>([
+  ["text", adaptItems(generated.surfaces.popupText as unknown as readonly GeneratedMenuNode[])],
+  ["table", adaptItems(generated.surfaces.popupTable as unknown as readonly GeneratedMenuNode[])],
+]);
+
+/** Resolves an original interface resource name without inventing a fallback for missing registrations. @param resourceName - Original native popup resource. @returns Generated supported placements, or no registered graph. */
+export function getWriterPopupMenuPlacements(
+  resourceName: string,
+): readonly WriterMenuItemPlacement[] | undefined {
+  return writerPopupPlacements.get(resourceName);
+}

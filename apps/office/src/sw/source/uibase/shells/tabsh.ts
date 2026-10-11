@@ -363,6 +363,7 @@ export class SwTableShell {
         ),
       ),
     );
+    this.commandShell.GetInterface().RegisterPopupMenu("table");
   }
   /** Returns the native dispatcher shell. @returns Command shell. */
   public GetCommandShell(): SfxShell {

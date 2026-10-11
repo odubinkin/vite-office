@@ -131,6 +131,7 @@ export class SwTextShell {
     dialogs: WriterDialogController,
   ) {
     this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
+    this.shell.GetInterface().RegisterPopupMenu("text");
   }
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
