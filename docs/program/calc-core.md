@@ -2556,3 +2556,25 @@ enforcement and full consumer QA remain unverified. CALC-048 preserves the obser
 signed/unsigned table decisions. Type/Any/Reference/default RuntimeException values
 and case values/service/pool/document/view/UI remain unfinished; whole task39 and
 full41 then requested pause remain pending. Broad parity/verified flags stay false.
+
+
+### Original UNO Type values
+
+The shared `cppu/inc/com/sun/star/uno/Type.ts` binds the original Type.h class
+declaration and Type.hxx inline members into one Type owner. Default construction
+uses the actual VOID cache, copy and pointer construction acquire, both no-acquire
+tags transfer ownership, and explicit disposal performs the original release.
+Original rvalue construction still copies: only move assignment swaps pointers.
+Copy assignment, acquired names, borrowed pointers, description replacement,
+class/equality/compatibility methods reuse existing shared CPPU/SAL owners.
+The original generated UDK TypeClass dependency is retained without a reverse edge.
+
+Complete unchanged native header calls and all69 original dependency objects are
+compared under normal and ASan/UBSan builds. Portable tests replay initialized
+count/name/common fields and all15 basic Type value pairs. Null no-acquire values
+are intentionally retained without destruction; no null destructor or invalid
+native dereference is certified. Physical allocation/ABI, const/rvalue enforcement,
+Array/legacy/UnoType helper templates, threading/shutdown/full QA and unfinished
+Any/Reference/default RuntimeException/case service/pool/document/view/UI remain
+unverified. Broad parity flags stay false; task39 and full41 then requested pause
+remain pending.

@@ -15,10 +15,14 @@ import {
 it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);
+  // Original include/com/sun/star/uno/Type.h includes the generated TypeClass enum.
+  expect(isForbiddenModuleEdge("cppu", "udkapi")).toBe(false);
+  expect(isForbiddenModuleEdge("udkapi", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("o3tl", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("sal", "cppu")).toBe(true);
   for (const source of [
     "cppu/inc/typelib/typedescription.ts",
+    "cppu/inc/com/sun/star/uno/Type.ts",
     "cppu/source/typelib/typelib.ts",
     "sal/inc/osl/interlck.ts",
     "sal/osl/unx/interlck.ts",
@@ -29,7 +33,7 @@ it("owns genuine CPPU type metadata and SAL comparison without browser or revers
       getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
     ).toMatch(/browser adapters/u);
   }
-  for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi"])
+  for (const dependency of ["sc", "sw", "framework", "vcl"])
     expect(isForbiddenModuleEdge("cppu", dependency)).toBe(true);
 });
 
