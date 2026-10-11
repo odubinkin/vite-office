@@ -1,4 +1,4 @@
-/** @fileoverview Original three-field uno_Any declaration without constructor, initialization or invented reserved-data defaults; actual destruction/clear declarations reuse their source owner. */
+/** @fileoverview Original three-field uno_Any declaration without invented constructor/initialization/defaults; the actual original C Any declarations reuse their source owner. */
 import type { typelib_TypeDescriptionReference } from "../typelib/typedescription";
 /** Original C record; opaque void pointers preserve logical identity, and reserved storage is interpreted only by actual selected type operations. */
 export interface _uno_Any {
@@ -12,5 +12,14 @@ export interface _uno_Any {
 /** Original public typedef. */
 export type uno_Any = _uno_Any;
 
-/** Original implemented C destruction declarations; construction/copy remains in its actual pending owner. */
-export { uno_any_destruct, uno_any_clear } from "../../source/uno/any";
+/** Original implemented C declarations reuse the complete actual any.cxx owner. */
+export {
+  uno_any_destruct,
+  uno_any_clear,
+  uno_type_any_assign,
+  uno_any_assign,
+  uno_type_any_construct,
+  uno_any_construct,
+  uno_type_any_constructAndConvert,
+  uno_any_constructAndConvert,
+} from "../../source/uno/any";

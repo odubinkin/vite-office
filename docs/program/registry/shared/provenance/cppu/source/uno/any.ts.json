@@ -8,14 +8,27 @@
     "upstreamPath": "cppu/source/uno/any.cxx",
     "localSymbols": [
       "uno_any_destruct",
-      "uno_any_clear"
+      "uno_any_clear",
+      "uno_type_any_assign",
+      "uno_any_assign",
+      "uno_type_any_construct",
+      "uno_any_construct",
+      "uno_type_any_constructAndConvert",
+      "uno_any_constructAndConvert"
     ],
     "upstreamSymbols": [
       "uno_any_destruct",
-      "uno_any_clear"
+      "uno_any_clear",
+      "uno_type_any_assign",
+      "uno_any_assign",
+      "uno_type_any_construct",
+      "uno_any_construct",
+      "uno_type_any_constructAndConvert",
+      "uno_any_constructAndConvert"
     ],
     "preservedResponsibilities": [
-      "Complete original destr.hxx normal LP64 destruction retains original type/reference/string release ownership, base-first/reverse own-member compound order, ascending element/subrange order and size returns, temporary/provided description lifetime, callback/null/default interface branches and actual atomic sequence zero transitions. Actual original data.cxx destructStruct/destructSequence/uno_type_destructData/uno_destructData, any.cxx uno_any_destruct/uno_any_clear and sequence.cxx uno_type_sequence_destroy boundaries reuse one real destruction owner. Native free is browser GC reclamation without synthetic field resets, provider/type factories or an independent memory registry. Existing SAL sequence char-tail declaration now accepts caller-addressed logical source byte-offset storage for non-byte elements; the original empty byte tail remains Int8Array. Scalar/pointer addresses and nested compound addresses retain actual caller cells/maps, without binary JS ABI. One stable Int32Array accessor address per actual sequence record reuses the existing OSL atomic owner; the static empty sequence count uses its existing address, no independent counter. Caller-initialized Any, registered compound and element descriptions are actual native type/string owners; FFI callbacks only observe caller pointers/order/counts. Full72 unchanged original native SAL/CPPU translation units normal/ASan/UBSan compare complete initialized fields/count/name/description streams for fundamental/default/enums/derived/nested/exception/empty/base-only data, every Any class, nested Any, every element class/ranges and sequence transitions/descriptions/zero-count C boundary. Both original zero-count assertions abort in native and retain the existing browser Error assertion adaptation. Normal diagnostic-only unexpected nested Any/TYPEDEF/unsupported element branches are observed without claiming supported generic producers. Copy/construction/assignment/queryInterface/Any/Sequence/Reference/default RuntimeException/case/service/UI consumer closure, native binary/pointer/object lifetime, 32-bit/debug1, native threads/shutdown and full upstream QA remain unfinished or unverified. System dependencies remain uninstrumented and leak detection disabled. Broad parity/default/verified flags remain false."
+      "Complete original destr.hxx normal LP64 destruction retains original type/reference/string release ownership, base-first/reverse own-member compound order, ascending element/subrange order and size returns, temporary/provided description lifetime, callback/null/default interface branches and actual atomic sequence zero transitions. Actual original data.cxx destructStruct/destructSequence/uno_type_destructData/uno_destructData, any.cxx uno_any_destruct/uno_any_clear and sequence.cxx uno_type_sequence_destroy boundaries reuse one real destruction owner. Native free is browser GC reclamation without synthetic field resets, provider/type factories or an independent memory registry. Existing SAL sequence char-tail declaration now accepts caller-addressed logical source byte-offset storage for non-byte elements; the original empty byte tail remains Int8Array. Scalar/pointer addresses and nested compound addresses retain actual caller cells/maps, without binary JS ABI. One stable Int32Array accessor address per actual sequence record reuses the existing OSL atomic owner; the static empty sequence count uses its existing address, no independent counter. Caller-initialized Any, registered compound and element descriptions are actual native type/string owners; FFI callbacks only observe caller pointers/order/counts. Full72 unchanged original native SAL/CPPU translation units normal/ASan/UBSan compare complete initialized fields/count/name/description streams for fundamental/default/enums/derived/nested/exception/empty/base-only data, every Any class, nested Any, every element class/ranges and sequence transitions/descriptions/zero-count C boundary. Both original zero-count assertions abort in native and retain the existing browser Error assertion adaptation. Normal diagnostic-only unexpected nested Any/TYPEDEF/unsupported element branches are observed without claiming supported generic producers. Copy/construction/assignment/queryInterface/Any/Sequence/Reference/default RuntimeException/case/service/UI consumer closure, native binary/pointer/object lifetime, 32-bit/debug1, native threads/shutdown and full upstream QA remain unfinished or unverified. System dependencies remain uninstrumented and leak detection disabled. Broad parity/default/verified flags remain false.",
+      "Original copy.hxx normal LP64 complete copy/default/convert operations and all eight actual any.cxx C boundaries plus real data.cxx copy/forward wrappers reuse actual shared type/reference/string/OSL/default/destruction/mapping owners. Preserve type acquisition, value defaults, enum default/description lookup, original Any flatten/null/VOID/source branches, live pData-to-pReserved alias, base-first/reverse own-member copying and reverse sequence conversion, shared sequence atomic increment and exact callback/mapping order, initialized-null mapping out cells, selected description ownership and source allocation-size guard. Source malloc/address expressions use native JS lazy addressed views of one uninitialized logical allocation; field offsets are source logical LP64 offsets, no physical JS binary ABI. Native first-member/nested address aliases and Any reserved-field addresses retain stable identity and live direct writes, with no type lookup/default initialization/provider work. Existing source-owned count views retain one actual count; no alternate type/sequence/interface provider or generated factory is introduced. Byte/primitive values keep their initialized logical type values and IEEE zero; Boolean uses native JS conversion only for valid initialized source data, not arbitrary JS normalization. Full72 unchanged native SAL/CPPU translation units normal/ASan/UBSan compare complete original initialized fields, real description/name/string/ref/callback/count observations through inline/reference/full-description/convert/assignment/null/default/flatten operations, full actual caller-owned type factories and sequences. Synthetic huge initialized header-only counts observe range guards without nonexistent tail reads; diagnostic-only nested Any/TYPEDEF/unexpected element branches certify no supported producer. Physical allocation/memory consumption/malloc resource failure/partial reserved-byte layout,32-bit/debug1/native threads/shutdown and full QA remain unverified. Actual C++ Any/Reference/default RuntimeException/Locale/case/service/UI consumer closure remains unfinished. Broad parity/default/verified flags stay false."
     ],
     "omittedResponsibilities": [
       "Full copy/construction/assignment/queryInterface/Any/Sequence/Reference/default RuntimeException/case/service/UI consumer closure; physical pointer/binary ABI/object lifetime, invalid storage or post-free accesses, 32-bit/debug1, native threads/shutdown and full QA."
@@ -29,6 +42,10 @@
         {
           "path": "apps/office/src/cppu/source/uno/destr.test.ts",
           "marker": "matches every original fundamental destruction through inline and C boundaries"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/copy.test.ts",
+          "marker": "matches complete original initialized data copy and conversion through all boundaries"
         }
       ],
       "upstream": [

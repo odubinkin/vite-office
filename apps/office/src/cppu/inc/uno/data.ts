@@ -16,4 +16,8 @@ export {
   uno_constructData,
   uno_type_destructData,
   uno_destructData,
+  uno_type_copyData,
+  uno_copyData,
+  uno_type_copyAndConvertData,
+  uno_copyAndConvertData,
 } from "../../source/uno/data";

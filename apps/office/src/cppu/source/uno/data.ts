@@ -1,4 +1,7 @@
-/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps selected default-construction and destruction wrappers in their actual source owner. */
+/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps selected default/copy/destruction wrappers in their actual source owner. */
+import { _copyConstructStruct, _copyConstructData, icopyConstructSequence } from "./copy";
+import type { uno_AcquireFunc } from "../../inc/uno/data";
+import type { uno_Mapping } from "../../inc/uno/mapping";
 import { _defaultConstructStruct, _defaultConstructData } from "./constr";
 import { _destructStruct, _destructData, idestructSequence } from "./destr";
 import type { uno_ReleaseFunc } from "../../inc/uno/data";
@@ -75,4 +78,60 @@ export function uno_destructData(
   release: uno_ReleaseFunc | null,
 ): void {
   _destructData(pValue, pTypeDescr.pWeakRef as R, pTypeDescr, release);
+}
+
+/** Original forward compound-copy wrapper. @param pDest - Destination. @param pSource - Source. @param pTypeDescr - Compound description. @param acquire - Callback. @param mapping - Mapping. @returns Nothing. */
+export function copyConstructStruct(
+  pDest: unknown,
+  pSource: unknown,
+  pTypeDescr: P,
+  acquire: uno_AcquireFunc | null,
+  mapping: uno_Mapping | null,
+): void {
+  _copyConstructStruct(pDest, pSource, pTypeDescr, acquire, mapping);
+}
+/** Original forward sequence-copy wrapper. @param pSource - Source. @param pElementType - Element reference. @param acquire - Callback. @param mapping - Mapping. @returns Shared/new sequence or null. */
+export function copyConstructSequence(
+  pSource: uno_Sequence,
+  pElementType: R,
+  acquire: uno_AcquireFunc | null,
+  mapping: uno_Mapping | null,
+): uno_Sequence | null {
+  return icopyConstructSequence(pSource, pElementType, acquire, mapping);
+}
+/** Original reference-only C copy. @param pDest - Destination. @param pSource - Source. @param pType - Borrowed type. @param acquire - Callback. @returns Nothing. */
+export function uno_type_copyData(
+  pDest: unknown,
+  pSource: unknown,
+  pType: R,
+  acquire: uno_AcquireFunc | null,
+): void {
+  _copyConstructData(pDest, pSource, pType, null, acquire, null);
+}
+/** Original full-description C copy. @param pDest - Destination. @param pSource - Source. @param pTypeDescr - Description. @param acquire - Callback. @returns Nothing. */
+export function uno_copyData(
+  pDest: unknown,
+  pSource: unknown,
+  pTypeDescr: D,
+  acquire: uno_AcquireFunc | null,
+): void {
+  _copyConstructData(pDest, pSource, pTypeDescr.pWeakRef as R, pTypeDescr, acquire, null);
+}
+/** Original reference-only C conversion. @param pDest - Destination. @param pSource - Source. @param pType - Borrowed type. @param mapping - Mapping. @returns Nothing. */
+export function uno_type_copyAndConvertData(
+  pDest: unknown,
+  pSource: unknown,
+  pType: R,
+  mapping: uno_Mapping | null,
+): void {
+  _copyConstructData(pDest, pSource, pType, null, null, mapping);
+}
+/** Original full-description C conversion. @param pDest - Destination. @param pSource - Source. @param pTypeDescr - Description. @param mapping - Mapping. @returns Nothing. */
+export function uno_copyAndConvertData(
+  pDest: unknown,
+  pSource: unknown,
+  pTypeDescr: D,
+  mapping: uno_Mapping | null,
+): void {
+  _copyConstructData(pDest, pSource, pTypeDescr.pWeakRef as R, pTypeDescr, null, mapping);
 }
