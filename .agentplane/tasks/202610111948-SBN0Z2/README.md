@@ -4,7 +4,7 @@ title: "Read hyperlink command state from original native attribute items"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,12 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T20:21:26.408Z"
+  updated_by: "CODER"
+  note: "Revised approved scope passes:7025 related occurrences/296 files plus25tooling/4 and3Chrome/3; standalone passing1584-case raw editsh92lines113stmts6functions110branches100/229counters.874 old files identical, two dialog setups source-migrated with original assertions preserved; exact refs restored,137build hashes same,9metadata gates pass. Runtime/static no upstream; generic query/UI fallback/selection/full history pending. Semantic48eccab061d3fff0ef1098f189fdf6e3e3636637."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T20:21:26.979Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact semantic review of48eccab061d3fff0ef1098f189fdf6e3e3636637: represented INET state follows pinned native item equality/interval/default-invalid aggregation; no TextRuns state adapter."
+  evaluated_sha: "48eccab061d3fff0ef1098f189fdf6e3e3636637"
+  blueprint_digest: "a102a577b2b0307caceea0ff3a5ab8a0c8b785fd561e357f89e47e0eb8766730"
+  evidence_refs:
+    - ".agentplane/tasks/202610111948-SBN0Z2/README.md"
+    - ".agentplane/tasks/202610111948-SBN0Z2/quality/20261011-202126979-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111948-SBN0Z2/quality/20261011-202126979-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111948-SBN0Z2/quality/20261011-202126979-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111948-SBN0Z2/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/SBN0Z2/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/SBN0Z2/certificate-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/SBN0Z2/accepted-case-summary.json"
+    - "apps/office/node_modules/.cache/parity-coverage/SBN0Z2/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/SBN0Z2/audit-results.json"
+  findings:
+    - "Read-only original owner/ring query preserves full normal and visited style IDs before final UI metadata. Passing standalone1584-case whole module100 certificate supplies229 positive raw counters; old related failures explicitly repaired,7053 accepted case occurrences/303 files, current static/Chrome/tooling/9metadata pass, exact3refs/pin and137build hashes preserved. Two native end-boundary dialog fixture migrations retain all prior assertions;874 other old files and historical canonical prefixes unchanged. No failed-run raw map counters, source/provider/gate weakening, IO deviations or upstream copies in AgentPlane."
+commit:
+  hash: "48eccab061d3fff0ef1098f189fdf6e3e3636637"
+  message: "🧩 SBN0Z2 code: read hyperlink state from native attribute items"
 comments:
   -
     author: "CODER"
@@ -30,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: execute revised native-query scope under the existing human upstream goal; retain old dialog outcomes with source-required interior caret setup and new disabled-at-end assertion."
+  -
+    author: "CODER"
+    body: "Native INET query implemented and verified: accepted7053 case occurrences, standalone1584-case passing whole editsh100 certificate,9metadata gates and explicit source-driven two-case setup migration; no failing map counters used."
 events:
   -
     type: "status"
@@ -45,8 +70,21 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: execute revised native-query scope under the existing human upstream goal; retain old dialog outcomes with source-required interior caret setup and new disabled-at-end assertion."
+  -
+    type: "status"
+    at: "2026-10-11T20:21:25.951Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Native INET query implemented and verified: accepted7053 case occurrences, standalone1584-case passing whole editsh100 certificate,9metadata gates and explicit source-driven two-case setup migration; no failing map counters used."
+  -
+    type: "verify"
+    at: "2026-10-11T20:21:26.408Z"
+    author: "CODER"
+    state: "ok"
+    note: "Revised approved scope passes:7025 related occurrences/296 files plus25tooling/4 and3Chrome/3; standalone passing1584-case raw editsh92lines113stmts6functions110branches100/229counters.874 old files identical, two dialog setups source-migrated with original assertions preserved; exact refs restored,137build hashes same,9metadata gates pass. Runtime/static no upstream; generic query/UI fallback/selection/full history pending. Semantic48eccab061d3fff0ef1098f189fdf6e3e3636637."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:20:12.465Z"
+doc_updated_at: "2026-10-11T20:21:26.474Z"
 doc_updated_by: "CODER"
 description: "Retire copyWriterTextRangeRuns/equalWriterHyperlinks query conversion in editsh. Port represented INET state branches of GetParaAttr/GetPaMAttr: complete native item equality, original cursor expansion flags and interval/default/mixed merging, actual node/ring traversal and source lookup bounds. Preserve existing accepted behavior where source agrees, use original owned hints and only final DTO projection for UI. Full generic GetCurAttr/character-style/redline/layout/dialog selection and SwHistory remain explicitly unverified."
 sections:
@@ -70,6 +108,39 @@ sections:
     Commands: npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; npm run inventory:invariants; npm run inventory:parity; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result:9/9 metadata gates pass after exact upstream references restored; pinned LO9bc445578031fecf56086729d8e4940c77e14d65 and9 original source hashes recorded only in ignored cache. Runtime/provenance append-only records retain historical statuses/defaults/classifications/responsibilities/evidence prefixes.
 
     Integrity:2829 old non-AgentPlane paths, only4 existing changes in approved scope (editsh.ts, textsh1.test.ts,2 canonical records),3 fresh tests added.874 other old test files byte-identical; approved native setup migration in exactly two old dialog cases retains every original dialog assertion and remaining setup byte-for-byte. No generic Sfx/Calc, schema/provider/gate, recovery/open/save policy mutation; no upstream/helper/Python source copies in AgentPlane. All failed/interrupt/fixture/helper attempts remain documented honestly. Full generic GetCurAttr/character style/redline/frame expansion, beginning-of-link command fallback, native UI default-selection/dialog lifecycle and full SwHistory are still unverified follow-ups; no whole-module upstream-parity/status promotion, no suspected upstream bug identified in this slice.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T20:21:26.408Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Revised approved scope passes:7025 related occurrences/296 files plus25tooling/4 and3Chrome/3; standalone passing1584-case raw editsh92lines113stmts6functions110branches100/229counters.874 old files identical, two dialog setups source-migrated with original assertions preserved; exact refs restored,137build hashes same,9metadata gates pass. Runtime/static no upstream; generic query/UI fallback/selection/full history pending. Semantic48eccab061d3fff0ef1098f189fdf6e3e3636637.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:21:25.951Z, excerpt_hash=sha256:1f1e42cbfad46d5a644e7bc9e38913f295b1db8d07f9597ea33539fc978311ff
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111948-SBN0Z2/blueprint/resolved-snapshot.json
+    - old_digest: a102a577b2b0307caceea0ff3a5ab8a0c8b785fd561e357f89e47e0eb8766730
+    - current_digest: a102a577b2b0307caceea0ff3a5ab8a0c8b785fd561e357f89e47e0eb8766730
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111948-SBN0Z2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610111948-SBN0Z2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this semantic commit only, retaining prior original-range/attribute-only history work and registered IO deviations."
   Findings: |-
     Previous goal turn made progress: completed XHQWW2, semantic7c73738f640c3536aef626440174ae38ecffe7e0/close d2f460865f89, clean writer. Remaining selected hyperlink state copyWriterTextRangeRuns loses normal/visited numeric IDs before DTO equality; native full SwFormatINetFormat equality makes these mixed. Native GetParaAttr respects DontExpand and exact start/end/empty-hint rules; GetPaMAttr covers original ring/node spans and10000 limits. Full generic attribute query/character styles/merged/redline state and native dialog default selection/full history remain unverified separate work.
@@ -131,6 +202,39 @@ Commands: final current TS7 typecheck, changed test/canonical Prettier checks, g
 Commands: npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; npm run inventory:invariants; npm run inventory:parity; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result:9/9 metadata gates pass after exact upstream references restored; pinned LO9bc445578031fecf56086729d8e4940c77e14d65 and9 original source hashes recorded only in ignored cache. Runtime/provenance append-only records retain historical statuses/defaults/classifications/responsibilities/evidence prefixes.
 
 Integrity:2829 old non-AgentPlane paths, only4 existing changes in approved scope (editsh.ts, textsh1.test.ts,2 canonical records),3 fresh tests added.874 other old test files byte-identical; approved native setup migration in exactly two old dialog cases retains every original dialog assertion and remaining setup byte-for-byte. No generic Sfx/Calc, schema/provider/gate, recovery/open/save policy mutation; no upstream/helper/Python source copies in AgentPlane. All failed/interrupt/fixture/helper attempts remain documented honestly. Full generic GetCurAttr/character style/redline/frame expansion, beginning-of-link command fallback, native UI default-selection/dialog lifecycle and full SwHistory are still unverified follow-ups; no whole-module upstream-parity/status promotion, no suspected upstream bug identified in this slice.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T20:21:26.408Z — VERIFY — ok
+
+By: CODER
+
+Note: Revised approved scope passes:7025 related occurrences/296 files plus25tooling/4 and3Chrome/3; standalone passing1584-case raw editsh92lines113stmts6functions110branches100/229counters.874 old files identical, two dialog setups source-migrated with original assertions preserved; exact refs restored,137build hashes same,9metadata gates pass. Runtime/static no upstream; generic query/UI fallback/selection/full history pending. Semantic48eccab061d3fff0ef1098f189fdf6e3e3636637.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:21:25.951Z, excerpt_hash=sha256:1f1e42cbfad46d5a644e7bc9e38913f295b1db8d07f9597ea33539fc978311ff
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111948-SBN0Z2/blueprint/resolved-snapshot.json
+- old_digest: a102a577b2b0307caceea0ff3a5ab8a0c8b785fd561e357f89e47e0eb8766730
+- current_digest: a102a577b2b0307caceea0ff3a5ab8a0c8b785fd561e357f89e47e0eb8766730
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111948-SBN0Z2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610111948-SBN0Z2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
