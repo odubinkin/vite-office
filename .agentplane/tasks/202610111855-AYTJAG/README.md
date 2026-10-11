@@ -1,10 +1,11 @@
 ---
 id: "202610111855-AYTJAG"
 title: "Port original CPPu data assignment and value compatibility"
-status: "DOING"
+result_summary: "Task45 original shared UNO assignment/value compatibility, source-absent Calc and related raw100; CALC-053/054 recorded and preserved. Public Any/genfunc/Sequence and Calc consumers remain subsequent; full next51."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Rechecked all six committed compressed observations against current complete native outputs and digests; five full normal/sanitized streams identical, separately named original assign.hxx422 UBSan SIGABRT explicitly bounded by approved Verify Steps."
     - "Recomputed every raw Calc/shared statement/function/branch counter: all positive,19/55 owners, S/B/F/L100;134 related shared and106 Calc tests pass without all3 upstream links. Exact restored links and unchanged equality caller verified."
     - "Original source module boundaries and shared owners reused; genuine caller inputs/FFI observer extraction introduce no provider or duplicated type/value implementation. Capability/provenance source symbols mapped, broad parity flags false, CALC-053/054 preserve source behavior."
-commit: null
+commit:
+  hash: "7ac2f9b22308d0137c84c9d4e015ec8044a2ace8"
+  message: "🧩 AYTJAG task: implement original shared UNO data assignment"
 comments:
   -
     author: "CODER"
     body: "Start: Port complete original shared assignment/value compatibility prerequisites with genuine owner reuse and full native/portable evidence; bounded diagnostics explicit, no temporary Any/provider or full run before51."
+  -
+    author: "CODER"
+    body: "Verified: Complete original shared assignment/value compatibility preserved; six full portable captures, five defined native sanitizer streams and explicit original null-base rejection, Calc106/shared134 raw100 and scoped gates pass. EVALUATOR evidence committed."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified original assignment native write/check with five identical defined/initialized normal-ASan/UBSan streams and separately bounded original interface-chain UBSan rejection; all six portable streams match. Source-absent Calc106/shared134 raw S/B/F/L100 across19/55 owners; all13 scoped gates and exact Prettier pass. Equality caller unchanged, CALC-053/054 preserved, broad flags false. Evidence and residual gaps recorded in Verification; full next51."
+  -
+    type: "status"
+    at: "2026-10-11T19:26:25.312Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete original shared assignment/value compatibility preserved; six full portable captures, five defined native sanitizer streams and explicit original null-base rejection, Calc106/shared134 raw100 and scoped gates pass. EVALUATOR evidence committed."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:24:08.400Z"
+doc_updated_at: "2026-10-11T19:26:25.313Z"
 doc_updated_by: "CODER"
 description: "Task45 implements complete original assign.hxx and data.cxx assignment/value-isAssignable boundaries required by Any extraction/has and genfunc consumers. Reuse real shared type/default/copy/destruct/string/sequence/query owners; exact native casts/source switches and partial writes/callback ordering. Genuine native proof including explicit bounded diagnostics for any confirmed undefined source expression; source-absent Calc/related raw100, scoped gates/inventory/evaluator clean close. Next full51."
 sections:
