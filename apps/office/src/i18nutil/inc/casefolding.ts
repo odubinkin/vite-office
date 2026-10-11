@@ -37,3 +37,32 @@ export interface MappingConstReference {
   readonly nmap: number;
   readonly map: Iterable<number> & { readonly length: number; readonly [index: number]: number };
 }
+
+/** Original iterator state. Only current/type/nmap have native default values; the native default map cells are uninitialized and have no promised value. */
+export class MappingElement {
+  private value: Mapping;
+  current: number;
+  /** Original default initializes current and the type/count fields; typed-array storage does not certify native indeterminate default units. @returns Original iterator state. */
+  constructor() {
+    this.value = { type: 0, nmap: 0, map: new Uint16Array(NMAPPINGMAX) };
+    this.current = 0;
+  }
+  /** Original embedded Mapping field has stable identity. @returns Mutable embedded value. */
+  get element(): Mapping {
+    return this.value;
+  }
+  /** Original struct value assignment copies all initialized fields into the existing embedded storage. @param source - Original Mapping value. @returns Nothing. */
+  set element(source: MappingConstReference) {
+    this.value.type = source.type;
+    this.value.nmap = source.nmap;
+    for (let i = 0; i < NMAPPINGMAX; i++) this.value.map[i] = source.map[i] as number;
+  }
+  /** Adapts the original implicit iterator-state copy assignment used for termination reset. Native default map cells remain unverified. @param source - Original state value. @returns This stable state owner. */
+  assign(source: MappingElement): this {
+    this.element = source.element;
+    this.current = source.current;
+    return this;
+  }
+}
+
+export { casefolding } from "../source/utility/casefolding";

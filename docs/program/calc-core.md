@@ -2651,3 +2651,32 @@ physical C++ ABI, native threading, debug source-location configuration and
 original consumer QA are outside this bounded scalar proof. Broad parity flags
 stay false; next tasks remain40 and full41, followed by Calc/shared repairs and
 the requested pause.
+
+
+### Original case iterator and width lookup owners
+
+Task40 completes the original getNextChar and MappingElement path with actual
+oneToOneMapping/oneToOneMappingWithFlag instance classes, complete width tables,
+all six independent lazy table getters, scalar decomposition/composition and
+original transliteration flags. Native copy-deleted/final/const/physical layouts
+remain explicit unverified platform contracts. MappingElement preserves stable
+embedded Mapping and map identities; only current/type/nmap are native defaults.
+Default map cells are uninitialized upstream and masked from native observations.
+No default-zero or physical-layout claim follows from typed-array storage.
+
+The stateless native casefolding/widthfolding static APIs are named readonly ESM
+records; this preserves their function signatures and ownership while satisfying
+the repository rule against classes containing only static methods. Numeric
+flags reuse the original offapi enum/constant-group owners through a readonly
+record; enum's source-derived sentinel is a literal as required by lint. No
+validator or coverage exception is introduced.
+
+Native capture uses actual original width/case bodies and oneToOneMapping TU,
+true SAL/CPPU/ICU dependencies and independently generated offapi headers. The
+original gbuild regular-header configuration selects cppumaker -L; bootstrap
+mode's enum factory is not used as an internal regular header. Native --write and --check capture all370 original source hashes and identical
+normal/ASan/UBSan streams; all four portable corpus replays pass. Source-absent
+Calc106 and related shared117 tests pass with raw S/B/F/L100; all13 declared
+gates pass. CALC-049/050 record preserved original quirks. No
+complete string/Sequence/locale service/CharClass/pool/document/edit/UI parity is
+claimed. Full task41/fix/pause remains immediately after task40.

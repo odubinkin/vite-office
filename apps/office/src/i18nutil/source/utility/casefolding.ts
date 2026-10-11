@@ -1,10 +1,13 @@
 /** @fileoverview Original conditional Mapping owners and cased_letter table predicate from casefolding.cxx. */
 import {
   MappingType,
+  MappingElement,
   type Mapping,
   type MappingConstReference,
   type Value,
 } from "../../inc/casefolding";
+import { TransliterationFlags } from "../../inc/transliteration";
+import { widthfolding } from "../../inc/widthfolding";
 import {
   CaseMappingIndex,
   CaseMappingValue,
@@ -196,6 +199,58 @@ export function getValue(
   dummy.nmap = splitSurrogates(value, dummy.map);
   return dummy;
 }
+
+/** Original helper mutates the current unit only for a nonzero composition; mark/range validation remains with the original caller. @param current - Native unit reference. @param next - Width-folded next unit. @returns Original composition success. */
+function is_ja_voice_sound_mark(current: [number], next: number): boolean {
+  if (next !== 0x3099 && next !== 0x309a) return false;
+  const c = widthfolding.getCompositionChar(current[0], next);
+  if (c !== 0) current[0] = c;
+  return c !== 0;
+}
+
+/** Original iterator consumes one mapping unit with exact index/state ordering and case/kana/width composition. @param str - Native caller UTF16 allocation. @param idx - Mutable native signed32 index reference. @param len - Native logical length. @param e - Original iterator state. @param aLocale - Borrowed real Locale. @param nMappingType - Original flags. @param moduleLoaded - Original transliteration modules. @returns Original next UTF16 unit or terminal zero. */
+export function getNextChar(
+  str: Uint16Array,
+  idx: [number],
+  len: number,
+  e: MappingElement,
+  aLocale: LocaleConstReference,
+  nMappingType: MappingType,
+  moduleLoaded: TransliterationFlags,
+): number {
+  if (idx[0] >= len) {
+    e.assign(new MappingElement());
+    return 0;
+  }
+  const c: [number] = [0];
+  if (moduleLoaded & TransliterationFlags.IGNORE_CASE) {
+    if (e.current >= e.element.nmap) {
+      const pos = idx[0]++;
+      e.element = getValue(str, pos, len, aLocale, nMappingType);
+      e.current = 0;
+    }
+    c[0] = e.element.map[e.current] as number;
+    e.current = ((e.current + 1) << 24) >> 24;
+  } else c[0] = str[idx[0]++] as number;
+  if (moduleLoaded & TransliterationFlags.IGNORE_KANA) {
+    if ((0x3040 <= c[0] && c[0] <= 0x3094) || (0x309d <= c[0] && c[0] <= 0x309f)) c[0] += 0x60;
+  }
+  if (moduleLoaded & TransliterationFlags.IGNORE_WIDTH) {
+    const half2fullTable = widthfolding.gethalf2fullTable();
+    c[0] = half2fullTable.get(c[0]);
+    if (
+      0x3040 <= c[0] &&
+      c[0] <= 0x30ff &&
+      idx[0] < len &&
+      is_ja_voice_sound_mark(c, half2fullTable.get(str[idx[0]] as number))
+    )
+      idx[0]++;
+  }
+  return c[0];
+}
+
+/** Original static casefolding API; a readonly ESM record preserves the same functions without an empty class instance. */
+export const casefolding = { getValue, getConditionalValue, getNextChar } as const;
 
 export const mapping_03a3 = mappingArray(conditions.mapping_03a3);
 export const mapping_0307 = mappingArray(conditions.mapping_0307);

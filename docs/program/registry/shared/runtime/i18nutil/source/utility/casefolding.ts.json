@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "shared-string",
     "capabilityIds": [
-      "CAP-ac247390-6e35-4e93-a8dc-2a7c0ba515f5"
+      "CAP-ac247390-6e35-4e93-a8dc-2a7c0ba515f5",
+      "CAP-5adb32f6-de83-4cd8-9332-1dacf851c58d"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,14 +17,10 @@
       "defaultStatus": "unverified",
       "divergenceClass": "none",
       "evidence": [
-        "apps/office/src/i18nutil/source/utility/casefolding.ts#cased_letter",
-        "apps/office/src/i18nutil/source/utility/casefolding.test.ts#replays every native UTF16 cased-letter result and original integral argument narrowing",
-        "i18nutil/source/utility/casefolding.cxx#cased_letter",
-        "apps/office/src/i18nutil/source/utility/casefolding.ts#getValue",
-        "apps/office/src/i18nutil/source/utility/casefolding-value.test.ts#all native locale/flag/context calls preserve const identity, independent copies and real exceptions",
-        "i18nutil/source/utility/casefolding.cxx#getValue"
+        "apps/office/src/i18nutil/source/utility/casefolding.ts#mappingArray",
+        "i18nutil/source/utility/casefolding.cxx#casefolding"
       ],
-      "justification": "Preserve original getConditionalValue const entry identity and getValue independent complete Mapping copies, exact Locale ASCII comparisons, native surrogate tail/combination, extra selection and existing task38 scalar ICU fallback. Real default RuntimeException uses the existing shared Exception/Reference/OUString/typelib owners. Every one of 13228032 original native rows is replayed including all initialized fields, conditional identity, copy independence, unchanged input and actual exception fields/type. Native --check recompiles 69 true SAL/CPPU owners plus unchanged original case/ICU scopes; 360 pinned blobs and all normal/ASan/UBSan captures agree. CALC-035 pos > len is preserved; CALC-038 isolated internal-bit UB supplies no invented portable expected result. Borrowed const units have a readonly structural interface; struct value copies retain all three initialized units.",
+      "justification": "Task40 original case iterator/width lookup ownership: retain complete initialized width rows and source order/duplicates, exact binary/index search and byte-to-row constructor contracts, actual borrowed-row identity and virtual operator dispatch, independent lazy table statics, scalar composition/decomposition, generated original IDL numeric flags and MappingElement state/default initialized fields. Reuse actual task39 Locale/Mapping/RuntimeException/SAL/CPPU/ICU owners. Stateless C++ static APIs are readonly ESM records because repository lint disallows extraneous classes; actual lookup instance classes and their source inheritance remain. Native default map cells are not promised zeros or observed after reset. Complete original normal/ASan/UBSan captures agree and portable replay passes. Source-absent Calc and related shared owners have raw S/B/F/L100. These bounded observations do not certify complete library or consumer parity.",
       "knownViolations": [],
       "localSymbols": [
         "[type, nmap, map]",
@@ -32,6 +29,7 @@
         "az",
         "c",
         "cased_letter",
+        "casefolding",
         "cmi",
         "cmv_idx",
         "copyMapping",
@@ -39,7 +37,10 @@
         "entry",
         "extra",
         "getConditionalValue",
+        "getNextChar",
         "getValue",
+        "half2fullTable",
+        "is_ja_voice_sound_mark",
         "langIs",
         "lt",
         "map",
@@ -55,6 +56,7 @@
         "mapping_0307",
         "mapping_03a3",
         "msb",
+        "pos",
         "tr",
         "type_i",
         "unit",
@@ -63,22 +65,12 @@
       "sourceResponsibility": "aligned",
       "upstreamFile": "i18nutil/source/utility/casefolding.cxx",
       "upstreamSymbols": [
-        "cased_letter",
-        "mapping_03a3",
-        "mapping_0307",
-        "mapping_004a",
-        "mapping_012e",
-        "mapping_00cc",
-        "mapping_00cd",
-        "mapping_0128",
-        "mapping_0049",
-        "mapping_0069",
-        "mapping_0130",
-        "getConditionalValue",
+        "casefolding",
         "getValue",
-        "langIs",
-        "type_i",
-        "accent_above"
+        "getConditionalValue",
+        "getNextChar",
+        "is_ja_voice_sound_mark",
+        "cased_letter"
       ]
     }
   }

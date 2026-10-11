@@ -39,9 +39,9 @@ const allowedEdges = new Map([
   ["external", new Set()],
   ["framework", new Set(["sfx2", "svl"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
-  ["i18nutil", new Set(["cppu", "external", "sal", "udkapi"])],
+  ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
-  ["offapi", new Set()],
+  ["offapi", new Set(["sal"])],
   ["package", new Set()],
   ["sal", new Set(["o3tl"])],
   ["sax", new Set()],
@@ -129,7 +129,11 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
-  if (portablePath.startsWith("i18nutil/inc/") || portablePath.startsWith("udkapi/"))
+  if (
+    portablePath.startsWith("i18nutil/inc/") ||
+    portablePath.startsWith("udkapi/") ||
+    portablePath.startsWith("offapi/com/")
+  )
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
   if (

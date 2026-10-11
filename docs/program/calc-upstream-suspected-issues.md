@@ -1173,3 +1173,50 @@ handwritten native type factory or expected numeric algorithm.
 Decision: preserve the original table and predicate. Add no unsigned range gate,
 value check, conversion repair or adjusted compatibility result. Actual original
 value conversion and valid consumer evidence require a separate observation.
+
+
+## CALC-049: Indexed width lookup retains a duplicate row before checking its flag
+
+Status: reproduced through unchanged original lookup classes and width getters.
+Upstream intent and complete transliteration service effects remain unverified.
+
+Pinned `i18nutil/source/utility/widthfolding_data.h` contains two half2full rows
+for U+0022: U+FF02 with flag1 and U+201D with flag2; U+0027 similarly selects
+U+FF07 or U+2019. Original `oneToOneMappingWithFlag::makeIndex` stores the last
+row for each key without considering the owner's flag. Indexed `find` checks
+only that stored row's flag. The normal half2full getter therefore preserves
+U+0022/U+0027, while the JIS getter returns U+201D/U+2019. The earlier normal
+rows remain in the original table but do not participate in indexed selection.
+
+Evidence: `scripts/casefolding-iterator-native-probe.mjs` tables mode captures
+all original tables, six getters and every BMP key; lookup mode also captures
+binary and indexed selection for both complete tables and eleven masks.
+Normal and ASan/UBSan streams match (3420032 and 27525324 bytes). Portable replay
+compares every captured result and actual borrowed row mutation/identity.
+
+Decision: preserve table order, duplicates, index assignment and flag checking.
+Do not prefilter rows, choose an earlier matching row or repair quote conversion.
+
+## CALC-050: Case iterator resets a pending expansion at the logical input end
+
+Status: reproduced through unchanged original getNextChar and initialized caller
+histories. Complete original consumer QA and upstream intent remain unverified.
+
+Pinned `i18nutil/source/utility/casefolding.cxx` checks idx>=len and resets the
+MappingElement before testing pending map entries. With FullFolding and
+IGNORE_CASE, terminal U+00DF yields one U+0073 followed by zero, although the
+first Mapping has nmap2/current1. Terminal U+FB03 likewise yields only its first
+U+0066 from a three-unit expansion. Adding U+0041 after either character allows
+the pending expansion to drain before the final character is folded.
+Original `i18npool/source/transliteration/transliteration_caseignore.cxx` has
+NOT_END_OF_STR checks including current<nmap, so its caller can request those
+pending units; this is source inspection, not an executed service verdict.
+
+Evidence: `scripts/casefolding-iterator-native-probe.mjs` histories mode captures
+all14 result/state/error/identity fields per call, including these four inputs.
+Its complete 10787896-byte normal and ASan/UBSan streams agree. Portable replay
+matches every observation. Native uninitialized map cells after reset are masked
+and are not claimed to have zero defaults.
+
+Decision: preserve early end checking, reset ordering and returned units. Add no
+pending-tail drain or adjusted logical length.

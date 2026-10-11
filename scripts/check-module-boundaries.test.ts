@@ -159,17 +159,22 @@ it("owns original locale and case-mapping dependencies without browser or revers
   expect(isForbiddenModuleEdge("udkapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "udkapi")).toBe(true);
   // The native casefolding fixture hashes the actual RuntimeException.hpp include and generated CPPU API.
-  for (const dependency of ["cppu", "external", "sal", "udkapi"]) {
+  for (const dependency of ["cppu", "external", "offapi", "sal", "udkapi"]) {
     expect(isForbiddenModuleEdge("i18nutil", dependency)).toBe(false);
     expect(isForbiddenModuleEdge(dependency, "i18nutil")).toBe(true);
   }
-  for (const owner of ["udkapi", "i18nutil"])
+  // Original transliteration.hxx consumes the generated IDL enum, whose hdl includes SAL types/sentinel.
+  expect(isForbiddenModuleEdge("offapi", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "offapi")).toBe(true);
+  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(true);
+  for (const owner of ["udkapi", "i18nutil", "offapi"])
     for (const dependency of ["sc", "sw", "framework", "vcl"])
       expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
   for (const source of [
     "udkapi/com/sun/star/lang/Locale.ts",
     "i18nutil/inc/casefolding.ts",
     "i18nutil/source/utility/casefolding_data.ts",
+    "offapi/com/sun/star/i18n/TransliterationModules.ts",
   ]) {
     expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
     expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
