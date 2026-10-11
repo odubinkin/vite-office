@@ -2598,3 +2598,9 @@ lifetime/ABI, compiler const enforcement, unsupported static classes, template/A
 overload families and native scheduling/shutdown/full QA remain unverified.
 Any/Reference/default RuntimeException/case/service/UI remain unfinished;
 broad parity flags stay false, task39 stays DOING and full41 then pause is pending.
+
+### Original UNO primitives and C records
+
+The shared `cppu/source/uno/prim.ts` follows the original `prim.hxx` callback, sequence-size, empty sequence, VOID acquisition and normal empty Any initialization contracts. C callback and record declarations remain in their original UNO headers; the UNO sequence typedef reuses SAL. Original `data.cxx` global initializers live in `cppu/source/uno/data.ts`. The existing CPPU equality/acquire and OSL atomic owners are reused. Int32Array count storage and a single mutable pointer cell adapt original addressed fields/globals; they do not add an independent registry or data engine.
+
+Empty Any construction leaves `pReserved` untouched and uses `pData=self` in the normal source configuration. Sequence size retains unsigned64 arithmetic wrap and the unsigned32 result guard, including initialized negative signed32 caller observations. These observations do not establish ordinary producer reachability or a defect. The native caller links 72 full unchanged SAL/CPPU translation units and compares complete normal/ASan/UBSan streams for arithmetic, count wrap/identity, callbacks, mapping description ownership and initialized fields. Native physical layout is recorded separately and does not represent a JS binary ABI. Full Any/data/sequence engines, queryInterface, Reference/default exceptions, debug1, native thread/object lifetime and case/service/UI consumers remain unfinished. Broad inventory parity flags remain false.

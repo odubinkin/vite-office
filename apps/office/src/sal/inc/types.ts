@@ -11,3 +11,17 @@ export const SAL_MAX_ENUM = 0x7fffffff;
 export const SAL_MIN_INT32 = -0x80000000;
 /** Original maximum signed32 integer macro. */
 export const SAL_MAX_INT32 = 0x7fffffff;
+
+/** Original sequence C record, without allocation/defaults; the declared one-char tail can be extended only by a real sequence owner. */
+export interface _sal_Sequence {
+  /** Original signed32 count at the beginning of the sequence. */
+  nRefCount: number;
+  /** Original signed32 element count. */
+  nElements: number;
+  /** Original char storage beginning at the flexible tail. */
+  elements: Int8Array;
+}
+/** Original public typedef. */
+export type sal_Sequence = _sal_Sequence;
+/** Original offsetof(sal_Sequence,elements): two adjacent signed32 fields before the char tail. This is the logical source offset, not a JS object ABI. */
+export const SAL_SEQUENCE_HEADER_SIZE = 4 + 4;

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/uno/sequence2.ts",
+    "status": "mapped",
+    "upstreamPath": "include/uno/sequence2.h",
+    "localSymbols": [
+      "uno_Sequence"
+    ],
+    "upstreamSymbols": [
+      "uno_Sequence"
+    ],
+    "preservedResponsibilities": [
+      "Original prim.hxx inline operations retain null callback branches, actual C interface slots, initialized mapping inout pointer and TYPELIB_DANGER_GET/RELEASE ownership, signed32 inputs with unsigned64 wrap before the unsigned32 sequence allocation guard, actual static empty sequence {1,0,{0}} and lazy acquired VOID pointer. SAL sequence header offset8 is a source logical offset; it does not claim JS binary layout. Actual Int32Array storage and existing OSL Atomics implement the address of the one original sequence count; the mutable VOID global is one cross-module pointer cell. Source empty Any construction changes only pType and normal-build pData=self, leaving initialized caller pReserved untouched. The original identical equality and TYPE_ACQUIRE bodies reuse the existing actual CPPU C predicate/acquire owner. New headers declare actual C callback/record/typedef contracts only, without fake providers, allocated Any values or complete data/sequence engines. Full unchanged original prim.hxx and 72 full SAL/CPPU translation units (including genuine any/data/sequence owners) supply normal and ASan/UBSan complete streams. Caller callbacks only record arguments/order and return a caller pointer, without substituting any native operation. Initialized copied C reference records are const equality witnesses only. Physical pointer/ABI/object lifetime, arbitrary invalid JS storage/numbers/callbacks, debug1 configuration, full data/Any/Sequence/queryInterface/Reference/default RuntimeException/case/service/UI consumers, concurrency/shutdown and full upstream QA remain unfinished or unverified. System dependencies are uninstrumented and leak detection disabled; broad parity flags remain false."
+    ],
+    "omittedResponsibilities": [
+      "Full data/Any/Sequence/queryInterface/Reference/default exceptions and downstream case/service/UI; debug1 compile configuration; binary pointer/layout/object lifetime; native concurrency/shutdown, invalid storage/callbacks and full upstream QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/sequence2.ts",
+          "marker": "uno_Sequence"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/prim.test.ts",
+          "marker": "matches original static empty sequence and lazy VOID empty-Any ownership"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/uno/sequence2.h",
+          "marker": "uno_Sequence"
+        },
+        {
+          "path": "cppu/source/uno/prim.hxx",
+          "marker": "&g_emptySeq.nRefCount"
+        }
+      ]
+    }
+  }
+}
