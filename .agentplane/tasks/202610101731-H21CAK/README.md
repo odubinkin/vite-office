@@ -1,10 +1,11 @@
 ---
 id: "202610101731-H21CAK"
 title: "Port original locale-aware case-mapping values for Calc string service"
-status: "DOING"
+result_summary: "verified-202610101731-H21CAK"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 181
+revision: 183
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T12:21:45.854Z"
+  updated_at: "2026-10-11T12:22:56.842Z"
   updated_by: "CODER"
   note: "verified-202610101731-H21CAK"
   attempts: 0
@@ -46,7 +47,9 @@ quality_review:
     - "All13228032 complete genuine native rows match portable Mapping fields, const identity, independent copies, unchanged input and actual RuntimeException fields/type; original69-owner normal/ASan/UBSan builds and360 pinned blobs reproduce the committed fixture. No fake Locale/exception/provider or duplicate shared owner."
     - "Source-absent Calc106/shared113/related ICU3 have S/B/F/L100 and every raw counter positive; all13 declared gates,34tooling tests, exact changed-file Prettier and intentional commit pass. Original i18nutil-to-CPPU API dependency is within approved source-root wiring; reverse/browser/app protections and pass thresholds remain intact."
     - "Existing CALC-035 behavior preserved; isolated CALC-038 unsupported UB has no invented expected output. Actual ICU raw audit reads the current correct6-file/5-owner report, with the stale interim path audit retained separately and excluded."
-commit: null
+commit:
+  hash: "75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6"
+  message: "🧩 H21CAK impl: complete original locale-aware scalar case mappings"
 comments:
   -
     author: "CODER"
@@ -57,6 +60,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610101731-H21CAK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -91,8 +97,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610101731-H21CAK"
+  -
+    type: "verify"
+    at: "2026-10-11T12:22:56.842Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101731-H21CAK"
+  -
+    type: "status"
+    at: "2026-10-11T12:22:57.050Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610101731-H21CAK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-11T12:22:36.703Z"
+doc_updated_at: "2026-10-11T12:22:57.053Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -622,6 +641,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610101731-H21CAK --result verified-202610101731-H21CAK --commit 75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-11T12:22:56.842Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101731-H21CAK
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T12:22:36.703Z, excerpt_hash=sha256:c176f78218371f2742b349043038393635a752ab885fcfa2045615bca95d23df
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json
+    - old_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+    - current_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101731-H21CAK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101731-H21CAK --result verified-202610101731-H21CAK --commit 6e0a31d7b2e74511ac2959daba39abb012e016a9
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -1480,6 +1529,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610101731-H21CAK --result verified-202610101731-H21CAK --commit 75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-11T12:22:56.842Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101731-H21CAK
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T12:22:36.703Z, excerpt_hash=sha256:c176f78218371f2742b349043038393635a752ab885fcfa2045615bca95d23df
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json
+- old_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+- current_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101731-H21CAK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101731-H21CAK --result verified-202610101731-H21CAK --commit 6e0a31d7b2e74511ac2959daba39abb012e016a9
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
