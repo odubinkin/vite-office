@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "uno-type",
     "capabilityIds": [
-      "CAP-897b212d-fad9-4e9f-a1e1-bcfe0df8d9e0"
+      "CAP-897b212d-fad9-4e9f-a1e1-bcfe0df8d9e0",
+      "CAP-6ddcdaaf-55c4-40ee-b95a-ed5bd63e601a"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,14 +17,18 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/cppu/inc/com/sun/star/lang/XServiceInfo.ts#XServiceInfo",
-        "apps/office/src/cppuhelper/source/service-helpers.test.ts#matches every original queryInterface arity and first-match position including typed NULL and complete mismatch",
+        "apps/office/src/cppu/inc/com/sun/star/lang/XServiceInfo.ts#cppu_detail_getUnoType",
+        "apps/office/src/cppu/inc/com/sun/star/uno/generated-interfaces.test.ts#matches complete original generated interface",
         "udkapi/com/sun/star/lang/XServiceInfo.idl#XServiceInfo"
       ],
-      "justification": "Task50 implements all actually declared original cppuhelper queryInterface overloads (1..14 and17..19;15/16 are absent, CALC-057) through one erased ordered argument list. Each declared static_type getter is evaluated in original order and later getters remain untouched after the first match. Matching NULL returns original typed NULL Any, mismatch returns actual empty Any, without a virtual interface query or inferred pointer type/provider. Real Type equality and Any default/acquisition/destruction remain existing shared owners. supportsService calls the original implementation getter once, retains that exact returned local Sequence, searches with existing full-length case-sensitive OUString equality over actual logical element field addresses, never requests COW, and destroys the local owner on return or exception. Original declaration reexports the single cxx body. XServiceInfo is the complete structural IDL method contract over the actual root interface, with logical addressed Sequence<string> output and no generated type/default/service implementation. Only original cppuhelper-to-cppu/SAL module edges are added; reverse/application/browser edges remain forbidden. Genuine full native helper/header/IDL ownership and complete initialized callback/type/name/ref/value streams are required; custom declared source-caller static_type methods invoke actual root/static typelib factories and supply no replacement library provider. Native --write and --check pass:74 complete unchanged translation units,375 full source hashes and15 genuine generated headers,161 terminal commands (157 exit0;2 expected NULL assertion SIGABRT;2 expected original missing-arity compiler exit1). Whole initialized normal-ASan/UBSan streams identical cold716/queries455732/services23136 bytes. With all3 original links absent together, Calc106/24 and related shared154/45 tests pass; all raw S/F/B counters positive and whole S/B/F/L100 for19/61 executable owners (Calc2920/2055/474/2564; shared3966/2158/537/3549). Exact links restored; task49 profile preserved append-only by the new helper test and all4 new source modules, including structural/reexport owners without executable counters. Scoped gate acceptance is recorded in the task evidence. Generated XServiceInfo static type/default implementations, actual weak object/adapter/listener/ImplHelper and service manager/context/locale/CharClass/pool/Calc cell/document/edit/view/UI remain subsequent. Physical pointer/ABI/resource/const/compiler-only/concurrency/shutdown/full consumer QA unverified. C++ NULL assertion is an explicit browser Error adaptation; no full public module parity claim. Broad flags false.",
+      "justification": "Task52 preserves complete original IDL method declarations and normal comprehensive cppumaker interface metadata for XWeak/XAdapter/XReference/XAggregation/XServiceInfo. Each original source getter owns its actual leaked Type cache and method-stage bInitStarted gate, sets the gate before actual RuntimeException initialization, registers real base/member/parameter/exception descriptions in original declaration order, and releases real original temporary names/references/descriptions. Original ADL/static_type/deprecated getCppuType use existing UnoType function arguments without inference or a new provider. Existing Type/Reference/Any/RuntimeException/OUString and C typelib engines are reused. Synchronous browser initialization adapts original mutex/barrier operations without a thread simulator; physical ABI/compiler-only/const restrictions, native threads/shutdown/resources and full consumers remain unverified. Actual weak object/adapter/listener/aggregation lifecycle, service manager/context/locale/CharClass/pool/Calc cell/document/edit/view/UI remain subsequent. Broad parity flags stay false. Genuine native --write and --check pass with72 unchanged complete original translation units,374 full source hashes,23 generated files (21 headers and2 parser sources) and161 terminal commands exit0. Seven complete initialized normal-ASan/UBSan streams match pure TypeScript replay. With all3 upstream links absent together, Calc106/24 and related shared161/46 tests pass; whole19/66 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4261/2178/552/3844). The task50 shared profile is preserved append-only and original links restored exactly. All13 scoped gates pass. These observations do not establish untested native threading, physical ABI or complete weak/service behavior.",
       "knownViolations": [],
       "localSymbols": [
-        "XServiceInfo"
+        "XServiceInfo",
+        "cppu_detail_getUnoType",
+        "getCppuType",
+        "interfaceType",
+        "bInitStarted"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "udkapi/com/sun/star/lang/XServiceInfo.idl",
