@@ -18,8 +18,8 @@ export interface _sal_Sequence {
   nRefCount: number;
   /** Original signed32 element count. */
   nElements: number;
-  /** Original char storage beginning at the flexible tail. */
-  elements: Int8Array;
+  /** Original char storage beginning at the flexible tail; addressed non-byte elements use caller-owned logical byte-offset storage, without a binary JS ABI. */
+  elements: Int8Array | ReadonlyMap<number, unknown>;
 }
 /** Original public typedef. */
 export type sal_Sequence = _sal_Sequence;

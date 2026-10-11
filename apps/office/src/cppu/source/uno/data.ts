@@ -1,5 +1,7 @@
-/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps selected default-construction wrappers in their actual source owner. */
+/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps selected default-construction and destruction wrappers in their actual source owner. */
 import { _defaultConstructStruct, _defaultConstructData } from "./constr";
+import { _destructStruct, _destructData, idestructSequence } from "./destr";
+import type { uno_ReleaseFunc } from "../../inc/uno/data";
 import type {
   typelib_TypeDescription as D,
   typelib_CompoundTypeDescription as P,
@@ -9,7 +11,7 @@ import type { typelib_TypeDescriptionReference as R } from "../../inc/typelib/ty
 /** Intrinsic storage for the addressed original signed32 sequence count. */
 const emptyCount = new Int32Array([1]);
 /** Original static empty sequence initializer {1,0,{0}}, reusing the SAL record and keeping its live count. */
-export const g_emptySeq: uno_Sequence = {
+export const g_emptySeq: uno_Sequence & { elements: Int8Array } = {
   /** Original field read. @returns Current signed32 count. */
   get nRefCount(): number {
     return emptyCount[0] as number;
@@ -39,4 +41,38 @@ export function uno_type_constructData(pMem: unknown, pType: R): void {
 /** Original full-description C boundary retains the exact borrowed description and weak reference. @param pMem - Caller storage. @param pTypeDescr - Actual borrowed full description. @returns Nothing. */
 export function uno_constructData(pMem: unknown, pTypeDescr: D): void {
   _defaultConstructData(pMem, pTypeDescr.pWeakRef as R, pTypeDescr);
+}
+
+/** Original recursive forward wrapper. @param pValue - Actual compound storage. @param pTypeDescr - Borrowed description. @param release - Caller interface callback. @returns Nothing. */
+export function destructStruct(
+  pValue: unknown,
+  pTypeDescr: P,
+  release: uno_ReleaseFunc | null,
+): void {
+  _destructStruct(pValue, pTypeDescr, release);
+}
+/** Original sequence forward wrapper. @param pSequence - Actual sequence. @param pType - Sequence type. @param pTypeDescr - Optional borrowed description. @param release - Caller callback. @returns Nothing. */
+export function destructSequence(
+  pSequence: uno_Sequence,
+  pType: R,
+  pTypeDescr: D | null,
+  release: uno_ReleaseFunc | null,
+): void {
+  idestructSequence(pSequence, pType, pTypeDescr, release);
+}
+/** Original reference-only destruction boundary. @param pValue - Addressed initialized value. @param pType - Actual type. @param release - Caller callback. @returns Nothing. */
+export function uno_type_destructData(
+  pValue: unknown,
+  pType: R,
+  release: uno_ReleaseFunc | null,
+): void {
+  _destructData(pValue, pType, null, release);
+}
+/** Original full-description destruction boundary. @param pValue - Addressed initialized value. @param pTypeDescr - Actual description. @param release - Caller callback. @returns Nothing. */
+export function uno_destructData(
+  pValue: unknown,
+  pTypeDescr: D,
+  release: uno_ReleaseFunc | null,
+): void {
+  _destructData(pValue, pTypeDescr.pWeakRef as R, pTypeDescr, release);
 }
