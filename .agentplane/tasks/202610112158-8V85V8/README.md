@@ -4,7 +4,7 @@ title: "Open native Writer text and table context menus"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 29
+revision: 32
 origin:
   system: "manual"
 depends_on:
@@ -18,12 +18,14 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T23:38:07.265Z"
+  updated_by: "CODER"
+  note: "Accepted scheduled full15740Vitest plus316Chromium=16056,0fail/skip/retry; app417/inventory/tooling100allfour,11 complete changed modules100 and56446 positive original app counters;887 old test bytes retained,39 intentional non-Agentplane paths,22 canonical prefix-preserving records. Three references absent for every runtime/static producer and restoredexactly; nine final metadata audits pass. All first full/static/fresh/ownership/Control-context failures recorded and repaired. Current source/test hashes, raw maps and build137 hashes match. Semantic5d39898e7ba0; same-agent exact SHA review remains, then clean closure and explicit human goal pause."
   attempts: 0
-commit: null
+commit:
+  hash: "5d39898e7ba0f942a430becc06af35ffe48e288d"
+  message: "🧩 8V85V8 fix: open Writer context menus through native selection and bindings"
 comments:
   -
     author: "CODER"
@@ -56,8 +58,20 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: approved dedicated Writer popup extraction for file-size gate; scheduled full serves related-check superset and eleven whole module100 certification, then all repairs and human pause."
+  -
+    type: "status"
+    at: "2026-10-11T23:38:06.393Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-11T23:38:07.265Z"
+    author: "CODER"
+    state: "ok"
+    note: "Accepted scheduled full15740Vitest plus316Chromium=16056,0fail/skip/retry; app417/inventory/tooling100allfour,11 complete changed modules100 and56446 positive original app counters;887 old test bytes retained,39 intentional non-Agentplane paths,22 canonical prefix-preserving records. Three references absent for every runtime/static producer and restoredexactly; nine final metadata audits pass. All first full/static/fresh/ownership/Control-context failures recorded and repaired. Current source/test hashes, raw maps and build137 hashes match. Semantic5d39898e7ba0; same-agent exact SHA review remains, then clean closure and explicit human goal pause."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:37:35.137Z"
+doc_updated_at: "2026-10-11T23:39:21.293Z"
 doc_updated_by: "CODER"
 description: "Route real mouse and keyboard popup requests through original SwEditWin selection policy and SfxDispatcher resource ownership; reuse shared bindings-backed menu rendering for generated text/table resources, preserve native selection and focus through cancellation and execution. Correction10/10, followed by the next full suites and required repairs then human pause."
 sections:
@@ -85,6 +99,39 @@ sections:
     Final source metadata audits9 pass only after all runtime producers are terminal and all3 source references restored. Same-agent exact semantic SHA review is required and does not claim independence. Native pixel/layout, follow/merged/nested/RTL hit affinity, readonly/drawing/spell/GCAttr/quiet/global/UNO/VCL timers/mnemonics/full platform presentation and complete upstream parity remain unverified. Registered IO/recovery deviations preserved.
 
     Human stop: scheduled full campaign after correction10 complete, all required repairs verified; pause goal after clean atomic closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T23:38:07.265Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Accepted scheduled full15740Vitest plus316Chromium=16056,0fail/skip/retry; app417/inventory/tooling100allfour,11 complete changed modules100 and56446 positive original app counters;887 old test bytes retained,39 intentional non-Agentplane paths,22 canonical prefix-preserving records. Three references absent for every runtime/static producer and restoredexactly; nine final metadata audits pass. All first full/static/fresh/ownership/Control-context failures recorded and repaired. Current source/test hashes, raw maps and build137 hashes match. Semantic5d39898e7ba0; same-agent exact SHA review remains, then clean closure and explicit human goal pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T23:38:06.393Z, excerpt_hash=sha256:9486f5705a16823ea1542de783063849c33281c653fc7c110bb80f2bf4a78860
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610112158-8V85V8/blueprint/resolved-snapshot.json
+    - old_digest: e62bd068350738c28cead41a8f62d58af50014bd6046319adccfc41c41820517
+    - current_digest: e62bd068350738c28cead41a8f62d58af50014bd6046319adccfc41c41820517
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112158-8V85V8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610112158-8V85V8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional semantic commit if needed, preserving unrelated human changes and prior tasks. Runtime harness finally restores exact reference targets. No history rewriting."
   Findings: |-
     Native edtwin6370+ uses TestCurrPam before cursor movement and retains selected text; crsrsh1294 uses marked ring Start<=hit and End>hit. TableContains checks original selected cell frames. Current portable layout has no full GetModelPositionForViewPoint/char rectangle API, so browser device geometry must map actual existing DOM points at the device ingress, with explicit limits; never add text/word inference or compatibility TextRuns path. Readonly/drawing/spell/UNO/full VCL and nested/merged/RTL/full hit affinity remain outside bounded certification. Standing human goal authorizes safe in-scope local execution and internal plan approval; no network/global/source copies.
@@ -108,6 +155,10 @@ sections:
     - Observation: All non-browser suites passed; full Chromium314pass/2fail,0skip/flaky: both unchanged solitary-Control column tests cannot Undo. Isolated unchanged2 reproduce. Actual error snapshots show an active Writer context popup during the Control border gesture; it owns keys and blocks Undo. First fresh capture fixture40pass/1failed expected1500 but default NONE orientation normalizes widths2880.
       Impact: New platform context event competes with the existing native table capture, a product regression within current popup ingress scope. Full campaign cannot be accepted or paused yet.
       Resolution: Browser edit-window context admission now preserves actual native table capture and pending release-click ownership; a later distinct right button resets release suppression and admits ordinary popup. New native mounted case tests active/released context events, native Undo/Redo and later right click; set its explicit LEFT orientation to match the fixed-width real Chromium fixture. Preserve every old test byte and failed browser traces/reports. Verify current fresh41, unchanged failed2 plus new context3, then fresh source100/full app and complete Chromium before closure/pause.
+
+    - Observation: First quality recording refused E_USAGE: dirty tracked parent README outside current task artifact subtree. Parent summary wording had an uncertain inventory count token and was corrected through ap task doc set; no source/test change.
+      Impact: Cannot record review while the parent documentation correction is uncommitted; all accepted runtime/source hashes remain identical.
+      Resolution: Commit only corrected parent/task documentation first, retain original semantic implementation5d39898e7ba0, then review the exact clean evidence head with byte equality to original accepted source profile and record both commit identities explicitly. No criterion change, bypass or test replay.
 id_source: "generated"
 ---
 ## Summary
@@ -148,6 +199,39 @@ Final source metadata audits9 pass only after all runtime producers are terminal
 
 Human stop: scheduled full campaign after correction10 complete, all required repairs verified; pause goal after clean atomic closure.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T23:38:07.265Z — VERIFY — ok
+
+By: CODER
+
+Note: Accepted scheduled full15740Vitest plus316Chromium=16056,0fail/skip/retry; app417/inventory/tooling100allfour,11 complete changed modules100 and56446 positive original app counters;887 old test bytes retained,39 intentional non-Agentplane paths,22 canonical prefix-preserving records. Three references absent for every runtime/static producer and restoredexactly; nine final metadata audits pass. All first full/static/fresh/ownership/Control-context failures recorded and repaired. Current source/test hashes, raw maps and build137 hashes match. Semantic5d39898e7ba0; same-agent exact SHA review remains, then clean closure and explicit human goal pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T23:38:06.393Z, excerpt_hash=sha256:9486f5705a16823ea1542de783063849c33281c653fc7c110bb80f2bf4a78860
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610112158-8V85V8/blueprint/resolved-snapshot.json
+- old_digest: e62bd068350738c28cead41a8f62d58af50014bd6046319adccfc41c41820517
+- current_digest: e62bd068350738c28cead41a8f62d58af50014bd6046319adccfc41c41820517
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112158-8V85V8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610112158-8V85V8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only intentional semantic commit if needed, preserving unrelated human changes and prior tasks. Runtime harness finally restores exact reference targets. No history rewriting.
@@ -175,3 +259,7 @@ Native edtwin6370+ uses TestCurrPam before cursor movement and retains selected 
 - Observation: All non-browser suites passed; full Chromium314pass/2fail,0skip/flaky: both unchanged solitary-Control column tests cannot Undo. Isolated unchanged2 reproduce. Actual error snapshots show an active Writer context popup during the Control border gesture; it owns keys and blocks Undo. First fresh capture fixture40pass/1failed expected1500 but default NONE orientation normalizes widths2880.
   Impact: New platform context event competes with the existing native table capture, a product regression within current popup ingress scope. Full campaign cannot be accepted or paused yet.
   Resolution: Browser edit-window context admission now preserves actual native table capture and pending release-click ownership; a later distinct right button resets release suppression and admits ordinary popup. New native mounted case tests active/released context events, native Undo/Redo and later right click; set its explicit LEFT orientation to match the fixed-width real Chromium fixture. Preserve every old test byte and failed browser traces/reports. Verify current fresh41, unchanged failed2 plus new context3, then fresh source100/full app and complete Chromium before closure/pause.
+
+- Observation: First quality recording refused E_USAGE: dirty tracked parent README outside current task artifact subtree. Parent summary wording had an uncertain inventory count token and was corrected through ap task doc set; no source/test change.
+  Impact: Cannot record review while the parent documentation correction is uncommitted; all accepted runtime/source hashes remain identical.
+  Resolution: Commit only corrected parent/task documentation first, retain original semantic implementation5d39898e7ba0, then review the exact clean evidence head with byte equality to original accepted source profile and record both commit identities explicitly. No criterion change, bypass or test replay.
