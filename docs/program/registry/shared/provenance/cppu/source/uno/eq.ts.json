@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/uno/eq.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/uno/eq.hxx",
+    "localSymbols": [
+      "_equalData",
+      "_equalStruct",
+      "_equalObject",
+      "equalString"
+    ],
+    "upstreamSymbols": [
+      "_equalData",
+      "_equalStruct",
+      "_equalObject"
+    ],
+    "preservedResponsibilities": [
+      "Task43 original eq.hxx equality: independent Any flattening, exact source destination/source class switches, original signed interpretation of unsigned-hyper source in signed destination cases, mathematical cmp_equal, binary32/double/floor/nonnegative guards, real type/string/compound/sequence equality and descending short circuit, root-interface query and reverse ordered releases. Existing SAL/CPPu values/type/count/storage/default/copy/destruction and OUString.equals owners reused. Native Math.fround and Number used when original direct cast agrees; actual native integer64 cast witness proves double rounding for0x4000004000000001, so only wider integer64-to-binary32 conversion uses explicit discarded-bit ties-to-even rounding via native BigInt. data.cxx binuno_queryInterface retains original first-call method description, dispatch and return/exception destruction using actual Any owners; browser filtered SAL_WARN output remains unported. Original --write and --check verify358 complete source hashes and identical normal/ASan/UBSan numeric2112864, scalar651680, sequence89468, interface5008 and diagnostic28-byte streams. Complete source-absent portable equality replay passes all5 cases, including actual retained method-description fields/identity and integer64 even/odd rounding ties. Combined source-absent Calc106/24 and shared125/37 tests have raw S/B/F/L100 across19/52 executable owners; strengthened test-only replay retains raw100 for all3 equality owners and verifies every combined runtime owner hash unchanged. Scoped gates pass. Native byte/pointer ABI, allocator/OOM, NaN payload families, undefined floating-to-u64 out-of-range casts, arbitrary unsupported inputs, native threads/shutdown and original consumer QA remain unverified. Public C++ Sequence/UnoType templates and downstream service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent work; broad parity flags false."
+    ],
+    "omittedResponsibilities": [
+      "Native filtered SAL_WARN logging, byte/pointer ABI/allocator/OOM/NaN payload families/undefined casts/arbitrary inputs/thread/shutdown/full consumer QA and downstream template/service/Calc document/UI parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/uno/eq.ts",
+          "marker": "_equalData"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/eq.test.ts",
+          "marker": "matches complete original numeric typed pairs and comparison cast ordering"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/uno/eq.hxx",
+          "marker": "_equalData"
+        }
+      ]
+    }
+  }
+}

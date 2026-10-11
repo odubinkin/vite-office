@@ -1247,3 +1247,30 @@ unsigned-byte observations only for the original sequence corpus.
 
 Decision: preserve both original paths. Add no sequence normalization or scalar
 raw-byte preservation. Do not infer binary ABI or full downstream behavior parity.
+
+## CALC-052: Signed scalar comparison reinterprets an unsigned-hyper source
+
+Status: reproduced through complete unchanged original numeric equality and
+initialized supported scalar types. Ordinary consumer effects and upstream intent
+remain unverified.
+
+Pinned `cppu/source/uno/eq.hxx::_equalData` reads an UNSIGNED_HYPER source
+as sal_Int64 in the BYTE, SHORT, LONG and HYPER destination branches. Those
+branches then call std::cmp_equal with that signed value. For example, BYTE -1
+compared to UNSIGNED_HYPER 18446744073709551615 returns true. Reversing those
+operands reaches the UNSIGNED_HYPER destination branch, which reads the unsigned
+value correctly, and returns false. The equality result is therefore asymmetric
+for this initialized pair. This is a bounded source comparison observation; it
+does not establish that an ordinary Calc producer relies on the result or that
+the cast is unintended.
+
+Evidence: `scripts/uno-equality-native-probe.mjs` numeric mode records all declared
+operand labels, typed value bits and original internal/reference/full-description
+comparison results. Complete normal and ASan/UBSan streams match (2112864 bytes).
+Both directions above are present and all three APIs agree per direction. The
+portable replay matches the entire stream and retains the explicit signed reads.
+Original out-of-range floating-to-unsigned casts are excluded from this corpus
+and do not participate in this observation.
+
+Decision: preserve the source destination/source switches and signed reads.
+Add no mathematical equality repair, symmetric dispatch or numeric coercion gate.

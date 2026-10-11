@@ -2733,3 +2733,32 @@ is S/B/F/L100 for all 19 Calc and 49 shared executable owners; all counters
 are positive. Public C++ Sequence template and real downstream casing service,
 CharClass/SharedStringPool/cell/document/edit/view/UI owners remain required.
 The next scheduled full run is task51; task41 remains the last complete run.
+
+### Original CPPu UNO equality engine
+
+Task43 represents original eq.hxx at shared CPPu eq.ts, with numeric and sequence
+responsibilities split into adjacent eq-numeric.ts and eq-sequence.ts for the
+authored file budget. Existing typed values, type references, logical addressed
+storage, string equality, Any and callback/destruction owners are reused.
+Actual data.cxx C/recursive equality entry points and retained binary query
+dispatch stay at their source owner; prim.hxx only declares that query function.
+
+Any flattening, exact numeric switches/casts, type identity, base-first/reverse
+compound members, descending sequence elements, root-interface queries and
+ordered releases follow the original. A native int64-to-float witness shows that
+Math.fround(Number(integer64)) can double round. Native JS remains in use for
+number/exact binary64 inputs; wider integer64 values need one exact ties-to-even
+discarded-bit adaptation using BigInt. No additional SAL numeric library is added.
+
+Native --write and --check verify all358 complete source hashes and identical
+normal/ASan/UBSan streams: numeric2112864, scalar651680, sequence89468,
+interface5008 and diagnostic28 bytes. All five complete portable replays match,
+including cached method-description fields/identity and integer64 rounding ties.
+With all three original source links absent, Calc106/24 and related shared125/37
+tests pass; raw S/B/F/L100 spans all19/52 executable owners. A strengthened
+five-case replay has raw100 for all three equality owners and verifies unchanged
+hashes for every owner covered by the combined profile. All scoped gates pass.
+Filtered native SAL_WARN output, physical allocation/ABI, NaN payload families,
+undefined floating-to-u64 conversions and full upstream consumer QA remain
+unverified. Public Sequence/UnoType and original services/CharClass/pool/Calc
+cells/document/edit/view/UI remain required. Next scheduled full run is task51.
