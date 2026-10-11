@@ -973,3 +973,34 @@ is not proof of a defect in valid ordinary UNO enum completion.
 Decision: retain the original selected-field swaps, including the unchanged
 existing default. Do not copy the incoming default, normalize enum values or
 claim an ordinary consumer failure from this witness.
+
+## CALC-041: Derived-member lookup may retain an additional base description reference
+
+Status: source-review suspicion only; ordinary lookup lifecycle, reachability and
+any actual leak remain unverified. This is not a demonstrated consumer defect.
+
+[Original getByName](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1943)
+looks up the base reference, acquires its description through
+typelib_typedescriptionreference_getDescription, and passes both to
+createDerivedInterfaceMemberDescription. Its failed-construction path releases
+the description, interface and base reference. Its successful path does not
+explicitly release the separately acquired base description.
+
+[Original internal construction](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1745)
+borrows the base while copying values and acquires copied type/name owners. It
+stores the transferred interface and base reference, with no separate base
+description pointer. The method/attribute destructor releases those stored
+owners. For these weak member references, reference release does not itself
+release pType; the apparent extra description acquisition merits review.
+
+Evidence: unchanged complete getByName/getDescription/construction/destruction
+source. The committed native members corpus directly calls the genuine private
+constructor and confirms its borrowed-base and transferred-interface/reference
+counts, but does not execute getByName's extra acquisition or an ordinary
+provider/cache lifecycle. No numeric leak result is assigned from that direct
+constructor witness. Long-lived descriptor retention could be intentional.
+
+Decision: preserve the original ownership operations. Do not add an extra base
+release, change weak reference semantics or claim a portable lookup fix. Verify
+actual provider, cache and derived-descriptor lifecycles when porting getByName,
+then update this entry with separately scoped native evidence.

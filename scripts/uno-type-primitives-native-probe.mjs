@@ -1,5 +1,9 @@
 /** @fileoverview Observes genuine generated/C type classes, initialized original CPPU/RTL records, registry ownership and fatal registration invariants against full unchanged native owners. */
-import { registryDriver, registryAssertionDriver } from "./uno-registry-native-driver.mjs";
+import {
+  registryDriver,
+  registryAssertionDriver,
+  derivedMemberDriver,
+} from "./uno-registry-native-driver.mjs";
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
@@ -74,13 +78,16 @@ const driver = String.raw`#include <typelib/typedescription.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include "typelib.cxx"
 static_assert(std::endian::native == std::endian::little);
 template<size_t N>void emit(std::array<sal_Int32,N>const&row){if(std::fwrite(row.data(),sizeof(sal_Int32),N,stdout)!=N)std::exit(3);}
 ${registryDriver}
 ${registryAssertionDriver}
+${derivedMemberDriver}
 int main(int argc,char**argv){std::string mode=argc>1?argv[1]:"enums";
 if(registrationAssertion(mode))return 0;
 if(registryCases(mode))return 0;
+if(derivedMemberCases(mode))return 0;
 if(mode=="enums"){std::cout<<'[';bool comma=false;
 ${names
   .map(
@@ -139,8 +146,14 @@ return 2;}
 writeFileSync(`${target}/driver.cpp`, driver);
 /** Builds the genuine original full dependency units and caller with matching instrumentation. @param sanitized - ASan/UBSan selection. @returns Executable path. */
 function build(sanitized) {
-  const objects = native.libraries(sanitized),
-    binary = `${target}/driver${sanitized ? "-asan" : ""}`,
+  const allObjects = native.libraries(sanitized);
+  const objects = allObjects.filter(
+    /** The full unchanged typelib.cxx is included in the caller translation unit to access its genuine private constructor; omit only its duplicate linked object. @param object - Original compiled path. @returns Whether to link this separate owner. */
+    (object) => !object.endsWith("/cppu_source_typelib_typelib.cxx.o"),
+  );
+  if (allObjects.length - objects.length !== 1)
+    throw new Error("Expected exactly one original included typelib owner");
+  const binary = `${target}/driver${sanitized ? "-asan" : ""}`,
     dependency = binary + ".d";
   native.run(
     "clang++",
@@ -148,6 +161,7 @@ function build(sanitized) {
       ...native.flags,
       ...(sanitized ? ["-fsanitize=address,undefined", "-fno-omit-frame-pointer", "-g"] : []),
       "-Ivendor/libreoffice-reference/cppu/source/typelib",
+      "-DCPPU_DLLIMPLEMENTATION",
       "-MMD",
       "-MF",
       dependency,
@@ -192,7 +206,16 @@ function capture(binary, mode) {
 const binary = build(false),
   sanitized = build(true),
   captures = {};
-for (const mode of ["enums", "units", "equals", "records", "counts", "threads", "registry"]) {
+for (const mode of [
+  "enums",
+  "units",
+  "equals",
+  "records",
+  "counts",
+  "threads",
+  "registry",
+  "members",
+]) {
   captures[mode] = capture(binary, mode);
   if (!capture(sanitized, mode).equals(captures[mode]))
     throw new Error(`Sanitized native output differs: ${mode}`);
@@ -311,12 +334,18 @@ const result = {
     fields:
       "Original full common/specific initialized fields, live name/type counts and pointer identity witnesses after every operation; unspecified native fields are never read",
   },
+  members: {
+    rawHash: hash(captures.members),
+    gzipBase64: gzipSync(captures.members, { level: 9 }).toString("base64"),
+    fields:
+      "Full initialized derived common/member fields, complete parameter/exception values and pointer/counter witnesses before cloning, after copying/mutation, and after release; base member is borrowed while interface/base-reference caller ownership transfers on success",
+  },
   registrationAssertions,
   bothNullEquals: captures.equals.readInt32LE(captures.equals.length - 4),
   nullWrapperAssertion: "SIGABRT",
   sanitizedIdentical: true,
   scope:
-    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Twenty initialized invalid caller inputs record complete original C assertion diagnostics and SIGABRT with no stdout, identically in normal and sanitized builds and before any sanitizer finding. The twenty-first registration guard (retained count > 1) is satisfied by original getByName acquisition in valid traces; no impossible realm-local failing interleaving is fabricated. Browser Error adapts the C assertion boundary only, not native process termination, recovery, UNO exceptions or OSL debug assertions. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
+    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Twenty initialized invalid caller inputs record complete original C assertion diagnostics and SIGABRT with no stdout, identically in normal and sanitized builds and before any sanitizer finding. The twenty-first registration guard (retained count > 1) is satisfied by original getByName acquisition in valid traces; no impossible realm-local failing interleaving is fabricated. Browser Error adapts the C assertion boundary only, not native process termination, recovery, UNO exceptions or OSL debug assertions. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Derived member construction calls the genuine private function by including the full unchanged typelib.cxx owner in the caller translation unit and omitting its duplicate linked object; all other original dependencies stay linked. Full initialized method/attribute fields, parameter/exception values, independent copy identity and borrowed/transferred ownership are observed, including zero arrays, output replacement, mutations and releases. Direct caller records do not certify missing getByName routing or complete original consumer QA. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
 };
 if (write) writeFileSync(fixture, JSON.stringify(result) + "\n");
 else if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(result))

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/typelib/typelib-members.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/typelib/typelib.cxx",
+    "localSymbols": [
+      "copyExceptions",
+      "createDerivedInterfaceMemberDescription"
+    ],
+    "upstreamSymbols": [
+      "copyExceptions",
+      "createDerivedInterfaceMemberDescription"
+    ],
+    "preservedResponsibilities": [
+      "Original internal createDerivedInterfaceMemberDescription and copyExceptions use the existing actual empty allocator and shared atomic/reference/string owners. Every method/attribute common member, position, name, return/attribute reference, parameter field, exception array, oneway/readonly flag, parent/base pointer and index follows original writes/acquisitions. Zero counts allocate original non-null empty arrays. Base description is borrowed; interface/base-reference ownership is transferred on success rather than newly acquired by this constructor. Null/unsupported inputs preserve output and ownership. Parameter records and exception arrays are independent copies; names and referenced owners remain shared with the original acquisitions. This is an internal implementation split, not a public C API or substitute type factory. Full getByName/completion/static types/Type/Any/Reference/default UNO exceptions and native pointer ABI/threading remain unfinished or unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full getByName routing, completion/static types/full public factories/Type/Any/Reference/default UNO exceptions, native pointer ABI/threading and full ordinary consumer QA remain unfinished or unverified. Initialized constructor caller records do not certify unported source consumers."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-members.ts",
+          "marker": "createDerivedInterfaceMemberDescription"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-members.test.ts",
+          "marker": "matches complete native fields, copies and transferred ownership"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "createDerivedInterfaceMemberDescription"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "copyExceptions"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/source/typelib/typelib-members.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original internal member-construction responsibility stays under the same CPPU typelib directory and uses the single original allocation/reference owner. A named internal module preserves its original algorithms and public C header boundary while respecting the repository hard limit of fewer than1000 authored lines per file; no alternate registry or factory contract is introduced."
+    }
+  }
+}

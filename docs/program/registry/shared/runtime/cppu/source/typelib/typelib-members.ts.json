@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/source/typelib/typelib-members.ts",
+    "classification": "upstream-mechanism",
+    "state": "internal",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-063eff22-98d2-4525-af39-24f5e60f8b20"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cppu/source/typelib/typelib-members.ts#createDerivedInterfaceMemberDescription",
+        "apps/office/src/cppu/source/typelib/typelib-members.test.ts#matches complete native fields, copies and transferred ownership",
+        "cppu/source/typelib/typelib.cxx#createDerivedInterfaceMemberDescription"
+      ],
+      "justification": "Original internal createDerivedInterfaceMemberDescription and copyExceptions use the existing actual empty allocator and shared atomic/reference/string owners. Every method/attribute common member, position, name, return/attribute reference, parameter field, exception array, oneway/readonly flag, parent/base pointer and index follows original writes/acquisitions. Zero counts allocate original non-null empty arrays. Base description is borrowed; interface/base-reference ownership is transferred on success rather than newly acquired by this constructor. Null/unsupported inputs preserve output and ownership. Parameter records and exception arrays are independent copies; names and referenced owners remain shared with the original acquisitions. This is an internal implementation split, not a public C API or substitute type factory. Full getByName/completion/static types/Type/Any/Reference/default UNO exceptions and native pointer ABI/threading remain unfinished or unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "copyExceptions",
+        "createDerivedInterfaceMemberDescription"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppu/source/typelib/typelib.cxx",
+      "upstreamSymbols": [
+        "copyExceptions",
+        "createDerivedInterfaceMemberDescription"
+      ]
+    }
+  }
+}

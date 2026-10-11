@@ -13,7 +13,8 @@
       "Preserve original weak/nonweak acquire/release and extended-member ownership.",
       "Preserve registered allocation identity, late completion fields and on-demand retention transitions.",
       "Preserve callback order/duplicate removal, typedef target acquisition and original256-entry cache eviction.",
-      "Preserve all21 original registration C assertion predicates and order;20 invalid native caller records stop at the matching assertion before sanitizer findings."
+      "Preserve all21 original registration C assertion predicates and order;20 invalid native caller records stop at the matching assertion before sanitizer findings.",
+      "Preserve original derived-method/attribute fields, independent parameter/exception arrays, borrowed base and transferred interface/reference ownership, including allocated zero-length arrays and unchanged output on unsupported inputs."
     ],
     "capability": "Original CPPU type registry allocation and ownership",
     "gaps": [
@@ -60,6 +61,10 @@
         {
           "path": "apps/office/src/cppu/inc/typelib/typedescription.ts",
           "marker": "typelib_typedescriptionreference_new"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-members.ts",
+          "marker": "createDerivedInterfaceMemberDescription"
         }
       ],
       "tests": [
@@ -78,6 +83,10 @@
         {
           "path": "apps/office/src/cppu/source/typelib/registry-assertions.test.ts",
           "marker": "retains every original failing invariant and assertion expression"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-members.test.ts",
+          "marker": "matches complete native fields, copies and transferred ownership"
         }
       ],
       "docs": [
@@ -92,7 +101,8 @@
     "scopeLimitations": [
       "Complete factories/completion/getDescription/static_types/Type/Any/Reference/default exceptions, native ABI/threading/singleton shutdown, full original QA and Calc document/edit/UI remain unfinished or unverified.",
       "Zero-count and empty weak-pointer witnesses replay defined original implementation branches using initialized caller records; they do not establish actual native interleavings or ordinary reachability. Canonical typed browser views and garbage collection do not certify native pointer ABI. Original cppu/qa/typelib.cxx tests are related references only, not ported or executed original QA.",
-      "C assertion failure is adapted to browser Error; native SIGABRT, post-failure recovery and debug-only OSL diagnostics are not portable runtime contracts. The retained-count guard is covered by valid acquired ownership; no invalid concurrent interleaving is claimed."
+      "C assertion failure is adapted to browser Error; native SIGABRT, post-failure recovery and debug-only OSL diagnostics are not portable runtime contracts. The retained-count guard is covered by valid acquired ownership; no invalid concurrent interleaving is claimed.",
+      "Native private constructor is called from the complete unchanged included typelib.cxx translation unit with its duplicate standalone object excluded at link. Actual empty allocations initialized by this caller are input records, not replacement native factory bodies. Full getByName consumers and their ownership paths are not certified by direct construction alone."
     ],
     "implemented": true,
     "contractParity": false,
@@ -101,7 +111,7 @@
     "verified": false,
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Original CPPU type allocation initializes exactly the original common/specific fields; uninitialized positions/flags/Uik fields remain absent. Canonical typed browser views share the same signed32 atomic counter, common fields and reference pType/description pSelf slot; aBase prefixes denote the same allocation, while sequence extended pType remains distinct. Original name-only terminated-UTF16 registry equality, callback order/duplicate removal, weak and nonweak ownership, all specific member releases, identity-preserving raw transfer/late completion, on-demand retention and the256-entry typedef callback cache are shared once. Full unchanged original SAL/CPPU owners and headers observe complete initialized fields/counts/identity traces under normal and ASan/UBSan builds; counter-zero/empty weak-pointer caller witnesses are separate from actual concurrent execution. Public C exports preserve the header/source boundary. Completion/getDescription/full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown and Calc document/edit/UI remain unfinished or unverified. All21 original registration C assertion predicates retain their source order. Twenty fresh-process initialized invalid caller records terminate at their actual original assertion, with complete diagnostic/SIGABRT evidence identical under normal and sanitized builds; portable tests compare each full expression. The retained-count guard is satisfied by actual getByName acquisition. Browser Error bridges only the C assertion boundary; native process termination, post-failure recovery and OSL debug diagnostics remain unverified."
+      "rationale": "Original CPPU type allocation initializes exactly the original common/specific fields; uninitialized positions/flags/Uik fields remain absent. Canonical typed browser views share the same signed32 atomic counter, common fields and reference pType/description pSelf slot; aBase prefixes denote the same allocation, while sequence extended pType remains distinct. Original name-only terminated-UTF16 registry equality, callback order/duplicate removal, weak and nonweak ownership, all specific member releases, identity-preserving raw transfer/late completion, on-demand retention and the256-entry typedef callback cache are shared once. Full unchanged original SAL/CPPU owners and headers observe complete initialized fields/counts/identity traces under normal and ASan/UBSan builds; counter-zero/empty weak-pointer caller witnesses are separate from actual concurrent execution. Public C exports preserve the header/source boundary. Completion/getDescription/full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown and Calc document/edit/UI remain unfinished or unverified. All21 original registration C assertion predicates retain their source order. Twenty fresh-process initialized invalid caller records terminate at their actual original assertion, with complete diagnostic/SIGABRT evidence identical under normal and sanitized builds; portable tests compare each full expression. The retained-count guard is satisfied by actual getByName acquisition. Browser Error bridges only the C assertion boundary; native process termination, post-failure recovery and OSL debug diagnostics remain unverified. Original internal createDerivedInterfaceMemberDescription and copyExceptions use the existing actual empty allocator and shared atomic/reference/string owners. Every method/attribute common member, position, name, return/attribute reference, parameter field, exception array, oneway/readonly flag, parent/base pointer and index follows original writes/acquisitions. Zero counts allocate original non-null empty arrays. Base description is borrowed; interface/base-reference ownership is transferred on success rather than newly acquired by this constructor. Null/unsupported inputs preserve output and ownership. Parameter records and exception arrays are independent copies; names and referenced owners remain shared with the original acquisitions. This is an internal implementation split, not a public C API or substitute type factory. Full getByName/completion/static types/Type/Any/Reference/default UNO exceptions and native pointer ABI/threading remain unfinished or unverified."
     }
   }
 }

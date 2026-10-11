@@ -2247,3 +2247,30 @@ Browser Error adapts the fatal C assertion boundary; it does not establish nativ
 process termination, recoverability or a default UNO RuntimeException owner.
 Full factories/static types/Type/Any/Reference/default exceptions remain required
 before locale-aware case values and their Calc string-service consumers.
+
+## Original inherited CPPU member construction
+
+Task39 ports complete internal copyExceptions and
+createDerivedInterfaceMemberDescription. The original empty allocator, reference
+counters and RTL string owners are reused. All parameter/exception arrays are
+independent copies; their referenced types and names retain original acquisition
+counts. Zero-length arrays remain allocated rather than null. Position/index,
+oneway/readonly, return/attribute pointers and every parameter field follow
+original writes. The base description is borrowed; the successful caller transfers
+interface/base-reference ownership without additional acquisitions. Missing or
+unsupported inputs preserve the output slot and caller ownership.
+
+The native caller includes the complete unchanged typelib.cxx translation unit
+to access its genuine private constructor, omitting only the duplicate standalone
+object at link. All genuine SAL/static-type dependency owners remain linked.
+Initialized original empty records are caller inputs, not replacement native
+factory bodies. Full fields/counters/identity are observed before/after cloning,
+source mutations and release in normal and sanitized builds. Direct constructor
+evidence does not establish missing getByName consumer ownership.
+
+The internal typelib-members.ts split stays in the original typelib directory
+and preserves the public C header boundary, with an explicit filename-divergence
+record required by the repository's fewer-than1000-line source limit. Complete
+getByName/completion/full public factories/static types/Type/Any/Reference/default
+UNO exceptions and their Calc string-service consumers remain required. Full
+run41 and the subsequent user-requested goal pause remain scheduled.
