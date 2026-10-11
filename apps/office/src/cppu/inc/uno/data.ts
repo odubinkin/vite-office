@@ -9,3 +9,6 @@ export type uno_QueryInterfaceFunc = (
 export type uno_AcquireFunc = (pInterface: unknown) => void;
 /** Original caller-supplied interface release callback. */
 export type uno_ReleaseFunc = (pInterface: unknown) => void;
+
+/** Actual original C default-construction declarations forward to their one source implementation. */
+export { uno_type_constructData, uno_constructData } from "../../source/uno/data";

@@ -1,4 +1,9 @@
-/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and adds no complete data-operation implementation. */
+/** @fileoverview Original data.cxx static g_emptySeq/g_pVoidType initializers; global address/count storage uses native JS views and keeps selected default-construction wrappers in their actual source owner. */
+import { _defaultConstructStruct, _defaultConstructData } from "./constr";
+import type {
+  typelib_TypeDescription as D,
+  typelib_CompoundTypeDescription as P,
+} from "../../inc/typelib/typedescription";
 import type { uno_Sequence } from "../../inc/uno/sequence2";
 import type { typelib_TypeDescriptionReference as R } from "../../inc/typelib/typedescription";
 /** Intrinsic storage for the addressed original signed32 sequence count. */
@@ -21,4 +26,17 @@ export const g_pVoidType: [R | null] = [null];
 /** Native address-of g_emptySeq.nRefCount intrinsic for the shared OSL atomic operation, without a second count or new counter implementation. @returns The actual live count address. */
 export function emptySequenceCountAddress(): Int32Array {
   return emptyCount;
+}
+
+/** Original forward-call wrapper preserves the recursive default owner. @param pMem - Caller compound storage. @param pCompType - Actual compound description. @returns Nothing. */
+export function defaultConstructStruct(pMem: unknown, pCompType: P): void {
+  _defaultConstructStruct(pMem, pCompType);
+}
+/** Original reference-only C boundary. @param pMem - Caller storage. @param pType - Actual borrowed type reference. @returns Nothing. */
+export function uno_type_constructData(pMem: unknown, pType: R): void {
+  _defaultConstructData(pMem, pType, null);
+}
+/** Original full-description C boundary retains the exact borrowed description and weak reference. @param pMem - Caller storage. @param pTypeDescr - Actual borrowed full description. @returns Nothing. */
+export function uno_constructData(pMem: unknown, pTypeDescr: D): void {
+  _defaultConstructData(pMem, pTypeDescr.pWeakRef as R, pTypeDescr);
 }
