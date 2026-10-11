@@ -646,6 +646,28 @@ export function typelib_typedescriptionreference_new(
   }
   init.maWeakMap.set(nameKey(ppRet[0].pTypeName), ppRet[0]);
 }
+/** Original ASCII name wrapper; conversion and registry/reference ownership use the existing actual SAL/CPPU owners. @param result - Original inout reference slot. @param typeClass - Original type class. @param name - Borrowed terminated original ASCII bytes. @returns Nothing. */
+export function typelib_typedescriptionreference_newByAsciiName(
+  result: [typelib_TypeDescriptionReference | null],
+  typeClass: typelib_TypeClass,
+  name: Uint8Array | null,
+): void {
+  const value = OUString.createFromAscii(name);
+  typelib_typedescriptionreference_new(result, typeClass, value.pData);
+  value.dispose();
+}
+/** Original reference assignment: acquire the source before releasing the previous destination, with an identity shortcut. Nonidentical null pointers have no valid native dereference contract. @param result - Original inout destination cell. @param source - Original borrowed reference; both-null identity is defined. @returns Nothing. */
+export function typelib_typedescriptionreference_assign(
+  result: [typelib_TypeDescriptionReference | null],
+  source: typelib_TypeDescriptionReference | null,
+): void {
+  if (result[0] !== source) {
+    typelib_typedescriptionreference_acquire(source as typelib_TypeDescriptionReference);
+    typelib_typedescriptionreference_release(result[0] as typelib_TypeDescriptionReference);
+    result[0] = source;
+  }
+}
+
 /** Original specific record bytes represented as fields; common-prefix fields are never copied. @param type - Original class. @returns Exact specific field names. */
 function specificFields(type: typelib_TypeClass): string[] {
   const compound = [

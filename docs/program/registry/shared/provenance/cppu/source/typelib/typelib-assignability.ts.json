@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/typelib/typelib-assignability.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/typelib/typelib.cxx",
+    "localSymbols": [
+      "s_aAssignableFromTab",
+      "typelib_typedescriptionreference_isAssignableFrom",
+      "typelib_typedescription_isAssignableFrom",
+      "typelib_typedescription_equals"
+    ],
+    "upstreamSymbols": [
+      "s_aAssignableFromTab",
+      "typelib_typedescriptionreference_isAssignableFrom",
+      "typelib_typedescription_isAssignableFrom",
+      "typelib_typedescription_equals"
+    ],
+    "preservedResponsibilities": [
+      "Original typelib.cxx primitive11x11 compatibility table and reference/description predicates preserve nullable inputs, ANY shortcut, exact identity/class/length/terminated-name equality, recursive struct/exception bases and ordered multiple-interface ancestry. Original private type_equals has the identical body as the already verified public reference_equals; import that existing shared predicate under its original private call name rather than duplicating its SAL string comparison. Description equality uses a declaration cast of the compared common-prefix fields/object identity without new views or allocator-only bookkeeping. The original public ASCII wrapper uses actual SAL createFromAscii then original reference_new, including output replacement/name-only canonical lookup and typedef miss. Original assignment acquires its source before releasing old destination, retaining self/both-null identity shortcuts; nonidentical null assignment has no valid native dereference contract and is not repaired. Complete full unchanged native dependency builds observe all121 actual table entries, all1681 prepared reference pairs and every initialized common description/name/count, interfaces/compound/sequence distinctions, original embedded-zero equality, every128 admissible ASCII first-byte case and actual destruction of a sequence holding the only source reference. Preserve CALC-048 signed/unsigned table observations without changing them. Related original QA is source evidence, not execution of its full consumer suites. Actual value conversion/ranges, ordinary synthetic-alias producers, native pointer ABI/mutex/thread scheduling/shutdown, invalid/null assignment and malformed JS reflection/const enforcement remain unverified; system libraries are uninstrumented and leak detection is disabled. No native body/method is replaced. Type/Any/Reference/default RuntimeException values and original case service/pool/document/view/UI remain unfinished; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Actual value conversion/Type/Any/Reference/default exception/service consumers, physical pointer ABI/native threading/shutdown and full consumer QA remain unfinished or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-assignability.ts",
+          "marker": "typelib_typedescriptionreference_isAssignableFrom"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-assignability.test.ts",
+          "marker": "matches every original compatibility table entry, nullable type pair and complete ownership record"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "s_aAssignableFromTab"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescriptionreference_isAssignableFrom"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_isAssignableFrom"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_equals"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/source/typelib/typelib-assignability.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original source table and assignability/description-prefix operations stay together in the CPPU typelib directory, split to respect the authored file-size limit; the existing909-line core owner holds original allocation/registry and the two short ASCII/assignment operations. Reuse shared equality/danger-reference/string owners; no second registry, type factory or numeric conversion implementation."
+    }
+  }
+}

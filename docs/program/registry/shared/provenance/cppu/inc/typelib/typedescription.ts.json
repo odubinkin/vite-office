@@ -86,7 +86,12 @@
       "typelib_static_struct_type_init",
       "typelib_static_interface_type_init",
       "typelib_static_mi_interface_type_init",
-      "typelib_static_enum_type_init"
+      "typelib_static_enum_type_init",
+      "typelib_typedescriptionreference_isAssignableFrom",
+      "typelib_typedescription_isAssignableFrom",
+      "typelib_typedescription_equals",
+      "typelib_typedescriptionreference_newByAsciiName",
+      "typelib_typedescriptionreference_assign"
     ],
     "preservedResponsibilities": [
       "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names.",
@@ -97,7 +102,8 @@
       "Original public method/attribute factory exports reuse the shared source owner.",
       "The original public C header reexports single/multiple-inheritance interface factories from their actual CPPU source owner. These are export bindings, not local function declarations or a second implementation.",
       "The original interface factories are now implemented in typelib-interface-factories.ts with a dedicated scoped capability and complete native/portable ordering, aliasing, registration and ownership observations. Earlier primitive/member-only evidence does not independently certify that owner; static types, Type/Any/Reference/default RuntimeException and full consumers remain unfinished or unverified.",
-      "The original public C static type exports now reuse static_types.ts and its dedicated scoped capability. These reexports are actual public header bindings, not local function definitions. The source-owned bootstrap and static initializer fields/counts are independently observed; Type/Any/Reference/default exception values, actual service consumers and native concurrency/physical ABI remain unfinished or unverified."
+      "The original public C static type exports now reuse static_types.ts and its dedicated scoped capability. These reexports are actual public header bindings, not local function definitions. The source-owned bootstrap and static initializer fields/counts are independently observed; Type/Any/Reference/default exception values, actual service consumers and native concurrency/physical ABI remain unfinished or unverified.",
+      "Original typelib.cxx primitive11x11 compatibility table and reference/description predicates preserve nullable inputs, ANY shortcut, exact identity/class/length/terminated-name equality, recursive struct/exception bases and ordered multiple-interface ancestry. Original private type_equals has the identical body as the already verified public reference_equals; import that existing shared predicate under its original private call name rather than duplicating its SAL string comparison. Description equality uses a declaration cast of the compared common-prefix fields/object identity without new views or allocator-only bookkeeping. The original public ASCII wrapper uses actual SAL createFromAscii then original reference_new, including output replacement/name-only canonical lookup and typedef miss. Original assignment acquires its source before releasing old destination, retaining self/both-null identity shortcuts; nonidentical null assignment has no valid native dereference contract and is not repaired. Complete full unchanged native dependency builds observe all121 actual table entries, all1681 prepared reference pairs and every initialized common description/name/count, interfaces/compound/sequence distinctions, original embedded-zero equality, every128 admissible ASCII first-byte case and actual destruction of a sequence holding the only source reference. Preserve CALC-048 signed/unsigned table observations without changing them. Related original QA is source evidence, not execution of its full consumer suites. Actual value conversion/ranges, ordinary synthetic-alias producers, native pointer ABI/mutex/thread scheduling/shutdown, invalid/null assignment and malformed JS reflection/const enforcement remain unverified; system libraries are uninstrumented and leak detection is disabled. No native body/method is replaced. Type/Any/Reference/default RuntimeException values and original case service/pool/document/view/UI remain unfinished; broad parity flags stay false."
     ],
     "omittedResponsibilities": [
       "Native type allocation/registration/reference lifecycle, full compound descriptions, common-prefix aliasing, Type/Reference/Any/default RuntimeException, full upstream consumer QA, native ABI/concurrency and Calc string service/document/edit/UI remain unverified. Initialized records certify only the original const comparison function, not a factory or allocator."
@@ -127,6 +133,10 @@
         {
           "path": "apps/office/src/cppu/source/typelib/static_types.test.ts",
           "marker": "matches complete original static initializers, layout, flags and ownership"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-assignability.test.ts",
+          "marker": "matches every original compatibility table entry, nullable type pair and complete ownership record"
         }
       ],
       "upstream": [
@@ -189,6 +199,26 @@
         {
           "path": "include/typelib/typedescription.h",
           "marker": "typelib_static_enum_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescriptionreference_isAssignableFrom"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_isAssignableFrom"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_equals"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescriptionreference_newByAsciiName"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescriptionreference_assign"
         }
       ]
     }

@@ -14,6 +14,8 @@ export {
   typelib_typedescription_release,
   typelib_typedescription_register,
   typelib_typedescriptionreference_new,
+  typelib_typedescriptionreference_newByAsciiName,
+  typelib_typedescriptionreference_assign,
   typelib_typedescriptionreference_acquire,
   typelib_typedescriptionreference_release,
   typelib_typedescription_new,
@@ -44,6 +46,12 @@ export {
   typelib_static_mi_interface_type_init,
   typelib_static_enum_type_init,
 } from "../../source/typelib/static_types";
+
+export {
+  typelib_typedescriptionreference_isAssignableFrom,
+  typelib_typedescription_isAssignableFrom,
+  typelib_typedescription_equals,
+} from "../../source/typelib/typelib-assignability";
 
 /** Complete original common type-reference record; declaration adds no allocation or guessed initialization. */
 export interface _typelib_TypeDescriptionReference {

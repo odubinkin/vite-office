@@ -1147,3 +1147,29 @@ original retained registry/static owners; no leak-detector verdict is claimed.
 Decision: retain the original acquisition and registration ordering. Add no extra
 release, lookup repair, synthesized exception or normalization. Valid ordinary
 service producers and native shutdown behavior require separate consumer evidence.
+
+## CALC-048: Type compatibility permits same-width signed/unsigned transitions
+
+Status: reproduced as type-predicate/table behavior through complete unchanged
+native SAL/CPPU owners. Actual value conversion, bit preservation, range checks,
+ordinary consumer effects and upstream intent remain unverified.
+
+Pinned `include/typelib/typedescription.h` describes isAssignableFrom as widening
+conversion without data loss. Actual `cppu/source/typelib/typelib.cxx` defines
+`s_aAssignableFromTab` with mutual signed/unsigned compatibility for short, long
+and hyper widths. The public reference predicate returns true for each direction
+between the actual corresponding original basic type references. A type-only
+predicate checks no source value or range. This appears broader than the header's
+widening/no-data-loss wording; it does not prove that the downstream converter
+loses information or that the table is erroneous.
+
+Evidence: `scripts/uno-assignability-native-probe.mjs` matrix mode observes all121
+entries of the actual native constant and all1681 prepared reference pairs,
+including these six directions. Complete normal and ASan/UBSan streams agree
+(606448 bytes). The portable replay compares both the full table and actual public
+predicate/description-wrapper outputs, with initialized owned names/counts and no
+handwritten native type factory or expected numeric algorithm.
+
+Decision: preserve the original table and predicate. Add no unsigned range gate,
+value check, conversion repair or adjusted compatibility result. Actual original
+value conversion and valid consumer evidence require a separate observation.

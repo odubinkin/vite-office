@@ -2516,3 +2516,43 @@ cache cell after root bootstrap and reenters with an existing XInterface. This
 observes the original null cache result and unchanged retained static-owner
 counts. It covers the source branch without claiming an ordinary producer, a
 mutex race or a repaired bootstrap.
+
+## Original UNO type compatibility and reference assignment
+
+Original ASCII reference creation and reference assignment live in the existing
+CPPU typelib owner. The original primitive compatibility table, reference ancestry
+predicate and description wrappers live together in typelib-assignability.ts,
+split only to keep the core owner below the authored file-size limit. Public C
+exports reuse these owners once through the existing typedescription header.
+
+The original private type_equals and public reference_equals have identical
+predicates. Reuse the existing verified shared equality owner under the private
+call name. Description equality casts only the compared common-prefix fields
+and preserves object identity; it creates no new view and requires no allocator
+bookkeeping. Existing danger-get/release owners preserve source ancestry traversal
+for structures/exceptions and ordered multiple-interface bases. The exact original
+11x11 table is source data inside the implementation module, not a public C header
+export. It is compared with the actual native constant, including diagonal entries
+that are bypassed by the public predicate's earlier identity shortcut. No value
+conversion or invented JavaScript numeric range check replaces this type predicate.
+
+ASCII names use original createFromAscii/reference_new and preserve terminator,
+output replacement, name-only registry lookup and typedef miss. Assignment acquires
+the source before releasing destination and retains self/both-null identity. The
+observation includes a source held only by its old sequence destination: release
+of that destination destroys the sequence and drops its element reference after
+source acquisition. Nonidentical null assignments dereference invalid native
+pointers and are not repaired or certified.
+
+Full unchanged normal and ASan/UBSan builds capture all121 primitive table entries,
+all1681 pairs of41 prepared actual/null references, initialized common fields, all
+name units/counts and real ownership changes. Prepared callers include compounds,
+exception ancestry, ordered multiple interfaces, sequences, weak members, a
+synthetic scalar alias and original embedded-zero names. Complete portable replay
+compares every captured byte/digest. System libraries are uninstrumented; leak
+detection is disabled. Real value conversion/ranges, ordinary synthetic producers,
+physical ABI/native mutex/thread scheduling/shutdown, malformed JS reflection/const
+enforcement and full consumer QA remain unverified. CALC-048 preserves the observed
+signed/unsigned table decisions. Type/Any/Reference/default RuntimeException values
+and case values/service/pool/document/view/UI remain unfinished; whole task39 and
+full41 then requested pause remain pending. Broad parity/verified flags stay false.
