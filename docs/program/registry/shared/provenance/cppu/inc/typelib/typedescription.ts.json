@@ -72,13 +72,15 @@
       "typelib_TypeDescriptionReference",
       "typelib_typedescription_Callback",
       "TYPELIB_DANGER_GET",
-      "TYPELIB_DANGER_RELEASE"
+      "TYPELIB_DANGER_RELEASE",
+      "typelib_typedescription_complete"
     ],
     "preservedResponsibilities": [
       "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names.",
       " Complete original extended C typedef declarations preserve every actual compound/struct/indirect/enum/method/interface/initializer field and callback signature. Deprecated Uik retains all five original fields. Genuine compiler sizeof/alignof/offsetof/member-size observations and portable declaration checks cover15 full original records; no uninitialized native field is read. Original allocTypeDescription uses new char[sizeof(T)], so no value initialization, guessed constructor/defaults or physical ABI/allocator/prefix-aliasing owner is inferred.",
       "Actual public C callback/reference lifecycle/registration exports reuse the shared source owner; internal newEmpty/getByName remain source-only. Full factories/completion/static types remain unfinished.",
-      "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites."
+      "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites.",
+      "Original public completion export reuses the shared original two-stage source owner."
     ],
     "omittedResponsibilities": [
       "Native type allocation/registration/reference lifecycle, full compound descriptions, common-prefix aliasing, Type/Reference/Any/default RuntimeException, full upstream consumer QA, native ABI/concurrency and Calc string service/document/edit/UI remain unverified. Initialized records certify only the original const comparison function, not a factory or allocator."
@@ -96,12 +98,20 @@
         {
           "path": "apps/office/src/cppu/source/typelib/typelib-lookup.test.ts",
           "marker": "matches original sequence routing, malformed names, provider typedefs and full cache eviction"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-complete.test.ts",
+          "marker": "matches original two-stage completion and every interface call-table composition"
         }
       ],
       "upstream": [
         {
           "path": "include/typelib/typedescription.h",
           "marker": "_typelib_TypeDescriptionReference"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_complete"
         }
       ]
     }

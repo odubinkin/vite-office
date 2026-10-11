@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/source/typelib/typelib-complete.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-faf02634-d0c8-4f39-ac68-8fd319c3f34a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/source/typelib/typelib-complete.ts#complete",
+        "apps/office/src/cppu/source/typelib/typelib-complete.test.ts#matches original two-stage completion and every interface call-table composition"
+      ],
+      "justification": "Original CPPU completion preserves the two-stage interface-list/call-table boundary, reverse attribute resolution before the completion guard, getter/setter index maps, provider/typedef replacement, identity-preserving registration and acquired256-entry cache eviction. It reuses the single actual allocator, registry, reference, string and atomic owners. Synthetic initialized caller records isolate this original completion mechanism; full interface/member factories, static types, UNO Type/Any/Reference/default RuntimeException and case service remain unfinished. Physical native ABI, cross-thread mutex scheduling, shutdown, malformed JS inputs, ordinary consumer reachability and full upstream QA are unverified. Normal and ASan/UBSan observations use full unchanged SAL/CPPU owners without substituted source methods; system libraries are uninstrumented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "typelib_typedescription_initTables",
+        "complete",
+        "typelib_typedescription_complete"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppu/source/typelib/typelib.cxx",
+      "upstreamSymbols": [
+        "typelib_typedescription_initTables",
+        "complete",
+        "typelib_typedescription_complete"
+      ]
+    }
+  }
+}

@@ -405,8 +405,8 @@ export function typelib_typedescription_newEnum(
   pTypeName: rtl_uString,
   nDefaultValue: number,
   nEnumValues: number,
-  ppEnumNames: rtl_uString[],
-  pEnumValues: Int32Array,
+  ppEnumNames: rtl_uString[] | null,
+  pEnumValues: Int32Array | null,
 ): void {
   typelib_typedescription_newEmpty(ppRet, typelib_TypeClass.ENUM, pTypeName);
   const desc = ppRet[0] as typelib_TypeDescription;
@@ -415,10 +415,12 @@ export function typelib_typedescription_newEnum(
   value.nEnumValues = nEnumValues;
   value.ppEnumNames = new Array(nEnumValues);
   for (let i = nEnumValues; i--;) {
-    value.ppEnumNames[i] = ppEnumNames[i] as rtl_uString;
+    value.ppEnumNames[i] = (ppEnumNames as rtl_uString[])[i] as rtl_uString;
     rtl_uString_acquire(value.ppEnumNames[i] as rtl_uString);
   }
-  value.pEnumValues = pEnumValues.slice(0, nEnumValues);
+  value.pEnumValues = new Int32Array(nEnumValues);
+  for (let i = 0; i < nEnumValues; i++)
+    value.pEnumValues[i] = (pEnumValues as Int32Array)[i] as number;
   desc.pWeakRef = referenceViews.get(desc) as typelib_TypeDescriptionReference;
   const alignment: [number] = [desc.nAlignment];
   desc.nSize = typelib_typedescription_getAlignedUnoSize(desc, 0, alignment);

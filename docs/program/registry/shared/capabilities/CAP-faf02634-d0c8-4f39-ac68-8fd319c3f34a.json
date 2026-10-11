@@ -1,0 +1,78 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-faf02634-d0c8-4f39-ac68-8fd319c3f34a",
+    "capabilityId": "CAP-faf02634-d0c8-4f39-ac68-8fd319c3f34a",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original deferred call-table initialization, reverse attribute lookup and getter/setter indices.",
+      "Original callback/typedef resolution, identity-preserving registration and acquired cache eviction."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original CPPU completion preserves the two-stage interface-list/call-table boundary, reverse attribute resolution before the completion guard, getter/setter index maps, provider/typedef replacement, identity-preserving registration and acquired256-entry cache eviction. It reuses the single actual allocator, registry, reference, string and atomic owners. Synthetic initialized caller records isolate this original completion mechanism; full interface/member factories, static types, UNO Type/Any/Reference/default RuntimeException and case service remain unfinished. Physical native ABI, cross-thread mutex scheduling, shutdown, malformed JS inputs, ordinary consumer reachability and full upstream QA are unverified. Normal and ASan/UBSan observations use full unchanged SAL/CPPU owners without substituted source methods; system libraries are uninstrumented."
+    },
+    "capability": "Shared original UNO two-stage type completion",
+    "gaps": [
+      "Original CPPU completion preserves the two-stage interface-list/call-table boundary, reverse attribute resolution before the completion guard, getter/setter index maps, provider/typedef replacement, identity-preserving registration and acquired256-entry cache eviction. It reuses the single actual allocator, registry, reference, string and atomic owners. Synthetic initialized caller records isolate this original completion mechanism; full interface/member factories, static types, UNO Type/Any/Reference/default RuntimeException and case service remain unfinished. Physical native ABI, cross-thread mutex scheduling, shutdown, malformed JS inputs, ordinary consumer reachability and full upstream QA are unverified. Normal and ASan/UBSan observations use full unchanged SAL/CPPU owners without substituted source methods; system libraries are uninstrumented."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "complete"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/typelib.cxx",
+          "marker": "testEnum"
+        },
+        {
+          "path": "cppu/qa/test_recursion.cxx",
+          "marker": "Test::testRecursion"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "TYPELIB_DANGER_GET"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-complete.ts",
+          "marker": "complete"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-complete.test.ts",
+          "marker": "matches original two-stage completion and every interface call-table composition"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO type completion"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Complete original type descriptions and interface call maps with source-defined ownership",
+    "scopeLimitations": [
+      "Original CPPU completion preserves the two-stage interface-list/call-table boundary, reverse attribute resolution before the completion guard, getter/setter index maps, provider/typedef replacement, identity-preserving registration and acquired256-entry cache eviction. It reuses the single actual allocator, registry, reference, string and atomic owners. Synthetic initialized caller records isolate this original completion mechanism; full interface/member factories, static types, UNO Type/Any/Reference/default RuntimeException and case service remain unfinished. Physical native ABI, cross-thread mutex scheduling, shutdown, malformed JS inputs, ordinary consumer reachability and full upstream QA are unverified. Normal and ASan/UBSan observations use full unchanged SAL/CPPU owners without substituted source methods; system libraries are uninstrumented."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

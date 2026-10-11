@@ -2379,3 +2379,11 @@ actual default RuntimeException remain pending. Related original typelib and
 recursion QA is source evidence only. Physical native ABI, other platform layouts,
 threading/shutdown, malformed JS storage and full consumer QA remain unverified.
 These dependencies do not yet provide an editable Calc document or UI.
+
+## Original UNO type completion
+
+The shared `cppu/source/typelib/typelib-complete.ts` preserves original `complete` and `typelib_typedescription_initTables` responsibilities. Member factories can request interface lists without recursively resolving attributes; public completion additionally creates member/function maps. Attribute resolution runs in reverse order before the already-complete guard, and writable attributes contribute separate getter/setter entries. Provider completion retains original typedef resolution, registration/identity and acquired256-entry cache eviction.
+
+Full unchanged original SAL/CPPU dependencies provide normal and ASan/UBSan observation streams. Synthetic initialized original allocator records isolate completion and do not establish full interface/member factory or ordinary-consumer parity. Broad parity flags stay false. Native mutex scheduling, physical ABI, shutdown and full QA remain unverified. Original interface factories/static types and Type/Any/Reference/default RuntimeException remain prerequisites of the case service; Calc document/edit/view/UI remain unfinished.
+
+Native observations cover all341 call-table compositions and260 enum completion/cache entries, plus interface-list/table and typedef success/failure outcomes. Complete streams contain53592 and40800 bytes. They also expose and correct a portable enum-factory bug: zero-count null input arrays must yield allocated empty output arrays without dereferencing the input; positive counts still copy independently. This is a portable regression correction, not a suspected upstream defect.
