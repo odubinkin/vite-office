@@ -4,7 +4,7 @@ title: "Port original public Any ownership and C++ interface callbacks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Task46 original public Any ownership/genfunc accepted: native write/check154 commands exit0, four complete normal-ASan/UBSan streams identical; source-absent Calc106/19 and shared138/57 whole raw S/B/F/L100;13 scoped gates,9 exact source Prettier checks and8 final metadata gates exit0. Broad parity flags false; later consumer and ABI gaps explicit. Separate implementation-bound EVALUATOR review follows."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T19:58:24.467Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation7a7f1c80edef satisfies approved selected public Any ownership and genfunc callback scope, source-shaped shared contracts and bounded native/source-absent acceptance. Clean canonical closure recommended; whole Calc goal stays active."
+  evaluated_sha: "7a7f1c80edef92124c6ec9b7bdfe578546ddaa80"
+  blueprint_digest: "680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d"
+  evidence_refs:
+    - ".agentplane/tasks/202610111930-9TWBAD/README.md"
+    - ".agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111930-9TWBAD/blueprint/resolved-snapshot.json"
+    - "output/playwright/task46-checks/evaluator-audit.json"
+    - "output/playwright/task46-checks/value-gates-final-manifest.json"
+    - "output/playwright/task46-checks/value-shared-manifest.json"
+    - "output/playwright/task46-checks/prettier.log"
+    - "apps/office/src/cppu/inc/com/sun/star/uno/native-any-ownership-cases.json"
+  findings:
+    - "Independently recomputed all four committed compressed streams, byte lengths and SHA256 against full normal/sanitized outputs;367 complete pinned source hashes and13 generated headers match actual files;154 native commands exit0. No task46 sanitizer rejection, complete matching instrumentation for authored72 translation units."
+    - "Recomputed every raw Calc/shared statement/function/branch counter: positive on all19/57 executable owners, whole S/B/F/L100; source-absent106 Calc and138 related shared tests pass. Exact3 links restored, previous assignment/equality profile retained."
+    - "Reviewed original Any constructor/ownership/move/metadata/setValue/clear and genfunc bodies plus genuine generated XInterface three virtual declarations against implementation; actual C/SAL/Type/RuntimeException owners reused, Reference change type-only. Erased address/type and explicit RAII adaptations are documented, no provider/value registry substitute. Provenance precise, broad parity flags false; CALC-055 preserves intentionally non-null moved VOID pointer."
 commit: null
 comments:
   -
@@ -42,7 +64,7 @@ events:
     state: "ok"
     note: "Task46 original public Any ownership/genfunc accepted: native write/check154 commands exit0, four complete normal-ASan/UBSan streams identical; source-absent Calc106/19 and shared138/57 whole raw S/B/F/L100;13 scoped gates,9 exact source Prettier checks and8 final metadata gates exit0. Broad parity flags false; later consumer and ABI gaps explicit. Separate implementation-bound EVALUATOR review follows."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:56:47.563Z"
+doc_updated_at: "2026-10-11T19:58:37.610Z"
 doc_updated_by: "CODER"
 description: "Task46 implements original Any.h/Any.hxx ownership constructors/copy/move/value metadata/setValue/clear and genfunc.h/hxx callbacks with actual XInterface contract; no temporary Any/provider. Reuse shared C Any/type/string/callback/address owners. Genuine original native and source-absent portable raw100, inventory/journal/scoped gates/evaluator clean closure. Public extraction/comparison/get/query and Sequence follow; next full51."
 sections:
@@ -67,40 +89,7 @@ sections:
     - Command: node output/playwright/task46-checks/any-gates.mjs; node output/playwright/task46-checks/any-gates.mjs provenance after precise XInterface provenance repair; npx prettier --check (nine exact authored implementation/test/probe paths in prettier.log).
       Result: pass.
       Evidence: all13 effective scoped gates exit0; exact-file Prettier exit0. TS7/lint/docs/size/dependencies/provenance/tree/shared+Calc inventory/four related tooling files/routing/doctor/diff. Initial provenance basename-only rejection recorded in Findings and corrected with actual IDL methods.
-      Scope: authored runtime/test/caller/probe and accurate responsibility-level registry. Final metadata checks and implementation-bound EVALUATOR review follow before clean canonical finish.
-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-11T19:56:47.504Z — VERIFY — ok
-
-    By: CODER
-
-    Note: Task46 original public Any ownership/genfunc accepted: native write/check154 commands exit0, four complete normal-ASan/UBSan streams identical; source-absent Calc106/19 and shared138/57 whole raw S/B/F/L100;13 scoped gates,9 exact source Prettier checks and8 final metadata gates exit0. Broad parity flags false; later consumer and ABI gaps explicit. Separate implementation-bound EVALUATOR review follows.
-    Attempts: 0
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:56:21.950Z, excerpt_hash=sha256:dc118d19c9005bef72865df40ab7dab0f8d4608613896d8d501672fab187b166
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610111930-9TWBAD/blueprint/resolved-snapshot.json
-    - old_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
-    - current_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610111930-9TWBAD
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610111930-9TWBAD
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    <!-- END VERIFICATION RESULTS -->
+      Scope: authored runtime/test/caller/probe and accurate responsibility-level registry. Eight final metadata gates exit0; separate EVALUATOR pass reviewed implementation7a7f1c80edef92124c6ec9b7bdfe578546ddaa80, recomputed raw counters, fixture/native digests and all367+13 actual hashes. Report: .agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/quality-report.json. Clean canonical finish follows committed quality artifacts.
   Rollback Plan: "Revert only this task implementation and metadata if needed, retaining traceable task evidence. No history rewrite, merge or external publication."
   Findings: |-
     Previous goal turn is progress: task45 DONE at7ac2f9b22308, evaluator d98ae57fdf6e, clean close03cfe6564849. Current branch calc clean. Public Any and genfunc owners absent; existing C owners complete, reservedDataAddress and borrowed Type view already real shared owners. Any.h/Any.hxx ownership and genfunc form a real source dependency cycle. Implement genuine Any ownership first, preserving later source families as explicit gaps without fake providers/constructors. Original genfunc query returns a caller-owned Any and transfers its reserved interface pointer before actual destruction; RuntimeException throw object cleanup requires explicit browser RAII adaptation. XInterface declaration supplies no implementation/provider and existing Reference direct calls reuse its two-method projection.
@@ -147,40 +136,7 @@ Port original public Any ownership/metadata and genfunc callbacks with actual XI
 - Command: node output/playwright/task46-checks/any-gates.mjs; node output/playwright/task46-checks/any-gates.mjs provenance after precise XInterface provenance repair; npx prettier --check (nine exact authored implementation/test/probe paths in prettier.log).
   Result: pass.
   Evidence: all13 effective scoped gates exit0; exact-file Prettier exit0. TS7/lint/docs/size/dependencies/provenance/tree/shared+Calc inventory/four related tooling files/routing/doctor/diff. Initial provenance basename-only rejection recorded in Findings and corrected with actual IDL methods.
-  Scope: authored runtime/test/caller/probe and accurate responsibility-level registry. Final metadata checks and implementation-bound EVALUATOR review follow before clean canonical finish.
-
-<!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-11T19:56:47.504Z — VERIFY — ok
-
-By: CODER
-
-Note: Task46 original public Any ownership/genfunc accepted: native write/check154 commands exit0, four complete normal-ASan/UBSan streams identical; source-absent Calc106/19 and shared138/57 whole raw S/B/F/L100;13 scoped gates,9 exact source Prettier checks and8 final metadata gates exit0. Broad parity flags false; later consumer and ABI gaps explicit. Separate implementation-bound EVALUATOR review follows.
-Attempts: 0
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:56:21.950Z, excerpt_hash=sha256:dc118d19c9005bef72865df40ab7dab0f8d4608613896d8d501672fab187b166
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610111930-9TWBAD/blueprint/resolved-snapshot.json
-- old_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
-- current_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610111930-9TWBAD
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610111930-9TWBAD
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-<!-- END VERIFICATION RESULTS -->
+  Scope: authored runtime/test/caller/probe and accurate responsibility-level registry. Eight final metadata gates exit0; separate EVALUATOR pass reviewed implementation7a7f1c80edef92124c6ec9b7bdfe578546ddaa80, recomputed raw counters, fixture/native digests and all367+13 actual hashes. Report: .agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/quality-report.json. Clean canonical finish follows committed quality artifacts.
 
 ## Rollback Plan
 
