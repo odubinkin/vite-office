@@ -4,7 +4,7 @@ title: "Run task51 full regression after Calc service helpers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,38 +18,43 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T22:30:37.873Z"
+  updated_at: "2026-10-11T22:33:16.774Z"
   updated_by: "CODER"
-  note: "Task51 all5 source-absent full suites and13 effective gates pass; office15457 inventory123 tooling34 browser308; every raw counter positive across424 executable owners S/B/F/L100; exact links restored; final evaluator reviews717505774be6; initial lint1 fixed by ignored JSDoc only."
+  note: "Complete task51 full regression accepted:5 suites/13 effective gates pass; raw100424owners. Final EVALUATOR identifies tested source3596ed6d81ff; task-only diff proves source/test/configuration identity through separately committed evidence717505774be6. Exact links restored; no Writer repair or weakened checks."
   attempts: 0
 quality_review:
   state: "pass"
-  updated_at: "2026-10-11T22:30:37.080Z"
+  updated_at: "2026-10-11T22:33:16.053Z"
   updated_by: "EVALUATOR"
-  note: "Final task51 review of evidence commit717505774be6 supersedes preliminary persistence-SHA review; complete full regression and raw100 independently accepted."
+  note: "Accept task51 against actual full-tested source3596ed6d81ff, with separate committed evidence717505774be6; tracked runtime/test/configuration content is identical. Earlier ambiguous review bindings superseded."
   evaluated_sha: "3596ed6d81ff6e8ab7ea67ca24d7dfdfa868ef9c"
   blueprint_digest: "6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163"
   evidence_refs:
     - ".agentplane/tasks/202610112213-MXC5RW/README.md"
-    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223037080-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223037080-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223037080-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223316053-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223316053-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223316053-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202610112213-MXC5RW/blueprint/resolved-snapshot.json"
+    - "output/playwright/task51-checks/source-evidence-binding.json"
     - "output/playwright/task51-checks/aggregate-audit.json"
     - "output/playwright/task51-checks/task51-full-results.json"
     - "output/playwright/task51-checks/full-gates-results.json"
-    - "output/playwright/task51-checks/office-coverage-audit.json"
     - "output/playwright/task51-checks/ignored-lint-repair.json"
-    - "output/playwright/task51-checks/lint-recheck-result.json"
   findings:
-    - "Independently re-ran aggregate-audit.py against actual evidence HEAD717505774be6 and inspected committed task documentation. Five full suite statuses all0; exact three original source links restored; office15457/702, inventory123/38, tooling34/9 and browser308 pass. Browser partition Writer306/shared2/Calc0 reflects actual entries and incomplete Calc UI."
-    - "Full raw coverage has every counter positive across424 executable owners and exact S/B/F/L30286/20815/6280/27418 all100, including19Calc/196shared/209Writer. Configured V8 inventory summary also100 with exact equal counts. No Writer repairs or weakened profiles/thresholds/assertions/timeouts."
-    - "All13 effective repository gates pass. Original lint1 and rejected evidence subject are retained honestly; one ignored JSDoc comment fixed lint, full rerun0. Evidence commit matches unchanged tracked application/runtime/tests/configuration baseline; no extra full-suite repetitions. Static smoke passes relative assets2bundles/no backend."
-commit: null
+    - "Independent source-evidence-binding.json and git diff prove every tracked change from tested source3596 to evidence7175/quality334b46 is restricted to this task subtree. The machine evaluated_sha3596 therefore identifies the real tested application source; evidence documentation is referenced separately. No runtime changes or hidden full repetitions."
+    - "Independent aggregate audit and complete original logs verify all five full suite commands exit0 once with all three upstream links absent and restored exactly. Office15457/702, inventory123/38, tooling34/9, browser308 (Writer306/shared2/Calc0) and static2bundles pass."
+    - "Full raw office S/F/B counters all positive across424 executable owners and whole S/B/F/L30286/20815/6280/27418 all100; Calc19 shared196 Writer209. Inventory configured V8 summary also100 with exact equal total/covered counts; no Writer-only deficit or repair."
+    - "All13 effective repository gates pass; initial lint1 retained and repaired only by one JSDoc comment in ignored task43 helper, rerun0. Assertions, coverage profiles/thresholds, timeouts, test/source files and lint rules unchanged. Source/evidence distinction resolves administrative recording without weakening acceptance."
+commit:
+  hash: "717505774be68678e916a2eaa49b5aba6dba5c2b"
+  message: "✅ MXC5RW verify: record full regression and raw coverage"
 comments:
   -
     author: "CODER"
     body: "Start: authorized task51 scheduled full regression in calc with exact source-link restoration and Writer-only coverage constraint."
+  -
+    author: "CODER"
+    body: "Record final reviewed task51 evidence commit717505774be6 before EVALUATOR; prior automatic evaluated_sha selected persistence snapshot because commit metadata was null. Full test evidence and acceptance remain unchanged."
 events:
   -
     type: "status"
@@ -64,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task51 all5 source-absent full suites and13 effective gates pass; office15457 inventory123 tooling34 browser308; every raw counter positive across424 executable owners S/B/F/L100; exact links restored; final evaluator reviews717505774be6; initial lint1 fixed by ignored JSDoc only."
+  -
+    type: "status"
+    at: "2026-10-11T22:31:46.330Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Record final reviewed task51 evidence commit717505774be6 before EVALUATOR; prior automatic evaluated_sha selected persistence snapshot because commit metadata was null. Full test evidence and acceptance remain unchanged."
+  -
+    type: "verify"
+    at: "2026-10-11T22:33:16.774Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete task51 full regression accepted:5 suites/13 effective gates pass; raw100424owners. Final EVALUATOR identifies tested source3596ed6d81ff; task-only diff proves source/test/configuration identity through separately committed evidence717505774be6. Exact links restored; no Writer repair or weakened checks."
 doc_version: 3
-doc_updated_at: "2026-10-11T22:30:37.930Z"
+doc_updated_at: "2026-10-11T22:33:16.828Z"
 doc_updated_by: "CODER"
 description: "Execute the scheduled full upstream-absent regression after tasks42-50; repair observed Calc/shared or tooling failures within scope, retain Writer-only coverage deficits, and record complete evidence."
 sections:
@@ -109,6 +127,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-11T22:33:16.774Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete task51 full regression accepted:5 suites/13 effective gates pass; raw100424owners. Final EVALUATOR identifies tested source3596ed6d81ff; task-only diff proves source/test/configuration identity through separately committed evidence717505774be6. Exact links restored; no Writer repair or weakened checks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:33:15.558Z, excerpt_hash=sha256:a462e97a2554da952e5f29945cca5117248fd0610afb3209c3ebbcbec7562863
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112213-MXC5RW/blueprint/resolved-snapshot.json
+    - old_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+    - current_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112213-MXC5RW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610112213-MXC5RW --result verified-202610112213-MXC5RW --commit 717505774be68678e916a2eaa49b5aba6dba5c2b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore the exact three original reference symlinks in finally. Revert only task51 intentional fixes if necessary; retain observed failure evidence and task traceability. Never reset unrelated work."
   Findings: |-
@@ -129,6 +177,10 @@ sections:
     - Observation: Evidence commit attempt was rejected because the subject omitted the required scope colon; no Git commit was created. A preliminary evaluator record therefore refers to persistence SHA3596ed6d81ff rather than the final evidence commit.
       Impact: No runtime/test/configuration changes or lost test evidence. Final acceptance must refer to the correctly committed evidence SHA, not the preliminary report.
       Resolution: Use required subject grammar, commit task documentation, then rerun independent aggregate audit and EVALUATOR review against that real SHA; retain the preliminary report as superseded evidence.
+
+    - Observation: Supported CLI records evidence commit717505774be6, but repeated EVALUATOR records retain first reviewed source SHA3596ed6d81ff. Actual full tests ran on source baseline3596; all later tracked changes are exclusively this task documentation and quality artifacts.
+      Impact: Earlier statements expecting the machine field to move to evidence SHA7175 were incorrect. No tests or runtime changes require replay; source SHA and evidence-document SHA have distinct responsibilities.
+      Resolution: Independently prove git diff3596..334b46e8 lists only this task subtree, record source-evidence-binding.json and final reviewer explicitly accepts actual tested source3596 with separately committed evidence7175. Use3596 as implementation/source SHA and final quality documentation SHA as closure evidence; supersede prior ambiguous reviews without editing machine reports by hand.
 id_source: "generated"
 ---
 ## Summary
@@ -184,6 +236,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-11T22:33:16.774Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete task51 full regression accepted:5 suites/13 effective gates pass; raw100424owners. Final EVALUATOR identifies tested source3596ed6d81ff; task-only diff proves source/test/configuration identity through separately committed evidence717505774be6. Exact links restored; no Writer repair or weakened checks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:33:15.558Z, excerpt_hash=sha256:a462e97a2554da952e5f29945cca5117248fd0610afb3209c3ebbcbec7562863
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112213-MXC5RW/blueprint/resolved-snapshot.json
+- old_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+- current_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112213-MXC5RW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610112213-MXC5RW --result verified-202610112213-MXC5RW --commit 717505774be68678e916a2eaa49b5aba6dba5c2b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -209,3 +291,7 @@ Baseline HEAD0abf7cf04925 on calc is clean. Full cadence task41 completed and pa
 - Observation: Evidence commit attempt was rejected because the subject omitted the required scope colon; no Git commit was created. A preliminary evaluator record therefore refers to persistence SHA3596ed6d81ff rather than the final evidence commit.
   Impact: No runtime/test/configuration changes or lost test evidence. Final acceptance must refer to the correctly committed evidence SHA, not the preliminary report.
   Resolution: Use required subject grammar, commit task documentation, then rerun independent aggregate audit and EVALUATOR review against that real SHA; retain the preliminary report as superseded evidence.
+
+- Observation: Supported CLI records evidence commit717505774be6, but repeated EVALUATOR records retain first reviewed source SHA3596ed6d81ff. Actual full tests ran on source baseline3596; all later tracked changes are exclusively this task documentation and quality artifacts.
+  Impact: Earlier statements expecting the machine field to move to evidence SHA7175 were incorrect. No tests or runtime changes require replay; source SHA and evidence-document SHA have distinct responsibilities.
+  Resolution: Independently prove git diff3596..334b46e8 lists only this task subtree, record source-evidence-binding.json and final reviewer explicitly accepts actual tested source3596 with separately committed evidence7175. Use3596 as implementation/source SHA and final quality documentation SHA as closure evidence; supersede prior ambiguous reviews without editing machine reports by hand.
