@@ -4,7 +4,7 @@ title: "Select original hyperlink at its beginning before edit dialog"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,40 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T20:43:55.422Z"
+  updated_by: "CODER"
+  note: "Exact semantic1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8 passes approved native begin/Edit scope:7075scenarios/306files,22fresh cases, complete textsh1/textsh1-commands100allfour/738positivecounters.878oldtests same bytes,4canonical prefixes preserved,137fresh build hashes and exact3refs/pin proof,9metadata gates. Allruntime/static upstream absent. Full generic/readonly/fly/overlap/selection lifecycle/RemoveINVALID/ring/history pending."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T20:43:56.108Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact semantic review1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8: represented SID_EDIT_HYPERLINK matches native current SET or Default original start fallback, with original exact hint selection before dialog and cancellation selection retained."
+  evaluated_sha: "1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8"
+  blueprint_digest: "88bcdb6121066a376dd7befdc286f0b4bcd3ef3e27118dac7006d99ccbad8484"
+  evidence_refs:
+    - ".agentplane/tasks/202610112025-A6NRZ0/README.md"
+    - ".agentplane/tasks/202610112025-A6NRZ0/quality/20261011-204356108-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112025-A6NRZ0/quality/20261011-204356108-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112025-A6NRZ0/quality/20261011-204356108-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112025-A6NRZ0/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/A6NRZ0/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/A6NRZ0/results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/A6NRZ0/accepted-summary.json"
+    - "apps/office/node_modules/.cache/parity-coverage/A6NRZ0/audit-results.json"
+  findings:
+    - "Genuine original body/cell red2 becomes passing;7046related/298files+25tooling/4+4Chrome/4=7075cases/306files,22fresh. Complete two unedited modules100allfour/738positive raw counters and current source/AST/hash validation.878oldtests unchanged,6old approved paths only,4append-only canonical records,137fresh build files and exact3reference targets/pin verified,9metadata gates. Actual shared-boundary following owner remains separate from equal URL neighbor, persistent point/content index survives preparation, accepted/direct/undo cases and real mounted/Chromium checks pass. No source/provider/schema/gate weakening or upstream copies in AgentPlane."
+commit:
+  hash: "1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8"
+  message: "🧩 A6NRZ0 code: select original hyperlink at its beginning before edit"
 comments:
   -
     author: "CODER"
     body: "Start: execute approved original hyperlink begin/edit selection command fix under standing upstream goal; native/query old state preserved, cancellation semantics checked, correction7/10."
+  -
+    author: "CODER"
+    body: "Represented EditHyperlink begin fallback implemented and verified:7075cases/306files, complete two-module100/738rawcounters,878oldtests identical,9static/build and9metadata checks; native selection lifecycle gaps remain explicit."
 events:
   -
     type: "status"
@@ -35,8 +59,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute approved original hyperlink begin/edit selection command fix under standing upstream goal; native/query old state preserved, cancellation semantics checked, correction7/10."
+  -
+    type: "status"
+    at: "2026-10-11T20:43:54.787Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Represented EditHyperlink begin fallback implemented and verified:7075cases/306files, complete two-module100/738rawcounters,878oldtests identical,9static/build and9metadata checks; native selection lifecycle gaps remain explicit."
+  -
+    type: "verify"
+    at: "2026-10-11T20:43:55.422Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8 passes approved native begin/Edit scope:7075scenarios/306files,22fresh cases, complete textsh1/textsh1-commands100allfour/738positivecounters.878oldtests same bytes,4canonical prefixes preserved,137fresh build hashes and exact3refs/pin proof,9metadata gates. Allruntime/static upstream absent. Full generic/readonly/fly/overlap/selection lifecycle/RemoveINVALID/ring/history pending."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:42:54.765Z"
+doc_updated_at: "2026-10-11T20:43:55.502Z"
 doc_updated_by: "CODER"
 description: "Align represented SID_EDIT_HYPERLINK enablement and beginning-of-link execute fallback with pinned textsh1.cxx4041-4062/1662-1684 and native Default-mode SelectTextAttr/SelectTextModel; preserve cancellation selection and original body/cell/adjacent hint identity."
 sections:
@@ -60,6 +97,39 @@ sections:
     Commands after reference restoration: npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; npm run inventory:invariants; npm run inventory:parity; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result:9metadata-only gates pass; LibreOffice pin9bc445578031fecf56086729d8e4940c77e14d65 and six source hashes recorded only in ignored cache. Four runtime/provenance records append responsibility/evidence/justification while historical statuses/defaults/classifications/history prefixes are unchanged. No upstream/helper/Python source copies in AgentPlane and no generic Sfx/Calc or registered IO/recovery policy changes.
 
     Source scope: pinned textsh1.cxx4041-4062/1662-1684 state and execute, move.cxx774-783 Default-mode WrtShell selection, crstrvl.cxx2305-2328/2367-2398 model bounds/point-mark ordering, crsrsh.cxx3040-3046 HasSelection. Additional read-only native SttSelect/EndSelect/SwMvContext/cursor-action inspection establishes no new defect or speculative label-reset change. Full generic GetCurAttr, SelectTextAttr/SelectTextModel overlap/readonly/fly/cursor-stack/selection-mode lifecycle and Remove INVALID/ring/word/history behavior remain unverified follow-ups, not registered deviations or certified parity. Same-agent non-independent exact semantic review is required before close. Original terminal red evidence remains honest.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T20:43:55.422Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8 passes approved native begin/Edit scope:7075scenarios/306files,22fresh cases, complete textsh1/textsh1-commands100allfour/738positivecounters.878oldtests same bytes,4canonical prefixes preserved,137fresh build hashes and exact3refs/pin proof,9metadata gates. Allruntime/static upstream absent. Full generic/readonly/fly/overlap/selection lifecycle/RemoveINVALID/ring/history pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:43:54.787Z, excerpt_hash=sha256:0d5fe93a3b94afcc02933a3ccb0104163a1d1e0c9e86b5fdc0c6e90eb12bdac1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610112025-A6NRZ0/blueprint/resolved-snapshot.json
+    - old_digest: 88bcdb6121066a376dd7befdc286f0b4bcd3ef3e27118dac7006d99ccbad8484
+    - current_digest: 88bcdb6121066a376dd7befdc286f0b4bcd3ef3e27118dac7006d99ccbad8484
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112025-A6NRZ0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610112025-A6NRZ0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert this semantic commit only, retaining SBN0Z2 native INET state and XHQWW2 original range/history work; registered IO/recovery deviations untouched."
   Findings: |-
     Previous goal turn is progress: SBN0Z2 DONE semantic48eccab061d3fff0ef1098f189fdf6e3e3636637/close6b54335a55ad,7053accepted occurrences, passing complete editsh100 certificate/229counters,9metadata, clean writer. Native state query already respects full style IDs and DontExpand. Remaining Edit slot only checks uniform metadata and lacks native nonzero-start Default fallback/selection-before-dialog; native cancellation deliberately retains that selection. Remove mixed state, generic core query/readonly/fly/full selection APIs/history still pending. This task corrects one Edit command, not the separate Remove undo workflow.
@@ -105,6 +175,39 @@ Command: npm exec -- playwright test apps/office/e2e/writer-native-hyperlink-beg
 Commands after reference restoration: npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check; npm run inventory:invariants; npm run inventory:parity; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result:9metadata-only gates pass; LibreOffice pin9bc445578031fecf56086729d8e4940c77e14d65 and six source hashes recorded only in ignored cache. Four runtime/provenance records append responsibility/evidence/justification while historical statuses/defaults/classifications/history prefixes are unchanged. No upstream/helper/Python source copies in AgentPlane and no generic Sfx/Calc or registered IO/recovery policy changes.
 
 Source scope: pinned textsh1.cxx4041-4062/1662-1684 state and execute, move.cxx774-783 Default-mode WrtShell selection, crstrvl.cxx2305-2328/2367-2398 model bounds/point-mark ordering, crsrsh.cxx3040-3046 HasSelection. Additional read-only native SttSelect/EndSelect/SwMvContext/cursor-action inspection establishes no new defect or speculative label-reset change. Full generic GetCurAttr, SelectTextAttr/SelectTextModel overlap/readonly/fly/cursor-stack/selection-mode lifecycle and Remove INVALID/ring/word/history behavior remain unverified follow-ups, not registered deviations or certified parity. Same-agent non-independent exact semantic review is required before close. Original terminal red evidence remains honest.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T20:43:55.422Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8 passes approved native begin/Edit scope:7075scenarios/306files,22fresh cases, complete textsh1/textsh1-commands100allfour/738positivecounters.878oldtests same bytes,4canonical prefixes preserved,137fresh build hashes and exact3refs/pin proof,9metadata gates. Allruntime/static upstream absent. Full generic/readonly/fly/overlap/selection lifecycle/RemoveINVALID/ring/history pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:43:54.787Z, excerpt_hash=sha256:0d5fe93a3b94afcc02933a3ccb0104163a1d1e0c9e86b5fdc0c6e90eb12bdac1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610112025-A6NRZ0/blueprint/resolved-snapshot.json
+- old_digest: 88bcdb6121066a376dd7befdc286f0b4bcd3ef3e27118dac7006d99ccbad8484
+- current_digest: 88bcdb6121066a376dd7befdc286f0b4bcd3ef3e27118dac7006d99ccbad8484
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112025-A6NRZ0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610112025-A6NRZ0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
