@@ -1,10 +1,11 @@
 ---
 id: "202610111525-71Z189"
 title: "Run full regression after Calc core task40 and pause goal"
-status: "DOING"
+result_summary: "Full Calc regression and native fixture isolation verified before requested pause"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/task41-checks/restored-links.json"
   findings:
     - "Reviewed committed two-line configuration/fixture repair and regression evidence. Office15084/668 has every raw counter positive at100 in Calc/shared/Writer; inventory rerun123/38 has configured V8 summary100; tooling33/9, browser303, static2 and final repository checks pass. Initial inventory/lint failures retained with explicit successful rechecks. Original vendor bodies, runtime sources, thresholds and source-absent protocol preserved. All3 exact links restored and clean commit state observed."
-commit: null
+commit:
+  hash: "1907ab17f827f4812549fa373ad7242f961748ad"
+  message: "🧩 71Z189 task: isolate native vendor lint and inventory fixtures after full regression"
 comments:
   -
     author: "CODER"
     body: "Start: full regression after task40, scoped Calc/shared repair and pause goal."
+  -
+    author: "CODER"
+    body: "Verified: complete full regression, scoped tooling repairs and all final acceptance gates; pause goal next."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full office15084/668 raw100, corrected inventory123/38 summary100, tooling33/9, browser303/static2 pass; all final repository gates and exact original link restoration verified. Two scoped tooling/isolation repairs; no Writer/runtime changes. Pause goal after closure."
+  -
+    type: "status"
+    at: "2026-10-11T15:43:23.225Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete full regression, scoped tooling repairs and all final acceptance gates; pause goal next."
 doc_version: 3
-doc_updated_at: "2026-10-11T15:42:52.502Z"
+doc_updated_at: "2026-10-11T15:43:23.227Z"
 doc_updated_by: "CODER"
 description: "Task41: full cadence regression after original case iterator and width lookup task40. Run all suites, raw coverage and repository/build/browser checks; repair Calc or affected shared failures, leave Writer-only coverage unchanged, record evidence and pause goal after clean closure."
 sections:
