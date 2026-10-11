@@ -1029,3 +1029,34 @@ that ordinary producers violate an assumed canonical-name precondition.
 
 The implementation keeps the original predicate and two-unit skip. No prefix
 validation, canonicalization, normalization or upstream repair is added.
+
+## CALC-043: Failed interface-member factories retain acquired descriptions
+
+Status: reproduced with initialized synthetic wrong-kind and incomplete-interface
+inputs through full unchanged native SAL/CPPU factories. Ordinary producer
+reachability, expected naming/type preconditions and an actual consumer leak
+remain unverified; no ordinary-consumer defect is claimed.
+
+[Original method factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1032)
+and
+[original extended attribute factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1120)
+first acquire the interface description through getByName. If that description
+has another type class, or list-only complete returns false, they return without
+releasing that acquired description. The local OUString is destroyed on return;
+the raw description pointer has no RAII owner. Successful construction transfers
+the acquired interface into the member description, whose destructor releases
+it. Missing lookups acquire no description.
+
+Evidence: scripts/uno-member-factories-native-probe.mjs failure mode executes both
+original factories with an initialized registered enum and an initialized
+registered incomplete interface. Each corresponding early return retains one
+additional description count. Prior owned output is released before lookup;
+other missing/bad-name branches preserve expected acquired counts. Complete
+normal/ASan/UBSan failure streams match (728 bytes), and the portable public
+factory replay matches every field and count. Native setup uses the genuine
+no-base interface factory; portable caller initialization isolates the member
+factory behavior and does not verify the still-unported interface constructor.
+
+Decision: preserve original operations and return ordering. No extra description
+release, exception, name validation or completion repair is added. Full valid
+producer/service/shutdown reachability still needs separate consumer evidence.

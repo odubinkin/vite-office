@@ -23,6 +23,11 @@ export {
 } from "../../source/typelib/typelib";
 export { typelib_typedescription_getByName } from "../../source/typelib/typelib-lookup";
 export { typelib_typedescription_complete } from "../../source/typelib/typelib-complete";
+export {
+  typelib_typedescription_newInterfaceMethod,
+  typelib_typedescription_newInterfaceAttribute,
+  typelib_typedescription_newExtendedInterfaceAttribute,
+} from "../../source/typelib/typelib-member-factories";
 
 /** Complete original common type-reference record; declaration adds no allocation or guessed initialization. */
 export interface _typelib_TypeDescriptionReference {

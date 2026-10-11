@@ -706,7 +706,7 @@ function swapFields(
   }
 }
 /** Adapts an original fatal C assertion to the existing browser Error assertion boundary; it is not a UNO exception. @param condition - Unchanged original invariant. @param expression - Original C expression. @returns Nothing for a satisfied invariant. */
-function assert(condition: boolean, expression: string): asserts condition {
+export function assert(condition: boolean, expression: string): asserts condition {
   if (!condition) throw new Error(`assert(${expression})`);
 }
 /** Original registration, identity-preserving completion and on-demand ownership transitions. Mutex-protected work is synchronous and realm-local; native cross-thread registry races remain unverified. @param ppNewDescription - Inout original allocated description. @returns Nothing. */
