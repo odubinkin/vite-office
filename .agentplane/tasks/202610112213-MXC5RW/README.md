@@ -4,7 +4,7 @@ title: "Run task51 full regression after Calc service helpers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,34 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T22:30:37.873Z"
+  updated_by: "CODER"
+  note: "Task51 all5 source-absent full suites and13 effective gates pass; office15457 inventory123 tooling34 browser308; every raw counter positive across424 executable owners S/B/F/L100; exact links restored; final evaluator reviews717505774be6; initial lint1 fixed by ignored JSDoc only."
   attempts: 0
 quality_review:
   state: "pass"
-  updated_at: "2026-10-11T22:29:57.050Z"
+  updated_at: "2026-10-11T22:30:37.080Z"
   updated_by: "EVALUATOR"
-  note: "Task51 accepted: complete source-absent full regression,424 whole executable office owners raw100 and13 effective gates independently verified; only ignored JSDoc repair."
+  note: "Final task51 review of evidence commit717505774be6 supersedes preliminary persistence-SHA review; complete full regression and raw100 independently accepted."
   evaluated_sha: "3596ed6d81ff6e8ab7ea67ca24d7dfdfa868ef9c"
   blueprint_digest: "6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163"
   evidence_refs:
     - ".agentplane/tasks/202610112213-MXC5RW/README.md"
-    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-222957050-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-222957050-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-222957050-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223037080-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223037080-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112213-MXC5RW/quality/20261011-223037080-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202610112213-MXC5RW/blueprint/resolved-snapshot.json"
     - "output/playwright/task51-checks/aggregate-audit.json"
     - "output/playwright/task51-checks/task51-full-results.json"
     - "output/playwright/task51-checks/full-gates-results.json"
+    - "output/playwright/task51-checks/office-coverage-audit.json"
     - "output/playwright/task51-checks/ignored-lint-repair.json"
     - "output/playwright/task51-checks/lint-recheck-result.json"
   findings:
-    - "Reviewed unchanged original task41 full command profiles and task51 driver: same five committed full scripts execute once, retain all exit codes and exact source-link targets, restore through finally. Independent aggregate audit confirms every command exit0 and restored actual symlinks."
-    - "Office15457/702, inventory123/38, tooling34/9 and browser308 actual complete logs pass; project partitions Writer306/shared2/Calc0 are counted from real successful entries. Static smoke passes2bundles. Calc0 is explicitly not represented as UI validation."
-    - "Independent parsed raw coverage counters are positive for all424 executable owners, with Calc19/shared196/Writer209 S/B/F/L100 and exact totals30286/20815/6280/27418. Inventory configured V8 summary all numerators equal denominators; no unsupported inventory raw counter claim or Writer-only repair."
-    - "All13 final gates pass, with initial lint1 retained separately from rerun0. Inspecting cached task43 helper shows exactly one JSDoc comment added and no operational-body change; recorded hashes preserve evidence. No tracked runtime, test, coverage threshold, timeout or lint-config edits. Complete profiles and assertion strength retained."
+    - "Independently re-ran aggregate-audit.py against actual evidence HEAD717505774be6 and inspected committed task documentation. Five full suite statuses all0; exact three original source links restored; office15457/702, inventory123/38, tooling34/9 and browser308 pass. Browser partition Writer306/shared2/Calc0 reflects actual entries and incomplete Calc UI."
+    - "Full raw coverage has every counter positive across424 executable owners and exact S/B/F/L30286/20815/6280/27418 all100, including19Calc/196shared/209Writer. Configured V8 inventory summary also100 with exact equal counts. No Writer repairs or weakened profiles/thresholds/assertions/timeouts."
+    - "All13 effective repository gates pass. Original lint1 and rejected evidence subject are retained honestly; one ignored JSDoc comment fixed lint, full rerun0. Evidence commit matches unchanged tracked application/runtime/tests/configuration baseline; no extra full-suite repetitions. Static smoke passes relative assets2bundles/no backend."
 commit: null
 comments:
   -
@@ -58,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: authorized task51 scheduled full regression in calc with exact source-link restoration and Writer-only coverage constraint."
+  -
+    type: "verify"
+    at: "2026-10-11T22:30:37.873Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task51 all5 source-absent full suites and13 effective gates pass; office15457 inventory123 tooling34 browser308; every raw counter positive across424 executable owners S/B/F/L100; exact links restored; final evaluator reviews717505774be6; initial lint1 fixed by ignored JSDoc only."
 doc_version: 3
-doc_updated_at: "2026-10-11T22:30:20.031Z"
+doc_updated_at: "2026-10-11T22:30:37.930Z"
 doc_updated_by: "CODER"
 description: "Execute the scheduled full upstream-absent regression after tasks42-50; repair observed Calc/shared or tooling failures within scope, retain Writer-only coverage deficits, and record complete evidence."
 sections:
@@ -71,6 +77,39 @@ sections:
     Command: python3 output/playwright/task51-checks/full-run.py, executing unchanged npm run test:coverage -- --coverage.reportOnFailure=true; npm run test:inventory:coverage; npm run test:tooling; npm run test:e2e; npm run test:static. Result: all five exit0 once, with all three original reference links absent for every command and finally restored to their exact targets. Office15457 tests/702 files pass, inventory123/38 and tooling34/9 pass. Browser308 pass: Writer306/shared2/Calc0. Static smoke verifies relative assets,2 JavaScript bundles and no backend endpoints; existing bundle-size advisory retained. Durations615.77/31.68/3.50/201.52/9.44 seconds respectively. Scope: complete committed application and verification profiles, without source access or coverage/test/timeout/configuration weakening.
     Command: python3 output/playwright/task51-checks/coverage-audit.py; python3 output/playwright/task51-checks/aggregate-audit.py. Result: every original office raw S/F/B counter positive and all S/B/F/L100 across424 executable owners: Calc19 S2920/B2055/F474/L2564; shared196 S11792/B7632/F2281/L10672; Writer209 S15574/B11128/F3525/L14182. Total S30286/B20815/F6280/L27418. No Writer-only gaps or Writer repairs. Configured inventory V8 summary numerator=denominator and100: S1734/B1292/F436/L1668; no inventory raw JSON counter claim. Aggregate audit verifies exact five full statuses, suite totals/project partitions, coverage source checksum, reference restoration and no tracked runtime/test/configuration changes.
     Command: python3 output/playwright/task51-checks/full-gates.py early and late; npm run lint rerun. Result: all13 effective gates pass: full format, lint, TS7 tools/application, JSDoc, file-size, boundaries, Writer resources, source tree/provenance, full inventory registry, routing, doctor and diff. Initial lint exit1 retained, corrected by one JSDoc comment in ignored task43 helper; complete rerun exit0, without rule exclusions or runtime changes. Logs, initial and final statuses and repair hashes retained under output/playwright/task51-checks. Scope: scheduled full regression and bounded operational artifact repair only.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T22:30:37.873Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task51 all5 source-absent full suites and13 effective gates pass; office15457 inventory123 tooling34 browser308; every raw counter positive across424 executable owners S/B/F/L100; exact links restored; final evaluator reviews717505774be6; initial lint1 fixed by ignored JSDoc only.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:30:20.031Z, excerpt_hash=sha256:a462e97a2554da952e5f29945cca5117248fd0610afb3209c3ebbcbec7562863
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112213-MXC5RW/blueprint/resolved-snapshot.json
+    - old_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+    - current_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112213-MXC5RW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610112213-MXC5RW -m 🧩 MXC5RW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore the exact three original reference symlinks in finally. Revert only task51 intentional fixes if necessary; retain observed failure evidence and task traceability. Never reset unrelated work."
   Findings: |-
     Baseline HEAD0abf7cf04925 on calc is clean. Full cadence task41 completed and paused the previous run; subsequent resumed goal completed tasks42-50. Browser projects are Writer, Calc and shared; zero Calc scenarios reflects absent Calc UI and must not be reported as UI validation.
@@ -113,6 +152,39 @@ Persist task artifacts, then run the complete office coverage, inventory coverag
 Command: python3 output/playwright/task51-checks/full-run.py, executing unchanged npm run test:coverage -- --coverage.reportOnFailure=true; npm run test:inventory:coverage; npm run test:tooling; npm run test:e2e; npm run test:static. Result: all five exit0 once, with all three original reference links absent for every command and finally restored to their exact targets. Office15457 tests/702 files pass, inventory123/38 and tooling34/9 pass. Browser308 pass: Writer306/shared2/Calc0. Static smoke verifies relative assets,2 JavaScript bundles and no backend endpoints; existing bundle-size advisory retained. Durations615.77/31.68/3.50/201.52/9.44 seconds respectively. Scope: complete committed application and verification profiles, without source access or coverage/test/timeout/configuration weakening.
 Command: python3 output/playwright/task51-checks/coverage-audit.py; python3 output/playwright/task51-checks/aggregate-audit.py. Result: every original office raw S/F/B counter positive and all S/B/F/L100 across424 executable owners: Calc19 S2920/B2055/F474/L2564; shared196 S11792/B7632/F2281/L10672; Writer209 S15574/B11128/F3525/L14182. Total S30286/B20815/F6280/L27418. No Writer-only gaps or Writer repairs. Configured inventory V8 summary numerator=denominator and100: S1734/B1292/F436/L1668; no inventory raw JSON counter claim. Aggregate audit verifies exact five full statuses, suite totals/project partitions, coverage source checksum, reference restoration and no tracked runtime/test/configuration changes.
 Command: python3 output/playwright/task51-checks/full-gates.py early and late; npm run lint rerun. Result: all13 effective gates pass: full format, lint, TS7 tools/application, JSDoc, file-size, boundaries, Writer resources, source tree/provenance, full inventory registry, routing, doctor and diff. Initial lint exit1 retained, corrected by one JSDoc comment in ignored task43 helper; complete rerun exit0, without rule exclusions or runtime changes. Logs, initial and final statuses and repair hashes retained under output/playwright/task51-checks. Scope: scheduled full regression and bounded operational artifact repair only.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T22:30:37.873Z — VERIFY — ok
+
+By: CODER
+
+Note: Task51 all5 source-absent full suites and13 effective gates pass; office15457 inventory123 tooling34 browser308; every raw counter positive across424 executable owners S/B/F/L100; exact links restored; final evaluator reviews717505774be6; initial lint1 fixed by ignored JSDoc only.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T22:30:20.031Z, excerpt_hash=sha256:a462e97a2554da952e5f29945cca5117248fd0610afb3209c3ebbcbec7562863
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112213-MXC5RW/blueprint/resolved-snapshot.json
+- old_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+- current_digest: 6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112213-MXC5RW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610112213-MXC5RW -m 🧩 MXC5RW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
