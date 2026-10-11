@@ -1,10 +1,11 @@
 ---
 id: "202610112148-F21JEZ"
 title: "Port original cppuhelper interface and service support helpers"
-status: "DOING"
+result_summary: "Task50 original cppuhelper interface query and service membership ownership verified against native complete streams and source-absent raw100"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Original15/16 overloads absent; native compiler rejects both with complete exact source/diagnostic hashes. Runtime arity contract preserves1..14/17..19 and CALC-057 records suspicious gap without claiming a consumer defect. NULL assertion remains separate native SIGABRT/browser Error adaptation."
     - "Independent audit confirms375 full source/15 genuine generated hashes, actual driver/configurations and161 terminal commands:157 exit0,2 exact SIGABRT,2 genuine missing-overload exit1. Full cold716/queries455732/services23136 streams equal normal-ASan/UB and fixture gzip/length/hash; no uninitialized bytes or fake source/provider."
     - "Whole19/61 owners every raw S/F/B counter positive; Calc106/shared154 tests source-absent with exact restored links. Task49 profile retained append-only. All13 final scoped gates/8 source Prettier checks0 and35 related tooling tests pass; source graph only original cppuhelper->cppu/SAL with reverse/application/browser gates retained. Inventory broad flags false."
-commit: null
+commit:
+  hash: "ca0505dc1db506379430af8637cd26dc6895fc9a"
+  message: "🧩 F21JEZ task: record original service helper native and raw coverage acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: source-complete cppuhelper interface/service helpers reuse actual shared Type/Any/Sequence/OUString owners; explicit template erasure and real IDL/module boundary, genuine full native/source-absent raw100 acceptance, no stubs or Writer repair,next full51."
+  -
+    author: "CODER"
+    body: "Verified: complete actually declared cppuhelper interface-query and service-support contracts reuse shared Type/Any/Sequence/OUString owners. Native write/check/full hashes match, missing15/16 overload compiler behavior retained as CALC-057, Calc106/shared154 whole19/61 raw100 and13 gates/8 Prettier checks pass; separate quality accepted. Full41 latest,next51; goal active."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final Task50 owner verification after last documentation update: implementatione530b7a257f6, separate EVALUATOR pass20261011-221046221, genuine native write/check/full hashes and source-absent Calc106/shared154 whole19/61 raw100;13 gates/8 Prettier checks pass. CALC-057 preserved; full41 latest,next51; goal active."
+  -
+    type: "status"
+    at: "2026-10-11T22:11:27.417Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete actually declared cppuhelper interface-query and service-support contracts reuse shared Type/Any/Sequence/OUString owners. Native write/check/full hashes match, missing15/16 overload compiler behavior retained as CALC-057, Calc106/shared154 whole19/61 raw100 and13 gates/8 Prettier checks pass; separate quality accepted. Full41 latest,next51; goal active."
 doc_version: 3
-doc_updated_at: "2026-10-11T22:11:09.464Z"
+doc_updated_at: "2026-10-11T22:11:27.418Z"
 doc_updated_by: "CODER"
 description: "Task50 real service prerequisites: complete queryInterface1..19 template family and supportsService with actual shared Type/Any/Sequence/OUString owners, real XServiceInfo IDL contract, source-shaped cppuhelper boundary, genuine original native acceptance, Calc/shared whole raw100 and inventory. Full41 latest,next51."
 sections:
@@ -151,6 +164,10 @@ sections:
     Native static_type caller classes are real authored XInterface implementations with explicit compile-time identities and original root/static typelib factory calls; their labels/counts/events are caller observations. No library type/ownership provider is replaced. Complete streams retain all initialized fields and callbacks; no empty/moved VOID reserved-byte or physical pointer reinterpretation certificate. Native supportsService uses real generated XServiceInfo headers emitted by the existing pinned genuine cppumaker from complete unchanged original IDL.
 
     Physical pointer/ABI/resources/native const/template-only enforcement/concurrency/shutdown/full upstream QA remain unverified. NULL-service native SIGABRT is distinct from the explicit browser Error adaptation. Getter exceptions propagate; owned returned Sequence is destructed exactly on normal search return/exception. No native source edit, service manager stub, fake weak object, generated value/default surrogate or Writer repair. Scope only calc checkout/branch. Full41 latest,next51; whole goal active.
+extensions:
+  implementation_commit:
+    hash: "e530b7a257f6cbd740a5ef7fe3b43086b7d27537"
+    message: "🧩 F21JEZ cppuhelper: port original interface query and service support contracts"
 id_source: "generated"
 ---
 ## Summary
