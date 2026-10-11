@@ -1,10 +1,11 @@
 ---
 id: "202610111813-A06D5E"
 title: "Reuse original formatted frames for browser cursor lines"
-status: "DOING"
+result_summary: "Original SetPara cache ownership and actual body frame reuse eliminate duplicate cursor clients; equal spans retain distinct native occurrences.7235 accepted scoped scenarios, both whole modules100all-four,904positive raw counters,9metadata gatespass, refs absent then restored. Correction3/10; broader goal remains active and must pause after next full checkpoint and repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Verified scoped native formatter/cursor reuse; record semantic commit for exact quality review."
+  -
+    author: "CODER"
+    body: "Verified: original formatter frames now serve native body cursor measurements; scoped tests and actual coverage pass, canonical history retained, exact semantic same-agent non-independent review recorded."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "7235 accepted scoped scenarios/316 files; both whole modules100all-four/904positive raw counters bound to exact source bytes; 9 metadata gatespass, refs absent and restored,866 old tests byte-identical plus2 precise destructor expectation migrations. Equal-span red regression causally repaired. Full goal incomplete; correction3/10, no full checkpoint."
+  -
+    type: "status"
+    at: "2026-10-11T18:42:21.452Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original formatter frames now serve native body cursor measurements; scoped tests and actual coverage pass, canonical history retained, exact semantic same-agent non-independent review recorded."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:41:55.095Z"
+doc_updated_at: "2026-10-11T18:42:21.453Z"
 doc_updated_by: "CODER"
 description: "Correction3 since full checkpoint A77JR3. Remove duplicated body SwTextFrame clients during mounted Home/End publication: update actual formatted native paragraph caches through source SetPara, preserve original root/node/master/follow identity and reject stale body fragment spans. Keep native construction for genuinely unformatted nodes and explicit measurement freshness guards. Add core/React/browser evidence, narrowly update the old React assertion that encoded duplicate-client destruction, preserve all other acceptance and historical inventory. No full checkpoint; stop after next full run and repair failures before pause."
 sections:
@@ -137,6 +148,10 @@ sections:
     - Observation: Actual duplicate body clients are removed: original formatter frames now serve mounted cursor measurements, preserving native registration, root, ID and master/follow identities. Equal source spans exposed a port occurrence collision in a new red regression.
       Impact: Span-only matching updated the master cache twice, yielding250 rather than150. This initialized native ownership case is not evidence of an upstream bug or complete field formatting. Two old React destructor assertions encoded the adapter lifetime and required precise native-lifetime migration.
       Resolution: Claim each original occurrence once; source SetPara returns old ownership and clears missing input. Current root-related7182 and unchanged txtfrm-only25 accepted, tooling25, Chromium3; both whole modules100all-four/904positive counters.866 other old acceptance files byte-identical, two exact assertion changes, four canonical histories preserved. Nine restored metadata gates pass. Initial CLI/format/red evidence retained; only causal production repair rerun. Broader native query/geometry/table layout remain pending; goalactive correction3/10, pause after next full and repairs.
+extensions:
+  implementation_commit:
+    hash: "4f9dc0d95476d33fe2a798b0697eaccc59ad6cbe"
+    message: "🧩 A06D5E code: Reuse original body frames for native cursor lines"
 id_source: "generated"
 ---
 ## Summary
