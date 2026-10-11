@@ -4,7 +4,7 @@ title: "Port original public Any ownership and C++ interface callbacks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T19:56:47.504Z"
+  updated_at: "2026-10-11T19:59:10.018Z"
   updated_by: "CODER"
-  note: "Task46 original public Any ownership/genfunc accepted: native write/check154 commands exit0, four complete normal-ASan/UBSan streams identical; source-absent Calc106/19 and shared138/57 whole raw S/B/F/L100;13 scoped gates,9 exact source Prettier checks and8 final metadata gates exit0. Broad parity flags false; later consumer and ABI gaps explicit. Separate implementation-bound EVALUATOR review follows."
+  note: "Verified: final task46 docs correspond to reviewed implementation7a7f1c80edef;154 native commands0, four identical normal-ASan/UBSan streams,367+13 verified hashes; source-absent Calc106/shared138,19/57 whole raw S/B/F/L100;13 effective gates9 exact Prettier8 final metadata gates0; separate EVALUATOR pass committed atb4d117ab1631. No implementation changes after verification."
   attempts: 0
 quality_review:
   state: "pass"
@@ -63,8 +63,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task46 original public Any ownership/genfunc accepted: native write/check154 commands exit0, four complete normal-ASan/UBSan streams identical; source-absent Calc106/19 and shared138/57 whole raw S/B/F/L100;13 scoped gates,9 exact source Prettier checks and8 final metadata gates exit0. Broad parity flags false; later consumer and ABI gaps explicit. Separate implementation-bound EVALUATOR review follows."
+  -
+    type: "verify"
+    at: "2026-10-11T19:59:10.018Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: final task46 docs correspond to reviewed implementation7a7f1c80edef;154 native commands0, four identical normal-ASan/UBSan streams,367+13 verified hashes; source-absent Calc106/shared138,19/57 whole raw S/B/F/L100;13 effective gates9 exact Prettier8 final metadata gates0; separate EVALUATOR pass committed atb4d117ab1631. No implementation changes after verification."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:58:37.610Z"
+doc_updated_at: "2026-10-11T19:59:10.077Z"
 doc_updated_by: "CODER"
 description: "Task46 implements original Any.h/Any.hxx ownership constructors/copy/move/value metadata/setValue/clear and genfunc.h/hxx callbacks with actual XInterface contract; no temporary Any/provider. Reuse shared C Any/type/string/callback/address owners. Genuine original native and source-absent portable raw100, inventory/journal/scoped gates/evaluator clean closure. Public extraction/comparison/get/query and Sequence follow; next full51."
 sections:
@@ -90,6 +96,39 @@ sections:
       Result: pass.
       Evidence: all13 effective scoped gates exit0; exact-file Prettier exit0. TS7/lint/docs/size/dependencies/provenance/tree/shared+Calc inventory/four related tooling files/routing/doctor/diff. Initial provenance basename-only rejection recorded in Findings and corrected with actual IDL methods.
       Scope: authored runtime/test/caller/probe and accurate responsibility-level registry. Eight final metadata gates exit0; separate EVALUATOR pass reviewed implementation7a7f1c80edef92124c6ec9b7bdfe578546ddaa80, recomputed raw counters, fixture/native digests and all367+13 actual hashes. Report: .agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/quality-report.json. Clean canonical finish follows committed quality artifacts.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T19:59:10.018Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: final task46 docs correspond to reviewed implementation7a7f1c80edef;154 native commands0, four identical normal-ASan/UBSan streams,367+13 verified hashes; source-absent Calc106/shared138,19/57 whole raw S/B/F/L100;13 effective gates9 exact Prettier8 final metadata gates0; separate EVALUATOR pass committed atb4d117ab1631. No implementation changes after verification.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:59:09.082Z, excerpt_hash=sha256:dc118d19c9005bef72865df40ab7dab0f8d4608613896d8d501672fab187b166
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610111930-9TWBAD/blueprint/resolved-snapshot.json
+    - old_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
+    - current_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111930-9TWBAD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610111930-9TWBAD --result verified-202610111930-9TWBAD --commit b4d117ab1631f2760a5180d7cf55bb95fb1fcad2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation and metadata if needed, retaining traceable task evidence. No history rewrite, merge or external publication."
   Findings: |-
     Previous goal turn is progress: task45 DONE at7ac2f9b22308, evaluator d98ae57fdf6e, clean close03cfe6564849. Current branch calc clean. Public Any and genfunc owners absent; existing C owners complete, reservedDataAddress and borrowed Type view already real shared owners. Any.h/Any.hxx ownership and genfunc form a real source dependency cycle. Implement genuine Any ownership first, preserving later source families as explicit gaps without fake providers/constructors. Original genfunc query returns a caller-owned Any and transfers its reserved interface pointer before actual destruction; RuntimeException throw object cleanup requires explicit browser RAII adaptation. XInterface declaration supplies no implementation/provider and existing Reference direct calls reuse its two-method projection.
@@ -101,6 +140,10 @@ sections:
     - Observation: Initial provenance check rejected the new XInterface declaration because upstreamSymbols contained only its filename basename.
       Impact: Traceability metadata failed; native --write/--check and all four portable replays pass, original implementations unchanged.
       Resolution: Record the actual queryInterface/acquire/release IDL responsibilities as upstream symbols, then repeat the provenance and remaining scoped gates without weakening validation.
+
+    - Observation: finish rejected stale blueprint verification after final Verification prose update.
+      Impact: Lifecycle evidence only; implementation, tests, native outputs and EVALUATOR verdict unchanged.
+      Resolution: Re-record canonical verify after the final docs update, commit that traceability evidence, then retry finish at the reviewed implementation SHA.
 id_source: "generated"
 ---
 ## Summary
@@ -138,6 +181,39 @@ Port original public Any ownership/metadata and genfunc callbacks with actual XI
   Evidence: all13 effective scoped gates exit0; exact-file Prettier exit0. TS7/lint/docs/size/dependencies/provenance/tree/shared+Calc inventory/four related tooling files/routing/doctor/diff. Initial provenance basename-only rejection recorded in Findings and corrected with actual IDL methods.
   Scope: authored runtime/test/caller/probe and accurate responsibility-level registry. Eight final metadata gates exit0; separate EVALUATOR pass reviewed implementation7a7f1c80edef92124c6ec9b7bdfe578546ddaa80, recomputed raw counters, fixture/native digests and all367+13 actual hashes. Report: .agentplane/tasks/202610111930-9TWBAD/quality/20261011-195824467-recovery-context/quality-report.json. Clean canonical finish follows committed quality artifacts.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T19:59:10.018Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: final task46 docs correspond to reviewed implementation7a7f1c80edef;154 native commands0, four identical normal-ASan/UBSan streams,367+13 verified hashes; source-absent Calc106/shared138,19/57 whole raw S/B/F/L100;13 effective gates9 exact Prettier8 final metadata gates0; separate EVALUATOR pass committed atb4d117ab1631. No implementation changes after verification.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:59:09.082Z, excerpt_hash=sha256:dc118d19c9005bef72865df40ab7dab0f8d4608613896d8d501672fab187b166
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610111930-9TWBAD/blueprint/resolved-snapshot.json
+- old_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
+- current_digest: 680338a9c27e1eef1967e589f10111f5049fe0fa5da69125c80adec4a05d9a4d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111930-9TWBAD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610111930-9TWBAD --result verified-202610111930-9TWBAD --commit b4d117ab1631f2760a5180d7cf55bb95fb1fcad2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only this task implementation and metadata if needed, retaining traceable task evidence. No history rewrite, merge or external publication.
@@ -153,3 +229,7 @@ Previous goal turn is progress: task45 DONE at7ac2f9b22308, evaluator d98ae57fdf
 - Observation: Initial provenance check rejected the new XInterface declaration because upstreamSymbols contained only its filename basename.
   Impact: Traceability metadata failed; native --write/--check and all four portable replays pass, original implementations unchanged.
   Resolution: Record the actual queryInterface/acquire/release IDL responsibilities as upstream symbols, then repeat the provenance and remaining scoped gates without weakening validation.
+
+- Observation: finish rejected stale blueprint verification after final Verification prose update.
+  Impact: Lifecycle evidence only; implementation, tests, native outputs and EVALUATOR verdict unchanged.
+  Resolution: Re-record canonical verify after the final docs update, commit that traceability evidence, then retry finish at the reviewed implementation SHA.
