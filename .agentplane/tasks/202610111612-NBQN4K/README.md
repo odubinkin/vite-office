@@ -4,7 +4,7 @@ title: "Integrate writer and calc and synchronize all branches"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T16:32:25.266Z"
+  updated_at: "2026-10-11T16:33:54.124Z"
   updated_by: "CODER"
-  note: "All full verification stages passed; 15420 application, 123 inventory, 33 tooling, 2 resource and 308 E2E tests; strict 100% coverage. Failed provenance dependency restored and remaining checks passed. Publication synchronization acceptance will be recorded before finish."
+  note: "All full project stages passed, both source heads retained, main/writer/calc published and synchronized at 2b23e7ab, all three directories clean on requested branches. Closure commit propagation remains routine final publication."
   attempts: 0
 quality_review:
   state: "pass"
@@ -60,8 +60,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "All full verification stages passed; 15420 application, 123 inventory, 33 tooling, 2 resource and 308 E2E tests; strict 100% coverage. Failed provenance dependency restored and remaining checks passed. Publication synchronization acceptance will be recorded before finish."
+  -
+    type: "verify"
+    at: "2026-10-11T16:33:54.124Z"
+    author: "CODER"
+    state: "ok"
+    note: "All full project stages passed, both source heads retained, main/writer/calc published and synchronized at 2b23e7ab, all three directories clean on requested branches. Closure commit propagation remains routine final publication."
 doc_version: 3
-doc_updated_at: "2026-10-11T16:32:25.321Z"
+doc_updated_at: "2026-10-11T16:33:54.181Z"
 doc_updated_by: "CODER"
 description: "User authorized push of existing writer/calc commits, integration into main, conflict resolution, complete project verification and scoped regression fixes, publication and reverse merges into writer/calc. Preserve history and finish with clean synchronized checkouts."
 sections:
@@ -107,6 +113,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-11T16:33:54.124Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All full project stages passed, both source heads retained, main/writer/calc published and synchronized at 2b23e7ab, all three directories clean on requested branches. Closure commit propagation remains routine final publication.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T16:33:53.675Z, excerpt_hash=sha256:481e61010d93ca1e13494cbf2c4cb7678e1ff91f590b83663641f4497dccdc82
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610111612-NBQN4K/blueprint/resolved-snapshot.json
+    - old_digest: bf0b01d3b7df5f3e827258f2818da6e253f332a3df77abb1b1b1c4488106c692
+    - current_digest: bf0b01d3b7df5f3e827258f2818da6e253f332a3df77abb1b1b1c4488106c692
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111612-NBQN4K
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610111612-NBQN4K --result verified-202610111612-NBQN4K --commit 2b23e7ab1596215303495598a442170c8a22e300
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve starting heads main=70ef6557, writer=90969e00, calc=1daed692. Abort an unresolved local merge if necessary. Revert published integration with new commits only upon explicit user authorization."
   Findings: |-
@@ -115,6 +151,10 @@ sections:
     - Observation: Writer/calc pushes via SSH failed with publickey rejection; explicit per-command remote.origin.pushurl HTTPS override succeeded, preserving permanent remotes. Both implementation merges were conflict-free. Provenance required absent ignored ICU reference.
       Impact: No production regression or missing test identified. Full suite stages required the existing pinned ICU source for metadata validation.
       Resolution: Use authorized HTTPS publication and link main vendor/icu-reference to the existing calc ignored ICU checkout. Preserve all history and existing tests/configuration; run failed and remaining metadata checks without replaying passed tests.
+
+    - Observation: Published main=2b23e7ab, then fetched HTTPS refs and fast-forward merged main into writer and calc. Published both development branches. All three checkout heads equal their origin tracking refs and 2b23e7ab; all statuses clean; initial writer 90969e00 and calc 1daed692 are ancestors of every head.
+      Impact: All requested integration and reverse synchronization acceptance criteria passed. Checkouts remain main, writer and calc respectively.
+      Resolution: Close the verified task on main, publish the closure artifact commit and fast-forward it into writer/calc. Refresh local main branch refs there without changing active branches; repeat final remote equality and clean checks.
 id_source: "generated"
 ---
 ## Summary
@@ -171,6 +211,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-11T16:33:54.124Z — VERIFY — ok
+
+By: CODER
+
+Note: All full project stages passed, both source heads retained, main/writer/calc published and synchronized at 2b23e7ab, all three directories clean on requested branches. Closure commit propagation remains routine final publication.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T16:33:53.675Z, excerpt_hash=sha256:481e61010d93ca1e13494cbf2c4cb7678e1ff91f590b83663641f4497dccdc82
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610111612-NBQN4K/blueprint/resolved-snapshot.json
+- old_digest: bf0b01d3b7df5f3e827258f2818da6e253f332a3df77abb1b1b1c4488106c692
+- current_digest: bf0b01d3b7df5f3e827258f2818da6e253f332a3df77abb1b1b1c4488106c692
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111612-NBQN4K
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610111612-NBQN4K --result verified-202610111612-NBQN4K --commit 2b23e7ab1596215303495598a442170c8a22e300
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -184,3 +254,7 @@ Preflight: all three repositories clean; writer ahead 58 and calc ahead 69. User
 - Observation: Writer/calc pushes via SSH failed with publickey rejection; explicit per-command remote.origin.pushurl HTTPS override succeeded, preserving permanent remotes. Both implementation merges were conflict-free. Provenance required absent ignored ICU reference.
   Impact: No production regression or missing test identified. Full suite stages required the existing pinned ICU source for metadata validation.
   Resolution: Use authorized HTTPS publication and link main vendor/icu-reference to the existing calc ignored ICU checkout. Preserve all history and existing tests/configuration; run failed and remaining metadata checks without replaying passed tests.
+
+- Observation: Published main=2b23e7ab, then fetched HTTPS refs and fast-forward merged main into writer and calc. Published both development branches. All three checkout heads equal their origin tracking refs and 2b23e7ab; all statuses clean; initial writer 90969e00 and calc 1daed692 are ancestors of every head.
+  Impact: All requested integration and reverse synchronization acceptance criteria passed. Checkouts remain main, writer and calc respectively.
+  Resolution: Close the verified task on main, publish the closure artifact commit and fast-forward it into writer/calc. Refresh local main branch refs there without changing active branches; repeat final remote equality and clean checks.
