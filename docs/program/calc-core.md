@@ -2704,3 +2704,32 @@ archives/implementations, coverage thresholds and runtime behavior are unchanged
 All3 exact original symlinks were restored. Remaining full static/repository gates
 pass; task41 closes and the goal pauses at the user's requested full-run boundary.
 Original service/pool/column/table/document/edit/view/UI work remains incomplete.
+
+
+### Original UNO sequence C engine
+
+Task42 ports the original sequence.cxx engine at its original shared CPPu owner,
+with source-helper functions split into sequence-elements.ts for the600-line
+budget. Actual SAL records/counts and CPPu construction/copy/destruction/type
+owners are reused. All reference/full-description constructors, reallocation,
+reference2One, assignment and zero-count destruction keep their original ordering.
+Primitive raw memory operations adapt existing typed logical address views;
+source tag/width selection and initialized scalar values remain intact.
+Native sal_Bool memcpy preserves bytes2/255 while scalar copy.hxx converts them
+to bool. The actual original source difference is preserved, not normalized away.
+
+Shared native type/value/callback callers and portable observers are extracted
+from the existing copy proof rather than duplicated. The old assembled native
+copy driver remains byte-identical. Sequence observations include all actual
+initialized values, type/string/count ownership and ordered callbacks. Native
+physical allocator address/capacity/byte layout/resource OOM/NaN payloads and
+indeterminate cells remain unverified. Signed-count diagnostic observations are
+separately bounded and do not establish valid producer/malformed-header parity.
+Native --write and --check verify 358 unchanged source hashes and complete
+normal/ASan/UBSan streams (2089840 lifecycle, 1288 helper and 4460 guard bytes).
+With all three original source links removed, Calc passes 106 tests in 24 files
+and directly related shared modules pass 120 tests in 36 files. Raw coverage
+is S/B/F/L100 for all 19 Calc and 49 shared executable owners; all counters
+are positive. Public C++ Sequence template and real downstream casing service,
+CharClass/SharedStringPool/cell/document/edit/view/UI owners remain required.
+The next scheduled full run is task51; task41 remains the last complete run.

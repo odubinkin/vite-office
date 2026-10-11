@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ca9b5489-27c1-47d2-85a4-7d9102219189",
+    "capabilityId": "CAP-ca9b5489-27c1-47d2-85a4-7d9102219189",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain complete original C sequence allocation/default/copy/COW/reallocation/assignment ordering using actual shared CPPu/SAL owners.",
+      "Retain original type/reference/value/string/interface ownership and initialized source guard observations, without a second storage/type/allocator model."
+    ],
+    "capability": "Original UNO C sequence lifecycle and copy-on-write engine",
+    "gaps": [
+      "Public C++ Sequence template and original downstream weak/service/classification/CharClass/SharedStringPool/cell/document/UI owners remain unported. Native allocation address/capacity/resource OOM/byte ABI/indeterminate cells/NaN payloads, arbitrary invalid pointer/header/range/type inputs and original consumer QA unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/uno/sequence.cxx",
+          "marker": "uno_type_sequence_construct"
+        },
+        {
+          "path": "include/uno/sequence2.h",
+          "marker": "uno_sequence_realloc"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "void Test::testSequence()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/com/sun/star/uno/Sequence.h",
+          "marker": "Sequence"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/uno/sequence.ts",
+          "marker": "ireallocSequence"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/sequence-elements.ts",
+          "marker": "copyRange"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/uno/sequence2.ts",
+          "marker": "uno_Sequence"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/uno/sequence-engine.test.ts",
+          "marker": "matches complete original sequence construction COW resize assignment and ownership histories"
+        },
+        {
+          "path": "scripts/uno-sequence-native-probe.mjs",
+          "marker": "prepareCaseNative"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO sequence C engine"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "C-sequence-engine",
+    "scopeLimitations": [
+      "Bounded complete initialized normal/ASan/UBSan streams and portable replay only; final source-absent Calc and directly related shared raw coverage is100. No ordinary producer claim for synthetic header guard/negative-count diagnostics."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task42 original sequence.cxx C engine: original element tags/widths, initialized defaults and ascending copy, base-first/reverse own compound fields, exact allocation size guards, shared/non-memcopyable COW split, prefix-copy/tail-default ordering, unique grow/shrink destruction, description/reference boundaries and assignment acquire-before-release/self identity. Reuse actual existing SAL record/atomic count, CPPu type/element storage, default/copy/destruction owners. Identical native primitive memset/memcpy operations use shared typed addressed-storage adapters; sal_Bool sequence bytes retain their source values while scalar data copy still normalizes through bool(source). Native free/realloc uses browser GC and stable logical views, not native addresses/capacity/byte ABI/OOM/NaN payload parity. Original negative-count guards retained; bounded diagnostic-only metadata observations do not establish supported producer/general malformed-header parity. Complete native --write/--check verified 358 original source hashes and three sanitizer-identical streams; source-absent Calc and directly related shared replay have every raw S/F/B counter positive and S/B/F/L100. Acceptance is bounded to the recorded initialized observations. Public C++ Sequence template, weak/service/classification/CharClass/pool/cell/document/UI remain subsequent work; broad semantic parity flags false."
+    }
+  }
+}

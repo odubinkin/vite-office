@@ -1220,3 +1220,30 @@ and are not claimed to have zero defaults.
 
 Decision: preserve early end checking, reset ordering and returned units. Add no
 pending-tail drain or adjusted logical length.
+
+## CALC-051: Boolean scalar copy normalizes bytes that sequence copy preserves
+
+Status: reproduced through unchanged original CPPu/SAL owners with initialized
+unsigned-byte inputs. Ordinary producer reachability, consumer effects and
+upstream intent remain unverified.
+
+Pinned `include/sal/types.h` defines sal_Bool as unsigned char. The BOOLEAN
+branches of `cppu/source/uno/copy.hxx` explicitly apply bool(source) when copying
+a scalar into data or Any. Inputs 2 and 255 become 1. Original
+`cppu/source/uno/sequence.cxx::icopyConstructFromElements` instead uses memcpy
+for BOOLEAN elements and retains 2 and 255 across its copied sequence histories.
+These paths therefore preserve different representations for initialized nonzero
+unsigned-byte values. This bounded difference does not establish an application
+bug or that supported ordinary boolean producers emit such values.
+
+Evidence: `scripts/uno-copy-native-probe.mjs` and its existing complete portable
+replay retain scalar normalization. `scripts/uno-sequence-native-probe.mjs`
+lifecycle mode executes the complete unchanged original sequence/data/any units
+and genuine dependencies, including both values across construction, COW, resize
+and assignment histories. Complete normal and ASan/UBSan streams match
+(2089840 lifecycle bytes); the portable replay matches every captured byte.
+Shared observers keep their default strict scalar boolean contract and opt into
+unsigned-byte observations only for the original sequence corpus.
+
+Decision: preserve both original paths. Add no sequence normalization or scalar
+raw-byte preservation. Do not infer binary ABI or full downstream behavior parity.
