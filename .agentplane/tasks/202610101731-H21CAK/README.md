@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 178
+revision: 181
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,34 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T12:20:52.361Z"
+  updated_at: "2026-10-11T12:21:45.854Z"
   updated_by: "CODER"
-  note: "Whole task39 acceptance passed: genuine native case closure and all13228032 portable observations; source-absent Calc106/shared113/ICU3 all raw100, all13 gates and changed-file Prettier. Full aggregate remains41; no Writer-only repair."
+  note: "verified-202610101731-H21CAK"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T12:21:24.016Z"
+  updated_by: "EVALUATOR"
+  note: "Commit75fe0dcd satisfies whole task39 original locale-aware scalar mapping and actual shared default-exception closure; every native and source-absent acceptance check is evidenced."
+  evaluated_sha: "75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6"
+  blueprint_digest: "e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca"
+  evidence_refs:
+    - ".agentplane/tasks/202610101731-H21CAK/README.md"
+    - ".agentplane/tasks/202610101731-H21CAK/quality/20261011-122124016-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101731-H21CAK/quality/20261011-122124016-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101731-H21CAK/quality/20261011-122124016-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json"
+    - "output/playwright/task39-checks/value-native-current.log"
+    - "output/playwright/casefolding-native/manifest.json"
+    - "output/playwright/task39-checks/value-coverage-audit.json"
+    - "output/playwright/task39-checks/value-icu-coverage-audit.json"
+    - "output/playwright/task39-checks/value-gates-final-manifest.json"
+    - "output/playwright/task39-checks/value-prettier-final.log"
+    - "75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6"
+  findings:
+    - "All13228032 complete genuine native rows match portable Mapping fields, const identity, independent copies, unchanged input and actual RuntimeException fields/type; original69-owner normal/ASan/UBSan builds and360 pinned blobs reproduce the committed fixture. No fake Locale/exception/provider or duplicate shared owner."
+    - "Source-absent Calc106/shared113/related ICU3 have S/B/F/L100 and every raw counter positive; all13 declared gates,34tooling tests, exact changed-file Prettier and intentional commit pass. Original i18nutil-to-CPPU API dependency is within approved source-root wiring; reverse/browser/app protections and pass thresholds remain intact."
+    - "Existing CALC-035 behavior preserved; isolated CALC-038 unsupported UB has no invented expected output. Actual ICU raw audit reads the current correct6-file/5-owner report, with the stale interim path audit retained separately and excluded."
 commit: null
 comments:
   -
@@ -61,8 +85,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Whole task39 acceptance passed: genuine native case closure and all13228032 portable observations; source-absent Calc106/shared113/ICU3 all raw100, all13 gates and changed-file Prettier. Full aggregate remains41; no Writer-only repair."
+  -
+    type: "verify"
+    at: "2026-10-11T12:21:45.854Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610101731-H21CAK"
 doc_version: 3
-doc_updated_at: "2026-10-11T12:20:52.459Z"
+doc_updated_at: "2026-10-11T12:22:36.703Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -569,6 +599,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-11T12:21:45.854Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610101731-H21CAK
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T12:20:52.459Z, excerpt_hash=sha256:c176f78218371f2742b349043038393635a752ab885fcfa2045615bca95d23df
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json
+    - old_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+    - current_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101731-H21CAK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101731-H21CAK --result verified-202610101731-H21CAK --commit 75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
@@ -879,6 +939,8 @@ sections:
     Final original-source-absent acceptance: Calc106 tests/24files/19executable owners and shared113tests/34files/41owners pass. Every raw statement/function/branch counter is positive; Calc S2920/B2055/F474/L2564 and shared S2707/B1333/F386/L2407 are all100. Exact3-link restoration verified. Related existing ICU scalar/trie replay3tests also passes with source links absent, S116/B64/F20/L106 all100. Its ignored helper initially read the already-green broader shared report because single String.replace only changed the output argv and not the audit path; that stale interim audit is preserved separately and invalid for ICU acceptance. Correct the evidence path and audit the actual freshly written coverage/task39-value-icu/coverage-final.json (5executable owners, every raw counter positive) without repeating successful tests. Test execution argv/source-absence/restoration records remain valid. No implementation contract or gate changed.
 
     Required whole-task native, defined caller value/locale/error/copy semantics, source-absent portable100 and all13 final gates are now satisfied. Source and shared inventory/provenance cover the actual added methods and const Mapping contract; broad library/API/service/UI parity flags remain false. Finish39 only after recorded verification, exact intentional commit and separate EVALUATOR review. Then continue task40/full41, repair Calc/affected shared failures while leaving Writer-only coverage to its branch, and pause goal after full41 as requested.
+
+    Direct closeout recovery: task complete at exact route exits5 because recording the EVALUATOR result changed the tracked active task README and created its quality artifacts. No implementation drift or task DONE state occurred. Recompute route, persist only this task README and quality packet with ap commit --allow-tasks, then retry the exact completion command against implementation75fe0dcd. Do not bypass deterministic clean-tracked closeout or alter other inherited tasks.
 id_source: "generated"
 ---
 ## Summary
@@ -1395,6 +1457,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-11T12:21:45.854Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610101731-H21CAK
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T12:20:52.459Z, excerpt_hash=sha256:c176f78218371f2742b349043038393635a752ab885fcfa2045615bca95d23df
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json
+- old_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+- current_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101731-H21CAK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101731-H21CAK --result verified-202610101731-H21CAK --commit 75fe0dcd1a2cbfa632bc616bb948eb98f8e7b9e6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1710,3 +1802,5 @@ All13 required gates pass on current implementation; source-absent Calc and rela
 Final original-source-absent acceptance: Calc106 tests/24files/19executable owners and shared113tests/34files/41owners pass. Every raw statement/function/branch counter is positive; Calc S2920/B2055/F474/L2564 and shared S2707/B1333/F386/L2407 are all100. Exact3-link restoration verified. Related existing ICU scalar/trie replay3tests also passes with source links absent, S116/B64/F20/L106 all100. Its ignored helper initially read the already-green broader shared report because single String.replace only changed the output argv and not the audit path; that stale interim audit is preserved separately and invalid for ICU acceptance. Correct the evidence path and audit the actual freshly written coverage/task39-value-icu/coverage-final.json (5executable owners, every raw counter positive) without repeating successful tests. Test execution argv/source-absence/restoration records remain valid. No implementation contract or gate changed.
 
 Required whole-task native, defined caller value/locale/error/copy semantics, source-absent portable100 and all13 final gates are now satisfied. Source and shared inventory/provenance cover the actual added methods and const Mapping contract; broad library/API/service/UI parity flags remain false. Finish39 only after recorded verification, exact intentional commit and separate EVALUATOR review. Then continue task40/full41, repair Calc/affected shared failures while leaving Writer-only coverage to its branch, and pause goal after full41 as requested.
+
+Direct closeout recovery: task complete at exact route exits5 because recording the EVALUATOR result changed the tracked active task README and created its quality artifacts. No implementation drift or task DONE state occurred. Recompute route, persist only this task README and quality packet with ap commit --allow-tasks, then retry the exact completion command against implementation75fe0dcd. Do not bypass deterministic clean-tracked closeout or alter other inherited tasks.
