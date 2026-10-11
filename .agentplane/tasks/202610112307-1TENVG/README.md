@@ -1,10 +1,11 @@
 ---
 id: "202610112307-1TENVG"
 title: "Port original weak reference listener and helper lifecycle"
-status: "DOING"
+result_summary: "Implemented original weak reference listener/helper/template lifecycle over reused shared owners with complete genuine native replay and source-absent Calc/shared100 coverage; original suspected cases preserved and documented."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -46,8 +47,8 @@ quality_review:
     - "Whole current raw coverage confirms every S/F/B counter positive and S/B/F/L100 for19Calc/68relatedshared owners;106/24Calc and167/47shared tests pass. Task52 profile append-only by1test/2wholeincludes, all3 exact source links restored. All13 final actual gate rows0,35relatedtooling tests and10authoredfileformat checks pass. Reexport is correctly attributed to real source helper, not duplicate local ownership."
     - "No library provider replaces OWeakObject/aggregation/exception bridge: entire original weak.cxx compiled, unrelated owners naturally dead-stripped. Both native undefined-symbol listings show no getCaughtException/throwException; link argv has no unresolved-symbol suppression. Complete fixture comparison remains deep-strict for every field/array, ignoring only unordered object key insertion order. Original full stream verifier untouched; no source/fixture/assertion/coverage/profile weakening."
 commit:
-  hash: "908c80a55f40022ce3fbd90bdedceee43d02cb30"
-  message: "✅ 1TENVG code: port original weak reference lifecycle"
+  hash: "c97382ed70818f02551388dbe7e3bec1e9a92dc1"
+  message: "✅ 1TENVG quality: record weak lifecycle acceptance"
 comments:
   -
     author: "CODER"
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: task53 complete listener/helper/template source and genuine native/scoped evidence committed; record actual source SHA before first independent EVALUATOR acceptance."
+  -
+    author: "CODER"
+    body: "Verified: task53 original listener/helper/template weak reference lifecycle implemented in shared owners; actual source908c80a55f40 accepted at matching evaluated_sha.5complete original native streams and actual compiler restriction reproduced; source-absent Calc/shared whole raw100,13actual gates/35tooling/10format pass; exact links restored,inventory and CALC058/059 recorded."
 events:
   -
     type: "status"
@@ -76,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task53 committed source908c80a55f40 independently accepted at matching evaluated_sha. Genuine73full original units/build,379hashes23generatedfiles,159runtime/build0 and1expected original compiler rejection;5whole normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared167/47 whole19/68owners raw100; exact task52 profile append-only and3links restored.13actual final gate rows0,35tooling tests,10formatfiles. Fullstream verifier unchanged,records/sourcecases honest,broadflagsfalse;lastfull51,next61."
+  -
+    type: "status"
+    at: "2026-10-11T23:51:12.089Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: task53 original listener/helper/template weak reference lifecycle implemented in shared owners; actual source908c80a55f40 accepted at matching evaluated_sha.5complete original native streams and actual compiler restriction reproduced; source-absent Calc/shared whole raw100,13actual gates/35tooling/10format pass; exact links restored,inventory and CALC058/059 recorded."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:50:40.418Z"
+doc_updated_at: "2026-10-11T23:51:12.090Z"
 doc_updated_by: "CODER"
 description: "Task53 implements complete original OWeakRefListener and WeakReferenceHelper plus typed WeakReference header wrapper over shared Reference/RuntimeException/XWeak/XAdapter/XReference; original native custom interface callers verify real weak-reference lifecycle, overload/copy/move/query/error ownership without OWeakObject substitutes. Direct calc only."
 sections:
@@ -196,6 +207,10 @@ sections:
     - Observation: Final inventory and related registry test reject inc/weakref.ts metadata claiming WeakReferenceHelper as a local implementation symbol. It is an imported reexport; the actual class owner is source/weak.ts.
       Impact: Both scoped inventory gates and1/35 related tooling tests fail; no all-gates acceptance claim. Runtime/native/raw coverage unaffected.
       Resolution: Remove only the false local implementation-symbol claim from the inc runtime/provenance records; retain the real source/weak.ts owner and reexport, original source markers, classification and false broad parity flags. Re-run exact related inventory/provenance/tooling gates without validator weakening or duplicate class implementation.
+extensions:
+  implementation_commit:
+    hash: "908c80a55f40022ce3fbd90bdedceee43d02cb30"
+    message: "✅ 1TENVG code: port original weak reference lifecycle"
 id_source: "generated"
 ---
 ## Summary
