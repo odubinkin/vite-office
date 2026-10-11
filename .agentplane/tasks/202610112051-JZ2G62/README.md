@@ -1,10 +1,11 @@
 ---
 id: "202610112051-JZ2G62"
 title: "Remove hyperlink attributes from native mixed selected ranges"
-status: "DOING"
+result_summary: "Native SET/INVALID selected Remove resets original marked body/cell/node/ring INET ranges as one undo; edattr owns original item-state query and initial ApplyExact retains selection ring.14140accepted,100allfour five modules; correction8/10."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 35
+revision: 36
 origin:
   system: "manual"
 depends_on: []
@@ -59,6 +60,9 @@ comments:
   -
     author: "CODER"
     body: "Start: semantic1f2ea1cd landed after original marked mixed removal/query owner correction and current-source verification; exact-commit self-review follows."
+  -
+    author: "CODER"
+    body: "Verified: semantic1f2ea1cd native INET selected mixed Remove/query ownership verified by14140 distinct accepted assertions/532files, whole-five100allfour1222positive counters,881old acceptance bytes unchanged,14fresh native/React/Chrome cases, required static137build and9metadata gates. Correct EVALUATOR same-agent exact-SHA review persisted; bounded full history/caret/generic/popup gaps documented. Correction8/10; pause after next full and required repairs."
 events:
   -
     type: "status"
@@ -94,8 +98,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14140 unique accepted assertions/532files; five whole current modules100allfour1222positive original counters. All881 old tests unchanged; native/React/Chrome14fresh; static137build and9 final restored-reference metadata gates pass. Failed profiles/fixtures/early metadata excluded and recorded. Exact semantic1f2ea1cd; bounded full history/caret/query/popup gaps explicit."
+  -
+    type: "status"
+    at: "2026-10-11T21:30:09.169Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: semantic1f2ea1cd native INET selected mixed Remove/query ownership verified by14140 distinct accepted assertions/532files, whole-five100allfour1222positive counters,881old acceptance bytes unchanged,14fresh native/React/Chrome cases, required static137build and9metadata gates. Correct EVALUATOR same-agent exact-SHA review persisted; bounded full history/caret/generic/popup gaps documented. Correction8/10; pause after next full and required repairs."
 doc_version: 3
-doc_updated_at: "2026-10-11T21:29:45.889Z"
+doc_updated_at: "2026-10-11T21:30:09.171Z"
 doc_updated_by: "CODER"
 description: "Retain native SET/INVALID INET item state for selected RemoveHyperlink admission; move native query to edattr owner and reset original selected body/cell/node/ring ranges with one undo operation. Preserve query/dialog metadata compatibility and registered IO deviations; caret word/Default fallback remains separate next command step."
 sections:
@@ -185,6 +196,10 @@ sections:
     - Observation: Initial role alias EVAL is not installed; that activation failed before an evaluator record was emitted. The proper EVALUATOR role is now activated and its latest report20261011-212927645 explicitly supersedes that first record.
       Impact: No implementation/verification change; earlier quality record is historical and not the accepted role-scoped review.
       Resolution: Exact latest evaluated_sha1f2ea1cd confirmed,18 intentional nonAP paths and frozen current source hashes independently checked. Persist role-correct self-review packet, then close via canonical gateway finish.
+extensions:
+  implementation_commit:
+    hash: "1f2ea1cd2a73656c107ab0e395f0464ae35f204b"
+    message: "🔗 JZ2G62 fix: remove mixed selected native hyperlinks through original item state"
 id_source: "generated"
 ---
 ## Summary
