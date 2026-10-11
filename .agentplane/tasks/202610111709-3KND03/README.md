@@ -1,10 +1,11 @@
 ---
 id: "202610111709-3KND03"
 title: "Port original UNO sequence allocation and copy-on-write engine"
-status: "DOING"
+result_summary: "Implemented original shared UNO C sequence engine with complete native replay, preserved scalar versus sequence boolean behavior, reused common CPPu/SAL owners, and100 percent Calc/related shared coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "All358 whole source hashes currently match fixture; full unchanged original sequence/data/any and genuine69 dependency owners produce sanitizer-identical complete streams, and three portable cases replay every byte. Prior native copy caller remains byte-identical; default scalar observer assertions retained."
     - "Source COW copy/tail/default/destruction/refcount and assignment order preserved. All raw counters positive in19 Calc and49 related shared owners, S/B/F/L100; all13 effective gates exit0. New responsibility-split filename and capability records are exhaustive; CALC-051 records behavior without repair."
-commit: null
+commit:
+  hash: "e37bdb3539a567b13e2192ed8b020455e7c1a21c"
+  message: "🧩 3KND03 task: port original shared UNO sequence lifecycle and COW engine"
 comments:
   -
     author: "CODER"
     body: "Start: complete original UNO sequence engine with real shared dependencies and native/portable proof."
+  -
+    author: "CODER"
+    body: "Verified: complete shared original UNO C sequence lifecycle and COW engine;358 genuine source hashes, sanitizer-identical native streams, source-absent Calc106/shared120 raw100, all13 gates and bounded EVALUATOR review pass."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original C sequence streams match; source-absent Calc106 and related shared120 pass with every raw counter positive and S/B/F/L100; all13 gates and exact restoration pass. Evidence in output/playwright/task42-checks manifests and task Verification; native allocator/ABI and downstream template/service/UI limitations retained."
+  -
+    type: "status"
+    at: "2026-10-11T17:54:36.940Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete shared original UNO C sequence lifecycle and COW engine;358 genuine source hashes, sanitizer-identical native streams, source-absent Calc106/shared120 raw100, all13 gates and bounded EVALUATOR review pass."
 doc_version: 3
-doc_updated_at: "2026-10-11T17:54:08.509Z"
+doc_updated_at: "2026-10-11T17:54:36.942Z"
 doc_updated_by: "CODER"
 description: "Task42: complete sequence.cxx engine required by original i18npool offsets and returned-string sequences; reuse existing CPPu/SAL type, copy, default and destruction owners. Source-shaped allocation/default/copy/reallocation/reference-to-one/assignment paths and actual native replay, portable raw100, inventory and scoped gates. Full run cadence restarts after task41."
 sections:
