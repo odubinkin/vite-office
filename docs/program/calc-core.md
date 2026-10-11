@@ -2762,3 +2762,27 @@ Filtered native SAL_WARN output, physical allocation/ABI, NaN payload families,
 undefined floating-to-u64 conversions and full upstream consumer QA remain
 unverified. Public Sequence/UnoType and original services/CharClass/pool/Calc
 cells/document/edit/view/UI remain required. Next scheduled full run is task51.
+
+### Original UnoType and sequence type helpers
+
+Task44 completes internal unotype.hxx overload selection and Sequence.hxx type
+helper bodies through existing actual typelib and borrowed Type owners. Explicit
+C++ type argument spellings and nested tuples adapt compiler erasure; they create
+no UNO types and infer none from JS values. Actual generated ADL getters remain
+at their original owners. Equivalent nested argument expressions retain the same
+compiler specialization key, while different C++ types keep different keys even
+when their canonical UNO reference is equal.
+
+UnoSequenceType, Sequence<E>::s_pType, favourChar and global char-sequence helpers
+retain independent original pointer cells. Recursive favour dispatch and the
+supplied-element helper's first-call-only behavior are preserved. The stateless
+UnoType template uses the repository's readonly ESM record convention.
+Original --write and --check verify364 complete source hashes and13 generated
+inputs, with all69 genuine dependency translation units rebuilt. Normal and
+ASan/UBSan streams match: types1865864, sequences1915688 and seeded71876 bytes.
+All three source-absent portable replays match. Calc106/24 and related shared128/38
+tests pass with raw S/B/F/L100 across all19/53 executable owners; every raw
+counter is positive. All13 scoped gates and exact Prettier pass. Physical ABI,
+compiler-only enforcement, external SDK sal_Unicode alias configuration and full
+consumer QA remain unverified. Public Any/genfunc/Sequence and original services,
+CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Next full51.

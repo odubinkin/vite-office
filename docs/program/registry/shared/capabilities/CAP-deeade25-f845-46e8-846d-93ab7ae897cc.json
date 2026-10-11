@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-deeade25-f845-46e8-846d-93ab7ae897cc",
+    "capabilityId": "CAP-deeade25-f845-46e8-846d-93ab7ae897cc",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve original fundamental/void/Reference/sequence/actual generated ADL overload dispatch through shared real typelib and Type owners.",
+      "Preserve independent exact template static cells, recursive favour dispatch and legacy supplied element first-call cache behavior."
+    ],
+    "capability": "Original UnoType overloads and Sequence type-helper static ownership",
+    "gaps": [
+      "Public Sequence/Any/genfunc and downstream service/CharClass/pool/Calc document/edit/view/UI remain unported; physical ABI, compiler-only enforcement, external SDK alias configuration and full consumer QA unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/cppu/unotype.hxx",
+          "marker": "cppu_detail_getUnoType"
+        },
+        {
+          "path": "include/com/sun/star/uno/Sequence.hxx",
+          "marker": "getCppuSequenceType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_unotype.cxx",
+          "marker": "UnoType"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/cppu/unotype.hxx",
+          "marker": "A working replacement for getCppuType"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/unotype.ts",
+          "marker": "UnoType"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence-type.ts",
+          "marker": "getCppuSequenceType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/unotype-overloads.test.ts",
+          "marker": "matches complete original fundamental Reference and generated ADL overloads"
+        },
+        {
+          "path": "scripts/uno-unotype-native-probe.mjs",
+          "marker": "prepareCaseNative"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UnoType and sequence type helpers"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "template-type-selection",
+    "scopeLimitations": [
+      "Complete initialized native normal-ASan/UBSan and portable observations verified through3 modes,364 original hashes; no physical/compiler-only/full consumer QA claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task44 completes original internal cppu unotype.hxx fundamental overloads, void forwarding, Reference/Sequence delegation and actual generated RuntimeException ADL getter calls. Original LIBO_INTERNAL_ONLY sal_Unicode remains distinct from sal_uInt16; native JS literal/nested arguments adapt erased C++ compile-time type selection only, never infer from JS values or build/register UNO types. Exact nested argument keys adapt compiler specialization identity and preserve different C++ spellings even when canonical UNO references agree; actual generated getter function identity represents its declared C++ type. Readonly UnoType ESM record follows repository stateless-static-class rule. Original function-static UnoSequenceType<T>, Sequence<E>::s_pType member-static, separate favourChar<T> td and global char sequence cell remain independent borrowed addresses. All initialization reuses actual typelib_static_sequence_type_init and existing live Type pointer-cell view; no copied cache, new provider, duplicated ownership algorithm or fabricated value Sequence class. Original getCppuSequenceType first caller Type initializes only shared member-static cell, subsequent arguments ignored; recursive favour dispatch retained. Original --write and --check verify364 complete original source hashes and13 generated inputs; all69 genuine SAL/CPPu translation units rebuilt normal/ASan/UBSan. Complete identical native and portable streams: types1865864, sequence1915688 and seeded71876 bytes. All3 full portable replays pass; source-absent Calc106/24 and directly related shared128/38 tests have raw S/B/F/L100 across19/53 executable owners, every raw counter positive. All13 scoped gates and exact Prettier pass. Native code and original factories remain unchanged. Physical ABI/pointer/object/allocator, compiler-only const/ref/rvalue/polymorphic ADL/illegal type enforcement, external SDK sal_Unicode alias configuration, native threading/shutdown and complete consumer QA unverified. Public Sequence/Any/genfunc and services/CharClass/pool/Calc cells/document/edit/view/UI subsequent; broad parity/default/verified flags remain false."
+    }
+  }
+}

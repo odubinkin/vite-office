@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence-type.ts",
+    "status": "mapped",
+    "upstreamPath": "include/com/sun/star/uno/Sequence.hxx",
+    "localSymbols": [
+      "getSequenceTypeFavourUnsigned",
+      "getSequenceTypeFavourChar",
+      "getCppuType",
+      "getCppuSequenceType",
+      "getCharSequenceCppuType"
+    ],
+    "upstreamSymbols": [
+      "getTypeFavourUnsigned",
+      "getTypeFavourChar",
+      "getCppuType",
+      "getCppuSequenceType",
+      "getCharSequenceCppuType"
+    ],
+    "preservedResponsibilities": [
+      "Task44 completes original internal cppu unotype.hxx fundamental overloads, void forwarding, Reference/Sequence delegation and actual generated RuntimeException ADL getter calls. Original LIBO_INTERNAL_ONLY sal_Unicode remains distinct from sal_uInt16; native JS literal/nested arguments adapt erased C++ compile-time type selection only, never infer from JS values or build/register UNO types. Exact nested argument keys adapt compiler specialization identity and preserve different C++ spellings even when canonical UNO references agree; actual generated getter function identity represents its declared C++ type. Readonly UnoType ESM record follows repository stateless-static-class rule. Original function-static UnoSequenceType<T>, Sequence<E>::s_pType member-static, separate favourChar<T> td and global char sequence cell remain independent borrowed addresses. All initialization reuses actual typelib_static_sequence_type_init and existing live Type pointer-cell view; no copied cache, new provider, duplicated ownership algorithm or fabricated value Sequence class. Original getCppuSequenceType first caller Type initializes only shared member-static cell, subsequent arguments ignored; recursive favour dispatch retained. Original --write and --check verify364 complete original source hashes and13 generated inputs; all69 genuine SAL/CPPu translation units rebuilt normal/ASan/UBSan. Complete identical native and portable streams: types1865864, sequence1915688 and seeded71876 bytes. All3 full portable replays pass; source-absent Calc106/24 and directly related shared128/38 tests have raw S/B/F/L100 across19/53 executable owners, every raw counter positive. All13 scoped gates and exact Prettier pass. Native code and original factories remain unchanged. Physical ABI/pointer/object/allocator, compiler-only const/ref/rvalue/polymorphic ADL/illegal type enforcement, external SDK sal_Unicode alias configuration, native threading/shutdown and complete consumer QA unverified. Public Sequence/Any/genfunc and services/CharClass/pool/Calc cells/document/edit/view/UI subsequent; broad parity/default/verified flags remain false."
+    ],
+    "omittedResponsibilities": [
+      "Sequence value class/genfunc/Any and full consumer QA subsequent. Physical ABI/allocator/compiler enforcement and external SDK configuration/native threading/shutdown unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence-type.ts",
+          "marker": "getCppuSequenceType"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/unotype-overloads.test.ts",
+          "marker": "matches original legacy first-call supplied element and recursive cache ownership"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/com/sun/star/uno/Sequence.hxx",
+          "marker": "getCppuSequenceType"
+        },
+        {
+          "path": "include/com/sun/star/uno/Sequence.hxx",
+          "marker": "getCharSequenceCppuType"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence-type.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original Sequence.hxx type-helper and Sequence.h member-static responsibilities are split by function boundary before porting the value class. Preserve the original caches and helper bodies; no stub Sequence class. Erased overload selection uses unambiguous bridge names."
+    }
+  }
+}

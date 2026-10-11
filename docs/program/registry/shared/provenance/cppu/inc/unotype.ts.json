@@ -8,17 +8,27 @@
     "upstreamPath": "include/cppu/unotype.hxx",
     "localSymbols": [
       "getTypeFromTypeDescriptionReference",
-      "getTypeFromTypeClass"
+      "getTypeFromTypeClass",
+      "unoTypeArgumentIdentity",
+      "cppu_detail_getUnoType",
+      "UnoType",
+      "getTypeFavourUnsigned",
+      "getTypeFavourChar"
     ],
     "upstreamSymbols": [
       "getTypeFromTypeDescriptionReference",
-      "getTypeFromTypeClass"
+      "getTypeFromTypeClass",
+      "cppu_detail_getUnoType",
+      "UnoType",
+      "getTypeFavourUnsigned",
+      "getTypeFavourChar"
     ],
     "preservedResponsibilities": [
-      "Original cppu::detail getTypeFromTypeDescriptionReference returns a const Type reference alias of the original pointer cell, without Type construction, pointer copying, acquisition or destruction. Native pointer-cell address identity uses a realm-local WeakMap keyed by the actual cell; its Type prototype/accessor view reads that same current cell on every shared member call and owns no native reference. This is intrinsic logical address adaptation, not a second Type implementation, type registry, copied static cache or fabricated UnoType/provider. getTypeFromTypeClass delegates to the actual original static C cache and the same cast. Original native header/member calls with full unchanged SAL/CPPU dependencies compare all17 supported static cells, all289 view pairs, complete initialized fields/counts/names and distinct caller-cell identities. Initialized mutable enum cells verify live replacement/null/restoration, equal pointer contents at different cell addresses, ordinary owning copy independence and acquisition/release only by actual copied/assigned owned Types. Deliberately borrowed aliases are never destroyed or assigned; nullable methods only exercise valid original branches. Type.h/Type.hxx actual value/member owners remain shared. Physical ABI/pointer/object lifetime, compile-time const enforcement, unsupported static classes, template/ADL/overload families, native threading/shutdown and full Any/Reference/default RuntimeException/case/service/UI consumers remain unfinished or unverified. System libraries are uninstrumented and leak detection is disabled; no original body/method is replaced. Broad parity flags remain false."
+      "Original cppu::detail getTypeFromTypeDescriptionReference returns a const Type reference alias of the original pointer cell, without Type construction, pointer copying, acquisition or destruction. Native pointer-cell address identity uses a realm-local WeakMap keyed by the actual cell; its Type prototype/accessor view reads that same current cell on every shared member call and owns no native reference. This is intrinsic logical address adaptation, not a second Type implementation, type registry, copied static cache or fabricated UnoType/provider. getTypeFromTypeClass delegates to the actual original static C cache and the same cast. Original native header/member calls with full unchanged SAL/CPPU dependencies compare all17 supported static cells, all289 view pairs, complete initialized fields/counts/names and distinct caller-cell identities. Initialized mutable enum cells verify live replacement/null/restoration, equal pointer contents at different cell addresses, ordinary owning copy independence and acquisition/release only by actual copied/assigned owned Types. Deliberately borrowed aliases are never destroyed or assigned; nullable methods only exercise valid original branches. Type.h/Type.hxx actual value/member owners remain shared. Physical ABI/pointer/object lifetime, compile-time const enforcement, unsupported static classes, template/ADL/overload families, native threading/shutdown and full Any/Reference/default RuntimeException/case/service/UI consumers remain unfinished or unverified. System libraries are uninstrumented and leak detection is disabled; no original body/method is replaced. Broad parity flags remain false.",
+      "Task44 completes original internal cppu unotype.hxx fundamental overloads, void forwarding, Reference/Sequence delegation and actual generated RuntimeException ADL getter calls. Original LIBO_INTERNAL_ONLY sal_Unicode remains distinct from sal_uInt16; native JS literal/nested arguments adapt erased C++ compile-time type selection only, never infer from JS values or build/register UNO types. Exact nested argument keys adapt compiler specialization identity and preserve different C++ spellings even when canonical UNO references agree; actual generated getter function identity represents its declared C++ type. Readonly UnoType ESM record follows repository stateless-static-class rule. Original function-static UnoSequenceType<T>, Sequence<E>::s_pType member-static, separate favourChar<T> td and global char sequence cell remain independent borrowed addresses. All initialization reuses actual typelib_static_sequence_type_init and existing live Type pointer-cell view; no copied cache, new provider, duplicated ownership algorithm or fabricated value Sequence class. Original getCppuSequenceType first caller Type initializes only shared member-static cell, subsequent arguments ignored; recursive favour dispatch retained. Original --write and --check verify364 complete original source hashes and13 generated inputs; all69 genuine SAL/CPPu translation units rebuilt normal/ASan/UBSan. Complete identical native and portable streams: types1865864, sequence1915688 and seeded71876 bytes. All3 full portable replays pass; source-absent Calc106/24 and directly related shared128/38 tests have raw S/B/F/L100 across19/53 executable owners, every raw counter positive. All13 scoped gates and exact Prettier pass. Native code and original factories remain unchanged. Physical ABI/pointer/object/allocator, compiler-only const/ref/rvalue/polymorphic ADL/illegal type enforcement, external SDK sal_Unicode alias configuration, native threading/shutdown and complete consumer QA unverified. Public Sequence/Any/genfunc and services/CharClass/pool/Calc cells/document/edit/view/UI subsequent; broad parity/default/verified flags remain false."
     ],
     "omittedResponsibilities": [
-      "Physical ABI/pointer/object lifetime and const enforcement, unsupported static classes, template/ADL/overload helper families, native scheduling/shutdown/full QA and unfinished Any/Reference/default RuntimeException/case/service/UI consumers."
+      "Physical ABI/pointer/object lifetime, compiler-only const/ref/rvalue/illegal type/derived/polymorphic ADL enforcement, external SDK sal_Unicode alias configuration, native scheduling/shutdown and full original consumer QA remain unverified. Actual value Any/genfunc/Sequence and services/CharClass/pool/Calc document/edit/view/UI remain subsequent."
     ],
     "evidence": {
       "local": [
@@ -29,6 +39,10 @@
         {
           "path": "apps/office/src/cppu/inc/unotype.test.ts",
           "marker": "matches original borrowed static Type views and every supported class pair"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/unotype-overloads.test.ts",
+          "marker": "matches complete original fundamental Reference and generated ADL overloads"
         }
       ],
       "upstream": [
@@ -43,6 +57,14 @@
         {
           "path": "include/com/sun/star/uno/Type.hxx",
           "marker": "inline Type::Type( const Type & rType )"
+        },
+        {
+          "path": "include/cppu/unotype.hxx",
+          "marker": "cppu_detail_getUnoType"
+        },
+        {
+          "path": "include/com/sun/star/uno/Sequence.hxx",
+          "marker": "getTypeFavourUnsigned"
         }
       ]
     }

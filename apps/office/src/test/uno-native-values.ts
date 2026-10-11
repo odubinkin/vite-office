@@ -578,3 +578,6 @@ export async function createUnoNativeInputs(capture: UnoNativeCapture, booleanBy
     outer,
   };
 }
+
+/** Shared field/name/count stream context without installing caller-specific type fixtures. */
+export { context as createUnoNativeContext };
