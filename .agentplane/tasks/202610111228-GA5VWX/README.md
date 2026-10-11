@@ -1,10 +1,11 @@
 ---
 id: "202610111228-GA5VWX"
 title: "Port original case-mapping iterator and width lookup owners"
-status: "DOING"
+result_summary: "Original case iterator and width lookup verified against complete native captures"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task40-checks/value-gates-final-manifest.json"
   findings:
     - "Reviewed b588a8e8 original binary/index ordering, borrowed row identity, generated numeric constants, independent lazy table getters, Mapping field copying and early iterator reset. Full native normal/ASan/UBSan streams match; every portable captured field and raw coverage counter passes. CALC-049/050 preserve source quirks. No complete service/QA/physical ABI/default-map parity claim."
-commit: null
+commit:
+  hash: "b588a8e8cf90c941b998297277fabfbae090186c"
+  message: "🧩 GA5VWX task: implement original case iterator and width lookup owners"
 comments:
   -
     author: "CODER"
     body: "Start: implement task40 original iterator and width lookup dependency scope under the user's approved continuation; full41/fix/pause next."
+  -
+    author: "CODER"
+    body: "Verified: original case iterator and width lookup captures, raw100 source-absent tests and all scoped gates."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original iterator/width captures and sanitizer comparison pass; source-absent Calc and related shared raw100; all13 gates and source extraction pass; CALC-049/050 preserved."
+  -
+    type: "status"
+    at: "2026-10-11T15:25:18.188Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original case iterator and width lookup captures, raw100 source-absent tests and all scoped gates."
 doc_version: 3
-doc_updated_at: "2026-10-11T15:25:02.129Z"
+doc_updated_at: "2026-10-11T15:25:18.189Z"
 doc_updated_by: "CODER"
 description: "Task40 after verified39: implement original getNextChar/MappingElement and genuine oneToOneMapping/width-table scalar dependencies for Calc string-service readiness; preserve upstream contracts and reuse all existing shared owners. Next task41 is full verification/fix/pause."
 sections:
