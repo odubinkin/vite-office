@@ -1060,3 +1060,11 @@ factory behavior and does not verify the still-unported interface constructor.
 Decision: preserve original operations and return ordering. No extra description
 release, exception, name validation or completion repair is added. Full valid
 producer/service/shutdown reachability still needs separate consumer evidence.
+
+## CALC-044: Integral format capacity macros omit space for binary negative minima
+
+- Source: pinned `include/rtl/string.h` defines `RTL_STR_MAX_VALUEOFINT32`33 and `RTL_STR_MAX_VALUEOFINT64`65; `include/rtl/ustring.h` aliases these values and recommends them for a buffer holding both the result and terminating NUL. Actual `sal/rtl/strtmpl.hxx::valueOfInt` writes a minus sign, all magnitude digits and then zero.
+- Observation: the complete original native C formatting stream observes signed32 minimum in radix2 with length33 and signed64 minimum with length65, excluding the terminator. They require34 and66 units respectively. Normal and ASan/UBSan streams agree using independently sufficient96-unit caller buffers; full untouched sentinels and terminator are retained. Unsigned64 requires65 units and fits its original macro.
+- Suspicion: the documented signed macro recommendation is one unit short for these binary minima. `StringNumber` uses the original macro-sized member buffer; its physical layout and consumer impact are not established by this C caller. No out-of-bounds or post-undefined-behavior output is claimed from these sufficient-buffer observations.
+- Evidence: `scripts/rtl-integer-format-native-probe.mjs`; `sal/rtl/native-integer-format-cases.json`; complete adjacent portable replay in `integer-format.test.ts`. Full unchanged346-source native dependency closure and complete48492536-byte stream are retained. The macros and result lengths are observed together.
+- Port decision: retain original33/65/65 constants and integral result/terminator behavior. Do not enlarge macros, truncate the negative minimum or silently certify insufficient buffers. Actual ordinary consumers and separate `OUString::number`/concat owners remain unverified.

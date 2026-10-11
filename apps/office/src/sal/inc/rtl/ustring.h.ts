@@ -39,3 +39,14 @@ export {
   rtl_uString_newFromString,
   rtl_uString_release,
 } from "../../rtl/ustring";
+
+export {
+  RTL_STR_MAX_VALUEOFINT32 as RTL_USTR_MAX_VALUEOFINT32,
+  RTL_STR_MAX_VALUEOFINT64 as RTL_USTR_MAX_VALUEOFINT64,
+  RTL_STR_MAX_VALUEOFUINT64 as RTL_USTR_MAX_VALUEOFUINT64,
+} from "./string.h";
+export {
+  rtl_ustr_valueOfInt32,
+  rtl_ustr_valueOfInt64,
+  rtl_ustr_valueOfUInt64,
+} from "../../rtl/ustring";

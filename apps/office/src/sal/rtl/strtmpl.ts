@@ -324,3 +324,18 @@ export function toInt(data: Uint16Array | null, length: number, nRadix: number):
   if (bNeg) return n === 1n << 63n ? -(1n << 63n) : -n;
   return n;
 }
+
+/** Original integral UTF16 formatting specialization. Native Number/BigInt radix conversion retains source digits/sign without64-bit precision loss. @param data - Borrowed sufficient output buffer. @param value - Original fixed-width integral value. @param radix - Original signed16 radix. @returns Written length excluding original terminating zero. */
+export function valueOfInt(
+  data: Uint16Array | null,
+  value: number | bigint,
+  radix: number,
+): number {
+  if (data === null) throw new Error("assert(pStr)");
+  if (radix < RTL_STR_MIN_RADIX || radix > RTL_STR_MAX_RADIX)
+    throw new Error("assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX )");
+  const text = value.toString(radix);
+  for (let i = 0; i < text.length; i++) data[i] = text.charCodeAt(i);
+  data[text.length] = 0;
+  return text.length;
+}

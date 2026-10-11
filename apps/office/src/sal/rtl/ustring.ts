@@ -228,3 +228,28 @@ export function rtl_ustr_toInt64_WithLength(
   if (nStrLength < 0) throw new Error("assert(len >= 0)");
   return str.toInt(pStr, nStrLength, nRadix);
 }
+
+/** Original signed32 UTF16 integral formatting wrapper; explicit conversion adapts the C argument width. @param data - Sufficient borrowed output storage. @param value - Original signed32 input. @param radix - Original signed16 radix. @returns Written length excluding terminating zero. */
+export function rtl_ustr_valueOfInt32(
+  data: Uint16Array | null,
+  value: number,
+  radix: number,
+): number {
+  return str.valueOfInt(data, value | 0, (radix << 16) >> 16);
+}
+/** Original signed64 UTF16 integral formatting wrapper, retaining exact native bits. @param data - Sufficient borrowed output storage. @param value - Original signed64 input. @param radix - Original signed16 radix. @returns Written length excluding terminating zero. */
+export function rtl_ustr_valueOfInt64(
+  data: Uint16Array | null,
+  value: bigint,
+  radix: number,
+): number {
+  return str.valueOfInt(data, BigInt.asIntN(64, value), (radix << 16) >> 16);
+}
+/** Original unsigned64 UTF16 integral formatting wrapper, retaining exact native bits. @param data - Sufficient borrowed output storage. @param value - Original unsigned64 input. @param radix - Original signed16 radix. @returns Written length excluding terminating zero. */
+export function rtl_ustr_valueOfUInt64(
+  data: Uint16Array | null,
+  value: bigint,
+  radix: number,
+): number {
+  return str.valueOfInt(data, BigInt.asUintN(64, value), (radix << 16) >> 16);
+}
