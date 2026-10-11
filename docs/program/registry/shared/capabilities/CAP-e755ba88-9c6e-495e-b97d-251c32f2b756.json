@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e755ba88-9c6e-495e-b97d-251c32f2b756",
+    "capabilityId": "CAP-e755ba88-9c6e-495e-b97d-251c32f2b756",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve original public Sequence pointer ownership/cold type initialization, copy-on-write, equality, swap/resize and legal borrowed arrays over the actual existing C/type/OSL owners.",
+      "Bind explicit compiler E/sizeof declarations without extra instance type metadata or a replacement default/type/value/data provider; distinguish source rvalue-copy construction from move-assignment swap."
+    ],
+    "capability": "Original public Sequence value ownership and arrays",
+    "gaps": [
+      "External-only mutable iterator/index bodies, ByteSequence bridge and ostream; physical pointer/layout/ABI/resource/native const/compiler-only restrictions (including prohibited Sequence<bool>), arbitrary element producer/alias/metadata safety, thread/shutdown/full consumer QA and service/CharClass/pool/Calc document/edit/view/UI remain unverified or subsequent."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/com/sun/star/uno/Sequence.hxx",
+          "marker": "Sequence< E >::Sequence()"
+        },
+        {
+          "path": "cppu/source/uno/sequence.cxx",
+          "marker": "uno_type_sequence_construct"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "testInterface"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/com/sun/star/uno/Sequence.h",
+          "marker": "Template C++ class representing an IDL sequence"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts",
+          "marker": "class Sequence"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/sequence.ts",
+          "marker": "uno_type_sequence_construct"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence-type.ts",
+          "marker": "getSequenceTypeFavourUnsigned"
+        },
+        {
+          "path": "apps/office/src/sal/inc/types.ts",
+          "marker": "SAL_NO_ACQUIRE_ARGUMENT"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.test.ts",
+          "marker": "matches full original public Sequence lifecycle COW arrays and move-as-copy contracts"
+        },
+        {
+          "path": "scripts/uno-public-sequence-native-probe.mjs",
+          "marker": "prepareCaseNative"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original public Sequence value ownership and arrays"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "sequence-value-lifecycle",
+    "scopeLimitations": [
+      "Task49 ports normal internal Sequence.h/hxx default/copy/adopt/length/elements/initializer constructor body, one actual pointer-cell ownership, destructor, copy assignment, true swap move assignment, get/length/has/size/const arrays/COW arrays/index/iterators/resize/swap and mutable range. Existing real C sequence allocation/default/copy/destruction, Sequence-type member-static cells, Type/UnoType/OSL/genfunc/data/array storage remain actual shared owners. Source has no move constructor: native rvalue construction copies the handle, unlike its move-assignment swap. The shared actual SAL enum typed witness preserves adoption versus integer length0, including NULL field adoption; existing numeric symbols stay0. Erased declared E and sizeof(E) bind compiler specialization identity only, with no instance type metadata, inferred value type or type/default/data provider. Const array/index/pointer-end expressions retain actual logical source storage and field addresses rather than claiming JS binary ABI or assembling copied E values. Native std::bad_alloc failure is represented by native JS RangeError at the same failed C result; original assertion rejection uses the existing browser Error adaptation. Genuine unchanged native --write passes:73 original translation units,370 full source hashes13 genuine generated headers; lifecycle239396/cold1004/guards896 bytes normal-ASan/UBSan identical, five separate original index/range/size assertion SIGABRT diagnostics agree. Pure caller uses actual scalar/OUString/Type/Any/Reference/nested Sequence/RuntimeException owning objects, native E initializer copy and raw live actual field lvalues; class defaults are never replaced by C-default inputs. Header-only huge guard observations never read absent tails and certify no ordinary producer. Native --write and final --check pass:73 full unchanged translation units,370 complete source hashes,13 generated headers and164 terminal commands (154 exit0;10 separately expected SIGABRT). Complete initialized normal-ASan/UBSan streams identical lifecycle239396/cold1004/guards896 bytes. All3 original source links absent: Calc106/24 and related shared149/44 tests pass with every raw S/F/B counter positive and whole S/B/F/L100 for19/59 executable owners (Calc2920/2055/474/2564; shared3952/2152/535/3539). Exact links restored. All13 effective scoped gates and6 exact authored-source Prettier checks pass. External-only mutable iterator/index bodies, ByteSequence bridge and ostream; physical pointer/layout/ABI/resource/native const/compiler-only restrictions (including prohibited Sequence<bool>), arbitrary element producer/alias/metadata safety, thread/shutdown/full consumer QA and service/CharClass/pool/Calc document/edit/view/UI remain unverified or subsequent. Broad flags remain false."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task49 ports normal internal Sequence.h/hxx default/copy/adopt/length/elements/initializer constructor body, one actual pointer-cell ownership, destructor, copy assignment, true swap move assignment, get/length/has/size/const arrays/COW arrays/index/iterators/resize/swap and mutable range. Existing real C sequence allocation/default/copy/destruction, Sequence-type member-static cells, Type/UnoType/OSL/genfunc/data/array storage remain actual shared owners. Source has no move constructor: native rvalue construction copies the handle, unlike its move-assignment swap. The shared actual SAL enum typed witness preserves adoption versus integer length0, including NULL field adoption; existing numeric symbols stay0. Erased declared E and sizeof(E) bind compiler specialization identity only, with no instance type metadata, inferred value type or type/default/data provider. Const array/index/pointer-end expressions retain actual logical source storage and field addresses rather than claiming JS binary ABI or assembling copied E values. Native std::bad_alloc failure is represented by native JS RangeError at the same failed C result; original assertion rejection uses the existing browser Error adaptation. Genuine unchanged native --write passes:73 original translation units,370 full source hashes13 genuine generated headers; lifecycle239396/cold1004/guards896 bytes normal-ASan/UBSan identical, five separate original index/range/size assertion SIGABRT diagnostics agree. Pure caller uses actual scalar/OUString/Type/Any/Reference/nested Sequence/RuntimeException owning objects, native E initializer copy and raw live actual field lvalues; class defaults are never replaced by C-default inputs. Header-only huge guard observations never read absent tails and certify no ordinary producer. Native --write and final --check pass:73 full unchanged translation units,370 complete source hashes,13 generated headers and164 terminal commands (154 exit0;10 separately expected SIGABRT). Complete initialized normal-ASan/UBSan streams identical lifecycle239396/cold1004/guards896 bytes. All3 original source links absent: Calc106/24 and related shared149/44 tests pass with every raw S/F/B counter positive and whole S/B/F/L100 for19/59 executable owners (Calc2920/2055/474/2564; shared3952/2152/535/3539). Exact links restored. All13 effective scoped gates and6 exact authored-source Prettier checks pass. External-only mutable iterator/index bodies, ByteSequence bridge and ostream; physical pointer/layout/ABI/resource/native const/compiler-only restrictions (including prohibited Sequence<bool>), arbitrary element producer/alias/metadata safety, thread/shutdown/full consumer QA and service/CharClass/pool/Calc document/edit/view/UI remain unverified or subsequent. Broad flags remain false."
+    }
+  }
+}

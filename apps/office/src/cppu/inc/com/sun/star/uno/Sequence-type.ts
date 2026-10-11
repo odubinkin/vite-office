@@ -1,4 +1,4 @@
-/** @fileoverview Original Sequence.hxx type-helper bodies and Sequence<E>::s_pType member-static storage, separate from the not-yet-ported value class. Explicit erased C++ argument keys represent compiler specialization identity; real typelib factory and borrowed Type owners remain shared. */
+/** @fileoverview Original Sequence.hxx type-helper bodies and Sequence<E>::s_pType member-static storage, shared with the actual public Sequence value class. Explicit erased C++ argument keys represent compiler specialization identity; real typelib factory and borrowed Type owners remain shared. */
 import type { Type } from "./Type";
 import type { typelib_TypeDescriptionReference as R } from "../../../../typelib/typedescription";
 import { typelib_static_sequence_type_init } from "../../../../typelib/typedescription";
