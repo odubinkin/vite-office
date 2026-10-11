@@ -1,10 +1,11 @@
 ---
 id: "202610111910-XHQWW2"
 title: "Use original internet attribute boundaries for hyperlink editing"
-status: "DOING"
+result_summary: "Original owned INET ranges replace TextRuns boundary reconstruction/equal-URL merging. SwUndoAttr changes attributes without replacing text/splitting unrelated internet owners.14070 scenarios/520 files pass,145lines155stmts39func62branches100/256positive raw counters;872 old tests unchanged,4 canonical histories preserved,9metadata gates pass,refs restored. Full native UI modes/SwHistory/uniform-state remain pending. Goalactive correction5/10; pause after next full and repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Verified local semantic implementation ready for exact-SHA review."
+  -
+    author: "CODER"
+    body: "Verified: original independent hyperlink bounds and attribute-only history;14070 accepted scenarios, whole2-module100, preserved old acceptance/inventory, exact semantic review."
 events:
   -
     type: "status"
@@ -82,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14070 accepted scenarios/520 files; two complete modules100 allfour/256 positive raw counters; 872 old acceptance files unchanged, four canonical histories preserved; static and9metadata gates pass; exact restored refs; failures/repairs documented, full goal remains unverified."
+  -
+    type: "status"
+    at: "2026-10-11T19:43:15.296Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original independent hyperlink bounds and attribute-only history;14070 accepted scenarios, whole2-module100, preserved old acceptance/inventory, exact semantic review."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:42:26.515Z"
+doc_updated_at: "2026-10-11T19:43:15.297Z"
 doc_updated_by: "CODER"
 description: "Retire core getRunRanges/projectWriterTextRuns range reconstruction and metadata-based neighbor merging. Read original owned SwTextINetFormat bounds through native GetTextAttrAt with current caret-inheritance policy. Verify independent adjacent identical hyperlinks, character-format splits, actual body/cell commands/history and browser UI. Full native selection modes and selected uniform-state run transport remain explicit separate work."
 sections:
@@ -157,6 +168,10 @@ sections:
     - Observation: Final original-attribute range correction and prerequisite attribute-only SwUndoAttr replay pass14070 accepted scenarios/520 files;7 fresh regressions. Both complete modules100 allfour,256 positive raw counters.872 old acceptance files byte-identical;4 canonical histories/protected statuses preserved. Metadata9gates pass and refs restored. Initial failure/repair/cancellation/stale build/proof helper history retained honestly in ignored cache.
       Impact: One projected run-range adapter and equal-URL neighbor merge removed. Direct formatting no longer replaces text/splits unchanged INET owners. Genuine old hyperlink-through-bold acceptance preserved without edits, new independent identical neighbor body/cell and UI/history pass. No full hyperlink/native history or goal parity claim.
       Resolution: Commit exact approved9 nonAP paths plus task/parent evidence, review exact semantic SHA as same agent non-independent, close clean writer. Continue goal correction5/10 and pause after next accepted full with failures repaired; remaining native UI default selection/word fallback/dialog/uniform-state and complete SwHistory explicitly pending.
+extensions:
+  implementation_commit:
+    hash: "7c73738f640c3536aef626440174ae38ecffe7e0"
+    message: "🧩 XHQWW2 code: preserve original hyperlink ranges during editing and formatting history"
 id_source: "generated"
 ---
 ## Summary
