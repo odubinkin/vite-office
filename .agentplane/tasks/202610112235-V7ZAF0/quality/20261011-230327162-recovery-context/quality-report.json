@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610112235-V7ZAF0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T23:03:27.162Z",
+  "verdict": "pass",
+  "summary": "Accept task52 committed generated5interface contracts and complete initialized metadata ownership at 522137316fb8; genuine normal-ASan/UBSan whole observations and append-only source-absent Calc/shared raw100 are verified. Broader weak/service and Calc UI readiness remain unverified.",
+  "evaluated_sha": "522137316fb8a1065f2e7e485649afb6bebae206",
+  "blueprint_digest": "3da578e12986daec5a3662db5000bfb42284a1462995b633e6857ebf6192c389",
+  "findings": [
+    "Compared real generated cppumaker headers/IDL against all5 committed source owners: original cached Type and separately gated method stage, declared method/base/parameter/exception order, real C registration and reverse local string destruction retained. Existing shared Type/Reference/Any/RuntimeException/OUString/typelib and original build/caller owners reused.",
+    "Independently audited161 terminal native commands exit0,72 unchanged complete original translation units per normal/sanitized build,374 current full source hashes,23 generated files (21 headers and2 parser sources), exact driver/configuration hashes and all7 complete gzip fixture/normal/ASan streams with empty runtime stderr.",
+    "Whole raw coverage audit confirms19 Calc and66 related shared executable owners all S/F/B counters positive and S/B/F/L100;106/24 Calc and161/46 shared tests pass. Task50 shared argv remains append-only; all5 changed owner includes present; all3 exact source symlink targets restored.13 scoped gates and20 authored format checks pass;35 related tooling tests pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610112235-V7ZAF0/README.md",
+    "output/playwright/task52-checks/final-audit.json",
+    "output/playwright/task52-checks/gates-final-manifest.json",
+    "output/playwright/task52-checks/format-final-check.log",
+    "output/playwright/cppu-generated-interface-native/manifest.json",
+    "apps/office/src/cppu/inc/com/sun/star/uno/native-generated-interface-cases.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native physical ABI/compiler-only/const/resource/thread/shutdown/full consumer QA unverified; virtual weak/adapter/listener/aggregation/ImplHelper/service creation and Calc document/edit/view/UI remain subsequent. Broad contract/behavior/default/verified flags stay false; no Writer-only changes. Last full51 next61."
+  ]
+}

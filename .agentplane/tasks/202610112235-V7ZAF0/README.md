@@ -4,7 +4,7 @@ title: "Port generated weak and service UNO interface type owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,43 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T23:03:41.541Z"
+  updated_by: "CODER"
+  note: "Task52 source implementation522137316fb8 independently accepted at matching actual evaluated_sha. Native161 commands0,72 full original units/build,374 source hashes23 generated files,7 whole normal-ASan/UBSan replay streams match. Source-absent Calc106/24 and shared161/46:19/66 whole owners raw S/B/F/L100; exact task50 argv append-only,3links restored.13 scoped gates,35 tooling tests and20 authored format checks pass. Inventory flags false and lifecycle/native limitations documented; lastfull51 next61."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T23:03:27.162Z"
+  updated_by: "EVALUATOR"
+  note: "Accept task52 committed generated5interface contracts and complete initialized metadata ownership at 522137316fb8; genuine normal-ASan/UBSan whole observations and append-only source-absent Calc/shared raw100 are verified. Broader weak/service and Calc UI readiness remain unverified."
+  evaluated_sha: "522137316fb8a1065f2e7e485649afb6bebae206"
+  blueprint_digest: "3da578e12986daec5a3662db5000bfb42284a1462995b633e6857ebf6192c389"
+  evidence_refs:
+    - ".agentplane/tasks/202610112235-V7ZAF0/README.md"
+    - ".agentplane/tasks/202610112235-V7ZAF0/quality/20261011-230327162-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112235-V7ZAF0/quality/20261011-230327162-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112235-V7ZAF0/quality/20261011-230327162-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112235-V7ZAF0/blueprint/resolved-snapshot.json"
+    - "output/playwright/task52-checks/final-audit.json"
+    - "output/playwright/task52-checks/gates-final-manifest.json"
+    - "output/playwright/task52-checks/format-final-check.log"
+    - "output/playwright/cppu-generated-interface-native/manifest.json"
+    - "apps/office/src/cppu/inc/com/sun/star/uno/native-generated-interface-cases.json"
+  findings:
+    - "Compared real generated cppumaker headers/IDL against all5 committed source owners: original cached Type and separately gated method stage, declared method/base/parameter/exception order, real C registration and reverse local string destruction retained. Existing shared Type/Reference/Any/RuntimeException/OUString/typelib and original build/caller owners reused."
+    - "Independently audited161 terminal native commands exit0,72 unchanged complete original translation units per normal/sanitized build,374 current full source hashes,23 generated files (21 headers and2 parser sources), exact driver/configuration hashes and all7 complete gzip fixture/normal/ASan streams with empty runtime stderr."
+    - "Whole raw coverage audit confirms19 Calc and66 related shared executable owners all S/F/B counters positive and S/B/F/L100;106/24 Calc and161/46 shared tests pass. Task50 shared argv remains append-only; all5 changed owner includes present; all3 exact source symlink targets restored.13 scoped gates and20 authored format checks pass;35 related tooling tests pass."
+commit:
+  hash: "522137316fb8a1065f2e7e485649afb6bebae206"
+  message: "✅ V7ZAF0 code: port generated weak and service type owners"
 comments:
   -
     author: "CODER"
     body: "Start: task52 original generated weak/service interface type owners in calc, shared owners reused and complete native/scoped raw100 required."
+  -
+    author: "CODER"
+    body: "Implementation: committed task52 source and complete native/scoped evidence; record actual implementation SHA before first independent EVALUATOR review."
 events:
   -
     type: "status"
@@ -35,8 +62,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: task52 original generated weak/service interface type owners in calc, shared owners reused and complete native/scoped raw100 required."
+  -
+    type: "status"
+    at: "2026-10-11T23:03:26.130Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: committed task52 source and complete native/scoped evidence; record actual implementation SHA before first independent EVALUATOR review."
+  -
+    type: "verify"
+    at: "2026-10-11T23:03:41.541Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task52 source implementation522137316fb8 independently accepted at matching actual evaluated_sha. Native161 commands0,72 full original units/build,374 source hashes23 generated files,7 whole normal-ASan/UBSan replay streams match. Source-absent Calc106/24 and shared161/46:19/66 whole owners raw S/B/F/L100; exact task50 argv append-only,3links restored.13 scoped gates,35 tooling tests and20 authored format checks pass. Inventory flags false and lifecycle/native limitations documented; lastfull51 next61."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:03:04.564Z"
+doc_updated_at: "2026-10-11T23:03:41.653Z"
 doc_updated_by: "CODER"
 description: "Task52 implements complete pinned cppumaker-generated metadata and IDL contracts for XWeak XAdapter XReference XAggregation and XServiceInfo as real service prerequisites; reuse actual shared Type/Reference/Any/typelib with full native evidence and scoped raw100."
 sections:
@@ -59,6 +99,39 @@ sections:
       Scope: approved task52 source/provenance/runtime/capability records. Actual weak/adapter/listener/aggregation/ImplHelper/service manager/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Native compiler-only/const/physical ABI/allocator/resource/thread/shutdown/full consumer QA remain unverified. Last full51; next scheduled full61, no extra full run required.
 
     Implementation commit and independent EVALUATOR acceptance are recorded in task lifecycle metadata after this verified source checkpoint.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T23:03:41.541Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task52 source implementation522137316fb8 independently accepted at matching actual evaluated_sha. Native161 commands0,72 full original units/build,374 source hashes23 generated files,7 whole normal-ASan/UBSan replay streams match. Source-absent Calc106/24 and shared161/46:19/66 whole owners raw S/B/F/L100; exact task50 argv append-only,3links restored.13 scoped gates,35 tooling tests and20 authored format checks pass. Inventory flags false and lifecycle/native limitations documented; lastfull51 next61.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T23:03:26.130Z, excerpt_hash=sha256:f483059cf5635838697f5545c0b16be3b37d982b6cf730b641b6c43264d729b2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112235-V7ZAF0/blueprint/resolved-snapshot.json
+    - old_digest: 3da578e12986daec5a3662db5000bfb42284a1462995b633e6857ebf6192c389
+    - current_digest: 3da578e12986daec5a3662db5000bfb42284a1462995b633e6857ebf6192c389
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112235-V7ZAF0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610112235-V7ZAF0 -m 🧩 V7ZAF0 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Retain native/portable evidence and always restore the original3reference symlinks. Revert only intentional task52 changes if needed; no resets of unrelated tasks or Writer work, no fixture/provenance fabrication."
   Findings: |-
     Previous goal turn is concrete progress: task51 full regression closed at c61ec60c1a0c, all424wholeofficeowners raw100. Existing generated RuntimeException, Type, UnoType callback ADL and complete C typelib engines provide real reusable primitives. No native JS WeakRef can replace the original explicit weak-adapter/refcount/listener lifecycle by assumption. This task implements actual generated interface contracts needed before that owner, not the weak object implementation itself.
@@ -108,6 +181,39 @@ Generate complete genuine5interface hdl/hpp headers with the existing unchanged 
   Scope: approved task52 source/provenance/runtime/capability records. Actual weak/adapter/listener/aggregation/ImplHelper/service manager/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Native compiler-only/const/physical ABI/allocator/resource/thread/shutdown/full consumer QA remain unverified. Last full51; next scheduled full61, no extra full run required.
 
 Implementation commit and independent EVALUATOR acceptance are recorded in task lifecycle metadata after this verified source checkpoint.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T23:03:41.541Z — VERIFY — ok
+
+By: CODER
+
+Note: Task52 source implementation522137316fb8 independently accepted at matching actual evaluated_sha. Native161 commands0,72 full original units/build,374 source hashes23 generated files,7 whole normal-ASan/UBSan replay streams match. Source-absent Calc106/24 and shared161/46:19/66 whole owners raw S/B/F/L100; exact task50 argv append-only,3links restored.13 scoped gates,35 tooling tests and20 authored format checks pass. Inventory flags false and lifecycle/native limitations documented; lastfull51 next61.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T23:03:26.130Z, excerpt_hash=sha256:f483059cf5635838697f5545c0b16be3b37d982b6cf730b641b6c43264d729b2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112235-V7ZAF0/blueprint/resolved-snapshot.json
+- old_digest: 3da578e12986daec5a3662db5000bfb42284a1462995b633e6857ebf6192c389
+- current_digest: 3da578e12986daec5a3662db5000bfb42284a1462995b633e6857ebf6192c389
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112235-V7ZAF0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610112235-V7ZAF0 -m 🧩 V7ZAF0 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
