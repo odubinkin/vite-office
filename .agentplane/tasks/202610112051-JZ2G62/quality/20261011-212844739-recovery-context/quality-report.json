@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610112051-JZ2G62",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T21:28:44.739Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact-commit review of1f2ea1cd: original INET state now owned by edattr; marked mixed reset uses actual native ranges and family-only history with initial ApplyExact preserving ring. Production scope five modules and ten append-only canonical records;881oldbytes unchanged; no upstream/helper artifacts.",
+  "evaluated_sha": "1f2ea1cd2a73656c107ab0e395f0464ae35f204b",
+  "blueprint_digest": "b4bf9655313a588d16533df545f1d9fbf1c7d4ccb748f36082dec579dd8a605d",
+  "findings": [
+    "Reviewed approved marked selected-range slice only. Full SwUndoResetAttr/SwHistory, unmarked-ring Default/word/stack, generic GetCurAttr/readonly/style/redline/frame and browser popup presentation remain unverified, not promoted to parity; test-only browser bundle uses original repository modules with refs absent."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610112051-JZ2G62/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/totals.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/accepted-certificate-browser-attempt1-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/results.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/audit-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/build-hashes.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
