@@ -4,7 +4,7 @@ title: "Port original public Any insertion extraction and data operations"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,28 +18,32 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T20:21:23.429Z"
+  updated_at: "2026-10-11T20:22:08.164Z"
   updated_by: "CODER"
-  note: "Verified: EVALUATOR comment clarification resolved with no executable changes; original generic partial writes preserved. Docs/exact source lint/Prettier/diff0; full native/source-absent/raw100/scoped evidence unchanged. Review refreshed against clarification commit next."
+  note: "Verified: final task47 docs correspond to reviewed implementation3f1f84c26812;152 native commands0,369+13 verified hashes, three full identical normal-ASan/UBSan streams; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 effective gates3 exact Prettier8 final metadata gates0 and comment-only docs/lint/format/diff0. Separate EVALUATOR pass recorded, broad flags false, later source dependencies explicit,last full41,next51."
   attempts: 0
 quality_review:
-  state: "rework"
-  updated_at: "2026-10-11T20:20:48.598Z"
+  state: "pass"
+  updated_at: "2026-10-11T20:21:46.102Z"
   updated_by: "EVALUATOR"
-  note: "Implementation and deterministic native/raw coverage pass; one extraction documentation statement overstates generic failure atomicity."
-  evaluated_sha: "412b3f21f674de0edd04aa2dc1bc81d769bab5e2"
+  note: "Selected original Any data operations and shared source ownership satisfy approved task47 scope and bounded native/source-absent verification. Review prose issue resolved without executable changes; clean canonical closure recommended, whole Calc goal active."
+  evaluated_sha: "3f1f84c26812d567781111d5086ef837acf85d91"
   blueprint_digest: "13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36"
   evidence_refs:
     - ".agentplane/tasks/202610112001-NE4EG1/README.md"
-    - ".agentplane/tasks/202610112001-NE4EG1/quality/20261011-202048598-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202610112001-NE4EG1/quality/20261011-202048598-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202610112001-NE4EG1/quality/20261011-202048598-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112001-NE4EG1/quality/20261011-202146102-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112001-NE4EG1/quality/20261011-202146102-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112001-NE4EG1/quality/20261011-202146102-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202610112001-NE4EG1/blueprint/resolved-snapshot.json"
-    - "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts"
-    - "apps/office/src/cppu/source/uno/assign.ts"
     - "output/playwright/task47-checks/evaluator-audit.json"
+    - "output/playwright/task47-checks/value-gates-final-manifest.json"
+    - "output/playwright/task47-checks/value-shared-manifest.json"
+    - "output/playwright/task47-checks/docs-review-final.log"
+    - "apps/office/src/cppu/inc/com/sun/star/uno/native-any-data-cases.json"
   findings:
-    - "Any.extract comment says every false result leaves destination untouched, but original generic assignData can preserve partial compound writes on failure. Primitive specialization guards are atomic; generic delegation already preserves source behavior correctly. Correct the comment without changing implementation or acceptance."
+    - "Recomputed every committed compressed capture byte/length/digest against full normal and ASan/UBSan output, all identical;369 complete pinned source files13generated hashes match actual restored files;152 native commands exit0. Current native diagnostics empty."
+    - "Recomputed all raw Calc/shared S/F/B counters: positive on all19/57 executable owners, S/B/F/L100;106 Calc and141 shared tests pass with3 source links absent and restored exactly. Prior original ownership/callback/assignment/equality profiles retained;13 scoped gates3 exact Prettier8 final metadata gates0."
+    - "Reviewed source-selected Any guard/conversion/callback/type/ownership bodies. Existing assignNumeric shares identical source switches without numeric policy duplication; real Type/OUString assignment and generic C assignment preserved. Actual generated RuntimeException default/fields/destructor in caller avoids C-default substitution; nonowning lvalues perform raw field stores only. Original generic partial writes documented accurately after comment-only rework, executable bodies/tests/fixture unchanged. Inventory precise and broad flags false."
 commit: null
 comments:
   -
@@ -65,8 +69,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: EVALUATOR comment clarification resolved with no executable changes; original generic partial writes preserved. Docs/exact source lint/Prettier/diff0; full native/source-absent/raw100/scoped evidence unchanged. Review refreshed against clarification commit next."
+  -
+    type: "verify"
+    at: "2026-10-11T20:22:08.164Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: final task47 docs correspond to reviewed implementation3f1f84c26812;152 native commands0,369+13 verified hashes, three full identical normal-ASan/UBSan streams; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 effective gates3 exact Prettier8 final metadata gates0 and comment-only docs/lint/format/diff0. Separate EVALUATOR pass recorded, broad flags false, later source dependencies explicit,last full41,next51."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:21:23.484Z"
+doc_updated_at: "2026-10-11T20:22:08.217Z"
 doc_updated_by: "CODER"
 description: "Task47 continues actual Any.hxx with isExtractableTo/has, Any equality, original generic/bool insertion and generic/bool/numeric/OUString/Type extraction, original selected toAny/fromAny copy/move helpers. Reuse real shared C assignment/equality and numeric owner, no provider/temp value implementation; full genuine native/source-absent whole raw100 scoped gates/inventory/review. Typed comparisons/get/ostream/string-expression helpers and remaining dependencies follow. Last full41,next51."
 sections:
@@ -91,17 +101,17 @@ sections:
     - Command: node output/playwright/task47-checks/any-gates.mjs; node output/playwright/task47-checks/any-gates.mjs docs after caller JSDoc completion; npx prettier --check apps/office/src/cppu/inc/com/sun/star/uno/Any.ts apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts scripts/uno-any-data-native-probe.mjs.
       Result: pass.
       Evidence: all13 effective scoped gates0 and exact3-source Prettier0; TS7/lint/docs/size/deps/provenance/tree/inventory shared+Calc/four related tooling files/routing/doctor/diff. Initial TS7/caller input/docs findings resolved without changing source/gates or observations.
-      Scope: selected runtime/test/probe and responsibility-level metadata. Final metadata check and implementation-bound EVALUATOR audit follow before clean canonical finish.
+      Scope: selected runtime/test/probe and responsibility-level metadata. Eight final metadata gates exit0. Separate EVALUATOR pass reviewed implementation3f1f84c26812d567781111d5086ef837acf85d91 after comment-only generic partial-write contract clarification; raw counters/full captures and369+13 actual hashes independently rechecked. Report: .agentplane/tasks/202610112001-NE4EG1/quality/20261011-202146102-recovery-context/quality-report.json. Docs/exact Any source lint/Prettier/diff checks after comment change exit0; executable bodies/observations/tests unchanged. Quality artifacts committed before clean canonical finish.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-11T20:19:25.369Z — VERIFY — ok
+    ### 2026-10-11T20:22:08.164Z — VERIFY — ok
 
     By: CODER
 
-    Note: Verified: task47 selected original Any data operators/helpers accepted;152 original build/capture commands0,369 source hashes13generated, three full normal-ASan/UBSan streams identical; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier checks8 final metadata gates0. Real default/owned lvalues and shared numeric/C owners reused. Separate implementation-bound EVALUATOR audit follows; whole Calc active,last full41,next51.
+    Note: Verified: final task47 docs correspond to reviewed implementation3f1f84c26812;152 native commands0,369+13 verified hashes, three full identical normal-ASan/UBSan streams; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 effective gates3 exact Prettier8 final metadata gates0 and comment-only docs/lint/format/diff0. Separate EVALUATOR pass recorded, broad flags false, later source dependencies explicit,last full41,next51.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:18:51.878Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:22:07.387Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
 
     Details:
 
@@ -116,37 +126,7 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610112001-NE4EG1
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-11T20:21:23.429Z — VERIFY — ok
-
-    By: CODER
-
-    Note: Verified: EVALUATOR comment clarification resolved with no executable changes; original generic partial writes preserved. Docs/exact source lint/Prettier/diff0; full native/source-absent/raw100/scoped evidence unchanged. Review refreshed against clarification commit next.
-    Attempts: 0
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:20:50.531Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112001-NE4EG1/blueprint/resolved-snapshot.json
-    - old_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
-    - current_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610112001-NE4EG1
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task complete 202610112001-NE4EG1 --result verified-202610112001-NE4EG1 --commit 412b3f21f674de0edd04aa2dc1bc81d769bab5e2
+    - safe_command: agentplane task complete 202610112001-NE4EG1 --result verified-202610112001-NE4EG1 --commit 3f1f84c26812d567781111d5086ef837acf85d91
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -217,17 +197,17 @@ Port original selected Any data operators/helpers using existing real shared own
 - Command: node output/playwright/task47-checks/any-gates.mjs; node output/playwright/task47-checks/any-gates.mjs docs after caller JSDoc completion; npx prettier --check apps/office/src/cppu/inc/com/sun/star/uno/Any.ts apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts scripts/uno-any-data-native-probe.mjs.
   Result: pass.
   Evidence: all13 effective scoped gates0 and exact3-source Prettier0; TS7/lint/docs/size/deps/provenance/tree/inventory shared+Calc/four related tooling files/routing/doctor/diff. Initial TS7/caller input/docs findings resolved without changing source/gates or observations.
-  Scope: selected runtime/test/probe and responsibility-level metadata. Final metadata check and implementation-bound EVALUATOR audit follow before clean canonical finish.
+  Scope: selected runtime/test/probe and responsibility-level metadata. Eight final metadata gates exit0. Separate EVALUATOR pass reviewed implementation3f1f84c26812d567781111d5086ef837acf85d91 after comment-only generic partial-write contract clarification; raw counters/full captures and369+13 actual hashes independently rechecked. Report: .agentplane/tasks/202610112001-NE4EG1/quality/20261011-202146102-recovery-context/quality-report.json. Docs/exact Any source lint/Prettier/diff checks after comment change exit0; executable bodies/observations/tests unchanged. Quality artifacts committed before clean canonical finish.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-11T20:19:25.369Z — VERIFY — ok
+### 2026-10-11T20:22:08.164Z — VERIFY — ok
 
 By: CODER
 
-Note: Verified: task47 selected original Any data operators/helpers accepted;152 original build/capture commands0,369 source hashes13generated, three full normal-ASan/UBSan streams identical; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier checks8 final metadata gates0. Real default/owned lvalues and shared numeric/C owners reused. Separate implementation-bound EVALUATOR audit follows; whole Calc active,last full41,next51.
+Note: Verified: final task47 docs correspond to reviewed implementation3f1f84c26812;152 native commands0,369+13 verified hashes, three full identical normal-ASan/UBSan streams; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 effective gates3 exact Prettier8 final metadata gates0 and comment-only docs/lint/format/diff0. Separate EVALUATOR pass recorded, broad flags false, later source dependencies explicit,last full41,next51.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:18:51.878Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:22:07.387Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
 
 Details:
 
@@ -242,37 +222,7 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610112001-NE4EG1
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-11T20:21:23.429Z — VERIFY — ok
-
-By: CODER
-
-Note: Verified: EVALUATOR comment clarification resolved with no executable changes; original generic partial writes preserved. Docs/exact source lint/Prettier/diff0; full native/source-absent/raw100/scoped evidence unchanged. Review refreshed against clarification commit next.
-Attempts: 0
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:20:50.531Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112001-NE4EG1/blueprint/resolved-snapshot.json
-- old_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
-- current_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610112001-NE4EG1
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task complete 202610112001-NE4EG1 --result verified-202610112001-NE4EG1 --commit 412b3f21f674de0edd04aa2dc1bc81d769bab5e2
+- safe_command: agentplane task complete 202610112001-NE4EG1 --result verified-202610112001-NE4EG1 --commit 3f1f84c26812d567781111d5086ef837acf85d91
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
