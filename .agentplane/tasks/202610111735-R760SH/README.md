@@ -4,7 +4,7 @@ title: "Restore native frame-area geometry ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -17,12 +17,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T18:05:36.590Z"
+  updated_by: "CODER"
+  note: "14030 related plus26 tooling cases pass with35fresh cases and zero pending; all four complete current core modules Istanbul100 (616positive raw counters),864old acceptance byte-identical, canonical history preserved, all static/build and9metadata gates pass. Production unchanged after runtime coverage; see ignored proof.json and task Verification. No full checkpoint; broad goal remains active with pause-after-next-full instruction."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T18:06:23.253Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact ee7b031ed9224862df1461a0eb4e3b32d60ca507: native area ownership task satisfies scoped source, behavior, current whole-module coverage, inventory, preservation and security gates. Recommend task finish; broad parity remains incomplete."
+  evaluated_sha: "ee7b031ed9224862df1461a0eb4e3b32d60ca507"
+  blueprint_digest: "fe789b4ea843181a9d23bca87386c069b6fb39e29f155bbc18558bbcdf19e8bb"
+  evidence_refs:
+    - ".agentplane/tasks/202610111735-R760SH/README.md"
+    - ".agentplane/tasks/202610111735-R760SH/quality/20261011-180623253-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111735-R760SH/quality/20261011-180623253-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111735-R760SH/quality/20261011-180623253-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111735-R760SH/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/R760SH/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/R760SH/review-binding.json"
+    - "apps/office/node_modules/.cache/parity-coverage/R760SH/related-tests.json"
+    - "apps/office/node_modules/.cache/parity-coverage/R760SH/tooling-tests.json"
+  findings:
+    - "Compared original tools/gen.hxx, swrect.hxx, frame.hxx, wsfrm/newfrm.cxx ownership and represented contracts against committed code. Every actual frame composes the native area owner; flags/defaults/scoped writeback/uint32 IDs and WRITER-006 empty containment are retained without model/client replacement. Full browser geometry/query integration is not claimed."
+    - "14030 related plus26 tooling cases pass with35fresh cases, no pending/failed cases; complete four current core modules100 in all four metrics.616raw positive integer counters are tied to exact committed source/test bytes, with installed remapper unbounded endpoints and source-verified implicit else locations retained raw.864prior acceptance files unchanged and canonical prefixes preserved."
+    - "All required static/build and9metadata checks pass after bounded declaration/comment/witness repairs. Runtime/build/tests execute with LibreOffice/mdds/ICU links physically absent and restore them; source-only audits run after restoration. No passing test replay, upstream copies/helper scripts/raw reports in AgentPlane, network or unrelated source mutation."
+commit:
+  hash: "ee7b031ed9224862df1461a0eb4e3b32d60ca507"
+  message: "🧩 R760SH code: Restore original native frame-area ownership"
 comments:
   -
     author: "CODER"
@@ -35,8 +58,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore original frame area/print geometry, validity and scoped writeback owners and remove duplicate SwFrame validity fields, preserve native empty containment and old acceptance/inventory/IO contracts; targeted current four-module100 coverage, correction2."
+  -
+    type: "status"
+    at: "2026-10-11T18:05:35.645Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-11T18:05:36.590Z"
+    author: "CODER"
+    state: "ok"
+    note: "14030 related plus26 tooling cases pass with35fresh cases and zero pending; all four complete current core modules Istanbul100 (616positive raw counters),864old acceptance byte-identical, canonical history preserved, all static/build and9metadata gates pass. Production unchanged after runtime coverage; see ignored proof.json and task Verification. No full checkpoint; broad goal remains active with pause-after-next-full instruction."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:04:36.885Z"
+doc_updated_at: "2026-10-11T18:05:36.645Z"
 doc_updated_by: "CODER"
 description: "Correction2 after full checkpoint: replace SwFrame-owned validity booleans with original SwFrameAreaDefinition composition and native area/print rectangles, frame IDs and scoped original write accesses. Port represented Point/Size/SwRect ownership and literal geometry, record source empty-rectangle containment without fixing it. Preserve original frame APIs/clients, inventory history and registered IO deviations; geometric lookup integration remains subsequent work."
 sections:
@@ -59,6 +94,39 @@ sections:
     Scope: actual frame-area base ownership and represented geometry contracts, replacing original misplaced validity storage. Native shared tools ownership registration adds only tools module, empty outbound allowlist and source-proven sw-to-tools edge; fresh test rejects reverse/application/browser edges. Runtime symbol records name genuine class/method declarations; nested helper/property evidence remains in provenance without weakening declaration validators. Inventory:6new runtime/provenance records and2append-only wsfrm records, broad statuses/defaults remain unverified. WRITER-006 preserves original empty-area containment.
     All runtime/static/build/test runs hide LibreOffice/mdds/ICU links physically and restore original targets in finally. Source pin 9bc445578031fecf56086729d8e4940c77e14d65 and original five-file source hashes retained.9metadata gates pass: source-tree/provenance/registry/resource-generation/invariants/parity/routing/doctor/diff. Source-dependent audits execute after restoration only; no runtime reads/executes pinned upstream. No upstream/helper/Python/log/raw-map files in AgentPlane.
     Residual: finite JavaScript exact-range geometry only; complete native tools/SwRect operators, transforms, full layout geometry, formatter/query/client unification, measured browser cursor registry and UI integration remain pending. This is a substrate refactor, not a completed UI geometry port. Same-agent evaluator review is non-independent. No full checkpoint for correction2; the broad goal remains active and must pause after the next full checkpoint only after correcting any failures.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T18:05:36.590Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 14030 related plus26 tooling cases pass with35fresh cases and zero pending; all four complete current core modules Istanbul100 (616positive raw counters),864old acceptance byte-identical, canonical history preserved, all static/build and9metadata gates pass. Production unchanged after runtime coverage; see ignored proof.json and task Verification. No full checkpoint; broad goal remains active with pause-after-next-full instruction.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T18:05:35.645Z, excerpt_hash=sha256:9b0e7b029ecaf7f33d798833d2236e999fd44a9b9750a272d898e781821351cc
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111735-R760SH/blueprint/resolved-snapshot.json
+    - old_digest: fe789b4ea843181a9d23bca87386c069b6fb39e29f155bbc18558bbcdf19e8bb
+    - current_digest: fe789b4ea843181a9d23bca87386c069b6fb39e29f155bbc18558bbcdf19e8bb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111735-R760SH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610111735-R760SH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Use a separately approved corrective task to revert the semantic source/inventory/document changes if needed. Restore all three original ignored source-reference link names and targets in finally. No network or reference execution."
   Findings: |-
     Clean authoritative baselinewriter180e855b. Actual frame area ownership in frame.hxx includes two SwRects, ID andthreevalidity flags, with scoped native by-value writeback in wsfrm.cxx. Current SwFrame fields claim only bounded validity, not native geometry owner. Composition will represent source multiple inheritance without changing original SwClient identity or introducing an index/model copy. Source Contains(Point) admits an empty rectangle origin despite IsEmpty; preserve and document unconfirmed observation. Read-only discovery of absent src/tools and core/inc directories was rerouted before mutation; new native directories are intentional source-shaped declarations. No gateway user-instructions found. Original query/UI measured registry/geometry/Calc responsibilities remain incomplete.
@@ -102,6 +170,39 @@ Evidence:14030 related cases/510files plus26 tooling cases/5files =14056 unique 
 Scope: actual frame-area base ownership and represented geometry contracts, replacing original misplaced validity storage. Native shared tools ownership registration adds only tools module, empty outbound allowlist and source-proven sw-to-tools edge; fresh test rejects reverse/application/browser edges. Runtime symbol records name genuine class/method declarations; nested helper/property evidence remains in provenance without weakening declaration validators. Inventory:6new runtime/provenance records and2append-only wsfrm records, broad statuses/defaults remain unverified. WRITER-006 preserves original empty-area containment.
 All runtime/static/build/test runs hide LibreOffice/mdds/ICU links physically and restore original targets in finally. Source pin 9bc445578031fecf56086729d8e4940c77e14d65 and original five-file source hashes retained.9metadata gates pass: source-tree/provenance/registry/resource-generation/invariants/parity/routing/doctor/diff. Source-dependent audits execute after restoration only; no runtime reads/executes pinned upstream. No upstream/helper/Python/log/raw-map files in AgentPlane.
 Residual: finite JavaScript exact-range geometry only; complete native tools/SwRect operators, transforms, full layout geometry, formatter/query/client unification, measured browser cursor registry and UI integration remain pending. This is a substrate refactor, not a completed UI geometry port. Same-agent evaluator review is non-independent. No full checkpoint for correction2; the broad goal remains active and must pause after the next full checkpoint only after correcting any failures.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T18:05:36.590Z — VERIFY — ok
+
+By: CODER
+
+Note: 14030 related plus26 tooling cases pass with35fresh cases and zero pending; all four complete current core modules Istanbul100 (616positive raw counters),864old acceptance byte-identical, canonical history preserved, all static/build and9metadata gates pass. Production unchanged after runtime coverage; see ignored proof.json and task Verification. No full checkpoint; broad goal remains active with pause-after-next-full instruction.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T18:05:35.645Z, excerpt_hash=sha256:9b0e7b029ecaf7f33d798833d2236e999fd44a9b9750a272d898e781821351cc
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111735-R760SH/blueprint/resolved-snapshot.json
+- old_digest: fe789b4ea843181a9d23bca87386c069b6fb39e29f155bbc18558bbcdf19e8bb
+- current_digest: fe789b4ea843181a9d23bca87386c069b6fb39e29f155bbc18558bbcdf19e8bb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111735-R760SH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610111735-R760SH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
