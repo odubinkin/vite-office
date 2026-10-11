@@ -4,7 +4,7 @@ title: "Port original weak reference listener and helper lifecycle"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 29
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,44 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T23:50:40.364Z"
+  updated_by: "CODER"
+  note: "Task53 committed source908c80a55f40 independently accepted at matching evaluated_sha. Genuine73full original units/build,379hashes23generatedfiles,159runtime/build0 and1expected original compiler rejection;5whole normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared167/47 whole19/68owners raw100; exact task52 profile append-only and3links restored.13actual final gate rows0,35tooling tests,10formatfiles. Fullstream verifier unchanged,records/sourcecases honest,broadflagsfalse;lastfull51,next61."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T23:50:13.353Z"
+  updated_by: "EVALUATOR"
+  note: "Accept committed task53 original OWeakRefListener/WeakReferenceHelper/typed wrapper at actual source908c80a55f40, whole native callback ownership replay and source-absent Calc/shared raw100. Shared owners reused; broader weak object/service/UI readiness unverified."
+  evaluated_sha: "908c80a55f40022ce3fbd90bdedceee43d02cb30"
+  blueprint_digest: "7fa6fbc4695a6cfb1e215b0d91b998ff12cbf7e132ba2f7009dbd03c27fa02af"
+  evidence_refs:
+    - ".agentplane/tasks/202610112307-1TENVG/README.md"
+    - ".agentplane/tasks/202610112307-1TENVG/quality/20261011-235013353-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112307-1TENVG/quality/20261011-235013353-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112307-1TENVG/quality/20261011-235013353-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112307-1TENVG/blueprint/resolved-snapshot.json"
+    - "output/playwright/task53-checks/final-audit.json"
+    - "output/playwright/task53-checks/gates-final-manifest.json"
+    - "output/playwright/task53-checks/format-final-check.log"
+    - "output/playwright/cppuhelper-weakref-native/manifest.json"
+    - "apps/office/src/cppuhelper/source/native-weakref-cases.json"
+  findings:
+    - "Reviewed actual committed2-runtime source owners against complete original weak.cxx/weakref.hxx: count1 construction gate/decrement, root-query versus direct XWeak overload, actual adapter return move, temporary/reference/destructor order, hardening, copy/move/self/equality/typed query and catch-only RuntimeException failure-state retention match. Typed root upcast preserves borrowed Reference view without extra ownership."
+    - "Independent full audit proves73 genuine unchanged original translation units per normal-ASan/UBSan build,379 current full source hashes,23 generated files including21 headers,159 runtime/build commands0/nullsignal. All5 complete captured streams exactly match sanitized/normal/fixture/pure replay. Original isolated syntax-only WeakReference<XWeak> rejection exits1 with full diagnostics/header/config/argv; compile binding rejects it without inventing an overload."
+    - "Whole current raw coverage confirms every S/F/B counter positive and S/B/F/L100 for19Calc/68relatedshared owners;106/24Calc and167/47shared tests pass. Task52 profile append-only by1test/2wholeincludes, all3 exact source links restored. All13 final actual gate rows0,35relatedtooling tests and10authoredfileformat checks pass. Reexport is correctly attributed to real source helper, not duplicate local ownership."
+    - "No library provider replaces OWeakObject/aggregation/exception bridge: entire original weak.cxx compiled, unrelated owners naturally dead-stripped. Both native undefined-symbol listings show no getCaughtException/throwException; link argv has no unresolved-symbol suppression. Complete fixture comparison remains deep-strict for every field/array, ignoring only unordered object key insertion order. Original full stream verifier untouched; no source/fixture/assertion/coverage/profile weakening."
+commit:
+  hash: "908c80a55f40022ce3fbd90bdedceee43d02cb30"
+  message: "✅ 1TENVG code: port original weak reference lifecycle"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete original listener/helper weak-reference lifecycle in shared owners on calc; genuine full native and scoped raw100 evidence, source overload/order/exception behavior retained."
+  -
+    author: "CODER"
+    body: "Implementation: task53 complete listener/helper/template source and genuine native/scoped evidence committed; record actual source SHA before first independent EVALUATOR acceptance."
 events:
   -
     type: "status"
@@ -35,8 +63,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement complete original listener/helper weak-reference lifecycle in shared owners on calc; genuine full native and scoped raw100 evidence, source overload/order/exception behavior retained."
+  -
+    type: "status"
+    at: "2026-10-11T23:50:12.663Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: task53 complete listener/helper/template source and genuine native/scoped evidence committed; record actual source SHA before first independent EVALUATOR acceptance."
+  -
+    type: "verify"
+    at: "2026-10-11T23:50:40.364Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task53 committed source908c80a55f40 independently accepted at matching evaluated_sha. Genuine73full original units/build,379hashes23generatedfiles,159runtime/build0 and1expected original compiler rejection;5whole normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared167/47 whole19/68owners raw100; exact task52 profile append-only and3links restored.13actual final gate rows0,35tooling tests,10formatfiles. Fullstream verifier unchanged,records/sourcecases honest,broadflagsfalse;lastfull51,next61."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:49:25.083Z"
+doc_updated_at: "2026-10-11T23:50:40.418Z"
 doc_updated_by: "CODER"
 description: "Task53 implements complete original OWeakRefListener and WeakReferenceHelper plus typed WeakReference header wrapper over shared Reference/RuntimeException/XWeak/XAdapter/XReference; original native custom interface callers verify real weak-reference lifecycle, overload/copy/move/query/error ownership without OWeakObject substitutes. Direct calc only."
 sections:
@@ -59,6 +100,39 @@ sections:
       Scope: only approved Calc/shared task53 implementation and records; broad contract/behavior/default/verified flags false. CALC-058 actual compiler restriction and CALC-059 source-inspected clear failure state documented without upstream repair; allocator-overwrite concern explicitly inference, not leak certification. OWeakObject/OWeakConnectionPoint/OWeakAggObject/generic exception bridge/ImplHelper/services/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Physical ABI/compiler-only restrictions beyond specific witness/allocator/resource/thread/shutdown/fullconsumer QA unverified. No Writer-only repair or extra full suite; last full51,next61.
 
     Actual committed implementation and independent EVALUATOR evaluated_sha acceptance are recorded before verification/closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T23:50:40.364Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task53 committed source908c80a55f40 independently accepted at matching evaluated_sha. Genuine73full original units/build,379hashes23generatedfiles,159runtime/build0 and1expected original compiler rejection;5whole normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared167/47 whole19/68owners raw100; exact task52 profile append-only and3links restored.13actual final gate rows0,35tooling tests,10formatfiles. Fullstream verifier unchanged,records/sourcecases honest,broadflagsfalse;lastfull51,next61.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T23:50:12.663Z, excerpt_hash=sha256:c93b2aa6f044433fdbcebbe87fed9fa0a234517d4daf34085035f7c5e1268e4b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112307-1TENVG/blueprint/resolved-snapshot.json
+    - old_digest: 7fa6fbc4695a6cfb1e215b0d91b998ff12cbf7e132ba2f7009dbd03c27fa02af
+    - current_digest: 7fa6fbc4695a6cfb1e215b0d91b998ff12cbf7e132ba2f7009dbd03c27fa02af
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112307-1TENVG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610112307-1TENVG -m 🧩 1TENVG task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore3original source link targets finally; retain failed/final native/scoped evidence. Revert only intentional task53 artifacts if needed; do not reset unrelated active tasks or Writer work."
   Findings: |-
     Previous goal turn is concrete progress: task52 closed at27b47930b48e with5real shared generated UNO interface contracts, seven genuine full native replay streams and whole19/66Calc/shared raw100. The complete original weak.cxx separates listener/helper responsibilities from weak object/connection/aggregation and its generic exception bridge. Implement full listener/helper before the weak object family; no omission disguised as a whole weak.cxx implementation. Original WeakReferenceHelper overload catches and order are retained. Native thread synchronization/physical ABI/compiler-only/allocator/shutdown/full consumer QA remain unverified.
@@ -156,6 +230,39 @@ Read complete original include/cppuhelper/weakref.hxx and cppuhelper/source/weak
   Scope: only approved Calc/shared task53 implementation and records; broad contract/behavior/default/verified flags false. CALC-058 actual compiler restriction and CALC-059 source-inspected clear failure state documented without upstream repair; allocator-overwrite concern explicitly inference, not leak certification. OWeakObject/OWeakConnectionPoint/OWeakAggObject/generic exception bridge/ImplHelper/services/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Physical ABI/compiler-only restrictions beyond specific witness/allocator/resource/thread/shutdown/fullconsumer QA unverified. No Writer-only repair or extra full suite; last full51,next61.
 
 Actual committed implementation and independent EVALUATOR evaluated_sha acceptance are recorded before verification/closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T23:50:40.364Z — VERIFY — ok
+
+By: CODER
+
+Note: Task53 committed source908c80a55f40 independently accepted at matching evaluated_sha. Genuine73full original units/build,379hashes23generatedfiles,159runtime/build0 and1expected original compiler rejection;5whole normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared167/47 whole19/68owners raw100; exact task52 profile append-only and3links restored.13actual final gate rows0,35tooling tests,10formatfiles. Fullstream verifier unchanged,records/sourcecases honest,broadflagsfalse;lastfull51,next61.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T23:50:12.663Z, excerpt_hash=sha256:c93b2aa6f044433fdbcebbe87fed9fa0a234517d4daf34085035f7c5e1268e4b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112307-1TENVG/blueprint/resolved-snapshot.json
+- old_digest: 7fa6fbc4695a6cfb1e215b0d91b998ff12cbf7e132ba2f7009dbd03c27fa02af
+- current_digest: 7fa6fbc4695a6cfb1e215b0d91b998ff12cbf7e132ba2f7009dbd03c27fa02af
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112307-1TENVG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610112307-1TENVG -m 🧩 1TENVG task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
