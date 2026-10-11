@@ -124,6 +124,18 @@
         {
           "path": "apps/office/e2e/writer-native-list-context.spec.ts",
           "marker": "Writer native list context and point state"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/shells/native-hyperlink-begin-edit.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-hyperlink-begin-edit.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-hyperlink-begin-edit.spec.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -186,6 +198,22 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/inc/wrtsh.hxx",
           "marker": "enum class SelectionType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx",
+          "marker": "SID_EDIT_HYPERLINK"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/move.cxx",
+          "marker": "SwWrtShell::SelectTextAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crstrvl.cxx",
+          "marker": "SwCursorShell::SelectTextModel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "SwCursorShell::HasSelection"
         }
       ]
     },
@@ -203,7 +231,8 @@
       "Iteration105 restores the existing paragraph StyleApply slot5552 to the stable SwDocShell owner with active SwView/GetWrtShell lifecycle, retaining the text-shell paragraph primitive. Caller-owned typed Template5552/Family5553 and Style6703/FamilyName5566 arguments and ordinary UNO/URL payloads preserve paragraph family2 defaults and recognized family-name precedence, paired programmatic-to-display conversion, actual custom or renamed style ownership, missing-name rejection, no-op family success and unsigned owner completion. Dispatcher preserves completed owner return items. Independent real model/view/frame/session tests cover current-style ID state, point/mark, history, graph replacement and instance isolation. Other style families, StyleDesigner, API-mode returns, modifier/reset/list/full-selection handling, the complete native style pool and native state itemset remain unverified; no status/default/exception promotion or registered save/open/recovery changes.",
       "Iteration106 restores inclusive text-node traversal for the current single SwPaM paragraph collection range, including empty/end-offset-zero paragraphs and table-cell text, with the supported editing primitive delegated to core edfcol instead of SwTextShell. One SwUndoFormatColl captures each original collection/list-item/suppression state and retains point/mark orientation; redo resolves the captured native collection display name and safely leaves nodes unchanged if absent. Actual document/view/frame tests and desktop/mobile ODT UI scenarios cover mixed active-endpoint styles, untouched neighbors, one history unit, repeated UndoRedo, owner guards, toolbar/sidebar/focus, continued editing and exported ownership. The existing whole-range no-op history remains a local contract and unverified against native repeated requests. Direct attribute and full-node hint resets, modifier/list resets, cursor rings, read-only/layout/redline/inline-heading handling, complete native history/defaults/style API and whole core/UI parity remain unverified. No status/default/exception promotion or registered save/open/recovery change.",
       "Iteration162 moves existing list state, rule application, deletion and level editing to inherited SwEditShell instead of functional command adapters and a cyclic UI shell route. Actual SwPaM rings include every selected table box. SelectionHasNumber/SelectionHasBullet preserve native empty-node, per-ring break and reserved Outline counted policy. SetCurNumRule reuses first created list identity across rings; DelNumRules and NumUpDown retain displayed table cursor and one grouped numeric history. SwPamRanges preserves native sorted same-start, adjacency, containment and partial-overlap policy; unreachable successor containment guard is omitted with lower-bound proof. Actual row/column/disjoint state, listID/count/indents/neighbors/current-slot replacement/atomic UndoRedo tests and Chromium real row selector assertions added. Full SwCursorShell hierarchy, document-owned undo/SwHistory/client/layout/merged/Repeat/rule factory and per-ring ContinueNumbering remain unverified. No module/state/default/IO exception promotion.",
-      "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved."
+      "Iteration168 gives list-kind and continuation operations to existing SwTextShell, retaining their bounded semantics while removing the old list-owner forwarding. SwListShell current-point GetNumLevel state preserves native MAXLEVEL10 sentinel and independent whole-range execution rejection. Represented SwWrtShell SelectionType requires actual rule, list membership and non-NONE level format; SwView conditionally places list shell below text shell using cached selection flags and TableCell masking. Source-owned registry/query splits retain the1000-line gate without compatibility wrappers or new models. Actual native, mounted DOM and Chromium cases cover the bounded flow. Other selection contexts, table row-column subtypes, native framework/layout/readonly gates and full core/UI/list/table behavior remain unverified; prior semantic/default/classification/IO deviations and evidence are preserved.",
+      "Task202610112025-A6NRZ0 aligns represented SID_EDIT_HYPERLINK state with pinned textsh1.cxx4041-4062: complete native current SET enables edit, otherwise only no-selection Default-mode original nonempty INET hint enables beginning fallback. Execute1662-1684 selects the exact original hinted range before dialog/direct arguments when no selection and no current SET; the persistent native point/content-index identity survives start-mark-end assignment, mark is at start and point at end. Cancellation retains the selected link as native source explicitly states; adjacent equal URLs remain separate and original body/cell owners are used. Full generic core GetCurAttr/SelectTextAttr/SelectTextModel, readonly/fly/selection-overlap/cursor-stack lifecycle and Remove INVALID/ring history remain unverified follow-ups. Existing statuses/defaults/classifications/evidence/responsibility prefixes and registered IO/recovery deviations preserved; no whole-module upstream parity promotion or upstream bug claim."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",

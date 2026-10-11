@@ -17,6 +17,7 @@ import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
+  RES_TXTATR_INETFMT,
   RES_MARGIN_FIRSTLINE,
   RES_BREAK,
   RES_PAGEDESC,
@@ -35,7 +36,8 @@ import {
   projectWriterCharacterAttributes,
   type WriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
-import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
+import { GetTextAttrMode } from "../../../inc/swtypes";
+import type { SwFormatINetFormat, WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import {
   CreateWriterFontSizeUndo,
@@ -69,6 +71,7 @@ export interface SwTextShellTarget extends Pick<
   readonly CaptureCursorState: () => SwUndoCursorState;
   readonly GetActiveParagraph: () => SwTextNode;
   readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
+  readonly IsTableMode: () => boolean;
   readonly GetDefaultFontFamily: () => string;
   readonly GetDefaultFontSizePt: () => number;
   readonly GetDoc: () => import("../../core/doc/doc").SwDoc;
@@ -201,6 +204,47 @@ export class SwTextShell {
   /** Returns the uniform hyperlink at the active selection or caret. @returns Hyperlink or undefined. */
   public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
     return getWriterHyperlinkAtCursor(this.target.GetDoc(), this.target.GetCursor());
+  }
+
+  /** Tests represented native HasSelection without treating an equal mark as selected; fly selection remains unrepresented. @returns Whether table mode or actual point/mark selection exists. */
+  private HasHyperlinkSelection(): boolean {
+    if (this.target.IsTableMode()) return true;
+    const cursor = this.target.GetCursor();
+    return cursor.HasMark() && cursor.GetPoint().compare(cursor.GetMark()) !== 0;
+  }
+
+  /** Implements represented SID_EDIT_HYPERLINK state: current SET or an unselected original nonempty Default-mode hint. @returns Whether edit is enabled. */
+  public CanEditHyperlink(): boolean {
+    if (this.GetHyperlinkAtCursor() !== undefined) return true;
+    if (this.HasHyperlinkSelection()) return false;
+    const point = this.target.GetCursor().GetPoint(),
+      node = point.GetNode(),
+      hint =
+        node instanceof SwTextNode
+          ? node.GetTextAttrAt(point.GetContentIndex(), RES_TXTATR_INETFMT, GetTextAttrMode.Default)
+          : undefined;
+    return hint !== undefined && (hint.GetAttr() as SwFormatINetFormat).GetValue().length > 0;
+  }
+
+  /** Implements SID_EDIT_HYPERLINK beginning fallback before dialog: select the original native hint with the persistent point at its end and mark at its start. Full core overlap/readonly/fly movement is unrepresented. @returns Whether execution may proceed. */
+  public PrepareEditHyperlink(): boolean {
+    if (this.HasHyperlinkSelection() || this.GetHyperlinkAtCursor() !== undefined) return true;
+    const cursor = this.target.GetCursor(),
+      point = cursor.GetPoint(),
+      node = point.GetNode(),
+      hint =
+        node instanceof SwTextNode
+          ? node.GetTextAttrAt(point.GetContentIndex(), RES_TXTATR_INETFMT, GetTextAttrMode.Default)
+          : undefined;
+    if (hint === undefined) return false;
+    cursor.DeleteMark();
+    point.Assign(node, hint.GetStart());
+    cursor.SetMark();
+    point.Assign(node, hint.GetEnd());
+    this.target.SetPendingCharacterItems((node as SwTextNode).GetCharacterItemsAt(hint.GetEnd()));
+    this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
+    this.target.NotifySelectionChanged();
+    return true;
   }
 
   /** Returns document bookmarks in position order. @returns Names. */

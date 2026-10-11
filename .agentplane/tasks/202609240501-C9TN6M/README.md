@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 337
+revision: 338
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:20:12.716Z"
+doc_updated_at: "2026-10-11T20:42:55.048Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1500,6 +1500,10 @@ sections:
     - Observation: Correction6/10 SBN0Z2 represented hyperlink state query retires TextRuns/DTO equality, uses original INET owners/full normal+visited style IDs/native interval flags/default-invalid ring/node aggregation. Native source requires old dialog end-caret setups to move inside; two cases retain all dialog outcomes and add disabled-end assertions;874 other old test files unchanged.
       Impact: Accepted7053 case occurrences/303 files; standalone passing1584-case producer certifies complete editsh100allfour/229 counters without failed-map contributions. Actual React/Chrome native state checks and9metadata gates pass; inventory/provenance append history only.
       Resolution: Finish atomic native-INET query task with exact semantic same-agent non-independent review and clean writer closure. Goal active, full once per10 corrections and pause after next accepted full plus repairs. Full generic query, beginning-command fallback/native UI selection/dialog/history remain pending; registered IO/recovery deviations untouched.
+
+    - Observation: Correction7/10 A6NRZ0 fixes EditHyperlink native nonzero/shared-beginning Default fallback and exact original hint selection before dialog. Native point/content-index identity persists; cancelled dialog leaves the selected link, accepted body/cell edit and direct arguments change the following owner only. Independent adjacent equal URLs are retained.
+      Impact: Genuine body/cell red2 reproduced before fix. Final7046related/298files+25tooling/4+4Chrome/4=7075cases/306files;22fresh cases. Complete two modules100allfour/738 raw positive counters,878oldtests identical,9current static/freshbuild checks,9metadata gates,137build hashes/reference/pin integrity and four append-only canonical records.
+      Resolution: Finish atomic Edit correction with exact semantic same-agent non-independent review and clean writer. Next command gap is Remove INVALID/default selection/ring undo; generic core/read-only/fly/selection lifecycle/full history still unverified. Goal active; full once per10 corrections, pause after next accepted full and fixes; registered IO/recovery preserved.
 id_source: "generated"
 ---
 ## Summary
@@ -2973,3 +2977,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction6/10 SBN0Z2 represented hyperlink state query retires TextRuns/DTO equality, uses original INET owners/full normal+visited style IDs/native interval flags/default-invalid ring/node aggregation. Native source requires old dialog end-caret setups to move inside; two cases retain all dialog outcomes and add disabled-end assertions;874 other old test files unchanged.
   Impact: Accepted7053 case occurrences/303 files; standalone passing1584-case producer certifies complete editsh100allfour/229 counters without failed-map contributions. Actual React/Chrome native state checks and9metadata gates pass; inventory/provenance append history only.
   Resolution: Finish atomic native-INET query task with exact semantic same-agent non-independent review and clean writer closure. Goal active, full once per10 corrections and pause after next accepted full plus repairs. Full generic query, beginning-command fallback/native UI selection/dialog/history remain pending; registered IO/recovery deviations untouched.
+
+- Observation: Correction7/10 A6NRZ0 fixes EditHyperlink native nonzero/shared-beginning Default fallback and exact original hint selection before dialog. Native point/content-index identity persists; cancelled dialog leaves the selected link, accepted body/cell edit and direct arguments change the following owner only. Independent adjacent equal URLs are retained.
+  Impact: Genuine body/cell red2 reproduced before fix. Final7046related/298files+25tooling/4+4Chrome/4=7075cases/306files;22fresh cases. Complete two modules100allfour/738 raw positive counters,878oldtests identical,9current static/freshbuild checks,9metadata gates,137build hashes/reference/pin integrity and four append-only canonical records.
+  Resolution: Finish atomic Edit correction with exact semantic same-agent non-independent review and clean writer. Next command gap is Remove INVALID/default selection/ring undo; generic core/read-only/fly/selection lifecycle/full history still unverified. Goal active; full once per10 corrections, pause after next accepted full and fixes; registered IO/recovery preserved.
