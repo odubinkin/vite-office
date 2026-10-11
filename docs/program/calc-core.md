@@ -2622,3 +2622,32 @@ Original copy.hxx normal LP64 complete copy/default/convert operations and all e
 ### Original Reference ownership and generated exception values
 
 Continue the approved real Reference/default-exception dependency: bind original Reference.h/hxx direct default/pointer/copy/no-acquire/move constructors, get/is/Boolean/clear/set/assignment/destruction ownership operations into one shared Reference owner; preserve null defaults, acquire-before-release and clear-before-release callback visibility and release/transfer/null move assignment. Query/Any/throwing/interface-identity comparison constructors and operators remain separate unfinished responsibilities, not substitutes. Port actual generated Exception/RuntimeException IDL value classes (normal LIBO_INTERNAL_ONLY, OSL_DEBUG_LEVEL0, no source-location configuration), real shared OUString and Reference default/copy/move/assign/reverse lifetime, stable field owners, and actual cppumaker RuntimeException type initializer with unchanged typelib factory/register/release and leaked shared Type lifetime. No JavaScript Error/provider/type shim or independent exception registry. Full original native generated headers, true72 SAL/CPPU dependencies normal/ASan/UBSan and complete value/type/count/callback observations must precede source-absent raw100 acceptance. Debug source-location append, physical ABI/C++ interface casts/native threading/QA and full query/Any/case/service/UI remain unverified; broad flags remain false. This continues task39 under the user instruction to keep the current39/40/full41/fix/pause plan. The actual generated ASCII type-name constructor requires original rtl_uString_newFromLiteral, char-to-Unicode Copy and selected OUString const char array overload; extend existing shared SAL owners, preserve embedded-zero/trailer validity, ASCII assertion and release-last aliasing. Native JS typed-array operations adapt original array type/length/validation only, not another string factory.
+
+
+### Original locale-aware scalar case values
+
+The shared i18nutil owner now implements the original `getConditionalValue` and
+`getValue` bodies. Exact Locale ASCII language comparison, conditional const entry
+identity, complete independent Mapping value copies, surrogate-tail suppression,
+combined scalar lookup, extras and task38-selected ICU scalar fallback retain the
+pinned source contracts. Default exceptions use the actual shared generated
+RuntimeException/Exception, Reference, OUString and typelib owners. The original
+`casefolding.cxx` RuntimeException API dependency adds i18nutil -> cppu to the
+approved source-root graph wiring; reverse, browser and application edges stay
+forbidden. No cycle exception is needed for this acyclic dependency.
+
+The original native probe rebuilt69 genuine SAL/CPPU translation units and the
+unchanged original case/ICU scopes, verified360 full pinned blobs, and reproduced
+all13,228,032 initialized observations identically under normal and ASan/UBSan
+builds. Portable replay compares every native field, conditional identity, copy
+independence, unchanged caller buffer and actual exception message/context/type.
+Focused source coverage has76 statements,101 branch counters and9 functions, all
+positive and S/B/F/L100. CALC-035 conditions are preserved; CALC-038 isolated
+internal-bit undefined behavior has no invented portable expected output. Final source-absent Calc106/24files/19executable owners and related shared113/34files/41owners pass; every raw S/B/F counter is positive and S/B/F/L100. Calc totals are S2920/B2055/F474/L2564 and related shared S2707/B1333/F386/L2407. All three original source links are restored exactly before source/provenance checks. All13 declared gates pass including34 tooling tests; doctor reports0errors and two inherited warnings.
+
+Full getNextChar/widthfolding, locale service/CharClass/SharedStringPool and Calc
+cell/document/edit/view remain unfinished. Full generated API, Any/query,
+physical C++ ABI, native threading, debug source-location configuration and
+original consumer QA are outside this bounded scalar proof. Broad parity flags
+stay false; next tasks remain40 and full41, followed by Calc/shared repairs and
+the requested pause.

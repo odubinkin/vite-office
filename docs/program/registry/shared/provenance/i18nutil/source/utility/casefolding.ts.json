@@ -8,9 +8,22 @@
     "upstreamPath": "i18nutil/source/utility/casefolding.cxx",
     "localSymbols": [
       "[type, nmap, map]",
+      "accent_above",
+      "address",
+      "az",
+      "c",
       "cased_letter",
       "cmi",
       "cmv_idx",
+      "copyMapping",
+      "dummy",
+      "entry",
+      "extra",
+      "getConditionalValue",
+      "getValue",
+      "langIs",
+      "lt",
+      "map",
       "mappingArray",
       "mapping_0049",
       "mapping_004a",
@@ -23,7 +36,10 @@
       "mapping_0307",
       "mapping_03a3",
       "msb",
-      "unit"
+      "tr",
+      "type_i",
+      "unit",
+      "value"
     ],
     "upstreamSymbols": [
       "cased_letter",
@@ -36,13 +52,18 @@
       "mapping_0128",
       "mapping_0049",
       "mapping_0069",
-      "mapping_0130"
+      "mapping_0130",
+      "getConditionalValue",
+      "getValue",
+      "langIs",
+      "type_i",
+      "accent_above"
     ],
     "preservedResponsibilities": [
-      "Preserve all ten original conditional const Mapping arrays,21 complete structs and the internal cased_letter index/type-mask predicate. Uint16Array retains all three initialized words; native sal_Unicode integral conversion is explicit. The primitive native probe compiles the complete unchanged original const/predicate interval and full genuine SAL/i18nutil/o3tl headers, verifies13 full pinned blobs, and compares every65536 UTF16 result plus integral conversions and all Mapping fields; ASan/UBSan outputs are identical. It does not instantiate Locale, execute getValue/getConditionalValue or certify UNO/service/pool behavior. Module exports expose original translation-unit internals to ESM consumers/tests without making them public header operations; complete public class implementation is pending."
+      "Preserve original getConditionalValue const entry identity and getValue independent complete Mapping copies, exact Locale ASCII comparisons, native surrogate tail/combination, extra selection and existing task38 scalar ICU fallback. Real default RuntimeException uses the existing shared Exception/Reference/OUString/typelib owners. Every one of 13228032 original native rows is replayed including all initialized fields, conditional identity, copy independence, unchanged input and actual exception fields/type. Native --check recompiles 69 true SAL/CPPU owners plus unchanged original case/ICU scopes; 360 pinned blobs and all normal/ASan/UBSan captures agree. CALC-035 pos > len is preserved; CALC-038 isolated internal-bit UB supplies no invented portable expected result. Borrowed const units have a readonly structural interface; struct value copies retain all three initialized units."
     ],
     "omittedResponsibilities": [
-      "Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated Locale correspondence, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unfinished. Native primitive capture is distinct from source-only Locale evidence and does not certify full original consumer QA, C++ ABI/const/template or physical memory contracts."
+      "getNextChar/widthfolding, full generated class/API and consumer QA, debug-source-location/physical C++ ABI/threading, actual locale service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unverified. Runtime exception/direct reference evidence is bounded to previously verified normal internal debug0 ownership/type initialization. Full public Any/query and native threading are not certified by the scalar mapping replay."
     ],
     "evidence": {
       "local": [
@@ -53,12 +74,24 @@
         {
           "path": "apps/office/src/i18nutil/source/utility/casefolding.test.ts",
           "marker": "replays every native UTF16 cased-letter result and original integral argument narrowing"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding.ts",
+          "marker": "getValue"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding-value.test.ts",
+          "marker": "all native locale/flag/context calls preserve const identity, independent copies and real exceptions"
         }
       ],
       "upstream": [
         {
           "path": "i18nutil/source/utility/casefolding.cxx",
           "marker": "cased_letter"
+        },
+        {
+          "path": "i18nutil/source/utility/casefolding.cxx",
+          "marker": "getValue"
         }
       ]
     }

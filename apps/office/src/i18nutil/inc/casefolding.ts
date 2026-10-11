@@ -30,3 +30,10 @@ export interface Mapping {
   nmap: number;
   map: Uint16Array;
 }
+
+/** Original const Mapping reference, exposing initialized units without mutable array operations. */
+export interface MappingConstReference {
+  readonly type: number;
+  readonly nmap: number;
+  readonly map: Iterable<number> & { readonly length: number; readonly [index: number]: number };
+}

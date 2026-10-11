@@ -4,7 +4,7 @@ title: "Port original locale-aware case-mapping values for Calc string service"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 172
+revision: 178
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T12:20:52.361Z"
+  updated_by: "CODER"
+  note: "Whole task39 acceptance passed: genuine native case closure and all13228032 portable observations; source-absent Calc106/shared113/ICU3 all raw100, all13 gates and changed-file Prettier. Full aggregate remains41; no Writer-only repair."
   attempts: 0
 commit: null
 comments:
@@ -55,8 +55,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-11T12:20:52.361Z"
+    author: "CODER"
+    state: "ok"
+    note: "Whole task39 acceptance passed: genuine native case closure and all13228032 portable observations; source-absent Calc106/shared113/ICU3 all raw100, all13 gates and changed-file Prettier. Full aggregate remains41; no Writer-only repair."
 doc_version: 3
-doc_updated_at: "2026-10-11T12:01:28.795Z"
+doc_updated_at: "2026-10-11T12:20:52.459Z"
 doc_updated_by: "CODER"
 description: "Task39: implement original casefolding getValue/getConditionalValue and complete source data with real Locale string fields/default ownership and original default UNO RuntimeException boundary. Reuse actual shared OUString, RTL character and proven ICU scalar contracts. Preserve suspect upstream behavior. Verify source/owner contracts and unchanged native reference without fake service/type stand-ins; portable Calc/affected shared100 and scoped gates. No UI shell, Writer duplication or full-run before41."
 sections:
@@ -512,6 +518,58 @@ sections:
     - Command: node output/playwright/task39-checks/reference-gates.mjs (with bounded resumed gates after recorded metadata repairs). Result: pass; final manifest13 distinct gates all0: TS7, nine-path eslint, JSDoc, size, dependencies, provenance, source tree, shared/Calc inventory,34 tooling tests/4 files, routing, doctor0errors/2 inherited warnings, diff. Validation scripts/criteria unchanged. Actual generated C++ header owners are colocated beside Type/Reference in CPPU; their IDL and genuine cppumaker remain provenance sources. Broad parity/default/verified flags false.
     - Command: node output/playwright/task39-checks/reference-portable.mjs. Result: pass, actual handle terminal0. All three original source links absent for complete Calc106 tests/24 files/19 executable owners S2920/B2055/F474/L2564 and related shared110 tests/33 files/41 executable owners S2651/B1234/F380/L2353. Every raw statement/function/branch counter positive; S/B/F/L100, thresholds unchanged. Restore all three original symlinks exactly afterward. Evidence:reference-calc-manifest.json,reference-shared-manifest.json,reference-coverage-audit.json.
     - Whole39 original getValue/getConditionalValue acceptance is still pending; this checkpoint supplies actual default exception and Reference ownership rather than a placeholder. No whole39 verify--ok/evaluator-pass/finish or goal-completion claim follows. Full41, Calc/affected shared repair and requested goal pause remain pending; Writer-only coverage repair excluded.
+
+    Whole task39 final acceptance (supersedes earlier dependency-only pending checkpoints):
+
+    Command: node scripts/casefolding-native-probe.mjs --check
+    Result: pass
+    Evidence: terminal0,360 complete original blobs,69 genuine SAL/CPPU TUs normal/ASan/UBSan plus unchanged case/ICU scopes;11141120 point +1048576 tail +1038336 condition rows, byte-identical normal/sanitized captures and exact committed fixture equality.
+    Scope: actual original getValue/getConditionalValue closure, real generated Locale/default RuntimeException and all initialized native value/reference/copy/error observations. Existing CALC-035/038 behavior remains preserved; unsupported native UB has no invented expected output.
+
+    Command: npm run test:coverage:calc and related shared exact argv in output/playwright/task39-checks/value-shared-manifest.json; additional ICU argv in value-icu-shared-manifest.json
+    Result: pass
+    Evidence: all3 original source links absent through entire executions then exactly restored. Calc106/24files/19owners S2920/B2055/F474/L2564; related shared113/34files/41owners S2707/B1333/F386/L2407; related ICU3tests/5owners S116/B64/F20/L106. Every raw statement/function/branch counter is positive, all S/B/F/L100.
+    Scope: all changed executable owners and affected shared SAL/CPPU/UNO/Locale/case/ICU consumers; no Writer runtime changes. Raw audits: value-coverage-audit.json and corrected actual ICU value-icu-coverage-audit.json.
+
+    Command: all13 argv in output/playwright/task39-checks/value-gates-final-manifest.json; changed-file Prettier; git diff --check
+    Result: pass
+    Evidence: TS7, exact five-path eslint, JSDoc1394 authored files, file size, unchanged protected dependencies, provenance429 runtime owners, source tree, shared/Calc inventory,34toolingtests/4files, routing, doctor0errors/two inherited warnings and diff. Scope includes original i18nutil -> CPPU generated RuntimeException API direction already covered by approved graph wiring; no cycle exception, alternate exception provider, threshold relaxation or skipped mandatory check.
+    Scope: all declared final static/source/governance gates. Source links restored before provenance/native reads. Full aggregate run remains task41, per user cadence; leave Writer-only coverage repairs to its separate branch.
+
+    Output: original locale-aware scalar case values plus shared default exception/type/lifetime dependency, exact const reference/value copy and native table/fallback/error behavior. Real locale service/CharClass/SharedStringPool, full Any/query/getNextChar/widthfolding and Calc document/edit/view/UI remain unfinished; full goal remains active until requested post-full41 pause. No whole library/ABI/threading/QA parity claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T12:20:52.361Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Whole task39 acceptance passed: genuine native case closure and all13228032 portable observations; source-absent Calc106/shared113/ICU3 all raw100, all13 gates and changed-file Prettier. Full aggregate remains41; no Writer-only repair.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T12:20:36.803Z, excerpt_hash=sha256:c176f78218371f2742b349043038393635a752ab885fcfa2045615bca95d23df
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json
+    - old_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+    - current_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101731-H21CAK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101731-H21CAK
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete."
   Findings: |-
     Original lazy Unicode expression checkpoint:
@@ -799,6 +857,28 @@ sections:
     The SAL C header reexports the actual new literal function without redeclaring a local implementation; retain its upstream public symbol and remove the reexport from local-declaration arrays, matching the existing header inventory contract. Native bodies/public export and pass criteria unchanged. Whole39 still pending.
 
     Final complete source-absent Calc106 and related-shared110 native stream tests now pass with S/B/F/L100/every raw counter positive, exact original-link restoration and unchanged13-gate validation. TextEncoder diagnostic failure corrected by actual same-realm source-literal byte construction; no upstream defect or suspect-journal entry. Direct Reference and actual generated exception dependency is verified within the declared normal configuration; original case methods/full39 remain unfinished. Continue existing39/40/full41/fix/pause plan.
+
+    Final original scalar mapping implementation: port getConditionalValue and getValue with original const entry identity and independent full Mapping value copies. Preserve original pos > len conditions (CALC-035), original extra traversal and isolated CALC-038 internal-bit undefined behavior without a fabricated expected result. Actual default exceptions reuse existing generated CPPU RuntimeException/Exception, direct Reference, SAL OUString and true typelib owners. No new registry/provider or duplicated Writer shared module.
+
+    Approved Scope already names scripts/check-module-boundaries.mjs/test and original shared dependency direction wiring. Add the actual acyclic i18nutil -> cppu direction witnessed by pinned casefolding.cxx #include <com/sun/star/uno/RuntimeException.hpp> and genuine generated native headers. The reverse edge and protected core/browser/application restrictions remain rejected; no cycle exemption or pass-threshold change. This is the approved original dependency wiring, not new verification scope.
+
+    Initial replay diagnostic mismatched the actual type-name field because the test observer called JavaScript Object.toString on OUString. The production mapping result was unchanged. Correct the observer to actual OUString.equalsAsciiL on the actual getTypeName value and dispose that owned copy. All 13228032 native rows then match. Initial eslint rejects two non-null assertions; use the exact original Value/MappingConstReference types. The JSDoc gate identified nine missing callback attachments; document actual callbacks without changing contracts. Recompute route after failures and retain diagnostic logs.
+
+    Command: node scripts/casefolding-native-probe.mjs --check
+    Result: pass
+    Evidence: 360 complete pinned original blobs;69 true SAL/CPPU TUs normal/ASan/UBSan;11141120 point,1048576 tail and1038336 conditional rows; all initialized bytes sanitizer-identical, full fixture/hash equality, terminal0.
+    Scope: Actual getValue/getConditionalValue case/ICU closure and true generated Locale/default RuntimeException; full13M input corpus. Isolated original internal-bit UB is recorded separately and has no portable expected result.
+
+    Command: npx vitest run src/i18nutil/source/utility/casefolding-value.test.ts --coverage --coverage.include=src/i18nutil/source/utility/casefolding.ts --coverage.reportsDirectory=coverage/task39-value (cwd apps/office)
+    Result: pass
+    Evidence: 3 complete corpus replay tests; S76/B101/F9/L72 all100, all186 raw counters positive (minimum3).
+    Scope: Actual Mapping values, borrowed identity, independent copies, input preservation and real exception fields/type. This source-present focused proof does not replace final source-absent acceptance.
+
+    All13 required gates pass on current implementation; source-absent Calc and related shared tests remain in progress. No whole39 verification/finish or full41/pause claim before final required evidence. Real locale service/CharClass/SharedStringPool, full Any/query/getNextChar/widthfolding and Calc document/edit/UI remain unfinished. No new ordinary suspected upstream defect is inferred.
+
+    Final original-source-absent acceptance: Calc106 tests/24files/19executable owners and shared113tests/34files/41owners pass. Every raw statement/function/branch counter is positive; Calc S2920/B2055/F474/L2564 and shared S2707/B1333/F386/L2407 are all100. Exact3-link restoration verified. Related existing ICU scalar/trie replay3tests also passes with source links absent, S116/B64/F20/L106 all100. Its ignored helper initially read the already-green broader shared report because single String.replace only changed the output argv and not the audit path; that stale interim audit is preserved separately and invalid for ICU acceptance. Correct the evidence path and audit the actual freshly written coverage/task39-value-icu/coverage-final.json (5executable owners, every raw counter positive) without repeating successful tests. Test execution argv/source-absence/restoration records remain valid. No implementation contract or gate changed.
+
+    Required whole-task native, defined caller value/locale/error/copy semantics, source-absent portable100 and all13 final gates are now satisfied. Source and shared inventory/provenance cover the actual added methods and const Mapping contract; broad library/API/service/UI parity flags remain false. Finish39 only after recorded verification, exact intentional commit and separate EVALUATOR review. Then continue task40/full41, repair Calc/affected shared failures while leaving Writer-only coverage to its branch, and pause goal after full41 as requested.
 id_source: "generated"
 ---
 ## Summary
@@ -1265,6 +1345,58 @@ Original direct Reference/generated exception dependency checkpoint (whole39 acc
 - Command: node output/playwright/task39-checks/reference-portable.mjs. Result: pass, actual handle terminal0. All three original source links absent for complete Calc106 tests/24 files/19 executable owners S2920/B2055/F474/L2564 and related shared110 tests/33 files/41 executable owners S2651/B1234/F380/L2353. Every raw statement/function/branch counter positive; S/B/F/L100, thresholds unchanged. Restore all three original symlinks exactly afterward. Evidence:reference-calc-manifest.json,reference-shared-manifest.json,reference-coverage-audit.json.
 - Whole39 original getValue/getConditionalValue acceptance is still pending; this checkpoint supplies actual default exception and Reference ownership rather than a placeholder. No whole39 verify--ok/evaluator-pass/finish or goal-completion claim follows. Full41, Calc/affected shared repair and requested goal pause remain pending; Writer-only coverage repair excluded.
 
+Whole task39 final acceptance (supersedes earlier dependency-only pending checkpoints):
+
+Command: node scripts/casefolding-native-probe.mjs --check
+Result: pass
+Evidence: terminal0,360 complete original blobs,69 genuine SAL/CPPU TUs normal/ASan/UBSan plus unchanged case/ICU scopes;11141120 point +1048576 tail +1038336 condition rows, byte-identical normal/sanitized captures and exact committed fixture equality.
+Scope: actual original getValue/getConditionalValue closure, real generated Locale/default RuntimeException and all initialized native value/reference/copy/error observations. Existing CALC-035/038 behavior remains preserved; unsupported native UB has no invented expected output.
+
+Command: npm run test:coverage:calc and related shared exact argv in output/playwright/task39-checks/value-shared-manifest.json; additional ICU argv in value-icu-shared-manifest.json
+Result: pass
+Evidence: all3 original source links absent through entire executions then exactly restored. Calc106/24files/19owners S2920/B2055/F474/L2564; related shared113/34files/41owners S2707/B1333/F386/L2407; related ICU3tests/5owners S116/B64/F20/L106. Every raw statement/function/branch counter is positive, all S/B/F/L100.
+Scope: all changed executable owners and affected shared SAL/CPPU/UNO/Locale/case/ICU consumers; no Writer runtime changes. Raw audits: value-coverage-audit.json and corrected actual ICU value-icu-coverage-audit.json.
+
+Command: all13 argv in output/playwright/task39-checks/value-gates-final-manifest.json; changed-file Prettier; git diff --check
+Result: pass
+Evidence: TS7, exact five-path eslint, JSDoc1394 authored files, file size, unchanged protected dependencies, provenance429 runtime owners, source tree, shared/Calc inventory,34toolingtests/4files, routing, doctor0errors/two inherited warnings and diff. Scope includes original i18nutil -> CPPU generated RuntimeException API direction already covered by approved graph wiring; no cycle exception, alternate exception provider, threshold relaxation or skipped mandatory check.
+Scope: all declared final static/source/governance gates. Source links restored before provenance/native reads. Full aggregate run remains task41, per user cadence; leave Writer-only coverage repairs to its separate branch.
+
+Output: original locale-aware scalar case values plus shared default exception/type/lifetime dependency, exact const reference/value copy and native table/fallback/error behavior. Real locale service/CharClass/SharedStringPool, full Any/query/getNextChar/widthfolding and Calc document/edit/view/UI remain unfinished; full goal remains active until requested post-full41 pause. No whole library/ABI/threading/QA parity claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T12:20:52.361Z — VERIFY — ok
+
+By: CODER
+
+Note: Whole task39 acceptance passed: genuine native case closure and all13228032 portable observations; source-absent Calc106/shared113/ICU3 all raw100, all13 gates and changed-file Prettier. Full aggregate remains41; no Writer-only repair.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T12:20:36.803Z, excerpt_hash=sha256:c176f78218371f2742b349043038393635a752ab885fcfa2045615bca95d23df
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610101731-H21CAK/blueprint/resolved-snapshot.json
+- old_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+- current_digest: e74de15adcef9c50aef0471037a1c2064bf9bdded4df0b6516b13b9ea527e9ca
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101731-H21CAK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101731-H21CAK
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only intentional task39 implementation/metadata commits if needed and rerun scoped checks. Preserve unrelated user work, Writer/main branches, shared verified Unicode/RTL contracts and original sources. Remove only task39-owned ignored probe artifacts if obsolete.
@@ -1556,3 +1688,25 @@ Runtime inventory distinguishes local declarations from imported bindings: Runti
 The SAL C header reexports the actual new literal function without redeclaring a local implementation; retain its upstream public symbol and remove the reexport from local-declaration arrays, matching the existing header inventory contract. Native bodies/public export and pass criteria unchanged. Whole39 still pending.
 
 Final complete source-absent Calc106 and related-shared110 native stream tests now pass with S/B/F/L100/every raw counter positive, exact original-link restoration and unchanged13-gate validation. TextEncoder diagnostic failure corrected by actual same-realm source-literal byte construction; no upstream defect or suspect-journal entry. Direct Reference and actual generated exception dependency is verified within the declared normal configuration; original case methods/full39 remain unfinished. Continue existing39/40/full41/fix/pause plan.
+
+Final original scalar mapping implementation: port getConditionalValue and getValue with original const entry identity and independent full Mapping value copies. Preserve original pos > len conditions (CALC-035), original extra traversal and isolated CALC-038 internal-bit undefined behavior without a fabricated expected result. Actual default exceptions reuse existing generated CPPU RuntimeException/Exception, direct Reference, SAL OUString and true typelib owners. No new registry/provider or duplicated Writer shared module.
+
+Approved Scope already names scripts/check-module-boundaries.mjs/test and original shared dependency direction wiring. Add the actual acyclic i18nutil -> cppu direction witnessed by pinned casefolding.cxx #include <com/sun/star/uno/RuntimeException.hpp> and genuine generated native headers. The reverse edge and protected core/browser/application restrictions remain rejected; no cycle exemption or pass-threshold change. This is the approved original dependency wiring, not new verification scope.
+
+Initial replay diagnostic mismatched the actual type-name field because the test observer called JavaScript Object.toString on OUString. The production mapping result was unchanged. Correct the observer to actual OUString.equalsAsciiL on the actual getTypeName value and dispose that owned copy. All 13228032 native rows then match. Initial eslint rejects two non-null assertions; use the exact original Value/MappingConstReference types. The JSDoc gate identified nine missing callback attachments; document actual callbacks without changing contracts. Recompute route after failures and retain diagnostic logs.
+
+Command: node scripts/casefolding-native-probe.mjs --check
+Result: pass
+Evidence: 360 complete pinned original blobs;69 true SAL/CPPU TUs normal/ASan/UBSan;11141120 point,1048576 tail and1038336 conditional rows; all initialized bytes sanitizer-identical, full fixture/hash equality, terminal0.
+Scope: Actual getValue/getConditionalValue case/ICU closure and true generated Locale/default RuntimeException; full13M input corpus. Isolated original internal-bit UB is recorded separately and has no portable expected result.
+
+Command: npx vitest run src/i18nutil/source/utility/casefolding-value.test.ts --coverage --coverage.include=src/i18nutil/source/utility/casefolding.ts --coverage.reportsDirectory=coverage/task39-value (cwd apps/office)
+Result: pass
+Evidence: 3 complete corpus replay tests; S76/B101/F9/L72 all100, all186 raw counters positive (minimum3).
+Scope: Actual Mapping values, borrowed identity, independent copies, input preservation and real exception fields/type. This source-present focused proof does not replace final source-absent acceptance.
+
+All13 required gates pass on current implementation; source-absent Calc and related shared tests remain in progress. No whole39 verification/finish or full41/pause claim before final required evidence. Real locale service/CharClass/SharedStringPool, full Any/query/getNextChar/widthfolding and Calc document/edit/UI remain unfinished. No new ordinary suspected upstream defect is inferred.
+
+Final original-source-absent acceptance: Calc106 tests/24files/19executable owners and shared113tests/34files/41owners pass. Every raw statement/function/branch counter is positive; Calc S2920/B2055/F474/L2564 and shared S2707/B1333/F386/L2407 are all100. Exact3-link restoration verified. Related existing ICU scalar/trie replay3tests also passes with source links absent, S116/B64/F20/L106 all100. Its ignored helper initially read the already-green broader shared report because single String.replace only changed the output argv and not the audit path; that stale interim audit is preserved separately and invalid for ICU acceptance. Correct the evidence path and audit the actual freshly written coverage/task39-value-icu/coverage-final.json (5executable owners, every raw counter positive) without repeating successful tests. Test execution argv/source-absence/restoration records remain valid. No implementation contract or gate changed.
+
+Required whole-task native, defined caller value/locale/error/copy semantics, source-absent portable100 and all13 final gates are now satisfied. Source and shared inventory/provenance cover the actual added methods and const Mapping contract; broad library/API/service/UI parity flags remain false. Finish39 only after recorded verification, exact intentional commit and separate EVALUATOR review. Then continue task40/full41, repair Calc/affected shared failures while leaving Writer-only coverage to its branch, and pause goal after full41 as requested.

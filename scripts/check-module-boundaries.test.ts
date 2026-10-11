@@ -158,7 +158,8 @@ it("admits only the witnessed two-owner component while retaining longer and unr
 it("owns original locale and case-mapping dependencies without browser or reverse library edges", /** Enforces the actual shared string service dependency directions. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("udkapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "udkapi")).toBe(true);
-  for (const dependency of ["external", "sal", "udkapi"]) {
+  // The native casefolding fixture hashes the actual RuntimeException.hpp include and generated CPPU API.
+  for (const dependency of ["cppu", "external", "sal", "udkapi"]) {
     expect(isForbiddenModuleEdge("i18nutil", dependency)).toBe(false);
     expect(isForbiddenModuleEdge(dependency, "i18nutil")).toBe(true);
   }

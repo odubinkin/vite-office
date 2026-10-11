@@ -8,6 +8,7 @@
     "upstreamPath": "include/i18nutil/casefolding.hxx",
     "localSymbols": [
       "Mapping",
+      "MappingConstReference",
       "MappingType",
       "NMAPPINGMAX",
       "Value"
@@ -19,10 +20,10 @@
       "NMAPPINGMAX"
     ],
     "preservedResponsibilities": [
-      "Original Locale has exactly Language/Country/Variant string fields; cppumaker emits default string constructors, ordered three-field value construction and comparisons, with compiler-generated memberwise copy/move/assignment and reverse destruction. Reuse shared OUString owners rather than JS strings or normalization; explicit lifetime factories/destructors and stable field accessors preserve ownership/member order. Complete original casefolding data retain256 signed indices,3328 type/value structs and352 three-unit extras, original flags0..128 and capacity3. Complete pinned IDL/cppumaker/header/data blobs are verified by source-only extraction; source-contract6 tests pass with all three executable owners S46/B7/F16/L46 all100 and upstream links absent. This evidence does not execute native cppumaker/casefolding or claim service/UNO reflection parity."
+      "Preserve original getConditionalValue const entry identity and getValue independent complete Mapping copies, exact Locale ASCII comparisons, native surrogate tail/combination, extra selection and existing task38 scalar ICU fallback. Real default RuntimeException uses the existing shared Exception/Reference/OUString/typelib owners. Every one of 13228032 original native rows is replayed including all initialized fields, conditional identity, copy independence, unchanged input and actual exception fields/type. Native --check recompiles 69 true SAL/CPPU owners plus unchanged original case/ICU scopes; 360 pinned blobs and all normal/ASan/UBSan captures agree. CALC-035 pos > len is preserved; CALC-038 isolated internal-bit UB supplies no invented portable expected result. Borrowed const units have a readonly structural interface; struct value copies retain all three initialized units."
     ],
     "omittedResponsibilities": [
-      "This records source-defined Locale value semantics and original mapping flags/data only. Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated-type observation, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished. Native comparison is not claimed from IDL/table extraction or these source-contract unit tests. Physical C++ ABI/const/template/compiler checks and full original QA remain unverified."
+      "getNextChar/widthfolding, full generated class/API and consumer QA, debug-source-location/physical C++ ABI/threading, actual locale service/CharClass/SharedStringPool and Calc cell/document/edit/UI remain unverified. Runtime exception/direct reference evidence is bounded to previously verified normal internal debug0 ownership/type initialization. Full public Any/query and native threading are not certified by the scalar mapping replay."
     ],
     "evidence": {
       "local": [

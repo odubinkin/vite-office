@@ -38,7 +38,8 @@ const allowedEdges = new Map([
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
   ["framework", new Set(["sfx2", "svl"])],
-  ["i18nutil", new Set(["external", "sal", "udkapi"])],
+  // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
+  ["i18nutil", new Set(["cppu", "external", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
   ["offapi", new Set()],
   ["package", new Set()],
