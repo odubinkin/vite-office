@@ -1,10 +1,11 @@
 ---
 id: "202610111948-SBN0Z2"
 title: "Read hyperlink command state from original native attribute items"
-status: "DOING"
+result_summary: "Native hyperlink item state and original ring/node/interval/default-invalid rules verified; inventory appended, two old dialog end-caret setups source-migrated,874 old test files identical. Pause goal only after next full and required repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Native INET query implemented and verified: accepted7053 case occurrences, standalone1584-case passing whole editsh100 certificate,9metadata gates and explicit source-driven two-case setup migration; no failing map counters used."
+  -
+    author: "CODER"
+    body: "Verified: native INET query replaces TextRuns state projection;7053 accepted occurrences/303files and passing whole editsh100 certificate,9metadata gates, exact same-agent non-independent semantic review, source-driven old setup migration with retained assertions. Full generic/UI/history parity remains pending; cadence6/10."
 events:
   -
     type: "status"
@@ -83,8 +87,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Revised approved scope passes:7025 related occurrences/296 files plus25tooling/4 and3Chrome/3; standalone passing1584-case raw editsh92lines113stmts6functions110branches100/229counters.874 old files identical, two dialog setups source-migrated with original assertions preserved; exact refs restored,137build hashes same,9metadata gates pass. Runtime/static no upstream; generic query/UI fallback/selection/full history pending. Semantic48eccab061d3fff0ef1098f189fdf6e3e3636637."
+  -
+    type: "status"
+    at: "2026-10-11T20:21:55.610Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native INET query replaces TextRuns state projection;7053 accepted occurrences/303files and passing whole editsh100 certificate,9metadata gates, exact same-agent non-independent semantic review, source-driven old setup migration with retained assertions. Full generic/UI/history parity remains pending; cadence6/10."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:21:26.474Z"
+doc_updated_at: "2026-10-11T20:21:55.612Z"
 doc_updated_by: "CODER"
 description: "Retire copyWriterTextRangeRuns/equalWriterHyperlinks query conversion in editsh. Port represented INET state branches of GetParaAttr/GetPaMAttr: complete native item equality, original cursor expansion flags and interval/default/mixed merging, actual node/ring traversal and source lookup bounds. Preserve existing accepted behavior where source agrees, use original owned hints and only final DTO projection for UI. Full generic GetCurAttr/character-style/redline/layout/dialog selection and SwHistory remain explicitly unverified."
 sections:
@@ -168,6 +179,10 @@ sections:
     - Observation: Accepted current-source certificate1584/1584 passes with unedited editsh raw92lines113statements6functions110branches100 and229 positive counters. Strict proof admits225 serialized Infinity end columns and27 genuine implicit else locations only against actual TypeScript AST; no failing-run map contributes. Targeted closure2 passed, then complete current fresh file16 passed in the accepted producer.
       Impact: Original related7018/7022 pass plus four repaired assertions and three newly added cases yields7025 accepted related occurrences across296 files. Five duplicate original assertion names require file/full-name/ordinal identities, not name-only deduplication; all resolved assertions pass. Tooling25/4 and Chrome3/3 add7053 accepted occurrences/303 files. Original failing attempts remain diagnostic and are not described as passing producers.
       Resolution: All current static checks pass; initial full format/build/static valid for unchanged production/source inputs and137 build files remain byte-identical, changed tests/canonical files pass targeted format plus global TS7/lint/docs/size/dependencies. Exact3refs restored and pin/hash9 sources verified. Nine metadata-only gates pass.874 original acceptance files unchanged; exactly two old dialog setups have new disabled-at-end/interior placement, with all original other setup and assertions byte-identical after removing those approved additions. Helper provenance-property typo started no producer; fixed actual evidence.upstream key. No raw maps/providers/gates edited.
+extensions:
+  implementation_commit:
+    hash: "48eccab061d3fff0ef1098f189fdf6e3e3636637"
+    message: "🧩 SBN0Z2 code: read hyperlink state from native attribute items"
 id_source: "generated"
 ---
 ## Summary
