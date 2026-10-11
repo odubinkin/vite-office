@@ -4,7 +4,7 @@ title: "Port original case-mapping iterator and width lookup owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Complete original iterator/width captures and sanitizer comparison pass; source-absent Calc and related shared raw100; all13 gates and source extraction pass; CALC-049/050 preserved."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T15:25:16.800Z"
+  updated_by: "EVALUATOR"
+  note: "Committed original iterator and width lookup scope meets bounded native, portable coverage and repository acceptance."
+  evaluated_sha: "b588a8e8cf90c941b998297277fabfbae090186c"
+  blueprint_digest: "e948a8dcb86e225b227d042ca7e9478d99c24740a3dae72d754a00352d22afe3"
+  evidence_refs:
+    - ".agentplane/tasks/202610111228-GA5VWX/README.md"
+    - ".agentplane/tasks/202610111228-GA5VWX/quality/20261011-152516800-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111228-GA5VWX/quality/20261011-152516800-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111228-GA5VWX/quality/20261011-152516800-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111228-GA5VWX/blueprint/resolved-snapshot.json"
+    - "output/playwright/task40-checks/native-check.log"
+    - "output/playwright/task40-checks/value-coverage-audit.json"
+    - "output/playwright/task40-checks/value-gates-final-manifest.json"
+  findings:
+    - "Reviewed b588a8e8 original binary/index ordering, borrowed row identity, generated numeric constants, independent lazy table getters, Mapping field copying and early iterator reset. Full native normal/ASan/UBSan streams match; every portable captured field and raw coverage counter passes. CALC-049/050 preserve source quirks. No complete service/QA/physical ABI/default-map parity claim."
 commit: null
 comments:
   -
