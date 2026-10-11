@@ -1,10 +1,11 @@
 ---
 id: "202610112235-V7ZAF0"
 title: "Port generated weak and service UNO interface type owners"
-status: "DOING"
+result_summary: "Implemented five original generated weak/service UNO interface type owners with whole native replay and source-absent Calc/shared100 coverage; real weak/service lifecycle and Calc UI remain subsequent."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -45,8 +46,8 @@ quality_review:
     - "Independently audited161 terminal native commands exit0,72 unchanged complete original translation units per normal/sanitized build,374 current full source hashes,23 generated files (21 headers and2 parser sources), exact driver/configuration hashes and all7 complete gzip fixture/normal/ASan streams with empty runtime stderr."
     - "Whole raw coverage audit confirms19 Calc and66 related shared executable owners all S/F/B counters positive and S/B/F/L100;106/24 Calc and161/46 shared tests pass. Task50 shared argv remains append-only; all5 changed owner includes present; all3 exact source symlink targets restored.13 scoped gates and20 authored format checks pass;35 related tooling tests pass."
 commit:
-  hash: "522137316fb8a1065f2e7e485649afb6bebae206"
-  message: "✅ V7ZAF0 code: port generated weak and service type owners"
+  hash: "a7c5df218331aef4aa2fc4e57463c1d2af1bc99c"
+  message: "✅ V7ZAF0 quality: record native and scoped acceptance"
 comments:
   -
     author: "CODER"
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: committed task52 source and complete native/scoped evidence; record actual implementation SHA before first independent EVALUATOR review."
+  -
+    author: "CODER"
+    body: "Verified: task52 original generated weak/service5interface owners preserve actual shared metadata registration/cache/order/ownership; committed implementation522137316fb8 accepted at exact evaluated_sha. Full native observations, source-absent Calc/shared raw100,13 scoped gates and20 authored format checks pass; inventory and exact restored source links recorded."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task52 source implementation522137316fb8 independently accepted at matching actual evaluated_sha. Native161 commands0,72 full original units/build,374 source hashes23 generated files,7 whole normal-ASan/UBSan replay streams match. Source-absent Calc106/24 and shared161/46:19/66 whole owners raw S/B/F/L100; exact task50 argv append-only,3links restored.13 scoped gates,35 tooling tests and20 authored format checks pass. Inventory flags false and lifecycle/native limitations documented; lastfull51 next61."
+  -
+    type: "status"
+    at: "2026-10-11T23:03:56.581Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: task52 original generated weak/service5interface owners preserve actual shared metadata registration/cache/order/ownership; committed implementation522137316fb8 accepted at exact evaluated_sha. Full native observations, source-absent Calc/shared raw100,13 scoped gates and20 authored format checks pass; inventory and exact restored source links recorded."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:03:41.653Z"
+doc_updated_at: "2026-10-11T23:03:56.583Z"
 doc_updated_by: "CODER"
 description: "Task52 implements complete pinned cppumaker-generated metadata and IDL contracts for XWeak XAdapter XReference XAggregation and XServiceInfo as real service prerequisites; reuse actual shared Type/Reference/Any/typelib with full native evidence and scoped raw100."
 sections:
@@ -147,6 +158,10 @@ sections:
     - Observation: An initial task brief redirection accidentally wrote /tmp/calc-task52-brief.txt outside the approved repository scope.
       Impact: Only a generated task brief was redirected; outside files were not read and no further outside-repository action was taken.
       Resolution: Recreate and retain task brief evidence under output/playwright/task52-checks; all subsequent authored artifacts and operations use the calc repository. The temporary file was not accessed again.
+extensions:
+  implementation_commit:
+    hash: "522137316fb8a1065f2e7e485649afb6bebae206"
+    message: "✅ V7ZAF0 code: port generated weak and service type owners"
 id_source: "generated"
 ---
 ## Summary
