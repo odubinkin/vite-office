@@ -1,5 +1,10 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
+import {
+  SvxIndentValue,
+  SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
 
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
@@ -10,11 +15,7 @@ import {
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import {
-  SvxFirstLineIndentItem,
-  SvxRightMarginItem,
-  SvxULSpaceItem,
-} from "../../../../editeng/source/items/frmitems";
+import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
   FontLineStyle,
@@ -98,6 +99,7 @@ import {
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_TEXTLEFT,
   RES_MARGIN_RIGHT,
   RES_UL_SPACE,
   RES_KEEP,
@@ -449,7 +451,10 @@ class SwXMLImport
     node.ChgFormatColl(this.document.GetTextFormatColl(style));
     node.SetListGeometryWins(listGeometryWins);
     if (alignment !== undefined) node.SetParagraphAlignment(alignment);
-    if (leftMargin !== undefined) node.SetParagraphTextLeftMargin(leftMargin);
+    if (leftMargin !== undefined)
+      node.SetAttr(
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(leftMargin), RES_MARGIN_TEXTLEFT),
+      );
     if (paragraphProperties !== undefined)
       putParagraphProperties(
         paragraphProperties,
@@ -816,18 +821,15 @@ function putParagraphProperties(
   put: (item: SfxPoolItem) => unknown,
   inherited: (which: number) => SfxPoolItem,
 ): void {
-  if (properties.firstLineIndent !== undefined || properties.autoTextIndent !== undefined)
-    put(
-      new SvxFirstLineIndentItem(
-        properties.firstLineIndent ??
-          (inherited(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
-        RES_MARGIN_FIRSTLINE,
-        properties.autoTextIndent ??
-          (inherited(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).IsAutoFirst(),
-      ),
-    );
+  if (properties.firstLineIndent !== undefined || properties.autoTextIndent !== undefined) {
+    const first = (inherited(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).Clone();
+    if (properties.firstLineIndent !== undefined)
+      first.SetTextFirstLineOffset(SvxIndentValue.twips(properties.firstLineIndent));
+    if (properties.autoTextIndent !== undefined) first.SetAutoFirst(properties.autoTextIndent);
+    put(first);
+  }
   if (properties.rightMargin !== undefined)
-    put(new SvxRightMarginItem(properties.rightMargin, RES_MARGIN_RIGHT));
+    put(new SvxRightMarginItem(SvxIndentValue.twips(properties.rightMargin), RES_MARGIN_RIGHT));
   if (
     properties.upperSpacing !== undefined ||
     properties.lowerSpacing !== undefined ||

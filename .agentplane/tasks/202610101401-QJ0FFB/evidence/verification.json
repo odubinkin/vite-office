@@ -1,0 +1,793 @@
+{
+  "status": "pass",
+  "taskId": "202610101401-QJ0FFB",
+  "goalStatus": "active-incomplete",
+  "cadence": "2/10 after N337G1",
+  "fullRun": false,
+  "latestUserStopRule": "Pause after next accepted full run and any discovered failures repaired.",
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceContract": "Native typed right value/units/proportions and represented UNO; native history owns independent value copies, legacy integer wire unchanged.",
+  "coverage": {
+    "status": "pass",
+    "sourceHashes": {
+      "apps/office/src/editeng/inc/lrspitem.ts": "83c2bd1c85319d542915c1faa0124baee47f520baa2a3571efeceabfd67f65e6",
+      "apps/office/src/editeng/source/items/frmitems.ts": "756344d2852b79f5352303b6b7de3cf25b05cb610161494bfc66468fe0dac1cb",
+      "apps/office/src/sw/source/core/attr/swatrset.ts": "843a54f7f34d8861c3759af7fc131c9e35d1e244ec602bbdea796f70c1c58cff",
+      "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "912cd803acad54784f65195a283670d719a659bc817a8ab1414b51b8e3248b65",
+      "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": "af0baa1625650d78197bbf4862a13f6c45a8b80ec242f73f9b10034795a81a8f",
+      "apps/office/src/sw/source/filter/xml/xmlimp.ts": "35fd78f94e4d104198507c8725f889aa227dd01b5de23d3108c4aa6e954f893d",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "66f8e59ecb61ef38e1671eee58527c75cda09bee54fba35a77cad72e23336f99",
+      "apps/office/src/sw/browser/filter/xml/item-codec.ts": "13f5422463eadb40af2ce0ca64acd4f3010d6ae633f15530632ff7ae9caf93a2",
+      "apps/office/src/sw/source/core/undo/unattr.ts": "d45105693125272d166e76e09ee1c17fe2847a833c4affc3a499ac69fe748ed8"
+    },
+    "actualWholeChangedModules": {
+      "lines": {
+        "total": 1696,
+        "covered": 1696,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1844,
+        "covered": 1844,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 524,
+        "covered": 524,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1422,
+        "covered": 1422,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "perModule": {
+      "apps/office/src/editeng/inc/lrspitem.ts": {
+        "lines": {
+          "total": 217,
+          "covered": 217,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 62,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 230,
+          "covered": 230,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 217,
+          "covered": 217,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/editeng/source/items/frmitems.ts": {
+        "lines": {
+          "total": 266,
+          "covered": 266,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 94,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 300,
+          "covered": 300,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 268,
+          "covered": 268,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/attr/swatrset.ts": {
+        "lines": {
+          "total": 148,
+          "covered": 148,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 48,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 162,
+          "covered": 162,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 86,
+          "covered": 86,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/txtnode/ndtxt.ts": {
+        "lines": {
+          "total": 296,
+          "covered": 296,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 104,
+          "covered": 104,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 322,
+          "covered": 322,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 202,
+          "covered": 202,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": {
+        "lines": {
+          "total": 73,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 74,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 71,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/filter/xml/xmlimp.ts": {
+        "lines": {
+          "total": 270,
+          "covered": 270,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 60,
+          "covered": 60,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 303,
+          "covered": 303,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 294,
+          "covered": 294,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": {
+        "lines": {
+          "total": 320,
+          "covered": 320,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 114,
+          "covered": 114,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 342,
+          "covered": 342,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 219,
+          "covered": 219,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/browser/filter/xml/item-codec.ts": {
+        "lines": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/undo/unattr.ts": {
+        "lines": {
+          "total": 65,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "completeActualMaps": 9,
+    "nonnegative": true,
+    "allCases": 14117,
+    "finalRelatedAfterNativeOwnerAndHistoryCopyRepairs": true,
+    "passingReplayForTypesHelpersDocsOrMetadata": false,
+    "testFiles": 501,
+    "freshCases": 50,
+    "mapHash": "0de44a1bda6b5201752f43ff202b20c6cfa3d6768630878878be0afe8b9dd32f",
+    "reportHash": "d9a78d96d7bb6506041bdb354edf25af88dea6d85b19aa5bac51288b5eb31efa",
+    "noEarlierMapReuse": true,
+    "filtersOrCounterEdits": false
+  },
+  "runtimeProfiles": {
+    "initial": {
+      "cases": 14117,
+      "passed": 14100,
+      "failed": 17,
+      "reportHash": "8dba4f43bc15c9e8518ff8b4ba678de5b4a117ae3dbc34eb02e561188b05ea35"
+    },
+    "failedOnlyRepair": {
+      "passed": 14,
+      "failed": 3,
+      "reportHash": "1a34cd13de87feeef8c821095d3650f789c3e0f20babfa689cd3d86aa674f234"
+    },
+    "supersededCallerCloneProof": {
+      "passed": 3,
+      "rejectedForAliasingAcceptance": true
+    },
+    "nativeOwnerProfile": {
+      "cases": 14117,
+      "passed": 14117,
+      "supersededByRealHistoryRepair": true,
+      "reportHash": "c5d705aa2dba0516ff9136b430babd816fdf1ad2e3d510575cad709e6addc494"
+    },
+    "finalCurrentNativeHistory": {
+      "cases": 14117,
+      "passed": 14117,
+      "failed": 0,
+      "files": 501,
+      "fresh": 50,
+      "reportHash": "d9a78d96d7bb6506041bdb354edf25af88dea6d85b19aa5bac51288b5eb31efa"
+    }
+  },
+  "runtimeCommand": {
+    "label": "native-history-related",
+    "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+    "args": [
+      "exec",
+      "--",
+      "vitest",
+      "related",
+      "src/editeng/inc/lrspitem.ts",
+      "src/editeng/source/items/frmitems.ts",
+      "src/sw/source/core/attr/swatrset.ts",
+      "src/sw/source/core/txtnode/ndtxt.ts",
+      "src/sw/source/core/doc/poolfmt-defaults.ts",
+      "src/sw/source/filter/xml/xmlimp.ts",
+      "src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "src/sw/browser/filter/xml/item-codec.ts",
+      "src/sw/source/core/undo/unattr.ts",
+      "--run",
+      "--coverage",
+      "--coverage.include=src/editeng/inc/lrspitem.ts",
+      "--coverage.include=src/editeng/source/items/frmitems.ts",
+      "--coverage.include=src/sw/source/core/attr/swatrset.ts",
+      "--coverage.include=src/sw/source/core/txtnode/ndtxt.ts",
+      "--coverage.include=src/sw/source/core/doc/poolfmt-defaults.ts",
+      "--coverage.include=src/sw/source/filter/xml/xmlimp.ts",
+      "--coverage.include=src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "--coverage.include=src/sw/browser/filter/xml/item-codec.ts",
+      "--coverage.include=src/sw/source/core/undo/unattr.ts",
+      "--coverage.reportOnFailure",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/QJ0FFB/native-history-related-tests.json",
+      "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/QJ0FFB/native-history-related-coverage"
+    ]
+  },
+  "staticChecks": [
+    {
+      "label": "native-owner-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/core/attr/native-paragraph-right-margin.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "native-owner-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "--max-warnings=0",
+        "apps/office/src/sw/source/core/undo/unattr.ts",
+        "apps/office/src/sw/source/core/attr/native-paragraph-right-margin.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "review-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-native-table-column-drag.spec.ts",
+        "writer-native-table-text-flow-headline.spec.ts",
+        "writer-table-properties-history.spec.ts",
+        "writer-native-cell-alignment.spec.ts",
+        "writer-table-alignment.spec.ts",
+        "writer-ruler-indent-pixels.spec.ts",
+        "writer-ruler-indent-items.spec.ts",
+        "writer-ruler-auto-first.spec.ts",
+        "writer-ruler-default-tabs.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "currentDocs": [
+    {
+      "label": "current-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "retainedRootFormat": {
+    "label": "format-check",
+    "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+    "args": [
+      "run",
+      "format:check"
+    ],
+    "status": 0,
+    "upstreamAbsent": true,
+    "mddsAbsent": true
+  },
+  "retainedRootLint": {
+    "label": "lint",
+    "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+    "args": [
+      "run",
+      "lint"
+    ],
+    "status": 0,
+    "upstreamAbsent": true,
+    "mddsAbsent": true
+  },
+  "browser": {
+    "startTime": "2026-10-10T14:47:45.785Z",
+    "duration": 27746.687,
+    "expected": 32,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "reportHash": "65a6617018a877e0d024c918c548271e52d9515d1728caeb1397da81f81a2a49"
+  },
+  "metadataChecks": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "359dab860a727a8600a8a5a97b7a513e7c6675e2affb0af67dc9e9910c78aa0a",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "a359328f7918dfea1cea645f84839a9d8026802981214c2be5ecd9b3fb2668af",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "cce5316a2159e28ba6f01d27377a2c5efdd6cbaae7b3bfd2524623d55913b554",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "485b400993d96c75989f8f008f4fc9092efc468748c0ae0375ea0fde185bddad",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "bb4afd596e4755d3fc6ae1d3394aa2afa24e8a7fb30044bc31afc8dcece4f94b",
+      "metadataOnly": true
+    }
+  ],
+  "sourceAudit": {
+    "status": "pass",
+    "metadataOnly": true,
+    "testsReadUpstream": false,
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "sourceHashes": {
+      "vendor/libreoffice-reference/include/editeng/lrspitem.hxx": "08dc1cc34d3961558a63f0b87f08c24c82880b92a0edceb76ee19d6c6c20ab22",
+      "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+      "vendor/libreoffice-reference/offapi/com/sun/star/frame/status/LeftRightMarginScale.idl": "81830b7ebff9cd073d727ea2627bfc09c3bbce6dacfd345521c8a4d855c521eb",
+      "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17",
+      "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx": "18888b58d07725197cb70b069c2e11e90c4aaa8cf8c43f288017d3cefdd65786"
+    },
+    "sourceLines": {
+      "void SvxRightMarginItem::SetRight": 683,
+      "bool SvxRightMarginItem::PutValue": 1582,
+      "SvxRightMarginItem::QueryValue": 1543
+    },
+    "nativePutPercentageMetadataOnly": true,
+    "nativeSetterAssertsPooledConstMutation": true,
+    "nativeHistoryOwnsClonedItemAndValueSet": true,
+    "unpooledCallerMutationRegressionRetained": true,
+    "fullNativeHistoryArchitectureUnverified": true,
+    "initializedPortableObservation": "WRITER-002",
+    "compiledNativeDifferential": false,
+    "documentHash": "2c4cfa1abad7883443e13f8327696a7f41852789af2e5f8dd8a67f737279324b"
+  },
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 8986,
+    "changedOriginalPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/e2e/writer-ruler-auto-first.spec.ts",
+      "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+      "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
+      "apps/office/src/editeng/inc/lrspitem.ts",
+      "apps/office/src/editeng/source/items/frmitems.test.ts",
+      "apps/office/src/editeng/source/items/frmitems.ts",
+      "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+      "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+      "apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+      "apps/office/src/sw/browser/presentation/writer-view-ruler-default-tabs.test.tsx",
+      "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+      "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+      "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+      "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "apps/office/src/sw/source/core/undo/unattr.ts",
+      "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+      "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json",
+      "docs/program/registry/shared/provenance/editeng/source/items/frmitems.ts.json",
+      "docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json",
+      "docs/program/registry/shared/runtime/editeng/source/items/frmitems.ts.json",
+      "docs/program/registry/writer/provenance/sw/browser/filter/xml/item-codec.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/attr/swatrset.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/doc/poolfmt-defaults.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/txtnode/ndtxt.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/undo/unattr.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlimp.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/uibase/wrtsh/wrtsh1.ts.json",
+      "docs/program/registry/writer/runtime/sw/browser/filter/xml/item-codec.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/attr/swatrset.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/doc/poolfmt-defaults.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/txtnode/ndtxt.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/undo/unattr.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlimp.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/uibase/wrtsh/wrtsh1.ts.json",
+      "docs/program/writer-upstream-suspected-issues.md"
+    ],
+    "oldTestFiles": 678,
+    "oldTestsByteIdentical": 671,
+    "exactMigratedOldFiles": 7,
+    "exactTypedInputs": 10,
+    "sourceBackedExpectedCorrections": 2,
+    "sourceBackedRightScalarObservers": 3,
+    "exactMigratedBrowserFiles": 3,
+    "exactBrowserTypedInputs": 4,
+    "otherBrowserFilesByteIdentical": true,
+    "exactCurrentNativeDeclarationOwnerMigrations": 1,
+    "canonicalHistoricalPrefixes": 18,
+    "parentFindingsPrefixPreserved": true,
+    "compilerApi": "6.0.3"
+  },
+  "observerTypeOnlyEquivalence": {
+    "status": "pass",
+    "compilerApi": "6.0.3",
+    "passingTestsReplayed": 0,
+    "proofs": [
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+        "compiledRuntimeAstAndTokensIdentical": true,
+        "correctTsOrTsxCompilation": true,
+        "runtimeHash": "1027745113f2e6a410e4459ad0a20c57af56d71853bad5e2ef6b268dca82d63b"
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+        "compiledRuntimeAstAndTokensIdentical": true,
+        "correctTsOrTsxCompilation": true,
+        "runtimeHash": "cccf0af5b08dd3bc64c0a541a2058a7c0ccd543053bd113030279cb4cb46cc45"
+      }
+    ]
+  },
+  "canonicalRecords": [
+    "docs/program/registry/shared/runtime/editeng/inc/lrspitem.ts.json",
+    "docs/program/registry/shared/provenance/editeng/inc/lrspitem.ts.json",
+    "docs/program/registry/shared/runtime/editeng/source/items/frmitems.ts.json",
+    "docs/program/registry/shared/provenance/editeng/source/items/frmitems.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/attr/swatrset.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/attr/swatrset.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/txtnode/ndtxt.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/txtnode/ndtxt.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/doc/poolfmt-defaults.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/doc/poolfmt-defaults.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlimp.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlimp.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/uibase/wrtsh/wrtsh1.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/uibase/wrtsh/wrtsh1.ts.json",
+    "docs/program/registry/writer/runtime/sw/browser/filter/xml/item-codec.ts.json",
+    "docs/program/registry/writer/provenance/sw/browser/filter/xml/item-codec.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/undo/unattr.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/undo/unattr.ts.json"
+  ],
+  "allRuntimeProfilesUpstreamAbsent": true,
+  "allRuntimeProfilesMddsAbsent": true,
+  "bothReferenceSymlinksRestored": true,
+  "passingTestsReplayForTypeHelperMetadataRepairs": 0,
+  "productionRepairsRevalidated": [
+    "Native owner imports replace obsolete facade dependency in two callers and satisfy size limit",
+    "Native paragraph history clones original values instead of mutable caller aliases"
+  ],
+  "thresholdsChanged": false,
+  "rawCountersEdited": false,
+  "earlierTaskOrSupersededSourceMapsReused": false,
+  "initialFailuresRetainedInIgnoredCache": true,
+  "metadataRepair": "Retire old frmitems runtime declaration ownership, retain identical export binding and claim the native declaration under lrspitem; no fabricated violation or runtime replay.",
+  "registeredRecoveryOpenSaveSettingsDeviationsUnchanged": true,
+  "noUpstreamSourcesHelpersPythonRawMapsOrLogsInAgentPlane": true,
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/QJ0FFB/",
+  "remaining": [
+    "Rich native right-margin graph transport",
+    "Explicit font-context UI layout",
+    "Native text-left/first-line and history architecture",
+    "General hash/presentation/UNO/VCL/list/table/filter/UI parity"
+  ],
+  "implementationCommit": "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f",
+  "quality": {
+    "taskId": "202610101401-QJ0FFB",
+    "implementationCommit": "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f",
+    "reviewer": "EVALUATOR",
+    "independent": false,
+    "method": "Same current coding agent reviewed exact committed source/evidence, source contracts, current complete maps, direct-caller three-cycle history, legacy boundaries and preservation facts.",
+    "verdict": "pass",
+    "goalComplete": false,
+    "remaining": [
+      "Rich native right-margin graph transport",
+      "Explicit font-context UI layout",
+      "Native text-left/first-line and history architecture",
+      "General hash/presentation/UNO/VCL/list/table/filter/UI parity"
+    ]
+  },
+  "qualityReport": ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json"
+}

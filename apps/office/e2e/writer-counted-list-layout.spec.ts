@@ -1,4 +1,5 @@
 /** @fileoverview Measures independent counted list axes through actual body/cell paragraph edits. */
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import { expect, test } from "@playwright/test";
 import { SvxTextLeftMarginItem } from "../src/editeng/source/items/frmitems";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
@@ -41,7 +42,7 @@ for (const cell of [false, true])
       node.SetNumRule("AxesRule");
       node.AddToList();
     }
-    node.SetAttr(new SvxTextLeftMarginItem(1680, RES_MARGIN_TEXTLEFT));
+    node.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(1680), RES_MARGIN_TEXTLEFT));
     const shell = new SwDocShell(doc, meta),
       bytes = writeOdtDocument(doc, meta);
     shell.Close();

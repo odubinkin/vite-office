@@ -1,5 +1,6 @@
 /** @fileoverview Checks imported document-owned named inheritance through the real formatting dialog and history. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
@@ -26,8 +27,10 @@ for (const width of [1280, 390])
       document.GetDfltTextFormatColl(),
       "OwnedParent",
     );
-    parent.SetFormatAttr(new SvxTextLeftMarginItem(600, RES_MARGIN_TEXTLEFT));
-    parent.SetFormatAttr(new SvxFirstLineIndentItem(-240, RES_MARGIN_FIRSTLINE));
+    parent.SetFormatAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(600), RES_MARGIN_TEXTLEFT));
+    parent.SetFormatAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(-240), RES_MARGIN_FIRSTLINE),
+    );
     document.MakeTextFormatColl("Owned child", parent, "OwnedChild");
     const docShell = new SwDocShell(document, metadata),
       shell = new SwWrtShell(docShell);

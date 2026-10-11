@@ -1,5 +1,6 @@
 /** @fileoverview Verifies ordinary native StyleApply resets, protected attributes, exact hints and repeat history through actual Writer owners. */
 import { afterEach, describe, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -40,7 +41,7 @@ function fixture() {
     node = required(doc.paragraphs[0]);
   node.SetText("ResetText");
   const target = doc.MakeTextFormatColl("Reset target", doc.GetDfltTextFormatColl(), "ResetTarget");
-  target.SetFormatAttr(new SvxFirstLineIndentItem(240, 92));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
   const owner = new SwDocShell(
     doc,
     createDocument({ id: "native-reset", title: "Reset", suiteId: "writer" }),
@@ -83,7 +84,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
       const { doc, node, shell, target } = fixture();
       doc.EnsureNumRule("ProtectedRule", "numbered");
       node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, 65));
-      node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
       node.SetAttr(new SvxWeightItem(8, 15));
       node.SetAttr(new SfxStringItem(83, "ProtectedList"));
       node.SetAttr(new SfxInt16Item(84, 2));
@@ -171,7 +172,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
         untouched = doc.GetNodes().MakeTextNode("Neighbor");
       first.ChgFormatColl(target);
       for (const node of [first, empty, last, untouched])
-        node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+        node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
       first.SetTextHints(
         new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 0, first.Len())]),
       );
@@ -260,7 +261,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
   it("records every actual unchanged SfxRequest, retains family2 and restores reset state independently", /** Checks native repeated-request history through document dispatch. @returns Nothing. */ () => {
     const { doc, node, shell, dispatch, target, owner } = fixture();
     node.ChgFormatColl(target);
-    node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
     node.SetTextHints(
       new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 0, node.Len())]),
     );

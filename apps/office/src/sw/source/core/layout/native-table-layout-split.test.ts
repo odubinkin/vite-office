@@ -18,6 +18,7 @@ const page = {
 function fixture(format: SwTableFormat = {}, heights: readonly number[] = [200, 200, 200]) {
   const doc = new SwDoc(),
     table = doc.nodes.MakeTableNode("Split", { headerRows: 0, ...format });
+  doc.paragraphs[0]?.SetText("Before");
   table.AddColumnWidth(4000);
   for (const [r] of heights.entries())
     doc.nodes
@@ -42,10 +43,13 @@ function ranges(pages: readonly SwPageFrame[]) {
       ),
   );
 }
-/** Supplies one independent predecessor measurement. @param height - Physical text height. @returns Body input. */
-function before(height = 400) {
+/** Supplies one independent predecessor measurement. @param doc - Original text owner. @param height - Physical text height. @returns Body input. */
+function before(doc: SwDoc, height = 400) {
+  const body = doc.paragraphs[0];
+  if (body === undefined) throw Error("Missing original fixture text");
   return [
     {
+      node: body,
       id: "before",
       lines: [{ start: 0, end: 6, height }],
       style: "body-text" as const,
@@ -60,7 +64,7 @@ it.each([{}, { layoutSplit: true }])(
   /** Checks source true default. @param format - Existing item. @returns Nothing. */ (format) => {
     const f = fixture(format);
     expect(new SwTabFrame(f.table).IsLayoutSplitAllowed()).toBe(true);
-    expect(ranges(createSwPageFrames(before(), page, undefined, [f.input]))).toEqual([
+    expect(ranges(createSwPageFrames(before(f.doc), page, undefined, [f.input]))).toEqual([
       [[0, 1, 0]],
       [[2, 2, 0]],
     ]);
@@ -70,7 +74,7 @@ it("native disabled split moves the whole table without changing original graph 
   const f = fixture({ layoutSplit: false }),
     rows = [...f.table.GetTabLines()],
     nodes = f.doc.nodes.entries().length;
-  const result = createSwPageFrames(before(), page, undefined, [f.input]);
+  const result = createSwPageFrames(before(f.doc), page, undefined, [f.input]);
   expect(ranges(result)).toEqual([[], [[0, 2, 0]]]);
   expect(result[0]?.textFrames[0]?.nodeId).toBe("before");
   expect(result[1]?.tableFrames[0]?.table).toBe(f.table);
@@ -81,11 +85,11 @@ it("native disabled split moves the whole table without changing original graph 
 });
 it("native disabled split respects exact fit and upper spacing separately from following spacing", /** Checks independent source frame budgets. @returns Nothing. */ () => {
   const f = fixture({ layoutSplit: false, marginBottom: 700 });
-  expect(ranges(createSwPageFrames(before(200), page, undefined, [f.input]))).toEqual([
+  expect(ranges(createSwPageFrames(before(f.doc, 200), page, undefined, [f.input]))).toEqual([
     [[0, 2, 0]],
   ]);
   f.table.SetFormat({ ...f.table.GetFormat(), marginTop: 100 });
-  expect(ranges(createSwPageFrames(before(200), page, undefined, [f.input]))).toEqual([
+  expect(ranges(createSwPageFrames(before(f.doc, 200), page, undefined, [f.input]))).toEqual([
     [],
     [[0, 2, 0]],
   ]);
@@ -100,7 +104,7 @@ it.each([false, true])(
     occupied,
   ) => {
     const f = fixture({ layoutSplit: false }, [500, 500, 500]);
-    const result = createSwPageFrames(occupied ? before() : [], page, undefined, [
+    const result = createSwPageFrames(occupied ? before(f.doc) : [], page, undefined, [
       { ...f.input, afterParagraphIndex: occupied ? 0 : -1 },
     ]);
     expect(ranges(result)).toEqual(
@@ -116,7 +120,7 @@ it("native whole master uses the follow descriptor and preserves original headli
     short = { ...page, height: 600 },
     large = { ...page, name: "Large", height: 1200, width: 8000 };
   const result = createSwPageFrames(
-    before(300),
+    before(f.doc, 300),
     {
       initialName: short.name,
       descriptors: [
@@ -133,5 +137,5 @@ it("native whole master uses the follow descriptor and preserves original headli
 });
 it("native empty table never creates a phantom follow page", /** Checks absent row owners. @returns Nothing. */ () => {
   const f = fixture({ layoutSplit: false, marginTop: 900 }, []);
-  expect(ranges(createSwPageFrames(before(), page, undefined, [f.input]))).toEqual([[]]);
+  expect(ranges(createSwPageFrames(before(f.doc), page, undefined, [f.input]))).toEqual([[]]);
 });

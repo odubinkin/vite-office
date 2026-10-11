@@ -1,8 +1,17 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import {
+  SvxTextLeftMarginItem,
+  SvxFirstLineIndentItem,
+  SvxIndentValue,
+} from "../../../../editeng/inc/lrspitem";
+import { ListLevelIndents } from "../para/paratr";
+import { SwRegHistory, type SwHistory } from "../undo/rolbck";
 import { SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import {
   RES_PARATR_TABSTOP,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_FIRSTLINE,
   RES_PARATR_NUMRULE,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -115,16 +124,56 @@ export function getMoveLeftMarginDistance(document: SwDoc): number {
   return tabs.Count() > 0 ? tabs.At(0).GetTabPos() : SW_DEFAULT_INDENT_DISTANCE;
 }
 
-/** Computes one text node's next direct left margin. @param paragraph - Selected node. @param distance - Document default tab distance. @param right - Increase direction. @param modulus - Snap to tab multiple. @returns Next margin. */
-export function getMovedLeftMargin(
-  paragraph: SwTextNode,
-  distance: number,
+/** Copies complete native paragraph items and merges independently applicable represented list geometry. @param paragraph - Original text owner. @returns Owned native first and left items. */
+export function getMoveLeftMarginItems(paragraph: SwTextNode): {
+  first: SvxFirstLineIndentItem;
+  left: SvxTextLeftMarginItem;
+} {
+  const first = new SvxFirstLineIndentItem(
+      paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem,
+    ),
+    left = new SvxTextLeftMarginItem(
+      paragraph.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem,
+    ),
+    indents = paragraph.AreListLevelIndentsApplicable(),
+    rule = paragraph.GetNumRule();
+  if (indents !== ListLevelIndents.No && rule !== undefined) {
+    const level = paragraph.GetActualListLevel();
+    if (level >= 0) {
+      const format = rule.Get(level);
+      if (format.GetPositionAndSpaceMode() === "label-alignment") {
+        if ((indents & ListLevelIndents.LeftMargin) !== 0)
+          left.SetTextLeft(SvxIndentValue.twips(format.GetIndentAt()));
+        // The current native numbering format profile stores first-line values in TWIP only.
+        if ((indents & ListLevelIndents.FirstLine) !== 0)
+          first.SetTextFirstLineOffset(SvxIndentValue.twips(format.GetFirstLineIndent()));
+      }
+    }
+  }
+  return { first, left };
+}
+/** Applies native typed margins in original first-then-left order over the inclusive current graph span. @param document - Original owner. @param range - Native selected range. @param right - Increase direction. @param modulus - Tab snapping. @param history - Optional native old-state receiver. @returns Nothing. */
+export function moveLeftMargin(
+  document: SwDoc,
+  range: SwPaM,
   right: boolean,
   modulus: boolean,
-): number {
-  let next = paragraph.GetParagraphTextLeftMargin();
-  if (modulus) next = Math.trunc(next / distance) * distance;
-  if (right) next += distance;
-  else if (next > 0) next -= distance;
-  return next;
+  history?: SwHistory,
+): void {
+  const distance = getMoveLeftMarginDistance(document);
+  for (const node of getTextFormatCollNodes(document, range)) {
+    const { first, left } = getMoveLeftMarginItems(node);
+    let next = left.ResolveTextLeft();
+    if (modulus) next = Math.trunc(next / distance) * distance;
+    if (right) next += distance;
+    else if (next > 0) next -= distance;
+    left.SetTextLeft(SvxIndentValue.twips(next));
+    const registration = new SwRegHistory(node, node, history);
+    try {
+      node.SetAttr(first);
+      node.SetAttr(left);
+    } finally {
+      registration.Dispose();
+    }
+  }
 }

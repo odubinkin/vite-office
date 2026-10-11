@@ -119,7 +119,7 @@ it.each([13, 14, 15])(
     member,
   ) => {
     const item = new SvxLRSpaceItem(which),
-      absolute = member === 13 ? 8 : member === 14 ? 11 : 5;
+      absolute = member === 13 ? 8 : member === 14 ? 5 : 11;
     expect(item.QueryValue(member)).toBeUndefined();
     expect(item.PutValue({ First: 1.25, Second: U.FONT_EM }, member | 0x80)).toBe(true);
     expect(item.QueryValue(member | 0x80)).toEqual({ First: 1.25, Second: U.FONT_EM });

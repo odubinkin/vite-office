@@ -1,5 +1,6 @@
 /** @fileoverview Verifies source-owned continuation over actual table rings and boolean restart history without upstream access. */
 import { selectTableRow } from "../../../../../test-support/table-mouse";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwContentIndex } from "../bastyp/index";
@@ -172,7 +173,7 @@ it.each(cases)(
         });
       node.SetCountedInList(false);
       node.SetParagraphTextLeftMargin(600);
-      node.SetParagraphFirstLineIndent(-120);
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
       node.SetParagraphRightMargin(80);
     }
     const before = targets.map(

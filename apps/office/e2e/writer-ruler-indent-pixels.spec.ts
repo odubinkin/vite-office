@@ -1,5 +1,6 @@
 /** @fileoverview Checks three native rounded paragraph ruler anchors and real Chromium transactions. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -25,9 +26,9 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(writerDocument, metadata));
     shell.Insert("RulerIndentPixelsProof");
     shell.SetParagraphItems([
-      new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-      new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE),
-      new SvxRightMarginItem(6503, RES_MARGIN_RIGHT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE),
+      new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     ]);
     const bytes = writeOdtDocument(writerDocument, metadata);
     await page.setViewportSize({ width, height: 800 });

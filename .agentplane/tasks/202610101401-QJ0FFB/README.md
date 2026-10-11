@@ -1,0 +1,340 @@
+---
+id: "202610101401-QJ0FFB"
+title: "Restore native typed right paragraph margin item"
+result_summary: "Replaced the numeric right-margin adapter with original typed value/unit/proportion/UNO/metric/copy ownership, fixed paragraph history mutable caller aliases through native Clone values, preserved legacy integer graph and registered IO exceptions, updated18canonical histories and documented preserved WRITER-002.14117/14117 cases50fresh,whole nine modules actual100all-four,32Chromium and nine metadata pass. Broad goal incomplete;2/10 and pause after next accepted full."
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 23
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-10T14:38:19.332Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-10T15:04:29.142Z"
+  updated_by: "CODER"
+  note: "Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-10T15:03:17.357Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact-SHA review passes native right item/context and history copy scope; broad native graph/UI parity remains incomplete."
+  evaluated_sha: "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f"
+  blueprint_digest: "520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3"
+  evidence_refs:
+    - ".agentplane/tasks/202610101401-QJ0FFB/README.md"
+    - ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610101401-QJ0FFB/evidence/verification.json"
+  findings:
+    - "Exact d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f owns native typed right and independent history Clone values; direct caller regression retained. Final nine full maps actual100all-four,14117accepted50fresh32Chromium,nine metadata;18histories preserved and declaration owner moved honestly. No raw source/helper/maps in artifacts, no passing type/helper/metadata replay, no IO/recovery deviation changes."
+commit:
+  hash: "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f"
+  message: "🧩 QJ0FFB writer: restore native right margin ownership"
+comments:
+  -
+    author: "CODER"
+    body: "Start: original typed right paragraph native contracts;8prod7oldfiles2fresh16canonical, preserve existing scalar wire and explicit unsupported rich rejection. Related/new100 absent bothrefs restoredmetadata exactSHA quality, broadgoal active2/10 no full."
+  -
+    author: "CODER"
+    body: "Start: associate verified native right ownership and independent paragraph history with exact semantic commit."
+  -
+    author: "CODER"
+    body: "Verified: native typed right margin and independent paragraph history satisfy approved source-backed scope;14117cases,whole nine-module100all-four,32Chromium,nine metadata and exact-SHA same-agent quality pass."
+events:
+  -
+    type: "status"
+    at: "2026-10-10T14:03:14.605Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: original typed right paragraph native contracts;8prod7oldfiles2fresh16canonical, preserve existing scalar wire and explicit unsupported rich rejection. Related/new100 absent bothrefs restoredmetadata exactSHA quality, broadgoal active2/10 no full."
+  -
+    type: "status"
+    at: "2026-10-10T15:03:15.560Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: associate verified native right ownership and independent paragraph history with exact semantic commit."
+  -
+    type: "verify"
+    at: "2026-10-10T15:03:16.037Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final14117/14117 cases501files50fresh, nine current whole modules actual Istanbul100all-four1696/1844/524/1422,32Chromium,current TS7/static/build and nine restored metadata audits pass. Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f; native history owns Clone values, no caller workaround, all18canonical histories and exact legacy migrations preserved."
+  -
+    type: "verify"
+    at: "2026-10-10T15:04:29.142Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full."
+  -
+    type: "status"
+    at: "2026-10-10T15:05:22.825Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native typed right margin and independent paragraph history satisfy approved source-backed scope;14117cases,whole nine-module100all-four,32Chromium,nine metadata and exact-SHA same-agent quality pass."
+doc_version: 3
+doc_updated_at: "2026-10-10T15:05:22.826Z"
+doc_updated_by: "CODER"
+description: "Atomic2/10 after N337G1; replace numeric right paragraph item with original lrspitem.hxx measure/proportion/default/value/copy/getter/setter/resolution/scaling/represented UNO5/7/14/0 contracts. Native pool/paragraph/style/ODF/shell ingress authors explicit twips; frmitems retains export alias. Existing legacy scalar persistence stays browser-owned and admits only its old integer-TWIP/default-proportion domain, rejects newly unrepresented state instead of loss; full native right/LR graph transport remains incomplete. Eight production modules, seven exact old-test migrations, two fresh native item/history files, sixteen canonical append records, parent/task facts; suspected-source doc if a new questionable original condition is found. Related/new entire changed-module100 upstream absent including both ignored references, static/browser, restored metadata/source hashes, exact-SHA non-independent quality clean close. No network/delegation/full run/IO deviations."
+sections:
+  Summary: "Replace scalar right paragraph item with original typed live margin ownership/contracts under lrspitem.hxx. Preserve existing integer TWIP application and browser wire behavior."
+  Scope: |-
+    Eight production modules: editeng/inc/lrspitem.ts; editeng/source/items/frmitems.ts; sw/source/core/attr/swatrset.ts; sw/source/core/txtnode/ndtxt.ts; sw/source/core/doc/poolfmt-defaults.ts; sw/source/filter/xml/xmlimp.ts; sw/source/uibase/wrtsh/wrtsh1.ts; sw/browser/filter/xml/item-codec.ts. Seven historical files with right constructors: frmitems.test.ts, odt-paragraph-indent-roundtrip.test.ts and five writer-view auto-first/ruler tests; two fresh native item and native paragraph history/boundary tests. Sixteen corresponding runtime/provenance records, parent/task facts; Writer suspected-source document if a newly suspicious original condition is found. No font measurement/UI overhaul, private-field/inverse restoration, rich native graph protocol or IO/recovery/settings exception change.
+
+    Required native constructor migration: exactly four inputs in three existing browser fixture files writer-ruler-auto-first.spec.ts, writer-ruler-indent-items.spec.ts and writer-ruler-indent-pixels.spec.ts. No case, expected value, sibling assertion or browser operation changes; within the standing user-authorized implementation and error-repair scope. Unit scalar observers expose native optional QueryValue member type without altering compiled runtime. Eight production modules remain the entire coverage target.
+
+    Native right-margin mutability exposes a necessary ownership defect in sw/source/core/undo/unattr.ts: SwUndoParagraphItem borrows mutable caller input although paragraph ItemSet clones it. Capture independent original Clone values before/after; retain node/cursor/direct/inherited history and unrelated acceptance. Add the corresponding two canonical records. Nine production modules/eighteen canonical histories are the complete current task target; same atomic typed-right/native-history correction under standing user-authorized error repair/refactoring. No extra adapter or caller-side workaround.
+  Plan: |-
+    Port original typed right live contracts;8prod7exact oldfiles2fresh16canonical. Preserve prior browser scalar wire, reject new unsupported states, rich graph still incomplete. Related/new entire8modules100 absent bothrefs, static/browser/restoredmetadata and exactSHA non-independent quality clean close.2/10 no full.
+
+    TS7 identified four missed existing browser constructors in three files. Migrate those exact fixture inputs to native SvxIndentValue.twips and retain their previously declared Chromium acceptance. Express optional UNO members at the test observer type boundary only, preserving compiled runtime; rerun only failed TS7/pending checks. No new production scope or full-run/cadence change. Standing user authorization covers necessary safe local test migrations; no network/delegation/publication.
+
+    Finish original native right-state ownership by correcting the existing paragraph history memento to own native Clone values rather than mutable caller aliases. Restore the direct-caller regression; no caller-side cloning workaround. Inspect pinned native history item-copy responsibility after reference restoration, update eighteenth canonical histories, run nine whole current-source coverage and related acceptance after genuine production history repair. Existing source maps from superseded sources cannot certify this final state. Safe local correction is already authorized by the user goal and explicit repair-before-pause request.
+  Verify Steps: |-
+    1. Native default/value/copy constructors, typed SetRight/GetRight stable member reference, independent double/signed16 unit and unsigned16 proportions, default100 no premature rounding; twip/EM/IC/empty/initialized/fixed/variable resolve; Clone/equality identity/measure/proportion ownership; ScaleMetrics and HasMetrics match original.
+    2. UNO0 default struct fields/right/scale, absolute5/percentage7/unit14 with conversion, exact native Any domains, rounding/setter order/atomic rejection match source. Real paragraph native ItemSet and three UndoRedo cycles preserve original node/cursor/client and item context. Existing integer scalar graph/JSON/Worker and legacy coercion/rejection preserved; newly unsupported rich wire states reject explicitly, full rich transport unverified.
+    3. Seven exact old-unit-file and three old-browser-file twip constructor migrations and explicitly source-backed fractional-right/default-query acceptance corrections preserve all other cases/expected values/sibling/history. All other historical tests byte-identical and18canonical historical/status/default/classification prefixes retained. Related/new entire9production modules actual Istanbul100 lines/statements/functions/branches complete current maps nonnegative once absent bothrefs; failed/new-only repair unless real production change justifies related revalidation; no passing helper/type/metadata replay or earlier-map/filter/threshold workaround.
+    4. Static/TS7/build/JSDoc/dependency/file-size/related Chromium pass absent bothrefs, restored in finally. Separate restored9metadata/source audits pass; suspicious source conditions if found recorded in Writer document with source/example/evidence/uncertainty/preservation and original behavior retained. Bounded English facts/hashes only AgentPlane; helpers/raw/maps ignored node_modules cache. ExactSHA explicitly same-agent non-independent quality, concrete result and clean writer branch. Broad goal active incomplete.
+    5. Four browser fixture constructor inputs retain all authored values/cases/sibling/history text; all other original browser files byte-identical. Query observer type-only repairs have compiled runtime AST equivalence; no passing unit replay.
+    6. Pass the original mutable typed right item directly; mutate the still unpooled authoring argument after acceptance and verify stored item plus three Redo cycles keep the independent original value/unit/proportion. Original history capture uses native Clone; do not hide caller/history aliasing with a clone in the test call. Original broader native history architecture remains unverified.
+  Verification: |-
+    Pass: final current-source native history profile14117/14117 in501files50fresh. Nine whole changed modules actual Istanbul100 lines/statements/functions/branches1696/1844/524/1422; complete current maps/nonnegative and current source hashes. Current TS7/static/build/dependencies/JSDoc/file-size and32Chromium pass absent both ignored references, restored in finally. Nine metadata and five pinned source hashes pass. Eighteen canonical histories retained, one current declaration owner migration, seven exact unit and three exact browser fixture migrations;671other old unit files and other browser files unchanged. New native mutable-caller history defect fixed in production, not hidden through caller Clone. No passing replay for type/helper/metadata-only repairs; genuine source-owner/history changes revalidated. WRITER-002 documented and preserved, full rich transport/general native parity remains unverified. Bounded evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow. Goal active incomplete;2/10, latest conditional pause after accepted full persists.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-10T15:03:16.037Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final14117/14117 cases501files50fresh, nine current whole modules actual Istanbul100all-four1696/1844/524/1422,32Chromium,current TS7/static/build and nine restored metadata audits pass. Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f; native history owns Clone values, no caller workaround, all18canonical histories and exact legacy migrations preserved.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:03:15.560Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+    - old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610101401-QJ0FFB
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-10T15:04:29.142Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:04:28.761Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+    - old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610101401-QJ0FFB --result verified-202610101401-QJ0FFB --commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+
+    Exact semantic commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f reviewed by the same current agent as EVALUATOR; explicitly non-independent pass, with nine current-source hashes checked against the committed blobs and native caller independence/32browser/eighteen-history/metadata evidence inspected. Quality report .agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json. Broad goal incomplete; latest requested pause follows the next accepted full run.
+  Rollback Plan: "Revert semantic task commit without rewriting history; restore both ignored reference symlinks in finally."
+  Findings: |-
+    Previous turn progressed: HB1SPN DONE17ab2ec6d1208582a910d4519ed6e195d79da3c5 close91210399681c;154related22fresh24browser whole2modules100 and WRITER-001. Active goal, clean writer at preflight, cadence1/10 after N337G1. Original scalar right class lacks native mutable/typed/proportion/default/copy/metrics/UNO contracts. Original native class has no public independent proportion setter for65535; SetRight rescales its input and PutValue7 excludes65535. Do not add private/inverse marshaling hacks. Port live native contracts now and keep old scalar boundary only, explicitly reject new unsupported states; complete rich right/LR graph preservation remains later architectural work. Initial tool orchestration syntax error executed no shell mutation; task route revalidated before retry.
+
+    Continuation: previous user-steering turn only revalidated route/state and acknowledged the requested pause; no authoritative change, therefore classified no progress without a blocker. This turn added native paragraph three-cycle UndoRedo and graph/JSON/Worker/legacy boundary acceptance, appended16canonical records and recorded WRITER-002 source percentage setter asymmetry without normalization. Both ignored references are hidden for the live related Vitest process; restoration is finally guarded. Ignored preservation helper initially used old-test0.before instead of actual old-test-0.before, failed before checking acceptance, then corrected only helper path and passed; no test replay. Seven exact compiler-directed old-test migrations preserve all671other prior test files byte-identical and16canonical historical prefixes. No new full run yet; latest user request is pause after next accepted full run.
+
+    Verification progression: initial related501files14117cases had17failures (six fresh wrong Int16 import, three fresh invalid node client API, eight existing native Query0 scalar observers). Correct actual import/client and source-defined scalar member5 observers; failed-only17 profile accepted14, leaving three true history caller-alias failures. A temporary fresh caller Clone made those three pass but review rejected that narrower proof: paragraph ItemSet owns a clone, so the original unpooled caller is legally mutable. Exact pinned SwHistorySetFormat pFormatHt->Clone and SwUndoAttr value ItemSet prove native history capture responsibility. SwUndoParagraphItem now owns native before/after Clone values and the direct-caller mutation regression is restored; new entire9current-production related coverage is live. No task completion relies on the temporary clone workaround or superseded8module profile. Type/lint repairs use validated compiled TS/TSX runtime equivalence and no passing replay. TS7 missed four constructor inputs in three browser fixtures: exact migrations added under approved amended scope. File-size gate found two1000line native callers; direct native right-owner imports remove their frmitems reexport dependency and restore998physical lines (999 including trailing split line), no blank-line suppression or limit weakening. Genuine production import/history changes justify revalidation, not helper/type/metadata repairs. Helpers initially misnamed saved fixtures, compared line formatting, and collapsed nineteen duplicate display names; bounded failed helper output was corrected without changing runtime checks/counters. Final source hashes include nine modules; all18canonical historical prefixes and671unchanged old unit files plus other browser files verified. Latest conditional pause request persists: pause only after the next accepted full run and any failures repaired.
+
+    VerifiedQJ0FFB: original typed SvxRightMarginItem replaces the immutable numeric adapter; stable owned double/signed16 measure, uint16 proportion, source default/value/copy, contextual/fixed/variable resolution, represented UNO0/5/7/14 admission/rounding, Clone/equality/metrics retain pinned source. Native paragraph history captures independent original before/after Clone values instead of mutable caller aliases; direct unpooled caller mutation and three UndoRedo cycles preserve node/cursor/style-client/context without a caller-side workaround. Two core callers import the native owner directly. Final genuine production-repair profile14117/14117 cases501files50fresh; nine entire changed modules actual Istanbul100all-four1696lines1844statements524functions1422branches, complete current-source nonnegative maps, no earlier/superseded map reuse/filter/counter edits/threshold reduction. TS7/static/build/dependency/JSDoc/file-size and32Chromium cases pass with both refs absent, restored in finally. Nine separate restored metadata audits and five pinned source hashes pass. Seven exact old-unit migrations plus four browser constructor inputs across three files;671other old unit files and all other browser files byte-identical; expected values/sibling/history retained except source-backed native scalar member/fractional acceptance corrections. Eighteen canonical historical/status/default/classification prefixes retained; one current declaration owner retires from frmitems after moving to native lrspitem, exported class identity unchanged. WRITER-002 records suspicious upstream percentage metadata-only/unsigned-admission/signed-status asymmetry, preserved rather than normalized. Full rich right-margin graph transport, font-context UI measurement, left/first-line/native-history architecture/hash/presentation/general UNO/VCL and broader Writer parity remain incomplete. Registered recovery/open/save/settings deviations untouched. Cadence2/10 after N337G1; no full run this task. Latest user request: pause after next accepted full run, after repairing any failures.
+
+    Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/run.cjs native-history-commands.json native-history-results.json
+    Result: pass.
+    Evidence:14117/14117 cases501files50fresh; entire nine-module actual100all-four, complete current-source nonnegative maps.
+    Scope: original native right item and actual independent paragraph history; tests invoke only the portable code with both references absent.
+    Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/run.cjs static-final-commands.json static-final-results.json; node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/run.cjs doc-final-commands.json doc-final-results.json
+    Result: pass.
+    Evidence: current-source native owner/history repairs pass TS7/dependencies/file-size/build/static-build/current JSDoc and32Chromium; original root format/lint plus changed-file checks retained.
+    Scope: static and actual desktop/narrow ruler/table browser regression absent both references.
+    Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/audit.cjs audit-repair-commands.json audit-repair-results.json
+    Result: pass.
+    Evidence: initial build/source-tree/provenance passed; failed registry owner declaration fixed only in metadata, failed/pending six checks passed; nine accepted metadata gates, doctor existing2warnings0errors.
+    Scope: restored references metadata, no tests or earlier passing metadata replay.
+    Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/source-audit.cjs; node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/preservation.cjs; node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/type-proof.cjs
+    Result: pass.
+    Evidence: five exact pinned source hashes, native history clone/value responsibility, WRITER-002 original setter behavior; eighteen canonical histories and exact unit/browser migrations; compilerAPI6.0.3 validates two current TSX observer compiled runtime AST/token equivalence.
+    Scope: source/metadata/preservation facts only, helpers/raw/maps remain ignored.
+extensions:
+  implementation_commit:
+    hash: "d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f"
+    message: "🧩 QJ0FFB writer: restore native right margin ownership"
+id_source: "generated"
+---
+## Summary
+
+Replace scalar right paragraph item with original typed live margin ownership/contracts under lrspitem.hxx. Preserve existing integer TWIP application and browser wire behavior.
+
+## Scope
+
+Eight production modules: editeng/inc/lrspitem.ts; editeng/source/items/frmitems.ts; sw/source/core/attr/swatrset.ts; sw/source/core/txtnode/ndtxt.ts; sw/source/core/doc/poolfmt-defaults.ts; sw/source/filter/xml/xmlimp.ts; sw/source/uibase/wrtsh/wrtsh1.ts; sw/browser/filter/xml/item-codec.ts. Seven historical files with right constructors: frmitems.test.ts, odt-paragraph-indent-roundtrip.test.ts and five writer-view auto-first/ruler tests; two fresh native item and native paragraph history/boundary tests. Sixteen corresponding runtime/provenance records, parent/task facts; Writer suspected-source document if a newly suspicious original condition is found. No font measurement/UI overhaul, private-field/inverse restoration, rich native graph protocol or IO/recovery/settings exception change.
+
+Required native constructor migration: exactly four inputs in three existing browser fixture files writer-ruler-auto-first.spec.ts, writer-ruler-indent-items.spec.ts and writer-ruler-indent-pixels.spec.ts. No case, expected value, sibling assertion or browser operation changes; within the standing user-authorized implementation and error-repair scope. Unit scalar observers expose native optional QueryValue member type without altering compiled runtime. Eight production modules remain the entire coverage target.
+
+Native right-margin mutability exposes a necessary ownership defect in sw/source/core/undo/unattr.ts: SwUndoParagraphItem borrows mutable caller input although paragraph ItemSet clones it. Capture independent original Clone values before/after; retain node/cursor/direct/inherited history and unrelated acceptance. Add the corresponding two canonical records. Nine production modules/eighteen canonical histories are the complete current task target; same atomic typed-right/native-history correction under standing user-authorized error repair/refactoring. No extra adapter or caller-side workaround.
+
+## Plan
+
+Port original typed right live contracts;8prod7exact oldfiles2fresh16canonical. Preserve prior browser scalar wire, reject new unsupported states, rich graph still incomplete. Related/new entire8modules100 absent bothrefs, static/browser/restoredmetadata and exactSHA non-independent quality clean close.2/10 no full.
+
+TS7 identified four missed existing browser constructors in three files. Migrate those exact fixture inputs to native SvxIndentValue.twips and retain their previously declared Chromium acceptance. Express optional UNO members at the test observer type boundary only, preserving compiled runtime; rerun only failed TS7/pending checks. No new production scope or full-run/cadence change. Standing user authorization covers necessary safe local test migrations; no network/delegation/publication.
+
+Finish original native right-state ownership by correcting the existing paragraph history memento to own native Clone values rather than mutable caller aliases. Restore the direct-caller regression; no caller-side cloning workaround. Inspect pinned native history item-copy responsibility after reference restoration, update eighteenth canonical histories, run nine whole current-source coverage and related acceptance after genuine production history repair. Existing source maps from superseded sources cannot certify this final state. Safe local correction is already authorized by the user goal and explicit repair-before-pause request.
+
+## Verify Steps
+
+1. Native default/value/copy constructors, typed SetRight/GetRight stable member reference, independent double/signed16 unit and unsigned16 proportions, default100 no premature rounding; twip/EM/IC/empty/initialized/fixed/variable resolve; Clone/equality identity/measure/proportion ownership; ScaleMetrics and HasMetrics match original.
+2. UNO0 default struct fields/right/scale, absolute5/percentage7/unit14 with conversion, exact native Any domains, rounding/setter order/atomic rejection match source. Real paragraph native ItemSet and three UndoRedo cycles preserve original node/cursor/client and item context. Existing integer scalar graph/JSON/Worker and legacy coercion/rejection preserved; newly unsupported rich wire states reject explicitly, full rich transport unverified.
+3. Seven exact old-unit-file and three old-browser-file twip constructor migrations and explicitly source-backed fractional-right/default-query acceptance corrections preserve all other cases/expected values/sibling/history. All other historical tests byte-identical and18canonical historical/status/default/classification prefixes retained. Related/new entire9production modules actual Istanbul100 lines/statements/functions/branches complete current maps nonnegative once absent bothrefs; failed/new-only repair unless real production change justifies related revalidation; no passing helper/type/metadata replay or earlier-map/filter/threshold workaround.
+4. Static/TS7/build/JSDoc/dependency/file-size/related Chromium pass absent bothrefs, restored in finally. Separate restored9metadata/source audits pass; suspicious source conditions if found recorded in Writer document with source/example/evidence/uncertainty/preservation and original behavior retained. Bounded English facts/hashes only AgentPlane; helpers/raw/maps ignored node_modules cache. ExactSHA explicitly same-agent non-independent quality, concrete result and clean writer branch. Broad goal active incomplete.
+5. Four browser fixture constructor inputs retain all authored values/cases/sibling/history text; all other original browser files byte-identical. Query observer type-only repairs have compiled runtime AST equivalence; no passing unit replay.
+6. Pass the original mutable typed right item directly; mutate the still unpooled authoring argument after acceptance and verify stored item plus three Redo cycles keep the independent original value/unit/proportion. Original history capture uses native Clone; do not hide caller/history aliasing with a clone in the test call. Original broader native history architecture remains unverified.
+
+## Verification
+
+Pass: final current-source native history profile14117/14117 in501files50fresh. Nine whole changed modules actual Istanbul100 lines/statements/functions/branches1696/1844/524/1422; complete current maps/nonnegative and current source hashes. Current TS7/static/build/dependencies/JSDoc/file-size and32Chromium pass absent both ignored references, restored in finally. Nine metadata and five pinned source hashes pass. Eighteen canonical histories retained, one current declaration owner migration, seven exact unit and three exact browser fixture migrations;671other old unit files and other browser files unchanged. New native mutable-caller history defect fixed in production, not hidden through caller Clone. No passing replay for type/helper/metadata-only repairs; genuine source-owner/history changes revalidated. WRITER-002 documented and preserved, full rich transport/general native parity remains unverified. Bounded evidence/verification.json; exact semantic SHA and explicitly same-agent non-independent quality follow. Goal active incomplete;2/10, latest conditional pause after accepted full persists.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-10T15:03:16.037Z — VERIFY — ok
+
+By: CODER
+
+Note: Final14117/14117 cases501files50fresh, nine current whole modules actual Istanbul100all-four1696/1844/524/1422,32Chromium,current TS7/static/build and nine restored metadata audits pass. Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f; native history owns Clone values, no caller workaround, all18canonical histories and exact legacy migrations preserved.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:03:15.560Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+- old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610101401-QJ0FFB
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-10T15:04:29.142Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact semantic d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f current nine-source100all-four14117/14117+32Chromium+nine metadata; source/preservation proof pass, same-agent non-independent evaluator pass recorded. No required current task work remains; broad goal incomplete, latest pause follows accepted full.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-10T15:04:28.761Z, excerpt_hash=sha256:4ac2dcb1ede6c076290d8db3d537ff496e459cbb67c9cced21e032a59b5a238c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610101401-QJ0FFB/blueprint/resolved-snapshot.json
+- old_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- current_digest: 520f787cfbdfb538059c27a10aaac482d0660d0bac299294847da36f5cf7efd3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610101401-QJ0FFB
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610101401-QJ0FFB --result verified-202610101401-QJ0FFB --commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+Exact semantic commit d2e3db825259d7b4dce0c4ae4aa2c637c7adde9f reviewed by the same current agent as EVALUATOR; explicitly non-independent pass, with nine current-source hashes checked against the committed blobs and native caller independence/32browser/eighteen-history/metadata evidence inspected. Quality report .agentplane/tasks/202610101401-QJ0FFB/quality/20261010-150317357-recovery-context/quality-report.json. Broad goal incomplete; latest requested pause follows the next accepted full run.
+
+## Rollback Plan
+
+Revert semantic task commit without rewriting history; restore both ignored reference symlinks in finally.
+
+## Findings
+
+Previous turn progressed: HB1SPN DONE17ab2ec6d1208582a910d4519ed6e195d79da3c5 close91210399681c;154related22fresh24browser whole2modules100 and WRITER-001. Active goal, clean writer at preflight, cadence1/10 after N337G1. Original scalar right class lacks native mutable/typed/proportion/default/copy/metrics/UNO contracts. Original native class has no public independent proportion setter for65535; SetRight rescales its input and PutValue7 excludes65535. Do not add private/inverse marshaling hacks. Port live native contracts now and keep old scalar boundary only, explicitly reject new unsupported states; complete rich right/LR graph preservation remains later architectural work. Initial tool orchestration syntax error executed no shell mutation; task route revalidated before retry.
+
+Continuation: previous user-steering turn only revalidated route/state and acknowledged the requested pause; no authoritative change, therefore classified no progress without a blocker. This turn added native paragraph three-cycle UndoRedo and graph/JSON/Worker/legacy boundary acceptance, appended16canonical records and recorded WRITER-002 source percentage setter asymmetry without normalization. Both ignored references are hidden for the live related Vitest process; restoration is finally guarded. Ignored preservation helper initially used old-test0.before instead of actual old-test-0.before, failed before checking acceptance, then corrected only helper path and passed; no test replay. Seven exact compiler-directed old-test migrations preserve all671other prior test files byte-identical and16canonical historical prefixes. No new full run yet; latest user request is pause after next accepted full run.
+
+Verification progression: initial related501files14117cases had17failures (six fresh wrong Int16 import, three fresh invalid node client API, eight existing native Query0 scalar observers). Correct actual import/client and source-defined scalar member5 observers; failed-only17 profile accepted14, leaving three true history caller-alias failures. A temporary fresh caller Clone made those three pass but review rejected that narrower proof: paragraph ItemSet owns a clone, so the original unpooled caller is legally mutable. Exact pinned SwHistorySetFormat pFormatHt->Clone and SwUndoAttr value ItemSet prove native history capture responsibility. SwUndoParagraphItem now owns native before/after Clone values and the direct-caller mutation regression is restored; new entire9current-production related coverage is live. No task completion relies on the temporary clone workaround or superseded8module profile. Type/lint repairs use validated compiled TS/TSX runtime equivalence and no passing replay. TS7 missed four constructor inputs in three browser fixtures: exact migrations added under approved amended scope. File-size gate found two1000line native callers; direct native right-owner imports remove their frmitems reexport dependency and restore998physical lines (999 including trailing split line), no blank-line suppression or limit weakening. Genuine production import/history changes justify revalidation, not helper/type/metadata repairs. Helpers initially misnamed saved fixtures, compared line formatting, and collapsed nineteen duplicate display names; bounded failed helper output was corrected without changing runtime checks/counters. Final source hashes include nine modules; all18canonical historical prefixes and671unchanged old unit files plus other browser files verified. Latest conditional pause request persists: pause only after the next accepted full run and any failures repaired.
+
+VerifiedQJ0FFB: original typed SvxRightMarginItem replaces the immutable numeric adapter; stable owned double/signed16 measure, uint16 proportion, source default/value/copy, contextual/fixed/variable resolution, represented UNO0/5/7/14 admission/rounding, Clone/equality/metrics retain pinned source. Native paragraph history captures independent original before/after Clone values instead of mutable caller aliases; direct unpooled caller mutation and three UndoRedo cycles preserve node/cursor/style-client/context without a caller-side workaround. Two core callers import the native owner directly. Final genuine production-repair profile14117/14117 cases501files50fresh; nine entire changed modules actual Istanbul100all-four1696lines1844statements524functions1422branches, complete current-source nonnegative maps, no earlier/superseded map reuse/filter/counter edits/threshold reduction. TS7/static/build/dependency/JSDoc/file-size and32Chromium cases pass with both refs absent, restored in finally. Nine separate restored metadata audits and five pinned source hashes pass. Seven exact old-unit migrations plus four browser constructor inputs across three files;671other old unit files and all other browser files byte-identical; expected values/sibling/history retained except source-backed native scalar member/fractional acceptance corrections. Eighteen canonical historical/status/default/classification prefixes retained; one current declaration owner retires from frmitems after moving to native lrspitem, exported class identity unchanged. WRITER-002 records suspicious upstream percentage metadata-only/unsigned-admission/signed-status asymmetry, preserved rather than normalized. Full rich right-margin graph transport, font-context UI measurement, left/first-line/native-history architecture/hash/presentation/general UNO/VCL and broader Writer parity remain incomplete. Registered recovery/open/save/settings deviations untouched. Cadence2/10 after N337G1; no full run this task. Latest user request: pause after next accepted full run, after repairing any failures.
+
+Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/run.cjs native-history-commands.json native-history-results.json
+Result: pass.
+Evidence:14117/14117 cases501files50fresh; entire nine-module actual100all-four, complete current-source nonnegative maps.
+Scope: original native right item and actual independent paragraph history; tests invoke only the portable code with both references absent.
+Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/run.cjs static-final-commands.json static-final-results.json; node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/run.cjs doc-final-commands.json doc-final-results.json
+Result: pass.
+Evidence: current-source native owner/history repairs pass TS7/dependencies/file-size/build/static-build/current JSDoc and32Chromium; original root format/lint plus changed-file checks retained.
+Scope: static and actual desktop/narrow ruler/table browser regression absent both references.
+Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/audit.cjs audit-repair-commands.json audit-repair-results.json
+Result: pass.
+Evidence: initial build/source-tree/provenance passed; failed registry owner declaration fixed only in metadata, failed/pending six checks passed; nine accepted metadata gates, doctor existing2warnings0errors.
+Scope: restored references metadata, no tests or earlier passing metadata replay.
+Command: node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/source-audit.cjs; node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/preservation.cjs; node apps/office/node_modules/.cache/parity-coverage/QJ0FFB/type-proof.cjs
+Result: pass.
+Evidence: five exact pinned source hashes, native history clone/value responsibility, WRITER-002 original setter behavior; eighteen canonical histories and exact unit/browser migrations; compilerAPI6.0.3 validates two current TSX observer compiled runtime AST/token equivalence.
+Scope: source/metadata/preservation facts only, helpers/raw/maps remain ignored.

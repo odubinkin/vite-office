@@ -1,5 +1,6 @@
 /** @fileoverview Checks automatic paragraph item state survives real ruler moves and Chromium history. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -25,16 +26,22 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(writerDocument, metadata));
     shell.Insert("RulerIndentItemsProof");
     shell.SetParagraphItems([
-      new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-      new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, true),
-      new SvxRightMarginItem(6503, RES_MARGIN_RIGHT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
+      (
+        /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+          const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE);
+          item.SetAutoFirst(true);
+          return item;
+        }
+      )(),
+      new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     ]);
     shell.SplitNode();
     shell.Insert("UntouchedParagraphProof");
     shell.SetParagraphItems([
-      new SvxTextLeftMarginItem(900, RES_MARGIN_TEXTLEFT),
-      new SvxFirstLineIndentItem(-120, RES_MARGIN_FIRSTLINE),
-      new SvxRightMarginItem(2000, RES_MARGIN_RIGHT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(900), RES_MARGIN_TEXTLEFT),
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE),
+      new SvxRightMarginItem(SvxIndentValue.twips(2000), RES_MARGIN_RIGHT),
     ]);
     const bytes = writeOdtDocument(writerDocument, metadata);
     await page.setViewportSize({ width, height: 800 });

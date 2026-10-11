@@ -1,5 +1,6 @@
 /** @fileoverview Verifies native style/reset history asymmetry, expanded redo selection, typing and ODT export at desktop/mobile widths. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import fs from "node:fs/promises";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { SvxFirstLineIndentItem } from "../src/editeng/source/items/frmitems";
@@ -15,11 +16,11 @@ function historyOdt(): Uint8Array {
   before.SetText("BeforeHistoryNeighbor");
   const a = doc.MakeTextFormatColl("History style A", doc.GetDfltTextFormatColl(), "HistoryA"),
     b = doc.MakeTextFormatColl("History style B", doc.GetDfltTextFormatColl(), "HistoryB");
-  a.SetFormatAttr(new SvxFirstLineIndentItem(240, 92));
-  b.SetFormatAttr(new SvxFirstLineIndentItem(360, 92));
+  a.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
+  b.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(360), 92));
   const node = doc.GetNodes().MakeTextNode("StyleRedo Bold Link Tail");
   node.ChgFormatColl(a);
-  node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+  node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
   node.ToggleTextRangeFormat(10, 14, "bold");
   node.SetHyperlink(15, 19, {
     url: "https://example.test/redo-history",

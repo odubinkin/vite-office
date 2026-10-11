@@ -1,0 +1,569 @@
+{
+  "status": "pass",
+  "taskId": "202610101614-BZ14P4",
+  "checkedHead": "17f757e790ecb80691c6052e814f254fe87c713f",
+  "upstreamPin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "goalIncomplete": true,
+  "pauseRequestedAfterClosure": true,
+  "checkpointReason": "Explicit current full-run stop request after three accepted atomic corrections since N337G1",
+  "fullRuns": 1,
+  "passingReplays": 0,
+  "repairsRequired": 0,
+  "tests": {
+    "full-app": {
+      "files": 635,
+      "passed": 15104,
+      "failed": 0,
+      "skipped": 0,
+      "reportSha256": "ebbba7c647b47faa3e460e26bcaba8b0c28e723a8c42b485646da4cf2b9c09ca"
+    },
+    "full-tooling": {
+      "files": 8,
+      "passed": 24,
+      "failed": 0,
+      "skipped": 0,
+      "reportSha256": "d1736bb121e9a5b8ee070322d9a774f566e91b541bb72aed75b8024fd2e6c6cd"
+    },
+    "full-inventory": {
+      "files": 38,
+      "passed": 123,
+      "failed": 0,
+      "skipped": 0,
+      "reportSha256": "d368d83e68042730fe11a42db434c6070c25e1b079dc8a40e2a3814f581e9361"
+    },
+    "full-resource": {
+      "files": 1,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "reportSha256": "98ccd8793553aea870b24f60fda2dec9a7e067b463f65ce8019cd44adcfbf9aa"
+    },
+    "full-browser": {
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "retries": 0,
+      "cases": 303,
+      "errors": [],
+      "reportSha256": "4235c9fc5a2595ae324ac4c0a2957f19c0048525e4041c3d6e25cc1a2eecffae"
+    }
+  },
+  "totalPassedCases": 15556,
+  "coverage": {
+    "full-app": {
+      "actualModules": 351,
+      "summary": {
+        "lines": {
+          "total": 23385,
+          "covered": 23385,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 25784,
+          "covered": 25784,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5633,
+          "covered": 5633,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18367,
+          "covered": 18367,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "uncovered": [],
+      "completeMaps": true,
+      "nonnegativeCounters": true,
+      "currentSourceHashes": true,
+      "mapSha256": "c5508e7f6d0689be6cce2587e4f038baeeec6e675addddbdd67f74ce722b4431"
+    },
+    "full-inventory": {
+      "actualModules": 42,
+      "summary": {
+        "lines": {
+          "total": 1668,
+          "covered": 1668,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1734,
+          "covered": 1734,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 436,
+          "covered": 436,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1292,
+          "covered": 1292,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "uncovered": [],
+      "completeMaps": true,
+      "nonnegativeCounters": true,
+      "currentSourceHashes": true,
+      "mapSha256": "aea2938b4aa32ccd4f0cf2d918c764c617a3c6f0dfd9d2d6f1f2ce110570eec9"
+    },
+    "full-tooling": {
+      "actualModules": 1,
+      "summary": {
+        "lines": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "uncovered": [],
+      "completeMaps": true,
+      "nonnegativeCounters": true,
+      "currentSourceHashes": true,
+      "mapSha256": "5d1467e6e34a812bcff4f55fb17ed17a66c0a4a6e9ab1e97c72c2ca25fd528c0"
+    }
+  },
+  "discovery": {
+    "expectedFiles": 802,
+    "executedFiles": 802,
+    "missing": [],
+    "extra": []
+  },
+  "preservation": {
+    "trackedPaths": 2417,
+    "changedOriginalPaths": [],
+    "references": [
+      {
+        "path": "vendor/libreoffice-reference",
+        "target": "../../vite-office/vendor/libreoffice-reference",
+        "restoredTarget": "../../vite-office/vendor/libreoffice-reference"
+      },
+      {
+        "path": "vendor/mdds-reference",
+        "target": "../../vite-office/vendor/mdds-reference",
+        "restoredTarget": "../../vite-office/vendor/mdds-reference"
+      }
+    ]
+  },
+  "runtimeAndStatic": [
+    {
+      "label": "format-check",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "format:check"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 100.102,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 16.752,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 9.794,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check-dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 0.924,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check-docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 1.569,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check-file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 0.283,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "current-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 10.219,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 0.465,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "full-app",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "run",
+        "test:coverage",
+        "--",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-app-tests.json",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-app-coverage",
+        "--coverage.reportOnFailure"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 636.1,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "full-tooling",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "scripts/check-source-provenance.test.ts",
+        "scripts/native-ruler-boundary.test.ts",
+        "scripts/check-legacy-font-boundary.test.ts",
+        "scripts/native-column-item-boundary.test.ts",
+        "scripts/typescript-toolchain.test.ts",
+        "scripts/native-writer-test-ownership.test.ts",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/test-projects.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-tooling-tests.json",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=apps/office/test-projects.ts",
+        "--coverage.exclude=**/*.test.ts",
+        "--coverage.reportOnFailure",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-tooling-coverage",
+        "--coverage.thresholds.lines=100",
+        "--coverage.thresholds.statements=100",
+        "--coverage.thresholds.functions=100",
+        "--coverage.thresholds.branches=100"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 9.85,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "full-inventory",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "test:inventory:coverage",
+        "--",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-inventory-tests.json",
+        "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-inventory-coverage",
+        "--coverage.reportOnFailure",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json",
+        "--coverage.reporter=json-summary"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 37.415,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "full-resource",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "scripts/writer-ui-resource-model.test.ts",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/BZ14P4/full-resource-tests.json"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 1.641,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "full-browser",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "signal": null,
+      "seconds": 303.354,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "metadataChecks": [
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "359dab860a727a8600a8a5a97b7a513e7c6675e2affb0af67dc9e9910c78aa0a",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "6fbef8fda78ccfebb2b2b799ec63d1530591a9d8c4d1a4ead4e3a5cde5950beb",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "7302b8a8ee7ca31e555a1283cf65b0a71352e8bdcfc710dde4ce2d2526c73194",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "239c6bc9264b55acfa8d181fd76aee927333f265f5ea16bcba88e261e7896ffa",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "1abdb1e7c29cb6ed45f70d3494a8a9a9d75784734b7a195b73ae285ee26d60bc",
+      "metadataOnly": true
+    },
+    {
+      "label": "diff-check",
+      "bin": "git",
+      "args": [
+        "diff",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    }
+  ],
+  "mapIntegrity": [
+    {
+      "label": "full-app",
+      "modules": 351,
+      "counters": 49784,
+      "completeMaps": true,
+      "nonnegative": true,
+      "currentSourceHashes": true
+    },
+    {
+      "label": "full-inventory",
+      "modules": 42,
+      "counters": 3462,
+      "completeMaps": true,
+      "nonnegative": true,
+      "currentSourceHashes": true
+    },
+    {
+      "label": "full-tooling",
+      "modules": 1,
+      "counters": 22,
+      "completeMaps": true,
+      "nonnegative": true,
+      "currentSourceHashes": true
+    }
+  ],
+  "artifactBoundary": {
+    "status": "pass",
+    "ignoredCache": "apps/office/node_modules/.cache/parity-coverage/BZ14P4/",
+    "taskFiles": [
+      "README.md",
+      "blueprint/resolved-snapshot.json"
+    ],
+    "noUpstreamSourcesPythonHelpersOrRawMapsInTask": true
+  },
+  "rawEvidenceLocation": "Ignored apps/office/node_modules/.cache/parity-coverage/BZ14P4/",
+  "rawEvidenceHashes": {
+    "before-hashes.json": "ccddf4773039b5eb7b570dbb852fc9dacd0e6e8201ae0c6299223b5e5bd8c2c5",
+    "commands.json": "5b89ef38d19a9b4b7afb18a3cfa81cd72276908c929ab3dabbcc08ce8961ff32",
+    "proof.json": "d986cc456041031b89131c2287db0cedf771e6f9ad46c9661684c0c27e7915ce",
+    "audit-results.json": "edf8a9c8f84e9f7d8acd7f904e24fa2e88feeb15fd33f531e1c3b4cbe31bd785"
+  },
+  "noSourceTestOrMetadataChanges": true,
+  "qualityReviewMode": "Same agent; not independent",
+  "remaining": [
+    "Typed native text-left paragraph margin contract",
+    "Lossless rich native margin wire transport",
+    "Broader original list/table/layout/filter/UNO/VCL parity"
+  ]
+}

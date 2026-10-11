@@ -1,0 +1,573 @@
+{
+  "taskId": "202610101813-PW1696",
+  "status": "pass",
+  "scope": [
+    "apps/office/src/sw/source/core/edit/edattr.ts",
+    "apps/office/src/sw/source/core/doc/docfmt.ts",
+    "apps/office/src/sw/inc/hintids.ts",
+    "docs/program/registry/writer/runtime/sw/source/core/edit/edattr.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/edit/edattr.ts.json",
+    "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json",
+    "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json",
+    "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json",
+    "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json",
+    "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+    "apps/office/src/sw/source/core/edit/native-margin-admission.test.ts",
+    "apps/office/src/sw/browser/presentation/writer-native-margin-admission.test.tsx",
+    "apps/office/e2e/writer-native-margin-admission.spec.ts",
+    "docs/program/writer-upstream-suspected-issues.md"
+  ],
+  "currentHashes": {
+    "apps/office/src/sw/source/core/edit/edattr.ts": "b621b9676deeeb2fe5f3c6f16e32218ae034e938b0504efa7b1c7c619cd1d3f0",
+    "apps/office/src/sw/source/core/doc/docfmt.ts": "c3c05972522b1bfa2624b5d862352d8a67236e5c28e1016a73238a0d99b6bd45",
+    "apps/office/src/sw/inc/hintids.ts": "79b16a8b4d160fba1d3369ddb4d44b5a3540714034d2bc0c9e4b5e9b6a21b11d",
+    "docs/program/registry/writer/runtime/sw/source/core/edit/edattr.ts.json": "1c2d16ac9e6177a808a70f14dc7b1ac003ebdb418f87cfeee96e6246eefea2d4",
+    "docs/program/registry/writer/provenance/sw/source/core/edit/edattr.ts.json": "725d1ac7c8b4483709cf630fb8f3d7a16dff839d202115e17535089b6d9e94a1",
+    "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json": "c736c6e8093fa93314ca3c6201fb2063cf950a4504c48f90b88e66bba906d108",
+    "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json": "b4b42ca95b3517b5055b145e9c8a69b723728e6e4d3ad5116744e5182a83d9a5",
+    "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json": "34d0a77ec1fffb5c5ecd6f1433e8795b6328257f8af2c5e225119570bb5fa6f0",
+    "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json": "54ae119928beff450c18bb3ff5f631ee2ac7d928fa4bdccac047da620518f788",
+    "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts": "4405fa3cfbdcbe95b716a57f195c15cd43984e2cae1ca7964230484ae8989925",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts": "0c20574ff3259d6daf7f966d16a45c73ef96c1ce57116ba3876d6dcbb7d25c94",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts": "13ee9f34c8a001c457ddb5d21e34c9d71565e1c1a536198c48407c425e70c8da",
+    "apps/office/src/sw/source/core/edit/native-margin-admission.test.ts": "10480dc25d211b974b7eb7f12c00b89f77135fcf813470079cdd74a1b10a9eac",
+    "apps/office/src/sw/browser/presentation/writer-native-margin-admission.test.tsx": "9b01090d5dbe03290b530a83030f30f16ec65fd973582fe348bb70b3619db5d0",
+    "apps/office/e2e/writer-native-margin-admission.spec.ts": "e29d39a55b4d998e6786d9cf0c9959b216432c613a2b293395cca62a3126a768",
+    "docs/program/writer-upstream-suspected-issues.md": "4938b10b44d3fb10d6a6f6a2ab8278cfd69cadc804bac1e876fed17133b35cd4"
+  },
+  "sourceAudit": {
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "sourceOnly": true,
+    "compiledDifferential": "not run",
+    "sourceHashes": {
+      "sw/source/core/edit/edattr.cxx": "c12c601bd4f1e660bd7cc9d54a3a8b1bab5b11fba5ac1ea3ad3d5f791e6e8a1c",
+      "sw/source/core/doc/docfmt.cxx": "1f4845c5c0221e5a86d0751139245d120ec541b2bb29cceb747b8239b8ab680b",
+      "sw/source/uibase/shells/textsh1.cxx": "ff294d3cc9b7cdb11af4aca02c44987e7b506488a6bbaa84781c3227019a8f0d",
+      "sw/inc/node.hxx": "92f1e375ba39481d1fcd231e58eebd9a57aa17840844db4ac31ccb6c309b9fea",
+      "sw/source/core/bastyp/init.cxx": "ffc4aeb0518fa5d885ab9a2aa2cd99a21b1613ceedcc27c581407d8f68ca96b3",
+      "include/o3tl/safeint.hxx": "c17b1cb7e30fb3f1e733a36d65f28d131badab3e959a509301b1554f6c7c760f",
+      "sw/inc/hintids.hxx": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f"
+    },
+    "nativeTextRangeAcceptsOriginalLR98": true
+  },
+  "runtime": {
+    "relatedCases": 14049,
+    "relatedFiles": 504,
+    "freshCoreReactCases": 22,
+    "chromiumCases": 26,
+    "chromiumFiles": 12,
+    "commands": [
+      {
+        "label": "native-margin-admission-related-final",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+        "args": [
+          "exec",
+          "--",
+          "vitest",
+          "related",
+          "src/sw/source/core/edit/edattr.ts",
+          "src/sw/source/core/doc/docfmt.ts",
+          "src/sw/inc/hintids.ts",
+          "--run",
+          "--coverage",
+          "--coverage.include=src/sw/source/core/edit/edattr.ts",
+          "--coverage.include=src/sw/source/core/doc/docfmt.ts",
+          "--coverage.include=src/sw/inc/hintids.ts",
+          "--coverage.reportOnFailure",
+          "--reporter=default",
+          "--reporter=json",
+          "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/PW1696/native-margin-admission-related-final-tests.json",
+          "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/PW1696/native-margin-admission-related-final-coverage"
+        ],
+        "status": 0,
+        "upstreamAbsent": true,
+        "mddsAbsent": true
+      },
+      {
+        "label": "browser-native-margin-admission",
+        "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+        "args": [
+          "exec",
+          "--",
+          "playwright",
+          "test",
+          "--config",
+          "apps/office/playwright.config.ts",
+          "--project=writer",
+          "writer-ruler-indent-items.spec.ts",
+          "writer-ruler-indent-pixels.spec.ts",
+          "writer-ruler-auto-first.spec.ts",
+          "writer-counted-list-layout.spec.ts",
+          "writer-uncounted-list-layout.spec.ts",
+          "writer-auto-first-layout.spec.ts",
+          "writer-manual-first-layout.spec.ts",
+          "writer-named-style-history.spec.ts",
+          "writer-style-selector.spec.ts",
+          "writer-cell-paragraph-format.spec.ts",
+          "writer-native-margin-admission.spec.ts",
+          "writer-cell-list-level.spec.ts",
+          "--reporter=list,json"
+        ],
+        "status": 0,
+        "upstreamAbsent": true,
+        "mddsAbsent": true
+      }
+    ],
+    "bothReferencesAbsent": true,
+    "restoredFinally": true
+  },
+  "coverage": {
+    "aggregate": {
+      "lines": {
+        "total": 142,
+        "covered": 142,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 158,
+        "covered": 158,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 78,
+        "covered": 78,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "actualWholeChangedModules": {
+      "apps/office/src/sw/inc/hintids.ts": {
+        "lines": {
+          "total": 53,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 53,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/doc/docfmt.ts": {
+        "lines": {
+          "total": 69,
+          "covered": 69,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 79,
+          "covered": 79,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 67,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/core/edit/edattr.ts": {
+        "lines": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "completeCurrentMaps": true,
+    "currentHashes": {
+      "apps/office/src/sw/source/core/edit/edattr.ts": "b621b9676deeeb2fe5f3c6f16e32218ae034e938b0504efa7b1c7c619cd1d3f0",
+      "apps/office/src/sw/source/core/doc/docfmt.ts": "c3c05972522b1bfa2624b5d862352d8a67236e5c28e1016a73238a0d99b6bd45",
+      "apps/office/src/sw/inc/hintids.ts": "79b16a8b4d160fba1d3369ddb4d44b5a3540714034d2bc0c9e4b5e9b6a21b11d"
+    },
+    "nonnegativeCounters": true,
+    "checkedCounters": 246,
+    "noEarlierMapReuseOrCounterFiltering": true,
+    "mapHash": "87e2855a5737c968c903a1c35ce6c7c1cdd33e979d22f93696c76398e0e1835c",
+    "reportHash": "1dc7640ce5e5137887237bb18585b94045c1806849b16def040aa27e22c327a1"
+  },
+  "staticChecks": [
+    {
+      "label": "style-repair-format-write",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+        "apps/office/src/sw/source/core/edit/native-margin-admission.test.ts",
+        "apps/office/src/sw/browser/presentation/writer-native-margin-admission.test.tsx",
+        "apps/office/e2e/writer-native-margin-admission.spec.ts",
+        "apps/office/src/sw/inc/hintids.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "style-repair-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+        "apps/office/src/sw/source/core/edit/native-margin-admission.test.ts",
+        "apps/office/src/sw/browser/presentation/writer-native-margin-admission.test.tsx",
+        "apps/office/e2e/writer-native-margin-admission.spec.ts",
+        "apps/office/src/sw/inc/hintids.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "style-repair-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/sw/source/core/edit/edattr.ts",
+        "apps/office/src/sw/source/core/doc/docfmt.ts",
+        "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+        "apps/office/src/sw/source/core/edit/native-margin-admission.test.ts",
+        "apps/office/src/sw/browser/presentation/writer-native-margin-admission.test.tsx",
+        "apps/office/e2e/writer-native-margin-admission.spec.ts",
+        "apps/office/src/sw/inc/hintids.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "inherited-admission-repair",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+      "args": [
+        "exec",
+        "--",
+        "vitest",
+        "run",
+        "src/sw/source/core/edit/native-margin-admission.test.ts",
+        "--testNamePattern=retains inherited legacy LR ownership independently of separate typed and list items",
+        "--reporter=default"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "metadataChecks": [
+    {
+      "label": "registry-build",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "rawHash": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "rawHash": "6c5bd2e3c84892b8cc26b8b1b5f06a950891f9d5988a8ef1f1496f0c252cd33e",
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "bin": "npm",
+      "args": [
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "rawHash": "359dab860a727a8600a8a5a97b7a513e7c6675e2affb0af67dc9e9910c78aa0a",
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "rawHash": "d9c1036746d5c82fef201a1268431f6f9ed5b0cc93cc8c04441d7dd3779be2bc",
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "bin": "node_modules/.bin/tsx",
+      "args": [
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "rawHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "rawHash": "f8c6ef6be8204b726b47ef7f56b1bce787e2ad5f64467543a2dd98b810a2bcc2",
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "bin": "npm",
+      "args": [
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "rawHash": "8b62cfa5aab117deb9e31bb39c26d80f894a8a4dcdf5810aa64f6846025a00c5",
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "bin": "node",
+      "args": [
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "rawHash": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "bin": "ap",
+      "args": [
+        "doctor"
+      ],
+      "status": 0,
+      "rawHash": "10259f0424c5d72b4759f5643ddec590b35de7261910edce15cccff1f5731fa2",
+      "metadataOnly": true
+    }
+  ],
+  "preservation": {
+    "status": "pass",
+    "originalPaths": 9027,
+    "changedOriginalPaths": [
+      ".agentplane/tasks/202609240501-C9TN6M/README.md",
+      "apps/office/src/sw/inc/hintids.ts",
+      "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "apps/office/src/sw/source/core/doc/native-default-entrypoints.test.ts",
+      "apps/office/src/sw/source/core/edit/edattr.ts",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts",
+      "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
+      "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json",
+      "docs/program/registry/writer/provenance/sw/source/core/edit/edattr.ts.json",
+      "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json",
+      "docs/program/registry/writer/runtime/sw/source/core/edit/edattr.ts.json",
+      "docs/program/writer-upstream-suspected-issues.md"
+    ],
+    "oldTestFiles": 807,
+    "oldTestsByteIdentical": 804,
+    "migratedOldTests": 3,
+    "allOtherOldTokensCasesMatricesInputsAndMatcherArgumentsPreserved": true,
+    "explicitNativeAdmissionMatcherChanges": 4,
+    "explicitAddedNoOpUndoAssertions": 2,
+    "explicitRenamedContradictedCase": 1,
+    "originalWidthGuardExpectedFalsePreservedWithActualLegacyLRFixture": true,
+    "canonicalHistoricalPrefixes": 6,
+    "onlyTwoRetiredCurrentOwnerMappingsChanged": true,
+    "parentFindingsPrefixPreserved": true
+  },
+  "reportHashes": {
+    "browser": "65eebccef8417bdb420e7cfd71d4c23ab2c66b67f2080f8d6ac1f56f47ef3408",
+    "preservation": "f7a9330c7ac6dd15f5cf960ebb7d836daf9d14cae3e5d9aeac32df6a5d849460"
+  },
+  "supersededEvidence": {
+    "initialRelatedFailed": 8,
+    "focusedRequiredRepairFailed": 1,
+    "earlierMapsExcluded": true
+  },
+  "limitations": [
+    "Current page-body width accommodation; actual native frame absence/width/vertical/merged layout/hierarchy/lifetime unverified",
+    "Complete rich numbering units and global Repeat dispatcher unverified",
+    "Same-agent review is explicitly non-independent; no compiled upstream differential run"
+  ],
+  "goal": {
+    "active": true,
+    "correctionsSinceFull": 3,
+    "lastFullTask": "202610101614-BZ14P4",
+    "nextFullAfterCorrections": 10,
+    "pauseAfterNextFullAndRequiredRepairs": true
+  },
+  "artifactPolicy": "Bounded English facts/counts/commands/hashes only; no source copies, helpers, Python, raw logs or counter maps.",
+  "finalMetadataFormat": [
+    {
+      "label": "final-metadata-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "docs/program/registry/writer/runtime/sw/source/core/edit/edattr.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/edit/edattr.ts.json",
+        "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json",
+        "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json",
+        "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json",
+        "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "parentFindingsPath": ".agentplane/tasks/202609240501-C9TN6M/README.md"
+}

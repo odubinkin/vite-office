@@ -1,6 +1,6 @@
 /** @fileoverview Applies named paragraph collections with the native common-style creation/finish ownership from prstylei.cxx and txtstyli.cxx. */
+import { SvxTextLeftMarginItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
-import { SvxTextLeftMarginItem } from "../../../../editeng/source/items/frmitems";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type {
   OdfStyleDefinition,
@@ -60,7 +60,7 @@ export function applyNamedParagraphStyles(
     }
     if (definition.leftMargin !== undefined)
       collection.SetFormatAttr(
-        new SvxTextLeftMarginItem(definition.leftMargin, RES_MARGIN_TEXTLEFT),
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(definition.leftMargin), RES_MARGIN_TEXTLEFT),
       );
     if (definition.paragraphProperties !== undefined)
       paragraphItems(

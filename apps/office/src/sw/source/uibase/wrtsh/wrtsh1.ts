@@ -1,5 +1,11 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
+import {
+  SvxIndentValue,
+  SvxRightMarginItem,
+  SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -45,11 +51,6 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
-import {
-  SvxFirstLineIndentItem,
-  SvxRightMarginItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import {
@@ -62,7 +63,7 @@ import {
   MergeParagraphWithPrevious,
   MergeParagraphWithNext,
 } from "./wrtsh-editing";
-import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/edattr";
+import { isMoveLeftMargin, moveLeftMarginAtShell } from "../../core/edit/edattr";
 import { pasteWriterTransfer, type WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
@@ -560,17 +561,15 @@ export class SwWrtShell extends SwFEShell {
   /** Removes paragraph-start indentation in the native firstline/hanging/left order. @returns Whether a paragraph item changed. */
   public TryRemoveIndent(): boolean {
     const node = this.GetActiveParagraph();
-    const first = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
-    const left = node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem;
+    const first = (node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).Clone();
     const offset = first.ResolveTextFirstLineOffset(),
-      margin = left.ResolveTextLeft();
+      margin = (node.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
     if (offset === 0 && margin === 0) return false;
+    first.SetTextFirstLineOffset(SvxIndentValue.zero());
+    const textLeft = offset < 0 ? margin + offset : offset > 0 ? margin : 0;
     return this.SetParagraphItems([
-      new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE, first.IsAutoFirst()),
-      new SvxTextLeftMarginItem(
-        offset < 0 ? margin + offset : offset > 0 ? margin : 0,
-        RES_MARGIN_TEXTLEFT,
-      ),
+      first,
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(textLeft), RES_MARGIN_TEXTLEFT),
     ]);
   }
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
@@ -786,14 +785,14 @@ export class SwWrtShell extends SwFEShell {
 
   /** Executes the upstream edit-shell margin operation on the whole selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether changed. */
   public MoveLeftMargin(right: boolean, modulus = true): boolean {
-    const action = createMoveLeftMarginAction(
-      this.GetDoc(),
-      this.getShellCursor(),
-      right,
-      modulus,
-      this.CaptureCursorState(),
+    if (!this.IsMoveLeftMargin(right, modulus)) return false;
+    return this.RunNotificationTransaction(
+      /** Executes native range history and one shell cursor invalidation. @returns True. */ () => {
+        moveLeftMarginAtShell(this, right, modulus);
+        this.NotifySelection();
+        return true;
+      },
     );
-    return action === undefined ? false : this.ApplyAction(action);
   }
 
   /** Reports upstream edit-shell margin availability for the selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether enabled. */
@@ -845,11 +844,12 @@ export class SwWrtShell extends SwFEShell {
   /** Applies ruler margin items through paragraph attribute history, retaining automatic mode. @param value - Replacement indent tuple. @returns Whether the selected paragraph attributes changed. */
   public SetParagraphRulerIndents(value: WriterParagraphIndentValue): boolean {
     const paragraph = this.GetActiveParagraph();
-    const firstLine = paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
+    const firstLine = (paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).Clone();
+    firstLine.SetTextFirstLineOffset(SvxIndentValue.twips(value.firstLine));
     return this.SetParagraphItems([
-      new SvxFirstLineIndentItem(value.firstLine, RES_MARGIN_FIRSTLINE, firstLine.IsAutoFirst()),
-      new SvxTextLeftMarginItem(value.left, RES_MARGIN_TEXTLEFT),
-      new SvxRightMarginItem(value.right, RES_MARGIN_RIGHT),
+      firstLine,
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(value.left), RES_MARGIN_TEXTLEFT),
+      new SvxRightMarginItem(SvxIndentValue.twips(value.right), RES_MARGIN_RIGHT),
     ]);
   }
   /** Applies one paragraph ruler drag to the active paragraph. @param edge - Dragged marker. @param delta - Twip drag delta. @returns Whether changed. */

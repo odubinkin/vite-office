@@ -2,6 +2,16 @@
 import { SfxPoolItem } from "../../svl/source/items/poolitem";
 import { MeasureUnit } from "../../offapi/com/sun/star/util/MeasureUnit";
 import { roundBorderMetric } from "../source/items/borderline";
+import {
+  MID_FIRST_LINE_UNIT_INDENT,
+  MID_FIRST_LINE_INDENT,
+  MID_FIRST_LINE_REL_INDENT,
+  MID_FIRST_AUTO,
+  MID_R_UNIT_MARGIN,
+  MID_L_UNIT_MARGIN,
+  MID_TXT_LMARGIN,
+  MID_L_REL_MARGIN,
+} from "./memberids";
 
 /** Resolves original em/ic units with native zero/uninitialized defaults. */
 export class SvxFontUnitMetrics {
@@ -342,12 +352,12 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         return absolute(this.GetTextLeft());
       case 12:
         return metric(this.GetGutterMargin());
-      case 13:
+      case MID_FIRST_LINE_UNIT_INDENT:
         return relative(this.GetTextFirstLineOffset());
-      case 14:
-        return relative(this.GetTextLeft());
-      case 15:
+      case MID_R_UNIT_MARGIN:
         return relative(this.GetRight());
+      case MID_L_UNIT_MARGIN:
+        return relative(this.GetTextLeft());
       default:
         return undefined;
     }
@@ -393,7 +403,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       this.SetAutoFirst(typeof value === "boolean" ? value : integer(value) && value !== 0);
       return true;
     }
-    if (id === 13 || id === 14 || id === 15) {
+    if (id === MID_FIRST_LINE_UNIT_INDENT || id === MID_R_UNIT_MARGIN || id === MID_L_UNIT_MARGIN) {
       if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
       const pair = value as Record<string, unknown>;
       if (
@@ -404,9 +414,9 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       )
         return false;
       const indent = new SvxIndentValue(pair.First, pair.Second);
-      if (id === 13) this.SetTextFirstLineOffset(indent);
-      else if (id === 14) this.SetTextLeft(indent);
-      else this.SetRight(indent);
+      if (id === MID_FIRST_LINE_UNIT_INDENT) this.SetTextFirstLineOffset(indent);
+      else if (id === MID_R_UNIT_MARGIN) this.SetRight(indent);
+      else this.SetTextLeft(indent);
       return true;
     }
     if (!integer(value)) return false;
@@ -447,6 +457,472 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     this.m_stRightMargin.ScaleMetrics(scale);
   }
   /** Reports native metric support. @returns Always true. */
+  public HasMetrics(): boolean {
+    return true;
+  }
+}
+
+/** Original typed text-left paragraph margin declared by lrspitem.hxx. */
+export class SvxTextLeftMarginItem extends SfxPoolItem {
+  private m_stTextLeftMargin = SvxIndentValue.zero();
+  private m_nPropLeftMargin = 100;
+  /** Creates native defaults or an independent original copy. @param source - Identity or original item. @returns Nothing. */
+  public constructor(source: number | SvxTextLeftMarginItem);
+  /** Creates a native typed text-left margin. @param value - Original measure. @param which - Native identity. @returns Nothing. */
+  public constructor(value: ConstIndentValue, which: number);
+  /** Initializes default/value/copy source state. @param source - Identity, item or typed measure. @param which - Value-constructor identity. @returns Nothing. */
+  public constructor(source: number | SvxTextLeftMarginItem | ConstIndentValue, which?: number) {
+    super(
+      typeof source === "number"
+        ? source
+        : source instanceof SvxTextLeftMarginItem
+          ? source.Which()
+          : (which as number),
+    );
+    if (source instanceof SvxTextLeftMarginItem) {
+      Object.assign(this, source);
+      this.m_stTextLeftMargin = new SvxIndentValue(
+        source.m_stTextLeftMargin.m_dValue,
+        source.m_stTextLeftMargin.m_nUnit,
+      );
+    } else if (typeof source !== "number") this.SetTextLeft(source);
+  }
+  /** Stores original by-value measure and unsigned proportion, retaining the member reference. @param value - Typed measure. @param proportion - Native percentage. @returns Nothing. */
+  public SetTextLeft(value: ConstIndentValue, proportion = 100): void {
+    const original = new SvxIndentValue(value.m_dValue, value.m_nUnit);
+    this.m_nPropLeftMargin = proportion & 0xffff;
+    Object.assign(this.m_stTextLeftMargin, original);
+    if (this.m_nPropLeftMargin !== 100)
+      this.m_stTextLeftMargin.m_dValue = (original.m_dValue * this.m_nPropLeftMargin) / 100;
+  }
+  /** Borrows the original constant text-left member. @returns Native measure. */
+  public GetTextLeft(): ConstIndentValue {
+    return this.m_stTextLeftMargin;
+  }
+  /** Resolves original text-left units in font context. @param metrics - Native context, empty by default for existing twip callers. @returns Signed32 twips. */
+  public ResolveTextLeft(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stTextLeftMargin.Resolve(metrics);
+  }
+  /** Resolves paragraph layout left, including a negative resolved first-line offset. @param first - Original first-line item. @param metrics - Original font context. @returns Signed layout twips. */
+  public ResolveLeft(first: SvxFirstLineIndentItem, metrics: SvxFontUnitMetrics): number {
+    let left = this.m_stTextLeftMargin.Resolve(metrics);
+    const offset = first.GetTextFirstLineOffset().Resolve(metrics);
+    if (offset < 0) left += offset;
+    return left;
+  }
+  /** Resolves each original fixed component before adding a negative first line. @param first - Original first-line item. @returns Fixed layout twips. */
+  public ResolveLeftFixedPart(first: SvxFirstLineIndentItem): number {
+    let left = this.m_stTextLeftMargin.ResolveFixedPart();
+    const offset = first.GetTextFirstLineOffset().ResolveFixedPart();
+    if (offset < 0) left += offset;
+    return left;
+  }
+  /** Resolves each original variable component before adding a negative first line. @param first - Original first-line item. @param metrics - Font context. @returns Variable layout twips. */
+  public ResolveLeftVariablePart(
+    first: SvxFirstLineIndentItem,
+    metrics: SvxFontUnitMetrics,
+  ): number {
+    let left = this.m_stTextLeftMargin.ResolveVariablePart(metrics);
+    const offset = first.GetTextFirstLineOffset().ResolveVariablePart(metrics);
+    if (offset < 0) left += offset;
+    return left;
+  }
+  /** Reads original unsigned percentage metadata. @returns Percentage. */
+  public GetPropLeft(): number {
+    return this.m_nPropLeftMargin;
+  }
+  /** Copies original measure, proportion and ownership independently. @returns Native copy. */
+  public Clone(): SvxTextLeftMarginItem {
+    return new SvxTextLeftMarginItem(this);
+  }
+  /** Compares original identity, typed measure and percentage. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxTextLeftMarginItem &&
+      other.Which() === this.Which() &&
+      this.m_stTextLeftMargin.equals(other.m_stTextLeftMargin) &&
+      this.m_nPropLeftMargin === other.m_nPropLeftMargin
+    );
+  }
+  /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
+  public QueryValue(member = 0): unknown {
+    const convert = (member & 0x80) !== 0;
+    switch (member & ~0x80) {
+      case 0: {
+        const left = this.ResolveTextLeft();
+        return {
+          TextLeft: (convert ? Math.trunc((left * 127 + (left >= 0 ? 36 : -36)) / 72) : left) | 0,
+          Left: 0,
+          Right: 0,
+          FirstLine: 0,
+          ScaleLeft: (this.m_nPropLeftMargin << 16) >> 16,
+          ScaleRight: 0,
+          ScaleFirstLine: 0,
+          AutoFirstLine: false,
+        };
+      }
+      case MID_TXT_LMARGIN:
+        return this.m_stTextLeftMargin.m_nUnit === MeasureUnit.TWIP
+          ? roundBorderMetric(this.m_stTextLeftMargin.m_dValue, convert ? 127 / 72 : 1) | 0
+          : undefined;
+      case MID_L_REL_MARGIN:
+        return (this.m_nPropLeftMargin << 16) >> 16;
+      case MID_L_UNIT_MARGIN:
+        return this.m_stTextLeftMargin.m_nUnit === MeasureUnit.TWIP
+          ? undefined
+          : { First: this.m_stTextLeftMargin.m_dValue, Second: this.m_stTextLeftMargin.m_nUnit };
+      default:
+        return undefined;
+    }
+  }
+  /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
+  public PutValue(value: unknown, member: number): boolean {
+    const convert = (member & 0x80) !== 0,
+      id = member & ~0x80;
+    if (id === MID_L_UNIT_MARGIN) {
+      if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+      const pair = value as Record<string, unknown>;
+      if (
+        typeof pair.First !== "number" ||
+        typeof pair.Second !== "number" ||
+        !Number.isInteger(pair.Second) ||
+        pair.Second < -32768 ||
+        pair.Second > 32767
+      )
+        return false;
+      this.SetTextLeft(new SvxIndentValue(pair.First, pair.Second));
+      return true;
+    }
+    if (
+      typeof value !== "number" ||
+      !Number.isInteger(value) ||
+      value < -2147483648 ||
+      value > 2147483647
+    )
+      return false;
+    if (id === MID_TXT_LMARGIN) {
+      this.SetTextLeft(
+        SvxIndentValue.twips(
+          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
+        ),
+      );
+      return true;
+    }
+    if (id === MID_L_REL_MARGIN) {
+      if (value < 0 || value >= 65535) return false;
+      this.m_nPropLeftMargin = value;
+      return true;
+    }
+    return false;
+  }
+  /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    this.m_stTextLeftMargin.ScaleMetrics(scale);
+  }
+  /** Reports original metric support. @returns True. */
+  public HasMetrics(): boolean {
+    return true;
+  }
+}
+
+/** Original typed right paragraph margin declared by lrspitem.hxx. */
+export class SvxRightMarginItem extends SfxPoolItem {
+  private m_stRightMargin = SvxIndentValue.zero();
+  private m_nPropRightMargin = 100;
+  /** Creates native defaults or an independent original copy. @param source - Identity or original item. @returns Nothing. */
+  public constructor(source: number | SvxRightMarginItem);
+  /** Creates a native typed right margin. @param value - Original measure. @param which - Native identity. @returns Nothing. */
+  public constructor(value: ConstIndentValue, which: number);
+  /** Initializes default/value/copy source state. @param source - Identity, item or typed measure. @param which - Value-constructor identity. @returns Nothing. */
+  public constructor(source: number | SvxRightMarginItem | ConstIndentValue, which?: number) {
+    super(
+      typeof source === "number"
+        ? source
+        : source instanceof SvxRightMarginItem
+          ? source.Which()
+          : (which as number),
+    );
+    if (source instanceof SvxRightMarginItem) {
+      Object.assign(this, source);
+      this.m_stRightMargin = new SvxIndentValue(
+        source.m_stRightMargin.m_dValue,
+        source.m_stRightMargin.m_nUnit,
+      );
+    } else if (typeof source !== "number") this.SetRight(source);
+  }
+  /** Stores original by-value measure and unsigned proportion, retaining the member reference. @param value - Typed measure. @param proportion - Native percentage. @returns Nothing. */
+  public SetRight(value: ConstIndentValue, proportion = 100): void {
+    const original = new SvxIndentValue(value.m_dValue, value.m_nUnit);
+    this.m_nPropRightMargin = proportion & 0xffff;
+    Object.assign(this.m_stRightMargin, original);
+    if (this.m_nPropRightMargin !== 100)
+      this.m_stRightMargin.m_dValue = (original.m_dValue * this.m_nPropRightMargin) / 100;
+  }
+  /** Borrows the original constant right member. @returns Native measure. */
+  public GetRight(): ConstIndentValue {
+    return this.m_stRightMargin;
+  }
+  /** Resolves original right units in font context. @param metrics - Native context, empty by default for existing twip callers. @returns Signed32 twips. */
+  public ResolveRight(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stRightMargin.Resolve(metrics);
+  }
+  /** Resolves only the original absolute component. @returns Fixed twips. */
+  public ResolveRightFixedPart(): number {
+    return this.m_stRightMargin.ResolveFixedPart();
+  }
+  /** Resolves only the original relative component. @param metrics - Font context. @returns Variable twips. */
+  public ResolveRightVariablePart(metrics: SvxFontUnitMetrics): number {
+    return this.m_stRightMargin.ResolveVariablePart(metrics);
+  }
+  /** Reads original unsigned percentage metadata. @returns Percentage. */
+  public GetPropRight(): number {
+    return this.m_nPropRightMargin;
+  }
+  /** Copies original measure, proportion and ownership independently. @returns Native copy. */
+  public Clone(): SvxRightMarginItem {
+    return new SvxRightMarginItem(this);
+  }
+  /** Compares original identity, typed measure and percentage. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxRightMarginItem &&
+      other.Which() === this.Which() &&
+      this.m_stRightMargin.equals(other.m_stRightMargin) &&
+      this.m_nPropRightMargin === other.m_nPropRightMargin
+    );
+  }
+  /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
+  public QueryValue(member = 0): unknown {
+    const convert = (member & 0x80) !== 0;
+    switch (member & ~0x80) {
+      case 0: {
+        const right = this.ResolveRight();
+        return {
+          TextLeft: 0,
+          Left: 0,
+          Right: (convert ? Math.trunc((right * 127 + (right >= 0 ? 36 : -36)) / 72) : right) | 0,
+          FirstLine: 0,
+          ScaleLeft: 0,
+          ScaleRight: (this.m_nPropRightMargin << 16) >> 16,
+          ScaleFirstLine: 0,
+          AutoFirstLine: false,
+        };
+      }
+      case 5:
+        return this.m_stRightMargin.m_nUnit === MeasureUnit.TWIP
+          ? roundBorderMetric(this.m_stRightMargin.m_dValue, convert ? 127 / 72 : 1) | 0
+          : undefined;
+      case 7:
+        return (this.m_nPropRightMargin << 16) >> 16;
+      case MID_R_UNIT_MARGIN:
+        return this.m_stRightMargin.m_nUnit === MeasureUnit.TWIP
+          ? undefined
+          : { First: this.m_stRightMargin.m_dValue, Second: this.m_stRightMargin.m_nUnit };
+      default:
+        return undefined;
+    }
+  }
+  /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
+  public PutValue(value: unknown, member: number): boolean {
+    const convert = (member & 0x80) !== 0,
+      id = member & ~0x80;
+    if (id === MID_R_UNIT_MARGIN) {
+      if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+      const pair = value as Record<string, unknown>;
+      if (
+        typeof pair.First !== "number" ||
+        typeof pair.Second !== "number" ||
+        !Number.isInteger(pair.Second) ||
+        pair.Second < -32768 ||
+        pair.Second > 32767
+      )
+        return false;
+      this.SetRight(new SvxIndentValue(pair.First, pair.Second));
+      return true;
+    }
+    if (
+      typeof value !== "number" ||
+      !Number.isInteger(value) ||
+      value < -2147483648 ||
+      value > 2147483647
+    )
+      return false;
+    if (id === 5) {
+      this.SetRight(
+        SvxIndentValue.twips(
+          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
+        ),
+      );
+      return true;
+    }
+    if (id === 7) {
+      if (value < 0 || value >= 65535) return false;
+      this.m_nPropRightMargin = value;
+      return true;
+    }
+    return false;
+  }
+  /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    this.m_stRightMargin.ScaleMetrics(scale);
+  }
+  /** Reports original metric support. @returns True. */
+  public HasMetrics(): boolean {
+    return true;
+  }
+}
+
+/** Original typed first-line paragraph indent declared by lrspitem.hxx. */
+export class SvxFirstLineIndentItem extends SfxPoolItem {
+  private m_stFirstLineOffset = SvxIndentValue.zero();
+  private m_nPropFirstLineOffset = 100;
+  private m_bAutoFirst = false;
+  /** Creates native defaults or an independent original copy. @param source - Identity or original item. @returns Nothing. */
+  public constructor(source: number | SvxFirstLineIndentItem);
+  /** Creates a native typed first-line indent. @param value - Original measure. @param which - Native identity. @returns Nothing. */
+  public constructor(value: ConstIndentValue, which: number);
+  /** Initializes default/value/copy source state. @param source - Identity, item or typed measure. @param which - Value-constructor identity. @returns Nothing. */
+  public constructor(source: number | SvxFirstLineIndentItem | ConstIndentValue, which?: number) {
+    super(
+      typeof source === "number"
+        ? source
+        : source instanceof SvxFirstLineIndentItem
+          ? source.Which()
+          : (which as number),
+    );
+    if (source instanceof SvxFirstLineIndentItem) {
+      Object.assign(this, source);
+      this.m_stFirstLineOffset = new SvxIndentValue(
+        source.m_stFirstLineOffset.m_dValue,
+        source.m_stFirstLineOffset.m_nUnit,
+      );
+    } else if (typeof source !== "number") this.SetTextFirstLineOffset(source);
+  }
+  /** Stores original by-value measure and unsigned proportion, retaining the member reference. @param value - Typed measure. @param proportion - Native percentage. @returns Nothing. */
+  public SetTextFirstLineOffset(value: ConstIndentValue, proportion = 100): void {
+    const original = new SvxIndentValue(value.m_dValue, value.m_nUnit);
+    this.m_nPropFirstLineOffset = proportion & 0xffff;
+    Object.assign(this.m_stFirstLineOffset, original);
+    if (this.m_nPropFirstLineOffset !== 100)
+      this.m_stFirstLineOffset.m_dValue = (original.m_dValue * this.m_nPropFirstLineOffset) / 100;
+  }
+  /** Borrows the original constant first-line member. @returns Native measure. */
+  public GetTextFirstLineOffset(): ConstIndentValue {
+    return this.m_stFirstLineOffset;
+  }
+  /** Resolves original first-line units in font context. @param metrics - Native context, empty by default for existing twip callers. @returns Signed32 twips. */
+  public ResolveTextFirstLineOffset(metrics = new SvxFontUnitMetrics()): number {
+    return this.m_stFirstLineOffset.Resolve(metrics);
+  }
+  /** Reads original unsigned percentage metadata. @returns Percentage. */
+  public GetPropTextFirstLineOffset(): number {
+    return this.m_nPropFirstLineOffset;
+  }
+  /** Reads original automatic-first-line state. @returns Flag. */
+  public IsAutoFirst(): boolean {
+    return this.m_bAutoFirst;
+  }
+  /** Sets original automatic-first-line state independently of the measure. @param value - Mode. @returns Nothing. */
+  public SetAutoFirst(value: boolean): void {
+    this.m_bAutoFirst = value;
+  }
+  /** Sets original unsigned percentage metadata without rescaling the measure. @param value - Native percentage. @returns Nothing. */
+  public SetPropTextFirstLineOffset(value: number): void {
+    this.m_nPropFirstLineOffset = value & 0xffff;
+  }
+  /** Copies original measure, proportion and ownership independently. @returns Native copy. */
+  public Clone(): SvxFirstLineIndentItem {
+    return new SvxFirstLineIndentItem(this);
+  }
+  /** Compares original identity, typed measure and percentage. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxFirstLineIndentItem &&
+      other.Which() === this.Which() &&
+      this.m_stFirstLineOffset.equals(other.m_stFirstLineOffset) &&
+      this.m_nPropFirstLineOffset === other.m_nPropFirstLineOffset &&
+      this.m_bAutoFirst === other.m_bAutoFirst
+    );
+  }
+  /** Queries original absolute, percentage, automatic or unit-pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
+  public QueryValue(member = 0): unknown {
+    const convert = (member & 0x80) !== 0;
+    switch (member & ~0x80) {
+      case MID_FIRST_AUTO:
+        return this.IsAutoFirst();
+      case MID_FIRST_LINE_INDENT:
+        return this.m_stFirstLineOffset.m_nUnit === MeasureUnit.TWIP
+          ? roundBorderMetric(this.m_stFirstLineOffset.m_dValue, convert ? 127 / 72 : 1) | 0
+          : undefined;
+      case MID_FIRST_LINE_REL_INDENT:
+        return (this.m_nPropFirstLineOffset << 16) >> 16;
+      case MID_FIRST_LINE_UNIT_INDENT:
+        return this.m_stFirstLineOffset.m_nUnit === MeasureUnit.TWIP
+          ? undefined
+          : { First: this.m_stFirstLineOffset.m_dValue, Second: this.m_stFirstLineOffset.m_nUnit };
+      default:
+        return undefined;
+    }
+  }
+  /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
+  public PutValue(value: unknown, member: number): boolean {
+    const convert = (member & 0x80) !== 0,
+      id = member & ~0x80;
+    if (id === MID_FIRST_AUTO) {
+      this.SetAutoFirst(
+        typeof value === "boolean"
+          ? value
+          : typeof value === "number" &&
+              Number.isInteger(value) &&
+              value >= -2147483648 &&
+              value <= 2147483647 &&
+              value !== 0,
+      );
+      return true;
+    }
+    if (id === MID_FIRST_LINE_UNIT_INDENT) {
+      if (value === null || typeof value !== "object" || Array.isArray(value)) return false;
+      const pair = value as Record<string, unknown>;
+      if (
+        typeof pair.First !== "number" ||
+        typeof pair.Second !== "number" ||
+        !Number.isInteger(pair.Second) ||
+        pair.Second < -32768 ||
+        pair.Second > 32767
+      )
+        return false;
+      this.SetTextFirstLineOffset(new SvxIndentValue(pair.First, pair.Second));
+      return true;
+    }
+    if (
+      typeof value !== "number" ||
+      !Number.isInteger(value) ||
+      value < -2147483648 ||
+      value > 2147483647
+    )
+      return false;
+    if (id === MID_FIRST_LINE_INDENT) {
+      Object.assign(
+        this.m_stFirstLineOffset,
+        SvxIndentValue.twips(
+          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
+        ),
+      );
+      this.m_nPropFirstLineOffset = 100;
+      return true;
+    }
+    if (id === MID_FIRST_LINE_REL_INDENT) {
+      if (value < 0 || value >= 65535) return false;
+      this.SetPropTextFirstLineOffset(value);
+      return true;
+    }
+    return false;
+  }
+  /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    this.m_stFirstLineOffset.ScaleMetrics(scale);
+  }
+  /** Reports original metric support. @returns True. */
   public HasMetrics(): boolean {
     return true;
   }

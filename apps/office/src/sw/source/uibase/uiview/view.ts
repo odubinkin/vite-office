@@ -41,14 +41,15 @@ export class SwView {
   private readonly editWindow: SwEditWin;
   private readonly horizontalRuler = new SvxRuler(true);
   private readonly verticalRuler = new SvxRuler(false);
-  private readonly layout = new SwRootFrame(
-    /** Resolves the current document after New/Open replaces the shell graph. @returns Active Writer document. */ () =>
-      this.docShell.GetDoc(),
-  );
+  private readonly layout: SwRootFrame;
   private readonly wrtShellSubscription: () => void;
 
   /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
   public constructor(private readonly docShell: SwDocShell) {
+    this.layout = new SwRootFrame(
+      /** Resolves the current document after New/Open replaces the shell graph. @returns Active Writer document. */ () =>
+        this.docShell.GetDoc(),
+    );
     this.viewOptions = new SwViewOption(
       /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
     );
@@ -265,6 +266,7 @@ export class SwView {
     this.frame?.CloseView();
     this.frame = undefined;
     this.wrtShell.Close();
+    this.layout.DestroyImpl();
     this.docShell.SetView(undefined);
     this.docShell.Close();
   }

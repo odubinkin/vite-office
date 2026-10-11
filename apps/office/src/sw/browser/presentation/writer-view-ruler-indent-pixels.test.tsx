@@ -1,5 +1,6 @@
 /** @fileoverview Checks rounded paragraph ruler coordinates preserve precise Writer items and history. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -37,9 +38,9 @@ function fixture(left = 487, firstLine = 367, right = 6503) {
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerIndentPixelsProof");
   shell.SetParagraphItems([
-    new SvxTextLeftMarginItem(left, RES_MARGIN_TEXTLEFT),
-    new SvxFirstLineIndentItem(firstLine, RES_MARGIN_FIRSTLINE),
-    new SvxRightMarginItem(right, RES_MARGIN_RIGHT),
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(left), RES_MARGIN_TEXTLEFT),
+    new SvxFirstLineIndentItem(SvxIndentValue.twips(firstLine), RES_MARGIN_FIRSTLINE),
+    new SvxRightMarginItem(SvxIndentValue.twips(right), RES_MARGIN_RIGHT),
     SvxTabStopItem.FromStops(
       RES_PARATR_TABSTOP,
       [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")],
@@ -55,9 +56,11 @@ function fixture(left = 487, firstLine = 367, right = 6503) {
 function values(shell: ReturnType<typeof fixture>["shell"]) {
   const node = shell.GetActiveParagraph();
   return {
-    left: node.GetAttr(RES_MARGIN_TEXTLEFT).QueryValue(),
-    firstLine: node.GetAttr(RES_MARGIN_FIRSTLINE).QueryValue(),
-    right: node.GetAttr(RES_MARGIN_RIGHT).QueryValue(),
+    left: (
+      node.GetAttr(RES_MARGIN_TEXTLEFT) as { QueryValue(member?: number): unknown }
+    ).QueryValue(11),
+    firstLine: firstValues(node.GetAttr(RES_MARGIN_FIRSTLINE)),
+    right: (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).QueryValue(5),
     spacing: node.GetAttr(RES_UL_SPACE).QueryValue(),
     tabs: node.GetAttr(RES_PARATR_TABSTOP).QueryValue(),
   };
@@ -216,3 +219,10 @@ describe("Writer paragraph indent pixel conversion", /** Groups source-domain pr
       );
     });
 });
+
+/** Observes original measure and automatic state through their explicit native members. @param item - Native first-line item or direct absence. @returns Historical authored value with auto marker. */
+function firstValues(item: { QueryValue(member?: number): unknown } | undefined): unknown {
+  if (item === undefined) return undefined;
+  const value = item.QueryValue(8);
+  return item.QueryValue(10) === true ? [value, 1] : value;
+}

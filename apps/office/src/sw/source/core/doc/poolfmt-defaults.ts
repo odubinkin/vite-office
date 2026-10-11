@@ -11,11 +11,11 @@ import {
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
 import {
+  SvxIndentValue,
   SvxFirstLineIndentItem,
-  SvxRightMarginItem,
   SvxTextLeftMarginItem,
-  SvxULSpaceItem,
-} from "../../../../editeng/source/items/frmitems";
+} from "../../../../editeng/inc/lrspitem";
+import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   FontItalic,
   FontWeight,
@@ -201,14 +201,19 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SvxAdjustItem(defaults.adjust, RES_PARATR_ADJUST));
   if (defaults.firstLineTwips !== undefined)
     collection.SetFormatAttr(
-      new SvxFirstLineIndentItem(defaults.firstLineTwips, RES_MARGIN_FIRSTLINE),
+      new SvxFirstLineIndentItem(
+        SvxIndentValue.twips(defaults.firstLineTwips),
+        RES_MARGIN_FIRSTLINE,
+      ),
     );
   if (defaults.textLeftTwips !== undefined)
     collection.SetFormatAttr(
-      new SvxTextLeftMarginItem(defaults.textLeftTwips, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(defaults.textLeftTwips), RES_MARGIN_TEXTLEFT),
     );
   if (defaults.rightTwips !== undefined)
-    collection.SetFormatAttr(new SvxRightMarginItem(defaults.rightTwips, RES_MARGIN_RIGHT));
+    collection.SetFormatAttr(
+      new SvxRightMarginItem(SvxIndentValue.twips(defaults.rightTwips), RES_MARGIN_RIGHT),
+    );
   if (defaults.upperTwips !== undefined || defaults.lowerTwips !== undefined)
     collection.SetFormatAttr(
       new SvxULSpaceItem(

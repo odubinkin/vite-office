@@ -1,5 +1,6 @@
 /** @fileoverview Verifies native Backspace count,numbering and indent ordering over actual body and cell nodes. */
 import { afterEach, describe, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwDocShell } from "../app/docsh";
@@ -129,7 +130,9 @@ describe("native list Backspace", /** Registers native editing contracts. @retur
     ) => {
       const f = fixture();
       f.body.SetText("Keep");
-      f.body.SetParagraphFirstLineIndent(offset);
+      f.body.SetAttr(
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(offset), RES_MARGIN_FIRSTLINE),
+      );
       f.body.SetParagraphTextLeftMargin(left);
       caret(f.shell, f.body);
       f.docShell.GetUndoManager().Clear();
@@ -151,7 +154,15 @@ describe("native list Backspace", /** Registers native editing contracts. @retur
     f.shell.FocusNode(f.first);
     f.shell.SetParagraphListKind("bullet");
     f.first.SetCountedInList(false);
-    f.first.SetAttr(new SvxFirstLineIndentItem(200, RES_MARGIN_FIRSTLINE, true));
+    f.first.SetAttr(
+      (
+        /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+          const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(200), RES_MARGIN_FIRSTLINE);
+          item.SetAutoFirst(true);
+          return item;
+        }
+      )(),
+    );
     f.first.SetParagraphTextLeftMargin(600);
     caret(f.shell, f.first);
     expect(f.win.DeleteLeft()).toBe(true);

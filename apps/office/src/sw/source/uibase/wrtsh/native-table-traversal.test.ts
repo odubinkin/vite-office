@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native table cursor traversal and actual retained row history without upstream execution. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { nativeBoxFormat } from "../../../../test/table-box-test-helpers";
 import { VertOrientation } from "./../../../../offapi/com/sun/star/text/VertOrientation";
@@ -208,7 +209,7 @@ describe("native table traversal", /** Registers actual cursor/row/history contr
       source = required(f.cells[2]),
       style = f.doc.MakeTextFormatColl("CellStyle");
     source.ChgFormatColl(style);
-    source.SetAttr(new SvxTextLeftMarginItem(720, RES_MARGIN_TEXTLEFT));
+    source.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(720), RES_MARGIN_TEXTLEFT));
     source.SetHyperlink(0, 4, { url: "https://cell.example/" });
     place(f, last, 3);
     const nodeCount = f.doc.nodes.Count(),

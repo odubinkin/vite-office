@@ -1,5 +1,6 @@
 /** @fileoverview Checks real automatic first-glyph layout independently of authored ruler/dialog values. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
@@ -38,8 +39,17 @@ for (const width of [1280, 390])
       const shell = new SwWrtShell(new SwDocShell(document, metadata));
       shell.Insert("AutomaticBodyLayoutProof");
       shell.SetParagraphItems([
-        new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, true),
-        new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+        (
+          /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+            const item = new SvxFirstLineIndentItem(
+              SvxIndentValue.twips(367),
+              RES_MARGIN_FIRSTLINE,
+            );
+            item.SetAutoFirst(true);
+            return item;
+          }
+        )(),
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
         new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE),
         new SvxFontHeightItem(360, RES_CHRATR_CJK_FONTSIZE),
         new SvxFontHeightItem(360, RES_CHRATR_CTL_FONTSIZE),
@@ -48,7 +58,7 @@ for (const width of [1280, 390])
       shell.SplitNode();
       shell.Insert("UntouchedLayoutProof");
       shell.SetParagraphItems([
-        new SvxFirstLineIndentItem(-120, RES_MARGIN_FIRSTLINE),
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE),
         new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
         new SvxFontHeightItem(240, RES_CHRATR_CJK_FONTSIZE),
         new SvxFontHeightItem(240, RES_CHRATR_CTL_FONTSIZE),

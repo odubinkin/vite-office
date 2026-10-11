@@ -1,5 +1,6 @@
 /** @fileoverview Checks live custom style selection through real ODT import, toolbar, paragraph draft and history. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
@@ -26,8 +27,10 @@ for (const width of [1280, 390])
       document.GetDfltTextFormatColl(),
       "OwnedParent",
     );
-    parent.SetFormatAttr(new SvxTextLeftMarginItem(600, RES_MARGIN_TEXTLEFT));
-    parent.SetFormatAttr(new SvxFirstLineIndentItem(-240, RES_MARGIN_FIRSTLINE));
+    parent.SetFormatAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(600), RES_MARGIN_TEXTLEFT));
+    parent.SetFormatAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(-240), RES_MARGIN_FIRSTLINE),
+    );
     document.MakeTextFormatColl("Owned child", parent, "OwnedChild");
     document.MakeTextFormatColl("Unused: & 字", document.GetDfltTextFormatColl(), "UnusedCustom");
     const docShell = new SwDocShell(document, metadata),

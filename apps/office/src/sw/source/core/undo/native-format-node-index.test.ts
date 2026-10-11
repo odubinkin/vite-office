@@ -1,5 +1,6 @@
 /** @fileoverview Verifies current numeric native formatting history ownership without upstream access. */
 import { afterEach, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -24,7 +25,9 @@ import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { moveLeftMargin } from "../doc/docfmt";
+import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { RES_PARATR_TABSTOP, RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 
 const documents: SwDoc[] = [];
@@ -60,7 +63,7 @@ function fixture(kind: "body" | "cells") {
     ),
     shell = new SwWrtShell(docShell),
     target = doc.MakeTextFormatColl("Format target", doc.GetDfltTextFormatColl(), "FormatTarget");
-  target.SetFormatAttr(new SvxFirstLineIndentItem(240, RES_MARGIN_FIRSTLINE));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), RES_MARGIN_FIRSTLINE));
   return {
     doc,
     docShell,
@@ -156,7 +159,8 @@ function direct(
 ): { action: SwUndo; check: (node: SwTextNode, after: boolean) => void } {
   const node = owner.first;
   if (kind === "character") node.SetTextHints(hints(node));
-  if (kind === "item-direct") node.SetParagraphFirstLineIndent(720);
+  if (kind === "item-direct")
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE));
   if (kind === "item-inherited") node.ResetAttr(RES_MARGIN_FIRSTLINE);
   if (kind === "alignment") node.SetParagraphAlignment("right");
   if (kind === "margin") node.SetParagraphTextLeftMargin(120);
@@ -191,7 +195,7 @@ function direct(
       action: new SwUndoParagraphItem(
         node,
         before,
-        new SvxFirstLineIndentItem(360, RES_MARGIN_FIRSTLINE),
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(360), RES_MARGIN_FIRSTLINE),
         state,
         state,
       ),
@@ -218,8 +222,19 @@ function direct(
           expect(current.GetParagraphAlignment()).toBe(applied ? "center" : "right");
         },
     };
+  const tabs = owner.doc
+    .GetAttrPool()
+    .GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem;
+  tabs.Remove(0, tabs.Count());
+  tabs.Insert(new SvxTabStop(240));
+  const range = new SwPaM(
+      owner.shell.getShellCursor().GetPoint(),
+      marked ? owner.shell.getShellCursor().GetMark() : undefined,
+    ),
+    action = new SwUndoMoveLeftMargin(range, true, false, state);
+  range.Dispose();
   return {
-    action: new SwUndoMoveLeftMargin(node, 120, 360, state, state),
+    action,
     check:
       /** Checks direct left margin. @param current - Current slot. @param applied - Applied state. @returns Nothing. */ (
         current,
@@ -254,7 +269,27 @@ it.each(directCases)(
       { action, check } = direct(owner, kind, marked),
       pending = owner.shell.CaptureCursorState().pendingCharacterItems;
     let current = replace(original);
-    expect(owner.shell.ApplyAction(action)).toBe(true);
+    expect(
+      owner.shell.ApplyAction(
+        action,
+        false,
+        action instanceof SwUndoMoveLeftMargin
+          ? /** Performs native initial mutation against the replacement slot. @param context - Actual native graph. @returns Nothing. */ (
+              context,
+            ) => {
+              const range = new SwPaM(
+                owner.shell.getShellCursor().GetPoint(),
+                marked ? owner.shell.getShellCursor().GetMark() : undefined,
+              );
+              try {
+                moveLeftMargin(context.GetDoc(), range, true, false, action.GetHistory());
+              } finally {
+                range.Dispose();
+              }
+            }
+          : undefined,
+      ),
+    ).toBe(true);
     check(current, true);
     for (let cycle = 0; cycle < 3; cycle++) {
       current = replace(current);
@@ -302,7 +337,7 @@ it.each(styleCases)(
     for (const node of [owner.first, owner.second]) {
       owner.shell.FocusNode(node);
       owner.shell.SetParagraphListKind("numbered");
-      node.SetParagraphFirstLineIndent(720);
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE));
       node.SetTextHints(hints(node));
     }
     owner.docShell.GetUndoManager().Clear();
@@ -472,8 +507,12 @@ it.each(["body", "cells"] as const)(
     section,
   ) => {
     const owner = fixture(section);
-    owner.first.SetParagraphFirstLineIndent(720);
-    owner.second.SetParagraphFirstLineIndent(480);
+    owner.first.SetAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE),
+    );
+    owner.second.SetAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(480), RES_MARGIN_FIRSTLINE),
+    );
     select(owner.shell, owner.first, owner.second, "reversed");
     const point = new SwPosition(owner.first, 4),
       mark = new SwPosition(owner.second, 1),

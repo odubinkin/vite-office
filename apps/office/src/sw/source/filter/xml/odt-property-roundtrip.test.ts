@@ -1,6 +1,7 @@
 /** @fileoverview Verifies upstream-mapped Writer color and paragraph compatibility properties through ODT. */
 
 import { describe, expect, it } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -155,7 +156,15 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const inherited = writer.GetTextFormatColl("heading-1");
     inherited.SetFormatAttr(new SfxInt16Item(RES_PARATR_ORPHANS, 3));
     inherited.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, false));
-    inherited.SetFormatAttr(new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE, true));
+    inherited.SetFormatAttr(
+      (
+        /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+          const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(0), RES_MARGIN_FIRSTLINE);
+          item.SetAutoFirst(true);
+          return item;
+        }
+      )(),
+    );
     inherited.SetFormatAttr(new SwFormatPageDesc("Standard"));
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer paragraph is missing.");

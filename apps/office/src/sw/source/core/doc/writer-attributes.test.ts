@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createWriterNumFormat, getWriterNumFormatKind, SwNumRule } from "./number";
 
 import { describe, expect, it } from "vitest";
@@ -247,7 +248,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const parent = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
     parent.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     const source = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES, parent);
-    source.Put(new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT));
+    source.Put(new SvxTextLeftMarginItem(SvxIndentValue.twips(-720), RES_MARGIN_TEXTLEFT));
     source.InvalidateItem(RES_CHRATR_UNDERLINE);
     source.DisableItem(RES_CHRATR_WEIGHT);
     const polymorphic: SfxItemSet = source;
@@ -267,7 +268,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
         source.GetItemIfSet(RES_MARGIN_TEXTLEFT, false),
       );
       clone.ClearItem(RES_CHRATR_UNDERLINE);
-      clone.Put(new SvxTextLeftMarginItem(360, RES_MARGIN_TEXTLEFT));
+      clone.Put(new SvxTextLeftMarginItem(SvxIndentValue.twips(360), RES_MARGIN_TEXTLEFT));
       expect(source.GetItemState(RES_CHRATR_UNDERLINE, false)).toBe(SfxItemState.INVALID);
       expect((source.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(
         -720,
@@ -294,7 +295,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const parent = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
     parent.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     const source = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES, parent);
-    source.Put(new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT));
+    source.Put(new SvxTextLeftMarginItem(SvxIndentValue.twips(-720), RES_MARGIN_TEXTLEFT));
     source.InvalidateItem(RES_CHRATR_UNDERLINE);
     source.DisableItem(RES_CHRATR_WEIGHT);
     const writerDestination = createFixture();
@@ -331,7 +332,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
         expect(clone.GetItemIfSet(RES_MARGIN_TEXTLEFT, false)).not.toBe(
           source.GetItemIfSet(RES_MARGIN_TEXTLEFT, false),
         );
-        clone.Put(new SvxTextLeftMarginItem(360, RES_MARGIN_TEXTLEFT));
+        clone.Put(new SvxTextLeftMarginItem(SvxIndentValue.twips(360), RES_MARGIN_TEXTLEFT));
       }
     }
     expect(source.Count()).toBe(3);
@@ -344,7 +345,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const parent = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
     parent.Put(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     const source = new SwAttrSet(pool, WRITER_TEXT_NODE_WHICH_RANGES, parent);
-    source.Put(new SvxTextLeftMarginItem(-720, RES_MARGIN_TEXTLEFT));
+    source.Put(new SvxTextLeftMarginItem(SvxIndentValue.twips(-720), RES_MARGIN_TEXTLEFT));
     source.InvalidateItem(RES_CHRATR_UNDERLINE);
     source.DisableItem(RES_CHRATR_WEIGHT);
     const full = source.CloneAsValue();
@@ -354,7 +355,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(full.GetItemState(RES_CHRATR_WEIGHT)).toBe(SfxItemState.DISABLED);
     expect(full.Count()).toBe(3);
     full.ClearItem(RES_CHRATR_UNDERLINE);
-    full.Put(new SvxTextLeftMarginItem(360, RES_MARGIN_TEXTLEFT));
+    full.Put(new SvxTextLeftMarginItem(SvxIndentValue.twips(360), RES_MARGIN_TEXTLEFT));
     expect(source.GetItemState(RES_CHRATR_UNDERLINE)).toBe(SfxItemState.INVALID);
     expect((source.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(-720);
     const empty = source.CloneAsValue(false);
@@ -381,7 +382,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(numRuleItem.equals(new SwNumRuleItem("Rule"))).toBe(true);
     expect(numRuleItem.equals(new SfxStringItem(RES_PARATR_NUMRULE, "Rule"))).toBe(false);
     expect(pool.CreateItem({ value: 1134, which: RES_MARGIN_TEXTLEFT })).toEqual(
-      new SvxTextLeftMarginItem(1134, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(1134), RES_MARGIN_TEXTLEFT),
     );
     set.Put(new SwNumRuleItem("Rule"));
     const populated = set.CloneAsValue();

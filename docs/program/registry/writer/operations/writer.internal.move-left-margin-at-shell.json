@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "writer.internal.move-left-margin-at-shell",
+    "modulePath": "apps/office/src/sw/source/core/edit/edattr.ts",
+    "symbol": "moveLeftMarginAtShell",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-0107",
+    "description": "Native SwEditShell::MoveLeftMargin model bracket delegates one original range command to its document owner without scalar undo synthesis."
+  }
+}

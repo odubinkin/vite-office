@@ -2,6 +2,7 @@
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition, SwPaM } from "../../core/crsr/pam";
+import { SwTextSizeInfo } from "../../core/text/inftxt";
 import { SwTextCursor } from "../../core/text/itrtxt";
 import { SwTextFrame } from "../../core/text/txtfrm";
 import { SwCursorShell, PopMode } from "../../core/crsr/trvltbl";
@@ -81,7 +82,7 @@ it.each([
           index,
         ) => ({ start: ends[index - 1] ?? 0, end, height: 240 }),
       );
-    f.shell.GetLayout().SetCursorTextFrame(f.node, lines, 0, text.length);
+    f.shell.GetLayout().SetCursorTextFrames(f.node, [{ lines: lines, start: 0, end: text.length }]);
     select(f, offset);
     const cursor = f.shell.getShellCursor();
     expect(cursor.LeftRightMargin(f.shell.GetLayout(), left, api)).toBe(true);
@@ -93,15 +94,16 @@ it.each([
 );
 it("retains soft-boundary affinity and excludes hard-break affinity", /** Checks direct native frame ambiguity and complete follow geometry. @returns Nothing. */ () => {
   const f = fixture("abcdef");
-  f.shell.GetLayout().SetCursorTextFrame(
-    f.node,
-    [
-      { start: 0, end: 3, height: 240 },
-      { start: 3, end: 6, height: 240 },
-    ],
-    0,
-    6,
-  );
+  f.shell.GetLayout().SetCursorTextFrames(f.node, [
+    {
+      lines: [
+        { start: 0, end: 3, height: 240 },
+        { start: 3, end: 6, height: 240 },
+      ],
+      start: 0,
+      end: 6,
+    },
+  ]);
   const cursor = f.shell.getShellCursor();
   select(f, 2);
   expect(cursor.LeftRightMargin(f.shell.GetLayout(), false)).toBe(true);
@@ -117,39 +119,51 @@ it("retains soft-boundary affinity and excludes hard-break affinity", /** Checks
   select(f, 0);
   expect(cursor.IsAtLeftRightMargin(f.shell.GetLayout(), false, true)).toBe(false);
   f.node.SetText("abc\ndef");
-  f.shell.GetLayout().SetCursorTextFrame(
-    f.node,
-    [
-      { start: 0, end: 4, height: 240 },
-      { start: 4, end: 7, height: 240 },
-    ],
-    0,
-    7,
-  );
+  f.shell.GetLayout().SetCursorTextFrames(f.node, [
+    {
+      lines: [
+        { start: 0, end: 4, height: 240 },
+        { start: 4, end: 7, height: 240 },
+      ],
+      start: 0,
+      end: 7,
+    },
+  ]);
   select(f, 4);
   SwTextCursor.SetRightMargin(true);
   expect(cursor.LeftRightMargin(f.shell.GetLayout(), true)).toBe(true);
   expect(cursor.GetPoint().GetContentIndex()).toBe(4);
   f.node.SetText("abc   def");
   select(f, 1);
-  f.shell.GetLayout().SetCursorTextFrame(f.node, [{ start: 0, end: 6, height: 240 }], 0, 6);
+  f.shell.GetLayout().SetCursorTextFrames(f.node, [
+    { lines: [{ start: 0, end: 6, height: 240 }], start: 0, end: 6 },
+    { lines: [{ start: 6, end: 9, height: 240 }], start: 6, end: 9 },
+  ]);
   expect(cursor.LeftRightMargin(f.shell.GetLayout(), false)).toBe(true);
   expect(cursor.GetPoint().GetContentIndex()).toBe(3);
-  const iterator = new SwTextCursor([], "");
-  expect(iterator.CharCursorToLine(0)).toBeUndefined();
-  const emptyFrame = new SwTextFrame("empty", 0, 0, false, 0, []),
+  const unformatted = new SwTextFrame(f.node, "missing", 0, 0, 0, []);
+  expect(
+    /** Checks native missing-para assertion. @returns Missing iterator. */ () =>
+      new SwTextCursor(unformatted, new SwTextSizeInfo(unformatted)),
+  ).toThrow("SwTextIter requires the original formatted paragraph.");
+  unformatted.DestroyImpl();
+  const emptyFrame = new SwTextFrame(f.node, "empty", 0, 0, 0, []),
     pam = new SwPaM(cursor.GetPoint());
   try {
     expect(emptyFrame.LeftMargin(pam)).toBe(false);
     expect(emptyFrame.RightMargin(pam)).toBe(false);
   } finally {
+    emptyFrame.DestroyImpl();
     pam.Dispose();
   }
 });
 
 it("uses the UI margin default when the shell API flag is omitted", /** Checks the actual shell default against trailing spaces. @returns Nothing. */ () => {
   const f = fixture("abc   def");
-  f.shell.GetLayout().SetCursorTextFrame(f.node, [{ start: 0, end: 6, height: 240 }], 0, 6);
+  f.shell.GetLayout().SetCursorTextFrames(f.node, [
+    { lines: [{ start: 0, end: 6, height: 240 }], start: 0, end: 6 },
+    { lines: [{ start: 6, end: 9, height: 240 }], start: 6, end: 9 },
+  ]);
   select(f, 1);
   expect(f.shell.LRMargin(false)).toBe(true);
   expect(f.shell.getShellCursor().GetPoint().GetContentIndex()).toBe(3);
@@ -171,15 +185,16 @@ it.each([false, true])(
       undo = f.doc.GetUndoManager(),
       layout = f.shell.GetLayout(),
       node = f.node;
-    f.edit.SetCursorTextFrame(
-      node.GetIndex(),
-      [
-        { start: 0, end: 3, height: 240 },
-        { start: 3, end: 6, height: 240 },
-      ],
-      0,
-      6,
-    );
+    f.edit.SetCursorTextFrames(node.GetIndex(), [
+      {
+        lines: [
+          { start: 0, end: 3, height: 240 },
+          { start: 3, end: 6, height: 240 },
+        ],
+        start: 0,
+        end: 6,
+      },
+    ]);
     select(f, 4, 5);
     f.shell.Push();
     expect(f.edit.MoveLineBoundary(true, true)).toBe(true);
@@ -211,7 +226,9 @@ it("native repeated Home enters visible labels and End clears without document h
   f.shell.SetParagraphListKind("bullet");
   f.doc.GetUndoManager().Clear();
   select(f, 2);
-  f.edit.SetCursorTextFrame(f.node.GetIndex(), [{ start: 0, end: 4, height: 240 }], 0, 4);
+  f.edit.SetCursorTextFrames(f.node.GetIndex(), [
+    { lines: [{ start: 0, end: 4, height: 240 }], start: 0, end: 4 },
+  ]);
   expect(f.edit.MoveLineBoundary(true)).toBe(true);
   expect(f.shell.IsInFrontOfLabel()).toBe(false);
   expect(f.edit.MoveLineBoundary(true)).toBe(true);
@@ -223,15 +240,17 @@ it("native repeated Home enters visible labels and End clears without document h
   expect(f.edit.MoveLineBoundary(true, true)).toBe(true);
   expect(f.shell.getShellCursor().GetMark().GetContentIndex()).toBe(2);
   expect(f.shell.IsInFrontOfLabel()).toBe(false);
-  expect(f.edit.SetCursorTextFrame(-1, [], 0, 0)).toBe(false);
+  expect(f.edit.SetCursorTextFrames(-1, [{ lines: [], start: 0, end: 0 }])).toBe(false);
   const root = SwCursorShell.prototype.GetLayout.call(f.shell);
   expect(SwCursorShell.prototype.GetLayout.call(f.shell)).toBe(root);
-  root.SetCursorTextFrame(f.node, [], 0, 0);
+  root.SetCursorTextFrames(f.node, [{ lines: [], start: 0, end: 0 }]);
   expect(f.shell.getShellCursor().LeftRightMargin(root, true)).toBe(false);
   expect(f.shell.getShellCursor().IsAtLeftRightMargin(root, true)).toBe(false);
   const other = new SwDoc().paragraphs[0];
   if (other === undefined) throw Error("Missing other owner");
-  root.SetCursorTextFrame(other, [{ start: 0, end: 0, height: 240 }], 0, 0);
+  root.SetCursorTextFrames(other, [
+    { lines: [{ start: 0, end: 0, height: 240 }], start: 0, end: 0 },
+  ]);
   expect(root.GetCursorTextFrame(other)).toBeUndefined();
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
 });
@@ -241,21 +260,25 @@ it("native iterator resolves backward queries and ordinary repeated Home stays i
       { start: 0, end: 3, height: 240 },
       { start: 3, end: 6, height: 240 },
     ],
-    iterator = new SwTextCursor(lines, "abcdef");
-  expect(iterator.CharCursorToLine(5)).toBe(lines[1]);
-  expect(iterator.CharCursorToLine(1)).toBe(lines[0]);
-  const blank = new SwTextCursor(
-    [
+    measured = fixture("abcdef"),
+    frame = new SwTextFrame(measured.node, "measured", 0, 6, 0, lines),
+    iterator = new SwTextCursor(frame, new SwTextSizeInfo(frame));
+  expect(iterator.CharCursorToLine(5)).toBe(frame.GetPara()?.GetNext());
+  expect(iterator.CharCursorToLine(1)).toBe(frame.GetPara());
+  const blankOwner = fixture("abc"),
+    blankFrame = new SwTextFrame(blankOwner.node, "blank", 0, 3, 0, [
       { start: 0, end: 0, height: 240 },
       { start: 0, end: 3, height: 240 },
-    ],
-    "abc",
-  );
+    ]),
+    blank = new SwTextCursor(blankFrame, new SwTextSizeInfo(blankFrame));
   SwTextCursor.SetRightMargin(true);
-  expect(blank.CharCursorToLine(0)?.end).toBe(3);
+  blank.CharCursorToLine(0);
+  expect(blank.GetEnd()).toBe(3);
+  frame.DestroyImpl();
+  blankFrame.DestroyImpl();
   const f = fixture("abcdef");
   select(f, 0);
-  f.edit.SetCursorTextFrame(f.node.GetIndex(), lines, 0, 6);
+  f.edit.SetCursorTextFrames(f.node.GetIndex(), [{ lines: lines, start: 0, end: 6 }]);
   expect(f.shell.LeftMargin()).toBe(true);
   expect(f.shell.LeftMargin()).toBe(true);
   expect(f.shell.IsInFrontOfLabel()).toBe(false);

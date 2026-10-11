@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
-import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import { RES_PARATR_TABSTOP, RES_LR_SPACE } from "../../../inc/hintids";
+import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh1";
 import {
@@ -42,7 +43,9 @@ describe("Writer MoveLeftMargin", /** Registers upstream-backed indent cases. @r
     paragraph.SetParagraphTextLeftMargin(300);
     expect(shell.ChangeParagraphIndent(false, false)).toBe(true);
     expect(paragraph.GetParagraphTextLeftMargin()).toBe(-420);
-    expect(shell.ChangeParagraphIndent(false, false)).toBe(false);
+    expect(shell.ChangeParagraphIndent(false, false)).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(-420);
     expect(shell.Undo()).toBe(true);
     expect(paragraph.GetParagraphTextLeftMargin()).toBe(300);
     expect(shell.Redo()).toBe(true);
@@ -137,6 +140,11 @@ describe("Writer MoveLeftMargin", /** Registers upstream-backed indent cases. @r
         right: 0,
       }),
     ).toBe(true);
+    const legacyGuard = new SvxLRSpaceItem(RES_LR_SPACE);
+    legacyGuard.SetTextLeft(
+      SvxIndentValue.twips(page.width - page.leftMargin - page.rightMargin - 500),
+    );
+    paragraph.SetAttr(legacyGuard);
     expect(shell.CanChangeParagraphIndent(true)).toBe(false);
     expect(shell.ChangeParagraphIndent(true)).toBe(false);
   });

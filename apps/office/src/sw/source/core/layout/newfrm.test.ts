@@ -1,6 +1,6 @@
 /** @fileoverview Checks Writer-owned page frames and same-node follow text frames. */
 
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import { createDefaultWriterPageDescriptor } from "./pagedesc";
 import { createSwPageFrames, projectSwTextPrintBounds } from "./newfrm";
@@ -15,9 +15,28 @@ import { RES_KEEP, RES_LINENUMBER, RES_UL_SPACE } from "../../../inc/hintids";
 
 const standardPage = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
+import { SwDoc } from "../doc/doc";
+import { SwFrame } from "./wsfrm";
+let owner = new SwDoc();
+afterEach(
+  /** Releases actual fixture frame clients before the native source graph. @returns Nothing. */ () => {
+    for (const node of owner.GetNodes().entries())
+      node.ForAllListeners(
+        /** Destroys actual fixture frames. @param listener - Original client. @returns Continue traversal. */ (
+          listener,
+        ) => {
+          if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
+          return false;
+        },
+      );
+    owner.Dispose();
+    owner = new SwDoc();
+  },
+);
 /** Creates one measured text node. @param id - Node identity. @param count - Visual line count. @param height - Line height. @returns Text-frame input. */
 function paragraph(id: string, count: number, height = 300): SwTextFrameInput {
   return {
+    node: owner.GetNodes().MakeTextNode("x".repeat(count * 5)),
     id,
     lines: Array.from(
       { length: count },
@@ -278,7 +297,7 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
           frame.textFrames.map(
             /** Projects one source range. @param part - Text fragment. @returns Start, end, and follow flag. */ (
               part,
-            ) => [part.start, part.end, part.follow],
+            ) => [part.start, part.end, part.IsFollow()],
           ),
       ),
     ).toEqual([[[0, 15, false]], [[15, 30, true]], [[30, 40, true]]]);
@@ -514,7 +533,7 @@ describe("persistent Writer layout root", /** Checks core layout identity over d
       wide.pages.map(
         /** Reads follow status. @param page - Physical page. @returns First frame follow status. */ (
           page,
-        ) => page.textFrames[0]?.follow,
+        ) => page.textFrames[0]?.IsFollow(),
       ),
     ).toEqual([false, true, true]);
     expect(wide.lineNumbers[1]?.[0]).toEqual([{ number: 5, topTwips: 300 }]);

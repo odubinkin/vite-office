@@ -3,6 +3,7 @@
  * `sw/inc/contentindex.hxx` and `sw/source/core/bastyp/index.cxx`.
  */
 
+import { BroadcastingModify } from "../../../inc/calbck";
 import type { SwContentNode } from "../docnode/node";
 
 /** Identifies the bounded model object that owns one live content position. */
@@ -20,7 +21,7 @@ export const enum SwContentIndexUpdateMode {
 }
 
 /** One node-owned registry of weakly retained live content indices. */
-export abstract class SwContentIndexRegistry {
+export abstract class SwContentIndexRegistry extends BroadcastingModify {
   private readonly indexReferences = new Set<WeakRef<SwContentIndex>>();
   private readonly referencesByIndex = new WeakMap<SwContentIndex, WeakRef<SwContentIndex>>();
 

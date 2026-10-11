@@ -1,0 +1,1035 @@
+{
+  "task": "202610101510-P5FPXY",
+  "status": "All approved source/portable/static/browser/metadata acceptance and exact-SHA same-agent non-independent quality passed; concrete closure pending.",
+  "sourcePin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "apps/office/src/editeng/inc/lrspitem.ts": "d1f294b647424f91c6e23be0e25b57c9e78c1a417bcd473d30449e659c917c8d",
+    "apps/office/src/editeng/inc/memberids.ts": "29762f6eefd86918a955108a08b86fb26939561b94831de2a105512e08af6094",
+    "apps/office/src/editeng/source/items/frmitems.ts": "6d26b577e8654655387aee7dc4a54e3485b4af9bee2dbe5a797b6423143d7beb",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "e34aabf3166fe64589909ae479ed393dc2347082760150ed2c2bdbc23200d409",
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": "3533638fbd6a49ae904d2fdbb6c6037158fecbb81d264ea9e8b7402673966276",
+    "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": "d52ac6240ac6e911e44680a68ac81b04807eb686cb6652ff37e0d444cf822eeb",
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": "fc54c99c7051ee07e1d0e773e5f58b9e940117db3a1641378fb2dae298c529a0",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": "9abb56faf8d9e8e2205264ff559022152fbb4a1452fd45b0befcbcc0bc75552b",
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts": "94d54caa1ca019892209780d539ef776b5f80fbea868f0dc48d16a460c0d06db",
+    "apps/office/src/sw/browser/filter/xml/item-codec.ts": "c105e5d9b57cab0ac2e05554a2bab5875ddd10f401b53cfef317a69bf167e6b1"
+  },
+  "originalSourceAudit": {
+    "status": "pass",
+    "metadataOnly": true,
+    "testsReadUpstream": false,
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "sourceHashes": {
+      "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx": "0a506d3769fe82ebe1272e5dda128f082d775d3eda7280911b5e8df78557754f",
+      "vendor/libreoffice-reference/include/editeng/lrspitem.hxx": "08dc1cc34d3961558a63f0b87f08c24c82880b92a0edceb76ee19d6c6c20ab22",
+      "vendor/libreoffice-reference/include/editeng/memberids.h": "4ee05fffe641223f6bfd4f4fab6fa9df1acf67f9f3029d4a27af3ec74c0e0bd1",
+      "vendor/libreoffice-reference/include/svl/poolitem.hxx": "cfbe8314efb61fb9956aef3b44aae678361603a416f0b91e8b1f301e0c436294",
+      "vendor/libreoffice-reference/sw/inc/ndtxt.hxx": "4d0536a8e0e480a6826a189c133dffc04a5e7d62f2c13036ab8062e4f98db07a",
+      "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx": "8cf38bae998b54451bbcbbc15fd69600d0f24490cf86c33c7cd54f72c63871f1",
+      "vendor/libreoffice-reference/sw/source/core/undo/rolbck.cxx": "af90445356fa188d7d22203e805ac56c1b64dc2b0ce4719a1ba011915909ab17",
+      "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx": "18888b58d07725197cb70b069c2e11e90c4aaa8cf8c43f288017d3cefdd65786"
+    },
+    "sourceLines": {
+      "SvxFirstLineIndentItem::SvxFirstLineIndentItem": 1270,
+      "bool SvxFirstLineIndentItem::QueryValue": 1323,
+      "bool SvxFirstLineIndentItem::PutValue": 1357
+    },
+    "nativeDefaultQueryUnsupported": true,
+    "originalAny2BoolSigned32Fallback": true,
+    "exclusivePercentageUpperBoundPreserved": true,
+    "originalCloneHistoryResponsibility": true,
+    "testOnlyNonNativeNumericWrapperRemoved": true,
+    "originalMutableCallerRegressionRetained": true,
+    "initializedPortableObservation": "WRITER-003",
+    "compiledNativeDifferential": false,
+    "fullNativeHistoryAndRichWireFontUIUnverified": true,
+    "documentHash": "4b2c97b049940654673e2bd84e482dc509a04a68cf831388c6f82fa3daa2d964"
+  },
+  "relatedTestCommand": {
+    "label": "native-absolute-related",
+    "cwd": "/Users/odubinkin/Projects/vite-office-writer/apps/office",
+    "args": [
+      "exec",
+      "--",
+      "vitest",
+      "related",
+      "src/editeng/inc/lrspitem.ts",
+      "src/editeng/inc/memberids.ts",
+      "src/editeng/source/items/frmitems.ts",
+      "src/sw/source/core/attr/swatrset.ts",
+      "src/sw/source/core/txtnode/ndtxt.ts",
+      "src/sw/source/core/doc/poolfmt-defaults.ts",
+      "src/sw/source/filter/xml/xmlimp.ts",
+      "src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "src/sw/source/uibase/shells/textsh1.ts",
+      "src/sw/browser/filter/xml/item-codec.ts",
+      "--run",
+      "--coverage",
+      "--coverage.include=src/editeng/inc/lrspitem.ts",
+      "--coverage.include=src/editeng/inc/memberids.ts",
+      "--coverage.include=src/editeng/source/items/frmitems.ts",
+      "--coverage.include=src/sw/source/core/attr/swatrset.ts",
+      "--coverage.include=src/sw/source/core/txtnode/ndtxt.ts",
+      "--coverage.include=src/sw/source/core/doc/poolfmt-defaults.ts",
+      "--coverage.include=src/sw/source/filter/xml/xmlimp.ts",
+      "--coverage.include=src/sw/source/uibase/wrtsh/wrtsh1.ts",
+      "--coverage.include=src/sw/source/uibase/shells/textsh1.ts",
+      "--coverage.include=src/sw/browser/filter/xml/item-codec.ts",
+      "--coverage.reportOnFailure",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/P5FPXY/native-absolute-related-tests.json",
+      "--coverage.reportsDirectory=/Users/odubinkin/Projects/vite-office-writer/apps/office/node_modules/.cache/parity-coverage/P5FPXY/native-absolute-related-coverage"
+    ]
+  },
+  "allCases": 14188,
+  "testFiles": 503,
+  "freshCases": 71,
+  "fullRun": false,
+  "cadenceAfterN337G1": 3,
+  "wholeActualChangedModuleCoverage": {
+    "lines": {
+      "total": 1904,
+      "covered": 1904,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 2083,
+      "covered": 2083,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 566,
+      "covered": 566,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 1707,
+      "covered": 1707,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "perModule": {
+    "apps/office/src/editeng/inc/lrspitem.ts": {
+      "lines": {
+        "total": 270,
+        "covered": 270,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 76,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 286,
+        "covered": 286,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 287,
+        "covered": 287,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/editeng/inc/memberids.ts": {
+      "lines": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/editeng/source/items/frmitems.ts": {
+      "lines": {
+        "total": 257,
+        "covered": 257,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 88,
+        "covered": 88,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 290,
+        "covered": 290,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 259,
+        "covered": 259,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/source/core/attr/swatrset.ts": {
+      "lines": {
+        "total": 152,
+        "covered": 152,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 48,
+        "covered": 48,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 167,
+        "covered": 167,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 90,
+        "covered": 90,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/source/core/txtnode/ndtxt.ts": {
+      "lines": {
+        "total": 295,
+        "covered": 295,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 103,
+        "covered": 103,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 321,
+        "covered": 321,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 202,
+        "covered": 202,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts": {
+      "lines": {
+        "total": 73,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 74,
+        "covered": 74,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 71,
+        "covered": 71,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/source/filter/xml/xmlimp.ts": {
+      "lines": {
+        "total": 274,
+        "covered": 274,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 60,
+        "covered": 60,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 308,
+        "covered": 308,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 294,
+        "covered": 294,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts": {
+      "lines": {
+        "total": 322,
+        "covered": 322,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 114,
+        "covered": 114,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 344,
+        "covered": 344,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 219,
+        "covered": 219,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/source/uibase/shells/textsh1.ts": {
+      "lines": {
+        "total": 210,
+        "covered": 210,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 60,
+        "covered": 60,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 238,
+        "covered": 238,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 221,
+        "covered": 221,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "apps/office/src/sw/browser/filter/xml/item-codec.ts": {
+      "lines": {
+        "total": 45,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 64,
+        "covered": 64,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "completeActualMaps": 10,
+  "nonnegative": true,
+  "coverageMapHash": "04a6858d8bbffb8d90b9b36791218b039f315f3a186576c8b1d4d327c1dfbb96",
+  "coverageReportHash": "443cbf0d41d60d988aabd0d939416e5bd9cd067b1ca53a57f303a63f0e7910c7",
+  "noEarlierOrSupersededMapReuse": true,
+  "noCounterFilterThresholdEdits": true,
+  "passingReplayForHelperTypeMetadataOnly": false,
+  "sourceRevalidationReasons": [
+    "Original native owner/copy refinement and file-size safe original item/left calculation consolidation in wrtsh",
+    "Retire non-native test-only first-line numeric node wrapper with14exact original callers",
+    "Align original direct-member absolute UNO first-line assignment; two fresh native public-contract cases"
+  ],
+  "supersededSuccessfulRelatedProfiles": [
+    {
+      "label": "related-first-line",
+      "cases": 14185,
+      "fresh": 68
+    },
+    {
+      "label": "final-related-first-line",
+      "cases": 14186,
+      "fresh": 69
+    },
+    {
+      "label": "native-retirement-related",
+      "cases": 14186,
+      "fresh": 69
+    }
+  ],
+  "staticFailuresRepaired": [
+    {
+      "check": "size",
+      "finding": "ndtxt counted1000lines; final991lines, strict1000 rejection retained",
+      "resolution": "Approved non-native numeric wrapper removal; no limit/blank-line workaround"
+    },
+    {
+      "check": "lint",
+      "finding": "one newly unused Which binding after wrapper removal",
+      "resolution": "Removed unused import; subsequent genuine native absolute mutation source refinement required current source revalidation"
+    }
+  ],
+  "staticEvidence": [
+    {
+      "label": "current-changed-format",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "prettier",
+        "--check",
+        "apps/office/src/editeng/inc/lrspitem.ts",
+        "apps/office/src/editeng/inc/memberids.ts",
+        "apps/office/src/editeng/source/items/frmitems.ts",
+        "apps/office/src/sw/source/core/attr/swatrset.ts",
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+        "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+        "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+        "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+        "apps/office/e2e/writer-auto-first-layout.spec.ts",
+        "apps/office/e2e/writer-manual-first-layout.spec.ts",
+        "apps/office/e2e/writer-named-style-history.spec.ts",
+        "apps/office/e2e/writer-ruler-auto-first.spec.ts",
+        "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+        "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
+        "apps/office/e2e/writer-style-redo.spec.ts",
+        "apps/office/e2e/writer-style-reset.spec.ts",
+        "apps/office/e2e/writer-style-selector.spec.ts",
+        "apps/office/src/editeng/source/items/frmitems.test.ts",
+        "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+        "apps/office/src/sw/source/core/edit/edfcol-history.test.ts",
+        "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+        "apps/office/src/sw/source/core/edit/edfcol-reset.test.ts",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+        "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+        "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+        "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+        "apps/office/src/editeng/source/items/native-first-line-indent-item.test.ts",
+        "apps/office/src/sw/source/core/attr/native-paragraph-first-line-indent.test.ts"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "current-changed-lint",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "eslint",
+        "apps/office/src/editeng/inc/lrspitem.ts",
+        "apps/office/src/editeng/inc/memberids.ts",
+        "apps/office/src/editeng/source/items/frmitems.ts",
+        "apps/office/src/sw/source/core/attr/swatrset.ts",
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+        "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+        "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+        "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
+        "apps/office/src/sw/source/uibase/shells/textsh1.ts",
+        "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+        "apps/office/e2e/writer-auto-first-layout.spec.ts",
+        "apps/office/e2e/writer-manual-first-layout.spec.ts",
+        "apps/office/e2e/writer-named-style-history.spec.ts",
+        "apps/office/e2e/writer-ruler-auto-first.spec.ts",
+        "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+        "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
+        "apps/office/e2e/writer-style-redo.spec.ts",
+        "apps/office/e2e/writer-style-reset.spec.ts",
+        "apps/office/e2e/writer-style-selector.spec.ts",
+        "apps/office/src/editeng/source/items/frmitems.test.ts",
+        "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+        "apps/office/src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+        "apps/office/src/sw/source/core/edit/edfcol-history.test.ts",
+        "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+        "apps/office/src/sw/source/core/edit/edfcol-reset.test.ts",
+        "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+        "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+        "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+        "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+        "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+        "apps/office/src/editeng/source/items/native-first-line-indent-item.test.ts",
+        "apps/office/src/sw/source/core/attr/native-paragraph-first-line-indent.test.ts",
+        "--max-warnings=0"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "typecheck",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "typecheck"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:dependencies",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:dependencies"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:file-size",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:file-size"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "build"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "check:docs",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "run",
+        "check:docs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "static-build",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    },
+    {
+      "label": "browser-first-line",
+      "cwd": "/Users/odubinkin/Projects/vite-office-writer",
+      "args": [
+        "exec",
+        "--",
+        "playwright",
+        "test",
+        "--config",
+        "apps/office/playwright.config.ts",
+        "--project=writer",
+        "writer-auto-first-layout.spec.ts",
+        "writer-manual-first-layout.spec.ts",
+        "writer-named-style-history.spec.ts",
+        "writer-ruler-auto-first.spec.ts",
+        "writer-ruler-indent-items.spec.ts",
+        "writer-ruler-indent-pixels.spec.ts",
+        "writer-style-redo.spec.ts",
+        "writer-style-reset.spec.ts",
+        "writer-style-selector.spec.ts",
+        "writer-counted-list-layout.spec.ts",
+        "writer-uncounted-list-layout.spec.ts",
+        "writer-cell-paragraph-format.spec.ts",
+        "--reporter=list,json"
+      ],
+      "status": 0,
+      "upstreamAbsent": true,
+      "mddsAbsent": true
+    }
+  ],
+  "initialWholeRootFormatLintPassed": true,
+  "browser": {
+    "cases": 27,
+    "files": 12,
+    "skipped": 0,
+    "flaky": 0,
+    "unexpected": 0,
+    "errors": 0,
+    "reportHash": "0289c3f182e45c34bee337ce4ee1e3274186b7e5ba9653c7a9d0c19c66b4a7e1"
+  },
+  "preservation": {
+    "status": "pass",
+    "canonicalHistoriesAndStatusesPreserved": 20,
+    "currentDeclarationOwnerMigrations": 1,
+    "unmodifiedHistoricalTestFiles": 768,
+    "migrations": [
+      {
+        "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
+        "originalAcceptanceMatchers": 14,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-manual-first-layout.spec.ts",
+        "originalAcceptanceMatchers": 12,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-named-style-history.spec.ts",
+        "originalAcceptanceMatchers": 12,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-ruler-auto-first.spec.ts",
+        "originalAcceptanceMatchers": 27,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+        "originalAcceptanceMatchers": 15,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-ruler-indent-pixels.spec.ts",
+        "originalAcceptanceMatchers": 9,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-style-redo.spec.ts",
+        "originalAcceptanceMatchers": 37,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-style-reset.spec.ts",
+        "originalAcceptanceMatchers": 32,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/e2e/writer-style-selector.spec.ts",
+        "originalAcceptanceMatchers": 21,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/editeng/source/items/frmitems.test.ts",
+        "originalAcceptanceMatchers": 40,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": "one source-backed fractional constructor correction; all other expected values retained"
+      },
+      {
+        "path": "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+        "originalAcceptanceMatchers": 37,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+        "originalAcceptanceMatchers": 54,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-counted-list-layout.test.tsx",
+        "originalAcceptanceMatchers": 37,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-list-indent-mask.test.tsx",
+        "originalAcceptanceMatchers": 45,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-list-label-drag.test.tsx",
+        "originalAcceptanceMatchers": 30,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-manual-first-layout.test.tsx",
+        "originalAcceptanceMatchers": 33,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+        "originalAcceptanceMatchers": 43,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+        "originalAcceptanceMatchers": 52,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-pixels.test.tsx",
+        "originalAcceptanceMatchers": 29,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/browser/presentation/writer-view-uncounted-list-layout.test.tsx",
+        "originalAcceptanceMatchers": 44,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/edit/edfcol-history.test.ts",
+        "originalAcceptanceMatchers": 61,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/edit/edfcol-modifier.test.ts",
+        "originalAcceptanceMatchers": 72,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/edit/edfcol-reset.test.ts",
+        "originalAcceptanceMatchers": 58,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+        "originalAcceptanceMatchers": 76,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+        "originalAcceptanceMatchers": 69,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts",
+        "originalAcceptanceMatchers": 23,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+        "originalAcceptanceMatchers": 98,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+        "originalAcceptanceMatchers": 101,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+        "originalAcceptanceMatchers": 131,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+        "originalAcceptanceMatchers": 132,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+        "originalAcceptanceMatchers": 96,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      },
+      {
+        "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+        "originalAcceptanceMatchers": 49,
+        "testDeclarationsPreserved": true,
+        "expectedArgumentsPreserved": true
+      }
+    ],
+    "allOtherOldTestFilesByteIdentical": true,
+    "noWeakeningOfExistingBehaviorAssertions": true
+  },
+  "retiredWrapperCallMigrations": [
+    {
+      "path": "apps/office/src/sw/browser/editor/cell-paragraph-rendering.test.tsx",
+      "receiver": "owner.node",
+      "value": "-80"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-indent-items.test.tsx",
+      "receiver": "shell.GetActiveParagraph()",
+      "value": "367"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts",
+      "receiver": "node",
+      "value": "-120"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/native-list-ring.test.ts",
+      "receiver": "node",
+      "value": "-120"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "receiver": "node",
+      "value": "720"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "receiver": "node",
+      "value": "720"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "receiver": "owner.first",
+      "value": "720"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-format-node-index.test.ts",
+      "receiver": "owner.second",
+      "value": "480"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "receiver": "node",
+      "value": "-120"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts",
+      "receiver": "owner.first",
+      "value": "-120"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+      "receiver": "first",
+      "value": "0"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+      "receiver": "first",
+      "value": "-100"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts",
+      "receiver": "first",
+      "value": "-20"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/native-list-backspace.test.ts",
+      "receiver": "f.body",
+      "value": "offset"
+    }
+  ],
+  "metadata": [
+    {
+      "label": "registry-build",
+      "command": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "source-tree",
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "source-provenance",
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "registry-check",
+      "command": [
+        "npm",
+        "run",
+        "inventory:registry:check"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "writer-resources",
+      "command": [
+        "node_modules/.bin/tsx",
+        "scripts/generate-writer-ui-resources.ts",
+        "--check"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-invariants",
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "inventory-parity",
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "routing",
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    },
+    {
+      "label": "doctor",
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "status": 0,
+      "metadataOnly": true
+    }
+  ],
+  "sourceAndMddsRestored": true,
+  "taskArtifactsContainOnlyBoundedEnglishFactsHashes": true,
+  "observations": [
+    "WRITER-001 preserved",
+    "WRITER-002 preserved",
+    "WRITER-003 original default first-line query unsupported"
+  ],
+  "compiledNativeDifferential": false,
+  "remainingGaps": [
+    "Rich first-line/right unit and percentage graph/Worker wire",
+    "Actual font-relative paragraph UI context/layout",
+    "General native pooling/lifetime,hash,presentation,UNO/VCL and full history architecture",
+    "Broad existing Writer core/UI parity"
+  ],
+  "stopRule": "After next full run, repair failures before pausing the goal; this correction did not run a full suite.",
+  "implementationCommit": "064cdbc517e4fe88655b86d045ba746a68912ff1",
+  "quality": {
+    "verdict": "pass",
+    "evaluatedSha": "064cdbc517e4fe88655b86d045ba746a68912ff1",
+    "independentReview": false,
+    "performedBy": "same agent in explicit EVALUATOR role",
+    "report": ".agentplane/tasks/202610101510-P5FPXY/quality/20261010-160740908-recovery-context/quality-report.json"
+  }
+}

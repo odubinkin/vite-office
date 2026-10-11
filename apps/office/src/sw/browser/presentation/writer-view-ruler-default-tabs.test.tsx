@@ -1,5 +1,6 @@
 /** @fileoverview Checks Writer tab-state preparation and noninteractive native default grids through owned model/DOM inputs. */
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxTextLeftMarginItem, SvxRightMarginItem } from "../../../editeng/source/items/frmitems";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
@@ -41,8 +42,12 @@ function fixture(options: Options = {}) {
     shell.SetParagraphItem(
       SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, options.stops, options.distance ?? 0),
     );
-  shell.SetParagraphItem(new SvxTextLeftMarginItem(options.left ?? 0, RES_MARGIN_TEXTLEFT));
-  shell.SetParagraphItem(new SvxRightMarginItem(options.right ?? 0, RES_MARGIN_RIGHT));
+  shell.SetParagraphItem(
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(options.left ?? 0), RES_MARGIN_TEXTLEFT),
+  );
+  shell.SetParagraphItem(
+    new SvxRightMarginItem(SvxIndentValue.twips(options.right ?? 0), RES_MARGIN_RIGHT),
+  );
   document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", options.relative ?? true);
   if (options.documentDefaults !== undefined) {
     const pool = document.GetAttrPool();

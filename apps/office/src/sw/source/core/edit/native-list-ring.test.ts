@@ -1,5 +1,6 @@
 /** @fileoverview Verifies native ring numbering ownership, table selections and exact SwPamRanges without upstream access. */
 import { selectTableRow } from "../../../../../test-support/table-mouse";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwEditShell, SwPamRanges } from "./ednumber";
@@ -164,7 +165,7 @@ it.each(commandCases)(
       node.SetAttrListLevel(2);
       node.SetCountedInList(false);
       node.SetParagraphTextLeftMargin(400);
-      node.SetParagraphFirstLineIndent(-120);
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
       node.SetParagraphRightMargin(80);
     }
     const before = targets.map(

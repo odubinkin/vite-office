@@ -1,5 +1,6 @@
 /** @fileoverview Checks authored first-line items and resolved automatic layout across the real Writer boundary. */
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   SvxFirstLineIndentItem,
@@ -49,9 +50,15 @@ function fixture(
     .GetDocumentSettingManager()
     .set("AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE", disregard);
   const items = [
-    new SvxFirstLineIndentItem(367, RES_MARGIN_FIRSTLINE, true),
-    new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
-    new SvxRightMarginItem(240, RES_MARGIN_RIGHT),
+    (
+      /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
+        const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(367), RES_MARGIN_FIRSTLINE);
+        item.SetAutoFirst(true);
+        return item;
+      }
+    )(),
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
+    new SvxRightMarginItem(SvxIndentValue.twips(240), RES_MARGIN_RIGHT),
     new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
     new SvxLineSpacingItem(value, RES_PARATR_LINESPACING, mode),
   ];
@@ -77,12 +84,23 @@ function state(owner: ReturnType<typeof fixture>) {
     effective: which.map(
       /** Queries the complete effective item. @param id - Which identity. @returns Value. */ (
         id,
-      ) => node.GetAttr(id).QueryValue(),
+      ) =>
+        id === RES_MARGIN_FIRSTLINE
+          ? firstValues(node.GetAttr(id))
+          : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
+              id === RES_MARGIN_TEXTLEFT ? 11 : 0,
+            ),
     ),
     direct: which.map(
       /** Distinguishes direct items from inheritance. @param id - Which identity. @returns Direct value or absence. */ (
         id,
-      ) => node.GetpSwAttrSet()?.GetItemIfSet(id, false)?.QueryValue() ?? null,
+      ) =>
+        (id === RES_MARGIN_FIRSTLINE
+          ? firstValues(node.GetpSwAttrSet()?.GetItemIfSet(id, false))
+          : (
+              node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
+                { QueryValue(member?: number): unknown } | undefined
+            )?.QueryValue(id === RES_MARGIN_TEXTLEFT ? 11 : 0)) ?? null,
     ),
     text: node.GetText(),
   };
@@ -138,7 +156,9 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
   for (const raw of [-367, 367])
     it(`retains manual signed ${raw} independently of line-space compatibility`, /** Checks manual values are authored rather than font-computed. @returns Nothing. */ function resolvesManualLayout() {
       const owner = fixture(false, "fixed", 701);
-      owner.shell.SetParagraphItems([new SvxFirstLineIndentItem(raw, RES_MARGIN_FIRSTLINE)]);
+      owner.shell.SetParagraphItems([
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(raw), RES_MARGIN_FIRSTLINE),
+      ]);
       const projected = owner.store.GetSnapshot().activeParagraph;
       expect(owner.shell.GetActiveParagraph().GetParagraphFirstLineIndent()).toBe(raw);
       expect(projected.computedStyle.resolvedFirstLineIndentPt).toBe(raw / 20);
@@ -266,3 +286,10 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
     expect(retained.computedStyle.firstLineIndentPt).toBe(18.35);
   });
 });
+
+/** Observes original first-line explicit native measure and auto members without replacing historical expected values. @param item - Native item or absence. @returns Historical measure/automatic marker. */
+function firstValues(item: { QueryValue(member?: number): unknown } | undefined): unknown {
+  if (item === undefined) return undefined;
+  const value = item.QueryValue(8);
+  return item.QueryValue(10) === true ? [value, 1] : value;
+}

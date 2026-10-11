@@ -188,6 +188,22 @@
         {
           "path": "apps/office/src/sw/source/core/table/native-independent-columns.test.ts",
           "marker": "native separators combine visible current-row"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-cursor-frame-chain.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cursor-frame-chain.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-cursor-frame-chain.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+          "marker": "SetCursorTextFrames"
         }
       ],
       "upstream": [
@@ -374,6 +390,10 @@
         {
           "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
           "marker": "void SvxRuler::EvalModifier()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/frmcrsr.cxx",
+          "marker": "pFrame->GetFollow()"
         }
       ]
     },
@@ -382,7 +402,8 @@
       "SwEditWin",
       "RulerColumnDrag",
       "GetTableColumnDragPosition",
-      "RulerRowDrag"
+      "RulerRowDrag",
+      "SetCursorTextFrames"
     ],
     "omittedResponsibilities": [
       "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
@@ -415,7 +436,8 @@
       "Iteration231 preserves actual mouse row modifier masks and represented native SvxRuler EvalModifier/PrepareProportional_Impl/CalcMinMax/DragBorders/ApplyBorders policies in horizontal-writing document ingress: Shift remains ordinary; exact Ctrl uses captured uint16 per-thousand preceding-row integer-device shares, source minimum-space limits and Margin2 nIndex0 following-border translation; exact Ctrl+Shift internal Border uses the previous visible lower bound and original active-line-only SetMouseTabRows flag, excluded at margins. Original SwTabCols/model/frame/cursor/box/line/history ownership remains unchanged. Tests use independent literal geometry and original-failure/new-case-only closures, never upstream. Full native ruler/slot/page-frame state, vertical/RTL document drag, snapping/protection and single-row indent ranges remain partial; no module/status/default/class/IO promotion.",
       "Iteration232 moves represented document table ruler tracking from SwEditWin into source-owned SVTOOLS Ruler lifecycle and SVX SvxRuler geometry over independent SvxColumnItem values. SwView owns persistent horizontal/vertical rulers; SwEditWin delegates actual Border/Margin hits with5px tolerance and physical tracking, retaining only original Writer carrier/document start for ExecuteTabWin-shaped native value apply. SVX owns exact modifier/snapping flags, uint16 share/width-block buffers, native represented limits, linear/proportional/row geometry and cancel/apply decisions without importing SW/browser code. Source SVX->SVTOOLS/VCL and SW->SVTOOLS native library edges are explicit. New source owners remain partial and unverified: full SFX bindings/slot state, VCL ruler drawing/ticks/snapping, protection, paragraph/frame margin state, column-margin modifier geometry, vertical/RTL document writing and frame-column/object/tab/indent contexts are not claimed. Existing ordinary column-margin geometry and registered IO deviations remain; prior semantic states/defaults/classes are unchanged.",
       "Iteration232 verification exposed a pre-existing unsupported core branch: SwDoc::SetTabCols and SwTable::SetTabCols explicitly reject currentRowOnly independent column-row geometry. Native SvxRuler EvalModifier retains its source current-line flag, but Writer column apply preserves the existing ordinary shared-column contract; native row apply forwards the flag as before. Independent per-row box widths, history/layout/ODT ownership and native current-line column apply require a subsequent core correction; this retained gap is not an intentional upstream exception or a parity claim. Remove unreachable proportional Margin1 skeleton branches from the represented border-only column preparation/limiter; full column-margin modifier contexts remain omitted. Four new unequal/hidden native geometry and cross-axis history cases cover changed complete functions without replaying passing cases.",
-      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved."
+      "Iteration233 moves connected flat-table column geometry into each original SwTableBox SwFormatFrameSize. Native current-row visible/other-row hidden fuzzy separator union and per-line NewSetTabCols adjustments feed original Writer document attribute history; actual Ctrl+Shift current-line columns replace the retained ordinary shared-column fallback. Source XML union grids/spans and browser device colspans preserve independent original cells, with complete native frame-size values in browser codec and declared grid widths only at import/builder ingress. No row-width side map, graph replacement or TextRuns conversion. Flat unspanned source behavior is represented; full row-span propagation/nested/merged graphs, frame item pooling/UNO, RTL/vertical/SFX/VCL/full ruler state remain partial. Registered recovery/open/save/settings untouched, previous statuses/defaults/classes preserved.",
+      "Task202610102109-06E9V7 replaces singular cursor-frame publication with one actual device fragment chain owned by the native root. Browser Home/End gathers all current body fragments of the same original node in physical order from the same editing host; a current cell/repeated header occurrence remains an independent single master, because current table text follows are not represented. SwEditWin forwards only original node coordinates and device lines/ranges. SwRootFrame creates original registered SwTextFrames and reciprocal source SetFollow links, returns the original master and releases every member on measurement replacement, document switch and close. Native model/view adjacency now selects actual follows, and RightMargin trims trailing spaces only with actual next line or GetFollow; the end-less-than-node-length continuation proxy and singular API are removed. Actual core ownership and literal native margins plus mounted device-port and real-Chromium page editing/history cover this integration. The measured cursor-frame registry, duplicate measurement versus body formatting clients, native full layout hierarchy/GetFrameOfModify/query/geometry, formatting/re-entrant stabilization/scroll/merged/vertical/empty-frame semantics and complete table text-flow/portion/font/script/root/Doc factory/Undo remain unported or unverified. Browser device measurement composition is not claimed as complete native formatter or query architecture. Historical classifications/status/default/responsibility/evidence and registered IO/recovery boundaries retained without broad promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",

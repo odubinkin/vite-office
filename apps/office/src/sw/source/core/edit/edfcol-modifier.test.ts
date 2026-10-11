@@ -1,5 +1,6 @@
 /** @fileoverview Checks registered Ctrl StyleApply reset sets, native list decisions and distinct initial/redo history through real Writer owners. */
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -43,7 +44,7 @@ function fixture() {
     node = required(doc.paragraphs[0]);
   node.SetText("CtrlResetText");
   const target = doc.MakeTextFormatColl("Ctrl target", doc.GetDfltTextFormatColl(), "CtrlTarget");
-  target.SetFormatAttr(new SvxFirstLineIndentItem(240, 92));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
   const owner = new SwDocShell(
     doc,
     createDocument({ id: "ctrl-reset", title: "Ctrl", suiteId: "writer" }),
@@ -104,7 +105,7 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
     ) => {
       const { doc, node, target, owner, shell, dispatch } = fixture();
       node.SetTextHints(hints(doc, 2, 5));
-      node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
       const original = required(node.GetpSwpHints()).clone();
       shell.SetPaM(new SwPosition(node, 4), new SwPosition(node, 1));
       const request = new SfxRequest(5552, [
@@ -288,7 +289,7 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
       if (breakState !== 0) node.SetAttr(new SfxInt16Item(101, breakState === 1 ? 0 : 4));
       node.SetAttr(new SfxInt16Item(84, 4));
       node.SetAttr(new SvxWeightItem(8, 15));
-      node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
       const resetSet = createParagraphStyleResetSet(doc);
       expect(resetSet.GetItemIfSet(15, false)?.QueryValue()).toBe(5);
       for (const which of [83, 84, 85, 86, 87])

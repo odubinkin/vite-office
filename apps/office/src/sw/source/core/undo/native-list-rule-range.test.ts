@@ -1,5 +1,6 @@
 /** @fileoverview Verifies bounded native SetNumRule flags and selected body/cell list operations without upstream access. */
 import { afterEach, expect, it } from "vitest";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SwDoc, SetNumRuleMode } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -127,7 +128,7 @@ it.each(commandCases)(
       selected = direction === "collapsed" ? [owner.first] : owner.selected;
     for (const node of selected) {
       node.SetParagraphTextLeftMargin(400);
-      node.SetParagraphFirstLineIndent(-120);
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
       node.SetParagraphRightMargin(80);
       node.SetAttrListLevel(2);
       node.SetCountedInList(false);
@@ -242,7 +243,7 @@ it("native shell history preserves direct indentation when continuing a label-wi
   owner.previous.SetAttr(new SwNumRuleItem(rule.GetName()));
   owner.previous.SetListId("width-list");
   owner.first.SetParagraphTextLeftMargin(400);
-  owner.first.SetParagraphFirstLineIndent(-120);
+  owner.first.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE));
   owner.first.SetParagraphRightMargin(80);
   const before = indent(owner.first);
   owner.shell.FocusNode(owner.first);

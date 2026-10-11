@@ -13,7 +13,8 @@ import {
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SvxFirstLineIndentItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
+import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
   RES_MARGIN_FIRSTLINE,
@@ -422,6 +423,11 @@ export class SwTextShell {
       )
     )
       return false;
+    const first = new SvxFirstLineIndentItem(
+      SvxIndentValue.twips(Math.round((value.firstLineIndentPt ?? 0) * 20)),
+      RES_MARGIN_FIRSTLINE,
+    );
+    first.SetAutoFirst(value.autoTextIndent === true);
     return this.ApplyParagraphItems(
       /** Builds each selected paragraph's items. @param paragraph - Selected paragraph. @returns Pooled items. */ (
         paragraph,
@@ -455,13 +461,7 @@ export class SwTextShell {
         ),
         ...(value.firstLineIndentPt === undefined && value.autoTextIndent === undefined
           ? []
-          : [
-              new SvxFirstLineIndentItem(
-                Math.round((value.firstLineIndentPt ?? 0) * 20),
-                RES_MARGIN_FIRSTLINE,
-                value.autoTextIndent === true,
-              ),
-            ]),
+          : [first]),
         ...(value.pageStyleName === undefined && value.pageNumber === undefined
           ? []
           : [

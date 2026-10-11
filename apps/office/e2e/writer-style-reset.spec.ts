@@ -1,5 +1,6 @@
 /** @fileoverview Checks ordinary paragraph style reset, exact hint preservation, native repeated history and ODT export in real desktop/mobile UI. */
 import { expect, test, type Locator } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import fs from "node:fs/promises";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { SvxFirstLineIndentItem } from "../src/editeng/source/items/frmitems";
@@ -20,15 +21,15 @@ function resetOdt(): Uint8Array {
   before.SetText("BeforeResetNeighbor");
   const a = doc.MakeTextFormatColl("Reset style A", doc.GetDfltTextFormatColl(), "ResetA"),
     b = doc.MakeTextFormatColl("Reset style B", doc.GetDfltTextFormatColl(), "ResetB");
-  a.SetFormatAttr(new SvxFirstLineIndentItem(240, 92));
-  b.SetFormatAttr(new SvxFirstLineIndentItem(360, 92));
+  a.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
+  b.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(360), 92));
   const whole = doc.GetNodes().MakeTextNode("WholeResetProof"),
     empty = doc.GetNodes().MakeTextNode(""),
     partial = doc.GetNodes().MakeTextNode("PartialResetProof"),
     link = doc.GetNodes().MakeTextNode("LinkResetProof");
   for (const node of [whole, empty, partial, link]) {
     node.ChgFormatColl(a);
-    node.SetAttr(new SvxFirstLineIndentItem(720, 92));
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
   }
   whole.ToggleTextRangeFormat(0, whole.Len(), "bold");
   partial.ToggleTextRangeFormat(2, 7, "bold");

@@ -511,7 +511,9 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       state,
     );
     const paragraph = new SwUndoParagraphFormat(target, "left", "center", state, state);
-    const margin = new SwUndoMoveLeftMargin(target, 0, 1134, state, state);
+    const marginRange = new SwPaM(new SwPosition(target, 0));
+    const margin = new SwUndoMoveLeftMargin(marginRange, true, true, state);
+    marginRange.Dispose();
     const styleRange = new SwPaM(new SwPosition(target, 0));
     const style = new SwUndoFormatColl(
       styleRange,
@@ -552,7 +554,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       numbering.GetPayloadSize(),
       split.GetPayloadSize(),
       joined.GetPayloadSize(),
-    ]).toEqual([1, 1, 6, 6, 2, 2, 3, 6, 1, expect.any(Number)]);
+    ]).toEqual([1, 1, 6, 6, 2, 0, 3, 6, 1, expect.any(Number)]);
     expect(insert.Merge(deletion)).toBe(false);
     expect(
       deletion.Merge(

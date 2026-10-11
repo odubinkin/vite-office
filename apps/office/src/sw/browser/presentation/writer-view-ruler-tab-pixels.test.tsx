@@ -1,4 +1,5 @@
 /** @fileoverview Checks native integer tab anchors without rounding logical Writer items. */
+import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxTextLeftMarginItem } from "../../../editeng/source/items/frmitems";
@@ -36,7 +37,9 @@ function fixture(position: number, adjustment = SvxTabAdjust.Right, left = 0, re
       720,
     ),
   );
-  shell.SetParagraphItem(new SvxTextLeftMarginItem(left, RES_MARGIN_TEXTLEFT));
+  shell.SetParagraphItem(
+    new SvxTextLeftMarginItem(SvxIndentValue.twips(left), RES_MARGIN_TEXTLEFT),
+  );
   session.docShell.GetDoc().GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", relative);
   const store = new WriterViewStore(session.view);
   stores.push(store);

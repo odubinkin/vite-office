@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/layout/flowfrm.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/layout/flowfrm.cxx",
+    "localSymbols": [
+      "SwFlowFrame"
+    ],
+    "upstreamSymbols": [
+      "SwFlowFrame::SwFlowFrame",
+      "SwFlowFrame::SetFollow",
+      "SwFlowFrame::~SwFlowFrame"
+    ],
+    "preservedResponsibilities": [
+      "Task202610101929-ECR55T replaces stored text-frame follow classification with actual original SwFlowFrame preceding/follow links. TypeScript composition represents the native C++ multiple-inheritance owner; SetFollow replacement/re-chaining and destruction follow source order without stitching. Original SwContentFrame clients delegate typed links and release them on destruction. Represented unmerged SwTextFrame GetOffset/GetFrameAtPos follows native boundary ties and existing SwTextCursor right-margin affinity. Pagination and retained-frame reconciliation repair actual same-node chains after candidate/discarded frame cleanup; React renders IsFollow rather than a detached boolean. Actual native owners, mounted edit/history and Chromium physical bullet continuation/reformat/edit/undo/redo/reopen checks cover this bounded correction. Cursor motion still uses the measured cursor map and MoveTextFrameMargin; native GetFrameOfModify/GetAdjFrameAtPos, root/page/content hierarchy, merged/vertical/native geometry, flow lock/undersize/fly flags/placement, redlines and text Prepare/callbacks, rich units/global Repeat remain unrepresented or unverified. Browser device fragment fields remain. All historical statuses/defaults/classifications/responsibility/evidence and registered recovery/open/save/settings deviations are retained; no whole-module or goal parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Native flow locks/undersize/fly flags, placement, complete native root/page/content hierarchy/query/merged/vertical/geometry/redline/text callbacks remain unrepresented or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/layout/flowfrm.ts",
+          "marker": "SwFlowFrame"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-text-frame-follow.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-text-frame-follow.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-text-frame-follow.spec.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/flowfrm.cxx",
+          "marker": "SwFlowFrame::SwFlowFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/flowfrm.cxx",
+          "marker": "SwFlowFrame::SetFollow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/flowfrm.cxx",
+          "marker": "SwFlowFrame::~SwFlowFrame"
+        }
+      ]
+    }
+  }
+}

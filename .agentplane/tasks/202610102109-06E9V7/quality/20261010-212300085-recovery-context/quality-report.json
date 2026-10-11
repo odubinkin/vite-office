@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "202610102109-06E9V7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-10T21:23:00.085Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact semantic 1b3be0438b363c43e23c54131ab7a03b097f1786: actual mounted body device fragments create original reciprocal native cursor follows, native margin removes text-length proxy and old singular API; approved scope/current acceptance/whole4coverage100/history/metadata satisfied, remaining architecture explicitly unverified.",
+  "evaluated_sha": "1b3be0438b363c43e23c54131ab7a03b097f1786",
+  "blueprint_digest": "4e544814b8ef1ae0e5bbb8a42ae799dae3d867745f23f6b1dbb03d334fdf67b1",
+  "findings": [
+    "Inspected actual source GetFollow RightMargin and original SetFollow/FindMaster/model-view adjacency. Native root creates and explicitly releases every original client, body DOM chain physical order admitted at browser device boundary, current cell/header occurrence isolated. No fake native formatter/query or synthetic continuation flag.",
+    "Actual7160related/306+24Chromium/13,9fresh core/React+1browser;whole4modules100allfour1700nonnegative complete raw counters/1284current hashes.822priorfiles818byte-identical/4inverse-AST migrations2actual-follow fixtures;8canonical histories and9metadata gates. Fresh browser final formatting proven every AST leaf equal; no passing acceptance replay."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610102109-06E9V7/README.md",
+    "git:1b3be0438b363c43e23c54131ab7a03b097f1786",
+    ".agentplane/tasks/202610102109-06E9V7/README.md#Verification",
+    "apps/office/node_modules/.cache/parity-coverage/06E9V7/coverage-proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/06E9V7/browser-proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/06E9V7/preservation-proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/06E9V7/source-audit-proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/06E9V7/format-equivalence-proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/06E9V7/audit-final-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Not independent review. Measured cursor registry and duplicate cursor/body formatting clients, native formatter/re-entrant query/hierarchy/geometry/scroll/merged/empty/table text follows/portion/font/script/Doc factories remain unported or unverified. No module/goal promotion; registered IO/recovery boundaries unchanged. Full checkpoint next task10 then human-requested pause after repairs."
+  ]
+}

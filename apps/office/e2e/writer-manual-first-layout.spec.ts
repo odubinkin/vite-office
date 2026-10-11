@@ -1,5 +1,6 @@
 /** @fileoverview Checks native manual offset wrapping in the real browser without rewriting authored ODT values. */
 import { expect, test } from "@playwright/test";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
@@ -25,12 +26,14 @@ for (const width of [1280, 390])
       const shell = new SwWrtShell(new SwDocShell(document, metadata));
       shell.Insert("ManualBoundaryLayoutProof");
       shell.SetParagraphItems([
-        new SvxFirstLineIndentItem(raw, RES_MARGIN_FIRSTLINE),
-        new SvxTextLeftMarginItem(487, RES_MARGIN_TEXTLEFT),
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(raw), RES_MARGIN_FIRSTLINE),
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
       ]);
       shell.SplitNode();
       shell.Insert("UntouchedBoundaryProof");
-      shell.SetParagraphItems([new SvxFirstLineIndentItem(120, RES_MARGIN_FIRSTLINE)]);
+      shell.SetParagraphItems([
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
+      ]);
       const bytes = writeOdtDocument(document, metadata);
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/writer");

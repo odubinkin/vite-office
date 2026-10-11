@@ -10,9 +10,12 @@ import {
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
 import {
+  SvxIndentValue,
   SvxFirstLineIndentItem,
-  SvxRightMarginItem,
   SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
+import {
+  SvxRightMarginItem,
   SvxULSpaceItem,
   SvxLRSpaceItem,
   SvxBoxItem,
@@ -241,24 +244,36 @@ export class SwAttrPool extends SfxItemPool {
       (value) => SvxTabStopItem.FromValue(RES_PARATR_TABSTOP, value),
     );
     this.RegisterDefaultItem(
-      new SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT),
+      new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),
       /** Restores a direct text-left margin. @param value - Persisted twip margin. @returns Concrete margin item. */ (
         value,
-      ) => new SvxTextLeftMarginItem(Number(value), RES_MARGIN_TEXTLEFT),
+      ) => {
+        const margin = Number(value);
+        if (!Number.isInteger(margin)) throw new Error("SvxTextLeftMarginItem value is invalid.");
+        return new SvxTextLeftMarginItem(SvxIndentValue.twips(margin), RES_MARGIN_TEXTLEFT);
+      },
     );
     this.RegisterDefaultItem(
-      new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE),
-      /** Restores first-line indent. @param value - Persisted twips. @returns Indent item. */ (
+      new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE),
+      /** Restores the existing integer/automatic browser record. @param value - Legacy payload. @returns Native item. */ (
         value,
-      ) =>
-        Array.isArray(value)
-          ? new SvxFirstLineIndentItem(Number(value[0]), RES_MARGIN_FIRSTLINE, value[1] === 1)
-          : new SvxFirstLineIndentItem(Number(value), RES_MARGIN_FIRSTLINE),
+      ) => {
+        const twips = Number(Array.isArray(value) ? value[0] : value);
+        if (!Number.isInteger(twips)) throw new Error("SvxFirstLineIndentItem value is invalid.");
+        const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(twips), RES_MARGIN_FIRSTLINE);
+        item.SetAutoFirst(Array.isArray(value) && value[1] === 1);
+        return item;
+      },
     );
     this.RegisterDefaultItem(
-      new SvxRightMarginItem(0, RES_MARGIN_RIGHT),
-      /** Restores right margin. @param value - Persisted twips. @returns Margin item. */ (value) =>
-        new SvxRightMarginItem(Number(value), RES_MARGIN_RIGHT),
+      new SvxRightMarginItem(RES_MARGIN_RIGHT),
+      /** Restores only the existing legacy integer scalar domain at the browser boundary. @param value - Persisted/coercible twips. @returns Native typed margin. */ (
+        value,
+      ) => {
+        const twips = Number(value);
+        if (!Number.isInteger(twips)) throw new Error("SvxRightMarginItem value is invalid.");
+        return new SvxRightMarginItem(SvxIndentValue.twips(twips), RES_MARGIN_RIGHT);
+      },
     );
     this.RegisterDefaultItem(
       new SvxULSpaceItem(RES_UL_SPACE),
