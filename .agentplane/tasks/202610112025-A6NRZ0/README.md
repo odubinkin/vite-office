@@ -1,10 +1,11 @@
 ---
 id: "202610112025-A6NRZ0"
 title: "Select original hyperlink at its beginning before edit dialog"
-status: "DOING"
+result_summary: "Native Edit beginning Default lookup selects the exact original hyperlink and keeps cancellation selection; body/cell/neighbor/point identity and actual React/Chrome tests pass. Inventory appended, full generic/core lifecycle and Remove mixed-state/history pending. Goal stays active until next full plus repairs, then pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Represented EditHyperlink begin fallback implemented and verified:7075cases/306files, complete two-module100/738rawcounters,878oldtests identical,9static/build and9metadata checks; native selection lifecycle gaps remain explicit."
+  -
+    author: "CODER"
+    body: "Verified: represented native begin EditHyperlink command/selection/cancellation passes7075cases/306files, complete two-module100/738counters,878oldtests unchanged,9metadata and current static/freshbuild proof. Exact semantic same-agent non-independent review recorded; correction7/10."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact semantic1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8 passes approved native begin/Edit scope:7075scenarios/306files,22fresh cases, complete textsh1/textsh1-commands100allfour/738positivecounters.878oldtests same bytes,4canonical prefixes preserved,137fresh build hashes and exact3refs/pin proof,9metadata gates. Allruntime/static upstream absent. Full generic/readonly/fly/overlap/selection lifecycle/RemoveINVALID/ring/history pending."
+  -
+    type: "status"
+    at: "2026-10-11T20:45:02.301Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: represented native begin EditHyperlink command/selection/cancellation passes7075cases/306files, complete two-module100/738counters,878oldtests unchanged,9metadata and current static/freshbuild proof. Exact semantic same-agent non-independent review recorded; correction7/10."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:43:55.502Z"
+doc_updated_at: "2026-10-11T20:45:02.302Z"
 doc_updated_by: "CODER"
 description: "Align represented SID_EDIT_HYPERLINK enablement and beginning-of-link execute fallback with pinned textsh1.cxx4041-4062/1662-1684 and native Default-mode SelectTextAttr/SelectTextModel; preserve cancellation selection and original body/cell/adjacent hint identity."
 sections:
@@ -141,6 +152,10 @@ sections:
     - Observation: Final upstream-absent pipeline passes all checks:7046related/298files,25tooling/4,4Chrome/4=7075cases/306files.21fresh native/React and1freshChrome verify beginning/shared-boundary exact attribute selection, real body/cell owners, persistent point/content-index identity, cancelled selection, accepted/direct args/undo, zero/interior/equal-mark/uniform/mixed/end/structural/default-empty/table state.
       Impact: Complete original textsh1.ts and textsh1-commands.ts raw300lines339statements110functions289branches100allfour,738positive counters,745serialized Infinity ends and54 genuine implicit-else locations checked against actual original source AST.2832 old paths/878old tests, only6 existing approved paths changed;4 canonical records append history/status/default/classification/responsibility prefixes.137fresh build files unchanged, exact3refs restored and pin/six-source hashes recorded,9metadata-only gates pass.
       Resolution: No post-fix runtime/static failures or old test migrations; original red2 remain honest baseline evidence. Extra native Stt/EndSelect, SwMvContext edws and cursor-action source audit did not establish a new defect or justify inventing label resets; full selection lifecycle/readonly/fly/overlap/generic query remains unverified and is not certified by the represented endpoint assignment. Follow-up is Remove INVALID/default selection/ring/history; registered IO/recovery untouched. Review exact semantic SHA then finish correction7/10; pause only after next full plus repairs.
+extensions:
+  implementation_commit:
+    hash: "1c3b413d7ebac9546307da0e2fdb9e03da6bdfd8"
+    message: "🧩 A6NRZ0 code: select original hyperlink at its beginning before edit"
 id_source: "generated"
 ---
 ## Summary
