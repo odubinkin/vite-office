@@ -1,4 +1,4 @@
-/** @fileoverview Original common typelib record declarations and weak-reference classifier; allocation/reference/registration implementations share the original CPPU source owner; interface factories/static types remain unfinished. */
+/** @fileoverview Original common typelib record declarations and weak-reference classifier; allocation/reference/registration implementations share the original CPPU source owner; interface factories share separate source responsibilities; static types remain unfinished. */
 import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
 import { typelib_TypeClass } from "./typeclass";
 import type { typelib_Uik } from "./uik";
@@ -28,6 +28,11 @@ export {
   typelib_typedescription_newInterfaceAttribute,
   typelib_typedescription_newExtendedInterfaceAttribute,
 } from "../../source/typelib/typelib-member-factories";
+
+export {
+  typelib_typedescription_newInterface,
+  typelib_typedescription_newMIInterface,
+} from "../../source/typelib/typelib-interface-factories";
 
 /** Complete original common type-reference record; declaration adds no allocation or guessed initialization. */
 export interface _typelib_TypeDescriptionReference {

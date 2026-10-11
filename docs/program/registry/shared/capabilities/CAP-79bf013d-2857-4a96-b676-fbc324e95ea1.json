@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-79bf013d-2857-4a96-b676-fbc324e95ea1",
+    "capabilityId": "CAP-79bf013d-2857-4a96-b676-fbc324e95ea1",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Source-defined interface fields, inherited order, names, pointer-array aliases and ownership only"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original single and multiple-inheritance interface factories reuse the actual CPPU allocator, canonical prefix view, reference registry, completion and logical LP64 layout owners. BaseList performs base-first global and per-direct-base name uniqueness using the actual full-length OUString comparison and owned temporary names. Derived names use actual shared lazy StringConcat and OUString.number; own members are acquired, inherited references are created, base descriptions are acquired and the weak prefix is initialized only at the original late stage. ppMembers is an interior live view of the original ppAllMembers storage, with in-bounds alias reads/writes and source destruction preserved. Initialized complete native streams cover original defaults, unused Uik arguments, output replacement, diamonds, reordered and repeated bases, empty completed base, all65536 UTF16 units and failed base acquisition/completion retention. No original native source method is replaced. Native ABI, arbitrary JS array reflection or out-of-bounds mutation, ordinary failed-producer reachability, cross-thread scheduling/shutdown and full consumer QA remain unverified; system libraries are uninstrumented and leak detection is disabled. static_types/Type/Any/Reference/default RuntimeException and case-value service remain unfinished; broad parity flags stay false. Additional original nested-diamond observations cover per-direct-base deduplication, registration into an existing canonical placeholder, live member-array writes after raw transfer, actual public completion and both complete call-index maps through final reference destruction."
+    },
+    "capability": "Shared original UNO interface factories",
+    "gaps": [
+      "Original single and multiple-inheritance interface factories reuse the actual CPPU allocator, canonical prefix view, reference registry, completion and logical LP64 layout owners. BaseList performs base-first global and per-direct-base name uniqueness using the actual full-length OUString comparison and owned temporary names. Derived names use actual shared lazy StringConcat and OUString.number; own members are acquired, inherited references are created, base descriptions are acquired and the weak prefix is initialized only at the original late stage. ppMembers is an interior live view of the original ppAllMembers storage, with in-bounds alias reads/writes and source destruction preserved. Initialized complete native streams cover original defaults, unused Uik arguments, output replacement, diamonds, reordered and repeated bases, empty completed base, all65536 UTF16 units and failed base acquisition/completion retention. No original native source method is replaced. Native ABI, arbitrary JS array reflection or out-of-bounds mutation, ordinary failed-producer reachability, cross-thread scheduling/shutdown and full consumer QA remain unverified; system libraries are uninstrumented and leak detection is disabled. static_types/Type/Any/Reference/default RuntimeException and case-value service remain unfinished; broad parity flags stay false. Additional original nested-diamond observations cover per-direct-base deduplication, registration into an existing canonical placeholder, live member-array writes after raw transfer, actual public completion and both complete call-index maps through final reference destruction."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_newMIInterface"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/typelib.cxx",
+          "marker": "testInterface"
+        },
+        {
+          "path": "cppu/qa/typelib.cxx",
+          "marker": "testMultiInterface"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newMIInterface"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.ts",
+          "marker": "typelib_typedescription_newMIInterface"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.test.ts",
+          "marker": "matches original diamond order, duplicate direct bases, derived names and shared array writes"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.test.ts",
+          "marker": "matches original inherited member construction for every65536 UTF16 unit"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.test.ts",
+          "marker": "matches original missing or incomplete base early return and retained acquisitions"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.test.ts",
+          "marker": "matches original nested diamond, canonical registration transfer and completed call maps"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO interface factories"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Construct original single and multiple-inheritance interface descriptions and acquired member lists",
+    "scopeLimitations": [
+      "Original single and multiple-inheritance interface factories reuse the actual CPPU allocator, canonical prefix view, reference registry, completion and logical LP64 layout owners. BaseList performs base-first global and per-direct-base name uniqueness using the actual full-length OUString comparison and owned temporary names. Derived names use actual shared lazy StringConcat and OUString.number; own members are acquired, inherited references are created, base descriptions are acquired and the weak prefix is initialized only at the original late stage. ppMembers is an interior live view of the original ppAllMembers storage, with in-bounds alias reads/writes and source destruction preserved. Initialized complete native streams cover original defaults, unused Uik arguments, output replacement, diamonds, reordered and repeated bases, empty completed base, all65536 UTF16 units and failed base acquisition/completion retention. No original native source method is replaced. Native ABI, arbitrary JS array reflection or out-of-bounds mutation, ordinary failed-producer reachability, cross-thread scheduling/shutdown and full consumer QA remain unverified; system libraries are uninstrumented and leak detection is disabled. static_types/Type/Any/Reference/default RuntimeException and case-value service remain unfinished; broad parity flags stay false. Additional original nested-diamond observations cover per-direct-base deduplication, registration into an existing canonical placeholder, live member-array writes after raw transfer, actual public completion and both complete call-index maps through final reference destruction."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -2409,3 +2409,41 @@ The original `StringNumber`, `StringConcat`, marker and Unicode `ToStringHelper`
 Original ASCII-uppercase strategy/range/replacement and C wrapper reuse the existing shared character owner. Borrowed output pointers are actual subarrays; no intermediate strings or independent allocator are used. Native original operands are kept alive through materialization. Tests observe full initialized local number units/zero, deferred source-owner and number changes, all UTF16 units, signed-char conversions and actual materialized payload/refcounts/empty identities. Original assertions remain separate process diagnostics.
 
 Spare uninitialized number cells, insufficient macro-sized CALC044 binary-minimum buffers, physical ABI/lifetime/thread scheduling, native const/rvalue/template enforcement and unported C8/pointer/other literal/numeric specializations remain unverified. The unsigned64 number representation uses its actual C formatter directly; unsigned `OUString.number` overload/type witnesses are not certified. Original interface/default-exception/case-service/pool/document/edit/view/UI remain unfinished. Full run41 then user-requested pause remains pending.
+
+### Original UNO interface factories
+
+The shared CPPU `typelib-interface-factories.ts` now owns the original
+`typelib_typedescription_newInterface`, `typelib_typedescription_newMIInterface`
+and internal `BaseList` responsibilities. Public C bindings remain in
+`cppu/inc/typelib/typedescription.ts`; the allocator, canonical prefix view,
+registry, completion, logical LP64 size and shared SAL string owners are reused.
+The source split honors the authored file-size limit.
+
+BaseList visits ancestors before each direct base, preserving separate global
+and per-direct-base uniqueness and the original member offsets. It uses actual
+full-length OUString comparison and owned temporary set names. Derived names
+are built through the original shared lazy StringConcat and OUString.number.
+Own references and direct-base descriptions retain their original acquisition
+and destruction behavior. `ppMembers` is a live interior view of the same
+`ppAllMembers` storage, including both directions of in-bounds pointer writes.
+The canonical weak prefix is assigned at the original late stage; default
+counts, zero Uik fields, null call maps and incomplete status are preserved.
+
+The unchanged native interface factory caller observes all initialized fields,
+name units, acquired counts, output replacement, diamond order, repeated and
+reordered bases, an explicitly completed empty base, all65536 UTF16 units and
+source-defined failed-base retention. Normal and ASan/UBSan captures are compared
+in full with the actual portable public C exports. The caller does not execute
+full upstream consumer QA or prove ordinary failed-producer reachability.
+Native ABI, cross-thread scheduling/shutdown and arbitrary JS array reflection
+or out-of-bounds writes are outside this evidence. System libraries are
+uninstrumented; original retained registries/failures are observed with leak
+detection disabled. Broad parity flags remain false. Static types,
+Type/Any/Reference/default RuntimeException and real case-value service remain
+unfinished, so this checkpoint does not certify document/edit/view/UI readiness.
+
+Nested-diamond observations also preserve per-direct-base deduplication and
+registration into an existing canonical placeholder. The own-member view still
+shares its complete array after the original raw transfer; actual public
+completion produces the original member/function maps, and destruction releases
+the transferred members and direct bases.

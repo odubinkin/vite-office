@@ -1068,3 +1068,32 @@ producer/service/shutdown reachability still needs separate consumer evidence.
 - Suspicion: the documented signed macro recommendation is one unit short for these binary minima. `StringNumber` uses the original macro-sized member buffer; its physical layout and consumer impact are not established by this C caller. No out-of-bounds or post-undefined-behavior output is claimed from these sufficient-buffer observations.
 - Evidence: `scripts/rtl-integer-format-native-probe.mjs`; `sal/rtl/native-integer-format-cases.json`; complete adjacent portable replay in `integer-format.test.ts`. Full unchanged346-source native dependency closure and complete48492536-byte stream are retained. The macros and result lengths are observed together.
 - Port decision: retain original33/65/65 constants and integral result/terminator behavior. Do not enlarge macros, truncate the negative minimum or silently certify insufficient buffers. Actual ordinary consumers and separate `OUString::number`/concat owners remain unverified.
+
+## CALC-045: Failed interface factory retains its allocation and acquired bases
+
+Status: reproduced with deliberately unavailable bases through the complete
+unchanged native SAL/CPPU interface factory. Ordinary producer reachability,
+expected interface preconditions and an actual consumer leak remain unverified.
+
+[Original multiple-inheritance interface factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L903)
+releases old output, allocates an empty interface and acquires its name before
+resolving and completing direct bases. A null description or failed list-only
+completion returns without releasing the new interface or the bases already
+acquired; the output remains null. The raw local interface pointer has no RAII
+owner, and its canonical weak prefix has not yet been assigned.
+
+Evidence: `scripts/uno-interface-factories-native-probe.mjs` failure mode uses
+both a real weak member reference without a provider and an empty base produced
+by the original interface factory itself. In each case, the new interface name
+count changes from1 to2 and remains2 after caller base release. For the existing
+empty base, its description count changes from1 to2 and remains1 after caller
+release; its owned name also remains acquired. Missing descriptions acquire no
+base. Prior output and its members are released first. Complete normal and
+ASan/UBSan failure streams agree (272 bytes); the portable actual public C
+factory replay compares every initialized field and count. Leak detection is
+disabled for retained original registries/failures, so no leak-detector verdict
+or ordinary-consumer failure is claimed.
+
+Decision: preserve allocation, acquisition and return ordering. Add no extra
+release, exception, completion repair or naming validation. Valid service
+producers and native shutdown behavior need separate consumer evidence.

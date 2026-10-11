@@ -106,6 +106,10 @@ function asReference(desc: typelib_TypeDescription): typelib_TypeDescriptionRefe
   descriptionViews.set(ref, desc);
   return ref;
 }
+/** Internal adaptation of original common-prefix reinterpretation; retrieves the allocator's existing canonical view without changing weak-reference initialization timing. @param desc - Live original allocation. @returns Existing common-prefix reference view. */
+export function referenceViewOf(desc: typelib_TypeDescription): typelib_TypeDescriptionReference {
+  return referenceViews.get(desc) as typelib_TypeDescriptionReference;
+}
 /** Adapts original prefix reinterpretation; nested aBase prefixes denote the same allocation. @param desc - Original allocation. @returns Typed record view. */
 function record<T>(desc: typelib_TypeDescription): T {
   return desc as unknown as T;
