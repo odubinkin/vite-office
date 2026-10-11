@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610111612-NBQN4K",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T16:32:25.678Z",
+  "verdict": "pass",
+  "summary": "Conflict-free integration retains both source heads and passes every full verification stage; no code/test changes needed.",
+  "evaluated_sha": "e597e7a4335ab46938fe936788a7534cff74580d",
+  "blueprint_digest": "bf0b01d3b7df5f3e827258f2818da6e253f332a3df77abb1b1b1c4488106c692",
+  "findings": [
+    "Full suite results and complete strict 100% application/inventory coverage reviewed; no integration regression found."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610111612-NBQN4K/README.md",
+    ".agentplane/tmp/NBQN4K/verify.log",
+    ".agentplane/tmp/NBQN4K/provenance.log",
+    ".agentplane/tmp/NBQN4K/invariants.log",
+    ".agentplane/tmp/NBQN4K/parity.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Doctor retains two pre-existing warnings; SSH push needs a per-command HTTPS override. Existing inventory placeholder/nonverified parity responsibilities are unchanged."
+  ]
+}
