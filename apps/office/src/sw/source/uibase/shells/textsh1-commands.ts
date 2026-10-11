@@ -174,10 +174,10 @@ export function createWriterTextCommandRegistry(
     {
       capabilityId: "CAP-0135",
       /** Removes hyperlink metadata from the current selected link. @returns Whether changed. */
-      execute: (): boolean => target.SetHyperlink(undefined),
+      execute: (): boolean => target.RemoveHyperlink(),
       id: WRITER_COMMAND_IDS.removeHyperlink,
       /** Enables removal only for a uniform selected or caret link. @returns Whether enabled. */
-      isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
+      isEnabled: (): boolean => target.CanRemoveHyperlink(),
     },
     {
       capabilityId: "CAP-0109",

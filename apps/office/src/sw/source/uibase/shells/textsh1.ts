@@ -2,7 +2,7 @@
 import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -49,6 +49,7 @@ import {
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import type { WriterBookmarkDialogResult } from "../dialog/writer-dialog-controller";
+import { getWriterINetFormatStateAtCursor } from "../../core/edit/edattr";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import { createWriterTextCommandRegistry } from "./textsh1-commands";
@@ -67,7 +68,11 @@ export interface SwTextShellTarget extends Pick<
   | "IsNumRuleStart"
   | "SetNumRuleStart"
 > {
-  readonly ApplyAction: (action: SfxUndoAction<SwUndoRedoContext>) => boolean;
+  readonly ApplyAction: (
+    action: SfxUndoAction<SwUndoRedoContext>,
+    tryMerge?: boolean,
+    execute?: (context: SwUndoRedoContext) => void,
+  ) => boolean;
   readonly CaptureCursorState: () => SwUndoCursorState;
   readonly GetActiveParagraph: () => SwTextNode;
   readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
@@ -215,7 +220,13 @@ export class SwTextShell {
 
   /** Implements represented SID_EDIT_HYPERLINK state: current SET or an unselected original nonempty Default-mode hint. @returns Whether edit is enabled. */
   public CanEditHyperlink(): boolean {
-    if (this.GetHyperlinkAtCursor() !== undefined) return true;
+    if (
+      getWriterINetFormatStateAtCursor(this.target.GetDoc(), this.target.GetCursor()).GetItemState(
+        RES_TXTATR_INETFMT,
+        false,
+      ) >= SfxItemState.SET
+    )
+      return true;
     if (this.HasHyperlinkSelection()) return false;
     const point = this.target.GetCursor().GetPoint(),
       node = point.GetNode(),
@@ -303,6 +314,45 @@ export class SwTextShell {
       text,
     );
     return action === undefined ? false : this.target.ApplyAction(action);
+  }
+
+  /** Tests native selected Remove admission including INVALID mixed item state; collapsed Default/word fallback remains pending. @returns Whether the represented command is enabled. */
+  public CanRemoveHyperlink(): boolean {
+    const state = getWriterINetFormatStateAtCursor(
+      this.target.GetDoc(),
+      this.target.GetCursor(),
+    ).GetItemState(RES_TXTATR_INETFMT, false);
+    return state >= SfxItemState.SET || state === SfxItemState.INVALID;
+  }
+
+  /** Resets internet attributes in original marked native ranges as one history operation. Full native SwUndoResetAttr/SwHistory and unmarked-ring word selection remain unverified. @returns Whether attributes changed. */
+  public RemoveHyperlink(): boolean {
+    if (!this.HasHyperlinkSelection()) return this.SetHyperlink(undefined);
+    const before = this.target.CaptureCursorState(),
+      actions: SwUndoAttr[] = [];
+    for (const range of getWriterSelectedTextRanges(this.target.GetCursor()) ?? []) {
+      const original = range.node.CaptureTextFragment(range.start, range.end),
+        replacement = range.node.CreateHyperlinkTextFragment(range.start, range.end, undefined);
+      if (!original.hints.equals(replacement.hints))
+        actions.push(
+          new SwUndoAttr(range.node, range.start, original, replacement, before, before),
+        );
+    }
+    if (actions.length === 0) return false;
+    let action: SfxUndoAction<SwUndoRedoContext> = actions[0] as SwUndoAttr;
+    if (actions.length > 1) {
+      const group = new SfxListUndoAction<SwUndoRedoContext>("Remove Hyperlink");
+      for (const child of actions) group.AddAction(child);
+      action = group;
+    }
+    return this.target.ApplyAction(
+      action,
+      false,
+      /** Runs initial attribute reset without history cursor restoration. @param context - Original shell context. @returns Nothing. */
+      (context) => {
+        for (const child of actions) child.ApplyExact(context);
+      },
+    );
   }
 
   /** Applies a font family through one text-shell history action. @param fontFamily - Requested family. @returns Whether changed. */

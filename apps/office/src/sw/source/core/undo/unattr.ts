@@ -145,6 +145,11 @@ export class SwUndoAttr extends SwUndo {
     }
   }
 
+  /** Performs the initial family-only mutation without restoring a history cursor; full native ResetAttrs history remains unverified. @param context - Original shell-owned history context. @returns Nothing. */
+  public ApplyExact(context: SwUndoRedoContext): void {
+    this.ApplyAttributes(context, this.afterFragment);
+  }
+
   /** Reports changed range hints only. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
     return GetFragmentPayloadSize(this.beforeFragment) + GetFragmentPayloadSize(this.afterFragment);

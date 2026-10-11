@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 338
+revision: 339
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:42:55.048Z"
+doc_updated_at: "2026-10-11T21:27:14.155Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1504,6 +1504,10 @@ sections:
     - Observation: Correction7/10 A6NRZ0 fixes EditHyperlink native nonzero/shared-beginning Default fallback and exact original hint selection before dialog. Native point/content-index identity persists; cancelled dialog leaves the selected link, accepted body/cell edit and direct arguments change the following owner only. Independent adjacent equal URLs are retained.
       Impact: Genuine body/cell red2 reproduced before fix. Final7046related/298files+25tooling/4+4Chrome/4=7075cases/306files;22fresh cases. Complete two modules100allfour/738 raw positive counters,878oldtests identical,9current static/freshbuild checks,9metadata gates,137build hashes/reference/pin integrity and four append-only canonical records.
       Resolution: Finish atomic Edit correction with exact semantic same-agent non-independent review and clean writer. Next command gap is Remove INVALID/default selection/ring undo; generic core/read-only/fly/selection lifecycle/full history still unverified. Goal active; full once per10 corrections, pause after next accepted full and fixes; registered IO/recovery preserved.
+
+    - Observation: Correction8/10 JZ2G62 completes native selected mixed hyperlink Remove and moves single-INET native SfxItemSet query to edattr; no TextRuns command-state projection. Actual marked body/cell/node/rings reset original INET family with one undo; ApplyExact preserves ring during initial mutation.
+      Impact: Mixed selected links and plain gaps now admit Remove and execute; inventory ten canonical records updated append-only. Full history/caret/readonly/generic query and generated popup presentation remain pending, without parity promotion.
+      Resolution: Accepted14140 distinct assertions,100allfour for five modules1222positive counters,881 old acceptance bytes preserved; final nine metadata gates and fresh static137build verified. Next prioritize actual native popup UI; pause goal after next full and required repairs.
 id_source: "generated"
 ---
 ## Summary
@@ -2981,3 +2985,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction7/10 A6NRZ0 fixes EditHyperlink native nonzero/shared-beginning Default fallback and exact original hint selection before dialog. Native point/content-index identity persists; cancelled dialog leaves the selected link, accepted body/cell edit and direct arguments change the following owner only. Independent adjacent equal URLs are retained.
   Impact: Genuine body/cell red2 reproduced before fix. Final7046related/298files+25tooling/4+4Chrome/4=7075cases/306files;22fresh cases. Complete two modules100allfour/738 raw positive counters,878oldtests identical,9current static/freshbuild checks,9metadata gates,137build hashes/reference/pin integrity and four append-only canonical records.
   Resolution: Finish atomic Edit correction with exact semantic same-agent non-independent review and clean writer. Next command gap is Remove INVALID/default selection/ring undo; generic core/read-only/fly/selection lifecycle/full history still unverified. Goal active; full once per10 corrections, pause after next accepted full and fixes; registered IO/recovery preserved.
+
+- Observation: Correction8/10 JZ2G62 completes native selected mixed hyperlink Remove and moves single-INET native SfxItemSet query to edattr; no TextRuns command-state projection. Actual marked body/cell/node/rings reset original INET family with one undo; ApplyExact preserves ring during initial mutation.
+  Impact: Mixed selected links and plain gaps now admit Remove and execute; inventory ten canonical records updated append-only. Full history/caret/readonly/generic query and generated popup presentation remain pending, without parity promotion.
+  Resolution: Accepted14140 distinct assertions,100allfour for five modules1222positive counters,881 old acceptance bytes preserved; final nine metadata gates and fresh static137build verified. Next prioritize actual native popup UI; pause goal after next full and required repairs.
