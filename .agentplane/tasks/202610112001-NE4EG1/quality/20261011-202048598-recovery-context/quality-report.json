@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610112001-NE4EG1",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T20:20:48.598Z",
+  "verdict": "rework",
+  "summary": "Implementation and deterministic native/raw coverage pass; one extraction documentation statement overstates generic failure atomicity.",
+  "evaluated_sha": "412b3f21f674de0edd04aa2dc1bc81d769bab5e2",
+  "blueprint_digest": "13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36",
+  "findings": [
+    "Any.extract comment says every false result leaves destination untouched, but original generic assignData can preserve partial compound writes on failure. Primitive specialization guards are atomic; generic delegation already preserves source behavior correctly. Correct the comment without changing implementation or acceptance."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610112001-NE4EG1/README.md",
+    "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+    "apps/office/src/cppu/source/uno/assign.ts",
+    "output/playwright/task47-checks/evaluator-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

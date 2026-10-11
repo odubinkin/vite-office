@@ -185,7 +185,7 @@ export class Any implements uno_Any {
     if (argument === "bool") this.insert([Number(Boolean((source as [boolean])[0]))], "sal_Bool");
     else this.setValue(source, getTypeFavourUnsigned(argument));
   }
-  /** Original extraction specialization guards the direct source class before changing a destination; generic extraction alone delegates to real assignData, including its source Any unwrapping. Numeric conversions reuse the identical original source switches in the existing shared assignment owner. @param destination - Original initialized lvalue storage or actual specialized owned OUString/Type. @param argument - Declared non-Any destination type. @returns Original success, false leaves the destination untouched. */
+  /** Original extraction specialization guards the direct source class before changing a destination; generic extraction alone delegates to real assignData, including its source Any unwrapping. Numeric conversions reuse the identical original source switches in the existing shared assignment owner. @param destination - Original initialized lvalue storage or actual specialized owned OUString/Type. @param argument - Declared non-Any destination type. @returns Original success; specialized failures leave the destination untouched, while generic assignment preserves any original partial writes. */
   extract(destination: unknown, argument: Exclude<UnoTypeArgument, "Any">): boolean {
     const sourceClass = (this.pType as R).eTypeClass;
     switch (argument) {
