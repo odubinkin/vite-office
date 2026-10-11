@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/misc/sharedstring.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-35777755-077d-44b8-97d4-1eff11ed481b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/source/misc/sharedstring.ts#SharedString",
+        "apps/office/src/svl/source/misc/sharedstring.test.ts#matches all original live owner, view, pointer, counter, buffer and allocator observations",
+        "vendor/libreoffice-reference/svl/source/misc/sharedstring.cxx#SharedString",
+        "vendor/libreoffice-reference/include/svl/sharedstring.hxx#SharedString::getString"
+      ],
+      "justification": "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SharedString",
+        "SharedStringConstReference",
+        "[source, ignoreCase = null]",
+        "assign",
+        "data",
+        "dispose",
+        "equals",
+        "getData",
+        "getDataIgnoreCase",
+        "getEmptyString",
+        "getIgnoreCaseString",
+        "getLength",
+        "getString",
+        "ignoreCase",
+        "isEmpty",
+        "isValid",
+        "move",
+        "moveAssign",
+        "notEquals",
+        "other",
+        "otherData",
+        "result",
+        "source"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "svl/source/misc/sharedstring.cxx",
+      "upstreamSymbols": [
+        "SharedString",
+        "EMPTY_STRING",
+        "getEmptyString",
+        "operator=",
+        "operator=="
+      ]
+    }
+  }
+}

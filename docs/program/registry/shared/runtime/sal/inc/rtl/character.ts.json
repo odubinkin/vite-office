@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/character.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-bed4b7bd-c13f-4e47-8728-c23d1792ff7f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/inc/rtl/character.ts#splitSurrogates",
+        "apps/office/src/sal/inc/rtl/character.test.ts#matches every initialized original Unicode codepoint and surrogate-pair observation",
+        "vendor/libreoffice-reference/include/rtl/character.hxx#splitSurrogates"
+      ],
+      "justification": "All22 original RTL character runtime functions and four detail constants retain original numeric predicates, ASCII-only transformations/difference, scalar short-circuit, ordered assertions and UTF16 split/combine semantics. Integral JS number boundaries apply original sal_uInt32 conversion; detail readonly fields adapt the native namespace, and Uint16Array output adapts caller pointer storage for original valid buffers. Full unmodified pinned character.hxx and actual original dependencies/config templates compile natively with7 full blob hashes. All1114112 codepoints and every1048576 supplementary codepoint/surrogate pair retain24 complete initialized row fields. Full106954752-byte original raw output is encoded with2082 generic neighboring-delta runs and reconstructed byte-for-byte. Native defined ASan/UBSan output agrees completely. All67300 ASCII-byte/cross-boundary comparison results, native UInt32 conversions, four constants,25 original runtime assertions and24 deleted char/signed-char native overload rejections are preserved separately. Portable full-state replay verifies every native field and exact whole raw SHA without original sources. C++ deleted-overload/constexpr/template/physical ABI/invalid pointer enforcement, nonintegral or unsafe JS numeric inputs and complete consumer QA remain unverified. The original locale-aware CharClass/UNO/i18nutil/ICU78.3 service, SharedStringPool and actual Calc cell/column/document/UI are still missing; no JavaScript Unicode casing or fake owner replaces them.",
+      "knownViolations": [],
+      "localSymbols": [
+        "combineSurrogates",
+        "compareIgnoreAsciiCase",
+        "detail",
+        "getHighSurrogate",
+        "getLowSurrogate",
+        "isAscii",
+        "isAsciiAlpha",
+        "isAsciiAlphanumeric",
+        "isAsciiCanonicHexDigit",
+        "isAsciiDigit",
+        "isAsciiHexDigit",
+        "isAsciiLowerCase",
+        "isAsciiOctalDigit",
+        "isAsciiUpperCase",
+        "isAsciiWhiteSpace",
+        "isHighSurrogate",
+        "isLowSurrogate",
+        "isSurrogate",
+        "isUnicodeCodePoint",
+        "isUnicodeScalarValue",
+        "splitSurrogates",
+        "toAsciiLowerCase",
+        "toAsciiUpperCase"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/rtl/character.hxx",
+      "upstreamSymbols": [
+        "isUnicodeCodePoint",
+        "isAscii",
+        "isAsciiLowerCase",
+        "isAsciiUpperCase",
+        "isAsciiAlpha",
+        "isAsciiDigit",
+        "isAsciiAlphanumeric",
+        "isAsciiCanonicHexDigit",
+        "isAsciiHexDigit",
+        "isAsciiOctalDigit",
+        "isAsciiWhiteSpace",
+        "toAsciiUpperCase",
+        "toAsciiLowerCase",
+        "compareIgnoreAsciiCase",
+        "isSurrogate",
+        "isHighSurrogate",
+        "isLowSurrogate",
+        "getHighSurrogate",
+        "getLowSurrogate",
+        "combineSurrogates",
+        "splitSurrogates",
+        "isUnicodeScalarValue",
+        "surrogatesHighFirst",
+        "surrogatesHighLast",
+        "surrogatesLowFirst",
+        "surrogatesLowLast"
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/typelib/uik.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cppu/inc/typelib/uik.ts#_typelib_Uik",
+        "include/typelib/uik.h#m_Data1"
+      ],
+      "justification": "Complete original extended C typedef declarations preserve every actual compound/struct/indirect/enum/method/interface/initializer field and callback signature. Deprecated Uik retains all five original fields. Genuine compiler sizeof/alignof/offsetof/member-size observations and portable declaration checks cover15 full original records; no uninitialized native field is read. Original allocTypeDescription uses new char[sizeof(T)], so no value initialization, guessed constructor/defaults or physical ABI/allocator/prefix-aliasing owner is inferred.",
+      "knownViolations": [],
+      "localSymbols": [
+        "_typelib_Uik",
+        "typelib_Uik"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/typelib/uik.h",
+      "upstreamSymbols": [
+        "_typelib_Uik",
+        "typelib_Uik",
+        "m_Data1",
+        "m_Data2",
+        "m_Data3",
+        "m_Data4",
+        "m_Data5"
+      ]
+    }
+  }
+}

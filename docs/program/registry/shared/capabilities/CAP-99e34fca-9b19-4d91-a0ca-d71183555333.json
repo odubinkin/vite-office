@@ -1,0 +1,85 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-99e34fca-9b19-4d91-a0ca-d71183555333",
+    "capabilityId": "CAP-99e34fca-9b19-4d91-a0ca-d71183555333",
+    "suite": "shared",
+    "subsystem": "rtl-ustring",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original first-NUL, replacement/release/allocation, ASCII guard and no-acquire pointer value contracts only"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original rtl_uString_newFromAscii reuses the actual shared getLength char specialization, empty constructor, release and allocator. It reads to the first NUL, releases prior owned data before allocation, keeps the original null allocation result, copies defined ASCII bytes and preserves the checked unsigned-char range guard. OUString::createFromAscii char-pointer overload transfers the actual result without acquiring; a direct owner slot adapts erased nullable pointer versus known-length buffer constructor overloads, preserving the original null pointer rather than silently constructing empty data. Native normal/ASan/UBSan streams compare every127 nonzero first byte with every128 second byte, null/empty/embedded-NUL input, initialized refcount/length/units/zero/default-empty identity and full allocator/free order. The original replaceable allocation-function pointer provides a null-failure witness; no upstream method is replaced. A null-data C++ value is deliberately retained without destruction. Ordinary OS OOM, null-value consumers/destruction, the separate string_view/literal overload, physical ABI/threading/full consumer QA and malformed JS buffers remain unverified. Native SIGABRT is compared with the existing browser Error assertion adaptation, without post-failure recovery claims. Static types/Type/Any/Reference/default RuntimeException/case service remain unfinished; broad parity flags stay false."
+    },
+    "capability": "Shared original terminated ASCII construction",
+    "gaps": [
+      "Original rtl_uString_newFromAscii reuses the actual shared getLength char specialization, empty constructor, release and allocator. It reads to the first NUL, releases prior owned data before allocation, keeps the original null allocation result, copies defined ASCII bytes and preserves the checked unsigned-char range guard. OUString::createFromAscii char-pointer overload transfers the actual result without acquiring; a direct owner slot adapts erased nullable pointer versus known-length buffer constructor overloads, preserving the original null pointer rather than silently constructing empty data. Native normal/ASan/UBSan streams compare every127 nonzero first byte with every128 second byte, null/empty/embedded-NUL input, initialized refcount/length/units/zero/default-empty identity and full allocator/free order. The original replaceable allocation-function pointer provides a null-failure witness; no upstream method is replaced. A null-data C++ value is deliberately retained without destruction. Ordinary OS OOM, null-value consumers/destruction, the separate string_view/literal overload, physical ABI/threading/full consumer QA and malformed JS buffers remain unverified. Native SIGABRT is compared with the existing browser Error assertion adaptation, without post-failure recovery claims. Static types/Type/Any/Reference/default RuntimeException/case service remain unfinished; broad parity flags stay false."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_uString_newFromAscii"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "createFromAscii"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
+          "marker": "createFromAscii"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "rtl_uString_newFromAscii"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_uString_newFromAscii"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "createFromAscii"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/ascii-create.test.ts",
+          "marker": "matches all original127 nonzero ASCII first bytes and128 second bytes"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ascii-create.test.ts",
+          "marker": "matches original allocated-null return without replacing an upstream method or destroying null data"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original terminated ASCII construction"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Construct original terminated ASCII data and no-acquire Unicode values",
+    "scopeLimitations": [
+      "Original rtl_uString_newFromAscii reuses the actual shared getLength char specialization, empty constructor, release and allocator. It reads to the first NUL, releases prior owned data before allocation, keeps the original null allocation result, copies defined ASCII bytes and preserves the checked unsigned-char range guard. OUString::createFromAscii char-pointer overload transfers the actual result without acquiring; a direct owner slot adapts erased nullable pointer versus known-length buffer constructor overloads, preserving the original null pointer rather than silently constructing empty data. Native normal/ASan/UBSan streams compare every127 nonzero first byte with every128 second byte, null/empty/embedded-NUL input, initialized refcount/length/units/zero/default-empty identity and full allocator/free order. The original replaceable allocation-function pointer provides a null-failure witness; no upstream method is replaced. A null-data C++ value is deliberately retained without destruction. Ordinary OS OOM, null-value consumers/destruction, the separate string_view/literal overload, physical ABI/threading/full consumer QA and malformed JS buffers remain unverified. Native SIGABRT is compared with the existing browser Error assertion adaptation, without post-failure recovery claims. Static types/Type/Any/Reference/default RuntimeException/case service remain unfinished; broad parity flags stay false."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

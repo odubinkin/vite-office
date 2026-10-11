@@ -1,0 +1,85 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-61c44895-c6ea-43a6-9e8c-d4094e3a2c4e",
+    "capabilityId": "CAP-61c44895-c6ea-43a6-9e8c-d4094e3a2c4e",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original UNO Type value construction, lifetime, assignment and member delegation only"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original uno::Type one-pointer value declarations in Type.h and exact inline member bodies in Type.hxx are bound into a single actual Type class; JavaScript class member definition requires one owner, not a substitute constructor/prototype patch or second class. Default VOID reads the actual static cache cell and acquires once. Exact class/OUString and terminated ASCII overloads reuse real C factories and shared SAL strings. Pointer and copy constructors acquire; both no-acquire enum tags transfer the pointer without acquisition. Native rvalue construction selects the original copy constructor; there is no move constructor. Explicit dispose maps the unconditional original destructor. Copy assignment reuses original acquire-before-release/self-identity logic; move assignment swaps both pointers and returns this. Acquired names, borrowed getTypeLibType, output replacement description, original class cast/equality operators/compatibility delegate to existing shared owners. The actual CPPU header imports the generated UDK TypeClass enum; original dependency direction is retained without a reverse edge. Complete original normal and sanitized native calls and portable replay compare initialized counts/names/common fields and all15 basic Type value pairs. Deliberately null no-acquire values are retained without destruction and observed only through valid nullable pointer/predicate methods. Physical SAL new/delete operators/ABI, const and rvalue enforcement, Array/legacy/UnoType templates, native threading/shutdown and full Any/Reference/default RuntimeException/case/UI consumers remain unverified; system libraries are uninstrumented and leak detection is disabled. No original body/method is substituted and broad parity flags stay false."
+    },
+    "capability": "Shared original UNO Type values",
+    "gaps": [
+      "Original uno::Type one-pointer value declarations in Type.h and exact inline member bodies in Type.hxx are bound into a single actual Type class; JavaScript class member definition requires one owner, not a substitute constructor/prototype patch or second class. Default VOID reads the actual static cache cell and acquires once. Exact class/OUString and terminated ASCII overloads reuse real C factories and shared SAL strings. Pointer and copy constructors acquire; both no-acquire enum tags transfer the pointer without acquisition. Native rvalue construction selects the original copy constructor; there is no move constructor. Explicit dispose maps the unconditional original destructor. Copy assignment reuses original acquire-before-release/self-identity logic; move assignment swaps both pointers and returns this. Acquired names, borrowed getTypeLibType, output replacement description, original class cast/equality operators/compatibility delegate to existing shared owners. The actual CPPU header imports the generated UDK TypeClass enum; original dependency direction is retained without a reverse edge. Complete original normal and sanitized native calls and portable replay compare initialized counts/names/common fields and all15 basic Type value pairs. Deliberately null no-acquire values are retained without destruction and observed only through valid nullable pointer/predicate methods. Physical SAL new/delete operators/ABI, const and rvalue enforcement, Array/legacy/UnoType templates, native threading/shutdown and full Any/Reference/default RuntimeException/case/UI consumers remain unverified; system libraries are uninstrumented and leak detection is disabled. No original body/method is substituted and broad parity flags stay false."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/com/sun/star/uno/Type.h",
+          "marker": "class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Type"
+        },
+        {
+          "path": "include/com/sun/star/uno/Type.hxx",
+          "marker": "inline Type::Type()"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_unotype.cxx",
+          "marker": "testUnoType"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/com/sun/star/uno/Type.h",
+          "marker": "getTypeLibType"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Type.ts",
+          "marker": "Type"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Type.test.ts",
+          "marker": "matches original value construction, acquired names, lifetime and description replacement"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Type.test.ts",
+          "marker": "matches original copy assignment and move assignment swaps including self identity"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Type.test.ts",
+          "marker": "matches all original basic Type value pairs and complete ownership records"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO Type values"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Construct, own, assign and query original UNO Type values",
+    "scopeLimitations": [
+      "Original uno::Type one-pointer value declarations in Type.h and exact inline member bodies in Type.hxx are bound into a single actual Type class; JavaScript class member definition requires one owner, not a substitute constructor/prototype patch or second class. Default VOID reads the actual static cache cell and acquires once. Exact class/OUString and terminated ASCII overloads reuse real C factories and shared SAL strings. Pointer and copy constructors acquire; both no-acquire enum tags transfer the pointer without acquisition. Native rvalue construction selects the original copy constructor; there is no move constructor. Explicit dispose maps the unconditional original destructor. Copy assignment reuses original acquire-before-release/self-identity logic; move assignment swaps both pointers and returns this. Acquired names, borrowed getTypeLibType, output replacement description, original class cast/equality operators/compatibility delegate to existing shared owners. The actual CPPU header imports the generated UDK TypeClass enum; original dependency direction is retained without a reverse edge. Complete original normal and sanitized native calls and portable replay compare initialized counts/names/common fields and all15 basic Type value pairs. Deliberately null no-acquire values are retained without destruction and observed only through valid nullable pointer/predicate methods. Physical SAL new/delete operators/ABI, const and rvalue enforcement, Array/legacy/UnoType templates, native threading/shutdown and full Any/Reference/default RuntimeException/case/UI consumers remain unverified; system libraries are uninstrumented and leak detection is disabled. No original body/method is substituted and broad parity flags stay false."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/stringconcat.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/stringconcat.hxx",
+    "localSymbols": [
+      "StringNumber",
+      "StringConcatMarker",
+      "UnicodeStringOperand",
+      "UnicodeConcatOperand",
+      "addDataHelper",
+      "ToStringHelper",
+      "StringConcat"
+    ],
+    "upstreamSymbols": [
+      "StringNumber",
+      "StringConcatMarker",
+      "addDataHelper",
+      "ToStringHelper",
+      "StringConcat"
+    ],
+    "preservedResponsibilities": [
+      "Original Unicode StringNumber/OUStringNumber, StringConcat/OUStringConcat, marker and actual ToStringHelper number/concat/OUString/literal/view/const-char specializations are shared under the original SAL header owner. Runtime operand dispatch adapts erased C++ template types; fixed Uint16Array storage and borrowed subarray pointer offsets retain original initialized payload/zero and deferred writes. OUString signed32/signed64 number overloads retain default radix10 and actual C formatting owners; original number and concat constructors preserve separate copies versus allocation after lazy length calculation, no intermediate flattened strings, source-defined empty identity and no operand acquire/release. Explicit unsigned64 StringNumber uses its actual existing C formatter; erased unsigned number overloads remain unported. CaseReplace/with_length/replaceChars and C uppercase reuse actual shared character predicates/scalar conversion, retaining unsigned16 inputs, embedded zero, all-unit replacement, original checked length guard and rvalue same-object result. Genuine complete original headers/dependencies under normal and ASan/UBSan observe fixed initialized number units, all65536 UTF16 units, all255 nonzero signed-char literal conversions, lazy operand changes and actual result/refcount/zero/empty identities. Source macro values33/65/65 remain unchanged; CALC044 undefined insufficient signed-minimum binary buffers, uninitialized spare number cells, physical ABI/lifetime/threading, native const/rvalue/template enforcement, C8/pointer/other literal/numeric specializations, malformed JS objects and full upstream consumer QA remain unverified. All native operands stay alive through materialization and no source method is replaced. Original interface factories/UNO/default exception/case service/document/UI remain unfinished; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Unported C8/pointer/other literal/numeric/template specializations and full consumer QA; initialized logical fields only, not physical ABI/lifetime or spare storage."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/stringconcat.ts",
+          "marker": "StringConcat"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/stringconcat.test.ts",
+          "marker": "matches original lazy operand references, owner changes, literals and distinct empty allocation"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/rtl/stringconcat.hxx",
+          "marker": "StringConcat"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original Unicode StringNumber/OUStringNumber, StringConcat/OUStringConcat, marker and actual ToStringHelper number/concat/OUString/literal/view/const-char specializations are shared under the original SAL header owner. Runtime operand dispatch adapts erased C++ template types; fixed Uint16Array storage and borrowed subarray pointer offsets retain original initialized payload/zero and deferred writes. OUString signed32/signed64 number overloads retain default radix10 and actual C formatting owners; original number and concat constructors preserve separate copies versus allocation after lazy length calculation, no intermediate flattened strings, source-defined empty identity and no operand acquire/release. Explicit unsigned64 StringNumber uses its actual existing C formatter; erased unsigned number overloads remain unported. CaseReplace/with_length/replaceChars and C uppercase reuse actual shared character predicates/scalar conversion, retaining unsigned16 inputs, embedded zero, all-unit replacement, original checked length guard and rvalue same-object result. Genuine complete original headers/dependencies under normal and ASan/UBSan observe fixed initialized number units, all65536 UTF16 units, all255 nonzero signed-char literal conversions, lazy operand changes and actual result/refcount/zero/empty identities. Source macro values33/65/65 remain unchanged; CALC044 undefined insufficient signed-minimum binary buffers, uninitialized spare number cells, physical ABI/lifetime/threading, native const/rvalue/template enforcement, C8/pointer/other literal/numeric specializations, malformed JS objects and full upstream consumer QA remain unverified. All native operands stay alive through materialization and no source method is replaced. Original interface factories/UNO/default exception/case service/document/UI remain unfinished; broad parity flags stay false."
+    }
+  }
+}

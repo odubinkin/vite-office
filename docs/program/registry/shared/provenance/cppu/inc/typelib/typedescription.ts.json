@@ -1,0 +1,226 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/typelib/typedescription.ts",
+    "status": "mapped",
+    "upstreamPath": "include/typelib/typedescription.h",
+    "localSymbols": [
+      "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK",
+      "_typelib_CompoundMember_Init",
+      "_typelib_CompoundTypeDescription",
+      "_typelib_EnumTypeDescription",
+      "_typelib_IndirectTypeDescription",
+      "_typelib_InterfaceAttributeTypeDescription",
+      "_typelib_InterfaceMemberTypeDescription",
+      "_typelib_InterfaceMethodTypeDescription",
+      "_typelib_InterfaceTypeDescription",
+      "_typelib_MethodParameter",
+      "_typelib_Parameter_Init",
+      "_typelib_StructMember_Init",
+      "_typelib_StructTypeDescription",
+      "_typelib_TypeDescription",
+      "_typelib_TypeDescriptionReference",
+      "typelib_CompoundMember_Init",
+      "typelib_CompoundTypeDescription",
+      "typelib_EnumTypeDescription",
+      "typelib_IndirectTypeDescription",
+      "typelib_InterfaceAttributeTypeDescription",
+      "typelib_InterfaceMemberTypeDescription",
+      "typelib_InterfaceMethodTypeDescription",
+      "typelib_InterfaceTypeDescription",
+      "typelib_MethodParameter",
+      "typelib_Parameter_Init",
+      "typelib_StructMember_Init",
+      "typelib_StructTypeDescription",
+      "typelib_TypeDescription",
+      "typelib_TypeDescriptionReference",
+      "typelib_typedescription_Callback",
+      "TYPELIB_DANGER_GET",
+      "TYPELIB_DANGER_RELEASE"
+    ],
+    "upstreamSymbols": [
+      "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK",
+      "_typelib_CompoundMember_Init",
+      "_typelib_CompoundTypeDescription",
+      "_typelib_EnumTypeDescription",
+      "_typelib_IndirectTypeDescription",
+      "_typelib_InterfaceAttributeTypeDescription",
+      "_typelib_InterfaceMemberTypeDescription",
+      "_typelib_InterfaceMethodTypeDescription",
+      "_typelib_InterfaceTypeDescription",
+      "_typelib_MethodParameter",
+      "_typelib_Parameter_Init",
+      "_typelib_StructMember_Init",
+      "_typelib_StructTypeDescription",
+      "_typelib_TypeDescription",
+      "_typelib_TypeDescriptionReference",
+      "typelib_CompoundMember_Init",
+      "typelib_CompoundTypeDescription",
+      "typelib_EnumTypeDescription",
+      "typelib_IndirectTypeDescription",
+      "typelib_InterfaceAttributeTypeDescription",
+      "typelib_InterfaceMemberTypeDescription",
+      "typelib_InterfaceMethodTypeDescription",
+      "typelib_InterfaceTypeDescription",
+      "typelib_MethodParameter",
+      "typelib_Parameter_Init",
+      "typelib_StructMember_Init",
+      "typelib_StructTypeDescription",
+      "typelib_TypeDescription",
+      "typelib_TypeDescriptionReference",
+      "typelib_typedescription_Callback",
+      "TYPELIB_DANGER_GET",
+      "TYPELIB_DANGER_RELEASE",
+      "typelib_typedescription_complete",
+      "typelib_typedescription_newInterfaceMethod",
+      "typelib_typedescription_newInterfaceAttribute",
+      "typelib_typedescription_newExtendedInterfaceAttribute",
+      "typelib_typedescription_newInterface",
+      "typelib_typedescription_newMIInterface",
+      "typelib_static_type_getByTypeClass",
+      "typelib_static_type_init",
+      "typelib_static_sequence_type_init",
+      "typelib_static_compound_type_init",
+      "typelib_static_struct_type_init",
+      "typelib_static_interface_type_init",
+      "typelib_static_mi_interface_type_init",
+      "typelib_static_enum_type_init",
+      "typelib_typedescriptionreference_isAssignableFrom",
+      "typelib_typedescription_isAssignableFrom",
+      "typelib_typedescription_equals",
+      "typelib_typedescriptionreference_newByAsciiName",
+      "typelib_typedescriptionreference_assign"
+    ],
+    "preservedResponsibilities": [
+      "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names.",
+      " Complete original extended C typedef declarations preserve every actual compound/struct/indirect/enum/method/interface/initializer field and callback signature. Deprecated Uik retains all five original fields. Genuine compiler sizeof/alignof/offsetof/member-size observations and portable declaration checks cover15 full original records; no uninitialized native field is read. Original allocTypeDescription uses new char[sizeof(T)], so no value initialization, guessed constructor/defaults or physical ABI/allocator/prefix-aliasing owner is inferred.",
+      "Actual public C callback/reference lifecycle/registration exports reuse the shared source owner; internal newEmpty/getByName remain source-only. Full factories/completion/static types remain unfinished.",
+      "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites.",
+      "Original public completion export reuses the shared original two-stage source owner.",
+      "Original public method/attribute factory exports reuse the shared source owner.",
+      "The original public C header reexports single/multiple-inheritance interface factories from their actual CPPU source owner. These are export bindings, not local function declarations or a second implementation.",
+      "The original interface factories are now implemented in typelib-interface-factories.ts with a dedicated scoped capability and complete native/portable ordering, aliasing, registration and ownership observations. Earlier primitive/member-only evidence does not independently certify that owner; static types, Type/Any/Reference/default RuntimeException and full consumers remain unfinished or unverified.",
+      "The original public C static type exports now reuse static_types.ts and its dedicated scoped capability. These reexports are actual public header bindings, not local function definitions. The source-owned bootstrap and static initializer fields/counts are independently observed; Type/Any/Reference/default exception values, actual service consumers and native concurrency/physical ABI remain unfinished or unverified.",
+      "Original typelib.cxx primitive11x11 compatibility table and reference/description predicates preserve nullable inputs, ANY shortcut, exact identity/class/length/terminated-name equality, recursive struct/exception bases and ordered multiple-interface ancestry. Original private type_equals has the identical body as the already verified public reference_equals; import that existing shared predicate under its original private call name rather than duplicating its SAL string comparison. Description equality uses a declaration cast of the compared common-prefix fields/object identity without new views or allocator-only bookkeeping. The original public ASCII wrapper uses actual SAL createFromAscii then original reference_new, including output replacement/name-only canonical lookup and typedef miss. Original assignment acquires its source before releasing old destination, retaining self/both-null identity shortcuts; nonidentical null assignment has no valid native dereference contract and is not repaired. Complete full unchanged native dependency builds observe all121 actual table entries, all1681 prepared reference pairs and every initialized common description/name/count, interfaces/compound/sequence distinctions, original embedded-zero equality, every128 admissible ASCII first-byte case and actual destruction of a sequence holding the only source reference. Preserve CALC-048 signed/unsigned table observations without changing them. Related original QA is source evidence, not execution of its full consumer suites. Actual value conversion/ranges, ordinary synthetic-alias producers, native pointer ABI/mutex/thread scheduling/shutdown, invalid/null assignment and malformed JS reflection/const enforcement remain unverified; system libraries are uninstrumented and leak detection is disabled. No native body/method is replaced. Type/Any/Reference/default RuntimeException values and original case service/pool/document/view/UI remain unfinished; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Native type allocation/registration/reference lifecycle, full compound descriptions, common-prefix aliasing, Type/Reference/Any/default RuntimeException, full upstream consumer QA, native ABI/concurrency and Calc string service/document/edit/UI remain unverified. Initialized records certify only the original const comparison function, not a factory or allocator."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typedescription.ts",
+          "marker": "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.test.ts",
+          "marker": "matches all complete native initialized reference comparisons without ownership mutations"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-lookup.test.ts",
+          "marker": "matches original sequence routing, malformed names, provider typedefs and full cache eviction"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-complete.test.ts",
+          "marker": "matches original two-stage completion and every interface call-table composition"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-member-factories.test.ts",
+          "marker": "matches original method and attribute fields and every owned parameter or exception"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/static_types.test.ts",
+          "marker": "matches complete original static initializers, layout, flags and ownership"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-assignability.test.ts",
+          "marker": "matches every original compatibility table entry, nullable type pair and complete ownership record"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "_typelib_TypeDescriptionReference"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_complete"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newInterfaceMethod"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newInterfaceAttribute"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newExtendedInterfaceAttribute"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newInterface"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newMIInterface"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_type_getByTypeClass"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_sequence_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_compound_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_struct_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_interface_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_mi_interface_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_static_enum_type_init"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescriptionreference_isAssignableFrom"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_isAssignableFrom"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_equals"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescriptionreference_newByAsciiName"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescriptionreference_assign"
+        }
+      ]
+    }
+  }
+}

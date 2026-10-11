@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/osl/interlck.ts",
+    "status": "mapped",
+    "upstreamPath": "include/osl/interlck.h",
+    "localSymbols": [
+      "oslInterlockedCount",
+      "oslInterlockedCountPointer"
+    ],
+    "upstreamSymbols": [
+      "oslInterlockedCount",
+      "osl_incrementInterlockedCount",
+      "osl_decrementInterlockedCount",
+      "osl_atomic_increment",
+      "osl_atomic_decrement"
+    ],
+    "preservedResponsibilities": [
+      "Original OSL signed32 adjusted interlocked count operations and internal macro boundary use one shared native JS Atomics.add/sub owner, returning the old atomic value adjusted and narrowed to signed32 rather than a later concurrent load. An Int32Array view adapts the addressed native count with real byte offsets and unchanged neighboring cells. Original full SAL/OSL headers and bodies capture65556 diagonal/boundary counts through both public functions and internal macros, all16 caller fields per input, plus four genuine4-thread4096-call captures retaining every65536 adjusted return and complete shared neighboring storage across signed overflow. Normal/ASan/UBSan outputs match. Portable real workers import the actual core owner, not an inline substitute. Ordinary ArrayBuffer storage supports single-realm callers; SharedArrayBuffer enables truly shared counters when available, without requiring its constructor in application runtime. Invalid native pointer/storage domains, other original platform implementation bodies, thread scheduling, full platform ABI and all CPPU registry/reference/UNO exception/Calc document/UI consumers remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Complete CPPU type allocation/registration/reference ownership, default UNO exception, original platform/ABI/invalid-pointer contracts and Calc document/edit/UI remain unfinished. Related original StringConcat checkEnsureCapacity is an actual RTL count consumer reference only, not a ported/executed original QA assertion."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/osl/interlck.ts",
+          "marker": "oslInterlockedCount"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/interlck.test.ts",
+          "marker": "matches every native C and macro return and addressed storage including signed overflow"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/osl/interlck.h",
+          "marker": "oslInterlockedCount"
+        }
+      ]
+    }
+  }
+}

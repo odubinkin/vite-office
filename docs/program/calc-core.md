@@ -1,5 +1,198 @@
 # Calc coordinate foundation
 
+## UI prerequisite priority
+
+The user resumed the goal after task31's full run and requires the missing
+core components for a real Calc UI first. The following dependencies take
+priority over unrelated completion of generic mdds or formula features:
+
+1. Original cell values and the shared string/text dependencies they actually
+   use, with original variant tags and text metadata.
+2. Required shared storage writes and original Calc cell-store registrations;
+   reuse shared owners rather than build a parallel document model.
+3. Original `ScColumn`, `ScTable` and `ScDocument` owners and the document
+   operations required by the first editable sheet.
+4. Original edit notifications and undo, reusing existing shared Svt/Sfx
+   services where their contracts apply.
+5. Original Calc view/input owners and browser presentation connected to those
+   document operations, using the existing shared command/UI infrastructure.
+
+Dependencies still control execution: a leaf declaration does not establish
+document or UI readiness. Original formula and rich-text cell owners must be
+ported where the actual cell-store contract needs them; they cannot be
+replaced by synthetic browser cell variants. The existing browser Foundation
+and coordinate/selection services do not yet provide an editable Calc sheet.
+
+Task32 (`202610101342-SSE4NF`), the first task since task31's full run, ports
+original `CellType` at `sc/inc/global`, `TEXTWIDTH_DIRTY` at
+`sc/inc/globalnames`, and `CellTextAttr` at its original header/core-data
+boundaries. Its width starts at65535 and its script at `UNKNOWN`8. The shared
+`SvtScriptType` declaration lives once under `svl/inc/languageoptions`, mapped
+to original `include/svl/languageoptions.hxx`; Calc imports that owner.
+
+Public accessors adapt implicit native UInt16/UInt8 field assignment for
+initialized finite integers. Optional-source construction and `assign` adapt
+compiler-provided memberwise value copy/assignment, including self-assignment
+and scalar trivial moves which leave their source fields unchanged. This
+metadata owner adds no text measurement or document substitute.
+
+`scripts/calc-celltextattr-native-probe.mjs` verifies all five complete pinned
+source blobs and extracts the complete original enum, struct, constructor and
+constant scopes unchanged. Its C++ wrapper supplies scalar SAL aliases and
+input/output only, then compiles with ASan/UBSan. Portable fixtures retain
+154 sequences and1232 complete three-owner field states covering boundaries,
+copies, mutations and assignment; native field widths are2/1 bytes. The tests
+do not require upstream files or a compiler. Native ABI/reference lifetime,
+undefined casts, actual storage/document/view integration and complete shared
+language services remain unverified. The three independent contracts have
+separate capabilities for metadata, cell tags and shared script tags; broader
+runtime semantic parity flags remain unverified.
+
+All suspicious Calc cases are recorded in
+[calc-upstream-suspected-issues.md](calc-upstream-suspected-issues.md), retaining
+the original behavior. Other applications can own separate journals. The next
+scheduled full run is task41; intervening tasks run Calc coverage and the
+tests of affected shared modules.
+
+Task32 verification passes with upstream symlinks absent: all106 Calc tests
+in24 files and the shared script enum test. Actual Istanbul Calc counters
+are2920 statements,2055 branches,474 functions and2564 lines, all100%; the
+shared enum has6 statements,1 function and6 lines, all100%, with no branches.
+Every recorded statement/function/branch counter is positive. Native
+`--check`, typecheck, lint, JSDoc, size, dependencies, source tree/provenance,
+both scoped inventories, routing and doctor pass. Source-provenance3 cases
+and registry12 cases pass; doctor's two existing warnings are unchanged.
+Journal body and all31 cases are preserved byte-for-byte. No Writer coverage
+or implementation changes and no full run occur in this task.
+
+## Shared Unicode ownership and intern pool
+
+Task34 (`202610101428-D9PRQV`) adds actual RTL Unicode data ownership before
+the original C++ `OUString` and `svl::SharedString` consumers. The existing SAL
+header/template/C wrapper boundaries are extended; `sal/rtl/strimp.ts` owns
+the original allocator globals, `sal/rtl/strimp.hxx.ts` owns their declarations
+and flag macros, and `sal/rtl/hash.ts`
+owns the complete original intern-table algorithms. Other applications can
+reuse these shared modules without their own string-data implementation.
+
+The original C empty is a concrete static identity with signed refcount
+-1073741823, length0 and one zero unit. It remains distinct from the later
+C++ `OUString` literal empty. Data retains UInt16 buffers, logical length,
+allocated capacity and terminating zero. Copying allocates distinct data;
+assignment acquires first, including selfassignment. Buffer copying releases
+the previous owner last so that the source can alias its storage. Reserving
+capacity releases the previous owner before allocating logical empty data.
+Both orders and actual allocator/free events are compared with native code.
+
+Interning retains the original hash, linear probes, wrap, static candidates,
+duplicate handling and complete following-chain reinsertion. The initial
+request1024 chooses2039; the original two next-prime applications grow it to
+8191 at its load threshold. The original fast-path destination overwrite is
+preserved and documented as suspicious
+[CALC-032](calc-upstream-suspected-issues.md#calc-032-intern-fast-path-overwrites-a-populated-destination-without-releasing-it).
+
+Browser storage uses concrete `Uint16Array` data and caller-owned pointer-slot
+tuples. An ESM-writable carrier holds the two original replaceable allocation
+function pointers. Default browser free releases the owned buffer reference
+for garbage collection; physical native allocation/deallocation and reads
+after free are outside certification. Uninitialized spare bytes are never
+included as invented native zeroes. Initialized logical payload and both
+initialized terminators are retained in every observed live allocation.
+
+The pool and counters belong to one synchronous browser realm. No asynchronous
+work crosses the native mutex-protected interval. Actual native pthread
+recursive mutex and compiler atomic operations remain in the C++ probe;
+native cross-thread synchronization is not claimed by the browser port.
+After last-reference decrement and synchronous hash removal, the following
+increment is necessarily1. The native recursive branch for a concurrent
+separate acquire is therefore outside the reachable realm-local domain.
+On the verified64-bit target the allocation size guard is always true for
+nonnegative signed32 lengths; its original `o3tl::make_unsigned` assertion is
+preserved. With active original constructor assertions, the hash helper's
+null-copy return cannot be reached: failure aborts before returning, while
+empty copying binds the static empty. These reductions do not certify release
+builds, concurrent ownership or undefined arithmetic/pointer inputs.
+
+`scripts/rtl-ustring-ownership-native-probe.mjs` verifies13 complete pinned
+blobs and extracts29 complete unchanged scopes. ASan/UBSan captures3336
+original calls, all live identities/counts/payloads/capacities/terminators,
+all1400 caller handles, allocation/free events and complete intern table slots.
+Twenty original assertion diagnostics are retained. The full native state
+output is88879388 bytes with SHA256
+`665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4`.
+Portable deltas are lossless: the capture script independently reconstructs
+and compares every complete native snapshot before accepting the fixture.
+Tests reconstruct the same complete observations without upstream access.
+
+This dependency closure does not yet provide `OUString`, `SharedString`, a
+Calc cell store, `ScColumn`, `ScTable`, `ScDocument` or an editable browser
+sheet. Those actual owners remain the next UI prerequisites. Other RTL
+algorithms, native ABI, alternate STL comparison magnitudes, uninitialized
+memory, process-abort semantics, and physical/out-of-memory allocation beyond
+the original replaceable allocator failures remain unverified. All scoped
+runtime/provenance flags continue to express that bounded evidence.
+
+Task34 scoped verification passes without either upstream symlink:106 Calc
+tests in24 files and4 shared RTL tests in2 files. Actual Istanbul Calc
+counters remain2920 statements,2055 branches,474 functions and2564 lines;
+the5 executable RTL sources have265 statements,137 branches,50 functions
+and207 lines. All four metrics are100%, every actual raw counter is positive,
+and complete initialized free-callback fields are included in native event
+comparison. Typecheck, lint, JSDoc, size, dependencies, source tree/provenance,
+Calc/shared inventories, routing and doctor pass. The two inherited doctor
+warnings remain. This is task3/10 after the last full run; next full is task41.
+Writer-only coverage and implementation are unchanged.
+
+## Shared UTF16 comparison for cell strings
+
+Task33 (`202610101405-RCRBVD`) ports the original dependency used by
+`svl::SharedString::operator==`: `rtl_ustr_reverseCompare_WithLength`.
+`sal/rtl/strtmpl.ts` owns `CompareNormal` and `reverseCompare_WithLengths`;
+`sal/rtl/ustring.ts` owns the C wrapper. The declaration boundary is
+`sal/inc/rtl/ustring.h.ts`, mapped to original `include/rtl/ustring.h` in the
+SAL library; its `.h` identity keeps the future C++ `ustring.hxx` owner distinct.
+
+Original traversal starts at the declared ends and preserves exact UInt16
+unit differences, returning the length difference only after a common suffix.
+Embedded NUL is an ordinary unit; surrogate pairs receive no code-point or
+locale reinterpretation. Borrowed `Uint16Array|null` views adapt native
+buffers, explicit lengths narrow to signed32, and the static comparator
+witness adapts the original empty template strategy. The original four
+assertions become fail-fast errors. Native process abort/release builds and
+invalid/dangling pointers remain outside this evidence. Positive loop length
+and the original guards prove non-null access; storage must cover its declared
+length without a new bounds repair.
+
+The native probe verifies four whole pinned source blobs and compiles six
+complete unchanged scopes with ASan/UBSan. It retains10084 calls and20168
+direct/public results, including valid prefixes and borrowed offsets, empty
+and null-zero inputs, embedded NUL, unsigned boundaries, surrogates, suffix
+precedence and original signed32 argument narrowing. Four separate native
+assertion callers retain their actual SIGABRT/stderr diagnostics. Portable
+tests compare every result through both original owners and the public header.
+SAL module registration protects these source/header owners from browser and
+application dependencies. Runtime/provenance/exported-operation records and
+one atomic shared capability remain semantically unverified for full-module
+parity.
+
+Actual RTL data allocation/refcounts, `OUString` and `SharedString` remain the
+following required string owners. This task introduces no replacement string
+store or document/UI model. It is task2 of10 since full task31; the next
+scheduled full suite remains task41.
+
+Task33 passes portable upstream-absent Calc106/24 and shared RTL2/1 tests;
+actual Calc coverage remains S2920/B2055/F474/L2564 all100. The two shared
+RTL owners have S21/B16/F3/L16 all100 with every raw counter positive. Native
+`--check`, all static/source gates, both scoped inventories, source-provenance3
+and module-boundary/registry24 cases pass. Calc inventory45capabilities/166
+modules and shared22/136 have zero semantic violations; broader parity stays
+unverified. Doctor's two inherited warnings remain. Original symlinks are
+restored exactly, with no Writer/threshold/config changes or full suite run.
+The header filename ledger records the necessary distinct module resolution
+for original C `ustring.h` and C++ `ustring.hxx` contracts; source validation
+is unchanged. Read-only function exports are extracted exhaustively from the
+runtime records, outside the mutation-helper operation collection.
+
 ## Shared container utilities and traits
 
 Task `202610092012-8RZCZ1` ports original mdds `util.hpp`: empty events,
@@ -595,7 +788,7 @@ Inventory stays semantically unverified. This is task5 of the resumed interval;
 full verification remains due at task10.
 
 Suspicious source conditions observed during these ports are tracked separately
-in [upstream-suspected-issues.md](upstream-suspected-issues.md). Recording them
+in [calc-upstream-suspected-issues.md](calc-upstream-suspected-issues.md). Recording them
 does not authorize changing upstream behavior; the user explicitly reaffirmed
 that preservation requirement.
 
@@ -1519,7 +1712,7 @@ corpus. Complete native values, output/iterator results, operations, ownership,
 payloads, capacities, metadata, endpoints and event logs remain portable through
 the existing common decoder and observer.
 
-[CALC-031](upstream-suspected-issues.md#calc-031-hinted-scalar-release-reads-empty-metadata-before-its-row-guard)
+[CALC-031](calc-upstream-suspected-issues.md#calc-031-hinted-scalar-release-reads-empty-metadata-before-its-row-guard)
 records the independently reproduced original hinted-empty-destination native
 undefined behavior, even with a valid foreign hint. The implementation preserves
 the lookup order; native UB has no defined portable expected result.
@@ -1538,3 +1731,976 @@ corpus argument. This keeps ordinary defaultheap formatting and import practical
 without dropping inputs, fields or assertions; raw native output remains one
 complete original run. Exported original insertion/merge helper responsibilities
 also have explicit internal-operation inventory records.
+
+## Shared OUString and SharedString value owners
+
+Task202610101521-5TVQA9 adds the actual shared SAL C++ header owner at
+`sal/inc/rtl/ustring.ts` and the single SVL compiled SharedString class at
+`svl/source/misc/sharedstring.ts`. Its original header reexports that class.
+SVL uses the original SAL library dependency declared in `svl/Library_svl.mk`;
+Calc and Writer reuse these owners rather than separate string models.
+
+The bounded OUString dependency closure includes original literal/static data,
+default/raw/copy/UTF16/no-acquire construction, runtime move construction,
+copy/move assignment, destruction, clear and direct getters. C++ default empty
+data carries static-only0x40000000 flags and differs from the C API empty.
+Move construction resets the source through the C API; move assignment swaps
+the two pointers. Explicit move factories and destructor calls represent C++
+rvalues and deterministic lifetime in JavaScript. Numeric constructor input
+witnesses sal_Unicode; native int/nullptr overload deletion, template/layout and
+constant-expression rules remain compiler checks, with original rejected callers
+captured separately.
+
+SharedString retains both nullable original/folded fields, all original
+construction/assignment/destructor operations, pointer getters, validity,
+empty/length predicates, original-only equality and the original empty singleton.
+Const references expose queries without destructor/assignment APIs.
+OUString::unacquired borrows the actual pointer field: a held view follows later
+assignment and move. Stable WeakMap-backed views perform no ownership work.
+A null getter returns the original static EMPTY_STRING reference; a held live
+field reference subsequently becoming null remains a null pointer, not a new
+empty value. Accessing its length is original undefined behavior.
+
+The native probe compiles full unchanged original OUString/SharedString headers,
+the complete SharedString source and31 unchanged RTL dependency scopes.
+Thirty-two full pinned source/header/configuration blobs are verified.
+All4424 complete initialized owner/view/pointer/allocator/data observations are
+recorded without selecting fields or dropping calls; the valid capture also
+passes ASan/UBSan with identical output. Two original runtime assertions,
+three compile-time constructor rejections and three separate original invalid
+lifetime diagnostics have no fabricated post-UB golden values.
+The prior3336 RTL snapshots and20 guards retain their exact driver and output
+digests after moving source extraction into a common probe helper.
+
+[CALC-034](calc-upstream-suspected-issues.md#calc-034-sharedstring-self-move-can-retain-freed-data)
+records the original self-move ownership hazard without adding a guard.
+Complete OUString conversion/search/formatting/append algorithms, native ABI,
+const/compile-time enforcement, concurrent/native physical memory semantics
+and full original QA remain unverified. Actual SharedStringPool, typed cell
+payload/storage mutation, column/table/document and editable Calc UI remain
+the next downstream dependencies. This is task4/10 after full task31; the next
+scheduled whole-suite run is task41.
+
+## Original shared Unicode comparisons and cached pool key
+
+Task36 (`202610101555-J73K9F`) extends the existing shared SAL header owner
+with original normal/reverse comparisons, length-before-pointer equality,
+relational operators and the signed32 polynomial hash. `OUStringHash` retains
+the actual signed32-to-size_t cast as unsigned64 `bigint` on the verified native
+target. Other native widths remain unverified.
+
+`svl/source/misc/sharedstringpool.ts` owns the original private `StringWithHash`
+struct and its cached hash functor. Its by-value constructor moves the argument
+into its sole owned string before calculating the cache. Explicit rvalue
+factories and destructor calls represent C++ value lifetimes. Implicit copy,
+move and assignment retain original member order; they copy the cache rather
+than recompute it. Equality first checks the cached hash, then the actual string.
+The shared SAL data/refcount owners are reused by both applications.
+
+`scripts/rtl-string-key-native-probe.mjs` compiles the complete pinned C++
+headers and unchanged complete original key/hash scope with32 full source blobs
+and32 dependency scopes. Its8143 calls capture complete initialized owner/key
+pointers, caches, refcounts, lengths, capacities, logical UTF16 units, terminators,
+allocation/free events and signed/unsigned comparison/hash results. Inputs
+include real hash collisions, embedded NULs, isolated surrogates, negative hashes,
+by-value rvalue construction, memberwise copies/moves and self assignment.
+The valid capture also passes ASan/UBSan with identical full output. Original
+null-field hashing is diagnosed separately; no post-UB portable result is invented.
+
+Shared native header configuration and full lifetime dependency extraction are
+factored into `rtl-ustring-native-sources.mjs`. The earlier SharedString driver
+remains `164be221` with4424 states,2 runtime guards,3 compile guards and3 invalid
+lifetime diagnoses; the prior RTL ownership driver remains `44ad48ef` with3336
+states and20 guards.
+
+The original locale-aware `CharClass` service remains required before the actual
+SharedStringPool can be ported. Its UNO/i18npool/i18nutil Unicode casing pipeline
+is not replaced with JavaScript casing. This task adds no substitute pool, actual
+Calc cell store, column/document or editable UI. Shortened/string-view template
+comparison overloads, remaining OUString algorithms, native ABI/concurrency and
+complete original consumer QA remain unverified. This is task5/10 since full
+task31; the next scheduled full run is task41.
+
+## Complete shared RTL character contracts
+
+Task37 (`202610101620-25HQ9X`) ports the complete runtime owner from original
+`include/rtl/character.hxx` into shared `sal/inc/rtl/character.ts`. Its22
+functions and four detail constants preserve Unicode/scalar/surrogate predicates,
+ASCII-only classification/conversion/comparison, ordered assertions and UTF16
+split/combine semantics. Scalar detection short-circuits before validating a
+surrogate; splitting a BMP point writes only the first output slot.
+
+Original integral sal_uInt32 conversion is explicit at the JavaScript numeric
+boundary. A readonly named object represents the original detail namespace;
+Uint16Array represents the caller's valid output pointer storage. Native deleted
+char/signed-char overloads and constant-expression/type/physical pointer rules
+remain separate original compiler evidence, not synthetic runtime guarantees.
+
+The original i18nutil casefolding owner directly depends on these functions.
+This adds the actual shared decoding dependency required before its real
+locale-aware service and SharedStringPool can be connected. It provides no
+JavaScript Unicode casing replacement, fake CharClass or document model.
+
+`scripts/rtl-character-native-probe.mjs` compiles the entire unchanged original
+header with7 pinned full header/config-template blobs. It captures24 initialized
+fields for all1114112 codepoints, including every1048576 supplementary point
+and surrogate pair. Full native output is106954752 bytes, SHA256
+`3ac04bb39846c8a0a4682442d1bdf7be9b3a45976a2fb295846b6012b0424511`.
+A generic2082-run neighboring-delta encoding restores every original byte;
+portable acceptance compares every field and the complete raw digest. It also
+checks67300 ASCII-byte/cross-boundary comparisons, UInt32 conversion witnesses,
+four constants,25 original runtime assertions and24 original rejected char
+overloads. ASan/UBSan gives identical defined outputs. The original UTF32-buffer
+consumer QA reference remains distinct from the generated header caller corpus.
+
+Invalid physical pointers/undersized output, nonintegral or unsafe JavaScript
+inputs, native ABI/template/constant-evaluation enforcement and complete original
+consumer QA remain unverified. Actual CharClass/UNO/i18npool/i18nutil/ICU78.3,
+SharedStringPool and Calc cell/column/document/editable UI owners remain required.
+This is task6/10 since full task31; the next scheduled full run is task41.
+
+
+## Native JavaScript Unicode correspondence before ICU implementation
+
+Task38 first compares the actual pinned ICU78.3 scalar dependency with native
+JavaScript, following the explicit native-first user requirement. The complete
+[comparison report](calc-native-unicode-conformance.json) retains both measured
+engines, every mismatch, original source/archive/driver/output hashes and the
+original LibreOffice table-mask predicate determining fallback reachability.
+
+All1,114,112 codepoints are tested, including surrogate codepoints. Node24.13.1
+(ICU78.2, Unicode17) and real Chrome154 give identical observations. Native
+`toLowerCase()` plus conversion to its first complete result codepoint agrees
+with original scalar lowercase everywhere in those engines. Unadapted lowercase
+expands U+0130 and has one mismatch; original LibreOffice tables intercept it
+before either lower fallback. Native whole-string uppercase has102 mismatches,
+including27 actual LowerToUpper fallback cases. Uppercase as a titlecase
+candidate has160 mismatches, including77 actual ToTitle fallback cases.
+Lowercase as a case-fold candidate has198 mismatches, including184 actual
+SimpleFolding and181 actual FullFolding fallback cases. The standard native
+interfaces have no direct scalar titlecase or Unicode case-fold mapping API.
+
+The scalar lowercase adapter now uses native JavaScript after signed32 conversion
+and original invalid-input identity handling. The uppercase, titlecase and fold
+contracts retain the actual source algorithms, frozen UTrie2 and exception slots. No whole
+ICU library is required by this evidence. Other engine/Unicode versions and
+actual complete locale-aware string services remain unverified; the selected
+native implementation must keep exhaustive pinned source-free replay tests.
+The native capture includes71,303,168 raw bytes, original trie/exception index
+observations,669 populated exception-slot values and pointer positions, signed
+out-of-range inputs, folding option masks and all original generated data.
+ASan/UBSan outputs agree completely. Another2,048 valid generic slot callers
+verify both single- and double-word macro contracts without modifying original
+generated data. Complete generated arrays, singleton fields and shared array
+offsets remain in their original owners. Header modules retain their native
+header discriminator for separate browser module resolution.
+
+Portable checks run with all original-source links absent: Calc106 tests
+pass with100% Istanbul coverage (2,920 statements,2,055 branches,474 functions,
+2,564 lines). The affected shared dependency passes3 exhaustive tests with100%
+coverage (116 statements,64 branches,20 functions,106 lines); every raw counter
+is positive, including all executable source owners. The public header module
+only reexports original delegates and has no executable coverage statements.
+Twenty-eight affected tooling tests and type, documentation, lint, dependency,
+source-tree, source-provenance and scoped inventory checks pass. Calc inventory
+contains50 capabilities/181 modules including shared dependencies; shared has
+27 capabilities/151 modules, both with zero semantic violations. Broad contract,
+behavior, default and ownership parity remain unverified. The full run remains
+scheduled for task41.
+
+This closes a scalar dependency, not the real locale-aware string service or
+SharedStringPool. The remaining UI prerequisite path is actual string mapping
+and pool, typed cell storage in ScColumn/ScTable/ScDocument, document edits with
+notifications and undo, then the Calc view/input adapter. Existing Writer/shared
+owners are reused wherever upstream shares them; editable sheet UI is not yet
+ready to connect.
+
+
+## Locale value ownership and original case-mapping data
+
+Task39 is in progress. The actual udkapi Locale.idl defines exactly three string
+fields in order: Language, Country, Variant. The shared Locale value owner reuses
+OUString for all fields and follows the cppumaker plain-struct constructor and
+comparison contract, with explicit adapters for compiler-generated memberwise
+copy/move/assignment and reverse-order destruction. It preserves exact UTF16
+values, embedded zero units and case-sensitive language codes. IDL documentation
+does not cause the value struct to validate or normalize BCP47/country strings.
+UNO runtime type reflection and native generated-class correspondence remain
+unverified; this owner is not a fake locale service or CharClass replacement.
+
+The full original casefolding header flags and source arrays are present in their
+actual i18nutil owners:256 signed indices,3328 type/value structs,352 three-unit
+extra mappings, MaxCaseMappingExtras3 and NMAPPINGMAX3. The source extraction
+helper verifies all full pinned IDL/cppumaker/header/data blobs and the complete
+normalized data SHA730303b65854039af4ee7078aa78f04c5e002c53d9eac0babe8bc36a95b11dc1.
+It is source data evidence; it does not execute cppumaker or original native
+casefolding. Six source-contract tests pass with original source links absent,
+with100% coverage across all three executable owners:46 statements,7 branches,
+16 functions and46 lines. No broad parity or original QA port is claimed.
+
+The getValue/getConditionalValue algorithms, real default UNO exception boundary,
+native correspondence and remaining task39 gates are still required. No
+placeholder function/service is connected to the core, and SharedStringPool,
+ScColumn/ScTable/ScDocument and editable Calc UI remain pending. The next full
+run remains scheduled for task41.
+
+
+Task39 also adds the original internal cased_letter predicate and all ten
+conditional const Mapping arrays at their actual casefolding.cxx owner. All21
+structs retain type, signed count and the three initialized UTF16 words. The
+predicate uses the original table index and CasedLetterMask; it adds no Unicode
+category heuristic or locale normalization. Exports of translation-unit
+internals support ESM ownership and adjacent replay tests; the public header
+still declares only the implemented flags/struct layouts.
+
+`scripts/casefolding-character-native-probe.mjs` compiles the complete unchanged
+original arrays/macros/predicate interval and genuine full SAL/i18nutil/o3tl
+headers. It verifies13 full pinned blobs and retains every65536 UTF16 result,
+six original integral-conversion callers and every field of all21 structs.
+Complete native output is524288 bytes with SHA256
+`1c92a8b377f318e5e88c2cd7de18a7524f71aee66dfa643fe7f3a2bc3e72f917`.
+Actual ASan/UBSan output is identical for all three corpora. No generated Locale,
+UNO exception, getValue or getConditionalValue is instantiated/executed by
+this primitive probe; these remain required by the active task39 contract.
+
+Eight source-contract/native-replay tests in three files pass without all three
+original source links. Four actual executable owners have S66/B9/F19/L65
+all100%; every raw counter is positive. Original source links are restored
+exactly. The corrected four-file boundary/provenance/runtime/registry tooling
+selection passes30 cases; it supersedes an earlier three-file selection that
+included a nonexistent test filename. New original udkapi/i18nutil roots now
+have explicit allowed shared dependency directions and the existing protected
+browser/worker/storage restrictions. Task39 remains in progress, with full
+algorithm/default-exception/native generated-type work pending. Next full41.
+
+
+## Original shared ASCII literal equality for locale codes
+
+Task39 extends the existing SAL C wrapper/header and OUString header owner with
+rtl_ustr_asciil_reverseEquals_WithLength and equalsAsciiL. The original langIs
+macro's literal operator uses this method. It preserves length-before-read,
+back-to-front comparison, embedded NUL and borrowed storage without case/locale
+normalization or new bounds repairs. Uint8Array represents original char bytes;
+original signed32 and selected signed-char conversion are explicit. No separate
+Calc comparison, string allocator or temporary locale service is introduced.
+
+`scripts/rtl-ascii-equality-native-probe.mjs` compiles complete unchanged original
+equality/lifetime scopes and full genuine OUString headers, verifying31 pinned
+full blobs. Both C and header methods are observed for all8,388,608 pairs of
+UTF16 units and original ASCII0..127 bytes. Complete output is16777216 bytes
+with SHA2565780cb29bd8009a2b1044d5b5f6666b2be0b6ed56b871e89c03551ee250fc0a5.
+Another337 complete observations retain prefix/offset/null-zero inputs, actual
+lt/tr/az literal operators, borrowed results, pointer/refcounts and unchanged
+caller buffers. ASan/UBSan outputs are identical for both corpora. Original
+negative-length assertion SIGABRT is captured separately. Logging, invalid
+storage/ABI, unsigned-char targets and non-ASCII byte warnings are unverified.
+The related original process getGlobalProcessId_002 QA reference is not claimed
+ported or executed.
+
+The first portable run correctly fails when Vitest deep Buffer comparison
+exhausts its heap; the fixed test compares every byte with Buffer.equals, keeping
+the same complete corpus/digest and100 thresholds. All18 tests in8 related
+string/case/Locale files pass with all original links absent. Thirteen executable
+owners have S516/B229/F120/L431 all100; an independent audit confirms every
+raw statement/function/branch counter is positive. Fresh Calc coverage passes
+106 tests in24 files, S2920/B2055/F474/L2564 all100, with all original source
+links absent and restored exactly in finally. The serial metadata/tooling gates
+pass after documenting an assertion callback:30 affected tooling tests, strict
+source and boundary checks, shared/Calc inventories with zero semantic
+violations, routing and doctor (zero errors, two inherited warnings).
+
+This completes the literal-equality dependency only. Native generated Locale,
+true UNO exception/reference boundaries, complete getValue/getConditionalValue,
+CharClass/SharedStringPool and document/edit/UI remain required; task39 stays
+DOING. This is still the eighth active task after full31, with next full41.
+
+
+The task39 native type dependency build is now reproducible via
+`node scripts/casefolding-native-types.mjs --compile`. It compiles21 true
+cppumaker/codemaker/unoidl/SAL-helper translation units, including the genuine
+legacy provider and parser/scanner generated from unchanged Bison/Flex grammars.
+The compiler dependency manifest verifies112 full pinned LibreOffice blobs and
+the cached Boost/mdds archives against original download.lst. All original
+class declarations and method bodies are compiled unchanged. This is object
+compilation evidence only: direct linking still needs real SAL/OSL/registry
+library owners; generated Locale/UNO headers and native case mapping execution
+remain pending. The helper adds no native substitute class or application
+runtime dependency. Related type/lint/JSDoc/size/format/routing/doctor checks
+pass; task39 remains DOING and the next full run remains41.
+
+
+Task39 now supplies the complete original generator build through
+`node scripts/casefolding-native-types.mjs --generate`. It compiles105 genuine
+translation units and links the unchanged cppumaker entry point with actual
+SAL/OSL, registry/store and SAL-helper owners. All336 full LibreOffice compiler
+inputs/build rules and cached original Boost/mdds/dragonbox/fast_float archives
+are verified; system zlib and macOS Foundation/CoreFoundation are the selected
+native platform dependencies. Native artifacts remain ignored.
+
+The original generator consumes byte-for-byte copies of the five pinned IDL
+files through its actual SourceTreeProvider, emitting ten genuine Locale,
+Exception, RuntimeException, XInterface and TypeClass headers. No handwritten
+class or provider facade is used. Relative input-path handling initially
+failed; exact local file URLs preserve the actual conversion contract. A large
+CNS table initially exceeded the source verifier's default subprocess buffer;
+the verifier now compares every byte using capacity derived from full blob
+length, retaining strict equality and hashes.
+
+A native caller using the generated Locale header observes original empty
+fields, shared-string copy identity, empty moved-from fields and memberwise
+move-assignment swaps. A native default RuntimeException caller links actual
+cppu static_types/typelib owners and observes an empty message, null Context
+and the registered RuntimeException type name. These bounded observations do
+not certify portable UNO reflection or full locale-aware case mapping.
+RuntimeException's original constructors call UnoType::get; that registration
+side effect must be retained with the true dependency owner. Full source
+getValue/getConditionalValue, portable exception/type/reference owners and
+sanitized complete mapping correspondence remain required. Task39 is still
+DOING; editable Calc UI is not ready. Next full run remains41.
+
+## Genuine original locale-aware case-value reference
+
+Task39 now provides `scripts/casefolding-native-probe.mjs --write|--check` and
+the committed `native-casefolding-value-cases.json`. It compiles the complete
+unchanged interval containing all conditional arrays, macros, cased_letter,
+getConditionalValue and getValue, with genuine original full headers/data,
+original generated Locale/RuntimeException and their actual CPPU type owners.
+The original ICU scalar bodies/macros/full Unicode data supply the native
+reference. This does not change task38's native-JS decisions for the portable
+runtime.
+
+All 67 genuine SAL and both required CPPU compilation units are rebuilt for
+normal and ASan/UBSan callers; the mapping, ICU and generated header bodies
+are instrumented too. Complete pinned LO blobs, original generated header
+hashes, actual configuration templates and verified ICU/Boost/dragonbox/
+fast_float archives are retained. Platform frameworks/libc are uninstrumented;
+full platform, ABI, thread/type-cache and consumer contracts remain unverified.
+
+Native observations cover all 1,114,112 Unicode code values in ten mapping
+modes (11,141,120 rows), all 1,048,576 paired-surrogate second positions, and
+1,038,336 conditional/value calls: 26 fully initialized caller contexts,
+13 characters, 12 exact language values and all 256 mapping-bit combinations.
+Contexts include embedded-zero/case-sensitive language values, original
+Lithuanian pos>len witnesses, adjacent sigma/dot cases, explicit buffer
+terminators, accent boundaries and independent declared lengths. They do not
+certify every possible string, position or mode domain.
+
+All 21 conditional Mapping references are observed through actual array
+identity. Every conditional/value call retains all Mapping fields and the
+native value-copy/input-preservation observation. Genuine default UNO
+exceptions occur 239,616 times in direct conditional calls and 3,744 times
+inside getValue: actual empty Message, null Context and the original registered
+RuntimeException type name are observed. No native Locale/UNO/ICU stand-in or
+portable JavaScript Error substitutes this evidence.
+
+Normal/sanitized outputs match all 521,895,936 bytes. Each of the three raw
+SHA256 digests is preserved; signed row-field differences plus gzip retain
+every observation and are reconstructed byte-for-byte before fixture writing
+or checking. The compact fixture is about 2 MB. CALC038 separately records the
+actual sanitizer bounds failure for U+1E9E with standalone internal NotValue;
+that undefined read has no portable expected value and is excluded from the
+defined full-code corpus without changing the original function.
+
+Shared inventory records the new native reference and keeps every broad parity
+flag false. Portable getValue/getConditionalValue, genuine default UNO
+exception/reference/type registration, service/CharClass/SharedStringPool and
+actual cell/column/table/document/edit/UI remain required. Task39 remains
+DOING; no full task verification, consumer QA or editable-UI readiness is
+claimed. The scheduled full test run remains task41.
+
+## Original UNO type comparison dependencies
+
+Task39 adds the actual C typelib TypeClass and independently generated UNO
+TypeClass declarations, the complete common C type-reference/description
+records, the original really-weak classifier and source-owned const reference
+equality. These are required original dependencies of the unfinished default
+UNO exception/type boundary. They introduce no guessed record constructors,
+type factory, allocation, registry, reference lifecycle or service facade.
+
+The SAL dependency adds the genuine terminated Unicode comparison at its
+original template/source/C-header boundaries. It retains the selected native
+unsigned-unit difference and prefix magnitudes, zero termination and null
+pointer assertions; known-length comparison remains its separate owner.
+The classifier identifies only INTERFACE_METHOD and INTERFACE_ATTRIBUTE as
+really weak. Interface and exception classes are not classified as weak.
+
+The new native probe compiles all67 original SAL and both required CPPU units
+in normal and ASan/UBSan modes, using genuine full headers and the actual
+generated TypeClass. Native capture retains all33 enum values,262144 Unicode
+witness pairs and123904 fully initialized public C record comparisons with
+name/type count preservation and both-null identity. All347 full pinned source
+blobs and output hashes are retained. These initialized records are genuine
+const predicate inputs, not replacements for the original runtime allocators
+or registry. The shared build helper verifies ICU inputs, but this caller
+does not compile or link ICU code. CALC-039 records equal-length names with
+different suffixes after embedded zero; original behavior is preserved.
+
+`node scripts/uno-type-primitives-native-probe.mjs --check` reproduces every
+captured byte and provenance field. Portable tests replay every captured byte
+without a deep Buffer assertion. With all three original source links absent,
+Calc106 tests/24 files retain19 executable owners S2920/B2055/F474/L2564 all100;
+the affected shared closure22 tests/9 files covers17 executable owners
+S601/B247/F126/L510 all100. Every raw statement/function/branch counter is
+positive, and formatting leaves the genuine native caller byte-identical.
+Complete portable type allocation, common-prefix pointer aliasing,
+registration/acquire/release, Type/Reference/Any/default RuntimeException,
+getValue/getConditionalValue, service/CharClass/SharedStringPool and Calc
+cell/column/table/document/edit/UI remain required. Task39 remains DOING;
+this bounded dependency does not establish editable-UI readiness.
+
+The user requested a pause after the next scheduled full run at task41.
+After that run, repair Calc/affected shared failures, leave Writer-only
+coverage gaps for its separate branch, record the result and pause the goal
+before further implementation.
+
+## Original OSL atomic counts and extended type declarations
+
+Task39 adds the real shared OSL signed32 interlocked count functions and their
+C-header/internal-macro boundary. Native JS Atomics.add/sub supplies the atomic
+operation; its previous value is adjusted and narrowed to signed32 to retain
+the original operation's own return, including overflow. A later atomic load
+would introduce a return race and is not used. Concrete Int32Array views retain
+the addressed byte offset and neighboring cells. Ordinary ArrayBuffer storage
+works for single-realm counts; the runtime does not construct or require a
+SharedArrayBuffer. Shared counters can use one when the environment permits.
+
+The genuine native caller now retains all16 return/storage fields for65556
+diagonal/boundary count inputs through both original public C functions and
+internal macros. Four original4-thread4096-call captures preserve all65536
+adjusted returns, signed-boundary crossings and complete neighboring storage.
+Normal and ASan/UBSan outputs agree. Portable workers load the actual authored
+OSL module, retain every return, and require each worker's terminal exit.
+This does not establish browser cross-origin isolation or full concurrent
+CPPU registry ownership.
+
+The complete extended typelib C records, initializer records, callback type
+and deprecated five-field Uik are declared at their original header owners.
+Every original field/typedef and genuine compiler size/alignment/offset/member
+size observation is retained for15 full records. The original allocator uses
+new char[sizeof(T)]; unspecified bytes are not read or assigned invented
+defaults. Header declarations and native layout observations do not provide
+the unfinished allocator, shared-prefix pointer aliasing, registration,
+refcount lifecycle or portable native ABI.
+
+The actual UNO default exception/type owners and getValue/getConditionalValue,
+locale/string service/pool, document/edit/view/UI remain required. Task39 stays
+DOING. The next full suite remains task41, followed by required Calc/shared
+repairs and the user-requested goal pause; Writer-only coverage remains excluded.
+
+## Original CPPU type registry ownership
+
+Task39 implements original empty type allocations, common-prefix field/counter
+ownership, acquire/release, complete specific-member destruction, name-only
+reference lookup/creation, callback order and duplicate removal, registration,
+identity-preserving specific-field transfer and late completion, on-demand
+retention and the original256-entry typedef callback cache. Public C exports
+stay at the original header boundary; internal newEmpty/getByName stay in the
+source owner. Original completion/getDescription/full factories/static types
+and Type/Any/Reference/default exception owners remain required and unfinished.
+
+Each browser allocation has canonical typed views sharing its original atomic
+signed32 count and common fields. Reference pType aliases description pSelf;
+sequence's specific pType remains a separate slot. The nested aBase prefixes
+identify the same allocation. Only actual original initialization writes are
+ported; uninitialized positions/flags/Uik fields are absent. Actual specific-byte
+memset during registration supplies its original zero values. Storage becomes
+eligible for browser garbage collection after its owners are released. Full
+native pointer ABI, cross-thread registry synchronization and singleton shutdown
+remain unverified. Registry accesses are synchronous within one browser realm.
+
+The true native probe calls unchanged full SAL/CPPU owners, genuine public and
+internal headers, and original allocators. It retains all initialized fields,
+name/type reference counts and identity witnesses after each operation, including
+complete specific ownership graphs, late enum/compound/interface completion,
+callback duplicates/misses/aliases, replacement output slots and256-entry cache
+eviction. Normal and ASan/UBSan results must match byte-for-byte. Uninitialized
+native fields and freed pointers are never read. Initialized counter-zero and
+empty weak-pointer state witnesses exercise original safeguard branches;
+they do not establish actual interleavings or ordinary user-level reachability.
+Original cppu/qa/typelib.cxx tests are related references only; full static-type
+and completion providers are still needed to port/execute them unchanged.
+
+Calc and affected shared owners retain the100% coverage requirement with all
+original source links absent. Native/provenance checks run with links restored.
+The next scheduled full application run remains task41; fix Calc/affected shared
+failures, leave Writer-only coverage for its branch, then pause the goal as the
+user requested. This prerequisite does not establish editable Calc UI readiness.
+
+## Original CPPU registration invariants
+
+Task39 also retains all21 C assertion predicates in original registration order.
+Twenty initialized invalid caller descriptions are independently passed to the
+unchanged native registry in fresh processes. Each stops at its corresponding
+original assertion with SIGABRT and no returned value or stdout; complete
+diagnostics match in normal and ASan/UBSan builds, before any sanitizer finding.
+Portable tests replay the same initialized inputs with a fresh registry for each
+failure and compare the complete assertion expression, ignoring formatting
+whitespace only. These deliberately invalid caller contracts do not establish
+ordinary user-level reachability.
+
+The retained-count assertion is satisfied by the original getByName acquisition
+in valid ownership traces. Its invalid concurrent interleaving is not fabricated
+for a synchronous browser realm. Private callChain receives an actual non-null
+fresh empty output slot from its sole current caller, satisfying its two C
+preconditions by construction. Debug-only OSL_ASSERT diagnostics are separate.
+Browser Error adapts the fatal C assertion boundary; it does not establish native
+process termination, recoverability or a default UNO RuntimeException owner.
+Full factories/static types/Type/Any/Reference/default exceptions remain required
+before locale-aware case values and their Calc string-service consumers.
+
+## Original inherited CPPU member construction
+
+Task39 ports complete internal copyExceptions and
+createDerivedInterfaceMemberDescription. The original empty allocator, reference
+counters and RTL string owners are reused. All parameter/exception arrays are
+independent copies; their referenced types and names retain original acquisition
+counts. Zero-length arrays remain allocated rather than null. Position/index,
+oneway/readonly, return/attribute pointers and every parameter field follow
+original writes. The base description is borrowed; the successful caller transfers
+interface/base-reference ownership without additional acquisitions. Missing or
+unsupported inputs preserve the output slot and caller ownership.
+
+The native caller includes the complete unchanged typelib.cxx translation unit
+to access its genuine private constructor, omitting only the duplicate standalone
+object at link. All genuine SAL/static-type dependency owners remain linked.
+Initialized original empty records are caller inputs, not replacement native
+factory bodies. Full fields/counters/identity are observed before/after cloning,
+source mutations and release in normal and sanitized builds. Direct constructor
+evidence does not establish missing getByName consumer ownership.
+
+The internal typelib-members.ts split stays in the original typelib directory
+and preserves the public C header boundary, with an explicit filename-divergence
+record required by the repository's fewer-than1000-line source limit. Complete
+getByName/completion/full public factories/static types/Type/Any/Reference/default
+UNO exceptions and their Calc string-service consumers remain required. Full
+run41 and the subsequent user-requested goal pause remain scheduled.
+
+## Shared bounded UTF16 search and substring ownership
+
+Task39 extends the actual shared SAL templates, C/header boundary and OUString
+owner with bounded character/view/reference indexOf, lastIndexOf and substring
+copy. The native JS backend preserves exact UTF16 units, embedded zero, isolated
+surrogates, logical lengths, offsets and original defaults. Empty substring
+needles return -1. No ICU search implementation is needed for this contract.
+
+Actual full-span copies acquire the original data through assign; other spans
+reuse the original allocator and replacement/self-field lifetime order. The
+complete native corpus records every returned offset, live refcount, logical
+length, unit, terminator and identity before/after replacement and release.
+All65536 character values and25 complete substring vectors produce8532312
+bytes; the unchanged full original SAL/OUString dependency closure produces
+identical normal and ASan/UBSan streams. Eleven original checked assertions
+remain separate from returned values and map to Error with original expressions.
+
+Invalid copy ranges are undefined by the public OUString contract. The original
+NDEBUG diagnostic fallback is not certified by the checked profile. ASCII literal
+search overloads, physical pointer/ABI/thread behavior and full upstream QA remain
+unverified. The source StringLiterals::checkOUStringLiteral tests provide related
+UTF16 search evidence, not a claim that their whole suite was executed. Original
+getByName parsing/completion/factories and UNO exception/case-service consumers
+remain unfinished. Full run41 and the subsequent requested goal pause remain
+scheduled.
+
+## Original bounded integer parsing for UNO type names
+
+Task39 adds the required signed64 known-length SAL conversion and bounded UTF16
+o3tl::toInt32. Original whitespace/control classification, sign handling, digit
+classification, first-invalid stop, overflow-to-zero, signed32 range check and
+default radix10 remain in their original shared owners. BigInt retains exact
+signed64 accumulation and limits. The real C/header, radix macros and SAL signed32
+limit macros are shared; no duplicated whitespace classifier or parser in Calc.
+
+The genuine native caller includes unchanged original strtmpl.hxx and full
+SAL/o3tl dependencies. It observes every UTF16 whitespace/digit predicate across
+every radix2..36, original DivMod quotient/remainder/positive guard, C/o3tl
+selected scalar contexts, every prefix of complete boundary/sign/control inputs
+and default conversions. All returned bytes and nine original checked assertions
+are retained separately. The original mutual SAL/o3tl inline-header directions
+are reflected in protected module edges; browser/app dependencies remain blocked.
+
+With explicit user approval, the dependency checker accepts only the original
+two-member SAL/o3tl strongly connected component and its three exact source-path
+and named-value-import witnesses. Additional bindings, other import forms, larger
+components and unrelated cycles still fail. Native JS UTF16 search remains in
+use; signed conversion uses native BigInt arithmetic with the original parser
+rules because parseInt does not preserve whitespace or overflow behavior. No
+additional runtime library is introduced.
+
+Original terminated/byte/unsigned/template APIs, NDEBUG invalid-radix fallback,
+arbitrary out-of-contract JS inputs, native ABI/thread lifetime and full upstream
+QA remain unverified. The original overflow QA provides related evidence only.
+Actual getByName/completion/UNO/default exception and case-service consumers stay
+unfinished. Full run41 followed by the requested goal pause remains scheduled.
+
+## Original borrowed UTF16 substring views
+
+Task39 adds both original OUString.subView overloads to the shared SAL value and
+const-reference owner required by derived-member type-name parsing. Native
+Uint16Array.subarray retains exact UTF16 storage/offsets, embedded zero and
+surrogate units without copying or acquiring the source string. Original range
+assertions retain their order; the default overload delegates with the remainder.
+The caller must keep the actual data owner alive and treat the borrowed units as
+const. Views remain on the old buffer when the source is replaced and another
+original copied owner still retains it. No additional string_view library is used.
+
+The existing genuine native caller exercises both overloads over every valid range
+for all UTF16 values and complete explicit inputs, with full view units and live
+source/pointer/count witnesses. Checked invalid-range outcomes are separate fatal
+assertion observations. No direct subView QA case was found in the available
+sal/qa/rtl/strings sources; the generated native caller is separate evidence.
+Native physical pointer lifetime/const enforcement/ABI, use after release,
+arbitrary malformed JS inputs, invalid-range undefined behavior and full original
+consumer QA remain unverified. Full getByName/type/exception/case-service work is
+still required; full run41 followed by the requested pause remains scheduled.
+
+
+## Original UNO type factories and lookup
+
+Shared CPPU implements the original plain/struct/enum factories, reference
+resolution and full getByName routing in its existing registry. This preserves
+15 lazily registered basic types, sequence/derived member parsing, provider
+callbacks, typedef resolution, and the acquired256-entry cache. Compound base
+and member references, member names, copied enum values/defaults and polymorphic
+flags retain original ownership. Recursive sequence members use the original
+pointer-sized logical slot. Header danger-get/release contracts remain in the
+original header owner. The lookup/size split keeps the source responsibility and
+singleton while honoring the authored1000-line limit.
+
+The browser retains contracts/structures/algorithms/defaults, not physical C++
+object memory. nSize/nAlignment/member offsets describe the separately verified
+logical LP64 UNO model; JS pointers, object byte layouts and vtables are not
+claimed compatible. Exact UTF16 and observable values/counts/identities remain
+covered by complete native streams. Original malformed sequence routing and
+extra derived-base retention are preserved (CALC041/CALC042). The zero-count
+reference guard is an initialized synthetic witness, not a concurrency test.
+
+Full interface factories/completion/static types/Type/Any/Reference and the
+actual default RuntimeException remain pending. Related original typelib and
+recursion QA is source evidence only. Physical native ABI, other platform layouts,
+threading/shutdown, malformed JS storage and full consumer QA remain unverified.
+These dependencies do not yet provide an editable Calc document or UI.
+
+## Original UNO type completion
+
+The shared `cppu/source/typelib/typelib-complete.ts` preserves original `complete` and `typelib_typedescription_initTables` responsibilities. Member factories can request interface lists without recursively resolving attributes; public completion additionally creates member/function maps. Attribute resolution runs in reverse order before the already-complete guard, and writable attributes contribute separate getter/setter entries. Provider completion retains original typedef resolution, registration/identity and acquired256-entry cache eviction.
+
+Full unchanged original SAL/CPPU dependencies provide normal and ASan/UBSan observation streams. Synthetic initialized original allocator records isolate completion and do not establish full interface/member factory or ordinary-consumer parity. Broad parity flags stay false. Native mutex scheduling, physical ABI, shutdown and full QA remain unverified. Original interface factories/static types and Type/Any/Reference/default RuntimeException remain prerequisites of the case service; Calc document/edit/view/UI remain unfinished.
+
+Native observations cover all341 call-table compositions and260 enum completion/cache entries, plus interface-list/table and typedef success/failure outcomes. Complete streams contain53592 and40800 bytes. They also expose and correct a portable enum-factory bug: zero-count null input arrays must yield allocated empty output arrays without dereferencing the input; positive counts still copy independently. This is a portable regression correction, not a suspected upstream defect.
+
+## Original UNO interface-member factories
+
+The shared original `typelib_typedescription_newInterfaceMethod`, `typelib_typedescription_newInterfaceAttribute` and `typelib_typedescription_newExtendedInterfaceAttribute` now use the actual allocator, registry, list-only completion and SAL UTF16 owners. Preserve original last-colon parsing, relative member indices, oneway/readonly flags, parameter names/types/in/out flags and separately acquired method/getter/setter exception arrays. The original factory exception helper returns null for zero count; the distinct derived-member copy retains its allocated empty array. Reuse the existing internal checked C-assert adaptation for the fresh weak-member invariant.
+
+Full unchanged original dependency observations compare initialized fields, dynamic parameter-name acquired counts, return/parameter/exception reference identity and all65536 UTF16 member-name units under normal and ASan/UBSan. Native setup calls the genuine no-base interface factory; portable initialized allocator records isolate the member factory contracts, without implementing or verifying the still-unported interface constructor. Failed wrong-kind/incomplete interface paths retain the original acquisitions; ordinary producer reachability, physical ABI, cross-thread scheduling/shutdown and full consumer QA remain unverified. Broad parity flags stay false. Original interface factories/static types/Type/Any/Reference/default RuntimeException/case service and Calc document/edit/view/UI remain unfinished.
+
+## Original integral UTF16 formatting
+
+Original SAL `valueOfInt` and signed32/signed64/unsigned64 C wrappers now share native JS `Number`/`BigInt.toString(radix)` after complete original comparison. Preserve signed argument widths, all35 radices2–36, lowercase digits, negative signs, terminating zero and unchanged initialized destination sentinels. The original header macro values remain33/65/65. The native caller uses independently sufficient96-unit buffers; CALC-044 records the signed-minimum binary capacity discrepancy without correcting upstream.
+
+Full unchanged genuine SAL/CPPU dependencies under normal and ASan/UBSan produce120031 complete observations: all signed16 decimal values, type/power boundaries over every valid radix and deterministic wide inputs. The full48492536-byte stream (SHA256 `86bad3fa6dc25f7f9fb7dcf877adf89bac036acfa2d9a828458b816aa4764a17`) agrees with native JS formatting before its selection and is replayed through the real portable C declarations. Nine original null/radix assertions retain their source order and expressions as separate process diagnostics.
+
+This is the actual formatting prerequisite for original inherited interface-member names. `StringNumber`, `OUString::number`, expression concatenation and the interface constructor remain required; C formatting alone does not certify their allocation/lifetime or macro-sized buffers. NDEBUG invalid-radix fallbacks, invalid buffers, native ABI and full consumer QA remain unverified. The task and goal stay active; full run41 then pause remains pending.
+
+## Original lazy Unicode string expressions
+
+The original `StringNumber`, `StringConcat`, marker and Unicode `ToStringHelper` specializations share `sal/inc/rtl/stringconcat.ts`, corresponding to `include/rtl/stringconcat.hxx`. Runtime dispatch adapts erased C++ specialization selection, while each expression retains actual borrowed operands. `OUString.number` signed32/signed64 overloads retain default radix10 and the original fixed local buffer; number construction copies its logical units. `OUString.Concat` creates the original unary marker expression, and the actual expression constructor calculates length first, allocates once and writes original left/right helpers with the final zero. Empty allocation retains the source-defined identity.
+
+Original ASCII-uppercase strategy/range/replacement and C wrapper reuse the existing shared character owner. Borrowed output pointers are actual subarrays; no intermediate strings or independent allocator are used. Native original operands are kept alive through materialization. Tests observe full initialized local number units/zero, deferred source-owner and number changes, all UTF16 units, signed-char conversions and actual materialized payload/refcounts/empty identities. Original assertions remain separate process diagnostics.
+
+Spare uninitialized number cells, insufficient macro-sized CALC044 binary-minimum buffers, physical ABI/lifetime/thread scheduling, native const/rvalue/template enforcement and unported C8/pointer/other literal/numeric specializations remain unverified. The unsigned64 number representation uses its actual C formatter directly; unsigned `OUString.number` overload/type witnesses are not certified. Original interface/default-exception/case-service/pool/document/edit/view/UI remain unfinished. Full run41 then user-requested pause remains pending.
+
+### Original UNO interface factories
+
+The shared CPPU `typelib-interface-factories.ts` now owns the original
+`typelib_typedescription_newInterface`, `typelib_typedescription_newMIInterface`
+and internal `BaseList` responsibilities. Public C bindings remain in
+`cppu/inc/typelib/typedescription.ts`; the allocator, canonical prefix view,
+registry, completion, logical LP64 size and shared SAL string owners are reused.
+The source split honors the authored file-size limit.
+
+BaseList visits ancestors before each direct base, preserving separate global
+and per-direct-base uniqueness and the original member offsets. It uses actual
+full-length OUString comparison and owned temporary set names. Derived names
+are built through the original shared lazy StringConcat and OUString.number.
+Own references and direct-base descriptions retain their original acquisition
+and destruction behavior. `ppMembers` is a live interior view of the same
+`ppAllMembers` storage, including both directions of in-bounds pointer writes.
+The canonical weak prefix is assigned at the original late stage; default
+counts, zero Uik fields, null call maps and incomplete status are preserved.
+
+The unchanged native interface factory caller observes all initialized fields,
+name units, acquired counts, output replacement, diamond order, repeated and
+reordered bases, an explicitly completed empty base, all65536 UTF16 units and
+source-defined failed-base retention. Normal and ASan/UBSan captures are compared
+in full with the actual portable public C exports. The caller does not execute
+full upstream consumer QA or prove ordinary failed-producer reachability.
+Native ABI, cross-thread scheduling/shutdown and arbitrary JS array reflection
+or out-of-bounds writes are outside this evidence. System libraries are
+uninstrumented; original retained registries/failures are observed with leak
+detection disabled. Broad parity flags remain false. Static types,
+Type/Any/Reference/default RuntimeException and real case-value service remain
+unfinished, so this checkpoint does not certify document/edit/view/UI readiness.
+
+Nested-diamond observations also preserve per-direct-base deduplication and
+registration into an existing canonical placeholder. The own-member view still
+shares its complete array after the original raw transfer; actual public
+completion produces the original member/function maps, and destruction releases
+the transferred members and direct bases.
+
+### Original terminated ASCII construction
+
+Shared SAL now implements the original `rtl_uString_newFromAscii` and the
+`OUString::createFromAscii` terminated-char overload. The existing template
+length owner accepts char bytes as well as UTF16 units. Empty construction,
+reference release and allocator owners are reused. Input is read to its first
+NUL; positive output releases the prior owner before allocation and checks the
+original ASCII range. The public C binding remains in its original header.
+
+No-acquire value construction retains the actual C pointer, including null
+allocation results. Direct owner-slot initialization adapts the erased nullable
+pointer versus known-length-buffer overloads without inventing empty data.
+Complete original normal/ASan/UBSan captures verify every127 nonzero first ASCII
+byte with every128 second byte, input null/empty/embedded NUL, every initialized
+output unit/zero/count and complete allocator/free ordering. A failure witness
+uses the original replaceable allocation-function pointer; it is not an
+ordinary OS OOM or an upstream method substitution. The original null-data
+value is retained without destruction. Physical ABI, threading, malformed JS
+buffers, null-value consumers/destruction, the distinct string_view/literal
+construction overload and full consumer QA remain unverified. Broad parity
+flags remain false. This supplies a genuine dependency for static type names;
+static types/Type/Any/Reference/default RuntimeException and case values remain
+unfinished.
+
+## Original UNO static type initialization
+
+The original `cppu/source/typelib/static_types.cxx` responsibility now lives in
+`cppu/source/typelib/static_types.ts`. Its eight original public C exports are
+reexported from the existing typedescription header. It reuses the single shared
+CPPU registry/allocation/prefix/completion/layout/reference and SAL string owners.
+There is no second type registry, fabricated XInterface or simplified exception
+description. Basic types, all three root methods, Exception's Message/Context
+and derived RuntimeException are constructed through the actual original factories.
+These are type descriptions; original C++ Type/Any/Reference and default exception
+values remain separate unfinished responsibilities.
+
+Original static initializers preserve cache-cell identity, acquired/static counts,
+idempotence, initialized-name reuse, original lazy sequence name construction,
+compound bases/offsets/parameterized flags, enum default and incomplete interface
+bases/lists. Uninitialized Uik is left uninitialized and never guessed or read by
+the native witness. The original private alignment cap uses the already verified
+selected LP64 logical layout. An initialized synthetic member alignment16 observes
+that source clamp without certifying an ordinary compiled ABI.
+
+The source has native mutexes and repeated checks surrounding static initialization.
+The already selected synchronous realm-local model retains the first check; it
+does not model native mutex scheduling or interleavings. Mutable one-element
+reference tuples adapt original cache-cell addresses; native address arithmetic
+and physical pointer ABI are outside that evidence. Actual `_ustr` constants use
+shared OUStringLiteral storage, while terminated initializer names use the original
+createFromAscii owner. No native method/body is substituted.
+
+The complete native caller retains full hashes for346 unchanged sources and
+rebuilds69 original dependency owners normally and under ASan/UBSan. Complete
+initialized records, names, counts and layouts are compared byte for byte through
+public portable calls. Source-defined checked assertions are observed separately.
+System libraries are uninstrumented, leak detection is disabled and full consumer
+QA/shutdown/native concurrency/malformed JS inputs remain unverified. CALC-047
+records acquired uninitialized-name retention and preserves the original ordering.
+Broad contract/behavior/default/verified flags remain false. Whole task39 and the
+actual locale/case service/pool/document/view/UI remain unfinished; full41 and the
+user-requested subsequent pause remain pending.
+
+A separate original synthetic caller clears the returned mutable Exception
+cache cell after root bootstrap and reenters with an existing XInterface. This
+observes the original null cache result and unchanged retained static-owner
+counts. It covers the source branch without claiming an ordinary producer, a
+mutex race or a repaired bootstrap.
+
+## Original UNO type compatibility and reference assignment
+
+Original ASCII reference creation and reference assignment live in the existing
+CPPU typelib owner. The original primitive compatibility table, reference ancestry
+predicate and description wrappers live together in typelib-assignability.ts,
+split only to keep the core owner below the authored file-size limit. Public C
+exports reuse these owners once through the existing typedescription header.
+
+The original private type_equals and public reference_equals have identical
+predicates. Reuse the existing verified shared equality owner under the private
+call name. Description equality casts only the compared common-prefix fields
+and preserves object identity; it creates no new view and requires no allocator
+bookkeeping. Existing danger-get/release owners preserve source ancestry traversal
+for structures/exceptions and ordered multiple-interface bases. The exact original
+11x11 table is source data inside the implementation module, not a public C header
+export. It is compared with the actual native constant, including diagonal entries
+that are bypassed by the public predicate's earlier identity shortcut. No value
+conversion or invented JavaScript numeric range check replaces this type predicate.
+
+ASCII names use original createFromAscii/reference_new and preserve terminator,
+output replacement, name-only registry lookup and typedef miss. Assignment acquires
+the source before releasing destination and retains self/both-null identity. The
+observation includes a source held only by its old sequence destination: release
+of that destination destroys the sequence and drops its element reference after
+source acquisition. Nonidentical null assignments dereference invalid native
+pointers and are not repaired or certified.
+
+Full unchanged normal and ASan/UBSan builds capture all121 primitive table entries,
+all1681 pairs of41 prepared actual/null references, initialized common fields, all
+name units/counts and real ownership changes. Prepared callers include compounds,
+exception ancestry, ordered multiple interfaces, sequences, weak members, a
+synthetic scalar alias and original embedded-zero names. Complete portable replay
+compares every captured byte/digest. System libraries are uninstrumented; leak
+detection is disabled. Real value conversion/ranges, ordinary synthetic producers,
+physical ABI/native mutex/thread scheduling/shutdown, malformed JS reflection/const
+enforcement and full consumer QA remain unverified. CALC-048 preserves the observed
+signed/unsigned table decisions. Type/Any/Reference/default RuntimeException values
+and case values/service/pool/document/view/UI remain unfinished; whole task39 and
+full41 then requested pause remain pending. Broad parity/verified flags stay false.
+
+
+### Original UNO Type values
+
+The shared `cppu/inc/com/sun/star/uno/Type.ts` binds the original Type.h class
+declaration and Type.hxx inline members into one Type owner. Default construction
+uses the actual VOID cache, copy and pointer construction acquire, both no-acquire
+tags transfer ownership, and explicit disposal performs the original release.
+Original rvalue construction still copies: only move assignment swaps pointers.
+Copy assignment, acquired names, borrowed pointers, description replacement,
+class/equality/compatibility methods reuse existing shared CPPU/SAL owners.
+The original generated UDK TypeClass dependency is retained without a reverse edge.
+
+Complete unchanged native header calls and all69 original dependency objects are
+compared under normal and ASan/UBSan builds. Portable tests replay initialized
+count/name/common fields and all15 basic Type value pairs. Null no-acquire values
+are intentionally retained without destruction; no null destructor or invalid
+native dereference is certified. Physical allocation/ABI, const/rvalue enforcement,
+Array/legacy/UnoType helper templates, threading/shutdown/full QA and unfinished
+Any/Reference/default RuntimeException/case service/pool/document/view/UI remain
+unverified. Broad parity flags stay false; task39 and full41 then requested pause
+remain pending.
+
+
+### Original borrowed UNO Type cell views
+
+The original `cppu::detail` helpers in `cppu/inc/unotype.ts` preserve the live
+const Type alias of a reference pointer cell. Native cell-address identity uses a
+WeakMap and an accessor view of the actual Type prototype. No Type constructor,
+acquire, release, pointer-copy or independent static cache participates. The class
+lookup helper delegates to the original shared C cache. Ordinary Type copies
+and assignments continue to own their references independently of cell changes.
+
+Complete unchanged original unotype.hxx/Type header calls and all69 original
+SAL/CPPU objects are compared under normal and ASan/UBSan builds. Tests cover
+all17 supported class cells and289 pairs, distinct equal-content cell addresses,
+mutable replacement/null/restoration and actual copy/assignment lifetimes.
+Borrowed aliases are never destroyed or assigned. Physical object/pointer
+lifetime/ABI, compiler const enforcement, unsupported static classes, template/ADL
+overload families and native scheduling/shutdown/full QA remain unverified.
+Any/Reference/default RuntimeException/case/service/UI remain unfinished;
+broad parity flags stay false, task39 stays DOING and full41 then pause is pending.
+
+### Original UNO primitives and C records
+
+The shared `cppu/source/uno/prim.ts` follows the original `prim.hxx` callback, sequence-size, empty sequence, VOID acquisition and normal empty Any initialization contracts. C callback and record declarations remain in their original UNO headers; the UNO sequence typedef reuses SAL. Original `data.cxx` global initializers live in `cppu/source/uno/data.ts`. The existing CPPU equality/acquire and OSL atomic owners are reused. Int32Array count storage and a single mutable pointer cell adapt original addressed fields/globals; they do not add an independent registry or data engine.
+
+Empty Any construction leaves `pReserved` untouched and uses `pData=self` in the normal source configuration. Sequence size retains unsigned64 arithmetic wrap and the unsigned32 result guard, including initialized negative signed32 caller observations. These observations do not establish ordinary producer reachability or a defect. The native caller links 72 full unchanged SAL/CPPU translation units and compares complete normal/ASan/UBSan streams for arithmetic, count wrap/identity, callbacks, mapping description ownership and initialized fields. Native physical layout is recorded separately and does not represent a JS binary ABI. Full Any/data/sequence engines, queryInterface, Reference/default exceptions, debug1, native thread/object lifetime and case/service/UI consumers remain unfinished. Broad inventory parity flags remain false.
+
+### Original UNO default construction
+
+The shared `cppu/source/uno/constr.ts` implements both complete original `constr.hxx` default functions. Actual `data.cxx` recursive and C wrappers stay in `cppu/source/uno/data.ts`; public C declarations reexport that one owner. Construction retains base-first/reverse-member order and real enum defaults, including temporary description ownership. Strings, VOID types, empty Any and sequence values reuse the existing shared owners. Scalar/pointer storage uses caller-owned lvalue cells; compound member offsets denote actual caller-provided field addresses and nested storage. This adapts addressing without allocating guessed fields or introducing a public binary ABI, generated struct/provider or second type/memory registry.
+
+The native caller uses 72 full unchanged SAL/CPPU translation units and real registered descriptions, poisoned unconstructed allocations and initialized reserved-field witnesses. Complete normal/ASan/UBSan streams cover fundamental defaults, inline/reference/full-description C boundaries, real enumerations and derived/nested/exception/empty/base-only compounds. Selected caller cleanup uses actual shared release functions; full destructor/copy/sequence/query/Any/Reference/default exception and downstream case/service/UI consumers remain unfinished. The normal diagnostic-only VOID default no-op is recorded without asserting supported arbitrary-class defaults. Broad parity flags remain false.
+
+### Original UNO destruction and clear
+
+Complete original destr.hxx normal LP64 destruction retains original type/reference/string release ownership, base-first/reverse own-member compound order, ascending element/subrange order and size returns, temporary/provided description lifetime, callback/null/default interface branches and actual atomic sequence zero transitions. Actual original data.cxx destructStruct/destructSequence/uno_type_destructData/uno_destructData, any.cxx uno_any_destruct/uno_any_clear and sequence.cxx uno_type_sequence_destroy boundaries reuse one real destruction owner. Native free is browser GC reclamation without synthetic field resets, provider/type factories or an independent memory registry. Existing SAL sequence char-tail declaration now accepts caller-addressed logical source byte-offset storage for non-byte elements; the original empty byte tail remains Int8Array. Scalar/pointer addresses and nested compound addresses retain actual caller cells/maps, without binary JS ABI. One stable Int32Array accessor address per actual sequence record reuses the existing OSL atomic owner; the static empty sequence count uses its existing address, no independent counter. Caller-initialized Any, registered compound and element descriptions are actual native type/string owners; FFI callbacks only observe caller pointers/order/counts. Full72 unchanged original native SAL/CPPU translation units normal/ASan/UBSan compare complete initialized fields/count/name/description streams for fundamental/default/enums/derived/nested/exception/empty/base-only data, every Any class, nested Any, every element class/ranges and sequence transitions/descriptions/zero-count C boundary. Both original zero-count assertions abort in native and retain the existing browser Error assertion adaptation. Normal diagnostic-only unexpected nested Any/TYPEDEF/unsupported element branches are observed without claiming supported generic producers. Copy/construction/assignment/queryInterface/Any/Sequence/Reference/default RuntimeException/case/service/UI consumer closure, native binary/pointer/object lifetime, 32-bit/debug1, native threads/shutdown and full upstream QA remain unfinished or unverified. System dependencies remain uninstrumented and leak detection disabled. Broad parity/default/verified flags remain false.
+
+### Original UNO copy and Any construction
+
+Original copy.hxx normal LP64 complete copy/default/convert operations and all eight actual any.cxx C boundaries plus real data.cxx copy/forward wrappers reuse actual shared type/reference/string/OSL/default/destruction/mapping owners. Preserve type acquisition, value defaults, enum default/description lookup, original Any flatten/null/VOID/source branches, live pData-to-pReserved alias, base-first/reverse own-member copying and reverse sequence conversion, shared sequence atomic increment and exact callback/mapping order, initialized-null mapping out cells, selected description ownership and source allocation-size guard. Source malloc/address expressions use native JS lazy addressed views of one uninitialized logical allocation; field offsets are source logical LP64 offsets, no physical JS binary ABI. Native first-member/nested address aliases and Any reserved-field addresses retain stable identity and live direct writes, with no type lookup/default initialization/provider work. Existing source-owned count views retain one actual count; no alternate type/sequence/interface provider or generated factory is introduced. Byte/primitive values keep their initialized logical type values and IEEE zero; Boolean uses native JS conversion only for valid initialized source data, not arbitrary JS normalization. Full72 unchanged native SAL/CPPU translation units normal/ASan/UBSan compare complete original initialized fields, real description/name/string/ref/callback/count observations through inline/reference/full-description/convert/assignment/null/default/flatten operations, full actual caller-owned type factories and sequences. Synthetic huge initialized header-only counts observe range guards without nonexistent tail reads; diagnostic-only nested Any/TYPEDEF/unexpected element branches certify no supported producer. Physical allocation/memory consumption/malloc resource failure/partial reserved-byte layout,32-bit/debug1/native threads/shutdown and full QA remain unverified. Actual C++ Any/Reference/default RuntimeException/Locale/case/service/UI consumer closure remains unfinished. Broad parity/default/verified flags stay false.
+
+### Original Reference ownership and generated exception values
+
+Continue the approved real Reference/default-exception dependency: bind original Reference.h/hxx direct default/pointer/copy/no-acquire/move constructors, get/is/Boolean/clear/set/assignment/destruction ownership operations into one shared Reference owner; preserve null defaults, acquire-before-release and clear-before-release callback visibility and release/transfer/null move assignment. Query/Any/throwing/interface-identity comparison constructors and operators remain separate unfinished responsibilities, not substitutes. Port actual generated Exception/RuntimeException IDL value classes (normal LIBO_INTERNAL_ONLY, OSL_DEBUG_LEVEL0, no source-location configuration), real shared OUString and Reference default/copy/move/assign/reverse lifetime, stable field owners, and actual cppumaker RuntimeException type initializer with unchanged typelib factory/register/release and leaked shared Type lifetime. No JavaScript Error/provider/type shim or independent exception registry. Full original native generated headers, true72 SAL/CPPU dependencies normal/ASan/UBSan and complete value/type/count/callback observations must precede source-absent raw100 acceptance. Debug source-location append, physical ABI/C++ interface casts/native threading/QA and full query/Any/case/service/UI remain unverified; broad flags remain false. This continues task39 under the user instruction to keep the current39/40/full41/fix/pause plan. The actual generated ASCII type-name constructor requires original rtl_uString_newFromLiteral, char-to-Unicode Copy and selected OUString const char array overload; extend existing shared SAL owners, preserve embedded-zero/trailer validity, ASCII assertion and release-last aliasing. Native JS typed-array operations adapt original array type/length/validation only, not another string factory.
+
+
+### Original locale-aware scalar case values
+
+The shared i18nutil owner now implements the original `getConditionalValue` and
+`getValue` bodies. Exact Locale ASCII language comparison, conditional const entry
+identity, complete independent Mapping value copies, surrogate-tail suppression,
+combined scalar lookup, extras and task38-selected ICU scalar fallback retain the
+pinned source contracts. Default exceptions use the actual shared generated
+RuntimeException/Exception, Reference, OUString and typelib owners. The original
+`casefolding.cxx` RuntimeException API dependency adds i18nutil -> cppu to the
+approved source-root graph wiring; reverse, browser and application edges stay
+forbidden. No cycle exception is needed for this acyclic dependency.
+
+The original native probe rebuilt69 genuine SAL/CPPU translation units and the
+unchanged original case/ICU scopes, verified360 full pinned blobs, and reproduced
+all13,228,032 initialized observations identically under normal and ASan/UBSan
+builds. Portable replay compares every native field, conditional identity, copy
+independence, unchanged caller buffer and actual exception message/context/type.
+Focused source coverage has76 statements,101 branch counters and9 functions, all
+positive and S/B/F/L100. CALC-035 conditions are preserved; CALC-038 isolated
+internal-bit undefined behavior has no invented portable expected output. Final source-absent Calc106/24files/19executable owners and related shared113/34files/41owners pass; every raw S/B/F counter is positive and S/B/F/L100. Calc totals are S2920/B2055/F474/L2564 and related shared S2707/B1333/F386/L2407. All three original source links are restored exactly before source/provenance checks. All13 declared gates pass including34 tooling tests; doctor reports0errors and two inherited warnings.
+
+Full getNextChar/widthfolding, locale service/CharClass/SharedStringPool and Calc
+cell/document/edit/view remain unfinished. Full generated API, Any/query,
+physical C++ ABI, native threading, debug source-location configuration and
+original consumer QA are outside this bounded scalar proof. Broad parity flags
+stay false; next tasks remain40 and full41, followed by Calc/shared repairs and
+the requested pause.
+
+
+### Original case iterator and width lookup owners
+
+Task40 completes the original getNextChar and MappingElement path with actual
+oneToOneMapping/oneToOneMappingWithFlag instance classes, complete width tables,
+all six independent lazy table getters, scalar decomposition/composition and
+original transliteration flags. Native copy-deleted/final/const/physical layouts
+remain explicit unverified platform contracts. MappingElement preserves stable
+embedded Mapping and map identities; only current/type/nmap are native defaults.
+Default map cells are uninitialized upstream and masked from native observations.
+No default-zero or physical-layout claim follows from typed-array storage.
+
+The stateless native casefolding/widthfolding static APIs are named readonly ESM
+records; this preserves their function signatures and ownership while satisfying
+the repository rule against classes containing only static methods. Numeric
+flags reuse the original offapi enum/constant-group owners through a readonly
+record; enum's source-derived sentinel is a literal as required by lint. No
+validator or coverage exception is introduced.
+
+Native capture uses actual original width/case bodies and oneToOneMapping TU,
+true SAL/CPPU/ICU dependencies and independently generated offapi headers. The
+original gbuild regular-header configuration selects cppumaker -L; bootstrap
+mode's enum factory is not used as an internal regular header. Native --write and --check capture all370 original source hashes and identical
+normal/ASan/UBSan streams; all four portable corpus replays pass. Source-absent
+Calc106 and related shared117 tests pass with raw S/B/F/L100; all13 declared
+gates pass. CALC-049/050 record preserved original quirks. No
+complete string/Sequence/locale service/CharClass/pool/document/edit/UI parity is
+claimed. Full task41/fix/pause remains immediately after task40.
+
+
+### Full regression after task40
+
+Task41 runs the complete source-absent office suite: 15084 tests across668 files,
+with S28703/B19704/F6057/L25988 and every raw Istanbul counter positive (100%).
+Calc19, shared182 and Writer205 executable owners each have raw S/B/F/L100.
+No Writer coverage repair was needed. Complete inventory123/38 has its configured
+V8 summary S1734/B1292/F436/L1668, all100%; no raw inventory counter file is
+claimed because that configuration emits text and json-summary. Tooling33/9,
+browser303 (Writer301/shared2/Calc0) and static2 bundles pass. Actual Calc UI
+browser scenarios remain absent, consistently with the unimplemented UI.
+
+Full lint initially traversed unchanged fast_float archive documentation under the
+native build output. Only that original archive cache is now excluded from
+repository-authored lint; application/probe/config sources retain their rules.
+The inventory CLI composition test initially leaked a new ICU vendor reference
+to disk. Its owned marker reader now handles all vendor references using required
+fixture lookups, matching production vendor evidence resolution; all scoped
+checks and complete inventory pass with original links absent. Original native
+archives/implementations, coverage thresholds and runtime behavior are unchanged.
+All3 exact original symlinks were restored. Remaining full static/repository gates
+pass; task41 closes and the goal pauses at the user's requested full-run boundary.
+Original service/pool/column/table/document/edit/view/UI work remains incomplete.

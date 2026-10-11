@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610111228-GA5VWX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T15:25:16.800Z",
+  "verdict": "pass",
+  "summary": "Committed original iterator and width lookup scope meets bounded native, portable coverage and repository acceptance.",
+  "evaluated_sha": "b588a8e8cf90c941b998297277fabfbae090186c",
+  "blueprint_digest": "e948a8dcb86e225b227d042ca7e9478d99c24740a3dae72d754a00352d22afe3",
+  "findings": [
+    "Reviewed b588a8e8 original binary/index ordering, borrowed row identity, generated numeric constants, independent lazy table getters, Mapping field copying and early iterator reset. Full native normal/ASan/UBSan streams match; every portable captured field and raw coverage counter passes. CALC-049/050 preserve source quirks. No complete service/QA/physical ABI/default-map parity claim."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610111228-GA5VWX/README.md",
+    "output/playwright/task40-checks/native-check.log",
+    "output/playwright/task40-checks/value-coverage-audit.json",
+    "output/playwright/task40-checks/value-gates-final-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full Sequence transforms, native physical/const/final/copy/threading guarantees and locale service/pool/document/UI remain unverified; full aggregate41 pending."
+  ]
+}

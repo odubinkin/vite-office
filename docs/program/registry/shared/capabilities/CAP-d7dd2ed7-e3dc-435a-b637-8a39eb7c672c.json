@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d7dd2ed7-e3dc-435a-b637-8a39eb7c672c",
+    "capabilityId": "CAP-d7dd2ed7-e3dc-435a-b637-8a39eb7c672c",
+    "suite": "shared",
+    "subsystem": "rtl-ustring",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original UTF16 whitespace, sign, case-sensitive digit classification and first-invalid stop.",
+      "Exact signed64 overflow-to-zero and original signed32 range/default10 behavior.",
+      "Complete genuine native predicate/value/guard observations retain real shared owner boundaries."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original signed64 known-length SAL toInt and UTF16 o3tl::toInt32 retain exact original whitespace/sign/digit/first-invalid-stop/overflow-to-zero and default radix10. BigInt preserves original unsigned accumulation and signed64 limits; signed32 narrowing occurs only after the original range-to-zero guard. The original internal whitespace classifier remains in o3tl, the generic algorithm/signed64 specialization and internal sign/digit/DivMod owners remain in SAL, and real C/header/radix/SAL signed32 macro boundaries are shared once. Genuine whole original SAL/CPPU translation units and unchanged strtmpl/o3tl headers observe complete constants, quotient/remainder/positive guard, every65536 UTF16 whitespace/digit predicate for every2..36 radix, selected scalar contexts, all prefixes of full radix/boundary/control/sign inputs and default10 values. Complete normal/ASan/UBSan byte streams and nine original checked fatal assertions must agree. Original mutual SAL/o3tl inline-header directions are retained; no app/browser dependencies or duplicated whitespace owner. Checked C assertions map to Error, distinct from UNO exceptions. This specialization does not certify terminated/byte/unsigned/template overloads, original NDEBUG invalid-radix fallback, arbitrary out-of-contract JS numbers or storage, native ABI/thread lifetime, full original QA or unfinished getByName/UNO/case-service consumers. Broad capability parity/default/verification flags stay false."
+    },
+    "capability": "Shared original bounded UTF16 signed integer conversion",
+    "gaps": [
+      "Original signed64 known-length SAL toInt and UTF16 o3tl::toInt32 retain exact original whitespace/sign/digit/first-invalid-stop/overflow-to-zero and default radix10. BigInt preserves original unsigned accumulation and signed64 limits; signed32 narrowing occurs only after the original range-to-zero guard. The original internal whitespace classifier remains in o3tl, the generic algorithm/signed64 specialization and internal sign/digit/DivMod owners remain in SAL, and real C/header/radix/SAL signed32 macro boundaries are shared once. Genuine whole original SAL/CPPU translation units and unchanged strtmpl/o3tl headers observe complete constants, quotient/remainder/positive guard, every65536 UTF16 whitespace/digit predicate for every2..36 radix, selected scalar contexts, all prefixes of full radix/boundary/control/sign inputs and default10 values. Complete normal/ASan/UBSan byte streams and nine original checked fatal assertions must agree. Original mutual SAL/o3tl inline-header directions are retained; no app/browser dependencies or duplicated whitespace owner. Checked C assertions map to Error, distinct from UNO exceptions. This specialization does not certify terminated/byte/unsigned/template overloads, original NDEBUG invalid-radix fallback, arbitrary out-of-contract JS numbers or storage, native ABI/thread lifetime, full original QA or unfinished getByName/UNO/case-service consumers. Broad capability parity/default/verification flags stay false."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "T toInt(S str"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_toInt64_WithLength"
+        },
+        {
+          "path": "include/o3tl/string_view.hxx",
+          "marker": "toInt32(std::u16string_view"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/strings/test_strings_toint.cxx",
+          "marker": "testToInt64Overflow"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "rtl_ustr_toInt64_WithLength"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "toInt("
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_toInt64_WithLength"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/string_view.ts",
+          "marker": "toInt32("
+        },
+        {
+          "path": "scripts/uno-registry-native-driver.mjs",
+          "marker": "integerDriver"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/o3tl/inc/string_view.test.ts",
+          "marker": "matches every complete original integer, predicate, prefix and default result"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original bounded integer parsing for UNO type names"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Parse bounded UTF16 signed integer values with original SAL and o3tl limits and defaults",
+    "scopeLimitations": [
+      "Original signed64 known-length SAL toInt and UTF16 o3tl::toInt32 retain exact original whitespace/sign/digit/first-invalid-stop/overflow-to-zero and default radix10. BigInt preserves original unsigned accumulation and signed64 limits; signed32 narrowing occurs only after the original range-to-zero guard. The original internal whitespace classifier remains in o3tl, the generic algorithm/signed64 specialization and internal sign/digit/DivMod owners remain in SAL, and real C/header/radix/SAL signed32 macro boundaries are shared once. Genuine whole original SAL/CPPU translation units and unchanged strtmpl/o3tl headers observe complete constants, quotient/remainder/positive guard, every65536 UTF16 whitespace/digit predicate for every2..36 radix, selected scalar contexts, all prefixes of full radix/boundary/control/sign inputs and default10 values. Complete normal/ASan/UBSan byte streams and nine original checked fatal assertions must agree. Original mutual SAL/o3tl inline-header directions are retained; no app/browser dependencies or duplicated whitespace owner. Checked C assertions map to Error, distinct from UNO exceptions. This specialization does not certify terminated/byte/unsigned/template overloads, original NDEBUG invalid-radix fallback, arbitrary out-of-contract JS numbers or storage, native ABI/thread lifetime, full original QA or unfinished getByName/UNO/case-service consumers. Broad capability parity/default/verification flags stay false.",
+      "Original Test::testToInt32Overflow/testToInt64Overflow provide related source cases. This bounded known-length conversion does not claim execution of the full original terminated OString/OUString QA suite."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

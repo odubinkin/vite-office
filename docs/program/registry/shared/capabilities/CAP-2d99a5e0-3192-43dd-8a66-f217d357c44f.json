@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2d99a5e0-3192-43dd-8a66-f217d357c44f",
+    "capabilityId": "CAP-2d99a5e0-3192-43dd-8a66-f217d357c44f",
+    "suite": "shared",
+    "subsystem": "unicode",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original integral digits/sign/length/terminator and all initialized buffer writes.",
+      "Original signed widths, macro values and checked null/radix guards."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original SAL integral UTF16 formatting shares actual strtmpl.hxx valueOfInt, ustring.cxx signed32/signed64/unsigned64 C wrappers and original string.h/ustring.h macro boundaries. Native JS Number/BigInt.toString(radix) is selected only after complete comparison with120031 genuine original observations (48492536 bytes SHA25686bad3fa6dc25f7f9fb7dcf877adf89bac036acfa2d9a828458b816aa4764a17). Preserve lowercase digits, negative signs, exact signed widths and unsigned64 bits, original null-before-radix checked guards, terminating zero and all untouched initialized buffer sentinels. The native caller uses96-unit sufficient buffers, all signed16 decimal inputs, all35 valid radices, signed32/signed64/unsigned64 power boundaries and deterministic wide inputs, with full unchanged346-source dependencies under normal and ASan/UBSan. Nine checked native fatal assertions remain separate diagnostics and map to Error; no defined post-abort result is claimed. Preserve original33/65/65 capacity macros despite CALC044: negative minima in base2 need34/66 units including zero. Macro-sized buffers, StringNumber/OUString::number/concat, original NDEBUG invalid-radix fallback, malformed JS arguments/storage, physical ABI and full consumer/upstream QA remain unverified. This closes a required original interface-factory derived-name formatting dependency, not the full interface/default-exception/case-service/document/UI path. No extra formatting library, lossy64-bit Number conversion or source-method replacement."
+    },
+    "capability": "Shared original RTL integral UTF16 formatting",
+    "gaps": [
+      "Original SAL integral UTF16 formatting shares actual strtmpl.hxx valueOfInt, ustring.cxx signed32/signed64/unsigned64 C wrappers and original string.h/ustring.h macro boundaries. Native JS Number/BigInt.toString(radix) is selected only after complete comparison with120031 genuine original observations (48492536 bytes SHA25686bad3fa6dc25f7f9fb7dcf877adf89bac036acfa2d9a828458b816aa4764a17). Preserve lowercase digits, negative signs, exact signed widths and unsigned64 bits, original null-before-radix checked guards, terminating zero and all untouched initialized buffer sentinels. The native caller uses96-unit sufficient buffers, all signed16 decimal inputs, all35 valid radices, signed32/signed64/unsigned64 power boundaries and deterministic wide inputs, with full unchanged346-source dependencies under normal and ASan/UBSan. Nine checked native fatal assertions remain separate diagnostics and map to Error; no defined post-abort result is claimed. Preserve original33/65/65 capacity macros despite CALC044: negative minima in base2 need34/66 units including zero. Macro-sized buffers, StringNumber/OUString::number/concat, original NDEBUG invalid-radix fallback, malformed JS arguments/storage, physical ABI and full consumer/upstream QA remain unverified. This closes a required original interface-factory derived-name formatting dependency, not the full interface/default-exception/case-service/document/UI path. No extra formatting library, lossy64-bit Number conversion or source-method replacement."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "valueOfInt"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_valueOfInt32"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/strings/test_strings_valuex.cxx",
+          "marker": "30039062"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "rtl_ustr_valueOfInt32"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "valueOfInt"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_valueOfInt32"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/integer-format.test.ts",
+          "marker": "matches every original integer-format digit, terminator, length and untouched initialized buffer unit"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/integer-format.test.ts",
+          "marker": "retains original checked null and radix guards for all three C wrappers"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original integral UTF16 formatting"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Format original signed32/signed64/unsigned64 integer into borrowed sufficient UTF16 storage",
+    "scopeLimitations": [
+      "Original SAL integral UTF16 formatting shares actual strtmpl.hxx valueOfInt, ustring.cxx signed32/signed64/unsigned64 C wrappers and original string.h/ustring.h macro boundaries. Native JS Number/BigInt.toString(radix) is selected only after complete comparison with120031 genuine original observations (48492536 bytes SHA25686bad3fa6dc25f7f9fb7dcf877adf89bac036acfa2d9a828458b816aa4764a17). Preserve lowercase digits, negative signs, exact signed widths and unsigned64 bits, original null-before-radix checked guards, terminating zero and all untouched initialized buffer sentinels. The native caller uses96-unit sufficient buffers, all signed16 decimal inputs, all35 valid radices, signed32/signed64/unsigned64 power boundaries and deterministic wide inputs, with full unchanged346-source dependencies under normal and ASan/UBSan. Nine checked native fatal assertions remain separate diagnostics and map to Error; no defined post-abort result is claimed. Preserve original33/65/65 capacity macros despite CALC044: negative minima in base2 need34/66 units including zero. Macro-sized buffers, StringNumber/OUString::number/concat, original NDEBUG invalid-radix fallback, malformed JS arguments/storage, physical ABI and full consumer/upstream QA remain unverified. This closes a required original interface-factory derived-name formatting dependency, not the full interface/default-exception/case-service/document/UI path. No extra formatting library, lossy64-bit Number conversion or source-method replacement."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

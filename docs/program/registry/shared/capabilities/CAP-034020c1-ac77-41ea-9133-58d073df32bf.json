@@ -1,0 +1,121 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-034020c1-ac77-41ea-9133-58d073df32bf",
+    "capabilityId": "CAP-034020c1-ac77-41ea-9133-58d073df32bf",
+    "suite": "shared",
+    "subsystem": "rtl-ustring",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original C empty flags/identity, refcount/copy/alias order and allocator hooks.",
+      "Full original pool probing, growth, static candidates and last-reference chain removal.",
+      "Every complete initialized native observation and20 original assertion diagnostics."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Original algorithms and owner boundaries retained; initialized UTF16 pointer/type witnesses and debug assertion adapters are explicit."
+    },
+    "capability": "Shared original RTL Unicode data ownership and intern pool",
+    "gaps": [
+      "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "EmptyStringImpl"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_uString_intern"
+        },
+        {
+          "path": "sal/rtl/hash.cxx",
+          "marker": "rtl_str_hash_intern"
+        },
+        {
+          "path": "sal/rtl/strimp.cxx",
+          "marker": "rtl_allocateString = malloc"
+        },
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "newFromSubString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "testSharedStringPool"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "rtl_uString"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "EmptyStringImpl"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_uString_intern"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strimp.ts",
+          "marker": "rtl_stringAllocation"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/hash.ts",
+          "marker": "rtl_str_hash_intern"
+        },
+        {
+          "path": "scripts/rtl-ustring-native-sources.mjs",
+          "marker": "const scopes"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strimp.hxx.ts",
+          "marker": "SAL_STRING_INTERN_FLAG"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "newFromSubString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring-ownership.test.ts",
+          "marker": "matches every complete native identity, counter, buffer, allocator event and hash-table slot"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-search.test.ts",
+          "marker": "matches every native search word and complete substring ownership observation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared Unicode ownership and intern pool"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Own, copy, assign and intern initialized Unicode string data using original shared RTL boundaries",
+    "scopeLimitations": [
+      "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair.",
+      "Native generated caller corpus is original unchanged-source observation, not literal upstream QA; existing SharedStringPool QA remains consumer context and is not claimed.",
+      "Original bounded UTF16 character/view/const-reference indexOf and lastIndexOf preserve logical lengths, offsets, embedded zero and isolated surrogate units; empty needles return -1 and default forward/reverse offsets are 0/current length. The std::basic_string_view backend is adapted to native JS indexOf/lastIndexOf through exact UTF16 unit views, without normalization. Actual newFromSubString/copy reuse the existing shared allocator/assign owners: full spans acquire the original data, other spans retain original replacement/self-field lifetimes and complete live buffers. Genuine full SAL/OUString dependencies with347 full pinned sources produce8532312 complete bytes, including all65536 character values and25 complete substring input vectors; normal and ASan/UBSan streams agree. Eleven genuine checked C assertions map to Error, preserving their expressions. Invalid copy ranges are undefined in the public contract; the original NDEBUG diagnostic fallback is not certified. Native ABI/concurrency, physical pointer lifetime, ASCII literal search overloads, other string APIs and complete upstream QA remain unverified. Type-name parsing/getByName and UNO/case-service consumers remain incomplete."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

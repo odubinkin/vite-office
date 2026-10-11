@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-aa1f8676-fe0a-4360-b258-2b80e620a62f",
+    "capabilityId": "CAP-aa1f8676-fe0a-4360-b258-2b80e620a62f",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Source-defined basic/compound/enum/sequence/typedef lookup/default/copy/reference contracts and complete cache eviction.",
+      "Logical LP64 size/offset computation and original reverse ASCII separator lookup with checked assertion order."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites."
+    },
+    "capability": "Shared original UNO type factory and lookup ownership",
+    "gaps": [
+      "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_getByName"
+        },
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "TYPELIB_DANGER_GET"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_lastIndexOfAscii_WithLength"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/typelib.cxx",
+          "marker": "testEnum"
+        },
+        {
+          "path": "cppu/qa/test_recursion.cxx",
+          "marker": "Test::testRecursion"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "TYPELIB_DANGER_GET"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-lookup.ts",
+          "marker": "typelib_typedescription_getByName"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.ts",
+          "marker": "newTypeDescription"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-lookup.test.ts",
+          "marker": "matches original complete plain, enum, recursive sequence, inherited and polymorphic factories"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-lookup.test.ts",
+          "marker": "matches original derived-member routing and every reference resolution branch"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO type factories and lookup"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Create and resolve original UNO type descriptions with source-defined ownership, defaults and logical layout",
+    "scopeLimitations": [
+      "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

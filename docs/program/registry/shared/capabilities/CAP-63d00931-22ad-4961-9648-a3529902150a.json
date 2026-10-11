@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-63d00931-22ad-4961-9648-a3529902150a",
+    "capabilityId": "CAP-63d00931-22ad-4961-9648-a3529902150a",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Source-defined method/attribute field, name, parameter and exception initialization.",
+      "Output replacement and original interface-list completion/failure acquired counts."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original method/attribute factories preserve output replacement, last-colon/double-colon name parsing and original UTF16 member-name construction, interface lookup with list-only completion, exact parameter/default/oneway/readonly/index fields, acquired return/attribute/parameter/exception references and separate getter/setter exception arrays. Zero-count exception factories yield null, unlike the distinct original derived-member reference-array copy. Source-defined early returns preserve acquired descriptions without inserting releases. Reuse existing CPPU allocator/registry/completion/checked-assert and shared SAL string/search owners. Normal and ASan/UBSan complete original dependency observations cover all65536 UTF16 units and initialized parameter/name/reference/exception fields; native setup uses the genuine no-base interface factory, while portable initialized allocator records isolate the member factories and do not implement or verify the still-unported interface factory. Physical ABI, cross-thread scheduling/shutdown, ordinary failing-producer reachability and full consumer QA remain unverified. Full interface factories/static_types/Type/Any/Reference/default RuntimeException/case-value service remain unfinished; broad parity flags stay false. System libraries are uninstrumented, and no native source method is replaced."
+    },
+    "capability": "Shared original UNO interface-member factories",
+    "gaps": [
+      "Original method/attribute factories preserve output replacement, last-colon/double-colon name parsing and original UTF16 member-name construction, interface lookup with list-only completion, exact parameter/default/oneway/readonly/index fields, acquired return/attribute/parameter/exception references and separate getter/setter exception arrays. Zero-count exception factories yield null, unlike the distinct original derived-member reference-array copy. Source-defined early returns preserve acquired descriptions without inserting releases. Reuse existing CPPU allocator/registry/completion/checked-assert and shared SAL string/search owners. Normal and ASan/UBSan complete original dependency observations cover all65536 UTF16 units and initialized parameter/name/reference/exception fields; native setup uses the genuine no-base interface factory, while portable initialized allocator records isolate the member factories and do not implement or verify the still-unported interface factory. Physical ABI, cross-thread scheduling/shutdown, ordinary failing-producer reachability and full consumer QA remain unverified. Full interface factories/static_types/Type/Any/Reference/default RuntimeException/case-value service remain unfinished; broad parity flags stay false. System libraries are uninstrumented, and no native source method is replaced."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_newInterfaceMethod"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/typelib.cxx",
+          "marker": "testEnum"
+        },
+        {
+          "path": "cppu/qa/test_recursion.cxx",
+          "marker": "Test::testRecursion"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/typelib/typedescription.h",
+          "marker": "typelib_typedescription_newInterfaceMethod"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-member-factories.ts",
+          "marker": "typelib_typedescription_newInterfaceMethod"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-member-factories.test.ts",
+          "marker": "matches original method and attribute fields and every owned parameter or exception"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-member-factories.test.ts",
+          "marker": "matches original full65536 UTF16 member-name construction and original last-colon routing"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-member-factories.test.ts",
+          "marker": "matches original member-factory early returns and retained interface or wrong-kind descriptions"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO interface-member factories"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Create original method and attribute descriptions with source-defined fields and acquired ownership",
+    "scopeLimitations": [
+      "Original method/attribute factories preserve output replacement, last-colon/double-colon name parsing and original UTF16 member-name construction, interface lookup with list-only completion, exact parameter/default/oneway/readonly/index fields, acquired return/attribute/parameter/exception references and separate getter/setter exception arrays. Zero-count exception factories yield null, unlike the distinct original derived-member reference-array copy. Source-defined early returns preserve acquired descriptions without inserting releases. Reuse existing CPPU allocator/registry/completion/checked-assert and shared SAL string/search owners. Normal and ASan/UBSan complete original dependency observations cover all65536 UTF16 units and initialized parameter/name/reference/exception fields; native setup uses the genuine no-base interface factory, while portable initialized allocator records isolate the member factories and do not implement or verify the still-unported interface factory. Physical ABI, cross-thread scheduling/shutdown, ordinary failing-producer reachability and full consumer QA remain unverified. Full interface factories/static_types/Type/Any/Reference/default RuntimeException/case-value service remain unfinished; broad parity flags stay false. System libraries are uninstrumented, and no native source method is replaced."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

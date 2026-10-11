@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/typelib/typelib-interface-factories.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/typelib/typelib.cxx",
+    "localSymbols": [
+      "BaseList",
+      "typelib_typedescription_newInterface",
+      "typelib_typedescription_newMIInterface"
+    ],
+    "upstreamSymbols": [
+      "BaseList",
+      "typelib_typedescription_newInterface",
+      "typelib_typedescription_newMIInterface"
+    ],
+    "preservedResponsibilities": [
+      "Original single and multiple-inheritance interface factories reuse the actual CPPU allocator, canonical prefix view, reference registry, completion and logical LP64 layout owners. BaseList performs base-first global and per-direct-base name uniqueness using the actual full-length OUString comparison and owned temporary names. Derived names use actual shared lazy StringConcat and OUString.number; own members are acquired, inherited references are created, base descriptions are acquired and the weak prefix is initialized only at the original late stage. ppMembers is an interior live view of the original ppAllMembers storage, with in-bounds alias reads/writes and source destruction preserved. Initialized complete native streams cover original defaults, unused Uik arguments, output replacement, diamonds, reordered and repeated bases, empty completed base, all65536 UTF16 units and failed base acquisition/completion retention. No original native source method is replaced. Native ABI, arbitrary JS array reflection or out-of-bounds mutation, ordinary failed-producer reachability, cross-thread scheduling/shutdown and full consumer QA remain unverified; system libraries are uninstrumented and leak detection is disabled. static_types/Type/Any/Reference/default RuntimeException and case-value service remain unfinished; broad parity flags stay false.",
+      "Additional original nested-diamond observations cover per-direct-base deduplication, registration into an existing canonical placeholder, live member-array writes after raw transfer, actual public completion and both complete call-index maps through final reference destruction."
+    ],
+    "omittedResponsibilities": [
+      "static_types/Type/Any/Reference/default RuntimeException/case values; native ABI/threading/shutdown/full consumer QA and ordinary failed-producer reachability remain unfinished or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.ts",
+          "marker": "typelib_typedescription_newMIInterface"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-interface-factories.test.ts",
+          "marker": "matches original diamond order, duplicate direct bases, derived names and shared array writes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "BaseList"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_newInterface"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_newMIInterface"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/source/typelib/typelib-interface-factories.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original interface factory and BaseList responsibilities remain together in the CPPU typelib directory, split only to honor the authored file-size limit. Shared canonical allocation/registry/completion/string/layout owners are reused, with a live native interior pointer adaptation and no parallel registry or service."
+    }
+  }
+}

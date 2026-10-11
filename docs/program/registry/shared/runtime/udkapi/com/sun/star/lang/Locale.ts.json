@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/lang/Locale.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "capabilityIds": [
+      "CAP-ac247390-6e35-4e93-a8dc-2a7c0ba515f5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/lang/Locale.ts#Locale",
+        "apps/office/src/udkapi/com/sun/star/lang/Locale.test.ts#retains all IDL fields and default empty string owners",
+        "udkapi/com/sun/star/lang/Locale.idl#Locale"
+      ],
+      "justification": "Original Locale has exactly Language/Country/Variant string fields; cppumaker emits default string constructors, ordered three-field value construction and comparisons, with compiler-generated memberwise copy/move/assignment and reverse destruction. Reuse shared OUString owners rather than JS strings or normalization; explicit lifetime factories/destructors and stable field accessors preserve ownership/member order. Complete original casefolding data retain256 signed indices,3328 type/value structs and352 three-unit extras, original flags0..128 and capacity3. Complete pinned IDL/cppumaker/header/data blobs are verified by source-only extraction; source-contract6 tests pass with all three executable owners S46/B7/F16/L46 all100 and upstream links absent. This evidence does not execute native cppumaker/casefolding or claim service/UNO reflection parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Locale",
+        "LocaleConstReference",
+        "assign",
+        "dispose",
+        "equals",
+        "move",
+        "moveAssign",
+        "notEquals",
+        "result"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/lang/Locale.idl",
+      "upstreamSymbols": [
+        "Locale",
+        "Language",
+        "Country",
+        "Variant"
+      ]
+    }
+  }
+}

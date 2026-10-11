@@ -9,13 +9,16 @@ import ts from "typescript";
 
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
+  "cppu",
   "cui",
   "editeng",
   "external",
   "framework",
+  "i18nutil",
   "o3tl",
   "offapi",
   "package",
+  "sal",
   "sax",
   "sc",
   "sfx2",
@@ -23,19 +26,24 @@ const moduleNames = [
   "svtools",
   "svx",
   "sw",
+  "udkapi",
   "unotools",
   "vcl",
   "xmloff",
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
+  ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
   ["framework", new Set(["sfx2", "svl"])],
-  ["o3tl", new Set()],
-  ["offapi", new Set()],
+  // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
+  ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
+  ["o3tl", new Set(["sal"])],
+  ["offapi", new Set(["sal"])],
   ["package", new Set()],
+  ["sal", new Set(["o3tl"])],
   ["sax", new Set()],
   [
     "sc",
@@ -58,7 +66,7 @@ const allowedEdges = new Map([
     ]),
   ],
   ["sfx2", new Set(["svl"])],
-  ["svl", new Set()],
+  ["svl", new Set(["sal"])],
   ["svtools", new Set()],
   ["svx", new Set(["editeng", "svl", "svtools", "vcl"])],
   [
@@ -79,6 +87,7 @@ const allowedEdges = new Map([
     ]),
   ],
   ["vcl", new Set(["svl"])],
+  ["udkapi", new Set(["sal"])],
   ["unotools", new Set()],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
 ]);
@@ -119,7 +128,21 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
+  if (
+    portablePath.startsWith("i18nutil/inc/") ||
+    portablePath.startsWith("udkapi/") ||
+    portablePath.startsWith("offapi/com/")
+  )
+    return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
+  if (
+    portablePath.startsWith("sal/rtl/") ||
+    portablePath.startsWith("sal/inc/rtl/") ||
+    portablePath.startsWith("sal/osl/") ||
+    portablePath.startsWith("sal/inc/osl/")
+  )
+    return "upstream-mechanism";
   if (/^[^/]+\/source\//u.test(portablePath)) return "upstream-mechanism";
   return undefined;
 }
@@ -265,11 +288,131 @@ function findCycle(graph) {
     return undefined;
   }
 
-  for (const moduleName of moduleNames) {
+  for (const moduleName of graph.keys()) {
     const cycle = visit(moduleName);
     if (cycle !== undefined) return cycle;
   }
   return undefined;
+}
+
+const originalSalO3tlBindings = new Map([
+  ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
+  ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
+  ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],
+]);
+
+/** Checks the exact original mutual header dependency using named value-import syntax. @param sourcePath - Source-relative importer. @param targetPath - Resolved source-relative target. @param sourceText - Authored source. @param importName - Import specifier under inspection. @returns Whether every matching import is an approved original binding. */
+export function isOriginalSalO3tlImport(sourcePath, targetPath, sourceText, importName) {
+  const portableSource = sourcePath.split(path.sep).join("/");
+  const portableTarget = targetPath.split(path.sep).join("/");
+  const expected = originalSalO3tlBindings.get(
+    `${portableSource} -> ${portableTarget.endsWith(".ts") ? portableTarget : `${portableTarget}.ts`}`,
+  );
+  if (expected === undefined) return false;
+  const parsed = ts.createSourceFile(
+    portableSource,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  const bindings = new Set();
+  let valid = true;
+  /** Checks matching module references, rejecting every non-named-value import form. @param node - Current syntax node. @returns Nothing. */
+  function visit(node) {
+    if (ts.isStringLiteralLike(node) && node.text === importName) {
+      const parent = node.parent;
+      if (ts.isImportDeclaration(parent) && parent.moduleSpecifier === node) {
+        const clause = parent.importClause;
+        if (
+          clause === undefined ||
+          clause.isTypeOnly ||
+          clause.name !== undefined ||
+          clause.namedBindings === undefined ||
+          !ts.isNamedImports(clause.namedBindings) ||
+          clause.namedBindings.elements.length === 0
+        ) {
+          valid = false;
+        } else {
+          for (const binding of clause.namedBindings.elements) {
+            if (
+              binding.isTypeOnly ||
+              binding.propertyName !== undefined ||
+              !expected.includes(binding.name.text)
+            )
+              valid = false;
+            bindings.add(binding.name.text);
+          }
+        }
+      } else if (
+        ts.isExportDeclaration(parent) ||
+        ts.isExternalModuleReference(parent) ||
+        ts.isLiteralTypeNode(parent) ||
+        (ts.isCallExpression(parent) &&
+          (parent.expression.kind === ts.SyntaxKind.ImportKeyword ||
+            (ts.isIdentifier(parent.expression) && parent.expression.text === "require")))
+      ) {
+        valid = false;
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(parsed);
+  return (
+    valid &&
+    bindings.size === expected.length &&
+    expected.every(
+      /** Requires all original named bindings rather than an empty witness. @param binding - Original symbol. @returns Whether present. */
+      (binding) => bindings.has(binding),
+    )
+  );
+}
+
+/** Collects all reachable graph owners including the initial owner. @param graph - Module graph. @param start - Initial owner. @returns Reachable owners. */
+function reachableModules(graph, start) {
+  const reachable = new Set([start]);
+  for (const owner of reachable) for (const target of graph.get(owner) ?? []) reachable.add(target);
+  return reachable;
+}
+
+/** Finds forbidden cycles while admitting only the witnessed original two-owner SAL/o3tl component. @param graph - Complete module adjacency map. @param imports - All cross-owner SAL/o3tl witnesses with sourceModule, targetModule and approved fields. @returns Ordered forbidden cycle or undefined. */
+export function findUnapprovedModuleCycle(graph, imports) {
+  const reverse = new Map();
+  for (const [source, targets] of graph)
+    for (const target of targets) {
+      if (!reverse.has(target)) reverse.set(target, new Set());
+      reverse.get(target).add(source);
+    }
+  const forward = reachableModules(graph, "sal");
+  const backward = reachableModules(reverse, "sal");
+  const component = [...forward].filter(
+    /** Selects the complete strongly connected component containing SAL. @param owner - Reachable owner. @returns Whether it can reach SAL. */
+    (owner) => backward.has(owner),
+  );
+  if (
+    component.length !== 2 ||
+    !component.includes("o3tl") ||
+    imports.length === 0 ||
+    !imports.every(
+      /** Requires every original cross-owner witness to pass syntax and binding checks. @param witness - Import observation. @returns Whether approved. */
+      (witness) => witness.approved,
+    ) ||
+    !["sal", "o3tl"].every(
+      /** Requires observed imports in both directions of the original component. @param owner - Importing owner. @returns Whether witnessed. */
+      (owner) =>
+        imports.some(
+          /** Matches one correctly directed original edge. @param witness - Import observation. @returns Whether it belongs to this direction. */
+          (witness) =>
+            witness.sourceModule === owner &&
+            witness.targetModule === (owner === "sal" ? "o3tl" : "sal"),
+        ),
+    )
+  )
+    return findCycle(graph);
+  const projection = new Map();
+  for (const [owner, targets] of graph) projection.set(owner, new Set(targets));
+  projection.get("sal").delete("o3tl");
+  return findCycle(projection);
 }
 
 const failures = [];
@@ -280,6 +423,7 @@ const graph = new Map(
   ),
 );
 const runtimeSources = collectRuntimeSources(sourceRoot);
+const salO3tlImports = [];
 let checkedImports = 0;
 
 for (const sourceFile of runtimeSources) {
@@ -345,6 +489,22 @@ for (const sourceFile of runtimeSources) {
     if (sourceModule === undefined || targetModule === undefined || sourceModule === targetModule)
       continue;
     addGraphEdge(graph, sourceModule, targetModule);
+    if (
+      (sourceModule === "sal" && targetModule === "o3tl") ||
+      (sourceModule === "o3tl" && targetModule === "sal")
+    ) {
+      const approved = isOriginalSalO3tlImport(
+        relativeSource,
+        relativeTarget,
+        sourceText,
+        imported.fileName,
+      );
+      salO3tlImports.push({ sourceModule, targetModule, approved });
+      if (!approved)
+        failures.push(
+          `${displayPath(sourceFile)}: non-original SAL/o3tl import ${imported.fileName}`,
+        );
+    }
     if (sourceModule === "framework" && suiteModules.has(targetModule)) {
       failures.push(
         `${displayPath(sourceFile)}: framework core must receive ${targetModule} through a registered module factory`,
@@ -367,7 +527,7 @@ for (const sourceFile of runtimeSources) {
   }
 }
 
-const cycle = findCycle(graph);
+const cycle = findUnapprovedModuleCycle(graph, salO3tlImports);
 if (cycle !== undefined) failures.push(`runtime module cycle: ${cycle.join(" -> ")}`);
 
 if (failures.length > 0) {

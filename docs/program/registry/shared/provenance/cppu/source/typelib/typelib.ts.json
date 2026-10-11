@@ -1,0 +1,128 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/typelib/typelib.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/typelib/typelib.cxx",
+    "localSymbols": [
+      "typelib_typedescriptionreference_equals",
+      "typelib_typedescription_registerCallback",
+      "typelib_typedescription_revokeCallback",
+      "allocTypeDescription",
+      "typelib_typedescription_newEmpty",
+      "typelib_typedescription_acquire",
+      "typelib_typedescriptionreference_acquire",
+      "deleteExceptions",
+      "typelib_typedescription_destructExtendedMembers",
+      "freeTypeDescription",
+      "typelib_typedescription_release",
+      "typelib_typedescriptionreference_release",
+      "typelib_typedescriptionreference_getByName",
+      "typelib_typedescriptionreference_new",
+      "typelib_typedescription_register",
+      "Init",
+      "newTypeDescription",
+      "typelib_typedescription_new",
+      "typelib_typedescription_newStruct",
+      "typelib_typedescription_newEnum",
+      "typelib_typedescriptionreference_getDescription",
+      "typelib_typedescriptionreference_newByAsciiName",
+      "typelib_typedescriptionreference_assign"
+    ],
+    "upstreamSymbols": [
+      "typelib_typedescriptionreference_equals",
+      "typelib_typedescription_registerCallback",
+      "typelib_typedescription_revokeCallback",
+      "allocTypeDescription",
+      "typelib_typedescription_newEmpty",
+      "typelib_typedescription_acquire",
+      "typelib_typedescriptionreference_acquire",
+      "deleteExceptions",
+      "typelib_typedescription_destructExtendedMembers",
+      "freeTypeDescription",
+      "typelib_typedescription_release",
+      "typelib_typedescriptionreference_release",
+      "typelib_typedescriptionreference_getByName",
+      "typelib_typedescriptionreference_new",
+      "typelib_typedescription_register",
+      "Init",
+      "newTypeDescription",
+      "typelib_typedescription_new",
+      "typelib_typedescription_newStruct",
+      "typelib_typedescription_newEnum",
+      "typelib_typedescriptionreference_getDescription",
+      "typelib_typedescriptionreference_newByAsciiName",
+      "typelib_typedescriptionreference_assign"
+    ],
+    "preservedResponsibilities": [
+      "Original CPPU type allocation initializes exactly the original common/specific fields; uninitialized positions/flags/Uik fields remain absent. Canonical typed browser views share the same signed32 atomic counter, common fields and reference pType/description pSelf slot; aBase prefixes denote the same allocation, while sequence extended pType remains distinct. Original name-only terminated-UTF16 registry equality, callback order/duplicate removal, weak and nonweak ownership, all specific member releases, identity-preserving raw transfer/late completion, on-demand retention and the256-entry typedef callback cache are shared once. Full unchanged original SAL/CPPU owners and headers observe complete initialized fields/counts/identity traces under normal and ASan/UBSan builds; counter-zero/empty weak-pointer caller witnesses are separate from actual concurrent execution. Public C exports preserve the header/source boundary. Completion/getDescription/full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown and Calc document/edit/UI remain unfinished or unverified.",
+      "All21 original registration C assertion predicates and order;20 original fresh-process native failures reproduce complete diagnostics before sanitizer findings, and portable tests compare every expression.",
+      "Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites.",
+      "Completion observations additionally verify zero-value enum factories with null input arrays: retain independently allocated empty output arrays and perform no source read for zero count. Replaced the portable unconditional slice, which incorrectly dereferenced null, with exact count-bounded copying; positive-count ownership and copies retain prior native evidence.",
+      "Existing checked C-assert/Error adaptation is exposed only internally for the original fresh weak-member invariant; no public C header helper or additional assertion owner is introduced.",
+      "Internal referenceViewOf retrieves the allocator-created canonical common-prefix reference view for the original interface factory late reinterpretation; no new view, early weak-reference initialization, second counter or public C helper is introduced.",
+      "The original interface factories are now implemented in typelib-interface-factories.ts with a dedicated scoped capability and complete native/portable ordering, aliasing, registration and ownership observations. Earlier primitive/member-only evidence does not independently certify that owner; static types, Type/Any/Reference/default RuntimeException and full consumers remain unfinished or unverified.",
+      "Original typelib.cxx primitive11x11 compatibility table and reference/description predicates preserve nullable inputs, ANY shortcut, exact identity/class/length/terminated-name equality, recursive struct/exception bases and ordered multiple-interface ancestry. Original private type_equals has the identical body as the already verified public reference_equals; import that existing shared predicate under its original private call name rather than duplicating its SAL string comparison. Description equality uses a declaration cast of the compared common-prefix fields/object identity without new views or allocator-only bookkeeping. The original public ASCII wrapper uses actual SAL createFromAscii then original reference_new, including output replacement/name-only canonical lookup and typedef miss. Original assignment acquires its source before releasing old destination, retaining self/both-null identity shortcuts; nonidentical null assignment has no valid native dereference contract and is not repaired. Complete full unchanged native dependency builds observe all121 actual table entries, all1681 prepared reference pairs and every initialized common description/name/count, interfaces/compound/sequence distinctions, original embedded-zero equality, every128 admissible ASCII first-byte case and actual destruction of a sequence holding the only source reference. Preserve CALC-048 signed/unsigned table observations without changing them. Related original QA is source evidence, not execution of its full consumer suites. Actual value conversion/ranges, ordinary synthetic-alias producers, native pointer ABI/mutex/thread scheduling/shutdown, invalid/null assignment and malformed JS reflection/const enforcement remain unverified; system libraries are uninstrumented and leak detection is disabled. No native body/method is replaced. Type/Any/Reference/default RuntimeException values and original case service/pool/document/view/UI remain unfinished; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Original completion/getDescription and full compound/interface factories/static_types/Type/Any/Reference/default exceptions, native pointer ABI/threading/singleton shutdown, full original consumer QA and Calc document/edit/UI remain unfinished or unverified. Initialized caller state witnesses do not certify ordinary reachability or actual cross-thread interleavings.",
+      "Native SIGABRT/process termination, post-failure recovery and debug-only OSL diagnostics are not browser contracts. No failing synchronous retained-count interleaving is fabricated."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.ts",
+          "marker": "typelib_typedescriptionreference_equals"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib.test.ts",
+          "marker": "matches all complete native initialized reference comparisons without ownership mutations"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/registry.test.ts",
+          "marker": "matches every complete original allocated record and ownership transition"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/registry-assertions.test.ts",
+          "marker": "retains every original failing invariant and assertion expression"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-lookup.test.ts",
+          "marker": "matches original sequence routing, malformed names, provider typedefs and full cache eviction"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-complete.test.ts",
+          "marker": "matches original completion providers, typedef outcomes, identity and full cache eviction"
+        },
+        {
+          "path": "apps/office/src/cppu/source/typelib/typelib-assignability.test.ts",
+          "marker": "matches every original compatibility table entry, nullable type pair and complete ownership record"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescriptionreference_equals"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescription_register"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescriptionreference_newByAsciiName"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "typelib_typedescriptionreference_assign"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser uses its Error assertion boundary for the unchanged C predicate and expression. Native SIGABRT does not define a portable post-failure result or recovery contract; this is separate from UNO RuntimeException and OSL debug diagnostics."
+    }
+  }
+}

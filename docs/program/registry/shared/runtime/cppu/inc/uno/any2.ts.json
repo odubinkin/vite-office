@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/uno/any2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-9ab24392-abc9-40c0-837b-86bc72f58330",
+      "CAP-11109bc4-e05b-43f5-ac32-8aa367c6be90",
+      "CAP-461c9b49-dda8-4ad6-9e48-ce6e6ba80123"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/uno/any2.ts#_uno_Any",
+        "apps/office/src/cppu/source/uno/prim.test.ts#matches original static empty sequence and lazy VOID empty-Any ownership",
+        "apps/office/src/cppu/source/uno/destr.test.ts#matches every original fundamental destruction through inline and C boundaries",
+        "apps/office/src/cppu/source/uno/copy.test.ts#matches complete original initialized data copy and conversion through all boundaries"
+      ],
+      "justification": "Original prim.hxx inline operations retain null callback branches, actual C interface slots, initialized mapping inout pointer and TYPELIB_DANGER_GET/RELEASE ownership, signed32 inputs with unsigned64 wrap before the unsigned32 sequence allocation guard, actual static empty sequence {1,0,{0}} and lazy acquired VOID pointer. SAL sequence header offset8 is a source logical offset; it does not claim JS binary layout. Actual Int32Array storage and existing OSL Atomics implement the address of the one original sequence count; the mutable VOID global is one cross-module pointer cell. Source empty Any construction changes only pType and normal-build pData=self, leaving initialized caller pReserved untouched. The original identical equality and TYPE_ACQUIRE bodies reuse the existing actual CPPU C predicate/acquire owner. New headers declare actual C callback/record/typedef contracts only, without fake providers, allocated Any values or complete data/sequence engines. Full unchanged original prim.hxx and 72 full SAL/CPPU translation units (including genuine any/data/sequence owners) supply normal and ASan/UBSan complete streams. Caller callbacks only record arguments/order and return a caller pointer, without substituting any native operation. Initialized copied C reference records are const equality witnesses only. Physical pointer/ABI/object lifetime, arbitrary invalid JS storage/numbers/callbacks, debug1 configuration, full data/Any/Sequence/queryInterface/Reference/default RuntimeException/case/service/UI consumers, concurrency/shutdown and full upstream QA remain unfinished or unverified. System dependencies are uninstrumented and leak detection disabled; broad parity flags remain false. Complete original destr.hxx normal LP64 destruction retains original type/reference/string release ownership, base-first/reverse own-member compound order, ascending element/subrange order and size returns, temporary/provided description lifetime, callback/null/default interface branches and actual atomic sequence zero transitions. Actual original data.cxx destructStruct/destructSequence/uno_type_destructData/uno_destructData, any.cxx uno_any_destruct/uno_any_clear and sequence.cxx uno_type_sequence_destroy boundaries reuse one real destruction owner. Native free is browser GC reclamation without synthetic field resets, provider/type factories or an independent memory registry. Existing SAL sequence char-tail declaration now accepts caller-addressed logical source byte-offset storage for non-byte elements; the original empty byte tail remains Int8Array. Scalar/pointer addresses and nested compound addresses retain actual caller cells/maps, without binary JS ABI. One stable Int32Array accessor address per actual sequence record reuses the existing OSL atomic owner; the static empty sequence count uses its existing address, no independent counter. Caller-initialized Any, registered compound and element descriptions are actual native type/string owners; FFI callbacks only observe caller pointers/order/counts. Full72 unchanged original native SAL/CPPU translation units normal/ASan/UBSan compare complete initialized fields/count/name/description streams for fundamental/default/enums/derived/nested/exception/empty/base-only data, every Any class, nested Any, every element class/ranges and sequence transitions/descriptions/zero-count C boundary. Both original zero-count assertions abort in native and retain the existing browser Error assertion adaptation. Normal diagnostic-only unexpected nested Any/TYPEDEF/unsupported element branches are observed without claiming supported generic producers. Copy/construction/assignment/queryInterface/Any/Sequence/Reference/default RuntimeException/case/service/UI consumer closure, native binary/pointer/object lifetime, 32-bit/debug1, native threads/shutdown and full upstream QA remain unfinished or unverified. System dependencies remain uninstrumented and leak detection disabled. Broad parity/default/verified flags remain false. Original copy.hxx normal LP64 complete copy/default/convert operations and all eight actual any.cxx C boundaries plus real data.cxx copy/forward wrappers reuse actual shared type/reference/string/OSL/default/destruction/mapping owners. Preserve type acquisition, value defaults, enum default/description lookup, original Any flatten/null/VOID/source branches, live pData-to-pReserved alias, base-first/reverse own-member copying and reverse sequence conversion, shared sequence atomic increment and exact callback/mapping order, initialized-null mapping out cells, selected description ownership and source allocation-size guard. Source malloc/address expressions use native JS lazy addressed views of one uninitialized logical allocation; field offsets are source logical LP64 offsets, no physical JS binary ABI. Native first-member/nested address aliases and Any reserved-field addresses retain stable identity and live direct writes, with no type lookup/default initialization/provider work. Existing source-owned count views retain one actual count; no alternate type/sequence/interface provider or generated factory is introduced. Byte/primitive values keep their initialized logical type values and IEEE zero; Boolean uses native JS conversion only for valid initialized source data, not arbitrary JS normalization. Full72 unchanged native SAL/CPPU translation units normal/ASan/UBSan compare complete original initialized fields, real description/name/string/ref/callback/count observations through inline/reference/full-description/convert/assignment/null/default/flatten operations, full actual caller-owned type factories and sequences. Synthetic huge initialized header-only counts observe range guards without nonexistent tail reads; diagnostic-only nested Any/TYPEDEF/unexpected element branches certify no supported producer. Physical allocation/memory consumption/malloc resource failure/partial reserved-byte layout,32-bit/debug1/native threads/shutdown and full QA remain unverified. Actual C++ Any/Reference/default RuntimeException/Locale/case/service/UI consumer closure remains unfinished. Broad parity/default/verified flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "_uno_Any",
+        "uno_Any"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/uno/any2.h",
+      "upstreamSymbols": [
+        "_uno_Any",
+        "uno_Any",
+        "uno_any_destruct",
+        "uno_any_clear",
+        "uno_type_any_assign",
+        "uno_any_assign",
+        "uno_type_any_construct",
+        "uno_any_construct",
+        "uno_type_any_constructAndConvert",
+        "uno_any_constructAndConvert"
+      ]
+    }
+  }
+}

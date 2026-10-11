@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/uno/constr.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/uno/constr.hxx",
+    "localSymbols": [
+      "_defaultConstructStruct",
+      "_defaultConstructData"
+    ],
+    "upstreamSymbols": [
+      "_defaultConstructStruct",
+      "_defaultConstructData"
+    ],
+    "preservedResponsibilities": [
+      "Complete original constr.hxx _defaultConstructData/_defaultConstructStruct and actual data.cxx defaultConstructStruct/uno_type_constructData/uno_constructData wrappers preserve original normal source defaults, real enum defaults and temporary danger-description ownership, base-first and reverse own-member construction. All constructors reuse actual shared SAL strings, CPPU reference/static VOID and empty Any/sequence primitive owners. Scalar and pointer lvalue addresses use real caller-owned one-value cells; compound source member offsets index actual caller-provided field addresses and nested storage. Address adaptation creates no fields, initialization, allocation, generated struct/interface/Locale/RuntimeException/provider or separate memory/type registry; physical C memory layout is not a JS public-data ABI. Integer64 zero uses BigInt, boolean false and floating positive zero retain logical source values. Existing C prefix allocation views preserve borrowed description identity. Full72 unchanged original SAL/CPPU native translation units and constr.hxx observe all fundamental defaults through both inline and C reference/full-description paths, real factory enums, registered derived/nested/exception/empty/base-only compound descriptions, initialized Any reserved witnesses and complete initialized counts/name/description fields. Original native allocations are poisoned before construction; only source-initialized values are observed. Caller cleanup explicitly invokes existing actual string/reference/atomic releases and does not implement or certify full destructors. Normal diagnostic-only VOID default no-op is observed, without promoting unsupported-class defaults to supported behavior. Full copy/destruction/assignment/Sequence/queryInterface/Any/Reference/default RuntimeException/case/service/UI consumers, original binary/pointer/object lifetime/uninitialized-storage/debug/concurrency/shutdown contracts and full QA remain unfinished or unverified. Normal/ASan/UBSan complete streams must agree; system libraries remain uninstrumented and leak detection disabled. Broad parity/default/verification flags remain false."
+    ],
+    "omittedResponsibilities": [
+      "Full copy/destruction/assignment/Sequence/queryInterface/Any/Reference/default RuntimeException/case/service/UI consumers, generated value/provider closure, physical ABI/pointer/object/uninitialized storage, debug1/native threading/shutdown and full upstream QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/uno/constr.ts",
+          "marker": "_defaultConstructStruct"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/constr.test.ts",
+          "marker": "matches every original fundamental default through inline and C boundaries"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/uno/constr.hxx",
+          "marker": "_defaultConstructStruct"
+        },
+        {
+          "path": "cppu/source/uno/constr.hxx",
+          "marker": "_defaultConstructData"
+        }
+      ]
+    }
+  }
+}

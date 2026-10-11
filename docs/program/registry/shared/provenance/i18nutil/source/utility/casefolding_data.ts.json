@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nutil/source/utility/casefolding_data.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nutil/source/utility/casefolding_data.h",
+    "localSymbols": [
+      "CaseMappingExtra",
+      "CaseMappingIndex",
+      "CaseMappingValue",
+      "MaxCaseMappingExtras",
+      "[type, nmap, map]"
+    ],
+    "upstreamSymbols": [
+      "CaseMappingIndex",
+      "CaseMappingValue",
+      "CaseMappingExtra",
+      "MaxCaseMappingExtras"
+    ],
+    "preservedResponsibilities": [
+      "Original Locale has exactly Language/Country/Variant string fields; cppumaker emits default string constructors, ordered three-field value construction and comparisons, with compiler-generated memberwise copy/move/assignment and reverse destruction. Reuse shared OUString owners rather than JS strings or normalization; explicit lifetime factories/destructors and stable field accessors preserve ownership/member order. Complete original casefolding data retain256 signed indices,3328 type/value structs and352 three-unit extras, original flags0..128 and capacity3. Complete pinned IDL/cppumaker/header/data blobs are verified by source-only extraction; source-contract6 tests pass with all three executable owners S46/B7/F16/L46 all100 and upstream links absent. This evidence does not execute native cppumaker/casefolding or claim service/UNO reflection parity."
+    ],
+    "omittedResponsibilities": [
+      "This records source-defined Locale value semantics and original mapping flags/data only. Actual getValue/getConditionalValue, original default UNO RuntimeException/Reference boundary, native generated-type observation, runtime type reflection, complete locale-aware service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished. Native comparison is not claimed from IDL/table extraction or these source-contract unit tests. Physical C++ ABI/const/template/compiler checks and full original QA remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding_data.ts",
+          "marker": "CaseMappingIndex"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/casefolding_data.test.ts",
+          "marker": "retains every table field and complete source-derived data digest"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "i18nutil/source/utility/casefolding_data.h",
+          "marker": "CaseMappingIndex"
+        }
+      ]
+    }
+  }
+}

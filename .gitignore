@@ -48,6 +48,7 @@ vendor/libreoffice-reference/
 /vendor/libreoffice-reference
 # Optional pinned external dependency research; ordinary tests use portable fixtures.
 /vendor/mdds-reference
+/vendor/icu-reference
 .playwright-cli
 
 # Deterministic compatibility views; author docs/program/registry records instead

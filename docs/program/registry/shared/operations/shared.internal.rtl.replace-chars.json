@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.rtl.replace-chars",
+    "modulePath": "apps/office/src/sal/rtl/strtmpl.ts",
+    "symbol": "replaceChars",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-7158764f-ce40-4523-8452-c1ccebf90380",
+    "description": "Original known-length range replacement writes every borrowed Unicode unit through the actual CaseReplace strategy, including embedded zero, after the original range length guard."
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-aede0ffe-3a6a-4cc3-9a3d-3b6313acd94c",
+    "capabilityId": "CAP-aede0ffe-3a6a-4cc3-9a3d-3b6313acd94c",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Both original subView overloads return every UTF16 unit with original borrowed storage and offset, without acquiring or copying.",
+      "Default remainder, original checked range/order behavior and owner-retained replacement lifetime."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original OUString.subView one/two-argument overloads return borrowed UTF16 storage with original range assertion order, no string allocation/copy/acquire, embedded-zero/surrogate preservation and original default remainder. Native Uint16Array.subarray adapts std::u16string_view with the same underlying buffer and offset. Existing genuine full SAL/OUString native caller observes every valid range over all65536 units and complete explicit inputs, original static literal views and source replacement while a copied owner keeps old storage live; the adjacent portable test replays every returned unit and initialized ownership/offset witness. Invalid native ranges are undefined in the public contract; checked-build assertion/order outcomes remain separate observations, mapped to Error rather than native termination. Caller must retain the real data owner and treat views as const. Native physical pointer lifetime/ABI/const enforcement, use after release, arbitrary malformed JS arguments and full upstream QA/getByName/type/exception/case consumers remain unverified. No additional string_view library or Calc-local string owner."
+    },
+    "capability": "Shared original OUString borrowed UTF16 substring views",
+    "gaps": [
+      "Original OUString.subView one/two-argument overloads return borrowed UTF16 storage with original range assertion order, no string allocation/copy/acquire, embedded-zero/surrogate preservation and original default remainder. Native Uint16Array.subarray adapts std::u16string_view with the same underlying buffer and offset. Existing genuine full SAL/OUString native caller observes every valid range over all65536 units and complete explicit inputs, original static literal views and source replacement while a copied owner keeps old storage live; the adjacent portable test replays every returned unit and initialized ownership/offset witness. Invalid native ranges are undefined in the public contract; checked-build assertion/order outcomes remain separate observations, mapped to Error rather than native termination. Caller must retain the real data owner and treat views as const. Native physical pointer lifetime/ABI/const enforcement, use after release, arbitrary malformed JS arguments and full upstream QA/getByName/type/exception/case consumers remain unverified. No additional string_view library or Calc-local string owner."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "subView"
+        },
+        {
+          "path": "cppu/source/typelib/typelib.cxx",
+          "marker": "o3tl::toInt32(name.subView"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/strings/test_oustring_startswith.cxx",
+          "marker": "StartsWith::startsWithChar"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "Returns a std::u16string_view"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "subView"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/string-subview.test.ts",
+          "marker": "matches every original subView range and complete borrowed ownership observation"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-subview.test.ts",
+          "marker": "preserves every original checked subView range assertion and its order"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original borrowed UTF16 substring views"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Borrow original OUString UTF16 substring storage with source-defined range and lifetime contracts",
+    "scopeLimitations": [
+      "Original OUString.subView one/two-argument overloads return borrowed UTF16 storage with original range assertion order, no string allocation/copy/acquire, embedded-zero/surrogate preservation and original default remainder. Native Uint16Array.subarray adapts std::u16string_view with the same underlying buffer and offset. Existing genuine full SAL/OUString native caller observes every valid range over all65536 units and complete explicit inputs, original static literal views and source replacement while a copied owner keeps old storage live; the adjacent portable test replays every returned unit and initialized ownership/offset witness. Invalid native ranges are undefined in the public contract; checked-build assertion/order outcomes remain separate observations, mapped to Error rather than native termination. Caller must retain the real data owner and treat views as const. Native physical pointer lifetime/ABI/const enforcement, use after release, arbitrary malformed JS arguments and full upstream QA/getByName/type/exception/case consumers remain unverified. No additional string_view library or Calc-local string owner.",
+      "No direct original subView QA case was found in the available sal/qa/rtl/strings sources. The generated genuine caller is separate from original consumer QA; no complete upstream QA execution is claimed.",
+      "The original StartsWith::startsWithChar QA source supplies related borrowed std::u16string_view remainder evidence only; it does not directly call subView and its full suite was not executed or ported here."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

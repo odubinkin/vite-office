@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8d4d87a5-1018-4cb5-9197-71e6d74203b5",
+    "capabilityId": "CAP-8d4d87a5-1018-4cb5-9197-71e6d74203b5",
+    "suite": "shared",
+    "subsystem": "rtl-ustring",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Exact bounded UTF16 units, forward/reverse offsets and original empty-needle -1.",
+      "Actual C, character, string-view and const-reference overloads share the same runtime owners.",
+      "Complete unchanged-source native output agrees with native JS search; original checked assertions remain fail-fast."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original bounded UTF16 character/view/const-reference indexOf and lastIndexOf preserve logical lengths, offsets, embedded zero and isolated surrogate units; empty needles return -1 and default forward/reverse offsets are 0/current length. The std::basic_string_view backend is adapted to native JS indexOf/lastIndexOf through exact UTF16 unit views, without normalization. Actual newFromSubString/copy reuse the existing shared allocator/assign owners: full spans acquire the original data, other spans retain original replacement/self-field lifetimes and complete live buffers. Genuine full SAL/OUString dependencies with347 full pinned sources produce8532312 complete bytes, including all65536 character values and25 complete substring input vectors; normal and ASan/UBSan streams agree. Eleven genuine checked C assertions map to Error, preserving their expressions. Invalid copy ranges are undefined in the public contract; the original NDEBUG diagnostic fallback is not certified. Native ABI/concurrency, physical pointer lifetime, ASCII literal search overloads, other string APIs and complete upstream QA remain unverified. Type-name parsing/getByName and UNO/case-service consumers remain incomplete."
+    },
+    "capability": "Shared original bounded UTF16 search",
+    "gaps": [
+      "Original bounded UTF16 character/view/const-reference indexOf and lastIndexOf preserve logical lengths, offsets, embedded zero and isolated surrogate units; empty needles return -1 and default forward/reverse offsets are 0/current length. The std::basic_string_view backend is adapted to native JS indexOf/lastIndexOf through exact UTF16 unit views, without normalization. Actual newFromSubString/copy reuse the existing shared allocator/assign owners: full spans acquire the original data, other spans retain original replacement/self-field lifetimes and complete live buffers. Genuine full SAL/OUString dependencies with347 full pinned sources produce8532312 complete bytes, including all65536 character values and25 complete substring input vectors; normal and ASan/UBSan streams agree. Eleven genuine checked C assertions map to Error, preserving their expressions. Invalid copy ranges are undefined in the public contract; the original NDEBUG diagnostic fallback is not certified. Native ABI/concurrency, physical pointer lifetime, ASCII literal search overloads, other string APIs and complete upstream QA remain unverified. Type-name parsing/getByName and UNO/case-service consumers remain incomplete."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "indexOfStr_WithLength"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_indexOfStr_WithLength"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "indexOf(std::u16string_view"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+          "marker": "checkOUStringLiteral"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/ustring.h",
+          "marker": "rtl_ustr_indexOfStr_WithLength"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "indexOfStr_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring.ts",
+          "marker": "rtl_ustr_indexOfStr_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "indexOf("
+        },
+        {
+          "path": "scripts/uno-registry-native-driver.mjs",
+          "marker": "stringSearchDriver"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/string-search.test.ts",
+          "marker": "matches every native search word and complete substring ownership observation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared bounded UTF16 search and substring ownership"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "Find characters or Unicode substrings with original shared SAL and OUString defaults",
+    "scopeLimitations": [
+      "Original bounded UTF16 character/view/const-reference indexOf and lastIndexOf preserve logical lengths, offsets, embedded zero and isolated surrogate units; empty needles return -1 and default forward/reverse offsets are 0/current length. The std::basic_string_view backend is adapted to native JS indexOf/lastIndexOf through exact UTF16 unit views, without normalization. Actual newFromSubString/copy reuse the existing shared allocator/assign owners: full spans acquire the original data, other spans retain original replacement/self-field lifetimes and complete live buffers. Genuine full SAL/OUString dependencies with347 full pinned sources produce8532312 complete bytes, including all65536 character values and25 complete substring input vectors; normal and ASan/UBSan streams agree. Eleven genuine checked C assertions map to Error, preserving their expressions. Invalid copy ranges are undefined in the public contract; the original NDEBUG diagnostic fallback is not certified. Native ABI/concurrency, physical pointer lifetime, ASCII literal search overloads, other string APIs and complete upstream QA remain unverified. Type-name parsing/getByName and UNO/case-service consumers remain incomplete.",
+      "The original StringLiterals::checkOUStringLiteral UTF16 search cases are related source evidence only; full original QA and ASCII literal overloads are not claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,4 +1,4 @@
-# Observed upstream cases requiring review
+# Calc: observed upstream cases requiring review
 
 These observations come from the pinned LibreOffice baseline
 `9bc445578031fecf56086729d8e4940c77e14d65` (`libreoffice-26.8.0.2`). They document
@@ -727,3 +727,496 @@ remain in the complete typed acceptance corpus. JavaScript storage bounds
 behavior is an existing representation boundary; native UB/ABI parity remains
 unverified. This may affect other original hinted callers sharing the lookup,
 but only scalar release is reproduced here.
+
+## CALC-032: Intern fast path overwrites a populated destination without releasing it
+
+Status: suspicious ownership condition; initialized native output reproduced.
+
+[Original `rtl_uString_intern`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sal/rtl/ustring.cxx#L587)
+asserts both pointers. When the source already carries the intern flag, it
+acquires the source and writes it to `*newStr`. This branch does not release
+the data previously stored in the destination. The other branch saves the
+previous destination and releases it after interning.
+
+The task34 unchanged-body capture creates an interned source containing
+`[65,66]`, copies it into separate destination data, then calls
+`rtl_uString_intern(&destination, internedSource)`. Native call181 changes
+the destination identity from56 to55. Allocation56 retains refcount1,
+length2, capacity2 and units `[65,66,0]`; no free event occurs. The previous
+allocation stays live in subsequent native snapshots. The probe's explicit
+process cleanup happens only after all observations are recorded.
+
+Evidence: `scripts/rtl-ustring-ownership-native-probe.mjs` compiles the
+complete original function and its original dependencies under ASan/UBSan.
+`apps/office/src/sal/rtl/native-ustring-ownership-cases.json` retains3336
+complete observations as lossless deltas; its raw state SHA256 is
+`665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4`.
+`ustring-ownership.test.ts` compares the entire allocation and handle state,
+including the displaced allocation and source refcount, after every call.
+
+Remaining uncertainty: a populated destination on this fast path may violate
+an intended caller invariant. The broader consumer requirements and history
+have not been established, so this is not a confirmed upstream defect report.
+Decision: preserve the original branch and overwrite order. Do not insert a
+release or normalize callers to hide the observation.
+
+## CALC-033: Intern-table growth applies next-prime selection twice
+
+Status: suspicious growth policy; initialized native table layout reproduced.
+
+[Original hash-table implementation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sal/rtl/hash.cxx)
+resizes when entry count reaches integer `nSize/2`. Its intern caller passes
+`getNextSize(nSize)` to resize; resize passes that request to table allocation,
+which applies `getNextSize` again. Each selection uses the first prime strictly
+greater than its argument. The initial request1024 allocates2039 slots.
+Growth from2039 requests4093 but allocates8191, skipping the intermediate
+table size. Native call2283 grows the table to8191 and inserts entry1020.
+
+Evidence: task34's unchanged complete `hash.cxx` body and dependencies compile
+under ASan/UBSan. Every physical occupied slot, table size and entry count is
+captured before and after growth in `native-ustring-ownership-cases.json`;
+the complete raw output SHA256 is
+`665e3f8e7f0d1ccede35d17809b26694319812aaf695e1383ee8edb40d46c7a4`.
+`ustring-ownership.test.ts` reconstructs and compares all3336 complete snapshots.
+
+Remaining uncertainty: this may be an intentional capacity/growth policy;
+the design history and expected memory/performance tradeoff are unknown.
+Decision: retain both selections, threshold and resulting original layout.
+Do not replace the result with a conventional single next-prime growth.
+
+## CALC-034: SharedString self-move can retain freed data
+
+Status: suspicious ownership condition; original full-header sanitizer
+reproduction retained. No upstream defect report or repair is implied.
+
+[Original move assignment](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/include/svl/sharedstring.hxx#L97)
+releases both current fields, then assigns each result of
+`std::exchange(r.field, nullptr)` back to the destination field. It has no
+self guard. When source and destination are the same object, exchange temporarily
+sets the field to null, then the assignment restores the old pointer.
+If releasing the original field destroyed its last reference, that pointer
+has already been freed. Copy assignment has an explicit self guard.
+
+Reproducer: construct `OUString x` from one UTF16 unit, construct
+`SharedString s(x)`, then clear x so s owns the last data reference.
+Call `s = std::move(s)`, followed by `s.getLength()`.
+Task202610101521-5TVQA9 compiles the full original headers/source with genuine
+RTL lifetime dependencies. The probe's invalid selector2 emits the marker
+`after-self-move-before-length`; ASan then reports heap-use-after-free
+in the original SharedString::getLength. Full stderr stays in the ignored
+native evidence directory. The portable fixture retains only the pre-UB
+marker and diagnosed condition, explicitly `definedResult:false`.
+
+Remaining uncertainty: self-move may be excluded by original caller invariants;
+the broader consumers and design history have not been established.
+Decision: preserve native release/exchange/assignment order and absence of
+a self guard. No synthetic safe result, special-case nulling or ownership
+repair is added. Safe static-data self-move remains in the complete defined
+native corpus; invalid dynamic self-move has no portable post-UB expectation.
+
+## CALC-035: Lithuanian conditional case mapping checks position beyond length
+
+Status: suspicious source condition only; native service output has not been
+reproduced. No confirmed defect or repair is implied.
+
+[Original conditional case mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/i18nutil/source/utility/casefolding.cxx#L85)
+checks `langIs("lt") && pos > len && accent_above(str[pos+1])` for U+0049,
+U+004A and U+012E. For a position inside a string (`0 <= pos < len`),
+`pos > len` is false, so this branch cannot select the Lithuanian
+accent-above mapping. For example, position0 in a two-unit input cannot
+reach that mapping through this condition. This is a predicate observation,
+not a captured case-conversion result.
+
+Evidence: unchanged pinned `i18nutil/source/utility/casefolding.cxx`,
+`getConditionalValue`, lines85–88, inspected while resolving SharedStringPool's
+original CharClass dependency. The original UNO/i18npool/i18nutil/ICU service
+has not yet been ported or exercised here. Full callers, mapping tables,
+locale service and intended index semantics remain to be checked before
+drawing a service-level conclusion.
+
+Decision: preserve the exact source condition when porting this owner. Do not
+change the comparison or replace the original locale service with JavaScript
+casing. Record a native reproduction when the actual service is available.
+
+
+## CALC-036: Case-mapping flag comments reverse the direction names
+
+Status: source documentation inconsistency; no runtime defect or repair is implied.
+
+The pinned include/i18nutil/casefolding.hxx declares LowerToUpper0x01 with the
+comment "Upper to Lower mapping", and UpperToLower0x02 with "Lower to Upper
+mapping". The names and numeric behavior agree with the switch in
+i18nutil/source/utility/casefolding.cxx: LowerToUpper uses u_toupper, while
+UpperToLower uses u_tolower. The two explanatory comments describe the opposite
+direction and can mislead a port or review.
+
+Evidence: unchanged full pinned header and getValue source, inspected in
+task202610101731-H21CAK. The numeric mapping contracts are also used by task38
+native fallback-reachability comparison. This observation does not certify
+complete locale-aware casefolding output or its original UNO service.
+
+Decision: retain original names, values and runtime behavior. Record the comment
+inconsistency; do not invert flags or mappings to follow the comments.
+
+
+## CALC-037: Generated Locale type initialization retains an upstream weak-memory TODO
+
+Status: upstream-documented concurrency concern; no concurrent failure has been
+reproduced and no repair is implied.
+
+[The original plain-struct type emitter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/codemaker/source/cppumaker/cpputype.cxx#L1991)
+emits a static raw type-description pointer, an outer null check and a call to
+`typelib_static_struct_type_init`. Its own TODO warns that on some weak-memory
+platforms another thread can observe an invalid pointed-to value. The actual
+Locale.hpp emitted by the pinned cppumaker retains this sequence and warning.
+
+Evidence: full unchanged PlainStructType::dumpNormalGetCppuType source and ten
+genuine headers generated in task202610101731-H21CAK. Native Locale value
+constructor/copy/move observations do not exercise concurrent type lookup.
+Original static_types.cxx also contains the inner static-initialization mutex;
+its synchronization and the generated outer pointer read need to be considered
+together before concluding there is a defect.
+
+Decision: preserve the generated behavior and original type-registration
+contracts. Do not invent an atomic repair or claim a reproduced concurrency
+problem from this source TODO. Browser realm and worker boundaries remain
+separate verification requirements.
+
+## CALC-038: Standalone internal NotValue mode reads beyond case extras
+
+Status: native undefined behavior reproduced with an initialized caller;
+reachability from ordinary case-operation consumers remains unverified.
+
+[Original `casefolding::getValue`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/i18nutil/source/utility/casefolding.cxx#L122)
+tries up to `MaxCaseMappingExtras` (three) entries from a table-defined offset.
+The complete original extras table has 352 entries. U+1E9E selects value-table
+address 1694, type 234 and extras offset 350. Its final two entries have types
+42 and 64; neither intersects the internal `MappingType::NotValue` bit 128.
+The loop consequently reaches extras index 352 before its RuntimeException
+fallback, although this index is outside the array.
+
+Initialized example: `sal_Unicode input[2] = {0x1e9e, 0}`, position 0, length 1,
+empty genuine generated Locale, and standalone NotValue as the mapping mode.
+The instrumented original body reports `index 352 out of bounds for type
+'const Mapping[352]'` and terminates with SIGABRT. All 67 genuine SAL and two
+CPPU dependency units, the unchanged case-mapping/ICU bodies, and the generated
+Locale/UNO header code are instrumented with ASan/UBSan. Native platform
+frameworks remain outside instrumentation.
+
+Evidence: [the full case-value probe](../../scripts/casefolding-native-probe.mjs),
+its isolated `internal-bit-ub` caller, and ignored complete native diagnostic
+`output/playwright/casefolding-native/internal-bit-ub.stderr`. NotValue describes
+internal table indirection; this synthetic caller is not evidence that an
+ordinary lower/upper/title/folding consumer passes it as a standalone mode.
+
+Decision: retain the original loop and table. Record this diagnostic separately
+from the defined Unicode observations, assign no portable expected value to
+the undefined native read, and do not add a table-bound repair or normalize
+mapping flags. Consumer reachability and intended mode constraints require
+separate review.
+
+## CALC-039: Type-reference name equality ignores equal-length suffixes after zero
+
+Status: suspicious caller-domain condition; original native const predicate
+reproduced with ASan/UBSan-identical output.
+
+[Original `typelib_typedescriptionreference_equals`](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L2226)
+first checks reference identity, then type class and logical name length. Its
+last comparison uses `rtl_ustr_compare`, which stops at the first zero unit.
+
+Example: two distinct, fully initialized public C reference records have the
+same type class and real owned names `[65,0,66]` and `[65,0,67]`. Both names have
+logical length3. Original reference equality returns true although the final
+logical units differ. Different logical lengths still return false; different
+type classes still return false. No name/reference acquire or release occurs.
+
+Evidence: [the full native type primitive caller](../../scripts/uno-type-primitives-native-probe.mjs),
+all123904 initialized class/name combinations in committed
+`native-type-primitives-cases.json`, and
+[portable reference comparison replay](../../apps/office/src/cppu/source/typelib/typelib.test.ts).
+The caller compiles genuine full SAL/CPPU owners and constructs original C
+header records only for const comparison. It supplies no type registry or
+allocation replacement.
+
+These embedded-zero names are synthetic predicate inputs. Reachability through
+ordinary valid UNO type registration/naming consumers is unproven; this is
+not a demonstrated defect of valid registered type names.
+
+Decision: preserve the original terminated comparison and length guard. Do not
+replace it with known-length comparison, normalize names, or silently repair
+the upstream function.
+
+## CALC-040: Conflicting enum completion default does not replace the existing default
+
+Status: synthetic conflicting-provider condition reproduced with normal and
+ASan/UBSan-identical output; ordinary consumer reachability remains unverified.
+
+[Original typelib registration](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1443)
+completes an already initialized incomplete enum by swapping its value count,
+name array and value array. It retains the existing nDefaultEnumValue. A raw
+uninitialized reference takes the separate whole-specific-record transfer path.
+
+Initialized caller example: an incomplete registered enum has default0 and no
+values. A new complete description with the same name/class supplies default42
+and values42/51. Registration returns the existing allocation, now with both
+values and names, but its default remains0. The complete native lifecycle trace
+retains every field/count/identity observation; portable replay matches it.
+
+Evidence: [the genuine original registry caller](../../scripts/uno-registry-native-driver.mjs),
+the registry stream in native-type-primitives-cases.json, and
+[complete portable ownership replay](../../apps/office/src/cppu/source/typelib/registry.test.ts).
+[Original Test::testEnum](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/qa/typelib.cxx#L38)
+expects the initial default0 to remain0 for a consistent provider. Preserving
+known static metadata may therefore be intentional; this conflicting caller
+is not proof of a defect in valid ordinary UNO enum completion.
+
+Decision: retain the original selected-field swaps, including the unchanged
+existing default. Do not copy the incoming default, normalize enum values or
+claim an ordinary consumer failure from this witness.
+
+## CALC-041: Derived-member lookup may retain an additional base description reference
+
+Status: the extra base acquisition is reproduced through complete original
+lookup with initialized synthetic members/interfaces. Ordinary producer lifecycle,
+reachability and an actual leak remain unverified; no consumer defect is claimed.
+
+[Original getByName](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1943)
+looks up the base reference, acquires its description through
+typelib_typedescriptionreference_getDescription, and passes both to
+createDerivedInterfaceMemberDescription. Its failed-construction path releases
+the description, interface and base reference. Its successful path does not
+explicitly release the separately acquired base description.
+
+[Original internal construction](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1745)
+borrows the base while copying values and acquires copied type/name owners. It
+stores the transferred interface and base reference, with no separate base
+description pointer. The method/attribute destructor releases those stored
+owners. For these weak member references, reference release does not itself
+release pType; the apparent extra description acquisition merits review.
+
+Evidence: the original private-constructor corpus remains independently scoped.
+The full unchanged getByName path is now executed by the derivedrefs mode in
+scripts/uno-lookup-native-probe.mjs: initialized method/attribute descriptions
+and their actual weak references show the additional base-description count
+retained on each successful derived lookup, while failed construction balances
+its acquired base/interface/reference owners. Complete normal/ASan/UBSan output
+and portable replay agree. This confirms the acquisition on these initialized
+synthetic inputs, not an ordinary producer leak or long-term shutdown behavior.
+
+Decision: preserve original operations. No extra base release, changed weak
+reference semantics or lookup repair is added. Full ordinary service/cache/shutdown
+reachability still requires separate consumer evidence.
+
+## CALC-042: Sequence-name lookup does not check the second prefix character
+
+Status: reproduced with an initialized synthetic name through complete unchanged
+native getByName/SAL/CPPU owners; ordinary valid-consumer reachability remains
+unverified. No valid-consumer defect is demonstrated.
+
+[Original getByName](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1919)
+enters sequence lookup when the name has more than two UTF16 units and its first
+unit is `[`. It uses name.copy(2) without checking that the second unit is `]`.
+The actual native lookup accepts `[xlong`, preserves that entire original type
+name and creates a sequence whose element reference resolves to long. Normal
+and fully instrumented ASan/UBSan dependency builds produce identical complete
+lookup streams; the portable replay preserves the same routing/counts.
+
+Evidence: scripts/uno-lookup-native-probe.mjs lookup mode and
+apps/office/src/cppu/source/typelib/native-lookup-cases.json retain the complete
+source hashes, native stream/digest and input, with adjacent original portable
+lookup replay. This extends the initial source-only suspicion; it does not prove
+that ordinary producers violate an assumed canonical-name precondition.
+
+The implementation keeps the original predicate and two-unit skip. No prefix
+validation, canonicalization, normalization or upstream repair is added.
+
+## CALC-043: Failed interface-member factories retain acquired descriptions
+
+Status: reproduced with initialized synthetic wrong-kind and incomplete-interface
+inputs through full unchanged native SAL/CPPU factories. Ordinary producer
+reachability, expected naming/type preconditions and an actual consumer leak
+remain unverified; no ordinary-consumer defect is claimed.
+
+[Original method factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1032)
+and
+[original extended attribute factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1120)
+first acquire the interface description through getByName. If that description
+has another type class, or list-only complete returns false, they return without
+releasing that acquired description. The local OUString is destroyed on return;
+the raw description pointer has no RAII owner. Successful construction transfers
+the acquired interface into the member description, whose destructor releases
+it. Missing lookups acquire no description.
+
+Evidence: scripts/uno-member-factories-native-probe.mjs failure mode executes both
+original factories with an initialized registered enum and an initialized
+registered incomplete interface. Each corresponding early return retains one
+additional description count. Prior owned output is released before lookup;
+other missing/bad-name branches preserve expected acquired counts. Complete
+normal/ASan/UBSan failure streams match (728 bytes), and the portable public
+factory replay matches every field and count. Native setup uses the genuine
+no-base interface factory; portable caller initialization isolates the member
+factory behavior and does not verify the still-unported interface constructor.
+
+Decision: preserve original operations and return ordering. No extra description
+release, exception, name validation or completion repair is added. Full valid
+producer/service/shutdown reachability still needs separate consumer evidence.
+
+## CALC-044: Integral format capacity macros omit space for binary negative minima
+
+- Source: pinned `include/rtl/string.h` defines `RTL_STR_MAX_VALUEOFINT32`33 and `RTL_STR_MAX_VALUEOFINT64`65; `include/rtl/ustring.h` aliases these values and recommends them for a buffer holding both the result and terminating NUL. Actual `sal/rtl/strtmpl.hxx::valueOfInt` writes a minus sign, all magnitude digits and then zero.
+- Observation: the complete original native C formatting stream observes signed32 minimum in radix2 with length33 and signed64 minimum with length65, excluding the terminator. They require34 and66 units respectively. Normal and ASan/UBSan streams agree using independently sufficient96-unit caller buffers; full untouched sentinels and terminator are retained. Unsigned64 requires65 units and fits its original macro.
+- Suspicion: the documented signed macro recommendation is one unit short for these binary minima. `StringNumber` uses the original macro-sized member buffer; its physical layout and consumer impact are not established by this C caller. No out-of-bounds or post-undefined-behavior output is claimed from these sufficient-buffer observations.
+- Evidence: `scripts/rtl-integer-format-native-probe.mjs`; `sal/rtl/native-integer-format-cases.json`; complete adjacent portable replay in `integer-format.test.ts`. Full unchanged346-source native dependency closure and complete48492536-byte stream are retained. The macros and result lengths are observed together.
+- Port decision: retain original33/65/65 constants and integral result/terminator behavior. Do not enlarge macros, truncate the negative minimum or silently certify insufficient buffers. Actual ordinary consumers and separate `OUString::number`/concat owners remain unverified.
+
+## CALC-045: Failed interface factory retains its allocation and acquired bases
+
+Status: reproduced with deliberately unavailable bases through the complete
+unchanged native SAL/CPPU interface factory. Ordinary producer reachability,
+expected interface preconditions and an actual consumer leak remain unverified.
+
+[Original multiple-inheritance interface factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L903)
+releases old output, allocates an empty interface and acquires its name before
+resolving and completing direct bases. A null description or failed list-only
+completion returns without releasing the new interface or the bases already
+acquired; the output remains null. The raw local interface pointer has no RAII
+owner, and its canonical weak prefix has not yet been assigned.
+
+Evidence: `scripts/uno-interface-factories-native-probe.mjs` failure mode uses
+both a real weak member reference without a provider and an empty base produced
+by the original interface factory itself. In each case, the new interface name
+count changes from1 to2 and remains2 after caller base release. For the existing
+empty base, its description count changes from1 to2 and remains1 after caller
+release; its owned name also remains acquired. Missing descriptions acquire no
+base. Prior output and its members are released first. Complete normal and
+ASan/UBSan failure streams agree (272 bytes); the portable actual public C
+factory replay compares every initialized field and count. Leak detection is
+disabled for retained original registries/failures, so no leak-detector verdict
+or ordinary-consumer failure is claimed.
+
+Decision: preserve allocation, acquisition and return ordering. Add no extra
+release, exception, completion repair or naming validation. Valid service
+producers and native shutdown behavior need separate consumer evidence.
+
+## CALC-046: Failed ASCII allocation becomes a null-data OUString
+
+Status: reproduced through the original source-provided replaceable allocator
+pointer. Ordinary OS OOM, consumer reachability and destruction of such a value
+remain unverified; the null-data value is intentionally retained without calling
+its destructor.
+
+Pinned `sal/rtl/ustring.cxx::rtl_uString_newFromAscii` releases prior owned data
+before allocation and returns with a null output if the allocator returns null.
+`include/rtl/ustring.hxx::OUString::createFromAscii(const char*)` then constructs
+an OUString from that pointer with SAL_NO_ACQUIRE. That constructor simply stores
+the pointer and performs no validation or allocation-failure exception.
+
+Evidence: `scripts/rtl-ascii-create-native-probe.mjs` failure mode sets the
+original `rtl_allocateString` function pointer to a caller allocator returning
+null. Full unchanged dependencies retain the null C result and the null-data
+C++ value. Complete normal and ASan/UBSan failure observations agree (180 bytes),
+including original release/allocation/free ordering. The native null-data value
+is heap-constructed with copy elision and deliberately retained; no post-invalid
+consumer, null destructor, sanitizer failure or ordinary OS OOM is claimed.
+
+Decision: preserve null pointer transfer and the original ordering. Add no
+invented empty-string fallback, std::bad_alloc translation or allocation repair.
+
+## CALC-047: Static initialized-name lookup retains an uninitialized acquisition
+
+Status: reproduced with a deliberately uninitialized canonical reference through
+full unchanged native SAL/CPPU owners. Ordinary producer reachability, expected
+static-initializer preconditions and an actual consumer leak remain unverified.
+
+Pinned `cppu/source/typelib/static_types.cxx::igetTypeByName` acquires a reference
+through `typelib_typedescriptionreference_getByName`. It returns that reference
+only when both its description and canonical weak prefix are initialized. On the
+other path it returns null without releasing the acquired reference. The caller
+then constructs/registers a new description and receives the canonical reference,
+while the earlier acquisition remains counted. No RAII owner releases the raw
+local reference.
+
+Evidence: `scripts/uno-static-types-native-probe.mjs` uninitialized mode first calls
+the actual static type initializer for an enum name and then the actual static
+enum initializer for the same name. Complete normal and ASan/UBSan streams agree
+(772 bytes), including the retained acquisition, canonical transfer, static/live
+counts and every initialized owned-name/description field. The adjacent public
+portable replay matches the full captured stream. Leak detection is disabled for
+original retained registry/static owners; no leak-detector verdict is claimed.
+
+Decision: retain the original acquisition and registration ordering. Add no extra
+release, lookup repair, synthesized exception or normalization. Valid ordinary
+service producers and native shutdown behavior require separate consumer evidence.
+
+## CALC-048: Type compatibility permits same-width signed/unsigned transitions
+
+Status: reproduced as type-predicate/table behavior through complete unchanged
+native SAL/CPPU owners. Actual value conversion, bit preservation, range checks,
+ordinary consumer effects and upstream intent remain unverified.
+
+Pinned `include/typelib/typedescription.h` describes isAssignableFrom as widening
+conversion without data loss. Actual `cppu/source/typelib/typelib.cxx` defines
+`s_aAssignableFromTab` with mutual signed/unsigned compatibility for short, long
+and hyper widths. The public reference predicate returns true for each direction
+between the actual corresponding original basic type references. A type-only
+predicate checks no source value or range. This appears broader than the header's
+widening/no-data-loss wording; it does not prove that the downstream converter
+loses information or that the table is erroneous.
+
+Evidence: `scripts/uno-assignability-native-probe.mjs` matrix mode observes all121
+entries of the actual native constant and all1681 prepared reference pairs,
+including these six directions. Complete normal and ASan/UBSan streams agree
+(606448 bytes). The portable replay compares both the full table and actual public
+predicate/description-wrapper outputs, with initialized owned names/counts and no
+handwritten native type factory or expected numeric algorithm.
+
+Decision: preserve the original table and predicate. Add no unsigned range gate,
+value check, conversion repair or adjusted compatibility result. Actual original
+value conversion and valid consumer evidence require a separate observation.
+
+
+## CALC-049: Indexed width lookup retains a duplicate row before checking its flag
+
+Status: reproduced through unchanged original lookup classes and width getters.
+Upstream intent and complete transliteration service effects remain unverified.
+
+Pinned `i18nutil/source/utility/widthfolding_data.h` contains two half2full rows
+for U+0022: U+FF02 with flag1 and U+201D with flag2; U+0027 similarly selects
+U+FF07 or U+2019. Original `oneToOneMappingWithFlag::makeIndex` stores the last
+row for each key without considering the owner's flag. Indexed `find` checks
+only that stored row's flag. The normal half2full getter therefore preserves
+U+0022/U+0027, while the JIS getter returns U+201D/U+2019. The earlier normal
+rows remain in the original table but do not participate in indexed selection.
+
+Evidence: `scripts/casefolding-iterator-native-probe.mjs` tables mode captures
+all original tables, six getters and every BMP key; lookup mode also captures
+binary and indexed selection for both complete tables and eleven masks.
+Normal and ASan/UBSan streams match (3420032 and 27525324 bytes). Portable replay
+compares every captured result and actual borrowed row mutation/identity.
+
+Decision: preserve table order, duplicates, index assignment and flag checking.
+Do not prefilter rows, choose an earlier matching row or repair quote conversion.
+
+## CALC-050: Case iterator resets a pending expansion at the logical input end
+
+Status: reproduced through unchanged original getNextChar and initialized caller
+histories. Complete original consumer QA and upstream intent remain unverified.
+
+Pinned `i18nutil/source/utility/casefolding.cxx` checks idx>=len and resets the
+MappingElement before testing pending map entries. With FullFolding and
+IGNORE_CASE, terminal U+00DF yields one U+0073 followed by zero, although the
+first Mapping has nmap2/current1. Terminal U+FB03 likewise yields only its first
+U+0066 from a three-unit expansion. Adding U+0041 after either character allows
+the pending expansion to drain before the final character is folded.
+Original `i18npool/source/transliteration/transliteration_caseignore.cxx` has
+NOT_END_OF_STR checks including current<nmap, so its caller can request those
+pending units; this is source inspection, not an executed service verdict.
+
+Evidence: `scripts/casefolding-iterator-native-probe.mjs` histories mode captures
+all14 result/state/error/identity fields per call, including these four inputs.
+Its complete 10787896-byte normal and ASan/UBSan streams agree. Portable replay
+matches every observation. Native uninitialized map cells after reset are masked
+and are not claimed to have zero defaults.
+
+Decision: preserve early end checking, reset ordering and returned units. Add no
+pending-tail drain or adjusted logical length.

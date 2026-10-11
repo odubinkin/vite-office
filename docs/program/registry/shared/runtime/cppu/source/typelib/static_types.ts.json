@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/source/typelib/static_types.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-b1e4443a-7221-4a46-87c2-81e62e502942"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/source/typelib/static_types.ts#typelib_static_type_getByTypeClass",
+        "apps/office/src/cppu/source/typelib/static_types.test.ts#matches complete original static initializers, layout, flags and ownership"
+      ],
+      "justification": "Original static_types.cxx static cache cells, lazy basic/XInterface/Exception/RuntimeException bootstrap and all eight public static initializers reuse the existing shared CPPU registry, allocation, canonical prefix, completion, reference/atomic, logical LP64 layout and SAL string/expression owners. Initialized descriptions retain exact field order/defaults, static/live counts, acquired bases/members, compound offsets/parameterized flags, sequence names, enum defaults and original idempotence. Static interfaces preserve incomplete member lists and uninitialized Uik rather than invoking the distinct full interface factory. Original constexpr _ustr storage uses the actual shared OUStringLiteral owner; ASCII names use the actual original createFromAscii. The original mutex-protected repeated guard reduces to the first guard in the existing synchronous realm-local model. Stable mutable tuple cells adapt cache-cell addresses; native concurrent scheduling/mutex interleavings, pointer arithmetic/physical ABI, shutdown, malformed JS inputs, ordinary failed-producer reachability and full consumer QA remain unverified. Synthetic member alignment16 observes the selected source clamp, not an ordinary compiled ABI. Preserve original acquired uninitialized-name retention documented in CALC-047. Full unchanged native owners are rebuilt normally and under ASan/UBSan; every captured initialized field/count/name unit is compared in portable replay. No native method/body is replaced; system libraries are not instrumented and leak detection is disabled. Type/Any/Reference/default exception value and locale/case service/pool/document/view/UI remain unfinished; all broad parity flags stay false. Additional original synthetic mutable-cell observation clears the returned Exception cache cell after root bootstrap and reenters with an existing XInterface. It preserves original null return and retained static owner counts; no ordinary producer or native mutex interleaving is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "adjustAlignment",
+        "newAlignedSize",
+        "igetTypeByName",
+        "init",
+        "typelib_static_type_getByTypeClass",
+        "typelib_static_type_init",
+        "typelib_static_sequence_type_init",
+        "typelib_static_compound_type_init",
+        "typelib_static_struct_type_init",
+        "typelib_static_interface_type_init",
+        "typelib_static_mi_interface_type_init",
+        "typelib_static_enum_type_init"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppu/source/typelib/static_types.cxx",
+      "upstreamSymbols": [
+        "adjustAlignment",
+        "newAlignedSize",
+        "igetTypeByName",
+        "init",
+        "typelib_static_type_getByTypeClass",
+        "typelib_static_type_init",
+        "typelib_static_sequence_type_init",
+        "typelib_static_compound_type_init",
+        "typelib_static_struct_type_init",
+        "typelib_static_interface_type_init",
+        "typelib_static_mi_interface_type_init",
+        "typelib_static_enum_type_init"
+      ]
+    }
+  }
+}
