@@ -2680,3 +2680,27 @@ Calc106 and related shared117 tests pass with raw S/B/F/L100; all13 declared
 gates pass. CALC-049/050 record preserved original quirks. No
 complete string/Sequence/locale service/CharClass/pool/document/edit/UI parity is
 claimed. Full task41/fix/pause remains immediately after task40.
+
+
+### Full regression after task40
+
+Task41 runs the complete source-absent office suite: 15084 tests across668 files,
+with S28703/B19704/F6057/L25988 and every raw Istanbul counter positive (100%).
+Calc19, shared182 and Writer205 executable owners each have raw S/B/F/L100.
+No Writer coverage repair was needed. Complete inventory123/38 has its configured
+V8 summary S1734/B1292/F436/L1668, all100%; no raw inventory counter file is
+claimed because that configuration emits text and json-summary. Tooling33/9,
+browser303 (Writer301/shared2/Calc0) and static2 bundles pass. Actual Calc UI
+browser scenarios remain absent, consistently with the unimplemented UI.
+
+Full lint initially traversed unchanged fast_float archive documentation under the
+native build output. Only that original archive cache is now excluded from
+repository-authored lint; application/probe/config sources retain their rules.
+The inventory CLI composition test initially leaked a new ICU vendor reference
+to disk. Its owned marker reader now handles all vendor references using required
+fixture lookups, matching production vendor evidence resolution; all scoped
+checks and complete inventory pass with original links absent. Original native
+archives/implementations, coverage thresholds and runtime behavior are unchanged.
+All3 exact original symlinks were restored. Remaining full static/repository gates
+pass; task41 closes and the goal pauses at the user's requested full-run boundary.
+Original service/pool/column/table/document/edit/view/UI work remains incomplete.
