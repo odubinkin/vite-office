@@ -10,6 +10,11 @@ import {
   rtl_ustr_reverseCompare_WithLength,
   rtl_ustr_hashCode_WithLength,
   rtl_ustr_asciil_reverseEquals_WithLength,
+  rtl_ustr_indexOfChar_WithLength,
+  rtl_ustr_lastIndexOfChar_WithLength,
+  rtl_ustr_indexOfStr_WithLength,
+  rtl_ustr_lastIndexOfStr_WithLength,
+  rtl_uString_newFromSubString,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
 import { SAL_NO_ACQUIRE } from "../types";
@@ -54,6 +59,9 @@ export type OUStringConstReference = Readonly<
     | "greaterThan"
     | "lessThanOrEqual"
     | "greaterThanOrEqual"
+    | "indexOf"
+    | "lastIndexOf"
+    | "copy"
   > & { pData: rtl_uString | null }
 >;
 
@@ -147,6 +155,42 @@ export class OUString {
   /** Original borrowed buffer access. @returns Actual backing storage. */
   getStr(): Uint16Array {
     return this.pData.buffer;
+  }
+
+  /** Original character and UTF16 string-view/const-reference search overloads. ASCII literal overloads remain separate. @param value - Character, borrowed UTF16 view or original string reference. @param fromIndex - Original starting offset. @returns First original unit offset or -1. */
+  indexOf(value: number | Uint16Array | OUStringConstReference, fromIndex = 0): number {
+    if (fromIndex < 0) throw new Error("assert(fromIndex >= 0)");
+    const data = this.pData.buffer.subarray(fromIndex),
+      length = this.pData.length - fromIndex;
+    const result =
+      typeof value === "number"
+        ? rtl_ustr_indexOfChar_WithLength(data, length, value)
+        : value instanceof Uint16Array
+          ? rtl_ustr_indexOfStr_WithLength(data, length, value, value.length)
+          : rtl_ustr_indexOfStr_WithLength(data, length, value.getStr(), value.getLength());
+    return result < 0 ? result : result + fromIndex;
+  }
+  /** Original character and UTF16 string-view/const-reference reverse searches over the selected prefix. @param value - Character or original borrowed view/reference. @param fromIndex - Original exclusive prefix end. @returns Last original unit offset or -1. */
+  lastIndexOf(
+    value: number | Uint16Array | OUStringConstReference,
+    fromIndex = this.pData.length,
+  ): number {
+    return typeof value === "number"
+      ? rtl_ustr_lastIndexOfChar_WithLength(this.pData.buffer, fromIndex, value)
+      : value instanceof Uint16Array
+        ? rtl_ustr_lastIndexOfStr_WithLength(this.pData.buffer, fromIndex, value, value.length)
+        : rtl_ustr_lastIndexOfStr_WithLength(
+            this.pData.buffer,
+            fromIndex,
+            value.getStr(),
+            value.getLength(),
+          );
+  }
+  /** Original substring value construction through the real C owner and SAL_NO_ACQUIRE. @param beginIndex - Inclusive offset. @param count - Original count, or remainder for the one-argument overload. @returns Original owned string value. */
+  copy(beginIndex: number, count = this.getLength() - beginIndex): OUString {
+    const slot: rtl_uStringSlot = [null];
+    rtl_uString_newFromSubString(slot, this.pData, beginIndex, count);
+    return new OUString(slot[0] as rtl_uString, SAL_NO_ACQUIRE);
   }
 
   /** Original normal comparison with the implicit string-view conversion of a live OUString reference. @param other - Original source reference. @returns Selected native UTF16 lexical result. */

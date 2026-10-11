@@ -9,6 +9,58 @@ import {
 } from "./strimp.hxx";
 import { internRelease } from "./ustring";
 
+/** Adapts the original basic_string_view to the host's exact UTF16 search storage without normalization, termination scanning or code-point conversion. @param data - Borrowed original units, nullable for an empty view. @param length - Logical view length. @returns Same logical sequence of UTF16 units. */
+function stringView(data: Uint16Array | null, length: number): string {
+  let value = "";
+  for (let i = 0; i < length; i++) value += String.fromCharCode((data as Uint16Array)[i] as number);
+  return value;
+}
+/** Original bounded character find; nonpositive lengths return before constructing the view. @param data - Borrowed units. @param length - Signed logical length. @param character - Original sal_Unicode value. @returns First unit offset or -1. */
+export function indexOfChar_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  character: number,
+): number {
+  if (length <= 0) return -1;
+  return stringView(data, length).indexOf(String.fromCharCode(character & 0xffff));
+}
+/** Original bounded reverse character find. @param data - Borrowed units. @param length - Logical length. @param character - Original sal_Unicode. @returns Last unit offset or -1. */
+export function lastIndexOfChar_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  character: number,
+): number {
+  if (length < 0) throw new Error("assert(nLen >= 0)");
+  return stringView(data, length).lastIndexOf(String.fromCharCode(character & 0xffff));
+}
+/** Original bounded UTF16 substring find, retaining the empty-needle exclusion and single-character dispatch. @param data - Borrowed haystack. @param length - Logical haystack length. @param needle - Borrowed needle. @param needleLength - Logical needle length. @returns First offset or -1. */
+export function indexOfStr_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  needle: Uint16Array | null,
+  needleLength: number,
+): number {
+  if (length < 0) throw new Error("assert(nStrLen >= 0)");
+  if (needleLength < 0) throw new Error("assert(nSubLen >= 0)");
+  if (needleLength === 0) return -1;
+  const view = stringView(data, length);
+  return needleLength === 1
+    ? view.indexOf(String.fromCharCode((needle as Uint16Array)[0] as number))
+    : view.indexOf(stringView(needle, needleLength));
+}
+/** Original bounded reverse UTF16 substring find. @param data - Borrowed haystack. @param length - Logical haystack length. @param needle - Borrowed needle. @param needleLength - Logical needle length. @returns Last offset or -1. */
+export function lastIndexOfStr_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  needle: Uint16Array | null,
+  needleLength: number,
+): number {
+  if (length < 0) throw new Error("assert(nStrLen >= 0)");
+  if (needleLength < 0) throw new Error("assert(nSubLen >= 0)");
+  if (needleLength === 0) return -1;
+  return stringView(data, length).lastIndexOf(stringView(needle, needleLength));
+}
+
 /** Original empty static comparison strategy; this specialization retains UInt16 character witnesses. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- original CompareNormal is an empty strategy with a static template operation.
 export class CompareNormal {
@@ -203,6 +255,19 @@ export function assign(ppThis: rtl_uStringSlot | null, pStr: rtl_uString): void 
   acquire(pStr);
   if (ppThis[0] !== null) release(ppThis[0]);
   ppThis[0] = pStr;
+}
+/** Original checked-build substring allocation: full range aliases through assign, other valid ranges use the actual string allocator. Invalid ranges are outside the public copy contract and stop at the original C assertion; the NDEBUG diagnostic fallback is not certified. @param ppThis - Inout owned slot. @param pFrom - Borrowed source. @param beginIndex - Original inclusive offset. @param count - Original count. @returns Nothing. */
+export function newFromSubString(
+  ppThis: rtl_uStringSlot | null,
+  pFrom: rtl_uString,
+  beginIndex: number,
+  count: number,
+): void {
+  if (ppThis === null) throw new Error("assert(ppThis)");
+  if (beginIndex === 0 && count === pFrom.length) return assign(ppThis, pFrom);
+  if (count < 0 || beginIndex < 0 || beginIndex + count > pFrom.length)
+    throw new Error("assert(false)");
+  newFromStr_WithLength(ppThis, pFrom.buffer.subarray(beginIndex), count);
 }
 /** Original borrowed getStr boundary. @param pThis - Live data. @returns Original buffer identity. */
 export function getStr(pThis: rtl_uString | null): Uint16Array {

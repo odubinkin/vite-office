@@ -2274,3 +2274,29 @@ record required by the repository's fewer-than1000-line source limit. Complete
 getByName/completion/full public factories/static types/Type/Any/Reference/default
 UNO exceptions and their Calc string-service consumers remain required. Full
 run41 and the subsequent user-requested goal pause remain scheduled.
+
+## Shared bounded UTF16 search and substring ownership
+
+Task39 extends the actual shared SAL templates, C/header boundary and OUString
+owner with bounded character/view/reference indexOf, lastIndexOf and substring
+copy. The native JS backend preserves exact UTF16 units, embedded zero, isolated
+surrogates, logical lengths, offsets and original defaults. Empty substring
+needles return -1. No ICU search implementation is needed for this contract.
+
+Actual full-span copies acquire the original data through assign; other spans
+reuse the original allocator and replacement/self-field lifetime order. The
+complete native corpus records every returned offset, live refcount, logical
+length, unit, terminator and identity before/after replacement and release.
+All65536 character values and25 complete substring vectors produce8532312
+bytes; the unchanged full original SAL/OUString dependency closure produces
+identical normal and ASan/UBSan streams. Eleven original checked assertions
+remain separate from returned values and map to Error with original expressions.
+
+Invalid copy ranges are undefined by the public OUString contract. The original
+NDEBUG diagnostic fallback is not certified by the checked profile. ASCII literal
+search overloads, physical pointer/ABI/thread behavior and full upstream QA remain
+unverified. The source StringLiterals::checkOUStringLiteral tests provide related
+UTF16 search evidence, not a claim that their whole suite was executed. Original
+getByName parsing/completion/factories and UNO exception/case-service consumers
+remain unfinished. Full run41 and the subsequent requested goal pause remain
+scheduled.

@@ -96,3 +96,24 @@ typelib_typedescription_release(base);typelib_typedescription_release(iface);ref
 for(int missing=0;missing<4;missing++){rtl::OUString name(u"CalcInvalid",11);typelib_TypeDescriptionReference*ref=nullptr;typelib_typedescriptionreference_new(&ref,typelib_TypeClass_LONG,name.pData);auto base=empty(typelib_TypeClass_LONG,name.pData),iface=empty(typelib_TypeClass_INTERFACE,name.pData),result=empty(typelib_TypeClass_LONG,name.pData);auto old=result;bool ok=createDerivedInterfaceMemberDescription(&result,name,missing==0?nullptr:ref,missing==1?nullptr:base,missing==2?nullptr:iface,0,0);emit(std::array<sal_Int32,2>{ok,result==old});observe(result);reference(ref);observe(base);observe(iface);memberString(name.pData);typelib_typedescription_release(result);typelib_typedescription_release(base);typelib_typedescription_release(iface);typelib_typedescriptionreference_release(ref);memberString(name.pData);}
 return true;}
 `;
+
+/** Calls the unchanged full SAL bounded searches and actual OUString copy overloads, retaining complete values and real allocation ownership. */
+export const stringSearchDriver = String.raw`
+static bool stringSearchCases(std::string const&mode,std::vector<std::vector<sal_Unicode>>const&inputs){
+if(mode.starts_with("search-invariant-")){int index=std::stoi(mode.substr(17));rtl::OUString value(u"abc",3);sal_Unicode needle[]={u'a'};rtl_uString*out=nullptr;
+switch(index){case 0:rtl_ustr_lastIndexOfChar_WithLength(value.getStr(),-1,u'a');break;case 1:rtl_ustr_indexOfStr_WithLength(value.getStr(),-1,needle,1);break;case 2:rtl_ustr_indexOfStr_WithLength(value.getStr(),3,needle,-1);break;case 3:rtl_ustr_lastIndexOfStr_WithLength(value.getStr(),-1,needle,1);break;case 4:rtl_ustr_lastIndexOfStr_WithLength(value.getStr(),3,needle,-1);break;case 5:rtl_uString_newFromSubString(nullptr,value.pData,0,3);break;case 6:rtl_uString_newFromSubString(&out,value.pData,0,-1);break;case 7:rtl_uString_newFromSubString(&out,value.pData,-1,0);break;case 8:rtl_uString_newFromSubString(&out,value.pData,1,3);break;case 9:value.indexOf(sal_Unicode('a'),-1);break;case 10:value.indexOf(std::u16string_view(needle,1),-1);break;default:std::exit(2);}return true;}
+if(mode!="search")return false;
+for(sal_uInt32 word=0;word<65536;word++){sal_Unicode data[]={0,static_cast<sal_Unicode>(word),static_cast<sal_Unicode>(word),0xffff,0};for(auto length:std::array<sal_Int32,4>{0,1,3,5})for(auto character:std::array<sal_Unicode,4>{0,1,0x80,0xffff})emit(std::array<sal_Int32,2>{rtl_ustr_indexOfChar_WithLength(length?data:nullptr,length,character),rtl_ustr_lastIndexOfChar_WithLength(length?data:nullptr,length,character)});}
+for(auto length:std::array<sal_Int32,3>{SAL_MIN_INT32,-65536,-1})emit(std::array<sal_Int32,1>{rtl_ustr_indexOfChar_WithLength(nullptr,length,0)});
+emit(std::array<sal_Int32,2>{rtl_ustr_indexOfStr_WithLength(nullptr,0,nullptr,0),rtl_ustr_lastIndexOfStr_WithLength(nullptr,0,nullptr,0)});
+for(auto const&h:inputs){rtl::OUString hay(h.data(),h.size());for(auto const&n:inputs){rtl::OUString needle(n.data(),n.size());std::u16string_view view(needle.getStr(),needle.getLength());for(sal_Int32 from=0;from<=hay.getLength();from++)emit(std::array<sal_Int32,8>{rtl_ustr_indexOfStr_WithLength(hay.getStr()+from,hay.getLength()-from,needle.getStr(),needle.getLength()),rtl_ustr_lastIndexOfStr_WithLength(hay.getStr(),from,needle.getStr(),needle.getLength()),hay.indexOf(view,from),hay.lastIndexOf(view,from),hay.indexOf(needle,from),hay.lastIndexOf(needle,from),hay.indexOf(view),hay.lastIndexOf(view)});}
+for(auto character:std::array<sal_Unicode,5>{0,u'A',0xffff,0xd800,0xdc00})for(sal_Int32 from=0;from<=hay.getLength();from++)emit(std::array<sal_Int32,4>{hay.indexOf(character,from),hay.lastIndexOf(character,from),hay.indexOf(character),hay.lastIndexOf(character)});
+for(sal_Int32 begin=0;begin<=hay.getLength();begin++)for(sal_Int32 count=0;count<=hay.getLength()-begin;count++){
+rtl_uString*out=nullptr;rtl_uString_newFromSubString(&out,hay.pData,begin,count);emit(std::array<sal_Int32,2>{out==hay.pData,hay.pData->refCount});memberString(out);rtl_uString_release(out);out=nullptr;
+rtl_uString_newFromStr_WithLength(&out,u"old",3);rtl_uString_newFromSubString(&out,hay.pData,begin,count);emit(std::array<sal_Int32,2>{out==hay.pData,hay.pData->refCount});memberString(out);rtl_uString_release(out);
+{rtl::OUString copy=hay.copy(begin,count);emit(std::array<sal_Int32,2>{copy.pData==hay.pData,hay.pData->refCount});memberString(copy.pData);}
+{rtl::OUString copy=hay.copy(begin);emit(std::array<sal_Int32,2>{copy.pData==hay.pData,hay.pData->refCount});memberString(copy.pData);}
+{rtl::OUString value(hay);auto original=value.pData;rtl_uString_newFromSubString(&value.pData,value.pData,begin,count);emit(std::array<sal_Int32,2>{value.pData==original,hay.pData->refCount});memberString(value.pData);}
+memberString(hay.pData);}}
+return true;}
+`;

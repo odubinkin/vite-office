@@ -5,6 +5,50 @@ import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import { SAL_STRING_IS_INTERN, SAL_STRING_REFCOUNT, rtl_stringAllocation } from "./strimp.hxx";
 import { rtl_str_hash_intern, rtl_str_hash_remove } from "./hash";
 
+/** Original bounded character-search C wrapper. @param data - Borrowed units. @param length - Logical length. @param character - Original sal_Unicode. @returns First position or -1. */
+export function rtl_ustr_indexOfChar_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  character: number,
+): number {
+  return str.indexOfChar_WithLength(data, length, character);
+}
+/** Original bounded reverse character-search C wrapper. @param data - Borrowed units. @param length - Logical length. @param character - Original sal_Unicode. @returns Last position or -1. */
+export function rtl_ustr_lastIndexOfChar_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  character: number,
+): number {
+  return str.lastIndexOfChar_WithLength(data, length, character);
+}
+/** Original bounded UTF16 substring-search C wrapper. @param data - Borrowed haystack. @param length - Haystack length. @param needle - Borrowed needle. @param needleLength - Needle length. @returns First position or -1. */
+export function rtl_ustr_indexOfStr_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  needle: Uint16Array | null,
+  needleLength: number,
+): number {
+  return str.indexOfStr_WithLength(data, length, needle, needleLength);
+}
+/** Original bounded reverse UTF16 substring-search C wrapper. @param data - Borrowed haystack. @param length - Haystack length. @param needle - Borrowed needle. @param needleLength - Needle length. @returns Last position or -1. */
+export function rtl_ustr_lastIndexOfStr_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  needle: Uint16Array | null,
+  needleLength: number,
+): number {
+  return str.lastIndexOfStr_WithLength(data, length, needle, needleLength);
+}
+/** Original substring allocation C wrapper. @param slot - Inout owned slot. @param source - Borrowed source. @param beginIndex - Beginning offset. @param count - Original count. @returns Nothing. */
+export function rtl_uString_newFromSubString(
+  slot: rtl_uStringSlot | null,
+  source: rtl_uString,
+  beginIndex: number,
+  count: number,
+): void {
+  str.newFromSubString(slot, source, beginIndex, count);
+}
+
 /** Original terminated Unicode C comparator reuses the SAL template owner. @param first - Borrowed null-terminated UTF16 input. @param second - Borrowed null-terminated UTF16 input. @returns Exact native comparison result. */
 export function rtl_ustr_compare(first: Uint16Array | null, second: Uint16Array | null): number {
   return str.compare(first, second, CompareNormal);

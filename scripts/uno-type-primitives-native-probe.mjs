@@ -3,6 +3,7 @@ import {
   registryDriver,
   registryAssertionDriver,
   derivedMemberDriver,
+  stringSearchDriver,
 } from "./uno-registry-native-driver.mjs";
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -48,6 +49,36 @@ const countBoundaries = [
   -2147483648, -2147483647, -65537, -65536, -32769, -32768, -129, -128, -2, -1, 0, 1, 127, 128,
   32767, 32768, 65535, 65536, 2147483646, 2147483647,
 ];
+const searchInputs = [
+  [],
+  [0],
+  [65],
+  [66],
+  [65, 65],
+  [65, 0, 66],
+  [0, 65, 0],
+  [0xd800],
+  [0xdc00],
+  [0xd800, 0xdc00],
+  [0xffff, 0, 0xffff],
+  [0x3a, 0x40],
+  [0x3a, 0x40, 0x3a, 0x40],
+  [65, 66, 65, 66],
+  [0x3a, 0x40, 0x30, 0x2c, 0x31, 0x3a, 0x58],
+  [0x03a3, 0x03c3, 0x03c2],
+  [0x0307, 0x49, 0x0130],
+];
+let searchSeed = 0x51a7;
+for (let count = 1; count <= 8; count++) {
+  const units = [];
+  for (let i = 0; i < count; i++) {
+    searchSeed = (Math.imul(searchSeed, 1664525) + 1013904223) >>> 0;
+    units.push(searchSeed >>> 16);
+  }
+  searchInputs.push(units);
+}
+const searchCharacters = [0, 1, 0x80, 0xffff];
+const searchLengths = [0, 1, 3, 5];
 const records = [
   ...(descriptions + uik)
     .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -84,10 +115,18 @@ template<size_t N>void emit(std::array<sal_Int32,N>const&row){if(std::fwrite(row
 ${registryDriver}
 ${registryAssertionDriver}
 ${derivedMemberDriver}
+${stringSearchDriver}
+static std::vector<std::vector<sal_Unicode>>searchInputs(){return {${searchInputs
+  .map(
+    /** Retains complete original caller inputs. @param input - All logical units. @returns Native initializer. */
+    (input) => `{${input.join(",")}}`,
+  )
+  .join(",")}};}
 int main(int argc,char**argv){std::string mode=argc>1?argv[1]:"enums";
 if(registrationAssertion(mode))return 0;
 if(registryCases(mode))return 0;
 if(derivedMemberCases(mode))return 0;
+if(stringSearchCases(mode,searchInputs()))return 0;
 if(mode=="enums"){std::cout<<'[';bool comma=false;
 ${names
   .map(
@@ -187,7 +226,7 @@ function build(sanitized) {
 /** Retains complete native outputs and process diagnostics. @param binary - Genuine executable. @param mode - Native caller selection. @returns Exact stdout bytes. */
 function capture(binary, mode) {
   const result = spawnSync(binary, [mode], {
-    maxBuffer: 8 * 1024 * 1024,
+    maxBuffer: 64 * 1024 * 1024,
     env: { ...process.env, ASAN_OPTIONS: "detect_leaks=0", UBSAN_OPTIONS: "halt_on_error=1" },
   });
   writeFileSync(`${binary}.${mode}`, result.stdout ?? "");
@@ -215,6 +254,7 @@ for (const mode of [
   "threads",
   "registry",
   "members",
+  "search",
 ]) {
   captures[mode] = capture(binary, mode);
   if (!capture(sanitized, mode).equals(captures[mode]))
@@ -275,6 +315,39 @@ for (let index = 0; index < 20; index++) {
 }
 native.manifest.state = "captured";
 native.save();
+const searchAssertions = [];
+for (let index = 0; index < 11; index++) {
+  const failures = [];
+  for (const executable of [binary, sanitized]) {
+    const mode = `search-invariant-${index}`;
+    const failure = spawnSync(executable, [mode], {
+      env: { ...process.env, ASAN_OPTIONS: "detect_leaks=0", UBSAN_OPTIONS: "halt_on_error=1" },
+      maxBuffer: 1024 * 1024,
+    });
+    const diagnostic = failure.stderr.toString();
+    writeFileSync(`${executable}.${mode}.stderr`, diagnostic);
+    native.manifest.commands.push({
+      tool: executable,
+      argv: [mode],
+      exitCode: failure.status,
+      signal: failure.signal,
+    });
+    if (
+      failure.signal !== "SIGABRT" ||
+      failure.stdout.length !== 0 ||
+      !diagnostic.includes("Assertion failed") ||
+      /AddressSanitizer|runtime error:/.test(diagnostic)
+    )
+      throw new Error(`Missing original string-search/copy assertion ${mode}: ${diagnostic}`);
+    const expression = diagnostic.match(/Assertion failed: \(([\s\S]*?)\), function /)?.[1];
+    if (!expression) throw new Error(`Missing expression ${mode}`);
+    failures.push({ index, signal: failure.signal, expression, diagnostic });
+  }
+  if (JSON.stringify(failures[0]) !== JSON.stringify(failures[1]))
+    throw new Error(`Sanitized search assertion differs ${index}`);
+  searchAssertions.push(failures[0]);
+}
+native.save();
 const result = {
   baselineCommit: pin,
   sourceHashes: native.manifest.sourceHashes,
@@ -334,6 +407,15 @@ const result = {
     fields:
       "Original full common/specific initialized fields, live name/type counts and pointer identity witnesses after every operation; unspecified native fields are never read",
   },
+  search: {
+    inputs: searchInputs,
+    characters: searchCharacters,
+    lengths: searchLengths,
+    rawHash: hash(captures.search),
+    gzipBase64: gzipSync(captures.search, { level: 9 }).toString("base64"),
+    fields:
+      "All65536 UTF16 characters across four search witnesses/four bounded lengths; complete C/OUString forward/reverse character/substring results and substring ownership/replacement/copy observations. Empty needles remain excluded; no normalization or terminator scanning.",
+  },
   members: {
     rawHash: hash(captures.members),
     gzipBase64: gzipSync(captures.members, { level: 9 }).toString("base64"),
@@ -341,11 +423,12 @@ const result = {
       "Full initialized derived common/member fields, complete parameter/exception values and pointer/counter witnesses before cloning, after copying/mutation, and after release; base member is borrowed while interface/base-reference caller ownership transfers on success",
   },
   registrationAssertions,
+  searchAssertions,
   bothNullEquals: captures.equals.readInt32LE(captures.equals.length - 4),
   nullWrapperAssertion: "SIGABRT",
   sanitizedIdentical: true,
   scope:
-    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Twenty initialized invalid caller inputs record complete original C assertion diagnostics and SIGABRT with no stdout, identically in normal and sanitized builds and before any sanitizer finding. The twenty-first registration guard (retained count > 1) is satisfied by original getByName acquisition in valid traces; no impossible realm-local failing interleaving is fabricated. Browser Error adapts the C assertion boundary only, not native process termination, recovery, UNO exceptions or OSL debug assertions. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Derived member construction calls the genuine private function by including the full unchanged typelib.cxx owner in the caller translation unit and omitting its duplicate linked object; all other original dependencies stay linked. Full initialized method/attribute fields, parameter/exception values, independent copy identity and borrowed/transferred ownership are observed, including zero arrays, output replacement, mutations and releases. Direct caller records do not certify missing getByName routing or complete original consumer QA. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Native platform frameworks/libc are uninstrumented.",
+    "Complete original enum/C declaration/layout/const comparison/OSL observations plus genuine original newEmpty/reference allocation, acquire/release, extended destruction, getByName, callbacks, registration/completion and 256-entry typedef-provider cache ownership traces. All initialized fields/counts/identity witnesses are retained; unspecified native fields are never read. Twenty initialized invalid caller inputs record complete original C assertion diagnostics and SIGABRT with no stdout, identically in normal and sanitized builds and before any sanitizer finding. The twenty-first registration guard (retained count > 1) is satisfied by original getByName acquisition in valid traces; no impossible realm-local failing interleaving is fabricated. Browser Error adapts the C assertion boundary only, not native process termination, recovery, UNO exceptions or OSL debug assertions. Callback responses and specific members are initialized real caller inputs using the original factories and acquisitions, not replacement native owners. Derived member construction calls the genuine private function by including the full unchanged typelib.cxx owner in the caller translation unit and omitting its duplicate linked object; all other original dependencies stay linked. Full initialized method/attribute fields, parameter/exception values, independent copy identity and borrowed/transferred ownership are observed, including zero arrays, output replacement, mutations and releases. Direct caller records do not certify missing getByName routing or complete original consumer QA. Explicit zero-count/empty weak-pointer state witnesses certify the original safeguard branches only, not a native concurrent interleaving or valid ordinary user-level reachability. Common-prefix adaptation, full native ABI/platform synchronization, singleton shutdown, completion/getDescription/static type providers and portable Type/Any/Reference/default UNO exceptions, services and Calc document/edit/UI remain unverified or unfinished. Original ICU source verification comes from the shared build helper but no ICU code is linked by this caller. Bounded UTF16 search observes the genuine SAL wrappers and full OUString overloads for all65536 code units and complete caller inputs; host native JS find/rfind values must reproduce every byte before accepting the browser adapter. Full-span copies reuse ownership, valid subranges/empty ranges delegate to the actual original allocator, and checked-build assertions remain separate fatal observations. Invalid copy ranges are outside the public OUString contract; the NDEBUG broken-string diagnostic fallback, ASCII search overloads and pointer ABI are not certified. Native platform frameworks/libc are uninstrumented.",
 };
 if (write) writeFileSync(fixture, JSON.stringify(result) + "\n");
 else if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(result))
@@ -358,6 +441,8 @@ console.log(
     equality: result.equals.count,
     sources: Object.keys(result.sourceHashes).length,
     registrationAssertions: registrationAssertions.length,
+    searchBytes: captures.search.length,
+    searchAssertions: searchAssertions.length,
     sanitizedIdentical: true,
   }),
 );
