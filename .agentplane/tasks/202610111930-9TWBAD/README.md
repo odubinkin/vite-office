@@ -1,10 +1,11 @@
 ---
 id: "202610111930-9TWBAD"
 title: "Port original public Any ownership and C++ interface callbacks"
-status: "DOING"
+result_summary: "task46 original public Any ownership/genfunc:72 unchanged native TUs,367 sources13generated,four full normal-ASan/UBSan streams; Calc106 and shared138 source-absent tests,19/57 whole raw S/B/F/L100;13 scoped gates9 exact Prettier checks8 final metadata gates,EVALUATOR pass at7a7f1c80edef. Inventory and CALC-055 updated; broad flags false, remaining public consumers/ABI gaps explicit. Last full41,next51,whole Calc goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Independently recomputed all four committed compressed streams, byte lengths and SHA256 against full normal/sanitized outputs;367 complete pinned source hashes and13 generated headers match actual files;154 native commands exit0. No task46 sanitizer rejection, complete matching instrumentation for authored72 translation units."
     - "Recomputed every raw Calc/shared statement/function/branch counter: positive on all19/57 executable owners, whole S/B/F/L100; source-absent106 Calc and138 related shared tests pass. Exact3 links restored, previous assignment/equality profile retained."
     - "Reviewed original Any constructor/ownership/move/metadata/setValue/clear and genfunc bodies plus genuine generated XInterface three virtual declarations against implementation; actual C/SAL/Type/RuntimeException owners reused, Reference change type-only. Erased address/type and explicit RAII adaptations are documented, no provider/value registry substitute. Provenance precise, broad parity flags false; CALC-055 preserves intentionally non-null moved VOID pointer."
-commit: null
+commit:
+  hash: "7a7f1c80edef92124c6ec9b7bdfe578546ddaa80"
+  message: "🧩 9TWBAD task: port original public Any ownership and C++ callbacks"
 comments:
   -
     author: "CODER"
     body: "Start: Implement original public Any ownership and genfunc C++ callbacks through shared real owners, genuine source/native/portable proofs and explicit later consumer gaps; no temporary provider, last full41/next51."
+  -
+    author: "CODER"
+    body: "Verified: original public Any selected ownership/metadata and genfunc virtual callbacks preserve shared upstream contracts; full native and source-absent whole raw100 evidence, scoped gates and separate EVALUATOR pass committed."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final task46 docs correspond to reviewed implementation7a7f1c80edef;154 native commands0, four identical normal-ASan/UBSan streams,367+13 verified hashes; source-absent Calc106/shared138,19/57 whole raw S/B/F/L100;13 effective gates9 exact Prettier8 final metadata gates0; separate EVALUATOR pass committed atb4d117ab1631. No implementation changes after verification."
+  -
+    type: "status"
+    at: "2026-10-11T19:59:21.409Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original public Any selected ownership/metadata and genfunc virtual callbacks preserve shared upstream contracts; full native and source-absent whole raw100 evidence, scoped gates and separate EVALUATOR pass committed."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:59:10.077Z"
+doc_updated_at: "2026-10-11T19:59:21.411Z"
 doc_updated_by: "CODER"
 description: "Task46 implements original Any.h/Any.hxx ownership constructors/copy/move/value metadata/setValue/clear and genfunc.h/hxx callbacks with actual XInterface contract; no temporary Any/provider. Reuse shared C Any/type/string/callback/address owners. Genuine original native and source-absent portable raw100, inventory/journal/scoped gates/evaluator clean closure. Public extraction/comparison/get/query and Sequence follow; next full51."
 sections:
