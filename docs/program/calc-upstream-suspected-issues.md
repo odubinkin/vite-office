@@ -1399,3 +1399,54 @@ Final --write/--check reproduces them; no rejected body is executed.
 
 Decision: preserve the actual1..14/17..19 family and restrict the erased declared
 argument-list arities accordingly. Add no missing overload or runtime fallback.
+
+
+## CALC-058: internal WeakReference<XWeak> duplicates assignment signatures
+
+Status: reproduced original compiler rejection; no valid runtime consumer failure
+is established.
+
+Pinned `include/cppuhelper/weakref.hxx` declares both a typed
+`operator=(Reference<interface_type> const&)` and a `LIBO_INTERNAL_ONLY` overload
+for `Reference<XWeak> const&`. Instantiating `WeakReference<XWeak>` in this
+configuration gives the same signature twice and the original compiler rejects
+the class. The public helper's separate XWeak constructor/assignment overloads
+remain valid; other typed wrappers are usable. This may be an intentionally
+unsupported specialization rather than an upstream defect.
+
+Evidence: Task53 complete unchanged original `weak.cxx` builds successfully,
+but the first genuine full caller fails when instantiating this specialization.
+Original diagnostic is “multiple overloads of 'operator=' instantiate to the
+same signature”. Complete failed compiler diagnostics and source/configuration
+hashes remain in `output/playwright/task53-checks/native-write-first.log` and
+`native-first-failed-manifest.json`. An isolated genuine syntax-only compiler witness now reproduces exit1 with complete source, argv, diagnostics and header hash in the native fixture/probe. No rejected specialization body executes.
+
+Decision: preserve the restriction at the erased compiler specialization binding.
+Retain the usable XWeak helper overloads and valid XInterface/XAdapter wrappers.
+Do not invent a missing overload, discard an original declaration or change the
+source/configuration to make the rejected class run.
+
+## CALC-059: clear retains the helper pointer after disposal throws
+
+Status: source-inspected suspicious failure state; allocator leakage and a valid
+ordinary consumer failure have not been independently established.
+
+Pinned `cppuhelper/source/weak.cxx::WeakReferenceHelper::clear` disposes its listener,
+releases it and resets `m_pImpl` inside one try block. If listener disposal throws
+RuntimeException, the catch only diagnoses it; release/reset are not reached.
+The listener already cleared its adapter member before calling `removeReference`,
+so `get()` can return an empty reference while the helper still owns its listener.
+A later successful clear releases it. Nonempty assignment calls clear and then
+replaces `m_pImpl`, which appears capable of losing the retained pointer if that
+clear fails. This is a failure-state ownership concern, not a proven allocation
+leak or general invalidity of the normal API.
+
+Evidence: complete pinned `OWeakRefListener::dispose`,
+`WeakReferenceHelper::clear` and both hard-reference assignment bodies. Task53's
+whole original `errors` stream includes a concrete adapter throwing RuntimeException
+from removal and a subsequent clear; the portable stream preserves the original
+callback/state/ownership observations. The pointer-overwrite allocation concern
+above is an inference from source order, not a separate native leak certificate.
+
+Decision: preserve the exact catch boundary, pointer publication and assignment
+order. Add no unconditional reset, retry or cleanup rule to repair this concern.
