@@ -1,10 +1,11 @@
 ---
 id: "202610112158-8V85V8"
 title: "Open native Writer text and table context menus"
-status: "DOING"
+result_summary: "Native Writer context popup and capture priority restored; repaired scheduled full16056pass,100allfour; goal pause follows."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 36
+revision: 37
 origin:
   system: "manual"
 depends_on:
@@ -57,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Start: approved dedicated Writer popup extraction for file-size gate; scheduled full serves related-check superset and eleven whole module100 certification, then all repairs and human pause."
+  -
+    author: "CODER"
+    body: "Verified: represented native context selection/resource/bindings popup and table gesture priority; repaired full15740Vitest+316Chromium=16056pass,0fail/skip/retry,100allfour;887 old tests unchanged,22 canonical records/history preserved. All runtime/static producers references-absent and final nine restored metadata gates pass. Exact completed implementationc3dce0d reviewed same-agent, not independently; source-origin5d39898e has identical39 accepted non-Agentplane bytes. Goal pauses by explicit human request after this clean closure."
 events:
   -
     type: "status"
@@ -97,8 +101,15 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "status"
+    at: "2026-10-11T23:41:46.003Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: represented native context selection/resource/bindings popup and table gesture priority; repaired full15740Vitest+316Chromium=16056pass,0fail/skip/retry,100allfour;887 old tests unchanged,22 canonical records/history preserved. All runtime/static producers references-absent and final nine restored metadata gates pass. Exact completed implementationc3dce0d reviewed same-agent, not independently; source-origin5d39898e has identical39 accepted non-Agentplane bytes. Goal pauses by explicit human request after this clean closure."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:41:43.778Z"
+doc_updated_at: "2026-10-11T23:41:46.005Z"
 doc_updated_by: "CODER"
 description: "Route real mouse and keyboard popup requests through original SwEditWin selection policy and SfxDispatcher resource ownership; reuse shared bindings-backed menu rendering for generated text/table resources, preserve native selection and focus through cancellation and execution. Correction10/10, followed by the next full suites and required repairs then human pause."
 sections:
@@ -194,6 +205,10 @@ sections:
     - Observation: Second finish passed SHA selection but refused E_GIT because the just-added active task Findings were uncommitted; deterministic direct closure requires every tracked path clean first.
       Impact: Task remains unclosed, with accepted semantic/source/test evidence unchanged.
       Resolution: Commit lifecycle-only Findings under active task scope, then run canonical finish with reviewed implementation versionc3dce0d. Preserve exact quality receipt and source-origin5d39898e; no source/test mutation or bypass.
+extensions:
+  implementation_commit:
+    hash: "c3dce0d2f28146b8f931751189d6ae7f6b284200"
+    message: "🧩 8V85V8 docs: record full verification and correct parent summary"
 id_source: "generated"
 ---
 ## Summary
