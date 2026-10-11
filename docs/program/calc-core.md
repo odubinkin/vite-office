@@ -2578,3 +2578,23 @@ Array/legacy/UnoType helper templates, threading/shutdown/full QA and unfinished
 Any/Reference/default RuntimeException/case service/pool/document/view/UI remain
 unverified. Broad parity flags stay false; task39 and full41 then requested pause
 remain pending.
+
+
+### Original borrowed UNO Type cell views
+
+The original `cppu::detail` helpers in `cppu/inc/unotype.ts` preserve the live
+const Type alias of a reference pointer cell. Native cell-address identity uses a
+WeakMap and an accessor view of the actual Type prototype. No Type constructor,
+acquire, release, pointer-copy or independent static cache participates. The class
+lookup helper delegates to the original shared C cache. Ordinary Type copies
+and assignments continue to own their references independently of cell changes.
+
+Complete unchanged original unotype.hxx/Type header calls and all69 original
+SAL/CPPU objects are compared under normal and ASan/UBSan builds. Tests cover
+all17 supported class cells and289 pairs, distinct equal-content cell addresses,
+mutable replacement/null/restoration and actual copy/assignment lifetimes.
+Borrowed aliases are never destroyed or assigned. Physical object/pointer
+lifetime/ABI, compiler const enforcement, unsupported static classes, template/ADL
+overload families and native scheduling/shutdown/full QA remain unverified.
+Any/Reference/default RuntimeException/case/service/UI remain unfinished;
+broad parity flags stay false, task39 stays DOING and full41 then pause is pending.

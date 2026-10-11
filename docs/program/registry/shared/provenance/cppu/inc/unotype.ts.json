@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/unotype.ts",
+    "status": "mapped",
+    "upstreamPath": "include/cppu/unotype.hxx",
+    "localSymbols": [
+      "getTypeFromTypeDescriptionReference",
+      "getTypeFromTypeClass"
+    ],
+    "upstreamSymbols": [
+      "getTypeFromTypeDescriptionReference",
+      "getTypeFromTypeClass"
+    ],
+    "preservedResponsibilities": [
+      "Original cppu::detail getTypeFromTypeDescriptionReference returns a const Type reference alias of the original pointer cell, without Type construction, pointer copying, acquisition or destruction. Native pointer-cell address identity uses a realm-local WeakMap keyed by the actual cell; its Type prototype/accessor view reads that same current cell on every shared member call and owns no native reference. This is intrinsic logical address adaptation, not a second Type implementation, type registry, copied static cache or fabricated UnoType/provider. getTypeFromTypeClass delegates to the actual original static C cache and the same cast. Original native header/member calls with full unchanged SAL/CPPU dependencies compare all17 supported static cells, all289 view pairs, complete initialized fields/counts/names and distinct caller-cell identities. Initialized mutable enum cells verify live replacement/null/restoration, equal pointer contents at different cell addresses, ordinary owning copy independence and acquisition/release only by actual copied/assigned owned Types. Deliberately borrowed aliases are never destroyed or assigned; nullable methods only exercise valid original branches. Type.h/Type.hxx actual value/member owners remain shared. Physical ABI/pointer/object lifetime, compile-time const enforcement, unsupported static classes, template/ADL/overload families, native threading/shutdown and full Any/Reference/default RuntimeException/case/service/UI consumers remain unfinished or unverified. System libraries are uninstrumented and leak detection is disabled; no original body/method is replaced. Broad parity flags remain false."
+    ],
+    "omittedResponsibilities": [
+      "Physical ABI/pointer/object lifetime and const enforcement, unsupported static classes, template/ADL/overload helper families, native scheduling/shutdown/full QA and unfinished Any/Reference/default RuntimeException/case/service/UI consumers."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/unotype.ts",
+          "marker": "getTypeFromTypeDescriptionReference"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/unotype.test.ts",
+          "marker": "matches original borrowed static Type views and every supported class pair"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/cppu/unotype.hxx",
+          "marker": "getTypeFromTypeDescriptionReference"
+        },
+        {
+          "path": "include/cppu/unotype.hxx",
+          "marker": "getTypeFromTypeClass"
+        },
+        {
+          "path": "include/com/sun/star/uno/Type.hxx",
+          "marker": "inline Type::Type( const Type & rType )"
+        }
+      ]
+    }
+  }
+}
