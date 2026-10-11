@@ -1121,3 +1121,29 @@ consumer, null destructor, sanitizer failure or ordinary OS OOM is claimed.
 
 Decision: preserve null pointer transfer and the original ordering. Add no
 invented empty-string fallback, std::bad_alloc translation or allocation repair.
+
+## CALC-047: Static initialized-name lookup retains an uninitialized acquisition
+
+Status: reproduced with a deliberately uninitialized canonical reference through
+full unchanged native SAL/CPPU owners. Ordinary producer reachability, expected
+static-initializer preconditions and an actual consumer leak remain unverified.
+
+Pinned `cppu/source/typelib/static_types.cxx::igetTypeByName` acquires a reference
+through `typelib_typedescriptionreference_getByName`. It returns that reference
+only when both its description and canonical weak prefix are initialized. On the
+other path it returns null without releasing the acquired reference. The caller
+then constructs/registers a new description and receives the canonical reference,
+while the earlier acquisition remains counted. No RAII owner releases the raw
+local reference.
+
+Evidence: `scripts/uno-static-types-native-probe.mjs` uninitialized mode first calls
+the actual static type initializer for an enum name and then the actual static
+enum initializer for the same name. Complete normal and ASan/UBSan streams agree
+(772 bytes), including the retained acquisition, canonical transfer, static/live
+counts and every initialized owned-name/description field. The adjacent public
+portable replay matches the full captured stream. Leak detection is disabled for
+original retained registry/static owners; no leak-detector verdict is claimed.
+
+Decision: retain the original acquisition and registration ordering. Add no extra
+release, lookup repair, synthesized exception or normalization. Valid ordinary
+service producers and native shutdown behavior require separate consumer evidence.

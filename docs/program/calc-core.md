@@ -2471,3 +2471,48 @@ construction overload and full consumer QA remain unverified. Broad parity
 flags remain false. This supplies a genuine dependency for static type names;
 static types/Type/Any/Reference/default RuntimeException and case values remain
 unfinished.
+
+## Original UNO static type initialization
+
+The original `cppu/source/typelib/static_types.cxx` responsibility now lives in
+`cppu/source/typelib/static_types.ts`. Its eight original public C exports are
+reexported from the existing typedescription header. It reuses the single shared
+CPPU registry/allocation/prefix/completion/layout/reference and SAL string owners.
+There is no second type registry, fabricated XInterface or simplified exception
+description. Basic types, all three root methods, Exception's Message/Context
+and derived RuntimeException are constructed through the actual original factories.
+These are type descriptions; original C++ Type/Any/Reference and default exception
+values remain separate unfinished responsibilities.
+
+Original static initializers preserve cache-cell identity, acquired/static counts,
+idempotence, initialized-name reuse, original lazy sequence name construction,
+compound bases/offsets/parameterized flags, enum default and incomplete interface
+bases/lists. Uninitialized Uik is left uninitialized and never guessed or read by
+the native witness. The original private alignment cap uses the already verified
+selected LP64 logical layout. An initialized synthetic member alignment16 observes
+that source clamp without certifying an ordinary compiled ABI.
+
+The source has native mutexes and repeated checks surrounding static initialization.
+The already selected synchronous realm-local model retains the first check; it
+does not model native mutex scheduling or interleavings. Mutable one-element
+reference tuples adapt original cache-cell addresses; native address arithmetic
+and physical pointer ABI are outside that evidence. Actual `_ustr` constants use
+shared OUStringLiteral storage, while terminated initializer names use the original
+createFromAscii owner. No native method/body is substituted.
+
+The complete native caller retains full hashes for346 unchanged sources and
+rebuilds69 original dependency owners normally and under ASan/UBSan. Complete
+initialized records, names, counts and layouts are compared byte for byte through
+public portable calls. Source-defined checked assertions are observed separately.
+System libraries are uninstrumented, leak detection is disabled and full consumer
+QA/shutdown/native concurrency/malformed JS inputs remain unverified. CALC-047
+records acquired uninitialized-name retention and preserves the original ordering.
+Broad contract/behavior/default/verified flags remain false. Whole task39 and the
+actual locale/case service/pool/document/view/UI remain unfinished; full41 and the
+user-requested subsequent pause remain pending.
+
+A separate original synthetic caller clears the returned mutable Exception
+cache cell after root bootstrap and reenters with an existing XInterface. This
+observes the original null cache result and unchanged retained static-owner
+counts. It covers the source branch without claiming an ordinary producer, a
+mutex race or a repaired bootstrap.
