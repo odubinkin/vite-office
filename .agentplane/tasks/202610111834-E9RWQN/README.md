@@ -1,10 +1,11 @@
 ---
 id: "202610111834-E9RWQN"
 title: "Complete original UnoType overloads and sequence type helpers"
-status: "DOING"
+result_summary: "Task44 original shared UnoType dispatch and sequence type-helper ownership implemented through existing typelib/Type owners, with native/portable100 acceptance and precise inventory. Any/genfunc/public Sequence and downstream Calc UI prerequisites remain subsequent."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Original fundamental class mapping, void forwarding, Reference/Sequence delegation, recursive unsigned/char helper calls, distinct UnoSequenceType/member-static/favourChar/global char cells and first-call supplied-element behavior remain at real source owners. Every initialization uses existing typelib_static_sequence_type_init and existing Type borrowed view; no new runtime type/provider or value Sequence substitute."
     - "Explicit nested/string arguments adapt C++ type erasure and exact specialization identity; generated RuntimeException ADL uses its existing original getter. Whole current3-mode normal/ASan/UBSan --write/--check verify364 complete source hashes and13 generated inputs,23 basic/Reference/generated groups and20 sequence families. Every portable byte/digest matches."
     - "Independently inspected actual raw maps: all S/F/B counters positive on19 Calc and53 related shared whole files, Calc106/shared128 tests pass. All13 scoped and4 final metadata gates plus exact Prettier pass; provenance errors were corrected in metadata without waivers. Registry states exact source boundaries and limitations, broad parity/default/verified flags false."
-commit: null
+commit:
+  hash: "896d8cf8d589b053bccc9b1bbed58ece9f55b4fa"
+  message: "🧩 E9RWQN task: implement original UnoType overloads and sequence type cells"
 comments:
   -
     author: "CODER"
     body: "Start: Complete original UnoType and Sequence.hxx type-helper prerequisites in calc with real shared owners and native/source-absent verification; no temporary Sequence/provider or full run before51."
+  -
+    author: "CODER"
+    body: "Verified: Original UnoType/Sequence type helper overloads and independent cells match364-source normal-ASan/UBSan and3 full portable streams; source-absent Calc106/shared128 raw100, scoped gates and EVALUATOR pass persisted. Clean closure, goal active and next full51."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original UnoType and Sequence type helpers verified:364 complete source hashes, normal-ASan/UBSan --write/--check and3 full portable streams match. Source-absent Calc106/shared128 raw100 across19/53 owners; all13 scoped gates, exact Prettier and final metadata checks pass. Actual shared owners reused; limitations retained."
+  -
+    type: "status"
+    at: "2026-10-11T18:50:30.725Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original UnoType/Sequence type helper overloads and independent cells match364-source normal-ASan/UBSan and3 full portable streams; source-absent Calc106/shared128 raw100, scoped gates and EVALUATOR pass persisted. Clean closure, goal active and next full51."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:48:52.919Z"
+doc_updated_at: "2026-10-11T18:50:30.726Z"
 doc_updated_by: "CODER"
 description: "Task44 fills source-shaped cppu unotype template/ADL overload and original Sequence.hxx type helper prerequisites using existing real typelib and borrowed Type owners. Explicit erased C++ type arguments preserve specialization/cache identity without a new UNO type provider. Genuine native header observation, source-absent Calc/related shared raw100, scoped gates and accurate inventory; next full51."
 sections:
