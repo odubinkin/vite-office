@@ -4,7 +4,7 @@ title: "Port original Reference query throwing and interface identity contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,31 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T20:53:46.039Z"
+  updated_at: "2026-10-11T20:55:07.966Z"
   updated_by: "CODER"
-  note: "Original Reference/Any queries and identity/cppu_opt accepted:73 unchanged native TUs,156 terminal commands0, four full normal-ASan/UBSan streams identical; source-absent Calc106 and shared145, whole19/58 owners every raw counter positive and S/B/F/L100;13 effective scoped gates and5 exact source format checks0. Broad flags false, last full41,next51; separate commit review remains."
+  note: "Final post-document verification for reviewed ce0d0c8d: EVALUATOR pass at quality/20261011-205436996-recovery-context/quality-report.json; four exact native streams73 TUs368 hashes13 generated156 commands0; source-absent Calc106/shared145 whole19/58 owners raw100;13 effective gates5 source formats0; no code changes after review, broad flags false, last full41,next51."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T20:54:36.996Z"
+  updated_by: "EVALUATOR"
+  note: "Task48 ce0d0c8d satisfies approved Reference query/throw/identity and cppu_opt scope, whole native stream parity, unchanged prior profiles and raw100; broad claims remain false."
+  evaluated_sha: "ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3"
+  blueprint_digest: "450f092dc76f497d95696d3e43df128a0dbcc8b3bfd0277cc75aebb945e55303"
+  evidence_refs:
+    - ".agentplane/tasks/202610112027-RET7WK/README.md"
+    - ".agentplane/tasks/202610112027-RET7WK/quality/20261011-205436996-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112027-RET7WK/quality/20261011-205436996-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112027-RET7WK/quality/20261011-205436996-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112027-RET7WK/blueprint/resolved-snapshot.json"
+    - "output/playwright/task48-checks/evaluator-audit.json"
+    - "output/playwright/task48-checks/value-coverage-audit.json"
+    - "output/playwright/task48-checks/value-gates-final-manifest.json"
+    - "output/playwright/task48-checks/native-check-final.log"
+    - "output/playwright/task48-checks/prettier-final.log"
+  findings:
+    - "Read original Reference.h/hxx and cppu_opt.cxx against actual TypeScript bodies: Any constructor source guard differs correctly from set, real reserved ownership transfers before Any destruction, query exceptions propagate, equality catches only actual RuntimeException, throwing set preserves its previous field, messages reuse real borrowed-name/lazy-string owners. Original private iset_throw access retained; no private native bypass, replacement query/default/type policy or pointer ordering algorithm."
+    - "Independently rehashed368 full source inputs13 generated headers and caller; all156 native commands terminate0, every fixture byte/digest equals normal and ASan/UBSan stdout, all stderr empty. Re-read raw coverage: whole19/58 owners all counters positive, Calc106/shared145 pass with links absent and exactly restored. Task47 argv profile preserved with one new test/whole owner only;13 effective gates and5 source format checks pass. Diagnostic invalid root replies accurately recorded CALC-056; broad flags remain false."
 commit: null
 comments:
   -
@@ -41,8 +62,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original Reference/Any queries and identity/cppu_opt accepted:73 unchanged native TUs,156 terminal commands0, four full normal-ASan/UBSan streams identical; source-absent Calc106 and shared145, whole19/58 owners every raw counter positive and S/B/F/L100;13 effective scoped gates and5 exact source format checks0. Broad flags false, last full41,next51; separate commit review remains."
+  -
+    type: "verify"
+    at: "2026-10-11T20:55:07.966Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final post-document verification for reviewed ce0d0c8d: EVALUATOR pass at quality/20261011-205436996-recovery-context/quality-report.json; four exact native streams73 TUs368 hashes13 generated156 commands0; source-absent Calc106/shared145 whole19/58 owners raw100;13 effective gates5 source formats0; no code changes after review, broad flags false, last full41,next51."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:53:46.090Z"
+doc_updated_at: "2026-10-11T20:55:08.019Z"
 doc_updated_by: "CODER"
 description: "Task48 completes source-selected Reference constructors/set/static/member/Any query and BaseReference identity equality via actual public Any/RuntimeException/shared owners. Port complete original cppu_opt message owner. Explicit erased enum/template witnesses, no invented pointer ordering/provider/exception policy. Genuine unchanged native/source-absent whole raw100, inventory/journal/gates/review clean finish; last full41,next51."
 sections:
@@ -71,19 +98,20 @@ sections:
     Evidence: value-gates-final-manifest.json, gates-final.log, gates-metadata-final.log and prettier-final.log (ignored output/playwright/task48-checks).
     Scope: TS7, exact authored source ESLint/Prettier, JSDoc, size, module dependencies, full source provenance/tree, shared/Calc inventory,34 tests in four related tooling files, routing, doctor and diff. Inventory runtime/provenance/capability CAP-e4db0ad3-085a-4f33-af2c-3c327b2c47ac and CALC-056 reflect actual source contracts/diagnostic scope; broad parity/default/verified flags false.
 
-    Command: intentional implementation commit and separate EVALUATOR raw/native/source/evidence review, then final canonical verify and clean finish.
-    Result: pending closure evidence.
+    Command: ap commit 202610112027-RET7WK (intentional implementation paths); python3 output/playwright/task48-checks/evaluator-audit.py; ap evaluator run 202610112027-RET7WK --verdict pass.
+    Result: pass.
+    Evidence: implementation ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3; .agentplane/tasks/202610112027-RET7WK/quality/20261011-205436996-recovery-context/quality-report.json (evaluated actual implementation SHA), evaluator-audit.json confirms native/raw/source/gates facts independently. Final owner verification is recorded after this final task document update, followed by intentional quality artifacts and clean task closure.
     Scope: Task48 only, branch calc, whole Calc goal active; no merge/publication/full suite.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-11T20:53:46.039Z — VERIFY — ok
+    ### 2026-10-11T20:55:07.966Z — VERIFY — ok
 
     By: CODER
 
-    Note: Original Reference/Any queries and identity/cppu_opt accepted:73 unchanged native TUs,156 terminal commands0, four full normal-ASan/UBSan streams identical; source-absent Calc106 and shared145, whole19/58 owners every raw counter positive and S/B/F/L100;13 effective scoped gates and5 exact source format checks0. Broad flags false, last full41,next51; separate commit review remains.
+    Note: Final post-document verification for reviewed ce0d0c8d: EVALUATOR pass at quality/20261011-205436996-recovery-context/quality-report.json; four exact native streams73 TUs368 hashes13 generated156 commands0; source-absent Calc106/shared145 whole19/58 owners raw100;13 effective gates5 source formats0; no code changes after review, broad flags false, last full41,next51.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:53:28.453Z, excerpt_hash=sha256:5d2131d34dcbf79e4bf317947cdb9022ea6ddf9009cb5fcce23a1dc8af96f78f
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:55:07.558Z, excerpt_hash=sha256:5d2131d34dcbf79e4bf317947cdb9022ea6ddf9009cb5fcce23a1dc8af96f78f
 
     Details:
 
@@ -98,12 +126,12 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610112027-RET7WK
+    - safe_command: agentplane task complete 202610112027-RET7WK --result verified-202610112027-RET7WK --commit ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -153,19 +181,20 @@ Result: pass.
 Evidence: value-gates-final-manifest.json, gates-final.log, gates-metadata-final.log and prettier-final.log (ignored output/playwright/task48-checks).
 Scope: TS7, exact authored source ESLint/Prettier, JSDoc, size, module dependencies, full source provenance/tree, shared/Calc inventory,34 tests in four related tooling files, routing, doctor and diff. Inventory runtime/provenance/capability CAP-e4db0ad3-085a-4f33-af2c-3c327b2c47ac and CALC-056 reflect actual source contracts/diagnostic scope; broad parity/default/verified flags false.
 
-Command: intentional implementation commit and separate EVALUATOR raw/native/source/evidence review, then final canonical verify and clean finish.
-Result: pending closure evidence.
+Command: ap commit 202610112027-RET7WK (intentional implementation paths); python3 output/playwright/task48-checks/evaluator-audit.py; ap evaluator run 202610112027-RET7WK --verdict pass.
+Result: pass.
+Evidence: implementation ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3; .agentplane/tasks/202610112027-RET7WK/quality/20261011-205436996-recovery-context/quality-report.json (evaluated actual implementation SHA), evaluator-audit.json confirms native/raw/source/gates facts independently. Final owner verification is recorded after this final task document update, followed by intentional quality artifacts and clean task closure.
 Scope: Task48 only, branch calc, whole Calc goal active; no merge/publication/full suite.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-11T20:53:46.039Z — VERIFY — ok
+### 2026-10-11T20:55:07.966Z — VERIFY — ok
 
 By: CODER
 
-Note: Original Reference/Any queries and identity/cppu_opt accepted:73 unchanged native TUs,156 terminal commands0, four full normal-ASan/UBSan streams identical; source-absent Calc106 and shared145, whole19/58 owners every raw counter positive and S/B/F/L100;13 effective scoped gates and5 exact source format checks0. Broad flags false, last full41,next51; separate commit review remains.
+Note: Final post-document verification for reviewed ce0d0c8d: EVALUATOR pass at quality/20261011-205436996-recovery-context/quality-report.json; four exact native streams73 TUs368 hashes13 generated156 commands0; source-absent Calc106/shared145 whole19/58 owners raw100;13 effective gates5 source formats0; no code changes after review, broad flags false, last full41,next51.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:53:28.453Z, excerpt_hash=sha256:5d2131d34dcbf79e4bf317947cdb9022ea6ddf9009cb5fcce23a1dc8af96f78f
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:55:07.558Z, excerpt_hash=sha256:5d2131d34dcbf79e4bf317947cdb9022ea6ddf9009cb5fcce23a1dc8af96f78f
 
 Details:
 
@@ -180,12 +209,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610112027-RET7WK
+- safe_command: agentplane task complete 202610112027-RET7WK --result verified-202610112027-RET7WK --commit ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
