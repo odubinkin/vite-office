@@ -4,7 +4,7 @@ title: "Port original CPPu UNO equality engine"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,29 @@ verification:
   updated_by: "CODER"
   note: "Complete original equality/query owners implemented; latest358-source normal/ASan/UBSan --write/--check and5 source-absent portable streams match. Calc106/shared125 raw100 across19/52 owners with exact hash binding; extended equality3 owners raw100. All scoped gates and final changed-input checks pass; limitations and CALC-052 recorded."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T18:30:52.416Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed0194432eb290: approved original equality/query scope is complete with actual unchanged native and source-absent portable evidence; scoped checks and raw100 satisfy bounded acceptance. Ready for clean direct closure."
+  evaluated_sha: "0194432eb2904920065a3d08a8833c5f515339b6"
+  blueprint_digest: "58974774354db7121c5be496ba60106b2284e2a0a21b2744cdfc019abda88689"
+  evidence_refs:
+    - ".agentplane/tasks/202610111757-W4BJBA/README.md"
+    - ".agentplane/tasks/202610111757-W4BJBA/quality/20261011-183052416-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111757-W4BJBA/quality/20261011-183052416-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111757-W4BJBA/quality/20261011-183052416-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111757-W4BJBA/blueprint/resolved-snapshot.json"
+    - "apps/office/src/cppu/source/uno/native-equality-cases.json"
+    - "output/playwright/task43-checks/native-check-extended.log"
+    - "output/playwright/task43-checks/value-coverage-audit.json"
+    - "output/playwright/task43-checks/extended-coverage-audit.json"
+    - "output/playwright/task43-checks/value-gates-final-manifest.json"
+    - "output/playwright/task43-checks/final-evidence-gates.json"
+  findings:
+    - "Original eq.hxx switches, independent Any flattening, borrowed/acquired description boundaries, base-first/reverse members and descending sequence/interface query/release ordering remain source-shaped. Real data.cxx retained query method dispatch and return/exception ownership use existing shared owners; declarations reference the single implementation."
+    - "Native --check terminal0 independently verifies358 complete source hashes and entire current5 captures against normal/ASan/UBSan. Actual raw Istanbul maps independently inspected: every S/F/B counter positive across19 Calc and52 related shared owners. Current commit hashes match combined acceptance before/after strengthened test replay; all3 equality owners fresh raw100. No weakened checks or fabricated runtime owner."
+    - "Native integer64 double-rounding counterexample justifies only the narrow BigInt binary32 adapter; exact native casts and signed reads of unsigned-hyper sources are preserved. CALC-052 and registry accurately bound source observations; broad parity/default/verified flags remain false."
 commit: null
 comments:
   -
