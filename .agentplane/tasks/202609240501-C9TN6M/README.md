@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 336
+revision: 337
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:41:56.276Z"
+doc_updated_at: "2026-10-11T20:20:12.716Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1496,6 +1496,10 @@ sections:
     - Observation: Correction5/10 task202610111910-XHQWW2 retires editsh projected TextRuns hyperlink range reconstruction/getRunRanges/equal-URL neighbor merging through original owned INET bounds. Related regression exposed SwUndoAttr text replacement splitting original hyperlinks on bold; scoped attribute-only changed-family replay retains unrelated actual owners. Fresh7 regressions and unchanged old hyperlink-through-bold acceptance pass.
       Impact: 14070 accepted scenarios/520 files:related14043/514,tooling25/4,Chromium2/2 on fresh build. Both complete modules100 allfour145lines155stmts39func62branches/256positive counters;872 old test bytes unchanged,4 canonical history prefixes/statuses preserved,9metadata gates pass,refs absent during runtime/static/build and restored. Failed fixture/type/private clone cancellation/stale browser/proof helper attempts recorded; no passing-case replay solely for wrapper repair.
       Resolution: Persist scoped semantic/quality/clean close. Complete native SwHistory/InsertItemSet, native UI selection/default/word fallback/dialog lifecycle and selected uniform state copyRuns remain unverified separate work. No registered IO/recovery changes, no new upstream bug. Goal remains active after correction5; pause after next full and necessary repairs per human stop rule.
+
+    - Observation: Correction6/10 SBN0Z2 represented hyperlink state query retires TextRuns/DTO equality, uses original INET owners/full normal+visited style IDs/native interval flags/default-invalid ring/node aggregation. Native source requires old dialog end-caret setups to move inside; two cases retain all dialog outcomes and add disabled-end assertions;874 other old test files unchanged.
+      Impact: Accepted7053 case occurrences/303 files; standalone passing1584-case producer certifies complete editsh100allfour/229 counters without failed-map contributions. Actual React/Chrome native state checks and9metadata gates pass; inventory/provenance append history only.
+      Resolution: Finish atomic native-INET query task with exact semantic same-agent non-independent review and clean writer closure. Goal active, full once per10 corrections and pause after next accepted full plus repairs. Full generic query, beginning-command fallback/native UI selection/dialog/history remain pending; registered IO/recovery deviations untouched.
 id_source: "generated"
 ---
 ## Summary
@@ -2965,3 +2969,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction5/10 task202610111910-XHQWW2 retires editsh projected TextRuns hyperlink range reconstruction/getRunRanges/equal-URL neighbor merging through original owned INET bounds. Related regression exposed SwUndoAttr text replacement splitting original hyperlinks on bold; scoped attribute-only changed-family replay retains unrelated actual owners. Fresh7 regressions and unchanged old hyperlink-through-bold acceptance pass.
   Impact: 14070 accepted scenarios/520 files:related14043/514,tooling25/4,Chromium2/2 on fresh build. Both complete modules100 allfour145lines155stmts39func62branches/256positive counters;872 old test bytes unchanged,4 canonical history prefixes/statuses preserved,9metadata gates pass,refs absent during runtime/static/build and restored. Failed fixture/type/private clone cancellation/stale browser/proof helper attempts recorded; no passing-case replay solely for wrapper repair.
   Resolution: Persist scoped semantic/quality/clean close. Complete native SwHistory/InsertItemSet, native UI selection/default/word fallback/dialog lifecycle and selected uniform state copyRuns remain unverified separate work. No registered IO/recovery changes, no new upstream bug. Goal remains active after correction5; pause after next full and necessary repairs per human stop rule.
+
+- Observation: Correction6/10 SBN0Z2 represented hyperlink state query retires TextRuns/DTO equality, uses original INET owners/full normal+visited style IDs/native interval flags/default-invalid ring/node aggregation. Native source requires old dialog end-caret setups to move inside; two cases retain all dialog outcomes and add disabled-end assertions;874 other old test files unchanged.
+  Impact: Accepted7053 case occurrences/303 files; standalone passing1584-case producer certifies complete editsh100allfour/229 counters without failed-map contributions. Actual React/Chrome native state checks and9metadata gates pass; inventory/provenance append history only.
+  Resolution: Finish atomic native-INET query task with exact semantic same-agent non-independent review and clean writer closure. Goal active, full once per10 corrections and pause after next accepted full plus repairs. Full generic query, beginning-command fallback/native UI selection/dialog/history remain pending; registered IO/recovery deviations untouched.

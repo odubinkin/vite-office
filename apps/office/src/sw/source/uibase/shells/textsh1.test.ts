@@ -154,6 +154,16 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     ).toBe(true);
     expect(await insert).toBe(true);
 
+    expect(run(WRITER_COMMAND_IDS.editHyperlink).status).toBe("disabled");
+    const inside = new SwPosition(
+      shell.GetActiveParagraph(),
+      shell.GetCursor().GetPoint().GetContentIndex() - 1,
+    );
+    try {
+      shell.SetPaM(inside);
+    } finally {
+      inside.Dispose();
+    }
     const edit = runValue(WRITER_COMMAND_IDS.editHyperlink) as Promise<boolean>;
     expect(dialogs.Cancel(dialogs.GetSnapshot()!.id)).toBe(true);
     expect(await edit).toBe(false);
@@ -179,7 +189,7 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
   });
 
   it("accepts direct hyperlink command arguments and leaves cancelled insert unchanged", /** Checks accepts direct hyperlink command arguments and leaves cancelled insert unchanged. @returns Test callback result. */ async () => {
-    const { dialogs, runValue, shell } = createFixture();
+    const { dialogs, run, runValue, shell } = createFixture();
     shell.Insert("Body");
     const cancelled = runValue(WRITER_COMMAND_IDS.hyperlinkDialog) as Promise<boolean>;
     dialogs.Cancel(dialogs.GetSnapshot()!.id);
@@ -190,6 +200,16 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
         text: "Link",
       }),
     ).toBe(true);
+    expect(run(WRITER_COMMAND_IDS.editHyperlink).status).toBe("disabled");
+    const inside = new SwPosition(
+      shell.GetActiveParagraph(),
+      shell.GetCursor().GetPoint().GetContentIndex() - 1,
+    );
+    try {
+      shell.SetPaM(inside);
+    } finally {
+      inside.Dispose();
+    }
     expect(
       runValue(WRITER_COMMAND_IDS.editHyperlink, {
         hyperlink: { url: "https://edited.example" },
