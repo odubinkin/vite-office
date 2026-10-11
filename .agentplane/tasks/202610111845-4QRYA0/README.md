@@ -4,7 +4,7 @@ title: "Resolve native line-margin frames through original content-node queries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,16 +17,45 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T19:05:10.010Z"
+  updated_by: "CODER"
+  note: "14068 scoped accepted scenarios/520files; two entire modules100all-four/980positive raw counters,870oldtests byte-identical,9metadata gatespass, all3refs absent then restored. Red stale-snapshot regression causally repaired. Explicit temporary device guard selects no frame; native Calc/general parity pending. Correction4/10, no full checkpoint."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T19:05:11.349Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact semantic review passes: actual native positioned content-node queries select line-margin frames, while explicit temporary device admission prevents obsolete caches."
+  evaluated_sha: "f74283e2612fc095b0bb82c6e72bc86c4b3df0fa"
+  blueprint_digest: "d128266c9261ecff534a66e17ade506fddd884d8f7532b98cc98c7a35d35f0d9"
+  evidence_refs:
+    - ".agentplane/tasks/202610111845-4QRYA0/README.md"
+    - ".agentplane/tasks/202610111845-4QRYA0/quality/20261011-190511349-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111845-4QRYA0/quality/20261011-190511349-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111845-4QRYA0/quality/20261011-190511349-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111845-4QRYA0/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4QRYA0/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4QRYA0/accepted-profile.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4QRYA0/repair-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4QRYA0/repro-tests.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4QRYA0/audit-results.json"
+    - "apps/office/src/sw/source/core/crsr/native-margin-frame-query.test.ts"
+  findings:
+    - "Read actual source/diff/tests: no measured-registry frame selection remains in SwCursor margins; original node.getLayoutFrame(layout,point) uses actual root/client/follow identity, admits preformatted clients without publication and preserves native mapped-position comparison/temporary PaM disposal. Fresh literal ownership and mounted edit/history tests prove current integration."
+    - "Unpublished stale-snapshot red regression retained; existing snapshot/model revision now rejects movement before device reformatting and re-admits after current formatting. Guard introduces no copied text state, remains explicitly browser-specific while native Calc/bidi/save-state/selection-overlap are unported; no full-native claim."
+    - "14037 related instances/512files from final root7190 plus unchanged initial-only6847 cases,25tooling/4 and6Chromium/4 pass (14068total/520files);0skip/flaky/browserretry. Complete current root/unchanged cursor original maps100all-four/980positive raw counters with exact source hashes and original location conventions. No source/map/provider/threshold weakening."
+    - "870 old acceptance files byte-identical, six approved old paths/twofresh tests; four canonical historical/status/default/classification/responsibility prefixes retained. Initial metadata shape/tooling filter corrections retain failure/discovery evidence and missing-only checks avoid passing tooling replay. All three references absent all producers/restored; nine metadata gatespass."
+commit:
+  hash: "f74283e2612fc095b0bb82c6e72bc86c4b3df0fa"
+  message: "🧩 4QRYA0 code: Query original native frames for line margins"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved original native margin frame queries, explicit temporary source-freshness guard, focused new tests and canonical evidence in clean writer."
+  -
+    author: "CODER"
+    body: "Native positioned frame query and explicit temporary source freshness verified; record semantic commit for exact quality review."
 events:
   -
     type: "status"
@@ -35,8 +64,21 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved original native margin frame queries, explicit temporary source-freshness guard, focused new tests and canonical evidence in clean writer."
+  -
+    type: "status"
+    at: "2026-10-11T19:05:09.169Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Native positioned frame query and explicit temporary source freshness verified; record semantic commit for exact quality review."
+  -
+    type: "verify"
+    at: "2026-10-11T19:05:10.010Z"
+    author: "CODER"
+    state: "ok"
+    note: "14068 scoped accepted scenarios/520files; two entire modules100all-four/980positive raw counters,870oldtests byte-identical,9metadata gatespass, all3refs absent then restored. Red stale-snapshot regression causally repaired. Explicit temporary device guard selects no frame; native Calc/general parity pending. Correction4/10, no full checkpoint."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:04:31.692Z"
+doc_updated_at: "2026-10-11T19:05:10.062Z"
 doc_updated_by: "CODER"
 description: "Replace SwCursor margin frame selection from the UI measured-frame registry with original SwContentNode.getLayoutFrame(layout,point). Retain only an explicit temporary source-freshness admission guard while native Calc/formatter invalidation is unported; actual formatted native clients work without UI publication. Preserve native temporary PaM/model-view comparison and verify original follow/root ownership plus mounted editing/history."
 sections:
@@ -56,6 +98,39 @@ sections:
     Traceability:2824 existing non-AgentPlane paths checked; only six approved old source/canonical paths changed. All870 old acceptance files byte-identical. Four old canonical array/evidence/history/text prefixes and status/default/classification/responsibility retained; two fresh tests added. No source/helpers/Python/raw logs/maps in AgentPlane.
     Repair evidence: first metadata helper used a nonexistent notes field; repaired to the existing preservedResponsibilities shape, with original prefixes preserved. Initial tooling used two absent path filters, discovering21 cases in2actual files; the missing-only corrected selection ran4 cases in2files, without replaying21passers. New-only stale-unpublished-snapshot regression reproduced true movement where false was required (1fail/6explicitlyfiltered). Actual root production correction now checks existing snapshot/document-model revision when no device lease exists; all7newcorecases and mounted8th pass in final related scope. Raw initial, reproduction and repair reports/logs remain separate. Production repair justifies related/browser revalidation; no upstream-enabled run.
     Remaining: explicit temporary device source-freshness guard does not select a frame, and does not certify native Calc/formatter invalidation. Existing measured ownership/freshness/compatibility registry, full native geometry/query/view-position/layout hierarchy/nontext/merged/bidi/selection protection and broader parity remain incomplete. Actual native cursor selection now works without UI publication and uses original registered node/root/position/follow clients. Registered IO/recovery deviations untouched. Correction4/10 after A77JR3; goalactive and pause after next full run and any required repairs. Exact semantic SHA same-agent non-independent review required before close.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T19:05:10.010Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 14068 scoped accepted scenarios/520files; two entire modules100all-four/980positive raw counters,870oldtests byte-identical,9metadata gatespass, all3refs absent then restored. Red stale-snapshot regression causally repaired. Explicit temporary device guard selects no frame; native Calc/general parity pending. Correction4/10, no full checkpoint.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:05:09.169Z, excerpt_hash=sha256:c653423a75c82703b09de35b4051a49369d6eba5a72cfaefa4700fee77e7d9ef
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111845-4QRYA0/blueprint/resolved-snapshot.json
+    - old_digest: d128266c9261ecff534a66e17ade506fddd884d8f7532b98cc98c7a35d35f0d9
+    - current_digest: d128266c9261ecff534a66e17ade506fddd884d8f7532b98cc98c7a35d35f0d9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111845-4QRYA0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610111845-4QRYA0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the scoped semantic commit and its tests/canonical notes; preserve prior history and registered deviations."
   Findings: |-
     Previous goal turn completed A06D5E with authoritative code/inventory/tests/evidence and clean writer; this is progress. Current source shows native margins use content-node.getLayoutFrame(layout,point,view-position/Calc), while the port selects through the UI registry. Full native query geometry/Calc invalidation is not represented, so the existing stale-text admission must remain explicitly at the device boundary until its native replacement. The new guard selects no frame and admits actual native formatting without a measured publication. No detached TextRuns/model/query copies or full parity promotion.
@@ -93,6 +168,39 @@ Evidence: format/lint/TS7/JSDoc/file-size/dependencies/build/static pass. All ru
 Traceability:2824 existing non-AgentPlane paths checked; only six approved old source/canonical paths changed. All870 old acceptance files byte-identical. Four old canonical array/evidence/history/text prefixes and status/default/classification/responsibility retained; two fresh tests added. No source/helpers/Python/raw logs/maps in AgentPlane.
 Repair evidence: first metadata helper used a nonexistent notes field; repaired to the existing preservedResponsibilities shape, with original prefixes preserved. Initial tooling used two absent path filters, discovering21 cases in2actual files; the missing-only corrected selection ran4 cases in2files, without replaying21passers. New-only stale-unpublished-snapshot regression reproduced true movement where false was required (1fail/6explicitlyfiltered). Actual root production correction now checks existing snapshot/document-model revision when no device lease exists; all7newcorecases and mounted8th pass in final related scope. Raw initial, reproduction and repair reports/logs remain separate. Production repair justifies related/browser revalidation; no upstream-enabled run.
 Remaining: explicit temporary device source-freshness guard does not select a frame, and does not certify native Calc/formatter invalidation. Existing measured ownership/freshness/compatibility registry, full native geometry/query/view-position/layout hierarchy/nontext/merged/bidi/selection protection and broader parity remain incomplete. Actual native cursor selection now works without UI publication and uses original registered node/root/position/follow clients. Registered IO/recovery deviations untouched. Correction4/10 after A77JR3; goalactive and pause after next full run and any required repairs. Exact semantic SHA same-agent non-independent review required before close.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T19:05:10.010Z — VERIFY — ok
+
+By: CODER
+
+Note: 14068 scoped accepted scenarios/520files; two entire modules100all-four/980positive raw counters,870oldtests byte-identical,9metadata gatespass, all3refs absent then restored. Red stale-snapshot regression causally repaired. Explicit temporary device guard selects no frame; native Calc/general parity pending. Correction4/10, no full checkpoint.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:05:09.169Z, excerpt_hash=sha256:c653423a75c82703b09de35b4051a49369d6eba5a72cfaefa4700fee77e7d9ef
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111845-4QRYA0/blueprint/resolved-snapshot.json
+- old_digest: d128266c9261ecff534a66e17ade506fddd884d8f7532b98cc98c7a35d35f0d9
+- current_digest: d128266c9261ecff534a66e17ade506fddd884d8f7532b98cc98c7a35d35f0d9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111845-4QRYA0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610111845-4QRYA0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
