@@ -12,6 +12,18 @@
         {
           "path": "apps/office/src/sw/source/core/edit/editsh.ts",
           "marker": "createWriterInsertTextAction"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/edit/native-internet-edit-range.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-internet-edit-range.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-internet-edit-range.spec.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -22,6 +34,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx",
           "marker": "SwEditShell::Insert2"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crstrvl.cxx",
+          "marker": "SwCursorShell::SelectTextAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/move.cxx",
+          "marker": "SwWrtShell::SelectTextAttr"
         }
       ]
     },
@@ -36,7 +56,8 @@
     ],
     "preservedResponsibilities": [
       "Owns supported selection-aware SwEditShell hyperlink editing and undo actions.",
-      "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved."
+      "Iteration133 restores collapsed SwEditShell Insert2 EMPTYEXPAND1 and forced5 factory policy,stored required SwUndoInsert flags reused by typed redo,and current FORCE candidate grouping barrier. Normal input after forced input may group under retained bounded payload guards and replays first mode. Literal source-independent shell/mode/lock/oldIgnore/empty boundary and actual INET ownership/history tests cover this path. Selection adapters remain pending native SwHistory rollback;full native grouping/redline/multicursor/index overloads/BuildPortions/core/UI remain unverified. No semantic status/default/exception promotion;registered I/O deviations preserved.",
+      "Task202610111910-XHQWW2 retires collapsed hyperlink range reconstruction from projected TextRuns, getRunRanges and URL-based neighbor merging plus its unreachable run certificate. Native node.GetTextAttrAt returns the original owned INET hint, and the edit/remove action uses actual GetStart/GetEnd bounds; adjacent identical links remain independent even across original character-format portions. The represented current caret inheritance uses native Expand for positive offsets and Default at0, retaining the existing current-attribute convention. Full native WrtShell SelectTextAttr false UI/default selection/word fallback/dialog lifecycle and selected uniform metadata state (remaining copyWriterTextRangeRuns adapter) are explicitly pending separate integration, not registered deviations or certified parity. Fresh original body/cell owners and actual mounted/Chromium edit/history evidence check original bounds, adjacent rich item metadata and unchanged source text/cursor. Historical statuses/defaults/classifications/responsibilities/evidence/history prefixes and registered IO/recovery deviations preserved; no whole-module/goal promotion and no upstream bug claim."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/edit/editsh.cxx",

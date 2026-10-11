@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 335
+revision: 336
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:04:32.338Z"
+doc_updated_at: "2026-10-11T19:41:56.276Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1492,6 +1492,10 @@ sections:
     - Observation: Correction4 after A77JR3: task202610111845-4QRYA0 resolves native line-margin frames through actual original content-node queries rather than measured-registry frame selection.
       Impact: Already formatted native clients support margins without UI publication. Original root/client order/point/follows and temporary PaM mapped-position equality restored. A real new regression showed that unpublished stale snapshots could move before device reformatting; guard now reads the existing document/snapshot revision without duplicating text state.
       Resolution: 14037 accepted related instances/512files plus25tooling/4 and6Chromium/4 =14068cases/520files,8fresh native/React cases. Whole two production modules current-source Istanbul100all-four448lines492statements79functions409branches/980positive raw counters, separate unedited source-bound maps.870oldtests byte-identical, four canonical histories/status/default/classification/responsibility prefixes preserved,9metadata gatespass. All producers upstream absent and links restored. Temporary device freshness/ownership/compatibility registry and native view-position Calc/formatter invalidation/bidi/selection-overlap/nontext/merged/full table hierarchy/general parity remain pending. Registered I/O/recovery deviations unchanged. Goalactive correction4/10; pause after next accepted full and any failures repaired; exact same-agent review/closure follows.
+
+    - Observation: Correction5/10 task202610111910-XHQWW2 retires editsh projected TextRuns hyperlink range reconstruction/getRunRanges/equal-URL neighbor merging through original owned INET bounds. Related regression exposed SwUndoAttr text replacement splitting original hyperlinks on bold; scoped attribute-only changed-family replay retains unrelated actual owners. Fresh7 regressions and unchanged old hyperlink-through-bold acceptance pass.
+      Impact: 14070 accepted scenarios/520 files:related14043/514,tooling25/4,Chromium2/2 on fresh build. Both complete modules100 allfour145lines155stmts39func62branches/256positive counters;872 old test bytes unchanged,4 canonical history prefixes/statuses preserved,9metadata gates pass,refs absent during runtime/static/build and restored. Failed fixture/type/private clone cancellation/stale browser/proof helper attempts recorded; no passing-case replay solely for wrapper repair.
+      Resolution: Persist scoped semantic/quality/clean close. Complete native SwHistory/InsertItemSet, native UI selection/default/word fallback/dialog lifecycle and selected uniform state copyRuns remain unverified separate work. No registered IO/recovery changes, no new upstream bug. Goal remains active after correction5; pause after next full and necessary repairs per human stop rule.
 id_source: "generated"
 ---
 ## Summary
@@ -2957,3 +2961,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction4 after A77JR3: task202610111845-4QRYA0 resolves native line-margin frames through actual original content-node queries rather than measured-registry frame selection.
   Impact: Already formatted native clients support margins without UI publication. Original root/client order/point/follows and temporary PaM mapped-position equality restored. A real new regression showed that unpublished stale snapshots could move before device reformatting; guard now reads the existing document/snapshot revision without duplicating text state.
   Resolution: 14037 accepted related instances/512files plus25tooling/4 and6Chromium/4 =14068cases/520files,8fresh native/React cases. Whole two production modules current-source Istanbul100all-four448lines492statements79functions409branches/980positive raw counters, separate unedited source-bound maps.870oldtests byte-identical, four canonical histories/status/default/classification/responsibility prefixes preserved,9metadata gatespass. All producers upstream absent and links restored. Temporary device freshness/ownership/compatibility registry and native view-position Calc/formatter invalidation/bidi/selection-overlap/nontext/merged/full table hierarchy/general parity remain pending. Registered I/O/recovery deviations unchanged. Goalactive correction4/10; pause after next accepted full and any failures repaired; exact same-agent review/closure follows.
+
+- Observation: Correction5/10 task202610111910-XHQWW2 retires editsh projected TextRuns hyperlink range reconstruction/getRunRanges/equal-URL neighbor merging through original owned INET bounds. Related regression exposed SwUndoAttr text replacement splitting original hyperlinks on bold; scoped attribute-only changed-family replay retains unrelated actual owners. Fresh7 regressions and unchanged old hyperlink-through-bold acceptance pass.
+  Impact: 14070 accepted scenarios/520 files:related14043/514,tooling25/4,Chromium2/2 on fresh build. Both complete modules100 allfour145lines155stmts39func62branches/256positive counters;872 old test bytes unchanged,4 canonical history prefixes/statuses preserved,9metadata gates pass,refs absent during runtime/static/build and restored. Failed fixture/type/private clone cancellation/stale browser/proof helper attempts recorded; no passing-case replay solely for wrapper repair.
+  Resolution: Persist scoped semantic/quality/clean close. Complete native SwHistory/InsertItemSet, native UI selection/default/word fallback/dialog lifecycle and selected uniform state copyRuns remain unverified separate work. No registered IO/recovery changes, no new upstream bug. Goal remains active after correction5; pause after next full and necessary repairs per human stop rule.

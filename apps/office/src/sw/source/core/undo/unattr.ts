@@ -9,6 +9,8 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
 import { getTextFormatCollNodes } from "../doc/docfmt";
 import { SwpHints } from "../txtnode/ndhints";
+import { clipHintOutsideRange } from "../txtnode/ndhints-range";
+import { AssertTextNodeRange } from "../txtnode/ndtxt-hints";
 import { resetFullParagraphAutoFormat, resetParagraphTextAttributes } from "../txtnode/txtedt";
 import {
   CopyTextFragment,
@@ -16,7 +18,6 @@ import {
   GetFragmentPayloadSize,
   GetUndoFragmentLength,
   GetUndoTextNode,
-  ReplaceUndoRange,
   SwUndRng,
   SwUndo,
   type SwUndoCursorState,
@@ -103,6 +104,7 @@ export class SwUndoAttr extends SwUndo {
   private readonly m_nNode: number;
   private readonly afterFragment: SwTextFragment;
   private readonly beforeFragment: SwTextFragment;
+  private readonly changedWhich = new Set<number>();
 
   /** Creates a direct-format action. @param paragraph - Target node. @param start - Formatted range start. @param beforeFragment - Original native fragment. @param afterFragment - Resulting native fragment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
@@ -118,6 +120,29 @@ export class SwUndoAttr extends SwUndo {
     this.m_nNode = paragraph.GetIndex();
     this.beforeFragment = CopyUndoFragment(beforeFragment);
     this.afterFragment = CopyUndoFragment(afterFragment);
+    const families = new Set(
+      [...beforeFragment.hints.entries(), ...afterFragment.hints.entries()].map(
+        /** Reads native ranged item identity. @param hint - Original snapshot attribute. @returns WhichId. */
+        (hint) => hint.Which(),
+      ),
+    );
+    for (const which of families) {
+      const original = new SwpHints(
+          paragraph.GetDoc().GetAttrPool(),
+          beforeFragment.hints.entries().filter(
+            /** Selects one original item family. @param hint - Snapshot attribute. @returns Whether selected. */
+            (hint) => hint.Which() === which,
+          ),
+        ),
+        replacement = new SwpHints(
+          paragraph.GetDoc().GetAttrPool(),
+          afterFragment.hints.entries().filter(
+            /** Selects one replacement family. @param hint - Snapshot attribute. @returns Whether selected. */
+            (hint) => hint.Which() === which,
+          ),
+        );
+      if (!original.equals(replacement)) this.changedWhich.add(which);
+    }
   }
 
   /** Reports changed range hints only. @returns Approximate payload units. */
@@ -125,26 +150,46 @@ export class SwUndoAttr extends SwUndo {
     return GetFragmentPayloadSize(this.beforeFragment) + GetFragmentPayloadSize(this.afterFragment);
   }
 
-  /** Restores original formatted fragments. @param context - Active Writer context. @returns Nothing. */
+  /** Restores changed attributes without replacing text or splitting unrelated original owners. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(
-      context.GetDoc(),
-      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
-      this.start,
-      this.start + GetUndoFragmentLength(this.afterFragment),
-      this.beforeFragment,
-    );
+    this.ApplyAttributes(context, this.beforeFragment);
   }
 
-  /** Reapplies formatted fragments. @param context - Active Writer context. @returns Nothing. */
+  /** Reapplies changed attributes while preserving native text and unrelated hint identities. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(
-      context.GetDoc(),
-      this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
-      this.start,
-      this.start + GetUndoFragmentLength(this.beforeFragment),
-      this.afterFragment,
-    );
+    this.ApplyAttributes(context, this.afterFragment);
+  }
+
+  /** Applies the represented ranged item-family delta; complete native SwHistory/InsertItemSet remains unverified. @param context - Current graph. @param fragment - Attribute snapshot. @returns Nothing. */
+  private ApplyAttributes(context: SwUndoRedoContext, fragment: SwTextFragment): void {
+    const node = GetUndoTextNode(
+        context.GetDoc(),
+        this.m_rDoc.GetNodes().at(this.m_nNode) as SwTextNode,
+      ),
+      end = this.start + GetUndoFragmentLength(fragment);
+    AssertTextNodeRange(node, this.start, end);
+    const hints = node.GetOrCreateSwpHints();
+    for (const hint of hints.entries()) {
+      if (
+        !this.changedWhich.has(hint.Which()) ||
+        hint.GetEnd() <= this.start ||
+        hint.GetStart() >= end
+      )
+        continue;
+      hints.DeleteAtPos(hints.entries().indexOf(hint));
+      for (const retained of clipHintOutsideRange(hint, this.start, end)) hints.Insert(retained);
+    }
+    for (const hint of fragment.hints.entries()) {
+      if (!this.changedWhich.has(hint.Which())) continue;
+      const replacement = hint.clone();
+      replacement.start += this.start;
+      replacement.SetEnd(replacement.GetEnd() + this.start);
+      hints.Insert(replacement);
+    }
+    hints.MergePortions(node);
+    context
+      .GetDoc()
+      .NotifyModelChange({ kind: "attribute-set-changed", nodeIndex: node.GetIndex() });
   }
 }
 
