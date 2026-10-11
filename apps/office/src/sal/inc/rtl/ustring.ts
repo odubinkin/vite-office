@@ -5,6 +5,7 @@ import {
   rtl_uString_new,
   rtl_uString_newFromStr,
   rtl_uString_newFromAscii,
+  rtl_uString_newFromLiteral,
   rtl_uString_newFromStr_WithLength,
   rtl_uString_release,
   rtl_ustr_compare_WithLength,
@@ -103,6 +104,7 @@ export class OUString {
             | OUStringLiteral
             | rtl_uString
             | Uint16Array
+            | Uint8Array
             | number
             | StringNumber
             | StringConcat,
@@ -123,6 +125,24 @@ export class OUString {
       }
     } else if (value instanceof StringNumber) {
       rtl_uString_newFromStr_WithLength(this.slot, value.buf, value.length);
+    } else if (value instanceof Uint8Array) {
+      // Erased const char[N] witnesses use native JS array operations for the original ConstCharArrayDetector::isValid predicate.
+      const length = value.length - 1;
+      if (
+        !value
+          .subarray(0, length)
+          .every(
+            /** Original no-embedded-zero predicate. @param unit - Original char byte. @returns Whether this unit is nonzero. */ (
+              unit,
+            ) => unit !== 0,
+          ) ||
+        value[length] !== 0
+      )
+        throw new Error(
+          "assert(libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal))",
+        );
+      if (length === 0) rtl_uString_new(this.slot);
+      else rtl_uString_newFromLiteral(this.slot, value, length, 0);
     } else if (value instanceof OUStringLiteral) this.pData = value.str;
     else if (typeof value === "number")
       rtl_uString_newFromStr_WithLength(this.slot, new Uint16Array([value]), 1);

@@ -206,14 +206,24 @@ export function new_WithLength(ppThis: rtl_uStringSlot | null, nLen: number): vo
     ppThis[0].buffer[0] = 0;
   }
 }
-/** Original same-type UTF16 Copy specialization of std::copy. @param destination - Allocated storage. @param source - Borrowed source. @param count - Native initialized unit count. @returns Nothing. */
-export function Copy(destination: Uint16Array, source: Uint16Array, count: number): void {
-  destination.set(source.subarray(0, count));
+/** Original same-type UTF16 std::copy and char-to-Unicode ASCII std::transform Copy overloads. @param destination - Allocated storage. @param source - Borrowed source. @param count - Native initialized unit count. @returns Nothing. */
+export function Copy(
+  destination: Uint16Array,
+  source: Uint16Array | Uint8Array,
+  count: number,
+): void {
+  if (source instanceof Uint8Array) {
+    for (let i = 0; i < count; i++) {
+      const unit = source[i] as number;
+      if (unit >= 0x80) throw new Error("assert(rtl::isAscii(static_cast<unsigned char>(c)))");
+      destination[i] = unit;
+    }
+  } else destination.set(source.subarray(0, count));
 }
 /** Original buffer copy with optional spare allocation; the old owner is released last to preserve aliasing. @param ppThis - Destination slot. @param pCharStr - Borrowed source. @param nLen - Signed32 unit count. @param allocExtra - Original signed32 extra capacity. @returns Nothing. */
 export function newFromStr_WithLength(
   ppThis: rtl_uStringSlot | null,
-  pCharStr: Uint16Array | null,
+  pCharStr: Uint16Array | Uint8Array | null,
   nLen: number,
   allocExtra = 0,
 ): void {
@@ -227,7 +237,7 @@ export function newFromStr_WithLength(
   const pOrg = ppThis[0];
   ppThis[0] = Alloc(nLen + allocExtra);
   if (ppThis[0] === null) throw new Error("assert(*ppThis != nullptr)");
-  if (nLen > 0) Copy(ppThis[0].buffer, pCharStr as Uint16Array, nLen);
+  if (nLen > 0) Copy(ppThis[0].buffer, pCharStr as Uint16Array | Uint8Array, nLen);
   if (allocExtra > 0) {
     ppThis[0].length = nLen;
     ppThis[0].buffer[nLen] = 0;

@@ -36,6 +36,7 @@ export {
   rtl_uString_new_WithLength,
   rtl_uString_newFromStr,
   rtl_uString_newFromAscii,
+  rtl_uString_newFromLiteral,
   rtl_uString_newFromStr_WithLength,
   rtl_uString_newFromString,
   rtl_uString_release,

@@ -188,6 +188,15 @@ export function rtl_uString_newFromStr_WithLength(
 ): void {
   str.newFromStr_WithLength(slot, data, length);
 }
+/** Original literal C boundary delegates to the same actual template owner and its char-to-Unicode Copy overload. @param slot - Inout owner. @param data - Original char storage, null only for zero length. @param length - Original signed32 length. @param allocExtra - Original signed32 spare capacity. @returns Nothing. */
+export function rtl_uString_newFromLiteral(
+  slot: rtl_uStringSlot | null,
+  data: Uint8Array | null,
+  length: number,
+  allocExtra: number,
+): void {
+  str.newFromStr_WithLength(slot, data, length, allocExtra);
+}
 /** Original assignment wrapper. @param slot - Destination slot. @param source - Live source. @returns Nothing. */
 export function rtl_uString_assign(slot: rtl_uStringSlot | null, source: rtl_uString): void {
   str.assign(slot, source);
