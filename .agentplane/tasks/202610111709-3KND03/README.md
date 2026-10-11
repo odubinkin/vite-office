@@ -4,7 +4,7 @@ title: "Port original UNO sequence allocation and copy-on-write engine"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,26 @@ verification:
   updated_by: "CODER"
   note: "Complete original C sequence streams match; source-absent Calc106 and related shared120 pass with every raw counter positive and S/B/F/L100; all13 gates and exact restoration pass. Evidence in output/playwright/task42-checks manifests and task Verification; native allocator/ABI and downstream template/service/UI limitations retained."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T17:53:40.756Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed committed original shared C sequence engine against full source and concrete native/source-absent evidence; approved bounded scope is complete."
+  evaluated_sha: "e37bdb3539a567b13e2192ed8b020455e7c1a21c"
+  blueprint_digest: "151b771a7152c20f2495797943790c8d18e80dc537d9bd6bffd49ec05e7dbff0"
+  evidence_refs:
+    - ".agentplane/tasks/202610111709-3KND03/README.md"
+    - ".agentplane/tasks/202610111709-3KND03/quality/20261011-175340756-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111709-3KND03/quality/20261011-175340756-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111709-3KND03/quality/20261011-175340756-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111709-3KND03/blueprint/resolved-snapshot.json"
+    - "output/playwright/task42-checks/value-coverage-audit.json"
+    - "output/playwright/task42-checks/value-gates-final-manifest.json"
+    - "output/playwright/task42-checks/native-check-safe-guards.log"
+    - "output/playwright/task42-checks/caller-extraction-audit.json"
+  findings:
+    - "All358 whole source hashes currently match fixture; full unchanged original sequence/data/any and genuine69 dependency owners produce sanitizer-identical complete streams, and three portable cases replay every byte. Prior native copy caller remains byte-identical; default scalar observer assertions retained."
+    - "Source COW copy/tail/default/destruction/refcount and assignment order preserved. All raw counters positive in19 Calc and49 related shared owners, S/B/F/L100; all13 effective gates exit0. New responsibility-split filename and capability records are exhaustive; CALC-051 records behavior without repair."
 commit: null
 comments:
   -
@@ -43,7 +63,7 @@ events:
     state: "ok"
     note: "Complete original C sequence streams match; source-absent Calc106 and related shared120 pass with every raw counter positive and S/B/F/L100; all13 gates and exact restoration pass. Evidence in output/playwright/task42-checks manifests and task Verification; native allocator/ABI and downstream template/service/UI limitations retained."
 doc_version: 3
-doc_updated_at: "2026-10-11T17:52:42.543Z"
+doc_updated_at: "2026-10-11T17:54:08.509Z"
 doc_updated_by: "CODER"
 description: "Task42: complete sequence.cxx engine required by original i18npool offsets and returned-string sequences; reuse existing CPPu/SAL type, copy, default and destruction owners. Source-shaped allocation/default/copy/reallocation/reference-to-one/assignment paths and actual native replay, portable raw100, inventory and scoped gates. Full run cadence restarts after task41."
 sections:
@@ -150,6 +170,10 @@ sections:
     - Observation: Source provenance gate correctly requires an explicit filename divergence for the sequence-elements.ts source function split.
       Impact: Runtime record exists but mapping has no budget-driven responsibility-split explanation.
       Resolution: Add that explanation to the existing new provenance record; preserve source ownership and filename enforcement.
+
+    - Observation: Direct finish correctly rejected dirty tracked task README produced by the separate EVALUATOR record.
+      Impact: Task remains verified pending closure; implementation is committed and clean, but quality artifacts need their own task-scoped checkpoint.
+      Resolution: Commit only this task README/quality artifacts, then retry canonical finish with the actual implementation hash. No runtime edits or acceptance changes.
 id_source: "generated"
 ---
 ## Summary
@@ -271,3 +295,7 @@ Previous goal turn is concrete progress: tasks40/41 completed, full15084/668 raw
 - Observation: Source provenance gate correctly requires an explicit filename divergence for the sequence-elements.ts source function split.
   Impact: Runtime record exists but mapping has no budget-driven responsibility-split explanation.
   Resolution: Add that explanation to the existing new provenance record; preserve source ownership and filename enforcement.
+
+- Observation: Direct finish correctly rejected dirty tracked task README produced by the separate EVALUATOR record.
+  Impact: Task remains verified pending closure; implementation is committed and clean, but quality artifacts need their own task-scoped checkpoint.
+  Resolution: Commit only this task README/quality artifacts, then retry canonical finish with the actual implementation hash. No runtime edits or acceptance changes.
