@@ -10,6 +10,7 @@ import ts from "typescript";
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "cppu",
+  "cppuhelper",
   "cui",
   "editeng",
   "external",
@@ -34,6 +35,8 @@ const moduleNames = [
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
+  // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
+  ["cppuhelper", new Set(["cppu", "sal"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
@@ -129,6 +132,8 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("cppuhelper/inc/") || portablePath.startsWith("cppuhelper/source/"))
+    return "upstream-mechanism";
   if (
     portablePath.startsWith("i18nutil/inc/") ||
     portablePath.startsWith("udkapi/") ||

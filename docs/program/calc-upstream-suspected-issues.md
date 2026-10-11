@@ -1374,3 +1374,28 @@ reserved contents are observed.
 
 Decision: preserve original comparison and exception selection. Add no extra
 null-result rejection or substitute identity provider.
+
+## CALC-057: queryInterface omits arities15 and16 between14 and17
+
+Status: reproduced compile-time contract gap; no incorrect runtime result or
+valid consumer failure is established.
+
+Pinned `include/cppuhelper/queryinterface.hxx` declares ordered template overloads
+for1..14 and17..19 interface pointers. The source jumps directly from14 to17,
+with no15/16 declarations. Both ordinary calls fail overload resolution. This
+may be intentional legacy coverage rather than an implementation defect; the
+absence alone does not prove a bug. Existing overloads still compare declared
+static types in order and return the first acquired interface Any, including
+a matching typed NULL.
+
+Evidence: Task50 first genuine caller compilation against the complete unchanged
+header fails with “no matching function for call to queryInterface” beginning
+with15 pointers. Compiler notes show14 requires15 total arguments (including
+rType), while17 requires18. Full failed compiler diagnostics are retained in
+`output/playwright/task50-checks/native-write.log` and the native build manifest.
+Dedicated repeatable compile-only15/16 witnesses in the final native probe
+both exit1 with complete original diagnostics and source/diagnostic hashes.
+Final --write/--check reproduces them; no rejected body is executed.
+
+Decision: preserve the actual1..14/17..19 family and restrict the erased declared
+argument-list arities accordingly. Add no missing overload or runtime fallback.

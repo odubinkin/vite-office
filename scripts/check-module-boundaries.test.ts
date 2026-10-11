@@ -463,3 +463,24 @@ it("retains actual mutual SAL and o3tl string-header owners without application 
     ).toMatch(/browser adapters/u);
   }
 });
+
+it("permits original cppuhelper UNO and SAL owners while retaining application and browser gates", /** Protects original helper ownership, without reverse or application-layer permission. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "sal"])
+    expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(false);
+  for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi", "svl"])
+    expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "cppuhelper")).toBe(true);
+  expect(getRuntimeOwnershipLayer("cppuhelper/source/supportsservice.ts")).toBe(
+    "upstream-mechanism",
+  );
+  expect(getRuntimeOwnershipViolation("cppuhelper/inc/queryinterface.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "cppuhelper/source/supportsservice.ts",
+      "vcl/browser/font-list.ts",
+      "../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
