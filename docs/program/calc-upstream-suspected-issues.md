@@ -1097,3 +1097,27 @@ or ordinary-consumer failure is claimed.
 Decision: preserve allocation, acquisition and return ordering. Add no extra
 release, exception, completion repair or naming validation. Valid service
 producers and native shutdown behavior need separate consumer evidence.
+
+## CALC-046: Failed ASCII allocation becomes a null-data OUString
+
+Status: reproduced through the original source-provided replaceable allocator
+pointer. Ordinary OS OOM, consumer reachability and destruction of such a value
+remain unverified; the null-data value is intentionally retained without calling
+its destructor.
+
+Pinned `sal/rtl/ustring.cxx::rtl_uString_newFromAscii` releases prior owned data
+before allocation and returns with a null output if the allocator returns null.
+`include/rtl/ustring.hxx::OUString::createFromAscii(const char*)` then constructs
+an OUString from that pointer with SAL_NO_ACQUIRE. That constructor simply stores
+the pointer and performs no validation or allocation-failure exception.
+
+Evidence: `scripts/rtl-ascii-create-native-probe.mjs` failure mode sets the
+original `rtl_allocateString` function pointer to a caller allocator returning
+null. Full unchanged dependencies retain the null C result and the null-data
+C++ value. Complete normal and ASan/UBSan failure observations agree (180 bytes),
+including original release/allocation/free ordering. The native null-data value
+is heap-constructed with copy elision and deliberately retained; no post-invalid
+consumer, null destructor, sanitizer failure or ordinary OS OOM is claimed.
+
+Decision: preserve null pointer transfer and the original ordering. Add no
+invented empty-string fallback, std::bad_alloc translation or allocation repair.

@@ -239,10 +239,10 @@ export function newFromString(ppThis: rtl_uStringSlot | null, pStr: rtl_uString 
   if (pStr === null) throw new Error("assert(pStr)");
   newFromStr_WithLength(ppThis, pStr.buffer, pStr.length);
 }
-/** Original class and UTF16 pointer getLength specializations. @param pStr - Data or NUL-terminated borrowed units. @returns Original logical length. */
-export function getLength(pStr: rtl_uString | Uint16Array | null): number {
+/** Original class, char and UTF16 pointer getLength specializations. @param pStr - Data or NUL-terminated borrowed units. @returns Original logical length. */
+export function getLength(pStr: rtl_uString | Uint16Array | Uint8Array | null): number {
   if (pStr === null) throw new Error("assert(pStr)");
-  if (!(pStr instanceof Uint16Array)) return pStr.length;
+  if (!(pStr instanceof Uint16Array) && !(pStr instanceof Uint8Array)) return pStr.length;
   // As in char_traits::length, the caller must provide a reachable terminating zero.
   let n = 0;
   while (pStr[n] !== 0) n++;

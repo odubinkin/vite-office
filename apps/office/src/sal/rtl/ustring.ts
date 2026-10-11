@@ -159,6 +159,27 @@ export function rtl_uString_newFromStr(
 ): void {
   str.newFromStr(slot, data);
 }
+/** Original terminated ASCII constructor, releasing the prior owner before allocation and preserving the null allocator result. @param slot - Inout owned pointer slot. @param data - Borrowed terminated bytes or null. @returns Nothing. */
+export function rtl_uString_newFromAscii(
+  slot: rtl_uStringSlot | null,
+  data: Uint8Array | null,
+): void {
+  if (slot === null) throw new Error("assert(ppThis)");
+  const length = data === null ? 0 : str.getLength(data);
+  if (length === 0) {
+    rtl_uString_new(slot);
+    return;
+  }
+  if (slot[0] !== null) rtl_uString_release(slot[0]);
+  slot[0] = rtl_uString_ImplAlloc(length);
+  if (slot[0] === null) return;
+  let i = 0;
+  do {
+    const unit = (data as Uint8Array)[i] as number;
+    if (unit >= 0x80) throw new Error("assert(static_cast<unsigned char>(*pCharStr) < 0x80)");
+    slot[0].buffer[i++] = unit;
+  } while ((data as Uint8Array)[i] !== 0);
+}
 /** Original known-length constructor wrapper. @param slot - Destination slot. @param data - Borrowed source. @param length - Signed32 unit count. @returns Nothing. */
 export function rtl_uString_newFromStr_WithLength(
   slot: rtl_uStringSlot | null,

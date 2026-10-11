@@ -4,6 +4,7 @@ import {
   rtl_uString_assign,
   rtl_uString_new,
   rtl_uString_newFromStr,
+  rtl_uString_newFromAscii,
   rtl_uString_newFromStr_WithLength,
   rtl_uString_release,
   rtl_ustr_compare_WithLength,
@@ -132,6 +133,15 @@ export class OUString {
       this.pData = ("pData" in value ? value.pData : value) as rtl_uString;
       if (argument !== SAL_NO_ACQUIRE) rtl_uString_acquire(this.pData);
     }
+  }
+
+  /** Original terminated-char createFromAscii overload, transferring actual C constructor ownership. The distinct string_view/literal overload remains a separate source responsibility. @param value - Borrowed terminated ASCII bytes or null. @returns Original no-acquire value owner. */
+  static createFromAscii(value: Uint8Array | null): OUString {
+    // The erased null pointer/buffer overloads differ: preserve the original no-acquire pointer result directly, including allocator failure.
+    const result = Object.create(OUString.prototype) as OUString;
+    result.slot = [null];
+    rtl_uString_newFromAscii(result.slot, value);
+    return result;
   }
 
   /** Original signed32/signed64 number overloads; bigint preserves the signed64 overload. Default radix is10. @param value - Original integral argument. @param radix - Original signed16 radix. @returns Original fixed local representation. */

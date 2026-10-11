@@ -2447,3 +2447,27 @@ registration into an existing canonical placeholder. The own-member view still
 shares its complete array after the original raw transfer; actual public
 completion produces the original member/function maps, and destruction releases
 the transferred members and direct bases.
+
+### Original terminated ASCII construction
+
+Shared SAL now implements the original `rtl_uString_newFromAscii` and the
+`OUString::createFromAscii` terminated-char overload. The existing template
+length owner accepts char bytes as well as UTF16 units. Empty construction,
+reference release and allocator owners are reused. Input is read to its first
+NUL; positive output releases the prior owner before allocation and checks the
+original ASCII range. The public C binding remains in its original header.
+
+No-acquire value construction retains the actual C pointer, including null
+allocation results. Direct owner-slot initialization adapts the erased nullable
+pointer versus known-length-buffer overloads without inventing empty data.
+Complete original normal/ASan/UBSan captures verify every127 nonzero first ASCII
+byte with every128 second byte, input null/empty/embedded NUL, every initialized
+output unit/zero/count and complete allocator/free ordering. A failure witness
+uses the original replaceable allocation-function pointer; it is not an
+ordinary OS OOM or an upstream method substitution. The original null-data
+value is retained without destruction. Physical ABI, threading, malformed JS
+buffers, null-value consumers/destruction, the distinct string_view/literal
+construction overload and full consumer QA remain unverified. Broad parity
+flags remain false. This supplies a genuine dependency for static type names;
+static types/Type/Any/Reference/default RuntimeException and case values remain
+unfinished.
