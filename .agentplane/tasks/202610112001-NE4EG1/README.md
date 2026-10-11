@@ -1,10 +1,11 @@
 ---
 id: "202610112001-NE4EG1"
 title: "Port original public Any insertion extraction and data operations"
-status: "DOING"
+result_summary: "Task47 original Any data operators/helpers accepted:72 unchanged native TUs369 sources13generated, three full normal-ASan/UBSan streams; source-absent Calc106 and shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier8 final metadata gates0, EVALUATOR pass reviewed3f1f84c26812. Shared owners/conversions reused, actual generated destination/default fields preserved; broad flags false and later typed comparison/get/ostream/Sequence/Calc UI gaps explicit. Last full41,next51,whole goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Recomputed every committed compressed capture byte/length/digest against full normal and ASan/UBSan output, all identical;369 complete pinned source files13generated hashes match actual restored files;152 native commands exit0. Current native diagnostics empty."
     - "Recomputed all raw Calc/shared S/F/B counters: positive on all19/57 executable owners, S/B/F/L100;106 Calc and141 shared tests pass with3 source links absent and restored exactly. Prior original ownership/callback/assignment/equality profiles retained;13 scoped gates3 exact Prettier8 final metadata gates0."
     - "Reviewed source-selected Any guard/conversion/callback/type/ownership bodies. Existing assignNumeric shares identical source switches without numeric policy duplication; real Type/OUString assignment and generic C assignment preserved. Actual generated RuntimeException default/fields/destructor in caller avoids C-default substitution; nonowning lvalues perform raw field stores only. Original generic partial writes documented accurately after comment-only rework, executable bodies/tests/fixture unchanged. Inventory precise and broad flags false."
-commit: null
+commit:
+  hash: "3f1f84c26812d567781111d5086ef837acf85d91"
+  message: "🧩 NE4EG1 task: clarify original extraction failure contract"
 comments:
   -
     author: "CODER"
     body: "Start: original selected Any.hxx insertion/extraction/Any equality/data helpers through shared real owners and genuine native/source-absent evidence; no temporary providers, full51 remains scheduled."
+  -
+    author: "CODER"
+    body: "Verified: original selected public Any data operations preserve shared type/value/ownership and generic partial writes; full native/source-absent raw100 evidence, scoped gates/inventory and separate implementation-bound EVALUATOR pass committed."
 events:
   -
     type: "status"
@@ -75,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final task47 docs correspond to reviewed implementation3f1f84c26812;152 native commands0,369+13 verified hashes, three full identical normal-ASan/UBSan streams; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 effective gates3 exact Prettier8 final metadata gates0 and comment-only docs/lint/format/diff0. Separate EVALUATOR pass recorded, broad flags false, later source dependencies explicit,last full41,next51."
+  -
+    type: "status"
+    at: "2026-10-11T20:22:18.070Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original selected public Any data operations preserve shared type/value/ownership and generic partial writes; full native/source-absent raw100 evidence, scoped gates/inventory and separate implementation-bound EVALUATOR pass committed."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:22:08.217Z"
+doc_updated_at: "2026-10-11T20:22:18.072Z"
 doc_updated_by: "CODER"
 description: "Task47 continues actual Any.hxx with isExtractableTo/has, Any equality, original generic/bool insertion and generic/bool/numeric/OUString/Type extraction, original selected toAny/fromAny copy/move helpers. Reuse real shared C assignment/equality and numeric owner, no provider/temp value implementation; full genuine native/source-absent whole raw100 scoped gates/inventory/review. Typed comparisons/get/ostream/string-expression helpers and remaining dependencies follow. Last full41,next51."
 sections:
