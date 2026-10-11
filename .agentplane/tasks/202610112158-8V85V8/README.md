@@ -4,7 +4,7 @@ title: "Open native Writer text and table context menus"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 32
+revision: 34
 origin:
   system: "manual"
 depends_on:
@@ -23,9 +23,30 @@ verification:
   updated_by: "CODER"
   note: "Accepted scheduled full15740Vitest plus316Chromium=16056,0fail/skip/retry; app417/inventory/tooling100allfour,11 complete changed modules100 and56446 positive original app counters;887 old test bytes retained,39 intentional non-Agentplane paths,22 canonical prefix-preserving records. Three references absent for every runtime/static producer and restoredexactly; nine final metadata audits pass. All first full/static/fresh/ownership/Control-context failures recorded and repaired. Current source/test hashes, raw maps and build137 hashes match. Semantic5d39898e7ba0; same-agent exact SHA review remains, then clean closure and explicit human goal pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T23:39:53.921Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact clean evidence-head review c3dce0d2f28146b8f931751189d6ae7f6b284200, explicitly not independent; semantic implementation5d39898e7ba0f942a430becc06af35ffe48e288d is byte-identical for all39 source/test/canonical paths. Native represented popup scope and complete scheduled verification campaign satisfy approved criteria."
+  evaluated_sha: "c3dce0d2f28146b8f931751189d6ae7f6b284200"
+  blueprint_digest: "e62bd068350738c28cead41a8f62d58af50014bd6046319adccfc41c41820517"
+  evidence_refs:
+    - ".agentplane/tasks/202610112158-8V85V8/README.md"
+    - ".agentplane/tasks/202610112158-8V85V8/quality/20261011-233953921-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112158-8V85V8/quality/20261011-233953921-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112158-8V85V8/quality/20261011-233953921-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112158-8V85V8/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/8V85V8/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/8V85V8/accepted-summary.json"
+    - "apps/office/node_modules/.cache/parity-coverage/8V85V8/final-full-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/8V85V8/audit-results.json"
+  findings:
+    - "Current and committed39 intentional non-Agentplane paths match immutable accepted source/test execution hashes. Original raw app417 maps100allfour with56446 positive counters; eleven complete changed files100 and3189positive counters with original ID/location audit.887 old test bytes retained; canonical/generated historical fields/defaults/statuses/classes preserved."
+    - "15740Vitest plus316Chromium=16056 unique pass,0skip/fail/retry. Old marker default-event, fresh Writer test owner placement, and platform Control-border context popup stealing Undo repaired without altering old acceptance bytes. Captured native table gesture retains priority; later independent right button admits menu. Current13 moved cases prove only relative import changes; final full owns them correctly. Native context selection/dispatch keeps actual owners; popup and menubar reuse original bindings item and placement renderer."
+    - "All nine restored-only metadata audits and static checks pass;3refs absent for runtime/static producers, unchanged exact targets and pin restoredfinally. Original failed profiles retained in ignored cache. First quality recording correctly refused uncommitted parent wording correction; clean docs evidence commitc3dce0d resolves it without code/test drift. Review is same-agent and does not claim independent reviewer evidence."
 commit:
-  hash: "5d39898e7ba0f942a430becc06af35ffe48e288d"
-  message: "🧩 8V85V8 fix: open Writer context menus through native selection and bindings"
+  hash: "c3dce0d2f28146b8f931751189d6ae7f6b284200"
+  message: "🧩 8V85V8 docs: record full verification and correct parent summary"
 comments:
   -
     author: "CODER"
@@ -70,8 +91,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Accepted scheduled full15740Vitest plus316Chromium=16056,0fail/skip/retry; app417/inventory/tooling100allfour,11 complete changed modules100 and56446 positive original app counters;887 old test bytes retained,39 intentional non-Agentplane paths,22 canonical prefix-preserving records. Three references absent for every runtime/static producer and restoredexactly; nine final metadata audits pass. All first full/static/fresh/ownership/Control-context failures recorded and repaired. Current source/test hashes, raw maps and build137 hashes match. Semantic5d39898e7ba0; same-agent exact SHA review remains, then clean closure and explicit human goal pause."
+  -
+    type: "status"
+    at: "2026-10-11T23:39:23.243Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-11T23:39:21.293Z"
+doc_updated_at: "2026-10-11T23:39:23.243Z"
 doc_updated_by: "CODER"
 description: "Route real mouse and keyboard popup requests through original SwEditWin selection policy and SfxDispatcher resource ownership; reuse shared bindings-backed menu rendering for generated text/table resources, preserve native selection and focus through cancellation and execution. Correction10/10, followed by the next full suites and required repairs then human pause."
 sections:
