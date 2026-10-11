@@ -162,7 +162,7 @@ export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze
 
 /** A master or follow frame; offsets always refer to the same source text node. */
 export class SwTextFrame extends SwContentFrame {
-  readonly #para: SwParaPortion | undefined;
+  #para: SwParaPortion | undefined;
   /** Registers the original node and retains the browser device fragment fields. @param node - Original text owner. @param nodeId - Device projection identity. @param start - Frame start. @param end - Frame end. @param topSpacing - Frame spacing. @param lines - Device-shaped lines. @param sibling - Existing native frame supplying the original root. @returns Frame. */
   public constructor(
     node: SwTextNode,
@@ -175,21 +175,7 @@ export class SwTextFrame extends SwContentFrame {
   ) {
     super(node, sibling);
     this.mnFrameType = SwFrameType.Txt;
-    const first = lines[0];
-    if (first !== undefined) {
-      this.#para = new SwParaPortion();
-      let current: SwLineLayout = this.#para;
-      for (let index = 0; index < lines.length; index++) {
-        const line = lines[index] as SwTextLine;
-        current.SetLen(line.end - line.start);
-        current.SetRealHeight(line.height);
-        if (index + 1 < lines.length) {
-          const next = new SwLineLayout();
-          current.SetNext(next);
-          current = next;
-        }
-      }
-    }
+    this.#para = createSwParaPortion(lines);
   }
   /** Resolves the original first node in the represented unmerged frame. @returns Original registered text owner. */
   public GetTextNodeFirst(): SwTextNode {
@@ -219,6 +205,12 @@ export class SwTextFrame extends SwContentFrame {
   /** Reads the original native paragraph first-line object. @returns Paragraph or missing formatting. */
   public GetPara(): SwParaPortion | undefined {
     return this.#para;
+  }
+  /** Replaces the original native paragraph cache and returns its previous owner, including clearing on missing input. @param para - New native paragraph or empty ownership. @returns Previous original paragraph cache. */
+  public SetPara(para: SwParaPortion | undefined): SwParaPortion | undefined {
+    const previous = this.#para;
+    this.#para = para;
+    return previous;
   }
   /** Reads the native fragment offset in represented unmerged node coordinates. @returns Original text offset. */
   public GetOffset(): number {
@@ -286,4 +278,22 @@ export function makeSwTextFrame(
     sibling,
   );
   return frame;
+}
+
+/** Builds the represented native paragraph/line cache once from the existing device-line contract; full native formatting remains unported. @param lines - Original measured line lengths and heights. @returns Actual native paragraph cache or missing formatting. */
+export function createSwParaPortion(lines: readonly SwTextLine[]): SwParaPortion | undefined {
+  if (lines[0] === undefined) return undefined;
+  const para = new SwParaPortion();
+  let current: SwLineLayout = para;
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index] as SwTextLine;
+    current.SetLen(line.end - line.start);
+    current.SetRealHeight(line.height);
+    if (index + 1 < lines.length) {
+      const next = new SwLineLayout();
+      current.SetNext(next);
+      current = next;
+    }
+  }
+  return para;
 }

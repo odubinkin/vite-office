@@ -78,8 +78,8 @@ it("mounted body pages publish reciprocal native follows and retain original edi
   expect(cursor.GetPoint().GetNode()).toBe(node);
   expect(cursor.GetPoint().GetContentIndex()).toBe(18);
   expect(cursor.GetMark().GetContentIndex()).toBe(Number(last.dataset.writerFragmentStart) + 1);
-  expect(master?.IsInDtor()).toBe(true);
-  expect(follow?.IsInDtor()).toBe(true);
+  expect(master?.IsInDtor()).toBe(false);
+  expect(follow?.IsInDtor()).toBe(false);
   expect(fireEvent.keyDown(last, { key: "Home" })).toBe(false);
   expect(cursor.HasMark()).toBe(false);
   const insertion = cursor.GetPoint().GetContentIndex();

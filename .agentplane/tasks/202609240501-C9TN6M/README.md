@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 333
+revision: 334
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:04:37.134Z"
+doc_updated_at: "2026-10-11T18:41:16.372Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1484,6 +1484,10 @@ sections:
     - Observation: Correction2 since full checkpoint A77JR3: task202610111735-R760SH restores SwFrameAreaDefinition ownership and native geometry contracts. Human requests stopping after the next full run.
       Impact: Real root/text/table/row/cell clients now own native area/print/validity/ID components. Browser geometry and duplicate measured cursor/formatter clients remain unintegrated. Broad upstream parity remains incomplete.
       Resolution: 14030 related plus26 tooling cases pass with35fresh scenarios, all four complete app modules100 and616positive raw counters;864old acceptance files and canonical history preserved.9metadata gates pass after witness repairs. Continue atomic work with inventory updates and upstream-absent related/new coverage; full run remains once per10tasks, then fix any failures and pause the goal as requested. Do not mark the broad goal complete.
+
+    - Observation: Correction3 since A77JR3: task202610111813-A06D5E unifies body cursor measurements with original formatter frames and source SetPara paragraph ownership. Latest human stop rule remains pause after the next full run and any required repairs.
+      Impact: Repeated Home/End no longer creates and destroys duplicate body clients. Actual root/node/frame ID/master/follow identities survive; reflow releases obsolete aliases and transition from standalone cursor clients to body formatting destroys old owned clients. Equal spans are matched by distinct original occurrence ownership.
+      Resolution: Accepted7207 related scenarios309files,25tooling4files and3Chromium3files;7235total/316files,9fresh cases. Two entire production modules Istanbul100all-four406lines444statements79functions381branches/904positive raw counters, separate original map/source bindings.866of867old acceptance files byte-identical; one file changes only two source-backed destructor expectations. Four canonical historical/scalar/default/classification prefixes preserved, nine metadata gatespass, upstream absent all producers. Remaining measured availability registry/full native geometry-query/formatter/cell hierarchy/general parity unverified; IO deviations untouched. Exact semantic same-agent non-independent review/closure follows; goalactive correction3/10.
 id_source: "generated"
 ---
 ## Summary
@@ -2941,3 +2945,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction2 since full checkpoint A77JR3: task202610111735-R760SH restores SwFrameAreaDefinition ownership and native geometry contracts. Human requests stopping after the next full run.
   Impact: Real root/text/table/row/cell clients now own native area/print/validity/ID components. Browser geometry and duplicate measured cursor/formatter clients remain unintegrated. Broad upstream parity remains incomplete.
   Resolution: 14030 related plus26 tooling cases pass with35fresh scenarios, all four complete app modules100 and616positive raw counters;864old acceptance files and canonical history preserved.9metadata gates pass after witness repairs. Continue atomic work with inventory updates and upstream-absent related/new coverage; full run remains once per10tasks, then fix any failures and pause the goal as requested. Do not mark the broad goal complete.
+
+- Observation: Correction3 since A77JR3: task202610111813-A06D5E unifies body cursor measurements with original formatter frames and source SetPara paragraph ownership. Latest human stop rule remains pause after the next full run and any required repairs.
+  Impact: Repeated Home/End no longer creates and destroys duplicate body clients. Actual root/node/frame ID/master/follow identities survive; reflow releases obsolete aliases and transition from standalone cursor clients to body formatting destroys old owned clients. Equal spans are matched by distinct original occurrence ownership.
+  Resolution: Accepted7207 related scenarios309files,25tooling4files and3Chromium3files;7235total/316files,9fresh cases. Two entire production modules Istanbul100all-four406lines444statements79functions381branches/904positive raw counters, separate original map/source bindings.866of867old acceptance files byte-identical; one file changes only two source-backed destructor expectations. Four canonical historical/scalar/default/classification prefixes preserved, nine metadata gatespass, upstream absent all producers. Remaining measured availability registry/full native geometry-query/formatter/cell hierarchy/general parity unverified; IO deviations untouched. Exact semantic same-agent non-independent review/closure follows; goalactive correction3/10.
