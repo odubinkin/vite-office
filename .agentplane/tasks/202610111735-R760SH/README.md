@@ -1,10 +1,11 @@
 ---
 id: "202610111735-R760SH"
 title: "Restore native frame-area geometry ownership"
-status: "DOING"
+result_summary: "Restore native frame-area ownership and geometry contracts;14056related/tooling cases,35fresh,whole changed-core Istanbul100; inventory and WRITER-006 updated"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -50,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: restore original frame area/print geometry, validity and scoped writeback owners and remove duplicate SwFrame validity fields, preserve native empty containment and old acceptance/inventory/IO contracts; targeted current four-module100 coverage, correction2."
+  -
+    author: "CODER"
+    body: "Verified: Native SwFrameAreaDefinition now owns original area/print values, validity and frame IDs for actual root/text/table/row/cell clients; scoped writeback and WRITER-006 contracts retained.14056 related/tooling cases pass with35fresh cases, complete four core modules Istanbul100, all864old acceptance and canonical histories preserved,9metadata gates pass. Same-agent exact semantic quality review is non-independent; broad geometry/UI parity remains incomplete."
 events:
   -
     type: "status"
@@ -70,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14030 related plus26 tooling cases pass with35fresh cases and zero pending; all four complete current core modules Istanbul100 (616positive raw counters),864old acceptance byte-identical, canonical history preserved, all static/build and9metadata gates pass. Production unchanged after runtime coverage; see ignored proof.json and task Verification. No full checkpoint; broad goal remains active with pause-after-next-full instruction."
+  -
+    type: "status"
+    at: "2026-10-11T18:06:49.349Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native SwFrameAreaDefinition now owns original area/print values, validity and frame IDs for actual root/text/table/row/cell clients; scoped writeback and WRITER-006 contracts retained.14056 related/tooling cases pass with35fresh cases, complete four core modules Istanbul100, all864old acceptance and canonical histories preserved,9metadata gates pass. Same-agent exact semantic quality review is non-independent; broad geometry/UI parity remains incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:05:36.645Z"
+doc_updated_at: "2026-10-11T18:06:49.350Z"
 doc_updated_by: "CODER"
 description: "Correction2 after full checkpoint: replace SwFrame-owned validity booleans with original SwFrameAreaDefinition composition and native area/print rectangles, frame IDs and scoped original write accesses. Port represented Point/Size/SwRect ownership and literal geometry, record source empty-rectangle containment without fixing it. Preserve original frame APIs/clients, inventory history and registered IO deviations; geometric lookup integration remains subsequent work."
 sections:
@@ -138,6 +149,10 @@ sections:
     - Observation: Native frame validity was stored directly in SwFrame and represented frames lacked their original area-definition owner. Upstream SwRect empty containment and Size/SwRect negative-size emptiness are unusual but defined.
       Impact: Original area/print scope, identity and geometry contracts were unavailable to future direct frame-query/UI integration; normalizing the unusual contracts would diverge from pinned source.
       Resolution: Compose original SwFrameAreaDefinition into all real frames; port shared Point/Size and SwRect values/scoped native writes with full changed-app-module Istanbul100 and35fresh scenarios. Record WRITER-006, preserve registration/defaults and all prior acceptance. Full browser geometry/query integration and complete native operators/transforms remain explicitly unverified.
+extensions:
+  implementation_commit:
+    hash: "ee7b031ed9224862df1461a0eb4e3b32d60ca507"
+    message: "🧩 R760SH code: Restore original native frame-area ownership"
 id_source: "generated"
 ---
 ## Summary
