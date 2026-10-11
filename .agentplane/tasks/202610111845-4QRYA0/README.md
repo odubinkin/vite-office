@@ -1,10 +1,11 @@
 ---
 id: "202610111845-4QRYA0"
 title: "Resolve native line-margin frames through original content-node queries"
-status: "DOING"
+result_summary: "Native original frame selection replaces measured-registry selection; native mapped-position comparison preserved.14068accepted scoped cases/520files, two entire modules100all-four/980positive counters,870oldtests byte-identical,9metadata gatespass, refs absent then restored. Full native Calc/formatter/general parity pending. Goalactive correction4/10; pause after next accepted full and repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -56,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Native positioned frame query and explicit temporary source freshness verified; record semantic commit for exact quality review."
+  -
+    author: "CODER"
+    body: "Verified: original native node/position frame queries serve line margins without UI publication; stale unpublished caches rejected via explicit temporary device snapshot admission. Scoped source-bound checks and exact non-independent semantic review pass."
 events:
   -
     type: "status"
@@ -77,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14068 scoped accepted scenarios/520files; two entire modules100all-four/980positive raw counters,870oldtests byte-identical,9metadata gatespass, all3refs absent then restored. Red stale-snapshot regression causally repaired. Explicit temporary device guard selects no frame; native Calc/general parity pending. Correction4/10, no full checkpoint."
+  -
+    type: "status"
+    at: "2026-10-11T19:05:38.791Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original native node/position frame queries serve line margins without UI publication; stale unpublished caches rejected via explicit temporary device snapshot admission. Scoped source-bound checks and exact non-independent semantic review pass."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:05:10.062Z"
+doc_updated_at: "2026-10-11T19:05:38.792Z"
 doc_updated_by: "CODER"
 description: "Replace SwCursor margin frame selection from the UI measured-frame registry with original SwContentNode.getLayoutFrame(layout,point). Retain only an explicit temporary source-freshness admission guard while native Calc/formatter invalidation is unported; actual formatted native clients work without UI publication. Preserve native temporary PaM/model-view comparison and verify original follow/root ownership plus mounted editing/history."
 sections:
@@ -138,6 +149,10 @@ sections:
     - Observation: Native margin frame selection now queries original node/root/point clients; published registry no longer chooses the frame. Existing original formatting works without UI cursor publication. A new red regression exposed stale native caches when no lease existed and text changed before device reformatting.
       Impact: Initial direct query admitted movement on an old cache. Native geometric Calc is still unported, so this interval needs explicit temporary device admission rather than a false full-native formatter claim. Existing mapped positions and original point/mark/root/follow identities must remain intact.
       Resolution: Use original positioned node.getLayoutFrame and native temporary PaM mapped-position comparison. Read existing snapshot/model revision for unpublished formatting and existing measured text for published device freshness; no copied text state or measured frame selection.14068 accepted scoped scenarios/520files,8fresh cases; both complete modules100all-four/980positive counters,870oldtests byte-identical, four canonical histories preserved,9metadata gatespass. Initial metadata shape/tooling filter repairs and red reproduction retained; missing4toolingcases ran without21passing replay, production repair revalidated root/browser. Full goalactive correction4/10; pause after next full and repairs.
+extensions:
+  implementation_commit:
+    hash: "f74283e2612fc095b0bb82c6e72bc86c4b3df0fa"
+    message: "🧩 4QRYA0 code: Query original native frames for line margins"
 id_source: "generated"
 ---
 ## Summary
