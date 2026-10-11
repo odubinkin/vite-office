@@ -133,3 +133,17 @@ for(sal_Int16 radix:{2,10,16,36}){sal_Unicode a[]={c,49},b[]={49,c},d[]={32,45,c
 for(auto const& [radix,data]:inputs){for(sal_Int32 length=0;length<=static_cast<sal_Int32>(data.size());length++)integerObserve(data.data(),length,radix);emit(std::array<sal_Int32,1>{o3tl::toInt32(std::u16string_view(data.data(),data.size()))});}
 return true;}
 `;
+
+/** Caller-only observations of the full unchanged original OUString subView overloads and live borrowed storage. */
+export const stringSubViewDriver = String.raw`
+static void viewState(std::u16string_view view,rtl::OUString const&owner,sal_Int32 begin){emit(std::array<sal_Int32,5>{static_cast<sal_Int32>(view.size()),view.data()==owner.getStr()+begin,owner.pData->refCount,owner.getLength(),owner.getStr()[owner.getLength()]});for(auto unit:view)emit(std::array<sal_Int32,1>{unit});}
+static void viewObserve(std::vector<sal_Unicode>const&units){rtl::OUString value(units.data(),units.size());auto data=value.pData;for(sal_Int32 begin=0;begin<=value.getLength();begin++){auto tail=value.subView(begin);viewState(tail,value,begin);emit(std::array<sal_Int32,1>{value.pData==data});for(sal_Int32 count=0;count<=value.getLength()-begin;count++){auto view=value.subView(begin,count);viewState(view,value,begin);emit(std::array<sal_Int32,1>{value.pData==data});}}}
+static bool stringSubViewCases(std::string const&mode,std::vector<std::vector<sal_Unicode>>const&inputs){
+if(mode.rfind("subview-invariant-",0)==0){int index=std::stoi(mode.substr(18));rtl::OUString value(u"abc",3);switch(index){case 0:value.subView(-1);break;case 1:value.subView(4);break;case 2:value.subView(-1,-1);break;case 3:value.subView(0,-1);break;case 4:value.subView(4,-1);break;case 5:value.subView(4,0);break;case 6:value.subView(1,3);break;case 7:value.subView(SAL_MAX_INT32);break;case 8:value.subView(SAL_MIN_INT32);break;case 9:value.subView(3,SAL_MAX_INT32);break;default:std::exit(2);}return true;}
+if(mode!="subview")return false;
+for(sal_uInt32 word=0;word<65536;word++)viewObserve({0,static_cast<sal_Unicode>(word),0xffff});
+for(auto const&units:inputs)viewObserve(units);
+{rtl::OUString value(u"A\0B",3),held(value);auto borrowed=value.subView(1,2);viewState(borrowed,held,1);auto old=held.pData;value.clear();emit(std::array<sal_Int32,2>{value.pData==old,held.pData->refCount});viewState(borrowed,held,1);memberString(value.pData);}
+{rtl::OUStringLiteral literal(u"A\0B");rtl::OUString value(literal);for(sal_Int32 begin=0;begin<=value.getLength();begin++)viewState(value.subView(begin),value,begin);}
+return true;}
+`;

@@ -5,6 +5,7 @@ import {
   derivedMemberDriver,
   stringSearchDriver,
   integerDriver,
+  stringSubViewDriver,
 } from "./uno-registry-native-driver.mjs";
 import { spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
@@ -182,6 +183,7 @@ ${registryAssertionDriver}
 ${derivedMemberDriver}
 ${stringSearchDriver}
 ${integerDriver}
+${stringSubViewDriver}
 static std::vector<std::vector<sal_Unicode>>searchInputs(){return {${searchInputs
   .map(
     /** Retains complete original caller inputs. @param input - All logical units. @returns Native initializer. */
@@ -195,6 +197,7 @@ if(registryCases(mode))return 0;
 if(derivedMemberCases(mode))return 0;
 if(stringSearchCases(mode,searchInputs()))return 0;
 if(integerCases(mode,integerInputs()))return 0;
+if(stringSubViewCases(mode,searchInputs()))return 0;
 if(mode=="enums"){std::cout<<'[';bool comma=false;
 ${names
   .map(
@@ -326,6 +329,7 @@ for (const mode of [
   "members",
   "search",
   "integer",
+  "subview",
 ]) {
   captures[mode] = capture(binary, mode);
   if (!capture(sanitized, mode).equals(captures[mode]))
@@ -452,6 +456,39 @@ for (let index = 0; index < 9; index++) {
   integerAssertions.push(failures[0]);
 }
 native.save();
+const subViewAssertions = [];
+for (let index = 0; index < 10; index++) {
+  const failures = [];
+  for (const executable of [binary, sanitized]) {
+    const mode = `subview-invariant-${index}`;
+    const failure = spawnSync(executable, [mode], {
+      env: { ...process.env, ASAN_OPTIONS: "detect_leaks=0", UBSAN_OPTIONS: "halt_on_error=1" },
+      maxBuffer: 1024 * 1024,
+    });
+    const diagnostic = failure.stderr.toString();
+    writeFileSync(`${executable}.${mode}.stderr`, diagnostic);
+    native.manifest.commands.push({
+      tool: executable,
+      argv: [mode],
+      exitCode: failure.status,
+      signal: failure.signal,
+    });
+    if (
+      failure.signal !== "SIGABRT" ||
+      failure.stdout.length !== 0 ||
+      !diagnostic.includes("Assertion failed") ||
+      /AddressSanitizer|runtime error:/.test(diagnostic)
+    )
+      throw new Error(`Missing original subView assertion ${mode}: ${diagnostic}`);
+    const expression = diagnostic.match(/Assertion failed: \(([\s\S]*?)\), function /)?.[1];
+    if (!expression) throw new Error(`Missing original expression ${mode}`);
+    failures.push({ index, signal: failure.signal, expression, diagnostic });
+  }
+  if (JSON.stringify(failures[0]) !== JSON.stringify(failures[1]))
+    throw new Error(`Sanitized subView assertion differs ${index}`);
+  subViewAssertions.push(failures[0]);
+}
+native.save();
 const result = {
   baselineCommit: pin,
   sourceHashes: native.manifest.sourceHashes,
@@ -529,6 +566,16 @@ const result = {
   registrationAssertions,
   searchAssertions,
   integerAssertions,
+  subViewAssertions,
+  subView: {
+    inputs: searchInputs,
+    rawHash: hash(captures.subview),
+    gzipBase64: gzipSync(captures.subview, { level: 9 }).toString("base64"),
+    fields:
+      "Every valid one/two-argument subView range for each UTF16 unit in complete three-unit inputs and all explicit inputs, complete view units/size/original pointer-offset identity/source data identity/reference count/terminator; borrowed view survives source replacement only while the actual copied owner retains storage, plus original static literal views",
+    scope:
+      "The full original OUString header and unchanged SAL dependencies execute every view operation. No original algorithms are replaced. Native Uint16Array.subarray adapts std::u16string_view storage without copying or acquiring. Caller must keep the original data owner live and treat units as const; use after release, native pointer ABI/physical lifetime, arbitrary malformed JS arguments and full upstream QA are not certified. Invalid native ranges are undefined in the public contract; ten checked-build assertion/order outcomes are retained separately, without post-assert or post-UB results. Full getByName/type/exception/case consumers remain unfinished.",
+  },
   integer: {
     inputs: integerInputs,
     rawHash: hash(captures.integer),
@@ -556,6 +603,8 @@ console.log(
     searchBytes: captures.search.length,
     integerBytes: captures.integer.length,
     integerAssertions: integerAssertions.length,
+    subViewBytes: captures.subview.length,
+    subViewAssertions: subViewAssertions.length,
     searchAssertions: searchAssertions.length,
     sanitizedIdentical: true,
   }),

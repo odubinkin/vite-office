@@ -1004,3 +1004,29 @@ Decision: preserve the original ownership operations. Do not add an extra base
 release, change weak reference semantics or claim a portable lookup fix. Verify
 actual provider, cache and derived-descriptor lifecycles when porting getByName,
 then update this entry with separately scoped native evidence.
+
+## CALC-042: Sequence-name lookup does not check the second prefix character
+
+Status: source-review suspicion only; malformed-name native outcomes and ordinary
+consumer reachability remain unverified. No valid-consumer defect is demonstrated.
+
+[Original getByName](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1919)
+enters sequence lookup when the name has more than two UTF16 units and its first
+unit is `[`. It obtains the element name with `name.copy(2)`, without checking
+that the skipped second unit is `]`. It then recursively resolves that element
+and attempts the original sequence factory using the entire original name.
+
+Source-review candidate: `[xlong` selects `long` as the element name despite its
+noncanonical prefix. This is a prediction from the branch and substring code,
+not a recorded native lookup result. The API may assume canonical names from
+trusted producers; whether an ordinary valid consumer can supply this input is
+unknown. The existing native registry corpus does not certify this candidate.
+
+Evidence: the complete unchanged getByName body, including its recursive lookup,
+sequence factory and provider/cache fallbacks. The separate native search/copy/
+subView corpora verify those string primitives, not malformed sequence routing.
+
+Decision: preserve the original first-unit/length predicate and two-unit skip
+when porting the full getter. Do not add a second-bracket validation, normalize
+the type name or assign a post-failure result. Capture separate genuine native
+lookup/provider/lifetime evidence before updating the status.

@@ -62,6 +62,7 @@ export type OUStringConstReference = Readonly<
     | "indexOf"
     | "lastIndexOf"
     | "copy"
+    | "subView"
   > & { pData: rtl_uString | null }
 >;
 
@@ -191,6 +192,20 @@ export class OUString {
     const slot: rtl_uStringSlot = [null];
     rtl_uString_newFromSubString(slot, this.pData, beginIndex, count);
     return new OUString(slot[0] as rtl_uString, SAL_NO_ACQUIRE);
+  }
+
+  /** Original nonowning UTF16 substring view; native subarray preserves storage and unit offsets without copying or acquiring the string. Caller keeps its original owner alive and treats the borrowed units as const. @param beginIndex - Original inclusive signed32 offset. @param count - Original count, or the one-argument remainder overload. @returns Borrowed units without a terminator. */
+  subView(beginIndex: number, count?: number): Uint16Array {
+    if (beginIndex < 0) throw new Error("assert(beginIndex >= 0)");
+    if (count === undefined) {
+      if (beginIndex > this.getLength()) throw new Error("assert(beginIndex <= getLength())");
+      return this.subView(beginIndex, this.getLength() - beginIndex);
+    }
+    if (count < 0) throw new Error("assert(count >= 0)");
+    if (beginIndex > this.getLength()) throw new Error("assert(beginIndex <= getLength())");
+    if (count > this.getLength() - beginIndex)
+      throw new Error("assert(count <= getLength() - beginIndex)");
+    return this.getStr().subarray(beginIndex, beginIndex + count);
   }
 
   /** Original normal comparison with the implicit string-view conversion of a live OUString reference. @param other - Original source reference. @returns Selected native UTF16 lexical result. */

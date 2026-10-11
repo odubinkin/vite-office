@@ -2331,3 +2331,24 @@ arbitrary out-of-contract JS inputs, native ABI/thread lifetime and full upstrea
 QA remain unverified. The original overflow QA provides related evidence only.
 Actual getByName/completion/UNO/default exception and case-service consumers stay
 unfinished. Full run41 followed by the requested goal pause remains scheduled.
+
+## Original borrowed UTF16 substring views
+
+Task39 adds both original OUString.subView overloads to the shared SAL value and
+const-reference owner required by derived-member type-name parsing. Native
+Uint16Array.subarray retains exact UTF16 storage/offsets, embedded zero and
+surrogate units without copying or acquiring the source string. Original range
+assertions retain their order; the default overload delegates with the remainder.
+The caller must keep the actual data owner alive and treat the borrowed units as
+const. Views remain on the old buffer when the source is replaced and another
+original copied owner still retains it. No additional string_view library is used.
+
+The existing genuine native caller exercises both overloads over every valid range
+for all UTF16 values and complete explicit inputs, with full view units and live
+source/pointer/count witnesses. Checked invalid-range outcomes are separate fatal
+assertion observations. No direct subView QA case was found in the available
+sal/qa/rtl/strings sources; the generated native caller is separate evidence.
+Native physical pointer lifetime/const enforcement/ABI, use after release,
+arbitrary malformed JS inputs, invalid-range undefined behavior and full original
+consumer QA remain unverified. Full getByName/type/exception/case-service work is
+still required; full run41 followed by the requested pause remains scheduled.
