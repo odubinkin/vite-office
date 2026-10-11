@@ -4,7 +4,7 @@ title: "Use original internet attribute boundaries for hyperlink editing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,12 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T19:42:26.463Z"
+  updated_by: "CODER"
+  note: "14070 accepted scenarios/520 files; two complete modules100 allfour/256 positive raw counters; 872 old acceptance files unchanged, four canonical histories preserved; static and9metadata gates pass; exact restored refs; failures/repairs documented, full goal remains unverified."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T19:42:52.672Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact semantic7c73738f640c3536aef626440174ae38ecffe7e0: original INET boundary lookup removes projected run range/equal-URL merge; scoped attribute-only history prevents unchanged internet owner splitting.14070 accepted scenarios and full2-module100 verify represented behavior, not complete upstream parity."
+  evaluated_sha: "7c73738f640c3536aef626440174ae38ecffe7e0"
+  blueprint_digest: "332dc53a1259c429663d08e0e9bbb910bd9d23a173942a9d6082f027b55925f5"
+  evidence_refs:
+    - ".agentplane/tasks/202610111910-XHQWW2/README.md"
+    - ".agentplane/tasks/202610111910-XHQWW2/quality/20261011-194252672-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610111910-XHQWW2/quality/20261011-194252672-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610111910-XHQWW2/quality/20261011-194252672-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610111910-XHQWW2/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XHQWW2/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XHQWW2/final-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XHQWW2/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/XHQWW2/old-byte-proof.json"
+  findings:
+    - "Approved9nonAP paths only;872 old acceptance files byte-identical,4 canonical histories/protected statuses preserved. Genuine adjacent-link body/cell red reproduced; old hyperlink-through-bold acceptance passes unchanged after prerequisite SwUndoAttr delta replay. Query native point identity and original INET owners during character history, rich item IDs, mounted/Chromium history and fresh build verified."
+commit:
+  hash: "7c73738f640c3536aef626440174ae38ecffe7e0"
+  message: "🧩 XHQWW2 code: preserve original hyperlink ranges during editing and formatting history"
 comments:
   -
     author: "CODER"
@@ -30,6 +51,9 @@ comments:
   -
     author: "CODER"
     body: "Start: approved dependency repair retains native INET owners during attribute-only history; no TextRuns merging, all old acceptance bytes preserved."
+  -
+    author: "CODER"
+    body: "Verified local semantic implementation ready for exact-SHA review."
 events:
   -
     type: "status"
@@ -45,8 +69,21 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: approved dependency repair retains native INET owners during attribute-only history; no TextRuns merging, all old acceptance bytes preserved."
+  -
+    type: "status"
+    at: "2026-10-11T19:42:25.522Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Verified local semantic implementation ready for exact-SHA review."
+  -
+    type: "verify"
+    at: "2026-10-11T19:42:26.463Z"
+    author: "CODER"
+    state: "ok"
+    note: "14070 accepted scenarios/520 files; two complete modules100 allfour/256 positive raw counters; 872 old acceptance files unchanged, four canonical histories preserved; static and9metadata gates pass; exact restored refs; failures/repairs documented, full goal remains unverified."
 doc_version: 3
-doc_updated_at: "2026-10-11T19:41:56.007Z"
+doc_updated_at: "2026-10-11T19:42:26.515Z"
 doc_updated_by: "CODER"
 description: "Retire core getRunRanges/projectWriterTextRuns range reconstruction and metadata-based neighbor merging. Read original owned SwTextINetFormat bounds through native GetTextAttrAt with current caret-inheritance policy. Verify independent adjacent identical hyperlinks, character-format splits, actual body/cell commands/history and browser UI. Full native selection modes and selected uniform-state run transport remain explicit separate work."
 sections:
@@ -72,6 +109,39 @@ sections:
     Command: node apps/office/node_modules/.cache/parity-coverage/XHQWW2/inspect-final-proof.cjs; node apps/office/node_modules/.cache/parity-coverage/XHQWW2/audit.cjs.
     Result: pass. All872 previous acceptance files byte-identical;2826 old non-AgentPlane paths unchanged except approved2 production and4 canonical records. Old canonical evidence/responsibility prefixes and other protected scalars preserved. Pin9bc445578031fecf56086729d8e4940c77e14d65,6 pinned source hashes recorded. LO/mdds/ICU refs absent for every runtime/static/build command and restored to exact original links; source checks metadata-only after restoration. All9 gates pass:source-tree/provenance/registry/resource-generation/invariants/parity/routing/doctor/diff.
     Limits: complete native SwHistory/InsertItemSet, native UI default false selection/word fallback/dialog lifecycle and selected uniform-state copyWriterTextRangeRuns remain unverified separate work. No registered IO/recovery deviation/status/default/classification promotion, no upstream bug claim. Correction5/10; full goal active, pause after next full and necessary repairs. Exact semantic SHA review/closure recorded next.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T19:42:26.463Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 14070 accepted scenarios/520 files; two complete modules100 allfour/256 positive raw counters; 872 old acceptance files unchanged, four canonical histories preserved; static and9metadata gates pass; exact restored refs; failures/repairs documented, full goal remains unverified.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:42:25.522Z, excerpt_hash=sha256:4b0ce6fc2754286709acf7eee32743e76e183b5796ac4a68bc27bbc181e5e36a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111910-XHQWW2/blueprint/resolved-snapshot.json
+    - old_digest: 332dc53a1259c429663d08e0e9bbb910bd9d23a173942a9d6082f027b55925f5
+    - current_digest: 332dc53a1259c429663d08e0e9bbb910bd9d23a173942a9d6082f027b55925f5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610111910-XHQWW2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610111910-XHQWW2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task semantic commit only; preserve preceding native layout work, old history and registered recovery/open/save deviations."
   Findings: |-
     Previous goal turn completed4QRYA0 and changed authoritative code/inventory/tests/evidence with clean writer; progress. Source audit finds core collapsed hyperlink range reconstructed from TextRuns and merged with all adjacent equal DTO hyperlinks. Native text-attribute selection reads one actual owned hint and uses its original bounds. Current positive caret inheritance is retained via native Expand lookup; native UI WrtShell default false selection/word fallback and selected uniform-state transport need separate integration. This correction removes one unnecessary range adapter rather than certifying all hyperlink behavior. No suspicious native bug identified.
@@ -124,6 +194,39 @@ Evidence: ignored cache apps/office/node_modules/.cache/parity-coverage/XHQWW2/ 
 Command: node apps/office/node_modules/.cache/parity-coverage/XHQWW2/inspect-final-proof.cjs; node apps/office/node_modules/.cache/parity-coverage/XHQWW2/audit.cjs.
 Result: pass. All872 previous acceptance files byte-identical;2826 old non-AgentPlane paths unchanged except approved2 production and4 canonical records. Old canonical evidence/responsibility prefixes and other protected scalars preserved. Pin9bc445578031fecf56086729d8e4940c77e14d65,6 pinned source hashes recorded. LO/mdds/ICU refs absent for every runtime/static/build command and restored to exact original links; source checks metadata-only after restoration. All9 gates pass:source-tree/provenance/registry/resource-generation/invariants/parity/routing/doctor/diff.
 Limits: complete native SwHistory/InsertItemSet, native UI default false selection/word fallback/dialog lifecycle and selected uniform-state copyWriterTextRangeRuns remain unverified separate work. No registered IO/recovery deviation/status/default/classification promotion, no upstream bug claim. Correction5/10; full goal active, pause after next full and necessary repairs. Exact semantic SHA review/closure recorded next.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T19:42:26.463Z — VERIFY — ok
+
+By: CODER
+
+Note: 14070 accepted scenarios/520 files; two complete modules100 allfour/256 positive raw counters; 872 old acceptance files unchanged, four canonical histories preserved; static and9metadata gates pass; exact restored refs; failures/repairs documented, full goal remains unverified.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T19:42:25.522Z, excerpt_hash=sha256:4b0ce6fc2754286709acf7eee32743e76e183b5796ac4a68bc27bbc181e5e36a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610111910-XHQWW2/blueprint/resolved-snapshot.json
+- old_digest: 332dc53a1259c429663d08e0e9bbb910bd9d23a173942a9d6082f027b55925f5
+- current_digest: 332dc53a1259c429663d08e0e9bbb910bd9d23a173942a9d6082f027b55925f5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610111910-XHQWW2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610111910-XHQWW2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
