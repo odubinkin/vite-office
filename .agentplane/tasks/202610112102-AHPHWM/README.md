@@ -4,7 +4,7 @@ title: "Port original public Sequence value ownership and array contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,32 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T21:44:57.581Z"
+  updated_at: "2026-10-11T21:45:57.057Z"
   updated_by: "CODER"
-  note: "Task49 actual upstream Sequence contracts accepted: native write/check 370 sources/13 generated/164 terminal commands including10 expected assertions; all initialized normal-ASan/UB streams identical; source-absent Calc106/shared149 whole19/59 raw100;13 scoped gates and6 source formatting checks pass; Writer untouched,next full51. Separate quality follows implementation commit."
+  note: "Final Task49 owner verification after last task-doc update: implementation962725bbe6ac, separate quality pass20261011-214539251, native full streams/source hashes and genuine expected assertion aborts verified; source-absent Calc106/shared149 whole19/59 raw100;13 effective gates/11 metadata repeats/6 Prettier checks0; profile append-only, Writer untouched,next full51, goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-11T21:45:39.251Z"
+  updated_by: "EVALUATOR"
+  note: "Task49 accepted against reviewed implementation962725bbe6ac: genuine original public Sequence contracts, actual shared owners, native/source hashes and whole raw100 confirmed independently."
+  evaluated_sha: "962725bbe6ac69f935bf34c82d950e6567a59b8c"
+  blueprint_digest: "0cfe8b6b662a5587324efaf52f800e10672460d98cf9ff4d466b3586891023b0"
+  evidence_refs:
+    - ".agentplane/tasks/202610112102-AHPHWM/README.md"
+    - ".agentplane/tasks/202610112102-AHPHWM/quality/20261011-214539251-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112102-AHPHWM/quality/20261011-214539251-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112102-AHPHWM/quality/20261011-214539251-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112102-AHPHWM/blueprint/resolved-snapshot.json"
+    - "output/playwright/task49-checks/evaluator-audit.json"
+    - "output/playwright/uno-public-sequence-native/manifest.json"
+    - "output/playwright/task49-checks/value-gates-final-manifest.json"
+    - "output/playwright/task49-checks/prettier-final.log"
+  findings:
+    - "Inspected original Sequence.h/hxx and reviewed one-pointer implementation: copy/adopt remain cold, zero-count destruction alone initializes type, move assignment swaps, native rvalue construction copies, const reads avoid COW, failed C allocation preserves source failure behavior. Existing C/type/OSL/data/default owners reused without duplicate provider."
+    - "Typed original SAL enum witness separates NULL adoption from integer length0 without changing numeric aliases or inferring pointer shape. Native NULL get-only observation and header-only guard diagnostics remain explicitly bounded; no destructor or absent-tail read is certified."
+    - "Independently audited164 terminal commands:154 exit0 and10 exact genuine SIGABRT assertions;3 full native normal-ASan/UB streams equal fixture gzip/length/hash.370 complete source and13 generated hashes plus actual driver/configurations match. All raw S/F/B counters positive for whole19/59 owners; source links absent during tests/restored exactly; prior task48 shared test/whole-owner argv retained append-only."
+    - "All13 effective scoped gates plus11 metadata repeats and6 source Prettier checks pass. Inventory broad parity/default/verified flags false and final facts precise; separate EVALUATOR phase performed without implementation edits."
 commit: null
 comments:
   -
@@ -41,8 +63,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task49 actual upstream Sequence contracts accepted: native write/check 370 sources/13 generated/164 terminal commands including10 expected assertions; all initialized normal-ASan/UB streams identical; source-absent Calc106/shared149 whole19/59 raw100;13 scoped gates and6 source formatting checks pass; Writer untouched,next full51. Separate quality follows implementation commit."
+  -
+    type: "verify"
+    at: "2026-10-11T21:45:57.057Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final Task49 owner verification after last task-doc update: implementation962725bbe6ac, separate quality pass20261011-214539251, native full streams/source hashes and genuine expected assertion aborts verified; source-absent Calc106/shared149 whole19/59 raw100;13 effective gates/11 metadata repeats/6 Prettier checks0; profile append-only, Writer untouched,next full51, goal active."
 doc_version: 3
-doc_updated_at: "2026-10-11T21:44:57.633Z"
+doc_updated_at: "2026-10-11T21:45:57.111Z"
 doc_updated_by: "CODER"
 description: "Task49 UI-prerequisite public Sequence.h/hxx normal internal value owner over existing actual C sequence/type/OSL/genfunc/data owners; declared template/layout erasure, genuine full native acceptance, source-absent whole Calc/shared raw100, inventory and separate quality; last full41,next51."
 sections:
@@ -74,17 +102,20 @@ sections:
     Evidence: value-gates-final-manifest.json, gates-final.log, gates-metadata-final.log, prettier-final.log.
     Scope: TS7, exact authored-source lint/format, docs, size, dependencies, source provenance/tree, shared/Calc inventories,34 tests in four relevant tooling files, routing, doctor,diff. Sequence and existing SAL runtime/provenance/capability records reflect typed constructor overload witness; broad parity/default/verified flags remain false.
 
-    Implementation verification is complete. Separate EVALUATOR audit and final evidence SHA will be appended after the intentional implementation commit; final owner verification follows the last task-doc update before clean closure on calc. Goal remains active; no full suite, merge, branch, publication or delegation.
+    Command: ap commit 202610112102-AHPHWM (intentional implementation allowlist); python3 output/playwright/task49-checks/evaluator-audit.py; exact prior shared-profile argv audit; ap evaluator run 202610112102-AHPHWM --verdict pass.
+    Result: pass.
+    Evidence: implementation962725bbe6ac69f935bf34c82d950e6567a59b8c; output/playwright/task49-checks/evaluator-audit.json; .agentplane/tasks/202610112102-AHPHWM/quality/20261011-214539251-recovery-context/quality-report.json. Separate EVALUATOR phase verifies actual reviewed SHA, complete raw/native/source/driver/gates/cap flags and exactly preserved baseline profile append-only. Implementation unchanged during review.
+    Scope: Task49 only on calc; final owner verify after this last documentation update, intentional quality artifacts and clean closure. Goal active; latest full41,next full51. No Writer-only repair, merge/publication/branch/worktree/delegation.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-11T21:44:57.581Z — VERIFY — ok
+    ### 2026-10-11T21:45:57.057Z — VERIFY — ok
 
     By: CODER
 
-    Note: Task49 actual upstream Sequence contracts accepted: native write/check 370 sources/13 generated/164 terminal commands including10 expected assertions; all initialized normal-ASan/UB streams identical; source-absent Calc106/shared149 whole19/59 raw100;13 scoped gates and6 source formatting checks pass; Writer untouched,next full51. Separate quality follows implementation commit.
+    Note: Final Task49 owner verification after last task-doc update: implementation962725bbe6ac, separate quality pass20261011-214539251, native full streams/source hashes and genuine expected assertion aborts verified; source-absent Calc106/shared149 whole19/59 raw100;13 effective gates/11 metadata repeats/6 Prettier checks0; profile append-only, Writer untouched,next full51, goal active.
     Attempts: 0
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T21:44:57.172Z, excerpt_hash=sha256:7e4d6c119c79ce26d80839552f059e396059823eaeb7bd11575f4280d3b86293
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T21:45:54.936Z, excerpt_hash=sha256:7e4d6c119c79ce26d80839552f059e396059823eaeb7bd11575f4280d3b86293
 
     Details:
 
@@ -99,12 +130,12 @@ sections:
     DecisionContextRef:
     - operator_action: run_exact_argv
     - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610112102-AHPHWM
+    - safe_command: agentplane task complete 202610112102-AHPHWM --result verified-202610112102-AHPHWM --commit 962725bbe6ac69f935bf34c82d950e6567a59b8c
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -160,17 +191,20 @@ Result: pass.
 Evidence: value-gates-final-manifest.json, gates-final.log, gates-metadata-final.log, prettier-final.log.
 Scope: TS7, exact authored-source lint/format, docs, size, dependencies, source provenance/tree, shared/Calc inventories,34 tests in four relevant tooling files, routing, doctor,diff. Sequence and existing SAL runtime/provenance/capability records reflect typed constructor overload witness; broad parity/default/verified flags remain false.
 
-Implementation verification is complete. Separate EVALUATOR audit and final evidence SHA will be appended after the intentional implementation commit; final owner verification follows the last task-doc update before clean closure on calc. Goal remains active; no full suite, merge, branch, publication or delegation.
+Command: ap commit 202610112102-AHPHWM (intentional implementation allowlist); python3 output/playwright/task49-checks/evaluator-audit.py; exact prior shared-profile argv audit; ap evaluator run 202610112102-AHPHWM --verdict pass.
+Result: pass.
+Evidence: implementation962725bbe6ac69f935bf34c82d950e6567a59b8c; output/playwright/task49-checks/evaluator-audit.json; .agentplane/tasks/202610112102-AHPHWM/quality/20261011-214539251-recovery-context/quality-report.json. Separate EVALUATOR phase verifies actual reviewed SHA, complete raw/native/source/driver/gates/cap flags and exactly preserved baseline profile append-only. Implementation unchanged during review.
+Scope: Task49 only on calc; final owner verify after this last documentation update, intentional quality artifacts and clean closure. Goal active; latest full41,next full51. No Writer-only repair, merge/publication/branch/worktree/delegation.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-11T21:44:57.581Z — VERIFY — ok
+### 2026-10-11T21:45:57.057Z — VERIFY — ok
 
 By: CODER
 
-Note: Task49 actual upstream Sequence contracts accepted: native write/check 370 sources/13 generated/164 terminal commands including10 expected assertions; all initialized normal-ASan/UB streams identical; source-absent Calc106/shared149 whole19/59 raw100;13 scoped gates and6 source formatting checks pass; Writer untouched,next full51. Separate quality follows implementation commit.
+Note: Final Task49 owner verification after last task-doc update: implementation962725bbe6ac, separate quality pass20261011-214539251, native full streams/source hashes and genuine expected assertion aborts verified; source-absent Calc106/shared149 whole19/59 raw100;13 effective gates/11 metadata repeats/6 Prettier checks0; profile append-only, Writer untouched,next full51, goal active.
 Attempts: 0
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T21:44:57.172Z, excerpt_hash=sha256:7e4d6c119c79ce26d80839552f059e396059823eaeb7bd11575f4280d3b86293
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T21:45:54.936Z, excerpt_hash=sha256:7e4d6c119c79ce26d80839552f059e396059823eaeb7bd11575f4280d3b86293
 
 Details:
 
@@ -185,12 +219,12 @@ BlueprintSnapshotRef:
 DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
-- safe_command: agentplane task verify-show 202610112102-AHPHWM
+- safe_command: agentplane task complete 202610112102-AHPHWM --result verified-202610112102-AHPHWM --commit 962725bbe6ac69f935bf34c82d950e6567a59b8c
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
