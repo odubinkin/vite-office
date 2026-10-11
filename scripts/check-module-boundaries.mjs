@@ -26,6 +26,7 @@ const moduleNames = [
   "svtools",
   "svx",
   "sw",
+  "tools",
   "udkapi",
   "unotools",
   "vcl",
@@ -82,6 +83,7 @@ const allowedEdges = new Map([
       "svl",
       "svx",
       "svtools",
+      "tools",
       "vcl",
       "xmloff",
     ]),
@@ -89,6 +91,7 @@ const allowedEdges = new Map([
   ["vcl", new Set(["svl"])],
   ["udkapi", new Set(["sal"])],
   ["unotools", new Set()],
+  ["tools", new Set()],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
 ]);
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
@@ -127,6 +130,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
   if (

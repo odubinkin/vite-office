@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 332
+revision: 333
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T17:28:32.871Z"
+doc_updated_at: "2026-10-11T18:04:37.134Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1480,6 +1480,10 @@ sections:
     Task202610102124-A77JR3 full checkpoint after nine native cursor/layout corrections: One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks. Maps and reports in ignored parity-coverage/A77JR3; same-agent exact semantic review required before close and explicit requested pause.
 
     Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-position GetFrameOfModify and SwContentNode.getLayoutFrame now borrow actual registered frame clients, use native type-mask/original root identity/master exclusion and original GetFrameAtPos routing. 13990 related cases in507 files, including12 fresh cases, and25 root tooling/resource cases in4 files pass (14015 unique). Entire two production modules current Istanbul100 all four metrics:93lines104statements35functions62branches,201 complete nonnegative integer raw counters. All863 old acceptance files byte-identical; existing two canonical histories/scalars/prefixes retained and two new source-mapped records added with unverified broad status. Actual retained/reflowed pagination queries borrow original objects without cursor-map publication or model/position copies. Native UI margin query integration/geometry/Calc/iterator order and full parity remain pending. Correction1 after the completed full checkpoint; no new full run. Initial fixture static failures repaired through actual base-frame constructor, final12then2scoped fixture cases validated without related-set replay; final current build/static pass. Missing integrated ICU metadata reference linked to existing approved local source;9source/metadata gates pass. Exact semantic review/closure pending; broad goal active.
+
+    - Observation: Correction2 since full checkpoint A77JR3: task202610111735-R760SH restores SwFrameAreaDefinition ownership and native geometry contracts. Human requests stopping after the next full run.
+      Impact: Real root/text/table/row/cell clients now own native area/print/validity/ID components. Browser geometry and duplicate measured cursor/formatter clients remain unintegrated. Broad upstream parity remains incomplete.
+      Resolution: 14030 related plus26 tooling cases pass with35fresh scenarios, all four complete app modules100 and616positive raw counters;864old acceptance files and canonical history preserved.9metadata gates pass after witness repairs. Continue atomic work with inventory updates and upstream-absent related/new coverage; full run remains once per10tasks, then fix any failures and pause the goal as requested. Do not mark the broad goal complete.
 id_source: "generated"
 ---
 ## Summary
@@ -2933,3 +2937,7 @@ Task202610102109-06E9V7 correction9: actual mounted body cursor master/follow pu
 Task202610102124-A77JR3 full checkpoint after nine native cursor/layout corrections: One current full upstream-absent checkpoint passed after nine accepted corrections. 15446Vitest scenarios and308Chromium scenarios (15754total),825/825discovered files,0failures/skips/flaky/retries/todo/errors. Actual configured application355modules and inventory42modules plus tooling1module100 all four gated metrics, complete current maps/53970nonnegative integer counters. All2454original non-AgentPlane tracked paths byte-identical; original reference link targets restored, source pin unchanged. No production/test/coverage config/inventory classification/default/registered IO deviation changes; no full replay or causal production repair needed. Full objective remains incomplete. Human requires goal paused after closure; no further parity tasks. Maps and reports in ignored parity-coverage/A77JR3; same-agent exact semantic review required before close and explicit requested pause.
 
 Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-position GetFrameOfModify and SwContentNode.getLayoutFrame now borrow actual registered frame clients, use native type-mask/original root identity/master exclusion and original GetFrameAtPos routing. 13990 related cases in507 files, including12 fresh cases, and25 root tooling/resource cases in4 files pass (14015 unique). Entire two production modules current Istanbul100 all four metrics:93lines104statements35functions62branches,201 complete nonnegative integer raw counters. All863 old acceptance files byte-identical; existing two canonical histories/scalars/prefixes retained and two new source-mapped records added with unverified broad status. Actual retained/reflowed pagination queries borrow original objects without cursor-map publication or model/position copies. Native UI margin query integration/geometry/Calc/iterator order and full parity remain pending. Correction1 after the completed full checkpoint; no new full run. Initial fixture static failures repaired through actual base-frame constructor, final12then2scoped fixture cases validated without related-set replay; final current build/static pass. Missing integrated ICU metadata reference linked to existing approved local source;9source/metadata gates pass. Exact semantic review/closure pending; broad goal active.
+
+- Observation: Correction2 since full checkpoint A77JR3: task202610111735-R760SH restores SwFrameAreaDefinition ownership and native geometry contracts. Human requests stopping after the next full run.
+  Impact: Real root/text/table/row/cell clients now own native area/print/validity/ID components. Browser geometry and duplicate measured cursor/formatter clients remain unintegrated. Broad upstream parity remains incomplete.
+  Resolution: 14030 related plus26 tooling cases pass with35fresh scenarios, all four complete app modules100 and616positive raw counters;864old acceptance files and canonical history preserved.9metadata gates pass after witness repairs. Continue atomic work with inventory updates and upstream-absent related/new coverage; full run remains once per10tasks, then fix any failures and pause the goal as requested. Do not mark the broad goal complete.

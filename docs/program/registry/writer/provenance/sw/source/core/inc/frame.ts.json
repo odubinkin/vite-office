@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/inc/frame.ts",
+    "upstreamPath": "sw/source/core/inc/frame.hxx",
+    "localSymbols": [
+      "SwFrameAreaDefinition",
+      "FrameAreaWriteAccess",
+      "FramePrintAreaWriteAccess"
+    ],
+    "upstreamSymbols": [
+      "SwFrameAreaDefinition",
+      "FrameAreaWriteAccess",
+      "FramePrintAreaWriteAccess"
+    ],
+    "preservedResponsibilities": [
+      "Task202610111735-R760SH restores the original SwFrameAreaDefinition owner composed by every real SwFrame, replacing misplaced validity fields with native-owned zero-default absolute/relative SwRects, guarded flags and uint32 frame IDs. Point/Size template bases own by-value integer storage; SwRect retains inclusive integer edge access, signed center division, height-before-width SSize, and WRITER-006 zero-area containment. Nested write-access values write back on explicit Dispose in finally without replacing borrowed members or changing validity. Composition represents C++ multiple inheritance while preserving original SwClient registration identity. Actual root/text/table/row/cell owners and independent scope values are checked without executing upstream. Numeric support is limited to finite integers in the JavaScript exact range; full native tools/SwRect operators, transforms, invalidation consumers, geometry formatting/query integration and browser measured geometry remain unported. No broad semantic/default/whole-capability promotion; registered recovery/open/save deviations retained."
+    ],
+    "omittedResponsibilities": [
+      "Full native geometry/transform/format/query consumers, operators, native Long overflow and ABI semantics remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/inc/frame.ts",
+          "marker": "SwFrameAreaDefinition"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/inc/native-frame-area.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/inc/frame.hxx",
+          "marker": "SwFrameAreaDefinition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/wsfrm.cxx",
+          "marker": "SwFrameAreaDefinition::SwFrameAreaDefinition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx",
+          "marker": "SwFrameAreaDefinition::snLastFrameId"
+        }
+      ]
+    }
+  }
+}
