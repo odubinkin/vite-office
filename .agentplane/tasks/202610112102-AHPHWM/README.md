@@ -1,10 +1,11 @@
 ---
 id: "202610112102-AHPHWM"
 title: "Port original public Sequence value ownership and array contracts"
-status: "DOING"
+result_summary: "Task49 original public Sequence ownership arrays COW and typed SAL adoption verified against genuine native streams and source-absent raw100"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Typed original SAL enum witness separates NULL adoption from integer length0 without changing numeric aliases or inferring pointer shape. Native NULL get-only observation and header-only guard diagnostics remain explicitly bounded; no destructor or absent-tail read is certified."
     - "Independently audited164 terminal commands:154 exit0 and10 exact genuine SIGABRT assertions;3 full native normal-ASan/UB streams equal fixture gzip/length/hash.370 complete source and13 generated hashes plus actual driver/configurations match. All raw S/F/B counters positive for whole19/59 owners; source links absent during tests/restored exactly; prior task48 shared test/whole-owner argv retained append-only."
     - "All13 effective scoped gates plus11 metadata repeats and6 source Prettier checks pass. Inventory broad parity/default/verified flags false and final facts precise; separate EVALUATOR phase performed without implementation edits."
-commit: null
+commit:
+  hash: "56fd0337b88bb8269144503d7fe1ca5ef3ebd244"
+  message: "🧩 AHPHWM task: record Sequence native and raw coverage quality acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: actual public Sequence lifecycle over shared C engine/type/OSL owners, explicit declared template/layout erasure without instance metadata or provider; full native/source-absent raw100 acceptance, no Writer repair, next full51."
+  -
+    author: "CODER"
+    body: "Verified: original public Sequence lifecycle and arrays reuse shared C/type/OSL owners; final native normal-ASan/UB streams and370 full source hashes match, source-absent Calc106/shared149 whole19/59 raw100, all scoped gates and separate EVALUATOR pass. Task49 inventory and declared SAL enum overload witness accepted; next full51, goal active."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final Task49 owner verification after last task-doc update: implementation962725bbe6ac, separate quality pass20261011-214539251, native full streams/source hashes and genuine expected assertion aborts verified; source-absent Calc106/shared149 whole19/59 raw100;13 effective gates/11 metadata repeats/6 Prettier checks0; profile append-only, Writer untouched,next full51, goal active."
+  -
+    type: "status"
+    at: "2026-10-11T21:46:11.458Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original public Sequence lifecycle and arrays reuse shared C/type/OSL owners; final native normal-ASan/UB streams and370 full source hashes match, source-absent Calc106/shared149 whole19/59 raw100, all scoped gates and separate EVALUATOR pass. Task49 inventory and declared SAL enum overload witness accepted; next full51, goal active."
 doc_version: 3
-doc_updated_at: "2026-10-11T21:45:57.111Z"
+doc_updated_at: "2026-10-11T21:46:11.459Z"
 doc_updated_by: "CODER"
 description: "Task49 UI-prerequisite public Sequence.h/hxx normal internal value owner over existing actual C sequence/type/OSL/genfunc/data owners; declared template/layout erasure, genuine full native acceptance, source-absent whole Calc/shared raw100, inventory and separate quality; last full41,next51."
 sections:
@@ -150,6 +163,10 @@ sections:
     Original assertions are independently observed as SIGABRT in native normal and ASan/UBSan runs; browser Error rejection remains explicit adaptation. Native bad_alloc at false C results maps to RangeError. Huge and negative header diagnostics inspect only initialized header fields and never absent tails; they do not certify valid ordinary producers. No uninitialized empty-tail bytes, invented C++ defaults, substituted owning objects, fake source/provider or private-access bypass.
 
     Remaining scope: external-only mutable iterators/index, ByteSequence bridge, ostream, physical pointers/layout/ABI/resource behavior, native const/compiler-only restrictions (including prohibited Sequence<bool>), arbitrary producer/alias/metadata safety, threads/shutdown/full consumer QA and subsequent service/CharClass/pool/Calc document/edit/view/UI. Broad parity/default/verified flags stay false. No new suspected upstream bug was found; no Calc journal entry is fabricated. Full41 is the latest full run and full51 remains next; Writer-only coverage is not repaired. No merge, publication, branch, worktree or delegated agent.
+extensions:
+  implementation_commit:
+    hash: "962725bbe6ac69f935bf34c82d950e6567a59b8c"
+    message: "🧩 AHPHWM cppu: port original public Sequence ownership and arrays"
 id_source: "generated"
 ---
 ## Summary
