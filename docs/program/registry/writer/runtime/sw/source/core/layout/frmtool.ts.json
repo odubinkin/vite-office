@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/frmtool.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "layout",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/layout/frmtool.ts#GetFrameOfModify",
+        "vendor/libreoffice-reference/sw/source/core/layout/frmtool.cxx#GetFrameOfModify",
+        "apps/office/src/sw/source/core/layout/native-content-frame-query.test.ts#@fileoverview"
+      ],
+      "justification": "Task202610111710-QJTZN0 restores the original no-view-position SwContentNode::getLayoutFrame/GetFrameOfModify query over actual registered frame clients. Native type masks, optional root identity, exclusion of actual content follows as first candidates, first qualifying master and optional original GetFrameAtPos routing are represented; no node/position/frame copy or detached query index. Literal body/cell/root/follow/tie/registration/destruction and actual retained/reflowed pagination owners are checked. Existing listener slot order remains the represented broadcaster boundary; full native SwIterator/UnwrapMulti/client-change restart, view-position rectangle/distance/page selection, Calc/fly formatting and protection are unported. Existing measured cursor registry and duplicate formatter/cursor clients remain explicit next integration work; current Home/End is not redirected to an incomplete geometric query. Non-text content frames/full root/page/body hierarchy remain unrepresented. Historical statuses/defaults/classifications/evidence and registered recovery/open/save/settings boundaries retained; no whole-module or goal promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetFrameOfModify"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/layout/frmtool.cxx",
+      "upstreamSymbols": [
+        "GetFrameOfModify"
+      ]
+    }
+  }
+}
