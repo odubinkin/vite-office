@@ -1349,3 +1349,28 @@ unverified.
 
 Decision: preserve both original move variants and the moved-from non-null
 address. Add no source reset, null normalization or dangling-pointer dereference.
+
+
+## CALC-056: Distinct interface pointers can compare equal after invalid root replies
+
+Status: reproduced only with diagnostic callers that violate the XInterface root
+query contract. No incorrect result from a valid UNO producer is established.
+
+Pinned `include/com/sun/star/uno/Reference.hxx::BaseReference::operator ==` first
+checks raw pointer identity, then compares the pointers returned by two root
+XInterface queries. It catches RuntimeException but does not reject a null query
+result. Two distinct diagnostic callers returning VOID, STRING or a null interface
+therefore yield two null roots and can compare equal. The original root query
+contract requires the proper canonical interface identity; these replies violate
+that producer requirement. This is a noteworthy defensive behavior, not a proven
+upstream defect for ordinary valid interfaces.
+
+Evidence: complete `identity` capture in
+`scripts/uno-reference-query-native-probe.mjs`, including ordered actual virtual
+callbacks, both queried owners, all initialized type/name/ref/count fields and
+exception destruction. The complete 5189724-byte normal/ASan/UBSan streams match,
+and the portable replay matches every byte. No null dereference or uninitialized
+reserved contents are observed.
+
+Decision: preserve original comparison and exception selection. Add no extra
+null-result rejection or substitute identity provider.

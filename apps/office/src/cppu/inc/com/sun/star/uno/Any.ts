@@ -1,4 +1,4 @@
-/** @fileoverview Original Any.h/Any.hxx ownership and value metadata at one actual public Any owner; later extraction/comparison/query/ostream families remain explicit source responsibilities. */
+/** @fileoverview Original Any.h/Any.hxx ownership and value metadata at one actual public Any owner; later typed comparison/get/string-expression/ostream families remain explicit source responsibilities. */
 import type { uno_Any } from "../../../../uno/any2";
 import {
   uno_any_construct,
@@ -16,6 +16,7 @@ import { typelib_typedescriptionreference_getDescription } from "../../../../typ
 import { typelib_TypeClass as C } from "../../../../typelib/typeclass";
 import type { TypeClass } from "../../../../../../udkapi/com/sun/star/uno/TypeClass";
 import { Type } from "./Type";
+import { Reference, UNO_QUERY, UNO_QUERY_THROW } from "./Reference";
 import { OUString } from "../../../../../../sal/inc/rtl/ustring";
 import {
   getTypeFromTypeDescriptionReference,
@@ -254,6 +255,14 @@ export class Any implements uno_Any {
           cpp_release,
         );
     }
+  }
+  /** Original internal Any::query<T> definition in Reference.hxx constructs the actual queried Reference. @param argument - Declared interface type. @returns Original owned reference. */
+  query(argument: UnoTypeArgument = "XInterface"): Reference {
+    return new Reference(this, UNO_QUERY, argument);
+  }
+  /** Original internal Any::queryThrow<T> constructs the actual throwing queried Reference. @param argument - Declared interface type. @returns Original owned reference or RuntimeException. */
+  queryThrow(argument: UnoTypeArgument = "XInterface"): Reference {
+    return new Reference(this, UNO_QUERY_THROW, argument);
   }
 }
 /** Original deprecated global Any type helper forwards to actual UnoType; no static copy or factory. @returns Original borrowed Type. */
