@@ -4,7 +4,7 @@ title: "Port original public Any insertion extraction and data operations"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-11T20:19:25.369Z"
+  updated_by: "CODER"
+  note: "Verified: task47 selected original Any data operators/helpers accepted;152 original build/capture commands0,369 source hashes13generated, three full normal-ASan/UBSan streams identical; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier checks8 final metadata gates0. Real default/owned lvalues and shared numeric/C owners reused. Separate implementation-bound EVALUATOR audit follows; whole Calc active,last full41,next51."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: original selected Any.hxx insertion/extraction/Any equality/data helpers through shared real owners and genuine native/source-absent evidence; no temporary providers, full51 remains scheduled."
+  -
+    type: "verify"
+    at: "2026-10-11T20:19:25.369Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: task47 selected original Any data operators/helpers accepted;152 original build/capture commands0,369 source hashes13generated, three full normal-ASan/UBSan streams identical; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier checks8 final metadata gates0. Real default/owned lvalues and shared numeric/C owners reused. Separate implementation-bound EVALUATOR audit follows; whole Calc active,last full41,next51."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:01:49.354Z"
+doc_updated_at: "2026-10-11T20:19:25.423Z"
 doc_updated_by: "CODER"
 description: "Task47 continues actual Any.hxx with isExtractableTo/has, Any equality, original generic/bool insertion and generic/bool/numeric/OUString/Type extraction, original selected toAny/fromAny copy/move helpers. Reuse real shared C assignment/equality and numeric owner, no provider/temp value implementation; full genuine native/source-absent whole raw100 scoped gates/inventory/review. Typed comparisons/get/ostream/string-expression helpers and remaining dependencies follow. Last full41,next51."
 sections:
@@ -49,9 +55,75 @@ sections:
     3. All3 upstream links absent for Calc coverage and exact task46 shared profile expanded with new tests/whole owners only; each raw S/F/B counter positive and S/B/F/L100. Restore links finally. Prior Any ownership/genfunc/assignment/equality replays strict. No Writer-only repair or weakening; no full before51.
     4. TS7/exact changed-file ESLint/Prettier, docs/size/deps/provenance/tree/shared+Calc inventory, four related tooling files/routing/doctor/diff all0. Exact schema/source ownership/capability gaps and source-specific adaptation accurately recorded, broad parity/default/verified flags false.
     5. Actual Command/Result/Evidence/Scope in task docs, intentional implementation commit, separate EVALUATOR audit tied to current implementation/native/coverage, committed review evidence, final canonical verification after last doc mutation and clean canonical finish. Keep complete Calc goal active.
-  Verification: "Pending actual implementation/native/source-absent checks."
+  Verification: |-
+    - Command: node scripts/uno-any-data-native-probe.mjs --write; node scripts/uno-any-data-native-probe.mjs --check.
+      Result: pass.
+      Evidence: 152 original build/capture commands exit0;72 unchanged translation units,369 complete source hashes13generated; three full initialized normal-ASan/UBSan streams identical extraction949008/predicates2082240/helpers147104 bytes. Native task47 diagnostics empty; no sanitizer rejection.
+      Scope: selected Any.hxx insertion/extraction/Any equality/extractability/has/toAny/fromAny; initialized supported source classes and actual declared destination/source owners. Real RuntimeException field defaults and destructor used, nonowning field lvalues at genuine offsets; no C-default/value/type/query factory substitute. Empty/moved reserved bytes/physical ABI/full consumer QA unverified; system dependencies uninstrumented and leak detection disabled.
+    - Command: node output/playwright/task47-checks/any-portable.mjs (exact child commands in value-calc-manifest.json and value-shared-manifest.json).
+      Result: pass.
+      Evidence: Calc106 tests24files19owners and shared141/42/57; source links absent throughout and restored exactly. Every whole raw S/F/B counter positive; S/B/F/L100 Calc2920/2055/474/2564 and shared3791/2068/490/3386. Previous original Any ownership/genfunc/assignment/equality replays retained.
+      Scope: Calc and exact prior related shared profile expanded only by3 new full replay tests. No Writer coverage repair, assertions/exclusions/timeout weakening or full before51.
+    - Command: node output/playwright/task47-checks/any-gates.mjs; node output/playwright/task47-checks/any-gates.mjs docs after caller JSDoc completion; npx prettier --check apps/office/src/cppu/inc/com/sun/star/uno/Any.ts apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts scripts/uno-any-data-native-probe.mjs.
+      Result: pass.
+      Evidence: all13 effective scoped gates0 and exact3-source Prettier0; TS7/lint/docs/size/deps/provenance/tree/inventory shared+Calc/four related tooling files/routing/doctor/diff. Initial TS7/caller input/docs findings resolved without changing source/gates or observations.
+      Scope: selected runtime/test/probe and responsibility-level metadata. Final metadata check and implementation-bound EVALUATOR audit follow before clean canonical finish.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-11T20:19:25.369Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: task47 selected original Any data operators/helpers accepted;152 original build/capture commands0,369 source hashes13generated, three full normal-ASan/UBSan streams identical; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier checks8 final metadata gates0. Real default/owned lvalues and shared numeric/C owners reused. Separate implementation-bound EVALUATOR audit follows; whole Calc active,last full41,next51.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:18:51.878Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112001-NE4EG1/blueprint/resolved-snapshot.json
+    - old_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
+    - current_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112001-NE4EG1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610112001-NE4EG1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task47 implementation and metadata while retaining task traceability; no destructive history rewrite or merge."
-  Findings: "Previous goal turn is progress: task46 DONE implementation7a7f1c80edef, reviewb4d117ab1631, closef9fedb7d1adb. Working tree clean calc. Actual public Any/C callbacks and shared numeric assignment exist. Source numeric extraction switches match assignNumeric exactly; use existing common owner with explicit original Any source guard to avoid duplicate shared conversion policy. Generic extraction may unwrap Any while primitive specializations guard the direct class; preserve this distinction. Missing typed comparison/BaseReference identity/get/ostream/string-expression/public Sequence families remain later genuine owners, no stubs. Last full41/next51. Final task doc update invalidates blueprint verification; re-record verify after final docs before close."
+  Findings: |-
+    Previous goal turn is progress: task46 DONE implementation7a7f1c80edef, reviewb4d117ab1631, closef9fedb7d1adb. Working tree clean calc. Actual public Any/C callbacks and shared numeric assignment exist. Source numeric extraction switches match assignNumeric exactly; use existing common owner with explicit original Any source guard to avoid duplicate shared conversion policy. Generic extraction may unwrap Any while primitive specializations guard the direct class; preserve this distinction. Missing typed comparison/BaseReference identity/get/ostream/string-expression/public Sequence families remain later genuine owners, no stubs. Last full41/next51. Final task doc update invalidates blueprint verification; re-record verify after final docs before close.
+
+    - Observation: First TS7 check rejects nullable borrowed Type reference annotation at isExtractableTo; original valid Type supplies initialized non-null reference.
+      Impact: Static address/type erasure annotation only; no accepted native or runtime behavior changed.
+      Resolution: Cast actual initialized borrowed Type reference to R at the original C call boundary, preserving the source producer precondition; rerun TS7.
+
+    - Observation: First combined portable/TS7/lint checks found pure caller helper sequence-name collision and one prefer-const annotation; predicates and helper whole-stream replays already pass.
+      Impact: Authored extraction caller invoked the shared description builder instead of the actual exported sequence C owner. No native mismatch or library implementation issue.
+      Resolution: Import original uno_type_sequence_construct from the existing public sequence2 owner directly and make the output reference const at its original post-extraction initialization; retain complete observations and rerun all three checks.
+
+    - Observation: Full extraction replay exposes an authored RuntimeException destination default mismatch: C data default uses global empty string ref flags, while native generated class default uses actual OUString literal empty storage.
+      Impact: Original initialized string flags differ at observation4067; predicates/helpers streams already identical. This is a caller input mismatch, not accepted extraction parity.
+      Resolution: Construct destination initial fields using actual generated RuntimeException/OUString default owners and represent only their original logical addressed fields; preserve native ordered lifetime and all captured bytes. Do not replace the original C default policy or normalize observations.
+
+    - Observation: Pure caller address wiring cannot redefine a generic allocator slot: original allocateUnoStorage intentionally exposes nonconfigurable own lvalue descriptors.
+      Impact: Caller representation only; no runtime owner contract change. A failed edit script left the caller unchanged and its repeat remained non-accepting.
+      Resolution: Use nonowning addressed views of the actual existing exception fields directly, keyed by genuine description offsets; retain actual generated owner construction/destruction. Do not mutate allocator descriptors or add a duplicate allocator/value factory.
+
+    - Observation: Scoped docs gate rejects missing JSDoc on authored helper cleanup arrows.
+      Impact: Documentation only; all three complete portable streams, TS7 and exact lint pass.
+      Resolution: Document each selected caller destructor/primitive no-op lifetime explicitly, then resume docs and remaining gates; source implementations and acceptance unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +148,51 @@ Port original selected Any data operators/helpers using existing real shared own
 
 ## Verification
 
-Pending actual implementation/native/source-absent checks.
+- Command: node scripts/uno-any-data-native-probe.mjs --write; node scripts/uno-any-data-native-probe.mjs --check.
+  Result: pass.
+  Evidence: 152 original build/capture commands exit0;72 unchanged translation units,369 complete source hashes13generated; three full initialized normal-ASan/UBSan streams identical extraction949008/predicates2082240/helpers147104 bytes. Native task47 diagnostics empty; no sanitizer rejection.
+  Scope: selected Any.hxx insertion/extraction/Any equality/extractability/has/toAny/fromAny; initialized supported source classes and actual declared destination/source owners. Real RuntimeException field defaults and destructor used, nonowning field lvalues at genuine offsets; no C-default/value/type/query factory substitute. Empty/moved reserved bytes/physical ABI/full consumer QA unverified; system dependencies uninstrumented and leak detection disabled.
+- Command: node output/playwright/task47-checks/any-portable.mjs (exact child commands in value-calc-manifest.json and value-shared-manifest.json).
+  Result: pass.
+  Evidence: Calc106 tests24files19owners and shared141/42/57; source links absent throughout and restored exactly. Every whole raw S/F/B counter positive; S/B/F/L100 Calc2920/2055/474/2564 and shared3791/2068/490/3386. Previous original Any ownership/genfunc/assignment/equality replays retained.
+  Scope: Calc and exact prior related shared profile expanded only by3 new full replay tests. No Writer coverage repair, assertions/exclusions/timeout weakening or full before51.
+- Command: node output/playwright/task47-checks/any-gates.mjs; node output/playwright/task47-checks/any-gates.mjs docs after caller JSDoc completion; npx prettier --check apps/office/src/cppu/inc/com/sun/star/uno/Any.ts apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts scripts/uno-any-data-native-probe.mjs.
+  Result: pass.
+  Evidence: all13 effective scoped gates0 and exact3-source Prettier0; TS7/lint/docs/size/deps/provenance/tree/inventory shared+Calc/four related tooling files/routing/doctor/diff. Initial TS7/caller input/docs findings resolved without changing source/gates or observations.
+  Scope: selected runtime/test/probe and responsibility-level metadata. Final metadata check and implementation-bound EVALUATOR audit follow before clean canonical finish.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-11T20:19:25.369Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: task47 selected original Any data operators/helpers accepted;152 original build/capture commands0,369 source hashes13generated, three full normal-ASan/UBSan streams identical; source-absent Calc106/shared141 tests,19/57 whole raw S/B/F/L100;13 scoped gates3 exact Prettier checks8 final metadata gates0. Real default/owned lvalues and shared numeric/C owners reused. Separate implementation-bound EVALUATOR audit follows; whole Calc active,last full41,next51.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:18:51.878Z, excerpt_hash=sha256:fe3a0da48c09b88ae99007fdbc69e9f9dbdff56223a5b2561958464301f0d37b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112001-NE4EG1/blueprint/resolved-snapshot.json
+- old_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
+- current_digest: 13f89e28e67f7e127ed111204984b2532414e2781e55b1e1657bf19746950c36
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112001-NE4EG1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610112001-NE4EG1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -85,3 +201,23 @@ Revert only task47 implementation and metadata while retaining task traceability
 ## Findings
 
 Previous goal turn is progress: task46 DONE implementation7a7f1c80edef, reviewb4d117ab1631, closef9fedb7d1adb. Working tree clean calc. Actual public Any/C callbacks and shared numeric assignment exist. Source numeric extraction switches match assignNumeric exactly; use existing common owner with explicit original Any source guard to avoid duplicate shared conversion policy. Generic extraction may unwrap Any while primitive specializations guard the direct class; preserve this distinction. Missing typed comparison/BaseReference identity/get/ostream/string-expression/public Sequence families remain later genuine owners, no stubs. Last full41/next51. Final task doc update invalidates blueprint verification; re-record verify after final docs before close.
+
+- Observation: First TS7 check rejects nullable borrowed Type reference annotation at isExtractableTo; original valid Type supplies initialized non-null reference.
+  Impact: Static address/type erasure annotation only; no accepted native or runtime behavior changed.
+  Resolution: Cast actual initialized borrowed Type reference to R at the original C call boundary, preserving the source producer precondition; rerun TS7.
+
+- Observation: First combined portable/TS7/lint checks found pure caller helper sequence-name collision and one prefer-const annotation; predicates and helper whole-stream replays already pass.
+  Impact: Authored extraction caller invoked the shared description builder instead of the actual exported sequence C owner. No native mismatch or library implementation issue.
+  Resolution: Import original uno_type_sequence_construct from the existing public sequence2 owner directly and make the output reference const at its original post-extraction initialization; retain complete observations and rerun all three checks.
+
+- Observation: Full extraction replay exposes an authored RuntimeException destination default mismatch: C data default uses global empty string ref flags, while native generated class default uses actual OUString literal empty storage.
+  Impact: Original initialized string flags differ at observation4067; predicates/helpers streams already identical. This is a caller input mismatch, not accepted extraction parity.
+  Resolution: Construct destination initial fields using actual generated RuntimeException/OUString default owners and represent only their original logical addressed fields; preserve native ordered lifetime and all captured bytes. Do not replace the original C default policy or normalize observations.
+
+- Observation: Pure caller address wiring cannot redefine a generic allocator slot: original allocateUnoStorage intentionally exposes nonconfigurable own lvalue descriptors.
+  Impact: Caller representation only; no runtime owner contract change. A failed edit script left the caller unchanged and its repeat remained non-accepting.
+  Resolution: Use nonowning addressed views of the actual existing exception fields directly, keyed by genuine description offsets; retain actual generated owner construction/destruction. Do not mutate allocator descriptors or add a duplicate allocator/value factory.
+
+- Observation: Scoped docs gate rejects missing JSDoc on authored helper cleanup arrows.
+  Impact: Documentation only; all three complete portable streams, TS7 and exact lint pass.
+  Resolution: Document each selected caller destructor/primitive no-op lifetime explicitly, then resume docs and remaining gates; source implementations and acceptance unchanged.

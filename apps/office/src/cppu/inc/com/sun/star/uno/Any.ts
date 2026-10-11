@@ -23,7 +23,14 @@ import {
   UnoType,
 } from "../../../../unotype";
 import type { UnoTypeArgument } from "../../../../unotype";
-import { cpp_acquire, cpp_release } from "./genfunc";
+import { cpp_acquire, cpp_release, cpp_queryInterface } from "./genfunc";
+import {
+  uno_type_assignData,
+  uno_type_equalData,
+  uno_type_isAssignableFromData,
+} from "../../../../uno/data";
+import { assignNumeric } from "../../../../../source/uno/assign-numeric";
+import type { rtl_uStringSlot } from "../../../../../../sal/inc/rtl/ustring.h";
 import { reservedDataAddress } from "../../../../../source/uno/copy";
 /** Original Any derives from its actual C record. Native C++ overload/type/lvalue syntax is explicit; no type is inferred from an untyped JS value and all construction remains in the existing C owner. */
 export class Any implements uno_Any {
@@ -144,8 +151,131 @@ export class Any implements uno_Any {
   clear(): void {
     uno_any_clear(this, cpp_release);
   }
+  /** Original extractability predicate delegates to actual data/type/interface owners. @param type - Borrowed demanded type. @returns Original result. */
+  isExtractableTo(type: Type): boolean {
+    return uno_type_isAssignableFromData(
+      type.getTypeLibType() as R,
+      this.pData,
+      this.pType as R,
+      cpp_queryInterface,
+      cpp_release,
+    );
+  }
+  /** Original has<T> erased declared template selector; deleted Any instantiation remains a compile-time restriction. @param argument - Original non-Any type argument. @returns Original extractability predicate. */
+  has(argument: Exclude<UnoTypeArgument, "Any">): boolean {
+    return this.isExtractableTo(getTypeFavourUnsigned(argument));
+  }
+  /** Original Any-to-Any equality uses real shared data equality and C++ callbacks. @param value - Right side. @returns Original comparison. */
+  operatorEquals(value: Any): boolean {
+    return uno_type_equalData(
+      this.pData,
+      this.pType as R,
+      value.pData,
+      value.pType as R,
+      cpp_queryInterface,
+      cpp_release,
+    );
+  }
+  /** Original negation of Any equality. @param value - Right side. @returns Original inequality. */
+  operatorNotEquals(value: Any): boolean {
+    return !this.operatorEquals(value);
+  }
+  /** Original insertion selects the declared C++ template type; bool delegates through a normalized sal_Bool temporary. Deleted Any instantiation is not available. @param source - Original lvalue address. @param argument - Declared non-Any type. @returns Nothing. */
+  insert(source: unknown, argument: Exclude<UnoTypeArgument, "Any">): void {
+    if (argument === "bool") this.insert([Number(Boolean((source as [boolean])[0]))], "sal_Bool");
+    else this.setValue(source, getTypeFavourUnsigned(argument));
+  }
+  /** Original extraction specialization guards the direct source class before changing a destination; generic extraction alone delegates to real assignData, including its source Any unwrapping. Numeric conversions reuse the identical original source switches in the existing shared assignment owner. @param destination - Original initialized lvalue storage or actual specialized owned OUString/Type. @param argument - Declared non-Any destination type. @returns Original success, false leaves the destination untouched. */
+  extract(destination: unknown, argument: Exclude<UnoTypeArgument, "Any">): boolean {
+    const sourceClass = (this.pType as R).eTypeClass;
+    switch (argument) {
+      case "bool":
+      case "sal_Bool":
+        if (sourceClass !== C.BOOLEAN) return false;
+        (destination as [boolean | number])[0] =
+          argument === "bool"
+            ? Boolean((this.pData as [unknown])[0])
+            : Number(Boolean((this.pData as [unknown])[0]));
+        return true;
+      case "sal_Int8":
+        return assignNumeric(C.BYTE, destination as [number], sourceClass, this.pData as [number]);
+      case "sal_Int16":
+        return assignNumeric(C.SHORT, destination as [number], sourceClass, this.pData as [number]);
+      case "sal_uInt16":
+        return assignNumeric(
+          C.UNSIGNED_SHORT,
+          destination as [number],
+          sourceClass,
+          this.pData as [number],
+        );
+      case "sal_Int32":
+        return assignNumeric(C.LONG, destination as [number], sourceClass, this.pData as [number]);
+      case "sal_uInt32":
+        return assignNumeric(
+          C.UNSIGNED_LONG,
+          destination as [number],
+          sourceClass,
+          this.pData as [number],
+        );
+      case "sal_Int64":
+        return assignNumeric(C.HYPER, destination as [bigint], sourceClass, this.pData as [bigint]);
+      case "sal_uInt64":
+        return assignNumeric(
+          C.UNSIGNED_HYPER,
+          destination as [bigint],
+          sourceClass,
+          this.pData as [bigint],
+        );
+      case "float":
+        return assignNumeric(C.FLOAT, destination as [number], sourceClass, this.pData as [number]);
+      case "double":
+        return assignNumeric(
+          C.DOUBLE,
+          destination as [number],
+          sourceClass,
+          this.pData as [number],
+        );
+      case "OUString":
+        if (sourceClass !== C.STRING) return false;
+        (destination as OUString).assign(OUString.unacquired(this.pData as rtl_uStringSlot));
+        return true;
+      case "Type":
+        if (sourceClass !== C.TYPE) return false;
+        (destination as Type).assign(getTypeFromTypeDescriptionReference(this.pData as [R]));
+        return true;
+      default:
+        return uno_type_assignData(
+          destination,
+          getTypeFavourUnsigned(argument).getTypeLibType() as R,
+          this.pData,
+          this.pType as R,
+          cpp_queryInterface,
+          cpp_acquire,
+          cpp_release,
+        );
+    }
+  }
 }
 /** Original deprecated global Any type helper forwards to actual UnoType; no static copy or factory. @returns Original borrowed Type. */
 export function getCppuType(): Type {
   return UnoType.get("Any");
+}
+
+/** Original toAny template/copy overload; declared source addresses are explicit and Any copy reuses its real owner. @param args - Actual source Any or lvalue address/type. @returns Original owned Any. */
+export function toAny(
+  ...args: [source: Any] | [sourceAddress: unknown, argument: Exclude<UnoTypeArgument, "Any">]
+): Any {
+  return args.length === 1 ? new Any(args[0]) : new Any(args[0], args[1]);
+}
+/** Original rvalue toAny overload delegates to the actual Any move constructor. @param source - Original rvalue. @returns Original moved value. */
+export function toAnyMove(source: Any): Any {
+  return Any.move(source);
+}
+/** Original fromAny specialization assigns an Any directly; generic form delegates to original extraction. C++ non-null assertion is a producer precondition, not a new conversion policy. @param source - Original Any. @param destination - Initialized addressed destination or actual Any. @param argument - Declared destination type. @returns Original success. */
+export function fromAny(source: Any, destination: unknown, argument: UnoTypeArgument): boolean {
+  if (argument === "Any") {
+    (destination as Any).assign(source);
+    return true;
+  }
+  return source.extract(destination, argument);
 }

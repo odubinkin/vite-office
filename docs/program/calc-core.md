@@ -2834,3 +2834,24 @@ bytes and physical ABI/allocation/compile-only/debug/thread/full QA are unverifi
 Any extraction/comparison/get/query/fromAny/toAny/ostream and public Sequence,
 Reference/service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent.
 Next full51; task41 remains the last full regression.
+
+
+## Original public Any insertion extraction and data operations
+
+Task47 continues the actual public Any owner with isExtractableTo/has, Any
+comparison, selected insertion/extraction and toAny/fromAny copy/move helpers.
+Actual C data/type/query/ownership and Type/OUString/Any owners are reused. The
+original numeric specialization switches match existing shared assignNumeric;
+reuse that source responsibility with each original direct source-class guard.
+Generic extraction retains original C assignment and Any unwrapping instead.
+Declared template types and source/destination addresses explicitly adapt erasure.
+
+The caller's generated RuntimeException destination must use the actual class
+default: its OUString literal empty storage differs from C data default flags.
+Portable observations use nonowning direct field lvalues at genuine description
+offsets and the actual class destructor, preserving initialized counts and values.
+Three complete native initialized normal-ASan/UBSan streams match (949008,
+2082240 and147104 bytes);369 complete source hashes and13 genuine generated
+headers verified.
+Source-absent Calc106/24 and related shared141/42 tests pass; all3 original links restored exactly. Whole19/57 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared3791/2068/490/3386). All13 effective scoped gates and3 exact authored-source Prettier checks pass. Remaining typed comparison/BaseReference interface identity, get/ostream, string-expression and external-only helper overloads, XInterface static helpers, public Sequence/Reference/services/CharClass/pool and Calc cells/document/edit/view/UI are subsequent source families. Physical ABI/allocator/resource/uninitialized reserved bytes/compile-only/debug/thread/shutdown/full consumer QA remain unverified.
+Last full41; next full51, whole Calc goal active.

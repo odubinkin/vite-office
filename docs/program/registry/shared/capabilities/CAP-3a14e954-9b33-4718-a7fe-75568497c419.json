@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3a14e954-9b33-4718-a7fe-75568497c419",
+    "capabilityId": "CAP-3a14e954-9b33-4718-a7fe-75568497c419",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve original Any specialization guards and generic data assignment, selection/equality and typed insertion/helper lifetime behavior through actual shared owners.",
+      "Reuse matching numeric conversions and actual C/Type/OUString/Any/cpp callback owners without a replacement value/type/default/query policy."
+    ],
+    "capability": "Original public Any insertion extraction and data operations",
+    "gaps": [
+      "Remaining typed comparison/BaseReference interface identity, get/ostream, string-expression and external-only helper overloads, XInterface static helpers, public Sequence/Reference/services/CharClass/pool and Calc cells/document/edit/view/UI are subsequent source families. Physical ABI/allocator/resource/uninitialized reserved bytes/compile-only/debug/thread/shutdown/full consumer QA remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/com/sun/star/uno/Any.hxx",
+          "marker": "inline bool Any::isExtractableTo"
+        },
+        {
+          "path": "cppu/source/uno/assign.hxx",
+          "marker": "_assignData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "testInterface"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/com/sun/star/uno/Any.h",
+          "marker": "fromAny"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+          "marker": "isExtractableTo"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/assign-numeric.ts",
+          "marker": "assignNumeric"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+          "marker": "matches complete original Any specialization and generic extraction destinations"
+        },
+        {
+          "path": "scripts/uno-any-data-native-probe.mjs",
+          "marker": "prepareCaseNative"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original public Any insertion extraction and data operations"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "any-data-operations",
+    "scopeLimitations": [
+      "Source-absent Calc106/24 and related shared141/42 tests pass; all3 original links restored exactly. Whole19/57 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared3791/2068/490/3386). All13 effective scoped gates and3 exact authored-source Prettier checks pass. Remaining typed comparison/BaseReference interface identity, get/ostream, string-expression and external-only helper overloads, XInterface static helpers, public Sequence/Reference/services/CharClass/pool and Calc cells/document/edit/view/UI are subsequent source families. Physical ABI/allocator/resource/uninitialized reserved bytes/compile-only/debug/thread/shutdown/full consumer QA remain unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task47 ports original Any.hxx isExtractableTo/has, Any equality/inequality, generic/bool insertion and generic/bool/numeric/OUString/Type extraction, selected toAny copy/template/move and fromAny generic/Any assignment. Reuse actual C data assignment/equality/extractability, real cpp callbacks, actual Type/OUString/Any copy/move owners. Numeric specializations reuse the existing assignNumeric owner because original source switches and width conversions match; direct source-class guards remain distinct from generic C Any unwrapping. Explicit declared template types and addressed destinations are erasure only, no value/type/provider inference or factory. Genuine native --write/--check passes:72 unchanged translation units,369 complete source hashes13generated, three full initialized normal-ASan/UBSan streams identical extraction949008/predicates2082240/helpers147104 bytes. Native public RuntimeException uses actual generated default/literal string ownership; portable caller represents nonowning direct addresses of the actual generated class fields at real description offsets, with raw field writes and real owner destructor rather than C-default substitution. Source-absent Calc106/24 and related shared141/42 tests pass; all3 original links restored exactly. Whole19/57 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared3791/2068/490/3386). All13 effective scoped gates and3 exact authored-source Prettier checks pass. Remaining typed comparison/BaseReference interface identity, get/ostream, string-expression and external-only helper overloads, XInterface static helpers, public Sequence/Reference/services/CharClass/pool and Calc cells/document/edit/view/UI are subsequent source families. Physical ABI/allocator/resource/uninitialized reserved bytes/compile-only/debug/thread/shutdown/full consumer QA remain unverified. Broad parity/default/verified flags remain false."
+    }
+  }
+}
