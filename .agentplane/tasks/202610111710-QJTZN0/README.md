@@ -1,10 +1,11 @@
 ---
 id: "202610111710-QJTZN0"
 title: "Restore native content-node layout-frame lookup"
-status: "DOING"
+result_summary: "Original GetFrameOfModify and SwContentNode.getLayoutFrame query actual registered roots/masters/follows and original positions; actual pagination ownership and12new cases verified. Whole changed modules100 and related/static/metadata pass without reference runtime. Native geometric query/Calc and UI cursor registry replacement remain further work; full parity incomplete, correction1 after full checkpoint."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Checkpoint: original no-view content-frame query implemented with current whole-module100 coverage and preserved acceptance/history. Static fixture failures repaired and all metadata gates pass; exact semantic quality review next."
+  -
+    author: "CODER"
+    body: "Verified: native no-view registered content-frame query restored, 14015unique related/tooling cases pass, complete whole-file100 coverage/current201counters, fixture failures repaired and9metadata gates pass. Same-agent exact-SHA quality review recorded; preserve all old acceptances/inventory/IO deviations and leave broad goal active."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "13990 related cases in507 files including12 fresh plus25 tooling/resource cases pass without reference sources. Both whole production modules93lines104statements35functions62branches100 with201 current valid counters and identical executed source hashes. All863old acceptance files unchanged; old canonical scalars/prefixes preserved, new records broadly unverified. Type/build fixture errors repaired with scoped12then2case revalidation; current static/build pass. Nine restored-source metadata gates pass after ignored local ICU reference link setup. Native geometric lookup/Calc and cursor-map integration remain unported; broad goal active, no full run."
+  -
+    type: "status"
+    at: "2026-10-11T17:30:33.556Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native no-view registered content-frame query restored, 14015unique related/tooling cases pass, complete whole-file100 coverage/current201counters, fixture failures repaired and9metadata gates pass. Same-agent exact-SHA quality review recorded; preserve all old acceptances/inventory/IO deviations and leave broad goal active."
 doc_version: 3
-doc_updated_at: "2026-10-11T17:29:16.471Z"
+doc_updated_at: "2026-10-11T17:30:33.557Z"
 doc_updated_by: "CODER"
 description: "First correction after full A77JR3: port the original GetFrameOfModify no-view-position branch and SwContentNode.getLayoutFrame over actual registered frame clients, preserving root/master/follow/native position identity. Restore the native query contract as a prerequisite for replacing the measured cursor registry; geometric selection, Calc and margin integration remain explicit further work. Preserve historical inventory and registered IO deviations."
 sections:
@@ -205,6 +216,10 @@ sections:
     - Observation: Restored-source audit source-tree passes; source-provenance fails because the integrated shared ICU provenance now requires vendor/icu-reference, absent in this Writer environment. The same ignored source reference already exists through the approved vite-office vendor directory.
       Impact: Production tests, current whole-module coverage and final static gates already pass without all reference sources. Metadata audit needs the existing local ICU reference; no network, repository-source change or acceptance replay is necessary.
       Resolution: Reuse the existing approved vite-office source-reference boundary with an ignored Writer symlink to ../../vite-office/vendor/icu-reference. This is environment setup inside this task, not a separate repository task. Preserve original LibreOffice/mdds links, rerun only failed/unexecuted metadata gates and record exact audit evidence.
+extensions:
+  implementation_commit:
+    hash: "b682d0ff7bf365e424875c878a5442dfb3b9f394"
+    message: "🧩 QJTZN0 code: Restore native registered content-frame lookup"
 id_source: "generated"
 ---
 ## Summary
