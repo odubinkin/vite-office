@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 334
+revision: 335
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:41:16.372Z"
+doc_updated_at: "2026-10-11T19:04:32.338Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1488,6 +1488,10 @@ sections:
     - Observation: Correction3 since A77JR3: task202610111813-A06D5E unifies body cursor measurements with original formatter frames and source SetPara paragraph ownership. Latest human stop rule remains pause after the next full run and any required repairs.
       Impact: Repeated Home/End no longer creates and destroys duplicate body clients. Actual root/node/frame ID/master/follow identities survive; reflow releases obsolete aliases and transition from standalone cursor clients to body formatting destroys old owned clients. Equal spans are matched by distinct original occurrence ownership.
       Resolution: Accepted7207 related scenarios309files,25tooling4files and3Chromium3files;7235total/316files,9fresh cases. Two entire production modules Istanbul100all-four406lines444statements79functions381branches/904positive raw counters, separate original map/source bindings.866of867old acceptance files byte-identical; one file changes only two source-backed destructor expectations. Four canonical historical/scalar/default/classification prefixes preserved, nine metadata gatespass, upstream absent all producers. Remaining measured availability registry/full native geometry-query/formatter/cell hierarchy/general parity unverified; IO deviations untouched. Exact semantic same-agent non-independent review/closure follows; goalactive correction3/10.
+
+    - Observation: Correction4 after A77JR3: task202610111845-4QRYA0 resolves native line-margin frames through actual original content-node queries rather than measured-registry frame selection.
+      Impact: Already formatted native clients support margins without UI publication. Original root/client order/point/follows and temporary PaM mapped-position equality restored. A real new regression showed that unpublished stale snapshots could move before device reformatting; guard now reads the existing document/snapshot revision without duplicating text state.
+      Resolution: 14037 accepted related instances/512files plus25tooling/4 and6Chromium/4 =14068cases/520files,8fresh native/React cases. Whole two production modules current-source Istanbul100all-four448lines492statements79functions409branches/980positive raw counters, separate unedited source-bound maps.870oldtests byte-identical, four canonical histories/status/default/classification/responsibility prefixes preserved,9metadata gatespass. All producers upstream absent and links restored. Temporary device freshness/ownership/compatibility registry and native view-position Calc/formatter invalidation/bidi/selection-overlap/nontext/merged/full table hierarchy/general parity remain pending. Registered I/O/recovery deviations unchanged. Goalactive correction4/10; pause after next accepted full and any failures repaired; exact same-agent review/closure follows.
 id_source: "generated"
 ---
 ## Summary
@@ -2949,3 +2953,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction3 since A77JR3: task202610111813-A06D5E unifies body cursor measurements with original formatter frames and source SetPara paragraph ownership. Latest human stop rule remains pause after the next full run and any required repairs.
   Impact: Repeated Home/End no longer creates and destroys duplicate body clients. Actual root/node/frame ID/master/follow identities survive; reflow releases obsolete aliases and transition from standalone cursor clients to body formatting destroys old owned clients. Equal spans are matched by distinct original occurrence ownership.
   Resolution: Accepted7207 related scenarios309files,25tooling4files and3Chromium3files;7235total/316files,9fresh cases. Two entire production modules Istanbul100all-four406lines444statements79functions381branches/904positive raw counters, separate original map/source bindings.866of867old acceptance files byte-identical; one file changes only two source-backed destructor expectations. Four canonical historical/scalar/default/classification prefixes preserved, nine metadata gatespass, upstream absent all producers. Remaining measured availability registry/full native geometry-query/formatter/cell hierarchy/general parity unverified; IO deviations untouched. Exact semantic same-agent non-independent review/closure follows; goalactive correction3/10.
+
+- Observation: Correction4 after A77JR3: task202610111845-4QRYA0 resolves native line-margin frames through actual original content-node queries rather than measured-registry frame selection.
+  Impact: Already formatted native clients support margins without UI publication. Original root/client order/point/follows and temporary PaM mapped-position equality restored. A real new regression showed that unpublished stale snapshots could move before device reformatting; guard now reads the existing document/snapshot revision without duplicating text state.
+  Resolution: 14037 accepted related instances/512files plus25tooling/4 and6Chromium/4 =14068cases/520files,8fresh native/React cases. Whole two production modules current-source Istanbul100all-four448lines492statements79functions409branches/980positive raw counters, separate unedited source-bound maps.870oldtests byte-identical, four canonical histories/status/default/classification/responsibility prefixes preserved,9metadata gatespass. All producers upstream absent and links restored. Temporary device freshness/ownership/compatibility registry and native view-position Calc/formatter invalidation/bidi/selection-overlap/nontext/merged/full table hierarchy/general parity remain pending. Registered I/O/recovery deviations unchanged. Goalactive correction4/10; pause after next accepted full and any failures repaired; exact same-agent review/closure follows.

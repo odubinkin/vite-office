@@ -182,6 +182,18 @@ export class SwRootFrame extends SwLayoutFrame {
       frames,
     });
   }
+  /** Temporary browser-device freshness admission while native Calc/text invalidation is unported; this never selects a frame and needs no published lease. @param node - Original content owner. @returns Whether original native query may proceed. */
+  public IsCursorTextGeometryCurrent(node: SwTextNode): boolean {
+    const document = this.getDocument(),
+      measured = this.cursorFrames.get(node);
+    return (
+      node.GetDoc() === document &&
+      (measured === undefined
+        ? this.snapshot === undefined ||
+          this.lastModelRevision === document.GetDocumentStateManager().GetModelRevision()
+        : measured.text === node.GetText())
+    );
+  }
   /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
   public GetCursorTextFrame(node: SwTextNode): SwTextFrame | undefined {
     const measured = this.cursorFrames.get(node);

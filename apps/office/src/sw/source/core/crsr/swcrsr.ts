@@ -2,19 +2,26 @@
 import { SwPaM } from "./pam";
 import { SwEndNode, SwTableBoxStartNode, SwTableNode, type SwStartNode } from "../docnode/node";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwTextFrame } from "../text/txtfrm";
 import { SwTable, type SwTableBox } from "../table/swtable";
 import type { SwRootFrame } from "../layout/newfrm";
 
 /** Persistent Writer cursor; cell navigation never uses body ordinals or display paragraphs. */
 export class SwCursor extends SwPaM {
-  /** Delegates margin movement to the current native layout frame. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Native frame admission. */
+  /** Queries the original node and native position for its registered frame; native geometric Calc/bidi/selection-overlap remain unported. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Native frame admission. */
   public LeftRightMargin(layout: SwRootFrame, left: boolean, api = false): boolean {
-    const frame = layout.GetCursorTextFrame(this.GetPoint().GetNode() as SwTextNode);
+    const point = this.GetPoint(),
+      node = point.GetNode() as SwTextNode;
+    if (!layout.IsCursorTextGeometryCurrent(node)) return false;
+    const frame = node.getLayoutFrame(layout, point) as SwTextFrame | undefined;
     return frame !== undefined && (left ? frame.LeftMargin(this) : frame.RightMargin(this, api));
   }
-  /** Checks a margin using a temporary PaM as upstream does. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Whether the point is at its margin. */
+  /** Queries the original positioned frame and compares native mapped positions using a temporary PaM as upstream does. @param layout - Owning layout. @param left - Beginning direction. @param api - API movement. @returns Whether the point is at its margin. */
   public IsAtLeftRightMargin(layout: SwRootFrame, left: boolean, api = false): boolean {
-    const frame = layout.GetCursorTextFrame(this.GetPoint().GetNode() as SwTextNode);
+    const point = this.GetPoint(),
+      node = point.GetNode() as SwTextNode;
+    if (!layout.IsCursorTextGeometryCurrent(node)) return false;
+    const frame = node.getLayoutFrame(layout, point) as SwTextFrame | undefined;
     if (frame === undefined) return false;
     const pam = new SwPaM(this.GetPoint());
     try {
@@ -22,7 +29,7 @@ export class SwCursor extends SwPaM {
         pam.GetPoint().Assign(pam.GetPoint().GetNode(), pam.GetPoint().GetContentIndex() - 1);
       return (
         (left ? frame.LeftMargin(pam) : frame.RightMargin(pam, api)) &&
-        pam.GetPoint().GetContentIndex() === this.GetPoint().GetContentIndex()
+        frame.MapModelToViewPos(pam.GetPoint()) === frame.MapModelToViewPos(this.GetPoint())
       );
     } finally {
       pam.Dispose();
