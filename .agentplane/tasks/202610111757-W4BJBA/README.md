@@ -1,10 +1,11 @@
 ---
 id: "202610111757-W4BJBA"
 title: "Port original CPPu UNO equality engine"
-status: "DOING"
+result_summary: "Task43 original typed equality and binary query ownership implemented at shared source owners; all bounded native/portable/scoped evidence passes. Public templates and downstream Calc UI prerequisites remain subsequent work."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Original eq.hxx switches, independent Any flattening, borrowed/acquired description boundaries, base-first/reverse members and descending sequence/interface query/release ordering remain source-shaped. Real data.cxx retained query method dispatch and return/exception ownership use existing shared owners; declarations reference the single implementation."
     - "Native --check terminal0 independently verifies358 complete source hashes and entire current5 captures against normal/ASan/UBSan. Actual raw Istanbul maps independently inspected: every S/F/B counter positive across19 Calc and52 related shared owners. Current commit hashes match combined acceptance before/after strengthened test replay; all3 equality owners fresh raw100. No weakened checks or fabricated runtime owner."
     - "Native integer64 double-rounding counterexample justifies only the narrow BigInt binary32 adapter; exact native casts and signed reads of unsigned-hyper sources are preserved. CALC-052 and registry accurately bound source observations; broad parity/default/verified flags remain false."
-commit: null
+commit:
+  hash: "0194432eb2904920065a3d08a8833c5f515339b6"
+  message: "🧩 W4BJBA task: port original shared UNO equality and binary query ownership"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete original shared CPPu equality and real query boundaries in calc checkout, using existing owners and bounded complete native/portable source-absent verification."
+  -
+    author: "CODER"
+    body: "Verified: Original shared CPPu equality/query engine matches complete358-source normal/ASan/UBSan and portable captures; Calc106/shared125 raw100, scoped checks and separate evaluator pass persisted. Clean direct closure; goal remains active and next full51."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original equality/query owners implemented; latest358-source normal/ASan/UBSan --write/--check and5 source-absent portable streams match. Calc106/shared125 raw100 across19/52 owners with exact hash binding; extended equality3 owners raw100. All scoped gates and final changed-input checks pass; limitations and CALC-052 recorded."
+  -
+    type: "status"
+    at: "2026-10-11T18:31:14.306Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original shared CPPu equality/query engine matches complete358-source normal/ASan/UBSan and portable captures; Calc106/shared125 raw100, scoped checks and separate evaluator pass persisted. Clean direct closure; goal remains active and next full51."
 doc_version: 3
-doc_updated_at: "2026-10-11T18:29:47.372Z"
+doc_updated_at: "2026-10-11T18:31:14.307Z"
 doc_updated_by: "CODER"
 description: "Task43: implement complete original eq.hxx comparison and its data.cxx entry/query boundaries as the real shared dependency of Sequence value equality and downstream Calc casing services, retaining native numeric/type/interface/compound/sequence ordering with complete genuine native captures and source-absent100 coverage."
 sections:
