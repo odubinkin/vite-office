@@ -18,6 +18,15 @@ import {
   rtl_uString_newFromSubString,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
+import { StringNumber, StringConcat, StringConcatMarker } from "./stringconcat";
+import type { UnicodeConcatOperand } from "./stringconcat";
+import {
+  rtl_uString_alloc,
+  rtl_ustr_valueOfInt32,
+  rtl_ustr_valueOfInt64,
+  RTL_USTR_MAX_VALUEOFINT32,
+  RTL_USTR_MAX_VALUEOFINT64,
+} from "./ustring.h";
 import { SAL_NO_ACQUIRE } from "../types";
 import type { __sal_NoAcquire } from "../types";
 
@@ -87,14 +96,33 @@ export class OUString {
   constructor(
     ...args:
       | []
-      | [value: OUStringConstReference | OUStringLiteral | rtl_uString | Uint16Array | number]
+      | [
+          value:
+            | OUStringConstReference
+            | OUStringLiteral
+            | rtl_uString
+            | Uint16Array
+            | number
+            | StringNumber
+            | StringConcat,
+        ]
       | [value: rtl_uString, noAcquire: __sal_NoAcquire]
       | [value: Uint16Array | null, length: number]
   ) {
     const [value, argument] = args;
     this.slot = [null];
     if (value === undefined) this.pData = OUString.empty.str;
-    else if (value instanceof OUStringLiteral) this.pData = value.str;
+    else if (value instanceof StringConcat) {
+      const length = value.length();
+      this.pData = rtl_uString_alloc(length) as rtl_uString;
+      if (length !== 0) {
+        const end = value.addData(this.pData.buffer);
+        this.pData.length = length;
+        end[0] = 0;
+      }
+    } else if (value instanceof StringNumber) {
+      rtl_uString_newFromStr_WithLength(this.slot, value.buf, value.length);
+    } else if (value instanceof OUStringLiteral) this.pData = value.str;
     else if (typeof value === "number")
       rtl_uString_newFromStr_WithLength(this.slot, new Uint16Array([value]), 1);
     else if (value === null || value instanceof Uint16Array) {
@@ -104,6 +132,17 @@ export class OUString {
       this.pData = ("pData" in value ? value.pData : value) as rtl_uString;
       if (argument !== SAL_NO_ACQUIRE) rtl_uString_acquire(this.pData);
     }
+  }
+
+  /** Original signed32/signed64 number overloads; bigint preserves the signed64 overload. Default radix is10. @param value - Original integral argument. @param radix - Original signed16 radix. @returns Original fixed local representation. */
+  static number(value: number | bigint, radix = 10): StringNumber {
+    return typeof value === "number"
+      ? new StringNumber(RTL_USTR_MAX_VALUEOFINT32, rtl_ustr_valueOfInt32, value, radix)
+      : new StringNumber(RTL_USTR_MAX_VALUEOFINT64, rtl_ustr_valueOfInt64, value, radix);
+  }
+  /** Original marker entry into lazy Unicode concatenation. @param value - Borrowed original operand. @returns Original unary expression. */
+  static Concat(value: UnicodeConcatOperand): StringConcat {
+    return new StringConcat(new StringConcatMarker(), value);
   }
 
   /** Original move constructor, resetting the source through the C empty constructor. @param source - Original rvalue owner. @returns Transferred owner. */

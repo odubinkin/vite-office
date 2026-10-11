@@ -1,4 +1,5 @@
 /** @fileoverview Original SAL UTF16 CompareNormal and reverseCompare_WithLengths used by shared string equality. */
+import { isAsciiLowerCase, toAsciiUpperCase } from "../inc/rtl/character";
 import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import {
   SAL_STRING_INTERN_FLAG,
@@ -338,4 +339,43 @@ export function valueOfInt(
   for (let i = 0; i < text.length; i++) data[i] = text.charCodeAt(i);
   data[text.length] = 0;
   return text.length;
+}
+
+/** Original known-length Unicode range; native begin/end are adapted by the bounded replacement loop. */
+export class with_length {
+  /** Original borrowed storage. */
+  readonly p: Uint16Array;
+  /** Original logical range length. */
+  readonly len: number;
+  /** Retains original range fields and checked length guard. @param data - Borrowed storage. @param length - Logical signed32 length. @returns Borrowed original range. */
+  constructor(data: Uint16Array, length: number) {
+    this.p = data;
+    this.len = length;
+    if (this.len < 0) throw new Error("assert(len >= 0)");
+  }
+}
+/** Original stateless template replacement strategy; callbacks witness erased template references. */
+export class CaseReplace {
+  /** Binds the original template functions. @param applicable - Original applicability predicate. @param replace - Original scalar replacement. @returns Original stateless strategy. */
+  constructor(
+    private readonly applicable: (code: number) => boolean,
+    private readonly replace: (code: number) => number,
+  ) {}
+  /** Original predicate-producing method. @returns Original bound predicate. */
+  Applicable(): (code: number) => boolean {
+    return (
+      /** Original predicate lambda converts the Unicode unit to its unsigned type. @param code - Original unit. @returns Original applicability predicate. */
+      (code: number) => this.applicable(code & 0xffff)
+    );
+  }
+  /** Original scalar replacement without testing applicability first. @param code - Original unsigned16 unit. @returns Replaced original unit. */
+  Replace(code: number): number {
+    return this.replace(code & 0xffff);
+  }
+}
+/** Original selected ASCII-uppercase replacement strategy. */
+export const toAsciiUpper = new CaseReplace(isAsciiLowerCase, toAsciiUpperCase);
+/** Original range replacement writes every unit, including zero. @param range - Original known-length borrowed range. @param replacer - Original strategy. @returns Nothing. */
+export function replaceChars(range: with_length, replacer: CaseReplace): void {
+  for (let i = 0; i < range.len; i++) range.p[i] = replacer.Replace(range.p[i] as number);
 }

@@ -253,3 +253,8 @@ export function rtl_ustr_valueOfUInt64(
 ): number {
   return str.valueOfInt(data, BigInt.asUintN(64, value), (radix << 16) >> 16);
 }
+
+/** Original known-length ASCII-uppercase C wrapper; known-length iteration includes embedded zero units. @param data - Borrowed original mutable storage. @param length - Original signed32 range length. @returns Nothing. */
+export function rtl_ustr_toAsciiUpperCase_WithLength(data: Uint16Array, length: number): void {
+  str.replaceChars(new str.with_length(data, length | 0), str.toAsciiUpper);
+}

@@ -50,3 +50,5 @@ export {
   rtl_ustr_valueOfInt64,
   rtl_ustr_valueOfUInt64,
 } from "../../rtl/ustring";
+
+export { rtl_ustr_toAsciiUpperCase_WithLength } from "../../rtl/ustring";
