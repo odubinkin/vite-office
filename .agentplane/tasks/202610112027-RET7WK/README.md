@@ -1,10 +1,11 @@
 ---
 id: "202610112027-RET7WK"
 title: "Port original Reference query throwing and interface identity contracts"
-status: "DOING"
+result_summary: "verified-202610112027-RET7WK"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-11T20:55:07.966Z"
+  updated_at: "2026-10-11T20:55:22.972Z"
   updated_by: "CODER"
-  note: "Final post-document verification for reviewed ce0d0c8d: EVALUATOR pass at quality/20261011-205436996-recovery-context/quality-report.json; four exact native streams73 TUs368 hashes13 generated156 commands0; source-absent Calc106/shared145 whole19/58 owners raw100;13 effective gates5 source formats0; no code changes after review, broad flags false, last full41,next51."
+  note: "verified-202610112027-RET7WK"
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Read original Reference.h/hxx and cppu_opt.cxx against actual TypeScript bodies: Any constructor source guard differs correctly from set, real reserved ownership transfers before Any destruction, query exceptions propagate, equality catches only actual RuntimeException, throwing set preserves its previous field, messages reuse real borrowed-name/lazy-string owners. Original private iset_throw access retained; no private native bypass, replacement query/default/type policy or pointer ordering algorithm."
     - "Independently rehashed368 full source inputs13 generated headers and caller; all156 native commands terminate0, every fixture byte/digest equals normal and ASan/UBSan stdout, all stderr empty. Re-read raw coverage: whole19/58 owners all counters positive, Calc106/shared145 pass with links absent and exactly restored. Task47 argv profile preserved with one new test/whole owner only;13 effective gates and5 source format checks pass. Diagnostic invalid root replies accurately recorded CALC-056; broad flags remain false."
-commit: null
+commit:
+  hash: "5588f9cda7892fee094e9cf02e7301f67cfdaa96"
+  message: "✅ RET7WK task: persist final query verification and review"
 comments:
   -
     author: "CODER"
     body: "Start: actual Reference query/throw/identity and original cppu_opt through shared real owners, complete native/source-absent proof and accurate remaining pointer/source gaps; last full41,next51."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610112027-RET7WK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final post-document verification for reviewed ce0d0c8d: EVALUATOR pass at quality/20261011-205436996-recovery-context/quality-report.json; four exact native streams73 TUs368 hashes13 generated156 commands0; source-absent Calc106/shared145 whole19/58 owners raw100;13 effective gates5 source formats0; no code changes after review, broad flags false, last full41,next51."
+  -
+    type: "verify"
+    at: "2026-10-11T20:55:22.972Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610112027-RET7WK"
+  -
+    type: "status"
+    at: "2026-10-11T20:55:23.102Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610112027-RET7WK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-11T20:55:08.019Z"
+doc_updated_at: "2026-10-11T20:55:23.103Z"
 doc_updated_by: "CODER"
 description: "Task48 completes source-selected Reference constructors/set/static/member/Any query and BaseReference identity equality via actual public Any/RuntimeException/shared owners. Port complete original cppu_opt message owner. Explicit erased enum/template witnesses, no invented pointer ordering/provider/exception policy. Genuine unchanged native/source-absent whole raw100, inventory/journal/gates/review clean finish; last full41,next51."
 sections:
@@ -134,6 +153,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-11T20:55:22.972Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610112027-RET7WK
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:55:08.019Z, excerpt_hash=sha256:5d2131d34dcbf79e4bf317947cdb9022ea6ddf9009cb5fcce23a1dc8af96f78f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112027-RET7WK/blueprint/resolved-snapshot.json
+    - old_digest: 450f092dc76f497d95696d3e43df128a0dbcc8b3bfd0277cc75aebb945e55303
+    - current_digest: 450f092dc76f497d95696d3e43df128a0dbcc8b3bfd0277cc75aebb945e55303
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112027-RET7WK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610112027-RET7WK --result verified-202610112027-RET7WK --commit 5588f9cda7892fee094e9cf02e7301f67cfdaa96
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task48 changes alone if needed while preserving traceability; no history rewrite/merge/publication."
   Findings: |-
@@ -142,6 +191,10 @@ sections:
     The first expanded shared coverage invocation placed the new coverage.include argument before the --coverage enable flag; CLI parsing selected the default shared scope instead of the recorded focused profile and failed coverage. Every test passed, and Calc passed with raw100. The ignored driver now appends the additional whole owner after the unchanged task47 include arguments. Re-run only shared acceptance; no exclusion, threshold, test timeout or Writer implementation change. Metadata gates were stopped before source-dependent checks while upstream links were absent and will resume after exact restoration.
 
     Focused shared tests all passed with whole statement/function/line100; four erased-default argument branches required acceptance. Native compilation rejected a derived caller attempting to expose Reference::iset_throw because the original helper is private, not protected. Retain original access rather than modifying the source: the portable helper is now private with an explicit erased template argument supplied only by its actual typed constructor/set callers. No invented public/default helper API or source behavior branch remains. Legal original constructor/set calls already capture both helper outcomes. Restore the unchanged genuine native caller exactly (driverHash equality checked), run --check again; exercise both default/explicit root argument forms for actual public Reference/Any queries against the same original streams. Public branch criteria unchanged, no native private-access bypass or coverage filter change.
+extensions:
+  implementation_commit:
+    hash: "ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3"
+    message: "🧩 RET7WK task: port original Reference queries and identity"
 id_source: "generated"
 ---
 ## Summary
@@ -210,6 +263,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610112027-RET7WK --result verified-202610112027-RET7WK --commit ce0d0c8d1982a7cf5d9fe78cc3b8eca9ee9a06b3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-11T20:55:22.972Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610112027-RET7WK
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-11T20:55:08.019Z, excerpt_hash=sha256:5d2131d34dcbf79e4bf317947cdb9022ea6ddf9009cb5fcce23a1dc8af96f78f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112027-RET7WK/blueprint/resolved-snapshot.json
+- old_digest: 450f092dc76f497d95696d3e43df128a0dbcc8b3bfd0277cc75aebb945e55303
+- current_digest: 450f092dc76f497d95696d3e43df128a0dbcc8b3bfd0277cc75aebb945e55303
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112027-RET7WK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610112027-RET7WK --result verified-202610112027-RET7WK --commit 5588f9cda7892fee094e9cf02e7301f67cfdaa96
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
