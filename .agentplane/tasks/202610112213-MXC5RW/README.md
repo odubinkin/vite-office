@@ -1,10 +1,11 @@
 ---
 id: "202610112213-MXC5RW"
 title: "Run task51 full regression after Calc service helpers"
-status: "DOING"
+result_summary: "Task51 full regression: complete source-absent suites pass;424 office owners raw100;13 effective gates pass; exact upstream links restored"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -46,8 +47,8 @@ quality_review:
     - "Full raw office S/F/B counters all positive across424 executable owners and whole S/B/F/L30286/20815/6280/27418 all100; Calc19 shared196 Writer209. Inventory configured V8 summary also100 with exact equal total/covered counts; no Writer-only deficit or repair."
     - "All13 effective repository gates pass; initial lint1 retained and repaired only by one JSDoc comment in ignored task43 helper, rerun0. Assertions, coverage profiles/thresholds, timeouts, test/source files and lint rules unchanged. Source/evidence distinction resolves administrative recording without weakening acceptance."
 commit:
-  hash: "717505774be68678e916a2eaa49b5aba6dba5c2b"
-  message: "✅ MXC5RW verify: record full regression and raw coverage"
+  hash: "2978c8858083f43c6ded298ed668b1916180d5c2"
+  message: "✅ MXC5RW quality: bind full regression to tested source evidence"
 comments:
   -
     author: "CODER"
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Record final reviewed task51 evidence commit717505774be6 before EVALUATOR; prior automatic evaluated_sha selected persistence snapshot because commit metadata was null. Full test evidence and acceptance remain unchanged."
+  -
+    author: "CODER"
+    body: "Verified: Task51 complete upstream-absent full regression passes office15457 inventory123 tooling34 browser308 and static2bundles;424 whole executable owners raw S/B/F/L100. All13 effective gates pass, initial lint fixed only by ignored JSDoc. Exact links restored; source3596 independently reviewed with separately committed evidence. Calc UI remains subsequent and next full61."
 events:
   -
     type: "status"
@@ -82,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete task51 full regression accepted:5 suites/13 effective gates pass; raw100424owners. Final EVALUATOR identifies tested source3596ed6d81ff; task-only diff proves source/test/configuration identity through separately committed evidence717505774be6. Exact links restored; no Writer repair or weakened checks."
+  -
+    type: "status"
+    at: "2026-10-11T22:33:27.810Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Task51 complete upstream-absent full regression passes office15457 inventory123 tooling34 browser308 and static2bundles;424 whole executable owners raw S/B/F/L100. All13 effective gates pass, initial lint fixed only by ignored JSDoc. Exact links restored; source3596 independently reviewed with separately committed evidence. Calc UI remains subsequent and next full61."
 doc_version: 3
-doc_updated_at: "2026-10-11T22:33:16.828Z"
+doc_updated_at: "2026-10-11T22:33:27.811Z"
 doc_updated_by: "CODER"
 description: "Execute the scheduled full upstream-absent regression after tasks42-50; repair observed Calc/shared or tooling failures within scope, retain Writer-only coverage deficits, and record complete evidence."
 sections:
@@ -181,6 +192,10 @@ sections:
     - Observation: Supported CLI records evidence commit717505774be6, but repeated EVALUATOR records retain first reviewed source SHA3596ed6d81ff. Actual full tests ran on source baseline3596; all later tracked changes are exclusively this task documentation and quality artifacts.
       Impact: Earlier statements expecting the machine field to move to evidence SHA7175 were incorrect. No tests or runtime changes require replay; source SHA and evidence-document SHA have distinct responsibilities.
       Resolution: Independently prove git diff3596..334b46e8 lists only this task subtree, record source-evidence-binding.json and final reviewer explicitly accepts actual tested source3596 with separately committed evidence7175. Use3596 as implementation/source SHA and final quality documentation SHA as closure evidence; supersede prior ambiguous reviews without editing machine reports by hand.
+extensions:
+  implementation_commit:
+    hash: "3596ed6d81ff6e8ab7ea67ca24d7dfdfa868ef9c"
+    message: "🧩 MXC5RW task: persist canonical task artifacts"
 id_source: "generated"
 ---
 ## Summary
