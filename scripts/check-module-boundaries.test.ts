@@ -3,6 +3,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  findUnapprovedModuleCycle,
+  isOriginalSalO3tlImport,
   isForbiddenModuleEdge,
   getProtectedBrowserGlobalReferences,
   getProtectedOwnershipReferences,
@@ -27,6 +29,124 @@ it("owns genuine CPPU type metadata and SAL comparison without browser or revers
   }
   for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi"])
     expect(isForbiddenModuleEdge("cppu", dependency)).toBe(true);
+});
+
+it("accepts only the original SAL/o3tl source paths and named value imports", /** Checks all permitted witnesses and rejects alternate syntax, bindings and owners. @returns Nothing. */ () => {
+  const specifier = "../../o3tl/inc/string_view";
+  const original = `import { implIsWhitespace } from "${specifier}";`;
+  expect(
+    isOriginalSalO3tlImport("sal/rtl/strtmpl.ts", "o3tl/inc/string_view", original, specifier),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport("sal/rtl/strtmpl.ts", "o3tl/inc/string_view.ts", original, specifier),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/rtl/ustring.h",
+      'import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";',
+      "../../sal/inc/rtl/ustring.h",
+    ),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/types",
+      'import { SAL_MAX_INT32, SAL_MIN_INT32 } from "../../sal/inc/types";',
+      "../../sal/inc/types",
+    ),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/types",
+      'import { SAL_MIN_INT32 } from "../../sal/inc/types";',
+      "../../sal/inc/types",
+    ),
+  ).toBe(false);
+  for (const text of [
+    `import { toInt32 } from "${specifier}";`,
+    `import { implIsWhitespace, toInt32 } from "${specifier}";`,
+    `import { implIsWhitespace as whitespace } from "${specifier}";`,
+    `import type { implIsWhitespace } from "${specifier}";`,
+    `import { type implIsWhitespace } from "${specifier}";`,
+    `import whitespace from "${specifier}";`,
+    `import whitespace, { implIsWhitespace } from "${specifier}";`,
+    `import * as whitespace from "${specifier}";`,
+    `import {} from "${specifier}";`,
+    `import "${specifier}";`,
+    `export * from "${specifier}";`,
+    `export { implIsWhitespace } from "${specifier}";`,
+    `import whitespace = require("${specifier}");`,
+    `const whitespace = require("${specifier}");`,
+    `const whitespace = import("${specifier}");`,
+    `const whitespace = import(\`${specifier}\`);`,
+    `type Whitespace = typeof import("${specifier}");`,
+    `${original}\nconst whitespace = import("${specifier}");`,
+    `${original}\nconst whitespace = import(\`${specifier}\`);`,
+    `// ${original}`,
+    `const explanation = "${specifier}";`,
+  ])
+    expect(
+      isOriginalSalO3tlImport("sal/rtl/strtmpl.ts", "o3tl/inc/string_view", text, specifier),
+    ).toBe(false);
+  expect(
+    isOriginalSalO3tlImport("sal/rtl/ustring.ts", "o3tl/inc/string_view", original, specifier),
+  ).toBe(false);
+  expect(
+    isOriginalSalO3tlImport("sal/rtl/strtmpl.ts", "o3tl/inc/sorted_vector", original, specifier),
+  ).toBe(false);
+});
+
+it("admits only the witnessed two-owner component while retaining longer and unrelated cycle failures", /** Protects strongly connected component scope before projecting the approved edge. @returns Nothing. */ () => {
+  const original = new Map([
+    ["sal", new Set(["o3tl"])],
+    ["o3tl", new Set(["sal"])],
+    ["cppu", new Set(["sal"])],
+  ]);
+  const witnesses = [
+    { sourceModule: "sal", targetModule: "o3tl", approved: true },
+    { sourceModule: "o3tl", targetModule: "sal", approved: true },
+  ];
+  expect(findUnapprovedModuleCycle(original, witnesses)).toBeUndefined();
+  expect(Array.from(original.get("sal") ?? [])).toEqual(["o3tl"]);
+  expect(findUnapprovedModuleCycle(original, [])).toEqual(["sal", "o3tl", "sal"]);
+  expect(findUnapprovedModuleCycle(original, witnesses.slice(0, 1))).toEqual([
+    "sal",
+    "o3tl",
+    "sal",
+  ]);
+  expect(
+    findUnapprovedModuleCycle(original, [...witnesses, { ...witnesses[0], approved: false }]),
+  ).toEqual(["sal", "o3tl", "sal"]);
+  const larger = new Map(original);
+  larger.set("o3tl", new Set(["sal", "third"]));
+  larger.set("third", new Set(["sal"]));
+  expect(findUnapprovedModuleCycle(larger, witnesses)).toBeDefined();
+  const longerWithoutDirectReverse = new Map(larger);
+  longerWithoutDirectReverse.set("o3tl", new Set(["third"]));
+  expect(findUnapprovedModuleCycle(longerWithoutDirectReverse, witnesses)).toEqual([
+    "sal",
+    "o3tl",
+    "third",
+    "sal",
+  ]);
+  const separate = new Map(original);
+  separate.set("other", new Set(["third"]));
+  separate.set("third", new Set(["other"]));
+  expect(findUnapprovedModuleCycle(separate, witnesses)).toEqual(["other", "third", "other"]);
+  const incomingOnly = new Map(original);
+  incomingOnly.set("third", new Set(["sal"]));
+  expect(findUnapprovedModuleCycle(incomingOnly, witnesses)).toBeUndefined();
+  const outgoingOnly = new Map(original);
+  outgoingOnly.set("o3tl", new Set(["sal", "third"]));
+  outgoingOnly.set("third", new Set());
+  expect(findUnapprovedModuleCycle(outgoingOnly, witnesses)).toBeUndefined();
+  expect(findUnapprovedModuleCycle(new Map([["sal", new Set(["sal"])]]), [])).toEqual([
+    "sal",
+    "sal",
+  ]);
+  expect(findUnapprovedModuleCycle(new Map([["cppu", new Set(["sal"])]]), [])).toBeUndefined();
 });
 
 it("owns original locale and case-mapping dependencies without browser or reverse library edges", /** Enforces the actual shared string service dependency directions. @returns Nothing. */ () => {
@@ -315,4 +435,19 @@ it("permits the editeng vcl font dependency while retaining reverse and browser 
       "../../../vcl/browser/font-list",
     ),
   ).toMatch(/browser adapters/u);
+});
+
+it("retains actual mutual SAL and o3tl string-header owners without application or browser dependencies", /** Protects original inline conversion/whitespace dependencies. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sal", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "sal")).toBe(false);
+  for (const owner of ["sal", "o3tl"])
+    for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi", "svl"])
+      expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
+  for (const source of ["o3tl/inc/string_view.ts", "sal/inc/rtl/string.h.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+    expect(
+      getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
+    ).toMatch(/browser adapters/u);
+  }
 });

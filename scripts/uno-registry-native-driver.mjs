@@ -117,3 +117,19 @@ rtl_uString_newFromStr_WithLength(&out,u"old",3);rtl_uString_newFromSubString(&o
 memberString(hay.pData);}}
 return true;}
 `;
+
+/** Caller-only observations of unchanged SAL/o3tl integer conversion and exact internal predicates; all parser bodies remain original. */
+export const integerDriver = String.raw`
+static void integerEmit(sal_Int64 value,sal_Int32 narrow){if(std::fwrite(&value,sizeof value,1,stdout)!=1||std::fwrite(&narrow,sizeof narrow,1,stdout)!=1)std::exit(3);}
+static void integerObserve(sal_Unicode const*data,sal_Int32 length,sal_Int16 radix){integerEmit(rtl_ustr_toInt64_WithLength(data,radix,length),o3tl::toInt32(std::u16string_view(data,length),radix));}
+static bool integerCases(std::string const&mode,std::vector<std::pair<sal_Int16,std::vector<sal_Unicode>>>const&inputs){
+if(mode.rfind("integer-invariant-",0)==0){int index=std::stoi(mode.substr(18));sal_Unicode data[]={49,50,51};sal_Int16 invalid[]={-32768,-1,0,1,37,32767};
+if(index<6)rtl_ustr_toInt64_WithLength(data,invalid[index],3);else if(index==6)rtl_ustr_toInt64_WithLength(data,10,-1);else if(index==7)rtl_ustr_toInt64_WithLength(data,0,-1);else if(index==8)o3tl::toInt32(std::u16string_view(data,3),37);else return false;return true;}
+if(mode!="integer")return false;
+emit(std::array<sal_Int32,4>{RTL_STR_MIN_RADIX,RTL_STR_MAX_RADIX,SAL_MIN_INT32,SAL_MAX_INT32});
+for(sal_Int16 radix=2;radix<=36;radix++)for(bool negative:{false,true}){auto [div,mod]=rtl::str::DivMod<sal_Int64>(radix,negative);integerEmit(div,mod);emit(std::array<sal_Int32,1>{div>0});}
+for(sal_uInt32 value=0;value<65536;value++){sal_Unicode c=static_cast<sal_Unicode>(value);emit(std::array<sal_Int32,1>{o3tl::internal::implIsWhitespace(c)});for(sal_Int16 radix=2;radix<=36;radix++)emit(std::array<sal_Int32,1>{rtl::str::implGetDigit(c,radix)});
+for(sal_Int16 radix:{2,10,16,36}){sal_Unicode a[]={c,49},b[]={49,c},d[]={32,45,c,49};integerObserve(a,2,radix);integerObserve(b,2,radix);integerObserve(d,4,radix);}}
+for(auto const& [radix,data]:inputs){for(sal_Int32 length=0;length<=static_cast<sal_Int32>(data.size());length++)integerObserve(data.data(),length,radix);emit(std::array<sal_Int32,1>{o3tl::toInt32(std::u16string_view(data.data(),data.size()))});}
+return true;}
+`;

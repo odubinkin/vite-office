@@ -8,6 +8,8 @@ import {
   rtl_stringAllocation,
 } from "./strimp.hxx";
 import { internRelease } from "./ustring";
+import { implIsWhitespace } from "../../o3tl/inc/string_view";
+import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../inc/rtl/string.h";
 
 /** Adapts the original basic_string_view to the host's exact UTF16 search storage without normalization, termination scanning or code-point conversion. @param data - Borrowed original units, nullable for an empty view. @param length - Logical view length. @returns Same logical sequence of UTF16 units. */
 function stringView(data: Uint16Array | null, length: number): string {
@@ -273,4 +275,52 @@ export function newFromSubString(
 export function getStr(pThis: rtl_uString | null): Uint16Array {
   if (pThis === null) throw new Error("assert(pThis)");
   return pThis.buffer;
+}
+
+/** Original signed-integer sign handler; a mutable offset slot adapts the borrowed iterator reference. @param data - Original known-length input. @param iter - Current non-end iterator offset. @returns Whether the original minus sign was consumed. */
+export function HandleSignChar(data: Uint16Array, iter: [number]): boolean {
+  if (data[iter[0]] === 45) {
+    iter[0]++;
+    return true;
+  }
+  if (data[iter[0]] === 43) iter[0]++;
+  return false;
+}
+/** Original signed64 numeric_limits specialization computes the quotient/remainder overflow guard. @param nRadix - Original admitted radix. @param bNeg - Original negative-input flag. @returns Exact original quotient and small remainder. */
+export function DivMod(nRadix: number, bNeg: boolean): readonly [bigint, number] {
+  const min = -(1n << 63n),
+    max = (1n << 63n) - 1n,
+    radix = BigInt(nRadix);
+  return bNeg ? [-(min / radix), Number(-(min % radix))] : [max / radix, Number(max % radix)];
+}
+/** Original UTF16 digit classifier and radix rejection. @param ch - Original unsigned16 unit. @param nRadix - Original radix. @returns Digit or -1. */
+export function implGetDigit(ch: number, nRadix: number): number {
+  let n = -1;
+  if (ch >= 48 && ch <= 57) n = ch - 48;
+  else if (ch >= 97 && ch <= 122) n = ch - 97 + 10;
+  else if (ch >= 65 && ch <= 90) n = ch - 65 + 10;
+  return n < nRadix ? n : -1;
+}
+/** Original signed64 known-length toInt specialization. Explicit UTF16 storage and offset adapt the original with_length iterator; its constructor assertion is retained at the public C owner before entry. BigInt preserves native unsigned accumulation and signed64 limits. @param data - Borrowed units, nullable for zero length. @param length - Original known length. @param nRadix - Original signed16 admitted radix. @returns Original signed64 value or overflow-to-zero. */
+export function toInt(data: Uint16Array | null, length: number, nRadix: number): bigint {
+  if (nRadix < RTL_STR_MIN_RADIX || nRadix > RTL_STR_MAX_RADIX)
+    throw new Error("assert(nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX)");
+  const iter: [number] = [0];
+  while (iter[0] !== length && implIsWhitespace((data as Uint16Array)[iter[0]] as number))
+    iter[0]++;
+  if (iter[0] === length) return 0n;
+  const bNeg = HandleSignChar(data as Uint16Array, iter),
+    [nDiv, nMod] = DivMod(nRadix, bNeg);
+  // Original assert(nDiv > 0) is necessarily true for signed64 limits and every admitted radix2..36.
+  let n = 0n;
+  while (iter[0] !== length) {
+    const nDigit = implGetDigit((data as Uint16Array)[iter[0]] as number, nRadix);
+    if (nDigit < 0) break;
+    if ((nMod < nDigit ? nDiv - 1n : nDiv) < n) return 0n;
+    n *= BigInt(nRadix);
+    n += BigInt(nDigit);
+    iter[0]++;
+  }
+  if (bNeg) return n === 1n << 63n ? -(1n << 63n) : -n;
+  return n;
 }

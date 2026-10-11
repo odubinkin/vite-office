@@ -195,3 +195,13 @@ export function internRelease(data: rtl_uString): void {
     rtl_stringAllocation.rtl_freeString(data);
   }
 }
+
+/** Original known-length signed64 C conversion: with_length checks precede the template radix assertion. @param pStr - Borrowed UTF16 input, nullable for zero length. @param nRadix - Original signed16 radix. @param nStrLength - Original signed32 known length. @returns Exact signed64 value or overflow-to-zero. */
+export function rtl_ustr_toInt64_WithLength(
+  pStr: Uint16Array | null,
+  nRadix: number,
+  nStrLength: number,
+): bigint {
+  if (nStrLength < 0) throw new Error("assert(len >= 0)");
+  return str.toInt(pStr, nStrLength, nRadix);
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/string.h.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-integer",
+    "capabilityIds": [
+      "CAP-d7dd2ed7-e3dc-435a-b637-8a39eb7c672c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/o3tl/inc/string_view.test.ts#matches every complete original integer, predicate, prefix and default result",
+        "apps/office/src/sal/inc/rtl/string.h.ts#RTL_STR_MIN_RADIX",
+        "vendor/libreoffice-reference/include/rtl/string.h#RTL_STR_MIN_RADIX"
+      ],
+      "justification": "Original signed64 known-length SAL toInt and UTF16 o3tl::toInt32 retain exact original whitespace/sign/digit/first-invalid-stop/overflow-to-zero and default radix10. BigInt preserves original unsigned accumulation and signed64 limits; signed32 narrowing occurs only after the original range-to-zero guard. The original internal whitespace classifier remains in o3tl, the generic algorithm/signed64 specialization and internal sign/digit/DivMod owners remain in SAL, and real C/header/radix/SAL signed32 macro boundaries are shared once. Genuine whole original SAL/CPPU translation units and unchanged strtmpl/o3tl headers observe complete constants, quotient/remainder/positive guard, every65536 UTF16 whitespace/digit predicate for every2..36 radix, selected scalar contexts, all prefixes of full radix/boundary/control/sign inputs and default10 values. Complete normal/ASan/UBSan byte streams and nine original checked fatal assertions must agree. Original mutual SAL/o3tl inline-header directions are retained; no app/browser dependencies or duplicated whitespace owner. Checked C assertions map to Error, distinct from UNO exceptions. This specialization does not certify terminated/byte/unsigned/template overloads, original NDEBUG invalid-radix fallback, arbitrary out-of-contract JS numbers or storage, native ABI/thread lifetime, full original QA or unfinished getByName/UNO/case-service consumers. Broad capability parity/default/verification flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RTL_STR_MIN_RADIX",
+        "RTL_STR_MAX_RADIX"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/rtl/string.h",
+      "upstreamSymbols": [
+        "RTL_STR_MIN_RADIX",
+        "RTL_STR_MAX_RADIX"
+      ]
+    }
+  }
+}

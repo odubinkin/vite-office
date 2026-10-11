@@ -2300,3 +2300,34 @@ UTF16 search evidence, not a claim that their whole suite was executed. Original
 getByName parsing/completion/factories and UNO exception/case-service consumers
 remain unfinished. Full run41 and the subsequent requested goal pause remain
 scheduled.
+
+## Original bounded integer parsing for UNO type names
+
+Task39 adds the required signed64 known-length SAL conversion and bounded UTF16
+o3tl::toInt32. Original whitespace/control classification, sign handling, digit
+classification, first-invalid stop, overflow-to-zero, signed32 range check and
+default radix10 remain in their original shared owners. BigInt retains exact
+signed64 accumulation and limits. The real C/header, radix macros and SAL signed32
+limit macros are shared; no duplicated whitespace classifier or parser in Calc.
+
+The genuine native caller includes unchanged original strtmpl.hxx and full
+SAL/o3tl dependencies. It observes every UTF16 whitespace/digit predicate across
+every radix2..36, original DivMod quotient/remainder/positive guard, C/o3tl
+selected scalar contexts, every prefix of complete boundary/sign/control inputs
+and default conversions. All returned bytes and nine original checked assertions
+are retained separately. The original mutual SAL/o3tl inline-header directions
+are reflected in protected module edges; browser/app dependencies remain blocked.
+
+With explicit user approval, the dependency checker accepts only the original
+two-member SAL/o3tl strongly connected component and its three exact source-path
+and named-value-import witnesses. Additional bindings, other import forms, larger
+components and unrelated cycles still fail. Native JS UTF16 search remains in
+use; signed conversion uses native BigInt arithmetic with the original parser
+rules because parseInt does not preserve whitespace or overflow behavior. No
+additional runtime library is introduced.
+
+Original terminated/byte/unsigned/template APIs, NDEBUG invalid-radix fallback,
+arbitrary out-of-contract JS inputs, native ABI/thread lifetime and full upstream
+QA remain unverified. The original overflow QA provides related evidence only.
+Actual getByName/completion/UNO/default exception and case-service consumers stay
+unfinished. Full run41 followed by the requested goal pause remains scheduled.

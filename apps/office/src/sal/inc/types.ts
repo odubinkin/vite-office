@@ -7,3 +7,7 @@ export enum __sal_NoAcquire {
 export const SAL_NO_ACQUIRE = __sal_NoAcquire.SAL_NO_ACQUIRE;
 /** Original maximum enumeration value fixes the native enum representation. */
 export const SAL_MAX_ENUM = 0x7fffffff;
+/** Original minimum signed32 integer macro. */
+export const SAL_MIN_INT32 = -0x80000000;
+/** Original maximum signed32 integer macro. */
+export const SAL_MAX_INT32 = 0x7fffffff;
