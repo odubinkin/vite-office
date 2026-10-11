@@ -2,6 +2,10 @@
 import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
 import { typelib_TypeClass } from "./typeclass";
 import type { typelib_Uik } from "./uik";
+import {
+  typelib_typedescriptionreference_getDescription,
+  typelib_typedescription_release,
+} from "../../source/typelib/typelib";
 export {
   typelib_typedescriptionreference_equals,
   typelib_typedescription_registerCallback,
@@ -12,7 +16,12 @@ export {
   typelib_typedescriptionreference_new,
   typelib_typedescriptionreference_acquire,
   typelib_typedescriptionreference_release,
+  typelib_typedescription_new,
+  typelib_typedescription_newStruct,
+  typelib_typedescription_newEnum,
+  typelib_typedescriptionreference_getDescription,
 } from "../../source/typelib/typelib";
+export { typelib_typedescription_getByName } from "../../source/typelib/typelib-lookup";
 
 /** Complete original common type-reference record; declaration adds no allocation or guessed initialization. */
 export interface _typelib_TypeDescriptionReference {
@@ -279,4 +288,22 @@ export function TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(
     eTypeClass === typelib_TypeClass.INTERFACE_METHOD ||
     eTypeClass === typelib_TypeClass.INTERFACE_ATTRIBUTE
   );
+}
+
+/** Original danger-get acquisition distinction, including empty nonweak references. @param result - Original output slot. @param ref - Borrowed type reference. @returns Nothing. */
+export function TYPELIB_DANGER_GET(
+  result: [typelib_TypeDescription | null],
+  ref: typelib_TypeDescriptionReference,
+): void {
+  if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(ref.eTypeClass)) {
+    typelib_typedescriptionreference_getDescription(result, ref);
+  } else if (ref.pType === null || ref.pType.pWeakRef === null) {
+    typelib_typedescriptionreference_getDescription(result, ref);
+    if (result[0] !== null) typelib_typedescription_release(result[0]);
+  } else result[0] = ref.pType;
+}
+/** Original danger-release only relinquishes a genuinely weak description. @param desc - Original description. @returns Nothing. */
+export function TYPELIB_DANGER_RELEASE(desc: typelib_TypeDescription): void {
+  if (TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(desc.eTypeClass))
+    typelib_typedescription_release(desc);
 }

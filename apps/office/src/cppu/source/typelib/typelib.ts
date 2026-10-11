@@ -10,6 +10,8 @@ import type {
   typelib_InterfaceMethodTypeDescription,
   typelib_InterfaceAttributeTypeDescription,
   typelib_typedescription_Callback,
+  typelib_CompoundMember_Init,
+  typelib_StructMember_Init,
 } from "../../inc/typelib/typedescription";
 import { rtl_ustr_compare } from "../../../sal/inc/rtl/ustring.h";
 
@@ -31,11 +33,22 @@ export function typelib_typedescriptionreference_equals(
   );
 }
 
-import { TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK } from "../../inc/typelib/typedescription";
+import {
+  TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK,
+  TYPELIB_DANGER_GET,
+  TYPELIB_DANGER_RELEASE,
+} from "../../inc/typelib/typedescription";
 import { typelib_TypeClass } from "../../inc/typelib/typeclass";
 import { osl_atomic_increment, osl_atomic_decrement } from "../../../sal/inc/osl/interlck";
 import { rtl_uString_acquire, rtl_uString_release } from "../../../sal/inc/rtl/ustring.h";
 import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import {
+  adjustAlignment,
+  newAlignedSize,
+  typelib_typedescription_getAlignedUnoSize,
+  typelib_typedescription_getByName,
+} from "./typelib-lookup";
 
 const counts = new WeakMap<object, Int32Array>();
 const referenceViews = new WeakMap<typelib_TypeDescription, typelib_TypeDescriptionReference>();
@@ -122,7 +135,7 @@ class TypeDescriptor_Init_Impl {
 let singleton: TypeDescriptor_Init_Impl | null = null;
 const nCacheSize = 256;
 /** Original lazy singleton; no native object graph crosses browser realms. @returns Live original registry state. */
-function Init(): TypeDescriptor_Init_Impl {
+export function Init(): TypeDescriptor_Init_Impl {
   if (singleton === null) singleton = new TypeDescriptor_Init_Impl();
   return singleton;
 }
@@ -261,6 +274,155 @@ export function typelib_typedescription_newEmpty(
     ppRet[0] = null;
   }
   ppRet[0] = allocTypeDescription(eTypeClass, pTypeName);
+}
+
+/** Original compound/struct/sequence factory body; sizes are logical LP64 UNO offsets, not JS object addresses. @param ppRet - Inout description slot. @param eTypeClass - Original class. @param pTypeName - Owned original name. @param pType - Borrowed base/element reference. @param nMembers - Original member count. @param pCompoundMembers - Original plain member initializers. @param pStructMembers - Original struct member initializers. @returns Nothing. */
+function newTypeDescription(
+  ppRet: [typelib_TypeDescription | null],
+  eTypeClass: typelib_TypeClass,
+  pTypeName: rtl_uString,
+  pType: typelib_TypeDescriptionReference | null,
+  nMembers: number,
+  pCompoundMembers: typelib_CompoundMember_Init[] | null,
+  pStructMembers: typelib_StructMember_Init[] | null,
+): void {
+  if (eTypeClass === typelib_TypeClass.TYPEDEF) {
+    typelib_typedescriptionreference_getDescription(
+      ppRet,
+      pType as typelib_TypeDescriptionReference,
+    );
+    return;
+  }
+  typelib_typedescription_newEmpty(ppRet, eTypeClass, pTypeName);
+  const desc = ppRet[0] as typelib_TypeDescription;
+  switch (eTypeClass) {
+    case typelib_TypeClass.SEQUENCE:
+      typelib_typedescriptionreference_acquire(pType as typelib_TypeDescriptionReference);
+      record<typelib_IndirectTypeDescription>(desc).pType = pType;
+      break;
+    case typelib_TypeClass.EXCEPTION:
+    case typelib_TypeClass.STRUCT: {
+      const compound = record<typelib_CompoundTypeDescription>(desc);
+      let offset = 0;
+      if (pType !== null) {
+        const base: [typelib_TypeDescription | null] = [null];
+        typelib_typedescriptionreference_getDescription(base, pType);
+        compound.pBaseTypeDescription = record<typelib_CompoundTypeDescription>(
+          base[0] as typelib_TypeDescription,
+        );
+        offset = compound.pBaseTypeDescription.aBase.nSize;
+      }
+      if (nMembers !== 0) {
+        compound.nMembers = nMembers;
+        compound.pMemberOffsets = new Int32Array(nMembers);
+        compound.ppTypeRefs = new Array(nMembers);
+        compound.ppMemberNames = new Array(nMembers);
+        const polymorphic =
+          eTypeClass === typelib_TypeClass.STRUCT &&
+          OUString.unacquired([pTypeName]).indexOf(60) >= 0;
+        assert(
+          !polymorphic || pStructMembers !== null,
+          "!polymorphic || pStructMembers != nullptr",
+        );
+        const struct = record<typelib_StructTypeDescription>(desc);
+        if (polymorphic) struct.pParameterizedTypes = new Array(nMembers);
+        for (let i = 0; i < nMembers; i++) {
+          const member =
+            pCompoundMembers !== null
+              ? (pCompoundMembers[i] as typelib_CompoundMember_Init)
+              : ((pStructMembers as typelib_StructMember_Init[])[i] as typelib_StructMember_Init)
+                  .aBase;
+          const ref: [typelib_TypeDescriptionReference | null] = [null];
+          typelib_typedescriptionreference_new(
+            ref,
+            member.eTypeClass,
+            member.pTypeName as rtl_uString,
+          );
+          compound.ppTypeRefs[i] = ref[0] as typelib_TypeDescriptionReference;
+          compound.ppMemberNames[i] = member.pMemberName;
+          rtl_uString_acquire(member.pMemberName);
+          assert(ref[0] !== null, "pTmp->ppTypeRefs[i]");
+          let size: number, alignment: number;
+          if (ref[0].eTypeClass === typelib_TypeClass.SEQUENCE) {
+            size = 8;
+            alignment = adjustAlignment(size);
+          } else {
+            const memberType: [typelib_TypeDescription | null] = [null];
+            TYPELIB_DANGER_GET(memberType, ref[0]);
+            const value = memberType[0] as typelib_TypeDescription;
+            size = value.nSize;
+            alignment = value.nAlignment;
+            TYPELIB_DANGER_RELEASE(value);
+          }
+          offset = newAlignedSize(offset, size, alignment);
+          compound.pMemberOffsets[i] = offset - size;
+          if (polymorphic)
+            (struct.pParameterizedTypes as boolean[])[i] = (
+              (pStructMembers as typelib_StructMember_Init[])[i] as typelib_StructMember_Init
+            ).bParameterizedType;
+        }
+      }
+      break;
+    }
+    default:
+      break;
+  }
+  if (!TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(eTypeClass))
+    desc.pWeakRef = referenceViews.get(desc) as typelib_TypeDescriptionReference;
+  if (eTypeClass !== typelib_TypeClass.VOID) {
+    const alignment: [number] = [desc.nAlignment];
+    desc.nSize = typelib_typedescription_getAlignedUnoSize(desc, 0, alignment);
+    desc.nAlignment = adjustAlignment(alignment[0]);
+  }
+}
+
+/** Original public plain type factory. @param ppRet - Inout result. @param eTypeClass - Original class. @param pTypeName - Original name. @param pType - Base or element reference. @param nMembers - Member count. @param pMembers - Original initializers. @returns Nothing. */
+export function typelib_typedescription_new(
+  ppRet: [typelib_TypeDescription | null],
+  eTypeClass: typelib_TypeClass,
+  pTypeName: rtl_uString,
+  pType: typelib_TypeDescriptionReference | null,
+  nMembers: number,
+  pMembers: typelib_CompoundMember_Init[] | null,
+): void {
+  newTypeDescription(ppRet, eTypeClass, pTypeName, pType, nMembers, pMembers, null);
+}
+
+/** Original public struct factory, preserving parameterized member flags. @param ppRet - Inout result. @param pTypeName - Original name. @param pType - Base reference. @param nMembers - Member count. @param pMembers - Original struct initializers. @returns Nothing. */
+export function typelib_typedescription_newStruct(
+  ppRet: [typelib_TypeDescription | null],
+  pTypeName: rtl_uString,
+  pType: typelib_TypeDescriptionReference | null,
+  nMembers: number,
+  pMembers: typelib_StructMember_Init[] | null,
+): void {
+  newTypeDescription(ppRet, typelib_TypeClass.STRUCT, pTypeName, pType, nMembers, null, pMembers);
+}
+
+/** Original enum factory acquires names and independently copies every value. @param ppRet - Inout result. @param pTypeName - Original name. @param nDefaultValue - Original default. @param nEnumValues - Original count. @param ppEnumNames - Borrowed names. @param pEnumValues - Borrowed signed32 values. @returns Nothing. */
+export function typelib_typedescription_newEnum(
+  ppRet: [typelib_TypeDescription | null],
+  pTypeName: rtl_uString,
+  nDefaultValue: number,
+  nEnumValues: number,
+  ppEnumNames: rtl_uString[],
+  pEnumValues: Int32Array,
+): void {
+  typelib_typedescription_newEmpty(ppRet, typelib_TypeClass.ENUM, pTypeName);
+  const desc = ppRet[0] as typelib_TypeDescription;
+  const value = record<typelib_EnumTypeDescription>(desc);
+  value.nDefaultEnumValue = nDefaultValue;
+  value.nEnumValues = nEnumValues;
+  value.ppEnumNames = new Array(nEnumValues);
+  for (let i = nEnumValues; i--;) {
+    value.ppEnumNames[i] = ppEnumNames[i] as rtl_uString;
+    rtl_uString_acquire(value.ppEnumNames[i] as rtl_uString);
+  }
+  value.pEnumValues = pEnumValues.slice(0, nEnumValues);
+  desc.pWeakRef = referenceViews.get(desc) as typelib_TypeDescriptionReference;
+  const alignment: [number] = [desc.nAlignment];
+  desc.nSize = typelib_typedescription_getAlignedUnoSize(desc, 0, alignment);
+  desc.nAlignment = adjustAlignment(alignment[0]);
 }
 /** Original description acquire through its actual atomic count. @param desc - Live allocated description. @returns Nothing. */
 export function typelib_typedescription_acquire(desc: typelib_TypeDescription): void {
@@ -685,4 +847,35 @@ export function typelib_typedescription_register(
   if (!desc.bOnDemand) typelib_typedescription_acquire(desc);
   (ref as typelib_TypeDescriptionReference).pType = desc;
   desc.pWeakRef = ref;
+}
+
+/** Original reference-to-description resolution, preserving the common-prefix allocation identity and actual atomic count. @param ppRet - Inout owned description. @param pRef - Borrowed original reference. @returns Nothing. */
+export function typelib_typedescriptionreference_getDescription(
+  ppRet: [typelib_TypeDescription | null],
+  pRef: typelib_TypeDescriptionReference,
+): void {
+  if (ppRet[0] !== null) {
+    typelib_typedescription_release(ppRet[0]);
+    ppRet[0] = null;
+  }
+  if (
+    !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(pRef.eTypeClass) &&
+    pRef.pType !== null &&
+    pRef.pType.pWeakRef !== null
+  ) {
+    const desc = descriptionViews.get(pRef) as typelib_TypeDescription;
+    osl_atomic_increment(counts.get(desc) as Int32Array);
+    ppRet[0] = desc;
+    return;
+  }
+  if (pRef.pType !== null && pRef.pType.pWeakRef !== null) {
+    if (osl_atomic_increment(counts.get(pRef.pType) as Int32Array) > 1) {
+      ppRet[0] = pRef.pType;
+      return;
+    }
+    osl_atomic_decrement(counts.get(pRef.pType) as Int32Array);
+    pRef.pType = null;
+  }
+  typelib_typedescription_getByName(ppRet, pRef.pTypeName);
+  pRef.pType = ppRet[0];
 }

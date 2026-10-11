@@ -14,6 +14,7 @@ import {
   rtl_ustr_lastIndexOfChar_WithLength,
   rtl_ustr_indexOfStr_WithLength,
   rtl_ustr_lastIndexOfStr_WithLength,
+  rtl_ustr_lastIndexOfAscii_WithLength,
   rtl_uString_newFromSubString,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
@@ -61,6 +62,7 @@ export type OUStringConstReference = Readonly<
     | "greaterThanOrEqual"
     | "indexOf"
     | "lastIndexOf"
+    | "lastIndexOfAsciiL"
     | "copy"
     | "subView"
   > & { pData: rtl_uString | null }
@@ -186,6 +188,15 @@ export class OUString {
             value.getStr(),
             value.getLength(),
           );
+  }
+  /** Original explicit known-length ASCII reverse search; C++ literal callers share this C owner. @param value - Original borrowed ASCII bytes. @param length - Explicit original byte count. @returns Last unit offset or -1. */
+  lastIndexOfAsciiL(value: Uint8Array | null, length: number): number {
+    return rtl_ustr_lastIndexOfAscii_WithLength(
+      this.pData.buffer,
+      this.pData.length,
+      value,
+      length,
+    );
   }
   /** Original substring value construction through the real C owner and SAL_NO_ACQUIRE. @param beginIndex - Inclusive offset. @param count - Original count, or remainder for the one-argument overload. @returns Original owned string value. */
   copy(beginIndex: number, count = this.getLength() - beginIndex): OUString {

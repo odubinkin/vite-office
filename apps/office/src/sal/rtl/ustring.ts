@@ -5,6 +5,29 @@ import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import { SAL_STRING_IS_INTERN, SAL_STRING_REFCOUNT, rtl_stringAllocation } from "./strimp.hxx";
 import { rtl_str_hash_intern, rtl_str_hash_remove } from "./hash";
 
+/** Original bounded reverse ASCII search with the source assertion order and signed native char equality. @param data - Borrowed UTF16 storage. @param length - Logical prefix length. @param needle - Original borrowed char bytes. @param needleLength - Original byte count. @returns Last unit offset or -1. */
+export function rtl_ustr_lastIndexOfAscii_WithLength(
+  data: Uint16Array | null,
+  length: number,
+  needle: Uint8Array | null,
+  needleLength: number,
+): number {
+  if (length < 0) throw new Error("assert(len >= 0)");
+  if (needleLength < 0) throw new Error("assert(subLen >= 0)");
+  if (needleLength > 0 && needleLength <= length) {
+    for (let i = length - needleLength; i >= 0; i--)
+      if (
+        rtl_ustr_asciil_reverseEquals_WithLength(
+          (data as Uint16Array).subarray(i),
+          needle,
+          needleLength,
+        )
+      )
+        return i;
+  }
+  return -1;
+}
+
 /** Original bounded character-search C wrapper. @param data - Borrowed units. @param length - Logical length. @param character - Original sal_Unicode. @returns First position or -1. */
 export function rtl_ustr_indexOfChar_WithLength(
   data: Uint16Array | null,

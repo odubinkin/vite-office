@@ -2352,3 +2352,30 @@ Native physical pointer lifetime/const enforcement/ABI, use after release,
 arbitrary malformed JS inputs, invalid-range undefined behavior and full original
 consumer QA remain unverified. Full getByName/type/exception/case-service work is
 still required; full run41 followed by the requested pause remains scheduled.
+
+
+## Original UNO type factories and lookup
+
+Shared CPPU implements the original plain/struct/enum factories, reference
+resolution and full getByName routing in its existing registry. This preserves
+15 lazily registered basic types, sequence/derived member parsing, provider
+callbacks, typedef resolution, and the acquired256-entry cache. Compound base
+and member references, member names, copied enum values/defaults and polymorphic
+flags retain original ownership. Recursive sequence members use the original
+pointer-sized logical slot. Header danger-get/release contracts remain in the
+original header owner. The lookup/size split keeps the source responsibility and
+singleton while honoring the authored1000-line limit.
+
+The browser retains contracts/structures/algorithms/defaults, not physical C++
+object memory. nSize/nAlignment/member offsets describe the separately verified
+logical LP64 UNO model; JS pointers, object byte layouts and vtables are not
+claimed compatible. Exact UTF16 and observable values/counts/identities remain
+covered by complete native streams. Original malformed sequence routing and
+extra derived-base retention are preserved (CALC041/CALC042). The zero-count
+reference guard is an initialized synthetic witness, not a concurrency test.
+
+Full interface factories/completion/static types/Type/Any/Reference and the
+actual default RuntimeException remain pending. Related original typelib and
+recursion QA is source evidence only. Physical native ABI, other platform layouts,
+threading/shutdown, malformed JS storage and full consumer QA remain unverified.
+These dependencies do not yet provide an editable Calc document or UI.

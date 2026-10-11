@@ -21,6 +21,7 @@ export {
   rtl_ustr_lastIndexOfChar_WithLength,
   rtl_ustr_indexOfStr_WithLength,
   rtl_ustr_lastIndexOfStr_WithLength,
+  rtl_ustr_lastIndexOfAscii_WithLength,
   rtl_uString_newFromSubString,
   rtl_ustr_compare,
   rtl_ustr_compare_WithLength,

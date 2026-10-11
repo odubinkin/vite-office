@@ -33,7 +33,7 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
-  ["cppu", new Set(["sal"])],
+  ["cppu", new Set(["sal", "o3tl"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],

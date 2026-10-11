@@ -14,6 +14,8 @@ import {
 
 it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("sal", "cppu")).toBe(true);
   for (const source of [
     "cppu/inc/typelib/typedescription.ts",

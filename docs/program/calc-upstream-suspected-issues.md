@@ -976,8 +976,9 @@ claim an ordinary consumer failure from this witness.
 
 ## CALC-041: Derived-member lookup may retain an additional base description reference
 
-Status: source-review suspicion only; ordinary lookup lifecycle, reachability and
-any actual leak remain unverified. This is not a demonstrated consumer defect.
+Status: the extra base acquisition is reproduced through complete original
+lookup with initialized synthetic members/interfaces. Ordinary producer lifecycle,
+reachability and an actual leak remain unverified; no consumer defect is claimed.
 
 [Original getByName](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1943)
 looks up the base reference, acquires its description through
@@ -993,40 +994,38 @@ description pointer. The method/attribute destructor releases those stored
 owners. For these weak member references, reference release does not itself
 release pType; the apparent extra description acquisition merits review.
 
-Evidence: unchanged complete getByName/getDescription/construction/destruction
-source. The committed native members corpus directly calls the genuine private
-constructor and confirms its borrowed-base and transferred-interface/reference
-counts, but does not execute getByName's extra acquisition or an ordinary
-provider/cache lifecycle. No numeric leak result is assigned from that direct
-constructor witness. Long-lived descriptor retention could be intentional.
+Evidence: the original private-constructor corpus remains independently scoped.
+The full unchanged getByName path is now executed by the derivedrefs mode in
+scripts/uno-lookup-native-probe.mjs: initialized method/attribute descriptions
+and their actual weak references show the additional base-description count
+retained on each successful derived lookup, while failed construction balances
+its acquired base/interface/reference owners. Complete normal/ASan/UBSan output
+and portable replay agree. This confirms the acquisition on these initialized
+synthetic inputs, not an ordinary producer leak or long-term shutdown behavior.
 
-Decision: preserve the original ownership operations. Do not add an extra base
-release, change weak reference semantics or claim a portable lookup fix. Verify
-actual provider, cache and derived-descriptor lifecycles when porting getByName,
-then update this entry with separately scoped native evidence.
+Decision: preserve original operations. No extra base release, changed weak
+reference semantics or lookup repair is added. Full ordinary service/cache/shutdown
+reachability still requires separate consumer evidence.
 
 ## CALC-042: Sequence-name lookup does not check the second prefix character
 
-Status: source-review suspicion only; malformed-name native outcomes and ordinary
-consumer reachability remain unverified. No valid-consumer defect is demonstrated.
+Status: reproduced with an initialized synthetic name through complete unchanged
+native getByName/SAL/CPPU owners; ordinary valid-consumer reachability remains
+unverified. No valid-consumer defect is demonstrated.
 
 [Original getByName](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/cppu/source/typelib/typelib.cxx#L1919)
 enters sequence lookup when the name has more than two UTF16 units and its first
-unit is `[`. It obtains the element name with `name.copy(2)`, without checking
-that the skipped second unit is `]`. It then recursively resolves that element
-and attempts the original sequence factory using the entire original name.
+unit is `[`. It uses name.copy(2) without checking that the second unit is `]`.
+The actual native lookup accepts `[xlong`, preserves that entire original type
+name and creates a sequence whose element reference resolves to long. Normal
+and fully instrumented ASan/UBSan dependency builds produce identical complete
+lookup streams; the portable replay preserves the same routing/counts.
 
-Source-review candidate: `[xlong` selects `long` as the element name despite its
-noncanonical prefix. This is a prediction from the branch and substring code,
-not a recorded native lookup result. The API may assume canonical names from
-trusted producers; whether an ordinary valid consumer can supply this input is
-unknown. The existing native registry corpus does not certify this candidate.
+Evidence: scripts/uno-lookup-native-probe.mjs lookup mode and
+apps/office/src/cppu/source/typelib/native-lookup-cases.json retain the complete
+source hashes, native stream/digest and input, with adjacent original portable
+lookup replay. This extends the initial source-only suspicion; it does not prove
+that ordinary producers violate an assumed canonical-name precondition.
 
-Evidence: the complete unchanged getByName body, including its recursive lookup,
-sequence factory and provider/cache fallbacks. The separate native search/copy/
-subView corpora verify those string primitives, not malformed sequence routing.
-
-Decision: preserve the original first-unit/length predicate and two-unit skip
-when porting the full getter. Do not add a second-bracket validation, normalize
-the type name or assign a post-failure result. Capture separate genuine native
-lookup/provider/lifetime evidence before updating the status.
+The implementation keeps the original predicate and two-unit skip. No prefix
+validation, canonicalization, normalization or upstream repair is added.

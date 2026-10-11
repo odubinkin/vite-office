@@ -9,7 +9,8 @@
     "subsystem": "uno-type",
     "capabilityIds": [
       "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad",
-      "CAP-063eff22-98d2-4525-af39-24f5e60f8b20"
+      "CAP-063eff22-98d2-4525-af39-24f5e60f8b20",
+      "CAP-aa1f8676-fe0a-4360-b258-2b80e620a62f"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,10 @@
       "evidence": [
         "apps/office/src/cppu/inc/typelib/typedescription.ts#TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK",
         "apps/office/src/cppu/source/typelib/typelib.test.ts#matches all complete native initialized reference comparisons without ownership mutations",
-        "include/typelib/typedescription.h#_typelib_TypeDescriptionReference"
+        "include/typelib/typedescription.h#_typelib_TypeDescriptionReference",
+        "apps/office/src/cppu/source/typelib/typelib-lookup.test.ts#matches original sequence routing, malformed names, provider typedefs and full cache eviction"
       ],
-      "justification": "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names. Complete original extended C typedef declarations preserve every actual compound/struct/indirect/enum/method/interface/initializer field and callback signature. Deprecated Uik retains all five original fields. Genuine compiler sizeof/alignof/offsetof/member-size observations and portable declaration checks cover15 full original records; no uninitialized native field is read. Original allocTypeDescription uses new char[sizeof(T)], so no value initialization, guessed constructor/defaults or physical ABI/allocator/prefix-aliasing owner is inferred. The actual public C callback/reference lifecycle/registration exports reuse the shared source owner; internal newEmpty/getByName remain source-only. Complete original factories/completion/static types still remain unfinished.",
+      "justification": "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names. Complete original extended C typedef declarations preserve every actual compound/struct/indirect/enum/method/interface/initializer field and callback signature. Deprecated Uik retains all five original fields. Genuine compiler sizeof/alignof/offsetof/member-size observations and portable declaration checks cover15 full original records; no uninitialized native field is read. Original allocTypeDescription uses new char[sizeof(T)], so no value initialization, guessed constructor/defaults or physical ABI/allocator/prefix-aliasing owner is inferred. The actual public C callback/reference lifecycle/registration exports reuse the shared source owner; internal newEmpty/getByName remain source-only. Complete original factories/completion/static types still remain unfinished. Original CPPU plain/struct/enum factories, getDescription and complete getByName routing reuse the single live registry/common-prefix/atomic/string owners. Preserve lazy15 basic types, original two-unit sequence skip (including noncanonical [xlong), last ASCII :@ separator, bounded original o3tl conversion, derived-member success/failure acquisitions, typedef resolution, and acquired256-entry cache with eviction. Type factories preserve base/element/member/name ownership, original enum copies/defaults, polymorphic flags, recursive sequence layout and logical offsets. Original TYPELIB_DANGER_GET/RELEASE inline contracts remain in their header owner; the lookup implementation split respects the authored size limit. Logical UNO size/alignment values follow the verified selected LP64 model, not the physical layout or addresses of JS objects. Full unchanged SAL/CPPU owners and original generated headers are observed under normal and ASan/UBSan; native streams include complete initialized field/count/identity/default/offset witnesses, all65536 UTF16 units in reverse ASCII search, all256 signed-char bytes, original checked assertions and the explicitly synthetic zero-count reference guard. Native process assertions map to Error without claiming post-failure recovery. Full interface factories/completion/static_types/Type/Any/Reference/default RuntimeException/case service, actual threading/shutdown/physical ABI/JS malformed inputs and complete upstream consumer QA remain unfinished or unverified. Related original QA evidence is not execution of those full suites.",
       "knownViolations": [],
       "localSymbols": [
         "TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK",
@@ -53,7 +55,9 @@
         "typelib_StructTypeDescription",
         "typelib_TypeDescription",
         "typelib_TypeDescriptionReference",
-        "typelib_typedescription_Callback"
+        "typelib_typedescription_Callback",
+        "TYPELIB_DANGER_GET",
+        "TYPELIB_DANGER_RELEASE"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "include/typelib/typedescription.h",
@@ -87,7 +91,9 @@
         "typelib_StructTypeDescription",
         "typelib_TypeDescription",
         "typelib_TypeDescriptionReference",
-        "typelib_typedescription_Callback"
+        "typelib_typedescription_Callback",
+        "TYPELIB_DANGER_GET",
+        "TYPELIB_DANGER_RELEASE"
       ]
     }
   }
