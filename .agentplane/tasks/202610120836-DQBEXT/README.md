@@ -1,10 +1,11 @@
 ---
 id: "202610120836-DQBEXT"
 title: "Connect original owned container reads and Calc text attribute store"
-status: "DOING"
+result_summary: "Preserve original owned container reads and Calc text attribute store with complete native and raw100 scoped evidence"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -47,12 +48,15 @@ quality_review:
     - "Original exact Calc trait declaration and same shared constructor/prototype/static members are bound; no absent pointee provider, substitute model or duplicate container."
     - "Entire source-absent Calc109/27 and related214/34 profiles raw100;28 unchanged shared maps/hashes,14 genuine declaration/reexport ASTs, final build/fresh streams/all13gates and additional metadata binding audits pass."
 commit:
-  hash: "4e6287c2e3f1ec49708eb4db338d147fe044c3d9"
-  message: "🧩 DQBEXT calc: preserve original owned container reads and text attribute store"
+  hash: "8d3cac29c9ece69fead9439d3a9ea0dcfcd2721d"
+  message: "✅ DQBEXT calc: record verified owned container coverage"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved original SoA owned reads and CellTextAttr store specialization over existing shared owners on calc; preserve native evidence and complete scoped coverage."
+  -
+    author: "CODER"
+    body: "Verified: Original owned SoA reference/result reads and Calc text attribute store share existing actual owners; whole native streams1203/505 agree, complete source-absent Calc109 and related shared214 pass raw100, final build and13scoped gates pass with exact EVALUATOR review and updated inventories."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation4e6287c2e3f1 exact EVALUATOR pass; original native1203/505 normal streams, complete source-absent Calc109 and shared214 raw S/B/F/L100, final build/fresh tests/all13scoped gates and final symbol/inventory/format audits pass. Initial failure evidence preserved; no whole-module/document/UI certification, next full71."
+  -
+    type: "status"
+    at: "2026-10-12T09:10:05.117Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original owned SoA reference/result reads and Calc text attribute store share existing actual owners; whole native streams1203/505 agree, complete source-absent Calc109 and related shared214 pass raw100, final build and13scoped gates pass with exact EVALUATOR review and updated inventories."
 doc_version: 3
-doc_updated_at: "2026-10-12T09:09:47.784Z"
+doc_updated_at: "2026-10-12T09:10:05.119Z"
 doc_updated_by: "CODER"
 description: "Iteration67: extend original shared SoA constructors and reference/value reads for actual owned values, preserve native default-plus-assignment and failed-read cleanup, move existing metadata member bodies to their original main_def boundary, and register exact Calc CellTextAttrTraits/CellTextAttrStoreType over existing owners. Validate whole genuine native and source-absent whole Calc/related raw100."
 sections:
@@ -173,6 +184,10 @@ sections:
     - Observation: An additional metadata binding audit rejected the guessed blocks_type operator== marker; the original native declaration is equals.
       Impact: Added symbol provenance could not be accepted; earlier final runtime/coverage gates are unchanged.
       Resolution: Use the exact equals source symbol after reading the original declaration; retain failed binding logs and repeat only affected metadata validators.
+extensions:
+  implementation_commit:
+    hash: "4e6287c2e3f1ec49708eb4db338d147fe044c3d9"
+    message: "🧩 DQBEXT calc: preserve original owned container reads and text attribute store"
 id_source: "generated"
 ---
 ## Summary
