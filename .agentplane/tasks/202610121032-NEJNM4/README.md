@@ -4,7 +4,7 @@ title: "Implement original range-value SoA set and hinted input writes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T10:57:00.920Z"
+  updated_by: "CODER"
+  note: "Complete original range set;112Calc/219related cases raw S/B/F/L100, every counter positive; whole normal-only native23968scalar/1914owned/Calc streams, source-absent final build and3fresh cases,67exact committed hashes,13gates/35tooling pass. Exact cd66bf47 EVALUATOR quality report recorded; suspected CALC064/065 retained; full next71."
   attempts: 0
 quality_review:
   state: "pass"
@@ -68,8 +68,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T10:57:00.920Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original range set;112Calc/219related cases raw S/B/F/L100, every counter positive; whole normal-only native23968scalar/1914owned/Calc streams, source-absent final build and3fresh cases,67exact committed hashes,13gates/35tooling pass. Exact cd66bf47 EVALUATOR quality report recorded; suspected CALC064/065 retained; full next71."
 doc_version: 3
-doc_updated_at: "2026-10-12T10:56:59.189Z"
+doc_updated_at: "2026-10-12T10:57:00.979Z"
 doc_updated_by: "CODER"
 description: "Iteration70: port complete original plain/hinted range set and single/multi-block dispatch through actual shared SoA fields, typed macro iterators, temporary block_slot_type and genuine Calc values. Preserve all native overlap/split/merge/event/lifecycle and input-end/exception ordering, source-map original range definitions, retain previous private corpus and scoped raw100. No substitute cell model, fake pointees or UI readiness claim."
 sections:
@@ -116,6 +122,39 @@ sections:
     Command: ap evaluator run 202610121032-NEJNM4 --verdict pass (same-agent EVALUATOR phase), then ap task verify-show and CODER verify/finish.
     Result: EVALUATOR pass on exact implementation cd66bf47adb14f91110f5a6ec9e1ec59159d9358.
     Evidence: .agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/quality-report.json; exact-review.json binds67committed owner/facade hashes,19intentional non-task paths, native/full scoped profiles and13passing gates. No independent reviewer claim. Metadata-only quality/verification/close commits follow without source edits.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T10:57:00.920Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original range set;112Calc/219related cases raw S/B/F/L100, every counter positive; whole normal-only native23968scalar/1914owned/Calc streams, source-absent final build and3fresh cases,67exact committed hashes,13gates/35tooling pass. Exact cd66bf47 EVALUATOR quality report recorded; suspected CALC064/065 retained; full next71.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T10:56:59.189Z, excerpt_hash=sha256:8b65d159a11d2b662077718476e8f1257705b5c2cead40261fed5ca00fae3ffc
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121032-NEJNM4/blueprint/resolved-snapshot.json
+    - old_digest: a93a83c91e27a621c51011f3d9f7cd77288ae2942373689d9c0116fb5dd1eacc
+    - current_digest: a93a83c91e27a621c51011f3d9f7cd77288ae2942373689d9c0116fb5dd1eacc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121032-NEJNM4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121032-NEJNM4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the intentional implementation commit and scoped registry/tests on calc; keep ignored raw native and validation evidence. No reset of unrelated work or modification of reference originals. User controls merges."
   Findings: |-
     Task70 is9/10 after the last full run61; next full71. Range writes take actual input iterators and preserve native set overload composition. Existing actual shared and Calc value owners are reused. New suspected upstream cases, if confirmed, go to docs/program/calc-upstream-suspected-issues.md without behavior correction.
@@ -222,6 +261,39 @@ Exact implementation-bound EVALUATOR phase and final CODER verify/clean DONE clo
 Command: ap evaluator run 202610121032-NEJNM4 --verdict pass (same-agent EVALUATOR phase), then ap task verify-show and CODER verify/finish.
 Result: EVALUATOR pass on exact implementation cd66bf47adb14f91110f5a6ec9e1ec59159d9358.
 Evidence: .agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/quality-report.json; exact-review.json binds67committed owner/facade hashes,19intentional non-task paths, native/full scoped profiles and13passing gates. No independent reviewer claim. Metadata-only quality/verification/close commits follow without source edits.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T10:57:00.920Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original range set;112Calc/219related cases raw S/B/F/L100, every counter positive; whole normal-only native23968scalar/1914owned/Calc streams, source-absent final build and3fresh cases,67exact committed hashes,13gates/35tooling pass. Exact cd66bf47 EVALUATOR quality report recorded; suspected CALC064/065 retained; full next71.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T10:56:59.189Z, excerpt_hash=sha256:8b65d159a11d2b662077718476e8f1257705b5c2cead40261fed5ca00fae3ffc
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121032-NEJNM4/blueprint/resolved-snapshot.json
+- old_digest: a93a83c91e27a621c51011f3d9f7cd77288ae2942373689d9c0116fb5dd1eacc
+- current_digest: a93a83c91e27a621c51011f3d9f7cd77288ae2942373689d9c0116fb5dd1eacc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121032-NEJNM4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121032-NEJNM4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
