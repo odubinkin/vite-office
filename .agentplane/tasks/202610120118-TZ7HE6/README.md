@@ -4,7 +4,7 @@ title: "Implement original UNO environment descriptor operations"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T01:34:35.777Z"
+  updated_by: "CODER"
+  note: "Complete original EnvDcp.cxx/C/C++ boundaries reviewed at a3d80b28351c:3whole native normal-ASan/UBSan/portable streams, all148commands0, source-absent Calc106/shared176 tests with19/72owners raw S/B/F/L100, exact retained related profile plus descriptor owners, all13gates/35tooling/13format checks pass. CALC-061 preserved; registry broad flags false and evaluated SHA matches."
   attempts: 0
 quality_review:
   state: "pass"
@@ -72,8 +72,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: Complete original EnvDcp source/header wrappers and whole native/portable ownership proof committed; shared owners reused, CALC-061 preserved, scoped raw100 and all13gates pass."
+  -
+    type: "verify"
+    at: "2026-10-12T01:34:35.777Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original EnvDcp.cxx/C/C++ boundaries reviewed at a3d80b28351c:3whole native normal-ASan/UBSan/portable streams, all148commands0, source-absent Calc106/shared176 tests with19/72owners raw S/B/F/L100, exact retained related profile plus descriptor owners, all13gates/35tooling/13format checks pass. CALC-061 preserved; registry broad flags false and evaluated SHA matches."
 doc_version: 3
-doc_updated_at: "2026-10-12T01:33:56.482Z"
+doc_updated_at: "2026-10-12T01:34:35.837Z"
 doc_updated_by: "CODER"
 description: "Task57: port complete EnvDcp.cxx, include/uno/EnvDcp.h declarations and include/cppu/EnvDcp.hxx wrappers using actual shared SAL/OUString owners. Required by EnvStack/lbmap for generic exception path. Whole native normal/sanitized streams and unchanged task56 related shared profile plus actual new owners/tests raw100, matching registry and suspicion journal if source evidence confirms. No environment/mapping provider or standalone string implementation. Last full51,next61."
 sections:
@@ -101,6 +107,39 @@ sections:
     Result: pass.
     Evidence: all13rows0, TS7 tools/app, authored lint/docs,size,boundaries,source provenance/tree,shared+Calc inventory,35related tooling tests/4files,routing,doctor,diff. All format paths checked. Doctor2inherited warnings/noerror. Initial reexport runtime-symbol metadata failure and all failed gate logs/manifest retained under gates-first; corrected to existing header convention with no parser/tooling or production behavior changes.
     Scope:3actual source owners and matching6registry records plus1limited capability; broad parity flags false. Original StringLiterals::checkEmbeddedNul is contextual shared string QA, not a direct descriptor QA port. Generic exception/environment/mapping, weak objects/services and Calc document/edit/view/UI remain subsequent. Actual implementation commit and independent evaluated_sha binding precede clean closure. Last full51,next61; goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T01:34:35.777Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original EnvDcp.cxx/C/C++ boundaries reviewed at a3d80b28351c:3whole native normal-ASan/UBSan/portable streams, all148commands0, source-absent Calc106/shared176 tests with19/72owners raw S/B/F/L100, exact retained related profile plus descriptor owners, all13gates/35tooling/13format checks pass. CALC-061 preserved; registry broad flags false and evaluated SHA matches.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T01:33:56.482Z, excerpt_hash=sha256:d41819451c3bb2bd8ad2d41a5b693ea43cefe4a81f8a8536ded75694485bed1c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120118-TZ7HE6/blueprint/resolved-snapshot.json
+    - old_digest: d793465e91300feed32a6611b1d57cc0684f4df073169ba95b542c005bb22bf3
+    - current_digest: d793465e91300feed32a6611b1d57cc0684f4df073169ba95b542c005bb22bf3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120118-TZ7HE6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120118-TZ7HE6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore all3source symlink targets in finally. Revert only intentional task57 source/native/registry/docs if necessary; retain failed evidence and unrelated tasks."
   Findings: |-
     Previous turn is progress: task56 complete at57cedf9d9663, original binary interface holder and complete streams/whole scoped raw100. Actual EnvStack and mapping runtime require EnvDcp.getTypeName/getPurpose. Original type-name no-colon branch uses terminated input, while colon branch uses explicit length; any branch-dependent NUL behavior must be tested and preserved rather than normalized through native JS split.
@@ -159,6 +198,39 @@ Command:13actual scoped gate commands in gates-inputs.json/gates-final-manifest.
 Result: pass.
 Evidence: all13rows0, TS7 tools/app, authored lint/docs,size,boundaries,source provenance/tree,shared+Calc inventory,35related tooling tests/4files,routing,doctor,diff. All format paths checked. Doctor2inherited warnings/noerror. Initial reexport runtime-symbol metadata failure and all failed gate logs/manifest retained under gates-first; corrected to existing header convention with no parser/tooling or production behavior changes.
 Scope:3actual source owners and matching6registry records plus1limited capability; broad parity flags false. Original StringLiterals::checkEmbeddedNul is contextual shared string QA, not a direct descriptor QA port. Generic exception/environment/mapping, weak objects/services and Calc document/edit/view/UI remain subsequent. Actual implementation commit and independent evaluated_sha binding precede clean closure. Last full51,next61; goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T01:34:35.777Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original EnvDcp.cxx/C/C++ boundaries reviewed at a3d80b28351c:3whole native normal-ASan/UBSan/portable streams, all148commands0, source-absent Calc106/shared176 tests with19/72owners raw S/B/F/L100, exact retained related profile plus descriptor owners, all13gates/35tooling/13format checks pass. CALC-061 preserved; registry broad flags false and evaluated SHA matches.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T01:33:56.482Z, excerpt_hash=sha256:d41819451c3bb2bd8ad2d41a5b693ea43cefe4a81f8a8536ded75694485bed1c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120118-TZ7HE6/blueprint/resolved-snapshot.json
+- old_digest: d793465e91300feed32a6611b1d57cc0684f4df073169ba95b542c005bb22bf3
+- current_digest: d793465e91300feed32a6611b1d57cc0684f4df073169ba95b542c005bb22bf3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120118-TZ7HE6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120118-TZ7HE6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
