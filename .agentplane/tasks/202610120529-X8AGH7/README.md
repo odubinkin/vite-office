@@ -4,7 +4,7 @@ title: "Implement original object value ownership in shared vector storage"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T06:02:30.474Z"
+  updated_by: "CODER"
+  note: "Implementation6513ab428571 verified: complete8020byte native streams; portable Calc106/24 and shared341/66 raw S/B/F/L100 across19+94owners; exact prior argv/unchanged maps and final source hashes audited; all13gates,35tooling tests and formatting pass. EVALUATOR pass at exact implementation SHA, inventory recorded, three source links restored. Full61 done, next full71."
   attempts: 0
 quality_review:
   state: "pass"
@@ -68,8 +68,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T06:02:30.474Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implementation6513ab428571 verified: complete8020byte native streams; portable Calc106/24 and shared341/66 raw S/B/F/L100 across19+94owners; exact prior argv/unchanged maps and final source hashes audited; all13gates,35tooling tests and formatting pass. EVALUATOR pass at exact implementation SHA, inventory recorded, three source links restored. Full61 done, next full71."
 doc_version: 3
-doc_updated_at: "2026-10-12T06:00:45.195Z"
+doc_updated_at: "2026-10-12T06:03:31.191Z"
 doc_updated_by: "CODER"
 description: "Task64 UI storage prerequisite: complete initialized value-ownership semantics for existing shared vector_storage/std_vector operations, reused scalar/borrowed-pointer paths, original C++ template operator witnesses, native whole-header caller traces normal/ASan/UBSan, source-absent Calc and exact full task63 related profile at raw100, inventory and scoped gates. Delayed-vector/default custom value integration remains the next owner boundary; no object class duplication, generic provider or narrowed replacement storage engine. Full71 next."
 sections:
@@ -95,6 +101,39 @@ sections:
     Result: pass.
     Evidence: format-final.log.
     Scope: intentional task64 files only. Writer implementation, browser counts, configs, coverage exclusions and thresholds unchanged. Full61 already completed; next whole replay71.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T06:02:30.474Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implementation6513ab428571 verified: complete8020byte native streams; portable Calc106/24 and shared341/66 raw S/B/F/L100 across19+94owners; exact prior argv/unchanged maps and final source hashes audited; all13gates,35tooling tests and formatting pass. EVALUATOR pass at exact implementation SHA, inventory recorded, three source links restored. Full61 done, next full71.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T06:00:45.195Z, excerpt_hash=sha256:422095605a5c28e1c960fce604d8e0d59da154e913afc988f1e2ca9f03c79d86
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120529-X8AGH7/blueprint/resolved-snapshot.json
+    - old_digest: 1ae611a6fd0168de79fd3b4983aabd17c2e42b70e5ffaaa6173eb46ba9b142c1
+    - current_digest: 1ae611a6fd0168de79fd3b4983aabd17c2e42b70e5ffaaa6173eb46ba9b142c1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120529-X8AGH7
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120529-X8AGH7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task64 source/native fixture/inventory/docs on calc; retain verification evidence and restore source symlinks. Do not merge or change unrelated active tasks."
   Findings: |-
     Preflight clean calc; only two unrelated active Writer tasks. Actual SharedString copy/move/assign/destructor already implemented and will be reused. Current vector storage is scalar/borrowed-pointer only, so direct object references cannot model owned value copies/releases. CellTextAttr has no equality operator; preserve optional native equality witness and do not require it merely to construct a vector. Prior task63 route boilerplate result produced a too-generic close subject; retain meaningful substantive finish result and body for closure.
@@ -130,6 +169,10 @@ sections:
     - Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
       Impact: Required acceptance check not passing; no broad pass claim.
       Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Closeout route emits generic verified-ID result. Previous task63 enforcement rejected the resulting generic close subject; the gateway documents canonical finish with a concrete result.
+      Impact: Repeating the known invalid placeholder would mark DONE before a failed close commit.
+      Resolution: Use the documented canonical finish command with a substantive vector-ownership result and explicit implementation/evidence SHAs; retain all quality and verification gates.
 id_source: "generated"
 ---
 ## Summary
@@ -167,6 +210,39 @@ Command: npx prettier --check apps/office/src/external/mdds/include/mdds/multi_t
 Result: pass.
 Evidence: format-final.log.
 Scope: intentional task64 files only. Writer implementation, browser counts, configs, coverage exclusions and thresholds unchanged. Full61 already completed; next whole replay71.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T06:02:30.474Z — VERIFY — ok
+
+By: CODER
+
+Note: Implementation6513ab428571 verified: complete8020byte native streams; portable Calc106/24 and shared341/66 raw S/B/F/L100 across19+94owners; exact prior argv/unchanged maps and final source hashes audited; all13gates,35tooling tests and formatting pass. EVALUATOR pass at exact implementation SHA, inventory recorded, three source links restored. Full61 done, next full71.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T06:00:45.195Z, excerpt_hash=sha256:422095605a5c28e1c960fce604d8e0d59da154e913afc988f1e2ca9f03c79d86
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120529-X8AGH7/blueprint/resolved-snapshot.json
+- old_digest: 1ae611a6fd0168de79fd3b4983aabd17c2e42b70e5ffaaa6173eb46ba9b142c1
+- current_digest: 1ae611a6fd0168de79fd3b4983aabd17c2e42b70e5ffaaa6173eb46ba9b142c1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120529-X8AGH7
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120529-X8AGH7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -207,3 +283,7 @@ Preflight clean calc; only two unrelated active Writer tasks. Actual SharedStrin
 - Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
   Impact: Required acceptance check not passing; no broad pass claim.
   Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Closeout route emits generic verified-ID result. Previous task63 enforcement rejected the resulting generic close subject; the gateway documents canonical finish with a concrete result.
+  Impact: Repeating the known invalid placeholder would mark DONE before a failed close commit.
+  Resolution: Use the documented canonical finish command with a substantive vector-ownership result and explicit implementation/evidence SHAs; retain all quality and verification gates.
