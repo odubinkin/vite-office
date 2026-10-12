@@ -1,10 +1,11 @@
 ---
 id: "202610120914-RXJMXP"
 title: "Connect original owned append forwarding and positional value reads"
-status: "DOING"
+result_summary: "Preserve original owned append categories and independent positional values through shared owners"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -47,12 +48,15 @@ quality_review:
     - "Exact committed hashes match complete Calc110 and related215 source-absent profiles; raw S/B/F/L100, all counters positive, final build and all13gates pass."
     - "Final native --check passes whole owned1380/Calc575 byte streams in the normal build; earlier failures remain documented and resolved."
 commit:
-  hash: "9231f05ecb79aa51764ba61741f29b09df4e32e2"
-  message: "🧩 RXJMXP calc: preserve owned append forwarding and positional copies"
+  hash: "c4c49743adf0da3d08322a95dfdc63f4760557a2"
+  message: "✅ RXJMXP calc: record verified append and copy coverage"
 comments:
   -
     author: "CODER"
     body: "Start: Connect approved original owned append forwarding and positional value copies over the shared SoA/default-block pipeline on calc; preserve source evidence and whole scoped raw100."
+  -
+    author: "CODER"
+    body: "Verified: original owned append forwarding and positional copies preserve actual shared storage, macro dispatch, lifecycle, metadata and event order; whole Calc110 and related215 cases pass source-absent with raw100 coverage, final native streams match, build and all13gates pass. Exact implementation reviewed and all source links restored."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implementation9231f05e passes complete Calc110 and related shared215 cases source-absent with raw S/B/F/L100; final whole native streams1380/575 match, build and all13gates pass, source links restored and exact-SHA EVALUATOR pass. Full suite due71; document and UI remain future scope."
+  -
+    type: "status"
+    at: "2026-10-12T09:59:42.094Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original owned append forwarding and positional copies preserve actual shared storage, macro dispatch, lifecycle, metadata and event order; whole Calc110 and related215 cases pass source-absent with raw100 coverage, final native streams match, build and all13gates pass. Exact implementation reviewed and all source links restored."
 doc_version: 3
-doc_updated_at: "2026-10-12T09:59:18.603Z"
+doc_updated_at: "2026-10-12T09:59:42.095Z"
 doc_updated_by: "CODER"
 description: "Iteration68: connect actual owned lvalue/rvalue append to the existing original SoA pipeline, expose native ValueT alias members on concrete default blocks and preserve positional by-value copies for Calc strings/text attributes. Move remaining metadata arithmetic/reserve bodies to original main_def boundary to respect file budgets. Use whole unchanged native owners and complete source-absent scoped raw100 verification; no synthetic CellStoreType or UI readiness claim."
 sections:
@@ -190,6 +201,10 @@ sections:
     - Observation: After optional undefined was corrected, final build still reported unknown results from inherited generic at access. The native static member is templated on Blk and returns Blk::value_type, rather than independently inferring ValueT from generic at.
       Impact: Static object getter type contract was incomplete despite correct runtime/native streams; client result casts would conceal this mismatch.
       Resolution: Bind static get to the original block template parameter and explicit BlockValueType alias derived from actual native ValueT members. Keep scalar access witnesses via their at return, one implementation-only erased-alias assertion, and no client casts. Complete TypeScript check passes; repeat final entire shared raw profile and source-absent build/fresh cases because source maps moved.
+extensions:
+  implementation_commit:
+    hash: "9231f05ecb79aa51764ba61741f29b09df4e32e2"
+    message: "🧩 RXJMXP calc: preserve owned append forwarding and positional copies"
 id_source: "generated"
 ---
 ## Summary
