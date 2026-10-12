@@ -14,6 +14,7 @@ const moduleNames = [
   "cui",
   "editeng",
   "external",
+  "formula",
   "framework",
   "i18nutil",
   "o3tl",
@@ -40,6 +41,8 @@ const allowedEdges = new Map([
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
+  // The original formula error header uses native JS numeric primitives and has no runtime module import.
+  ["formula", new Set()],
   ["framework", new Set(["sfx2", "svl"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
@@ -130,6 +133,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("cppuhelper/inc/") || portablePath.startsWith("cppuhelper/source/"))

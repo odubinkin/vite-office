@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/formula/inc/errorcodes.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formula-errors",
+    "capabilityIds": [
+      "CAP-e60d991e-1a99-4ce8-8f42-8d2c53b83f60"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/formula/inc/errorcodes.ts#FormulaError",
+        "apps/office/src/formula/inc/errorcodes.ts#CreateDoubleError",
+        "apps/office/src/formula/inc/errorcodes.ts#GetDoubleErrorValue",
+        "apps/office/src/formula/inc/errorcodes.ts#isPublishedFormulaError",
+        "apps/office/src/formula/inc/errorcodes.test.ts#retains every original enum name and UInt16 value",
+        "apps/office/src/formula/inc/errorcodes.test.ts#matches original encoded and published errors for the entire UInt16 domain",
+        "apps/office/src/formula/inc/errorcodes.test.ts#matches the full original finite infinite and NaN bit classification stream",
+        "apps/office/src/formula/inc/errorcodes.test.ts#preserves encoded errors through scalar object and Float64 result storage",
+        "vendor/libreoffice-reference/include/formula/errorcodes.hxx#enum class FormulaError",
+        "vendor/libreoffice-reference/include/formula/errorcodes.hxx#CreateDoubleError",
+        "vendor/libreoffice-reference/include/formula/errorcodes.hxx#GetDoubleErrorValue",
+        "vendor/libreoffice-reference/include/formula/errorcodes.hxx#isPublishedFormulaError"
+      ],
+      "justification": "Task72 supplies the complete original shared include/formula/errorcodes.hxx enum and all three helper functions required by ScFormulaResult and ScFormulaCell. Original explicit published/internal cases, finite/infinite/NaN precedence and UInt16 code payload are preserved through Number.isFinite and DataView, without a second SAL union library or synthetic formula token/cell. Normal-only caller compiles the whole unchanged pinned header, verifies all seven original header dependencies and one reused configuration, and captures every65536 UInt16 error creation/decoding/publication plus300finite/infinite/quiet/signaling NaN bit witnesses. Compiler-reported SDK metadata is recorded without reading outside-repository files or claiming its bytes are pinned. Portable complete raw100 and actual Chromium production-module scalar/object/Float64 storage witnesses are required. No claim is made for other browser engines, payload preservation through arithmetic/JSON/cross-process transport, arbitrary native ABI, full formula module/upstream QA or complete Calc document/UI. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full71; next full81.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FormulaError",
+        "CreateDoubleError",
+        "GetDoubleErrorValue",
+        "isPublishedFormulaError"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/formula/errorcodes.hxx",
+      "upstreamSymbols": [
+        "enum class FormulaError",
+        "CreateDoubleError",
+        "GetDoubleErrorValue",
+        "isPublishedFormulaError"
+      ]
+    }
+  }
+}
