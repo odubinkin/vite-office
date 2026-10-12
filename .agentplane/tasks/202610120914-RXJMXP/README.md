@@ -4,7 +4,7 @@ title: "Connect original owned append forwarding and positional value reads"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -24,7 +24,31 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T09:58:52.099Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation 9231f05ecb79aa51764ba61741f29b09df4e32e2 satisfies the approved owned append and positional-copy scope."
+  evaluated_sha: "9231f05ecb79aa51764ba61741f29b09df4e32e2"
+  blueprint_digest: "7e2c7ca63605028d5a42b74f17edce1278541d15fa3585652a4ebcd904b6481f"
+  evidence_refs:
+    - ".agentplane/tasks/202610120914-RXJMXP/README.md"
+    - ".agentplane/tasks/202610120914-RXJMXP/quality/20261012-095852099-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120914-RXJMXP/quality/20261012-095852099-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120914-RXJMXP/quality/20261012-095852099-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120914-RXJMXP/blueprint/resolved-snapshot.json"
+    - "output/playwright/task68-checks/exact-review.json"
+    - "output/playwright/task68-checks/value-coverage-audit.json"
+    - "output/playwright/task68-checks/source-argument-map-audit.json"
+    - "output/playwright/task68-checks/gates-final-manifest.json"
+    - "output/playwright/task68-checks/final-local-manifest.json"
+  findings:
+    - "Original forwarding, copy-return behavior and event/metadata order use the existing shared owners; no parallel Calc model."
+    - "Exact committed hashes match complete Calc110 and related215 source-absent profiles; raw S/B/F/L100, all counters positive, final build and all13gates pass."
+    - "Final native --check passes whole owned1380/Calc575 byte streams in the normal build; earlier failures remain documented and resolved."
+commit:
+  hash: "9231f05ecb79aa51764ba61741f29b09df4e32e2"
+  message: "🧩 RXJMXP calc: preserve owned append forwarding and positional copies"
 comments:
   -
     author: "CODER"
@@ -37,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Connect approved original owned append forwarding and positional value copies over the shared SoA/default-block pipeline on calc; preserve source evidence and whole scoped raw100."
+  -
+    type: "status"
+    at: "2026-10-12T09:57:45.003Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-12T09:53:41.102Z"
+doc_updated_at: "2026-10-12T09:58:53.741Z"
 doc_updated_by: "CODER"
 description: "Iteration68: connect actual owned lvalue/rvalue append to the existing original SoA pipeline, expose native ValueT alias members on concrete default blocks and preserve positional by-value copies for Calc strings/text attributes. Move remaining metadata arithmetic/reserve bodies to original main_def boundary to respect file budgets. Use whole unchanged native owners and complete source-absent scoped raw100 verification; no synthetic CellStoreType or UI readiness claim."
 sections:
@@ -78,6 +108,12 @@ sections:
     Result: all13final exitCodes0; complete final typecheck/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventories/35tooling cases/routing/doctor/diff pass. Evidence: gates-final-manifest.json, gates-last-summary.log, gate-*.log and format-last.log. All original failed coverage/type/build/inventory logs and structured Findings retained. Internal native forwarding template category is mandatory in its internal body; public lvalue defaults preserved. Static block get now returns native Blk::value_type, with one implementation-only erased alias assertion and no client casts. Scalar/pointer/bool semantics unchanged, no separate engine.
 
     Full suite: not due, last61 and next71. No Writer-only coverage fixes, policy/exclusion/threshold changes, merge/publication or whole kernel/document/UI certification. Full container mutators/pointee ADL/forwarding/arbitrary allocator/throwing/undefined/physical ABI/debug/upstream QA and actual formula/edittext/pointee/ScColumn/Table/Document/edit/undo/input/view/UI remain subsequent. Broad goal stays active. Exact source/EVALUATOR/ap verification/closure references follow.
+
+    Command: node scripts/mdds-container-append-native-probe.mjs --check (final1380/575 fixture)
+    Result: pass, exit0; exact final streams match.
+
+    Implementation commit: 9231f05ecb79aa51764ba61741f29b09df4e32e2.
+    Exact same-agent EVALUATOR phase: pass; output/playwright/task68-checks/exact-review.json and .agentplane/tasks/202610120914-RXJMXP/quality-report.json. All51committed executable hashes match the final complete source profile. No independent subagent review claim.
   Rollback Plan: "Revert only task68 code/fixture/inventory commits; re-run whole Calc and related shared source-absent checks. Preserve unchanged prior67 native/coverage evidence and assertions."
   Findings: |-
     - Observation: First complete source-absent profile: Calc110 cases pass raw100; shared215 cases pass, but one raw branch is zero: default forwarding category on internal create_new_block_with_new_cell at main_def.ts822. Complete first maps/logs retained.
@@ -163,6 +199,12 @@ Command: python3 output/playwright/task68-checks/gates.py and intentional-file p
 Result: all13final exitCodes0; complete final typecheck/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventories/35tooling cases/routing/doctor/diff pass. Evidence: gates-final-manifest.json, gates-last-summary.log, gate-*.log and format-last.log. All original failed coverage/type/build/inventory logs and structured Findings retained. Internal native forwarding template category is mandatory in its internal body; public lvalue defaults preserved. Static block get now returns native Blk::value_type, with one implementation-only erased alias assertion and no client casts. Scalar/pointer/bool semantics unchanged, no separate engine.
 
 Full suite: not due, last61 and next71. No Writer-only coverage fixes, policy/exclusion/threshold changes, merge/publication or whole kernel/document/UI certification. Full container mutators/pointee ADL/forwarding/arbitrary allocator/throwing/undefined/physical ABI/debug/upstream QA and actual formula/edittext/pointee/ScColumn/Table/Document/edit/undo/input/view/UI remain subsequent. Broad goal stays active. Exact source/EVALUATOR/ap verification/closure references follow.
+
+Command: node scripts/mdds-container-append-native-probe.mjs --check (final1380/575 fixture)
+Result: pass, exit0; exact final streams match.
+
+Implementation commit: 9231f05ecb79aa51764ba61741f29b09df4e32e2.
+Exact same-agent EVALUATOR phase: pass; output/playwright/task68-checks/exact-review.json and .agentplane/tasks/202610120914-RXJMXP/quality-report.json. All51committed executable hashes match the final complete source profile. No independent subagent review claim.
 
 ## Rollback Plan
 
