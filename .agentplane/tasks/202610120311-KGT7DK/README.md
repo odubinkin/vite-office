@@ -4,7 +4,7 @@ title: "Run scheduled full Calc repository validation after task60"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T03:32:41.743Z"
+  updated_by: "CODER"
+  note: "Full61 all5suites/all13gates pass; app15491/710,inventory123/38,tooling34/9,browser308(306Writer/2shared/0Calc),static smoke. Full438owners raw100; exact task60 related Calc106/shared188 raw100 and argv/maps preserved; all3links restored, runtime/config trees unchanged, EVALUATOR exactSHA2d66f7d97eb90712da902b3f708d1282074e8dc4."
   attempts: 0
 quality_review:
   state: "pass"
@@ -66,8 +66,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T03:32:41.743Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full61 all5suites/all13gates pass; app15491/710,inventory123/38,tooling34/9,browser308(306Writer/2shared/0Calc),static smoke. Full438owners raw100; exact task60 related Calc106/shared188 raw100 and argv/maps preserved; all3links restored, runtime/config trees unchanged, EVALUATOR exactSHA2d66f7d97eb90712da902b3f708d1282074e8dc4."
 doc_version: 3
-doc_updated_at: "2026-10-12T03:32:15.885Z"
+doc_updated_at: "2026-10-12T03:32:41.802Z"
 doc_updated_by: "CODER"
 description: "Scheduled full61 after ten atomic tasks since full51. Complete application/inventory/tooling/browser/static suites and aggregate gates, ownership/raw coverage/source-absent evidence and exact link restoration. Repair only demonstrated Calc/shared failures without lowering checks; retain Writer-only coverage gaps as directed. Complete implementation-bound review and clean close in calc, no merge/branch/publication."
 sections:
@@ -85,6 +91,39 @@ sections:
     Command: node output/playwright/task61-checks/portable.mjs. Result: pass. Evidence: value-calc/shared manifests/logs, value-coverage-audit.json/final-audit.json. Calc106/24, full related shared188/53;19+76 executable owners all raw100. Shared4705/2290/630/4260; exact complete task60 related argv/exclusions/global configuration and every prior source map preserved. All3source links absent/restored again. No weakened thresholds, source extraction or substitute provider. Native owners already verified task60 and unchanged; no unnecessary native rebuild. Actual tracked apps/office/src/scripts/package/lock/test/browser configuration tree/object IDs equal task60 implementation ea402d8861ada771c9efc21d123e6a0335adaac0.
 
     Scope: scheduled full61, complete test/coverage/browser/static/gate evidence and one ignored-artifact lint repair; no new kernel functionality, Writer-only fixes, branches, merges or publication. Full kernel/consumer/UI parity is not certified. ObjectEntry remains scoped as in task60; full environment/mapping/exception machinery, weak objects/services/CharClass/actual SharedStringPool/cell storage/ScColumn/Table/Document/edit/input/view/UI prerequisites remain. Full goal stays active; next scheduled full follows ten further tasks. Evidence-bound EVALUATOR and clean close follow this record.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T03:32:41.743Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full61 all5suites/all13gates pass; app15491/710,inventory123/38,tooling34/9,browser308(306Writer/2shared/0Calc),static smoke. Full438owners raw100; exact task60 related Calc106/shared188 raw100 and argv/maps preserved; all3links restored, runtime/config trees unchanged, EVALUATOR exactSHA2d66f7d97eb90712da902b3f708d1282074e8dc4.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T03:32:15.885Z, excerpt_hash=sha256:a3005472a43221201a2c0f5449588caa6c7e0b570ca4098f031f14b0389329c7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120311-KGT7DK/blueprint/resolved-snapshot.json
+    - old_digest: ba1bf83df61a83af778148c971be0572734cdeba2569abf6eeb584949a1147bc
+    - current_digest: ba1bf83df61a83af778148c971be0572734cdeba2569abf6eeb584949a1147bc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120311-KGT7DK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120311-KGT7DK
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore exact3original symlink targets in finally. Preserve first failure manifests/logs. Revert only intentional task61 Calc/shared repair changes if necessary. Do not touch unrelated tasks or Writer-only coverage."
   Findings: |-
     Existing full51 passed15457 application tests,702files and308 browser scenarios(Writer306/shared2/Calc0). Task60 complete related baseline has19Calc and76shared executable owners raw100; complete shared helper coverage exception and argv must remain intact. No broader provider/UI readiness claim. Full51 doctor2warnings pre-existing. Full61 uses current sources and actual counts, not old totals.
@@ -96,6 +135,10 @@ sections:
     - Observation: Aggregate lint reports one no-useless-assignment for the initial null write in ignored output/playwright/task55-checks/direct-capture-experiment.test.ts. Original complete full-lint-first.log and full-gates-first-results.json retained.
       Impact: Aggregate lint failed; runtime owners and assertions unchanged. This is a preserved nonproduction counterexample artifact, not a Writer coverage issue.
       Resolution: Remove only its unused initializer, retaining actual Any construction/callbacks/assertions/disposal order. Old/new artifact hashes and exact change in ignored-lint-repair.json; rerun original full lint without configuration weakening.
+
+    - Observation: One initial aggregate lint error in ignored task55 counterexample required only removing an unused initializer; original log/manifests and exact old/new hashes retained. No tracked runtime/Writer changes or weakened checks.
+      Impact: Current full test/coverage state is certified; complete environment/mapping/exception/cell/document/input/view/UI behavior is still outside implemented scope. Existing doctor2warnings/chunk warning retained.
+      Resolution: Close scheduled full61 cleanly; continue authorized remaining Calc UI prerequisite kernel work and retain broad parity limitations.
 id_source: "generated"
 ---
 ## Summary
@@ -126,6 +169,39 @@ Command: node output/playwright/task61-checks/portable.mjs. Result: pass. Eviden
 
 Scope: scheduled full61, complete test/coverage/browser/static/gate evidence and one ignored-artifact lint repair; no new kernel functionality, Writer-only fixes, branches, merges or publication. Full kernel/consumer/UI parity is not certified. ObjectEntry remains scoped as in task60; full environment/mapping/exception machinery, weak objects/services/CharClass/actual SharedStringPool/cell storage/ScColumn/Table/Document/edit/input/view/UI prerequisites remain. Full goal stays active; next scheduled full follows ten further tasks. Evidence-bound EVALUATOR and clean close follow this record.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T03:32:41.743Z — VERIFY — ok
+
+By: CODER
+
+Note: Full61 all5suites/all13gates pass; app15491/710,inventory123/38,tooling34/9,browser308(306Writer/2shared/0Calc),static smoke. Full438owners raw100; exact task60 related Calc106/shared188 raw100 and argv/maps preserved; all3links restored, runtime/config trees unchanged, EVALUATOR exactSHA2d66f7d97eb90712da902b3f708d1282074e8dc4.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T03:32:15.885Z, excerpt_hash=sha256:a3005472a43221201a2c0f5449588caa6c7e0b570ca4098f031f14b0389329c7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120311-KGT7DK/blueprint/resolved-snapshot.json
+- old_digest: ba1bf83df61a83af778148c971be0572734cdeba2569abf6eeb584949a1147bc
+- current_digest: ba1bf83df61a83af778148c971be0572734cdeba2569abf6eeb584949a1147bc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120311-KGT7DK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120311-KGT7DK
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Always restore exact3original symlink targets in finally. Preserve first failure manifests/logs. Revert only intentional task61 Calc/shared repair changes if necessary. Do not touch unrelated tasks or Writer-only coverage.
@@ -141,3 +217,7 @@ Existing full51 passed15457 application tests,702files and308 browser scenarios(
 - Observation: Aggregate lint reports one no-useless-assignment for the initial null write in ignored output/playwright/task55-checks/direct-capture-experiment.test.ts. Original complete full-lint-first.log and full-gates-first-results.json retained.
   Impact: Aggregate lint failed; runtime owners and assertions unchanged. This is a preserved nonproduction counterexample artifact, not a Writer coverage issue.
   Resolution: Remove only its unused initializer, retaining actual Any construction/callbacks/assertions/disposal order. Old/new artifact hashes and exact change in ignored-lint-repair.json; rerun original full lint without configuration weakening.
+
+- Observation: One initial aggregate lint error in ignored task55 counterexample required only removing an unused initializer; original log/manifests and exact old/new hashes retained. No tracked runtime/Writer changes or weakened checks.
+  Impact: Current full test/coverage state is certified; complete environment/mapping/exception/cell/document/input/view/UI behavior is still outside implemented scope. Existing doctor2warnings/chunk warning retained.
+  Resolution: Close scheduled full61 cleanly; continue authorized remaining Calc UI prerequisite kernel work and retain broad parity limitations.
