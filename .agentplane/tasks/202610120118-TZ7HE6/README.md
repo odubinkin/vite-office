@@ -1,10 +1,11 @@
 ---
 id: "202610120118-TZ7HE6"
 title: "Implement original UNO environment descriptor operations"
-status: "DOING"
+result_summary: "Implemented complete original EnvDcp over shared string owners; native/portable whole streams and scoped raw100 verified, inventory and CALC-061 updated, next full61."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,8 +49,8 @@ quality_review:
     - "Whole original functions24684/aliases16572/wrappers11944 streams match normal-ASan/UBSan builds and actual portable owners:70full original units per build,349source/13generated/8configuration hashes,148terminal commands all0. Whole original C streams consumed and CALC-061 preserves confirmed embedded-NUL branch behavior without a loadable-environment defect claim."
     - "Source-absent Calc106/shared176 tests and19/72executable owners raw S/B/F/L100; full task56 shared profile preserved adding only actual descriptor test/three source owners and report path. All13gates,35tooling tests and13exact authored format checks pass;3source links restored, native builders/support unchanged and matching registry broad flags false."
 commit:
-  hash: "a3d80b28351c67632f07ce6a12b26457e1ae0360"
-  message: "🧩 TZ7HE6 code: implement original UNO environment descriptor operations"
+  hash: "505166cb19299e0953893f480d26fff09891cf67"
+  message: "✅ TZ7HE6 verify: persist descriptor scope checks"
 comments:
   -
     author: "CODER"
@@ -57,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Complete original EnvDcp source/header wrappers and whole native/portable ownership proof committed; shared owners reused, CALC-061 preserved, scoped raw100 and all13gates pass."
+  -
+    author: "CODER"
+    body: "Verified: Complete original environment descriptor source/header wrappers implemented at a3d80b28351c over shared SAL/OUString,3whole native normal/sanitized/portable streams and source-absent Calc106/shared176 tests with19/72owners raw100, all13gates and matching evaluated SHA. CALC-061 documented and behavior preserved; registry scope explicit, environment/mapping/exception remain subsequent."
 events:
   -
     type: "status"
@@ -78,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original EnvDcp.cxx/C/C++ boundaries reviewed at a3d80b28351c:3whole native normal-ASan/UBSan/portable streams, all148commands0, source-absent Calc106/shared176 tests with19/72owners raw S/B/F/L100, exact retained related profile plus descriptor owners, all13gates/35tooling/13format checks pass. CALC-061 preserved; registry broad flags false and evaluated SHA matches."
+  -
+    type: "status"
+    at: "2026-10-12T01:34:47.299Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete original environment descriptor source/header wrappers implemented at a3d80b28351c over shared SAL/OUString,3whole native normal/sanitized/portable streams and source-absent Calc106/shared176 tests with19/72owners raw100, all13gates and matching evaluated SHA. CALC-061 documented and behavior preserved; registry scope explicit, environment/mapping/exception remain subsequent."
 doc_version: 3
-doc_updated_at: "2026-10-12T01:34:35.837Z"
+doc_updated_at: "2026-10-12T01:34:47.300Z"
 doc_updated_by: "CODER"
 description: "Task57: port complete EnvDcp.cxx, include/uno/EnvDcp.h declarations and include/cppu/EnvDcp.hxx wrappers using actual shared SAL/OUString owners. Required by EnvStack/lbmap for generic exception path. Whole native normal/sanitized streams and unchanged task56 related shared profile plus actual new owners/tests raw100, matching registry and suspicion journal if source evidence confirms. No environment/mapping provider or standalone string implementation. Last full51,next61."
 sections:
@@ -159,6 +170,10 @@ sections:
     - Observation: Initial inventory/tooling validation treated the pure published C reexport header as locally defined function implementations and reported two missing-local-symbol violations.
       Impact: Shared/Calc inventory and one related tooling case fail; native/portable whole descriptor cases and implementation remain unchanged. All failed logs/manifest are preserved separately.
       Resolution: Recompute route and follow the existing shared reexport-header convention: empty runtime localSymbols for no locally defined bodies, explicit evidence points to actual C source owner; keep true published API/provenance exports and broad parity false. No implementation/provider or validation changes.
+extensions:
+  implementation_commit:
+    hash: "a3d80b28351c67632f07ce6a12b26457e1ae0360"
+    message: "🧩 TZ7HE6 code: implement original UNO environment descriptor operations"
 id_source: "generated"
 ---
 ## Summary
