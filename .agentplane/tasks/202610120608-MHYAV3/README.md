@@ -4,7 +4,7 @@ title: "Connect original object value storage to Calc string and text attribute 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-12T07:44:03.806Z"
+  updated_at: "2026-10-12T07:45:47.750Z"
   updated_by: "CODER"
-  note: "Actual implementation03bb0aa688218cfca8431377422593d37f83f628 verified: unchanged whole original normal-only owned/Calc streams,107Calc and211related tests, whole20Calc/31shared executable owners raw S/B/F/L100,35tooling tests, all13scoped gates, intentional Prettier/source-map/source-hash/link audit and exact-SHA EVALUATOR pass. Typed callbacks/full MTV/document/UI remain subsequent work; next full71."
+  note: "Verified: original object value blocks at03bb0aa688218cfca8431377422593d37f83f628 pass normal-only whole native streams, source-absent107Calc/211related tests and whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA EVALUATOR. Re-recorded blueprint evidence after final document edits; no implementation or acceptance changes."
   attempts: 0
 quality_review:
   state: "pass"
@@ -79,8 +79,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual implementation03bb0aa688218cfca8431377422593d37f83f628 verified: unchanged whole original normal-only owned/Calc streams,107Calc and211related tests, whole20Calc/31shared executable owners raw S/B/F/L100,35tooling tests, all13scoped gates, intentional Prettier/source-map/source-hash/link audit and exact-SHA EVALUATOR pass. Typed callbacks/full MTV/document/UI remain subsequent work; next full71."
+  -
+    type: "verify"
+    at: "2026-10-12T07:45:47.750Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: original object value blocks at03bb0aa688218cfca8431377422593d37f83f628 pass normal-only whole native streams, source-absent107Calc/211related tests and whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA EVALUATOR. Re-recorded blueprint evidence after final document edits; no implementation or acceptance changes."
 doc_version: 3
-doc_updated_at: "2026-10-12T07:44:38.496Z"
+doc_updated_at: "2026-10-12T07:45:47.814Z"
 doc_updated_by: "CODER"
 description: "Iteration65: extend existing delayed_delete_vector and default_element_block with actual owned ValueT constructors, assignment and lifetime semantics; reuse task64 shared vector operations and existing SharedString/CellTextAttr owners; export original Calc string_block and celltextattr_block specializations with initialized native behavior evidence. Keep allocator, failure cleanup, undefined lifetimes and full MTV/document/UI gaps explicit."
 sections:
@@ -102,6 +108,39 @@ sections:
     Result: pass. Evidence: gates-final-manifest.json all13 exit0; typecheck, changed runtime/test/helper/probe ESLint, JSDoc, file size, module boundaries, provenance, tree, shared/Calc inventory,35tooling tests/4files, routing, doctor and diff. First failed inventory/tooling logs and manifests retained; constructor evidence corrected to actual inline header and .cxx assignment, new append_storage recorded as exhaustive internal operation. No gate/assertion/threshold or Writer changes.
 
     Scope: the approved actual initialized object-value block operation family and original Calc string_block/celltextattr_block plus standard aliases/discriminators, reusing existing SharedString/CellTextAttr/shared vector storage. Complete perfect forwarding/rvalue overload families, custom allocators/StoreT, throwing cleanup, undefined lifetimes/ranges, physical ABI, other actual Calc pointees, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity/verification flags remain false. CALC-063 records original copy-based mdds swap without altering upstream behavior. Full61 is the last complete run; next full71. Actual implementation commit:03bb0aa688218cfca8431377422593d37f83f628. Exact-SHA EVALUATOR pass recorded in .agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/quality-report.json and committed in b6bfeba5a3e8. CODER verification is recorded as ok; only task metadata changed after the evaluated implementation. Final closure uses the canonical gateway finish command with a substantive result and explicit implementation/evidence hashes.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T07:45:47.750Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: original object value blocks at03bb0aa688218cfca8431377422593d37f83f628 pass normal-only whole native streams, source-absent107Calc/211related tests and whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA EVALUATOR. Re-recorded blueprint evidence after final document edits; no implementation or acceptance changes.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T07:45:34.022Z, excerpt_hash=sha256:25e34b31e2116752de04acb352f02c97e6fed4622847aa0503583638aacb1a9f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120608-MHYAV3/blueprint/resolved-snapshot.json
+    - old_digest: 12fe9bd977976f934debb89f2e822a2d5a9f0ff185d23c1352091ae3552845f3
+    - current_digest: 12fe9bd977976f934debb89f2e822a2d5a9f0ff185d23c1352091ae3552845f3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120608-MHYAV3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610120608-MHYAV3 --result verified-202610120608-MHYAV3 --commit 03bb0aa688218cfca8431377422593d37f83f628
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation/metadata commits through a new traced task if requested. Leave user branches/merges, original upstream/reference links, Writer and existing task64 storage intact."
   Findings: |-
     Task64 is DONE at implementation6513ab428571af4f3f29db36e37ae5acfba8fc19, close d67559c7c87b. Branch calc starts clean, three source links present, two unrelated active tasks untouched. Source confirms front single erase retains hidden constructed values until a later clear_removed; default/fill constructor distinction matters for object identity and destruction. Existing svl SharedString and sc CellTextAttr owners will be reused.
@@ -145,6 +184,10 @@ sections:
     - Observation: Verified route emits a generic verified-ID completion result. The same placeholder previously failed the enforced commit subject guard during task63 closure.
       Impact: Literal placeholder risks terminal task-state mutation followed by rejected closure subject.
       Resolution: Use the higher-priority gateway canonical finish command with a substantive result and explicit implementation/evidence hashes, as successful task64 closure; no lifecycle guard or scope change.
+
+    - Observation: Canonical finish rejected missing recorded blueprint verification after the final Verification section rewrite; task remains unclosed despite deterministic checks passing.
+      Impact: The final documentation write replaced the CLI blueprint evidence packet; closeout validation correctly blocks.
+      Resolution: Recompute route and record ap verify again after all documentation writes, commit that exact metadata evidence, then retry canonical finish with unchanged source SHA and pass criteria.
 id_source: "generated"
 ---
 ## Summary
@@ -178,6 +221,39 @@ Command: all13 exact scoped commands in `output/playwright/task65-checks/gates-i
 Result: pass. Evidence: gates-final-manifest.json all13 exit0; typecheck, changed runtime/test/helper/probe ESLint, JSDoc, file size, module boundaries, provenance, tree, shared/Calc inventory,35tooling tests/4files, routing, doctor and diff. First failed inventory/tooling logs and manifests retained; constructor evidence corrected to actual inline header and .cxx assignment, new append_storage recorded as exhaustive internal operation. No gate/assertion/threshold or Writer changes.
 
 Scope: the approved actual initialized object-value block operation family and original Calc string_block/celltextattr_block plus standard aliases/discriminators, reusing existing SharedString/CellTextAttr/shared vector storage. Complete perfect forwarding/rvalue overload families, custom allocators/StoreT, throwing cleanup, undefined lifetimes/ranges, physical ABI, other actual Calc pointees, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity/verification flags remain false. CALC-063 records original copy-based mdds swap without altering upstream behavior. Full61 is the last complete run; next full71. Actual implementation commit:03bb0aa688218cfca8431377422593d37f83f628. Exact-SHA EVALUATOR pass recorded in .agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/quality-report.json and committed in b6bfeba5a3e8. CODER verification is recorded as ok; only task metadata changed after the evaluated implementation. Final closure uses the canonical gateway finish command with a substantive result and explicit implementation/evidence hashes.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T07:45:47.750Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: original object value blocks at03bb0aa688218cfca8431377422593d37f83f628 pass normal-only whole native streams, source-absent107Calc/211related tests and whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA EVALUATOR. Re-recorded blueprint evidence after final document edits; no implementation or acceptance changes.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T07:45:34.022Z, excerpt_hash=sha256:25e34b31e2116752de04acb352f02c97e6fed4622847aa0503583638aacb1a9f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120608-MHYAV3/blueprint/resolved-snapshot.json
+- old_digest: 12fe9bd977976f934debb89f2e822a2d5a9f0ff185d23c1352091ae3552845f3
+- current_digest: 12fe9bd977976f934debb89f2e822a2d5a9f0ff185d23c1352091ae3552845f3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120608-MHYAV3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610120608-MHYAV3 --result verified-202610120608-MHYAV3 --commit 03bb0aa688218cfca8431377422593d37f83f628
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -226,3 +302,7 @@ Task64 is DONE at implementation6513ab428571af4f3f29db36e37ae5acfba8fc19, close 
 - Observation: Verified route emits a generic verified-ID completion result. The same placeholder previously failed the enforced commit subject guard during task63 closure.
   Impact: Literal placeholder risks terminal task-state mutation followed by rejected closure subject.
   Resolution: Use the higher-priority gateway canonical finish command with a substantive result and explicit implementation/evidence hashes, as successful task64 closure; no lifecycle guard or scope change.
+
+- Observation: Canonical finish rejected missing recorded blueprint verification after the final Verification section rewrite; task remains unclosed despite deterministic checks passing.
+  Impact: The final documentation write replaced the CLI blueprint evidence packet; closeout validation correctly blocks.
+  Resolution: Recompute route and record ap verify again after all documentation writes, commit that exact metadata evidence, then retry canonical finish with unchanged source SHA and pass criteria.
