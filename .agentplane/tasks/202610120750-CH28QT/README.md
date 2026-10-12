@@ -4,7 +4,7 @@ title: "Connect complete typed value callback bindings to original Calc blocks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T08:22:04.912Z"
+  updated_by: "CODER"
+  note: "Verified: original typed callback and Calc registrations at4ab97f756c957fb9041d93d4be9a801dcbe7400d pass complete normal-only native value/pointer/Calc streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates, intentional format and source-map/hash/link audit, and exact-source-SHA EVALUATOR. CLI evidence recorded after final document edits; full71 remains next."
   attempts: 0
 quality_review:
   state: "pass"
@@ -74,8 +74,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: original typed value/pointer callbacks and actual Calc registrations committed at4ab97f756c957fb9041d93d4be9a801dcbe7400d; complete original normal-only streams, whole source-absent raw100 and all13scoped checks pass. Proceed to exact implementation-bound quality phase."
+  -
+    type: "verify"
+    at: "2026-10-12T08:22:04.912Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: original typed callback and Calc registrations at4ab97f756c957fb9041d93d4be9a801dcbe7400d pass complete normal-only native value/pointer/Calc streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates, intentional format and source-map/hash/link audit, and exact-source-SHA EVALUATOR. CLI evidence recorded after final document edits; full71 remains next."
 doc_version: 3
-doc_updated_at: "2026-10-12T08:18:58.999Z"
+doc_updated_at: "2026-10-12T08:22:04.965Z"
 doc_updated_by: "CODER"
 description: "Iteration66: extend existing original mdds callback/store/block owners for actual object output assignment, by-value extraction, rvalue append and emplaced construction; bind original pointer and Calc SharedString/CellTextAttr callback families. Reuse existing owners and validate unchanged whole macro/header native streams plus whole source-absent Calc/related raw100."
 sections:
@@ -96,7 +102,40 @@ sections:
     Command: all13exact scoped commands in gates-inputs.json executed by `python3 output/playwright/task66-checks/gates.py`;26intentional files `npx prettier --check` in format-final.log.
     Result: pass. Evidence: gates-final-manifest.json all13exit0, including TS7 typecheck, changed runtime/test/probe lint, JSDoc,size,module boundaries,source provenance/tree,shared/Calc inventory,35tooling tests/4files,routing,doctor,diff. Original callbacks remain shared; the result-binding type belongs to macro.ts and is reused by the unchanged scalar container result contract without runtime casts or behavior changes. Failed native compiler/first typecheck/replay/size logs and metadata findings retained. Original headers/configuration, native expectations, coverage scope/thresholds, Writer and enforcement remain unchanged.
 
-    Scope: original initialized callback operation families and actual Calc registrations, original owned extraction/reference assignment, rvalue append and real erased construction through existing storage. Other macro empty-expression categories, arbitrary native ValueT/constructor/allocator/StoreT/failure/undefined-lifetime/physical ABI families, actual other Calc pointees, complete MTV/CellStore/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity and verification capability flags stay false. No new suspicious upstream issue established; CALC-063 remains the latest journal entry. Full61 is the last full run; next full71. Actual implementation SHA, implementation-bound quality review and final CLI verification follow before closure.
+    Scope: original initialized callback operation families and actual Calc registrations, original owned extraction/reference assignment, rvalue append and real erased construction through existing storage. Other macro empty-expression categories, arbitrary native ValueT/constructor/allocator/StoreT/failure/undefined-lifetime/physical ABI families, actual other Calc pointees, complete MTV/CellStore/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity and verification capability flags stay false. No new suspicious upstream issue established; CALC-063 remains the latest journal entry. Full61 is the last full run; next full71. Actual implementation4ab97f756c957fb9041d93d4be9a801dcbe7400d is byte-bound in actual-sha-review.json. Exact-SHA EVALUATOR pass is recorded in .agentplane/tasks/202610120750-CH28QT/quality/20261012-081901577-recovery-context/quality-report.json, committed at5db4c6eb6ffd. Only task metadata changes after the evaluated implementation. Final CLI verification is recorded after this final documentation update; canonical gateway finish uses a substantive result and explicit source/evidence commits.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T08:22:04.912Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: original typed callback and Calc registrations at4ab97f756c957fb9041d93d4be9a801dcbe7400d pass complete normal-only native value/pointer/Calc streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates, intentional format and source-map/hash/link audit, and exact-source-SHA EVALUATOR. CLI evidence recorded after final document edits; full71 remains next.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T08:22:04.488Z, excerpt_hash=sha256:c3e5516b07b3c2204e055ccbfb8ad4a956de015b5e07a1e4e4325bcc189b7970
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120750-CH28QT/blueprint/resolved-snapshot.json
+    - old_digest: fa631521476ba80d31eac8c0057d5f1ce4f1a04d546e76982d656f60a9fe56ad
+    - current_digest: fa631521476ba80d31eac8c0057d5f1ce4f1a04d546e76982d656f60a9fe56ad
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120750-CH28QT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120750-CH28QT
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "If requested, revert this task's implementation/metadata through a new traced task. Preserve user branches/merges, upstream links, Writer and existing task65 owners."
   Findings: |-
     Task65 DONE: implementation03bb0aa688218cfca8431377422593d37f83f628, close905a7299fc44. Calc checkout starts clean. Existing macro.ts already provides scalar lvalue callback forwarding and standard_element_blocks.ts registrations; reuse them. Original types.hpp has distinct output-reference and by-value get_value overloads, forwarded rvalue append and variadic emplace; current object get_value returns a borrowed reference and therefore cannot serve those actual callback contracts. Whole original pointer macro omits value rvalue/emplace overloads. Original sc registrations use existing actual SharedString and CellTextAttr owners. Closure must record ap verify after final Verification-section edits, which otherwise replace the CLI blueprint evidence packet.
@@ -128,6 +167,10 @@ sections:
     - Observation: File size gate correctly reports original SoA main.ts at1002lines after adding the erased result-only callback type binding; all other12scoped gates and whole portable raw100 pass.
       Impact: Required authored file budget fails; no size threshold change is allowed.
       Resolution: Keep the language callback result-binding type in its existing macro.ts owner and have the SoA declaration reuse it. This removes the extra type adaptation from main.ts without inventing a runtime module or changing behavior. Recheck static gates and whole affected shared coverage after the source-map change.
+
+    - Observation: The verified direct route emits a generic verified-ID closure result that previously conflicted with the enforced meaningful commit subject guard.
+      Impact: Using that literal placeholder risks closure subject rejection after task-state mutation.
+      Resolution: Use the canonical gateway finish command with a substantive implementation result and explicit source/evidence hashes, as successful task65 closure; record CLI verification after all final document edits to preserve blueprint evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -160,7 +203,40 @@ Result: pass. Evidence: source-argument-map-audit.json verifies exact whole exec
 Command: all13exact scoped commands in gates-inputs.json executed by `python3 output/playwright/task66-checks/gates.py`;26intentional files `npx prettier --check` in format-final.log.
 Result: pass. Evidence: gates-final-manifest.json all13exit0, including TS7 typecheck, changed runtime/test/probe lint, JSDoc,size,module boundaries,source provenance/tree,shared/Calc inventory,35tooling tests/4files,routing,doctor,diff. Original callbacks remain shared; the result-binding type belongs to macro.ts and is reused by the unchanged scalar container result contract without runtime casts or behavior changes. Failed native compiler/first typecheck/replay/size logs and metadata findings retained. Original headers/configuration, native expectations, coverage scope/thresholds, Writer and enforcement remain unchanged.
 
-Scope: original initialized callback operation families and actual Calc registrations, original owned extraction/reference assignment, rvalue append and real erased construction through existing storage. Other macro empty-expression categories, arbitrary native ValueT/constructor/allocator/StoreT/failure/undefined-lifetime/physical ABI families, actual other Calc pointees, complete MTV/CellStore/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity and verification capability flags stay false. No new suspicious upstream issue established; CALC-063 remains the latest journal entry. Full61 is the last full run; next full71. Actual implementation SHA, implementation-bound quality review and final CLI verification follow before closure.
+Scope: original initialized callback operation families and actual Calc registrations, original owned extraction/reference assignment, rvalue append and real erased construction through existing storage. Other macro empty-expression categories, arbitrary native ValueT/constructor/allocator/StoreT/failure/undefined-lifetime/physical ABI families, actual other Calc pointees, complete MTV/CellStore/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity and verification capability flags stay false. No new suspicious upstream issue established; CALC-063 remains the latest journal entry. Full61 is the last full run; next full71. Actual implementation4ab97f756c957fb9041d93d4be9a801dcbe7400d is byte-bound in actual-sha-review.json. Exact-SHA EVALUATOR pass is recorded in .agentplane/tasks/202610120750-CH28QT/quality/20261012-081901577-recovery-context/quality-report.json, committed at5db4c6eb6ffd. Only task metadata changes after the evaluated implementation. Final CLI verification is recorded after this final documentation update; canonical gateway finish uses a substantive result and explicit source/evidence commits.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T08:22:04.912Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: original typed callback and Calc registrations at4ab97f756c957fb9041d93d4be9a801dcbe7400d pass complete normal-only native value/pointer/Calc streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates, intentional format and source-map/hash/link audit, and exact-source-SHA EVALUATOR. CLI evidence recorded after final document edits; full71 remains next.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T08:22:04.488Z, excerpt_hash=sha256:c3e5516b07b3c2204e055ccbfb8ad4a956de015b5e07a1e4e4325bcc189b7970
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120750-CH28QT/blueprint/resolved-snapshot.json
+- old_digest: fa631521476ba80d31eac8c0057d5f1ce4f1a04d546e76982d656f60a9fe56ad
+- current_digest: fa631521476ba80d31eac8c0057d5f1ce4f1a04d546e76982d656f60a9fe56ad
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120750-CH28QT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120750-CH28QT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -197,3 +273,7 @@ Task65 DONE: implementation03bb0aa688218cfca8431377422593d37f83f628, close905a72
 - Observation: File size gate correctly reports original SoA main.ts at1002lines after adding the erased result-only callback type binding; all other12scoped gates and whole portable raw100 pass.
   Impact: Required authored file budget fails; no size threshold change is allowed.
   Resolution: Keep the language callback result-binding type in its existing macro.ts owner and have the SoA declaration reuse it. This removes the extra type adaptation from main.ts without inventing a runtime module or changing behavior. Recheck static gates and whole affected shared coverage after the source-map change.
+
+- Observation: The verified direct route emits a generic verified-ID closure result that previously conflicted with the enforced meaningful commit subject guard.
+  Impact: Using that literal placeholder risks closure subject rejection after task-state mutation.
+  Resolution: Use the canonical gateway finish command with a substantive implementation result and explicit source/evidence hashes, as successful task65 closure; record CLI verification after all final document edits to preserve blueprint evidence.
