@@ -39,8 +39,12 @@ import {
 import { type NativeValueType, type ReferenceCallbacks } from "./multi_type_vector/macro.ts";
 import { type iterator_base, type const_iterator_base } from "./multi_type_vector/soa/iterator.ts";
 
-import { element_block_node_type } from "./multi_type_matrix_def.ts";
-export { element_block_node_type } from "./multi_type_matrix_def.ts";
+import {
+  element_block_node_type,
+  walk_func,
+  type WalkCallableOperations,
+} from "./multi_type_matrix_def.ts";
+export { element_block_node_type, type WalkCallableOperations } from "./multi_type_matrix_def.ts";
 
 /** Original mtm element_t values, distinct from custom block discriminators. */
 export const element_t = {
@@ -117,7 +121,7 @@ type ReadPosition = BlockPosition<{
 }>;
 const move_construction = Symbol("original matrix defaulted move constructor");
 
-/** Actual original matrix core; subsequent block-walk scopes remain unimplemented. */
+/** Actual original matrix owner over the genuine shared vector. */
 export class multi_type_matrix<S> {
   private m_store: multi_type_vector;
   private readonly m_size: size_pair_type;
@@ -615,6 +619,118 @@ export class multi_type_matrix<S> {
   /** Original emptiness uses store metadata. @returns Empty. */
   public empty(): boolean {
     return this.m_store.empty();
+  }
+  /** Original whole/ranged single-matrix walk. @param func - Native argument. @param operations - Erased FuncT members/category. @param start - Inclusive first cell. @param end - Inclusive last cell. @returns Callable state by value. */
+  public walk<F>(
+    func: F,
+    operations: WalkCallableOperations<F>,
+    start?: size_pair_type,
+    end?: size_pair_type,
+  ): F;
+  /** Original whole/ranged parallel walk; ranged geometry may differ. @param func - Native argument. @param operations - Erased FuncT members/category. @param right - Other matrix. @param start - Inclusive first cell. @param end - Inclusive last cell. @returns Callable state by value. */
+  public walk<F>(
+    func: F,
+    operations: WalkCallableOperations<F>,
+    right: multi_type_matrix<S>,
+    start?: size_pair_type,
+    end?: size_pair_type,
+  ): F;
+  /** Original four overload bodies share only erased call syntax; validation and block traversal remain source-specific. @param func - Actual caller value. @param operations - Native callable members/category. @param rightOrStart - Overload argument. @param startOrEnd - Overload argument. @param parallelEnd - Parallel range end. @returns Independent native return value. */
+  public walk<F>(
+    func: F,
+    operations: WalkCallableOperations<F>,
+    rightOrStart?: multi_type_matrix<S> | size_pair_type,
+    startOrEnd?: size_pair_type,
+    parallelEnd?: size_pair_type,
+  ): F {
+    const parameter = operations.argument_is_rvalue
+      ? operations.move_construct(func)
+      : operations.copy_construct(func);
+    try {
+      const right = rightOrStart instanceof multi_type_matrix ? rightOrStart : undefined;
+      const start = right ? startOrEnd : (rightOrStart as size_pair_type | undefined);
+      const end = right ? parallelEnd : startOrEnd;
+      const mapping =
+        /** Original enclosing static type mapper. @param type - Store discriminator. @returns Matrix discriminator. */ (
+          type: number,
+        ): number => multi_type_matrix.to_mtm_type(this.Traits, type);
+      if (start !== undefined) {
+        const last = end as size_pair_type;
+        if (last.row < start.row || last.column < start.column)
+          throw new size_error(
+            `multi_type_matrix: invalid start/end position pair: (row=${start.row}; column=${start.column}) - (row=${last.row}; column=${last.column})`,
+          );
+        if (
+          last.row > this.m_size.row ||
+          last.column > this.m_size.column ||
+          (right !== undefined &&
+            (last.row > right.m_size.row || last.column > right.m_size.column))
+        )
+          throw new size_error("multi_type_matrix: end position is out-of-bound.");
+        const rows = last.row - start.row + 1;
+        const node1 = new element_block_node_type(mapping);
+        const node2 = right ? new element_block_node_type(mapping) : undefined;
+        let pos1 = this.cposition(0, 0);
+        let pos2 = right?.cposition(0, 0);
+        for (let col = start.column; col <= last.column; ++col) {
+          pos1 = this.cposition(pos1, start.row, col);
+          if (right) pos2 = right.cposition(pos2 as const_position_type, start.row, col);
+          let remaining_rows = rows;
+          do {
+            let section_size = Math.min(pos1.first.get().size - pos1.second, remaining_rows);
+            if (right)
+              section_size = Math.min(
+                section_size,
+                (pos2 as const_position_type).first.get().size -
+                  (pos2 as const_position_type).second,
+              );
+            node1.assign(pos1, section_size);
+            if (node2) node2.assign(pos2 as const_position_type, section_size);
+            operations.invoke(parameter, node1, node2);
+            if (right) {
+              pos1 = multi_type_vector.advance_position(pos1, section_size);
+              pos2 = multi_type_vector.advance_position(pos2 as const_position_type, section_size);
+            } else pos1 = { first: pos1.first.increment(), second: 0 };
+            remaining_rows -= section_size;
+          } while (remaining_rows);
+        }
+      } else if (right !== undefined) {
+        if (this.m_size.not_equals(right.m_size))
+          throw new size_error(
+            "multi_type_matrix: left and right matrices must have the same geometry.",
+          );
+        if (!this.m_store.empty()) {
+          let remaining_size = this.m_store.size();
+          let pos1: const_position_type = { first: this.m_store.cbegin(), second: 0 };
+          let pos2: const_position_type = { first: right.m_store.cbegin(), second: 0 };
+          const node1 = new element_block_node_type(mapping),
+            node2 = new element_block_node_type(mapping);
+          while (remaining_size) {
+            const section_size = Math.min(
+              pos1.first.get().size - pos1.second,
+              pos2.first.get().size - pos2.second,
+            );
+            node1.assign(pos1, section_size);
+            node2.assign(pos2, section_size);
+            operations.invoke(parameter, node1, node2);
+            pos1 = multi_type_vector.advance_position(pos1, section_size);
+            pos2 = multi_type_vector.advance_position(pos2, section_size);
+            remaining_size -= section_size;
+          }
+        }
+      } else {
+        const wf = new walk_func(parameter, mapping, operations);
+        for (
+          const it = this.m_store.cbegin(), end = this.m_store.cend();
+          !it.equals(end);
+          it.advance(1)
+        )
+          wf.invoke(it.get());
+      }
+      return operations.move_construct(parameter);
+    } finally {
+      operations.destroy(parameter);
+    }
   }
   /** Original store then scalar geometry swaps. @param other - Matrix. @returns Nothing. */
   public swap(other: multi_type_matrix<S>): void {

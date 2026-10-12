@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "matrix-storage",
     "capabilityIds": [
-      "CAP-59c941ef-f080-4c78-8621-244b0cbd4e85"
+      "CAP-59c941ef-f080-4c78-8621-244b0cbd4e85",
+      "CAP-00428990-d728-4d13-a167-ef2b6a02e2db"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -22,20 +23,28 @@
         "apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts#matches original Calc matrix geometry ownership and failed integer operations",
         "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl#multi_type_matrix<Traits>::transpose",
         "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp#struct element_block_node_type",
-        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#mRes.maMat.copy(maMat)"
+        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#mRes.maMat.copy(maMat)",
+        "apps/office/src/external/mdds/include/mdds/multi_type_matrix-walk.test.ts#matches whole original four walks and callable lifetimes",
+        "apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts#matches original Calc matrix walks and genuine shared ownership",
+        "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl#FuncT multi_type_matrix<Traits>::walk",
+        "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp#struct walk_func",
+        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#aFunc = maMat.walk(std::move(aFunc))"
       ],
-      "justification": "Task79 ports original matrix element_block_node_type, transpose, matrix copy, range copy and resize over genuine shared SoA vector and existing strings/blocks. Source block section order, early self/empty exits, range validation, clipping, partial writes, temporary default string construction/assignment/destruction, resize reset-before-clear and temp copy/swap are retained. Explicit string ADL callbacks and NativeValueType witnesses restore erased native template aliases, reusing actual SharedString members; primitive std::string value witnesses use existing JS string semantics, not a new string owner. Full unchanged original matrix/vector headers and genuine SharedString dependencies produce ordinary initialized full streams. Original canonical integer type is omitted in matrix-copy/transpose dispatch while range-copy accepts it; preserve and journal this asymmetry and consequent resize exceptions. Debug assertions, invalid iterator lifetimes, unrepresentable native casts/dimensions, ABI/concurrency/full QA remain unverified. Matrix block walks, actual ScMatrix/result/cell/document/edit/undo/input/view/UI remain required; foundation and broad parity flags false, next full81. Original matrix QA marker is unexecuted field/type context only.",
+      "justification": "Task79 ports original matrix element_block_node_type, transpose, matrix copy, range copy and resize over genuine shared SoA vector and existing strings/blocks. Source block section order, early self/empty exits, range validation, clipping, partial writes, temporary default string construction/assignment/destruction, resize reset-before-clear and temp copy/swap are retained. Explicit string ADL callbacks and NativeValueType witnesses restore erased native template aliases, reusing actual SharedString members; primitive std::string value witnesses use existing JS string semantics, not a new string owner. Full unchanged original matrix/vector headers and genuine SharedString dependencies produce ordinary initialized full streams. Original canonical integer type is omitted in matrix-copy/transpose dispatch while range-copy accepts it; preserve and journal this asymmetry and consequent resize exceptions. Debug assertions, invalid iterator lifetimes, unrepresentable native casts/dimensions, ABI/concurrency/full QA remain unverified. Matrix block walks, actual ScMatrix/result/cell/document/edit/undo/input/view/UI remain required; foundation and broad parity flags false, next full81. Original matrix QA marker is unexecuted field/type context only. Task80 ports four original matrix block walks and walk_func over the real shared SoA vector. Exact whole/ranged/parallel section order, original type mapping, validation, borrowed node offsets, copied/moved FuncT parameter and returned state, and exception destruction use explicit existing ValueOperations witnesses. Ordinary full unchanged matrix headers and genuine SharedString/Calc trait excerpts match whole27666byte scalar and251byte Calc streams; all initialized dimensions0..3/subranges, differing parallel dimensions, typed integer/string/flag sections, callback exceptions and callable lifetime/category state are covered. CALC-071 preserves inclusive endpoint row-count spill within initialized flat storage. No native invalid iterator/UB/ABI/concurrency or full upstream QA claim. Actual ScMatrix/result/formula cells/column/table/document/edit/undo/input/view/UI remain required; broad flags false. Original QA marker is unexecuted context only. Full81 follows, then pause at user request.",
       "knownViolations": [],
       "localSymbols": [
         "element_block_node_type",
         "assign",
         "begin",
-        "end"
+        "end",
+        "walk_func",
+        "invoke"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl",
       "upstreamSymbols": [
-        "element_block_node_type"
+        "element_block_node_type",
+        "walk_func"
       ]
     }
   }

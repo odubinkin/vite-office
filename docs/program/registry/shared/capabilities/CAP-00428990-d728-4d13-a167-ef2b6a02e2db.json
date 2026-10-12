@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-00428990-d728-4d13-a167-ef2b6a02e2db",
+    "capabilityId": "CAP-00428990-d728-4d13-a167-ef2b6a02e2db",
+    "suite": "shared",
+    "subsystem": "matrix-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original four matrix walks preserve store block and subrange section order over actual shared owners.",
+      "FuncT argument/return value categories and exception cleanup use explicit actual native special-member witnesses.",
+      "Original inclusive endpoint validation is preserved; only initialized in-storage spill is certified."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task80 ports four original matrix block walks and walk_func over the real shared SoA vector. Exact whole/ranged/parallel section order, original type mapping, validation, borrowed node offsets, copied/moved FuncT parameter and returned state, and exception destruction use explicit existing ValueOperations witnesses. Ordinary full unchanged matrix headers and genuine SharedString/Calc trait excerpts match whole27666byte scalar and251byte Calc streams; all initialized dimensions0..3/subranges, differing parallel dimensions, typed integer/string/flag sections, callback exceptions and callable lifetime/category state are covered. CALC-071 preserves inclusive endpoint row-count spill within initialized flat storage. No native invalid iterator/UB/ABI/concurrency or full upstream QA claim. Actual ScMatrix/result/formula cells/column/table/document/edit/undo/input/view/UI remain required; broad flags false. Original QA marker is unexecuted context only. Full81 follows, then pause at user request."
+    },
+    "capability": "Original mdds matrix block walks",
+    "gaps": [
+      "Actual ScMatrix/result/cell/document/edit/view/UI remain required.",
+      "Native ABI/concurrency/invalid iterator cases/full upstream QA unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_matrix.ts",
+          "marker": "public walk"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_matrix_def.ts",
+          "marker": "class walk_func"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_matrix-walk.test.ts",
+          "marker": "matches whole original four walks and callable lifetimes"
+        },
+        {
+          "path": "apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts",
+          "marker": "matches original Calc matrix walks and genuine shared ownership"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original matrix block walks (task80)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl",
+          "marker": "FuncT multi_type_matrix<Traits>::walk"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp",
+          "marker": "struct walk_func"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "aFunc = maMat.walk(std::move(aFunc))"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "element is not of empty type"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/core/tool/scmatrix.cxx",
+          "marker": "aFunc = maMat.walk(std::move(aFunc))"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-matrix-block-walks",
+    "scopeLimitations": [
+      "Task80 ports four original matrix block walks and walk_func over the real shared SoA vector. Exact whole/ranged/parallel section order, original type mapping, validation, borrowed node offsets, copied/moved FuncT parameter and returned state, and exception destruction use explicit existing ValueOperations witnesses. Ordinary full unchanged matrix headers and genuine SharedString/Calc trait excerpts match whole27666byte scalar and251byte Calc streams; all initialized dimensions0..3/subranges, differing parallel dimensions, typed integer/string/flag sections, callback exceptions and callable lifetime/category state are covered. CALC-071 preserves inclusive endpoint row-count spill within initialized flat storage. No native invalid iterator/UB/ABI/concurrency or full upstream QA claim. Actual ScMatrix/result/formula cells/column/table/document/edit/undo/input/view/UI remain required; broad flags false. Original QA marker is unexecuted context only. Full81 follows, then pause at user request."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

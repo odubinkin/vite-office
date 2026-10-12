@@ -1589,3 +1589,13 @@ Pinned mdds3.2.1 multi_type_matrix recognizes its configured integer block as el
 Evidence: task79 scripts/calc-matrix-geometry-native-probe.mjs compiles full unchanged original matrix/vector headers over genuine dependencies. Its ordinary initialized streams observe the omission for std_string_traits int32, original Calc matrix_traits UInt16 and matrix_flag_traits UInt8. An earlier string section is retained in the destination when matrix copy later encounters an integer; failed transpose and resize preserve the source and release temporary strings. Input-range integer copy succeeds. Original ScMatrixImpl::MatCopy/MatTrans/Resize source paths use these operations, but their complete consumers and document behavior are not yet implemented or certified.
 
 Decision: preserve the missing switch alternatives, partial destination updates and exception/lifetime behavior. Do not add integer branches or make copy transactional. Revisit actual consumer reachability when ScMatrix and its flag operations are connected.
+
+## CALC-071: inclusive matrix walk endpoint accepts the row count
+
+Status: confirmed original range validation asymmetry in the pinned mdds dependency; a Calc consumer defect is not established.
+
+Original ranged multi_type_matrix::walk rejects an endpoint only when end.row is greater than the row count, although the endpoint is inclusive. A fully initialized 2x2 matrix containing one numeric block therefore accepts start(0,0), end(2,0) and calls the visitor with three elements: the third belongs to the next column in the underlying column-major store. This observation uses an existing initialized third element, not an invalid iterator or an out-of-storage read. The parallel ranged overload has the same strict greater-than validation; its corresponding boundary behavior has not yet been separately certified.
+
+Evidence: task80 scripts/calc-matrix-walk-native-probe.mjs compiles whole unchanged original matrix/vector headers with verified pinned dependency sources. Its ordinary scalar stream records one numeric section of size3 for the initialized 2x2 spill caller. The portable full-stream replay matches the same section. Original ScMatrix/input consumers and user-visible reachability remain unimplemented.
+
+Decision: preserve the original validation and inclusive traversal. Do not change greater-than to greater-than-or-equal or clamp the section to a column. Do not use this initialized case to claim safety for endpoints at the final column or invalid store positions.

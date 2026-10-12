@@ -32,6 +32,14 @@
         {
           "path": "apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts",
           "marker": "matches original Calc matrix geometry ownership and failed integer operations"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_matrix-walk.test.ts",
+          "marker": "matches whole original four walks and callable lifetimes"
+        },
+        {
+          "path": "apps/office/src/sc/inc/mtvelements-matrix-walk.test.ts",
+          "marker": "matches original Calc matrix walks and genuine shared ownership"
         }
       ],
       "upstream": [
@@ -58,6 +66,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
           "marker": "mRes.maMat.copy(maMat)"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl",
+          "marker": "FuncT multi_type_matrix<Traits>::walk"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp",
+          "marker": "struct walk_func"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "aFunc = maMat.walk(std::move(aFunc))"
         }
       ]
     },
@@ -111,7 +131,8 @@
       "transpose",
       "copy",
       "copy_range",
-      "resize"
+      "resize",
+      "walk"
     ],
     "omittedResponsibilities": [
       "Task78 implements original mdds3.2.1 multi_type_matrix core geometry/storage/access over the genuine existing SoA vector. Original trait registration, size_pair_type, default/size/value/range/copy/defaulted move and assignments/destructor, equality, plain/hinted/const positions, typed scalar and owned reads, borrowed string queries, scalar/range/column/empty writes, numeric/empty/clear/swap retain original contracts. Erased template aliases/value categories use explicit witnesses; numeric conversion is certified only for initialized representable native casts and exact bounded size_t coordinates. Ordinary full unchanged matrix/vector headers and genuine SharedString dependencies provide whole native streams; Calc custom string/UInt16/UInt8 traits are source excerpts, not fake pointees. Transpose, matrix copy/resize/block walks, ScMatrix/ScFormulaResult/formula cells/column/table/document/edit/undo/input/view/UI, native ABI/invalid lifetimes/concurrency/full upstream QA remain required or unverified. Foundation and broad parity flags remain false; next full81.",
@@ -120,14 +141,16 @@
     "preservedResponsibilities": [
       "Original matrix template boundary uses actual shared SoA field owner and block traits.",
       "Original geometry and typed storage operations retain column-major layout, explicit aliases and value lifetime semantics.",
-      "Original geometry algorithms and erased string template/ADL/lifetime witnesses reuse existing actual value owners."
+      "Original geometry algorithms and erased string template/ADL/lifetime witnesses reuse existing actual value owners.",
+      "Task80 ports four original matrix block walks and walk_func over the real shared SoA vector. Exact whole/ranged/parallel section order, original type mapping, validation, borrowed node offsets, copied/moved FuncT parameter and returned state, and exception destruction use explicit existing ValueOperations witnesses. Ordinary full unchanged matrix headers and genuine SharedString/Calc trait excerpts match whole27666byte scalar and251byte Calc streams; all initialized dimensions0..3/subranges, differing parallel dimensions, typed integer/string/flag sections, callback exceptions and callable lifetime/category state are covered. CALC-071 preserves inclusive endpoint row-count spill within initialized flat storage. No native invalid iterator/UB/ABI/concurrency or full upstream QA claim. Actual ScMatrix/result/formula cells/column/table/document/edit/undo/input/view/UI remain required; broad flags false. Original QA marker is unexecuted context only. Full81 follows, then pause at user request."
     ],
     "status": "mapped",
     "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp",
     "upstreamSymbols": [
       "class multi_type_matrix",
       "struct size_pair_type",
-      "struct std_string_traits"
+      "struct std_string_traits",
+      "walk"
     ]
   }
 }
