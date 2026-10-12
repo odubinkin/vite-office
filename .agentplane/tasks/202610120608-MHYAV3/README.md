@@ -1,10 +1,11 @@
 ---
 id: "202610120608-MHYAV3"
 title: "Connect original object value storage to Calc string and text attribute blocks"
-status: "DOING"
+result_summary: "Original Calc string and text attribute value blocks implemented with actual shared ownership and complete scoped native and portable checks"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -49,8 +50,8 @@ quality_review:
     - "All107Calc/211related portable tests and35tooling tests pass;20Calc and31related whole executable owners raw100,14nonexecuting facade exclusions AST-verified,27unchanged shared raw maps preserved and source hashes match the committed runtime."
     - "First failed native/coverage/metadata evidence retained. Constructor evidence and exhaustive append_storage operation repaired without weakening source/test/coverage/configuration gates or changing Writer."
 commit:
-  hash: "03bb0aa688218cfca8431377422593d37f83f628"
-  message: "🧩 MHYAV3 calc: connect original string and text attribute value blocks"
+  hash: "6e4f741e552d106efeb5076dff33afb9b6901cdf"
+  message: "✅ MHYAV3 verify: retain final blueprint evidence for object blocks"
 comments:
   -
     author: "CODER"
@@ -58,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: actual object value blocks committed at03bb0aa688218cfca8431377422593d37f83f628; normal whole native and source-absent scoped acceptance passes. Proceed to implementation-bound quality phase."
+  -
+    author: "CODER"
+    body: "Verified: original initialized object value storage and Calc string/text attribute specializations reuse existing owners; complete normal-only genuine native streams, source-absent107Calc/211related tests, whole20Calc/31shared owners raw100,35tooling tests, all13scoped gates and actual-source-SHA quality pass are recorded. Full71 remains the next complete run."
 events:
   -
     type: "status"
@@ -85,8 +89,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original object value blocks at03bb0aa688218cfca8431377422593d37f83f628 pass normal-only whole native streams, source-absent107Calc/211related tests and whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA EVALUATOR. Re-recorded blueprint evidence after final document edits; no implementation or acceptance changes."
+  -
+    type: "status"
+    at: "2026-10-12T07:46:12.677Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original initialized object value storage and Calc string/text attribute specializations reuse existing owners; complete normal-only genuine native streams, source-absent107Calc/211related tests, whole20Calc/31shared owners raw100,35tooling tests, all13scoped gates and actual-source-SHA quality pass are recorded. Full71 remains the next complete run."
 doc_version: 3
-doc_updated_at: "2026-10-12T07:45:47.814Z"
+doc_updated_at: "2026-10-12T07:46:12.679Z"
 doc_updated_by: "CODER"
 description: "Iteration65: extend existing delayed_delete_vector and default_element_block with actual owned ValueT constructors, assignment and lifetime semantics; reuse task64 shared vector operations and existing SharedString/CellTextAttr owners; export original Calc string_block and celltextattr_block specializations with initialized native behavior evidence. Keep allocator, failure cleanup, undefined lifetimes and full MTV/document/UI gaps explicit."
 sections:
@@ -188,6 +199,10 @@ sections:
     - Observation: Canonical finish rejected missing recorded blueprint verification after the final Verification section rewrite; task remains unclosed despite deterministic checks passing.
       Impact: The final documentation write replaced the CLI blueprint evidence packet; closeout validation correctly blocks.
       Resolution: Recompute route and record ap verify again after all documentation writes, commit that exact metadata evidence, then retry canonical finish with unchanged source SHA and pass criteria.
+extensions:
+  implementation_commit:
+    hash: "03bb0aa688218cfca8431377422593d37f83f628"
+    message: "🧩 MHYAV3 calc: connect original string and text attribute value blocks"
 id_source: "generated"
 ---
 ## Summary
