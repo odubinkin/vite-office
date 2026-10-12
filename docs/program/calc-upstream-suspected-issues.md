@@ -1499,3 +1499,13 @@ identity observation. Input indices8/9 reproduce the branch difference.
 Decision: preserve the original bounded-versus-terminated calls and all output
 ownership. Do not normalize with a single native JS split/slice rule, discard
 NUL units uniformly, add descriptor validation or repair upstream behavior.
+
+## CALC-062: ObjectEntry type lookup ignores secondary interface bases
+
+Status: confirmed original lookup difference; full environment consumers and a user-visible defect are unverified.
+
+At pinned9bc445578031fecf56086729d8e4940c77e14d65, cppu/source/uno/lbenv.cxx ObjectEntry::find walks only pBaseTypeDescription. cppu/source/typelib/typelib.cxx initializes this compatibility field from ppBaseTypes[0]. A genuine interface entry.Child deriving from entry.Multi(entry.A, entry.B) is assignable to entry.B according to the original typelib_typedescriptionreference_isAssignableFrom, but an ObjectEntry storing only entry.Child returns null for entry.B. Adding a separate entry.B record makes the lookup succeed. Root XInterface returns the first record directly. Distinct actual descriptors named entry.A still match through td_equals.
+
+Evidence: scripts/uno-object-entry-native-probe.mjs builds all101 original desktop dependencies and includes the whole unchanged lbenv.cxx in a pure caller; normal-ASan/UBSan find836-byte streams match all initialized portable observations in lbenv.test.ts. output/playwright/task60-checks/decoded-find-prefix.json records the exact initial query rows: entry.B misses while assignability is true. The full stream remains in native-object-entry-cases.json and normal/asan caller.find outputs. This is a direct internal lookup experiment, not a complete environment or consumer QA port.
+
+Decision: preserve the primary-base chain and first-record root shortcut. Do not replace it with a traversal of every ppBaseTypes entry or a JS inheritance shortcut.

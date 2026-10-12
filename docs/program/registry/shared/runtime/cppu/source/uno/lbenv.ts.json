@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/source/uno/lbenv.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-environment",
+    "capabilityIds": [
+      "CAP-b3e641c5-1ae6-4549-9905-0cf67b86414d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/source/uno/lbenv.ts#ObjectEntry",
+        "apps/office/src/cppu/source/uno/lbenv.test.ts#matches complete original ObjectEntry",
+        "cppu/source/uno/lbenv.cxx#ObjectEntry"
+      ],
+      "justification": "Complete original lbenv.cxx ObjectEntry constructor, append and both find overloads reuse actual shared OUString, rtl_ustr_compare, C typelib and full declared ext-environment records. Interface acquisition precedes description acquisition, pointer emplace does not overwrite, and vector append follows. Root lookup returns the first entry; type lookup walks only pBaseTypeDescription. Logical compiler member copy/move/assignment/destruction retain original string ownership, trivial pointer records and valid live aliases. Native arrays and Map represent accessed elements and key identity/insertion, without physical capacity/allocator/hash ordering claims. Whole unchanged native owner and genuine desktop dependencies normal-ASan/UBSan, complete streams and whole related source-absent raw100 are required. No DefaultEnvironment, runtime provider, environment/mapping/exception engine is synthesized; physical ABI/leaks/native threads/shutdown and full consumer QA remain unverified; broad parity flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "td_equals",
+        "InterfaceEntry",
+        "ObjectEntryEnvironment",
+        "ObjectEntry"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppu/source/uno/lbenv.cxx",
+      "upstreamSymbols": [
+        "ObjectEntry",
+        "InterfaceEntry",
+        "td_equals"
+      ]
+    }
+  }
+}

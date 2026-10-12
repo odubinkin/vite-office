@@ -3090,3 +3090,9 @@ flags stay false. Full environment/mapping/exception mechanism, further weak
 objects/services and Calc cell/document/edit/view/UI remain subsequent. Physical
 ABI/compiler const/native threading/resource/leaks/shutdown and complete consumer/
 upstream QA are unverified. Last full51; next scheduled61.
+
+## Original UNO environment object entry
+
+Task60 ports cppu/source/uno/lbenv.cxx ObjectEntry, InterfaceEntry and td_equals over existing shared OUString/C typelib and ext-environment declarations. Complete constructor, append, both find overloads and logical compiler value lifetimes match whole original construct904, append1820, find836 and values2008-byte normal-ASan/UBSan streams. The probe builds all101 original native dependency units and includes the complete unchanged owner in its pure caller; no replacement provider or extracted body. Original primary-base-only lookup is retained (CALC-062).
+
+The borrowed ext-record and pointer map are caller input, not the full DefaultEnvironment engine. Native arrays/Map represent accessed elements and insertion identity only; physical vector capacity/allocator/hash ordering/ABI/leaks/native threads/shutdown and complete consumer QA remain unverified. Full environment/mapping/exception machinery, weak objects, services, character classification, actual SharedStringPool, cell storage, ScColumn/ScTable/ScDocument and editing/view ownership remain prerequisites. Browser UI readiness is unchanged. Complete source-absent coverage and scoped gates are recorded in task60 evidence before completion.

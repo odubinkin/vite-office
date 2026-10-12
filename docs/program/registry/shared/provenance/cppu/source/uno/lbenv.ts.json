@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/uno/lbenv.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/uno/lbenv.cxx",
+    "localSymbols": [
+      "td_equals",
+      "InterfaceEntry",
+      "ObjectEntryEnvironment",
+      "ObjectEntry"
+    ],
+    "upstreamSymbols": [
+      "ObjectEntry",
+      "InterfaceEntry",
+      "td_equals"
+    ],
+    "preservedResponsibilities": [
+      "Complete original lbenv.cxx ObjectEntry constructor, append and both find overloads reuse actual shared OUString, rtl_ustr_compare, C typelib and full declared ext-environment records. Interface acquisition precedes description acquisition, pointer emplace does not overwrite, and vector append follows. Root lookup returns the first entry; type lookup walks only pBaseTypeDescription. Logical compiler member copy/move/assignment/destruction retain original string ownership, trivial pointer records and valid live aliases. Native arrays and Map represent accessed elements and key identity/insertion, without physical capacity/allocator/hash ordering claims. Whole unchanged native owner and genuine desktop dependencies normal-ASan/UBSan, complete streams and whole related source-absent raw100 are required. No DefaultEnvironment, runtime provider, environment/mapping/exception engine is synthesized; physical ABI/leaks/native threads/shutdown and full consumer QA remain unverified; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Complete environment/mapping/exception engine and later weak objects/services/Calc cell/document/edit/view/UI remain absent. Physical vector capacity/allocator/hash ordering/ABI/leaks/native threads/shutdown and full consumer/upstream QA unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/uno/lbenv.ts",
+          "marker": "ObjectEntry"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/lbenv.test.ts",
+          "marker": "matches complete original ObjectEntry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/uno/lbenv.cxx",
+          "marker": "ObjectEntry::append"
+        },
+        {
+          "path": "cppu/source/uno/lbenv.cxx",
+          "marker": "ObjectEntry::find"
+        }
+      ]
+    }
+  }
+}
