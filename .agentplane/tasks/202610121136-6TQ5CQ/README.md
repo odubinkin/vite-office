@@ -4,7 +4,7 @@ title: "Implement shared formula error codes and encoded double errors"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,38 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T12:43:35.584Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR phase confirms exact1af1cccdd89f full shared formula error leaf: unchanged original header/native streams, actual Chromium numeric contracts, Calc and directly affected shared raw100, namespace containment and13aggregate gates plus related tooling. This is not an independent review or full formula/kernel/UI certification."
+  evaluated_sha: "1af1cccdd89fd856885256e15d228b7729f366ef"
+  blueprint_digest: "a56c1321a86995dd22389ef32989386d78860e767b8496912de4d5e1d154bb39"
+  evidence_refs:
+    - ".agentplane/tasks/202610121136-6TQ5CQ/README.md"
+    - ".agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121136-6TQ5CQ/blueprint/resolved-snapshot.json"
+    - "output/playwright/task72-checks/exact-review.json"
+    - "output/playwright/task72-checks/final-audit.json"
+    - "output/playwright/task72-checks/effective-portable-results.json"
+    - "output/playwright/task72-checks/gates-results.json"
+    - "output/playwright/task72-checks/tooling-recheck.json"
+  findings:
+    - "All38enum members and explicit publication cases,65536encoded UInt16 outputs and300finite/infinite/NaN bit witnesses match complete pinned header;7original header hashes and1original config verified,4normal-only commands pass. SDK metadata is explicitly outside pinned source evidence."
+    - "Current112Calc tests/30files and5related shared tests pass;20Calc owner source hashes/maps unchanged from full71, all raw S/F/B counters positive; shared64S48B4F60L all100. Source-absent current Chromium154 scalar/object/Float64 storage and whole streams pass; links restored exactly."
+    - "Namespace registration adds no dependency edges or cycle exceptions; negative application/browser tests pass. All13aggregate gates and23tooling tests pass; bounded initial witness/schema/docs/checker failures retained and corrected without relaxing criteria. No Writer changes, sanitizer, full-suite replay or false parity flags."
+commit:
+  hash: "1af1cccdd89fd856885256e15d228b7729f366ef"
+  message: "🧩 6TQ5CQ calc: implement original shared formula error contracts"
 comments:
   -
     author: "CODER"
     body: "Start: implement the complete shared original formula error header and native-JS numeric equivalence witnesses under approved ongoing Calc goal; scoped raw100 and source-absent browser checks, no full until81."
+  -
+    author: "CODER"
+    body: "Start: implementation and exact scoped/native/browser validation complete; source commit1af1cccdd89f records shared formula error contracts and necessary namespace registration, source-bound EVALUATOR phase follows."
 events:
   -
     type: "status"
@@ -37,8 +64,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the complete shared original formula error header and native-JS numeric equivalence witnesses under approved ongoing Calc goal; scoped raw100 and source-absent browser checks, no full until81."
+  -
+    type: "status"
+    at: "2026-10-12T12:43:33.235Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: implementation and exact scoped/native/browser validation complete; source commit1af1cccdd89f records shared formula error contracts and necessary namespace registration, source-bound EVALUATOR phase follows."
 doc_version: 3
-doc_updated_at: "2026-10-12T11:57:31.020Z"
+doc_updated_at: "2026-10-12T12:45:06.469Z"
 doc_updated_by: "CODER"
 description: "Task72: port the complete original include/formula/errorcodes.hxx enum, CreateDoubleError, GetDoubleErrorValue and isPublishedFormulaError as the required formula-result/ScFormulaCell dependency. Reuse native JS numeric/DataView primitives and existing SAL source evidence instead of a duplicate library. Compare unchanged complete pinned original header via a normal-only native caller; retain all enum/internal/published/default distinctions, NaN low-bit precedence and invalid runtime assumptions in evidence. Complete Calc plus directly related shared raw100 with upstream links absent/restored, registry/provenance and aggregate local gates. No Writer-only changes, no full suite until81, no pretend formula cell/document/UI."
 sections:
@@ -58,7 +92,16 @@ sections:
     3. Installed playwright-cli open/snapshot/run-code/close against a task-local Vite dev server: actual production module imports and committed whole native streams match in Chromium with all3source links absent/restored. Keep result/source hashes and session evidence; no DOM interaction or UI readiness claim. Matched playwright SKILL.md prescribes CLI-first automation and no new @playwright/test specs unless explicitly requested, so this preserves numeric acceptance using the installed CLI without adding or changing test ownership/configuration.
     4. node output/playwright/task72-checks/gates.mjs: format/lint/typecheck/docs/size/dependency/resources/source-tree/provenance/all inventory/routing/doctor/diff pass. npx vitest run scripts/check-source-provenance.test.ts scripts/check-module-boundaries.test.ts pass. Full suite not due until81; no Writer-only coverage repairs or lowered criteria.
     5. Inspect full counters/streams, exact source pin/hash correspondence, new capability markers and source responsibility, source-bound same-agent EVALUATOR pass and final git status --short --untracked-files=all. Record residual cross-engine NaN/arithmetic/JSON transport limitations honestly, no full module/kernel/upstream QA parity promotion.
-  Verification: "Task72 checks passed: complete normal-only native header38enum/65536creation-publication/300double-bit cases with7pinned headers,1reused config and4actual commands; compiler SDK metadata is explicitly outside pinned source scope. Full Calc112tests/30files raw10020owners2958S2055B489F2602L unchanged source/maps against full71; directly affected shared5tests/1owner64S48B4F60L raw100. Source links absent during runtime/build/current-source Chromium154 exact whole streams,65536scalar/object/Float64 storage witnesses; all3original targets restored. Related tooling23tests/2files pass. All13aggregate gates pass,14effective rows including tooling. First native/schema/lint/docs/dependency/tooling/CLI reporting failures retained; no threshold/config/timeout changes, Writer fixes, sanitizer or full suite. Native JS primitives suffice for this leaf; other engines/arithmetic/JSON transport remain unverified. Full formula/cell/document/input/UI remains incomplete; next full81. Final audit output/playwright/task72-checks/final-audit.json binds current source hashes and full output/coverage/gate manifests; source-bound same-agent EVALUATOR and closure pending."
+  Verification: |-
+    Command: node scripts/formula-errorcodes-native-probe.mjs --write and --check. Result: pass. Evidence: output/playwright/formula-errorcodes-native/manifest.json and committed native-errorcodes-cases.json;4normal-only compiler/caller commands,38enum names,65536creation/decoding/publication and300bit-classification cases;7whole pinned headers and1configuration. Scope: complete original shared error header initialized witnesses; SDK metadata recorded without reading outside-repo files or claiming its bytes are pinned.
+
+    Command: node output/playwright/task72-checks/portable.mjs, then bounded --browser-only and final --shared-browser corrections. Result: effective underlying checks pass; initial wrapper failed only collecting a discarded CLI console.log return, retained in first logs. Evidence: effective-portable-results.json/coverage-audit.json/final-audit.json. Scope: full Calc112tests/30files,20unchanged executable owners raw2958S2055B489F2602L; directly affected shared5tests/1owner raw64S48B4F60L; every raw S/F/B counter positive, all S/B/F/L100. No successful Calc/build repetition after reporting-only correction; JSDoc-only shared source changes refreshed five shared cases/current browser. All3source links absent during tests/build/browser and restored byte-exact. Build pass.
+
+    Command: installed playwright-cli -s=formula-errors72 open/snapshot/run-code --filename output/playwright/task72-checks/browser-caller.txt/close under actual task-local Vite source imports. Result: pass. Evidence: browser-proof.json and browser-contract.log; Chromium154.0.8037.98 matches whole38enum/65536error/300bit streams plus65536scalar/object/Float64 storage witnesses. Scope: actual production numeric helpers, no UI or formal new browser-suite scenario claim. Applied playwright SKILL.md CLI-first guidance; no project/test ownership/configuration edits.
+
+    Command: node output/playwright/task72-checks/gates.mjs, followed by --recheck of changed-scope checks; npx vitest run scripts/check-source-provenance.test.ts scripts/check-module-boundaries.test.ts. Result:14effective rows pass,13aggregate gates plus related tooling23tests/2files. Evidence: gates-results.json/tooling-recheck.json/first-gates-results.json and retained first-failure logs. Scope: format/lint/type/docs/size/dependencies/resources/tree/provenance/global registry/routing/doctor/diff plus complete directly related tooling. New formula namespace has no runtime module import edges; application/browser reverse edges remain rejected. No Writer repair or timeout/threshold/exclusion changes.
+
+    Command: python3 output/playwright/task72-checks/final-audit.py and source-bound same-agent EVALUATOR. Result: pass. Evidence: final-audit.json/exact-review.json plus .agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/quality-report.json. Scope:30exact committed source hashes at1af1cccdd89fd856885256e15d228b7729f366ef, current raw maps/streams, source pin/restored links, explicit first failures and clean intentional scope. Separate same-agent EVALUATOR phase, not independent review. Complete formula/kernel/document/input/UI, other engines, arithmetic/JSON/cross-process payload preservation and native ABI remain unverified. Next full81; no full suite or sanitizer this leaf.
   Rollback Plan: "Revert only task72 implementation and task evidence commits; restore original3symlink targets after any runtime verification failure; keep original native/full failure logs and source hashes. Re-run affected scoped checks after rollback; preserve unrelated active tasks."
   Findings: |-
     Preflight: clean calc after task71 DONE ff739312; unrelated C9TN6M/X6VV8G tasks untouched. User authorizes continued core-first implementation and native-JS equivalence preference. Current source has no shared formula/errorcodes owner. It is included by both ScFormulaResult and ScFormulaCell; this leaf supplies actual missing contracts, not a pretend cell/store or UI readiness. Last full71; next full81. The previous status-only turn is revalidated against clean authoritative task71 DONE state; this task is the next concrete implementation.
@@ -107,7 +150,15 @@ Complete include/formula/errorcodes.hxx responsibility in apps/office/src/formul
 
 ## Verification
 
-Task72 checks passed: complete normal-only native header38enum/65536creation-publication/300double-bit cases with7pinned headers,1reused config and4actual commands; compiler SDK metadata is explicitly outside pinned source scope. Full Calc112tests/30files raw10020owners2958S2055B489F2602L unchanged source/maps against full71; directly affected shared5tests/1owner64S48B4F60L raw100. Source links absent during runtime/build/current-source Chromium154 exact whole streams,65536scalar/object/Float64 storage witnesses; all3original targets restored. Related tooling23tests/2files pass. All13aggregate gates pass,14effective rows including tooling. First native/schema/lint/docs/dependency/tooling/CLI reporting failures retained; no threshold/config/timeout changes, Writer fixes, sanitizer or full suite. Native JS primitives suffice for this leaf; other engines/arithmetic/JSON transport remain unverified. Full formula/cell/document/input/UI remains incomplete; next full81. Final audit output/playwright/task72-checks/final-audit.json binds current source hashes and full output/coverage/gate manifests; source-bound same-agent EVALUATOR and closure pending.
+Command: node scripts/formula-errorcodes-native-probe.mjs --write and --check. Result: pass. Evidence: output/playwright/formula-errorcodes-native/manifest.json and committed native-errorcodes-cases.json;4normal-only compiler/caller commands,38enum names,65536creation/decoding/publication and300bit-classification cases;7whole pinned headers and1configuration. Scope: complete original shared error header initialized witnesses; SDK metadata recorded without reading outside-repo files or claiming its bytes are pinned.
+
+Command: node output/playwright/task72-checks/portable.mjs, then bounded --browser-only and final --shared-browser corrections. Result: effective underlying checks pass; initial wrapper failed only collecting a discarded CLI console.log return, retained in first logs. Evidence: effective-portable-results.json/coverage-audit.json/final-audit.json. Scope: full Calc112tests/30files,20unchanged executable owners raw2958S2055B489F2602L; directly affected shared5tests/1owner raw64S48B4F60L; every raw S/F/B counter positive, all S/B/F/L100. No successful Calc/build repetition after reporting-only correction; JSDoc-only shared source changes refreshed five shared cases/current browser. All3source links absent during tests/build/browser and restored byte-exact. Build pass.
+
+Command: installed playwright-cli -s=formula-errors72 open/snapshot/run-code --filename output/playwright/task72-checks/browser-caller.txt/close under actual task-local Vite source imports. Result: pass. Evidence: browser-proof.json and browser-contract.log; Chromium154.0.8037.98 matches whole38enum/65536error/300bit streams plus65536scalar/object/Float64 storage witnesses. Scope: actual production numeric helpers, no UI or formal new browser-suite scenario claim. Applied playwright SKILL.md CLI-first guidance; no project/test ownership/configuration edits.
+
+Command: node output/playwright/task72-checks/gates.mjs, followed by --recheck of changed-scope checks; npx vitest run scripts/check-source-provenance.test.ts scripts/check-module-boundaries.test.ts. Result:14effective rows pass,13aggregate gates plus related tooling23tests/2files. Evidence: gates-results.json/tooling-recheck.json/first-gates-results.json and retained first-failure logs. Scope: format/lint/type/docs/size/dependencies/resources/tree/provenance/global registry/routing/doctor/diff plus complete directly related tooling. New formula namespace has no runtime module import edges; application/browser reverse edges remain rejected. No Writer repair or timeout/threshold/exclusion changes.
+
+Command: python3 output/playwright/task72-checks/final-audit.py and source-bound same-agent EVALUATOR. Result: pass. Evidence: final-audit.json/exact-review.json plus .agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/quality-report.json. Scope:30exact committed source hashes at1af1cccdd89fd856885256e15d228b7729f366ef, current raw maps/streams, source pin/restored links, explicit first failures and clean intentional scope. Separate same-agent EVALUATOR phase, not independent review. Complete formula/kernel/document/input/UI, other engines, arithmetic/JSON/cross-process payload preservation and native ABI remain unverified. Next full81; no full suite or sanitizer this leaf.
 
 ## Rollback Plan
 
