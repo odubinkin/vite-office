@@ -1,10 +1,11 @@
 ---
 id: "202610121640-EEQ2PY"
 title: "Implement original mdds matrix copy resize and transpose"
-status: "DOING"
+result_summary: "Implemented original matrix copy resize transpose and block section contracts with genuine shared ownership"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -58,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original matrix geometry/node committed at0cbebbee231e, genuine SoA/SharedString reused. Entire Calc124/shared223 raw100 and native whole streams, source-absent build/profile, all14gates and23tooling pass. Separate same-agent EVALUATOR now binds exact source and pending walk/ScMatrix/document/UI limits."
+  -
+    author: "CODER"
+    body: "Verified: Original matrix node and copy/range copy/resize/transpose reuse real SoA/SharedString and preserve source sections, validation, partial writes, temporary lifetime and integer dispatch omissions. Entire Calc124/shared223 raw S/B/F/L100 every counter positive, seven ordinary native commands/448sources and full66673/946byte streams, source-absent static/profile0UI, all14gates/23tooling and exact149source/test/fixture hashes pass at0cbebbee231e8d4f63306d2a3bd875926e9a4ef1 with same-agent separate EVALUATOR pass. CALC-070 documented, inventory foundations partial, block walks/ScMatrix/document/UI/full QA remain required, next full81."
 events:
   -
     type: "status"
@@ -79,8 +83,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original matrix node/geometry verified at0cbebbee231e8d4f63306d2a3bd875926e9a4ef1: entire Calc124/shared223 raw S/B/F/L100 every counter positive; seven ordinary native commands/448sources and whole66673/946byte streams, original partial writes/temporary exceptions and CALC-070 preserved; source-absent static/profile0UI, all14gates/23tooling, exact149source/test/fixture hashes and same-agent separate EVALUATOR pass. Actual shared owners reused, block walks/ScMatrix/document/UI still required, next full81."
+  -
+    type: "status"
+    at: "2026-10-12T17:07:14.120Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original matrix node and copy/range copy/resize/transpose reuse real SoA/SharedString and preserve source sections, validation, partial writes, temporary lifetime and integer dispatch omissions. Entire Calc124/shared223 raw S/B/F/L100 every counter positive, seven ordinary native commands/448sources and full66673/946byte streams, source-absent static/profile0UI, all14gates/23tooling and exact149source/test/fixture hashes pass at0cbebbee231e8d4f63306d2a3bd875926e9a4ef1 with same-agent separate EVALUATOR pass. CALC-070 documented, inventory foundations partial, block walks/ScMatrix/document/UI/full QA remain required, next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T17:06:24.072Z"
+doc_updated_at: "2026-10-12T17:07:14.121Z"
 doc_updated_by: "CODER"
 description: "Task79 of approved Calc UI prerequisite goal: original element_block_node_type, matrix copy/range copy/resize/transpose over genuine existing vector and string callbacks/value members. Confirm original integer dispatch omissions normally and preserve/document them. Explicit erased string type witnesses, no new string/storage engine or fake Calc owners. Whole Calc/affected shared raw100 and ordinary native streams, inventory/provenance/local gates/exact same-agent evaluator. Only calc checkout/branch, next full81; block walks remain next scope."
 sections:
