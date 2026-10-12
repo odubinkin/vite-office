@@ -4,7 +4,7 @@ title: "Capture original desktop generic UNO exception behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,39 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T00:58:20.147Z"
+  updated_by: "EVALUATOR"
+  note: "Approved native desktop exception contract experiment is complete; whole original normal/sanitized observations match, portable scoped coverage remains raw100 and direct JS shortcut is disproven."
+  evaluated_sha: "368d2d2bfdc358c1d0f3025e77b21481a3095170"
+  blueprint_digest: "ef74b71ec7cf6caeb3823cee5921e9fb5616ed4ca99439ef1c50aa725cf1723c"
+  evidence_refs:
+    - ".agentplane/tasks/202610120010-WHX77E/README.md"
+    - ".agentplane/tasks/202610120010-WHX77E/quality/20261012-005820147-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120010-WHX77E/quality/20261012-005820147-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120010-WHX77E/quality/20261012-005820147-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120010-WHX77E/blueprint/resolved-snapshot.json"
+    - "output/playwright/task55-checks/final-audit.json"
+    - "output/playwright/task55-checks/native-check.log"
+    - "output/playwright/task55-checks/gates-final-manifest.json"
+    - "output/playwright/task55-checks/value-coverage-audit.json"
+    - "output/playwright/task55-checks/direct-js-counterexample.json"
+    - "output/playwright/task55-checks/enum-normal/manifest.json"
+  findings:
+    - "101 complete original units per build, 443 full original hashes, 39 generated hashes, 219 successful terminal commands, four whole equal streams; separate genuine configure and enum negative probes retain full inputs and diagnostics."
+    - "No browser runtime helper or new runtime inventory owner is claimed. All existing 19 Calc and 69 shared owners retain every raw coverage counter positive under the unchanged task54 shared profile with all three source links absent and restored."
+    - "Native non-null Context query and temporary acquire/release differ from direct JS catch and one Any copy despite equal final count. Next implementation must preserve these observable phases."
+commit:
+  hash: "368d2d2bfdc358c1d0f3025e77b21481a3095170"
+  message: "🧩 WHX77E code: capture original desktop UNO exception contract"
 comments:
   -
     author: "CODER"
     body: "Start: Capture genuine original desktop exception bridge contract and non-null Context ownership before browser implementation; no source/provider substitutes."
+  -
+    author: "CODER"
+    body: "Implementation: Captured complete original desktop exception contract with whole native streams and scoped raw coverage evidence; browser helper remains subsequent."
 events:
   -
     type: "status"
@@ -35,8 +63,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Capture genuine original desktop exception bridge contract and non-null Context ownership before browser implementation; no source/provider substitutes."
+  -
+    type: "status"
+    at: "2026-10-12T00:58:19.394Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Captured complete original desktop exception contract with whole native streams and scoped raw coverage evidence; browser helper remains subsequent."
 doc_version: 3
-doc_updated_at: "2026-10-12T00:58:06.661Z"
+doc_updated_at: "2026-10-12T00:58:19.394Z"
 doc_updated_by: "CODER"
 description: "Task55: genuine complete desktop cppuhelper exception capture/throw contract over actual CPPU environment/mapping and native bridge. Determine whether native JS adaptation preserves dynamic type/data/Context ownership before implementing browser exception helpers; no synthetic bridge, mobile fallback or partial-stream claims."
 sections:

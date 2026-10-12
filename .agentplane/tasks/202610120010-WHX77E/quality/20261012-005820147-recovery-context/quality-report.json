@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610120010-WHX77E",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-12T00:58:20.147Z",
+  "verdict": "pass",
+  "summary": "Approved native desktop exception contract experiment is complete; whole original normal/sanitized observations match, portable scoped coverage remains raw100 and direct JS shortcut is disproven.",
+  "evaluated_sha": "368d2d2bfdc358c1d0f3025e77b21481a3095170",
+  "blueprint_digest": "ef74b71ec7cf6caeb3823cee5921e9fb5616ed4ca99439ef1c50aa725cf1723c",
+  "findings": [
+    "101 complete original units per build, 443 full original hashes, 39 generated hashes, 219 successful terminal commands, four whole equal streams; separate genuine configure and enum negative probes retain full inputs and diagnostics.",
+    "No browser runtime helper or new runtime inventory owner is claimed. All existing 19 Calc and 69 shared owners retain every raw coverage counter positive under the unchanged task54 shared profile with all three source links absent and restored.",
+    "Native non-null Context query and temporary acquire/release differ from direct JS catch and one Any copy despite equal final count. Next implementation must preserve these observable phases."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610120010-WHX77E/README.md",
+    "output/playwright/task55-checks/final-audit.json",
+    "output/playwright/task55-checks/native-check.log",
+    "output/playwright/task55-checks/gates-final-manifest.json",
+    "output/playwright/task55-checks/value-coverage-audit.json",
+    "output/playwright/task55-checks/direct-js-counterexample.json",
+    "output/playwright/task55-checks/enum-normal/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Physical ABI, allocator/leaks, assembly/system-runtime sanitizer instrumentation, native threading/shutdown and full consumer QA are not certified; actual portable exception helpers remain subsequent."
+  ]
+}
