@@ -4,7 +4,7 @@ title: "Implement original single-value SoA set with hinted writes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T10:28:57.152Z"
+  updated_by: "CODER"
+  note: "Exact implementation962e1e28: complete source-absent Calc111 and related217 tests pass, whole raw S/B/F/L100;10016scalar permutations and whole owned/Calc native streams match, all8native statuses positive. Build,3fresh cases, all13gates and35tooling cases pass; original links restored and exact-SHA EVALUATOR pass. Full due71; document/UI remain incomplete."
   attempts: 0
 quality_review:
   state: "pass"
@@ -68,8 +68,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T10:28:57.152Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact implementation962e1e28: complete source-absent Calc111 and related217 tests pass, whole raw S/B/F/L100;10016scalar permutations and whole owned/Calc native streams match, all8native statuses positive. Build,3fresh cases, all13gates and35tooling cases pass; original links restored and exact-SHA EVALUATOR pass. Full due71; document/UI remain incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-12T10:28:55.175Z"
+doc_updated_at: "2026-10-12T10:28:57.213Z"
 doc_updated_by: "CODER"
 description: "Iteration69: implement both original single-value set overloads and complete empty/data/singleton/top/middle/bottom neighbor transformations over the existing shared store. Reuse actual Calc strings and text attributes, preserve lifecycle/metadata/event/iterator order, and verify whole unchanged native cases and complete scoped source-absent raw100. Original main_def.inl single-value setter family may use a source-mapped main_def.set.ts implementation shard to retain the1000line limit; no alternate model or fake pointees."
 sections:
@@ -110,6 +116,39 @@ sections:
     Full suite: not due; last61, next71. No Writer-only coverage repairs, network, policy/profile/exclusion/threshold changes, merge/publication or whole module/kernel/UI certification. Remaining range-set/other container/actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI, arbitrary value/allocator/throwing/undefined/native ABI/debug/upstream QA remain subsequent. No new suspected upstream issue: encountered failures were type plumbing, observer/caller coverage, pinned diagnostic and inventory metadata defects. Goal stays active. Exact implementation/EVALUATOR/ap verification and closure evidence follow.
 
     Implementation commit: 962e1e2870d231b3470a02e31eb2a75cf4765d8e. Exact same-agent EVALUATOR phase: pass; output/playwright/task69-checks/exact-review.json and .agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/quality-report.json. All52executable owner and14facade committed source hashes match the final verified source evidence. This is a separate review phase by the same agent, with no independent-agent claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T10:28:57.152Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact implementation962e1e28: complete source-absent Calc111 and related217 tests pass, whole raw S/B/F/L100;10016scalar permutations and whole owned/Calc native streams match, all8native statuses positive. Build,3fresh cases, all13gates and35tooling cases pass; original links restored and exact-SHA EVALUATOR pass. Full due71; document/UI remain incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T10:28:55.175Z, excerpt_hash=sha256:ae023491c13d4b24d4b741b6a7ca51728714766a31d45c624be02f9dff9e675e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121002-WPSNEA/blueprint/resolved-snapshot.json
+    - old_digest: 647723317f5045e891220c5019314b81a64d7e0bc98e41b934d2a5e906519722
+    - current_digest: 647723317f5045e891220c5019314b81a64d7e0bc98e41b934d2a5e906519722
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121002-WPSNEA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121002-WPSNEA
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task implementation commit and its scoped registry/test records on calc; retain ignored raw evidence. User manages merges. Do not reset other work or modify original reference sources."
   Findings: |-
     Iteration69, task8 since the full run at61; next full run71. Actual native single-value set takes const T&, including rvalue call expressions; no invented move setter overload. No source reference is shipped in the browser build.
@@ -214,6 +253,39 @@ Result: pass, all13final exitCodes0 and35tooling cases pass. Evidence: gates-fin
 Full suite: not due; last61, next71. No Writer-only coverage repairs, network, policy/profile/exclusion/threshold changes, merge/publication or whole module/kernel/UI certification. Remaining range-set/other container/actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI, arbitrary value/allocator/throwing/undefined/native ABI/debug/upstream QA remain subsequent. No new suspected upstream issue: encountered failures were type plumbing, observer/caller coverage, pinned diagnostic and inventory metadata defects. Goal stays active. Exact implementation/EVALUATOR/ap verification and closure evidence follow.
 
 Implementation commit: 962e1e2870d231b3470a02e31eb2a75cf4765d8e. Exact same-agent EVALUATOR phase: pass; output/playwright/task69-checks/exact-review.json and .agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/quality-report.json. All52executable owner and14facade committed source hashes match the final verified source evidence. This is a separate review phase by the same agent, with no independent-agent claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T10:28:57.152Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact implementation962e1e28: complete source-absent Calc111 and related217 tests pass, whole raw S/B/F/L100;10016scalar permutations and whole owned/Calc native streams match, all8native statuses positive. Build,3fresh cases, all13gates and35tooling cases pass; original links restored and exact-SHA EVALUATOR pass. Full due71; document/UI remain incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T10:28:55.175Z, excerpt_hash=sha256:ae023491c13d4b24d4b741b6a7ca51728714766a31d45c624be02f9dff9e675e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121002-WPSNEA/blueprint/resolved-snapshot.json
+- old_digest: 647723317f5045e891220c5019314b81a64d7e0bc98e41b934d2a5e906519722
+- current_digest: 647723317f5045e891220c5019314b81a64d7e0bc98e41b934d2a5e906519722
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121002-WPSNEA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121002-WPSNEA
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
