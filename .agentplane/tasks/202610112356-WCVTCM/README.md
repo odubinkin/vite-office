@@ -4,7 +4,7 @@ title: "Port original DisposedException value and type ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,39 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T00:05:27.545Z"
+  updated_by: "EVALUATOR"
+  note: "Committed task54 implementation89c87d697626 preserves original comprehensive internal DisposedException value/type ownership over shared RuntimeException/Exception. Whole original normal-ASan/UBSan/pure streams and source-absent scoped raw100 accepted;13actual gate rows0 and inventory aligned."
+  evaluated_sha: "89c87d69762645936914a9eb92bb620713b306e3"
+  blueprint_digest: "2559f180c755929f17f521c46549807f9b48a300b413631aa97ce2bd9196d8e1"
+  evidence_refs:
+    - ".agentplane/tasks/202610112356-WCVTCM/README.md"
+    - ".agentplane/tasks/202610112356-WCVTCM/quality/20261012-000527545-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610112356-WCVTCM/quality/20261012-000527545-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610112356-WCVTCM/quality/20261012-000527545-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610112356-WCVTCM/blueprint/resolved-snapshot.json"
+    - "89c87d697626"
+    - "output/playwright/task54-checks/final-audit.json"
+    - "output/playwright/task54-checks/gates-final-manifest.json"
+    - "output/playwright/task54-checks/native-check.log"
+    - "output/playwright/task54-checks/value-coverage-audit.json"
+    - "output/playwright/task54-checks/replay-initial.log"
+    - "output/playwright/task54-checks/format-final.log"
+  findings:
+    - "Original constructor base-before-derived type order, implicit copy/move no type reinitialization, inherited stable fields/assignment/reverse destruction and RuntimeException base type factory/register/release match genuine generated header. JS catch/finally preserves tested actual hierarchy and caught value lifetime without a substitute exception/type/value provider."
+    - "Independent final audit reread every current source/generated/caller/configuration hash, all153terminal statuses and3whole initialized streams, every raw coverage counter and exact task53 append-only profile.3links restored exactly, common builders/full verifier unchanged,35tooling tests and7format files pass; scope contains9intentional paths only."
+commit:
+  hash: "89c87d69762645936914a9eb92bb620713b306e3"
+  message: "🧩 WCVTCM code: port original DisposedException ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Continue approved Calc goal with complete original DisposedException prerequisite, shared reuse and genuine native/scoped raw100 evidence."
+  -
+    author: "CODER"
+    body: "Implementation: original DisposedException and shared records committed; complete genuine native/pure/source-absent raw100 and13scoped gates accepted, ready for independent committed-source review."
 events:
   -
     type: "status"
@@ -35,8 +63,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Continue approved Calc goal with complete original DisposedException prerequisite, shared reuse and genuine native/scoped raw100 evidence."
+  -
+    type: "status"
+    at: "2026-10-12T00:04:58.843Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: original DisposedException and shared records committed; complete genuine native/pure/source-absent raw100 and13scoped gates accepted, ready for independent committed-source review."
 doc_version: 3
-doc_updated_at: "2026-10-12T00:04:09.967Z"
+doc_updated_at: "2026-10-12T00:04:58.843Z"
 doc_updated_by: "CODER"
 description: "Task54: complete original generated DisposedException over existing Exception/RuntimeException owners as required by OWeakConnectionPoint disposal. Genuine native comprehensive headers and strict whole stream replay, scoped Calc/shared raw100; no generic exception bridge substitute."
 sections:
