@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2e1c9997-e05f-4428-badd-326709d565f4",
+    "capabilityId": "CAP-2e1c9997-e05f-4428-badd-326709d565f4",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve actual owned output identity/by-value copies, rvalue and forwarded construction semantics through existing original owners.",
+      "Compare complete unchanged original normal-only value/pointer/Calc callback streams and verify whole source-absent Calc/related owners raw100.",
+      "Keep full upstream module/kernel/UI, arbitrary original ValueT/empty-expression/allocator/failure/undefined-lifetime/physical ABI claims unverified."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task66 extends original initialized value and pointer callback families through existing owners. Original output-reference extraction copy-assigns the existing owned target; by-value extraction constructs an independent result. Rvalue append and actual erased forwarded constructor packs use the same original store, constructing incoming values before alias relocation. The existing scalar container requires its actual value-result binding only, so its heterogeneous callback type omits unrelated writable-reference overload requirements without runtime changes. Original value macro, pointer macro and Calc SharedString/CellTextAttr registrations reuse original block and actual value owners. Normal-only pure callers over whole unchanged mdds macros/headers and full actual SharedString/CellTextAttr sources compare complete value, borrowed-pointer and Calc streams. Original ValueT() empty expressions use actual default temporary, move assignment and destruction. Explicit type/reference/value-category/constructor witnesses replace erased C++ overload/ADL/parameter-pack syntax; no runtime type guessing, duplicate store or fake Calc pointee/provider. Other macro empty-expression categories, arbitrary ValueT/constructor families, throwing cleanup, custom allocators/StoreT, undefined ranges/lifetimes and physical ABI remain unverified. Full MTV/actual other Calc pointees/document/input/view/UI remain subsequent work; no whole module or upstream QA certification."
+    },
+    "capability": "Original initialized typed value and pointer callbacks",
+    "gaps": [
+      "Other macro empty-expression categories, arbitrary native value/constructor families, custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes and physical ABI are unverified.",
+      "Borrowed-pointer macro witness does not certify other Calc pointee implementations or arbitrary native managed ownership graphs.",
+      "Complete MTV/actual other Calc pointees/document/input/view/UI remain subsequent work; original QA references are contextual, not a whole QA port."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/macro.hpp",
+          "marker": "#define MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp",
+          "marker": "struct default_element_block"
+        },
+        {
+          "path": "sc/inc/mtvelements.hxx",
+          "marker": "string_block"
+        },
+        {
+          "path": "sc/source/core/data/celltextattr.cxx",
+          "marker": "CellTextAttr::CellTextAttr()"
+        },
+        {
+          "path": "svl/source/misc/sharedstring.cxx",
+          "marker": "SharedString& SharedString::operator="
+        },
+        {
+          "path": "include/svl/sharedstring.hxx",
+          "marker": "SharedString::SharedString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/element-blocks/test_basic.cpp",
+          "marker": "using my_block2"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/macro.ts",
+          "marker": "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/macro.test.ts",
+          "marker": "matches whole original value callback stream"
+        },
+        {
+          "path": "apps/office/src/sc/inc/mtvelements-callback.test.ts",
+          "marker": "matches whole original Calc value callback stream"
+        },
+        {
+          "path": "scripts/mdds-element-callback-native-probe.mjs",
+          "marker": "Whole original element callbacks captured"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original typed value callbacks (task66)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "typed-element-callbacks",
+    "scopeLimitations": [
+      "Task66 extends original initialized value and pointer callback families through existing owners. Original output-reference extraction copy-assigns the existing owned target; by-value extraction constructs an independent result. Rvalue append and actual erased forwarded constructor packs use the same original store, constructing incoming values before alias relocation. The existing scalar container requires its actual value-result binding only, so its heterogeneous callback type omits unrelated writable-reference overload requirements without runtime changes. Original value macro, pointer macro and Calc SharedString/CellTextAttr registrations reuse original block and actual value owners. Normal-only pure callers over whole unchanged mdds macros/headers and full actual SharedString/CellTextAttr sources compare complete value, borrowed-pointer and Calc streams. Original ValueT() empty expressions use actual default temporary, move assignment and destruction. Explicit type/reference/value-category/constructor witnesses replace erased C++ overload/ADL/parameter-pack syntax; no runtime type guessing, duplicate store or fake Calc pointee/provider. Other macro empty-expression categories, arbitrary ValueT/constructor families, throwing cleanup, custom allocators/StoreT, undefined ranges/lifetimes and physical ABI remain unverified. Full MTV/actual other Calc pointees/document/input/view/UI remain subsequent work; no whole module or upstream QA certification."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "dependencyManifestHash": "e47199063c500d19ca96cea316d4a384e8cce9c5481e8e726404679bfcbd9810",
+  "mddsArchiveHashes": {
+    "mdds": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112",
+    "boost": "2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb"
+  },
+  "mddsSourceHashes": {
+    "global.hpp": "1267207aeb62432ac770ad2578c4b370367766f429968d186710716fa9184ecd",
+    "multi_type_vector/types.hpp": "b22de4d75774af2aa8f8423cc33e61ddd0c8cae6d9c641f6105c36bfbd8b3291",
+    "multi_type_vector/types_util.hpp": "331d70cdd77e4a2365ccbec91c62600b010d6fe0099f81194be33d38e4eb19b4",
+    "multi_type_vector/delayed_delete_vector.hpp": "eae6a3b966aa9eda88a560c8637c3d1a32b3d6a1f54ad55e6dda097e0f8ce939",
+    "multi_type_vector/standard_element_blocks.hpp": "42482fa57ff3cf7389e618a896863f971a30700ed02814379a438973a2ac759d",
+    "multi_type_vector/block_funcs.hpp": "9b3d8418f48c4237395cc73fd65dee4119566c71f771817cf2eb89e369b9f55f",
+    "multi_type_vector/macro.hpp": "7b6432057fa0d35e8902cb7f0720b38e641206a8b6f25eec0e446435be989583",
+    "multi_type_vector/util.hpp": "f4d7cfcd79986c5ec2714f694fae50307c03d84056d7d1e2ec30f2512f3bb7bc",
+    "multi_type_vector/soa/main.hpp": "fa23b0046758009d58e5be69856e167656a212b4d937f83b8bce6f643115cdb9",
+    "multi_type_vector/soa/main_def.inl": "08ac72ad06b18d746a0a7830cca74b5bbf08b2b1b46724f461c2089767b5b660",
+    "multi_type_vector/soa/iterator.hpp": "3da24a13bfa102b8aab639ba340f7e52812f34202616ffbfeff043a0e93b2893",
+    "multi_type_vector/iterator_node.hpp": "4beac64b5fe1c76542d8c36821a85c1e475f17b08acc857fe012c3e54aa4d5b1",
+    "multi_type_vector/soa/block_util.hpp": "8dcf3c0024b8eaa5076d63bc4e89f74f0f048d14643e037fabc32e3e8cbffc3e"
+  },
+  "callerHash": "1a04b74673f3c5587b86f1ef65d4f1eb3be0aaef6f28736b4a6d0f0a8dd9996a",
+  "sourceDigest": "3dd14ec070c48d61d6ff1183f0207516f3dae800605dea425d0fb36d43a533a1",
+  "captures": {
+    "owned": "owned\nnew 1 0\nnew 2 10\nnew 3 20\nnew 4 30\nnew 5 80\ncopy 2 6 10\ncopy 2 7 10\nfill 2 2 6:10 7:10\ntype 59\ndefault 8 0\nmoveassign 5 8 0\ndelete 8 -1\nempty 5:0\ndefault 9 0\nempty_expression 9:0\ndelete 9 0\nassign 5 6 10\noutput 5:10\ncopy 6 10 10\nresult 10:10\ndelete 10 10\nassign 7 3 20\nset 2 2 6:10 7:20\nassign 6 2 10\nassign 7 3 20\nset_range 2 2 6:10 7:20\ncopy 4 11 30\nmove 6 12 10\nmove 7 13 20\ndelete 6 -1\ndelete 7 -1\nappend 3 4 12:10 13:20 11:30\nmove 4 14 30\nappend_move 4 4 12:10 13:20 11:30 14:30\ncopy 2 15 10\nmove 12 16 10\nmove 13 17 20\nmove 11 18 30\nmove 14 19 30\ndelete 12 -1\ndelete 13 -1\ndelete 11 -1\ndelete 14 -1\nemplace_lvalue 5 8 16:10 17:20 18:30 19:30 15:10\ndefault 20 0\nemplace_default 6 8 16:10 17:20 18:30 19:30 15:10 20:0\nnew 21 123\nemplace_args 7 8 16:10 17:20 18:30 19:30 15:10 20:0 21:123\nmove 3 22 20\nemplace_move 8 8 16:10 17:20 18:30 19:30 15:10 20:0 21:123 22:20\ncopy 16 23 10\nmove 16 24 10\nmove 17 25 20\nmove 18 26 30\nmove 19 27 30\nmove 15 28 10\nmove 20 29 0\nmove 21 30 123\nmove 22 31 20\ndelete 16 -1\ndelete 17 -1\ndelete 18 -1\ndelete 19 -1\ndelete 15 -1\ndelete 20 -1\ndelete 21 -1\ndelete 22 -1\nemplace_alias 9 16 24:10 25:20 26:30 27:30 28:10 29:0 30:123 31:20 23:10\nmove 23 32 10\nmoveassign 23 31 20\nmoveassign 31 30 123\nmoveassign 30 29 0\nmoveassign 29 28 10\nmoveassign 28 27 30\nmoveassign 27 26 30\nmoveassign 26 25 20\nmoveassign 25 24 10\nassign 24 2 10\nprepend 10 16 24:10 25:10 26:20 27:30 28:30 29:10 30:0 31:123 23:20 32:10\nmove 23 33 20\nmove 32 34 10\nmoveassign 32 31 123\nmoveassign 23 30 0\nmoveassign 31 29 10\nmoveassign 30 28 30\nmoveassign 29 27 30\nmoveassign 28 26 20\nmoveassign 27 25 10\nmoveassign 26 24 10\nassign 24 2 10\nassign 25 3 -1\nprepend_range 12 16 24:10 25:-1 26:10 27:10 28:20 29:30 30:30 31:10 23:0 32:123 33:20 34:10\ncopy 2 35 10\ncopy 3 36 -1\nappend_range 14 16 24:10 25:-1 26:10 27:10 28:20 29:30 30:30 31:10 23:0 32:123 33:20 34:10 35:10 36:-1\nmove 35 37 10\nmove 36 38 -1\nmoveassign 36 34 10\nmoveassign 35 33 20\nmoveassign 34 32 123\nmoveassign 33 23 0\nmoveassign 32 31 10\nmoveassign 23 30 30\nmoveassign 31 29 30\nmoveassign 30 28 20\nmoveassign 29 27 10\nmoveassign 28 26 10\nmoveassign 27 25 -1\nassign 25 2 10\nassign 26 3 -1\ninsert_range 16 16 24:10 25:10 26:-1 27:-1 28:10 29:10 30:20 31:30 23:30 32:10 33:0 34:123 35:20 36:10 37:10 38:-1\nassign 24 2 10\nassign 25 3 -1\ndelete 38 -1\ndelete 37 10\ndelete 36 10\ndelete 35 20\ndelete 34 123\ndelete 33 0\ndelete 32 10\ndelete 23 30\ndelete 31 30\ndelete 30 20\ndelete 29 10\ndelete 28 10\ndelete 27 -1\ndelete 26 -1\nassign_range 2 16 24:10 25:-1\ncopy 2 39 10\ncopy 3 40 -1\nrange 2 2 39:10 40:-1\ndelete 40 -1\ndelete 39 10\ndelete 25 -1\ndelete 24 10\ninputs\ndelete 5 10\ndelete 4 -1\ndelete 3 -1\ndelete 2 10\ndelete 1 0\n",
+    "pointer": "pointer\nnew 1 10\nnew 2 20\nnew 3 30\nfill 2 2 1 1\ntype 60\nempty 0\noutput 1\nset 2 2 1 2\nset_range 2 2 1 2\nappend 3 4 1 2 3\nprepend 4 4 2 1 2 3\nprepend_range 6 8 1 2 2 1 2 3\nappend_range 8 8 1 2 2 1 2 3 1 2\ninsert_range 10 16 1 1 2 2 2 1 2 3 1 2\nassign_range 3 16 1 2 3\nrange 2 2 1 2\ninputs\ndelete 3 30\ndelete 2 20\ndelete 1 10\n",
+    "calc": "calc\nfill 2 2 5 65 65 65\nempty 2 2 4 65 65 -1\noutput 2 2 5 65 65 65\nresult 6 65\nafter_result 2 2 5 65 65 65\nappend_move 3 4 5 65 65 65 -1\nemplace_args 4 4 6 65 65 65 65 -1\nemplace_default 5 8 6 65 65 65 65 -1 -1\nstring_remaining 2\nattr_fill 2 2 9:1 9:1 65535:8\nattr_output 2 2 9:1 9:1 9:1\nattr_empty 2 2 9:1 9:1 65535:8\nattr_independent 2 2 9:1 9:1 65535:8\nattr_append_move 3 4 9:1 9:1 9:1 65535:8\nattr_emplace_default 4 4 9:1 9:1 9:1 65535:8 65535:8\n"
+  }
+}

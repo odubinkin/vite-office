@@ -214,9 +214,25 @@ export class element_block<T> extends base_element_block {
   ): void {
     this.get(block).m_array.set(pos, this.convert(value));
   }
-  /** Adapts both value-return and output-reference overloads as the original assigned scalar. @param this - Native static specialization. @param block - Owner. @param pos - Offset. @returns Scalar. */
-  public static get_value<T>(this: BlockConstructor<T>, block: base_element_block, pos: number): T {
-    return this.get(block).m_array.get(pos);
+  /** Original by-value overload constructs its result. @param this - Native specialization. @param block - Owner. @param pos - Offset. @returns Value result. */
+  public static get_value<T>(this: BlockConstructor<T>, block: base_element_block, pos: number): T;
+  /** Original output-reference overload assigns into the target. @param this - Native specialization. @param block - Owner. @param pos - Offset. @param output - Target reference. @returns Nothing. */
+  public static get_value<T>(
+    this: BlockConstructor<T>,
+    block: base_element_block,
+    pos: number,
+    output: [T],
+  ): void;
+  /** Binds native extraction overloads without changing borrowed at/operator[] access. @param this - Native specialization. @param block - Owner. @param pos - Offset. @param output - Optional reference. @returns Value or nothing. */
+  public static get_value<T>(
+    this: BlockConstructor<T>,
+    block: base_element_block,
+    pos: number,
+    output?: [T],
+  ): T | void {
+    const store = this.get(block).m_array;
+    if (output === undefined) return store.get_value(pos);
+    store.get_value(pos, output);
   }
   /** Appends original scalar after native T conversion. @param this - Native static specialization. @param block - Owner. @param value - Scalar. @returns Nothing. */
   public static append_value<T>(
@@ -225,6 +241,22 @@ export class element_block<T> extends base_element_block {
     value: T,
   ): void {
     this.get(block).m_array.push_back(this.convert(value));
+  }
+  /** Original forwarded rvalue append overload; the suffix is the erased C++ value-category witness. @param this - Native specialization. @param block - Owner. @param value - Moved source. @returns Nothing. */
+  public static append_value_move<T>(
+    this: BlockConstructor<T>,
+    block: base_element_block,
+    value: T,
+  ): void {
+    this.get(block).m_array.push_back_move(this.convert(value));
+  }
+  /** Original variadic emplace overload with its actual erased constructor call. @param this - Native specialization. @param block - Owner. @param construct - Forwarded ValueT constructor. @returns Nothing. */
+  public static emplace_back_construct<T>(
+    this: BlockConstructor<T>,
+    block: base_element_block,
+    construct: () => T,
+  ): void {
+    this.get(block).m_array.emplace_back_construct(construct);
   }
   /** Forwards constructed native scalar. @param this - Native static specialization. @param block - Owner. @param value - Scalar. @returns Nothing. */
   public static emplace_back_value<T>(

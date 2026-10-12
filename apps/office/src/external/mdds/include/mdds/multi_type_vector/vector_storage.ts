@@ -129,6 +129,32 @@ export function set_storage_value<T>(storage: vector_storage<T>, index: number, 
   if (storage.operations) storage.operations.copy_assign(storage.values[index] as T, value);
   else storage.values[index] = value;
 }
+/** Native by-value extraction constructs an independent result. @param storage - State. @param index - Live position. @returns Value result. */
+export function get_storage_value<T>(storage: vector_storage<T>, index: number): T;
+/** Native output-reference extraction assigns into the existing target. @param storage - State. @param index - Live position. @param output - Actual reference slot. @returns Nothing. */
+export function get_storage_value<T>(storage: vector_storage<T>, index: number, output: [T]): void;
+/** Binds the two original extraction overloads. @param storage - State. @param index - Live position. @param output - Optional output reference. @returns Independent value or nothing. */
+export function get_storage_value<T>(
+  storage: vector_storage<T>,
+  index: number,
+  output?: [T],
+): T | void {
+  const value = storage.values[index] as T;
+  const operations = storage.operations;
+  if (output === undefined) return operations ? operations.copy_construct(value) : value;
+  if (operations) operations.copy_assign(output[0], value);
+  else output[0] = value;
+}
+/** Original emplace constructs directly before relocating aliased constructor arguments. @param storage - State. @param construct - Actual erased forwarded ValueT constructor. @param aligned_count - Allocation witness. @returns Nothing. */
+export function emplace_storage<T>(
+  storage: vector_storage<T>,
+  construct: () => T,
+  aligned_count: number,
+): void {
+  const next = construct();
+  grow_storage(storage, storage.size + 1, aligned_count);
+  storage.values[storage.size++] = next;
+}
 /** Constructs appended value before relocating aliased sources. @param storage - State. @param value - Live source. @param move - Rvalue overload. @param aligned_count - Native allocation witness. @returns Nothing. */
 export function append_storage<T>(
   storage: vector_storage<T>,

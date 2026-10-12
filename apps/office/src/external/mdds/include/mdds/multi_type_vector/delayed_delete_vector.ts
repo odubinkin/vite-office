@@ -11,6 +11,8 @@ import {
   append_storage,
   resize_storage,
   set_storage_value,
+  get_storage_value,
+  emplace_storage,
   swap_storage_values,
   type ValueOperations,
 } from "./vector_storage.ts";
@@ -155,6 +157,16 @@ export class delayed_delete_vector<T> {
   public get(position: number): T {
     return this.m_vec.values[position + this.m_front_offset] as T;
   }
+  /** Extracts a native value result rather than a borrowed operator[] reference. @param position - Logical position. @returns Independent value. */
+  public get_value(position: number): T;
+  /** Assigns through an actual output reference. @param position - Logical position. @param output - Target reference. @returns Nothing. */
+  public get_value(position: number, output: [T]): void;
+  /** Binds native value extraction overloads over existing storage. @param position - Logical position. @param output - Optional reference. @returns Value or nothing. */
+  public get_value(position: number, output?: [T]): T | void {
+    const index = position + this.m_front_offset;
+    if (output === undefined) return get_storage_value(this.m_vec, index);
+    get_storage_value(this.m_vec, index, output);
+  }
   /** Adapts mutable operator[]. @param position - Logical position. @param value - Scalar. @returns Nothing. */
   public set(position: number, value: T): void {
     set_storage_value(this.m_vec, position + this.m_front_offset, value);
@@ -168,6 +180,14 @@ export class delayed_delete_vector<T> {
   /** Appends without clearing removed front entries. @param value - Scalar. @returns Nothing. */
   public push_back(value: T): void {
     append_storage(this.m_vec, value, false, this.aligned_capacity(this.m_vec.size + 1));
+  }
+  /** Original rvalue push_back overload. @param value - Actual moved source. @returns Nothing. */
+  public push_back_move(value: T): void {
+    append_storage(this.m_vec, value, true, this.aligned_capacity(this.m_vec.size + 1));
+  }
+  /** Original forwarded constructor pack, represented by its actual ValueT constructor call. @param construct - Erased native constructor arguments. @returns Nothing. */
+  public emplace_back_construct(construct: () => T): void {
+    emplace_storage(this.m_vec, construct, this.aligned_capacity(this.m_vec.size + 1));
   }
   /** Adapts scalar perfect forwarding after T construction at the call boundary. @param value - Constructed scalar. @returns Nothing. */
   public emplace_back(value: T): void {

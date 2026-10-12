@@ -1,4 +1,5 @@
 /** @fileoverview Original Calc mtvelements.hxx value-block specializations over shared mdds and actual SVL/Calc value owners. */
+import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
 import { SharedString } from "../../svl/inc/sharedstring";
 import { CellTextAttr } from "./celltextattr";
 import { type DelayedValueOperations } from "../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts";
@@ -104,4 +105,19 @@ export const celltextattr_block = default_element_block(
   attr_value,
   false,
   attr_operations,
+);
+
+/** Original svl namespace SharedString callback overloads with explicit erased value-type witness. */
+export const string_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_string,
+  new SharedString(),
+  string_block,
+  { operations: string_operations, empty: string_operations.default_construct },
+);
+/** Original sc namespace CellTextAttr callback overloads, reusing its actual metadata members. */
+export const celltextattr_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
+  element_type_celltextattr,
+  new CellTextAttr(),
+  celltextattr_block,
+  { operations: attr_operations, empty: attr_operations.default_construct },
 );

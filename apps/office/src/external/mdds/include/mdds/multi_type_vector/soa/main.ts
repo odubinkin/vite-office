@@ -14,7 +14,7 @@ import {
   type DelayedVectorValue,
   type delayed_delete_vector_iterator,
 } from "../delayed_delete_vector.ts";
-import { type MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../macro.ts";
+import { type ValueResultCallbacks } from "../macro.ts";
 import {
   throw_block_position_not_found,
   empty_event_func,
@@ -272,9 +272,8 @@ export const empty_event_value_ops: EventValueOps<empty_event_func> = {
   },
 };
 /** Explicit erased original scalar overload family; numeric native types are never inferred from JS values. */
-export type ContainerCallbacks<T extends DelayedVectorValue = DelayedVectorValue> = ReturnType<
-  typeof MDDS_MTV_DEFINE_ELEMENT_CALLBACKS<T>
->;
+export type ContainerCallbacks<T extends DelayedVectorValue = DelayedVectorValue> =
+  ValueResultCallbacks<T>;
 const move_construction = Symbol("native move construction");
 /** Original SoA multi_type_vector field/lifetime owner; subsequent original segment algorithms are not replaced by a different engine. */
 export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
