@@ -4,7 +4,7 @@ title: "Implement original managed mdds element blocks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T04:59:08.233Z"
+  updated_by: "CODER"
+  note: "Complete original managed/noncopyable and clone owners at types.ts over reused storage. Whole13383byte normal-ASan/UBSan streams, true no-equality and negative count/fill constructor witnesses; Calc106/shared34019+94raw100 source-absent, exact prior argv/maps immutable and three links restored. All13gates/35tooling/format pass; actual implementation4ea09eaeb70a1bf8054e7141878cd7669de7adc0 reviewed, initial failures retained, no Writer/config/threshold repairs."
   attempts: 0
 quality_review:
   state: "pass"
@@ -68,8 +68,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T04:59:08.233Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original managed/noncopyable and clone owners at types.ts over reused storage. Whole13383byte normal-ASan/UBSan streams, true no-equality and negative count/fill constructor witnesses; Calc106/shared34019+94raw100 source-absent, exact prior argv/maps immutable and three links restored. All13gates/35tooling/format pass; actual implementation4ea09eaeb70a1bf8054e7141878cd7669de7adc0 reviewed, initial failures retained, no Writer/config/threshold repairs."
 doc_version: 3
-doc_updated_at: "2026-10-12T04:57:19.981Z"
+doc_updated_at: "2026-10-12T04:59:08.296Z"
 doc_updated_by: "CODER"
 description: "Task63: complete original managed and noncopyable managed element block pointer ownership for Calc storage prerequisites; reuse existing scalar block/vector engine, unchanged whole native headers, exact ownership/copy/clone/resize/overwrite streams, source-absent Calc and affected shared raw100, inventory and scoped gates. Next full71."
 sections:
@@ -77,7 +83,41 @@ sections:
   Scope: "Complete original managed/noncopyable element-block and clone owners directly in apps/office/src/external/mdds/include/mdds/multi_type_vector/types.ts, reusing shared delayed_delete_vector.ts and existing scalar engine. Native pointer copy/delete and optional equality/clone operators are erased template witnesses. Adjacent types_managed.test.ts/native-managed-block-cases.json and genuine scripts/mdds-managed-block-native-probe.mjs verify whole original pinned headers and complete initialized streams. Matching shared records/capability and calc-core.md updated. Final combined owner fits repository budget; newly authored companion runtime and records removed. No Calc objects/provider, object-value policy, custom StoreT/allocator/parallel execution, physical ABI or full document/UI claims."
   Plan: "Implement original pointer block ownership and copy/clone contracts using existing shared block/vector machinery, verify whole original header caller normal and ASan/UBSan with full initialized identity/value/lifetime/error streams, retain source-absent Calc and exact task62 related raw100 plus complete affected mdds owners/tests, update inventory and scoped gates, implementation-bound same-agent EVALUATOR phase and clean finish on calc. Full71 remains next."
   Verify Steps: "node scripts/mdds-managed-block-native-probe.mjs --write then --check: exact pinned full native input verification, positive compiler/normal and ASan/UBSan exit status, unchanged whole headers and complete output parity. Source-absent driver output/playwright/task63-checks/portable.mjs: Calc raw S/B/F/L100 and exact task62 related argv retained with complete mdds vector/types/managed/dispatch tests and owners; raw source maps audit and all three links restored. Scoped13 gates from output/playwright/task63-checks/gates-inputs.json (typecheck, changed-path lint, docs, size, dependencies, provenance/tree, shared/Calc inventory, related tooling, routing, doctor, diff), intentional-file Prettier check. Record every failed check and bounded repair, no Writer-only repair/profile lowering. Record actual implementation SHA before EVALUATOR review, verify and clean finish."
-  Verification: "Command: node scripts/mdds-managed-block-native-probe.mjs --write and --check. Result: pass. Evidence: output/playwright/task63-checks/native-contract-{write,check}.log; whole unchanged verified mdds3.2.1 headers,13source hashes, pinned two archive hashes and original LO patch; normal/ASan/UBSan four positive terminal commands, complete13383byte identical streams including allocation/copy/clone/delete/value/identity/error ordering, true no-operator== and rejected count/pointer constructor compile witnesses. Scope: complete original initialized managed/noncopyable owner and clone contracts over existing shared storage. Command: node output/playwright/task63-checks/portable.mjs (Calc106/24) and final --shared-only. Result: pass. Evidence: value-{calc,shared}-manifest.json and logs; shared340/65; source-absent19+94executable owners all raw100. Calc S/B/F/L2920/2055/474/2564; shared6740/3158/1089/6098. Exact task62 argv order and all prior runtime maps preserved; all three links restored. Command: declared13scoped gates plus final changed-path ESLint, npm run typecheck and intentional-file Prettier. Result: pass. Evidence: gates-final-manifest.json, gate-lint-final.log, typecheck-terminal.log, format-final-check.log and final-audit.json. Scope: original types.ts boundary, all affected source/inventory/docs/tooling; global source input hashes unchanged during final profile. Initial failed checks retained in Findings and prior-gates. No Writer code/coverage/config/threshold repair. Original suspicious journal unchanged because no new suspicious upstream case was confirmed. Quality and clean source/evidence commits follow; full71 remains next."
+  Verification: |-
+    Command: node scripts/mdds-managed-block-native-probe.mjs --write and --check. Result: pass. Evidence: output/playwright/task63-checks/native-contract-{write,check}.log; whole unchanged verified mdds3.2.1 headers,13source hashes, pinned two archive hashes and original LO patch; normal/ASan/UBSan four positive terminal commands, complete13383byte identical streams including allocation/copy/clone/delete/value/identity/error ordering, true no-operator== and rejected count/pointer constructor compile witnesses. Scope: complete original initialized managed/noncopyable owner and clone contracts over existing shared storage. Command: node output/playwright/task63-checks/portable.mjs (Calc106/24) and final --shared-only. Result: pass. Evidence: value-{calc,shared}-manifest.json and logs; shared340/65; source-absent19+94executable owners all raw100. Calc S/B/F/L2920/2055/474/2564; shared6740/3158/1089/6098. Exact task62 argv order and all prior runtime maps preserved; all three links restored. Command: declared13scoped gates plus final changed-path ESLint, npm run typecheck and intentional-file Prettier. Result: pass. Evidence: gates-final-manifest.json, gate-lint-final.log, typecheck-terminal.log, format-final-check.log and final-audit.json. Scope: original types.ts boundary, all affected source/inventory/docs/tooling; global source input hashes unchanged during final profile. Initial failed checks retained in Findings and prior-gates. No Writer code/coverage/config/threshold repair. Original suspicious journal unchanged because no new suspicious upstream case was confirmed. Quality and clean source/evidence commits follow; full71 remains next.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T04:59:08.233Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original managed/noncopyable and clone owners at types.ts over reused storage. Whole13383byte normal-ASan/UBSan streams, true no-equality and negative count/fill constructor witnesses; Calc106/shared34019+94raw100 source-absent, exact prior argv/maps immutable and three links restored. All13gates/35tooling/format pass; actual implementation4ea09eaeb70a1bf8054e7141878cd7669de7adc0 reviewed, initial failures retained, no Writer/config/threshold repairs.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T04:57:19.981Z, excerpt_hash=sha256:60d35c12b233e0faa3d3a46112a9483696b98a3058611c55388d9ad3c63866ca
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120418-PECP1V/blueprint/resolved-snapshot.json
+    - old_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+    - current_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120418-PECP1V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120418-PECP1V
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task63 intentional source, fixture, inventory and documentation changes on calc; retain evidence and restored source links. No merges or unrelated active-task edits."
   Findings: |-
     Previous completed turn made progress: task62 native mapping lifetimes and full related raw100 passed; task61 full application15491 and browser308 passed. Read-only inspection confirms Calc mtvelements.hxx uses noncopyable managed object blocks; existing mdds implementation currently supports scalar blocks only. No new suspicious upstream case confirmed yet.
@@ -170,6 +210,39 @@ node scripts/mdds-managed-block-native-probe.mjs --write then --check: exact pin
 ## Verification
 
 Command: node scripts/mdds-managed-block-native-probe.mjs --write and --check. Result: pass. Evidence: output/playwright/task63-checks/native-contract-{write,check}.log; whole unchanged verified mdds3.2.1 headers,13source hashes, pinned two archive hashes and original LO patch; normal/ASan/UBSan four positive terminal commands, complete13383byte identical streams including allocation/copy/clone/delete/value/identity/error ordering, true no-operator== and rejected count/pointer constructor compile witnesses. Scope: complete original initialized managed/noncopyable owner and clone contracts over existing shared storage. Command: node output/playwright/task63-checks/portable.mjs (Calc106/24) and final --shared-only. Result: pass. Evidence: value-{calc,shared}-manifest.json and logs; shared340/65; source-absent19+94executable owners all raw100. Calc S/B/F/L2920/2055/474/2564; shared6740/3158/1089/6098. Exact task62 argv order and all prior runtime maps preserved; all three links restored. Command: declared13scoped gates plus final changed-path ESLint, npm run typecheck and intentional-file Prettier. Result: pass. Evidence: gates-final-manifest.json, gate-lint-final.log, typecheck-terminal.log, format-final-check.log and final-audit.json. Scope: original types.ts boundary, all affected source/inventory/docs/tooling; global source input hashes unchanged during final profile. Initial failed checks retained in Findings and prior-gates. No Writer code/coverage/config/threshold repair. Original suspicious journal unchanged because no new suspicious upstream case was confirmed. Quality and clean source/evidence commits follow; full71 remains next.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T04:59:08.233Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original managed/noncopyable and clone owners at types.ts over reused storage. Whole13383byte normal-ASan/UBSan streams, true no-equality and negative count/fill constructor witnesses; Calc106/shared34019+94raw100 source-absent, exact prior argv/maps immutable and three links restored. All13gates/35tooling/format pass; actual implementation4ea09eaeb70a1bf8054e7141878cd7669de7adc0 reviewed, initial failures retained, no Writer/config/threshold repairs.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T04:57:19.981Z, excerpt_hash=sha256:60d35c12b233e0faa3d3a46112a9483696b98a3058611c55388d9ad3c63866ca
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120418-PECP1V/blueprint/resolved-snapshot.json
+- old_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+- current_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120418-PECP1V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120418-PECP1V
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
