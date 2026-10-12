@@ -4,7 +4,7 @@ title: "Connect original owned container reads and Calc text attribute store"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -24,7 +24,31 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T09:09:04.950Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation4e6287c2e3f1 preserves original owned reference/result read semantics and actual Calc text attribute specialization over shared owners; complete scoped evidence passes."
+  evaluated_sha: "4e6287c2e3f1ec49708eb4db338d147fe044c3d9"
+  blueprint_digest: "a899d7012e5ae089123964c2c045193dee96aa0f016778ab89f25bcb8e9727ff"
+  evidence_refs:
+    - ".agentplane/tasks/202610120836-DQBEXT/README.md"
+    - ".agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120836-DQBEXT/blueprint/resolved-snapshot.json"
+    - "output/playwright/task67-checks/exact-review.json"
+    - "output/playwright/task67-checks/source-argument-map-audit.json"
+    - "output/playwright/task67-checks/gates-final-manifest.json"
+    - "output/playwright/task67-checks/final-local-manifest.json"
+    - "output/playwright/mdds-container-value-native/manifest.json"
+  findings:
+    - "Original default cell then reference assignment is distinguished from block copy by full native special-member stream; failed reads destroy only the fresh result and retain caller output."
+    - "Original exact Calc trait declaration and same shared constructor/prototype/static members are bound; no absent pointee provider, substitute model or duplicate container."
+    - "Entire source-absent Calc109/27 and related214/34 profiles raw100;28 unchanged shared maps/hashes,14 genuine declaration/reexport ASTs, final build/fresh streams/all13gates and additional metadata binding audits pass."
+commit:
+  hash: "4e6287c2e3f1ec49708eb4db338d147fe044c3d9"
+  message: "🧩 DQBEXT calc: preserve original owned container reads and text attribute store"
 comments:
   -
     author: "CODER"
@@ -37,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved original SoA owned reads and CellTextAttr store specialization over existing shared owners on calc; preserve native evidence and complete scoped coverage."
+  -
+    type: "status"
+    at: "2026-10-12T09:09:01.973Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-12T09:07:35.338Z"
+doc_updated_at: "2026-10-12T09:09:44.847Z"
 doc_updated_by: "CODER"
 description: "Iteration67: extend original shared SoA constructors and reference/value reads for actual owned values, preserve native default-plus-assignment and failed-read cleanup, move existing metadata member bodies to their original main_def boundary, and register exact Calc CellTextAttrTraits/CellTextAttrStoreType over existing owners. Validate whole genuine native and source-absent whole Calc/related raw100."
 sections:
@@ -77,6 +107,8 @@ sections:
     Result: all13final exitCodes0, including typecheck/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventories/35tooling cases/routing/doctor/diff. Additional exact symbol metadata bindings materially revalidated by npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc, and full intentional file prettier --check. Evidence: gates-final-manifest.json and corresponding final logs, provenance-binding-final.log, shared-binding-final.log, calc-binding-final.log, format-check-final.log. All early syntax/lint/JSDoc/marker failure logs and findings retained. Runtime, tests, assertions, global coverage exclusions/thresholds and policies are not weakened.
 
     Full suite: not due. Last full61; next scheduled full71. Writer-only coverage is not changed. Source/metadata review and exact implementation commit references follow before ap verify/finish. Broad Calc goal remains active/incomplete: complete CellStoreType/pointees/ScColumn/Table/Document/edit/undo/input/view/UI remain subsequent.
+
+    Implementation commit: 4e6287c2e3f1ec49708eb4db338d147fe044c3d9. EVALUATOR pass exact implementation; quality report: .agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/quality-report.json. Complete19intentional non-task paths plus task README are reviewed; no implementation edits after this SHA. Final closure metadata is recorded subsequently by ap verify/finish.
   Rollback Plan: "Revert only task67 implementation and metadata commits; re-run source-absent Calc and directly related shared checks. Preserve prior66 evidence and unchanged tests."
   Findings: |-
     - Observation: Exact scoped gate typecheck exited1; original log gate-typecheck.log retained.
@@ -149,6 +181,8 @@ Command: python3 output/playwright/task67-checks/gates.py
 Result: all13final exitCodes0, including typecheck/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventories/35tooling cases/routing/doctor/diff. Additional exact symbol metadata bindings materially revalidated by npm run check:source-provenance, npm run inventory:parity:shared, npm run inventory:parity:calc, and full intentional file prettier --check. Evidence: gates-final-manifest.json and corresponding final logs, provenance-binding-final.log, shared-binding-final.log, calc-binding-final.log, format-check-final.log. All early syntax/lint/JSDoc/marker failure logs and findings retained. Runtime, tests, assertions, global coverage exclusions/thresholds and policies are not weakened.
 
 Full suite: not due. Last full61; next scheduled full71. Writer-only coverage is not changed. Source/metadata review and exact implementation commit references follow before ap verify/finish. Broad Calc goal remains active/incomplete: complete CellStoreType/pointees/ScColumn/Table/Document/edit/undo/input/view/UI remain subsequent.
+
+Implementation commit: 4e6287c2e3f1ec49708eb4db338d147fe044c3d9. EVALUATOR pass exact implementation; quality report: .agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/quality-report.json. Complete19intentional non-task paths plus task README are reviewed; no implementation edits after this SHA. Final closure metadata is recorded subsequently by ap verify/finish.
 
 ## Rollback Plan
 
