@@ -4,7 +4,7 @@ title: "Connect original object value storage to Calc string and text attribute 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,40 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T07:43:36.816Z"
+  updated_by: "EVALUATOR"
+  note: "Approved actual initialized object block ownership and Calc value specializations pass at implementation03bb0aa688218cfca8431377422593d37f83f628; complete original normal-only native streams, whole source-absent scoped raw100 and all13gates are tied to the committed bytes."
+  evaluated_sha: "03bb0aa688218cfca8431377422593d37f83f628"
+  blueprint_digest: "12fe9bd977976f934debb89f2e822a2d5a9f0ff185d23c1352091ae3552845f3"
+  evidence_refs:
+    - ".agentplane/tasks/202610120608-MHYAV3/README.md"
+    - ".agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120608-MHYAV3/blueprint/resolved-snapshot.json"
+    - "output/playwright/task65-checks/actual-sha-review.json"
+    - "output/playwright/task65-checks/source-argument-map-audit.json"
+    - "output/playwright/task65-checks/value-coverage-audit.json"
+    - "output/playwright/task65-checks/gates-final-manifest.json"
+    - "output/playwright/mdds-object-value-native/manifest.json"
+    - "output/playwright/task65-checks/native-check.log"
+    - "output/playwright/task65-checks/format-final.log"
+  findings:
+    - "Actual default/fill/range/copy including hidden prefixes, assignment/lifetime, copy-based mdds swap and separate iter_swap preserve real native value observations; existing SharedString/CellTextAttr and shared storage owners are reused."
+    - "All107Calc/211related portable tests and35tooling tests pass;20Calc and31related whole executable owners raw100,14nonexecuting facade exclusions AST-verified,27unchanged shared raw maps preserved and source hashes match the committed runtime."
+    - "First failed native/coverage/metadata evidence retained. Constructor evidence and exhaustive append_storage operation repaired without weakening source/test/coverage/configuration gates or changing Writer."
+commit:
+  hash: "03bb0aa688218cfca8431377422593d37f83f628"
+  message: "🧩 MHYAV3 calc: connect original string and text attribute value blocks"
 comments:
   -
     author: "CODER"
     body: "Start: extend existing initialized object storage and connect original Calc string/text attribute block owners using shared operators and normal-only genuine native evidence."
+  -
+    author: "CODER"
+    body: "Implementation: actual object value blocks committed at03bb0aa688218cfca8431377422593d37f83f628; normal whole native and source-absent scoped acceptance passes. Proceed to implementation-bound quality phase."
 events:
   -
     type: "status"
@@ -37,8 +66,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: extend existing initialized object storage and connect original Calc string/text attribute block owners using shared operators and normal-only genuine native evidence."
+  -
+    type: "status"
+    at: "2026-10-12T07:42:43.064Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: actual object value blocks committed at03bb0aa688218cfca8431377422593d37f83f628; normal whole native and source-absent scoped acceptance passes. Proceed to implementation-bound quality phase."
 doc_version: 3
-doc_updated_at: "2026-10-12T07:41:52.975Z"
+doc_updated_at: "2026-10-12T07:42:43.064Z"
 doc_updated_by: "CODER"
 description: "Iteration65: extend existing delayed_delete_vector and default_element_block with actual owned ValueT constructors, assignment and lifetime semantics; reuse task64 shared vector operations and existing SharedString/CellTextAttr owners; export original Calc string_block and celltextattr_block specializations with initialized native behavior evidence. Keep allocator, failure cleanup, undefined lifetimes and full MTV/document/UI gaps explicit."
 sections:
