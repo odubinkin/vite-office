@@ -1,10 +1,11 @@
 ---
 id: "202610121032-NEJNM4"
 title: "Implement original range-value SoA set and hinted input writes"
-status: "DOING"
+result_summary: "Implemented original range-value SoA set and hinted input writes with complete native correspondence, scoped coverage and inventory evidence."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -48,12 +49,15 @@ quality_review:
     - "Whole normal-only native scalar23968range permutations/owned1914cases/genuine Calc streams,112Calc/219related tests, all raw counters positive, source-absent production build and3fresh whole stream cases pass; all13gates and35tooling cases pass."
     - "Original CALC064/065 suspicious behavior is preserved and journaled with explicit source/fault-injection and consumer limitations; no false full parity promotion."
 commit:
-  hash: "cd66bf47adb14f91110f5a6ec9e1ec59159d9358"
-  message: "🧩 NEJNM4 calc: implement original range-value SoA writes"
+  hash: "c2bee486be513f95c33c8e7bde3385c745eb3dc2"
+  message: "✅ NEJNM4 calc: record verified original range writes"
 comments:
   -
     author: "CODER"
     body: "Start: implement original complete plain/hinted input-range writes over the shared SoA owner and genuine Calc values on calc; preserve whole native outputs and strict scoped source-absent raw100."
+  -
+    author: "CODER"
+    body: "Verified: complete original plain/hinted range writes reuse actual shared SoA/Calc owners; whole normal-only native streams,112Calc/219related raw100, final source-absent build,13gates/35tooling and exact EVALUATOR review pass. CALC064/065 retained; next full71."
 events:
   -
     type: "status"
@@ -74,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original range set;112Calc/219related cases raw S/B/F/L100, every counter positive; whole normal-only native23968scalar/1914owned/Calc streams, source-absent final build and3fresh cases,67exact committed hashes,13gates/35tooling pass. Exact cd66bf47 EVALUATOR quality report recorded; suspected CALC064/065 retained; full next71."
+  -
+    type: "status"
+    at: "2026-10-12T10:57:43.231Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete original plain/hinted range writes reuse actual shared SoA/Calc owners; whole normal-only native streams,112Calc/219related raw100, final source-absent build,13gates/35tooling and exact EVALUATOR review pass. CALC064/065 retained; next full71."
 doc_version: 3
-doc_updated_at: "2026-10-12T10:57:00.979Z"
+doc_updated_at: "2026-10-12T10:57:43.232Z"
 doc_updated_by: "CODER"
 description: "Iteration70: port complete original plain/hinted range set and single/multi-block dispatch through actual shared SoA fields, typed macro iterators, temporary block_slot_type and genuine Calc values. Preserve all native overlap/split/merge/event/lifecycle and input-end/exception ordering, source-map original range definitions, retain previous private corpus and scoped raw100. No substitute cell model, fake pointees or UI readiness claim."
 sections:
@@ -206,6 +217,10 @@ sections:
     - Observation: Second inventory pass found the newly introduced operation ID was a prefix of an existing ID, so filename discovery order did not satisfy the canonical lexicographic ID order.
       Impact: Only registration naming was affected; production sources, complete native streams and100% scoped profiles passed unchanged.
       Resolution: Use the unique source-family operation ID shared.internal.soa.range-insert-empty for the same exact original symbol. Shared and Calc inventories and all35 direct tooling cases now pass; preserve both original failed manifests.
+extensions:
+  implementation_commit:
+    hash: "cd66bf47adb14f91110f5a6ec9e1ec59159d9358"
+    message: "🧩 NEJNM4 calc: implement original range-value SoA writes"
 id_source: "generated"
 ---
 ## Summary
