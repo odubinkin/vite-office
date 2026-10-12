@@ -2916,3 +2916,45 @@ recorded in task54 verification. Generic exception bridge, weak object family,
 services and Calc document/edit/view/UI remain subsequent. Physical ABI,
 allocator/resource, native threads/shutdown, source-location/debug/external-only
 headers and full consumer QA remain unverified. Last full51; next scheduled61.
+
+## Original desktop generic exception contract experiment
+
+Task55 captures the full original getCaughtException/throwException path before
+implementing browser helpers. Complete genuine CPPU environments/mappings, the
+macOS AARCH64 bridge selected by upstream, and cppuhelper exception helpers are
+built without replacement bodies or unresolved-symbol suppression. Native
+--write/--check pass: 101 complete original units per normal/ASan/UBSan build,
+443 full source hashes, 39 genuine generated files and 219 terminal commands
+exit0/signalnull. Whole capture12944/roundtrip12992/nested1308/rejects2132-byte
+streams match; runtime stderr is empty. Actual dynamic base/derived types,
+extra exception fields, non-null Context query/acquire/release, nested catches,
+Any copy/clear and rejected nonexception arguments are observed.
+
+Ten exact original configure.ac C++ ABI compile probes retain complete inputs,
+diagnostics and expected results (7 unavailable declarations). A native UNIX
+loader check verifies dlsym/dladdr support; owned configuration headers preserve
+original feature rules. Cached value-only configuration is unchanged. Original
+cppuhelper/bridge internal comprehensive API requires cppumaker -C. CALC-060
+records the separate normal/internal enum compiler restriction without changing
+original code. Assembly and the system runtime are not sanitizer-instrumented;
+physical ABI, allocator/leaks/thread/shutdown and full consumer QA are not certified.
+
+A complete decode of the capture stream and a bounded diagnostic over actual
+shared RuntimeException/Reference/Any owners disprove direct JS catch plus one
+Any copy as an equivalent replacement. With a non-null Context, the candidate
+has3acquire callbacks through the first Any. Original behavior includes one
+queryInterface(XInterface),6acquire and3release callbacks, ending at the same
+strong count. Final ownership alone would conceal this difference. The temporary
+diagnostic is retained under task55 evidence and removed from app sources.
+No browser exception helper implementation or full portable exception parity is
+claimed. The next implementation must preserve original logical mapping/query
+and temporary ownership phases while reusing shared owners; native JS remains
+appropriate for actual throw/catch only where these observable contracts hold.
+
+Source-absent Calc106/24 and unchanged related shared170/48 tests pass, with whole
+19/69 executable owners every raw S/F/B positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4420/2234/580/3993). The task54 shared argv is
+unchanged except report destination; all3 source links restored exactly. All13
+scoped gates,35 related tooling tests and3 authored native/fixture format checks
+pass. No new browser runtime owner was added, so runtime inventory remains
+unchanged. Last full51; next scheduled61.

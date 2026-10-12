@@ -1450,3 +1450,28 @@ above is an inference from source order, not a separate native leak certificate.
 
 Decision: preserve the exact catch boundary, pointer publication and assignment
 order. Add no unconditional reset, retry or cleanup rule to repair this concern.
+
+## CALC-060: normal generated enum getter rejects internal scoped enums
+
+Status: confirmed original compiler restriction for a configuration combination;
+not an established defect in the upstream library build.
+
+Original `codemaker/source/cppumaker/cpputype.cxx::EnumType::dumpNormalGetCppuType`
+passes its first generated enum constant directly to the `sal_Int32` default-value
+parameter of `typelib_static_enum_type_init`. With `LIBO_INTERNAL_ONLY`, the
+original generated declaration is an enum class, so that implicit conversion is
+rejected. A genuine default-mode cppumaker InteractionClassification header and
+an unchanged syntax-only caller reproduce the error. No rejected body executes.
+
+Evidence: task55 full failure at both InteractionClassification and IOErrorCode
+in `native-write-semantic-idl.log`; failed manifest retains complete original and
+generated hashes. The isolated original witness in
+`output/playwright/task55-checks/enum-normal/manifest.json` retains the complete
+caller, real generation/compiler argv, exit1, full diagnostics and both generated
+header hashes. Its complete headers are retained in the adjacent generated folder.
+Original `EnumType::dumpComprehensiveGetCppuType` emits an explicit integer cast.
+
+Decision: preserve original generated behavior. Actual `cppuhelper/Library_cppuhelper.mk`
+and the selected bridge use internal comprehensive API; task55 uses original
+cppumaker `-C` accordingly. Do not patch the normal getter, remove scoped enums
+or infer that the supported comprehensive library configuration is broken.
