@@ -1,10 +1,11 @@
 ---
 id: "202610121059-FKXJB9"
 title: "Run scheduled full Calc repository validation after task70"
-status: "DOING"
+result_summary: "Completed scheduled full repository regression with exact current Calc/shared coverage, browser ownership and source-bound evidence."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,12 +49,15 @@ quality_review:
     - "Current112Calc/219related cases retain exact task70 selection/maps and all20/33raw owners100;14facade ASTs verified. Only shared test and operational docs changed; native proof and app/config trees untouched."
     - "First inventory assertion failure, concurrent timeouts and lint errors retained; exact serial corrective runs and five ignored artifact byte/minimal-import repairs audited without weaker criteria."
 commit:
-  hash: "85509a1ea0a2b0974ed3978ad6066197dae6447b"
-  message: "🧩 FKXJB9 calc: validate full regression and current inventory linkage"
+  hash: "b350677dfa77ea90a35c2201ba9017ed4270b711"
+  message: "✅ FKXJB9 calc: record verified scheduled full regression"
 comments:
   -
     author: "CODER"
     body: "Start: run scheduled full71 complete source-absent runtime suites and aggregate gates on calc; retain exact current profiles, repair only observed Calc/shared failures and leave Writer-only coverage gaps untouched."
+  -
+    author: "CODER"
+    body: "Verified: full office15510/inventory123/tooling34/browser308/static,442whole raw100 owners,13effective gates and exact source-bound EVALUATOR pass; bounded shared inventory test and ignored lint repairs retain failures, app/config/native bytes unchanged; next full81."
 events:
   -
     type: "status"
@@ -74,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all442office raw owners100 and13effective gates pass. Current112Calc/219related raw100 retain task70 maps/selection. Shared test expectation corrected exactly; original failures and ignored-only lint repairs preserved.457source hashes/EVALUATOR85509a1e bound, app/config/native proof unchanged, links restored; next full81."
+  -
+    type: "status"
+    at: "2026-10-12T11:31:18.092Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: full office15510/inventory123/tooling34/browser308/static,442whole raw100 owners,13effective gates and exact source-bound EVALUATOR pass; bounded shared inventory test and ignored lint repairs retain failures, app/config/native bytes unchanged; next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T11:31:16.861Z"
+doc_updated_at: "2026-10-12T11:31:18.093Z"
 doc_updated_by: "CODER"
 description: "Iteration71: scheduled full regression after ten tasks since full61. Run complete office/inventory/tooling/browser/static suites and aggregate gates on calc, all original source links absent for runtime suites, raw coverage and browser ownership audit, exact current task70 Calc/related profiles. Repair only demonstrated Calc/shared failures; retain Writer-only coverage gaps without fixes. No new features, branches, merges or parity promotion."
 sections:
@@ -162,6 +173,10 @@ sections:
     - Observation: Final full lint found5errors only in ignored investigation artifacts: one historical TypeScript snapshot with a forbidden non-null assertion and four unused imports in prior final-local helpers. All other12aggregate gates passed.
       Impact: No application or production tooling owner was affected; global lint acceptance remained pending.
       Resolution: Retain snapshot bytes under explicit .ts.txt text name with relocation/hash evidence; remove only four unused imports, preserving executable helper bodies. No lint exclusions or thresholds changed. Repeat exact global lint and retain original failure log.
+extensions:
+  implementation_commit:
+    hash: "85509a1ea0a2b0974ed3978ad6066197dae6447b"
+    message: "🧩 FKXJB9 calc: validate full regression and current inventory linkage"
 id_source: "generated"
 ---
 ## Summary
