@@ -3024,3 +3024,33 @@ descriptor QA port. Generic exception/environment/mapping, further weak objects/
 services and Calc document/edit/view/UI remain subsequent. Physical ABI/native
 thread/resource/leaks/shutdown and full consumer/upstream QA are unverified.
 Last full51; next scheduled61.
+
+## Original UNO Enterable callback boundaries
+
+Task58 implements the complete original cppu/Enterable.hxx callback adapters,
+abstract wrapper, constructor-populated C slots and empty virtual destructor.
+The C Enterable declarations and complete environment/ext-environment records
+retain original boundaries; runtime environment APIs are still absent.
+One shared OUString.getDataAddress compiler binding preserves the actual object
+and its mutable string field without copying or acquiring. EnvDcp wrappers reuse
+this mechanism; their complete existing original observation streams still match.
+Native JS iterators represent valid advancing argument cursors, retaining actual
+callee/context identity and mixed argument order; physical va_list ABI is unclaimed.
+
+Original --write/--check pass over69complete genuine translation units per
+normal/ASan/UBSan build,349full source hashes,13generated headers and
+8configuration hashes. All146terminal commands exit0/signalnull. Complete
+calls324/reasons1336/throwing112-byte streams match both native builds and the
+actual shared browser owners, including object/raw-field aliases, retained old
+string refcounts, reason mutation, bool-to-int conversion and propagated throws.
+
+Source-absent Calc106/24 and related shared179/51 tests pass. All19/73 executable
+owners have every raw S/F/B counter positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4483/2259/609/4055). Complete task57 shared argv is
+retained, adding only the Enterable test/three whole source owners and changing
+the report destination. All3source links are restored exactly. Matching registry
+records keep broad parity flags false. Original StringLiterals::checkEmbeddedNul
+is contextual string QA, not a direct Enterable QA port. Full environment/mapping/
+generic exceptions, further weak objects/services and Calc document/edit/view/UI
+remain subsequent; native ABI/thread/resource/leaks/shutdown and full consumer/
+upstream QA are unverified. Last full51; next scheduled61.

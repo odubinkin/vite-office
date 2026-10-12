@@ -15,7 +15,8 @@
       "getPurpose"
     ],
     "preservedResponsibilities": [
-      "Complete original EnvDcp.cxx descriptor functions and published uno/EnvDcp.h/cppu/EnvDcp.hxx boundaries reuse existing actual SAL/OUString owners. Type prefix uses bounded input when colon exists and terminated input otherwise; purpose retains the first colon and the full bounded suffix, or replaces output with original empty storage. C++ wrappers default-construct actual output values and pass borrowed live field address views with no additional string owner/provider. Whole original source/dependency/header normal-ASan/UBSan streams and source-absent complete related owners raw100 are required. No standalone string parser/default policy, generic exception/environment/mapping provider, physical ABI/allocator/leaks/native thread/shutdown or full consumer/upstream QA claim; broad parity flags remain false."
+      "Complete original EnvDcp.cxx descriptor functions and published uno/EnvDcp.h/cppu/EnvDcp.hxx boundaries reuse existing actual SAL/OUString owners. Type prefix uses bounded input when colon exists and terminated input otherwise; purpose retains the first colon and the full bounded suffix, or replaces output with original empty storage. C++ wrappers default-construct actual output values and pass borrowed live field address views with no additional string owner/provider. Whole original source/dependency/header normal-ASan/UBSan streams and source-absent complete related owners raw100 are required. No standalone string parser/default policy, generic exception/environment/mapping provider, physical ABI/allocator/leaks/native thread/shutdown or full consumer/upstream QA claim; broad parity flags remain false.",
+      "Task58 replaces local address closures with the single borrowed OUString.getDataAddress compiler binding. Complete existing descriptor streams remain unchanged."
     ],
     "omittedResponsibilities": [
       "Full generic exception/environment/mapping, physical ABI/allocator/leaks/native thread/shutdown and complete consumer/upstream QA."
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/cppu/source/uno/EnvDcp.test.ts",
           "marker": "matches complete original"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "getDataAddress"
         }
       ],
       "upstream": [
