@@ -4,7 +4,7 @@ title: "Implement original UNO Enterable and shared string field address"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,37 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T02:04:09.240Z"
+  updated_by: "EVALUATOR"
+  note: "Actual implementation 79a3cfe6a8c9db461e826428bfb4fe7b87be47fa preserves full original Enterable bodies and shared OUString field identity; complete native streams, source-absent raw100 and all13 scoped gates verified."
+  evaluated_sha: "79a3cfe6a8c9db461e826428bfb4fe7b87be47fa"
+  blueprint_digest: "92563c2655396dd094f28604b519539a4ab3334cbbe9b8b8350a6c5fc2fa5cfb"
+  evidence_refs:
+    - ".agentplane/tasks/202610120143-NAX8S5/README.md"
+    - ".agentplane/tasks/202610120143-NAX8S5/quality/20261012-020409240-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120143-NAX8S5/quality/20261012-020409240-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120143-NAX8S5/quality/20261012-020409240-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120143-NAX8S5/blueprint/resolved-snapshot.json"
+    - "output/playwright/task58-checks/final-audit.json"
+    - "output/playwright/task58-checks/gates-final-manifest.json"
+    - "output/playwright/task58-checks/value-coverage-audit.json"
+    - "output/playwright/task58-checks/format-check.log"
+    - "apps/office/src/cppu/inc/Enterable.test.ts"
+  findings:
+    - "Constructor/C slot/virtual/variadic/reason order matches original header. Native JS iterator is a valid logical advancing cursor, without physical va_list claim. Shared field binding returns the actual existing slot and registers actual owner identity without acquisition; EnvDcp reuses it and full regression remains equal."
+    - "Complete environment/ext-environment record slots are type declarations only; no runtime environment provider/API or fake initialization. Inventory distinguishes implemented wrapper from unverified full environment/mapping engine. Original empty destructor is complete source behavior."
+commit:
+  hash: "79a3cfe6a8c9db461e826428bfb4fe7b87be47fa"
+  message: "🧩 NAX8S5 code: implement original UNO Enterable callback boundaries"
 comments:
   -
     author: "CODER"
     body: "Start: Port full original Enterable callback bodies and shared logical field/cursor bindings, reuse actual string owners and verify complete genuine header observations."
+  -
+    author: "CODER"
+    body: "Implemented: complete original Enterable adapters/wrapper and shared string field alias; genuine whole native streams, complete raw100 and all13 scoped gates pass."
 events:
   -
     type: "status"
@@ -37,8 +63,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Port full original Enterable callback bodies and shared logical field/cursor bindings, reuse actual string owners and verify complete genuine header observations."
+  -
+    type: "status"
+    at: "2026-10-12T02:03:44.063Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implemented: complete original Enterable adapters/wrapper and shared string field alias; genuine whole native streams, complete raw100 and all13 scoped gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T02:03:30.167Z"
+doc_updated_at: "2026-10-12T02:03:44.063Z"
 doc_updated_by: "CODER"
 description: "Task58: port full include/cppu/Enterable.hxx bodies, exact C Enterable and environment record/callee declarations; native JS iterator transports valid va_list argument cursor. Reuse actual SAL OUString field address through one shared compiler binding and refactor EnvDcp onto it. Complete genuine header normal-ASan/UBSan traces and unchanged task57 related profile plus new source/test owners raw100; registry updated. No environment runtime/mapping/default providers, physical varargs/ABI/thread claim. Last full51,next61."
 sections:
