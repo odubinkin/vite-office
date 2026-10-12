@@ -4,7 +4,7 @@ title: "Run Calc cycle81 full suites and pause goal"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: approved scheduled full cycle81 after Calc72 through80, all full suites and raw owner audits with four upstream links absent/restored. No Writer-only coverage repairs; exact evidence, checkpoint and same-agent review then user-requested goal pause."
 doc_version: 3
-doc_updated_at: "2026-10-12T17:33:00.028Z"
+doc_updated_at: "2026-10-12T17:52:47.747Z"
 doc_updated_by: "CODER"
 description: "Scheduled full verification after Calc tasks72 through80 under approved ongoing goal and explicit user stop request. Run full office/inventory/tooling/browser/static checks without original source links, audit raw100 Calc/shared and record Writer-only coverage gaps without fixing them; repair only in-scope Calc/shared failures if needed. Exact evidence, docs and same-agent separate evaluator; finish then pause goal."
 sections:
@@ -49,9 +49,9 @@ sections:
     2. python3 output/playwright/task81-checks/full-gates.py: whole format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff pass with source links restored; inventory invariants and actual browser ownership separation checked.
     3. Current coverage owner inventory and all executed test/config/fixture/runtime evidence hashes match committed runtime state; independently inspect whole raw maps and complete full-suite logs/manifests, browser project ownership. Same-agent separate EVALUATOR binds exact SHA with nonempty findings/evidence; report no UI readiness.
     4. Complete task README and cycle8 checkpoint, authoritative DONE and clean git all-files status; call update_goal paused at user request and stop. No Writer-only coverage fixes or fabricated global100 where Writer gaps exist.
-  Verification: "Pending. No full-run pass, full coverage or UI readiness claim."
+  Verification: "Command: python3 output/playwright/task81-checks/full-run.py. Result: all5 stages pass first full run. Evidence: office15550tests740files, inventory123tests38files, tooling35tests9files, browser308passed (Writer306/shared2/Calc0), static build pass. Scope: all current suites with four original links absent/restored. Command: office-audit.py and final-audit/source-raw audit. Result: pass. Evidence: whole office459executable owners raw33129S22303B6705F30164L100 every counter positive, Calc24/shared226/Writer209 and no gaps. Inventory configured JSON summary1734S1292B436F1668L100; default reporters text/json-summary do not export a raw inventory map, no extra rerun or invented raw-file claim. Scope: actual coverage roots with registry consumer overrides retained separately. Command: python3 output/playwright/task81-checks/full-gates.py. Result:14whole gates pass first run including invariants/routing/doctor. Evidence: all exit0, format/lint/type/docs/source tree/provenance/registry/dependencies/resources/size/diff. Command: exact source audit. Result: pass for current3155hashes and unchanged runtime/test/fixture/config bytes across full run; commit-bound same-agent separate EVALUATOR follows. Scope: cycle8/current core checkpoint only, no runtime/test fixes or Writer coverage repairs; no complete Calc core/UI claim. Stop: pause goal after canonical closure."
   Rollback Plan: "Revert only intentional cycle81 changes via a new approved task. Retain full logs/raw maps and restore original source links; no destructive history or unrelated task changes."
-  Findings: "Task80 is DONE and clean, implementation7035f668de70ae341779dcf72c8c2be28833630e. Last full71 is DONE; full81 now due. User explicitly requests pause after next full run and relevant repairs, excluding Writer-only coverage repairs."
+  Findings: "Full cycle81 passes all5 suite stages first run: office15550tests740files, inventory123tests38files, tooling35tests9files, browser308 (Writer306/shared2/Calc0), static build. Whole office raw459owners33129S22303B6705F30164L100 every counter positive; no Writer deficit, no production/test/threshold/exclusion/native/sanitizer changes. Inventory default text/json-summary reporters prove1734S1292B436F1668L100; no raw inventory JSON is exported or claimed. Initial ignored audits wrongly conflated shared storage folder with declared Writer consumers, expected leading slash in browser paths and expected inventory raw JSON; all corrected from actual config/records/artifact evidence without replaying full suites. Actual coverage roots and separate fifteen registry consumer overrides recorded. All14whole gates pass, four links restored.3154tracked pre-run bytes retain identical runtime/test/fixture/config; only core checkpoint changed and cycle8 doc added,3155current non-task hashes. Exact commit-bound same-agent separate evaluator and canonical closure follow; do not claim complete Calc kernel or editable UI. Pause goal after closure at explicit user request."
 id_source: "generated"
 ---
 ## Summary
@@ -75,7 +75,7 @@ Run full cycle81 office/inventory/tooling/browser/static suites upstream-absent 
 
 ## Verification
 
-Pending. No full-run pass, full coverage or UI readiness claim.
+Command: python3 output/playwright/task81-checks/full-run.py. Result: all5 stages pass first full run. Evidence: office15550tests740files, inventory123tests38files, tooling35tests9files, browser308passed (Writer306/shared2/Calc0), static build pass. Scope: all current suites with four original links absent/restored. Command: office-audit.py and final-audit/source-raw audit. Result: pass. Evidence: whole office459executable owners raw33129S22303B6705F30164L100 every counter positive, Calc24/shared226/Writer209 and no gaps. Inventory configured JSON summary1734S1292B436F1668L100; default reporters text/json-summary do not export a raw inventory map, no extra rerun or invented raw-file claim. Scope: actual coverage roots with registry consumer overrides retained separately. Command: python3 output/playwright/task81-checks/full-gates.py. Result:14whole gates pass first run including invariants/routing/doctor. Evidence: all exit0, format/lint/type/docs/source tree/provenance/registry/dependencies/resources/size/diff. Command: exact source audit. Result: pass for current3155hashes and unchanged runtime/test/fixture/config bytes across full run; commit-bound same-agent separate EVALUATOR follows. Scope: cycle8/current core checkpoint only, no runtime/test fixes or Writer coverage repairs; no complete Calc core/UI claim. Stop: pause goal after canonical closure.
 
 ## Rollback Plan
 
@@ -83,4 +83,4 @@ Revert only intentional cycle81 changes via a new approved task. Retain full log
 
 ## Findings
 
-Task80 is DONE and clean, implementation7035f668de70ae341779dcf72c8c2be28833630e. Last full71 is DONE; full81 now due. User explicitly requests pause after next full run and relevant repairs, excluding Writer-only coverage repairs.
+Full cycle81 passes all5 suite stages first run: office15550tests740files, inventory123tests38files, tooling35tests9files, browser308 (Writer306/shared2/Calc0), static build. Whole office raw459owners33129S22303B6705F30164L100 every counter positive; no Writer deficit, no production/test/threshold/exclusion/native/sanitizer changes. Inventory default text/json-summary reporters prove1734S1292B436F1668L100; no raw inventory JSON is exported or claimed. Initial ignored audits wrongly conflated shared storage folder with declared Writer consumers, expected leading slash in browser paths and expected inventory raw JSON; all corrected from actual config/records/artifact evidence without replaying full suites. Actual coverage roots and separate fifteen registry consumer overrides recorded. All14whole gates pass, four links restored.3154tracked pre-run bytes retain identical runtime/test/fixture/config; only core checkpoint changed and cycle8 doc added,3155current non-task hashes. Exact commit-bound same-agent separate evaluator and canonical closure follow; do not claim complete Calc kernel or editable UI. Pause goal after closure at explicit user request.
