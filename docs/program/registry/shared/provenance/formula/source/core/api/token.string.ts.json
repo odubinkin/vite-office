@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/formula/source/core/api/token.string.ts",
+    "status": "mapped",
+    "upstreamPath": "formula/source/core/api/token.cxx",
+    "localSymbols": [
+      "FormulaStringToken",
+      "FormulaStringOpToken",
+      "FormulaStringNameToken"
+    ],
+    "upstreamSymbols": [
+      "FormulaStringToken::FormulaStringToken",
+      "FormulaStringOpToken::FormulaStringOpToken",
+      "FormulaStringNameToken::FormulaStringNameToken"
+    ],
+    "preservedResponsibilities": [
+      "Original declared/source module boundary and single actual owner of each token or template operation.",
+      "Original initialized defaults, copy/Clone/equality/classification and owned value/reference sequencing for the implemented bounded scope."
+    ],
+    "omittedResponsibilities": [
+      "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81. Original declaration/definition responsibility is split solely to retain the authored1000line budget, without duplicate owners or runtime import cycles."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/formula/source/core/api/token.string.ts",
+          "marker": "FormulaStringToken"
+        },
+        {
+          "path": "apps/office/src/formula/source/core/api/token.string.ts",
+          "marker": "FormulaStringOpToken"
+        },
+        {
+          "path": "apps/office/src/formula/source/core/api/token.string.ts",
+          "marker": "FormulaStringNameToken"
+        },
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "matches all original UInt16 opcode classifications"
+        },
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "matches original intrusive reference and FAP lifetime streams"
+        },
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "matches all original string-op parameter counts"
+        },
+        {
+          "path": "apps/office/src/formula/inc/token.test.ts",
+          "marker": "uses real shared string ownership"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "formula/source/core/api/token.cxx",
+          "marker": "FormulaStringToken::FormulaStringToken"
+        },
+        {
+          "path": "formula/source/core/api/token.cxx",
+          "marker": "FormulaStringOpToken::FormulaStringOpToken"
+        },
+        {
+          "path": "formula/source/core/api/token.cxx",
+          "marker": "FormulaStringNameToken::FormulaStringNameToken"
+        },
+        {
+          "path": "include/formula/token.hxx",
+          "marker": "FormulaStringToken"
+        },
+        {
+          "path": "include/formula/token.hxx",
+          "marker": "FormulaStringOpToken"
+        },
+        {
+          "path": "include/formula/token.hxx",
+          "marker": "FormulaStringNameToken"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/formula/source/core/api/token.string.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original token.hxx/token.cxx declaration or definition shard retaining its original operation family under authored1000line limit; no new mechanism, second engine or runtime cycle."
+    }
+  }
+}

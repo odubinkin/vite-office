@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/formula/source/core/api/token.string.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formula-token",
+    "capabilityIds": [
+      "CAP-98784da1-72d0-4dd4-a7bb-7dc46b16e495"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/formula/source/core/api/token.string.ts#FormulaStringToken",
+        "apps/office/src/formula/source/core/api/token.string.ts#FormulaStringOpToken",
+        "apps/office/src/formula/source/core/api/token.string.ts#FormulaStringNameToken",
+        "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
+        "apps/office/src/formula/inc/native-token.test.ts#matches original intrusive reference and FAP lifetime streams",
+        "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
+        "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
+        "formula/source/core/api/token.cxx#FormulaStringToken::FormulaStringToken",
+        "formula/source/core/api/token.cxx#FormulaStringOpToken::FormulaStringOpToken",
+        "formula/source/core/api/token.cxx#FormulaStringNameToken::FormulaStringNameToken",
+        "include/formula/token.hxx#FormulaStringToken",
+        "include/formula/token.hxx#FormulaStringOpToken",
+        "include/formula/token.hxx#FormulaStringNameToken"
+      ],
+      "justification": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81. Original declaration/definition responsibility is split solely to retain the authored1000line budget, without duplicate owners or runtime import cycles.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FormulaStringToken",
+        "FormulaStringOpToken",
+        "FormulaStringNameToken"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "formula/source/core/api/token.cxx",
+      "upstreamSymbols": [
+        "FormulaStringToken::FormulaStringToken",
+        "FormulaStringOpToken::FormulaStringOpToken",
+        "FormulaStringNameToken::FormulaStringNameToken"
+      ]
+    }
+  }
+}

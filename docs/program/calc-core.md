@@ -3166,3 +3166,49 @@ Task73 implements the actual complete sc::FormulaResultValue struct and all four
 Task74 ports the complete shared OpCode and ParamClass header contracts needed by original FormulaToken. All505opcode names/aliases/range sentinels,487diagnostic cases and10parameter classifications retain original values. Whole genuine native headers verify every65536UInt16 release diagnostic; unknown codes retain???, while a separate normal debug caller demonstrates native assertion termination. Browser binding deliberately claims release behavior only, not native debug process abort or unreachable numeric fallback. Enum-only opcode.enum declaration shard retains original header responsibility under authored1000line budget; opcode header consumes it without a cycle or a second engine. Whole Calc and affected formula raw100/source-absent build/profile and exact source-bound review are required. Full formula/token/cell/document/input/UI/native ABI/upstream QA remain unverified; next full81.
 
 The native duplicate-valued opcode aliases use one typed constant declaration and an associated named value type. This preserves all505original names/values without inventing C++-absent reverse lookup names or disabling lint rules. Native fixture generation uses the existing repository Prettier configuration so --write and --check are reproducible. Current raw coverage is remeasured after this language binding change.
+
+
+### Original shared formula token family and ownership (task75)
+
+Task `202610121401-NEW0HT` implements the original `include/formula/token.hxx`
+family of15classes at shared `formula/inc` and `formula/source/core/api`
+boundaries. StackVar and RefCntPolicy retain their original UInt8 values;
+copies and Clone reset the count and policy exactly as the base constructor
+specifies. Function/parameter/reference/array classification, scalar members,
+string values, jump arrays and equality retain original responsibilities.
+FormulaErrorToken assignment copies only its error. Original compiler-only
+access and protected string construction have explicit erased access witnesses.
+
+Existing SAL interlocked, OUString, SharedString, errors, opcodes and parameter
+classes are reused. The real FAP token owns its original FormulaToken through
+shared Boost intrusive_ptr ownership. Its generic ADL and raw/copy/move argument
+categories are explicit bindings, rather than guessed from pointer-shaped
+objects. Mutable/const formula pointer aliases bind the genuine formula hooks
+once. The generic owner has no application or formula dependency. Additional
+Boost conversion/cast/comparison/hash/stream operators remain unimplemented.
+
+FormulaCompiler currently binds only its actual static IsOpCodeJumpCommand
+member. It does not construct compiler instances or compile expressions. Source
+shards preserve original token.hxx/token.cxx responsibilities under the authored
+1000line limit and do not create a runtime dependency cycle or another engine.
+
+The normal-only native caller includes whole unchanged token/types/compiler
+headers and complete selected actual member definitions. Original cppumaker
+produces FormulaLanguage from its pinned IDL; no compiler or dependency class is
+substituted.463whole pinned source files and17actual Boost headers are verified;
+Boost1.91is checked against the archive hash in original download.lst. Complete
+65536-opcode byte/space classification,65536string-op parameter counts,
+256stack diagnostics, constructor/Clone rows, scalar field narrowing/IEEE payload/jump-copy
+observations,30string-family copy/move/member-assignment cases and genuine
+intrusive/FAP lifetime streams match the portable owners. CALC-067 records the original early-return
+asymmetry without changing its behavior. The browser implements the original
+release-build dummy setter; native debug process abort is outside its claim.
+
+Current source-absent checks pass116Calc tests in31files and82directly affected
+shared tests in22files. Raw Calc S3021/B2065/F501/L2665and shared
+S1692/B1344/F303/L1503are100with every raw statement/function/branch counter
+positive. Source-absent static build and the actual Calc browser profile pass;
+there are0actual Calc UI scenarios. Capability/runtime/provenance entries remain
+foundation with broad contract/behavior/default/verified flags false. Final source-bound review and lifecycle closure are required for task completion. Full tokenarray/compiler/native ABI/invalid lifetimes,
+complete upstream QA and Calc cell/matrix/document/input/view/UI remain unfinished
+or unverified. Last full71; next full81.

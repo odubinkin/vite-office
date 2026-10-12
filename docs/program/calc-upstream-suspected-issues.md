@@ -1549,3 +1549,13 @@ At pinned9bc445578031fecf56086729d8e4940c77e14d65, include/formula/opcode.hxx Op
 Evidence: task74 scripts/formula-opcode-native-probe.mjs compiles the whole unchanged original header normally with NDEBUG and compares all65536UInt16 diagnostics. Unknown code1 returns "???"; original range-end sentinel values36/49/67/72/84/180/521 also return "???". A separate ordinary debug caller without NDEBUG confirms the original assertion and SIGABRT for code1. No sanitizer or memory-safety inference is involved.
 
 Decision: preserve the actual release switch output. Do not replace "???" with the unreachable numeric conversion or manufacture names for range sentinels. Native debug process termination is recorded as a separate profile; the browser owner claims release behavior only.
+
+## CALC-067: early parameter-count return hides some string-op byte fields
+
+Status: confirmed original control-flow asymmetry; no user-visible Calc defect is established.
+
+At pinned9bc445578031fecf56086729d8e4940c77e14d65, FormulaToken::GetParamCount first returns zero for special opcodes below ocStopDiv unless they belong to its explicit exception list. The later string-token branch nevertheless checks ocBad, ocStringXML, ocStringName and ocDPFieldName and reads their byte count. In particular, a real FormulaStringOpToken(ocStringXML, string) with SetByte(3) returns zero before reaching that branch. The coexistence of the early filter and later explicit cases looks suspicious, but the complete compiler and Calc consumers are not implemented and their intended use is not established.
+
+Evidence: task75 scripts/formula-token-native-probe.mjs compiles whole original token and compiler headers plus complete original selected member definitions over actual SAL, SharedString and Boost owners. Its normal-only values stream observes byte3 through original initialization and a zero parameter count for the actual ocStringXML token. The portable implementation preserves the same early return and reachable string cases; the initial unit-test expectation of three was corrected to the observed zero. The two already-excluded ocBad/ocStringXML comparisons are documented at the original TS branch rather than emitted as unreachable comparisons. A further whole65536-opcode stream checks original GetParamCount for actual FormulaStringOpToken values with bytes0/1/255, including the reachable ocStringName/ocDPFieldName alternatives. No sanitizer or memory-safety conclusion is involved.
+
+Decision: preserve the original early return and later cases. Do not move the string-token branch or derive parameter counts directly from stored bytes. Revisit consumer reachability when the original compiler/input owners are connected.
