@@ -1,10 +1,11 @@
 ---
 id: "202610120206-XVSQJZ"
 title: "Implement original XExceptionThrower interface type prerequisite"
-status: "DOING"
+result_summary: "Task59 complete: original exception interface/type and shared observers; Calc106/shared184 raw100; all13gates pass; full environment/mapping/ABI/QA gaps retained; next full61."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -44,8 +45,8 @@ quality_review:
     - "Full generated cache/factory and bInitStarted stage match original order: root base, two member references, Type leak, RuntimeException then existing Exception builtin, positions3/4, in-any exc and Exception/RuntimeException declarations, register/release/temporary destruction and ADL/static/deprecated getters. No alternative Exception cache or virtual throw implementation."
     - "Shared C++/TS interface observations are reused by old and new cases; old seven streams and first three new streams preserved exactly. Root and pending-method caller data use actual public typelib factories, not fabricated providers. Complete19+75 raw counters are positive; baseline runtime source maps/global test configuration unchanged and strict100 retained."
 commit:
-  hash: "2f1d41ce5e6b0cf4c552ab7dcd478888abb7bdb7"
-  message: "🧩 XVSQJZ code: implement original exception interface type registration"
+  hash: "05902a95a4936fa8e2f999fe65109c8ebf4dde31"
+  message: "✅ XVSQJZ code: persist complete interface verification"
 comments:
   -
     author: "CODER"
@@ -53,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Implemented: complete original XExceptionThrower interface/type and shared whole observers; native streams,19+75 raw100 owners and all13gates pass."
+  -
+    author: "CODER"
+    body: "Verified: Complete original XExceptionThrower type/interface and shared observers preserve all genuine native streams and baseline maps; Calc106/shared184,19+75owners raw100,13scoped gates and implementation-bound review pass."
 events:
   -
     type: "status"
@@ -74,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original XExceptionThrower metadata and genuine five whole streams pass; unchanged prior seven streams,370+374source hashes,157new native statuses,19+75owner raw100 and all13gates independently audited. Actual implementation2f1d41ce5e6b0cf4c552ab7dcd478888abb7bdb7 reviewed with evaluated_sha equality; full engine/physical ABI/QA gaps retained."
+  -
+    type: "status"
+    at: "2026-10-12T02:31:39.756Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete original XExceptionThrower type/interface and shared observers preserve all genuine native streams and baseline maps; Calc106/shared184,19+75owners raw100,13scoped gates and implementation-bound review pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T02:31:03.471Z"
+doc_updated_at: "2026-10-12T02:31:39.758Z"
 doc_updated_by: "CODER"
 description: "Task59: full original cppuhelper/detail/XExceptionThrower IDL/generated comprehensive type owner, reuse actual Type/Any/Reference/Exception/RuntimeException/OUString/typelib. Reuse complete interface metadata observers for existing and new tests/probes, preserve whole existing generated interface streams. Genuine normal-ASan/UBSan complete native streams; exact task58 shared raw100 plus actual new test/source owners, Calc and matching registry. No environment/mapping/exception engine provider or physical ABI/thread/full consumer claim. Last full51,next61."
 sections:
@@ -174,6 +185,10 @@ sections:
     - Observation: Final manifest audit correctly found TS2749 in the pending-case test: dynamically imported Type value was used as a static type.
       Impact: Every runtime/native/raw coverage check passed, but the mandatory final TS7 check was not green; no task completion before repair.
       Resolution: Use native TS InstanceType<typeof Type> for the erased test-only enum return type. Runtime emitted operations and core source are unchanged. Preserve gates-five-first logs/manifest; rerun exact typecheck, lint/format and audit final actual statuses.
+extensions:
+  implementation_commit:
+    hash: "2f1d41ce5e6b0cf4c552ab7dcd478888abb7bdb7"
+    message: "🧩 XVSQJZ code: implement original exception interface type registration"
 id_source: "generated"
 ---
 ## Summary
