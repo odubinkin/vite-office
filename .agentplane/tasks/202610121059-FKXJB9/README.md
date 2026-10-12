@@ -4,7 +4,7 @@ title: "Run scheduled full Calc repository validation after task70"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T11:31:16.802Z"
+  updated_by: "CODER"
+  note: "Full office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all442office raw owners100 and13effective gates pass. Current112Calc/219related raw100 retain task70 maps/selection. Shared test expectation corrected exactly; original failures and ignored-only lint repairs preserved.457source hashes/EVALUATOR85509a1e bound, app/config/native proof unchanged, links restored; next full81."
   attempts: 0
 quality_review:
   state: "pass"
@@ -68,8 +68,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T11:31:16.802Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all442office raw owners100 and13effective gates pass. Current112Calc/219related raw100 retain task70 maps/selection. Shared test expectation corrected exactly; original failures and ignored-only lint repairs preserved.457source hashes/EVALUATOR85509a1e bound, app/config/native proof unchanged, links restored; next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T11:31:15.442Z"
+doc_updated_at: "2026-10-12T11:31:16.861Z"
 doc_updated_by: "CODER"
 description: "Iteration71: scheduled full regression after ten tasks since full61. Run complete office/inventory/tooling/browser/static suites and aggregate gates on calc, all original source links absent for runtime suites, raw coverage and browser ownership audit, exact current task70 Calc/related profiles. Repair only demonstrated Calc/shared failures; retain Writer-only coverage gaps without fixes. No new features, branches, merges or parity promotion."
 sections:
@@ -104,6 +110,39 @@ sections:
     Command: ap evaluator run 202610121059-FKXJB9 --verdict pass, same-agent separate EVALUATOR phase.
     Result: pass on exact85509a1ea0a2b0974ed3978ad6066197dae6447b.
     Evidence: .agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/quality-report.json; exact-review.json binds457committed source hashes and complete audited commands/results. Metadata-only quality, verification and close commits follow. No independent reviewer claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T11:31:16.802Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all442office raw owners100 and13effective gates pass. Current112Calc/219related raw100 retain task70 maps/selection. Shared test expectation corrected exactly; original failures and ignored-only lint repairs preserved.457source hashes/EVALUATOR85509a1e bound, app/config/native proof unchanged, links restored; next full81.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T11:31:15.442Z, excerpt_hash=sha256:884793809876107cd6cbfe1bd1e7ab3f16914aa7ddb65b7480dc2eef0a855381
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121059-FKXJB9/blueprint/resolved-snapshot.json
+    - old_digest: 86bfdefbd46ffed507dd884be716505db96a7e92a9f32b03f84acc75a4aa0f0c
+    - current_digest: 86bfdefbd46ffed507dd884be716505db96a7e92a9f32b03f84acc75a4aa0f0c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121059-FKXJB9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121059-FKXJB9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore exact3original source symlinks in finally; preserve first failure logs/manifests. Revert only intentional approved task71 Calc/shared repair changes if required, leaving unrelated tasks and Writer-only coverage intact."
   Findings: |-
     Task70 DONE at5253e8abd9a7; source cd66bf47adb14f91110f5a6ec9e1ec59159d9358. Last full61;71is scheduled tenth task. Existing task70 profiles112Calc/219related and20/33executable owners raw100. The first setup CLI rejected code+ops because exactly one primary tag is required; no task was created. Current task uses code with calc, no scope change. Full kernel/editable UI remains unproven.
@@ -167,6 +206,39 @@ Exact implementation-bound same-agent EVALUATOR and final CODER verify/clean DON
 Command: ap evaluator run 202610121059-FKXJB9 --verdict pass, same-agent separate EVALUATOR phase.
 Result: pass on exact85509a1ea0a2b0974ed3978ad6066197dae6447b.
 Evidence: .agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/quality-report.json; exact-review.json binds457committed source hashes and complete audited commands/results. Metadata-only quality, verification and close commits follow. No independent reviewer claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T11:31:16.802Z — VERIFY — ok
+
+By: CODER
+
+Note: Full office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all442office raw owners100 and13effective gates pass. Current112Calc/219related raw100 retain task70 maps/selection. Shared test expectation corrected exactly; original failures and ignored-only lint repairs preserved.457source hashes/EVALUATOR85509a1e bound, app/config/native proof unchanged, links restored; next full81.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T11:31:15.442Z, excerpt_hash=sha256:884793809876107cd6cbfe1bd1e7ab3f16914aa7ddb65b7480dc2eef0a855381
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121059-FKXJB9/blueprint/resolved-snapshot.json
+- old_digest: 86bfdefbd46ffed507dd884be716505db96a7e92a9f32b03f84acc75a4aa0f0c
+- current_digest: 86bfdefbd46ffed507dd884be716505db96a7e92a9f32b03f84acc75a4aa0f0c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121059-FKXJB9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121059-FKXJB9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
