@@ -124,6 +124,58 @@ export function assign_storage<T>(
   destroy_suffix(storage, values.length);
   storage.size = values.length;
 }
+/** Native reference assignment for owned values or borrowed scalars/pointers. @param storage - State. @param index - Live position. @param value - Source reference. @returns Nothing. */
+export function set_storage_value<T>(storage: vector_storage<T>, index: number, value: T): void {
+  if (storage.operations) storage.operations.copy_assign(storage.values[index] as T, value);
+  else storage.values[index] = value;
+}
+/** Constructs appended value before relocating aliased sources. @param storage - State. @param value - Live source. @param move - Rvalue overload. @param aligned_count - Native allocation witness. @returns Nothing. */
+export function append_storage<T>(
+  storage: vector_storage<T>,
+  value: T,
+  move: boolean,
+  aligned_count = storage.size + 1,
+): void {
+  const operations = storage.operations;
+  const next = operations
+    ? move
+      ? operations.move_construct(value)
+      : operations.copy_construct(value)
+    : value;
+  grow_storage(storage, storage.size + 1, aligned_count);
+  storage.values[storage.size++] = next;
+}
+/** Native default initialization on growth and reverse destruction on shrink. @param storage - State. @param count - New size. @param construct - Erased actual value_type default constructor. @param aligned_count - Native allocation witness. @returns Nothing. */
+export function resize_storage<T>(
+  storage: vector_storage<T>,
+  count: number,
+  construct: () => T,
+  aligned_count: number,
+): void {
+  if (count < storage.size) destroy_suffix(storage, count);
+  else {
+    const pending: T[] = [];
+    for (let i = storage.size; i < count; ++i) pending.push(construct());
+    grow_storage(storage, count, aligned_count);
+    for (let i = 0; i < pending.length; ++i) storage.values[storage.size + i] = pending[i];
+  }
+  storage.size = count;
+}
+/** Original iter_swap with actual ValueT move temporary; scalar/pointer path retains borrowed identity. @param left - First state. @param first - First position. @param right - Second state. @param second - Second position. @returns Nothing. */
+export function swap_storage_values<T>(
+  left: vector_storage<T>,
+  first: number,
+  right: vector_storage<T>,
+  second: number,
+): void {
+  const operations = left.operations;
+  if (operations) {
+    const temporary = operations.move_construct(left.values[first] as T);
+    operations.move_assign(left.values[first] as T, right.values[second] as T);
+    operations.move_assign(right.values[second] as T, temporary);
+    operations.destroy(temporary);
+  } else [left.values[first], right.values[second]] = [right.values[second], left.values[first]];
+}
 /** Normal std::vector syntax witness for values and borrowed pointers; no delayed deletion or mdds block/container policy. */
 export class std_vector<T> {
   private m_storage: vector_storage<T> = { values: [], size: 0 };
@@ -182,8 +234,7 @@ export class std_vector<T> {
   }
   /** Native reference assignment. @param index - Position. @param value - Value. @returns Nothing. */
   public set(index: number, value: T): void {
-    if (this.m_storage.operations) this.m_storage.operations.copy_assign(this.get(index), value);
-    else this.m_storage.values[index] = value;
+    set_storage_value(this.m_storage, index, value);
   }
   /** Copies original vector constructed range. @returns Values. */
   public snapshot(): T[] {
@@ -207,15 +258,7 @@ export class std_vector<T> {
   }
   /** Constructs incoming value before relocating aliased sources. @param value - Live source. @param move - Rvalue overload. @returns Nothing. */
   private append(value: T, move: boolean): void {
-    const storage = this.m_storage;
-    const operations = storage.operations;
-    const next = operations
-      ? move
-        ? operations.move_construct(value)
-        : operations.copy_construct(value)
-      : value;
-    grow_storage(storage, storage.size + 1);
-    storage.values[storage.size++] = next;
+    append_storage(this.m_storage, value, move);
   }
   /** Native pop on a nonempty vector. @returns Nothing. */
   public pop_back(): void {

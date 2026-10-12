@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.append-storage",
+    "modulePath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts",
+    "symbol": "append_storage",
+    "classification": "local-infrastructure",
+    "capabilityId": "CAP-ceefcfc9-a671-49ad-8b63-e83dc83efc06",
+    "description": "Shared erased native ValueT append construction precedes aliased storage relocation, reused by original delayed_delete_vector and std_vector. Actual value members or borrowed scalar/pointer identity are supplied at the template boundary; no block segmentation or document behavior."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/mtvelements.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-storage",
+    "capabilityIds": [
+      "CAP-13d7cb0b-dec2-491f-adaa-af49e308d033"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/mtvelements.ts#string_block",
+        "apps/office/src/sc/inc/mtvelements.test.ts#matches whole original Calc object value block stream",
+        "vendor/libreoffice-reference/sc/inc/mtvelements.hxx#string_block"
+      ],
+      "justification": "Task65 connects actual initialized object ValueT ownership to the existing delayed_delete_vector/default_element_block operation family, reusing shared vector special-member helpers. Count/default constructs independent values; count/fill and range/copy perform actual value copies including hidden constructed prefixes. Reference assignment, append/lvalue emplace, range insertion, resize/default construction, erase, reserve/shrink, equality and destructor preserve original native operators. Original mdds block swap performs two copies and copy assignments; actual std::iter_swap remains a distinct move-temporary operation. Scalar and borrowed-pointer paths remain shared. Pure callers over unchanged mdds3.2.1 headers and full actual SharedString/CellTextAttr sources use verified existing complete native dependency objects and normal-only witness execution, comparing whole owned and Calc streams. Existing SharedString and CellTextAttr owners are reused; external mdds imports no Calc/SVL. Custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes, complete perfect-forwarding/rvalue overload families, physical ABI, pointee/callback/container/document/UI owners remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "element_type_broadcaster",
+        "element_type_celltextattr",
+        "element_type_string",
+        "element_type_edittext",
+        "element_type_formula",
+        "element_type_cellnote",
+        "element_type_sparkline",
+        "element_type_numeric",
+        "element_type_empty",
+        "element_type_uint16",
+        "numeric_block",
+        "uint16_block",
+        "string_operations",
+        "attr_operations",
+        "string_value",
+        "attr_value",
+        "string_block",
+        "celltextattr_block"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/mtvelements.hxx",
+      "upstreamSymbols": [
+        "string_block",
+        "celltextattr_block",
+        "numeric_block",
+        "uint16_block"
+      ]
+    }
+  }
+}

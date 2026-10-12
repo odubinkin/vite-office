@@ -1,0 +1,107 @@
+/** @fileoverview Original Calc mtvelements.hxx value-block specializations over shared mdds and actual SVL/Calc value owners. */
+import { SharedString } from "../../svl/inc/sharedstring";
+import { CellTextAttr } from "./celltextattr";
+import { type DelayedValueOperations } from "../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts";
+import {
+  default_element_block,
+  element_type_user_start,
+  element_type_empty as empty,
+} from "../../external/mdds/include/mdds/multi_type_vector/types.ts";
+import {
+  double_element_block,
+  uint16_element_block,
+  element_type_double,
+  element_type_uint16 as uint16,
+} from "../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts";
+export const element_type_broadcaster = element_type_user_start;
+export const element_type_celltextattr = element_type_user_start + 1;
+export const element_type_string = element_type_user_start + 2;
+export const element_type_edittext = element_type_user_start + 3;
+export const element_type_formula = element_type_user_start + 4;
+export const element_type_cellnote = element_type_user_start + 5;
+export const element_type_sparkline = element_type_user_start + 6;
+export const element_type_numeric = element_type_double;
+export const element_type_empty = empty;
+export const element_type_uint16 = uint16;
+export const numeric_block = double_element_block;
+export const uint16_block = uint16_element_block;
+const string_operations: DelayedValueOperations<SharedString> = {
+  move_noexcept: true,
+  /** Original empty ValueT constructor. @returns Empty value. */
+  default_construct() {
+    return new SharedString();
+  },
+  /** Actual const-value constructor. @param value - Source. @returns Independent shared value. */
+  copy_construct(value) {
+    return new SharedString(value);
+  },
+  /** Actual move constructor. @param value - Rvalue source. @returns Transferred value. */
+  move_construct(value) {
+    return SharedString.move(value);
+  },
+  /** Actual const-value assignment. @param target - Target. @param source - Source. @returns Nothing. */
+  copy_assign(target, source) {
+    target.assign(source);
+  },
+  /** Actual move assignment. @param target - Target. @param source - Rvalue source. @returns Nothing. */
+  move_assign(target, source) {
+    target.moveAssign(source);
+  },
+  /** Actual original value destructor. @param value - Live value. @returns Nothing. */
+  destroy(value) {
+    value.dispose();
+  },
+  /** Actual original operator==. @param left - Left value. @param right - Right value. @returns Equality. */
+  equal(left, right) {
+    return left.equals(right);
+  },
+};
+const attr_operations: DelayedValueOperations<CellTextAttr> = {
+  move_noexcept: true,
+  /** Original default metadata constructor. @returns Metadata. */
+  default_construct() {
+    return new CellTextAttr();
+  },
+  /** Original implicit memberwise copy. @param value - Source. @returns Independent metadata. */
+  copy_construct(value) {
+    return new CellTextAttr(value);
+  },
+  /** Original implicit move of scalar members retains source members. @param value - Source. @returns Metadata. */
+  move_construct(value) {
+    return new CellTextAttr(value);
+  },
+  /** Original implicit assignment. @param target - Target. @param source - Source. @returns Nothing. */
+  copy_assign(target, source) {
+    target.assign(source);
+  },
+  /** Original implicit move assignment of scalar members. @param target - Target. @param source - Source. @returns Nothing. */
+  move_assign(target, source) {
+    target.assign(source);
+  },
+  /** Original trivial destructor has no resource operation. @param value - Metadata. @returns Nothing. */
+  destroy(value) {
+    void value;
+  },
+};
+/** Original value conversion keeps a const reference; construction belongs to the underlying store. @param value - Native value. @returns Same reference. */
+function string_value(value: SharedString): SharedString {
+  return value;
+}
+/** Original metadata const reference conversion. @param value - Metadata. @returns Same reference. */
+function attr_value(value: CellTextAttr): CellTextAttr {
+  return value;
+}
+export const string_block = default_element_block(
+  element_type_string,
+  new SharedString(),
+  string_value,
+  false,
+  string_operations,
+);
+export const celltextattr_block = default_element_block(
+  element_type_celltextattr,
+  new CellTextAttr(),
+  attr_value,
+  false,
+  attr_operations,
+);

@@ -6,8 +6,8 @@ import { gunzipSync } from "node:zlib";
 import { isDeepStrictEqual } from "node:util";
 import { hash, pin, upstream, loadUnicodeOriginal } from "./rtl-ustring-native-sources.mjs";
 import { originalDependency } from "./casefolding-native-libraries.mjs";
-/** Verifies actual existing build and witnesses before reuse; missing/invalid inputs require the original full probe. @param target - New caller directory. @param base - Complete original dependency build. @param fixture - Complete original dependency witness. @returns Verified caller compiler and full evidence. */
-export function reuseExceptionNative(target, base, fixture) {
+/** Verifies actual existing build and witnesses before reuse; missing/invalid inputs require the original full probe. @param target - New caller directory. @param base - Complete original dependency build. @param fixture - Complete original dependency witness. @param options - Optional normal-only caller mode. @returns Verified caller compiler and full evidence. */
+export function reuseExceptionNative(target, base, fixture, options = {}) {
   const text = readFileSync(base + "/manifest.json"),
     previous = JSON.parse(text),
     witness = JSON.parse(readFileSync(fixture, "utf8"));
@@ -152,7 +152,7 @@ export function reuseExceptionNative(target, base, fixture) {
     const expected = gunzipSync(Buffer.from(capture.gzipBase64, "base64"));
     if (expected.length !== capture.byteLength || hash(expected) !== capture.digest)
       throw Error("Invalid original whole witness");
-    for (const label of ["normal", "asan"]) {
+    for (const label of options.normalOnly ? ["normal"] : ["normal", "asan"]) {
       const result = run(
         base + "/" + label + "/caller",
         [mode],
@@ -168,8 +168,8 @@ export function reuseExceptionNative(target, base, fixture) {
       });
     }
   }
-  /** Compiles the whole new owner caller with unchanged original dependency flags, objects and libraries. @param sanitized - Matching original instrumentation. @returns Actual linked caller path. */
-  function build(sanitized) {
+  /** Compiles the whole new owner caller with unchanged original dependency flags, objects and libraries. @param sanitized - Matching original instrumentation. @param extraArguments - Genuine additional owner sources/include flags. @returns Actual linked caller path. */
+  function build(sanitized, extraArguments = []) {
     const label = sanitized ? "asan" : "normal",
       dir = target + "/" + label;
     mkdirSync(dir, { recursive: true });
@@ -194,7 +194,7 @@ export function reuseExceptionNative(target, base, fixture) {
                 ? dir + "/caller"
                 : arg,
       );
-    argv.push("-Wl,-rpath," + resolve(base + "/" + label));
+    argv.push(...extraArguments, "-Wl,-rpath," + resolve(base + "/" + label));
     run(original.tool, argv, label + "-link-caller");
     for (const file of readFileSync(dependency, "utf8").replaceAll("\\\n", " ").split(/\s+/))
       if (file.startsWith(upstream + "/")) loadUnicodeOriginal(sources, originalDependency(file));

@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
 import { delayed_delete_vector, delayed_delete_vector_iterator } from "./delayed_delete_vector.ts";
-import { type DelayedVectorValue } from "./delayed_delete_vector.ts";
+import { type DelayedValueOperations } from "./delayed_delete_vector.ts";
 import { general_error } from "../global.ts";
 
 /** Original block discriminator type. */
@@ -92,12 +92,13 @@ export class base_range_type<T> {
 /** Original shared unmanaged scalar operation owner over actual delayed_delete_vector. */
 export class element_block<T> extends base_element_block {
   protected m_array: delayed_delete_vector<T>;
-  /** Initializes storage through genuine count/fill/range/copy contract families. @param type - Native discriminator. @param zero - Explicit native T{}. @param initial - Constructor family. @param valueOrLast - Fill or range end. @returns Block. */
+  /** Initializes storage through genuine count/fill/range/copy contract families. @param type - Native discriminator. @param zero - Explicit native T{}. @param initial - Constructor family. @param valueOrLast - Fill or range end. @param operations - Actual object ValueT members. @returns Block. */
   protected constructor(
     type: element_t,
     zero: T,
     initial: BlockInitial<T>,
-    valueOrLast: T | delayed_delete_vector_iterator<T>,
+    valueOrLast: T | delayed_delete_vector_iterator<T> | undefined,
+    operations?: DelayedValueOperations<T>,
   ) {
     // The sole default specialization supplies both erased-template arguments
     // explicitly for every native constructor family; defaults belong there.
@@ -106,6 +107,7 @@ export class element_block<T> extends base_element_block {
       zero,
       initial instanceof element_block ? initial.store() : initial,
       valueOrLast,
+      operations,
     );
   }
   /** Borrows native constructed storage, including delayed front state. @returns Original store. */
@@ -247,7 +249,11 @@ export class element_block<T> extends base_element_block {
   }
   /** Releases an unmanaged primitive block through GC; deleted/dangling native owners have no valid subsequent calls. @param pointer - Owner or null. @returns Nothing. */
   public static delete_block(pointer: base_element_block | null): void {
-    void pointer;
+    if (pointer !== null) (pointer as element_block<unknown>).dispose();
+  }
+  /** Original block destructor delegates to the complete underlying value store. @returns Nothing. */
+  public dispose(): void {
+    this.m_array.dispose();
   }
   /** Resizes then retains original integer-capacity auto-shrink comparison. @param this - Native static specialization. @param block - Owner. @param new_size - Count. @returns Nothing. */
   public static resize_block<T>(
@@ -349,10 +355,7 @@ export class element_block<T> extends base_element_block {
     const it1 = st1.begin().advance(pos1),
       it2 = st2.begin().advance(pos2);
     for (let i = 0; i < len; ++i, it1.advance(1), it2.advance(1)) {
-      const v1 = it1.get(),
-        v2 = it2.get();
-      it1.set(v2);
-      it2.set(v1);
+      it1.swap_copy(it2);
     }
   }
   /** Compares original typed storage. @param this - Native static specialization. @param left - Left owner. @param right - Right owner. @returns Equality. */
@@ -501,12 +504,13 @@ function convert_range<T>(
   for (const it = first.copy(); !it.equals(last); it.advance(1)) values.push(cast(it.get()));
   return values;
 }
-/** Specializes original unmanaged default block template without generated native substitutes. @param TypeId - Native discriminator. @param zero - Native value_type{}. @param cast - Erased native scalar conversion. @param debug - Original compile-time MDDS_MULTI_TYPE_VECTOR_DEBUG witness. @returns Original static specialization. */
-export function default_element_block<T extends DelayedVectorValue>(
+/** Specializes original unmanaged default block template without generated native substitutes. @param TypeId - Native discriminator. @param zero - Native value_type{}. @param cast - Erased native scalar conversion. @param debug - Original compile-time MDDS_MULTI_TYPE_VECTOR_DEBUG witness. @param operations - Actual object ValueT special members. @returns Original static specialization. */
+export function default_element_block<T>(
   TypeId: element_t,
   zero: T,
   cast: (value: T) => T,
   debug = false,
+  operations?: DelayedValueOperations<T>,
 ) {
   /** Original default_element_block specialization over actual shared storage. */
   class default_element_block extends copyable_element_block<T> {
@@ -521,7 +525,7 @@ export function default_element_block<T extends DelayedVectorValue>(
     /** Initializes original constructor families with explicit erased T{}. @param initial - Count/range/copy. @param valueOrLast - Fill/range end. @returns Original specialized block. */
     public constructor(
       initial: BlockInitial<T> = 0,
-      valueOrLast: T | delayed_delete_vector_iterator<T> = zero,
+      valueOrLast?: T | delayed_delete_vector_iterator<T>,
     ) {
       const prepared =
         initial instanceof delayed_delete_vector_iterator
@@ -533,7 +537,10 @@ export function default_element_block<T extends DelayedVectorValue>(
         TypeId,
         zero,
         prepared,
-        valueOrLast instanceof delayed_delete_vector_iterator ? valueOrLast : cast(valueOrLast),
+        valueOrLast === undefined || valueOrLast instanceof delayed_delete_vector_iterator
+          ? valueOrLast
+          : cast(valueOrLast),
+        operations,
       );
     }
     /** Creates original filled scalar owner. @param init_size - Count. @param value - Scalar. @returns Block. */
@@ -635,7 +642,7 @@ export function managed_element_block<T>(
       return this;
     }
     /** Original destructor visits only live pointer elements. @returns Nothing. */
-    public dispose(): void {
+    public override dispose(): void {
       delete_values(this.m_array, 0, this.m_array.size(), ops);
     }
     /** Original delete of the concrete self_type pointer; null is valid. @param pointer - Block or null. @returns Nothing. */
@@ -687,7 +694,7 @@ export function noncopyable_managed_element_block<T>(
       super(TypeId, null, initial, last);
     }
     /** Original live-range pointee destructor. @returns Nothing. */
-    public dispose(): void {
+    public override dispose(): void {
       delete_values(this.m_array, 0, this.m_array.size(), ops);
     }
     /** Original delete of concrete owner or null. @param pointer - Owner. @returns Nothing. */

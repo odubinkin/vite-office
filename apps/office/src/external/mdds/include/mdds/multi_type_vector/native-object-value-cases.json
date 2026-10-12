@@ -1,0 +1,29 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "dependencyManifestHash": "e47199063c500d19ca96cea316d4a384e8cce9c5481e8e726404679bfcbd9810",
+  "mddsArchiveHashes": {
+    "mdds": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112",
+    "boost": "2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb"
+  },
+  "mddsSourceHashes": {
+    "global.hpp": "1267207aeb62432ac770ad2578c4b370367766f429968d186710716fa9184ecd",
+    "multi_type_vector/types.hpp": "b22de4d75774af2aa8f8423cc33e61ddd0c8cae6d9c641f6105c36bfbd8b3291",
+    "multi_type_vector/types_util.hpp": "331d70cdd77e4a2365ccbec91c62600b010d6fe0099f81194be33d38e4eb19b4",
+    "multi_type_vector/delayed_delete_vector.hpp": "eae6a3b966aa9eda88a560c8637c3d1a32b3d6a1f54ad55e6dda097e0f8ce939",
+    "multi_type_vector/standard_element_blocks.hpp": "42482fa57ff3cf7389e618a896863f971a30700ed02814379a438973a2ac759d",
+    "multi_type_vector/block_funcs.hpp": "9b3d8418f48c4237395cc73fd65dee4119566c71f771817cf2eb89e369b9f55f",
+    "multi_type_vector/macro.hpp": "7b6432057fa0d35e8902cb7f0720b38e641206a8b6f25eec0e446435be989583",
+    "multi_type_vector/util.hpp": "f4d7cfcd79986c5ec2714f694fae50307c03d84056d7d1e2ec30f2512f3bb7bc",
+    "multi_type_vector/soa/main.hpp": "fa23b0046758009d58e5be69856e167656a212b4d937f83b8bce6f643115cdb9",
+    "multi_type_vector/soa/main_def.inl": "08ac72ad06b18d746a0a7830cca74b5bbf08b2b1b46724f461c2089767b5b660",
+    "multi_type_vector/soa/iterator.hpp": "3da24a13bfa102b8aab639ba340f7e52812f34202616ffbfeff043a0e93b2893",
+    "multi_type_vector/iterator_node.hpp": "4beac64b5fe1c76542d8c36821a85c1e475f17b08acc857fe012c3e54aa4d5b1",
+    "multi_type_vector/soa/block_util.hpp": "8dcf3c0024b8eaa5076d63bc4e89f74f0f048d14643e037fabc32e3e8cbffc3e"
+  },
+  "callerHash": "e9df4f2b4b4c72551f9c74ba3c5e675b3cbf0d70033b71b713185236654482fb",
+  "sourceDigest": "3dd14ec070c48d61d6ff1183f0207516f3dae800605dea425d0fb36d43a533a1",
+  "captures": {
+    "owned": "owned\nnew 1 0\nnew 2 10\nnew 3 20\nnew 4 30\ndefault 5 0\ndefault 6 0\ndefault 2 2 5:0 6:0\ncopy 2 7 10\ncopy 2 8 10\ncopy 2 9 10\nfilled 3 3 7:10 8:10 9:10\ncopy 2 10 10\ncopy 3 11 20\ncopy 4 12 30\nrange 3 3 10:10 11:20 12:30\ndelayed 2 3 11:20 12:30\ncopy 10 13 10\ncopy 11 14 20\ncopy 12 15 30\ncopy_hidden 2 3 14:20 15:30\ncopy 10 16 10\ncopy 11 17 20\ncopy 12 18 30\nclone_hidden 2 3 17:20 18:30\nassign 5 3 20\nset 2 2 5:20 6:0\ncopy 4 19 30\nmove 5 20 20\nmove 6 21 0\ndelete 5 -1\ndelete 6 -1\nappend 3 4 20:20 21:0 19:30\ncopy 2 22 10\nemplace_lvalue 4 4 20:20 21:0 19:30 22:10\ncopy 3 23 20\nmove 20 24 20\nmove 21 25 0\nmove 19 26 30\nmove 22 27 10\ndelete 20 -1\ndelete 21 -1\ndelete 19 -1\ndelete 22 -1\nprepend 5 8 23:20 24:20 25:0 26:30 27:10\nmove 23 28 20\nmove 24 29 20\nmove 25 30 0\nmove 26 31 30\nmove 27 32 10\ndelete 23 -1\ndelete 24 -1\ndelete 25 -1\ndelete 26 -1\ndelete 27 -1\nreserve 5 12 28:20 29:20 30:0 31:30 32:10\ndefault 33 0\ndefault 34 0\nresize_grow 7 12 28:20 29:20 30:0 31:30 32:10 33:0 34:0\nassign 29 2 10\nassign 30 3 20\nassign 31 4 30\nset_range 7 12 28:20 29:10 30:20 31:30 32:10 33:0 34:0\ncopy 28 35 20\ncopy 7 36 10\nassign 28 36 10\nassign 7 35 20\ndelete 36 10\ndelete 35 20\ncopy 29 37 10\ncopy 8 38 10\nassign 29 38 10\nassign 8 37 10\ndelete 38 10\ndelete 37 10\nswap_d 7 12 28:10 29:10 30:20 31:30 32:10 33:0 34:0\nswap_f 3 3 7:20 8:10 9:10\ncopy 28 39 10\ncopy 28 40 10\nassign 28 40 10\nassign 28 39 10\ndelete 40 10\ndelete 39 10\nswap_self 7 12 28:10 29:10 30:20 31:30 32:10 33:0 34:0\nmove 34 41 0\nmoveassign 34 9 10\nmoveassign 9 41 0\ndelete 41 -1\nreverse_d 7 12 28:10 29:10 30:20 31:30 32:10 33:0 34:10\nreverse_f 3 3 7:20 8:10 9:0\nmoveassign 13 14 20\nmoveassign 14 15 30\ndelete 15 -1\nassign 13 29 10\nassign 14 30 20\ncopy 31 42 30\nassign 3 3 13:10 14:20 42:30\nmove 13 43 10\nmove 14 44 20\nmove 42 45 30\ndelete 13 -1\ndelete 14 -1\ndelete 42 -1\ncopy 28 46 10\ncopy 29 47 10\nappend_range 5 5 43:10 44:20 45:30 46:10 47:10\nmove 43 48 10\nmove 44 49 20\nmove 45 50 30\nmove 46 51 10\nmove 47 52 10\ndelete 43 -1\ndelete 44 -1\ndelete 45 -1\ndelete 46 -1\ndelete 47 -1\nmove 52 53 10\nmoveassign 52 51 10\nmoveassign 51 50 30\nmoveassign 50 49 20\nmoveassign 49 48 10\nassign 48 30 20\nprepend_range 6 6 48:20 49:10 50:20 51:30 52:10 53:10\nmoveassign 49 51 30\nmoveassign 50 52 10\nmoveassign 51 53 10\ndelete 53 -1\ndelete 52 -1\nerase_range 4 6 48:20 49:30 50:10 51:10\ndelete 9 0\ndelete 8 10\nresize_shrink 1 3 7:20\nmove 7 54 20\ndelete 7 -1\nshrink_fit 1 1 54:20\nshrink_noop 1 1 54:20\nmoveassign 10 11 20\nmoveassign 11 12 30\ndelete 12 -1\nclear_hidden 2 3 10:20 11:30\nequal 1\ndelete 18 30\ndelete 17 20\ndelete 16 10\ndelete 51 10\ndelete 50 10\ndelete 49 30\ndelete 48 20\ndelete 11 30\ndelete 10 20\ndelete 54 20\ndelete 34 10\ndelete 33 0\ndelete 32 10\ndelete 31 30\ndelete 30 20\ndelete 29 10\ndelete 28 10\nscalar_swap 2 1\ninputs\ndelete 4 30\ndelete 3 20\ndelete 2 10\ndelete 1 0\n",
+    "calc": "calc\nstring_default 2 2 2 -1:0:0 -1:0:0\nstring_fill 3 3 5 65:5:0 65:5:0 65:5:0\nstring_hidden 2 3 5 65:5:0 65:5:0\nstring_copy 2 3 8 65:8:0 65:8:0\nstring_set 2 2 9 65:9:0 -1:0:0\nstring_alias_append 3 4 10 65:10:0 -1:0:0 65:10:0\nstring_clear_hidden 2 3 9 65:9:0 65:9:0\nstring_resize 1 1 8 65:8:0\nstring_equal 1\nstring_remaining 2\nattr_default 2 2 65535:8 65535:8\nattr_fill 3 3 9:1 9:1 9:1\nattr_independent 2 2 9:1 65535:8\nattr_copy_hidden 2 3 9:1 9:1\nattr_grow 4 4 9:1 65535:8 65535:8 65535:8\nattr_clear_hidden 2 3 9:1 9:1\nattr_swap_a 4 4 9:1 65535:8 65535:8 65535:8\nattr_swap_b 2 3 9:1 9:1\n"
+  }
+}

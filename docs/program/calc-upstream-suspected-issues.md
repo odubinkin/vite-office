@@ -1509,3 +1509,13 @@ At pinned9bc445578031fecf56086729d8e4940c77e14d65, cppu/source/uno/lbenv.cxx Obj
 Evidence: scripts/uno-object-entry-native-probe.mjs builds all101 original desktop dependencies and includes the whole unchanged lbenv.cxx in a pure caller; normal-ASan/UBSan find836-byte streams match all initialized portable observations in lbenv.test.ts. output/playwright/task60-checks/decoded-find-prefix.json records the exact initial query rows: entry.B misses while assignability is true. The full stream remains in native-object-entry-cases.json and normal/asan caller.find outputs. This is a direct internal lookup experiment, not a complete environment or consumer QA port.
 
 Decision: preserve the primary-base chain and first-record root shortcut. Do not replace it with a traversal of every ppBaseTypes entry or a JS inheritance shortcut.
+
+## CALC-063: mdds block swap copies two values even when moves are available
+
+Status: confirmed original copy-based swap; not an established defect. Copy-only ValueT requirements may explain the choice.
+
+Pinned mdds3.2.1 types.hpp element_block::swap_values declares ValueT v1=*it1, v2=*it2, then copy-assigns both references. An instrumented movable noexcept ValueT therefore has two copy constructions, two copy assignments and two temporary destructions for each pair, including the same reference. Direct std::iter_swap over the same real storage uses one move temporary and two move assignments. This may create additional transient string references, but no complete Calc consumer defect or performance regression is demonstrated.
+
+Evidence: task65 scripts/mdds-object-value-native-probe.mjs includes whole unchanged verified original headers and captures full normal-only owned streams in native-object-value-cases.json. swap_d/swap_f/swap_self retain the two copies; reverse_d/reverse_f witness the separate std::iter_swap path. Actual SharedString/CellTextAttr full source owners are also compiled unchanged.
+
+Decision: retain the original two-copy block algorithm. Do not replace it with std::swap, pointer/reference exchange or a JS destructuring swap for owned values. The selected native iterator swap remains a separate language binding.
