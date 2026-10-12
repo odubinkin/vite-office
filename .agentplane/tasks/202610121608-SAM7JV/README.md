@@ -4,7 +4,7 @@ title: "Implement original mdds matrix storage and typed access"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T16:36:53.445Z"
+  updated_by: "CODER"
+  note: "Original mdds matrix core verified atabcfd1c50790a04b67405b1e8add204fb6132bd6: Calc123/shared221 whole raw S/B/F/L100 every counter positive; final current matrix118S64B37F115L100; seven ordinary native commands/448sources and full28105/585byte streams; source-absent static/profile0UI, all14gates/23tooling, exact145source/test hashes and same-agent separate EVALUATOR pass. Actual shared owners reused, CALC-069 preserved, missing matrix algorithms/document/UI recorded honestly, next full81."
   attempts: 0
 quality_review:
   state: "pass"
@@ -74,8 +74,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: original mdds matrix core committed at abcfd1c50790 with genuine shared SoA/SharedString owners; native and whole Calc/shared raw100, final matrix raw100 and14gates pass. Separate same-agent EVALUATOR will bind exact source and declared missing APIs."
+  -
+    type: "verify"
+    at: "2026-10-12T16:36:53.445Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original mdds matrix core verified atabcfd1c50790a04b67405b1e8add204fb6132bd6: Calc123/shared221 whole raw S/B/F/L100 every counter positive; final current matrix118S64B37F115L100; seven ordinary native commands/448sources and full28105/585byte streams; source-absent static/profile0UI, all14gates/23tooling, exact145source/test hashes and same-agent separate EVALUATOR pass. Actual shared owners reused, CALC-069 preserved, missing matrix algorithms/document/UI recorded honestly, next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T16:34:21.143Z"
+doc_updated_at: "2026-10-12T16:36:53.526Z"
 doc_updated_by: "CODER"
 description: "Task78 of the ongoing approved Calc UI prerequisite goal: implement genuine multi_type_matrix core over existing shared SoA multi_type_vector, original traits/size/constructors/lifetimes/positions/typed scalar and range writes/queries/empty/numeric/swap. Preserve upstream behavior with ordinary native evidence; keep unimplemented transpose/copy/resize/walk and ScMatrix/document/UI explicitly pending. Whole Calc and affected shared raw100, inventory and provenance, local gates, source-bound separate same-agent evaluation. Only calc checkout/branch; next full81."
 sections:
@@ -83,9 +89,43 @@ sections:
   Scope: "Only calc checkout/branch. Matrix runtime header/definition/type shards, colocated tests/native fixture; ordinary native probe; capability/runtime/provenance inventory entries; calc-core documentation and task metadata. Original traits, size_pair_type, default/size/value/range/copy/defaulted-move/destructor, equality, positions, typed reads and scalar/range/empty writes, numeric/empty/clear/swap. No synthetic backing store, guessed JS overloads, Writer coverage repairs, sanitizer or broad matrix/document/UI certification. Transpose, matrix copy, resize and walks remain real subsequent source scopes."
   Plan: "Implement original matrix core storage/access over genuine SoA vector; ordinary native full-header evidence, whole Calc/affected shared raw100, inventory/provenance and local gates, exact-source same-agent evaluator. Preserve actual missing transpose/copy/resize/walk and Calc owners, next full81."
   Verify Steps: "1. node scripts/calc-matrix-native-probe.mjs --write and --check: unchanged full original matrix/vector headers, actual Calc string/UInt16/UInt8 block traits where exercised, whole deterministic normal-only streams and source hashes, no fake dependencies. 2. node output/playwright/task78-checks/portable.mjs: entire Calc and directly affected complete shared owners/tests, raw S/B/F/L100 and every counter positive, reference links absent/restored, source-absent build and Calc profile. 3. node output/playwright/task78-checks/gates.mjs: full format/lint/type/docs/size/deps/resources/tree/provenance/registry/routing/doctor/diff plus affected complete tooling tests. 4. Exact source/test hashes tied to implementation commit and separate same-agent EVALUATOR with nonempty evidence/findings; truthful pending APIs and broad false flags; final authoritative DONE and clean all-files git status. Next full81, no earlier full suite or Writer-only repair."
-  Verification: "Pending implementation and declared scoped checks. No completion, 100% coverage or UI readiness claim."
+  Verification: |-
+    Command: node scripts/calc-matrix-native-probe.mjs --write then --check. Result: pass. Evidence: seven positive ordinary native commands/448whole original source hashes plus exact pinned archives/header checks, whole scalar28105byte and Calc ownership585byte streams; current final native --check also passes. Scope: unchanged complete matrix/vector headers over real SharedString and original Calc trait excerpts, no fake dependencies or routine sanitizer. Command: node output/playwright/task78-checks/portable.mjs then --checks-only. Result: pass after erased test type witness correction. Evidence: entire Calc123tests34files and affected shared221tests41files raw S/B/F/L100, every counter positive; Calc3080S2092B526F2721L, shared3596S1734B716F3203L. Four source links absent/restored; static/build and actual Calc profile0UI pass. First build type inference failure retained, explicit MatrixTraits<SharedString> repairs only test type binding. Command: final current matrix two-test coverage command recorded in exact-review; Result: pass118S64B37F115L100 every counter positive after non-runtime overload declarations and comment/type changes; other whole covered runtime owners unchanged. Command: node output/playwright/task78-checks/gates.mjs then selective --recheck. Result: all14gates pass, whole23tooling tests. First lint/docs/registry failures retained, optional signature/helper unused import/callback docs/runtime row-column callable metadata corrected without suppression or altered gate criteria. Evidence: exact145current source/test/fixture hashes also match implementationabcfd1c50790a04b67405b1e8add204fb6132bd6,11intentional paths including10non-task files. Same-agent separate EVALUATOR pass, not independent review: .agentplane/tasks/202610121608-SAM7JV/quality/20261012-163546764-recovery-context/quality-report.json, exact evaluated_sha/nonempty findings/evidence. CALC-069 preserves original int8 constructor/query asymmetry. Matrix transpose/copy/resize/walk, ScMatrix/document/UI and ABI/full QA remain pending, broad false flags; original QA marker unexecuted context, next full81. Final verified lifecycle closure follows.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T16:36:53.445Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original mdds matrix core verified atabcfd1c50790a04b67405b1e8add204fb6132bd6: Calc123/shared221 whole raw S/B/F/L100 every counter positive; final current matrix118S64B37F115L100; seven ordinary native commands/448sources and full28105/585byte streams; source-absent static/profile0UI, all14gates/23tooling, exact145source/test hashes and same-agent separate EVALUATOR pass. Actual shared owners reused, CALC-069 preserved, missing matrix algorithms/document/UI recorded honestly, next full81.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T16:36:52.133Z, excerpt_hash=sha256:8e90a7def3d7aaca214cc132661b69099cecbdf925ee63204f2cc921c05da404
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121608-SAM7JV/blueprint/resolved-snapshot.json
+    - old_digest: 8fb9dbd4db0f5a8a199d2dc0c2407b0ae14f2ee2e22ad111bac611b63a9071f5
+    - current_digest: 8fb9dbd4db0f5a8a199d2dc0c2407b0ae14f2ee2e22ad111bac611b63a9071f5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121608-SAM7JV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121608-SAM7JV
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task78 changes through a new approved task; preserve existing SoA/shared owners and unrelated work. No branch merge or destructive history."
-  Findings: "Native --write/--check pass seven positive ordinary commands and448whole original source hashes plus verified original mdds archives/headers. Whole scalar28105byte and Calc ownership585byte streams match both current tests. Whole Calc123tests34files raw3080S2092B526F2721L100; whole directly affected shared221tests41files raw3596S1734B716F3203L100, matrix118S37F64B every counter positive. Four links absent/restored. Initial type inference/static build failure corrected by explicit MatrixTraits<SharedString>; source-absent static and actual Calc profile0UI now pass. Original typed scalar/empty return overload signatures added without runtime behavior changes. First lint/docs/registry gates retained; lint optional signatures/helper unused declaration corrected, callback JSDoc added, only runtime localSymbols row/column field entries removed according to enforced callable convention; actual fields remain in code/provenance. CALC-069 preserves original int8 scalar/range validation asymmetry. Wrong initial test config and one wrong relative-path documentation command had no semantic mutations; corrected locally. Remaining final gates/review/lifecycle pending. No Writer repair, new sanitizer, replacement storage or broad matrix/UI claim; next full81."
+  Findings: "Original matrix core reuses genuine shared SoA vector and SharedString, with typed callback aliases and column-major geometry. Native seven ordinary commands/448sources plus28105/585byte full streams, Calc123/shared221 whole raw100, final current matrix118S64B37F115L raw100, source-absent static/profile0UI, all14gates/23tooling pass. First config/path/type/lint/docs/registry issues are retained in logs and repaired within scope; no Writer coverage changes or relaxed checks. Explicit return overload declarations, copyright and test type/comment corrections are non-runtime changes; current matrix/two tests revalidated, other covered runtime owners unchanged. Exact145source/test/fixture hashes match implementationabcfd1c50790a04b67405b1e8add204fb6132bd6; same-agent separate EVALUATOR pass report recorded, no independent review claim. CALC-069 records original supported-store-but-rejected-matrix int8 asymmetry with behavior preserved. Foundations/broad false flags and unexecuted QA context accurately retain missing matrix algorithms/ScMatrix/document/UI, native ABI/concurrency/invalid lifetimes/full QA. Final verify/closure follows, next full81."
 id_source: "generated"
 ---
 ## Summary
@@ -106,7 +146,40 @@ Implement original matrix core storage/access over genuine SoA vector; ordinary 
 
 ## Verification
 
-Pending implementation and declared scoped checks. No completion, 100% coverage or UI readiness claim.
+Command: node scripts/calc-matrix-native-probe.mjs --write then --check. Result: pass. Evidence: seven positive ordinary native commands/448whole original source hashes plus exact pinned archives/header checks, whole scalar28105byte and Calc ownership585byte streams; current final native --check also passes. Scope: unchanged complete matrix/vector headers over real SharedString and original Calc trait excerpts, no fake dependencies or routine sanitizer. Command: node output/playwright/task78-checks/portable.mjs then --checks-only. Result: pass after erased test type witness correction. Evidence: entire Calc123tests34files and affected shared221tests41files raw S/B/F/L100, every counter positive; Calc3080S2092B526F2721L, shared3596S1734B716F3203L. Four source links absent/restored; static/build and actual Calc profile0UI pass. First build type inference failure retained, explicit MatrixTraits<SharedString> repairs only test type binding. Command: final current matrix two-test coverage command recorded in exact-review; Result: pass118S64B37F115L100 every counter positive after non-runtime overload declarations and comment/type changes; other whole covered runtime owners unchanged. Command: node output/playwright/task78-checks/gates.mjs then selective --recheck. Result: all14gates pass, whole23tooling tests. First lint/docs/registry failures retained, optional signature/helper unused import/callback docs/runtime row-column callable metadata corrected without suppression or altered gate criteria. Evidence: exact145current source/test/fixture hashes also match implementationabcfd1c50790a04b67405b1e8add204fb6132bd6,11intentional paths including10non-task files. Same-agent separate EVALUATOR pass, not independent review: .agentplane/tasks/202610121608-SAM7JV/quality/20261012-163546764-recovery-context/quality-report.json, exact evaluated_sha/nonempty findings/evidence. CALC-069 preserves original int8 constructor/query asymmetry. Matrix transpose/copy/resize/walk, ScMatrix/document/UI and ABI/full QA remain pending, broad false flags; original QA marker unexecuted context, next full81. Final verified lifecycle closure follows.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T16:36:53.445Z — VERIFY — ok
+
+By: CODER
+
+Note: Original mdds matrix core verified atabcfd1c50790a04b67405b1e8add204fb6132bd6: Calc123/shared221 whole raw S/B/F/L100 every counter positive; final current matrix118S64B37F115L100; seven ordinary native commands/448sources and full28105/585byte streams; source-absent static/profile0UI, all14gates/23tooling, exact145source/test hashes and same-agent separate EVALUATOR pass. Actual shared owners reused, CALC-069 preserved, missing matrix algorithms/document/UI recorded honestly, next full81.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T16:36:52.133Z, excerpt_hash=sha256:8e90a7def3d7aaca214cc132661b69099cecbdf925ee63204f2cc921c05da404
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121608-SAM7JV/blueprint/resolved-snapshot.json
+- old_digest: 8fb9dbd4db0f5a8a199d2dc0c2407b0ae14f2ee2e22ad111bac611b63a9071f5
+- current_digest: 8fb9dbd4db0f5a8a199d2dc0c2407b0ae14f2ee2e22ad111bac611b63a9071f5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121608-SAM7JV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121608-SAM7JV
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -114,4 +187,4 @@ Revert only intentional task78 changes through a new approved task; preserve exi
 
 ## Findings
 
-Native --write/--check pass seven positive ordinary commands and448whole original source hashes plus verified original mdds archives/headers. Whole scalar28105byte and Calc ownership585byte streams match both current tests. Whole Calc123tests34files raw3080S2092B526F2721L100; whole directly affected shared221tests41files raw3596S1734B716F3203L100, matrix118S37F64B every counter positive. Four links absent/restored. Initial type inference/static build failure corrected by explicit MatrixTraits<SharedString>; source-absent static and actual Calc profile0UI now pass. Original typed scalar/empty return overload signatures added without runtime behavior changes. First lint/docs/registry gates retained; lint optional signatures/helper unused declaration corrected, callback JSDoc added, only runtime localSymbols row/column field entries removed according to enforced callable convention; actual fields remain in code/provenance. CALC-069 preserves original int8 scalar/range validation asymmetry. Wrong initial test config and one wrong relative-path documentation command had no semantic mutations; corrected locally. Remaining final gates/review/lifecycle pending. No Writer repair, new sanitizer, replacement storage or broad matrix/UI claim; next full81.
+Original matrix core reuses genuine shared SoA vector and SharedString, with typed callback aliases and column-major geometry. Native seven ordinary commands/448sources plus28105/585byte full streams, Calc123/shared221 whole raw100, final current matrix118S64B37F115L raw100, source-absent static/profile0UI, all14gates/23tooling pass. First config/path/type/lint/docs/registry issues are retained in logs and repaired within scope; no Writer coverage changes or relaxed checks. Explicit return overload declarations, copyright and test type/comment corrections are non-runtime changes; current matrix/two tests revalidated, other covered runtime owners unchanged. Exact145source/test/fixture hashes match implementationabcfd1c50790a04b67405b1e8add204fb6132bd6; same-agent separate EVALUATOR pass report recorded, no independent review claim. CALC-069 records original supported-store-but-rejected-matrix int8 asymmetry with behavior preserved. Foundations/broad false flags and unexecuted QA context accurately retain missing matrix algorithms/ScMatrix/document/UI, native ABI/concurrency/invalid lifetimes/full QA. Final verify/closure follows, next full81.
