@@ -4,7 +4,7 @@ title: "Run scheduled full Calc repository validation after task70"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -23,7 +23,33 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T11:30:04.013Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR: full71 actual complete regression, corrected exact shared inventory expectation and all13effective gates pass;457committed source hashes match evidence. Full Calc kernel/UI remain unverified."
+  evaluated_sha: "85509a1ea0a2b0974ed3978ad6066197dae6447b"
+  blueprint_digest: "86bfdefbd46ffed507dd884be716505db96a7e92a9f32b03f84acc75a4aa0f0c"
+  evidence_refs:
+    - ".agentplane/tasks/202610121059-FKXJB9/README.md"
+    - ".agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121059-FKXJB9/blueprint/resolved-snapshot.json"
+    - "output/playwright/task71-checks/exact-review.json"
+    - "output/playwright/task71-checks/final-audit.json"
+    - "output/playwright/task71-checks/office-coverage-audit.json"
+    - "output/playwright/task71-checks/browser-ownership.json"
+    - "output/playwright/task71-checks/inventory-recheck.json"
+    - "output/playwright/task71-checks/full-gates-results.json"
+    - "output/playwright/task71-checks/ignored-lint-repairs.json"
+  findings:
+    - "Full office15510/727, inventory123/38, tooling34/9, browser306Writer/2shared/0Calc and static pass with upstream links absent; all442office executable raw owners100 and inventory summary100."
+    - "Current112Calc/219related cases retain exact task70 selection/maps and all20/33raw owners100;14facade ASTs verified. Only shared test and operational docs changed; native proof and app/config trees untouched."
+    - "First inventory assertion failure, concurrent timeouts and lint errors retained; exact serial corrective runs and five ignored artifact byte/minimal-import repairs audited without weaker criteria."
+commit:
+  hash: "85509a1ea0a2b0974ed3978ad6066197dae6447b"
+  message: "🧩 FKXJB9 calc: validate full regression and current inventory linkage"
 comments:
   -
     author: "CODER"
@@ -36,8 +62,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: run scheduled full71 complete source-absent runtime suites and aggregate gates on calc; retain exact current profiles, repair only observed Calc/shared failures and leave Writer-only coverage gaps untouched."
+  -
+    type: "status"
+    at: "2026-10-12T11:29:03.818Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-12T11:29:02.734Z"
+doc_updated_at: "2026-10-12T11:31:15.442Z"
 doc_updated_by: "CODER"
 description: "Iteration71: scheduled full regression after ten tasks since full61. Run complete office/inventory/tooling/browser/static suites and aggregate gates on calc, all original source links absent for runtime suites, raw coverage and browser ownership audit, exact current task70 Calc/related profiles. Repair only demonstrated Calc/shared failures; retain Writer-only coverage gaps without fixes. No new features, branches, merges or parity promotion."
 sections:
@@ -56,7 +88,7 @@ sections:
   Verification: |-
     Command: python3 output/playwright/task71-checks/full-run.py; serial corrective npm run test:inventory:coverage via inventory-recheck.json.
     Result: pass after bounded shared-test repair; first failures retained.
-    Evidence: full-results.json contains original5results and first inventory failure; final-audit.json explicitly binds inventory-recheck.json to the resolved inventory row without overwriting the first record. Whole office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all runtime checks performed with3original links absent and exact restoration. Browser --list JSON actual Writer306/shared2/Calc0 matches every actual passed scenario.
+    Evidence: task71-full-results.json contains original5results and first inventory failure; final-audit.json explicitly binds inventory-recheck.json to the resolved inventory row without overwriting the first record. Whole office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all runtime checks performed with3original links absent and exact restoration. Browser --list JSON actual Writer306/shared2/Calc0 matches every actual passed scenario.
     Scope: complete repository runtime; no full kernel/UI/upstream QA certification.
 
     Command: python3 output/playwright/task71-checks/full-gates.py; exact npm run lint corrective rerun.
@@ -68,6 +100,10 @@ sections:
     Evidence: office442executable owners raw S/B/F/L100, all raw counters positive; inventory summary100. Whole Calc112/30 and related shared219/39,20/33whole owners raw100, previous complete maps/selection and14facade ASTs/source hashes retained. Native/selection digest and unchanged app/package/config tree bindings,457current source hashes, exact original pin/links and every actual status/count audited. Actual JSON/raw/manifests/logs live in task71-checks; original inventory and concurrent timeout failures preserved. No Writer coverage gaps, no Writer fixes.
 
     Exact implementation-bound same-agent EVALUATOR and final CODER verify/clean DONE follow. Full goal remains active; next full81.
+
+    Command: ap evaluator run 202610121059-FKXJB9 --verdict pass, same-agent separate EVALUATOR phase.
+    Result: pass on exact85509a1ea0a2b0974ed3978ad6066197dae6447b.
+    Evidence: .agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/quality-report.json; exact-review.json binds457committed source hashes and complete audited commands/results. Metadata-only quality, verification and close commits follow. No independent reviewer claim.
   Rollback Plan: "Always restore exact3original source symlinks in finally; preserve first failure logs/manifests. Revert only intentional approved task71 Calc/shared repair changes if required, leaving unrelated tasks and Writer-only coverage intact."
   Findings: |-
     Task70 DONE at5253e8abd9a7; source cd66bf47adb14f91110f5a6ec9e1ec59159d9358. Last full61;71is scheduled tenth task. Existing task70 profiles112Calc/219related and20/33executable owners raw100. The first setup CLI rejected code+ops because exactly one primary tag is required; no task was created. Current task uses code with calc, no scope change. Full kernel/editable UI remains unproven.
@@ -115,7 +151,7 @@ Complete office, inventory coverage, tooling, all browser projects and static su
 
 Command: python3 output/playwright/task71-checks/full-run.py; serial corrective npm run test:inventory:coverage via inventory-recheck.json.
 Result: pass after bounded shared-test repair; first failures retained.
-Evidence: full-results.json contains original5results and first inventory failure; final-audit.json explicitly binds inventory-recheck.json to the resolved inventory row without overwriting the first record. Whole office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all runtime checks performed with3original links absent and exact restoration. Browser --list JSON actual Writer306/shared2/Calc0 matches every actual passed scenario.
+Evidence: task71-full-results.json contains original5results and first inventory failure; final-audit.json explicitly binds inventory-recheck.json to the resolved inventory row without overwriting the first record. Whole office15510/727, inventory123/38, tooling34/9, browser308 and static pass; all runtime checks performed with3original links absent and exact restoration. Browser --list JSON actual Writer306/shared2/Calc0 matches every actual passed scenario.
 Scope: complete repository runtime; no full kernel/UI/upstream QA certification.
 
 Command: python3 output/playwright/task71-checks/full-gates.py; exact npm run lint corrective rerun.
@@ -127,6 +163,10 @@ Result: pass.
 Evidence: office442executable owners raw S/B/F/L100, all raw counters positive; inventory summary100. Whole Calc112/30 and related shared219/39,20/33whole owners raw100, previous complete maps/selection and14facade ASTs/source hashes retained. Native/selection digest and unchanged app/package/config tree bindings,457current source hashes, exact original pin/links and every actual status/count audited. Actual JSON/raw/manifests/logs live in task71-checks; original inventory and concurrent timeout failures preserved. No Writer coverage gaps, no Writer fixes.
 
 Exact implementation-bound same-agent EVALUATOR and final CODER verify/clean DONE follow. Full goal remains active; next full81.
+
+Command: ap evaluator run 202610121059-FKXJB9 --verdict pass, same-agent separate EVALUATOR phase.
+Result: pass on exact85509a1ea0a2b0974ed3978ad6066197dae6447b.
+Evidence: .agentplane/tasks/202610121059-FKXJB9/quality/20261012-113004013-recovery-context/quality-report.json; exact-review.json binds457committed source hashes and complete audited commands/results. Metadata-only quality, verification and close commits follow. No independent reviewer claim.
 
 ## Rollback Plan
 
