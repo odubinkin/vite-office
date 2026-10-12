@@ -1,10 +1,11 @@
 ---
 id: "202610120243-2GW4JJ"
 title: "Implement original UNO environment object entry owner"
-status: "DOING"
+result_summary: "Implemented original UNO ObjectEntry over reused shared strings, typelib and environment contracts; complete whole native parity and source-absent related100, inventory and CALC-062 recorded; full61 next."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -44,12 +45,15 @@ quality_review:
     - "Full explicit constructor/append/type and pointer find follow source order and original root/primary-base behavior; actual shared strings/type references and declared borrowed environment records reused. Copy/move/assignment preserve initialized OID/vector/scalar ownership and valid aliases without physical capacity/hash-order claims."
     - "Whole101 original dependencies per build, whole unchanged owner TU and four normal-ASan/UBSan streams agree; exact prior coverage argv and runtime maps retained, all19+76 raw counters positive, all13 gates pass. CALC-062 records genuine secondary-base lookup miss versus assignability while behavior remains unchanged."
 commit:
-  hash: "ea402d8861ada771c9efc21d123e6a0335adaac0"
-  message: "🧩 2GW4JJ uno: implement original environment object entry"
+  hash: "89f5128ac3b92c85521bcd6046e0d6be19d9a4b4"
+  message: "✅ 2GW4JJ verify: record complete owner evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Port original environment object entry matching/registration owner and prove complete genuine native lifetime/callback/map traces."
+  -
+    author: "CODER"
+    body: "Verified: original ObjectEntry operations and initialized compiler value lifetimes match full genuine native normal-ASan/UBSan streams; Calc106/24 and shared188/53 with all19+76 owners raw100 source-absent; all13scoped gates/35tooling/format, implementation-bound quality pass and CALC-062 retained. Exact symlinks restored; scheduled full61 is next."
 events:
   -
     type: "status"
@@ -70,8 +74,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original ObjectEntry whole normal-ASan/UBSan four streams; full443source/39generated/101units/219terminal audit; source-absent Calc106/24 and shared188/53 all19+76 raw100; all13scoped gates/35tooling/format; original CALC-062 behavior retained. EVALUATOR evaluated_sha equals ea402d8861ada771c9efc21d123e6a0335adaac0. Full61 next."
+  -
+    type: "status"
+    at: "2026-10-12T03:11:06.464Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original ObjectEntry operations and initialized compiler value lifetimes match full genuine native normal-ASan/UBSan streams; Calc106/24 and shared188/53 with all19+76 owners raw100 source-absent; all13scoped gates/35tooling/format, implementation-bound quality pass and CALC-062 retained. Exact symlinks restored; scheduled full61 is next."
 doc_version: 3
-doc_updated_at: "2026-10-12T03:10:44.778Z"
+doc_updated_at: "2026-10-12T03:11:06.465Z"
 doc_updated_by: "CODER"
 description: "Task60: complete lbenv.cxx td_equals/InterfaceEntry/ObjectEntry explicit constructor, append and find overloads, original logical compiler-generated value lifetimes. Reuse actual OUString, C typelib and environment record contracts; native JS arrays/Map for original accessed vector membership/key identity only. Full unchanged original lbenv TU plus genuine complete desktop dependencies normal-ASan/UBSan, whole ownership/callback/find/copy/move observations, exact task59 shared raw100 plus actual owner/test and Calc. Matching registry/docs and suspected-case journal if confirmed. No fake default environment/provider or whole engine/ABI/thread claim. Full61 next."
 sections:
@@ -139,6 +150,10 @@ sections:
     - Observation: Borrowed declared ext-environment record and pointer map are not the full runtime engine; native arrays/Map preserve logical original accessed elements/insertion identity.
       Impact: Physical capacity/allocator/hash order/ABI/leaks/thread/shutdown and complete consumers unverified; environment/mapping/exception machinery and cell/document/edit/view/UI prerequisites remain.
       Resolution: Retain explicit scope and false broad parity flags; schedule full61 and subsequent source-backed dependencies.
+extensions:
+  implementation_commit:
+    hash: "ea402d8861ada771c9efc21d123e6a0335adaac0"
+    message: "🧩 2GW4JJ uno: implement original environment object entry"
 id_source: "generated"
 ---
 ## Summary
