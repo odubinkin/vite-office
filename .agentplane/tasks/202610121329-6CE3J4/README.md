@@ -4,7 +4,7 @@ title: "Implement shared formula opcode and parameter contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T13:53:46.650Z"
+  updated_by: "CODER"
+  note: "Complete original shared opcode/parameter contracts atae465b1ace028f18e107bec896edbab32d555663 match native505/10names,65536release diagnostics and10argument calls. Calc116/shared8 raw100, source-absent build/profile, complete gates and exact same-agent quality review pass. CALC-066 recorded; no full token/document/UI parity; next full81."
   attempts: 0
 quality_review:
   state: "pass"
@@ -69,8 +69,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation committed with current native header streams, actual signed conversion calls, scoped raw100 and complete successful gates; separate same-agent quality review follows."
+  -
+    type: "verify"
+    at: "2026-10-12T13:53:46.650Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original shared opcode/parameter contracts atae465b1ace028f18e107bec896edbab32d555663 match native505/10names,65536release diagnostics and10argument calls. Calc116/shared8 raw100, source-absent build/profile, complete gates and exact same-agent quality review pass. CALC-066 recorded; no full token/document/UI parity; next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T13:53:44.109Z"
+doc_updated_at: "2026-10-12T13:53:46.729Z"
 doc_updated_by: "CODER"
 description: "Task74: Complete original OpCode enum/diagnostic helper and ParamClass enum required by genuine FormulaToken; original numeric aliases/range sentinels/defaults and release unknown diagnostic behavior. Reuse formula shared namespace, no token/cell/document placeholders. Exact normal-only whole-header native evidence, full Calc and whole affected shared raw100, source-absent build/Calc profile, inventory/provenance and local gates. Header enum declaration shard only if authored file budget requires it; map explicit filename divergence. Work only calc; next full81."
 sections:
@@ -89,6 +95,39 @@ sections:
     Command: node output/playwright/task74-checks/gates.mjs and corrective --recheck. Result: pass. Evidence: all13aggregate gates plus23related tooling cases/2files. Scope: real format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling; no new cycle or relaxed validator.
 
     Command: python3 output/playwright/task74-checks/final-audit.py and exact committed source-bound same-agent separate EVALUATOR phase. Result: pass. Evidence: final-audit.json/final-source-hashes.json/exact-review.json and quality report .agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/quality-report.json at evaluated implementationae465b1ace028f18e107bec896edbab32d555663;38committed current source hashes match. Scope: current source/whole native capture and raw map locations, original enum-only declaration shard and header responsibility, explicit release versus debug assertion and suspicious CALC-066 unreachable numeric tail. No independent reviewer claim. Full formula/token/cell/document/input/view/UI/native ABI/upstream QA remain incomplete; last full71,next full81.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T13:53:46.650Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original shared opcode/parameter contracts atae465b1ace028f18e107bec896edbab32d555663 match native505/10names,65536release diagnostics and10argument calls. Calc116/shared8 raw100, source-absent build/profile, complete gates and exact same-agent quality review pass. CALC-066 recorded; no full token/document/UI parity; next full81.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T13:53:44.109Z, excerpt_hash=sha256:ad0361607ebaf6200aaae38839796c930023282f6e3f11790fdaa6234b12c1bf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121329-6CE3J4/blueprint/resolved-snapshot.json
+    - old_digest: 2dd77dbc88977c23af3fb279d4ee381eb04971b970450cea6d56efca6620388e
+    - current_digest: 2dd77dbc88977c23af3fb279d4ee381eb04971b970450cea6d56efca6620388e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121329-6CE3J4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121329-6CE3J4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task74 implementation and traceability commits; restore exact original3source symlinks after any portable check. Preserve native/first failure evidence and unrelated active tasks/user-owned merges. Recheck scoped owners after rollback."
   Findings: |-
     Previous turn is concrete progress: task73 DONE8d809aac040d, actual FormulaResultValue and shared reuse verified, clean calc. Original formula/token.hxx directly needs opcode.hxx/paramclass.hxx; these shared owners are absent. Original opcode.hxx has1078lines before TS formatting; source-mapped enum declaration shard is approved only to retain exact complete responsibility within authored1000line limit, without runtime import cycle. Original helper default asserts(false) then returns???; unreachable numeric tail is not substituted as a plausible fallback. Release behavior and debug termination are distinct observation scopes, no browser debug termination parity claim. Existing actual formula error owner remains reused. Goal authorizes current safe local core work; no network required; last full71,next full81.
@@ -137,6 +176,39 @@ Command: node output/playwright/task74-checks/portable.mjs; corrected --shared-o
 Command: node output/playwright/task74-checks/gates.mjs and corrective --recheck. Result: pass. Evidence: all13aggregate gates plus23related tooling cases/2files. Scope: real format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling; no new cycle or relaxed validator.
 
 Command: python3 output/playwright/task74-checks/final-audit.py and exact committed source-bound same-agent separate EVALUATOR phase. Result: pass. Evidence: final-audit.json/final-source-hashes.json/exact-review.json and quality report .agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/quality-report.json at evaluated implementationae465b1ace028f18e107bec896edbab32d555663;38committed current source hashes match. Scope: current source/whole native capture and raw map locations, original enum-only declaration shard and header responsibility, explicit release versus debug assertion and suspicious CALC-066 unreachable numeric tail. No independent reviewer claim. Full formula/token/cell/document/input/view/UI/native ABI/upstream QA remain incomplete; last full71,next full81.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T13:53:46.650Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original shared opcode/parameter contracts atae465b1ace028f18e107bec896edbab32d555663 match native505/10names,65536release diagnostics and10argument calls. Calc116/shared8 raw100, source-absent build/profile, complete gates and exact same-agent quality review pass. CALC-066 recorded; no full token/document/UI parity; next full81.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T13:53:44.109Z, excerpt_hash=sha256:ad0361607ebaf6200aaae38839796c930023282f6e3f11790fdaa6234b12c1bf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121329-6CE3J4/blueprint/resolved-snapshot.json
+- old_digest: 2dd77dbc88977c23af3fb279d4ee381eb04971b970450cea6d56efca6620388e
+- current_digest: 2dd77dbc88977c23af3fb279d4ee381eb04971b970450cea6d56efca6620388e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121329-6CE3J4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121329-6CE3J4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
