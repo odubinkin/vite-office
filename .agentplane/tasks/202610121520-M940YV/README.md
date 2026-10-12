@@ -1,10 +1,11 @@
 ---
 id: "202610121520-M940YV"
 title: "Implement original Calc empty and hybrid result tokens"
-status: "DOING"
+result_summary: "Implemented original Calc empty and hybrid result tokens with shared string and formula ownership"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -48,8 +49,8 @@ quality_review:
     - "Entire Calc119tests32files and related shared82tests22files pass raw S/B/F/L100 with every counter positive; four links absent/restored, static/profile0UI scenarios. All14gates and23tooling tests pass; original first failures retained and repaired source-backed sc -> sal edge/schema-required unexecuted QA context without changing application runtime after coverage."
     - "CALC-068 original display-flag equality omission retained. Capability/runtime records remain partial foundation with broad parity false; original QA reference is explicitly context only and unexecuted."
 commit:
-  hash: "11aa1926dd9b6775b2610b9de0f2ba78807f7ab8"
-  message: "🚧 M940YV sc: implement original empty and hybrid result tokens"
+  hash: "3a946f9fbf9a50a1bde16ed9e82ca145e7c65bde"
+  message: "✅ M940YV task: record original result token verification"
 comments:
   -
     author: "CODER"
@@ -57,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original empty and hybrid Calc result token classes committed at11aa1926dd9b6775b2610b9de0f2ba78807f7ab8; complete Calc/shared raw100, all14gates and ordinary original streams verified. Separate same-agent EVALUATOR reviews exact source with explicit incomplete matrix/document/UI limits."
+  -
+    author: "CODER"
+    body: "Verified: Original Calc empty and hybrid result tokens match selected unchanged upstream class/member scopes and reuse genuine FormulaToken, SharedString and OUString owners. Whole Calc119/shared82 raw S/B/F/L100,14gates/23tooling,10ordinary native commands and exact117source/test hashes pass at11aa1926dd9b6775b2610b9de0f2ba78807f7ab8 with same-agent EVALUATOR pass. CALC-068 preserves original flag omission; matrix/full result/document/UI remain incomplete. Next full81."
 events:
   -
     type: "status"
@@ -78,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified original empty/hybrid result tokens at11aa1926dd9b6775b2610b9de0f2ba78807f7ab8: whole Calc119/shared82 raw S/B/F/L100 every counter positive,10ordinary native commands/465source hashes/17Boost headers,14gates/23tooling, source-absent build/profile0UI and exact117source/test hashes with separate same-agent EVALUATOR pass. Original flag omission CALC-068 preserved; incomplete matrix/result/document/UI limits recorded, next full81."
+  -
+    type: "status"
+    at: "2026-10-12T15:39:02.333Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original Calc empty and hybrid result tokens match selected unchanged upstream class/member scopes and reuse genuine FormulaToken, SharedString and OUString owners. Whole Calc119/shared82 raw S/B/F/L100,14gates/23tooling,10ordinary native commands and exact117source/test hashes pass at11aa1926dd9b6775b2610b9de0f2ba78807f7ab8 with same-agent EVALUATOR pass. CALC-068 preserves original flag omission; matrix/full result/document/UI remain incomplete. Next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T15:38:32.218Z"
+doc_updated_at: "2026-10-12T15:39:02.335Z"
 doc_updated_by: "CODER"
 description: "Task76: port genuine ScEmptyCellToken and ScHybridCellToken required by ScFormulaResult, preserving original source/module boundaries and reusing existing FormulaToken, SharedString and OUString ownership. Normal-only local upstream comparison, complete Calc and related shared raw100, registry/provenance and precise partial scope. No fake matrix/document/compiler owners; next full81."
 sections:
@@ -124,6 +135,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task76 intentional source/inventory/docs commit through a separate approved task; preserve existing shared owners and unrelated work. No destructive history or branch merges."
   Findings: "Original two class scopes/native bodies are unchanged; first C++20 unlike-derived equality ambiguity repaired only in the caller via explicit actual member invocation against const FormulaToken. First diagnostics retained. Final normal-only --write/--check:465original hashes,17Boost headers,10positive commands,3whole streams. First dependency gate identified actual sc -> sal OUString edge; original global.hxx/token.hxx include rtl/ustring.hxx and hybrid owns OUString, so existing edge checker/test now admits that forward dependency while rejecting reverse and app imports. First inventory gate required nonempty upstream.tests; actual original ucalc_formula.cxx empty-string QA reference is context only, explicitly unexecuted/not direct token proof. First gate logs/results retained. Complete Calc/shared raw100, all14gates and23tooling pass. CALC-068 retains original hybrid flag omission; valid zero/empty-string pair is separate from release-only combinations that do not claim debug assertion validity. Matrix/ScFormulaResult/cell/document/UI, implicit class move, ABI/concurrency/invalid lifetimes/full upstream QA remain unverified. Exact source review/closure pending; next full81."
+extensions:
+  implementation_commit:
+    hash: "11aa1926dd9b6775b2610b9de0f2ba78807f7ab8"
+    message: "🚧 M940YV sc: implement original empty and hybrid result tokens"
 id_source: "generated"
 ---
 ## Summary
