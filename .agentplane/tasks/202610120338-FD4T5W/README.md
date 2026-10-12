@@ -1,10 +1,11 @@
 ---
 id: "202610120338-FD4T5W"
 title: "Implement original internal UNO mapping lifetime owners"
-status: "DOING"
+result_summary: "Implemented complete original private Mapping/MappingEntry and shared C callback typedefs; verified native dependency reuse with whole new caller parity, source-absent related100 and matching inventory; remaining full engine/Calc UI prerequisites stay active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -47,12 +48,15 @@ quality_review:
     - "Private Mapping matches original acquired/default/copy/move/destructor/pointer assignment/move assignment/get/is, including acquire-new/release-old/publish-new order and deleted copy assignment. MappingEntry acquires only actual OUString name; scalar/mapping/free pointer copies and initialized source-empty moves match whole native streams. Existing C records are reused and original free/get callback typedefs added without a provider."
     - "Whole unchanged lbmap.cxx caller compiled normal-ASan/UBSan; entire mapping560/entries828-byte streams match. All443source/39generated/9configuration hashes, original219positive commands/101units per variant/feature/loader evidence,209concrete artifacts and8whole prior witnesses verified;14new commands0 distinguish reuse from rebuilding. Exact full prior related argv/maps retained, Calc106/shared190 all19+77raw100,13gates/35tooling/format pass. Only test JSDoc comment repaired, first failed doc/lint evidence retained."
 commit:
-  hash: "0c801307e7c9be936f0eba40edaa7f14e444c10d"
-  message: "🧩 FD4T5W uno: implement original mapping lifetime owners"
+  hash: "c3ddb8a9d76f56e916d5343323090fac1a2842ae"
+  message: "✅ FD4T5W verify: record complete mapping evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete original private mapping lifetime owners over existing shared records/string ownership; verify reused full native build and pure caller streams, complete source-absent related raw100 and scoped evidence."
+  -
+    author: "CODER"
+    body: "Verified: complete original private Mapping/MappingEntry callbacks and initialized value lifetimes match whole normal-ASan/UBSan native streams over verified reused genuine dependencies. Calc106/shared19019+77owners raw100 source-absent; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound quality pass. Actual source0c801307e7c9be936f0eba40edaa7f14e444c10d; all3links restored, full71 next."
 events:
   -
     type: "status"
@@ -73,8 +77,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original mapping lifetime streams with whole unchanged owner and hash-verified genuine reused dependencies:443source/39generated/9configs/209artifacts,8full witnesses and14new positive commands. Source-absent Calc106/shared19019+77 raw100; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound EVALUATOR SHA0c801307e7c9be936f0eba40edaa7f14e444c10d pass."
+  -
+    type: "status"
+    at: "2026-10-12T04:06:22.778Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete original private Mapping/MappingEntry callbacks and initialized value lifetimes match whole normal-ASan/UBSan native streams over verified reused genuine dependencies. Calc106/shared19019+77owners raw100 source-absent; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound quality pass. Actual source0c801307e7c9be936f0eba40edaa7f14e444c10d; all3links restored, full71 next."
 doc_version: 3
-doc_updated_at: "2026-10-12T04:04:18.925Z"
+doc_updated_at: "2026-10-12T04:06:22.779Z"
 doc_updated_by: "CODER"
 description: "Task62 after full61: complete cppu private Mapping and MappingEntry from original lbmap.cxx, reused existing mapping C record/string owners and actual free/get callback typedefs. Whole unchanged native TU and pure caller over hash-verified genuine task60 full dependencies; two variants and whole callback/value/alias streams, no substitute registry/provider. Exact full task60 shared argv plus whole new owners/test and Calc raw100; runtime/provenance/capability/docs and scoped gates. Full71 next."
 sections:
@@ -146,6 +157,10 @@ sections:
     - Observation: Native dependencies were verified/reused rather than rebuilt; previous whole witnesses replayed and actual new caller compiled in both variants. Only missing caller-type JSDoc repaired; first failures retained.
       Impact: Complete registry/mediation/environment/public Mapping descriptor wrappers/exception consumers and physical ABI/allocator/pointer hash/leaks/thread/shutdown remain unverified. No mapping provider synthesized.
       Resolution: Retain narrow capability scope and false broad parity flags; continue remaining true upstream dependencies before Calc cell/document/input/view/UI. Full71 next.
+extensions:
+  implementation_commit:
+    hash: "0c801307e7c9be936f0eba40edaa7f14e444c10d"
+    message: "🧩 FD4T5W uno: implement original mapping lifetime owners"
 id_source: "generated"
 ---
 ## Summary
