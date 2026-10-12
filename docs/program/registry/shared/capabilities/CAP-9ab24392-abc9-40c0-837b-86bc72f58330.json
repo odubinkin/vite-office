@@ -9,7 +9,8 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Original UNO primitive callbacks, sequence arithmetic, static empty sequence and normal empty Any initialization only"
+      "Original UNO primitive callbacks, sequence arithmetic, static empty sequence and normal empty Any initialization only",
+      "Task62 declares original uno_freeMappingFunc and uno_getMappingFunc using the existing actual environment/string/mapping records; no runtime/provider implementation."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

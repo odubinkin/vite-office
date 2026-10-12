@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1cb65525-f209-4822-b031-899458bd00fd",
+    "capabilityId": "CAP-1cb65525-f209-4822-b031-899458bd00fd",
+    "suite": "shared",
+    "subsystem": "uno-mapping",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve complete cppu-private Mapping callback/publication order and original deleted copy assignment.",
+      "Preserve initialized MappingEntry scalar/pointer/free callback and owned-name compiler lifetime operations, without acquiring borrowed mapping pointers.",
+      "Verify complete immutable genuine native dependency evidence and concrete artifacts; replay whole prior witnesses, compile whole unchanged new owner and compare every whole two-variant initialized stream.",
+      "Retain exact full previous related coverage argv/source maps with whole new owner raw100 source-absent."
+    ],
+    "capability": "Original private UNO mapping pointer and registry-entry lifetime owners",
+    "gaps": [
+      "Original full mapping registry/mediation, environment wrappers/engine and exception consumers remain absent. Physical ABI/allocator/pointer hashes/leaks/native threads/shutdown and full consumer/upstream QA unverified.",
+      "cppuhelper/qa/misc/test_misc.cxx::testgetCaughtException is contextual consuming mapping/exception QA, not a direct private-owner QA port."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/uno/lbmap.cxx",
+          "marker": "class Mapping"
+        },
+        {
+          "path": "cppu/source/uno/lbmap.cxx",
+          "marker": "struct MappingEntry"
+        },
+        {
+          "path": "include/uno/mapping.h",
+          "marker": "uno_freeMappingFunc"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppuhelper/qa/misc/test_misc.cxx",
+          "marker": "testgetCaughtException"
+        }
+      ],
+      "docs": [
+        {
+          "path": "cppu/source/uno/lbmap.cxx",
+          "marker": "class Mapping"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/uno/lbmap.ts",
+          "marker": "Mapping"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/uno/lbmap.test.ts",
+          "marker": "matches complete original private mapping"
+        },
+        {
+          "path": "scripts/uno-mapping-lifetime-native-probe.mjs",
+          "marker": "Original mapping lifetime observations"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original private UNO mapping lifetime owners"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Complete original cppu-private Mapping pointer/default/copy/move/destruction/pointer assignment/move assignment/get/is and MappingEntry original by-value string constructor plus logical compiler values reuse existing actual C mapping records and OUString owners. Pointer assignment acquires new before releasing old and publishing the pointer. Original private copy assignment remains deleted. MappingEntry owns only its name; mapping/free-function pointers are borrowed. Whole unchanged lbmap.cxx is compiled in a pure caller normal-ASan/UBSan over verified reused full genuine desktop dependencies, with complete previous dependency witnesses replayed and concrete artifact hashes retained. Native compile/link/capture commands are distinguished from reused219positive dependency commands/101units per variant. Whole mapping560 and entries828-byte initialized streams match actual portable owners; full related source-absent raw100 is required. No registry/mediation/environment/mapping provider/public descriptor wrapper/exception engine is synthesized. Physical ABI/allocator/pointer hash/leaks/native threads/shutdown/full consumers/upstream QA remain unverified; broad parity flags false."
+    },
+    "scopeLimitations": [
+      "Complete original cppu-private Mapping pointer/default/copy/move/destruction/pointer assignment/move assignment/get/is and MappingEntry original by-value string constructor plus logical compiler values reuse existing actual C mapping records and OUString owners. Pointer assignment acquires new before releasing old and publishing the pointer. Original private copy assignment remains deleted. MappingEntry owns only its name; mapping/free-function pointers are borrowed. Whole unchanged lbmap.cxx is compiled in a pure caller normal-ASan/UBSan over verified reused full genuine desktop dependencies, with complete previous dependency witnesses replayed and concrete artifact hashes retained. Native compile/link/capture commands are distinguished from reused219positive dependency commands/101units per variant. Whole mapping560 and entries828-byte initialized streams match actual portable owners; full related source-absent raw100 is required. No registry/mediation/environment/mapping provider/public descriptor wrapper/exception engine is synthesized. Physical ABI/allocator/pointer hash/leaks/native threads/shutdown/full consumers/upstream QA remain unverified; broad parity flags false."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "private-mapping-lifetime-ownership"
+  }
+}

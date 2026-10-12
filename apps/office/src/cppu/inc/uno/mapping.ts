@@ -1,4 +1,6 @@
 /** @fileoverview Original UNO mapping callback/record declarations; no environment, bridge or mapping provider is synthesized. */
+import type { uno_Environment } from "./environment";
+import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
 import type { typelib_InterfaceTypeDescription } from "../typelib/typedescription";
 /** Original mapping acquisition callback. */
 export type uno_AcquireMappingFunc = (pMapping: _uno_Mapping) => void;
@@ -22,3 +24,12 @@ export interface _uno_Mapping {
 }
 /** Original public typedef. */
 export type uno_Mapping = _uno_Mapping;
+/** Original runtime callback to free a registered mapping; no free implementation/provider is supplied. */
+export type uno_freeMappingFunc = (pMapping: _uno_Mapping) => void;
+/** Original mapping demand callback with actual inout mapping and borrowed environment/purpose records. */
+export type uno_getMappingFunc = (
+  ppMapping: [_uno_Mapping | null],
+  pFrom: uno_Environment,
+  pTo: uno_Environment,
+  pAddPurpose: rtl_uString | null,
+) => void;
