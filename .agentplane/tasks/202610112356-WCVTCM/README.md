@@ -1,10 +1,11 @@
 ---
 id: "202610112356-WCVTCM"
 title: "Port original DisposedException value and type ownership"
-status: "DOING"
+result_summary: "Implemented original comprehensive internal DisposedException over shared RuntimeException/Exception, preserving constructor/type initialization and full value ownership. Native normal-ASan/UBSan/pure3streams match; Calc106/24 and shared170/48 whole19/69owners raw100;13gates,35tooling tests,7formatfiles pass.3source links restored, inventory mapped, nextfull61."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -46,8 +47,8 @@ quality_review:
     - "Original constructor base-before-derived type order, implicit copy/move no type reinitialization, inherited stable fields/assignment/reverse destruction and RuntimeException base type factory/register/release match genuine generated header. JS catch/finally preserves tested actual hierarchy and caught value lifetime without a substitute exception/type/value provider."
     - "Independent final audit reread every current source/generated/caller/configuration hash, all153terminal statuses and3whole initialized streams, every raw coverage counter and exact task53 append-only profile.3links restored exactly, common builders/full verifier unchanged,35tooling tests and7format files pass; scope contains9intentional paths only."
 commit:
-  hash: "89c87d69762645936914a9eb92bb620713b306e3"
-  message: "🧩 WCVTCM code: port original DisposedException ownership"
+  hash: "e7150bf5342ac5913a35c0d3cf03428d5956094b"
+  message: "✅ WCVTCM verify: persist final scoped checks"
 comments:
   -
     author: "CODER"
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original DisposedException and shared records committed; complete genuine native/pure/source-absent raw100 and13scoped gates accepted, ready for independent committed-source review."
+  -
+    author: "CODER"
+    body: "Verified: original DisposedException value/type and typed-catch lifecycle reuse shared owners; genuine whole native streams, scoped raw100 and inventory accepted at implementation89c87d697626."
 events:
   -
     type: "status"
@@ -76,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task54 committed source89c87d697626 accepted at matching evaluated_sha. Genuine72complete original units/build,368hashes15generatedfiles153commands0 and3whole original normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared170/48 whole19/69owners rawS/B/F/L100; task53argv append-only and3links restored.13actual gates0,35tooling tests,7formatfiles, inventory aligned/common observers unchanged. Physical/resource/thread/debug/fullconsumer limits explicit; lastfull51,next61."
+  -
+    type: "status"
+    at: "2026-10-12T00:06:15.522Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original DisposedException value/type and typed-catch lifecycle reuse shared owners; genuine whole native streams, scoped raw100 and inventory accepted at implementation89c87d697626."
 doc_version: 3
-doc_updated_at: "2026-10-12T00:06:06.063Z"
+doc_updated_at: "2026-10-12T00:06:15.523Z"
 doc_updated_by: "CODER"
 description: "Task54: complete original generated DisposedException over existing Exception/RuntimeException owners as required by OWeakConnectionPoint disposal. Genuine native comprehensive headers and strict whole stream replay, scoped Calc/shared raw100; no generic exception bridge substitute."
 sections:
@@ -139,6 +150,10 @@ sections:
     - Observation: First deterministic finish rejected the active task README modified by ap verify; task remains verified and no close state mutation occurred.
       Impact: Tracked lifecycle record must be persisted before clean direct finish; implementation and accepted checks unchanged.
       Resolution: Commit only active task verification/Findings, then recompute route and finish using the same reviewed implementation SHA.
+extensions:
+  implementation_commit:
+    hash: "89c87d69762645936914a9eb92bb620713b306e3"
+    message: "🧩 WCVTCM code: port original DisposedException ownership"
 id_source: "generated"
 ---
 ## Summary
