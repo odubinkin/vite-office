@@ -1,10 +1,11 @@
 ---
 id: "202610120311-KGT7DK"
 title: "Run scheduled full Calc repository validation after task60"
-status: "DOING"
+result_summary: "Full61 passed complete application/inventory/tooling/browser/static suites and13gates;438app owners raw100, retained related100 and exact links restored; no runtime/Writer changes, full kernel/UI goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -46,12 +47,15 @@ quality_review:
     - "All5 full suite result entries0:15491 application tests/710files,123inventory/38,34tooling/9,308actual browser passes(306Writer/2shared/0Calc),static smoke. Raw full office30942statements/20941branches/6369functions/28058lines every counter positive; all210shared/19Calc/209Writer owners100, no Writer gap or source edit."
     - "Full13 aggregate gates pass after one exact ignored task55 artifact unused-initializer repair; first failures and old/new hash reconstruction retained, no assertion/threshold/lint rule weakening. Exact task60 complete related argv/source maps preserved, Calc106/shared188 raw100; all3reference links absent/restored for both passes. Tracked runtime/scripts/configuration trees unchanged since actual task60 implementation; unchanged native owners were not rebuilt."
 commit:
-  hash: "2d66f7d97eb90712da902b3f708d1282074e8dc4"
-  message: "🧪 KGT7DK validation: record complete full61 results"
+  hash: "86a1a220d1b0fb14a115d00b6f1d115054997917"
+  message: "✅ KGT7DK verify: record complete full61 checks"
 comments:
   -
     author: "CODER"
     body: "Start: run scheduled full61 after task60; complete source-absent runtime/coverage/browser and aggregate gates, preserve actual failures and Writer-only gaps, audit exact ownership and clean evidence-bound finish."
+  -
+    author: "CODER"
+    body: "Verified: scheduled full61 all5runtime suites and13aggregate gates pass;15491app/123inventory/34tooling/308browser and static smoke. All438app owners raw100; complete retained Calc106/shared188 related100; exact reference links restored and runtime/configuration source trees unchanged. One ignored initializer lint repair preserved first evidence; implementation-bound EVALUATOR pass."
 events:
   -
     type: "status"
@@ -72,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full61 all5suites/all13gates pass; app15491/710,inventory123/38,tooling34/9,browser308(306Writer/2shared/0Calc),static smoke. Full438owners raw100; exact task60 related Calc106/shared188 raw100 and argv/maps preserved; all3links restored, runtime/config trees unchanged, EVALUATOR exactSHA2d66f7d97eb90712da902b3f708d1282074e8dc4."
+  -
+    type: "status"
+    at: "2026-10-12T03:33:16.929Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: scheduled full61 all5runtime suites and13aggregate gates pass;15491app/123inventory/34tooling/308browser and static smoke. All438app owners raw100; complete retained Calc106/shared188 related100; exact reference links restored and runtime/configuration source trees unchanged. One ignored initializer lint repair preserved first evidence; implementation-bound EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T03:32:41.802Z"
+doc_updated_at: "2026-10-12T03:33:16.931Z"
 doc_updated_by: "CODER"
 description: "Scheduled full61 after ten atomic tasks since full51. Complete application/inventory/tooling/browser/static suites and aggregate gates, ownership/raw coverage/source-absent evidence and exact link restoration. Repair only demonstrated Calc/shared failures without lowering checks; retain Writer-only coverage gaps as directed. Complete implementation-bound review and clean close in calc, no merge/branch/publication."
 sections:
@@ -139,6 +150,10 @@ sections:
     - Observation: One initial aggregate lint error in ignored task55 counterexample required only removing an unused initializer; original log/manifests and exact old/new hashes retained. No tracked runtime/Writer changes or weakened checks.
       Impact: Current full test/coverage state is certified; complete environment/mapping/exception/cell/document/input/view/UI behavior is still outside implemented scope. Existing doctor2warnings/chunk warning retained.
       Resolution: Close scheduled full61 cleanly; continue authorized remaining Calc UI prerequisite kernel work and retain broad parity limitations.
+extensions:
+  implementation_commit:
+    hash: "2d66f7d97eb90712da902b3f708d1282074e8dc4"
+    message: "🧪 KGT7DK validation: record complete full61 results"
 id_source: "generated"
 ---
 ## Summary
