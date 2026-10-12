@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/scmatrix.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "matrix-value",
+    "capabilityIds": [
+      "CAP-877498e5-ba0b-4824-afe6-6cfcf2ed9f82"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/scmatrix.ts#ScMatrixValue",
+        "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches all original matrix UInt8 tags, IEEE comparisons and error payload queries",
+        "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches original matrix value copy assignment and rvalue copy ownership",
+        "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches original matrix tag field UInt8 narrowing and scalar copy assignment",
+        "vendor/libreoffice-reference/sc/inc/scmatrix.hxx#struct ScMatrixValue",
+        "vendor/libreoffice-reference/sc/inc/types.hxx#enum class ScMatValType"
+      ],
+      "justification": "Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/scmatrix.hxx",
+      "upstreamSymbols": [
+        "ScMatrixValue"
+      ]
+    }
+  }
+}

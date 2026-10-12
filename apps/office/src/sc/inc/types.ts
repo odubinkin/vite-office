@@ -8,3 +8,15 @@ export type SCCOL = number;
 export type SCTAB = number;
 /** Native signed 32-bit coordinate capable of holding either rows or columns. */
 export type SCCOLROW = number;
+
+/** Original fixed UInt8 matrix value discriminator and non-value bit mask. */
+export const ScMatValType = {
+  Value: 0x00,
+  Boolean: 0x01,
+  String: 0x02,
+  Empty: 0x06,
+  EmptyPath: 0x0e,
+  NonvalueMask: 0x0e,
+} as const;
+/** Original UInt8 scoped enum type; readonly constants retain EmptyPath/NonvalueMask aliases without introducing a JS reverse map. */
+export type ScMatValType = (typeof ScMatValType)[keyof typeof ScMatValType];
