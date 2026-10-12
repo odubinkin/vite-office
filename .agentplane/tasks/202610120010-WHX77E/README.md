@@ -4,7 +4,7 @@ title: "Capture original desktop generic UNO exception behavior"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T00:58:31.048Z"
+  updated_by: "CODER"
+  note: "Complete original desktop exception experiment verified at implementation368d2d2bfdc3: four whole native/sanitized streams, 219 successful terminal commands, separately retained feature/compiler negative probes, exact unchanged source-absent Calc106/shared170 tests and whole19/69owner raw100; all13gates pass, evaluator SHA matches. No browser helper implementation claim."
   attempts: 0
 quality_review:
   state: "pass"
@@ -70,8 +70,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: Captured complete original desktop exception contract with whole native streams and scoped raw coverage evidence; browser helper remains subsequent."
+  -
+    type: "verify"
+    at: "2026-10-12T00:58:31.048Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original desktop exception experiment verified at implementation368d2d2bfdc3: four whole native/sanitized streams, 219 successful terminal commands, separately retained feature/compiler negative probes, exact unchanged source-absent Calc106/shared170 tests and whole19/69owner raw100; all13gates pass, evaluator SHA matches. No browser helper implementation claim."
 doc_version: 3
-doc_updated_at: "2026-10-12T00:58:19.394Z"
+doc_updated_at: "2026-10-12T00:58:31.116Z"
 doc_updated_by: "CODER"
 description: "Task55: genuine complete desktop cppuhelper exception capture/throw contract over actual CPPU environment/mapping and native bridge. Determine whether native JS adaptation preserves dynamic type/data/Context ownership before implementing browser exception helpers; no synthetic bridge, mobile fallback or partial-stream claims."
 sections:
@@ -99,6 +105,39 @@ sections:
     Result: pass.
     Evidence: every actual row0; TS7 tools/app, authored lint/docs,size,boundaries,provenance/tree,shared+Calc inventory,35tooling tests,routing,doctor,diff. Doctor2inherited warnings/noerror.
     Scope: approved native contract experiment only; actual code/evidence commit and independent evaluated_sha binding precede closure. Lastfull51,next61, goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T00:58:31.048Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original desktop exception experiment verified at implementation368d2d2bfdc3: four whole native/sanitized streams, 219 successful terminal commands, separately retained feature/compiler negative probes, exact unchanged source-absent Calc106/shared170 tests and whole19/69owner raw100; all13gates pass, evaluator SHA matches. No browser helper implementation claim.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T00:58:19.394Z, excerpt_hash=sha256:20497dda4160673519c8c5be308453f56d74baccbe2b15749a1657e44e0a50b2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120010-WHX77E/blueprint/resolved-snapshot.json
+    - old_digest: ef74b71ec7cf6caeb3823cee5921e9fb5616ed4ca99439ef1c50aa725cf1723c
+    - current_digest: ef74b71ec7cf6caeb3823cee5921e9fb5616ed4ca99439ef1c50aa725cf1723c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120010-WHX77E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120010-WHX77E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Always restore3source symlink targets in finally. Revert only task55 intentional probe/fixture/doc artifacts if needed; preserve failures and unrelated tasks."
   Findings: |-
     Previous goal turn is concrete progress: task54 DONE at e70479609e1d, actual DisposedException over shared owners, genuine3whole streams and whole19/69Calc/shared raw100. Original getCaughtException/throwException uses desktop Mapping and real exception RTTI; a direct JS catch plus Any copy might change non-null Context callback/ownership ordering. This experiment must inspect the complete path before selecting a native browser adaptation. The actual macOS AARCH64 bridge is gcc3_linux_aarch64 selected by bridges/Library_cpp_uno.mk, not a guessed gcc3_macosx_arm64 directory; original XExceptionThrower IDL is cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl.
@@ -181,6 +220,39 @@ Command:13 scoped gate commands in final manifest and exact3file Prettier check.
 Result: pass.
 Evidence: every actual row0; TS7 tools/app, authored lint/docs,size,boundaries,provenance/tree,shared+Calc inventory,35tooling tests,routing,doctor,diff. Doctor2inherited warnings/noerror.
 Scope: approved native contract experiment only; actual code/evidence commit and independent evaluated_sha binding precede closure. Lastfull51,next61, goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T00:58:31.048Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original desktop exception experiment verified at implementation368d2d2bfdc3: four whole native/sanitized streams, 219 successful terminal commands, separately retained feature/compiler negative probes, exact unchanged source-absent Calc106/shared170 tests and whole19/69owner raw100; all13gates pass, evaluator SHA matches. No browser helper implementation claim.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T00:58:19.394Z, excerpt_hash=sha256:20497dda4160673519c8c5be308453f56d74baccbe2b15749a1657e44e0a50b2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120010-WHX77E/blueprint/resolved-snapshot.json
+- old_digest: ef74b71ec7cf6caeb3823cee5921e9fb5616ed4ca99439ef1c50aa725cf1723c
+- current_digest: ef74b71ec7cf6caeb3823cee5921e9fb5616ed4ca99439ef1c50aa725cf1723c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120010-WHX77E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120010-WHX77E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
