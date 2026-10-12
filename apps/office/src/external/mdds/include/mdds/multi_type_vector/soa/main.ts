@@ -1,6 +1,11 @@
 /** @fileoverview Original private SoA block_slot_type, blocks_type and blocks_to_transfer owners; no replacement multi_type_vector engine. */
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
+import {
+  set as set_body,
+  push_back_impl,
+  append_empty as append_empty_body,
+} from "./main_def.set.ts";
 import { integrity_error } from "../../global.ts";
 import {
   type base_element_block,
@@ -32,6 +37,8 @@ import {
 import { iterator_base, const_iterator_base } from "./iterator.ts";
 import { std_vector } from "../vector_storage.ts";
 import {
+  resize as resize_body,
+  create_new_block_with_new_cell,
   copy_blocks,
   store_insert,
   store_swap,
@@ -54,7 +61,6 @@ import {
   merge_with_next_block as merge_with_next_block_body,
   clear as clear_body,
   dispose as dispose_body,
-  create_new_block_with_new_cell,
   make_iterator,
   next_position as next_position_impl,
   get_impl,
@@ -554,6 +560,38 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
       pos.second,
     ) as BlockValueType<B>;
   }
+  /** Original single-value plain set. @param pos - Row. @param value - Const value. @param callbacks - Native overloads. @returns Iterator. */
+  public set<T>(
+    pos: number | bigint,
+    value: T,
+    callbacks: ContainerCallbacks<T>,
+  ): iterator_base<this>;
+  /** Original hinted const-value set. @param hint - Position hint. @param pos - Row. @param value - Const value. @param callbacks - Native overloads. @returns Iterator. */
+  public set<T>(
+    hint: iterator_base<this>,
+    pos: number | bigint,
+    value: T,
+    callbacks: ContainerCallbacks<T>,
+  ): iterator_base<this>;
+  /** Original set overload adaptation delegates the actual borrowed fields. @param first - Row or hint. @param second - Value or row. @param third - Callbacks or value. @param fourth - Hinted callbacks. @returns Original iterator. */
+  public set<T>(
+    first: number | bigint | iterator_base<this>,
+    second: T | number | bigint,
+    third: T | ContainerCallbacks<T>,
+    fourth?: ContainerCallbacks<T>,
+  ): iterator_base<this> {
+    return set_body(
+      this.m_block_store,
+      this.m_cur_size,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      this,
+      first,
+      second,
+      third,
+      fourth,
+    );
+  }
   /** Original no_trace/nondebug value append entry with an explicit erased native overload witness. @param value - Native value. @param callbacks - Native family. @returns Last block iterator. */
   public push_back<T>(value: T, callbacks: ContainerCallbacks<T>): iterator_base<this> {
     return this.push_back_impl(value, callbacks);
@@ -568,25 +606,23 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     callbacks: ContainerCallbacks<T>,
     move = false,
   ): iterator_base<this> {
-    const cat = callbacks.mdds_mtv_get_element_type(value);
-    const last_data =
-      this.m_block_store.element_blocks.size() === 0
-        ? null
-        : this.m_block_store.element_blocks.get(this.m_block_store.element_blocks.size() - 1);
-    if (!last_data || cat !== get_block_type(last_data)) {
-      const block_index = this.m_block_store.positions.size();
-      const start_pos = this.m_cur_size;
-      this.m_block_store.push_back(start_pos, 1, null);
-      this.create_new_block_with_new_cell(block_index, value, callbacks, move);
-      ++this.m_cur_size;
-      return this.get_iterator(block_index);
-    }
-    const block_index = this.m_block_store.positions.size() - 1;
-    if (move) callbacks.mdds_mtv_append_value_move(last_data, value);
-    else callbacks.mdds_mtv_append_value(last_data, value);
-    this.m_block_store.sizes.set(block_index, this.m_block_store.sizes.get(block_index) + 1);
-    ++this.m_cur_size;
-    return this.get_iterator(block_index);
+    return push_back_impl(
+      this.m_block_store,
+      this,
+      this.m_cur_size,
+      value,
+      callbacks,
+      move,
+      /** Writes the actual primitive member before returned iterator construction. @returns Nothing. */ () => {
+        ++this.m_cur_size;
+      },
+      /** Binds the existing original helper. @param index - Slot. @param cell - Value. @param family - Overloads. @param moving - Category. @returns Nothing. */ (
+        index,
+        cell,
+        family,
+        moving,
+      ) => this.create_new_block_with_new_cell(index, cell, family, moving),
+    );
   }
   /** Original new-cell helper releases/deletes prior data, creates empty, installs/acquires then appends; exact null diagnostic retained. @param block_index - Metadata slot. @param cell - Native value. @param callbacks - Native family. @param move - Erased forwarding category. @returns Nothing. */
   private create_new_block_with_new_cell<T>(
@@ -922,21 +958,14 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   }
   /** Original append_empty member updates only actual metadata and logical size. Valid empty metadata requires zero logical size. @param len - Native admitted count. @returns Whether a new block was added. */
   private append_empty(len: number): boolean {
-    if (this.m_block_store.positions.size() === 0) {
-      this.m_block_store.push_back(0, len, null);
-      this.m_cur_size = len;
-      return true;
-    }
-    let new_block_added = false;
-    const last = this.m_block_store.element_blocks.size() - 1;
-    const last_data = this.m_block_store.element_blocks.get(last);
-    if (!last_data) this.m_block_store.sizes.set(last, this.m_block_store.sizes.get(last) + len);
-    else {
-      this.m_block_store.push_back(this.m_cur_size, len, null);
-      new_block_added = true;
-    }
-    this.m_cur_size += len;
-    return new_block_added;
+    return append_empty_body(
+      this.m_block_store,
+      this.m_cur_size,
+      len,
+      /** Assigns the original primitive field. @param size - Size. @returns Nothing. */ (size) => {
+        this.m_cur_size = size;
+      },
+    );
   }
   /** Original public empty append returns the new or extended last block iterator. @returns Last block iterator. */
   public push_back_empty(): iterator_base<this> {
@@ -950,49 +979,20 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   }
   /** Original resize_impl retains exact truncation/overwrite and release order; diagnostic uses pinned source line4833. @param new_size - Native admitted size. @returns Nothing. */
   private resize_impl(new_size: number): void {
-    if (new_size === this.m_cur_size) return;
-    if (!new_size) {
-      this.clear();
-      return;
-    }
-    if (new_size > this.m_cur_size) {
-      this.append_empty(new_size - this.m_cur_size);
-      return;
-    }
-    const new_end_row = new_size - 1;
-    const block_index = get_block_position(this.m_block_store, this.m_cur_size, new_end_row);
-    if (block_index === this.m_block_store.positions.size())
-      throw_block_position_not_found(
-        "multi_type_vector::resize",
-        4833,
-        new_end_row,
-        this.block_size(),
-        this.size(),
-      );
-    const data = this.m_block_store.element_blocks.get(block_index);
-    const start_row_in_block = this.m_block_store.positions.get(block_index);
-    const end_row_in_block = start_row_in_block + this.m_block_store.sizes.get(block_index) - 1;
-    if (new_end_row < end_row_in_block) {
-      const new_block_size = new_end_row - start_row_in_block + 1;
-      if (data) {
-        this.Traits.block_funcs.overwrite_values(
-          data,
-          new_end_row + 1,
-          end_row_in_block - new_end_row,
-        );
-        this.Traits.block_funcs.resize_block(data, new_block_size);
-      }
-      this.m_block_store.sizes.set(block_index, new_block_size);
-    }
-    delete_element_blocks(
+    resize_body(
       this.m_block_store,
+      this.m_cur_size,
       this.m_hdl_event,
       this.Traits.block_funcs,
-      block_index + 1,
-      this.m_block_store.element_blocks.size(),
+      new_size,
+      /** Calls the actual existing empty append member. @param count - Count. @returns Appended. */ (
+        count,
+      ) => this.append_empty(count),
+      /** Assigns the actual original primitive field. @param size - Size. @returns Nothing. */ (
+        size,
+      ) => {
+        this.m_cur_size = size;
+      },
     );
-    const len = this.m_block_store.element_blocks.size() - block_index - 1;
-    this.m_block_store.erase(block_index + 1, len);
-    this.m_cur_size = new_size;
   }
 }

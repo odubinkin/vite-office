@@ -949,3 +949,50 @@ export function release_impl<P>(
   value.value = callbacks.mdds_mtv_get_value(blk_data, offset);
   return set_empty_in_single_block(store, event, funcs, parent, pos, pos, block_index, false);
 }
+
+/** Original resize member over actual fields. @param store - Metadata. @param size - Logical size. @param event - Handler. @param funcs - Block operations. @param new_size - Requested size. @param append_empty - Actual owner member. @param set_size - Actual primitive field assignment. @returns Nothing. */
+export function resize(
+  store: blocks_type,
+  size: number,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  new_size: number,
+  append_empty: (count: number) => boolean,
+  set_size: (size: number) => void,
+): void {
+  if (new_size === size) return;
+  if (!new_size) {
+    clear(store, event, funcs);
+    set_size(0);
+    return;
+  }
+  if (new_size > size) {
+    append_empty(new_size - size);
+    return;
+  }
+  const new_end_row = new_size - 1;
+  const block_index = get_block_position(store, size, new_end_row);
+  if (block_index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::resize",
+      4833,
+      new_end_row,
+      store.positions.size(),
+      size,
+    );
+  const data = store.element_blocks.get(block_index);
+  const start_row_in_block = store.positions.get(block_index);
+  const end_row_in_block = start_row_in_block + store.sizes.get(block_index) - 1;
+  if (new_end_row < end_row_in_block) {
+    const new_block_size = new_end_row - start_row_in_block + 1;
+    if (data) {
+      funcs.overwrite_values(data, new_end_row + 1, end_row_in_block - new_end_row);
+      funcs.resize_block(data, new_block_size);
+    }
+    store.sizes.set(block_index, new_block_size);
+  }
+  delete_element_blocks(store, event, funcs, block_index + 1, store.element_blocks.size());
+  const len = store.element_blocks.size() - block_index - 1;
+  store.erase(block_index + 1, len);
+  set_size(new_size);
+}

@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.soa.append-empty",
+    "modulePath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+    "symbol": "append_empty",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-a9a48a25-fddd-4081-a015-b6d20c190afc",
+    "description": "Original append_empty member body borrows actual metadata and native callback/primitive field bindings in source order."
+  }
+}

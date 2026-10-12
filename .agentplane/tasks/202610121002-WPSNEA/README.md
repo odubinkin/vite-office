@@ -4,7 +4,7 @@ title: "Implement original single-value SoA set with hinted writes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: implement approved original single-value plain and hinted SoA writes over existing shared fields on calc; capture whole unchanged native results and source-absent scoped raw100."
 doc_version: 3
-doc_updated_at: "2026-10-12T10:03:23.589Z"
+doc_updated_at: "2026-10-12T10:27:18.827Z"
 doc_updated_by: "CODER"
 description: "Iteration69: implement both original single-value set overloads and complete empty/data/singleton/top/middle/bottom neighbor transformations over the existing shared store. Reuse actual Calc strings and text attributes, preserve lifecycle/metadata/event/iterator order, and verify whole unchanged native cases and complete scoped source-absent raw100. Original main_def.inl single-value setter family may use a source-mapped main_def.set.ts implementation shard to retain the1000line limit; no alternate model or fake pointees."
 sections:
@@ -60,9 +60,78 @@ sections:
     4. node output/playwright/task69-checks/facades.mjs; python3 output/playwright/task69-checks/audit.py: complete facade ASTs, exact owner/test selection and current hashes, prior unchanged maps, actual native/source/capability/provenance/mutation bindings and1000line source budgets pass.
     5. python3 output/playwright/task69-checks/gates.py plus intentional Prettier --check: inspect each of13exitCodes and35tooling cases; all type/lint/docs/size/dependency/provenance/tree/shared+Calc inventory/routing/doctor/diff gates pass. Full suite not due until71.
     6. ap task verify-show 202610121002-WPSNEA: same-agent EVALUATOR pass bound to exact implementationSHA, final ap verify and DONE closure on clean calc. Range-set/other container/pointee/formula/document/edit/undo/input/view/UI/native undefined/debug/allocator/physical ABI gaps remain explicit.
-  Verification: "Pending implementation and complete declared checks. No readiness or parity claim from task setup."
+  Verification: |-
+    Command: node scripts/mdds-container-set-native-probe.mjs --write; node scripts/mdds-container-set-native-probe.mjs --check
+    Result: pass. Evidence: output/playwright/task69-checks/native-final.log, native-check-final.log and output/playwright/mdds-container-set-native/manifest.json. Scope: unchanged whole normal-only SoA/type/macro headers and genuine full SharedString/CellTextAttr sources with verified complete cached dependencies, all8actual commands exit0, no sanitizer run. Exact final scalar2189311/owned278399/Calc1510-byte initialized streams compare10016scalar permutation writes across both overloads, actual owned lifecycle/copy/assignment/destructor order, every live segment/capacity/value, returned cached/private iterator and pointer identity, event order, native line735/776 diagnostics and real Calc refcounts/independent values. Caller-only standard private-member access invokes actual unchanged original empty top/bottom helpers. Actual original CellTextAttrTraits declaration is selected and checked against the full pinned file; the complete Calc pointee header graph is not compiled or certified.
+
+    Command: node output/playwright/task69-checks/portable.mjs; node output/playwright/task69-checks/portable.mjs --shared-only
+    Result: pass. Evidence: value-calc-portable.log/manifest.json, value-shared-portable.log/manifest.json, portable-current-summary.log, value-coverage-audit.json and current-profile-source-hashes.json. Scope: entire Calc111tests/29files and directly related shared217tests/37files source-absent. Whole Calc20executable owners raw S/B/F/L2958/2055/489/2602 and shared32owners3264/1574/670/2878 all100, every actual raw counter positive. Final shared profile repeated after actual logical-size binding/fourth-type native topology. Original entire test/owner selection retained,29unchanged shared whole source maps/hashes and all20Calc runtime hashes unchanged; no map/counter normalization/mixing, changed source reuse or exclusions. Original first failed99.93map/log and manifests retained independently, with source-backed meaningful missing topology added and no threshold weakening.
+
+    Command: node output/playwright/task69-checks/final-local.mjs
+    Result: pass. Evidence: final-local-manifest.json, final-local-summary.log, build-final.log and fresh-tests-final.log. Scope: final production build and all3complete current native stream tests pass source-absent. All3original source links restored exactly. Typecheck, lint and all structural checks pass on the same unchanged runtime source hashes.
+
+    Command: node output/playwright/task69-checks/facades.mjs; python3 output/playwright/task69-checks/audit.py
+    Result: pass. Evidence: non-executable-facades.json, sources-final-profile.json, source-argument-map-audit.json, previous-{calc,shared}-coverage.json, previous-source-hashes.json and previous-related-selection.json. Scope:14complete facade ASTs, exact whole owner/test selection and complete current hashes, retained unchanged maps, native command/pin/stream bindings, both scoped capability flags remain uncertified for whole modules, canonical source-mapped filename divergence and actual1000line budgets, restored source links.
+
+    Command: python3 output/playwright/task69-checks/gates.py; intentional21file prettier --check
+    Result: pass, all13final exitCodes0 and35tooling cases pass. Evidence: gates-final-manifest.json, gates-current-summary.log, gate-*.log, format-final.log. Scope: type/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventory/routing/doctor/diff. Initial type/docs/metadata/registry failures retained as first-gate logs and structured task-local Findings; no verifier or policy waiver. Original private new-cell wrapper/corpus retained and actual primitive size updated before iterator construction. Existing append_empty/resize bodies move only to mapped original definition boundaries with actual field bindings, no duplicate engine or runtime cycle.
+
+    Full suite: not due; last61, next71. No Writer-only coverage repairs, network, policy/profile/exclusion/threshold changes, merge/publication or whole module/kernel/UI certification. Remaining range-set/other container/actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI, arbitrary value/allocator/throwing/undefined/native ABI/debug/upstream QA remain subsequent. No new suspected upstream issue: encountered failures were type plumbing, observer/caller coverage, pinned diagnostic and inventory metadata defects. Goal stays active. Exact implementation/EVALUATOR/ap verification and closure evidence follow.
   Rollback Plan: "Revert only this task implementation commit and its scoped registry/test records on calc; retain ignored raw evidence. User manages merges. Do not reset other work or modify original reference sources."
-  Findings: "Iteration69, task8 since the full run at61; next full run71. Actual native single-value set takes const T&, including rvalue call expressions; no invented move setter overload. No source reference is shipped in the browser build."
+  Findings: |-
+    Iteration69, task8 since the full run at61; next full run71. Actual native single-value set takes const T&, including rvalue call expressions; no invented move setter overload. No source reference is shipped in the browser build.
+
+    - Observation: First typecheck failed TS6133: the private create_new_block_with_new_cell wrapper became unused after original append moved to the definition shard; typecheck-first.log retained.
+      Impact: Required type gate failed; runtime parity remains unclaimed.
+      Resolution: Remove only the unused header wrapper/import and bind inventory to the existing original main_def helper used by actual writes; no algorithm or threshold changes.
+
+    - Observation: The proposed unused-wrapper deletion was discarded before tests: retained native corpus explicitly invokes the original private new-cell helper.
+      Impact: Existing private-helper acceptance and original header binding must remain intact.
+      Resolution: Keep the wrapper; append definition binds that same owner member and increments the actual size field before iterator construction. Move unchanged append_empty and resize bodies to original mapped definition boundaries to satisfy998line budgets; no acceptance or scope expansion.
+
+    - Observation: First new-stream run passes owned and genuine Calc cases but scalar stream differs; test helper union D/U/B fails native this-type checking. Both logs retained independently.
+      Impact: Defined scalar parity and type gates are not yet passing; no broad success claim.
+      Resolution: Inspect the exact native discrepancy and replace only the test observer union with explicit actual typed block branches; preserve full stream assertions and original operation algorithms.
+
+    - Observation: Full scalar comparison differs only in four pinned __LINE__ diagnostics: actual original lines735/776, initial port used736/777.
+      Impact: The exact diagnostic contract must match native even with all live mutation streams already matching.
+      Resolution: Correct the two source-line witnesses; keep complete scalar/owned/Calc assertions and all original captured output unchanged. Test typed observer now branches on original bool versus numeric aliases without casts.
+
+    - Observation: Full source-absent Calc111 and related217 tests pass; raw shared profile99.93 misses the nonempty singleton fallback when both differently typed neighbors and the replacement are all distinct. Original raw map/log retained.
+      Impact: Three native scalar categories cannot exercise that four-category topology; strict100 is not met.
+      Resolution: Add genuine original int8 as the fourth scalar replacement to the complete native permutations, keeping both overloads and full field/event assertions; rerun affected shared whole profile without exclusions or counter changes. Also retain exact original logical-size field read in sole-empty-block admission.
+
+    - Observation: Exact scoped gate typecheck exited1; original log gate-typecheck.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate lint exited1; original log gate-lint.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate docs exited1; original log gate-docs.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate provenance exited1; original log gate-provenance.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate inventory-shared exited1; original log gate-inventory-shared.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate inventory-calc exited1; original log gate-inventory-calc.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Initial structural gates retained: final logical-size plumbing missed one argument/JSDoc; new definition shard needs canonical aligned responsibility, header-local set declaration marker and explicit filename-divergence entry. Three registry tooling cases fail on that metadata.
+      Impact: Type/docs/provenance/inventory acceptance is not yet green; no validator waiver.
+      Resolution: Pass the original actual logical-size argument; document it, retain aligned enum and actual header marker, and register the intentional source-mapped single-value definition shard in the existing filename-divergence owner. Rerun exact gates after full current-source profile and preserve all failures.
 id_source: "generated"
 ---
 ## Summary
@@ -94,7 +163,22 @@ Existing shared SoA main.ts/main_def.ts and a source-mapped original single-cell
 
 ## Verification
 
-Pending implementation and complete declared checks. No readiness or parity claim from task setup.
+Command: node scripts/mdds-container-set-native-probe.mjs --write; node scripts/mdds-container-set-native-probe.mjs --check
+Result: pass. Evidence: output/playwright/task69-checks/native-final.log, native-check-final.log and output/playwright/mdds-container-set-native/manifest.json. Scope: unchanged whole normal-only SoA/type/macro headers and genuine full SharedString/CellTextAttr sources with verified complete cached dependencies, all8actual commands exit0, no sanitizer run. Exact final scalar2189311/owned278399/Calc1510-byte initialized streams compare10016scalar permutation writes across both overloads, actual owned lifecycle/copy/assignment/destructor order, every live segment/capacity/value, returned cached/private iterator and pointer identity, event order, native line735/776 diagnostics and real Calc refcounts/independent values. Caller-only standard private-member access invokes actual unchanged original empty top/bottom helpers. Actual original CellTextAttrTraits declaration is selected and checked against the full pinned file; the complete Calc pointee header graph is not compiled or certified.
+
+Command: node output/playwright/task69-checks/portable.mjs; node output/playwright/task69-checks/portable.mjs --shared-only
+Result: pass. Evidence: value-calc-portable.log/manifest.json, value-shared-portable.log/manifest.json, portable-current-summary.log, value-coverage-audit.json and current-profile-source-hashes.json. Scope: entire Calc111tests/29files and directly related shared217tests/37files source-absent. Whole Calc20executable owners raw S/B/F/L2958/2055/489/2602 and shared32owners3264/1574/670/2878 all100, every actual raw counter positive. Final shared profile repeated after actual logical-size binding/fourth-type native topology. Original entire test/owner selection retained,29unchanged shared whole source maps/hashes and all20Calc runtime hashes unchanged; no map/counter normalization/mixing, changed source reuse or exclusions. Original first failed99.93map/log and manifests retained independently, with source-backed meaningful missing topology added and no threshold weakening.
+
+Command: node output/playwright/task69-checks/final-local.mjs
+Result: pass. Evidence: final-local-manifest.json, final-local-summary.log, build-final.log and fresh-tests-final.log. Scope: final production build and all3complete current native stream tests pass source-absent. All3original source links restored exactly. Typecheck, lint and all structural checks pass on the same unchanged runtime source hashes.
+
+Command: node output/playwright/task69-checks/facades.mjs; python3 output/playwright/task69-checks/audit.py
+Result: pass. Evidence: non-executable-facades.json, sources-final-profile.json, source-argument-map-audit.json, previous-{calc,shared}-coverage.json, previous-source-hashes.json and previous-related-selection.json. Scope:14complete facade ASTs, exact whole owner/test selection and complete current hashes, retained unchanged maps, native command/pin/stream bindings, both scoped capability flags remain uncertified for whole modules, canonical source-mapped filename divergence and actual1000line budgets, restored source links.
+
+Command: python3 output/playwright/task69-checks/gates.py; intentional21file prettier --check
+Result: pass, all13final exitCodes0 and35tooling cases pass. Evidence: gates-final-manifest.json, gates-current-summary.log, gate-*.log, format-final.log. Scope: type/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventory/routing/doctor/diff. Initial type/docs/metadata/registry failures retained as first-gate logs and structured task-local Findings; no verifier or policy waiver. Original private new-cell wrapper/corpus retained and actual primitive size updated before iterator construction. Existing append_empty/resize bodies move only to mapped original definition boundaries with actual field bindings, no duplicate engine or runtime cycle.
+
+Full suite: not due; last61, next71. No Writer-only coverage repairs, network, policy/profile/exclusion/threshold changes, merge/publication or whole module/kernel/UI certification. Remaining range-set/other container/actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI, arbitrary value/allocator/throwing/undefined/native ABI/debug/upstream QA remain subsequent. No new suspected upstream issue: encountered failures were type plumbing, observer/caller coverage, pinned diagnostic and inventory metadata defects. Goal stays active. Exact implementation/EVALUATOR/ap verification and closure evidence follow.
 
 ## Rollback Plan
 
@@ -103,3 +187,55 @@ Revert only this task implementation commit and its scoped registry/test records
 ## Findings
 
 Iteration69, task8 since the full run at61; next full run71. Actual native single-value set takes const T&, including rvalue call expressions; no invented move setter overload. No source reference is shipped in the browser build.
+
+- Observation: First typecheck failed TS6133: the private create_new_block_with_new_cell wrapper became unused after original append moved to the definition shard; typecheck-first.log retained.
+  Impact: Required type gate failed; runtime parity remains unclaimed.
+  Resolution: Remove only the unused header wrapper/import and bind inventory to the existing original main_def helper used by actual writes; no algorithm or threshold changes.
+
+- Observation: The proposed unused-wrapper deletion was discarded before tests: retained native corpus explicitly invokes the original private new-cell helper.
+  Impact: Existing private-helper acceptance and original header binding must remain intact.
+  Resolution: Keep the wrapper; append definition binds that same owner member and increments the actual size field before iterator construction. Move unchanged append_empty and resize bodies to original mapped definition boundaries to satisfy998line budgets; no acceptance or scope expansion.
+
+- Observation: First new-stream run passes owned and genuine Calc cases but scalar stream differs; test helper union D/U/B fails native this-type checking. Both logs retained independently.
+  Impact: Defined scalar parity and type gates are not yet passing; no broad success claim.
+  Resolution: Inspect the exact native discrepancy and replace only the test observer union with explicit actual typed block branches; preserve full stream assertions and original operation algorithms.
+
+- Observation: Full scalar comparison differs only in four pinned __LINE__ diagnostics: actual original lines735/776, initial port used736/777.
+  Impact: The exact diagnostic contract must match native even with all live mutation streams already matching.
+  Resolution: Correct the two source-line witnesses; keep complete scalar/owned/Calc assertions and all original captured output unchanged. Test typed observer now branches on original bool versus numeric aliases without casts.
+
+- Observation: Full source-absent Calc111 and related217 tests pass; raw shared profile99.93 misses the nonempty singleton fallback when both differently typed neighbors and the replacement are all distinct. Original raw map/log retained.
+  Impact: Three native scalar categories cannot exercise that four-category topology; strict100 is not met.
+  Resolution: Add genuine original int8 as the fourth scalar replacement to the complete native permutations, keeping both overloads and full field/event assertions; rerun affected shared whole profile without exclusions or counter changes. Also retain exact original logical-size field read in sole-empty-block admission.
+
+- Observation: Exact scoped gate typecheck exited1; original log gate-typecheck.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate lint exited1; original log gate-lint.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate docs exited1; original log gate-docs.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate provenance exited1; original log gate-provenance.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate inventory-shared exited1; original log gate-inventory-shared.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate inventory-calc exited1; original log gate-inventory-calc.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Initial structural gates retained: final logical-size plumbing missed one argument/JSDoc; new definition shard needs canonical aligned responsibility, header-local set declaration marker and explicit filename-divergence entry. Three registry tooling cases fail on that metadata.
+  Impact: Type/docs/provenance/inventory acceptance is not yet green; no validator waiver.
+  Resolution: Pass the original actual logical-size argument; document it, retain aligned enum and actual header marker, and register the intentional source-mapped single-value definition shard in the existing filename-divergence owner. Rerun exact gates after full current-source profile and preserve all failures.
