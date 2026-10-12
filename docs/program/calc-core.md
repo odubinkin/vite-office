@@ -2886,3 +2886,33 @@ Genuine native --write and --check pass:72 full unchanged original translation u
 Task53 ports complete original OWeakRefListener and WeakReferenceHelper bodies and WeakReference wrapper from weak.cxx/weakref.hxx. Actual Reference/RuntimeException/OSL/queryInterface and original generated XWeak/XAdapter/XReference/Type/Any remain reused. Constructor count1 gate, explicit XWeak versus root-query overload, returned adapter move, actual temporary destruction and callback hardening retain source order. Native JS catch/finally adapts typed catch/destruction; mutex/physical/native thread/compiler/allocator/shutdown/fullconsumer behavior is not claimed. Erased WeakReference specialization stores only declared interface identity on its compiler-emitted class, never on instances or in a new type/default/value provider. Original internal WeakReference<XWeak> duplicate assignment signatures are preserved as a compile-binding rejection; WeakReferenceHelper XWeak overload remains valid. Genuine native --write and final --check pass:73 unchanged complete original translation units per normal-ASan/UBSan build,379 full source hashes,23 generated files (21 headers and2 parser sources),159 runtime/build commands exit0/signalnull and one separate expected original syntax-only compiler exit1. Five whole initialized runtime streams match normal/sanitized/pure replay: lifecycle5524/overloads6800/nulls1888/errors7408/destructor1812 bytes; runtime stderr empty. The actual original Reference<T> upcast is a borrowed root view, with no extra acquire/release. With all3 source links absent together, Calc106/24 and related shared167/47 tests pass, whole19/68 owners every raw S/F/B positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4399/2226/575/3975). Task52 profile retained append-only; exact source links restored. Six adjacent cases pass including the original internal template rejection. No original exception bridge symbols remain unresolved; full weak.cxx is compiled and unrelated owners naturally dead-stripped without substitutes or unresolved-symbol suppression. Broad parity flags remain false. OWeakObject/OWeakConnectionPoint/OWeakAggObject and generic C++ exception bridge are subsequent owners, not stubbed by this task.
 
 All13 scoped gates and10 exact authored file format checks pass; related tooling35/4 passes. CALC-058 records the actual rejected internal XWeak specialization; CALC-059 records the original suspicious clear failure state and distinguishes source-order inference from an allocation leak certificate. Full weak object/connection/aggregation, generic exception bridge, ImplHelper/service manager/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Last full51; next scheduled full61. The full Calc goal remains active.
+
+
+## Original DisposedException value and type ownership
+
+Task54 adds the original comprehensive internal DisposedException value and its
+generated type initializer. Existing RuntimeException/Exception, OUString,
+Reference, Type and typelib owners are reused. Explicit default/two-field
+construction initializes base then derived type; implicit copies/moves preserve
+actual field ownership without type initialization, assignments retain stable
+fields, and destruction releases Context before Message. Native JS typed catch
+and finally represent source catch selection and caught object destruction.
+
+The actual derived type factory/register/release uses RuntimeException as its
+base and returns the original cached leaked Type. Native --write/--check
+rebuild72 complete unchanged original units per normal-ASan/UBSan configuration;
+368 complete source hashes,15 genuine generated files and153 terminal commands
+are verified. Whole values2656/type6768/catches488-byte streams match original,
+sanitized and strict pure replay. Three adjacent cases pass.
+
+With all3 upstream links absent together, Calc106/24 and related shared170/48
+tests pass. Whole19/69 executable owners have every raw S/F/B counter positive
+and S/B/F/L100 (Calc2920/2055/474/2564; shared4420/2234/580/3993). The task53
+shared argv is preserved append-only; exact link targets restored. All13 scoped
+gates,35 related tooling tests and7 exact authored file format checks pass.
+ No second exception type/value
+provider is introduced. Genuine original full stream and scoped checks are
+recorded in task54 verification. Generic exception bridge, weak object family,
+services and Calc document/edit/view/UI remain subsequent. Physical ABI,
+allocator/resource, native threads/shutdown, source-location/debug/external-only
+headers and full consumer QA remain unverified. Last full51; next scheduled61.

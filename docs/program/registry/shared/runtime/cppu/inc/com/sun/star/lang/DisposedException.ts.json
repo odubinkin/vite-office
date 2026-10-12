@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-f7e290bb-9cbe-45b6-9f65-60ac50adeea0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts#DisposedException",
+        "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.test.ts#matches complete original",
+        "udkapi/com/sun/star/lang/DisposedException.idl#DisposedException"
+      ],
+      "justification": "Original comprehensive internal cppumaker DisposedException value derives from the existing shared RuntimeException/Exception owner. Default/two-field constructors initialize the base before the derived type; implicit copies/moves and inherited assignments retain actual stable OUString/Reference fields and reverse destruction. Generated derived type initialization uses actual shared typelib factory/register/release with the real RuntimeException base and leaked cached Type. Native JS catch/finally represents typed catch and caught object lifetime over actual generated hierarchy, without a second type/value/default provider. Complete genuine normal-ASan/UBSan native streams and source-absent whole raw100 checks are required. Physical ABI, allocator/resource, native threading/shutdown, source-location/debug/external-only headers and complete consumer QA remain unverified; generic exception bridge and weak object/services/Calc document/edit/view/UI remain subsequent. Broad parity flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DisposedException",
+        "cppu_detail_getUnoType",
+        "getCppuType",
+        "disposedType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/lang/DisposedException.idl",
+      "upstreamSymbols": [
+        "DisposedException",
+        "RuntimeException"
+      ]
+    }
+  }
+}
