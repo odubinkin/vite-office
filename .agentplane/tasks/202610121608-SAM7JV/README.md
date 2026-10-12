@@ -4,7 +4,7 @@ title: "Implement original mdds matrix storage and typed access"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,41 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T16:35:46.764Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR passes exact implementation abcfd1c50790a04b67405b1e8add204fb6132bd6: original matrix storage/access over genuine shared owners, complete declared scoped checks and truthful pending APIs. Not independent review or complete ScMatrix/document/UI certification."
+  evaluated_sha: "abcfd1c50790a04b67405b1e8add204fb6132bd6"
+  blueprint_digest: "8fb9dbd4db0f5a8a199d2dc0c2407b0ae14f2ee2e22ad111bac611b63a9071f5"
+  evidence_refs:
+    - ".agentplane/tasks/202610121608-SAM7JV/README.md"
+    - ".agentplane/tasks/202610121608-SAM7JV/quality/20261012-163546764-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121608-SAM7JV/quality/20261012-163546764-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121608-SAM7JV/quality/20261012-163546764-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121608-SAM7JV/blueprint/resolved-snapshot.json"
+    - "output/playwright/task78-checks/exact-review.json"
+    - "output/playwright/task78-checks/final-source-hashes.json"
+    - "output/playwright/task78-checks/value-coverage-audit.json"
+    - "output/playwright/task78-checks/final-matrix-coverage-audit.json"
+    - "output/playwright/task78-checks/gates-results.json"
+    - "output/playwright/calc-matrix-native/manifest.json"
+  findings:
+    - "All145 current source/test/fixture hashes match the implementation commit;11intentional changed paths including10approved non-task files. Genuine SoA vector is reused, original matrix trait registration, geometry/lifetime/typed operations and native defaulted move/assignment ordering preserved."
+    - "Full unchanged original mdds matrix/vector headers compile normally with genuine SharedString and exact original Calc alias/trait excerpts:7positive ordinary commands,448whole original source hashes, verified archives and complete28105/585byte streams. No fake pointees or routine sanitizer."
+    - "Entire Calc123tests34files and directly affected shared221tests41files pass raw S/B/F/L100, every counter positive. Current matrix owner and both current tests additionally pass final118S64B37F115L raw100 after erased overload/type and comment changes. Other covered runtime owners unchanged; source links absent/restored for whole portable gates, static/profile0UI pass."
+    - "All14terminal local gates and23whole tooling tests pass. Initial build typing, helper lint, callback docs and runtime field-symbol metadata failures retained and corrected without weakening gates. CALC-069 retains original scalar/range int8 validation asymmetry."
+    - "Inventory foundations and broad flags false; original transpose/copy/resize/walk, ScMatrix/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain explicitly pending; QA reference is unexecuted field/type context, next full81."
+commit:
+  hash: "abcfd1c50790a04b67405b1e8add204fb6132bd6"
+  message: "🧩 SAM7JV calc: implement original mdds matrix storage and typed access"
 comments:
   -
     author: "CODER"
     body: "Start: approved ongoing Calc goal and UI prerequisite order; implement genuine original matrix storage/access with existing shared SoA blocks and whole scoped parity evidence, no replacement engine or Writer repair."
+  -
+    author: "CODER"
+    body: "Implementation: original mdds matrix core committed at abcfd1c50790 with genuine shared SoA/SharedString owners; native and whole Calc/shared raw100, final matrix raw100 and14gates pass. Separate same-agent EVALUATOR will bind exact source and declared missing APIs."
 events:
   -
     type: "status"
@@ -37,8 +67,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: approved ongoing Calc goal and UI prerequisite order; implement genuine original matrix storage/access with existing shared SoA blocks and whole scoped parity evidence, no replacement engine or Writer repair."
+  -
+    type: "status"
+    at: "2026-10-12T16:34:21.143Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: original mdds matrix core committed at abcfd1c50790 with genuine shared SoA/SharedString owners; native and whole Calc/shared raw100, final matrix raw100 and14gates pass. Separate same-agent EVALUATOR will bind exact source and declared missing APIs."
 doc_version: 3
-doc_updated_at: "2026-10-12T16:31:39.234Z"
+doc_updated_at: "2026-10-12T16:34:21.143Z"
 doc_updated_by: "CODER"
 description: "Task78 of the ongoing approved Calc UI prerequisite goal: implement genuine multi_type_matrix core over existing shared SoA multi_type_vector, original traits/size/constructors/lifetimes/positions/typed scalar and range writes/queries/empty/numeric/swap. Preserve upstream behavior with ordinary native evidence; keep unimplemented transpose/copy/resize/walk and ScMatrix/document/UI explicitly pending. Whole Calc and affected shared raw100, inventory and provenance, local gates, source-bound separate same-agent evaluation. Only calc checkout/branch; next full81."
 sections:
