@@ -1,10 +1,11 @@
 ---
 id: "202610120750-CH28QT"
 title: "Connect complete typed value callback bindings to original Calc blocks"
-status: "DOING"
+result_summary: "Original Calc typed value callbacks implemented with shared output assignment copy move and construction semantics and complete scoped checks"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -50,8 +51,8 @@ quality_review:
     - "All108Calc/213related tests, whole20Calc/31shared raw S/B/F/L100,35tooling tests and all13scoped gates pass;26unchanged shared maps and14pure declaration/reexport exclusions audited; original source links restored."
     - "Initial native constructor/Unicode-output, typed output variance, metadata writer and size failures remain recorded and repaired without original source/config/assertion/threshold/Writer changes. No new confirmed suspicious upstream behavior or broader kernel/UI claim."
 commit:
-  hash: "4ab97f756c957fb9041d93d4be9a801dcbe7400d"
-  message: "🧩 CH28QT calc: connect original typed value and pointer callbacks"
+  hash: "8f3f2f69f2071a4fa3f5db4c0f5d305e1cf51fbd"
+  message: "✅ CH28QT verify: record final typed callback acceptance evidence"
 comments:
   -
     author: "CODER"
@@ -59,6 +60,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original typed value/pointer callbacks and actual Calc registrations committed at4ab97f756c957fb9041d93d4be9a801dcbe7400d; complete original normal-only streams, whole source-absent raw100 and all13scoped checks pass. Proceed to exact implementation-bound quality phase."
+  -
+    author: "CODER"
+    body: "Verified: original typed value and pointer callbacks plus actual Calc SharedString/CellTextAttr registrations reuse existing owners and preserve output/copy/move/construction behavior. Complete normal-only genuine native streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA quality pass are recorded. Full71 remains the next complete run."
 events:
   -
     type: "status"
@@ -80,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original typed callback and Calc registrations at4ab97f756c957fb9041d93d4be9a801dcbe7400d pass complete normal-only native value/pointer/Calc streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates, intentional format and source-map/hash/link audit, and exact-source-SHA EVALUATOR. CLI evidence recorded after final document edits; full71 remains next."
+  -
+    type: "status"
+    at: "2026-10-12T08:23:15.795Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original typed value and pointer callbacks plus actual Calc SharedString/CellTextAttr registrations reuse existing owners and preserve output/copy/move/construction behavior. Complete normal-only genuine native streams, source-absent108Calc/213related tests, whole20Calc/31shared raw100,35tooling tests, all13scoped gates and exact-source-SHA quality pass are recorded. Full71 remains the next complete run."
 doc_version: 3
-doc_updated_at: "2026-10-12T08:22:04.965Z"
+doc_updated_at: "2026-10-12T08:23:15.796Z"
 doc_updated_by: "CODER"
 description: "Iteration66: extend existing original mdds callback/store/block owners for actual object output assignment, by-value extraction, rvalue append and emplaced construction; bind original pointer and Calc SharedString/CellTextAttr callback families. Reuse existing owners and validate unchanged whole macro/header native streams plus whole source-absent Calc/related raw100."
 sections:
@@ -171,6 +182,10 @@ sections:
     - Observation: The verified direct route emits a generic verified-ID closure result that previously conflicted with the enforced meaningful commit subject guard.
       Impact: Using that literal placeholder risks closure subject rejection after task-state mutation.
       Resolution: Use the canonical gateway finish command with a substantive implementation result and explicit source/evidence hashes, as successful task65 closure; record CLI verification after all final document edits to preserve blueprint evidence.
+extensions:
+  implementation_commit:
+    hash: "4ab97f756c957fb9041d93d4be9a801dcbe7400d"
+    message: "🧩 CH28QT calc: connect original typed value and pointer callbacks"
 id_source: "generated"
 ---
 ## Summary
