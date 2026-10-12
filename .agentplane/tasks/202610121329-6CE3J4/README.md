@@ -1,10 +1,11 @@
 ---
 id: "202610121329-6CE3J4"
 title: "Implement shared formula opcode and parameter contracts"
-status: "DOING"
+result_summary: "Implemented shared OpCode and ParamClass contracts for genuine formula tokens; all aliases retained, CALC-066 documented, task74 verified. Next full81; cell/document/input/UI remain subsequent work."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -45,8 +46,8 @@ quality_review:
     - "Complete505original opcode names/aliases and10parameter classifications retain values/defaults through typed declarations; whole487case diagnostic switch preserves release??? and all65536original results plus10native argument conversions."
     - "All38current source hashes match evaluated commit; Calc116/shared8 raw100 and source-absent build/profile pass; all13aggregate gates plus23tooling cases pass after visible exact corrective checks. Enum-only shard maps original header under file budget without a runtime cycle."
 commit:
-  hash: "ae465b1ace028f18e107bec896edbab32d555663"
-  message: "🚧 6CE3J4 formula: implement original opcode and parameter contracts"
+  hash: "701661875ee12507c9e9fdf9991039bef0488e2d"
+  message: "✅ 6CE3J4 verify: record native and scoped raw coverage"
 comments:
   -
     author: "CODER"
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation committed with current native header streams, actual signed conversion calls, scoped raw100 and complete successful gates; separate same-agent quality review follows."
+  -
+    author: "CODER"
+    body: "Verified: Complete original shared opcode and parameter header contracts match whole native observations; Calc and affected shared raw100/source-absent build/profile, all gates and exact source-bound separate same-agent quality review pass."
 events:
   -
     type: "status"
@@ -75,8 +79,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original shared opcode/parameter contracts atae465b1ace028f18e107bec896edbab32d555663 match native505/10names,65536release diagnostics and10argument calls. Calc116/shared8 raw100, source-absent build/profile, complete gates and exact same-agent quality review pass. CALC-066 recorded; no full token/document/UI parity; next full81."
+  -
+    type: "status"
+    at: "2026-10-12T13:53:49.762Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete original shared opcode and parameter header contracts match whole native observations; Calc and affected shared raw100/source-absent build/profile, all gates and exact source-bound separate same-agent quality review pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T13:53:46.729Z"
+doc_updated_at: "2026-10-12T13:53:49.763Z"
 doc_updated_by: "CODER"
 description: "Task74: Complete original OpCode enum/diagnostic helper and ParamClass enum required by genuine FormulaToken; original numeric aliases/range sentinels/defaults and release unknown diagnostic behavior. Reuse formula shared namespace, no token/cell/document placeholders. Exact normal-only whole-header native evidence, full Calc and whole affected shared raw100, source-absent build/Calc profile, inventory/provenance and local gates. Header enum declaration shard only if authored file budget requires it; map explicit filename divergence. Work only calc; next full81."
 sections:
@@ -147,6 +158,10 @@ sections:
     - Observation: The global lint gate rejects actual original duplicate-valued opcode enum aliases and original reference expressions. First format gate also identifies only the native fixture metadata array style; fixture bytes are preserved.
       Impact: Original named values/range aliases must remain complete; neither lint disabling nor dropping aliases is acceptable. Current source representation must be reverified rather than using stale enum coverage.
       Resolution: Represent the full original named domain as an immutable typed constant declaration, following existing native enum bindings in the repository; all505original values/aliases retained, no reverse-enum API invented. Header switch and public type remain unchanged in responsibility. Use existing Prettier format/resolveConfig pattern for reproducible native fixture generation. Recheck complete affected shared owners/raw100, native --write/--check and current static gates; preserve first failures and prior raw evidence.
+extensions:
+  implementation_commit:
+    hash: "ae465b1ace028f18e107bec896edbab32d555663"
+    message: "🚧 6CE3J4 formula: implement original opcode and parameter contracts"
 id_source: "generated"
 ---
 ## Summary
