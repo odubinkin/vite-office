@@ -4,7 +4,7 @@ title: "Connect original owned container reads and Calc text attribute store"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T09:09:47.689Z"
+  updated_by: "CODER"
+  note: "Implementation4e6287c2e3f1 exact EVALUATOR pass; original native1203/505 normal streams, complete source-absent Calc109 and shared214 raw S/B/F/L100, final build/fresh tests/all13scoped gates and final symbol/inventory/format audits pass. Initial failure evidence preserved; no whole-module/document/UI certification, next full71."
   attempts: 0
 quality_review:
   state: "pass"
@@ -67,8 +67,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T09:09:47.689Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implementation4e6287c2e3f1 exact EVALUATOR pass; original native1203/505 normal streams, complete source-absent Calc109 and shared214 raw S/B/F/L100, final build/fresh tests/all13scoped gates and final symbol/inventory/format audits pass. Initial failure evidence preserved; no whole-module/document/UI certification, next full71."
 doc_version: 3
-doc_updated_at: "2026-10-12T09:09:44.847Z"
+doc_updated_at: "2026-10-12T09:09:47.784Z"
 doc_updated_by: "CODER"
 description: "Iteration67: extend original shared SoA constructors and reference/value reads for actual owned values, preserve native default-plus-assignment and failed-read cleanup, move existing metadata member bodies to their original main_def boundary, and register exact Calc CellTextAttrTraits/CellTextAttrStoreType over existing owners. Validate whole genuine native and source-absent whole Calc/related raw100."
 sections:
@@ -109,6 +115,39 @@ sections:
     Full suite: not due. Last full61; next scheduled full71. Writer-only coverage is not changed. Source/metadata review and exact implementation commit references follow before ap verify/finish. Broad Calc goal remains active/incomplete: complete CellStoreType/pointees/ScColumn/Table/Document/edit/undo/input/view/UI remain subsequent.
 
     Implementation commit: 4e6287c2e3f1ec49708eb4db338d147fe044c3d9. EVALUATOR pass exact implementation; quality report: .agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/quality-report.json. Complete19intentional non-task paths plus task README are reviewed; no implementation edits after this SHA. Final closure metadata is recorded subsequently by ap verify/finish.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T09:09:47.689Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implementation4e6287c2e3f1 exact EVALUATOR pass; original native1203/505 normal streams, complete source-absent Calc109 and shared214 raw S/B/F/L100, final build/fresh tests/all13scoped gates and final symbol/inventory/format audits pass. Initial failure evidence preserved; no whole-module/document/UI certification, next full71.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T09:09:44.847Z, excerpt_hash=sha256:06592deedf44313391446c91b590ccbf349bb17394654ed2239bf9730eb40bbf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120836-DQBEXT/blueprint/resolved-snapshot.json
+    - old_digest: a899d7012e5ae089123964c2c045193dee96aa0f016778ab89f25bcb8e9727ff
+    - current_digest: a899d7012e5ae089123964c2c045193dee96aa0f016778ab89f25bcb8e9727ff
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120836-DQBEXT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120836-DQBEXT
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task67 implementation and metadata commits; re-run source-absent Calc and directly related shared checks. Preserve prior66 evidence and unchanged tests."
   Findings: |-
     - Observation: Exact scoped gate typecheck exited1; original log gate-typecheck.log retained.
@@ -183,6 +222,39 @@ Result: all13final exitCodes0, including typecheck/lint/docs/file-size/dependenc
 Full suite: not due. Last full61; next scheduled full71. Writer-only coverage is not changed. Source/metadata review and exact implementation commit references follow before ap verify/finish. Broad Calc goal remains active/incomplete: complete CellStoreType/pointees/ScColumn/Table/Document/edit/undo/input/view/UI remain subsequent.
 
 Implementation commit: 4e6287c2e3f1ec49708eb4db338d147fe044c3d9. EVALUATOR pass exact implementation; quality report: .agentplane/tasks/202610120836-DQBEXT/quality/20261012-090904950-recovery-context/quality-report.json. Complete19intentional non-task paths plus task README are reviewed; no implementation edits after this SHA. Final closure metadata is recorded subsequently by ap verify/finish.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T09:09:47.689Z — VERIFY — ok
+
+By: CODER
+
+Note: Implementation4e6287c2e3f1 exact EVALUATOR pass; original native1203/505 normal streams, complete source-absent Calc109 and shared214 raw S/B/F/L100, final build/fresh tests/all13scoped gates and final symbol/inventory/format audits pass. Initial failure evidence preserved; no whole-module/document/UI certification, next full71.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T09:09:44.847Z, excerpt_hash=sha256:06592deedf44313391446c91b590ccbf349bb17394654ed2239bf9730eb40bbf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120836-DQBEXT/blueprint/resolved-snapshot.json
+- old_digest: a899d7012e5ae089123964c2c045193dee96aa0f016778ab89f25bcb8e9727ff
+- current_digest: a899d7012e5ae089123964c2c045193dee96aa0f016778ab89f25bcb8e9727ff
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120836-DQBEXT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120836-DQBEXT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
