@@ -4,7 +4,7 @@ title: "Implement shared formula opcode and parameter contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,36 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T13:53:00.952Z"
+  updated_by: "EVALUATOR"
+  note: "Exact shared opcode and parameter contracts pass source-bound same-agent separate EVALUATOR review; no independent reviewer claim."
+  evaluated_sha: "ae465b1ace028f18e107bec896edbab32d555663"
+  blueprint_digest: "2dd77dbc88977c23af3fb279d4ee381eb04971b970450cea6d56efca6620388e"
+  evidence_refs:
+    - ".agentplane/tasks/202610121329-6CE3J4/README.md"
+    - ".agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121329-6CE3J4/blueprint/resolved-snapshot.json"
+    - "output/playwright/task74-checks/exact-review.json"
+    - "output/playwright/task74-checks/final-audit.json"
+    - "output/playwright/task74-checks/first-gates-results.json"
+    - "output/playwright/task74-checks/first-static-manifest.json"
+  findings:
+    - "Complete505original opcode names/aliases and10parameter classifications retain values/defaults through typed declarations; whole487case diagnostic switch preserves release??? and all65536original results plus10native argument conversions."
+    - "All38current source hashes match evaluated commit; Calc116/shared8 raw100 and source-absent build/profile pass; all13aggregate gates plus23tooling cases pass after visible exact corrective checks. Enum-only shard maps original header under file budget without a runtime cycle."
+commit:
+  hash: "ae465b1ace028f18e107bec896edbab32d555663"
+  message: "🚧 6CE3J4 formula: implement original opcode and parameter contracts"
 comments:
   -
     author: "CODER"
     body: "Start: Implement genuine shared opcode/parameter header contracts required by original formula tokens, following approved source-shaped boundaries and scoped raw100 checks."
+  -
+    author: "CODER"
+    body: "Implementation committed with current native header streams, actual signed conversion calls, scoped raw100 and complete successful gates; separate same-agent quality review follows."
 events:
   -
     type: "status"
@@ -37,8 +62,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement genuine shared opcode/parameter header contracts required by original formula tokens, following approved source-shaped boundaries and scoped raw100 checks."
+  -
+    type: "status"
+    at: "2026-10-12T13:52:09.629Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation committed with current native header streams, actual signed conversion calls, scoped raw100 and complete successful gates; separate same-agent quality review follows."
 doc_version: 3
-doc_updated_at: "2026-10-12T13:51:00.476Z"
+doc_updated_at: "2026-10-12T13:53:44.109Z"
 doc_updated_by: "CODER"
 description: "Task74: Complete original OpCode enum/diagnostic helper and ParamClass enum required by genuine FormulaToken; original numeric aliases/range sentinels/defaults and release unknown diagnostic behavior. Reuse formula shared namespace, no token/cell/document placeholders. Exact normal-only whole-header native evidence, full Calc and whole affected shared raw100, source-absent build/Calc profile, inventory/provenance and local gates. Header enum declaration shard only if authored file budget requires it; map explicit filename divergence. Work only calc; next full81."
 sections:
@@ -56,7 +88,7 @@ sections:
 
     Command: node output/playwright/task74-checks/gates.mjs and corrective --recheck. Result: pass. Evidence: all13aggregate gates plus23related tooling cases/2files. Scope: real format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling; no new cycle or relaxed validator.
 
-    Command: python3 output/playwright/task74-checks/final-audit.py and exact committed source-bound same-agent separate EVALUATOR phase. Result: pass. Evidence: final-audit.json/final-source-hashes.json/exact-review.json and quality report added after exact reviewed commit. Scope: current source/whole native capture and raw map locations, original enum-only declaration shard and header responsibility, explicit release versus debug assertion and suspicious CALC-066 unreachable numeric tail. No independent reviewer claim. Full formula/token/cell/document/input/view/UI/native ABI/upstream QA remain incomplete; last full71,next full81.
+    Command: python3 output/playwright/task74-checks/final-audit.py and exact committed source-bound same-agent separate EVALUATOR phase. Result: pass. Evidence: final-audit.json/final-source-hashes.json/exact-review.json and quality report .agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/quality-report.json at evaluated implementationae465b1ace028f18e107bec896edbab32d555663;38committed current source hashes match. Scope: current source/whole native capture and raw map locations, original enum-only declaration shard and header responsibility, explicit release versus debug assertion and suspicious CALC-066 unreachable numeric tail. No independent reviewer claim. Full formula/token/cell/document/input/view/UI/native ABI/upstream QA remain incomplete; last full71,next full81.
   Rollback Plan: "Revert only task74 implementation and traceability commits; restore exact original3source symlinks after any portable check. Preserve native/first failure evidence and unrelated active tasks/user-owned merges. Recheck scoped owners after rollback."
   Findings: |-
     Previous turn is concrete progress: task73 DONE8d809aac040d, actual FormulaResultValue and shared reuse verified, clean calc. Original formula/token.hxx directly needs opcode.hxx/paramclass.hxx; these shared owners are absent. Original opcode.hxx has1078lines before TS formatting; source-mapped enum declaration shard is approved only to retain exact complete responsibility within authored1000line limit, without runtime import cycle. Original helper default asserts(false) then returns???; unreachable numeric tail is not substituted as a plausible fallback. Release behavior and debug termination are distinct observation scopes, no browser debug termination parity claim. Existing actual formula error owner remains reused. Goal authorizes current safe local core work; no network required; last full71,next full81.
@@ -104,7 +136,7 @@ Command: node output/playwright/task74-checks/portable.mjs; corrected --shared-o
 
 Command: node output/playwright/task74-checks/gates.mjs and corrective --recheck. Result: pass. Evidence: all13aggregate gates plus23related tooling cases/2files. Scope: real format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling; no new cycle or relaxed validator.
 
-Command: python3 output/playwright/task74-checks/final-audit.py and exact committed source-bound same-agent separate EVALUATOR phase. Result: pass. Evidence: final-audit.json/final-source-hashes.json/exact-review.json and quality report added after exact reviewed commit. Scope: current source/whole native capture and raw map locations, original enum-only declaration shard and header responsibility, explicit release versus debug assertion and suspicious CALC-066 unreachable numeric tail. No independent reviewer claim. Full formula/token/cell/document/input/view/UI/native ABI/upstream QA remain incomplete; last full71,next full81.
+Command: python3 output/playwright/task74-checks/final-audit.py and exact committed source-bound same-agent separate EVALUATOR phase. Result: pass. Evidence: final-audit.json/final-source-hashes.json/exact-review.json and quality report .agentplane/tasks/202610121329-6CE3J4/quality/20261012-135300952-recovery-context/quality-report.json at evaluated implementationae465b1ace028f18e107bec896edbab32d555663;38committed current source hashes match. Scope: current source/whole native capture and raw map locations, original enum-only declaration shard and header responsibility, explicit release versus debug assertion and suspicious CALC-066 unreachable numeric tail. No independent reviewer claim. Full formula/token/cell/document/input/view/UI/native ABI/upstream QA remain incomplete; last full71,next full81.
 
 ## Rollback Plan
 
