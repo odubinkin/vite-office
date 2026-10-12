@@ -1,10 +1,11 @@
 ---
 id: "202610120418-PECP1V"
 title: "Implement original managed mdds element blocks"
-status: "DOING"
+result_summary: "verified-202610120418-PECP1V"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 34
+revision: 37
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-12T04:59:08.233Z"
+  updated_at: "2026-10-12T05:02:41.798Z"
   updated_by: "CODER"
-  note: "Complete original managed/noncopyable and clone owners at types.ts over reused storage. Whole13383byte normal-ASan/UBSan streams, true no-equality and negative count/fill constructor witnesses; Calc106/shared34019+94raw100 source-absent, exact prior argv/maps immutable and three links restored. All13gates/35tooling/format pass; actual implementation4ea09eaeb70a1bf8054e7141878cd7669de7adc0 reviewed, initial failures retained, no Writer/config/threshold repairs."
+  note: "verified-202610120418-PECP1V"
   attempts: 0
 quality_review:
   state: "pass"
@@ -54,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: implement complete original managed block ownership and clone specializations over shared mdds storage; native whole header and related source-absent raw100."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610120418-PECP1V. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -74,8 +78,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original managed/noncopyable and clone owners at types.ts over reused storage. Whole13383byte normal-ASan/UBSan streams, true no-equality and negative count/fill constructor witnesses; Calc106/shared34019+94raw100 source-absent, exact prior argv/maps immutable and three links restored. All13gates/35tooling/format pass; actual implementation4ea09eaeb70a1bf8054e7141878cd7669de7adc0 reviewed, initial failures retained, no Writer/config/threshold repairs."
+  -
+    type: "verify"
+    at: "2026-10-12T05:02:41.798Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610120418-PECP1V"
+  -
+    type: "status"
+    at: "2026-10-12T05:02:41.905Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610120418-PECP1V. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-12T04:59:08.296Z"
+doc_updated_at: "2026-10-12T05:06:29.262Z"
 doc_updated_by: "CODER"
 description: "Task63: complete original managed and noncopyable managed element block pointer ownership for Calc storage prerequisites; reuse existing scalar block/vector engine, unchanged whole native headers, exact ownership/copy/clone/resize/overwrite streams, source-absent Calc and affected shared raw100, inventory and scoped gates. Next full71."
 sections:
@@ -115,6 +132,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-12T05:02:41.798Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610120418-PECP1V
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T04:59:08.296Z, excerpt_hash=sha256:60d35c12b233e0faa3d3a46112a9483696b98a3058611c55388d9ad3c63866ca
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120418-PECP1V/blueprint/resolved-snapshot.json
+    - old_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+    - current_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120418-PECP1V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610120418-PECP1V --result verified-202610120418-PECP1V --commit 4ea09eaeb70a1bf8054e7141878cd7669de7adc0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -189,6 +236,10 @@ sections:
     - Observation: Final direct original types.ts layout and complete native/portable contracts pass; final lint uses the defined erased operator type, source input hashes and every prior related runtime map retained. All13gates and35tooling tests pass; final source links restored.
       Impact: Task63 implementation and acceptance ready for actual source commit and implementation-bound quality review. Complete cell storage/ScColumn/Table/Document/input/view/UI remain subsequent goal work.
       Resolution: Commit only intentional task63 paths, record actual implementation SHA before EVALUATOR, verify exact quality SHA and clean finish; do not merge or mark entire goal complete. Next full71.
+
+    - Observation: Route-emitted task complete with verified-ID result marked task DONE but its deterministic close subject failed the commit subject guard twice as too generic. Only active task README is staged; no source changes.
+      Impact: All implementation/quality/verification pass, but final task artifact cleanup commit is still required. Generated verification shorthand remains traceable to detailed Verification and prior recorded evidence.
+      Resolution: Use canonical ap commit with an explicit substantive managed-mdds closure subject and the active-task-only allowlist; preserve guard enforcement, reviewed implementation SHA and source evidence. No policy/config/threshold change or branch merge.
 id_source: "generated"
 ---
 ## Summary
@@ -240,6 +291,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-12T05:02:41.798Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610120418-PECP1V
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T04:59:08.296Z, excerpt_hash=sha256:60d35c12b233e0faa3d3a46112a9483696b98a3058611c55388d9ad3c63866ca
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120418-PECP1V/blueprint/resolved-snapshot.json
+- old_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+- current_digest: 408d45340c0ca464b0e963b668f25cba44ea2cb526240000b57069a795d138b1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120418-PECP1V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610120418-PECP1V --result verified-202610120418-PECP1V --commit 4ea09eaeb70a1bf8054e7141878cd7669de7adc0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
@@ -319,3 +400,7 @@ Previous completed turn made progress: task62 native mapping lifetimes and full 
 - Observation: Final direct original types.ts layout and complete native/portable contracts pass; final lint uses the defined erased operator type, source input hashes and every prior related runtime map retained. All13gates and35tooling tests pass; final source links restored.
   Impact: Task63 implementation and acceptance ready for actual source commit and implementation-bound quality review. Complete cell storage/ScColumn/Table/Document/input/view/UI remain subsequent goal work.
   Resolution: Commit only intentional task63 paths, record actual implementation SHA before EVALUATOR, verify exact quality SHA and clean finish; do not merge or mark entire goal complete. Next full71.
+
+- Observation: Route-emitted task complete with verified-ID result marked task DONE but its deterministic close subject failed the commit subject guard twice as too generic. Only active task README is staged; no source changes.
+  Impact: All implementation/quality/verification pass, but final task artifact cleanup commit is still required. Generated verification shorthand remains traceable to detailed Verification and prior recorded evidence.
+  Resolution: Use canonical ap commit with an explicit substantive managed-mdds closure subject and the active-task-only allowlist; preserve guard enforcement, reviewed implementation SHA and source evidence. No policy/config/threshold change or branch merge.
