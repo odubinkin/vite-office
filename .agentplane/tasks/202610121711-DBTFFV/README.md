@@ -4,7 +4,7 @@ title: "Implement original mdds matrix block walks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,39 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T17:29:58.068Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR passes exact implementation7035f668de70ae341779dcf72c8c2be28833630e original matrix walks and full declared scoped evidence; not independent review or complete ScMatrix/document/UI certification."
+  evaluated_sha: "7035f668de70ae341779dcf72c8c2be28833630e"
+  blueprint_digest: "634c3717bd436158a7d81856a8b2aa1cbcb7af33851e2d6bec60ace231f97102"
+  evidence_refs:
+    - ".agentplane/tasks/202610121711-DBTFFV/README.md"
+    - ".agentplane/tasks/202610121711-DBTFFV/quality/20261012-172958068-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121711-DBTFFV/quality/20261012-172958068-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121711-DBTFFV/quality/20261012-172958068-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121711-DBTFFV/blueprint/resolved-snapshot.json"
+    - "output/playwright/task80-checks/exact-review.json"
+    - "output/playwright/task80-checks/final-source-hashes.json"
+    - "output/playwright/task80-checks/value-coverage-audit.json"
+    - "output/playwright/task80-checks/gates-results.json"
+    - "output/playwright/calc-matrix-walk-native/manifest.json"
+  findings:
+    - "All153current source/test/fixture hashes match implementation;14intentional paths. Four original matrix walk overloads reuse real SoA vector/const block sections, original type mapping and validation. walk_func borrows actual copied FuncT and creates original zero-offset nodes; no matrix or callable engine replacement."
+    - "Explicit existing ValueOperations members bind erased FuncT lvalue/rvalue argument and implicit return categories plus parameter destruction on normal/exception paths. Ordinary full unchanged original headers/genuine SharedString/Calc traits provide seven positive commands/448sources and complete27666/251byte streams."
+    - "Entire Calc125tests36files and affected shared225tests45files pass raw S/B/F/L100 every counter positive; Calc3080S2092B526F2721L, shared3766S1805B731F3361L35executable owners. Source-absent static/profile0UI and all14 final gates/23tooling pass. Initial formatting/JSDoc and overlapping registry failures corrected, final registry sequential with restored links."
+    - "CALC-071 records only initialized in-storage inclusive row spill and preserves original behavior. Inventory broad flags false, native invalid iterators/ABI/full QA and ScMatrix/result/cells/document/edit/view/UI remain pending; full81 next then requested pause."
+commit:
+  hash: "7035f668de70ae341779dcf72c8c2be28833630e"
+  message: "🧩 DBTFFV calc: implement original matrix block walks"
 comments:
   -
     author: "CODER"
     body: "Start: approved ongoing Calc task80 original matrix walks over genuine shared owners with normal native streams and whole scoped raw100. Full81 follows then requested goal pause; Writer-only repairs excluded."
+  -
+    author: "CODER"
+    body: "Implementation: original four matrix block walks committed at7035f668de70. Whole native streams, Calc125/shared225 raw100, source-absent static/profile and14gates/23tooling pass. Same-agent separate EVALUATOR exact-source review now follows; ScMatrix/document/UI remain subsequent."
 events:
   -
     type: "status"
@@ -37,8 +65,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: approved ongoing Calc task80 original matrix walks over genuine shared owners with normal native streams and whole scoped raw100. Full81 follows then requested goal pause; Writer-only repairs excluded."
+  -
+    type: "status"
+    at: "2026-10-12T17:29:22.676Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: original four matrix block walks committed at7035f668de70. Whole native streams, Calc125/shared225 raw100, source-absent static/profile and14gates/23tooling pass. Same-agent separate EVALUATOR exact-source review now follows; ScMatrix/document/UI remain subsequent."
 doc_version: 3
-doc_updated_at: "2026-10-12T17:28:29.859Z"
+doc_updated_at: "2026-10-12T17:29:22.676Z"
 doc_updated_by: "CODER"
 description: "Task80 of ongoing approved Calc goal: port all four original block walks and callable value contracts over existing shared matrix/vector owners. Normal original native streams, whole Calc and affected shared raw100, inventory and exact review; next full81 then requested goal pause."
 sections:
