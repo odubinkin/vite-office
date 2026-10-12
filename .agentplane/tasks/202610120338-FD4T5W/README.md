@@ -4,7 +4,7 @@ title: "Implement original internal UNO mapping lifetime owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -24,7 +24,31 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T04:03:28.968Z"
+  updated_by: "EVALUATOR"
+  note: "Actual implementation0c801307e7c9be936f0eba40edaa7f14e444c10d preserves complete original cppu-private Mapping/MappingEntry logical lifetimes; reused genuine native evidence independently audited and whole related source-absent raw100 retained."
+  evaluated_sha: "0c801307e7c9be936f0eba40edaa7f14e444c10d"
+  blueprint_digest: "7b2c1283ab687c4352642c741f0f5380f6b2eda3494f3b45f7b92c3b0ffd9c05"
+  evidence_refs:
+    - ".agentplane/tasks/202610120338-FD4T5W/README.md"
+    - ".agentplane/tasks/202610120338-FD4T5W/quality/20261012-040328968-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120338-FD4T5W/quality/20261012-040328968-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120338-FD4T5W/quality/20261012-040328968-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120338-FD4T5W/blueprint/resolved-snapshot.json"
+    - "output/playwright/task62-checks/final-audit.json"
+    - "output/playwright/task62-checks/gates-final-manifest.json"
+    - "output/playwright/task62-checks/value-coverage-audit.json"
+    - "output/playwright/task62-checks/format-final-check.log"
+    - "output/playwright/uno-mapping-lifetime-native/manifest.json"
+    - "apps/office/src/cppu/source/uno/lbmap.test.ts"
+  findings:
+    - "Private Mapping matches original acquired/default/copy/move/destructor/pointer assignment/move assignment/get/is, including acquire-new/release-old/publish-new order and deleted copy assignment. MappingEntry acquires only actual OUString name; scalar/mapping/free pointer copies and initialized source-empty moves match whole native streams. Existing C records are reused and original free/get callback typedefs added without a provider."
+    - "Whole unchanged lbmap.cxx caller compiled normal-ASan/UBSan; entire mapping560/entries828-byte streams match. All443source/39generated/9configuration hashes, original219positive commands/101units per variant/feature/loader evidence,209concrete artifacts and8whole prior witnesses verified;14new commands0 distinguish reuse from rebuilding. Exact full prior related argv/maps retained, Calc106/shared190 all19+77raw100,13gates/35tooling/format pass. Only test JSDoc comment repaired, first failed doc/lint evidence retained."
+commit:
+  hash: "0c801307e7c9be936f0eba40edaa7f14e444c10d"
+  message: "🧩 FD4T5W uno: implement original mapping lifetime owners"
 comments:
   -
     author: "CODER"
@@ -37,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement complete original private mapping lifetime owners over existing shared records/string ownership; verify reused full native build and pure caller streams, complete source-absent related raw100 and scoped evidence."
+  -
+    type: "status"
+    at: "2026-10-12T04:03:28.426Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-12T04:01:27.634Z"
+doc_updated_at: "2026-10-12T04:03:28.426Z"
 doc_updated_by: "CODER"
 description: "Task62 after full61: complete cppu private Mapping and MappingEntry from original lbmap.cxx, reused existing mapping C record/string owners and actual free/get callback typedefs. Whole unchanged native TU and pure caller over hash-verified genuine task60 full dependencies; two variants and whole callback/value/alias streams, no substitute registry/provider. Exact full task60 shared argv plus whole new owners/test and Calc raw100; runtime/provenance/capability/docs and scoped gates. Full71 next."
 sections:
