@@ -4,7 +4,7 @@ title: "Implement original Calc FormulaResultValue owner and shared string lifec
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,35 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T13:26:35.596Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR phase passes exact FormulaResultValue implementation; no independent reviewer claim."
+  evaluated_sha: "14639632a54ce990d48c05ea41e41d19805cd0ce"
+  blueprint_digest: "c93594f94cb43b67b6ea3fb0446fd01309f3087ff33ed9a9f95773a342180da0"
+  evidence_refs:
+    - ".agentplane/tasks/202610121251-865XS3/README.md"
+    - ".agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121251-865XS3/blueprint/resolved-snapshot.json"
+    - "output/playwright/task73-checks/exact-review.json"
+    - "output/playwright/task73-checks/final-audit.json"
+    - "output/playwright/task73-checks/first-gates-results.json"
+  findings:
+    - "Original actual named struct and four constructor contracts preserve defaults, all enum-vs-double distinctions, genuine shared string special members, reference identity and fixed-width fields; whole native captures match without substitutes."
+    - "Exact committed47source hashes match current maps/evidence; Calc116 and shared63 tests pass raw100, affected4case recheck and all13aggregate gates plus23tooling cases pass; first failures preserved."
+commit:
+  hash: "14639632a54ce990d48c05ea41e41d19805cd0ce"
+  message: "🚧 865XS3 calc: implement original FormulaResultValue ownership"
 comments:
   -
     author: "CODER"
     body: "Start: implement the actual complete FormulaResultValue owner, explicit native overload/value-category bindings and existing SharedString/FormulaError lifecycle under ongoing approved Calc goal; raw100/source-absent scoped checks, next full81."
+  -
+    author: "CODER"
+    body: "Implementation committed; complete native streams and current scoped raw100/gates pass, proceeding to separate same-agent quality review."
 events:
   -
     type: "status"
@@ -37,8 +61,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the actual complete FormulaResultValue owner, explicit native overload/value-category bindings and existing SharedString/FormulaError lifecycle under ongoing approved Calc goal; raw100/source-absent scoped checks, next full81."
+  -
+    type: "status"
+    at: "2026-10-12T13:26:11.398Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation committed; complete native streams and current scoped raw100/gates pass, proceeding to separate same-agent quality review."
 doc_version: 3
-doc_updated_at: "2026-10-12T13:25:32.028Z"
+doc_updated_at: "2026-10-12T13:27:01.774Z"
 doc_updated_by: "CODER"
 description: "Task73: port actual sc::FormulaResultValue named struct and all four explicit constructors plus implicit copy/move/assignment/destruction, reusing real shared FormulaError/SharedString owners. Preserve Invalid/Value/String/Error distinctions, defaults, numeric NaN payloads, by-value string copy/move and lifetime semantics; no guessed enum-vs-double overload, synthetic token/cell/document or duplicate string model. Compile selected exact original struct and constructor bodies with whole genuine SharedString/SAL dependencies normal-only; no full ScFormulaResult claim. Full Calc plus directly related shared raw100/upstream-absent build, inventory/provenance/aggregate gates and exact source-bound quality phase; next full81."
 sections:
@@ -66,7 +97,7 @@ sections:
 
     Command: node output/playwright/task73-checks/gates.mjs; corrective --recheck. Result: pass. Evidence: all13aggregate gates and23tooling tests/2files; first lint/registry failures retained with explicit corrective metadata. Scope: format/lint/typecheck/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling, no weaker validator/profile/threshold.
 
-    Command: python3 output/playwright/task73-checks/final-audit.py. Result: pass. Evidence: raw locations match unchanged full71 owners and final new-owner recheck; complete captures/current sources/source-link targets and actual terminal gate statuses checked. Final source hashes and exact implementation commit review recorded in output/playwright/task73-checks/final-source-hashes.json and exact-review.json. Same-agent separate EVALUATOR phase; not an independent reviewer. Quality report path will be added after exact implementation commit review. Scope: actual current scoped source evidence; full kernel/token/cell/document/input/view/UI, native ABI/concurrency/undefined lifetime remain unverified. Last full71; next scheduled full81.
+    Command: python3 output/playwright/task73-checks/final-audit.py. Result: pass. Evidence: raw locations match unchanged full71 owners and final new-owner recheck; complete captures/current sources/source-link targets and actual terminal gate statuses checked. Final source hashes and exact implementation commit review recorded in output/playwright/task73-checks/final-source-hashes.json and exact-review.json. Same-agent separate EVALUATOR phase; not an independent reviewer. Quality report: .agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/quality-report.json; evaluated implementation14639632a54ce990d48c05ea41e41d19805cd0ce with47current committed source hashes. Scope: actual current scoped source evidence; full kernel/token/cell/document/input/view/UI, native ABI/concurrency/undefined lifetime remain unverified. Last full71; next scheduled full81.
   Rollback Plan: "Revert only task73 changes; preserve source-exact native caller/full failure evidence outside Agentplane. Always restore original3symlink targets on runtime verification termination. Recheck directly affected Calc/shared after rollback. Preserve unrelated active tasks and user-owned merges."
   Findings: |-
     Preflight confirms clean calc with task72 DONE e3b27cee; previous goal turn is concrete progress (new shared formula error contracts). Existing SharedString and FormulaError are authoritative owners; no FormulaResultValue yet. Original numeric and enum-error constructors both erase to JS number, so explicit actual enum type witness is required; do not infer error from value or NaN. Native comparison is bounded to actual complete named struct/four ctor scopes because full ScFormulaResult still depends on real absent token/matrix graph. User continues the approved Calc goal and requires shared reuse/native JS where equivalent. No new network/outside-repo access. Last full71, next full81.
@@ -122,7 +153,7 @@ Command: corrected owner test recorded in output/playwright/task73-checks/owner-
 
 Command: node output/playwright/task73-checks/gates.mjs; corrective --recheck. Result: pass. Evidence: all13aggregate gates and23tooling tests/2files; first lint/registry failures retained with explicit corrective metadata. Scope: format/lint/typecheck/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling, no weaker validator/profile/threshold.
 
-Command: python3 output/playwright/task73-checks/final-audit.py. Result: pass. Evidence: raw locations match unchanged full71 owners and final new-owner recheck; complete captures/current sources/source-link targets and actual terminal gate statuses checked. Final source hashes and exact implementation commit review recorded in output/playwright/task73-checks/final-source-hashes.json and exact-review.json. Same-agent separate EVALUATOR phase; not an independent reviewer. Quality report path will be added after exact implementation commit review. Scope: actual current scoped source evidence; full kernel/token/cell/document/input/view/UI, native ABI/concurrency/undefined lifetime remain unverified. Last full71; next scheduled full81.
+Command: python3 output/playwright/task73-checks/final-audit.py. Result: pass. Evidence: raw locations match unchanged full71 owners and final new-owner recheck; complete captures/current sources/source-link targets and actual terminal gate statuses checked. Final source hashes and exact implementation commit review recorded in output/playwright/task73-checks/final-source-hashes.json and exact-review.json. Same-agent separate EVALUATOR phase; not an independent reviewer. Quality report: .agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/quality-report.json; evaluated implementation14639632a54ce990d48c05ea41e41d19805cd0ce with47current committed source hashes. Scope: actual current scoped source evidence; full kernel/token/cell/document/input/view/UI, native ABI/concurrency/undefined lifetime remain unverified. Last full71; next scheduled full81.
 
 ## Rollback Plan
 
