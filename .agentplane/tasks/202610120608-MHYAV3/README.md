@@ -4,7 +4,7 @@ title: "Connect original object value storage to Calc string and text attribute 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T07:44:03.806Z"
+  updated_by: "CODER"
+  note: "Actual implementation03bb0aa688218cfca8431377422593d37f83f628 verified: unchanged whole original normal-only owned/Calc streams,107Calc and211related tests, whole20Calc/31shared executable owners raw S/B/F/L100,35tooling tests, all13scoped gates, intentional Prettier/source-map/source-hash/link audit and exact-SHA EVALUATOR pass. Typed callbacks/full MTV/document/UI remain subsequent work; next full71."
   attempts: 0
 quality_review:
   state: "pass"
@@ -73,8 +73,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: actual object value blocks committed at03bb0aa688218cfca8431377422593d37f83f628; normal whole native and source-absent scoped acceptance passes. Proceed to implementation-bound quality phase."
+  -
+    type: "verify"
+    at: "2026-10-12T07:44:03.806Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual implementation03bb0aa688218cfca8431377422593d37f83f628 verified: unchanged whole original normal-only owned/Calc streams,107Calc and211related tests, whole20Calc/31shared executable owners raw S/B/F/L100,35tooling tests, all13scoped gates, intentional Prettier/source-map/source-hash/link audit and exact-SHA EVALUATOR pass. Typed callbacks/full MTV/document/UI remain subsequent work; next full71."
 doc_version: 3
-doc_updated_at: "2026-10-12T07:42:43.064Z"
+doc_updated_at: "2026-10-12T07:44:38.496Z"
 doc_updated_by: "CODER"
 description: "Iteration65: extend existing delayed_delete_vector and default_element_block with actual owned ValueT constructors, assignment and lifetime semantics; reuse task64 shared vector operations and existing SharedString/CellTextAttr owners; export original Calc string_block and celltextattr_block specializations with initialized native behavior evidence. Keep allocator, failure cleanup, undefined lifetimes and full MTV/document/UI gaps explicit."
 sections:
@@ -95,7 +101,7 @@ sections:
     Command: all13 exact scoped commands in `output/playwright/task65-checks/gates-inputs.json`, executed by gates.py; failed inventory/tooling gates re-run after metadata repairs. Intentional23files `npx prettier --check` recorded in format-final.log.
     Result: pass. Evidence: gates-final-manifest.json all13 exit0; typecheck, changed runtime/test/helper/probe ESLint, JSDoc, file size, module boundaries, provenance, tree, shared/Calc inventory,35tooling tests/4files, routing, doctor and diff. First failed inventory/tooling logs and manifests retained; constructor evidence corrected to actual inline header and .cxx assignment, new append_storage recorded as exhaustive internal operation. No gate/assertion/threshold or Writer changes.
 
-    Scope: the approved actual initialized object-value block operation family and original Calc string_block/celltextattr_block plus standard aliases/discriminators, reusing existing SharedString/CellTextAttr/shared vector storage. Complete perfect forwarding/rvalue overload families, custom allocators/StoreT, throwing cleanup, undefined lifetimes/ranges, physical ABI, other actual Calc pointees, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity/verification flags remain false. CALC-063 records original copy-based mdds swap without altering upstream behavior. Full61 is the last complete run; next full71. Actual implementation SHA and quality review follow this checked source packet before closure.
+    Scope: the approved actual initialized object-value block operation family and original Calc string_block/celltextattr_block plus standard aliases/discriminators, reusing existing SharedString/CellTextAttr/shared vector storage. Complete perfect forwarding/rvalue overload families, custom allocators/StoreT, throwing cleanup, undefined lifetimes/ranges, physical ABI, other actual Calc pointees, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity/verification flags remain false. CALC-063 records original copy-based mdds swap without altering upstream behavior. Full61 is the last complete run; next full71. Actual implementation commit:03bb0aa688218cfca8431377422593d37f83f628. Exact-SHA EVALUATOR pass recorded in .agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/quality-report.json and committed in b6bfeba5a3e8. CODER verification is recorded as ok; only task metadata changed after the evaluated implementation. Final closure uses the canonical gateway finish command with a substantive result and explicit implementation/evidence hashes.
   Rollback Plan: "Revert only this task implementation/metadata commits through a new traced task if requested. Leave user branches/merges, original upstream/reference links, Writer and existing task64 storage intact."
   Findings: |-
     Task64 is DONE at implementation6513ab428571af4f3f29db36e37ae5acfba8fc19, close d67559c7c87b. Branch calc starts clean, three source links present, two unrelated active tasks untouched. Source confirms front single erase retains hidden constructed values until a later clear_removed; default/fill constructor distinction matters for object identity and destruction. Existing svl SharedString and sc CellTextAttr owners will be reused.
@@ -135,6 +141,10 @@ sections:
     - Observation: After correcting native markers, exhaustive shared runtime inventory identified newly exported append_storage as a missing internal mutation operation.
       Impact: Inventory acceptance remains pending; runtime/native/portable checks already pass.
       Resolution: Add the actual exported helper as a scoped shared internal operation using the existing operation schema and false whole-parity flags; preserve previous failing evidence and replay affected inventory gates.
+
+    - Observation: Verified route emits a generic verified-ID completion result. The same placeholder previously failed the enforced commit subject guard during task63 closure.
+      Impact: Literal placeholder risks terminal task-state mutation followed by rejected closure subject.
+      Resolution: Use the higher-priority gateway canonical finish command with a substantive result and explicit implementation/evidence hashes, as successful task64 closure; no lifecycle guard or scope change.
 id_source: "generated"
 ---
 ## Summary
@@ -167,7 +177,7 @@ Result: pass. Evidence: source-argument-map-audit.json verifies exact whole exec
 Command: all13 exact scoped commands in `output/playwright/task65-checks/gates-inputs.json`, executed by gates.py; failed inventory/tooling gates re-run after metadata repairs. Intentional23files `npx prettier --check` recorded in format-final.log.
 Result: pass. Evidence: gates-final-manifest.json all13 exit0; typecheck, changed runtime/test/helper/probe ESLint, JSDoc, file size, module boundaries, provenance, tree, shared/Calc inventory,35tooling tests/4files, routing, doctor and diff. First failed inventory/tooling logs and manifests retained; constructor evidence corrected to actual inline header and .cxx assignment, new append_storage recorded as exhaustive internal operation. No gate/assertion/threshold or Writer changes.
 
-Scope: the approved actual initialized object-value block operation family and original Calc string_block/celltextattr_block plus standard aliases/discriminators, reusing existing SharedString/CellTextAttr/shared vector storage. Complete perfect forwarding/rvalue overload families, custom allocators/StoreT, throwing cleanup, undefined lifetimes/ranges, physical ABI, other actual Calc pointees, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity/verification flags remain false. CALC-063 records original copy-based mdds swap without altering upstream behavior. Full61 is the last complete run; next full71. Actual implementation SHA and quality review follow this checked source packet before closure.
+Scope: the approved actual initialized object-value block operation family and original Calc string_block/celltextattr_block plus standard aliases/discriminators, reusing existing SharedString/CellTextAttr/shared vector storage. Complete perfect forwarding/rvalue overload families, custom allocators/StoreT, throwing cleanup, undefined lifetimes/ranges, physical ABI, other actual Calc pointees, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain unverified. All whole parity/verification flags remain false. CALC-063 records original copy-based mdds swap without altering upstream behavior. Full61 is the last complete run; next full71. Actual implementation commit:03bb0aa688218cfca8431377422593d37f83f628. Exact-SHA EVALUATOR pass recorded in .agentplane/tasks/202610120608-MHYAV3/quality/20261012-074336816-recovery-context/quality-report.json and committed in b6bfeba5a3e8. CODER verification is recorded as ok; only task metadata changed after the evaluated implementation. Final closure uses the canonical gateway finish command with a substantive result and explicit implementation/evidence hashes.
 
 ## Rollback Plan
 
@@ -212,3 +222,7 @@ Task64 is DONE at implementation6513ab428571af4f3f29db36e37ae5acfba8fc19, close 
 - Observation: After correcting native markers, exhaustive shared runtime inventory identified newly exported append_storage as a missing internal mutation operation.
   Impact: Inventory acceptance remains pending; runtime/native/portable checks already pass.
   Resolution: Add the actual exported helper as a scoped shared internal operation using the existing operation schema and false whole-parity flags; preserve previous failing evidence and replay affected inventory gates.
+
+- Observation: Verified route emits a generic verified-ID completion result. The same placeholder previously failed the enforced commit subject guard during task63 closure.
+  Impact: Literal placeholder risks terminal task-state mutation followed by rejected closure subject.
+  Resolution: Use the higher-priority gateway canonical finish command with a substantive result and explicit implementation/evidence hashes, as successful task64 closure; no lifecycle guard or scope change.
