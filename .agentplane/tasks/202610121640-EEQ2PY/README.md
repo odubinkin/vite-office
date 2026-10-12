@@ -4,7 +4,7 @@ title: "Implement original mdds matrix copy resize and transpose"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: ongoing approved Calc goal/UI prerequisites; port original matrix geometry operations over real shared owners with ordinary native evidence and whole scoped raw100. Preserve suspected integer asymmetry and partial exceptions; no replacement matrix or Writer repairs."
 doc_version: 3
-doc_updated_at: "2026-10-12T16:40:57.182Z"
+doc_updated_at: "2026-10-12T16:59:34.880Z"
 doc_updated_by: "CODER"
 description: "Task79 of approved Calc UI prerequisite goal: original element_block_node_type, matrix copy/range copy/resize/transpose over genuine existing vector and string callbacks/value members. Confirm original integer dispatch omissions normally and preserve/document them. Explicit erased string type witnesses, no new string/storage engine or fake Calc owners. Whole Calc/affected shared raw100 and ordinary native streams, inventory/provenance/local gates/exact same-agent evaluator. Only calc checkout/branch, next full81; block walks remain next scope."
 sections:
@@ -48,7 +48,7 @@ sections:
   Verify Steps: "1. node scripts/calc-matrix-geometry-native-probe.mjs --write then --check: full unchanged pinned matrix/vector headers, genuine shared strings and original Calc trait excerpts, normal-only complete initialized streams for geometry/lifetimes/partial exceptions and original integer omissions, source hashes and archives. 2. node output/playwright/task79-checks/portable.mjs: entire Calc and whole directly affected shared owners/tests raw S/B/F/L100, every raw counter positive, original links absent/restored, static build and actual Calc profile. 3. node output/playwright/task79-checks/gates.mjs: full format/lint/type/docs/size/deps/resources/tree/provenance/registry/routing/doctor/diff and whole affected tooling tests. 4. Source/test/fixture exact hashes tied to implementation commit and same-agent separate EVALUATOR nonempty evidence/findings; inventory foundations/broad false flags and missing walks/ScMatrix/document/UI explicit; final authoritative DONE and clean git all-files status. No Writer-only repairs, sanitizer or full suite before81."
   Verification: "Pending implementation and acceptance checks; no task completion or coverage claim."
   Rollback Plan: "Revert only task79 intentional changes through a new approved task; preserve existing shared owners and unrelated work. No merge, destructive history or outside checkout edits."
-  Findings: "Readonly pinned matrix_def.inl shows real copy section/node algorithm, early empty/self exits, range validation order, zero resize field reset before clear, temporary copy/swap and transpose local string lifetime. Integer canonical type is recognized by queries but omitted from matrix-copy/transpose dispatch. Native ordinary initialized observations must confirm and journal the asymmetry; no corrective divergence."
+  Findings: "Original matrix geometry and block node use actual vector/SharedString owners with explicit native ADL/value witnesses and source-shaped definitions, no module cycles. Initial duplicate callback shorthands repaired after typecheck; first ordinary caller emitted escaped physical line continuations, corrected only caller formatting and recaptured unchanged source scopes. First driver/manifest/fixture snapshots retained. Complete native66673/946byte streams match four fresh tests, --write/--check pass seven ordinary commands. CALC-070 preserves original integer dispatch omission, partial destination writes and unchanged failed transpose/resize with real temporary string destruction. Whole Calc124tests35files raw3080S2092B526F2721L100 and affected shared223tests43files35executable owners raw3697S1768B727F3296L100, every counter positive. Four links absent/restored, static/profile0UI pass. Local gates and exact implementation evaluation currently pending. No Writer repairs, routine sanitizer, fake dense storage or broader matrix/UI claim; next full81."
 id_source: "generated"
 ---
 ## Summary
@@ -77,4 +77,4 @@ Revert only task79 intentional changes through a new approved task; preserve exi
 
 ## Findings
 
-Readonly pinned matrix_def.inl shows real copy section/node algorithm, early empty/self exits, range validation order, zero resize field reset before clear, temporary copy/swap and transpose local string lifetime. Integer canonical type is recognized by queries but omitted from matrix-copy/transpose dispatch. Native ordinary initialized observations must confirm and journal the asymmetry; no corrective divergence.
+Original matrix geometry and block node use actual vector/SharedString owners with explicit native ADL/value witnesses and source-shaped definitions, no module cycles. Initial duplicate callback shorthands repaired after typecheck; first ordinary caller emitted escaped physical line continuations, corrected only caller formatting and recaptured unchanged source scopes. First driver/manifest/fixture snapshots retained. Complete native66673/946byte streams match four fresh tests, --write/--check pass seven ordinary commands. CALC-070 preserves original integer dispatch omission, partial destination writes and unchanged failed transpose/resize with real temporary string destruction. Whole Calc124tests35files raw3080S2092B526F2721L100 and affected shared223tests43files35executable owners raw3697S1768B727F3296L100, every counter positive. Four links absent/restored, static/profile0UI pass. Local gates and exact implementation evaluation currently pending. No Writer repairs, routine sanitizer, fake dense storage or broader matrix/UI claim; next full81.

@@ -1,7 +1,7 @@
 /** @fileoverview Original mdds3.2.1 matrix geometry and storage owner over the genuine shared SoA vector; native template arguments remain explicit. */
 // SPDX-FileCopyrightText: 2012 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
-import { invalid_arg_error, type_error, general_error } from "./global.ts";
+import { invalid_arg_error, type_error, general_error, size_error } from "./global.ts";
 import { element_block_funcs, type ElementBlockType } from "./multi_type_vector/block_funcs.ts";
 import {
   type BlockElementAccess,
@@ -14,6 +14,9 @@ import {
   double_element_block,
   int32_element_block,
   string_element_block,
+  string_element_callbacks,
+  double_element_callbacks,
+  boolean_element_callbacks,
   element_type_boolean,
   element_type_double,
   element_type_int32,
@@ -36,6 +39,9 @@ import {
 import { type NativeValueType, type ReferenceCallbacks } from "./multi_type_vector/macro.ts";
 import { type iterator_base, type const_iterator_base } from "./multi_type_vector/soa/iterator.ts";
 
+import { element_block_node_type } from "./multi_type_matrix_def.ts";
+export { element_block_node_type } from "./multi_type_matrix_def.ts";
+
 /** Original mtm element_t values, distinct from custom block discriminators. */
 export const element_t = {
   element_empty: element_type_empty,
@@ -48,12 +54,25 @@ export const element_t = {
 export interface MatrixTraits<S> {
   readonly string_element_block: ElementBlockType & BlockElementAccess<S>;
   readonly integer_element_block: ElementBlockType & BlockElementAccess<number>;
+  readonly string_callbacks: ContainerCallbacks<S> & ReferenceCallbacks<S>;
+  readonly string_value_type: NativeValueType<S>;
   readonly integer_type: (value: number) => number;
 }
 /** Original std_string_traits; the function represents its int32_t static_cast. */
 export const std_string_traits: MatrixTraits<string> = {
   string_element_block,
   integer_element_block: int32_element_block,
+  string_callbacks: string_element_callbacks,
+  string_value_type: {
+    /** Native std::string default value. @returns Empty string. */
+    default_construct() {
+      return "";
+    },
+    /** Native primitive value lifetime has no browser resource owner. @param value - String value. @returns Nothing. */
+    destroy(value) {
+      void value;
+    },
+  },
   /** Native initialized, representable double-to-int32 conversion. @param value - Number. @returns Integer. */
   integer_type(value) {
     return value | 0;
@@ -98,7 +117,7 @@ type ReadPosition = BlockPosition<{
 }>;
 const move_construction = Symbol("original matrix defaulted move constructor");
 
-/** Actual original matrix core; subsequent transpose/copy/resize/walk scopes remain unimplemented. */
+/** Actual original matrix core; subsequent block-walk scopes remain unimplemented. */
 export class multi_type_matrix<S> {
   private m_store: multi_type_vector;
   private readonly m_size: size_pair_type;
@@ -401,6 +420,169 @@ export class multi_type_matrix<S> {
   /** Original size returns a value rather than its mutable member. @returns Geometry. */
   public size(): size_pair_type {
     return new size_pair_type(this.m_size.row, this.m_size.column);
+  }
+  /** Original transpose uses a temporary and preserves unsupported integer dispatch. @returns This owner. */
+  public transpose(): this {
+    const tmp = new multi_type_matrix(this.Traits, this.m_size.column, this.m_size.row);
+    try {
+      for (let row = 0; row < this.m_size.row; ++row) {
+        for (let col = 0; col < this.m_size.column; ++col) {
+          switch (this.get_type(row, col)) {
+            case element_t.element_numeric:
+              tmp.set(
+                col,
+                row,
+                this.m_store.get(this.get_pos(row, col), double_element_callbacks),
+                double_element_callbacks,
+              );
+              break;
+            case element_t.element_boolean:
+              tmp.set(
+                col,
+                row,
+                this.m_store.get(this.get_pos(row, col), boolean_element_callbacks),
+                boolean_element_callbacks,
+              );
+              break;
+            case element_t.element_string: {
+              const val: [S] = [this.Traits.string_value_type.default_construct()];
+              try {
+                this.m_store.get(this.get_pos(row, col), this.Traits.string_callbacks, val);
+                tmp.set(col, row, val[0], this.Traits.string_callbacks);
+              } finally {
+                this.Traits.string_value_type.destroy(val[0]);
+              }
+              break;
+            }
+            case element_t.element_empty:
+              break;
+            default:
+              throw new general_error("multi_type_matrix: unknown element type.");
+          }
+        }
+      }
+      this.swap(tmp);
+      return this;
+    } finally {
+      tmp.dispose();
+    }
+  }
+  /** Original top-left matrix copy visits original source block sections without a dense intermediary. @param src - Source. @returns Nothing. */
+  public copy(src: multi_type_matrix<S>): void {
+    if (src === this) return;
+    if (this.empty() || src.empty()) return;
+    const rows = Math.min(this.m_size.row, src.m_size.row),
+      cols = Math.min(this.m_size.column, src.m_size.column);
+    let pos_dest = this.position(0, 0),
+      pos_src = src.cposition(0, 0);
+    const src_node = new element_block_node_type(
+      /** Original enclosing static type mapping. @param type - Block discriminator. @returns Matrix type. */
+      (type) => multi_type_matrix.to_mtm_type(this.Traits, type),
+    );
+    for (let col = 0; col < cols; ++col) {
+      pos_dest = this.position(pos_dest, 0, col);
+      pos_src = src.cposition(pos_src, 0, col);
+      let remaining_rows = rows;
+      do {
+        const section_size = Math.min(pos_src.first.get().size - pos_src.second, remaining_rows);
+        src_node.assign(pos_src, section_size);
+        const logical_pos_dest = multi_type_vector.logical_position(pos_dest);
+        let blk_pos: iterator_base<multi_type_vector>;
+        switch (multi_type_matrix.to_mtm_type(this.Traits, pos_src.first.get().type)) {
+          case element_t.element_numeric:
+            blk_pos = this.m_store.set(
+              pos_dest.first,
+              logical_pos_dest,
+              src_node.begin(double_element_block),
+              src_node.end(double_element_block),
+              double_element_callbacks,
+            );
+            break;
+          case element_t.element_boolean:
+            blk_pos = this.m_store.set(
+              pos_dest.first,
+              logical_pos_dest,
+              src_node.begin(boolean_element_block),
+              src_node.end(boolean_element_block),
+              boolean_element_callbacks,
+            );
+            break;
+          case element_t.element_string:
+            blk_pos = this.m_store.set(
+              pos_dest.first,
+              logical_pos_dest,
+              src_node.begin(this.Traits.string_element_block),
+              src_node.end(this.Traits.string_element_block),
+              this.Traits.string_callbacks,
+            );
+            break;
+          case element_t.element_empty:
+            blk_pos = this.m_store.set_empty(
+              pos_dest.first,
+              logical_pos_dest,
+              logical_pos_dest + section_size - 1,
+            );
+            break;
+          default:
+            throw new general_error("multi_type_matrix: unknown element type.");
+        }
+        remaining_rows -= section_size;
+        const logical_pos_next = logical_pos_dest + section_size;
+        if (logical_pos_next >= this.m_store.size()) return;
+        pos_dest = this.m_store.position(blk_pos, logical_pos_next);
+        pos_src = { first: pos_src.first.increment(), second: 0 };
+      } while (remaining_rows);
+    }
+  }
+  /** Original array-to-top-left copy retains early exits and validation order. @param rows - Input rows. @param cols - Input columns. @param first - Begin. @param last - End. @param callbacks - Native input value type. @returns Nothing. */
+  public copy_range<T>(
+    rows: number,
+    cols: number,
+    first: delayed_delete_vector_iterator<T>,
+    last: delayed_delete_vector_iterator<T>,
+    callbacks: ContainerCallbacks<T>,
+  ): void {
+    const n = first.distance_to(last);
+    if (!n || this.empty()) return;
+    if (n !== rows * cols)
+      throw new size_error(
+        "multi_type_matrix: size of the array does not match the destination size.",
+      );
+    if (rows > this.m_size.row || cols > this.m_size.column)
+      throw new size_error(
+        "multi_type_matrix: specified destination size is larger than the current matrix.",
+      );
+    multi_type_matrix.to_mtm_type(this.Traits, callbacks.mdds_mtv_get_element_type(first.get()));
+    let it = first.copy(),
+      pos_dest = this.position(0, 0);
+    for (let col = 0; col < cols; ++col) {
+      pos_dest = this.position(pos_dest, 0, col);
+      const it_this_end = it.copy().advance(rows);
+      pos_dest.first = this.m_store.set(
+        pos_dest.first,
+        this.get_pos(0, col),
+        it,
+        it_this_end,
+        callbacks,
+      );
+      it = it_this_end;
+    }
+  }
+  /** Original resize resets geometry before clearing zero sizes; nonzero resize copies into a temporary then swaps. @param rows - New rows. @param cols - New columns. @param callbacks - Optional native fill type. @param value - Fill value. @returns Nothing. */
+  public resize<T>(rows: number, cols: number, callbacks?: ContainerCallbacks<T>, value?: T): void {
+    if (!rows || !cols) {
+      this.m_size.row = 0;
+      this.m_size.column = 0;
+      this.m_store.clear();
+      return;
+    }
+    const temp = new multi_type_matrix(this.Traits, rows, cols, callbacks, value);
+    try {
+      temp.copy(this);
+      temp.swap(this);
+    } finally {
+      temp.dispose();
+    }
   }
   /** Original store clear precedes geometry reset. @returns Nothing. */
   public clear(): void {

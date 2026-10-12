@@ -25,6 +25,8 @@ it("matches whole original Calc matrix trait ownership and UInt8 flag stream", /
     s = new SharedString(text);
   const traits: MatrixTraits<SharedString> = {
       string_element_block: string_block,
+      string_callbacks: S,
+      string_value_type,
       integer_element_block: uint16_block,
       /** Erased original uint16_t static_cast. @param value - Number. @returns Integer. */
       integer_type(value: number): number {
@@ -33,6 +35,8 @@ it("matches whole original Calc matrix trait ownership and UInt8 flag stream", /
     },
     flagtraits: MatrixTraits<SharedString> = {
       string_element_block: string_block,
+      string_callbacks: S,
+      string_value_type,
       integer_element_block: uint8_element_block,
       /** Erased original uint8_t static_cast. @param value - Number. @returns Integer. */
       integer_type(value: number): number {

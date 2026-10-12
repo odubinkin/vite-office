@@ -1579,3 +1579,13 @@ The original multi_type_matrix mtv_traits registers int8_element_block, while to
 Evidence: task78 scripts/calc-matrix-native-probe.mjs compiles the full unchanged mdds3.2.1 multi_type_matrix/vector headers from the pinned LibreOffice download.lst archive and patch, over genuine dependencies. The ordinary scalar stream captures rangeerror, numericerror and allnumericerror from initialized actual int8 matrices. No invalid lifetime, sanitizer or memory-safety inference is involved.
 
 Decision: preserve registration and the different validation points. Do not silently promote int8 to the configured integer type or add a scalar-constructor check. Revisit consumer reachability when the original ScMatrix owner is connected.
+
+## CALC-070: matrix geometry dispatch omits its supported integer element type
+
+Status: confirmed original dependency dispatch omission; a user-visible Calc defect is not established.
+
+Pinned mdds3.2.1 multi_type_matrix recognizes its configured integer block as element_integer for typed queries and input-range copy. The matrix-to-matrix copy and transpose switches handle numeric, boolean, string and empty, but omit element_integer. Their default throws the original unknown-element-type diagnostic. Resize constructs a temporary and calls matrix copy, so it also throws when copying a nonempty integer section. A zero dimension bypasses copying and clears successfully.
+
+Evidence: task79 scripts/calc-matrix-geometry-native-probe.mjs compiles full unchanged original matrix/vector headers over genuine dependencies. Its ordinary initialized streams observe the omission for std_string_traits int32, original Calc matrix_traits UInt16 and matrix_flag_traits UInt8. An earlier string section is retained in the destination when matrix copy later encounters an integer; failed transpose and resize preserve the source and release temporary strings. Input-range integer copy succeeds. Original ScMatrixImpl::MatCopy/MatTrans/Resize source paths use these operations, but their complete consumers and document behavior are not yet implemented or certified.
+
+Decision: preserve the missing switch alternatives, partial destination updates and exception/lifetime behavior. Do not add integer branches or make copy transactional. Revisit actual consumer reachability when ScMatrix and its flag operations are connected.

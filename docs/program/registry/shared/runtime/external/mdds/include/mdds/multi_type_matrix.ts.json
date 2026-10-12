@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "matrix-storage",
     "capabilityIds": [
-      "CAP-e0694dad-29de-4234-bdfe-a748052c2c33"
+      "CAP-e0694dad-29de-4234-bdfe-a748052c2c33",
+      "CAP-59c941ef-f080-4c78-8621-244b0cbd4e85"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -21,9 +22,16 @@
         "apps/office/src/sc/inc/mtvelements-matrix.test.ts#matches whole original Calc matrix trait ownership and UInt8 flag stream",
         "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp#class multi_type_matrix",
         "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl#multi_type_matrix<Traits>::multi_type_matrix",
-        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#struct matrix_traits"
+        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#struct matrix_traits",
+        "apps/office/src/external/mdds/include/mdds/multi_type_matrix.ts#transpose",
+        "apps/office/src/external/mdds/include/mdds/multi_type_matrix_def.ts#element_block_node_type",
+        "apps/office/src/external/mdds/include/mdds/multi_type_matrix-geometry.test.ts#matches whole original matrix copy resize transpose and section stream",
+        "apps/office/src/sc/inc/mtvelements-matrix-geometry.test.ts#matches original Calc matrix geometry ownership and failed integer operations",
+        "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl#multi_type_matrix<Traits>::transpose",
+        "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp#struct element_block_node_type",
+        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#mRes.maMat.copy(maMat)"
       ],
-      "justification": "Task78 implements original mdds3.2.1 multi_type_matrix core geometry/storage/access over the genuine existing SoA vector. Original trait registration, size_pair_type, default/size/value/range/copy/defaulted move and assignments/destructor, equality, plain/hinted/const positions, typed scalar and owned reads, borrowed string queries, scalar/range/column/empty writes, numeric/empty/clear/swap retain original contracts. Erased template aliases/value categories use explicit witnesses; numeric conversion is certified only for initialized representable native casts and exact bounded size_t coordinates. Ordinary full unchanged matrix/vector headers and genuine SharedString dependencies provide whole native streams; Calc custom string/UInt16/UInt8 traits are source excerpts, not fake pointees. Transpose, matrix copy/resize/block walks, ScMatrix/ScFormulaResult/formula cells/column/table/document/edit/undo/input/view/UI, native ABI/invalid lifetimes/concurrency/full upstream QA remain required or unverified. Foundation and broad parity flags remain false; next full81.",
+      "justification": "Task78 implements original mdds3.2.1 multi_type_matrix core geometry/storage/access over the genuine existing SoA vector. Original trait registration, size_pair_type, default/size/value/range/copy/defaulted move and assignments/destructor, equality, plain/hinted/const positions, typed scalar and owned reads, borrowed string queries, scalar/range/column/empty writes, numeric/empty/clear/swap retain original contracts. Erased template aliases/value categories use explicit witnesses; numeric conversion is certified only for initialized representable native casts and exact bounded size_t coordinates. Ordinary full unchanged matrix/vector headers and genuine SharedString dependencies provide whole native streams; Calc custom string/UInt16/UInt8 traits are source excerpts, not fake pointees. Transpose, matrix copy/resize/block walks, ScMatrix/ScFormulaResult/formula cells/column/table/document/edit/undo/input/view/UI, native ABI/invalid lifetimes/concurrency/full upstream QA remain required or unverified. Foundation and broad parity flags remain false; next full81. Task79 ports original matrix element_block_node_type, transpose, matrix copy, range copy and resize over genuine shared SoA vector and existing strings/blocks. Source block section order, early self/empty exits, range validation, clipping, partial writes, temporary default string construction/assignment/destruction, resize reset-before-clear and temp copy/swap are retained. Explicit string ADL callbacks and NativeValueType witnesses restore erased native template aliases, reusing actual SharedString members; primitive std::string value witnesses use existing JS string semantics, not a new string owner. Full unchanged original matrix/vector headers and genuine SharedString dependencies produce ordinary initialized full streams. Original canonical integer type is omitted in matrix-copy/transpose dispatch while range-copy accepts it; preserve and journal this asymmetry and consequent resize exceptions. Debug assertions, invalid iterator lifetimes, unrepresentable native casts/dimensions, ABI/concurrency/full QA remain unverified. Matrix block walks, actual ScMatrix/result/cell/document/edit/undo/input/view/UI remain required; foundation and broad parity flags false, next full81. Original matrix QA marker is unexecuted field/type context only.",
       "knownViolations": [],
       "localSymbols": [
         "element_t",
@@ -66,7 +74,13 @@
         "clear",
         "numeric",
         "empty",
-        "swap"
+        "swap",
+        "default_construct",
+        "destroy",
+        "transpose",
+        "copy",
+        "copy_range",
+        "resize"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp",
