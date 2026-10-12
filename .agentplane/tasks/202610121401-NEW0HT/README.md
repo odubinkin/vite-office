@@ -1,10 +1,11 @@
 ---
 id: "202610121401-NEW0HT"
 title: "Implement original shared formula token family and ownership"
-status: "DOING"
+result_summary: "Implemented original shared formula token family and intrusive ownership for Calc cell prerequisites"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-12T15:11:12.305Z"
+  updated_at: "2026-10-12T15:16:38.744Z"
   updated_by: "CODER"
-  note: "Original15token family and real shared ownership verified at efab390538c488bafda21b00455a91394382b728: complete Calc116 and related82tests raw100,14local gates,7whole normal native streams with463original sources/17Boost headers, exact78source hashes and same-agent EVALUATOR pass. Inventory foundations and incomplete compiler/document/UI limits recorded; next full81."
+  note: "verified-202610121401-NEW0HT"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,8 +46,8 @@ quality_review:
   findings:
     - "All78current source hashes match implementation commit; original shared owners and actual full native headers/selected definitions are reused without fake classes, runtime cycles, thresholds or sanitizer changes. Registry3newcapabilities and18records retain foundation/broadfalse claims. First generated extraction lint failure fixed without exclusions. Scope and residual native/consumer limits are explicit; review is same-agent, not independent."
 commit:
-  hash: "efab390538c488bafda21b00455a91394382b728"
-  message: "🚧 NEW0HT formula: implement original token family and ownership"
+  hash: "f950d98a415b5681f2a03e7514569c50e6025ce1"
+  message: "✅ NEW0HT task: record token verification"
 comments:
   -
     author: "CODER"
@@ -54,6 +55,12 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original15token family, real shared ownership and complete bounded native/raw100 evidence are committed; final same-agent EVALUATOR review follows."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610121401-NEW0HT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Original 15-class shared formula token family and ownership pass complete Calc116 and directly related shared82 tests with raw S/B/F/L100; 14 gates and normal-only native evidence match implementation efab390538c488bafda21b00455a91394382b728 with exact same-agent EVALUATOR pass. Closure metadata recovery replaces generic generated result only; checks and source are unchanged. Next full regression81; compiler/document/UI remain incomplete."
 events:
   -
     type: "status"
@@ -75,8 +82,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original15token family and real shared ownership verified at efab390538c488bafda21b00455a91394382b728: complete Calc116 and related82tests raw100,14local gates,7whole normal native streams with463original sources/17Boost headers, exact78source hashes and same-agent EVALUATOR pass. Inventory foundations and incomplete compiler/document/UI limits recorded; next full81."
+  -
+    type: "verify"
+    at: "2026-10-12T15:16:38.744Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610121401-NEW0HT"
+  -
+    type: "status"
+    at: "2026-10-12T15:16:38.883Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610121401-NEW0HT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-10-12T15:19:03.498Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Original 15-class shared formula token family and ownership pass complete Calc116 and directly related shared82 tests with raw S/B/F/L100; 14 gates and normal-only native evidence match implementation efab390538c488bafda21b00455a91394382b728 with exact same-agent EVALUATOR pass. Closure metadata recovery replaces generic generated result only; checks and source are unchanged. Next full regression81; compiler/document/UI remain incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-12T15:11:12.394Z"
+doc_updated_at: "2026-10-12T15:19:03.500Z"
 doc_updated_by: "CODER"
 description: "Task75: Actual complete FormulaToken header family15classes, StackVar/RefCntPolicy, original fields/defaults/copy/Clone/equality/classification and virtual methods; reuse existing SAL atomics/OUString/SharedString/errors/opcodes/ParamClass. Required original Boost intrusive_ptr ownership core shared once with erased ADL/type witnesses, existing cached1.91sources only; no full Boost claim. Actual FormulaCompiler IsOpCodeJumpCommand member at original boundary, no full compiler claim. Whole original native headers plus complete selected real member definitions, no fake Calc pointees or compiler class; normal-only source-exact witnesses for safe initialized states. Whole Calc/affected shared raw100/source-absent build/profile, full local gates/inventory/quality. Work only calc,next full81."
 sections:
@@ -136,6 +163,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-12T15:16:38.744Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610121401-NEW0HT
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T15:11:12.394Z, excerpt_hash=sha256:58021d2fe0a3338a20868d3edfe3b16f63a535f626afc411350a63a1aa5b2f41
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121401-NEW0HT/blueprint/resolved-snapshot.json
+    - old_digest: 552bd8656c92d415b9ad0afb26a8ec806a86dcf287cfe4e0642fdb1e58fff5d6
+    - current_digest: 552bd8656c92d415b9ad0afb26a8ec806a86dcf287cfe4e0642fdb1e58fff5d6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121401-NEW0HT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610121401-NEW0HT --result verified-202610121401-NEW0HT --commit efab390538c488bafda21b00455a91394382b728
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task75 implementation/traceability commits, restore original3source links after every portable verification, preserve first native/verification failures and source hashes. Keep unrelated active tasks/user merges. Recheck affected owners after rollback."
   Findings: |-
@@ -160,6 +217,10 @@ sections:
     Terminal current evidence: expanded compressed native --check passed unchanged five whole streams,463original source hashes and17verified Boost headers; targeted final lint passed. Source-absent static build and Calc browser profile passed (no actual Calc UI scenarios), all original3links restored. File-size gate passed. Current verification wrapper records raw100full Calc and complete affected shared maps. No live test/native handles remain. Documentation completeness/inventory registration, additional initialized payload field observations, aggregate gates and exact-source commit/evaluator/lifecycle closure remain pending; task75 is DOING and goal remains active.
 
     Task75 final implementation evidence: all15classes and corrected const input contracts reuse genuine shared owners. Registered3shared capabilities and9runtime+9provenance records;492runtime modules pass source provenance and registry with0semantic violations, broad parity/verified flags false. Added optional ignored local Boost reference symlink; portable wrapper now removes/restores all4reference links. Extended exact native fields and30string ownership cases, current16token tests and complete related82tests pass raw100. Full14aggregate rows pass with23tooling tests; first global lint failure came from a redundant first empty-member archive extraction which also unpacked unrelated Boost Node examples. Removed only task-owned redundant extraction, enforced nonempty required-header extraction and reverified17actual Boost headers; no lint exemption or policy weakening. Full original Boost license verified. Terminal native captured manifest has14positive normal-only commands. All required current portable static/profile checks pass; actual0CalcUIscenarios. No new sanitizer run, Writer source/coverage repair or full regression; next full81. Implementation commit/exact source-bound same-agent EVALUATOR/lifecycle closure are next.
+extensions:
+  implementation_commit:
+    hash: "efab390538c488bafda21b00455a91394382b728"
+    message: "🚧 NEW0HT formula: implement original token family and ownership"
 id_source: "generated"
 ---
 ## Summary
@@ -228,6 +289,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-12T15:16:38.744Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610121401-NEW0HT
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T15:11:12.394Z, excerpt_hash=sha256:58021d2fe0a3338a20868d3edfe3b16f63a535f626afc411350a63a1aa5b2f41
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121401-NEW0HT/blueprint/resolved-snapshot.json
+- old_digest: 552bd8656c92d415b9ad0afb26a8ec806a86dcf287cfe4e0642fdb1e58fff5d6
+- current_digest: 552bd8656c92d415b9ad0afb26a8ec806a86dcf287cfe4e0642fdb1e58fff5d6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121401-NEW0HT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610121401-NEW0HT --result verified-202610121401-NEW0HT --commit efab390538c488bafda21b00455a91394382b728
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
