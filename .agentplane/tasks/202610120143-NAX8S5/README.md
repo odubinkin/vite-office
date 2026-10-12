@@ -1,10 +1,11 @@
 ---
 id: "202610120143-NAX8S5"
 title: "Implement original UNO Enterable and shared string field address"
-status: "DOING"
+result_summary: "Task58 complete: original Enterable and shared field address reuse, Calc106/shared179 raw100; all13gates pass; environment/mapping/physical ABI gaps retained; next full61."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -46,8 +47,8 @@ quality_review:
     - "Constructor/C slot/virtual/variadic/reason order matches original header. Native JS iterator is a valid logical advancing cursor, without physical va_list claim. Shared field binding returns the actual existing slot and registers actual owner identity without acquisition; EnvDcp reuses it and full regression remains equal."
     - "Complete environment/ext-environment record slots are type declarations only; no runtime environment provider/API or fake initialization. Inventory distinguishes implemented wrapper from unverified full environment/mapping engine. Original empty destructor is complete source behavior."
 commit:
-  hash: "79a3cfe6a8c9db461e826428bfb4fe7b87be47fa"
-  message: "🧩 NAX8S5 code: implement original UNO Enterable callback boundaries"
+  hash: "57ba1a86f44cb6cc61e7f5afcd762cc650943ca1"
+  message: "✅ NAX8S5 code: persist complete Enterable verification"
 comments:
   -
     author: "CODER"
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Implemented: complete original Enterable adapters/wrapper and shared string field alias; genuine whole native streams, complete raw100 and all13 scoped gates pass."
+  -
+    author: "CODER"
+    body: "Verified: Complete original Enterable callback wrapper and environment records use shared actual string field identity; all whole genuine native streams, source-absent Calc/shared raw100,13scoped gates and implementation-bound review pass."
 events:
   -
     type: "status"
@@ -76,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All approved original-header/native/portable/raw100/scoped gates pass. Actual implementation79a3cfe6a8c9db461e826428bfb4fe7b87be47fa independently reviewed with evaluated_sha equality and honest environment/physical ABI gaps; final-audit.json records full hashes/146statuses/whole streams/19+73owners/all13gates."
+  -
+    type: "status"
+    at: "2026-10-12T02:04:47.771Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete original Enterable callback wrapper and environment records use shared actual string field identity; all whole genuine native streams, source-absent Calc/shared raw100,13scoped gates and implementation-bound review pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T02:04:27.679Z"
+doc_updated_at: "2026-10-12T02:04:47.773Z"
 doc_updated_by: "CODER"
 description: "Task58: port full include/cppu/Enterable.hxx bodies, exact C Enterable and environment record/callee declarations; native JS iterator transports valid va_list argument cursor. Reuse actual SAL OUString field address through one shared compiler binding and refactor EnvDcp onto it. Complete genuine header normal-ASan/UBSan traces and unchanged task57 related profile plus new source/test owners raw100; registry updated. No environment runtime/mapping/default providers, physical varargs/ABI/thread claim. Last full51,next61."
 sections:
@@ -160,6 +171,10 @@ sections:
     - Observation: First scoped gate run found a typed-arrow JSDoc attachment and empty provenance localSymbols for genuine type-only header owners; all original logs preserved in gates-first.
       Impact: Required checks correctly rejected metadata/documentation; native streams and complete raw100 already passed.
       Resolution: Attached JSDoc directly to the typed arrow; inventoried actual declared header type names in matching records. All final gates pass without parser/tool/behavior/threshold changes. Logical SAL field address and native JS argument iterator preserve original initialized observable contracts; physical ABI remains unclaimed.
+extensions:
+  implementation_commit:
+    hash: "79a3cfe6a8c9db461e826428bfb4fe7b87be47fa"
+    message: "🧩 NAX8S5 code: implement original UNO Enterable callback boundaries"
 id_source: "generated"
 ---
 ## Summary
