@@ -3,14 +3,41 @@
 export interface vector_storage<T> {
   values: (T | undefined)[];
   size: number;
+  operations?: ValueOperations<T> | undefined;
 }
-/** Allocates real reserved slots and copies constructed values. @param storage - Borrowed state. @param capacity - Slots. @returns Nothing. */
+/** Erased native ValueT special members; borrowed scalar/pointer stores need no witness. */
+export interface ValueOperations<T> {
+  copy_construct(value: T): T;
+  move_construct(value: T): T;
+  copy_assign(target: T, source: T): void;
+  move_assign(target: T, source: T): void;
+  destroy(value: T): void;
+  equal?(left: T, right: T): boolean;
+  move_noexcept: boolean;
+}
+/** Original move-if-noexcept relocation. @param operations - ValueT members. @param value - Live source. @returns Constructed value. */
+function relocate<T>(operations: ValueOperations<T>, value: T): T {
+  return operations.move_noexcept
+    ? operations.move_construct(value)
+    : operations.copy_construct(value);
+}
+/** Releases the constructed suffix in native reverse destruction order. @param storage - State. @param first - First destroyed position. @returns Nothing. */
+function destroy_suffix<T>(storage: vector_storage<T>, first: number): void {
+  for (let i = storage.size - 1; i >= first; --i) {
+    storage.operations?.destroy(storage.values[i] as T);
+    storage.values[i] = undefined;
+  }
+}
+/** Allocates reserved slots with native move-if-noexcept value relocation. @param storage - State. @param capacity - Slots. @returns Nothing. */
 export function allocate_storage<T>(storage: vector_storage<T>, capacity: number): void {
   const values = Array<T | undefined>(capacity);
-  for (let i = 0; i < storage.size; ++i) values[i] = storage.values[i];
+  const operations = storage.operations;
+  for (let i = 0; i < storage.size; ++i)
+    values[i] = operations ? relocate(operations, storage.values[i] as T) : storage.values[i];
+  if (operations) for (let i = 0; i < storage.size; ++i) operations.destroy(storage.values[i] as T);
   storage.values = values;
 }
-/** Retains selected native geometric growth and explicit bool-word capacity witness. @param storage - State. @param count - Required size. @param aligned_count - Native minimum allocation. @returns Nothing. */
+/** Retains selected native geometric growth and bool-word capacity witness. @param storage - State. @param count - Required size. @param aligned_count - Native minimum allocation. @returns Nothing. */
 export function grow_storage<T>(
   storage: vector_storage<T>,
   count: number,
@@ -19,41 +46,122 @@ export function grow_storage<T>(
   if (count > storage.values.length)
     allocate_storage(storage, Math.max(aligned_count, storage.values.length * 2));
 }
-/** Original underlying vector range insertion before any delayed-offset responsibility. @param storage - State. @param index - Absolute offset. @param values - Valid external range. @param aligned_count - Native allocation witness. @returns Nothing. */
+/** Original underlying vector range insertion. @param storage - State. @param index - Absolute offset. @param values - Valid external range. @param aligned_count - Native allocation witness. @returns Nothing. */
 export function insert_storage<T>(
   storage: vector_storage<T>,
   index: number,
   values: readonly T[],
   aligned_count = storage.size + values.length,
 ): void {
-  grow_storage(storage, storage.size + values.length, aligned_count);
-  for (let i = storage.size - 1; i >= index; --i)
-    storage.values[i + values.length] = storage.values[i];
-  for (let i = 0; i < values.length; ++i) storage.values[index + i] = values[i];
-  storage.size += values.length;
+  const operations = storage.operations;
+  const count = values.length;
+  if (!operations) {
+    grow_storage(storage, storage.size + count, aligned_count);
+    for (let i = storage.size - 1; i >= index; --i) storage.values[i + count] = storage.values[i];
+    for (let i = 0; i < count; ++i) storage.values[index + i] = values[i];
+  } else if (count > 0) {
+    const old_size = storage.size;
+    if (old_size + count > storage.values.length) {
+      const next = Array<T | undefined>(Math.max(aligned_count, storage.values.length * 2));
+      for (let i = 0; i < count; ++i) next[index + i] = operations.copy_construct(values[i] as T);
+      for (let i = index; i < old_size; ++i)
+        next[i + count] = relocate(operations, storage.values[i] as T);
+      for (let i = index; i < old_size; ++i) operations.destroy(storage.values[i] as T);
+      for (let i = 0; i < index; ++i) next[i] = relocate(operations, storage.values[i] as T);
+      for (let i = 0; i < index; ++i) operations.destroy(storage.values[i] as T);
+      storage.values = next;
+    } else {
+      const tail = old_size - index;
+      if (count <= tail) {
+        for (let i = old_size - count; i < old_size; ++i)
+          storage.values[i + count] = operations.move_construct(storage.values[i] as T);
+        for (let i = old_size - count - 1; i >= index; --i)
+          operations.move_assign(storage.values[i + count] as T, storage.values[i] as T);
+        for (let i = 0; i < count; ++i)
+          operations.copy_assign(storage.values[index + i] as T, values[i] as T);
+      } else {
+        for (let i = tail; i < count; ++i)
+          storage.values[index + i] = operations.copy_construct(values[i] as T);
+        for (let i = index; i < old_size; ++i)
+          storage.values[i + count] = operations.move_construct(storage.values[i] as T);
+        for (let i = 0; i < tail; ++i)
+          operations.copy_assign(storage.values[index + i] as T, values[i] as T);
+      }
+    }
+  }
+  storage.size += count;
 }
-/** Original underlying vector range erase without delayed-offset management. @param storage - State. @param index - Absolute offset. @param count - Erase length. @returns Nothing. */
+/** Original underlying vector range erase. @param storage - State. @param index - Absolute offset. @param count - Erase length. @returns Nothing. */
 export function erase_storage<T>(storage: vector_storage<T>, index: number, count: number): void {
-  for (let i = index; i < storage.size - count; ++i) storage.values[i] = storage.values[i + count];
-  for (let i = storage.size - count; i < storage.size; ++i) storage.values[i] = undefined;
+  if (count === 0) return;
+  for (let i = index; i < storage.size - count; ++i) {
+    if (storage.operations)
+      storage.operations.move_assign(storage.values[i] as T, storage.values[i + count] as T);
+    else storage.values[i] = storage.values[i + count];
+  }
+  destroy_suffix(storage, storage.size - count);
   storage.size -= count;
 }
-/** Original underlying vector assignment retains sufficient allocated capacity. @param storage - State. @param values - External range. @param aligned_count - Native capacity witness. @returns Nothing. */
+/** Original range assignment retains sufficient capacity. @param storage - State. @param values - External range. @param aligned_count - Native capacity witness. @returns Nothing. */
 export function assign_storage<T>(
   storage: vector_storage<T>,
   values: readonly T[],
   aligned_count = values.length,
 ): void {
-  if (values.length > storage.values.length) allocate_storage(storage, aligned_count);
-  for (let i = 0; i < values.length; ++i) storage.values[i] = values[i];
-  for (let i = values.length; i < storage.size; ++i) storage.values[i] = undefined;
+  const operations = storage.operations;
+  if (values.length > storage.values.length) {
+    destroy_suffix(storage, 0);
+    storage.size = 0;
+    storage.values = Array<T | undefined>(aligned_count);
+  }
+  const retained = Math.min(storage.size, values.length);
+  for (let i = 0; i < retained; ++i) {
+    if (operations) operations.copy_assign(storage.values[i] as T, values[i] as T);
+    else storage.values[i] = values[i];
+  }
+  for (let i = retained; i < values.length; ++i)
+    storage.values[i] = operations ? operations.copy_construct(values[i] as T) : values[i];
+  destroy_suffix(storage, values.length);
   storage.size = values.length;
 }
-/** Normal std::vector syntax witness for unmanaged numbers and borrowed pointers; no delayed deletion or mdds block/container policy. */
+/** Normal std::vector syntax witness for values and borrowed pointers; no delayed deletion or mdds block/container policy. */
 export class std_vector<T> {
   private m_storage: vector_storage<T> = { values: [], size: 0 };
-  /** Copies a native constructed external range. @param values - Values. @returns Vector. */
-  public constructor(values: readonly T[] = []) {
+  /** Copies a native vector or constructed external range. @param values - Source. @param operations - Actual ValueT members. @returns Vector. */
+  public constructor(values: readonly T[] | std_vector<T> = [], operations?: ValueOperations<T>) {
+    if (values instanceof std_vector) {
+      this.m_storage.operations = values.m_storage.operations;
+      assign_storage(this.m_storage, values.snapshot());
+    } else {
+      this.m_storage.operations = operations;
+      assign_storage(this.m_storage, values);
+    }
+  }
+  /** Original move constructor steals storage. @param source - Live vector. @returns Vector. */
+  public static move<T>(source: std_vector<T>): std_vector<T> {
+    const result = new std_vector<T>([], source.m_storage.operations);
+    result.swap(source);
+    return result;
+  }
+  /** Native copy assignment with self guard. @param source - Live source. @returns This vector. */
+  public copy_assign(source: std_vector<T>): this {
+    if (source !== this) this.assign(source.snapshot());
+    return this;
+  }
+  /** Native move assignment releases destination and steals source storage. @param source - Live source. @returns This vector. */
+  public move_assign(source: std_vector<T>): this {
+    this.dispose();
+    this.m_storage = source.m_storage;
+    source.m_storage = { values: [], size: 0, operations: this.m_storage.operations };
+    return this;
+  }
+  /** Original destructor releases constructed objects. @returns Nothing. */
+  public dispose(): void {
+    this.clear();
+    this.m_storage.values = [];
+  }
+  /** Original range assignment. @param values - Valid external values. @returns Nothing. */
+  public assign(values: readonly T[]): void {
     assign_storage(this.m_storage, values);
   }
   /** Borrows real reserved storage for the shared iterator syntax. @returns Storage. */
@@ -74,7 +182,8 @@ export class std_vector<T> {
   }
   /** Native reference assignment. @param index - Position. @param value - Value. @returns Nothing. */
   public set(index: number, value: T): void {
-    this.m_storage.values[index] = value;
+    if (this.m_storage.operations) this.m_storage.operations.copy_assign(this.get(index), value);
+    else this.m_storage.values[index] = value;
   }
   /** Copies original vector constructed range. @returns Values. */
   public snapshot(): T[] {
@@ -90,18 +199,34 @@ export class std_vector<T> {
   }
   /** Native append. @param value - Value. @returns Nothing. */
   public push_back(value: T): void {
-    grow_storage(this.m_storage, this.m_storage.size + 1);
-    this.m_storage.values[this.m_storage.size++] = value;
+    this.append(value, false);
+  }
+  /** Original rvalue push_back overload. @param value - Live rvalue source. @returns Nothing. */
+  public push_back_move(value: T): void {
+    this.append(value, true);
+  }
+  /** Constructs incoming value before relocating aliased sources. @param value - Live source. @param move - Rvalue overload. @returns Nothing. */
+  private append(value: T, move: boolean): void {
+    const storage = this.m_storage;
+    const operations = storage.operations;
+    const next = operations
+      ? move
+        ? operations.move_construct(value)
+        : operations.copy_construct(value)
+      : value;
+    grow_storage(storage, storage.size + 1);
+    storage.values[storage.size++] = next;
   }
   /** Native pop on a nonempty vector. @returns Nothing. */
   public pop_back(): void {
-    this.m_storage.values[--this.m_storage.size] = undefined;
+    destroy_suffix(this.m_storage, this.m_storage.size - 1);
+    --this.m_storage.size;
   }
   /** Original valid range erase. @param index - Position. @param count - Length. @returns Nothing. */
   public erase(index: number, count: number): void {
     erase_storage(this.m_storage, index, count);
   }
-  /** Native clear retains allocation and releases only stored unmanaged references. @returns Nothing. */
+  /** Native clear retains allocation and releases constructed values. @returns Nothing. */
   public clear(): void {
     erase_storage(this.m_storage, 0, this.m_storage.size);
   }
@@ -112,7 +237,13 @@ export class std_vector<T> {
   /** Original vector equality for unmanaged values/pointer aliases. @param other - Vector. @returns Equality. */
   public equals(other: std_vector<T>): boolean {
     if (this.size() !== other.size()) return false;
-    for (let i = 0; i < this.size(); ++i) if (this.get(i) !== other.get(i)) return false;
+    const operations = this.m_storage.operations;
+    for (let i = 0; i < this.size(); ++i) {
+      const equal = operations
+        ? (operations.equal as NonNullable<ValueOperations<T>["equal"]>)(this.get(i), other.get(i))
+        : this.get(i) === other.get(i);
+      if (!equal) return false;
+    }
     return true;
   }
 }

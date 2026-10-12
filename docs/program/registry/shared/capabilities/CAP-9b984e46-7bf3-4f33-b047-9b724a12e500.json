@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9b984e46-7bf3-4f33-b047-9b724a12e500",
+    "capabilityId": "CAP-9b984e46-7bf3-4f33-b047-9b724a12e500",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve initialized object value copy/move, assignment, destruction and optional equality across the existing shared vector operation family without a separate container.",
+      "Compare complete genuine native ValueT identity/value/lifetime traces for both move-if-noexcept traits, including aliased append and multi-element insertion.",
+      "Retain exact prior related coverage plus the whole new replay test at raw S/B/F/L100 with all original source links absent."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task64 extends the existing shared reserved-slot adapter with erased native ValueT copy/move construction, in-place assignment, destruction, optional operator== and move-if-noexcept traits. All existing initialized vector helpers and std_vector operations preserve object ownership; copy/move constructor and assignment, rvalue append and destructor bindings reuse the same storage. Native selected libc++ whole streams compare object identities, values, capacities and every special-member event for both move traits, aliased append, all insertion branches, retained/reallocated assignment, empty operations and self copy/move. Borrowed scalar/pointer stores remain shared. This is language infrastructure, not a new mdds container or certified whole STL implementation. Custom allocators, throwing operator cleanup, invalid/self-inserting ranges, other standard-library implementations, physical ABI and complete mdds/Calc cell/document/UI remain unverified."
+    },
+    "capability": "Initialized shared vector object value ownership",
+    "gaps": [
+      "Custom allocators, throwing operator cleanup, invalidated/self-inserting ranges, other STL implementation traces and physical ABI remain unverified.",
+      "Original mdds delayed object-value specialization, actual Calc cell owners, full multi_type_vector and Calc document/UI are subsequent work.",
+      "Original element-block buildability QA is contextual evidence only, not a whole QA port or STL conformance claim."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/delayed_delete_vector.hpp",
+          "marker": "class delayed_delete_vector"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/element-blocks/test_basic.cpp",
+          "marker": "default_element_block<type_1, my_type_1>"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_storage.ts",
+          "marker": "ValueOperations"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/vector_value_ownership.test.ts",
+          "marker": "matches complete native object identity and lifetime streams"
+        },
+        {
+          "path": "scripts/mdds-vector-value-native-probe.mjs",
+          "marker": "Complete original vector value streams"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared vector object value ownership"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "vector-value-ownership",
+    "scopeLimitations": [
+      "Task64 extends the existing shared reserved-slot adapter with erased native ValueT copy/move construction, in-place assignment, destruction, optional operator== and move-if-noexcept traits. All existing initialized vector helpers and std_vector operations preserve object ownership; copy/move constructor and assignment, rvalue append and destructor bindings reuse the same storage. Native selected libc++ whole streams compare object identities, values, capacities and every special-member event for both move traits, aliased append, all insertion branches, retained/reallocated assignment, empty operations and self copy/move. Borrowed scalar/pointer stores remain shared. This is language infrastructure, not a new mdds container or certified whole STL implementation. Custom allocators, throwing operator cleanup, invalid/self-inserting ranges, other standard-library implementations, physical ABI and complete mdds/Calc cell/document/UI remain unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
