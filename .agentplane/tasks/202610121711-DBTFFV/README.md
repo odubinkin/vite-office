@@ -1,10 +1,11 @@
 ---
 id: "202610121711-DBTFFV"
 title: "Implement original mdds matrix block walks"
-status: "DOING"
+result_summary: "Implemented original matrix block walks and returned callable state with genuine shared ownership and verified native section contracts"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -57,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original four matrix block walks committed at7035f668de70. Whole native streams, Calc125/shared225 raw100, source-absent static/profile and14gates/23tooling pass. Same-agent separate EVALUATOR exact-source review now follows; ScMatrix/document/UI remain subsequent."
+  -
+    author: "CODER"
+    body: "Verified: original four matrix walks reuse actual shared vector and strings with source sections, validation, returned callable state and exception cleanup. Full native27666/251byte streams, seven ordinary commands/448sources, entire Calc125/shared225 raw100,14gates/23tooling, source-absent static/profile0UI and exact153hashes pass at7035f668de70ae341779dcf72c8c2be28833630e with same-agent separate EVALUATOR. CALC-071 preserved, full ScMatrix/document/UI pending; full81 then requested pause."
 events:
   -
     type: "status"
@@ -84,8 +88,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: final task80 README and exact implementation7035f668de70ae341779dcf72c8c2be28833630e bind original native27666/251byte streams, Calc125/shared225 whole raw100 every counter positive,14gates/23tooling, source-absent static/profile0UI and153exact hashes with same-agent separate EVALUATOR pass. Metadata section update reset blueprint verification; this final record restores it without source changes. Full81 then requested pause."
+  -
+    type: "status"
+    at: "2026-10-12T17:31:11.374Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original four matrix walks reuse actual shared vector and strings with source sections, validation, returned callable state and exception cleanup. Full native27666/251byte streams, seven ordinary commands/448sources, entire Calc125/shared225 raw100,14gates/23tooling, source-absent static/profile0UI and exact153hashes pass at7035f668de70ae341779dcf72c8c2be28833630e with same-agent separate EVALUATOR. CALC-071 preserved, full ScMatrix/document/UI pending; full81 then requested pause."
 doc_version: 3
-doc_updated_at: "2026-10-12T17:31:00.836Z"
+doc_updated_at: "2026-10-12T17:31:11.375Z"
 doc_updated_by: "CODER"
 description: "Task80 of ongoing approved Calc goal: port all four original block walks and callable value contracts over existing shared matrix/vector owners. Normal original native streams, whole Calc and affected shared raw100, inventory and exact review; next full81 then requested goal pause."
 sections:
