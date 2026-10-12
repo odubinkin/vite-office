@@ -4,7 +4,7 @@ title: "Implement original mdds matrix block walks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -79,7 +79,7 @@ events:
     state: "ok"
     note: "Original walks verified at7035f668de70ae341779dcf72c8c2be28833630e: whole native27666/251byte streams seven normal commands/448sources; Calc125/shared225 raw S/B/F/L100 all counters positive; source-absent static/profile0UI,14gates/23tooling and exact153hashes pass with same-agent separate EVALUATOR. CALC-071 and partial inventory retained; full81 next then user-requested pause."
 doc_version: 3
-doc_updated_at: "2026-10-12T17:30:15.455Z"
+doc_updated_at: "2026-10-12T17:30:37.156Z"
 doc_updated_by: "CODER"
 description: "Task80 of ongoing approved Calc goal: port all four original block walks and callable value contracts over existing shared matrix/vector owners. Normal original native streams, whole Calc and affected shared raw100, inventory and exact review; next full81 then requested goal pause."
 sections:
@@ -91,41 +91,7 @@ sections:
     2. node output/playwright/task80-checks/portable.mjs: entire Calc and whole directly affected shared owners/tests raw S/B/F/L100 and every counter positive; original source links absent/restored; static build and actual Calc browser profile.
     3. node output/playwright/task80-checks/gates.mjs: format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff plus whole directly affected tooling tests.
     4. Exact source/test/fixture hashes bound to implementation commit and same-agent separate EVALUATOR with nonempty evidence/findings; accurate partial inventory and missing ScMatrix/document/edit/UI limits. Authoritative DONE and clean all-files git status. Full suites at81 then requested pause. Writer-only coverage repairs excluded.
-  Verification: |-
-    Command: node scripts/calc-matrix-walk-native-probe.mjs --write then --check. Result: pass. Evidence: seven ordinary positive commands/448whole source hashes, exact pinned mdds headers/archives, whole27666byte scalar and251byte genuine Calc streams. Scope: original four block walks, exact typed sections, copied/moved FuncT and returned state, callback exceptions, real shared owners, initialized CALC-071 spill only. Command: node output/playwright/task80-checks/portable.mjs and final --shared-only after JSDoc relocation. Result: pass. Evidence: entire Calc125tests36files raw3080S2092B526F2721L and whole affected shared225tests45files35executable owners raw3766S1805B731F3361L, all S/B/F/L100 every counter positive. Scope: whole Calc/affected shared owners, four original links absent/restored, static/profile0UI. Command: node output/playwright/task80-checks/gates.mjs and sequential --recheck with restored sources. Result: all14 final gates pass and23whole tooling tests. Initial format/JSDoc failures repaired; overlapping source-absent registry result superseded by final restored-source pass. Scope: declared complete gates, global format first pass correction narrowed to three changed files. Current source/hash implementation and separate same-agent EVALUATOR pending before closure. No Writer-only repairs, sanitizer or ScMatrix/document/UI/full QA claim. Full81 then requested pause.
-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-12T17:30:15.166Z — VERIFY — ok
-
-    By: CODER
-
-    Note: Original walks verified at7035f668de70ae341779dcf72c8c2be28833630e: whole native27666/251byte streams seven normal commands/448sources; Calc125/shared225 raw S/B/F/L100 all counters positive; source-absent static/profile0UI,14gates/23tooling and exact153hashes pass with same-agent separate EVALUATOR. CALC-071 and partial inventory retained; full81 next then user-requested pause.
-    Attempts: 0
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T17:29:22.676Z, excerpt_hash=sha256:ad9e49930e11498a63fbfd4933d9959a4970c6b814b2b78e26fe81a7695963d8
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121711-DBTFFV/blueprint/resolved-snapshot.json
-    - old_digest: 634c3717bd436158a7d81856a8b2aa1cbcb7af33851e2d6bec60ace231f97102
-    - current_digest: 634c3717bd436158a7d81856a8b2aa1cbcb7af33851e2d6bec60ace231f97102
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610121711-DBTFFV
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610121711-DBTFFV
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    <!-- END VERIFICATION RESULTS -->
+  Verification: "Command: node scripts/calc-matrix-walk-native-probe.mjs --write then --check. Result: pass. Evidence: seven ordinary positive commands/448whole original source hashes and exact pinned archives/headers; complete27666byte scalar and251byte Calc streams match. Scope: whole unchanged matrix headers, original typed sections/callable state/category/unwind and initialized CALC-071 spill, actual shared owners. Command: node output/playwright/task80-checks/portable.mjs plus final --shared-only. Result: pass. Evidence: Calc125tests36files raw3080S2092B526F2721L, shared225tests45files35executable owners raw3766S1805B731F3361L all S/B/F/L100 every raw counter positive; source-absent static/profile0UI and four links restored. Command: node output/playwright/task80-checks/gates.mjs and sequential --recheck. Result: all14 final gates/23whole tooling tests pass after recorded initial format/JSDoc and registry-overlap failures; final registry runs with restored sources. Scope: complete declared gates, format correction replay only three changed files after initial whole check. Command: exact153current source/test/fixture and git-show implementation hash audit plus ap evaluator run and ap verify. Result: pass/ok at7035f668de70ae341779dcf72c8c2be28833630e. Evidence: output/playwright/task80-checks/exact-review.json and .agentplane/tasks/202610121711-DBTFFV/quality/20261012-172958068-recovery-context/quality-report.json, same-agent separate EVALUATOR, not independent review. Scope:14intentional implementation paths and full declared task80 acceptance; partial inventory/broad false flags, ScMatrix/document/UI/native invalid iterators/ABI/full QA remain unfinished or unverified. Full81 next then requested pause; no Writer-only repairs or new sanitizer."
   Rollback Plan: "Revert only intentional task80 changes through a new approved task, preserving existing shared owners and unrelated work. No merge or destructive history."
   Findings: "Original four matrix walks and walk_func preserve actual typed block sections and copied/moved callable state/cleanup through genuine shared owners and explicit native special-member witnesses. CALC-071 preserves initialized row-count inclusive spill; parallel boundary case, invalid native iterator/lifetime/ABI/full consumer QA unverified. Entire Calc125/shared225 raw100 and native whole27666/251byte streams match;14final gates/23tooling pass. Initial wrong generation cwd, SharedString iterator type inference, new formatting/JSDoc and overlapping source-absent registry failures corrected; observations and gate firstExitCode metadata recorded, final registry sequential with restored links. Exact153current source/test/fixture hashes match implementation7035f668de70ae341779dcf72c8c2be28833630e. Same-agent separate EVALUATOR pass .agentplane/tasks/202610121711-DBTFFV/quality/20261012-172958068-recovery-context/quality-report.json; not independent review. No Writer-only repairs, sanitizer, replacement storage or full UI claim. Actual ScMatrix/result/cell/document/edit/view/UI remain subsequent, full81 then requested pause."
 id_source: "generated"
@@ -151,40 +117,7 @@ Implement task80 original four matrix block walks over actual shared owners, ver
 
 ## Verification
 
-Command: node scripts/calc-matrix-walk-native-probe.mjs --write then --check. Result: pass. Evidence: seven ordinary positive commands/448whole source hashes, exact pinned mdds headers/archives, whole27666byte scalar and251byte genuine Calc streams. Scope: original four block walks, exact typed sections, copied/moved FuncT and returned state, callback exceptions, real shared owners, initialized CALC-071 spill only. Command: node output/playwright/task80-checks/portable.mjs and final --shared-only after JSDoc relocation. Result: pass. Evidence: entire Calc125tests36files raw3080S2092B526F2721L and whole affected shared225tests45files35executable owners raw3766S1805B731F3361L, all S/B/F/L100 every counter positive. Scope: whole Calc/affected shared owners, four original links absent/restored, static/profile0UI. Command: node output/playwright/task80-checks/gates.mjs and sequential --recheck with restored sources. Result: all14 final gates pass and23whole tooling tests. Initial format/JSDoc failures repaired; overlapping source-absent registry result superseded by final restored-source pass. Scope: declared complete gates, global format first pass correction narrowed to three changed files. Current source/hash implementation and separate same-agent EVALUATOR pending before closure. No Writer-only repairs, sanitizer or ScMatrix/document/UI/full QA claim. Full81 then requested pause.
-
-<!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-12T17:30:15.166Z — VERIFY — ok
-
-By: CODER
-
-Note: Original walks verified at7035f668de70ae341779dcf72c8c2be28833630e: whole native27666/251byte streams seven normal commands/448sources; Calc125/shared225 raw S/B/F/L100 all counters positive; source-absent static/profile0UI,14gates/23tooling and exact153hashes pass with same-agent separate EVALUATOR. CALC-071 and partial inventory retained; full81 next then user-requested pause.
-Attempts: 0
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T17:29:22.676Z, excerpt_hash=sha256:ad9e49930e11498a63fbfd4933d9959a4970c6b814b2b78e26fe81a7695963d8
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121711-DBTFFV/blueprint/resolved-snapshot.json
-- old_digest: 634c3717bd436158a7d81856a8b2aa1cbcb7af33851e2d6bec60ace231f97102
-- current_digest: 634c3717bd436158a7d81856a8b2aa1cbcb7af33851e2d6bec60ace231f97102
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610121711-DBTFFV
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610121711-DBTFFV
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-<!-- END VERIFICATION RESULTS -->
+Command: node scripts/calc-matrix-walk-native-probe.mjs --write then --check. Result: pass. Evidence: seven ordinary positive commands/448whole original source hashes and exact pinned archives/headers; complete27666byte scalar and251byte Calc streams match. Scope: whole unchanged matrix headers, original typed sections/callable state/category/unwind and initialized CALC-071 spill, actual shared owners. Command: node output/playwright/task80-checks/portable.mjs plus final --shared-only. Result: pass. Evidence: Calc125tests36files raw3080S2092B526F2721L, shared225tests45files35executable owners raw3766S1805B731F3361L all S/B/F/L100 every raw counter positive; source-absent static/profile0UI and four links restored. Command: node output/playwright/task80-checks/gates.mjs and sequential --recheck. Result: all14 final gates/23whole tooling tests pass after recorded initial format/JSDoc and registry-overlap failures; final registry runs with restored sources. Scope: complete declared gates, format correction replay only three changed files after initial whole check. Command: exact153current source/test/fixture and git-show implementation hash audit plus ap evaluator run and ap verify. Result: pass/ok at7035f668de70ae341779dcf72c8c2be28833630e. Evidence: output/playwright/task80-checks/exact-review.json and .agentplane/tasks/202610121711-DBTFFV/quality/20261012-172958068-recovery-context/quality-report.json, same-agent separate EVALUATOR, not independent review. Scope:14intentional implementation paths and full declared task80 acceptance; partial inventory/broad false flags, ScMatrix/document/UI/native invalid iterators/ABI/full QA remain unfinished or unverified. Full81 next then requested pause; no Writer-only repairs or new sanitizer.
 
 ## Rollback Plan
 
