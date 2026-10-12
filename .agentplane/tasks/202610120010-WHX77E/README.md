@@ -1,10 +1,11 @@
 ---
 id: "202610120010-WHX77E"
 title: "Capture original desktop generic UNO exception behavior"
-status: "DOING"
+result_summary: "Captured genuine desktop exception and Context mapping contract; preserved compiler restriction and rejected direct-JS shortcut; scoped coverage100 and next full61."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -46,8 +47,8 @@ quality_review:
     - "No browser runtime helper or new runtime inventory owner is claimed. All existing 19 Calc and 69 shared owners retain every raw coverage counter positive under the unchanged task54 shared profile with all three source links absent and restored."
     - "Native non-null Context query and temporary acquire/release differ from direct JS catch and one Any copy despite equal final count. Next implementation must preserve these observable phases."
 commit:
-  hash: "368d2d2bfdc358c1d0f3025e77b21481a3095170"
-  message: "🧩 WHX77E code: capture original desktop UNO exception contract"
+  hash: "3675ae8e6348c9aafc66db94193e15dd7f8c046d"
+  message: "✅ WHX77E verify: persist scoped native and coverage evidence"
 comments:
   -
     author: "CODER"
@@ -55,6 +56,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: Captured complete original desktop exception contract with whole native streams and scoped raw coverage evidence; browser helper remains subsequent."
+  -
+    author: "CODER"
+    body: "Verified: Complete original desktop UNO exception contract captured and independently reviewed at368d2d2bfdc3; four whole normal/sanitized streams match, exact unchanged source-absent Calc106/shared170 tests and19/69owners raw100, all13gates pass. Direct JS one-copy replacement disproven and browser helper remains subsequent."
 events:
   -
     type: "status"
@@ -76,8 +80,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original desktop exception experiment verified at implementation368d2d2bfdc3: four whole native/sanitized streams, 219 successful terminal commands, separately retained feature/compiler negative probes, exact unchanged source-absent Calc106/shared170 tests and whole19/69owner raw100; all13gates pass, evaluator SHA matches. No browser helper implementation claim."
+  -
+    type: "status"
+    at: "2026-10-12T00:58:44.026Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Complete original desktop UNO exception contract captured and independently reviewed at368d2d2bfdc3; four whole normal/sanitized streams match, exact unchanged source-absent Calc106/shared170 tests and19/69owners raw100, all13gates pass. Direct JS one-copy replacement disproven and browser helper remains subsequent."
 doc_version: 3
-doc_updated_at: "2026-10-12T00:58:31.116Z"
+doc_updated_at: "2026-10-12T00:58:44.028Z"
 doc_updated_by: "CODER"
 description: "Task55: genuine complete desktop cppuhelper exception capture/throw contract over actual CPPU environment/mapping and native bridge. Determine whether native JS adaptation preserves dynamic type/data/Context ownership before implementing browser exception helpers; no synthetic bridge, mobile fallback or partial-stream claims."
 sections:
@@ -181,6 +192,10 @@ sections:
     - Observation: Implementation commit was rejected by the repository subject hook before creating a commit.
       Impact: Only the six intentional task paths were staged; source and verification evidence remain unchanged.
       Resolution: Recomputed the route and use the required emoji, task suffix and scope subject format.
+extensions:
+  implementation_commit:
+    hash: "368d2d2bfdc358c1d0f3025e77b21481a3095170"
+    message: "🧩 WHX77E code: capture original desktop UNO exception contract"
 id_source: "generated"
 ---
 ## Summary
