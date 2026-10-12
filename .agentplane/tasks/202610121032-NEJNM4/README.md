@@ -4,7 +4,7 @@ title: "Implement original range-value SoA set and hinted input writes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -24,7 +24,32 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T10:56:26.242Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase: exact cd66bf47adb14f91110f5a6ec9e1ec59159d9358 complete original range-write family satisfies approved native/source-absent/raw100/registry/structural contract; full kernel and UI remain unverified."
+  evaluated_sha: "cd66bf47adb14f91110f5a6ec9e1ec59159d9358"
+  blueprint_digest: "a93a83c91e27a621c51011f3d9f7cd77288ae2942373689d9c0116fb5dd1eacc"
+  evidence_refs:
+    - ".agentplane/tasks/202610121032-NEJNM4/README.md"
+    - ".agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121032-NEJNM4/blueprint/resolved-snapshot.json"
+    - "output/playwright/task70-checks/exact-review.json"
+    - "output/playwright/task70-checks/source-argument-map-audit.json"
+    - "output/playwright/task70-checks/value-coverage-audit.json"
+    - "output/playwright/task70-checks/final-local-manifest.json"
+    - "output/playwright/task70-checks/gates-final-manifest.json"
+    - "output/playwright/mdds-container-range-native/manifest.json"
+  findings:
+    - "Exact67committed owner/facade hashes and19intentional non-task paths match final evidence; actual shared owners and complete original single/multi-block contracts retained."
+    - "Whole normal-only native scalar23968range permutations/owned1914cases/genuine Calc streams,112Calc/219related tests, all raw counters positive, source-absent production build and3fresh whole stream cases pass; all13gates and35tooling cases pass."
+    - "Original CALC064/065 suspicious behavior is preserved and journaled with explicit source/fault-injection and consumer limitations; no false full parity promotion."
+commit:
+  hash: "cd66bf47adb14f91110f5a6ec9e1ec59159d9358"
+  message: "🧩 NEJNM4 calc: implement original range-value SoA writes"
 comments:
   -
     author: "CODER"
@@ -37,8 +62,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement original complete plain/hinted input-range writes over the shared SoA owner and genuine Calc values on calc; preserve whole native outputs and strict scoped source-absent raw100."
+  -
+    type: "status"
+    at: "2026-10-12T10:55:14.718Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-12T10:55:13.215Z"
+doc_updated_at: "2026-10-12T10:56:59.189Z"
 doc_updated_by: "CODER"
 description: "Iteration70: port complete original plain/hinted range set and single/multi-block dispatch through actual shared SoA fields, typed macro iterators, temporary block_slot_type and genuine Calc values. Preserve all native overlap/split/merge/event/lifecycle and input-end/exception ordering, source-map original range definitions, retain previous private corpus and scoped raw100. No substitute cell model, fake pointees or UI readiness claim."
 sections:
@@ -81,6 +112,10 @@ sections:
     Evidence: inspect all13canonical final gate statuses0, including both exact inventories and35direct tooling cases. All19intentional non-task paths formatted. Earlier docs/operation-registration/order failures preserved in two separate manifests/log sets and Findings; bounded fixes preserve original algorithms. CALC064/065 document suspected original asymmetry/partial failure state without repair or unproven consumer claims.
 
     Exact implementation-bound EVALUATOR phase and final CODER verify/clean DONE closure follow. Same agent phases are explicit, no independent reviewer claim. Full suite last61, next71 (task70 is9of10); no full suite due within this leaf. Broad goal remains active with actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI unfinished.
+
+    Command: ap evaluator run 202610121032-NEJNM4 --verdict pass (same-agent EVALUATOR phase), then ap task verify-show and CODER verify/finish.
+    Result: EVALUATOR pass on exact implementation cd66bf47adb14f91110f5a6ec9e1ec59159d9358.
+    Evidence: .agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/quality-report.json; exact-review.json binds67committed owner/facade hashes,19intentional non-task paths, native/full scoped profiles and13passing gates. No independent reviewer claim. Metadata-only quality/verification/close commits follow without source edits.
   Rollback Plan: "Revert only the intentional implementation commit and scoped registry/tests on calc; keep ignored raw native and validation evidence. No reset of unrelated work or modification of reference originals. User controls merges."
   Findings: |-
     Task70 is9/10 after the last full run61; next full71. Range writes take actual input iterators and preserve native set overload composition. Existing actual shared and Calc value owners are reused. New suspected upstream cases, if confirmed, go to docs/program/calc-upstream-suspected-issues.md without behavior correction.
@@ -183,6 +218,10 @@ Result: pass.
 Evidence: inspect all13canonical final gate statuses0, including both exact inventories and35direct tooling cases. All19intentional non-task paths formatted. Earlier docs/operation-registration/order failures preserved in two separate manifests/log sets and Findings; bounded fixes preserve original algorithms. CALC064/065 document suspected original asymmetry/partial failure state without repair or unproven consumer claims.
 
 Exact implementation-bound EVALUATOR phase and final CODER verify/clean DONE closure follow. Same agent phases are explicit, no independent reviewer claim. Full suite last61, next71 (task70 is9of10); no full suite due within this leaf. Broad goal remains active with actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI unfinished.
+
+Command: ap evaluator run 202610121032-NEJNM4 --verdict pass (same-agent EVALUATOR phase), then ap task verify-show and CODER verify/finish.
+Result: EVALUATOR pass on exact implementation cd66bf47adb14f91110f5a6ec9e1ec59159d9358.
+Evidence: .agentplane/tasks/202610121032-NEJNM4/quality/20261012-105626242-recovery-context/quality-report.json; exact-review.json binds67committed owner/facade hashes,19intentional non-task paths, native/full scoped profiles and13passing gates. No independent reviewer claim. Metadata-only quality/verification/close commits follow without source edits.
 
 ## Rollback Plan
 
