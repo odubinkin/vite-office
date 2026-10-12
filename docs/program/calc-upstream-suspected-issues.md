@@ -1569,3 +1569,13 @@ Pinned sc/source/core/tool/token.cxx ScHybridCellToken::operator== compares the 
 Evidence: task76 scripts/sc-result-token-native-probe.mjs compiles complete unchanged original selected class declarations/member definitions over real shared owners. The ordinary NDEBUG hybrid stream includes the valid empty-string flag pair (pattern0) and preserves flag_equal1; other initialized release-only combinations do not claim satisfaction of the native debug assertion.
 
 Decision: retain the original omission and both query results. Do not add the flag to equality. Native debug assertion termination and full ScFormulaResult consumers remain unverified.
+
+## CALC-069: scalar matrix construction accepts a type rejected by matrix queries
+
+Status: confirmed original constructor/query asymmetry in the pinned mdds dependency; a Calc consumer defect is not established.
+
+The original multi_type_matrix mtv_traits registers int8_element_block, while to_mtm_type and get_numeric/numeric do not recognize int8 for std_string_traits. Its scalar constructor delegates directly to the vector without matrix type validation. A fully initialized 1x1 matrix filled with int8_t(4) therefore constructs successfully, but get_numeric and numeric throw the original unknown-element-type diagnostic. The range constructor explicitly validates its first block and rejects an int8 range during construction. This may be intentional legacy/internal support; actual Calc consumers use their own UInt16/UInt8 integer aliases, which are recognized.
+
+Evidence: task78 scripts/calc-matrix-native-probe.mjs compiles the full unchanged mdds3.2.1 multi_type_matrix/vector headers from the pinned LibreOffice download.lst archive and patch, over genuine dependencies. The ordinary scalar stream captures rangeerror, numericerror and allnumericerror from initialized actual int8 matrices. No invalid lifetime, sanitizer or memory-safety inference is involved.
+
+Decision: preserve registration and the different validation points. Do not silently promote int8 to the configured integer type or add a scalar-constructor check. Revisit consumer reachability when the original ScMatrix owner is connected.

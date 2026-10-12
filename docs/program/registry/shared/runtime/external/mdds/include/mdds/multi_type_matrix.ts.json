@@ -1,0 +1,80 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_matrix.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "matrix-storage",
+    "capabilityIds": [
+      "CAP-e0694dad-29de-4234-bdfe-a748052c2c33"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_matrix.ts#multi_type_matrix",
+        "apps/office/src/external/mdds/include/mdds/multi_type_matrix.test.ts#matches the whole original scalar matrix storage/access stream",
+        "apps/office/src/sc/inc/mtvelements-matrix.test.ts#matches whole original Calc matrix trait ownership and UInt8 flag stream",
+        "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp#class multi_type_matrix",
+        "vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl#multi_type_matrix<Traits>::multi_type_matrix",
+        "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx#struct matrix_traits"
+      ],
+      "justification": "Task78 implements original mdds3.2.1 multi_type_matrix core geometry/storage/access over the genuine existing SoA vector. Original trait registration, size_pair_type, default/size/value/range/copy/defaulted move and assignments/destructor, equality, plain/hinted/const positions, typed scalar and owned reads, borrowed string queries, scalar/range/column/empty writes, numeric/empty/clear/swap retain original contracts. Erased template aliases/value categories use explicit witnesses; numeric conversion is certified only for initialized representable native casts and exact bounded size_t coordinates. Ordinary full unchanged matrix/vector headers and genuine SharedString dependencies provide whole native streams; Calc custom string/UInt16/UInt8 traits are source excerpts, not fake pointees. Transpose, matrix copy/resize/block walks, ScMatrix/ScFormulaResult/formula cells/column/table/document/edit/undo/input/view/UI, native ABI/invalid lifetimes/concurrency/full upstream QA remain required or unverified. Foundation and broad parity flags remain false; next full81.",
+      "knownViolations": [],
+      "localSymbols": [
+        "element_t",
+        "MatrixTraits",
+        "std_string_traits",
+        "integer_type",
+        "size_pair_type",
+        "equals",
+        "not_equals",
+        "position_type",
+        "const_position_type",
+        "ReadPosition",
+        "multi_type_matrix",
+        "move",
+        "dispose",
+        "assign",
+        "assign_move",
+        "to_mtm_type",
+        "next_position",
+        "get_pos",
+        "position",
+        "cposition",
+        "matrix_position",
+        "end_position",
+        "cend_position",
+        "get_type",
+        "get_numeric",
+        "get_integer",
+        "get_boolean",
+        "get_string",
+        "get",
+        "set",
+        "set_range",
+        "set_range_position",
+        "set_column",
+        "set_empty",
+        "set_column_empty",
+        "set_row_empty",
+        "size",
+        "clear",
+        "numeric",
+        "empty",
+        "swap"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_matrix.hpp",
+      "upstreamSymbols": [
+        "class multi_type_matrix",
+        "struct size_pair_type",
+        "struct std_string_traits"
+      ]
+    }
+  }
+}
