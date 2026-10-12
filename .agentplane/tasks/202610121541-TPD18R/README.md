@@ -1,10 +1,11 @@
 ---
 id: "202610121541-TPD18R"
 title: "Implement original Calc matrix result value contract"
-status: "DOING"
+result_summary: "Implemented original Calc matrix value and UInt8 tag contracts with genuine shared ownership"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -48,8 +49,8 @@ quality_review:
     - "Entire Calc122tests33files and affected shared82tests22files pass raw S/B/F/L100, every counter positive. Four links absent/restored, static/profile0UI scenarios, all14gates and23whole tooling tests pass. Metadata getter/setter symbol correction retains actual members/evidence; first failures retained."
     - "Partial foundation and broad parity flags false accurately record missing matrix/container/token/result/document/UI; original matrix QA is explicitly unexecuted field/type context."
 commit:
-  hash: "e4fa414925704b56f154c01188f682afbdb1684e"
-  message: "🚧 TPD18R sc: implement original matrix value contract"
+  hash: "d1ff959abd2a65f2963f04f388a539747079c741"
+  message: "✅ TPD18R task: record original matrix value verification"
 comments:
   -
     author: "CODER"
@@ -57,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original ScMatrixValue and fixed tag contract committed ate4fa414925704b56f154c01188f682afbdb1684e; all scoped native/whole Calc/shared raw100 and14gates pass. Separate same-agent EVALUATOR reviews exact source and declared matrix/document/UI limits."
+  -
+    author: "CODER"
+    body: "Verified: Original matrix value/tag contract reuses real SharedString/formula errors and preserves default/copy/assignment/equality plus native rvalue-copy behavior. Whole Calc122/shared82 raw S/B/F/L100 every counter positive,8ordinary native commands/449source hashes,14gates/23tooling and exact120source/test hashes pass ate4fa414925704b56f154c01188f682afbdb1684e with same-agent EVALUATOR pass. Actual mdds matrix/ScMatrix/token/result/document/UI remain required; original QA context unexecuted, next full81."
 events:
   -
     type: "status"
@@ -78,8 +82,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original ScMatrixValue/ScMatValType contract verified ate4fa414925704b56f154c01188f682afbdb1684e: whole Calc122/shared82 raw S/B/F/L100 every counter positive,8ordinary native commands/449source hashes and3whole streams,14gates/23tooling/source-absent static/profile0UI, exact120source/test hashes and same-agent separate EVALUATOR pass. Existing shared owners reused; genuine matrix/container/document/UI remain required, next full81."
+  -
+    type: "status"
+    at: "2026-10-12T16:02:31.227Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original matrix value/tag contract reuses real SharedString/formula errors and preserves default/copy/assignment/equality plus native rvalue-copy behavior. Whole Calc122/shared82 raw S/B/F/L100 every counter positive,8ordinary native commands/449source hashes,14gates/23tooling and exact120source/test hashes pass ate4fa414925704b56f154c01188f682afbdb1684e with same-agent EVALUATOR pass. Actual mdds matrix/ScMatrix/token/result/document/UI remain required; original QA context unexecuted, next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T16:02:02.257Z"
+doc_updated_at: "2026-10-12T16:02:31.229Z"
 doc_updated_by: "CODER"
 description: "Task77 implements original ScMatValType and actual complete ScMatrixValue value/copy/assignment/query/equality contract required by genuine ScMatrix storage and matrix result tokens. Reuse shared strings/error helpers; no fake ScMatrix/pImpl/container. Complete Calc/affected shared raw100, ordinary-only source comparison, inventory/provenance and exact source review; next full81."
 sections:
@@ -124,6 +135,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task77 implementation/metadata through a separate approved task; preserve existing coordinate/shared owners and unrelated work. No destructive history or merging."
   Findings: "Actual matrix container/ScMatrix remain missing; original value/tag contract alone is implemented without a substitute. Readonly scoped constants preserve six original UInt8 values including EmptyPath/NonvalueMask alias14. Native explicitly defaulted copy operations suppress moves; rvalue native streams copy and leave source owned, so no move factory was invented. Original --write/--check passes8normal-only commands/449whole source hashes and3whole streams. Full Calc122/shared82 raw100 every counter positive, source-absent static/profile0UI, all14gates/23tooling pass. First target lint literal setter self-assignment is replaced with saved const member reference; same original assignment semantics, no lint relaxation. First inventory gate disallows getters/setters as separate callable symbols in runtime.localSymbols; only metadata symbol list corrected, actual members/source/evidence preserved. First gate logs/results retained. Native terminal callback JSDoc is comment-only; native caller/scopes remain unchanged after verified capture. Original QA context is unexecuted, no full matrix/QA/browser readiness claim. Exact source EVALUATOR/closure pending; next full81."
+extensions:
+  implementation_commit:
+    hash: "e4fa414925704b56f154c01188f682afbdb1684e"
+    message: "🚧 TPD18R sc: implement original matrix value contract"
 id_source: "generated"
 ---
 ## Summary
