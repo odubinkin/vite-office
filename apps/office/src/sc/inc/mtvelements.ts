@@ -121,3 +121,33 @@ export const celltextattr_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(
   celltextattr_block,
   { operations: attr_operations, empty: attr_operations.default_construct },
 );
+
+/** Actual original value-type members, reused for erased native container return declarations. */
+export const string_value_type = string_operations;
+export const celltextattr_value_type = attr_operations;
+import {
+  default_traits,
+  empty_event_func,
+} from "../../external/mdds/include/mdds/multi_type_vector/util.ts";
+import { element_block_funcs } from "../../external/mdds/include/mdds/multi_type_vector/block_funcs.ts";
+import {
+  multi_type_vector,
+  empty_event_value_ops,
+} from "../../external/mdds/include/mdds/multi_type_vector/soa/main.ts";
+/** Original default_traits specialization registers only the original text metadata block. */
+export const CellTextAttrTraits = {
+  ...default_traits,
+  block_funcs: element_block_funcs(celltextattr_block),
+};
+const text_attr_constructor = (multi_type_vector<empty_event_func>).bind(
+  null,
+  CellTextAttrTraits,
+  empty_event_value_ops,
+);
+/** Original typedef binds the existing constructor/traits and inherits its static methods; no second engine or subclass. */
+export const CellTextAttrStoreType = Object.setPrototypeOf(
+  text_attr_constructor,
+  multi_type_vector,
+) as typeof text_attr_constructor & Omit<typeof multi_type_vector, "prototype">;
+/** Original text attribute container typedef instance, sharing the generic container owner. */
+export type CellTextAttrStoreType = InstanceType<typeof CellTextAttrStoreType>;

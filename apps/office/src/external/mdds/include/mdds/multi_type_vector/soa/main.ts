@@ -14,7 +14,11 @@ import {
   type DelayedVectorValue,
   type delayed_delete_vector_iterator,
 } from "../delayed_delete_vector.ts";
-import { type ValueResultCallbacks } from "../macro.ts";
+import {
+  type ValueResultCallbacks,
+  type ReferenceCallbacks,
+  type NativeValueType,
+} from "../macro.ts";
 import {
   throw_block_position_not_found,
   empty_event_func,
@@ -28,8 +32,10 @@ import { iterator_base, const_iterator_base } from "./iterator.ts";
 import { std_vector } from "../vector_storage.ts";
 import {
   copy_blocks,
-  equal_blocks,
-  erase,
+  store_insert,
+  store_swap,
+  store_equals,
+  store_erase,
   initialize_element_blocks,
   delete_element_blocks,
   delete_element_block,
@@ -48,6 +54,7 @@ import {
   make_iterator,
   next_position as next_position_impl,
   get_impl,
+  get_value as get_value_body,
   get_type as get_type_impl,
   is_empty as is_empty_impl,
   position_impl,
@@ -128,15 +135,7 @@ export class blocks_type {
   }
   /** Original single/range erase overloads retain helper call order. @param index - Position. @param size - Optional count. @returns Nothing. */
   public erase(index: number, size?: number): void {
-    if (size === undefined) {
-      this.positions.erase(index, 1);
-      this.sizes.erase(index, 1);
-      this.element_blocks.erase(index, 1);
-    } else {
-      erase(this.positions, index, size);
-      erase(this.sizes, index, size);
-      erase(this.element_blocks, index, size);
-    }
+    store_erase(this, index, size);
   }
   /** Original empty-slot or external block-array insertion. @param index - Position. @param sizeOrSource - Count or source. @returns Nothing. */
   public insert(index: number, sizeOrSource: number | blocks_type): void;
@@ -149,19 +148,7 @@ export class blocks_type {
     size?: number,
     data?: base_element_block | null,
   ): void {
-    if (posOrSource instanceof blocks_type) {
-      this.positions.insert(index, posOrSource.positions.snapshot());
-      this.sizes.insert(index, posOrSource.sizes.snapshot());
-      this.element_blocks.insert(index, posOrSource.element_blocks.snapshot());
-    } else if (size === undefined) {
-      this.positions.insert(index, Array<number>(posOrSource).fill(0));
-      this.sizes.insert(index, Array<number>(posOrSource).fill(0));
-      this.element_blocks.insert(index, Array<null>(posOrSource).fill(null));
-    } else {
-      this.positions.insert(index, [posOrSource]);
-      this.sizes.insert(index, [size]);
-      this.element_blocks.insert(index, [data as base_element_block | null]);
-    }
+    store_insert(this, index, posOrSource, size, data);
   }
   /** Original first/subsequent block position calculation; exact bounded native logical indices. @param index - Slot. @returns Nothing. */
   public calc_block_position(index: number): void {
@@ -181,21 +168,7 @@ export class blocks_type {
   public swap(index1: number, index2: number): void;
   /** Original swap overloads. @param otherOrIndex - Store or index. @param index2 - Second index. @returns Nothing. */
   public swap(otherOrIndex: blocks_type | number, index2?: number): void {
-    if (otherOrIndex instanceof blocks_type) {
-      this.positions.swap(otherOrIndex.positions);
-      this.sizes.swap(otherOrIndex.sizes);
-      this.element_blocks.swap(otherOrIndex.element_blocks);
-    } else {
-      const j = index2 as number;
-      for (const arr of [this.positions, this.sizes]) {
-        const value = arr.get(otherOrIndex);
-        arr.set(otherOrIndex, arr.get(j));
-        arr.set(j, value);
-      }
-      const value = this.element_blocks.get(otherOrIndex);
-      this.element_blocks.set(otherOrIndex, this.element_blocks.get(j));
-      this.element_blocks.set(j, value);
-    }
+    store_swap(this, otherOrIndex, index2);
   }
   /** Original synchronized reserve allocates real slots. @param n - Minimum capacity. @returns Nothing. */
   public reserve(n: number): void {
@@ -205,14 +178,7 @@ export class blocks_type {
   }
   /** Original metadata/length checks before default equal_blocks. @param other - Store. @returns Equality. */
   public equals(other: blocks_type): boolean {
-    if (!this.positions.equals(other.positions)) return false;
-    if (!this.sizes.equals(other.sizes)) return false;
-    if (this.element_blocks.size() !== other.element_blocks.size()) return false;
-    return equal_blocks(
-      this.element_blocks,
-      other.element_blocks,
-      this.Traits.block_funcs.equal_block,
-    );
+    return store_equals(this, other);
   }
   /** Original metadata clear does not delete blocks. @returns Nothing. */
   public clear(): void {
@@ -272,8 +238,7 @@ export const empty_event_value_ops: EventValueOps<empty_event_func> = {
   },
 };
 /** Explicit erased original scalar overload family; numeric native types are never inferred from JS values. */
-export type ContainerCallbacks<T extends DelayedVectorValue = DelayedVectorValue> =
-  ValueResultCallbacks<T>;
+export type ContainerCallbacks<T = DelayedVectorValue> = ValueResultCallbacks<T>;
 const move_construction = Symbol("native move construction");
 /** Original SoA multi_type_vector field/lifetime owner; subsequent original segment algorithms are not replaced by a different engine. */
 export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
@@ -285,9 +250,10 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     public readonly Traits: ContainerTraits<E>,
     public readonly Events: EventValueOps<E>,
     init?: number | E | multi_type_vector<E>,
-    callbacksOrTag?: ContainerCallbacks | typeof clone_construction_type | typeof move_construction,
-    valueOrFirst?: DelayedVectorValue | delayed_delete_vector_iterator<DelayedVectorValue>,
-    last?: delayed_delete_vector_iterator<DelayedVectorValue>,
+    callbacksOrTag?:
+      ContainerCallbacks<unknown> | typeof clone_construction_type | typeof move_construction,
+    valueOrFirst?: unknown,
+    last?: delayed_delete_vector_iterator<unknown>,
   ) {
     if (init instanceof multi_type_vector) {
       const moving = callbacksOrTag === move_construction;
@@ -523,12 +489,42 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
   public is_empty(pos: number | bigint): boolean {
     return is_empty_impl(this.m_block_store, this.m_cur_size, pos);
   }
-  /** Original typed result/output-reference scalar get overload body, sharing real scalar macro callbacks. @param pos - Row. @param callbacks - Explicit native type witness. @returns Scalar. */
+  /** Original scalar result syntax. @param pos - Row. @param callbacks - Typed overloads. @returns Scalar. */
   public get<T extends DelayedVectorValue>(
     pos: number | bigint,
     callbacks: ContainerCallbacks<T>,
-  ): T {
-    return get_impl(this.m_block_store, this.m_cur_size, pos, callbacks);
+  ): T;
+  /** Original output-reference get. @param pos - Row. @param callbacks - Typed overloads. @param output - Existing target. @returns Nothing. */
+  public get<T>(pos: number | bigint, callbacks: ReferenceCallbacks<T>, output: [T]): void;
+  /** Original owned result get with erased native ValueT members. @param pos - Row. @param callbacks - Typed overloads. @param valueType - Actual default constructor/destructor. @returns Owned result. */
+  public get<T>(
+    pos: number | bigint,
+    callbacks: ReferenceCallbacks<T>,
+    valueType: NativeValueType<T>,
+  ): T;
+  /** Selects the original reference/value overload without runtime value-type guessing. @param pos - Row. @param callbacks - Native typed overloads. @param outputOrType - Output reference or erased native ValueT. @returns Result or nothing. */
+  public get<T>(
+    pos: number | bigint,
+    callbacks: ContainerCallbacks<T> | ReferenceCallbacks<T>,
+    outputOrType?: [T] | NativeValueType<T>,
+  ): T | void {
+    if (outputOrType === undefined)
+      return get_impl(this.m_block_store, this.m_cur_size, pos, callbacks as ContainerCallbacks<T>);
+    if (Array.isArray(outputOrType))
+      return get_impl(
+        this.m_block_store,
+        this.m_cur_size,
+        pos,
+        callbacks as ReferenceCallbacks<T>,
+        outputOrType,
+      );
+    return get_value_body(
+      this.m_block_store,
+      this.m_cur_size,
+      pos,
+      callbacks as ReferenceCallbacks<T>,
+      outputOrType,
+    );
   }
   /** Original mutable/const static next-position overloads. @param pos - Valid source. @returns Independent pair. */
   public static next_position<I extends BlockPositionIterator<I>>(

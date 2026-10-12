@@ -221,3 +221,14 @@ export type ValueResultCallbacks<T> = Omit<
   mdds_mtv_get_empty_value(): T;
   mdds_mtv_get_value(block: base_element_block, pos: number): T;
 };
+
+/** Original ADL get callbacks with an actual writable reference witness. */
+export interface ReferenceCallbacks<T> {
+  mdds_mtv_get_empty_value(output: [T]): void;
+  mdds_mtv_get_value(block: base_element_block, pos: number, output: [T]): void;
+}
+/** Erased native T cell declaration and exceptional automatic destruction in value-return get. */
+export interface NativeValueType<T> {
+  default_construct(): T;
+  destroy(value: T): void;
+}

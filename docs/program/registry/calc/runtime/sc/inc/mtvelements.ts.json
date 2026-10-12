@@ -9,7 +9,8 @@
     "subsystem": "cell-storage",
     "capabilityIds": [
       "CAP-13d7cb0b-dec2-491f-adaa-af49e308d033",
-      "CAP-e3022684-37dd-4dae-a11e-d9b8eca85ec8"
+      "CAP-e3022684-37dd-4dae-a11e-d9b8eca85ec8",
+      "CAP-b216f3fb-c198-40df-a212-6757787f63e8"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -20,9 +21,10 @@
         "apps/office/src/sc/inc/mtvelements.ts#string_block",
         "apps/office/src/sc/inc/mtvelements.test.ts#matches whole original Calc object value block stream",
         "vendor/libreoffice-reference/sc/inc/mtvelements.hxx#string_block",
-        "apps/office/src/sc/inc/mtvelements-callback.test.ts#matches whole original Calc value callback stream"
+        "apps/office/src/sc/inc/mtvelements-callback.test.ts#matches whole original Calc value callback stream",
+        "apps/office/src/sc/inc/mtvelements-store.test.ts#matches complete original string and text attribute container stream"
       ],
-      "justification": "Task65 connects actual initialized object ValueT ownership to the existing delayed_delete_vector/default_element_block operation family, reusing shared vector special-member helpers. Count/default constructs independent values; count/fill and range/copy perform actual value copies including hidden constructed prefixes. Reference assignment, append/lvalue emplace, range insertion, resize/default construction, erase, reserve/shrink, equality and destructor preserve original native operators. Original mdds block swap performs two copies and copy assignments; actual std::iter_swap remains a distinct move-temporary operation. Scalar and borrowed-pointer paths remain shared. Pure callers over unchanged mdds3.2.1 headers and full actual SharedString/CellTextAttr sources use verified existing complete native dependency objects and normal-only witness execution, comparing whole owned and Calc streams. Existing SharedString and CellTextAttr owners are reused; external mdds imports no Calc/SVL. Custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes, complete perfect-forwarding/rvalue overload families, physical ABI, pointee/callback/container/document/UI owners remain unverified. Task66 extends original initialized value and pointer callback families through existing owners. Original output-reference extraction copy-assigns the existing owned target; by-value extraction constructs an independent result. Rvalue append and actual erased forwarded constructor packs use the same original store, constructing incoming values before alias relocation. The existing scalar container requires its actual value-result binding only, so its heterogeneous callback type omits unrelated writable-reference overload requirements without runtime changes. Original value macro, pointer macro and Calc SharedString/CellTextAttr registrations reuse original block and actual value owners. Normal-only pure callers over whole unchanged mdds macros/headers and full actual SharedString/CellTextAttr sources compare complete value, borrowed-pointer and Calc streams. Original ValueT() empty expressions use actual default temporary, move assignment and destruction. Explicit type/reference/value-category/constructor witnesses replace erased C++ overload/ADL/parameter-pack syntax; no runtime type guessing, duplicate store or fake Calc pointee/provider. Other macro empty-expression categories, arbitrary ValueT/constructor families, throwing cleanup, custom allocators/StoreT, undefined ranges/lifetimes and physical ABI remain unverified. Full MTV/actual other Calc pointees/document/input/view/UI remain subsequent work; no whole module or upstream QA certification.",
+      "justification": "Task65 connects actual initialized object ValueT ownership to the existing delayed_delete_vector/default_element_block operation family, reusing shared vector special-member helpers. Count/default constructs independent values; count/fill and range/copy perform actual value copies including hidden constructed prefixes. Reference assignment, append/lvalue emplace, range insertion, resize/default construction, erase, reserve/shrink, equality and destructor preserve original native operators. Original mdds block swap performs two copies and copy assignments; actual std::iter_swap remains a distinct move-temporary operation. Scalar and borrowed-pointer paths remain shared. Pure callers over unchanged mdds3.2.1 headers and full actual SharedString/CellTextAttr sources use verified existing complete native dependency objects and normal-only witness execution, comparing whole owned and Calc streams. Existing SharedString and CellTextAttr owners are reused; external mdds imports no Calc/SVL. Custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes, complete perfect-forwarding/rvalue overload families, physical ABI, pointee/callback/container/document/UI owners remain unverified. Task66 extends original initialized value and pointer callback families through existing owners. Original output-reference extraction copy-assigns the existing owned target; by-value extraction constructs an independent result. Rvalue append and actual erased forwarded constructor packs use the same original store, constructing incoming values before alias relocation. The existing scalar container requires its actual value-result binding only, so its heterogeneous callback type omits unrelated writable-reference overload requirements without runtime changes. Original value macro, pointer macro and Calc SharedString/CellTextAttr registrations reuse original block and actual value owners. Normal-only pure callers over whole unchanged mdds macros/headers and full actual SharedString/CellTextAttr sources compare complete value, borrowed-pointer and Calc streams. Original ValueT() empty expressions use actual default temporary, move assignment and destruction. Explicit type/reference/value-category/constructor witnesses replace erased C++ overload/ADL/parameter-pack syntax; no runtime type guessing, duplicate store or fake Calc pointee/provider. Other macro empty-expression categories, arbitrary ValueT/constructor families, throwing cleanup, custom allocators/StoreT, undefined ranges/lifetimes and physical ABI remain unverified. Full MTV/actual other Calc pointees/document/input/view/UI remain subsequent work; no whole module or upstream QA certification. Task67 generalizes the existing original SoA count/fill/range constructor bindings to actual owned values. Original get(pos,T&) assigns an existing output reference; owned T get(pos) declares a default value, calls reference get_impl and returns that value, destroying the fresh local before propagating a failed lookup. Scalar result callers remain unchanged. Existing blocks_type insert/swap/equality/erase member bodies now occupy original main_def.inl boundary through thin header wrappers, with original algorithms and no runtime import cycle. Actual SharedString and CellTextAttr value members, macros, default traits, block dispatch and empty event owners are reused. Original CellTextAttrTraits and CellTextAttrStoreType bind the same shared constructor/prototype, not a second container engine. Whole unchanged mdds SoA headers with actual full SharedString/CellTextAttr sources produce normal-only complete owned1203 and Calc505-byte streams; original Calc trait declaration is a selected exact declaration witness from full pinned mtvelements.hxx, not a compilation or certification of its absent full pointee dependency graph. Erased ADL/type/output/ValueT constructor/destructor witnesses replace C++ syntax without runtime value-type inference. Reference/value reads, count/fill/range, copy/clone/move and failed result cleanup are bounded initialized witnesses. Other value/allocator/constructor/throwing-operator families, undefined ranges/lifetimes, physical ABI and complete upstream QA remain unverified. Full CellStoreType requires actual formula/edittext and associated owners; ScColumn/Table/Document/edit/undo/input/view/UI remain next prerequisites, with no whole module/kernel/UI parity promotion. Last full61; next full71.",
       "knownViolations": [],
       "localSymbols": [
         "element_type_broadcaster",
@@ -44,7 +46,11 @@
         "string_block",
         "celltextattr_block",
         "string_element_callbacks",
-        "celltextattr_element_callbacks"
+        "celltextattr_element_callbacks",
+        "string_value_type",
+        "celltextattr_value_type",
+        "CellTextAttrTraits",
+        "CellTextAttrStoreType"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/inc/mtvelements.hxx",
@@ -52,7 +58,9 @@
         "string_block",
         "celltextattr_block",
         "numeric_block",
-        "uint16_block"
+        "uint16_block",
+        "CellTextAttrTraits",
+        "CellTextAttrStoreType"
       ]
     }
   }
