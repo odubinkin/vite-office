@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/formula/inc/opcode.ts",
+    "status": "mapped",
+    "upstreamPath": "include/formula/opcode.hxx",
+    "localSymbols": [
+      "OpCodeEnumToString"
+    ],
+    "upstreamSymbols": [
+      "enum OpCode",
+      "OpCodeEnumToString"
+    ],
+    "preservedResponsibilities": [
+      "Original complete shared header declaration and actual diagnostic responsibility.",
+      "Original enum values/aliases/defaults and initialized release behavior."
+    ],
+    "omittedResponsibilities": [
+      "Full formula/token/document/UI/native debug process termination/native ABI/full upstream QA remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/formula/inc/opcode.ts",
+          "marker": "OpCodeEnumToString"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "retains every original opcode and parameter name value and alias"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "matches every original UInt16 release opcode diagnostic"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "narrows original finite integer calls to the native UInt16 argument"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/formula/opcode.hxx",
+          "marker": "enum OpCode"
+        },
+        {
+          "path": "include/formula/opcode.hxx",
+          "marker": "OpCodeEnumToString"
+        }
+      ]
+    }
+  }
+}

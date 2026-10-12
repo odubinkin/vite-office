@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c3238842-956e-4d79-9055-79ff0eddc240",
+    "capabilityId": "CAP-c3238842-956e-4d79-9055-79ff0eddc240",
+    "suite": "shared",
+    "subsystem": "formula-opcode",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Complete original named enum values, aliases and defaults are retained.",
+      "Whole native header observations match initialized portable contracts without token/cell substitutes."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task74 ports the complete shared OpCode and ParamClass header contracts needed by original FormulaToken. All505opcode names/aliases/range sentinels,487diagnostic cases and10parameter classifications retain original values. Whole genuine native headers verify every65536UInt16 release diagnostic; unknown codes retain???, while a separate normal debug caller demonstrates native assertion termination. Browser binding deliberately claims release behavior only, not native debug process abort or unreachable numeric fallback. Enum-only opcode.enum declaration shard retains original header responsibility under authored1000line budget; opcode header consumes it without a cycle or a second engine. Whole Calc and affected formula raw100/source-absent build/profile and exact source-bound review are required. Full formula/token/cell/document/input/UI/native ABI/upstream QA remain unverified; next full81."
+    },
+    "capability": "Original shared formula opcode contracts",
+    "gaps": [
+      "Full formula/token/cell/document/input/UI and native ABI/upstream QA remain unverified.",
+      "Native debug process termination is observed, not implemented as browser termination."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/include/formula/opcode.hxx",
+          "marker": "enum OpCode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/opcode.hxx",
+          "marker": "OpCodeEnumToString"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/formula/opcode.hxx",
+          "marker": "Only to be used for debugging output."
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "ocPush"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-formula-opcode",
+    "scopeLimitations": [
+      "Task74 ports the complete shared OpCode and ParamClass header contracts needed by original FormulaToken. All505opcode names/aliases/range sentinels,487diagnostic cases and10parameter classifications retain original values. Whole genuine native headers verify every65536UInt16 release diagnostic; unknown codes retain???, while a separate normal debug caller demonstrates native assertion termination. Browser binding deliberately claims release behavior only, not native debug process abort or unreachable numeric fallback. Enum-only opcode.enum declaration shard retains original header responsibility under authored1000line budget; opcode header consumes it without a cycle or a second engine. Whole Calc and affected formula raw100/source-absent build/profile and exact source-bound review are required. Full formula/token/cell/document/input/UI/native ABI/upstream QA remain unverified; next full81.",
+      "Referenced spreadsheet token QA is contextual only, not executed or certified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/formula/inc/opcode.enum.ts",
+          "marker": "OpCode"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.ts",
+          "marker": "OpCodeEnumToString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "retains every original opcode and parameter name value and alias"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "matches every original UInt16 release opcode diagnostic"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "narrows original finite integer calls to the native UInt16 argument"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original shared formula opcode and parameter contracts (task74)"
+        }
+      ]
+    }
+  }
+}

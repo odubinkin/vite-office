@@ -1539,3 +1539,13 @@ Pinned mdds3.2.1 soa/main_def.inl set_cells_to_single_block first shortens the c
 Evidence: task70 native-container-range-cases.json scalar stream includes two controlled caller-only trait failures against complete unchanged original headers. The null creation throws the original logic_error text; assignment failure invokes the original unique_ptr deleter on the empty new block before propagation. Both complete retained-state/clear streams match the portable owner. These are explicit fault-injection witnesses, not naturally occurring allocation failures, sanitizer results or a certification of generic exception safety.
 
 Decision: preserve the original metadata-before-allocation order, temporary cleanup and retained partial state. Do not add rollback or normalize the block after failure.
+
+## CALC-066: opcode diagnostic numeric fallback is unreachable
+
+Status: confirmed original unreachable tail; no Calc consumer defect is established.
+
+At pinned9bc445578031fecf56086729d8e4940c77e14d65, include/formula/opcode.hxx OpCodeEnumToString returns a name in every explicit switch case. Its default asserts(false) and returns "???". The following ostringstream conversion of the numeric opcode can therefore never run, including in release builds where assert is disabled. This looks like a leftover fallback; the header explicitly labels the helper as debug-only with unstable output, so this is not a demonstrated spreadsheet defect.
+
+Evidence: task74 scripts/formula-opcode-native-probe.mjs compiles the whole unchanged original header normally with NDEBUG and compares all65536UInt16 diagnostics. Unknown code1 returns "???"; original range-end sentinel values36/49/67/72/84/180/521 also return "???". A separate ordinary debug caller without NDEBUG confirms the original assertion and SIGABRT for code1. No sanitizer or memory-safety inference is involved.
+
+Decision: preserve the actual release switch output. Do not replace "???" with the unreachable numeric conversion or manufacture names for range sentinels. Native debug process termination is recorded as a separate profile; the browser owner claims release behavior only.
