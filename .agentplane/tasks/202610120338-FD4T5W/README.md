@@ -4,7 +4,7 @@ title: "Implement original internal UNO mapping lifetime owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T04:04:18.861Z"
+  updated_by: "CODER"
+  note: "Complete original mapping lifetime streams with whole unchanged owner and hash-verified genuine reused dependencies:443source/39generated/9configs/209artifacts,8full witnesses and14new positive commands. Source-absent Calc106/shared19019+77 raw100; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound EVALUATOR SHA0c801307e7c9be936f0eba40edaa7f14e444c10d pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -67,8 +67,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T04:04:18.861Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original mapping lifetime streams with whole unchanged owner and hash-verified genuine reused dependencies:443source/39generated/9configs/209artifacts,8full witnesses and14new positive commands. Source-absent Calc106/shared19019+77 raw100; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound EVALUATOR SHA0c801307e7c9be936f0eba40edaa7f14e444c10d pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T04:03:28.426Z"
+doc_updated_at: "2026-10-12T04:04:18.925Z"
 doc_updated_by: "CODER"
 description: "Task62 after full61: complete cppu private Mapping and MappingEntry from original lbmap.cxx, reused existing mapping C record/string owners and actual free/get callback typedefs. Whole unchanged native TU and pure caller over hash-verified genuine task60 full dependencies; two variants and whole callback/value/alias streams, no substitute registry/provider. Exact full task60 shared argv plus whole new owners/test and Calc raw100; runtime/provenance/capability/docs and scoped gates. Full71 next."
 sections:
@@ -84,6 +90,39 @@ sections:
     Command: python3 output/playwright/task62-checks/gates.py; exact authored eslint recheck; npm run check:docs recheck; npx prettier --check apps/office/src/cppu/source/uno/lbmap.ts apps/office/src/cppu/source/uno/lbmap.test.ts apps/office/src/cppu/inc/uno/mapping.ts scripts/uno-mapping-lifetime-native-probe.mjs scripts/uno-exception-native-reuse.mjs apps/office/src/cppu/source/uno/native-mapping-lifetime-cases.json; python3 output/playwright/task62-checks/final-audit.py. Result: pass. Evidence:13actual final gates rows0,35tooling/4files, format-final-check.log, final-audit.json. TS7 app/tools, authored lint,JSDoc,size,dependencies,provenance/tree,shared+Calc inventory,routing,doctor,diff. Initial docs/lint shared the same missing Input type comment; first logs/13row manifest retained and only that documentation comment added. No source/observation/assertion/threshold weakening. Doctor0errors/2preexisting warnings.
 
     Scope: complete original cppu-private Mapping pointer/default/copy/move/destruction/pointer assignment/move assignment/get/is; private copy assignment remains deleted. MappingEntry initialized constructor/scalars/pointer/free/name/compiler copy/move/assignment/destruction, with only owned name acquired. Pointer assignment acquires new, releases old, then publishes new; C pointer callbacks are pure declared caller input. Registry/mediation/full environment/public Mapping descriptor constructors/exception consumers are not implemented by this owner. Physical ABI/allocator/pointer hash/leaks/native threads/shutdown and full upstream consumer QA remain unverified; leak detection disabled and broad parity flags false. No suspicious new case confirmed, so journal unchanged. Last full61 passed; next scheduled full71. Cell/storage/document/input/view/UI goal remains active. Actual source commit before EVALUATOR exactSHA, verify and clean finish follow.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T04:04:18.861Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original mapping lifetime streams with whole unchanged owner and hash-verified genuine reused dependencies:443source/39generated/9configs/209artifacts,8full witnesses and14new positive commands. Source-absent Calc106/shared19019+77 raw100; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound EVALUATOR SHA0c801307e7c9be936f0eba40edaa7f14e444c10d pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T04:03:28.426Z, excerpt_hash=sha256:b54087d18c978244a7e6a47e1402bfabe3f6f64b5e5c4e38b1b1548430cd3b82
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120338-FD4T5W/blueprint/resolved-snapshot.json
+    - old_digest: 7b2c1283ab687c4352642c741f0f5380f6b2eda3494f3b45f7b92c3b0ffd9c05
+    - current_digest: 7b2c1283ab687c4352642c741f0f5380f6b2eda3494f3b45f7b92c3b0ffd9c05
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120338-FD4T5W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120338-FD4T5W
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore exact3source links in finally. Preserve first failure logs/manifests. Revert only intentional task62 source/test/probe/reuse helper/registry/docs/journal changes. Never modify the verified task60 dependency build; missing/invalid cache requires regenerating it through its existing full original probe, not replacement providers. No Writer-only changes."
   Findings: |-
     Full61 passed, all438owners raw100, browserWriter306/shared2/Calc0. Original cppu private Mapping is distinct from public uno::Mapping: descriptor/environment constructors and mapped-interface overloads must not be invented here. Original private copy assignment is deleted; pointer assignment acquires new before releasing old and publishing the pointer. MappingEntry acquires only its OUString member, not borrowed mapping/free callback. Complete environment/registry runtime, exception helper, weak objects/services/CharClass/pool/cells/document/view/UI remain missing. Native dependency reuse must validate every original hash/config/generated/probe/terminal command and concrete reused outputs rather than infer a live or valid build from a file name.
@@ -103,6 +142,10 @@ sections:
     - Observation: The same undocumented Input type also failed check:docs; the earlier remaining-gates wording was imprecise.11other gates passed. First doc/lint logs and full manifest retained.
       Impact: Both documentation and lint acceptance require the same single caller-type JSDoc.
       Resolution: The comment-only repair passed authored lint and the original check:docs rerun; preserve all source behavior/observations/thresholds. Merge only actual successful recheck results into final13row manifest.
+
+    - Observation: Native dependencies were verified/reused rather than rebuilt; previous whole witnesses replayed and actual new caller compiled in both variants. Only missing caller-type JSDoc repaired; first failures retained.
+      Impact: Complete registry/mediation/environment/public Mapping descriptor wrappers/exception consumers and physical ABI/allocator/pointer hash/leaks/thread/shutdown remain unverified. No mapping provider synthesized.
+      Resolution: Retain narrow capability scope and false broad parity flags; continue remaining true upstream dependencies before Calc cell/document/input/view/UI. Full71 next.
 id_source: "generated"
 ---
 ## Summary
@@ -131,6 +174,39 @@ Command: python3 output/playwright/task62-checks/gates.py; exact authored eslint
 
 Scope: complete original cppu-private Mapping pointer/default/copy/move/destruction/pointer assignment/move assignment/get/is; private copy assignment remains deleted. MappingEntry initialized constructor/scalars/pointer/free/name/compiler copy/move/assignment/destruction, with only owned name acquired. Pointer assignment acquires new, releases old, then publishes new; C pointer callbacks are pure declared caller input. Registry/mediation/full environment/public Mapping descriptor constructors/exception consumers are not implemented by this owner. Physical ABI/allocator/pointer hash/leaks/native threads/shutdown and full upstream consumer QA remain unverified; leak detection disabled and broad parity flags false. No suspicious new case confirmed, so journal unchanged. Last full61 passed; next scheduled full71. Cell/storage/document/input/view/UI goal remains active. Actual source commit before EVALUATOR exactSHA, verify and clean finish follow.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T04:04:18.861Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original mapping lifetime streams with whole unchanged owner and hash-verified genuine reused dependencies:443source/39generated/9configs/209artifacts,8full witnesses and14new positive commands. Source-absent Calc106/shared19019+77 raw100; exact prior argv/maps retained,13gates/35tooling/format and implementation-bound EVALUATOR SHA0c801307e7c9be936f0eba40edaa7f14e444c10d pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T04:03:28.426Z, excerpt_hash=sha256:b54087d18c978244a7e6a47e1402bfabe3f6f64b5e5c4e38b1b1548430cd3b82
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120338-FD4T5W/blueprint/resolved-snapshot.json
+- old_digest: 7b2c1283ab687c4352642c741f0f5380f6b2eda3494f3b45f7b92c3b0ffd9c05
+- current_digest: 7b2c1283ab687c4352642c741f0f5380f6b2eda3494f3b45f7b92c3b0ffd9c05
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120338-FD4T5W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120338-FD4T5W
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Restore exact3source links in finally. Preserve first failure logs/manifests. Revert only intentional task62 source/test/probe/reuse helper/registry/docs/journal changes. Never modify the verified task60 dependency build; missing/invalid cache requires regenerating it through its existing full original probe, not replacement providers. No Writer-only changes.
@@ -154,3 +230,7 @@ Full61 passed, all438owners raw100, browserWriter306/shared2/Calc0. Original cpp
 - Observation: The same undocumented Input type also failed check:docs; the earlier remaining-gates wording was imprecise.11other gates passed. First doc/lint logs and full manifest retained.
   Impact: Both documentation and lint acceptance require the same single caller-type JSDoc.
   Resolution: The comment-only repair passed authored lint and the original check:docs rerun; preserve all source behavior/observations/thresholds. Merge only actual successful recheck results into final13row manifest.
+
+- Observation: Native dependencies were verified/reused rather than rebuilt; previous whole witnesses replayed and actual new caller compiled in both variants. Only missing caller-type JSDoc repaired; first failures retained.
+  Impact: Complete registry/mediation/environment/public Mapping descriptor wrappers/exception consumers and physical ABI/allocator/pointer hash/leaks/thread/shutdown remain unverified. No mapping provider synthesized.
+  Resolution: Retain narrow capability scope and false broad parity flags; continue remaining true upstream dependencies before Calc cell/document/input/view/UI. Full71 next.
