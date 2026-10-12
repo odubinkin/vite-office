@@ -1475,3 +1475,27 @@ Decision: preserve original generated behavior. Actual `cppuhelper/Library_cppuh
 and the selected bridge use internal comprehensive API; task55 uses original
 cppumaker `-C` accordingly. Do not patch the normal getter, remove scoped enums
 or infer that the supported comprehensive library configuration is broken.
+
+## CALC-061: descriptor type name treats embedded NUL differently by delimiter branch
+
+Status: confirmed original branch-dependent string boundary; not an established
+defect for supported/loadable environment names.
+
+In cppu/source/uno/EnvDcp.cxx, uno_EnvDcp_getTypeName searches for the first colon
+over the descriptor's explicit length. With a colon, it constructs that bounded
+prefix. Without a colon, it calls rtl_uString_newFromStr on terminated input.
+A real OUString can retain embedded NUL, so UTF16 units [103,0,99] produce a
+one-unit type name [103]; [103,0,99,58,112] produce the three-unit prefix
+[103,0,99]. Whether such names denote a supported environment is not certified.
+The purpose path retains its leading colon and entire explicit-length suffix.
+
+Evidence: task57 genuine --write/--check builds the complete original descriptor
+source/header and every dependency owner normal-ASan/UBSan. Whole functions24684,
+aliases16572 and wrappers11944-byte observations match the portable shared
+owners. output/playwright/task57-checks/decoded-functions.json consumes both
+complete original C streams, preserving every initialized string/refcount/
+identity observation. Input indices8/9 reproduce the branch difference.
+
+Decision: preserve the original bounded-versus-terminated calls and all output
+ownership. Do not normalize with a single native JS split/slice rule, discard
+NUL units uniformly, add descriptor validation or repair upstream behavior.

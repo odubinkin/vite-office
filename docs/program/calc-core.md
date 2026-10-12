@@ -2993,3 +2993,34 @@ Generic exception helpers, environment/mapping and later weak objects/services/
 Calc document/edit/view/UI remain subsequent. Physical ABI, allocator/leaks,
 native thread/shutdown and full consumer QA are unverified. Last full51;
 next scheduled61.
+
+## Original UNO environment descriptor operations
+
+Task57 implements complete original EnvDcp.cxx and published C/C++ boundaries
+over shared SAL/OUString owners, a dependency of actual EnvStack and lbmap.
+Type-prefix and purpose branches, initialized inout replacement, retained source
+aliases and borrowed live output field addresses preserve original ownership.
+No separate string parser/default policy or environment/mapping provider is
+introduced. CALC-061 records the confirmed branch-dependent embedded-NUL boundary;
+the original behavior is preserved.
+
+Original --write/--check pass over70complete genuine translation units per
+normal/ASan/UBSan build,349full source hashes,13genuine generated headers and
+8configuration hashes. All148terminal commands exit0/signalnull; whole functions
+24684/aliases16572/wrappers11944-byte streams match native normal/sanitized builds
+and the actual browser owners. Both C streams are fully decoded, including all
+initialized string/refcount/identity observations; no selected-byte certificate.
+
+Source-absent Calc106/24 and related shared176/50 tests pass, with whole19/72
+executable owners every raw S/F/B counter positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4467/2259/597/4039). Complete task56 shared argv is
+retained, adding only the actual descriptor test/three whole source owners and
+changing the report destination. All3source links restored exactly. Published
+C header is a pure reexport, with actual C bodies inventoried separately.
+Scoped gate acceptance is recorded in task57 evidence. Matching registry records
+and the limited capability keep broad parity flags false. Original
+StringLiterals::checkEmbeddedNul is contextual shared string QA, not a direct
+descriptor QA port. Generic exception/environment/mapping, further weak objects/
+services and Calc document/edit/view/UI remain subsequent. Physical ABI/native
+thread/resource/leaks/shutdown and full consumer/upstream QA are unverified.
+Last full51; next scheduled61.

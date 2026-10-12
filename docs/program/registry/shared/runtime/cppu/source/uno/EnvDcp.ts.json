@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/source/uno/EnvDcp.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-2381887a-8b89-4ac3-9d70-c5b1164d8f49"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/source/uno/EnvDcp.ts#uno_EnvDcp_getTypeName",
+        "apps/office/src/cppu/source/uno/EnvDcp.test.ts#matches complete original"
+      ],
+      "justification": "Complete original EnvDcp.cxx descriptor functions and published uno/EnvDcp.h/cppu/EnvDcp.hxx boundaries reuse existing actual SAL/OUString owners. Type prefix uses bounded input when colon exists and terminated input otherwise; purpose retains the first colon and the full bounded suffix, or replaces output with original empty storage. C++ wrappers default-construct actual output values and pass borrowed live field address views with no additional string owner/provider. Whole original source/dependency/header normal-ASan/UBSan streams and source-absent complete related owners raw100 are required. No standalone string parser/default policy, generic exception/environment/mapping provider, physical ABI/allocator/leaks/native thread/shutdown or full consumer/upstream QA claim; broad parity flags remain false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uno_EnvDcp_getTypeName",
+        "uno_EnvDcp_getPurpose"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppu/source/uno/EnvDcp.cxx",
+      "upstreamSymbols": [
+        "uno_EnvDcp_getTypeName",
+        "uno_EnvDcp_getPurpose"
+      ]
+    }
+  }
+}

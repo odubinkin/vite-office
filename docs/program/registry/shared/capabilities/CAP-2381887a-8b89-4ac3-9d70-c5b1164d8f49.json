@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2381887a-8b89-4ac3-9d70-c5b1164d8f49",
+    "capabilityId": "CAP-2381887a-8b89-4ac3-9d70-c5b1164d8f49",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve complete original C/C++ descriptor boundaries, explicit-length/terminated branches, purpose delimiter and actual shared string ownership.",
+      "Match whole original initialized C replacement/retained-alias/wrapper streams over unchanged native dependencies, plus source-absent whole-owner raw100."
+    ],
+    "capability": "Original UNO environment descriptor type and purpose operations",
+    "gaps": [
+      "Generic exception/environment/mapping and further weak objects/services/Calc document/edit/view/UI remain subsequent; physical ABI/allocator/leaks/native thread/shutdown and full consumer/upstream QA unverified.",
+      "Original StringLiterals::checkEmbeddedNul is a contextual shared string QA reference, not a direct EnvDcp test port. No direct descriptor QA found in cppu/cppuhelper; whole genuine descriptor source/header caller proves the implemented boundaries."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/uno/EnvDcp.cxx",
+          "marker": "uno_EnvDcp_getTypeName"
+        },
+        {
+          "path": "include/uno/EnvDcp.h",
+          "marker": "uno_EnvDcp_getTypeName"
+        },
+        {
+          "path": "include/cppu/EnvDcp.hxx",
+          "marker": "getTypeName"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+          "marker": "checkEmbeddedNul"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/uno/EnvDcp.h",
+          "marker": "Get the purpose part of an environment descriptor."
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/uno/EnvDcp.ts",
+          "marker": "uno_EnvDcp_getTypeName"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/uno/EnvDcp.ts",
+          "marker": "uno_EnvDcp_getTypeName"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/EnvDcp.ts",
+          "marker": "getTypeName"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/uno/EnvDcp.test.ts",
+          "marker": "matches complete original"
+        },
+        {
+          "path": "scripts/uno-envdcp-native-probe.mjs",
+          "marker": "Original environment descriptor observations"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original UNO environment descriptor operations"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Complete original EnvDcp.cxx descriptor functions and published uno/EnvDcp.h/cppu/EnvDcp.hxx boundaries reuse existing actual SAL/OUString owners. Type prefix uses bounded input when colon exists and terminated input otherwise; purpose retains the first colon and the full bounded suffix, or replaces output with original empty storage. C++ wrappers default-construct actual output values and pass borrowed live field address views with no additional string owner/provider. Whole original source/dependency/header normal-ASan/UBSan streams and source-absent complete related owners raw100 are required. No standalone string parser/default policy, generic exception/environment/mapping provider, physical ABI/allocator/leaks/native thread/shutdown or full consumer/upstream QA claim; broad parity flags remain false."
+    },
+    "scopeLimitations": [
+      "Complete original EnvDcp.cxx descriptor functions and published uno/EnvDcp.h/cppu/EnvDcp.hxx boundaries reuse existing actual SAL/OUString owners. Type prefix uses bounded input when colon exists and terminated input otherwise; purpose retains the first colon and the full bounded suffix, or replaces output with original empty storage. C++ wrappers default-construct actual output values and pass borrowed live field address views with no additional string owner/provider. Whole original source/dependency/header normal-ASan/UBSan streams and source-absent complete related owners raw100 are required. No standalone string parser/default policy, generic exception/environment/mapping provider, physical ABI/allocator/leaks/native thread/shutdown or full consumer/upstream QA claim; broad parity flags remain false.",
+      "Contextual original string QA reference does not claim a direct EnvDcp QA port."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "environment-descriptor-type-purpose-ownership"
+  }
+}

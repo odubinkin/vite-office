@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/EnvDcp.ts",
+    "status": "mapped",
+    "upstreamPath": "include/cppu/EnvDcp.hxx",
+    "localSymbols": [
+      "getTypeName",
+      "getPurpose"
+    ],
+    "upstreamSymbols": [
+      "getTypeName",
+      "getPurpose"
+    ],
+    "preservedResponsibilities": [
+      "Complete original EnvDcp.cxx descriptor functions and published uno/EnvDcp.h/cppu/EnvDcp.hxx boundaries reuse existing actual SAL/OUString owners. Type prefix uses bounded input when colon exists and terminated input otherwise; purpose retains the first colon and the full bounded suffix, or replaces output with original empty storage. C++ wrappers default-construct actual output values and pass borrowed live field address views with no additional string owner/provider. Whole original source/dependency/header normal-ASan/UBSan streams and source-absent complete related owners raw100 are required. No standalone string parser/default policy, generic exception/environment/mapping provider, physical ABI/allocator/leaks/native thread/shutdown or full consumer/upstream QA claim; broad parity flags remain false."
+    ],
+    "omittedResponsibilities": [
+      "Full generic exception/environment/mapping, physical ABI/allocator/leaks/native thread/shutdown and complete consumer/upstream QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/EnvDcp.ts",
+          "marker": "getTypeName"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/EnvDcp.test.ts",
+          "marker": "matches complete original"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/cppu/EnvDcp.hxx",
+          "marker": "getTypeName"
+        }
+      ]
+    }
+  }
+}
