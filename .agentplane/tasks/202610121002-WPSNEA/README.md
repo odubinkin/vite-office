@@ -1,10 +1,11 @@
 ---
 id: "202610121002-WPSNEA"
 title: "Implement original single-value SoA set with hinted writes"
-status: "DOING"
+result_summary: "Implement original single-value and hinted writes over existing shared SoA storage"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -48,12 +49,15 @@ quality_review:
     - "Whole original normal-only scalar2189311/owned278399/Calc1510 streams and all8native command statuses pass; final build,3fresh cases and all13gates plus35tooling tests pass."
     - "Mapped definition shard and mutation symbols are canonical inventory records; private helper acceptance retained, no duplicate engine, runtime cycle or broad certification."
 commit:
-  hash: "962e1e2870d231b3470a02e31eb2a75cf4765d8e"
-  message: "🧩 WPSNEA calc: implement original single-value segment writes"
+  hash: "7542a8661cfaca70caf6b9fe1088b5a304ad61c3"
+  message: "✅ WPSNEA calc: record verified single-value write coverage"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved original single-value plain and hinted SoA writes over existing shared fields on calc; capture whole unchanged native results and source-absent scoped raw100."
+  -
+    author: "CODER"
+    body: "Verified: both original const-value single-cell set overloads and complete neighbor/split/merge transformations preserve actual shared metadata, value lifecycle, events and returned iterator identities. Whole Calc111 and related217 cases pass source-absent with raw100; native10016permutations and owned/Calc streams match, build and all13gates pass. Exact reviewed implementation is recorded and source links restored."
 events:
   -
     type: "status"
@@ -74,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact implementation962e1e28: complete source-absent Calc111 and related217 tests pass, whole raw S/B/F/L100;10016scalar permutations and whole owned/Calc native streams match, all8native statuses positive. Build,3fresh cases, all13gates and35tooling cases pass; original links restored and exact-SHA EVALUATOR pass. Full due71; document/UI remain incomplete."
+  -
+    type: "status"
+    at: "2026-10-12T10:29:00.411Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: both original const-value single-cell set overloads and complete neighbor/split/merge transformations preserve actual shared metadata, value lifecycle, events and returned iterator identities. Whole Calc111 and related217 cases pass source-absent with raw100; native10016permutations and owned/Calc streams match, build and all13gates pass. Exact reviewed implementation is recorded and source links restored."
 doc_version: 3
-doc_updated_at: "2026-10-12T10:28:57.213Z"
+doc_updated_at: "2026-10-12T10:29:00.413Z"
 doc_updated_by: "CODER"
 description: "Iteration69: implement both original single-value set overloads and complete empty/data/singleton/top/middle/bottom neighbor transformations over the existing shared store. Reuse actual Calc strings and text attributes, preserve lifecycle/metadata/event/iterator order, and verify whole unchanged native cases and complete scoped source-absent raw100. Original main_def.inl single-value setter family may use a source-mapped main_def.set.ts implementation shard to retain the1000line limit; no alternate model or fake pointees."
 sections:
@@ -204,6 +215,10 @@ sections:
     - Observation: Initial structural gates retained: final logical-size plumbing missed one argument/JSDoc; new definition shard needs canonical aligned responsibility, header-local set declaration marker and explicit filename-divergence entry. Three registry tooling cases fail on that metadata.
       Impact: Type/docs/provenance/inventory acceptance is not yet green; no validator waiver.
       Resolution: Pass the original actual logical-size argument; document it, retain aligned enum and actual header marker, and register the intentional source-mapped single-value definition shard in the existing filename-divergence owner. Rerun exact gates after full current-source profile and preserve all failures.
+extensions:
+  implementation_commit:
+    hash: "962e1e2870d231b3470a02e31eb2a75cf4765d8e"
+    message: "🧩 WPSNEA calc: implement original single-value segment writes"
 id_source: "generated"
 ---
 ## Summary
