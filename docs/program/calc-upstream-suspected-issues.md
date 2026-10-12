@@ -1559,3 +1559,13 @@ At pinned9bc445578031fecf56086729d8e4940c77e14d65, FormulaToken::GetParamCount f
 Evidence: task75 scripts/formula-token-native-probe.mjs compiles whole original token and compiler headers plus complete original selected member definitions over actual SAL, SharedString and Boost owners. Its normal-only values stream observes byte3 through original initialization and a zero parameter count for the actual ocStringXML token. The portable implementation preserves the same early return and reachable string cases; the initial unit-test expectation of three was corrected to the observed zero. The two already-excluded ocBad/ocStringXML comparisons are documented at the original TS branch rather than emitted as unreachable comparisons. A further whole65536-opcode stream checks original GetParamCount for actual FormulaStringOpToken values with bytes0/1/255, including the reachable ocStringName/ocDPFieldName alternatives. No sanitizer or memory-safety conclusion is involved.
 
 Decision: preserve the original early return and later cases. Do not move the string-token branch or derive parameter counts directly from stored bytes. Revisit consumer reachability when the original compiler/input owners are connected.
+
+## CALC-068: hybrid result equality omits the empty-display flag
+
+Status: confirmed original field omission; a Calc consumer defect is not established.
+
+Pinned sc/source/core/tool/token.cxx ScHybridCellToken::operator== compares the base type/opcode, mfDouble, maString and maFormula, but does not compare mbEmptyDisplayedAsString. Two valid zero-valued tokens with an empty shared string and the same formula therefore compare equal even when IsEmptyDisplayedAsString differs. The analogous ScEmptyCellToken equality does compare its display flag. Full consumer behavior is still unported, so this is a suspicious asymmetry, not a demonstrated spreadsheet defect.
+
+Evidence: task76 scripts/sc-result-token-native-probe.mjs compiles complete unchanged original selected class declarations/member definitions over real shared owners. The ordinary NDEBUG hybrid stream includes the valid empty-string flag pair (pattern0) and preserves flag_equal1; other initialized release-only combinations do not claim satisfaction of the native debug assertion.
+
+Decision: retain the original omission and both query results. Do not add the flag to equality. Native debug assertion termination and full ScFormulaResult consumers remain unverified.

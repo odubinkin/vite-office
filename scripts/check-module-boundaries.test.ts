@@ -237,11 +237,11 @@ it("permits Calc mdds dependency while keeping external owners independent", /**
 
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
   it("isolates Calc and Writer while admitting shared dependencies", /** Verifies independent application owners. @returns Nothing. */ () => {
-    for (const dependency of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"])
+    for (const dependency of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff", "sal"])
       expect(isForbiddenModuleEdge("sc", dependency)).toBe(false);
     expect(isForbiddenModuleEdge("sc", "sw")).toBe(true);
     expect(isForbiddenModuleEdge("sw", "sc")).toBe(true);
-    for (const shared of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"]) {
+    for (const shared of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff", "sal"]) {
       expect(isForbiddenModuleEdge(shared, "sc")).toBe(true);
       expect(isForbiddenModuleEdge(shared, "sw")).toBe(true);
     }

@@ -63,6 +63,8 @@ const allowedEdges = new Map([
       "o3tl",
       "offapi",
       "package",
+      // Original Calc global.hxx/token.hxx use rtl/ustring.hxx; hybrid results own OUString.
+      "sal",
       "sax",
       "sfx2",
       "svl",

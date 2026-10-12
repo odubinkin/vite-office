@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/token.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/token.cxx",
+    "localSymbols": [
+      "ScEmptyCellToken",
+      "ScHybridCellToken"
+    ],
+    "upstreamSymbols": [
+      "ScEmptyCellToken::operator==",
+      "ScHybridCellToken::ScHybridCellToken(",
+      "ScHybridCellToken::GetDouble",
+      "ScHybridCellToken::operator=="
+    ],
+    "preservedResponsibilities": [
+      "Original Calc header/core tool responsibility and genuine empty/hybrid result token classes.",
+      "Original constructor/copy/clone/query/equality fields and actual shared ownership."
+    ],
+    "omittedResponsibilities": [
+      "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScEmptyCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScHybridCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "matches complete original empty token flags, clone policy and equality stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "matches complete original hybrid token shared ownership and formula copy move stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "matches original hybrid result IEEE payload and compared field distinctions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "class ScEmptyCellToken final"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "class ScHybridCellToken final"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScEmptyCellToken::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScHybridCellToken::ScHybridCellToken("
+        }
+      ]
+    }
+  }
+}
