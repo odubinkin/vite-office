@@ -1,10 +1,11 @@
 ---
 id: "202610121251-865XS3"
 title: "Implement original Calc FormulaResultValue owner and shared string lifecycle"
-status: "DOING"
+result_summary: "Implemented original FormulaResultValue using genuine shared owners; task73 verified, next full81; document/input/UI remain subsequent work."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,8 +45,8 @@ quality_review:
     - "Original actual named struct and four constructor contracts preserve defaults, all enum-vs-double distinctions, genuine shared string special members, reference identity and fixed-width fields; whole native captures match without substitutes."
     - "Exact committed47source hashes match current maps/evidence; Calc116 and shared63 tests pass raw100, affected4case recheck and all13aggregate gates plus23tooling cases pass; first failures preserved."
 commit:
-  hash: "14639632a54ce990d48c05ea41e41d19805cd0ce"
-  message: "🚧 865XS3 calc: implement original FormulaResultValue ownership"
+  hash: "a25d09e09f692f03a82415b336258228e47fff18"
+  message: "✅ 865XS3 verify: record native and scoped coverage checks"
 comments:
   -
     author: "CODER"
@@ -53,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation committed; complete native streams and current scoped raw100/gates pass, proceeding to separate same-agent quality review."
+  -
+    author: "CODER"
+    body: "Verified: Original Calc FormulaResultValue contracts and actual shared ownership match native; complete Calc and related shared raw100, source-absent build/profile, aggregate gates and exact source-bound same-agent review pass."
 events:
   -
     type: "status"
@@ -74,8 +78,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original FormulaResultValue owner at14639632a54ce990d48c05ea41e41d19805cd0ce matches complete native streams; Calc116/shared63 raw100, source-absent build/profile and all aggregate/tooling gates pass. Separate same-agent EVALUATOR report recorded; no full kernel/UI claim; next full81."
+  -
+    type: "status"
+    at: "2026-10-12T13:27:21.890Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original Calc FormulaResultValue contracts and actual shared ownership match native; complete Calc and related shared raw100, source-absent build/profile, aggregate gates and exact source-bound same-agent review pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T13:27:05.021Z"
+doc_updated_at: "2026-10-12T13:27:21.892Z"
 doc_updated_by: "CODER"
 description: "Task73: port actual sc::FormulaResultValue named struct and all four explicit constructors plus implicit copy/move/assignment/destruction, reusing real shared FormulaError/SharedString owners. Preserve Invalid/Value/String/Error distinctions, defaults, numeric NaN payloads, by-value string copy/move and lifetime semantics; no guessed enum-vs-double overload, synthetic token/cell/document or duplicate string model. Compile selected exact original struct and constructor bodies with whole genuine SharedString/SAL dependencies normal-only; no full ScFormulaResult claim. Full Calc plus directly related shared raw100/upstream-absent build, inventory/provenance/aggregate gates and exact source-bound quality phase; next full81."
 sections:
@@ -156,6 +167,10 @@ sections:
     - Observation: The final registry diagnostic specifically identifies maString, meType and mnError as missing local declarations. Inspection of collectDeclaredSymbols confirms ordinary method declarations are collected, but accessors are not.
       Impact: The earlier restored member list overclaimed what this field indexes; this is metadata, not an upstream behavior discrepancy.
       Resolution: Remove only these three accessor names from semantic.localSymbols, retain the actual class/enum/method declarations and every accessor evidence/provenance marker. Preserve first gate manifest and registry failures; recheck registry without weakening its validator. The corrected self-copy test passed all four cases with whole owner raw100 while all source links were absent and then restored.
+extensions:
+  implementation_commit:
+    hash: "14639632a54ce990d48c05ea41e41d19805cd0ce"
+    message: "🚧 865XS3 calc: implement original FormulaResultValue ownership"
 id_source: "generated"
 ---
 ## Summary
