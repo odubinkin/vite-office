@@ -4,7 +4,7 @@ title: "Implement shared formula error codes and encoded double errors"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T12:45:08.155Z"
+  updated_by: "CODER"
+  note: "Complete original shared error header and native JS contract verified at1af1cccdd89f; Calc112/30 plus shared5/1 raw S/B/F/L100/every counter positive,23tooling cases/13aggregate gates, complete normal native65k+300 streams and actual Chromium154 current-source storage witnesses, all3source links absent/restored; exact source-bound same-agent EVALUATOR pass. No full module/UI or cross-engine/arithmetic/transport claim; next full81."
   attempts: 0
 quality_review:
   state: "pass"
@@ -71,8 +71,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: implementation and exact scoped/native/browser validation complete; source commit1af1cccdd89f records shared formula error contracts and necessary namespace registration, source-bound EVALUATOR phase follows."
+  -
+    type: "verify"
+    at: "2026-10-12T12:45:08.155Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original shared error header and native JS contract verified at1af1cccdd89f; Calc112/30 plus shared5/1 raw S/B/F/L100/every counter positive,23tooling cases/13aggregate gates, complete normal native65k+300 streams and actual Chromium154 current-source storage witnesses, all3source links absent/restored; exact source-bound same-agent EVALUATOR pass. No full module/UI or cross-engine/arithmetic/transport claim; next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T12:45:06.469Z"
+doc_updated_at: "2026-10-12T12:45:08.215Z"
 doc_updated_by: "CODER"
 description: "Task72: port the complete original include/formula/errorcodes.hxx enum, CreateDoubleError, GetDoubleErrorValue and isPublishedFormulaError as the required formula-result/ScFormulaCell dependency. Reuse native JS numeric/DataView primitives and existing SAL source evidence instead of a duplicate library. Compare unchanged complete pinned original header via a normal-only native caller; retain all enum/internal/published/default distinctions, NaN low-bit precedence and invalid runtime assumptions in evidence. Complete Calc plus directly related shared raw100 with upstream links absent/restored, registry/provenance and aggregate local gates. No Writer-only changes, no full suite until81, no pretend formula cell/document/UI."
 sections:
@@ -102,6 +108,39 @@ sections:
     Command: node output/playwright/task72-checks/gates.mjs, followed by --recheck of changed-scope checks; npx vitest run scripts/check-source-provenance.test.ts scripts/check-module-boundaries.test.ts. Result:14effective rows pass,13aggregate gates plus related tooling23tests/2files. Evidence: gates-results.json/tooling-recheck.json/first-gates-results.json and retained first-failure logs. Scope: format/lint/type/docs/size/dependencies/resources/tree/provenance/global registry/routing/doctor/diff plus complete directly related tooling. New formula namespace has no runtime module import edges; application/browser reverse edges remain rejected. No Writer repair or timeout/threshold/exclusion changes.
 
     Command: python3 output/playwright/task72-checks/final-audit.py and source-bound same-agent EVALUATOR. Result: pass. Evidence: final-audit.json/exact-review.json plus .agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/quality-report.json. Scope:30exact committed source hashes at1af1cccdd89fd856885256e15d228b7729f366ef, current raw maps/streams, source pin/restored links, explicit first failures and clean intentional scope. Separate same-agent EVALUATOR phase, not independent review. Complete formula/kernel/document/input/UI, other engines, arithmetic/JSON/cross-process payload preservation and native ABI remain unverified. Next full81; no full suite or sanitizer this leaf.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T12:45:08.155Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original shared error header and native JS contract verified at1af1cccdd89f; Calc112/30 plus shared5/1 raw S/B/F/L100/every counter positive,23tooling cases/13aggregate gates, complete normal native65k+300 streams and actual Chromium154 current-source storage witnesses, all3source links absent/restored; exact source-bound same-agent EVALUATOR pass. No full module/UI or cross-engine/arithmetic/transport claim; next full81.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T12:45:06.469Z, excerpt_hash=sha256:7d52ac0591c37cdcff2cf08c17d019c50bd8545c001b01b22129b4b75cfe2fec
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121136-6TQ5CQ/blueprint/resolved-snapshot.json
+    - old_digest: a56c1321a86995dd22389ef32989386d78860e767b8496912de4d5e1d154bb39
+    - current_digest: a56c1321a86995dd22389ef32989386d78860e767b8496912de4d5e1d154bb39
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121136-6TQ5CQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121136-6TQ5CQ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task72 implementation and task evidence commits; restore original3symlink targets after any runtime verification failure; keep original native/full failure logs and source hashes. Re-run affected scoped checks after rollback; preserve unrelated active tasks."
   Findings: |-
     Preflight: clean calc after task71 DONE ff739312; unrelated C9TN6M/X6VV8G tasks untouched. User authorizes continued core-first implementation and native-JS equivalence preference. Current source has no shared formula/errorcodes owner. It is included by both ScFormulaResult and ScFormulaCell; this leaf supplies actual missing contracts, not a pretend cell/store or UI readiness. Last full71; next full81. The previous status-only turn is revalidated against clean authoritative task71 DONE state; this task is the next concrete implementation.
@@ -159,6 +198,39 @@ Command: installed playwright-cli -s=formula-errors72 open/snapshot/run-code --f
 Command: node output/playwright/task72-checks/gates.mjs, followed by --recheck of changed-scope checks; npx vitest run scripts/check-source-provenance.test.ts scripts/check-module-boundaries.test.ts. Result:14effective rows pass,13aggregate gates plus related tooling23tests/2files. Evidence: gates-results.json/tooling-recheck.json/first-gates-results.json and retained first-failure logs. Scope: format/lint/type/docs/size/dependencies/resources/tree/provenance/global registry/routing/doctor/diff plus complete directly related tooling. New formula namespace has no runtime module import edges; application/browser reverse edges remain rejected. No Writer repair or timeout/threshold/exclusion changes.
 
 Command: python3 output/playwright/task72-checks/final-audit.py and source-bound same-agent EVALUATOR. Result: pass. Evidence: final-audit.json/exact-review.json plus .agentplane/tasks/202610121136-6TQ5CQ/quality/20261012-124335584-recovery-context/quality-report.json. Scope:30exact committed source hashes at1af1cccdd89fd856885256e15d228b7729f366ef, current raw maps/streams, source pin/restored links, explicit first failures and clean intentional scope. Separate same-agent EVALUATOR phase, not independent review. Complete formula/kernel/document/input/UI, other engines, arithmetic/JSON/cross-process payload preservation and native ABI remain unverified. Next full81; no full suite or sanitizer this leaf.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T12:45:08.155Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original shared error header and native JS contract verified at1af1cccdd89f; Calc112/30 plus shared5/1 raw S/B/F/L100/every counter positive,23tooling cases/13aggregate gates, complete normal native65k+300 streams and actual Chromium154 current-source storage witnesses, all3source links absent/restored; exact source-bound same-agent EVALUATOR pass. No full module/UI or cross-engine/arithmetic/transport claim; next full81.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T12:45:06.469Z, excerpt_hash=sha256:7d52ac0591c37cdcff2cf08c17d019c50bd8545c001b01b22129b4b75cfe2fec
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121136-6TQ5CQ/blueprint/resolved-snapshot.json
+- old_digest: a56c1321a86995dd22389ef32989386d78860e767b8496912de4d5e1d154bb39
+- current_digest: a56c1321a86995dd22389ef32989386d78860e767b8496912de4d5e1d154bb39
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121136-6TQ5CQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121136-6TQ5CQ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
