@@ -1,10 +1,11 @@
 ---
 id: "202610121608-SAM7JV"
 title: "Implement original mdds matrix storage and typed access"
-status: "DOING"
+result_summary: "Implemented original mdds matrix storage and typed access with genuine shared ownership"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -59,6 +60,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: original mdds matrix core committed at abcfd1c50790 with genuine shared SoA/SharedString owners; native and whole Calc/shared raw100, final matrix raw100 and14gates pass. Separate same-agent EVALUATOR will bind exact source and declared missing APIs."
+  -
+    author: "CODER"
+    body: "Verified: Original mdds matrix core over genuine SoA vector and SharedString retains traits, geometry, lifetimes, typed positions/queries/writes and original int8 asymmetry. Whole Calc123/shared221 raw S/B/F/L100 every counter positive, final current matrix raw100, seven ordinary native commands/448sources and whole28105/585byte streams, source-absent static/profile0UI, all14gates/23tooling and exact145source/test/fixture hashes pass atabcfd1c50790a04b67405b1e8add204fb6132bd6 with same-agent separate EVALUATOR pass. Inventory foundations remain partial; actual matrix algorithms/ScMatrix/document/UI and full QA still required, next full81."
 events:
   -
     type: "status"
@@ -80,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original mdds matrix core verified atabcfd1c50790a04b67405b1e8add204fb6132bd6: Calc123/shared221 whole raw S/B/F/L100 every counter positive; final current matrix118S64B37F115L100; seven ordinary native commands/448sources and full28105/585byte streams; source-absent static/profile0UI, all14gates/23tooling, exact145source/test hashes and same-agent separate EVALUATOR pass. Actual shared owners reused, CALC-069 preserved, missing matrix algorithms/document/UI recorded honestly, next full81."
+  -
+    type: "status"
+    at: "2026-10-12T16:37:30.431Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original mdds matrix core over genuine SoA vector and SharedString retains traits, geometry, lifetimes, typed positions/queries/writes and original int8 asymmetry. Whole Calc123/shared221 raw S/B/F/L100 every counter positive, final current matrix raw100, seven ordinary native commands/448sources and whole28105/585byte streams, source-absent static/profile0UI, all14gates/23tooling and exact145source/test/fixture hashes pass atabcfd1c50790a04b67405b1e8add204fb6132bd6 with same-agent separate EVALUATOR pass. Inventory foundations remain partial; actual matrix algorithms/ScMatrix/document/UI and full QA still required, next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T16:36:53.526Z"
+doc_updated_at: "2026-10-12T16:37:30.433Z"
 doc_updated_by: "CODER"
 description: "Task78 of the ongoing approved Calc UI prerequisite goal: implement genuine multi_type_matrix core over existing shared SoA multi_type_vector, original traits/size/constructors/lifetimes/positions/typed scalar and range writes/queries/empty/numeric/swap. Preserve upstream behavior with ordinary native evidence; keep unimplemented transpose/copy/resize/walk and ScMatrix/document/UI explicitly pending. Whole Calc and affected shared raw100, inventory and provenance, local gates, source-bound separate same-agent evaluation. Only calc checkout/branch; next full81."
 sections:
