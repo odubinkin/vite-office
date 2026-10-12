@@ -2958,3 +2958,38 @@ unchanged except report destination; all3 source links restored exactly. All13
 scoped gates,35 related tooling tests and3 authored native/fixture format checks
 pass. No new browser runtime owner was added, so runtime inventory remains
 unchanged. Last full51; next scheduled61.
+
+## Original binary UNO interface holder
+
+Task56 implements the complete original internal UnoInterfaceReference in the
+existing shared dispatcher owner, a direct dependency of getCaughtException.
+Pointer/no-acquire/copy/move constructors and assignments, clear/destruction,
+and borrowed dispatch addresses follow include/uno/dispatcher.hxx. Release
+callbacks observe the previous pointer in set/clear; this differs from the
+existing C++ Reference owner and is preserved. Null dispatch arguments and the
+actual inout exception cell are forwarded without copying or a callback provider.
+Two existing non-null caller witnesses use explicit argument-array views after
+the C callback declaration is corrected to include its actual null contract.
+
+Whole original --write/--check pass over 69 complete genuine dependency units
+per normal/ASan/UBSan build, 348 complete source hashes, 13 generated headers,
+8 configuration hashes and 146 terminal commands exit0/signalnull. Complete
+ownership952/moves276/dispatch124-byte streams match both native builds and the
+actual browser owner; callback observations include the current holder pointer,
+all caller counts and borrowed return/argument/exception address identities.
+The original real typelib XInterface::queryInterface member is used; no library,
+interface, type or default provider replaces an upstream operation.
+
+Source-absent Calc106/24 and related shared173/49 tests pass, with whole19/70
+executable owners every raw S/F/B positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4448/2255/590/4021). The complete task55 shared argv
+is retained, adding only dispatcher.test.ts and changing the report destination;
+the existing dispatcher owner was already included. All3source links restored
+exactly. All13 scoped gates and35 tooling tests pass; matching runtime/provenance
+records and the new limited capability preserve broad parity flags false.
+The upstream testInterface reference concerns surrounding CPPU interface
+ownership; no direct original holder QA port or complete consumer QA is claimed.
+Generic exception helpers, environment/mapping and later weak objects/services/
+Calc document/edit/view/UI remain subsequent. Physical ABI, allocator/leaks,
+native thread/shutdown and full consumer QA are unverified. Last full51;
+next scheduled61.

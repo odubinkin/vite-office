@@ -76,7 +76,7 @@ async function caller(mode: keyof typeof fixture.captures) {
         args,
         exc,
       ): void => {
-        x.ref((args[0] as [R])[0]);
+        x.ref(((args as unknown[])[0] as [R])[0]);
         original(p, d, out, args, exc);
       };
     Object.defineProperty(w, "pDispatcher", { value: dispatch, writable: true });

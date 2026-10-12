@@ -36,7 +36,13 @@ export async function createUnoNativeQueryInputs(capture: UnoNativeCapture) {
       ): void => {
         const q = p as unknown as typeof w,
           returned = output as uno_Any;
-        x.emit(5, q.id, member.eTypeClass, exception[0] !== null, (args[0] as [R])[0].eTypeClass);
+        x.emit(
+          5,
+          q.id,
+          member.eTypeClass,
+          exception[0] !== null,
+          ((args as unknown[])[0] as [R])[0].eTypeClass,
+        );
         x.emit(seenMethod === member);
         seenMethod = member as D;
         x.desc(member as D);
