@@ -1,4 +1,4 @@
-/** @fileoverview Original mdds3.2.1 delayed_delete_vector primitive storage, with explicit erased T{} and borrowed vector iterator syntax. */
+/** @fileoverview Original mdds3.2.1 delayed_delete_vector scalar and borrowed-pointer storage, with explicit erased T{} and borrowed vector iterator syntax. */
 // SPDX-FileCopyrightText: 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
 
@@ -13,7 +13,7 @@ import {
 /** Initialized unmanaged native scalar families; object copy/destruction policies are not implemented. */
 export type DelayedVectorValue = number | boolean | bigint | string;
 /** Borrows a native vector position; valid iterator lifetime and owner/range preconditions apply. */
-export class delayed_delete_vector_iterator<T extends DelayedVectorValue> {
+export class delayed_delete_vector_iterator<T> {
   /** Borrows backing storage independently of the delayed owner, including after swap. @param storage - Native vector. @param position - Absolute base position. @param reverse - Reverse iterator. @returns Iterator. */
   public constructor(
     private readonly storage: vector_storage<T>,
@@ -47,7 +47,7 @@ export class delayed_delete_vector_iterator<T extends DelayedVectorValue> {
   }
 }
 /** Original front deletion offset over an allocated vector; reserved capacity follows the native libc++ comparison target. */
-export class delayed_delete_vector<T extends DelayedVectorValue> {
+export class delayed_delete_vector<T> {
   private m_vec: vector_storage<T>;
   private m_front_offset = 0;
   /** Adapts default/count/fill/range/copy constructors with required erased native T{}. @param defaultValue - Native value_type{}. @param initial - Count, scalar range, first iterator or copy source. @param valueOrLast - Fill value or terminal iterator. @returns Original storage owner. */
