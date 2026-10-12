@@ -4,7 +4,7 @@ title: "Port original DisposedException value and type ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T00:05:40.042Z"
+  updated_by: "CODER"
+  note: "Task54 committed source89c87d697626 accepted at matching evaluated_sha. Genuine72complete original units/build,368hashes15generatedfiles153commands0 and3whole original normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared170/48 whole19/69owners rawS/B/F/L100; task53argv append-only and3links restored.13actual gates0,35tooling tests,7formatfiles, inventory aligned/common observers unchanged. Physical/resource/thread/debug/fullconsumer limits explicit; lastfull51,next61."
   attempts: 0
 quality_review:
   state: "pass"
@@ -70,8 +70,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation: original DisposedException and shared records committed; complete genuine native/pure/source-absent raw100 and13scoped gates accepted, ready for independent committed-source review."
+  -
+    type: "verify"
+    at: "2026-10-12T00:05:40.042Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task54 committed source89c87d697626 accepted at matching evaluated_sha. Genuine72complete original units/build,368hashes15generatedfiles153commands0 and3whole original normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared170/48 whole19/69owners rawS/B/F/L100; task53argv append-only and3links restored.13actual gates0,35tooling tests,7formatfiles, inventory aligned/common observers unchanged. Physical/resource/thread/debug/fullconsumer limits explicit; lastfull51,next61."
 doc_version: 3
-doc_updated_at: "2026-10-12T00:04:58.843Z"
+doc_updated_at: "2026-10-12T00:06:06.063Z"
 doc_updated_by: "CODER"
 description: "Task54: complete original generated DisposedException over existing Exception/RuntimeException owners as required by OWeakConnectionPoint disposal. Genuine native comprehensive headers and strict whole stream replay, scoped Calc/shared raw100; no generic exception bridge substitute."
 sections:
@@ -85,6 +91,39 @@ sections:
     Command: node output/playwright/task54-checks/portable.mjs; python3 output/playwright/task54-checks/final-audit.py. Result: pass. Evidence: all3 source links absent together and exact targets restored; Calc106tests/24files and shared170tests/48files. Whole19/69 executable owners have every raw S/F/B positive and S/B/F/L100: Calc2920/2055/474/2564, shared4420/2234/580/3993. Independent audit rereads every raw coverage counter and all current original/generated/caller/configuration/native stream fields; exact task53 profile append-only1test/1wholeowner. Common native build and whole replay observers unchanged. Scope: selected Calc and whole related shared owners; no Writer-only repair or threshold/profile narrowing.
 
     Command:13 scoped gate commands in gates-final-manifest.json, exact7file npx prettier --check and final audit. Result: pass. Evidence: every actual gate row exit0, TS7 application/tools, authored lint, docs,size,boundaries,provenance/tree,shared+Calc inventory,35related tooling tests,routing,doctor,diff;7authored files format pass. Doctor2inherited warnings/no errors. Scope: approved task54 changes only; broad parity flagsfalse, physical ABI/allocator/resource/native thread/shutdown/debug/source-location/external-only headers/fullconsumer QA unverified. No new suspicious original case or upstream behavioral repair. Last full51,next61; goal remains active. Final implementation/evaluated_sha binding recorded before direct finish.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T00:05:40.042Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task54 committed source89c87d697626 accepted at matching evaluated_sha. Genuine72complete original units/build,368hashes15generatedfiles153commands0 and3whole original normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared170/48 whole19/69owners rawS/B/F/L100; task53argv append-only and3links restored.13actual gates0,35tooling tests,7formatfiles, inventory aligned/common observers unchanged. Physical/resource/thread/debug/fullconsumer limits explicit; lastfull51,next61.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T00:04:58.843Z, excerpt_hash=sha256:05d788ed5aae038b440877e2bc4ca5e59823626ae1a7fec6aa4086ca01db0983
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112356-WCVTCM/blueprint/resolved-snapshot.json
+    - old_digest: 2559f180c755929f17f521c46549807f9b48a300b413631aa97ce2bd9196d8e1
+    - current_digest: 2559f180c755929f17f521c46549807f9b48a300b413631aa97ce2bd9196d8e1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610112356-WCVTCM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610112356-WCVTCM
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore original source symlinks in finally. Revert only task54 intentional artifacts if necessary; preserve failed native/scoped evidence and unrelated tasks."
   Findings: |-
     Task53 is DONE at878b9f99c197; clean calc branch. Original weak.cxx requires DisposedException distinct typed catch before RuntimeException/getCaughtException. The generated exception adds no fields and inherits actual RuntimeException ownership; this atomic prerequisite does not claim generic exception bridge or OWeakObject implemented.
@@ -96,6 +135,10 @@ sections:
     - Observation: Initial TS7 check ran while genuine native fixture generation was still in progress and rejected the absent fixture import.
       Impact: No runtime/source parity failure; typecheck acceptance pending.
       Resolution: Native write completed successfully and wrote the genuine fixture; rerun actual typecheck after capture without type/configuration changes.
+
+    - Observation: First deterministic finish rejected the active task README modified by ap verify; task remains verified and no close state mutation occurred.
+      Impact: Tracked lifecycle record must be persisted before clean direct finish; implementation and accepted checks unchanged.
+      Resolution: Commit only active task verification/Findings, then recompute route and finish using the same reviewed implementation SHA.
 id_source: "generated"
 ---
 ## Summary
@@ -122,6 +165,39 @@ Command: node output/playwright/task54-checks/portable.mjs; python3 output/playw
 
 Command:13 scoped gate commands in gates-final-manifest.json, exact7file npx prettier --check and final audit. Result: pass. Evidence: every actual gate row exit0, TS7 application/tools, authored lint, docs,size,boundaries,provenance/tree,shared+Calc inventory,35related tooling tests,routing,doctor,diff;7authored files format pass. Doctor2inherited warnings/no errors. Scope: approved task54 changes only; broad parity flagsfalse, physical ABI/allocator/resource/native thread/shutdown/debug/source-location/external-only headers/fullconsumer QA unverified. No new suspicious original case or upstream behavioral repair. Last full51,next61; goal remains active. Final implementation/evaluated_sha binding recorded before direct finish.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T00:05:40.042Z — VERIFY — ok
+
+By: CODER
+
+Note: Task54 committed source89c87d697626 accepted at matching evaluated_sha. Genuine72complete original units/build,368hashes15generatedfiles153commands0 and3whole original normal-ASan/UBSan/pure streams match. Source-absent Calc106/24/shared170/48 whole19/69owners rawS/B/F/L100; task53argv append-only and3links restored.13actual gates0,35tooling tests,7formatfiles, inventory aligned/common observers unchanged. Physical/resource/thread/debug/fullconsumer limits explicit; lastfull51,next61.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T00:04:58.843Z, excerpt_hash=sha256:05d788ed5aae038b440877e2bc4ca5e59823626ae1a7fec6aa4086ca01db0983
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610112356-WCVTCM/blueprint/resolved-snapshot.json
+- old_digest: 2559f180c755929f17f521c46549807f9b48a300b413631aa97ce2bd9196d8e1
+- current_digest: 2559f180c755929f17f521c46549807f9b48a300b413631aa97ce2bd9196d8e1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610112356-WCVTCM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610112356-WCVTCM
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Restore original source symlinks in finally. Revert only task54 intentional artifacts if necessary; preserve failed native/scoped evidence and unrelated tasks.
@@ -137,3 +213,7 @@ Task53 is DONE at878b9f99c197; clean calc branch. Original weak.cxx requires Dis
 - Observation: Initial TS7 check ran while genuine native fixture generation was still in progress and rejected the absent fixture import.
   Impact: No runtime/source parity failure; typecheck acceptance pending.
   Resolution: Native write completed successfully and wrote the genuine fixture; rerun actual typecheck after capture without type/configuration changes.
+
+- Observation: First deterministic finish rejected the active task README modified by ap verify; task remains verified and no close state mutation occurred.
+  Impact: Tracked lifecycle record must be persisted before clean direct finish; implementation and accepted checks unchanged.
+  Resolution: Commit only active task verification/Findings, then recompute route and finish using the same reviewed implementation SHA.
