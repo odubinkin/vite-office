@@ -4,7 +4,7 @@ title: "Implement original mdds matrix copy resize and transpose"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,40 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T17:04:24.228Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR passes exact implementation0cbebbee231e8d4f63306d2a3bd875926e9a4ef1: original matrix geometry/node over genuine shared owners and full declared scoped evidence. Not independent review or complete matrix/ScMatrix/document/UI certification."
+  evaluated_sha: "0cbebbee231e8d4f63306d2a3bd875926e9a4ef1"
+  blueprint_digest: "543dd04a8b370a53f043b88f276aac16036a5016cccc7bcf1e7cec6f92190c61"
+  evidence_refs:
+    - ".agentplane/tasks/202610121640-EEQ2PY/README.md"
+    - ".agentplane/tasks/202610121640-EEQ2PY/quality/20261012-170424228-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121640-EEQ2PY/quality/20261012-170424228-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121640-EEQ2PY/quality/20261012-170424228-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121640-EEQ2PY/blueprint/resolved-snapshot.json"
+    - "output/playwright/task79-checks/exact-review.json"
+    - "output/playwright/task79-checks/final-source-hashes.json"
+    - "output/playwright/task79-checks/value-coverage-audit.json"
+    - "output/playwright/task79-checks/gates-results.json"
+    - "output/playwright/calc-matrix-geometry-native/manifest.json"
+  findings:
+    - "All149current source/test/fixture hashes match implementation,15intentional paths including14approved non-task paths. Original node field/default/copy/section iterator responsibilities preserved in source-shaped definition file; geometry algorithms reuse genuine SoA vector with no dense intermediary or runtime cycle."
+    - "Transpose string temporaries use actual NativeValueType default construction, writable-reference ADL assignment and destruction. Matrix copy preserves original section order, clipping, early exits/partial writes; resize preserves reset-before-clear and temporary copy/swap/unwind."
+    - "Full unchanged pinned mdds matrix/vector headers and genuine SharedString sources with original Calc traits produce7positive ordinary commands/448original source hashes and full66673/946byte streams. Integer omission and range-copy asymmetry confirmed and preserved in CALC-070. Initial caller newline and trait shorthand issues corrected before terminal checks, first snapshots retained."
+    - "Entire Calc124tests35files and affected shared223tests43files pass raw S/B/F/L100 with every counter positive; Calc3080S2092B526F2721L, shared3697S1768B727F3296L35executable owners. Source links absent/restored; static and Calc profile0UI pass, all14gates and23whole tooling tests pass."
+    - "Capability/runtime/provenance foundations and broad flags remain false, with exact native context and unexecuted QA marker stated. Block walks, actual ScMatrix/result/cell/document/input/view/UI and ABI/concurrency/invalid lifetime/full QA remain pending, next full81."
+commit:
+  hash: "0cbebbee231e8d4f63306d2a3bd875926e9a4ef1"
+  message: "🧩 EEQ2PY calc: implement original matrix copy resize and transpose"
 comments:
   -
     author: "CODER"
     body: "Start: ongoing approved Calc goal/UI prerequisites; port original matrix geometry operations over real shared owners with ordinary native evidence and whole scoped raw100. Preserve suspected integer asymmetry and partial exceptions; no replacement matrix or Writer repairs."
+  -
+    author: "CODER"
+    body: "Implementation: original matrix geometry/node committed at0cbebbee231e, genuine SoA/SharedString reused. Entire Calc124/shared223 raw100 and native whole streams, source-absent build/profile, all14gates and23tooling pass. Separate same-agent EVALUATOR now binds exact source and pending walk/ScMatrix/document/UI limits."
 events:
   -
     type: "status"
@@ -37,8 +66,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: ongoing approved Calc goal/UI prerequisites; port original matrix geometry operations over real shared owners with ordinary native evidence and whole scoped raw100. Preserve suspected integer asymmetry and partial exceptions; no replacement matrix or Writer repairs."
+  -
+    type: "status"
+    at: "2026-10-12T17:02:40.236Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: original matrix geometry/node committed at0cbebbee231e, genuine SoA/SharedString reused. Entire Calc124/shared223 raw100 and native whole streams, source-absent build/profile, all14gates and23tooling pass. Separate same-agent EVALUATOR now binds exact source and pending walk/ScMatrix/document/UI limits."
 doc_version: 3
-doc_updated_at: "2026-10-12T16:59:34.880Z"
+doc_updated_at: "2026-10-12T17:02:40.236Z"
 doc_updated_by: "CODER"
 description: "Task79 of approved Calc UI prerequisite goal: original element_block_node_type, matrix copy/range copy/resize/transpose over genuine existing vector and string callbacks/value members. Confirm original integer dispatch omissions normally and preserve/document them. Explicit erased string type witnesses, no new string/storage engine or fake Calc owners. Whole Calc/affected shared raw100 and ordinary native streams, inventory/provenance/local gates/exact same-agent evaluator. Only calc checkout/branch, next full81; block walks remain next scope."
 sections:
