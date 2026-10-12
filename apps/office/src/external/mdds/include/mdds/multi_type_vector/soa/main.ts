@@ -1,6 +1,7 @@
 /** @fileoverview Original private SoA block_slot_type, blocks_type and blocks_to_transfer owners; no replacement multi_type_vector engine. */
 // SPDX-FileCopyrightText: 2021 - 2025 Kohei Yoshida
 // SPDX-License-Identifier: MIT
+import { set as set_range_body, insert_empty_impl } from "./main_def.range.ts";
 import {
   set as set_body,
   push_back_impl,
@@ -10,7 +11,6 @@ import { integrity_error } from "../../global.ts";
 import {
   type base_element_block,
   type element_t,
-  element_type_empty,
   get_block_element_at,
   get_block_type,
   type BlockElementAccess,
@@ -52,7 +52,6 @@ import {
   delete_element_block,
   mutate_blocks,
   get_block_position,
-  is_previous_block_of_type,
   set_empty as set_empty_body,
   release_range as release_range_body,
   release as release_body,
@@ -573,13 +572,44 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     value: T,
     callbacks: ContainerCallbacks<T>,
   ): iterator_base<this>;
-  /** Original set overload adaptation delegates the actual borrowed fields. @param first - Row or hint. @param second - Value or row. @param third - Callbacks or value. @param fourth - Hinted callbacks. @returns Original iterator. */
+  /** Original input-range set. @param pos - Row. @param first - Begin. @param last - End. @param callbacks - Overloads. @returns Iterator. */
+  public set<T>(
+    pos: number | bigint,
+    first: delayed_delete_vector_iterator<T>,
+    last: delayed_delete_vector_iterator<T>,
+    callbacks: ContainerCallbacks<T>,
+  ): iterator_base<this>;
+  /** Original hinted input-range set. @param hint - Hint. @param pos - Row. @param first - Begin. @param last - End. @param callbacks - Overloads. @returns Iterator. */
+  public set<T>(
+    hint: iterator_base<this>,
+    pos: number | bigint,
+    first: delayed_delete_vector_iterator<T>,
+    last: delayed_delete_vector_iterator<T>,
+    callbacks: ContainerCallbacks<T>,
+  ): iterator_base<this>;
+  /** Original set overload adaptation by native argument arity. @param first - Row or hint. @param second - Value, input or row. @param third - Callbacks, input or value. @param fourth - Callbacks or input end. @param fifth - Hinted range callbacks. @returns Iterator. */
   public set<T>(
     first: number | bigint | iterator_base<this>,
-    second: T | number | bigint,
-    third: T | ContainerCallbacks<T>,
-    fourth?: ContainerCallbacks<T>,
+    second: T | number | bigint | delayed_delete_vector_iterator<T>,
+    third: T | ContainerCallbacks<T> | delayed_delete_vector_iterator<T>,
+    fourth?: ContainerCallbacks<T> | delayed_delete_vector_iterator<T>,
+    fifth?: ContainerCallbacks<T>,
   ): iterator_base<this> {
+    const hinted = typeof first === "object";
+    if (hinted ? arguments.length === 5 : arguments.length === 4)
+      return set_range_body(
+        this.m_block_store,
+        this.m_cur_size,
+        this.m_hdl_event,
+        this.Traits.block_funcs,
+        this,
+        block_slot_type,
+        hinted ? (second as number | bigint) : (first as number | bigint),
+        (hinted ? third : second) as delayed_delete_vector_iterator<T>,
+        (hinted ? fourth : third) as delayed_delete_vector_iterator<T>,
+        (hinted ? fifth : fourth) as ContainerCallbacks<T>,
+        hinted ? (first as iterator_base<this>) : undefined,
+      );
     return set_body(
       this.m_block_store,
       this.m_cur_size,
@@ -587,9 +617,9 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
       this.Traits.block_funcs,
       this,
       first,
-      second,
-      third,
-      fourth,
+      second as T | number | bigint,
+      third as T | ContainerCallbacks<T>,
+      fourth as ContainerCallbacks<T> | undefined,
     );
   }
   /** Original no_trace/nondebug value append entry with an explicit erased native overload witness. @param value - Native value. @param callbacks - Native family. @returns Last block iterator. */
@@ -692,78 +722,22 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
       (pos, index, length) => this.insert_empty_impl(pos, index, length),
     );
   }
-  /** Original empty insertion member preserves smaller-side copy, equal-side choice, acquisition and metadata swap order. @param pos - Admitted row. @param block_index - Located block. @param length - Finite insertion length. @returns Inserted empty iterator. */
+  /** Original private empty insertion wrapper. @param pos - Row. @param block_index - Block. @param length - Count. @returns Iterator. */
   private insert_empty_impl(pos: number, block_index: number, length: number): iterator_base<this> {
-    const blk_data = this.m_block_store.element_blocks.get(block_index);
-    if (!blk_data) {
-      this.m_block_store.sizes.set(block_index, this.m_block_store.sizes.get(block_index) + length);
-      this.m_cur_size += length;
-      adjust_block_positions(this.Traits.loop_unrolling)(
-        this.m_block_store,
-        block_index + 1,
-        length,
-      );
-      return this.get_iterator(block_index);
-    }
-    const start_pos = this.m_block_store.positions.get(block_index);
-    if (start_pos === pos) {
-      const blk_prev = is_previous_block_of_type(
-        this.m_block_store,
-        block_index,
-        element_type_empty,
-      );
-      if (blk_prev) {
-        this.m_block_store.sizes.set(
-          block_index - 1,
-          this.m_block_store.sizes.get(block_index - 1) + length,
-        );
-        this.m_cur_size += length;
-        adjust_block_positions(this.Traits.loop_unrolling)(this.m_block_store, block_index, length);
-        return this.get_iterator(block_index - 1);
-      }
-      this.m_block_store.insert(block_index, start_pos, length, null);
-      this.m_cur_size += length;
-      adjust_block_positions(this.Traits.loop_unrolling)(
-        this.m_block_store,
-        block_index + 1,
-        length,
-      );
-      return this.get_iterator(block_index);
-    }
-    const size_blk_prev = pos - start_pos;
-    const size_blk_next = this.m_block_store.sizes.get(block_index) - size_blk_prev;
-    this.m_block_store.insert(block_index + 1, 2);
-    this.m_block_store.sizes.set(block_index + 1, length);
-    this.m_block_store.sizes.set(block_index + 2, size_blk_next);
-    this.m_block_store.element_blocks.set(
-      block_index + 2,
-      this.Traits.block_funcs.create_new_block(get_block_type(blk_data), 0),
+    return insert_empty_impl(
+      this.m_block_store,
+      this.m_hdl_event,
+      this.Traits.block_funcs,
+      this,
+      this.Traits.loop_unrolling,
+      pos,
+      block_index,
+      length,
+      /** Updates the original size field before iterator construction. @param count - Added count. @returns Nothing. */
+      (count) => {
+        this.m_cur_size += count;
+      },
     );
-    const next_data = this.m_block_store.element_blocks.get(block_index + 2) as base_element_block;
-    this.m_hdl_event.element_block_acquired(next_data);
-    if (size_blk_prev > size_blk_next) {
-      this.Traits.block_funcs.assign_values_from_block(
-        next_data,
-        blk_data,
-        size_blk_prev,
-        size_blk_next,
-      );
-      this.Traits.block_funcs.resize_block(blk_data, size_blk_prev);
-      this.m_block_store.sizes.set(block_index, size_blk_prev);
-    } else {
-      this.Traits.block_funcs.assign_values_from_block(next_data, blk_data, 0, size_blk_prev);
-      this.m_block_store.sizes.set(block_index + 2, size_blk_prev);
-      this.Traits.block_funcs.erase(blk_data, 0, size_blk_prev);
-      this.m_block_store.sizes.set(block_index, size_blk_next);
-      const position = this.m_block_store.positions.get(block_index);
-      this.m_block_store.swap(block_index, block_index + 2);
-      this.m_block_store.positions.set(block_index, position);
-    }
-    this.m_cur_size += length;
-    this.m_block_store.calc_block_position(block_index + 1);
-    this.m_block_store.calc_block_position(block_index + 2);
-    adjust_block_positions(this.Traits.loop_unrolling)(this.m_block_store, block_index + 3, length);
-    return this.get_iterator(block_index + 1);
   }
   /** Original nondebug/no_trace erase entry keeps its reversed-range error before lookup. @param start_pos - First inclusive row. @param end_pos - Last inclusive row. @returns Nothing. */
   public erase(start_pos: number | bigint, end_pos: number | bigint): void {

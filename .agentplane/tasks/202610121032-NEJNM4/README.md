@@ -4,7 +4,7 @@ title: "Implement original range-value SoA set and hinted input writes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: implement original complete plain/hinted input-range writes over the shared SoA owner and genuine Calc values on calc; preserve whole native outputs and strict scoped source-absent raw100."
 doc_version: 3
-doc_updated_at: "2026-10-12T10:32:38.526Z"
+doc_updated_at: "2026-10-12T10:55:13.215Z"
 doc_updated_by: "CODER"
 description: "Iteration70: port complete original plain/hinted range set and single/multi-block dispatch through actual shared SoA fields, typed macro iterators, temporary block_slot_type and genuine Calc values. Preserve all native overlap/split/merge/event/lifecycle and input-end/exception ordering, source-map original range definitions, retain previous private corpus and scoped raw100. No substitute cell model, fake pointees or UI readiness claim."
 sections:
@@ -60,10 +60,78 @@ sections:
     3. node output/playwright/task70-checks/final-local.mjs: final source-absent production build and all new full native-stream tests pass, original source links restored.
     4. node output/playwright/task70-checks/facades.mjs; python3 output/playwright/task70-checks/audit.py: entire14declaration facades ASTs, exact complete owner/test/current-source/raw-map/native/pin/argument/registry bindings, previous unchanged source maps, no counter manipulation or excluded branches and source budgets pass.
     5. python3 output/playwright/task70-checks/gates.py and intentional-file Prettier --check: inspect all13exitCodes and35tooling cases; type/lint/docs/size/dependency/provenance/tree/shared+Calc inventory/routing/doctor/diff all pass. Full suite due71 after61, no Writer-only repair.
-    6. ap task verify-show TASK_ID: exact implementation-bound EVALUATOR pass, final ap verify and DONE closure on clean calc. Remaining container/pointee/formula/edittext/CellStoreType/column/table/document/edit/undo/input/view/UI, generic allocator/throwing/undefined/native ABI/debug/full upstream QA remain explicit.
-  Verification: "Pending implementation and complete declared evidence. Task setup is not a readiness claim."
+    6. ap task verify-show 202610121032-NEJNM4: exact implementation-bound EVALUATOR pass, final ap verify and DONE closure on clean calc. Remaining container/pointee/formula/edittext/CellStoreType/column/table/document/edit/undo/input/view/UI, generic allocator/throwing/undefined/native ABI/debug/full upstream QA remain explicit.
+  Verification: |-
+    Command: node scripts/mdds-container-range-native-probe.mjs --write; node scripts/mdds-container-range-native-probe.mjs --check
+    Result: pass.
+    Evidence: whole normal-only unchanged original headers plus full actual SharedString/CellTextAttr sources and verified complete cached native dependencies. Native manifest has8successful commands, including4normal cached witnesses,1caller link and3captures. Entire scalar5199516, owned902106 and Calc1313-byte streams match;23968scalar range permutations,1914owned cases, both range overloads, all live values/capacity/metadata/events/returned identity and controlled unique_ptr failure cleanup.
+    Scope: selected initialized original range operation family; only exact CellTextAttrTraits declaration witnessed. No full Calc pointee graph, arbitrary allocator/throwing/undefined/native ABI/debug/upstream QA or module/kernel/UI certification.
+
+    Command: node output/playwright/task70-checks/portable.mjs; final node output/playwright/task70-checks/portable.mjs --shared-only
+    Result: pass.
+    Evidence: all3original source links physically absent;112Calc tests30files and219related shared tests39files. Whole executable Calc20owners S/B/F/L2958/2055/489/2602 and related33owners3478/1670/679/3088 all100%; every raw statement/branch/function counter positive. No profiles, counters, thresholds, assertions or prior owner/test selections weakened. Exact source links restored. Initial coverage failure and before-header-repair maps/logs preserved independently.
+    Scope: all Calc plus complete directly related shared family and existing real caller bindings. Writer-only coverage is outside repair scope.
+
+    Command: node output/playwright/task70-checks/final-local.mjs; node output/playwright/task70-checks/facades.mjs; python3 output/playwright/task70-checks/audit.py
+    Result: pass.
+    Evidence: final source-absent production build and3new whole native-stream tests pass; all14declaration facade complete ASTs independently parsed. All prior executable owners/tests retained;31unchanged shared and20Calc complete maps/source hashes preserved against task69. Final67owner/facade source hashes recorded; whole raw-positive/native/pin/selection/argument/link/budget/capability audit passes. Both runtime source files<1000lines; source links restored exactly.
+
+    Command: python3 output/playwright/task70-checks/gates.py; intentional-file Prettier --check
+    Result: pass.
+    Evidence: inspect all13canonical final gate statuses0, including both exact inventories and35direct tooling cases. All19intentional non-task paths formatted. Earlier docs/operation-registration/order failures preserved in two separate manifests/log sets and Findings; bounded fixes preserve original algorithms. CALC064/065 document suspected original asymmetry/partial failure state without repair or unproven consumer claims.
+
+    Exact implementation-bound EVALUATOR phase and final CODER verify/clean DONE closure follow. Same agent phases are explicit, no independent reviewer claim. Full suite last61, next71 (task70 is9of10); no full suite due within this leaf. Broad goal remains active with actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI unfinished.
   Rollback Plan: "Revert only the intentional implementation commit and scoped registry/tests on calc; keep ignored raw native and validation evidence. No reset of unrelated work or modification of reference originals. User controls merges."
-  Findings: "Task70 is9/10 after the last full run61; next full71. Range writes take actual input iterators and preserve native set overload composition. Existing actual shared and Calc value owners are reused. New suspected upstream cases, if confirmed, go to docs/program/calc-upstream-suspected-issues.md without behavior correction."
+  Findings: |-
+    Task70 is9/10 after the last full run61; next full71. Range writes take actual input iterators and preserve native set overload composition. Existing actual shared and Calc value owners are reused. New suspected upstream cases, if confirmed, go to docs/program/calc-upstream-suspected-issues.md without behavior correction.
+
+    - Observation: Initial TypeScript checks found unused header imports after relocating insert_empty_impl, an unavailable std_vector back accessor, and the Calc caller using the macro name rather than the original static create_block member. Scalar and owned full native streams already pass; initial Calc caller failed before mutation.
+      Impact: Task remains in implementation; no verification pass is claimed.
+      Resolution: Use existing get(size-1) metadata access, remove only unused imports, and call the actual static block constructor; preserve complete native fixtures and acceptance criteria.
+
+    - Observation: First complete source-absent profile passed all112 Calc and219 related tests, but raw shared coverage99.91/99.94/100/99.93 missed the original replacement unique_ptr null and exception-cleanup branches. Raw maps and logs retained in task70-checks.
+      Impact: The required100% check failed; ordinary complete native streams do not exercise these error branches.
+      Resolution: Add caller-only block-operation failure injection to the unchanged original native container and replay its full cleanup/metadata stream; do not change thresholds or production algorithms.
+
+    - Observation: Caller-only failure coverage initially used a non-const deleter signature and reversed the existing portable fill-constructor callback/value arguments. Native compilation and whole scalar comparison exposed these test caller errors.
+      Impact: These were caller defects; unchanged upstream and production range algorithms were preserved. Existing ordinary scalar/owned/Calc native streams remain unchanged.
+      Resolution: Retain the original const-pointer delete_block contract, bind the existing constructor as size/callbacks/value and rerun complete whole streams plus scoped coverage.
+
+    - Observation: Exact scoped gate docs exited1; original log gate-docs.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate inventory-shared exited1; original log gate-inventory-shared.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate inventory-calc exited1; original log gate-inventory-calc.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: First structural gates found the new import preceding the mandatory opening fileoverview and the newly exported original insert_empty_impl missing from exhaustive internal-operation inventory. All type/lint/size/dependency/provenance/tree/routing/doctor/diff gates passed.
+      Impact: Documentation and exact operation registration gates failed, including the inventory consumer test; original algorithms and100% profiles passed.
+      Resolution: Move the import below the retained opening license/documentation without changing member bodies, register the actual original insert_empty_impl and rerun the final shared profile/build/structural gates. First logs and manifests retained.
+
+    - Observation: Exact scoped gate inventory-shared exited1; original log gate-inventory-shared.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate inventory-calc exited1; original log gate-inventory-calc.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
+      Impact: Required acceptance check not passing; no broad pass claim.
+      Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+    - Observation: Second inventory pass found the newly introduced operation ID was a prefix of an existing ID, so filename discovery order did not satisfy the canonical lexicographic ID order.
+      Impact: Only registration naming was affected; production sources, complete native streams and100% scoped profiles passed unchanged.
+      Resolution: Use the unique source-family operation ID shared.internal.soa.range-insert-empty for the same exact original symbol. Shared and Calc inventories and all35 direct tooling cases now pass; preserve both original failed manifests.
 id_source: "generated"
 ---
 ## Summary
@@ -92,11 +160,29 @@ Existing shared SoA main.ts and original definitions; new source-mapped main_def
 3. node output/playwright/task70-checks/final-local.mjs: final source-absent production build and all new full native-stream tests pass, original source links restored.
 4. node output/playwright/task70-checks/facades.mjs; python3 output/playwright/task70-checks/audit.py: entire14declaration facades ASTs, exact complete owner/test/current-source/raw-map/native/pin/argument/registry bindings, previous unchanged source maps, no counter manipulation or excluded branches and source budgets pass.
 5. python3 output/playwright/task70-checks/gates.py and intentional-file Prettier --check: inspect all13exitCodes and35tooling cases; type/lint/docs/size/dependency/provenance/tree/shared+Calc inventory/routing/doctor/diff all pass. Full suite due71 after61, no Writer-only repair.
-6. ap task verify-show TASK_ID: exact implementation-bound EVALUATOR pass, final ap verify and DONE closure on clean calc. Remaining container/pointee/formula/edittext/CellStoreType/column/table/document/edit/undo/input/view/UI, generic allocator/throwing/undefined/native ABI/debug/full upstream QA remain explicit.
+6. ap task verify-show 202610121032-NEJNM4: exact implementation-bound EVALUATOR pass, final ap verify and DONE closure on clean calc. Remaining container/pointee/formula/edittext/CellStoreType/column/table/document/edit/undo/input/view/UI, generic allocator/throwing/undefined/native ABI/debug/full upstream QA remain explicit.
 
 ## Verification
 
-Pending implementation and complete declared evidence. Task setup is not a readiness claim.
+Command: node scripts/mdds-container-range-native-probe.mjs --write; node scripts/mdds-container-range-native-probe.mjs --check
+Result: pass.
+Evidence: whole normal-only unchanged original headers plus full actual SharedString/CellTextAttr sources and verified complete cached native dependencies. Native manifest has8successful commands, including4normal cached witnesses,1caller link and3captures. Entire scalar5199516, owned902106 and Calc1313-byte streams match;23968scalar range permutations,1914owned cases, both range overloads, all live values/capacity/metadata/events/returned identity and controlled unique_ptr failure cleanup.
+Scope: selected initialized original range operation family; only exact CellTextAttrTraits declaration witnessed. No full Calc pointee graph, arbitrary allocator/throwing/undefined/native ABI/debug/upstream QA or module/kernel/UI certification.
+
+Command: node output/playwright/task70-checks/portable.mjs; final node output/playwright/task70-checks/portable.mjs --shared-only
+Result: pass.
+Evidence: all3original source links physically absent;112Calc tests30files and219related shared tests39files. Whole executable Calc20owners S/B/F/L2958/2055/489/2602 and related33owners3478/1670/679/3088 all100%; every raw statement/branch/function counter positive. No profiles, counters, thresholds, assertions or prior owner/test selections weakened. Exact source links restored. Initial coverage failure and before-header-repair maps/logs preserved independently.
+Scope: all Calc plus complete directly related shared family and existing real caller bindings. Writer-only coverage is outside repair scope.
+
+Command: node output/playwright/task70-checks/final-local.mjs; node output/playwright/task70-checks/facades.mjs; python3 output/playwright/task70-checks/audit.py
+Result: pass.
+Evidence: final source-absent production build and3new whole native-stream tests pass; all14declaration facade complete ASTs independently parsed. All prior executable owners/tests retained;31unchanged shared and20Calc complete maps/source hashes preserved against task69. Final67owner/facade source hashes recorded; whole raw-positive/native/pin/selection/argument/link/budget/capability audit passes. Both runtime source files<1000lines; source links restored exactly.
+
+Command: python3 output/playwright/task70-checks/gates.py; intentional-file Prettier --check
+Result: pass.
+Evidence: inspect all13canonical final gate statuses0, including both exact inventories and35direct tooling cases. All19intentional non-task paths formatted. Earlier docs/operation-registration/order failures preserved in two separate manifests/log sets and Findings; bounded fixes preserve original algorithms. CALC064/065 document suspected original asymmetry/partial failure state without repair or unproven consumer claims.
+
+Exact implementation-bound EVALUATOR phase and final CODER verify/clean DONE closure follow. Same agent phases are explicit, no independent reviewer claim. Full suite last61, next71 (task70 is9of10); no full suite due within this leaf. Broad goal remains active with actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI unfinished.
 
 ## Rollback Plan
 
@@ -105,3 +191,51 @@ Revert only the intentional implementation commit and scoped registry/tests on c
 ## Findings
 
 Task70 is9/10 after the last full run61; next full71. Range writes take actual input iterators and preserve native set overload composition. Existing actual shared and Calc value owners are reused. New suspected upstream cases, if confirmed, go to docs/program/calc-upstream-suspected-issues.md without behavior correction.
+
+- Observation: Initial TypeScript checks found unused header imports after relocating insert_empty_impl, an unavailable std_vector back accessor, and the Calc caller using the macro name rather than the original static create_block member. Scalar and owned full native streams already pass; initial Calc caller failed before mutation.
+  Impact: Task remains in implementation; no verification pass is claimed.
+  Resolution: Use existing get(size-1) metadata access, remove only unused imports, and call the actual static block constructor; preserve complete native fixtures and acceptance criteria.
+
+- Observation: First complete source-absent profile passed all112 Calc and219 related tests, but raw shared coverage99.91/99.94/100/99.93 missed the original replacement unique_ptr null and exception-cleanup branches. Raw maps and logs retained in task70-checks.
+  Impact: The required100% check failed; ordinary complete native streams do not exercise these error branches.
+  Resolution: Add caller-only block-operation failure injection to the unchanged original native container and replay its full cleanup/metadata stream; do not change thresholds or production algorithms.
+
+- Observation: Caller-only failure coverage initially used a non-const deleter signature and reversed the existing portable fill-constructor callback/value arguments. Native compilation and whole scalar comparison exposed these test caller errors.
+  Impact: These were caller defects; unchanged upstream and production range algorithms were preserved. Existing ordinary scalar/owned/Calc native streams remain unchanged.
+  Resolution: Retain the original const-pointer delete_block contract, bind the existing constructor as size/callbacks/value and rerun complete whole streams plus scoped coverage.
+
+- Observation: Exact scoped gate docs exited1; original log gate-docs.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate inventory-shared exited1; original log gate-inventory-shared.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate inventory-calc exited1; original log gate-inventory-calc.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: First structural gates found the new import preceding the mandatory opening fileoverview and the newly exported original insert_empty_impl missing from exhaustive internal-operation inventory. All type/lint/size/dependency/provenance/tree/routing/doctor/diff gates passed.
+  Impact: Documentation and exact operation registration gates failed, including the inventory consumer test; original algorithms and100% profiles passed.
+  Resolution: Move the import below the retained opening license/documentation without changing member bodies, register the actual original insert_empty_impl and rerun the final shared profile/build/structural gates. First logs and manifests retained.
+
+- Observation: Exact scoped gate inventory-shared exited1; original log gate-inventory-shared.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate inventory-calc exited1; original log gate-inventory-calc.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Exact scoped gate tooling exited1; original log gate-tooling.log retained.
+  Impact: Required acceptance check not passing; no broad pass claim.
+  Resolution: Recompute route and inspect bounded source-backed repair without threshold/profile/assertion changes.
+
+- Observation: Second inventory pass found the newly introduced operation ID was a prefix of an existing ID, so filename discovery order did not satisfy the canonical lexicographic ID order.
+  Impact: Only registration naming was affected; production sources, complete native streams and100% scoped profiles passed unchanged.
+  Resolution: Use the unique source-family operation ID shared.internal.soa.range-insert-empty for the same exact original symbol. Shared and Calc inventories and all35 direct tooling cases now pass; preserve both original failed manifests.

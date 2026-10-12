@@ -1519,3 +1519,23 @@ Pinned mdds3.2.1 types.hpp element_block::swap_values declares ValueT v1=*it1, v
 Evidence: task65 scripts/mdds-object-value-native-probe.mjs includes whole unchanged verified original headers and captures full normal-only owned streams in native-object-value-cases.json. swap_d/swap_f/swap_self retain the two copies; reverse_d/reverse_f witness the separate std::iter_swap path. Actual SharedString/CellTextAttr full source owners are also compiled unchanged.
 
 Decision: retain the original two-copy block algorithm. Do not replace it with std::swap, pointer/reference exchange or a JS destructuring swap for owned values. The selected native iterator swap remains a separate language binding.
+
+## CALC-064: range write skips overwrite_values for a different partial last block
+
+Status: confirmed source asymmetry; a managed-pointee or Calc consumer defect is not established.
+
+Pinned mdds3.2.1 soa/main_def.inl set_cells_to_multi_blocks_block1_non_empty extends a first block of the incoming category. If the range ends inside a nonempty last block of a different category, it calls block_funcs::erase for that last block without a preceding overwrite_values. The corresponding set_cells_to_multi_blocks_block1_non_equal path calls overwrite_values before erase. This is suspicious for block categories whose overwrite operation owns separate pointee cleanup. Actual Calc pointee registrations and supported consumer reachability are still unported, so no leak or user-visible defect is claimed.
+
+Evidence: task70 scripts/mdds-container-range-native-probe.mjs includes the complete unchanged original SoA/types/macros headers and compares whole normal-only scalar23968-case and owned-value streams. These streams cover the asymmetric category transition and retain its original special-member/event behavior; owned unmanaged values do not prove managed-pointee cleanup. No sanitizer or memory-safety conclusion is inferred.
+
+Decision: preserve the exact original erase call and ordering. Do not insert overwrite_values or normalize the two algorithms. Revisit this suspicion when actual managed Calc cell owners and their consumers are connected.
+
+## CALC-065: failed prefix replacement retains shortened metadata and old payload
+
+Status: confirmed controlled original trait-failure outcome; ordinary Calc failure handling and its recovery behavior are unverified.
+
+Pinned mdds3.2.1 soa/main_def.inl set_cells_to_single_block first shortens the current block metadata when replacing its upper part, then creates and fills a replacement block for the lower values. A creation failure or throwing assign_values_from_block propagates without restoring the original metadata. For a three-row double block and a one-row uint16 prefix, the retained container has logical size3, metadata size2 and old element payload size3. This is suspicious for callers that continue using the container after an exception; no guarantee of such continued use or full Calc consumer defect is established.
+
+Evidence: task70 native-container-range-cases.json scalar stream includes two controlled caller-only trait failures against complete unchanged original headers. The null creation throws the original logic_error text; assignment failure invokes the original unique_ptr deleter on the empty new block before propagation. Both complete retained-state/clear streams match the portable owner. These are explicit fault-injection witnesses, not naturally occurring allocation failures, sanitizer results or a certification of generic exception safety.
+
+Decision: preserve the original metadata-before-allocation order, temporary cleanup and retained partial state. Do not add rollback or normalize the block after failure.
