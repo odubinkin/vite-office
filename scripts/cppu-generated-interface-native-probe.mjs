@@ -4,6 +4,10 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
+import {
+  unoNativeInterfaceTypes,
+  unoNativeInterfaceCaller,
+} from "./uno-native-interface-caller.mjs";
 import { unoNativeValueCaller } from "./uno-native-value-caller.mjs";
 import { prepareCaseNative } from "./casefolding-native-build.mjs";
 import { hash, loadUnicodeOriginal, pin, upstream } from "./rtl-ustring-native-sources.mjs";
@@ -75,13 +79,9 @@ const driver = String.raw`${unoNativeValueCaller}
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <string>
-using InterfaceTD=typelib_InterfaceTypeDescription;using Mtd=typelib_InterfaceMethodTypeDescription;using T=css::uno::Type;
-template<typename X>T const& access(int kind){switch(kind){case 0:return cppu::UnoType<X>::get();case 1:return X::static_type();case 2:return getCppuType(static_cast<css::uno::Reference<X>const*>(nullptr));case 3:return cppu::UnoType<css::uno::Reference<X>>::get();default:return cppu_detail_getUnoType(static_cast<X const*>(nullptr));}}
+${unoNativeInterfaceTypes}template<typename X>T const& access(int kind){switch(kind){case 0:return cppu::UnoType<X>::get();case 1:return X::static_type();case 2:return getCppuType(static_cast<css::uno::Reference<X>const*>(nullptr));case 3:return cppu::UnoType<css::uno::Reference<X>>::get();default:return cppu_detail_getUnoType(static_cast<X const*>(nullptr));}}
 T const& get(int index,int kind){switch(index){case 0:return access<css::uno::XWeak>(kind);case 1:return access<css::uno::XAdapter>(kind);case 2:return access<css::uno::XReference>(kind);case 3:return access<css::uno::XAggregation>(kind);default:return access<css::lang::XServiceInfo>(kind);}}
-void iface(InterfaceTD*i){desc(&i->aBase);emit({i->nMembers,i->nAllMembers,i->nBaseTypes,i->ppBaseTypes==nullptr,i->pBaseTypeDescription==nullptr,i->ppMembers==nullptr,i->ppAllMembers==nullptr});emit({static_cast<sal_Int32>(i->aUik.m_Data1),i->aUik.m_Data2,i->aUik.m_Data3,static_cast<sal_Int32>(i->aUik.m_Data4),static_cast<sal_Int32>(i->aUik.m_Data5)});if(i->nBaseTypes)emit({i->pBaseTypeDescription==i->ppBaseTypes[0]});for(int k=0;k<i->nBaseTypes;++k)desc(&i->ppBaseTypes[k]->aBase);for(int k=0;k<i->nMembers;++k){emit({i->ppMembers[k]==i->ppAllMembers[i->nAllMembers-i->nMembers+k]});ref(i->ppMembers[k]);}for(int k=0;k<i->nAllMembers;++k)ref(i->ppAllMembers[k]);if(i->aBase.bComplete){emit({i->pMapMemberIndexToFunctionIndex==nullptr,i->nMapFunctionIndexToMemberIndex,i->pMapFunctionIndexToMemberIndex==nullptr});for(int k=0;k<i->nAllMembers;++k)emit({i->pMapMemberIndexToFunctionIndex[k]});for(int k=0;k<i->nMapFunctionIndexToMemberIndex;++k)emit({i->pMapFunctionIndexToMemberIndex[k]});}}
-void method(Mtd*m,InterfaceTD*owner){desc(&m->aBase.aBase);emit({m->aBase.nPosition});text(m->aBase.pMemberName);ref(m->pReturnTypeRef);emit({m->nParams,m->pParams==nullptr,m->nExceptions,m->ppExceptions==nullptr,m->bOneWay,m->pInterface==owner,m->pBaseRef==nullptr,m->nIndex});desc(&m->pInterface->aBase);ref(m->pBaseRef);for(int k=0;k<m->nParams;++k){text(m->pParams[k].pName);ref(m->pParams[k].pTypeRef);emit({m->pParams[k].bIn,m->pParams[k].bOut});}for(int k=0;k<m->nExceptions;++k)ref(m->ppExceptions[k]);}
-void observe(T const&t){ref(t.getTypeLibType());emit({static_cast<sal_Int32>(t.getTypeClass())});{auto n=t.getTypeName();text(n.pData);}D*d=nullptr;t.getDescription(&d);iface(reinterpret_cast<InterfaceTD*>(d));auto*i=reinterpret_cast<InterfaceTD*>(d);for(int k=0;k<i->nAllMembers;++k){emit({k});D*m=nullptr;typelib_typedescriptionreference_getDescription(&m,i->ppAllMembers[k]);emit({m==nullptr});if(m){method(reinterpret_cast<Mtd*>(m),i);typelib_typedescription_release(m);}ref(i->ppAllMembers[k]);}emit({typelib_typedescription_complete(&d)});iface(reinterpret_cast<InterfaceTD*>(d));typelib_typedescription_release(d);ref(t.getTypeLibType());{T copy(t);emit({copy==t,copy!=t,&copy==&t});ref(copy.getTypeLibType());}ref(t.getTypeLibType());{void*p=nullptr;css::uno::Any a(&p,t);anyValue(&a);emit({a.hasValue(),static_cast<sal_Int32>(a.getValueTypeClass())});}ref(t.getTypeLibType());}
-void run(std::vector<int>const&order){for(int index:order){emit({7,index});auto const&t=get(index,0);observe(t);for(int kind=1;kind<5;++kind){auto const&v=get(index,kind);emit({kind,&v==&t,v.getTypeLibType()==t.getTypeLibType()});ref(v.getTypeLibType());}}for(int index:order){emit({8,index});observe(get(index,0));}}
+${unoNativeInterfaceCaller}void run(std::vector<int>const&order){for(int index:order){emit({7,index});auto const&t=get(index,0);observe(t);for(int kind=1;kind<5;++kind){auto const&v=get(index,kind);emit({kind,&v==&t,v.getTypeLibType()==t.getTypeLibType()});ref(v.getTypeLibType());}}for(int index:order){emit({8,index});observe(get(index,0));}}
 int main(int argc,char**argv){if(argc!=2)return 2;std::string mode=argv[1];if(mode=="forward")run({0,1,2,3,4});else if(mode=="reverse")run({4,3,2,1,0});else if(mode.size()==5&&mode.substr(0,4)=="cold"&&mode[4]>='0'&&mode[4]<='4')run({mode[4]-'0'});else return 2;return 0;}
 `;
 const caller = driver;

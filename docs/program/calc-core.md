@@ -3054,3 +3054,39 @@ is contextual string QA, not a direct Enterable QA port. Full environment/mappin
 generic exceptions, further weak objects/services and Calc document/edit/view/UI
 remain subsequent; native ABI/thread/resource/leaks/shutdown and full consumer/
 upstream QA are unverified. Last full51; next scheduled61.
+
+## Original internal exception interface type
+
+Task59 implements complete original XExceptionThrower IDL/generated comprehensive
+interface metadata over existing actual Type/Any/Reference, RuntimeException,
+the Exception builtin type, shared OUString and C typelib owners. The original
+leaked Type cache, initialization gate, bootstrap order, two method references,
+positions3/4, one in-any exc parameter and both Exception/RuntimeException
+declarations retain original registration/release/temporary order.
+ADL/static_type/deprecated getCppuType use real UnoType; no virtual throw or
+environment/mapping implementation is synthesized.
+
+Complete initialized interface/method/map/Type/Any observers are shared with
+the earlier five generated interfaces. Their seven original whole streams remain
+unchanged after extraction. New cold/runtime-first/exception-first streams are
+45164/45532/45476bytes over72whole original translation units per native build,
+370complete source hashes,15genuine generated files and8configuration hashes.
+Normal and ASan/UBSan builds agree completely. Additional whole root11060 and
+pending-method11780-byte streams use the actual original public typelib factories;
+all157terminal commands exit0/signalnull. The first three streams are unchanged.
+
+Source-absent Calc106/24 and shared184/52 pass. All19/75 executable owners have
+every raw S/F/B counter positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4630/2269/616/4190). Existing task58 runtime owner
+maps and full shared argv are retained; the new test/type/shared observer are
+added. Task-local exclusion arguments retain existing exclusions except the exact
+new observation helper, which is measured completely. Global test configuration
+and strict100 thresholds are unchanged; all3source links restored exactly.
+All13 actual scoped gates and35tooling tests pass; first failure logs retained.
+
+The original cppuhelper/qa/misc/test_misc.cxx::testgetCaughtException reference
+is contextual exception-helper QA, not a direct metadata test port. Broad parity
+flags stay false. Full environment/mapping/exception mechanism, further weak
+objects/services and Calc cell/document/edit/view/UI remain subsequent. Physical
+ABI/compiler const/native threading/resource/leaks/shutdown and complete consumer/
+upstream QA are unverified. Last full51; next scheduled61.
