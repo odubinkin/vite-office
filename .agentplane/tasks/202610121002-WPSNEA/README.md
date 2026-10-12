@@ -4,7 +4,7 @@ title: "Implement original single-value SoA set with hinted writes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -24,7 +24,32 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T10:28:20.463Z"
+  updated_by: "EVALUATOR"
+  note: "Exact implementation962e1e2870d231b3470a02e31eb2a75cf4765d8e satisfies approved original single-value plain/hinted SoA write scope."
+  evaluated_sha: "962e1e2870d231b3470a02e31eb2a75cf4765d8e"
+  blueprint_digest: "647723317f5045e891220c5019314b81a64d7e0bc98e41b934d2a5e906519722"
+  evidence_refs:
+    - ".agentplane/tasks/202610121002-WPSNEA/README.md"
+    - ".agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121002-WPSNEA/blueprint/resolved-snapshot.json"
+    - "output/playwright/task69-checks/exact-review.json"
+    - "output/playwright/task69-checks/source-argument-map-audit.json"
+    - "output/playwright/task69-checks/value-coverage-audit.json"
+    - "output/playwright/task69-checks/gates-final-manifest.json"
+    - "output/playwright/task69-checks/final-local-manifest.json"
+  findings:
+    - "Complete original set dispatch and neighbor merges reuse existing fields and actual values/callbacks/iterator/event owners; const-value behavior and diagnostic lines preserved."
+    - "Exact committed source hashes match whole Calc111 and related217 source-absent profiles, every raw counter positive; unchanged29shared maps and20Calc owners retained."
+    - "Whole original normal-only scalar2189311/owned278399/Calc1510 streams and all8native command statuses pass; final build,3fresh cases and all13gates plus35tooling tests pass."
+    - "Mapped definition shard and mutation symbols are canonical inventory records; private helper acceptance retained, no duplicate engine, runtime cycle or broad certification."
+commit:
+  hash: "962e1e2870d231b3470a02e31eb2a75cf4765d8e"
+  message: "🧩 WPSNEA calc: implement original single-value segment writes"
 comments:
   -
     author: "CODER"
@@ -37,8 +62,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved original single-value plain and hinted SoA writes over existing shared fields on calc; capture whole unchanged native results and source-absent scoped raw100."
+  -
+    type: "status"
+    at: "2026-10-12T10:28:17.952Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
 doc_version: 3
-doc_updated_at: "2026-10-12T10:27:18.827Z"
+doc_updated_at: "2026-10-12T10:28:55.175Z"
 doc_updated_by: "CODER"
 description: "Iteration69: implement both original single-value set overloads and complete empty/data/singleton/top/middle/bottom neighbor transformations over the existing shared store. Reuse actual Calc strings and text attributes, preserve lifecycle/metadata/event/iterator order, and verify whole unchanged native cases and complete scoped source-absent raw100. Original main_def.inl single-value setter family may use a source-mapped main_def.set.ts implementation shard to retain the1000line limit; no alternate model or fake pointees."
 sections:
@@ -77,6 +108,8 @@ sections:
     Result: pass, all13final exitCodes0 and35tooling cases pass. Evidence: gates-final-manifest.json, gates-current-summary.log, gate-*.log, format-final.log. Scope: type/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventory/routing/doctor/diff. Initial type/docs/metadata/registry failures retained as first-gate logs and structured task-local Findings; no verifier or policy waiver. Original private new-cell wrapper/corpus retained and actual primitive size updated before iterator construction. Existing append_empty/resize bodies move only to mapped original definition boundaries with actual field bindings, no duplicate engine or runtime cycle.
 
     Full suite: not due; last61, next71. No Writer-only coverage repairs, network, policy/profile/exclusion/threshold changes, merge/publication or whole module/kernel/UI certification. Remaining range-set/other container/actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI, arbitrary value/allocator/throwing/undefined/native ABI/debug/upstream QA remain subsequent. No new suspected upstream issue: encountered failures were type plumbing, observer/caller coverage, pinned diagnostic and inventory metadata defects. Goal stays active. Exact implementation/EVALUATOR/ap verification and closure evidence follow.
+
+    Implementation commit: 962e1e2870d231b3470a02e31eb2a75cf4765d8e. Exact same-agent EVALUATOR phase: pass; output/playwright/task69-checks/exact-review.json and .agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/quality-report.json. All52executable owner and14facade committed source hashes match the final verified source evidence. This is a separate review phase by the same agent, with no independent-agent claim.
   Rollback Plan: "Revert only this task implementation commit and its scoped registry/test records on calc; retain ignored raw evidence. User manages merges. Do not reset other work or modify original reference sources."
   Findings: |-
     Iteration69, task8 since the full run at61; next full run71. Actual native single-value set takes const T&, including rvalue call expressions; no invented move setter overload. No source reference is shipped in the browser build.
@@ -179,6 +212,8 @@ Command: python3 output/playwright/task69-checks/gates.py; intentional21file pre
 Result: pass, all13final exitCodes0 and35tooling cases pass. Evidence: gates-final-manifest.json, gates-current-summary.log, gate-*.log, format-final.log. Scope: type/lint/docs/file-size/dependencies/provenance/tree/shared+Calc inventory/routing/doctor/diff. Initial type/docs/metadata/registry failures retained as first-gate logs and structured task-local Findings; no verifier or policy waiver. Original private new-cell wrapper/corpus retained and actual primitive size updated before iterator construction. Existing append_empty/resize bodies move only to mapped original definition boundaries with actual field bindings, no duplicate engine or runtime cycle.
 
 Full suite: not due; last61, next71. No Writer-only coverage repairs, network, policy/profile/exclusion/threshold changes, merge/publication or whole module/kernel/UI certification. Remaining range-set/other container/actual formula/edittext/pointee/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI, arbitrary value/allocator/throwing/undefined/native ABI/debug/upstream QA remain subsequent. No new suspected upstream issue: encountered failures were type plumbing, observer/caller coverage, pinned diagnostic and inventory metadata defects. Goal stays active. Exact implementation/EVALUATOR/ap verification and closure evidence follow.
+
+Implementation commit: 962e1e2870d231b3470a02e31eb2a75cf4765d8e. Exact same-agent EVALUATOR phase: pass; output/playwright/task69-checks/exact-review.json and .agentplane/tasks/202610121002-WPSNEA/quality/20261012-102820463-recovery-context/quality-report.json. All52executable owner and14facade committed source hashes match the final verified source evidence. This is a separate review phase by the same agent, with no independent-agent claim.
 
 ## Rollback Plan
 
