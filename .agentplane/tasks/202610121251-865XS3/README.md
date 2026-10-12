@@ -4,7 +4,7 @@ title: "Implement original Calc FormulaResultValue owner and shared string lifec
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T13:27:04.928Z"
+  updated_by: "CODER"
+  note: "Original FormulaResultValue owner at14639632a54ce990d48c05ea41e41d19805cd0ce matches complete native streams; Calc116/shared63 raw100, source-absent build/profile and all aggregate/tooling gates pass. Separate same-agent EVALUATOR report recorded; no full kernel/UI claim; next full81."
   attempts: 0
 quality_review:
   state: "pass"
@@ -68,8 +68,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Implementation committed; complete native streams and current scoped raw100/gates pass, proceeding to separate same-agent quality review."
+  -
+    type: "verify"
+    at: "2026-10-12T13:27:04.928Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original FormulaResultValue owner at14639632a54ce990d48c05ea41e41d19805cd0ce matches complete native streams; Calc116/shared63 raw100, source-absent build/profile and all aggregate/tooling gates pass. Separate same-agent EVALUATOR report recorded; no full kernel/UI claim; next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T13:27:01.774Z"
+doc_updated_at: "2026-10-12T13:27:05.021Z"
 doc_updated_by: "CODER"
 description: "Task73: port actual sc::FormulaResultValue named struct and all four explicit constructors plus implicit copy/move/assignment/destruction, reusing real shared FormulaError/SharedString owners. Preserve Invalid/Value/String/Error distinctions, defaults, numeric NaN payloads, by-value string copy/move and lifetime semantics; no guessed enum-vs-double overload, synthetic token/cell/document or duplicate string model. Compile selected exact original struct and constructor bodies with whole genuine SharedString/SAL dependencies normal-only; no full ScFormulaResult claim. Full Calc plus directly related shared raw100/upstream-absent build, inventory/provenance/aggregate gates and exact source-bound quality phase; next full81."
 sections:
@@ -98,6 +104,39 @@ sections:
     Command: node output/playwright/task73-checks/gates.mjs; corrective --recheck. Result: pass. Evidence: all13aggregate gates and23tooling tests/2files; first lint/registry failures retained with explicit corrective metadata. Scope: format/lint/typecheck/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling, no weaker validator/profile/threshold.
 
     Command: python3 output/playwright/task73-checks/final-audit.py. Result: pass. Evidence: raw locations match unchanged full71 owners and final new-owner recheck; complete captures/current sources/source-link targets and actual terminal gate statuses checked. Final source hashes and exact implementation commit review recorded in output/playwright/task73-checks/final-source-hashes.json and exact-review.json. Same-agent separate EVALUATOR phase; not an independent reviewer. Quality report: .agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/quality-report.json; evaluated implementation14639632a54ce990d48c05ea41e41d19805cd0ce with47current committed source hashes. Scope: actual current scoped source evidence; full kernel/token/cell/document/input/view/UI, native ABI/concurrency/undefined lifetime remain unverified. Last full71; next scheduled full81.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T13:27:04.928Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original FormulaResultValue owner at14639632a54ce990d48c05ea41e41d19805cd0ce matches complete native streams; Calc116/shared63 raw100, source-absent build/profile and all aggregate/tooling gates pass. Separate same-agent EVALUATOR report recorded; no full kernel/UI claim; next full81.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T13:27:01.774Z, excerpt_hash=sha256:444fb44c92f714b90dc8d97d307844a06c38fe6b79053353f0b66fe0d105a0bf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121251-865XS3/blueprint/resolved-snapshot.json
+    - old_digest: c93594f94cb43b67b6ea3fb0446fd01309f3087ff33ed9a9f95773a342180da0
+    - current_digest: c93594f94cb43b67b6ea3fb0446fd01309f3087ff33ed9a9f95773a342180da0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610121251-865XS3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610121251-865XS3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task73 changes; preserve source-exact native caller/full failure evidence outside Agentplane. Always restore original3symlink targets on runtime verification termination. Recheck directly affected Calc/shared after rollback. Preserve unrelated active tasks and user-owned merges."
   Findings: |-
     Preflight confirms clean calc with task72 DONE e3b27cee; previous goal turn is concrete progress (new shared formula error contracts). Existing SharedString and FormulaError are authoritative owners; no FormulaResultValue yet. Original numeric and enum-error constructors both erase to JS number, so explicit actual enum type witness is required; do not infer error from value or NaN. Native comparison is bounded to actual complete named struct/four ctor scopes because full ScFormulaResult still depends on real absent token/matrix graph. User continues the approved Calc goal and requires shared reuse/native JS where equivalent. No new network/outside-repo access. Last full71, next full81.
@@ -154,6 +193,39 @@ Command: corrected owner test recorded in output/playwright/task73-checks/owner-
 Command: node output/playwright/task73-checks/gates.mjs; corrective --recheck. Result: pass. Evidence: all13aggregate gates and23tooling tests/2files; first lint/registry failures retained with explicit corrective metadata. Scope: format/lint/typecheck/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and related tooling, no weaker validator/profile/threshold.
 
 Command: python3 output/playwright/task73-checks/final-audit.py. Result: pass. Evidence: raw locations match unchanged full71 owners and final new-owner recheck; complete captures/current sources/source-link targets and actual terminal gate statuses checked. Final source hashes and exact implementation commit review recorded in output/playwright/task73-checks/final-source-hashes.json and exact-review.json. Same-agent separate EVALUATOR phase; not an independent reviewer. Quality report: .agentplane/tasks/202610121251-865XS3/quality/20261012-132635596-recovery-context/quality-report.json; evaluated implementation14639632a54ce990d48c05ea41e41d19805cd0ce with47current committed source hashes. Scope: actual current scoped source evidence; full kernel/token/cell/document/input/view/UI, native ABI/concurrency/undefined lifetime remain unverified. Last full71; next scheduled full81.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T13:27:04.928Z — VERIFY — ok
+
+By: CODER
+
+Note: Original FormulaResultValue owner at14639632a54ce990d48c05ea41e41d19805cd0ce matches complete native streams; Calc116/shared63 raw100, source-absent build/profile and all aggregate/tooling gates pass. Separate same-agent EVALUATOR report recorded; no full kernel/UI claim; next full81.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T13:27:01.774Z, excerpt_hash=sha256:444fb44c92f714b90dc8d97d307844a06c38fe6b79053353f0b66fe0d105a0bf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610121251-865XS3/blueprint/resolved-snapshot.json
+- old_digest: c93594f94cb43b67b6ea3fb0446fd01309f3087ff33ed9a9f95773a342180da0
+- current_digest: c93594f94cb43b67b6ea3fb0446fd01309f3087ff33ed9a9f95773a342180da0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610121251-865XS3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610121251-865XS3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
