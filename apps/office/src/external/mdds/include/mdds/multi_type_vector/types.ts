@@ -547,6 +547,8 @@ export function default_element_block<T>(
   /** Original default_element_block specialization over actual shared storage. */
   class default_element_block extends copyable_element_block<T> {
     public static readonly block_type = TypeId;
+    /** Erased native value_type alias binds existing actual default-block ValueT special members. */
+    public static readonly value_type = operations;
     /** Erased original types_util bool-store trait for the actual default delayed_delete_vector<T>. */
     public static readonly has_std_vector_bool_store = typeof zero === "boolean";
     public static readonly debug = debug;
@@ -598,11 +600,12 @@ export function default_element_block<T>(
 
 /** Original erased Blk static access and compile-time store trait, borrowing actual scalar ownership. */
 export interface BlockElementAccess<T> {
+  readonly value_type?: Pick<DelayedValueOperations<T>, "copy_construct"> | undefined;
   readonly has_std_vector_bool_store: boolean;
   at(data: base_element_block, offset: number): T;
   cbegin(data: base_element_block): delayed_delete_vector_iterator<T>;
 }
-/** Original types.hpp bool-store dispatch: proxy-safe iterator read or checked at. @param Blk - Original template alias and store trait. @param data - Actual owned block. @param offset - Caller offset. @returns Native scalar value. */
+/** Original types.hpp bool-store dispatch: proxy-safe iterator read or checked at. @param Blk - Original template alias and store trait. @param data - Actual owned block. @param offset - Caller offset. @returns Independent native value_type result. */
 export function get_block_element_at<T>(
   Blk: BlockElementAccess<T>,
   data: base_element_block,
@@ -613,7 +616,8 @@ export function get_block_element_at<T>(
     it.advance(offset);
     return it.get();
   }
-  return Blk.at(data, offset);
+  const value = Blk.at(data, offset);
+  return Blk.value_type ? Blk.value_type.copy_construct(value) : value;
 }
 
 /** Erased native ValueT delete and equality operators; null delete is handled by the original default_delete contract. */
@@ -780,3 +784,12 @@ export function noncopyable_managed_element_block<T>(
   }
   return noncopyable_managed_element_block;
 }
+
+/** Original Blk::value_type return alias; actual owned/default block members specialize erased native T, while other access witnesses retain their at result. */
+export type BlockValueType<B extends BlockElementAccess<unknown>> = B extends {
+  readonly value_type: infer V;
+}
+  ? NonNullable<V> extends { copy_construct: (...args: never[]) => infer T }
+    ? T
+    : ReturnType<B["at"]>
+  : ReturnType<B["at"]>;

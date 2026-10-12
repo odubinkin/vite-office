@@ -33,6 +33,24 @@ import {
   type BlocksTraits,
 } from "./main.ts";
 import { type ReferenceCallbacks, type NativeValueType } from "../macro.ts";
+/** Original blocks_type calc_block_position member body. @param store - Metadata. @param index - Native argument. @returns Nothing. */
+export function store_calc_block_position(store: blocks_type, index: number): void {
+  if (index === 0) {
+    store.positions.set(index, 0);
+    return;
+  }
+  store.positions.set(index, store.positions.get(index - 1) + store.sizes.get(index - 1));
+}
+/** Original blocks_type calc_next_block_position member body. @param store - Metadata. @param index - Native argument. @returns Position. */
+export function store_calc_next_block_position(store: blocks_type, index: number): number {
+  return store.positions.get(index) + store.sizes.get(index);
+}
+/** Original blocks_type reserve member body. @param store - Metadata. @param n - Native argument. @returns Nothing. */
+export function store_reserve(store: blocks_type, n: number): void {
+  store.positions.reserve(n);
+  store.sizes.reserve(n);
+  store.element_blocks.reserve(n);
+}
 /** Original metadata insert overloads. @param store - Metadata. @param index - Slot. @param posOrSource - Count, position or store. @param size - Length. @param data - Pointer. @returns Nothing. */
 export function store_insert(
   store: blocks_type,
@@ -793,14 +811,15 @@ export function release(
   }
   store.clear();
 }
-/** Original new-cell member retains release/delete/create/null/install/acquire/append order. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param block_index - Slot. @param cell - Scalar. @param callbacks - Native family. @returns Nothing. */
-export function create_new_block_with_new_cell<T extends DelayedVectorValue>(
+/** Original new-cell member retains release/delete/create/null/install/acquire/append order. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param block_index - Slot. @param cell - Native value. @param callbacks - Native family. @param move - Erased forwarding category. @returns Nothing. */
+export function create_new_block_with_new_cell<T>(
   store: blocks_type,
   event: ContainerEvent,
   funcs: BlocksTraits["block_funcs"],
   block_index: number,
   cell: T,
   callbacks: ContainerCallbacks<T>,
+  move: boolean,
 ): void {
   let data: base_element_block | null = store.element_blocks.get(block_index);
   if (data) {
@@ -811,7 +830,8 @@ export function create_new_block_with_new_cell<T extends DelayedVectorValue>(
   if (!data) throw new general_error("Failed to create new block.");
   store.element_blocks.set(block_index, data);
   event.element_block_acquired(data);
-  callbacks.mdds_mtv_append_value(data, cell);
+  if (move) callbacks.mdds_mtv_append_value_move(data, cell);
+  else callbacks.mdds_mtv_append_value(data, cell);
 }
 
 /** Original destructor body retains positions.size bound and does not clear metadata or logical size. @param store - Actual metadata. @param event - Handler. @param funcs - Operations. @returns Nothing. */

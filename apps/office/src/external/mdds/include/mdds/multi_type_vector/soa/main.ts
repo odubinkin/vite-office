@@ -9,6 +9,7 @@ import {
   get_block_element_at,
   get_block_type,
   type BlockElementAccess,
+  type BlockValueType,
 } from "../types.ts";
 import {
   type DelayedVectorValue,
@@ -36,6 +37,9 @@ import {
   store_swap,
   store_equals,
   store_erase,
+  store_calc_block_position,
+  store_calc_next_block_position,
+  store_reserve,
   initialize_element_blocks,
   delete_element_blocks,
   delete_element_block,
@@ -152,15 +156,11 @@ export class blocks_type {
   }
   /** Original first/subsequent block position calculation; exact bounded native logical indices. @param index - Slot. @returns Nothing. */
   public calc_block_position(index: number): void {
-    if (index === 0) {
-      this.positions.set(index, 0);
-      return;
-    }
-    this.positions.set(index, this.positions.get(index - 1) + this.sizes.get(index - 1));
+    store_calc_block_position(this, index);
   }
   /** Original next position arithmetic. @param index - Slot. @returns Position. */
   public calc_next_block_position(index: number): number {
-    return this.positions.get(index) + this.sizes.get(index);
+    return store_calc_next_block_position(this, index);
   }
   /** Original complete vector swap. @param other - Store. @returns Nothing. */
   public swap(other: blocks_type): void;
@@ -172,9 +172,7 @@ export class blocks_type {
   }
   /** Original synchronized reserve allocates real slots. @param n - Minimum capacity. @returns Nothing. */
   public reserve(n: number): void {
-    this.positions.reserve(n);
-    this.sizes.reserve(n);
-    this.element_blocks.reserve(n);
+    store_reserve(this, n);
   }
   /** Original metadata/length checks before default equal_blocks. @param other - Store. @returns Equality. */
   public equals(other: blocks_type): boolean {
@@ -546,23 +544,29 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
     return pos.first.get().position + pos.second;
   }
   /** Original static typed-position get delegates actual types.hpp helper. @param pos - Valid nonempty matching position. @param Blk - Erased original block template witness. @returns Scalar. */
-  public static get<T extends DelayedVectorValue>(
+  public static get<B extends BlockElementAccess<unknown>>(
     pos: BlockPosition<{ get(): { readonly data: base_element_block | null } }>,
-    Blk: BlockElementAccess<T>,
-  ): T {
-    return get_block_element_at(Blk, pos.first.get().data as base_element_block, pos.second);
+    Blk: B,
+  ): BlockValueType<B> {
+    return get_block_element_at(
+      Blk,
+      pos.first.get().data as base_element_block,
+      pos.second,
+    ) as BlockValueType<B>;
   }
-  /** Original no_trace/nondebug scalar append entry with an explicit erased native overload witness. @param value - Scalar. @param callbacks - Native family. @returns Last block iterator. */
-  public push_back<T extends DelayedVectorValue>(
-    value: T,
-    callbacks: ContainerCallbacks<T>,
-  ): iterator_base<this> {
+  /** Original no_trace/nondebug value append entry with an explicit erased native overload witness. @param value - Native value. @param callbacks - Native family. @returns Last block iterator. */
+  public push_back<T>(value: T, callbacks: ContainerCallbacks<T>): iterator_base<this> {
     return this.push_back_impl(value, callbacks);
   }
-  /** Original push_back_impl retains creation/append and metadata ordering over actual shared fields. @param value - Scalar. @param callbacks - Native family. @returns Last block iterator. */
-  private push_back_impl<T extends DelayedVectorValue>(
+  /** Original rvalue push_back overload with explicit erased value category. @param value - Actual rvalue. @param callbacks - Native overload family. @returns Last block iterator. */
+  public push_back_move<T>(value: T, callbacks: ContainerCallbacks<T>): iterator_base<this> {
+    return this.push_back_impl(value, callbacks, true);
+  }
+  /** Original push_back_impl retains creation/append and metadata ordering over actual shared fields. @param value - Native value. @param callbacks - Native family. @param move - Erased forwarding category. @returns Last block iterator. */
+  private push_back_impl<T>(
     value: T,
     callbacks: ContainerCallbacks<T>,
+    move = false,
   ): iterator_base<this> {
     const cat = callbacks.mdds_mtv_get_element_type(value);
     const last_data =
@@ -573,21 +577,23 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
       const block_index = this.m_block_store.positions.size();
       const start_pos = this.m_cur_size;
       this.m_block_store.push_back(start_pos, 1, null);
-      this.create_new_block_with_new_cell(block_index, value, callbacks);
+      this.create_new_block_with_new_cell(block_index, value, callbacks, move);
       ++this.m_cur_size;
       return this.get_iterator(block_index);
     }
     const block_index = this.m_block_store.positions.size() - 1;
-    callbacks.mdds_mtv_append_value(last_data, value);
+    if (move) callbacks.mdds_mtv_append_value_move(last_data, value);
+    else callbacks.mdds_mtv_append_value(last_data, value);
     this.m_block_store.sizes.set(block_index, this.m_block_store.sizes.get(block_index) + 1);
     ++this.m_cur_size;
     return this.get_iterator(block_index);
   }
-  /** Original new-cell helper releases/deletes prior data, creates empty, installs/acquires then appends; exact null diagnostic retained. @param block_index - Metadata slot. @param cell - Scalar. @param callbacks - Native family. @returns Nothing. */
-  private create_new_block_with_new_cell<T extends DelayedVectorValue>(
+  /** Original new-cell helper releases/deletes prior data, creates empty, installs/acquires then appends; exact null diagnostic retained. @param block_index - Metadata slot. @param cell - Native value. @param callbacks - Native family. @param move - Erased forwarding category. @returns Nothing. */
+  private create_new_block_with_new_cell<T>(
     block_index: number,
     cell: T,
     callbacks: ContainerCallbacks<T>,
+    move = false,
   ): void {
     create_new_block_with_new_cell(
       this.m_block_store,
@@ -596,6 +602,7 @@ export class multi_type_vector<E extends ContainerEvent = empty_event_func> {
       block_index,
       cell,
       callbacks,
+      move,
     );
   }
   /** Original plain/hinted range emptying with actual borrowed original fields. @param first - Start or valid hint. @param second - End or hinted start. @param third - Hinted end. @returns Original empty block iterator. */
