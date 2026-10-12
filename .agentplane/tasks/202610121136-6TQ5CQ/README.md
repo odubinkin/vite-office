@@ -1,10 +1,11 @@
 ---
 id: "202610121136-6TQ5CQ"
 title: "Implement shared formula error codes and encoded double errors"
-status: "DOING"
+result_summary: "Implemented the original shared FormulaError and complete encoded double/publication contracts using verified native JS primitives as genuine formula-result/cell dependencies."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -47,8 +48,8 @@ quality_review:
     - "Current112Calc tests/30files and5related shared tests pass;20Calc owner source hashes/maps unchanged from full71, all raw S/F/B counters positive; shared64S48B4F60L all100. Source-absent current Chromium154 scalar/object/Float64 storage and whole streams pass; links restored exactly."
     - "Namespace registration adds no dependency edges or cycle exceptions; negative application/browser tests pass. All13aggregate gates and23tooling tests pass; bounded initial witness/schema/docs/checker failures retained and corrected without relaxing criteria. No Writer changes, sanitizer, full-suite replay or false parity flags."
 commit:
-  hash: "1af1cccdd89fd856885256e15d228b7729f366ef"
-  message: "🧩 6TQ5CQ calc: implement original shared formula error contracts"
+  hash: "6822b4197c975ae1a72bd55af135ab8cd963afa4"
+  message: "✅ 6TQ5CQ calc: record verified shared formula error contracts"
 comments:
   -
     author: "CODER"
@@ -56,6 +57,9 @@ comments:
   -
     author: "CODER"
     body: "Start: implementation and exact scoped/native/browser validation complete; source commit1af1cccdd89f records shared formula error contracts and necessary namespace registration, source-bound EVALUATOR phase follows."
+  -
+    author: "CODER"
+    body: "Verified: complete shared original formula errors, normal native38enum/65536code/300bit and Chromium154 storage streams, full Calc112/related5 raw100,23tooling/13aggregate gates and exact source-bound same-agent EVALUATOR pass; all3links restored, no Writer/threshold/sanitizer/full-suite changes; next full81."
 events:
   -
     type: "status"
@@ -77,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete original shared error header and native JS contract verified at1af1cccdd89f; Calc112/30 plus shared5/1 raw S/B/F/L100/every counter positive,23tooling cases/13aggregate gates, complete normal native65k+300 streams and actual Chromium154 current-source storage witnesses, all3source links absent/restored; exact source-bound same-agent EVALUATOR pass. No full module/UI or cross-engine/arithmetic/transport claim; next full81."
+  -
+    type: "status"
+    at: "2026-10-12T12:45:09.470Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete shared original formula errors, normal native38enum/65536code/300bit and Chromium154 storage streams, full Calc112/related5 raw100,23tooling/13aggregate gates and exact source-bound same-agent EVALUATOR pass; all3links restored, no Writer/threshold/sanitizer/full-suite changes; next full81."
 doc_version: 3
-doc_updated_at: "2026-10-12T12:45:08.215Z"
+doc_updated_at: "2026-10-12T12:45:09.471Z"
 doc_updated_by: "CODER"
 description: "Task72: port the complete original include/formula/errorcodes.hxx enum, CreateDoubleError, GetDoubleErrorValue and isPublishedFormulaError as the required formula-result/ScFormulaCell dependency. Reuse native JS numeric/DataView primitives and existing SAL source evidence instead of a duplicate library. Compare unchanged complete pinned original header via a normal-only native caller; retain all enum/internal/published/default distinctions, NaN low-bit precedence and invalid runtime assumptions in evidence. Complete Calc plus directly related shared raw100 with upstream links absent/restored, registry/provenance and aggregate local gates. No Writer-only changes, no full suite until81, no pretend formula cell/document/UI."
 sections:
@@ -160,6 +171,10 @@ sections:
     - Observation: Current-source normal native --check, complete shared raw100 and Chromium whole streams pass; related tooling23cases/2files and all14effective check rows pass. Current20Calc source hashes and raw maps remain identical to full71. Five shared cases and browser alone were refreshed after JSDoc edits; successful112Calc tests/build were not redundantly repeated. The CLI literal caller and original copy are preserved as text artifacts; no lint exclusion was added.
       Impact: The shared FormulaError/helper owner is available for genuine formula results/cells; actual Calc document and UI are still absent.
       Resolution: Record exact committed source-bound same-agent EVALUATOR, final verification and clean task72 closure. Next full81; no full-scope readiness or parity promotion.
+extensions:
+  implementation_commit:
+    hash: "1af1cccdd89fd856885256e15d228b7729f366ef"
+    message: "🧩 6TQ5CQ calc: implement original shared formula error contracts"
 id_source: "generated"
 ---
 ## Summary
