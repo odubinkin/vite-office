@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/formularesult.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "formula-result",
+    "capabilityIds": [
+      "CAP-b0498d77-fc77-41e5-ad49-d43f03a3c1bd"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/formularesult.ts#FormulaResultValue",
+        "apps/office/src/sc/inc/formularesult.ts#FormulaResultValueType",
+        "apps/office/src/sc/source/core/tool/formularesult.test.ts#matches all original scalar constructor and encoded error value distinctions",
+        "apps/office/src/sc/source/core/tool/formularesult.test.ts#matches complete original shared string ownership and struct special member stream",
+        "apps/office/src/sc/source/core/tool/formularesult.test.ts#matches original public field narrowing and shared member reference assignment",
+        "apps/office/src/sc/source/core/tool/formularesult.test.ts#preserves explicit original error type even when its code is NONE",
+        "vendor/libreoffice-reference/sc/inc/formularesult.hxx#struct FormulaResultValue",
+        "vendor/libreoffice-reference/sc/source/core/tool/formularesult.cxx#FormulaResultValue::FormulaResultValue"
+      ],
+      "justification": "Task73 implements the actual complete sc::FormulaResultValue struct and all four explicit constructors, with original Invalid/Value/String/Error tags, direct unscoped tag aliases, defaults and implicit copy/move/assignment/destructor semantics. Genuine existing FormulaError and SharedString owners are reused, without a parallel string or result model. Native fixed UInt8/UInt16 field assignment and shared member reference identity are retained; public string assignment delegates to its actual shared value assignment. Explicit actual FormulaError enum and SharedString.move witnesses restore erased enum-vs-double and caller value-category contracts; values and NaNs are never guessed as errors. Complete selected original struct/four-constructor scopes from full pinned files compile over whole genuine SharedString/SAL dependencies with four reused normal witnesses, one new normal link and three complete capture commands. All65536error/double/encoded-double constructor distinctions,52ownership/assignment combinations,16public field narrowing/copy/move observations and initialized special doubles are compared. The full ScFormulaResult/token/matrix/document graph is neither compiled through substitutes nor certified. Raw whole Calc and directly related shared100 plus source-absent build/profile checks are required. Other constructors/native ABI/concurrency/undefined lifetimes and whole formula/kernel/upstream QA/document/input/UI remain unverified. Explicit native special members/value category bindings replace erased C++ syntax; plain JS reference aliasing is not a native value copy. Last full71; next full81.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/formularesult.hxx",
+      "upstreamSymbols": [
+        "struct FormulaResultValue"
+      ]
+    }
+  }
+}

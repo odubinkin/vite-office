@@ -57,6 +57,8 @@ const allowedEdges = new Map([
       "cui",
       "editeng",
       "external",
+      // Original Calc formularesult.hxx includes the shared formula error contracts.
+      "formula",
       "framework",
       "o3tl",
       "offapi",

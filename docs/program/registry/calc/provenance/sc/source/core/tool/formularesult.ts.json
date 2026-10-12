@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/formularesult.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/formularesult.cxx",
+    "localSymbols": [
+      "FormulaResultValue",
+      "FormulaResultValueType",
+      "maString",
+      "meType",
+      "mnError",
+      "move",
+      "assign",
+      "moveAssign",
+      "dispose"
+    ],
+    "upstreamSymbols": [
+      "FormulaResultValue::FormulaResultValue"
+    ],
+    "preservedResponsibilities": [
+      "Original actual named result value owner and header/core-tool boundary, reusing genuine shared strings and errors.",
+      "Complete explicit/implicit value special members, exact tags/defaults and actual fixed-width/public shared member semantics."
+    ],
+    "omittedResponsibilities": [
+      "Full ScFormulaResult/token/matrix/cell/document/input/view/UI, native ABI/invalid lifetimes/full upstream QA remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "FormulaResultValue"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "FormulaResultValueType"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "maString"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "meType"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "mnError"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "move"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "assign"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "moveAssign"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "dispose"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.test.ts",
+          "marker": "matches all original scalar constructor and encoded error value distinctions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.test.ts",
+          "marker": "matches complete original shared string ownership and struct special member stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.test.ts",
+          "marker": "matches original public field narrowing and shared member reference assignment"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.test.ts",
+          "marker": "preserves explicit original error type even when its code is NONE"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/formularesult.hxx",
+          "marker": "struct FormulaResultValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/formularesult.cxx",
+          "marker": "FormulaResultValue::FormulaResultValue"
+        }
+      ]
+    }
+  }
+}
