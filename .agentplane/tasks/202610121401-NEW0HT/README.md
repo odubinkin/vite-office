@@ -4,7 +4,7 @@ title: "Implement original shared formula token family and ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,36 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T15:09:00.301Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR review of efab390538c488bafda21b00455a91394382b728: original15token family/shared ownership scope passes source-exact ordinary native witnesses, raw100portable checks and14local gates; full compiler/document/UI remain unverified."
+  evaluated_sha: "efab390538c488bafda21b00455a91394382b728"
+  blueprint_digest: "552bd8656c92d415b9ad0afb26a8ec806a86dcf287cfe4e0642fdb1e58fff5d6"
+  evidence_refs:
+    - ".agentplane/tasks/202610121401-NEW0HT/README.md"
+    - ".agentplane/tasks/202610121401-NEW0HT/quality/20261012-150900301-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610121401-NEW0HT/quality/20261012-150900301-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610121401-NEW0HT/quality/20261012-150900301-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610121401-NEW0HT/blueprint/resolved-snapshot.json"
+    - "output/playwright/task75-checks/exact-review.json"
+    - "output/playwright/task75-checks/final-audit.json"
+    - "output/playwright/task75-checks/gates-results.json"
+    - "output/playwright/task75-checks/value-coverage-audit.json"
+    - "output/playwright/formula-token-native/manifest.json"
+  findings:
+    - "All78current source hashes match implementation commit; original shared owners and actual full native headers/selected definitions are reused without fake classes, runtime cycles, thresholds or sanitizer changes. Registry3newcapabilities and18records retain foundation/broadfalse claims. First generated extraction lint failure fixed without exclusions. Scope and residual native/consumer limits are explicit; review is same-agent, not independent."
+commit:
+  hash: "efab390538c488bafda21b00455a91394382b728"
+  message: "🚧 NEW0HT formula: implement original token family and ownership"
 comments:
   -
     author: "CODER"
     body: "Start: Implement genuine shared formula token family and required original reference/compiler ownership contracts over existing shared owners, following complete source-shaped native witnesses and raw100 gates."
+  -
+    author: "CODER"
+    body: "Implementation: original15token family, real shared ownership and complete bounded native/raw100 evidence are committed; final same-agent EVALUATOR review follows."
 events:
   -
     type: "status"
@@ -37,8 +62,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement genuine shared formula token family and required original reference/compiler ownership contracts over existing shared owners, following complete source-shaped native witnesses and raw100 gates."
+  -
+    type: "status"
+    at: "2026-10-12T15:08:56.057Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: original15token family, real shared ownership and complete bounded native/raw100 evidence are committed; final same-agent EVALUATOR review follows."
 doc_version: 3
-doc_updated_at: "2026-10-12T15:03:43.981Z"
+doc_updated_at: "2026-10-12T15:10:25.709Z"
 doc_updated_by: "CODER"
 description: "Task75: Actual complete FormulaToken header family15classes, StackVar/RefCntPolicy, original fields/defaults/copy/Clone/equality/classification and virtual methods; reuse existing SAL atomics/OUString/SharedString/errors/opcodes/ParamClass. Required original Boost intrusive_ptr ownership core shared once with erased ADL/type witnesses, existing cached1.91sources only; no full Boost claim. Actual FormulaCompiler IsOpCodeJumpCommand member at original boundary, no full compiler claim. Whole original native headers plus complete selected real member definitions, no fake Calc pointees or compiler class; normal-only source-exact witnesses for safe initialized states. Whole Calc/affected shared raw100/source-absent build/profile, full local gates/inventory/quality. Work only calc,next full81."
 sections:
@@ -65,7 +97,7 @@ sections:
     Evidence: full format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and whole directly affected tooling23tests pass. First lint failure was redundant task-owned Boost archive extraction containing unrelated Node examples; removed only that generated extraction and re-extracted17required verified headers with a nonempty guard, then full lint passed. First diagnostics retained. Current introduced const contracts and native payload/string cases passed application typecheck and16token tests. Final native-helper terminal metadata change received targeted lint/docs checks; final docs/native helper formatting is rechecked before commit.
     Scope: all required repository local gates, genuine formula-to-SAL/SVL/external edges and generic-owner independence. Registry/provenance covers492runtime modules with0semantic violations;3new shared capabilities and18source/runtime records. Filename shards mapped to original responsibilities and no runtime cycle. Native/tooling validations are evidence for the bounded implemented scope, not full upstream QA.
 
-    Pending final source-bound implementation commit and same-agent separate EVALUATOR report; ap verify/finish follows only that review. This record does not claim independent review or goal completion.
+    Implementation commit efab390538c488bafda21b00455a91394382b728 binds all78current source hashes. Same-agent separate EVALUATOR pass report: .agentplane/tasks/202610121401-NEW0HT/quality/20261012-150900301-recovery-context/quality-report.json, exact evaluated_sha matches implementation. No independent review or goal completion is claimed. Footer-only original Boost copyright notice was appended after executable code without changing raw source locations; targeted formatter/lint passed and original full license bytes were checked. Verification/lifecycle closure is now authorized by the recorded review.
   Rollback Plan: "Revert only task75 implementation/traceability commits, restore original3source links after every portable verification, preserve first native/verification failures and source hashes. Keep unrelated active tasks/user merges. Recheck affected owners after rollback."
   Findings: |-
     Previous goal turn is concrete progress: task74 DONE53820e95e1ff with complete shared opcode/parameter contracts, current source clean calc. Current token/types/compiler owners are absent. FormulaToken header defines15classes; original IsFunction/GetParamCount use real byte/space/FAP/external/string-op owners, so isolated fake base dependencies are prohibited. OSL signed32 atomic owner and real OUString/SharedString already exist. Local output/playwright/mdds-native/boost_1_91_0 contains actual Boost1.91source matching upstream download.lst requirement; verify cache archive/dependencies before using. Reference aliases need actual intrusive ownership contract rather than misusing UNO Reference. Goal authorizes safe current core scope and shared reuse; native ordinary header/member observations only, no routine sanitizers. User readiness estimate remains preliminary15-25tasks; document/input/UI owners are still absent. Last full71,next full81.
@@ -126,7 +158,7 @@ Result: all14rows pass.
 Evidence: full format/lint/type/docs/size/dependencies/resources/tree/provenance/registry/routing/doctor/diff and whole directly affected tooling23tests pass. First lint failure was redundant task-owned Boost archive extraction containing unrelated Node examples; removed only that generated extraction and re-extracted17required verified headers with a nonempty guard, then full lint passed. First diagnostics retained. Current introduced const contracts and native payload/string cases passed application typecheck and16token tests. Final native-helper terminal metadata change received targeted lint/docs checks; final docs/native helper formatting is rechecked before commit.
 Scope: all required repository local gates, genuine formula-to-SAL/SVL/external edges and generic-owner independence. Registry/provenance covers492runtime modules with0semantic violations;3new shared capabilities and18source/runtime records. Filename shards mapped to original responsibilities and no runtime cycle. Native/tooling validations are evidence for the bounded implemented scope, not full upstream QA.
 
-Pending final source-bound implementation commit and same-agent separate EVALUATOR report; ap verify/finish follows only that review. This record does not claim independent review or goal completion.
+Implementation commit efab390538c488bafda21b00455a91394382b728 binds all78current source hashes. Same-agent separate EVALUATOR pass report: .agentplane/tasks/202610121401-NEW0HT/quality/20261012-150900301-recovery-context/quality-report.json, exact evaluated_sha matches implementation. No independent review or goal completion is claimed. Footer-only original Boost copyright notice was appended after executable code without changing raw source locations; targeted formatter/lint passed and original full license bytes were checked. Verification/lifecycle closure is now authorized by the recorded review.
 
 ## Rollback Plan
 
