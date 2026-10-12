@@ -4,7 +4,7 @@ title: "Implement original UNO environment object entry owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-12T03:10:44.718Z"
+  updated_by: "CODER"
+  note: "Complete original ObjectEntry whole normal-ASan/UBSan four streams; full443source/39generated/101units/219terminal audit; source-absent Calc106/24 and shared188/53 all19+76 raw100; all13scoped gates/35tooling/format; original CALC-062 behavior retained. EVALUATOR evaluated_sha equals ea402d8861ada771c9efc21d123e6a0335adaac0. Full61 next."
   attempts: 0
 quality_review:
   state: "pass"
@@ -64,8 +64,14 @@ events:
     author: "CODER"
     from: "DOING"
     to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-12T03:10:44.718Z"
+    author: "CODER"
+    state: "ok"
+    note: "Complete original ObjectEntry whole normal-ASan/UBSan four streams; full443source/39generated/101units/219terminal audit; source-absent Calc106/24 and shared188/53 all19+76 raw100; all13scoped gates/35tooling/format; original CALC-062 behavior retained. EVALUATOR evaluated_sha equals ea402d8861ada771c9efc21d123e6a0335adaac0. Full61 next."
 doc_version: 3
-doc_updated_at: "2026-10-12T03:10:24.551Z"
+doc_updated_at: "2026-10-12T03:10:44.778Z"
 doc_updated_by: "CODER"
 description: "Task60: complete lbenv.cxx td_equals/InterfaceEntry/ObjectEntry explicit constructor, append and find overloads, original logical compiler-generated value lifetimes. Reuse actual OUString, C typelib and environment record contracts; native JS arrays/Map for original accessed vector membership/key identity only. Full unchanged original lbenv TU plus genuine complete desktop dependencies normal-ASan/UBSan, whole ownership/callback/find/copy/move observations, exact task59 shared raw100 plus actual owner/test and Calc. Matching registry/docs and suspected-case journal if confirmed. No fake default environment/provider or whole engine/ABI/thread claim. Full61 next."
 sections:
@@ -81,6 +87,39 @@ sections:
     Command: python3 output/playwright/task60-checks/gates.py; python3 output/playwright/task60-checks/gates-repair.py; python3 output/playwright/task60-checks/final-audit.py; npx prettier --check apps/office/src/cppu/source/uno/lbenv.ts apps/office/src/cppu/source/uno/lbenv.test.ts scripts/uno-object-entry-native-probe.mjs apps/office/src/cppu/source/uno/native-object-entry-cases.json. Result: pass. Evidence: all13 actual rows in gates-final-manifest.json, final-audit.json, format-final-check.log. TS7 app/tools, authored lint,docs,size,dependencies,provenance/tree, shared+Calc inventory,35 tooling tests,routing,doctor,diff. Doctor has0errors/2preexisting warnings. First failed caller, test cast and non-null lint diagnostics remain retained; assertions/thresholds/source behavior unchanged.
 
     Scope and residual gaps: caller-owned declared ext-environment/map input is not the DefaultEnvironment runtime implementation. Native arrays/Map preserve accessed elements and key identity/insertion, not physical capacity/allocator/hash order/ABI. Leak detection disabled. Native threads/shutdown/full environment/mapping/exception/consumer QA remain unverified; broad parity flags false. CALC-062 preserves confirmed primary-base-only lookup despite real secondary-base assignability. Later weak objects/services/CharClass/actual SharedStringPool/cell storage/ScColumn/Table/Document/input/view/UI are still prerequisites. Scheduled full61 starts next; full goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-12T03:10:44.718Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Complete original ObjectEntry whole normal-ASan/UBSan four streams; full443source/39generated/101units/219terminal audit; source-absent Calc106/24 and shared188/53 all19+76 raw100; all13scoped gates/35tooling/format; original CALC-062 behavior retained. EVALUATOR evaluated_sha equals ea402d8861ada771c9efc21d123e6a0335adaac0. Full61 next.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T03:10:24.551Z, excerpt_hash=sha256:f28d77257f139a4b72119945be533468a45d17a0c20dfb8edf6e5e69ad37f32f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120243-2GW4JJ/blueprint/resolved-snapshot.json
+    - old_digest: 92b779ce58a58ce09eab2a893bff6e6ebb3a9f29c4a343c09818be0e57d5b239
+    - current_digest: 92b779ce58a58ce09eab2a893bff6e6ebb3a9f29c4a343c09818be0e57d5b239
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610120243-2GW4JJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610120243-2GW4JJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore all3original source links in finally; revert only intentional task60 owner/test/probe/registry/docs/journal if needed, preserve evidence and unrelated tasks."
   Findings: |-
     Task59 is DONE at4aaf79510a45; full61 is next after this task. First native caller compile failed: its I alias collided with the existing common observation caller's indirect-type I alias, causing 17 compile diagnostics. No original source failed or changed. Evidence: output/playwright/task60-checks/native-write-first.log. The attempted first manifest preservation used the wrong filename (build-manifest.json rather than manifest.json); that artifact was not retained. Resolution within approved caller scope: use distinct original interface descriptor alias OEType; repeat genuine build and complete captures. Full environment/mapping/exception engines remain absent; no substitute providers or extraction.
@@ -96,6 +135,10 @@ sections:
     - Observation: TS7 rejects direct cast of the actual C description self pointer to the containing interface record in the new native replay test.
       Impact: The replay's runtime observations pass, but app typecheck does not; gate logs retained.
       Resolution: Use an explicit erased C boundary cast through unknown in the caller test, matching original reinterpret_cast; no runtime source or assertion change.
+
+    - Observation: Borrowed declared ext-environment record and pointer map are not the full runtime engine; native arrays/Map preserve logical original accessed elements/insertion identity.
+      Impact: Physical capacity/allocator/hash order/ABI/leaks/thread/shutdown and complete consumers unverified; environment/mapping/exception machinery and cell/document/edit/view/UI prerequisites remain.
+      Resolution: Retain explicit scope and false broad parity flags; schedule full61 and subsequent source-backed dependencies.
 id_source: "generated"
 ---
 ## Summary
@@ -124,6 +167,39 @@ Command: python3 output/playwright/task60-checks/gates.py; python3 output/playwr
 
 Scope and residual gaps: caller-owned declared ext-environment/map input is not the DefaultEnvironment runtime implementation. Native arrays/Map preserve accessed elements and key identity/insertion, not physical capacity/allocator/hash order/ABI. Leak detection disabled. Native threads/shutdown/full environment/mapping/exception/consumer QA remain unverified; broad parity flags false. CALC-062 preserves confirmed primary-base-only lookup despite real secondary-base assignability. Later weak objects/services/CharClass/actual SharedStringPool/cell storage/ScColumn/Table/Document/input/view/UI are still prerequisites. Scheduled full61 starts next; full goal remains active.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-12T03:10:44.718Z — VERIFY — ok
+
+By: CODER
+
+Note: Complete original ObjectEntry whole normal-ASan/UBSan four streams; full443source/39generated/101units/219terminal audit; source-absent Calc106/24 and shared188/53 all19+76 raw100; all13scoped gates/35tooling/format; original CALC-062 behavior retained. EVALUATOR evaluated_sha equals ea402d8861ada771c9efc21d123e6a0335adaac0. Full61 next.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-12T03:10:24.551Z, excerpt_hash=sha256:f28d77257f139a4b72119945be533468a45d17a0c20dfb8edf6e5e69ad37f32f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610120243-2GW4JJ/blueprint/resolved-snapshot.json
+- old_digest: 92b779ce58a58ce09eab2a893bff6e6ebb3a9f29c4a343c09818be0e57d5b239
+- current_digest: 92b779ce58a58ce09eab2a893bff6e6ebb3a9f29c4a343c09818be0e57d5b239
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610120243-2GW4JJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610120243-2GW4JJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Restore all3original source links in finally; revert only intentional task60 owner/test/probe/registry/docs/journal if needed, preserve evidence and unrelated tasks.
@@ -143,3 +219,7 @@ Task59 is DONE at4aaf79510a45; full61 is next after this task. First native call
 - Observation: TS7 rejects direct cast of the actual C description self pointer to the containing interface record in the new native replay test.
   Impact: The replay's runtime observations pass, but app typecheck does not; gate logs retained.
   Resolution: Use an explicit erased C boundary cast through unknown in the caller test, matching original reinterpret_cast; no runtime source or assertion change.
+
+- Observation: Borrowed declared ext-environment record and pointer map are not the full runtime engine; native arrays/Map preserve logical original accessed elements/insertion identity.
+  Impact: Physical capacity/allocator/hash order/ABI/leaks/thread/shutdown and complete consumers unverified; environment/mapping/exception machinery and cell/document/edit/view/UI prerequisites remain.
+  Resolution: Retain explicit scope and false broad parity flags; schedule full61 and subsequent source-backed dependencies.
