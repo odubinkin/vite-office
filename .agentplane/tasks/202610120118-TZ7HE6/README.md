@@ -4,7 +4,7 @@ title: "Implement original UNO environment descriptor operations"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -24,11 +24,39 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-12T01:33:57.146Z"
+  updated_by: "EVALUATOR"
+  note: "Complete original environment descriptor boundaries are implemented over existing actual SAL/OUString and meet whole native/portable and complete-owner raw coverage criteria at the reviewed source."
+  evaluated_sha: "a3d80b28351c67632f07ce6a12b26457e1ae0360"
+  blueprint_digest: "d793465e91300feed32a6611b1d57cc0684f4df073169ba95b542c005bb22bf3"
+  evidence_refs:
+    - ".agentplane/tasks/202610120118-TZ7HE6/README.md"
+    - ".agentplane/tasks/202610120118-TZ7HE6/quality/20261012-013357146-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610120118-TZ7HE6/quality/20261012-013357146-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610120118-TZ7HE6/quality/20261012-013357146-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610120118-TZ7HE6/blueprint/resolved-snapshot.json"
+    - "output/playwright/task57-checks/final-audit.json"
+    - "output/playwright/task57-checks/native-check.log"
+    - "output/playwright/task57-checks/decoded-functions.json"
+    - "output/playwright/task57-checks/value-coverage-audit.json"
+    - "output/playwright/task57-checks/gates-final-manifest.json"
+    - "output/playwright/task57-checks/format-final.log"
+  findings:
+    - "Both C functions preserve original bounded/terminated type-name branch and leading-colon purpose; C++ wrappers initialize real outputs and pass actual pointer-field views without a second string/environment/default provider. Retained aliases keep source alive exactly as native caller."
+    - "Whole original functions24684/aliases16572/wrappers11944 streams match normal-ASan/UBSan builds and actual portable owners:70full original units per build,349source/13generated/8configuration hashes,148terminal commands all0. Whole original C streams consumed and CALC-061 preserves confirmed embedded-NUL branch behavior without a loadable-environment defect claim."
+    - "Source-absent Calc106/shared176 tests and19/72executable owners raw S/B/F/L100; full task56 shared profile preserved adding only actual descriptor test/three source owners and report path. All13gates,35tooling tests and13exact authored format checks pass;3source links restored, native builders/support unchanged and matching registry broad flags false."
+commit:
+  hash: "a3d80b28351c67632f07ce6a12b26457e1ae0360"
+  message: "🧩 TZ7HE6 code: implement original UNO environment descriptor operations"
 comments:
   -
     author: "CODER"
     body: "Start: Port complete original EnvDcp source/header boundaries through shared SAL/OUString and verify genuine whole ownership streams; no environment or string provider substitutes."
+  -
+    author: "CODER"
+    body: "Implementation: Complete original EnvDcp source/header wrappers and whole native/portable ownership proof committed; shared owners reused, CALC-061 preserved, scoped raw100 and all13gates pass."
 events:
   -
     type: "status"
@@ -37,8 +65,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Port complete original EnvDcp source/header boundaries through shared SAL/OUString and verify genuine whole ownership streams; no environment or string provider substitutes."
+  -
+    type: "status"
+    at: "2026-10-12T01:33:56.482Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Implementation: Complete original EnvDcp source/header wrappers and whole native/portable ownership proof committed; shared owners reused, CALC-061 preserved, scoped raw100 and all13gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-12T01:32:34.352Z"
+doc_updated_at: "2026-10-12T01:33:56.482Z"
 doc_updated_by: "CODER"
 description: "Task57: port complete EnvDcp.cxx, include/uno/EnvDcp.h declarations and include/cppu/EnvDcp.hxx wrappers using actual shared SAL/OUString owners. Required by EnvStack/lbmap for generic exception path. Whole native normal/sanitized streams and unchanged task56 related shared profile plus actual new owners/tests raw100, matching registry and suspicion journal if source evidence confirms. No environment/mapping provider or standalone string implementation. Last full51,next61."
 sections:
