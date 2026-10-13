@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 355
+revision: 356
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:05:22.118Z"
+doc_updated_at: "2026-10-13T17:19:00.365Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1560,6 +1560,10 @@ sections:
     Bounded original frame ownership/API/traversal over represented flat table grid. Full physical VCL frame geometry/paint areas/root/page/master/follow/covered/rowspan/nested/RTL/vertical/Word ends/junctions/primitives/incremental formatting and whole native core/UI parity remain unverified. Original renderer still owns temporary table hierarchy for its render lifetime; this task removes the second painter graph, not complete persistent native layout. No compatibility overload/model wrapper/new runtime module/cache/state registry or low-level allocation machinery added. No upstream/helper/Python/rawmap source copies in Agentplane/network/global reads/publication; protected Space and registered save/open/recovery/settings exceptions remain. Same-agent non-independent semanticSHA review follows. Goalactive cadence8/10; full once10 then user pause after next full+necessary repairs.
 
     Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-agent EVALUATOR phase (not independent), report .agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/quality-report.json. All12reviewed blobs equal frozen final evidence,137staticfiles unchanged.1571unique assertions, whole2current-original modules100four/276positive counters,949otheroldtests and original3caller assertion/data outputs,4canonical history prefixes/9metadata gates pass. No source/test/registry change after acceptance; clean direct close follows. Goalactive8/10, full once10 then user pause after next full and repairs.
+
+    - Observation: Correction9/10 task202610131709-529MQ3 fixes SwTabFramePainter outer flags from actual frame links instead of model row indexes; partial/reordered chains now match pinned Insert predicates.
+      Impact: Original painter/native owner/grid/Style arbitration/defaults and protected IO/recovery/Space preserved; whole physical/native parity remains unverified.
+      Resolution: 1566unique assertions1528related/26tooling/12Chromium pass; whole painter100L74/S78/F9/B26 and113positive original counters,955oldtests identical,2canonical histories and9metadata gates pass.4refs absent everyproducer/exactfinallyrestore; transient shared boost metadata retry only. Full once10 then human-requested pause after full+repairs.
 id_source: "generated"
 ---
 ## Summary
@@ -3093,3 +3097,7 @@ Task202610131634-4VSZVA correction8/10: Accepted1571unique assertions:1523relate
 Bounded original frame ownership/API/traversal over represented flat table grid. Full physical VCL frame geometry/paint areas/root/page/master/follow/covered/rowspan/nested/RTL/vertical/Word ends/junctions/primitives/incremental formatting and whole native core/UI parity remain unverified. Original renderer still owns temporary table hierarchy for its render lifetime; this task removes the second painter graph, not complete persistent native layout. No compatibility overload/model wrapper/new runtime module/cache/state registry or low-level allocation machinery added. No upstream/helper/Python/rawmap source copies in Agentplane/network/global reads/publication; protected Space and registered save/open/recovery/settings exceptions remain. Same-agent non-independent semanticSHA review follows. Goalactive cadence8/10; full once10 then user pause after next full+necessary repairs.
 
 Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-agent EVALUATOR phase (not independent), report .agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/quality-report.json. All12reviewed blobs equal frozen final evidence,137staticfiles unchanged.1571unique assertions, whole2current-original modules100four/276positive counters,949otheroldtests and original3caller assertion/data outputs,4canonical history prefixes/9metadata gates pass. No source/test/registry change after acceptance; clean direct close follows. Goalactive8/10, full once10 then user pause after next full and repairs.
+
+- Observation: Correction9/10 task202610131709-529MQ3 fixes SwTabFramePainter outer flags from actual frame links instead of model row indexes; partial/reordered chains now match pinned Insert predicates.
+  Impact: Original painter/native owner/grid/Style arbitration/defaults and protected IO/recovery/Space preserved; whole physical/native parity remains unverified.
+  Resolution: 1566unique assertions1528related/26tooling/12Chromium pass; whole painter100L74/S78/F9/B26 and113positive original counters,955oldtests identical,2canonical histories and9metadata gates pass.4refs absent everyproducer/exactfinallyrestore; transient shared boost metadata retry only. Full once10 then human-requested pause after full+repairs.

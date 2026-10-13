@@ -59,13 +59,10 @@ export class SwTabFramePainter {
           bottom = new Style(box.GetBottom());
         right.MirrorSelf();
         bottom.MirrorSelf();
-        this.Insert(new SwLineEntry(c, r, r + 1, c === 0, left), false);
+        this.Insert(new SwLineEntry(c, r, r + 1, row.Lower() === cell, left), false);
         this.Insert(new SwLineEntry(c + 1, r, r + 1, cell.GetNext() === undefined, right), false);
-        this.Insert(new SwLineEntry(r, c, c + 1, r === 0, top), true);
-        this.Insert(
-          new SwLineEntry(r + 1, c, c + 1, r === table.GetTabLines().length - 1, bottom),
-          true,
-        );
+        this.Insert(new SwLineEntry(r, c, c + 1, this.mrTabFrame.Lower() === row, top), true);
+        this.Insert(new SwLineEntry(r + 1, c, c + 1, row.GetNext() === undefined, bottom), true);
       }
     }
   }
