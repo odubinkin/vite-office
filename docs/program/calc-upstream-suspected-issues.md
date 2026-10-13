@@ -1672,3 +1672,23 @@ The cached-value fast path assigns rVal but does not clear rErr. Later paths lik
 Evidence: task89 complete unchanged native result class/source histories query each state with initialized NONE and DivisionByZero out errors and a fixed initialized numeric output. Portable replay preserves all return values and untouched fields without changing thresholds or forcing private state.
 
 Decision: preserve original output writes and precedence. Do not automatically clear caller error or numeric storage. Audit actual original consumer initialization when those owners are ported.
+
+## CALC-079: token removal skips adjacent duplicate RPN references
+
+Status: confirmed original traversal asymmetry; a user-visible defect is not established.
+
+FormulaTokenArray::RemoveToken shifts remaining RPN entries down after a match, then the outer forward loop increments its index. An adjacent equal reference shifted into the current slot is skipped. Removing code token x from RPN x,x,x,y leaves one x reference and y, despite removal from active code. Nonadjacent duplicates can both be removed.
+
+Evidence: task90 complete unchanged selected normal array functions and initialized pointer ranges over genuine tokens. The caller retains genuine token references, so the leftover RPN identity is live; no freed-pointer or sanitizer experiment is used. Complete portable replay preserves active RPN contents and lengths.
+
+Decision: preserve original forward-index traversal and leftover identity. Do not decrement the scan index, deduplicate or clean all matches. Audit actual compiler/document consumer effects when those owners are ported.
+
+## CALC-080: moved token array retains finalized source flag
+
+Status: confirmed original moved-source metadata behavior; a defect is not established.
+
+FormulaTokenArray::Move transfers buffers and zeros source nLen/nRPN but leaves source flags/error/recalc state. Moving a finalized code array therefore leaves an empty source that still rejects appending a new token. Clear restores the ordinary editable default. Copying nonempty code also finalizes its copied buffer, irrespective of the source's prior flag.
+
+Evidence: task90 unchanged original constructor/Assign/Move/Finalize/Add functions, initialized normal source/copy/move histories and explicit moved-source append observation. Portable replay matches all flags, lengths, identities and rejection.
+
+Decision: preserve moved-source flags and original finalization/rejection. Do not silently reset or reopen the moved-from array. User-visible consumer effects remain unverified.

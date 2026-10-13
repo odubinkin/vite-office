@@ -1,0 +1,107 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/formula/source/core/api/token.array.ts",
+    "status": "mapped",
+    "upstreamPath": "formula/source/core/api/token.cxx",
+    "localSymbols": [
+      "FormulaTokenArray",
+      "FormulaTokenArrayStandardRange",
+      "ScRecalcMode",
+      "move",
+      "Assign",
+      "Move",
+      "copy_assign",
+      "move_assign",
+      "Clear",
+      "Finalize",
+      "CheckToken",
+      "CheckAllRPNTokens",
+      "MergeArray",
+      "Add",
+      "AddToken",
+      "AddDouble",
+      "AddString",
+      "AddError",
+      "ReplaceRPNToken",
+      "ReplaceToken",
+      "RemoveToken",
+      "DelRPN",
+      "CreateNewRPNArrayFromData",
+      "GetArray",
+      "GetCode",
+      "FirstToken",
+      "TokenAt",
+      "OpCodeBefore",
+      "PeekPrev",
+      "FirstRPNToken",
+      "LastRPNToken",
+      "GetOuterFuncOpCode",
+      "Tokens",
+      "RPNTokens",
+      "HasReferences",
+      "HasExternalRef",
+      "HasOpCode",
+      "HasOpCodeRPN",
+      "HasNameOrColRowName",
+      "HasOpCodes",
+      "GetLen",
+      "GetCodeLen",
+      "GetCodeError",
+      "SetCodeError",
+      "SetHyperLink",
+      "IsHyperLink",
+      "SetFromRangeName",
+      "IsFromRangeName",
+      "SetShareable",
+      "IsShareable",
+      "SetDynamicArrayFunction",
+      "HasDynamicArrayFunction",
+      "GetRecalcMode",
+      "GetCombinedBitsRecalcMode",
+      "SetCombinedBitsRecalcMode",
+      "SetMaskedRecalcMode",
+      "AddRecalcMode",
+      "ClearRecalcMode",
+      "SetExclusiveRecalcModeNormal",
+      "SetExclusiveRecalcModeAlways",
+      "SetRecalcModeForced",
+      "SetRecalcModeOnRefMove",
+      "IsRecalcModeNormal",
+      "IsRecalcModeAlways",
+      "IsRecalcModeForced",
+      "IsRecalcModeOnRefMove",
+      "IsRecalcModeMustAfterImport",
+      "ClearRecalcModeMustAfterImport"
+    ],
+    "upstreamSymbols": [
+      "FormulaTokenArray"
+    ],
+    "preservedResponsibilities": [
+      "Original shared initialized code/RPN token identity, copies/moves/defaults/edit/query/finalization/limits and recalc state, with actual live ranges."
+    ],
+    "omittedResponsibilities": [
+      "Task90 implements the actual shared FormulaTokenArray initialized code/RPN storage operation family and original FormulaTokenArrayStandardRange live bounded iterable plus ScRecalcMode UInt8 constants/priority/masks. Default/shallowcopy/logicalmove/assignment/clear/finalize/DelRPN, XML placeholders, initialized compiler RPN data, append/cloned token/numeric/string/error wrappers,8192bound/ocStop, replacements/removal and token/opcode/reference/name/index queries reuse genuine FormulaToken owners. Copy finalizes nonempty code; move transfers arrays/lengths while retaining source flags; finalized rejects appends. Ordinary JS refs omit physical capacity32/unique_ptr/refcount/allocator/pool/finalizer; logical nullable buffer presence/active lengths and original alias traversal retained. Replace/remove native GetRef gates specialize to actual RPN identity matches; refcount1 break implies no remaining match, but original forward-index duplicate-adjacency skip remains CALC-079. StandardRange borrows live buffer with fixed end, preserving later replacement, JS iteration adapts pointer range. o3tl typed_flags7f complement makes combined mask60, implemented with native bitops, no flags library. Native selected complete source/header scopes over genuine token dependencies use only declaration scaffold for supported array methods/static compiler function, no fake instantiated peer/full native layout claim. Full normal array/recalc streams include every256mode input; no count/address/tail/undefined-state/sanitizer certification. Full UNO/opcode jump builders/rewrites/reference-range/ScTokenArray/ScFormulaCell/document/UI/ODS remain pending; actual Calc prerequisite focus/full91 retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/formula/source/core/api/token.array.ts",
+          "marker": "FormulaTokenArray"
+        },
+        {
+          "path": "apps/office/src/formula/inc/tokenarray.test.ts",
+          "marker": "matches complete original initialized code and RPN ownership edit stream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/formula/source/core/api/token.cxx",
+          "marker": "FormulaTokenArray"
+        }
+      ]
+    }
+  }
+}

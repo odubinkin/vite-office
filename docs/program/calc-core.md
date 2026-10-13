@@ -3391,3 +3391,35 @@ string mutation. CALC-078 records caller error retention in GetErrorOrDouble.
 Both preserve original behavior; real consumer/UI effects are unverified.
 Continue toward ScFormulaCell and actual storage/ScColumn/ScTable/ScDocument,
 editing/undo and shared-backed ODS; next full run91.
+
+## Shared token array storage and recalculation (task90)
+
+Task90 installs actual shared FormulaTokenArray code/RPN storage and
+FormulaTokenArrayStandardRange at formula/inc/tokenarray and the original
+token.cxx class shard token.array. This is the required base of ScTokenArray
+used by ScFormulaCell construction and formula/ODS code storage; it is not a
+parallel Calc-specific sequence or a full compiler implementation.
+
+Default/copy/move/assignment/reset/finalization, initialized XML/RPN inputs,
+append/token clones/numeric/string/error builders,8192limit/ocStop sentinel,
+replacement/removal and opcode/reference/name/index queries reuse real
+shared token owners. Copies share tokens but finalize nonempty code. Moves
+transfer arrays and active lengths while retaining source metadata. Standard
+ranges borrow live buffer identity and a fixed end, so later entry replacement
+remains visible through the range. Only active initialized data is certified.
+
+Original ScRecalcMode constants and complete byte/priority histories use
+native bitops. The original o3tl typed_flags7f complement makes the combined
+mask60; a new flags library is unnecessary. JS GC owns token/array lifetime,
+with no capacity32/unique_ptr/refcount/pool/allocator/finalizer mechanism.
+Refcount gates in replace/remove specialize to actual RPN identity scans;
+original forward-index adjacency skip remains CALC-079. Moved-source flags
+and finalized append rejection remain CALC-080.
+
+Normal native selected complete methods/header inlines compile over genuine
+tokens with a declaration scaffold limited to the supported operation family
+and original static compiler method. No unsupported virtual function or fake
+peer is supplied; full native layout/vtable and memory/tail/invalid-state
+behavior are outside certification. Full UNO/opcode jump builders/rewrites/
+reference ranges, ScTokenArray/ScFormulaCell/document/storage/editing/UI/ODS
+remain pending real owners. Next scheduled full run91.

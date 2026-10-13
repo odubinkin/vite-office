@@ -4,7 +4,7 @@ title: "Implement shared formula token array storage and recalc state"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: actual shared FormulaTokenArray code/RPN and recalc operation family needed by real Calc formula cell and ODS; existing token owners, original alias/copy/default logic and GC refs."
 doc_version: 3
-doc_updated_at: "2026-10-13T15:44:44.000Z"
+doc_updated_at: "2026-10-13T16:07:32.296Z"
 doc_updated_by: "CODER"
 description: "Iteration90 direct prerequisite for genuine ScTokenArray/ScFormulaCell and ODS formulas: original shared FormulaTokenArray code/RPN ownership semantics, construction/copy/move/edit/query/finalization and recalculation state over actual tokens with JS GC."
 sections:
@@ -50,7 +50,16 @@ sections:
     4. Exact current/committed non-task hashes, same-agent separate EVALUATOR, canonical DONE/clean calc. Partial array operation family and native declaration scaffold explicitly bounded; full array/ScTokenArray/ScFormulaCell/document/storage/UI/ODS still pending, full91.
   Verification: "Pending implementation."
   Rollback Plan: "Revert intentional task90 changes through a new task only; no merge/history rewrite."
-  Findings: "Default ScFormulaCell requires actual ScTokenArray, whose base FormulaTokenArray is absent. This installs real shared storage rather than inventing Calc-specific sequences. Copy constructor shares token identity but finalizes nonempty code. Move empties source buffers/lengths but retains its other flags. Native refcount1 stop conditions imply no remaining RPN match; removing those memory gates does not justify changing forward-index traversal. Uninitialized array capacity/tails and jump token code are outside this leaf."
+  Findings: |-
+    Default ScFormulaCell requires actual ScTokenArray, whose base FormulaTokenArray is absent. This installs real shared storage rather than inventing Calc-specific sequences. Copy constructor shares token identity but finalizes nonempty code. Move empties source buffers/lengths but retains its other flags. Native refcount1 stop conditions imply no remaining RPN match; removing those memory gates does not justify changing forward-index traversal. Uninitialized array capacity/tails and jump token code are outside this leaf.
+
+    - Observation: First normal selected-array compile needs original sal/log.hxx for unchanged SAL_WARN/SAL_WARN_IF stream macros in RemoveToken after omitting unused full compiler header.
+      Impact: Include/declaration scaffold omission only; no original behavioral assertion ran, selected source methods unchanged.
+      Resolution: Include genuine sal/log.hxx and rerun normal capture, no fake warning macro/peer or altered source/verification.
+
+    - Observation: Whole Calc132 passes; shared250tests55files all pass but strict raw coverage leaves Finalize nonempty/unfinalized true path unexecuted:4271/4272statements2146/2147branches, functions/lines100. Empty finalization and already-finalized copy tested.
+      Impact: Meaningful original mutation transition missing from fixture, no runtime or Writer defect and no threshold change.
+      Resolution: Add original Finalize on nonempty open source array to normal native stream and portable replay, regenerate/check fixture then rerun only affected whole shared profile and remaining source-absent static/profile checks. Preserve initial failure logs/counters.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +92,11 @@ Revert intentional task90 changes through a new task only; no merge/history rewr
 ## Findings
 
 Default ScFormulaCell requires actual ScTokenArray, whose base FormulaTokenArray is absent. This installs real shared storage rather than inventing Calc-specific sequences. Copy constructor shares token identity but finalizes nonempty code. Move empties source buffers/lengths but retains its other flags. Native refcount1 stop conditions imply no remaining RPN match; removing those memory gates does not justify changing forward-index traversal. Uninitialized array capacity/tails and jump token code are outside this leaf.
+
+- Observation: First normal selected-array compile needs original sal/log.hxx for unchanged SAL_WARN/SAL_WARN_IF stream macros in RemoveToken after omitting unused full compiler header.
+  Impact: Include/declaration scaffold omission only; no original behavioral assertion ran, selected source methods unchanged.
+  Resolution: Include genuine sal/log.hxx and rerun normal capture, no fake warning macro/peer or altered source/verification.
+
+- Observation: Whole Calc132 passes; shared250tests55files all pass but strict raw coverage leaves Finalize nonempty/unfinalized true path unexecuted:4271/4272statements2146/2147branches, functions/lines100. Empty finalization and already-finalized copy tested.
+  Impact: Meaningful original mutation transition missing from fixture, no runtime or Writer defect and no threshold change.
+  Resolution: Add original Finalize on nonempty open source array to normal native stream and portable replay, regenerate/check fixture then rerun only affected whole shared profile and remaining source-absent static/profile checks. Preserve initial failure logs/counters.

@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-79407258-9d80-4f44-98f7-7880517574ff",
+    "capabilityId": "CAP-79407258-9d80-4f44-98f7-7880517574ff",
+    "suite": "shared",
+    "subsystem": "formula-token-array",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual code/RPN storage copies share tokens and transfer moves/reset/finalization/8192stop behavior remains original.",
+      "Original replacement/removal traversal and initialized active range/index/opcode/reference/name queries retained.",
+      "Live StandardRange replacements remain visible and all original recalc byte/priority/mask histories match.",
+      "Ordinary JS refs and bitops avoid another ownership/capacity/flags library."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task90 implements the actual shared FormulaTokenArray initialized code/RPN storage operation family and original FormulaTokenArrayStandardRange live bounded iterable plus ScRecalcMode UInt8 constants/priority/masks. Default/shallowcopy/logicalmove/assignment/clear/finalize/DelRPN, XML placeholders, initialized compiler RPN data, append/cloned token/numeric/string/error wrappers,8192bound/ocStop, replacements/removal and token/opcode/reference/name/index queries reuse genuine FormulaToken owners. Copy finalizes nonempty code; move transfers arrays/lengths while retaining source flags; finalized rejects appends. Ordinary JS refs omit physical capacity32/unique_ptr/refcount/allocator/pool/finalizer; logical nullable buffer presence/active lengths and original alias traversal retained. Replace/remove native GetRef gates specialize to actual RPN identity matches; refcount1 break implies no remaining match, but original forward-index duplicate-adjacency skip remains CALC-079. StandardRange borrows live buffer with fixed end, preserving later replacement, JS iteration adapts pointer range. o3tl typed_flags7f complement makes combined mask60, implemented with native bitops, no flags library. Native selected complete source/header scopes over genuine token dependencies use only declaration scaffold for supported array methods/static compiler function, no fake instantiated peer/full native layout claim. Full normal array/recalc streams include every256mode input; no count/address/tail/undefined-state/sanitizer certification. Full UNO/opcode jump builders/rewrites/reference-range/ScTokenArray/ScFormulaCell/document/UI/ODS remain pending; actual Calc prerequisite focus/full91 retained."
+    },
+    "capability": "Original shared token array storage and recalc state",
+    "gaps": [
+      "Full UNO/opcode/compiler/rewriter/reference-range and ScTokenArray/ScFormulaCell/document/UI/ODS families pending.",
+      "Native layout/vtable/memory counts/capacity/tails/None-policy/assertions/undefined behavior/full QA unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/include/formula/tokenarray.hxx",
+          "marker": "class FORMULA_DLLPUBLIC FormulaTokenArray"
+        },
+        {
+          "path": "vendor/libreoffice-reference/formula/source/core/api/token.cxx",
+          "marker": "FormulaTokenArray::FormulaTokenArray()"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "const ScTokenArray* pCode = pCell->GetCode();"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/formula/tokenarray.hxx",
+          "marker": "Assignment with incrementing references of FormulaToken entries"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-token-array-storage-recalc-family",
+    "scopeLimitations": [
+      "Task90 implements the actual shared FormulaTokenArray initialized code/RPN storage operation family and original FormulaTokenArrayStandardRange live bounded iterable plus ScRecalcMode UInt8 constants/priority/masks. Default/shallowcopy/logicalmove/assignment/clear/finalize/DelRPN, XML placeholders, initialized compiler RPN data, append/cloned token/numeric/string/error wrappers,8192bound/ocStop, replacements/removal and token/opcode/reference/name/index queries reuse genuine FormulaToken owners. Copy finalizes nonempty code; move transfers arrays/lengths while retaining source flags; finalized rejects appends. Ordinary JS refs omit physical capacity32/unique_ptr/refcount/allocator/pool/finalizer; logical nullable buffer presence/active lengths and original alias traversal retained. Replace/remove native GetRef gates specialize to actual RPN identity matches; refcount1 break implies no remaining match, but original forward-index duplicate-adjacency skip remains CALC-079. StandardRange borrows live buffer with fixed end, preserving later replacement, JS iteration adapts pointer range. o3tl typed_flags7f complement makes combined mask60, implemented with native bitops, no flags library. Native selected complete source/header scopes over genuine token dependencies use only declaration scaffold for supported array methods/static compiler function, no fake instantiated peer/full native layout claim. Full normal array/recalc streams include every256mode input; no count/address/tail/undefined-state/sanitizer certification. Full UNO/opcode jump builders/rewrites/reference-range/ScTokenArray/ScFormulaCell/document/UI/ODS remain pending; actual Calc prerequisite focus/full91 retained.",
+      "Original Calc derived-array QA anchor is unexecuted static consumer context only; normal selected original source/header histories and portable replay provide actual evidence."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/formula/source/core/api/token.array.ts",
+          "marker": "FormulaTokenArray"
+        },
+        {
+          "path": "apps/office/src/formula/inc/tokenarray.ts",
+          "marker": "FormulaTokenArray"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/formula/inc/tokenarray.test.ts",
+          "marker": "matches complete original initialized code and RPN ownership edit stream"
+        },
+        {
+          "path": "apps/office/src/formula/inc/tokenarray.test.ts",
+          "marker": "matches every original recalc byte and exclusive priority history"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared token array storage and recalculation (task90)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Token array references and active buffers"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-079"
+        }
+      ]
+    }
+  }
+}

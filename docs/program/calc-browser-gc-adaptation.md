@@ -64,3 +64,28 @@ and identities, not physical memory layout/ownership timing, invalid derived
 casts, assertions or native parallel policy handling. Actual stored matrix
 formula tokens and interpreter transport inputs reuse original distinct
 classes and dispatch responsibilities.
+
+## Token array references and active buffers
+
+Task90 FormulaTokenArray stores ordinary references to the real shared token
+owners in nullable code/RPN arrays with original active lengths and flags.
+Copies duplicate buffers while sharing tokens; logical moves transfer buffers
+and zero source lengths, preserving other source flags. Finalization and the
+8192token/ocStop boundary are logical contracts, not an allocation pool.
+Physical reserve32/growth/unique_ptr/refcount/finalizer management is omitted.
+Clear and deletion drop references; other token/array aliases survive.
+
+Native replacement/removal uses GetRef to avoid useless RPN scans and stops
+when only the old code reference remains. With ordinary references, scanning
+actual RPN identities preserves value behavior: if a match exists it supplies
+another native reference, and after GetRef1 no later match exists. Original
+forward-index scanning after a removal is retained, including adjacent-token
+skip CALC-079; no corrective deduplication or ownership ledger is introduced.
+Typed_flags7f masks are implemented as native bitops. StandardRange keeps an
+actual borrowed buffer and fixed end, with JS iteration adapting native
+pointer traversal, without a custom pointer/iterator memory library.
+
+Only active initialized slots and valid removal ranges are certified; native
+tail/capacity, invalid UInt16 overflow ranges, vtable/layout, None-policy and
+physical cleanup timing are outside parity. Existing SAL/SVL value cleanup
+remains its current separate shared boundary.
