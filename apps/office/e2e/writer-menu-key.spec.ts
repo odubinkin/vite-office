@@ -16,7 +16,12 @@ test("F10 activates the first Writer root without opening and closes its keyboar
   await expect(edit).toBeFocused();
   await expect(page.getByRole("menu")).toHaveCount(0);
   await edit.press("ArrowDown");
-  await expect(page.getByRole("menuitem", { name: "Cut", exact: true })).toBeFocused();
+  await expect(page.getByRole("menuitem", { name: "Undo", exact: true })).toBeDisabled();
+  await expect(page.getByRole("menuitem", { name: "Undo", exact: true })).toHaveAttribute(
+    "data-popup-highlighted",
+    "true",
+  );
+  await expect(page.getByRole("menu", { name: "Edit menu" })).toBeFocused();
   await page.keyboard.press("F10");
   await expect(page.getByRole("menu")).toHaveCount(0);
   await expect(editor).toBeFocused();

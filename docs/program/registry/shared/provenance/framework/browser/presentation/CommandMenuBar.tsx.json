@@ -152,6 +152,18 @@
         {
           "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
           "marker": "Writer native context menu"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-disabled-menubar.test.tsx",
+          "marker": "native root keyboard preselection"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-disabled-menubar.spec.ts",
+          "marker": "Writer native disabled menubar traversal"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+          "marker": "selectedMenuItem"
         }
       ],
       "upstream": [
@@ -182,6 +194,18 @@
         {
           "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
           "marker": "<prop oor:name=\"PopupLabel\""
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "void MenuFloatingWindow::ImplCursorUpDown"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+          "marker": "GetSkipDisabledInMenus()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/app/settings.cxx",
+          "marker": "mbSkipDisabledInMenus           = false;"
         }
       ]
     },
@@ -211,7 +235,10 @@
     "stackDivergence": {
       "kind": "browser-adaptation",
       "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-    }
+    },
+    "browserResponsibilities": [
+      "Task202610131541-J4GV99 applies source SkipDisabledInMenus=false to represented menubar popup preselection and arrow/Home/End/wrap traversal. Original bindings determine enabled state; the original HTML disabled button is never made focusable or enabled. Actual direct resource nodes own data-popup-highlighted and aria-activedescendant selection, independently of browser menu focus. Later keys use that selected node; native Return cancels only the current disabled popup without execution. Existing JS DOM queries/attributes/focus/click callbacks suffice, with no separate mirrored map/state manager/new adapter module. The previously registered browser Space activation adapter remains intact, including existing enabled root/submenu activation and HTML disabled-click protection. Source-confirmed obsolete enabled-only first/last assumptions migrate in precisely7old cases (guarded shared templates retain original End/ArrowLeft assertion semantics). Full native pointer timers/mnemonics/shared popup controller/root focus graph/platform parity remain unverified; all historical statuses/defaults/classifications and registered IO/recovery deviations preserved."
+    ]
   },
   "legacyOrder": 18
 }

@@ -111,31 +111,6 @@ export function CommandMenuBar({
     } else closeMenu(true);
   }
 
-  /** Moves focus among enabled direct children. @param container - Active menu. @param direction - Requested move. @param current - Current item. @returns Nothing. */
-  function focusMenuItem(
-    container: HTMLElement,
-    direction: "first" | "last" | "next" | "previous",
-    current?: HTMLElement,
-  ): void {
-    const items = [...container.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
-      /** Retains enabled direct menu children. @param item - Menu item candidate. @returns Whether it belongs to this menu. */ (
-        item,
-      ) => !item.hasAttribute("disabled") && item.closest('[role="menu"]') === container,
-    );
-    /* istanbul ignore next -- Every declared Writer menu contains an enabled or focusable item. */
-    if (items.length === 0) return;
-    const currentIndex = current === undefined ? -1 : items.indexOf(current);
-    const index =
-      direction === "first"
-        ? 0
-        : direction === "last"
-          ? items.length - 1
-          : direction === "next"
-            ? (currentIndex + 1 + items.length) % items.length
-            : ((currentIndex < 0 ? 0 : currentIndex) - 1 + items.length) % items.length;
-    items[index]?.focus();
-  }
-
   /** Opens one popup with origin-specific preselection. @param index - Menu index. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
   function openMenu(index: number, preSelectFirst = false): void {
     if (openMenuIndex === index) return;
@@ -266,14 +241,16 @@ export function CommandMenuBar({
 
   /** Applies popup keyboard navigation. @param event - Menu event. @param menuIndex - Owning menu index. @returns Nothing. */
   function handleMenuKeyDown(event: React.KeyboardEvent<HTMLElement>, menuIndex: number): void {
-    const target = event.target as HTMLElement;
-    const menu = target.closest<HTMLElement>('[role="menu"]');
+    const eventTarget = event.target as HTMLElement;
+    const menu = eventTarget.closest<HTMLElement>('[role="menu"]');
     /* istanbul ignore next -- This handler is installed only on elements inside a rendered menu. */
     if (menu === null) return;
     if (menu !== event.currentTarget) return;
+    const target = eventTarget === menu ? (selectedMenuItem(menu) ?? menu) : eventTarget;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (target === menu) closePopup(menu);
+      if (target === menu || (event.key === "Enter" && target.hasAttribute("disabled")))
+        closePopup(menu);
       else if (target.getAttribute("aria-haspopup") === "menu")
         openSubmenu(target.dataset.submenuTrigger, true);
       else target.click();
@@ -387,6 +364,7 @@ export function CommandMenuBar({
                 <CommandMenuPopup
                   aria-label={`${label} menu`}
                   data-submenu={item.id}
+                  id={`${idPrefix}-${item.id}-menu`}
                   onKeyDown={
                     /** Routes submenu keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
                       event,
@@ -418,7 +396,7 @@ export function CommandMenuBar({
   return (
     <div
       aria-label={ariaLabel}
-      className="flex items-center gap-1"
+      className="flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"
       onBlurCapture={
         /** Cancels a cycle after focus transfers outside without restoring it. @param event - Focus transfer. @returns Nothing. */ (
           event,
@@ -431,6 +409,9 @@ export function CommandMenuBar({
           event,
         ) => {
           saveFocus(event.relatedTarget);
+          const target = event.target,
+            menu = target.closest<HTMLElement>('[role="menu"]');
+          if (menu !== null && target.matches('[role^="menuitem"]')) markMenuItem(menu, target);
           if (!event.currentTarget.contains(event.relatedTarget)) menuActive.current = true;
         }
       }
@@ -632,4 +613,55 @@ export function BindingsMenuCommand({
       )}
     </button>
   );
+}
+
+/** Reads selected direct entries independently of HTML disabled focus. @param container - Actual popup owner. @returns Selected native entry, if present. */
+function selectedMenuItem(container: HTMLElement): HTMLElement | undefined {
+  return [...container.querySelectorAll<HTMLElement>("[data-popup-highlighted]")].find(
+    /** Retains this popup's original highlighted placement. @param item - Actual entry. @returns Whether owned here. */
+    (item) => item.closest('[role="menu"]') === container,
+  );
+}
+
+/** Publishes selection over the existing popup DOM without changing native command state. @param container - Actual popup. @param item - Original entry. @returns Nothing. */
+function markMenuItem(container: HTMLElement, item: HTMLElement): void {
+  selectedMenuItem(container)?.removeAttribute("data-popup-highlighted");
+  item.dataset.popupHighlighted = "true";
+  if (item.id === "") {
+    const entries = [...container.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
+      /** Reads direct original placement order. @param entry - Actual entry. @returns Whether owned here. */
+      (entry) => entry.closest('[role="menu"]') === container,
+    );
+    item.id = `${container.id}-item-${entries.indexOf(item)}`;
+  }
+  container.setAttribute("aria-activedescendant", item.id);
+}
+
+/** Selects direct children with native SkipDisabledInMenus=false. @param container - Active menu. @param direction - Requested move. @param current - Current item. @returns Nothing. */
+function focusMenuItem(
+  container: HTMLElement,
+  direction: "first" | "last" | "next" | "previous",
+  current?: HTMLElement,
+): void {
+  const items = [...container.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
+    /** Retains direct menu children, including disabled native commands. @param item - Menu item candidate. @returns Whether it belongs to this menu. */ (
+      item,
+    ) => item.closest('[role="menu"]') === container,
+  );
+  /* istanbul ignore next -- Every declared Writer menu contains an enabled or focusable item. */
+  if (items.length === 0) return;
+  const selected = current === container ? selectedMenuItem(container) : current;
+  const currentIndex = selected === undefined ? -1 : items.indexOf(selected);
+  const index =
+    direction === "first"
+      ? 0
+      : direction === "last"
+        ? items.length - 1
+        : direction === "next"
+          ? (currentIndex + 1 + items.length) % items.length
+          : ((currentIndex < 0 ? 0 : currentIndex) - 1 + items.length) % items.length;
+  const item = items[index] as HTMLElement;
+  markMenuItem(container, item);
+  if (item.hasAttribute("disabled")) container.focus();
+  else item.focus();
 }

@@ -126,9 +126,16 @@ describe("menubar root boundary navigation", /** Groups existing root navigation
         expect(screen.getAllByRole("menu")).toHaveLength(1);
         expect(screen.queryByRole("menuitem", { name: "Beta" })).not.toBeInTheDocument();
         expect(screen.queryByRole("menuitem", { name: "Nested" })).not.toBeInTheDocument();
-        expect(
-          screen.getByRole("menuitem", { name: key === "Home" ? "Alpha" : "Omega" }),
-        ).toHaveFocus();
+        if (key === "Home") {
+          expect(screen.getByRole("menuitem", { name: "Disabled" })).toBeDisabled();
+          expect(screen.getByRole("menuitem", { name: "Disabled" })).toHaveAttribute(
+            "data-popup-highlighted",
+            "true",
+          );
+          expect(screen.getByRole("menu", { name: "First menu" })).toHaveFocus();
+        } else {
+          expect(screen.getByRole("menuitem", { name: "Omega" })).toHaveFocus();
+        }
         expect(key === "Home" ? fixture.first : fixture.last).toHaveAttribute(
           "aria-expanded",
           "true",
@@ -168,9 +175,18 @@ describe("menubar root boundary navigation", /** Groups existing root navigation
       fireEvent.click(start);
       start.focus();
       fireEvent.keyDown(start, { key });
-      expect(
-        screen.getByRole("menuitem", { name: key === "ArrowLeft" ? "Omega" : "Alpha" }),
-      ).toHaveFocus();
+      if (key === "ArrowRight") {
+        expect(screen.getByRole("menuitem", { name: "Disabled" })).toBeDisabled();
+        expect(screen.getByRole("menuitem", { name: "Disabled" })).toHaveAttribute(
+          "data-popup-highlighted",
+          "true",
+        );
+        expect(screen.getByRole("menu", { name: "First menu" })).toHaveFocus();
+      } else {
+        expect(
+          screen.getByRole("menuitem", { name: key === "ArrowLeft" ? "Omega" : "Alpha" }),
+        ).toHaveFocus();
+      }
       expect(screen.getAllByRole("menu")).toHaveLength(1);
       expect(fixture.execute).not.toHaveBeenCalled();
     });

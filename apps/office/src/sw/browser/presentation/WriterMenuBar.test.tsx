@@ -541,8 +541,25 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(edit).toHaveFocus();
     expect(edit).toHaveAttribute("tabindex", "0");
     fireEvent.keyDown(edit, { key: "ArrowDown" });
+    expect(screen.getByRole("menuitem", { name: "Undo" })).toHaveAttribute(
+      "data-popup-highlighted",
+      "true",
+    );
+    expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
+    expect(screen.getByRole("menuitem", { name: "Redo" })).toHaveAttribute(
+      "data-popup-highlighted",
+      "true",
+    );
+    fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
     expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "End" });
+    expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toHaveAttribute(
+      "data-popup-highlighted",
+      "true",
+    );
+    expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowUp" });
     expect(screen.getByRole("menuitem", { name: "Select All" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "Select All" }), { key: "p" });
     expect(screen.getByRole("menuitem", { name: "Paste" })).toHaveFocus();
@@ -599,6 +616,17 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       expect(firstFileItem).toHaveFocus();
       fireEvent.keyDown(file, { key: "ArrowRight" });
       expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
+      expect(screen.getByRole("menuitem", { name: "Undo" })).toHaveAttribute(
+        "data-popup-highlighted",
+        "true",
+      );
+      expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
+      expect(screen.getByRole("menuitem", { name: "Redo" })).toHaveAttribute(
+        "data-popup-highlighted",
+        "true",
+      );
+      fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
       expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
       fireEvent.pointerDown(screen.getByRole("menuitem", { name: "Cut" }));
       expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
@@ -609,6 +637,17 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.keyDown(screen.getByRole("menuitemcheckbox", { name: "Status Bar" }), {
         key: "ArrowLeft",
       });
+      expect(screen.getByRole("menuitem", { name: "Undo" })).toHaveAttribute(
+        "data-popup-highlighted",
+        "true",
+      );
+      expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
+      expect(screen.getByRole("menuitem", { name: "Redo" })).toHaveAttribute(
+        "data-popup-highlighted",
+        "true",
+      );
+      fireEvent.keyDown(screen.getByRole("menu", { name: "Edit menu" }), { key: "ArrowDown" });
       expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
       fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "c" });
       fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "u" });

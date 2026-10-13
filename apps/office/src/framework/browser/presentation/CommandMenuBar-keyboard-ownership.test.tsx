@@ -120,14 +120,22 @@ describe("popup keyboard ownership", /** Groups event ownership regressions. @re
     expect(fixture.execute).toHaveBeenLastCalledWith("beta", fixture.arguments_);
   });
 
-  it("skips disabled siblings and advances one item per arrow", /** Verifies nested traversal and disabled activation. @returns Nothing. */ function advancesNestedOnce(): void {
+  it("includes disabled siblings and advances one item per arrow", /** Verifies nested traversal and disabled activation. @returns Nothing. */ function advancesNestedOnce(): void {
     const fixture = renderOwnedMenu();
     openNestedMenu();
     const beta = screen.getByRole("menuitem", { name: "Beta" });
     beta.focus();
     fireEvent.keyDown(beta, { key: "ArrowDown" });
+    expect(screen.getByRole("menuitem", { name: "disabled" })).toHaveAttribute(
+      "data-popup-highlighted",
+      "true",
+    );
+    expect(screen.getByRole("menu", { name: "Nested menu" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menu", { name: "Nested menu" }), { key: "ArrowDown" });
     expect(screen.getByRole("menuitem", { name: "Bravo" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitem", { name: "disabled" }), { key: "Enter" });
+    expect(screen.queryByRole("menu", { name: "Nested menu" })).not.toBeInTheDocument();
+    expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
     expect(fixture.execute).not.toHaveBeenCalled();
   });
 
