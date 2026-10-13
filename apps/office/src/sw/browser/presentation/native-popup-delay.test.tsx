@@ -127,9 +127,9 @@ it("owning parent leave retains child while a different highlight closes after15
   expect(screen.getByRole("menu", { name: "First menu" })).toBeVisible();
   advance(1);
   expect(screen.queryByRole("menu", { name: "First menu" })).not.toBeInTheDocument();
-  expect(undo).toHaveAttribute("data-popup-highlighted", "true");
+  expect(undo).not.toHaveAttribute("data-popup-highlighted");
 });
-it("reentering active parent cancels delayed closure and preserves child selection", /** Checks repeated ownership cannot reset a keyboard-selected child. @returns Nothing. */ () => {
+it("reentering active parent retains selection but cannot stop the child-owned close timer", /** Checks native close timer ownership differs from parent highlight ownership. @returns Nothing. */ () => {
   fixture();
   const first = screen.getByRole("menuitem", { name: "First" });
   fireEvent.keyDown(first, { key: "ArrowRight" });
@@ -138,9 +138,12 @@ it("reentering active parent cancels delayed closure and preserves child selecti
   fireEvent.mouseLeave(first.parentElement as HTMLElement);
   advance(100);
   fireEvent.mouseEnter(first.parentElement as HTMLElement);
-  advance(300);
+  advance(49);
   expect(screen.getByRole("menu", { name: "First menu" })).toBeVisible();
   expect(bold).toHaveFocus();
+  advance(1);
+  expect(screen.queryByRole("menu", { name: "First menu" })).not.toBeInTheDocument();
+  expect(first).toHaveAttribute("data-popup-highlighted", "true");
 });
 it("keyboard and direct left activation bypass delay and cancel pending pointer work", /** Checks native null-timer activation and first-child preselection. @returns Nothing. */ () => {
   fixture();
@@ -218,7 +221,7 @@ it("direct reactivation retains the selected active child", /** Checks native ac
   const first = screen.getByRole("menuitem", { name: "First" });
   fireEvent.mouseDown(first, { button: 0 });
   const deep = screen.getByRole("menuitem", { name: "Deep" });
-  act(() => deep.focus());
+  act(/** Selects original enabled child. @returns Nothing. */ () => deep.focus());
   fireEvent.mouseDown(first, { button: 0 });
   expect(screen.getByRole("menu", { name: "First menu" })).toBeVisible();
   expect(deep).toHaveFocus();

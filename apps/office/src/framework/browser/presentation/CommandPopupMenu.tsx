@@ -31,17 +31,22 @@ export function CommandPopupMenu({
   const root = useRef<HTMLDivElement>(null),
     savedFocus = useRef<HTMLElement | undefined>(undefined);
   const [openPath, setOpenPath] = useState<readonly string[]>([]);
+  const activePath = useRef<readonly string[]>([]);
+  /** Updates native active-window ownership before publishing the browser view. @param path - Original active popup chain. @returns Nothing. */ function setPath(
+    path: readonly string[],
+  ): void {
+    activePath.current = path;
+    setOpenPath(path);
+  }
   const highlighted = useRef(new WeakMap<HTMLElement, HTMLElement>());
-  const timers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
+  const highlightTimers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
+  const closeTimers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
   const cancelTimers = useCallback(
     /** Stops timer work for a popup and all descendants. @param depth - First affected popup. @returns Nothing. */ (
       depth = 0,
     ): void => {
-      for (const [owner, timer] of timers.current)
-        if (owner >= depth) {
-          clearTimeout(timer);
-          timers.current.delete(owner);
-        }
+      for (const timers of [highlightTimers.current, closeTimers.current])
+        for (const owner of timers.keys()) if (owner >= depth) stopTimer(timers, owner);
     },
     [],
   );
@@ -51,11 +56,21 @@ export function CommandPopupMenu({
       menu: HTMLElement,
       item: HTMLElement,
     ): void => {
-      highlighted.current.get(menu)?.removeAttribute("data-popup-highlighted");
-      highlighted.current.set(menu, item);
-      item.dataset.popupHighlighted = "true";
-      if (item.id === "") item.id = `${menu.id}-item-${entries(menu).indexOf(item)}`;
-      menu.setAttribute("aria-activedescendant", item.id);
+      /** Paints one actual native highlighted entry without transferring focus. @param owner - Native popup. @param entry - Original placement. @returns Nothing. */ function record(
+        owner: HTMLElement,
+        entry: HTMLElement,
+      ): void {
+        highlighted.current.get(owner)?.removeAttribute("data-popup-highlighted");
+        highlighted.current.set(owner, entry);
+        entry.dataset.popupHighlighted = "true";
+        if (entry.id === "") entry.id = `${owner.id}-item-${entries(owner).indexOf(entry)}`;
+        owner.setAttribute("aria-activedescendant", entry.id);
+      }
+      stopTimer(closeTimers.current, Number(menu.dataset.popupDepth));
+      record(menu, item);
+      const parent = menu.previousElementSibling as HTMLElement | null;
+      if (parent !== null)
+        record(parent.closest<HTMLElement>('[role="menu"]') as HTMLElement, parent);
     },
     [],
   );
@@ -134,35 +149,48 @@ export function CommandPopupMenu({
     trigger: HTMLElement,
     keyboard = false,
   ): void {
-    cancelTimers(depth);
     mark(trigger.closest<HTMLElement>('[role="menu"]') as HTMLElement, trigger);
+    if (activePath.current[depth] === item.id) return;
+    cancelTimers(depth + 1);
     if (item.items.length === 0) {
       pendingChildFocus.current = false;
       preselect.current = false;
-      setOpenPath(openPath.slice(0, depth));
+      setPath(activePath.current.slice(0, depth));
       trigger.focus();
       return;
     }
-    if (openPath[depth] === item.id) return;
     pendingChildFocus.current = true;
     preselect.current = keyboard;
-    setOpenPath([...openPath.slice(0, depth), item.id]);
+    setPath([...activePath.current.slice(0, depth), item.id]);
   }
-  /** Queues native HighlightChanged after default MouseSettings150ms delay. @param item - Child resource, or ordinary command. @param depth - Current menu depth. @param trigger - Actual selected entry. @returns Nothing. */ function pointerSelect(
-    item: Extract<CommandMenuItemPlacement, { kind: "submenu" }> | undefined,
+  /** Queues native HighlightChanged for the current selection after150ms. @param values - Actual popup resources. @param depth - Current menu depth. @param trigger - Actual pointer entry. @returns Nothing. */ function pointerSelect(
+    values: readonly CommandMenuItemPlacement[],
     depth: number,
     trigger: HTMLElement,
   ): void {
-    cancelTimers(depth);
-    mark(trigger.closest<HTMLElement>('[role="menu"]') as HTMLElement, trigger);
-    if (item !== undefined && openPath[depth] === item.id) return;
-    timers.current.set(
+    stopTimer(highlightTimers.current, depth);
+    const menu = trigger.closest<HTMLElement>('[role="menu"]') as HTMLElement;
+    mark(menu, trigger);
+    if (
+      trigger.dataset.popupTrigger !== undefined &&
+      activePath.current[depth] === trigger.dataset.popupTrigger
+    )
+      return;
+    highlightTimers.current.set(
       depth,
       setTimeout(
         /** Applies current native pointer admission after its delay. @returns Nothing. */ () => {
-          timers.current.delete(depth);
-          if (item === undefined) setOpenPath(openPath.slice(0, depth));
-          else open(item, depth, trigger);
+          highlightTimers.current.delete(depth);
+          const selected = highlighted.current.get(menu);
+          if (selected === undefined) return;
+          const id = selected.dataset.popupTrigger;
+          if (id === undefined) {
+            cancelTimers(depth + 1);
+            setPath(activePath.current.slice(0, depth));
+          } else {
+            const item = childResource(values, id);
+            if (item !== undefined) open(item, depth, selected);
+          }
         },
         150,
       ),
@@ -172,19 +200,30 @@ export function CommandPopupMenu({
     depth: number,
     trigger: HTMLElement,
   ): void {
-    cancelTimers(depth);
     const menu = trigger.closest<HTMLElement>('[role="menu"]') as HTMLElement;
-    if (openPath[depth] !== undefined && highlighted.current.get(menu) !== trigger)
-      timers.current.set(
-        depth,
+    const selected = highlighted.current.get(menu);
+    const ownsChild =
+      activePath.current[depth] !== undefined &&
+      selected?.dataset.popupTrigger === activePath.current[depth];
+    if (activePath.current[depth] !== undefined && selected !== undefined && !ownsChild) {
+      stopTimer(closeTimers.current, depth + 1);
+      closeTimers.current.set(
+        depth + 1,
         setTimeout(
           /** Closes a child whose parent highlight belongs elsewhere. @returns Nothing. */ () => {
-            timers.current.delete(depth);
-            setOpenPath(openPath.slice(0, depth));
+            closeTimers.current.delete(depth + 1);
+            cancelTimers(depth + 1);
+            setPath(activePath.current.slice(0, depth));
           },
           150,
         ),
       );
+    }
+    if (!ownsChild) {
+      selected?.removeAttribute("data-popup-highlighted");
+      highlighted.current.delete(menu);
+      menu.removeAttribute("aria-activedescendant");
+    }
   }
   /** Returns direct selectable entries in original resource order, including disabled commands by native default. @param menu - Actual menu owner. @returns Direct entries. */ function entries(
     menu: HTMLElement | null,
@@ -201,8 +240,8 @@ export function CommandPopupMenu({
     depth: number,
     trigger: HTMLElement,
   ): void {
-    cancelTimers(depth - 1);
-    setOpenPath(openPath.slice(0, depth - 1));
+    cancelTimers(depth);
+    setPath(activePath.current.slice(0, depth - 1));
     trigger.focus();
   }
   /** Routes menu input without invoking document shortcuts. @param event - Current menu keyboard input. @param depth - Native popup depth. @param values - Current native resource entries. @returns Nothing. */ function key(
@@ -211,7 +250,6 @@ export function CommandPopupMenu({
     values: readonly CommandMenuItemPlacement[],
   ): void {
     event.stopPropagation();
-    cancelTimers(depth);
     const target = event.target as HTMLElement,
       menu = event.currentTarget,
       list = entries(menu),
@@ -228,12 +266,7 @@ export function CommandPopupMenu({
       event.preventDefault();
       const id = selected?.dataset.popupTrigger;
       if (id !== undefined) {
-        const item = values.find(
-          /** Resolves the original child resource of the current menu. @param value - Native placement. @returns Whether it owns the entry. */ (
-            value,
-          ): value is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
-            value.kind === "submenu" && value.id === id,
-        );
+        const item = childResource(values, id);
         if (item !== undefined)
           flushSync(
             /** Applies original child admission before its keyboard preselection. @returns Nothing. */ () =>
@@ -286,15 +319,12 @@ export function CommandPopupMenu({
                 /** Updates actual pointer selection without executing the command. @param event - Original command region. @returns Nothing. */ (
                   event,
                 ) =>
-                  pointerSelect(
-                    undefined,
-                    depth,
-                    event.currentTarget.firstElementChild as HTMLElement,
-                  )
+                  pointerSelect(values, depth, event.currentTarget.firstElementChild as HTMLElement)
               }
               onMouseLeave={
-                /** Stops an unaccepted pointer request. @returns Nothing. */ () =>
-                  cancelTimers(depth)
+                /** Releases actual command-region selection. @param event - Original region. @returns Nothing. */ (
+                  event,
+                ) => pointerLeave(depth, event.currentTarget.firstElementChild as HTMLElement)
               }
             >
               <BindingsMenuCommand
@@ -316,7 +346,8 @@ export function CommandPopupMenu({
             onMouseEnter={
               /** Applies original child admission for pointer entry. @param event - Native parent region. @returns Nothing. */ (
                 event,
-              ) => pointerSelect(item, depth, event.currentTarget.firstElementChild as HTMLElement)
+              ) =>
+                pointerSelect(values, depth, event.currentTarget.firstElementChild as HTMLElement)
             }
             onMouseLeave={
               /** Releases this child's pointer ownership. @param event - Actual parent popup region. @returns Nothing. */ (
@@ -400,5 +431,22 @@ export function CommandPopupMenu({
         {renderItems(items, 0)}
       </CommandMenuPopup>
     </div>
+  );
+}
+/** Stops only the timer owned by one native popup. @param timers - Native timer category. @param owner - Popup depth. @returns Nothing. */
+function stopTimer(timers: Map<number, ReturnType<typeof setTimeout>>, owner: number): void {
+  clearTimeout(timers.get(owner));
+  timers.delete(owner);
+}
+/** Resolves a child from the actual resource list shared by key and timer input. @param values - Current menu resources. @param id - Actual selected entry identity. @returns Original child, if present. */
+function childResource(
+  values: readonly CommandMenuItemPlacement[],
+  id: string,
+): Extract<CommandMenuItemPlacement, { kind: "submenu" }> | undefined {
+  return values.find(
+    /** Retains original native placement ownership. @param value - Resource entry. @returns Whether it owns the selected child. */ (
+      value,
+    ): value is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
+      value.kind === "submenu" && value.id === id,
   );
 }

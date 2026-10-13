@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 346
+revision: 347
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:47:06.165Z"
+doc_updated_at: "2026-10-13T14:15:22.066Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1532,6 +1532,10 @@ sections:
     - Observation: Final61PRG4 source review superseded provisional qualitypass with rework before closure: native child selection changes also rehighlight the original parent. Fresh independent timer-depth fixture now uses nonselecting Space instead of ArrowDown, avoiding an unsupported ancestor-selection claim.
       Impact: Production/native150ms timer deliverable and137built files unchanged; descendant-to-ancestor native highlight propagation remains a separate unverified UI mechanism and priority for the next atomic task.
       Resolution: Recapture related whole-target100four from current fresh fixture and preserve exact-SHA lineage; no general menu parity promotion, original pass/rework attempts retained. Human pause rule and1full/10atomic cadence unchanged.
+
+    - Observation: Post-full cadence4 task9N15Q3 restores original immediate parent highlight, current resource and active-window ownership at timer invocation; separate per-popup highlight/close timers replace captured pointer target and overbroad cancellation. Native mutable active child identity precedes React view publication; same window preserves selection through pending callbacks.
+      Impact: Native bindings/resources andIO/recovery unchanged. Native INVALID leave and parent-reentry child-owned close behavior require2precise oldcase migrations; annotation-only pre-existing JSDoc repair found by enforcement.943other oldtestfiles unchanged, all other executable statements/imports preserved. Immediate parent assignment does not propagate recursively. Full pointer first-move/synthetic/scroll/NOSELECT/mnemonic/settings/pixel platform/global parity remain unverified.
+      Resolution:1447related/209files including50mounted (9new),26tooling/4files,11Chromium=1484unique pass. Whole one source100allfour159lines173statements36functions110branches/319positive original counters; canonical2history/status/default/class preserved,9restored-onlymetadata gates and137staticbuild pass.4reference paths absent for every producer/exact finally restoration, no upstream source copies/helpers/rawmaps in Agentplane or pinned runtime invocation. Genuine red7/7, first TS7 and fresh old-expectation failure retained honestly ignoredcache. Exact semanticSHA same-agent review/clean close follows; goalactive4/10, pause after next full+repairs.
 id_source: "generated"
 ---
 ## Summary
@@ -3037,3 +3041,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Final61PRG4 source review superseded provisional qualitypass with rework before closure: native child selection changes also rehighlight the original parent. Fresh independent timer-depth fixture now uses nonselecting Space instead of ArrowDown, avoiding an unsupported ancestor-selection claim.
   Impact: Production/native150ms timer deliverable and137built files unchanged; descendant-to-ancestor native highlight propagation remains a separate unverified UI mechanism and priority for the next atomic task.
   Resolution: Recapture related whole-target100four from current fresh fixture and preserve exact-SHA lineage; no general menu parity promotion, original pass/rework attempts retained. Human pause rule and1full/10atomic cadence unchanged.
+
+- Observation: Post-full cadence4 task9N15Q3 restores original immediate parent highlight, current resource and active-window ownership at timer invocation; separate per-popup highlight/close timers replace captured pointer target and overbroad cancellation. Native mutable active child identity precedes React view publication; same window preserves selection through pending callbacks.
+  Impact: Native bindings/resources andIO/recovery unchanged. Native INVALID leave and parent-reentry child-owned close behavior require2precise oldcase migrations; annotation-only pre-existing JSDoc repair found by enforcement.943other oldtestfiles unchanged, all other executable statements/imports preserved. Immediate parent assignment does not propagate recursively. Full pointer first-move/synthetic/scroll/NOSELECT/mnemonic/settings/pixel platform/global parity remain unverified.
+  Resolution:1447related/209files including50mounted (9new),26tooling/4files,11Chromium=1484unique pass. Whole one source100allfour159lines173statements36functions110branches/319positive original counters; canonical2history/status/default/class preserved,9restored-onlymetadata gates and137staticbuild pass.4reference paths absent for every producer/exact finally restoration, no upstream source copies/helpers/rawmaps in Agentplane or pinned runtime invocation. Genuine red7/7, first TS7 and fresh old-expectation failure retained honestly ignoredcache. Exact semanticSHA same-agent review/clean close follows; goalactive4/10, pause after next full+repairs.
