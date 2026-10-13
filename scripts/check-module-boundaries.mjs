@@ -43,7 +43,8 @@ const allowedEdges = new Map([
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
-  ["formula", new Set(["sal", "svl"])],
+  // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
+  ["formula", new Set(["offapi", "sal", "svl"])],
   ["framework", new Set(["sfx2", "svl"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],

@@ -9,21 +9,31 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim.",
+      "Task93 extends actual shared FormulaGrammar to all original static constants/21Grammar enumerators and aliases, API mapping, support switch, language/convention masks, English-bit updates, release-mode convention merges and ODF1.1/OpenFormula/OOXML/Excel predicates. Actual FormulaLanguage IDL constants have a separate shared owner; no literal-language duplication/parser/flags library. Signed32 native JS bitops retain original arithmetic. Full unchanged original header and grammar.cxx produce13349-byte381-line ordinary NDEBUG stream with9whole source hashes/verified original configuration/genuine generated headers and two normal commands. Negative grammar states can be queried for language/English/support, but native convention/ref/Excel observations are excluded because original enum cast can leave AddressConvention range (CALC-082); JS retains signed arithmetic without native enum ABI claim. Native debug merge assert is omitted according to production release contract, so initialized unsupported packed merges may return unsupported grammars. Existing address enum witness preserved. Native invalid enum/assertion process/ABI/full original QA and actual compiler/document/UI/ODS remain unverified; user UI/ODS priority and pause after full101 remain."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+      "rationale": "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim. Task93 extends actual shared FormulaGrammar to all original static constants/21Grammar enumerators and aliases, API mapping, support switch, language/convention masks, English-bit updates, release-mode convention merges and ODF1.1/OpenFormula/OOXML/Excel predicates. Actual FormulaLanguage IDL constants have a separate shared owner; no literal-language duplication/parser/flags library. Signed32 native JS bitops retain original arithmetic. Full unchanged original header and grammar.cxx produce13349-byte381-line ordinary NDEBUG stream with9whole source hashes/verified original configuration/genuine generated headers and two normal commands. Negative grammar states can be queried for language/English/support, but native convention/ref/Excel observations are excluded because original enum cast can leave AddressConvention range (CALC-082); JS retains signed arithmetic without native enum ABI claim. Native debug merge assert is omitted according to production release contract, so initialized unsupported packed merges may return unsupported grammars. Existing address enum witness preserved. Native invalid enum/assertion process/ABI/full original QA and actual compiler/document/UI/ODS remain unverified; user UI/ODS priority and pause after full101 remain."
     },
     "capability": "Original shared formula address convention",
     "gaps": [
-      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+      "Original static grammar value operations are implemented; native invalid enum casts, debug assertion process/ABI/full original QA remain uncertified.",
+      "Actual compiler/document/UI/ODS import/export remain pending."
     ],
     "upstream": {
       "implementation": [
         {
           "path": "vendor/libreoffice-reference/include/formula/grammar.hxx",
           "marker": "FormulaGrammar"
+        },
+        {
+          "path": "vendor/libreoffice-reference/formula/source/core/api/grammar.cxx",
+          "marker": "FormulaGrammar::mapAPItoGrammar"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/sheet/FormulaLanguage.idl",
+          "marker": "constants FormulaLanguage"
         }
       ],
       "tests": [
@@ -43,7 +53,8 @@
     "atomicOperation": "formula-grammar-values",
     "scopeLimitations": [
       "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim.",
-      "Original QA anchors are unexecuted static caller context; complete normal native instance observations and current portable tests supply actual evidence."
+      "Original QA anchors are unexecuted static caller context; complete normal native instance observations and current portable tests supply actual evidence.",
+      "Task93 extends actual shared FormulaGrammar to all original static constants/21Grammar enumerators and aliases, API mapping, support switch, language/convention masks, English-bit updates, release-mode convention merges and ODF1.1/OpenFormula/OOXML/Excel predicates. Actual FormulaLanguage IDL constants have a separate shared owner; no literal-language duplication/parser/flags library. Signed32 native JS bitops retain original arithmetic. Full unchanged original header and grammar.cxx produce13349-byte381-line ordinary NDEBUG stream with9whole source hashes/verified original configuration/genuine generated headers and two normal commands. Negative grammar states can be queried for language/English/support, but native convention/ref/Excel observations are excluded because original enum cast can leave AddressConvention range (CALC-082); JS retains signed arithmetic without native enum ABI claim. Native debug merge assert is omitted according to production release contract, so initialized unsupported packed merges may return unsupported grammars. Existing address enum witness preserved. Native invalid enum/assertion process/ABI/full original QA and actual compiler/document/UI/ODS remain unverified; user UI/ODS priority and pause after full101 remain."
     ],
     "implemented": true,
     "contractParity": false,
@@ -55,18 +66,34 @@
         {
           "path": "apps/office/src/formula/inc/grammar.ts",
           "marker": "FormulaGrammar"
+        },
+        {
+          "path": "apps/office/src/formula/source/core/api/grammar.ts",
+          "marker": "FormulaGrammar"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sheet/FormulaLanguage.ts",
+          "marker": "FormulaLanguage"
         }
       ],
       "tests": [
         {
           "path": "apps/office/src/formula/inc/grammar.test.ts",
           "marker": "matches original shared address convention enum"
+        },
+        {
+          "path": "apps/office/src/formula/inc/grammar.test.ts",
+          "marker": "matches complete original shared grammar and language stream"
         }
       ],
       "docs": [
         {
           "path": "docs/program/calc-core.md",
           "marker": "Document calculation configuration values (task92)"
+        },
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared formula grammar operations (task93)"
         }
       ]
     }

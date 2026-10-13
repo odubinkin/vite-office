@@ -1702,3 +1702,13 @@ ScCalcConfig::setOpenCLConfigToDefault assigns a static shared_ptr to a mutable 
 Evidence: task92 unchanged original full headers and instance methods with genuine o3tl::sorted_vector and OUString, normal mode only. An initialized caller inserts ocOffset into the shared default, observes a later construction and reset, then removes it to restore the original set. Portable replay retains the exact alias/contents and ordered uniqueness. No memory/sanitizer experiment or actual document consumer defect claim.
 
 Decision: preserve original mutable default identity and partial-reset field behavior. Do not freeze, clone or reconstruct the static set. Audit actual configuration consumers when those owners are ported.
+
+## CALC-082: unspecified grammar convention extraction leaves enum range
+
+Status: source-confirmed unsupported sentinel conversion; a user-visible defect is not established.
+
+FormulaGrammar::extractRefConvention clears the English bit, performs signed right shift and subtracts kConventionOffset, then casts to AddressConvention. For GRAM_UNSPECIFIED=-1 the integer expression computes-259, outside the original AddressConvention enum range. Calling convention-dependent OOXML/Excel predicates on this sentinel therefore cannot serve as valid initialized native enum evidence.
+
+Evidence: unchanged pinned grammar.hxx expression, original enum declarations and task93 ordinary full grammar caller. The preliminary observer was corrected before acceptance: negative grammar states retain valid English/language/support observations, while native convention/ref/Excel fields explicitly say excluded. No sanitizer or invalid-enum process behavior is certified. Portable code preserves the original signed arithmetic; no sentinel fallback or invented validation is added.
+
+Decision: retain upstream arithmetic and audit original caller preconditions when document/compiler owners are ported. Do not infer user-visible damage from this source expression alone.
