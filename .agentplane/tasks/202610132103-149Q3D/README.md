@@ -1,10 +1,11 @@
 ---
 id: "202610132103-149Q3D"
 title: "Implement Calc merge/filter flag values over shared integer item owner"
-status: "DOING"
+result_summary: "Implemented original ScMF and ScMergeFlagAttr default/copy/Clone/9predicates over existing sharedSfxInt16Item, header/Which/core records and source-backed tests. Complete targetedraw100 andallgates pass, no Writer/sharedruntimechanges; nextfull111requestedpause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task102-checks/gates-results.json"
   findings:
     - "Exact committed review proves3326currentnon-taskhashes differ only13intentionalpaths2changed/11added. Original6sourcefiles matchpin;4meaningful flag/itemset tests, complete142Calc/105shared tests rawpositive, actual auxiliary source-absent manifests terminal0 and4linksrestored. ExistingWriter/sharedruntime unchanged."
-commit: null
+commit:
+  hash: "acba634e8c5f978804bd57bcc63716436518cc1b"
+  message: "🧩 149Q3D code: implement Calc merge/filter flag values over shared items"
 comments:
   -
     author: "CODER"
     body: "Start: actual ScMF/ScMergeFlagAttr values and predicates over existing shared integer item, truthful header/core inventory and targeted rawcoverage, nextfull111pause preserved."
+  -
+    author: "CODER"
+    body: "Verified: actual represented merge/filter/pivot flag values reuse shareditems;142Calc and105relatedcases raw100/allpositive,16gates8finalchecks actualstatic/Calc0UI and3326exacthashes pass, linksrestored."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source-backed actualScMF/ScMergeFlagAttr over shareditems, final142Calc/105sharedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI linksrestored and3326exactsourcehashes pass. Pendingdiagnostic/document/UI/ODS truthfullyrecorded."
+  -
+    type: "status"
+    at: "2026-10-13T21:18:29.200Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual represented merge/filter/pivot flag values reuse shareditems;142Calc and105relatedcases raw100/allpositive,16gates8finalchecks actualstatic/Calc0UI and3326exacthashes pass, linksrestored."
 doc_version: 3
-doc_updated_at: "2026-10-13T21:18:27.550Z"
+doc_updated_at: "2026-10-13T21:18:29.201Z"
 doc_updated_by: "CODER"
 description: "Task102: original ScMF and ScMergeFlagAttr value/default/copy/clone and complete overlap/filter/scenario/pivot predicate contract, directly reuse existing shared SfxInt16Item/SfxPoolItem. Original attrib.hxx/core attrib.cxx boundaries and truthful inventory. No duplicate pool/int class or custom memory/C++ fake provider. XML diagnostics and ScMergeAttr/span/document/view/config/ODS remain pending, not claimed by bounded value owner."
 sections:
