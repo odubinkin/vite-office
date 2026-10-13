@@ -1,0 +1,23 @@
+# EVALUATOR opinion: pass
+
+Same-agent non-independent exact bfdc6734535c review passes bounded native auxiliary menubar clicks and original bindings,1607unique accepted cases/whole current menu100four.
+
+## Findings
+- Pinned MenuBarWindow::MouseButtonDown/MenuFloatingWindow::MouseButtonUp have no button filter; ImplHighlightItem bMBDown directly opens enabled original child when none active. Port uses one native auxclick delegate and original HTML click/disabled admission, existing openSubmenu, context suppression. No new low-level press-release/state/command adapter. Source exact1old post-Escape Lists click assertion changes no-op closed to visible; allotherbytes retained,955otheroldtestfiles identical. Registered Space/IO/recovery preserved.
+- 1562unique related (1561initialpass1obsolete oldassertion then1failed-onlypass),26tooling19Chromium=1607accepted;9new native4new Chromium mouse/focus/history/disabled/nested/background cases. Whole current-original menu100L209/S231/F51/B210 with492positive original raw counters/IDs/locations; no source/map/counter transfer/normalization/provider/exclusion/threshold change. All6reviewed blobs match frozen evidence;2canonical histories/137staticfiles/9metadata pass,4refs absent everyproducer/exactfinallyrestore.
+
+## Evidence
+- .agentplane/tasks/202610131721-W6QHFR/README.md
+- apps/office/node_modules/.cache/parity-coverage/W6QHFR/proof.json
+- apps/office/node_modules/.cache/parity-coverage/W6QHFR/accepted-results.json
+- apps/office/node_modules/.cache/parity-coverage/W6QHFR/audit-results.json
+- apps/office/node_modules/.cache/parity-coverage/W6QHFR/execution-hashes.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Full scheduled profile is separate next checkpoint after atomic10/10 closure, then explicit user pause after failures fixed. Full native popup timers/mnemonics/platform/focus graph/core/UI parity remains unverified.

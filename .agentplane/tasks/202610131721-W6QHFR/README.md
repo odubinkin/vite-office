@@ -4,7 +4,7 @@ title: "Route native auxiliary mouse clicks through the menubar"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "1607unique accepted cases, native auxclick/original click button-neutral admission/bindings/focus/disabled;1562related1obsolete oldassertion failed-only closure,26tooling19Chromium. Whole current menu100four492positive original counters,955oldfiles identical/1exactsourceassertion,2canonical histories137staticfiles9metadata pass.4refs absent/exactrestore. Correction10/10; full follows then human pause after repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T17:32:57.779Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact bfdc6734535c review passes bounded native auxiliary menubar clicks and original bindings,1607unique accepted cases/whole current menu100four."
+  evaluated_sha: "bfdc6734535c64e2379c45ef8952232050db6ae6"
+  blueprint_digest: "f9516526988987466d9ae1ca5448d225d297e2bff888ed26266450a43d355538"
+  evidence_refs:
+    - ".agentplane/tasks/202610131721-W6QHFR/README.md"
+    - ".agentplane/tasks/202610131721-W6QHFR/quality/20261013-173257779-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131721-W6QHFR/quality/20261013-173257779-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131721-W6QHFR/quality/20261013-173257779-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131721-W6QHFR/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/W6QHFR/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/W6QHFR/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/W6QHFR/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/W6QHFR/execution-hashes.json"
+  findings:
+    - "Pinned MenuBarWindow::MouseButtonDown/MenuFloatingWindow::MouseButtonUp have no button filter; ImplHighlightItem bMBDown directly opens enabled original child when none active. Port uses one native auxclick delegate and original HTML click/disabled admission, existing openSubmenu, context suppression. No new low-level press-release/state/command adapter. Source exact1old post-Escape Lists click assertion changes no-op closed to visible; allotherbytes retained,955otheroldtestfiles identical. Registered Space/IO/recovery preserved."
+    - "1562unique related (1561initialpass1obsolete oldassertion then1failed-onlypass),26tooling19Chromium=1607accepted;9new native4new Chromium mouse/focus/history/disabled/nested/background cases. Whole current-original menu100L209/S231/F51/B210 with492positive original raw counters/IDs/locations; no source/map/counter transfer/normalization/provider/exclusion/threshold change. All6reviewed blobs match frozen evidence;2canonical histories/137staticfiles/9metadata pass,4refs absent everyproducer/exactfinallyrestore."
 commit: null
 comments:
   -
