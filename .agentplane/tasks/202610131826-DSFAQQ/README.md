@@ -1,10 +1,11 @@
 ---
 id: "202610131826-DSFAQQ"
 title: "Implement Calc reference list and table tokens"
-status: "DOING"
+result_summary: "Task96 completed on calc: original list identity/copy/move/Clone and table Item/index/RPN/area cloning/value comparison, no memory library or fake services; CALC-085 preserved,135 Calc and252 affected shared tests/raw100,16gates/static/Calc0UI,3286 exact source hashes. Goal active continues101 then pauses111/repairs; actual compiler/document/UI/ODS pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Complete original list/table class/Item/constructor/copy/Clone/getter/setter/comparison definitions plus real full shared/reference headers produce matching77781-byte normal stream,474sources8commands. Raw Calc135tests27owners3706S2479B697F3295L/shared252tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass, links absent/restored."
     - "Original list-object identity and nullable structured-reference area cloning/payload comparison preserved, including CALC-085. Native value list insertion adapts with explicit data copy, logical move retains source list owner/transfers element identities; ordinary refs only, no generic memory/vector/refcount/finalizer library or fake document/config/compiler/matrix peers."
     - "Initial observer-prefix/source-absence overlap/test typing/metadata declaration-property errors retained and bounded repairs reviewed; no source verifier/threshold weakening. Existing runtime declaration inventory now points to actual class owners, property/reexport anchors remain evidence. Real upstream table/ref-list QA functions unexecuted consumer context only."
-commit: null
+commit:
+  hash: "e27d551efc36b01f51f6fd9c5e9d6222292fd0c3"
+  message: "🧮 DSFAQQ calc: implement list and table reference tokens"
 comments:
   -
     author: "CODER"
     body: "Start: complete original list/table token families over genuine shared/data owners, reference responsibility shard, normal value proof and scoped raw100. No fake services or ownership manager."
+  -
+    author: "CODER"
+    body: "Verified: original RefList and structured-table token families with existing shared/data owners, unchanged reference responsibility shard, normal native semantics/raw100/16gates/exact review pass."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task96 exact source e27d551efc36b01f51f6fd9c5e9d6222292fd0c3,3286 committed non-task hashes17 intentionalpaths, same-agent separate EVALUATOR pass not independent. Actual full RefList/table families plus unchanged task95 reference responsibility shard; genuine native474sources8normalcommands77781bytes. Calc135/shared252 rawS/B/F/L100 everycounterpositive;16gates/static/Calc0UI pass, source links absent/restored. CALC-085 preserved, no memory library/fake service or UI/ODS readiness claim; continue101 then pause111/repairs."
+  -
+    type: "status"
+    at: "2026-10-13T18:45:53.373Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original RefList and structured-table token families with existing shared/data owners, unchanged reference responsibility shard, normal native semantics/raw100/16gates/exact review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T18:45:39.264Z"
+doc_updated_at: "2026-10-13T18:45:53.375Z"
 doc_updated_by: "CODER"
 description: "Task96 complete original ScRefListToken and ScTableRefToken value/copy/clone/member/equality families needed by real compiler/token array/UI table references, reusing actual existing formula/data/token owners with ordinary JS refs."
 sections:
