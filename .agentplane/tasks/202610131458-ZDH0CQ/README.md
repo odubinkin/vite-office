@@ -4,7 +4,7 @@ title: "Implement original Calc formula result state owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: full original ScFormulaResult state/query/hybrid owner over actual existing peers, preserve legal value/cache/error/matrix transitions with GC refs and no memory manager."
 doc_version: 3
-doc_updated_at: "2026-10-13T15:00:01.401Z"
+doc_updated_at: "2026-10-13T15:29:18.363Z"
 doc_updated_by: "CODER"
 description: "Iteration89 actual ScFormulaResult over real existing tokens/matrices/shared values, cached results and hybrid import transitions for ScFormulaCell/UI/ODS; ordinary JS refs, no memory manager."
 sections:
@@ -50,7 +50,16 @@ sections:
     4. Exact current/committed non-task hashes and same-agent separate EVALUATOR, canonical DONE/clean calc. Full ScFormulaCell/document/storage/editing/UI/ODS remain pending, original QA unexecuted context, native ABI/invalid casts/refcount/concurrency not certified; next full91.
   Verification: "Pending implementation."
   Rollback Plan: "Revert intentional task89 changes through a new task only; no merge or history rewrite."
-  Findings: "Real matrix token dependency is present from88. Original GetResult non-token string guard cannot be reached after isValue(GetCellResultType), by GetType precedence. Scalar svError token storage is immediately resolved to mnError/mfValue; only matrix upper-left can yield svError after mnError NONE. GC removes physical token policy fields and fixups, preserving all value/copy/default behavior. Existing shared SAL/SVL cleanup boundary remains unchanged."
+  Findings: |-
+    Real matrix token dependency is present from88. Original GetResult non-token string guard cannot be reached after isValue(GetCellResultType), by GetType precedence. Scalar svError token storage is immediately resolved to mnError/mfValue; only matrix upper-left can yield svError after mnError NONE. GC removes physical token policy fields and fixups, preserving all value/copy/default behavior. Existing shared SAL/SVL cleanup boundary remains unchanged.
+
+    - Observation: Normal full original114594-byte stream check passes. Targeted lint rejects one non-null assertion on the genuinely constructed matrix owner in the new test.
+      Impact: Test access syntax only, no runtime/behavior or threshold failure; coverage not started.
+      Resolution: Assert actual matrix owner instance and use typed access without non-null assertion, then continue scoped lint/type/whole Calc/shared coverage. Native fixture unchanged.
+
+    - Observation: Preliminary TS7 check rejects one initialized inputs[0] test array lookup passed to matrix-formula constructor without an explicit type bound; noUncheckedIndexedAccess adds undefined.
+      Impact: Fixture type annotation only; full original behavior stream and implementation unchanged, coverage still not started.
+      Resolution: Use explicit FormulaToken type for known initialized first slot, rerun type check and whole portable Calc/shared profile. No non-null assertion, source/fixture or pass-criteria change.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +92,11 @@ Revert intentional task89 changes through a new task only; no merge or history r
 ## Findings
 
 Real matrix token dependency is present from88. Original GetResult non-token string guard cannot be reached after isValue(GetCellResultType), by GetType precedence. Scalar svError token storage is immediately resolved to mnError/mfValue; only matrix upper-left can yield svError after mnError NONE. GC removes physical token policy fields and fixups, preserving all value/copy/default behavior. Existing shared SAL/SVL cleanup boundary remains unchanged.
+
+- Observation: Normal full original114594-byte stream check passes. Targeted lint rejects one non-null assertion on the genuinely constructed matrix owner in the new test.
+  Impact: Test access syntax only, no runtime/behavior or threshold failure; coverage not started.
+  Resolution: Assert actual matrix owner instance and use typed access without non-null assertion, then continue scoped lint/type/whole Calc/shared coverage. Native fixture unchanged.
+
+- Observation: Preliminary TS7 check rejects one initialized inputs[0] test array lookup passed to matrix-formula constructor without an explicit type bound; noUncheckedIndexedAccess adds undefined.
+  Impact: Fixture type annotation only; full original behavior stream and implementation unchanged, coverage still not started.
+  Resolution: Use explicit FormulaToken type for known initialized first slot, rerun type check and whole portable Calc/shared profile. No non-null assertion, source/fixture or pass-criteria change.

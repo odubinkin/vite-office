@@ -1,2 +1,7 @@
-/** @fileoverview Original formularesult.hxx boundary for the genuine FormulaResultValue struct; ScFormulaResult remains a subsequent original owner. */
-export { FormulaResultValue, FormulaResultValueType } from "../source/core/tool/formularesult";
+/** @fileoverview Original formularesult.hxx boundary for genuine FormulaResultValue and ScFormulaResult owners. */
+export {
+  FormulaResultValue,
+  FormulaResultValueType,
+  ScFormulaResult,
+  type FormulaResultNumber,
+} from "../source/core/tool/formularesult";

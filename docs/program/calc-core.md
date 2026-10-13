@@ -3358,3 +3358,36 @@ These are direct prerequisites of the actual ScFormulaResult/ScFormulaCell
 owners and ODS cached formula results, not unrelated matrix aggregation.
 Continue with those real owners and cell storage/document/editing/ODS;
 no editable sheet or ODS filter is claimed and next full run is91.
+
+## Original formula result state owner (task89)
+
+Task89 adds actual ScFormulaResult alongside existing FormulaResultValue at
+the original formularesult header/core boundaries. Default/token/copy, Assign,
+scalar resolution, error/cache/empty precedence, all queries, matrix updates
+and hybrid import setters reuse real FormulaToken/Calc matrix/empty/hybrid
+tokens and shared strings. This supports cached ODS formula results without
+creating a second document/result model. No ScFormulaCell/document/UI/ODS
+filter is claimed yet; those remain required real owners.
+
+Native token refs and None-policy/fixup bookkeeping are replaced by ordinary
+JS references. Numeric matrix copies and original destination-matrix
+assignment semantics remain. Complete original C++ result class/header/source
+and genuine token/matrix dependencies are observed normally only, including
+copy/assignment, error-masked matrix dimensions, all hybrid import transitions,
+caller out-reference preservation and multiline cache alias histories.
+Only genuine stored matrix-formula owners are used; transport input is
+applied to that valid context, not cast into a fabricated stored owner.
+
+Three error queries specialize the resolved-scalar invariant: ResolveToken
+never retains a scalar svError, instead setting mnError and direct zero.
+When mnError is NONE, a svError result can therefore only come from matrix
+upper-left. GetResult's non-token string guard after isValue is likewise
+unreachable: GetType yields svDouble for non-token nonempty nonerror state.
+These are explicit logical proofs over the original methods, not private
+state forcing, missing-feature defaults or Istanbul ignore directives.
+
+CALC-077 records multiline cache retention after an external shared-token
+string mutation. CALC-078 records caller error retention in GetErrorOrDouble.
+Both preserve original behavior; real consumer/UI effects are unverified.
+Continue toward ScFormulaCell and actual storage/ScColumn/ScTable/ScDocument,
+editing/undo and shared-backed ODS; next full run91.

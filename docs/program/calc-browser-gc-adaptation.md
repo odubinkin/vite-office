@@ -39,3 +39,28 @@ Iteration84 also corrects generic shared `delayed_delete_vector` scalar fill: or
 
 
 Generic vector reserved slots are also initialized with `undefined`, matching the existing optional-slot representation, before scalar assignments. This prevents numeric array transitions from losing encoded errors during allocation/copy. The fix is in the shared owner and adds no error decoder, alternate number wrapper or memory manager.
+
+## Formula result references and state invariants
+
+Task89 ScFormulaResult retains original value/type/cache/empty/error fields
+and ordinary references to actual token owners. No mbNoneRefCnt field,
+IncRef/DecRef calls, policy checks or manual token deletion is added. Original
+HandleStuffAfterParallelCalculation performs only removed native ownership
+fixups and is a value-preserving no-op for JS GC. Clearing a native union into
+a number drops the inactive JS token reference; shared token aliases survive.
+Existing SAL/SVL value-copy/cleanup remains its separate current boundary.
+
+Result/error query specialization follows actual public-state invariants.
+ResolveToken consumes scalar errors, so with mnError NONE a svError cell
+result only originates in a matrix upper-left. The redundant native direct
+stored-error tests in GetErrorOrDouble/GetResult/GetResultError are removed.
+The non-token string guard in GetResult is impossible after numeric
+classification, since GetType returns svDouble when mbToken is false and
+there is no error/empty flag. No coverage counter is ignored or invented,
+and no private/native invalid state is forced to cover those guards.
+
+Native complete source/class comparisons certify initialized public values
+and identities, not physical memory layout/ownership timing, invalid derived
+casts, assertions or native parallel policy handling. Actual stored matrix
+formula tokens and interpreter transport inputs reuse original distinct
+classes and dispatch responsibilities.

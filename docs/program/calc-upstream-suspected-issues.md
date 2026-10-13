@@ -1652,3 +1652,23 @@ ScMatrixFormulaCellToken copy construction clones a double upper-left via CloneU
 Evidence: task88 complete original normal matrix-result token stream records formula_equal for null, double, string, unknown and error upper-left tokens, including original constructors and virtual Clone/equality bodies. Portable replay preserves every result. No native ownership count or memory-management experiment is required.
 
 Decision: preserve identity comparison and numeric cloning. Do not substitute upper-left value equality or share the mutable numeric token to make copies compare equal. Actual formula-cell/UI effects remain unverified.
+
+## CALC-077: formula multiline cache survives an external string-token mutation
+
+Status: confirmed original cache/alias behavior; a user-visible defect is not established.
+
+ScFormulaResult stores ordinary string-token identity and caches IsMultiline. If a caller retains the genuine mutable FormulaStringToken and changes its string after that query, subsequent GetString/GetResult expose the new text but keep the prior multiline flag. Calling SetToken again resets the cache and rescans. A string changing from A to A-LF-B can therefore retain false until the result setter runs.
+
+Evidence: task89 full unchanged ScFormulaResult/header/source over genuine token/matrix/string dependencies, normal native public histories and complete portable replay. The caller retains an actual token and uses original SetString; no private-state or lifetime violation is forced.
+
+Decision: preserve cache and reset responsibilities. Do not rescan on every query or invent an observer binding to mutate the result flag. Actual formula-cell/UI reachability remains unverified.
+
+## CALC-078: GetErrorOrDouble retains caller error output
+
+Status: confirmed original output-reference behavior; caller requirements and user-visible defects remain unverified.
+
+The cached-value fast path assigns rVal but does not clear rErr. Later paths likewise test the caller's existing rErr before numeric classification and may return true without writing rVal, even for string/unknown values. An initialized caller error can therefore survive a successful numeric query; fresh NONE is observably different. Internal SetResultError controls the result's own error and does not reset caller storage.
+
+Evidence: task89 complete unchanged native result class/source histories query each state with initialized NONE and DivisionByZero out errors and a fixed initialized numeric output. Portable replay preserves all return values and untouched fields without changing thresholds or forcing private state.
+
+Decision: preserve original output writes and precedence. Do not automatically clear caller error or numeric storage. Audit actual original consumer initialization when those owners are ported.
