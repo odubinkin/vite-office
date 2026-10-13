@@ -1599,3 +1599,14 @@ Original ranged multi_type_matrix::walk rejects an endpoint only when end.row is
 Evidence: task80 scripts/calc-matrix-walk-native-probe.mjs compiles whole unchanged original matrix/vector headers with verified pinned dependency sources. Its ordinary scalar stream records one numeric section of size3 for the initialized 2x2 spill caller. The portable full-stream replay matches the same section. Original ScMatrix/input consumers and user-visible reachability remain unimplemented.
 
 Decision: preserve the original validation and inclusive traversal. Do not change greater-than to greater-than-or-equal or clamp the section to a column. Do not use this initialized case to claim safety for endpoints at the final column or invalid store positions.
+
+
+## CALC-072: matrix resize overloads use different error initializers and may preserve prior cell data
+
+Status: confirmed original fallback asymmetry and storage behavior; a user-visible defect is not established.
+
+In pinned sc/source/core/tool/scmatrix.cxx, invalid-size constructors and the unfilled ScMatrixImpl::Resize initialize a1x1 matrix with FormulaError::MatrixSize. The filled Resize overload instead uses FormulaError::StackOverflow. The underlying mdds resize constructs a filled temporary and copies existing cells into it, so an existing cell can overwrite that fallback error. Starting from a zero-sized matrix preserves the selected error; resizing an already initialized1x1 matrix to an invalid one-zero shape may retain its old cell instead.
+
+Evidence: task84 ordinary unchanged original constructor/Resize/geometry definitions over genuine mdds/SAL/SVL. Complete native and portable streams cover both overloads, empty-before-invalid fallback and initialized-cell preservation; no invalid memory access, sanitizer or large allocation is required.
+
+Decision: preserve the two error choices and the existing-cell copy behavior. Do not force the new error into retained cells or normalize the filled overload to MatrixSize. Revisit actual interpreter/UI consumer reachability when those owners are implemented.

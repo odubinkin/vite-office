@@ -3259,3 +3259,16 @@ Task82 scoped checks pass125Calc/shared242tests with raw S/B/F/L100 every counte
 The actual internal `ScMatrixImpl` now owns the original data and flag matrices over the existing shared mdds container. The three empty/scalar/vector constructors, content `Clear`, dimensions/count, numeric query and coordinate replication follow their original definitions. The column/row inversion into mdds is preserved, as are scalar, single-column and single-row replication and unchanged coordinates on valid short-circuit queries. The public `ScMatrix` facade, mutations/accessors, interpreter binding and document/UI owners remain subsequent work. There is no interpreter substitute or additional container engine.
 
 Ordinary native source-excerpt observations cover16dimension pairs, all constructor forms and clear,25coordinate pairs per stage and genuine UInt16/UInt8 traits. The native caller declaration exposes storage only to observe initial data/flags; original selected method bodies remain unchanged. Native memory-pool accounting is deliberately omitted under the user GC-first instruction, documented in `calc-browser-gc-adaptation.md`. Shared value cleanup remains the existing separate boundary. No native exception/allocation/lifetime timing or whole upstream QA certification is claimed. Next full-suite cadence is91 after81.
+
+
+### Public matrix construction and geometry (task84)
+
+The public `ScMatrix` now delegates its three constructors, dimensions/count, coordinate validation/replication and Resize overloads to the actual `ScMatrixImpl`. Six original inline tag classifiers retain their UInt8 masks. Initial64bit upstream536870912-element validation applies per matrix; GC replaces the native live-allocation ledger, environment override and reference-counted ownership. Ordinary native observations compare the initial allocation boundary before any matrices exist, all256tags, zero/one-zero/rectangular constructors and repeated grow/shrink/zero/error resize. No large matrix is allocated for boundary queries. See `calc-browser-gc-adaptation.md` for the resource-policy divergence and `calc-upstream-suspected-issues.md` CALC-072 for the original resize fallback asymmetry.
+
+The public typed mutation/accessors, Clone/interpreter/results and document/UI graph remain subsequent original owners. No substitute interpreter or cloning algorithm is provided. Native allocation exceptions/lifetime timing and full original QA are unverified. Next full91.
+
+
+Iteration84 also corrects generic shared `delayed_delete_vector` scalar fill: ordinary assignments retain encoded NaN error values where `Array.fill` canonicalized them. The public matrix native replay covers actual MatrixSize538/StackOverflow514 behavior through shared storage. No memory manager or Calc-specific error representation is introduced in mdds.
+
+
+Generic vector reserved slots are also initialized with `undefined`, matching the existing optional-slot representation, before scalar assignments. This prevents numeric array transitions from losing encoded errors during allocation/copy. The fix is in the shared owner and adds no error decoder, alternate number wrapper or memory manager.

@@ -28,3 +28,14 @@ All125Calc tests36files and242directly affected shared tests48files pass with ra
 ### Matrix storage
 
 Iteration83 introduces the original internal `ScMatrixImpl` storage/coordinate slice over existing shared mdds. It stores containers through ordinary JavaScript references. The C++ constructors debit a global `nElementsMax` allocation ledger, and the destructor credits it; these mechanisms are omitted because JS collection has no deterministic destructor schedule. No replacement counter, allocator, finalizer, weak-reference manager or memory-pool emulation is introduced. `Clear` remains an explicit content operation. The public matrix allocation-limit contract and interpreter binding are still unported and must be considered at their actual owner boundary, rather than implied by this internal storage slice. Existing shared-value cleanup APIs remain unchanged. Native observations compare initialized data/flags, dimensions/count, numeric queries and coordinate replication, excluding pool/refcount/destructor timing.
+
+
+### Public matrix allocation policy
+
+Iteration84 preserves the original64bit initial536870912-element default for each matrix. Zero by zero is valid, exactly one zero dimension is invalid, and division-based overflow validation precedes allocation. It deliberately does not deduct other matrices from a global budget or read `SC_MAX_MATRIX_ELEMENTS`; the browser has no native process pool or deterministic destructor schedule. This is an explicit resource-policy adaptation, not equivalence to the C++ live-allocation ledger. Native boundary observations are captured before any matrix exists. No native large allocation, memory pressure handling or GC timing is certified. Original constructor/Resize value fallback behavior remains unchanged, including CALC-072.
+
+
+Iteration84 also corrects generic shared `delayed_delete_vector` scalar fill: ordinary assignments retain encoded NaN error values where `Array.fill` canonicalized them. The public matrix native replay covers actual MatrixSize538/StackOverflow514 behavior through shared storage. No memory manager or Calc-specific error representation is introduced in mdds.
+
+
+Generic vector reserved slots are also initialized with `undefined`, matching the existing optional-slot representation, before scalar assignments. This prevents numeric array transitions from losing encoded errors during allocation/copy. The fix is in the shared owner and adds no error decoder, alternate number wrapper or memory manager.

@@ -27,21 +27,32 @@
       "ValidColRow",
       "ValidColRowReplicated",
       "ValidColRowOrReplicated",
-      "IsNumeric"
+      "IsNumeric",
+      "ScMatrix",
+      "Resize",
+      "IsSizeAllocatable",
+      "IsValueType",
+      "IsBooleanType",
+      "IsNonValueType",
+      "IsRealStringType",
+      "IsEmptyType",
+      "IsEmptyPathType"
     ],
     "upstreamSymbols": [
       "ScMatrixValue",
       "ScMatrixImpl",
       "matrix_traits",
-      "matrix_flag_traits"
+      "matrix_flag_traits",
+      "ScMatrix"
     ],
     "preservedResponsibilities": [
       "Original inline matrix value owner/header boundary and genuine shared value/error reuse.",
       "Original default/copy/assignment/query/equality semantics and fixed tag/member identity.",
-      "Original internal data/flag matrix storage and constructor/coordinate replication semantics reuse genuine shared owners."
+      "Original internal data/flag matrix storage and constructor/coordinate replication semantics reuse genuine shared owners.",
+      "Original public matrix constructors/resize/geometry/type classifier boundary delegates to actual shared storage."
     ],
     "omittedResponsibilities": [
-      "Iteration83 extends the real ScMatrixImpl internal storage slice with original matrix_traits/matrix_flag_traits over existing SharedString blocks and shared mdds multi_type_matrix, all three constructors, Clear, dimensions/count, strict coordinate validation, scalar/single-axis coordinate replication, short-circuit preservation and numeric query. No duplicated container or interpreter stand-in. Ordinary unchanged original definition excerpts compile over genuine pinned mdds/SAL/SVL; declaration scaffolding exposes storage only for caller observations. Complete41517-byte stream covers16dimensions, empty/scalar/vector initialization, copied input values, flags,25coordinate pairs per stage and actual UInt16/UInt8 trait casts. Native constructors debit a global allocation pool; JavaScript deliberately omits the allocation ledger and native destruction/refcount scheduling per the user GC-first instruction. Clear is a content operation, not object deallocation. Original matrix value contract remains implemented. Public ScMatrix, mutations/typed access, interpreter, result/cell/document/input/UI remain incomplete; broad parity flags remain false. Native exception suppression, allocation limits/ABI/concurrency and full upstream QA are not certified. Next full91."
+      "Iteration84 implements original public ScMatrix constructors, genuine pImpl delegation, resize overloads, dimensions/count/coordinate validation and six inline UInt8 classifiers over actual ScMatrixImpl/shared mdds. The original64bit initial default536870912-element bound is preserved as a per-matrix bound; native live-pool debit/credit, environment override and refcount/unique_ptr destruction timing are deliberately omitted under the user GC-first instruction. Ordinary original definition excerpts over genuine dependencies compare25016-byte constructor/resize/coordinate observations and all256tags; allocation-boundary queries run before native objects exist and do not certify native live-pool equivalence. Invalid constructors/default resize use MatrixSize, filled resize uses StackOverflow; mdds resize may preserve existing cell data over the error initializer (CALC-072). No interpreter/Clone substitute, no duplicated storage. Typed access/mutations, Clone/interpreter/results/cell/document/input/UI, allocation exceptions/ABI and full upstream QA remain incomplete; broad parity flags stay false. Original QA anchors are unexecuted context. Next full91."
     ],
     "evidence": {
       "local": [
@@ -68,6 +79,14 @@
         {
           "path": "apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
           "marker": "matches original internal matrix storage and coordinate replication stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "ScMatrix"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+          "marker": "matches original public matrix construction resize and classification stream"
         }
       ],
       "upstream": [
@@ -82,6 +101,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
           "marker": "ScMatrixImpl::ValidColRowReplicated"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scmatrix.hxx",
+          "marker": "IsRealStringType"
         }
       ]
     }

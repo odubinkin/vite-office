@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c38c9f95-f607-4f74-a496-f04c0a2f1608",
+    "capabilityId": "CAP-c38c9f95-f607-4f74-a496-f04c0a2f1608",
+    "suite": "calc",
+    "subsystem": "matrix-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Three original public constructors delegate to genuine storage with original invalid-size fallback.",
+      "Original resize errors and preservation of existing cells remain unchanged.",
+      "Original public geometry delegates and all256UInt8 tag classifiers match native observations.",
+      "Original initial64bit element limit is applied per matrix; ordinary JS references replace native live-pool/refcount ownership.",
+      "Necessary shared scalar fill preserves encoded errors with ordinary assignments instead of Array.fill."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Iteration84 implements original public ScMatrix constructors, genuine pImpl delegation, resize overloads, dimensions/count/coordinate validation and six inline UInt8 classifiers over actual ScMatrixImpl/shared mdds. The original64bit initial default536870912-element bound is preserved as a per-matrix bound; native live-pool debit/credit, environment override and refcount/unique_ptr destruction timing are deliberately omitted under the user GC-first instruction. Ordinary original definition excerpts over genuine dependencies compare25016-byte constructor/resize/coordinate observations and all256tags; allocation-boundary queries run before native objects exist and do not certify native live-pool equivalence. Invalid constructors/default resize use MatrixSize, filled resize uses StackOverflow; mdds resize may preserve existing cell data over the error initializer (CALC-072). No interpreter/Clone substitute, no duplicated storage. Typed access/mutations, Clone/interpreter/results/cell/document/input/UI, allocation exceptions/ABI and full upstream QA remain incomplete; broad parity flags stay false. Original QA anchors are unexecuted context. Next full91."
+    },
+    "capability": "Original public Calc matrix construction resize and geometry",
+    "gaps": [
+      "Typed mutations/accessors, Clone/interpreter/results/document/UI remain unported.",
+      "Native live-pool/environment override deliberately omitted; native allocation/exception/ABI/full QA unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "ScMatrix"
+        },
+        {
+          "path": "apps/office/src/sc/inc/scmatrix.ts",
+          "marker": "ScMatrix"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+          "marker": "matches original public matrix construction resize and classification stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Public matrix construction and geometry (task84)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Public matrix allocation policy"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "bool ScMatrix::IsSizeAllocatable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scmatrix.hxx",
+          "marker": "IsRealStringType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "element is not of empty type"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/scmatrix.hxx",
+          "marker": "Checks nC or nR for zero"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-public-matrix-construction-resize-geometry",
+    "scopeLimitations": [
+      "Iteration84 implements original public ScMatrix constructors, genuine pImpl delegation, resize overloads, dimensions/count/coordinate validation and six inline UInt8 classifiers over actual ScMatrixImpl/shared mdds. The original64bit initial default536870912-element bound is preserved as a per-matrix bound; native live-pool debit/credit, environment override and refcount/unique_ptr destruction timing are deliberately omitted under the user GC-first instruction. Ordinary original definition excerpts over genuine dependencies compare25016-byte constructor/resize/coordinate observations and all256tags; allocation-boundary queries run before native objects exist and do not certify native live-pool equivalence. Invalid constructors/default resize use MatrixSize, filled resize uses StackOverflow; mdds resize may preserve existing cell data over the error initializer (CALC-072). No interpreter/Clone substitute, no duplicated storage. Typed access/mutations, Clone/interpreter/results/cell/document/input/UI, allocation exceptions/ABI and full upstream QA remain incomplete; broad parity flags stay false. Original QA anchors are unexecuted context. Next full91."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

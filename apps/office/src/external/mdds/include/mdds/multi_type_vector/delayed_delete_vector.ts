@@ -107,12 +107,13 @@ export class delayed_delete_vector<T> {
             operations ? operations.default_construct() : defaultValue,
           this.aligned_capacity(initial),
         );
-      } else
-        assign_storage(
-          this.m_vec,
-          Array<T>(initial).fill(valueOrLast as T),
-          this.aligned_capacity(initial),
-        );
+      } else {
+        // Array.fill may canonicalize NaN payloads; native
+        // scalar copies must retain encoded formula error values.
+        const values = Array<T | undefined>(initial).fill(undefined);
+        for (let i = 0; i < initial; ++i) values[i] = valueOrLast as T;
+        assign_storage(this.m_vec, values as T[], this.aligned_capacity(initial));
+      }
     } else
       assign_storage(
         this.m_vec,

@@ -8,28 +8,33 @@
     "suite": "calc",
     "subsystem": "matrix-value",
     "capabilityIds": [
-      "CAP-877498e5-ba0b-4824-afe6-6cfcf2ed9f82"
+      "CAP-877498e5-ba0b-4824-afe6-6cfcf2ed9f82",
+      "CAP-c38c9f95-f607-4f74-a496-f04c0a2f1608"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/inc/scmatrix.ts#ScMatrixValue",
         "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches all original matrix UInt8 tags, IEEE comparisons and error payload queries",
         "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches original matrix value copy assignment and rvalue copy ownership",
         "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches original matrix tag field UInt8 narrowing and scalar copy assignment",
         "vendor/libreoffice-reference/sc/inc/scmatrix.hxx#struct ScMatrixValue",
-        "vendor/libreoffice-reference/sc/inc/types.hxx#enum class ScMatValType"
+        "vendor/libreoffice-reference/sc/inc/types.hxx#enum class ScMatValType",
+        "apps/office/src/sc/source/core/tool/scmatrix.ts#ScMatrix",
+        "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts#matches original public matrix construction resize and classification stream",
+        "vendor/libreoffice-reference/sc/inc/scmatrix.hxx#IsRealStringType"
       ],
-      "justification": "Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81.",
+      "justification": "Iteration84 implements original public ScMatrix constructors, genuine pImpl delegation, resize overloads, dimensions/count/coordinate validation and six inline UInt8 classifiers over actual ScMatrixImpl/shared mdds. The original64bit initial default536870912-element bound is preserved as a per-matrix bound; native live-pool debit/credit, environment override and refcount/unique_ptr destruction timing are deliberately omitted under the user GC-first instruction. Ordinary original definition excerpts over genuine dependencies compare25016-byte constructor/resize/coordinate observations and all256tags; allocation-boundary queries run before native objects exist and do not certify native live-pool equivalence. Invalid constructors/default resize use MatrixSize, filled resize uses StackOverflow; mdds resize may preserve existing cell data over the error initializer (CALC-072). No interpreter/Clone substitute, no duplicated storage. Typed access/mutations, Clone/interpreter/results/cell/document/input/UI, allocation exceptions/ABI and full upstream QA remain incomplete; broad parity flags stay false. Original QA anchors are unexecuted context. Next full91.",
       "knownViolations": [],
       "localSymbols": [],
-      "sourceResponsibility": "aligned",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "sc/inc/scmatrix.hxx",
       "upstreamSymbols": [
-        "ScMatrixValue"
+        "ScMatrixValue",
+        "ScMatrix"
       ]
     }
   }

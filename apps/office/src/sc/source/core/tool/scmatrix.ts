@@ -1,7 +1,11 @@
 /** @fileoverview Original matrix value and internal typed storage/geometry owners; genuine shared values, error helpers and mdds are reused. */
 import { ScMatValType } from "../../../inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import { GetDoubleErrorValue, type FormulaError } from "../../../../formula/inc/errorcodes";
+import {
+  GetDoubleErrorValue,
+  CreateDoubleError,
+  FormulaError,
+} from "../../../../formula/inc/errorcodes";
 
 import {
   multi_type_matrix,
@@ -71,6 +75,24 @@ export class ScMatrixImpl {
   Clear(): void {
     this.maMat.clear();
     this.maMatFlag.clear();
+  }
+  /** Original resize overloads preserve their distinct invalid-size error codes; GC replaces pool bookkeeping. @param nC - Columns. @param nR - Rows. @param fVal - Optional numeric initializer. @returns Nothing. */
+  Resize(nC: number, nR: number, fVal?: number): void {
+    if (ScMatrix.IsSizeAllocatable(nC, nR)) {
+      if (fVal === undefined) this.maMat.resize(nR, nC);
+      else this.maMat.resize(nR, nC, double_element_callbacks, fVal);
+      this.maMatFlag.resize(nR, nC);
+    } else {
+      this.maMat.resize(
+        1,
+        1,
+        double_element_callbacks,
+        CreateDoubleError(
+          fVal === undefined ? FormulaError.MatrixSize : FormulaError.StackOverflow,
+        ),
+      );
+      this.maMatFlag.resize(1, 1);
+    }
   }
   /** Original out-parameter dimensions. @param dimensions - Native mutable references. @returns Nothing. */
   GetDimensions(dimensions: MatrixCoordinates): void {
@@ -185,5 +207,73 @@ export class ScMatrixValue {
   /** Original implicit destructor destroys the owned shared value. @returns Nothing. */
   dispose(): void {
     this.stringValue.dispose();
+  }
+}
+
+/** Original public matrix owner over the real internal implementation; ordinary references replace C++ pointer/refcount ownership. */
+export class ScMatrix {
+  private readonly pImpl: ScMatrixImpl;
+  /** Original three constructors and MatrixSize fallback. @param nC - Columns. @param nR - Rows. @param initial - Scalar or double vector initializer. @returns Matrix. */
+  constructor(nC: number, nR: number, initial?: number | number[]) {
+    this.pImpl = ScMatrix.IsSizeAllocatable(nC, nR)
+      ? new ScMatrixImpl(nC, nR, initial)
+      : new ScMatrixImpl(1, 1, CreateDoubleError(FormulaError.MatrixSize));
+  }
+  /** Original zero-shape and overflow validation; the initial64bit upstream limit applies per matrix without a live-allocation ledger. @param nC - Columns. @param nR - Rows. @returns Allocation shape validity. */
+  static IsSizeAllocatable(nC: number, nR: number): boolean {
+    if ((nC && !nR) || (!nC && nR)) return false;
+    if (!nC || !nR) return true;
+    return nC <= Math.floor(0x180000000 / 12 / nR);
+  }
+  /** Original value or boolean test. @param nType - UInt8 type. @returns Classification. */
+  static IsValueType(nType: ScMatValType): boolean {
+    return nType <= ScMatValType.Boolean;
+  }
+  /** Original boolean test. @param nType - UInt8 type. @returns Classification. */
+  static IsBooleanType(nType: ScMatValType): boolean {
+    return nType === ScMatValType.Boolean;
+  }
+  /** Original nonvalue mask test. @param nType - UInt8 type. @returns Classification. */
+  static IsNonValueType(nType: ScMatValType): boolean {
+    return Boolean(nType & ScMatValType.NonvalueMask);
+  }
+  /** Original real string test. @param nType - UInt8 type. @returns Classification. */
+  static IsRealStringType(nType: ScMatValType): boolean {
+    return (nType & ScMatValType.NonvalueMask) === ScMatValType.String;
+  }
+  /** Original empty type test. @param nType - UInt8 type. @returns Classification. */
+  static IsEmptyType(nType: ScMatValType): boolean {
+    return (nType & ScMatValType.NonvalueMask) === ScMatValType.Empty;
+  }
+  /** Original empty path type test. @param nType - UInt8 type. @returns Classification. */
+  static IsEmptyPathType(nType: ScMatValType): boolean {
+    return (nType & ScMatValType.NonvalueMask) === ScMatValType.EmptyPath;
+  }
+  /** Original resize delegates to its actual implementation. @param nC - Columns. @param nR - Rows. @param fVal - Optional fill. @returns Nothing. */
+  Resize(nC: number, nR: number, fVal?: number): void {
+    this.pImpl.Resize(nC, nR, fVal);
+  }
+  /** Original dimensions delegate. @param dimensions - Native out parameters. @returns Nothing. */
+  GetDimensions(dimensions: MatrixCoordinates): void {
+    this.pImpl.GetDimensions(dimensions);
+  }
+  /** Original count delegate. @returns Count. */
+  GetElementCount(): number {
+    return this.pImpl.GetElementCount();
+  }
+  /** Original strict coordinate delegate. @param nC - Column. @param nR - Row. @returns Validity. */
+  ValidColRow(nC: number, nR: number): boolean {
+    return this.pImpl.ValidColRow(nC, nR);
+  }
+  /** Original replicated coordinate delegate. @param coordinates - Native references. @returns Validity. */
+  ValidColRowReplicated(coordinates: MatrixCoordinates): boolean {
+    return this.pImpl.ValidColRowReplicated(coordinates);
+  }
+  /** Original short-circuit coordinate query. @param coordinates - Native references. @returns Validity. */
+  ValidColRowOrReplicated(coordinates: MatrixCoordinates): boolean {
+    return (
+      this.ValidColRow(coordinates.column, coordinates.row) ||
+      this.ValidColRowReplicated(coordinates)
+    );
   }
 }
