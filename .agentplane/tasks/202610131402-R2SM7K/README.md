@@ -1,10 +1,11 @@
 ---
 id: "202610131402-R2SM7K"
 title: "Implement original Calc scalar cell reference boundary"
-status: "DOING"
+result_summary: "Implemented scalar ScRefCellValue constructors, memberwise copy/assignment, clear/type/typed getters/isEmpty with original null STRING tag and borrowed identity. Inventory and UI/ODS checkpoint updated. Real storage/document/text/formula/editing/UI/ODS pending next-priority owners, goal active and next full91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Actual SharedString identity is borrowed without copy/acquire/dispose. Null retains STRING tag. Clear drops inactive JS reference for GC; original union ABI, assertions/invalid reads, rich-text/formula/document families unverified. No fake peers or memory manager."
     - "Whole Calc130 and related shared246 tests raw S/B/F/L100 with every raw counter positive; four original links absent/restored, static and Calc profile0UI pass. All16repository/tooling/inventory gates pass. Exact current/committed hashes and11 intentional non-task changes match source commit, Writer/shared runtime unchanged."
-commit: null
+commit:
+  hash: "18d66dae0a4da8f7fe154ba0da3770f6703701c0"
+  message: "🧩 R2SM7K task: implement original scalar ScRefCellValue borrowed access"
 comments:
   -
     author: "CODER"
     body: "Start: original scalar borrowed ScRefCellValue contract and evidence, reused SharedString and ordinary JS refs; human UI/ODS goal authorization, no missing peer stand-in."
+  -
+    author: "CODER"
+    body: "Verified: original scalar borrowed ScRefCellValue contract with actual SharedString identity, no copying/refcount/manager. Ordinary1451-byte stream, Calc130/shared246 raw100, source-absent build/profile and16gates pass; exact3222hashes and same-agent separate EVALUATOR pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original scalar ScRefCellValue at18d66dae0a4da8f7fe154ba0da3770f6703701c0,1451-byte ordinary stream/6commands, Calc130/shared246 whole raw100 every counter positive, source-absent static/profile and16gates, exact3222hashes/11paths and same-agent separate EVALUATOR pass. No fake peers, new memory manager or Writer/shared runtime edits. UI/ODS real owners remain priority, next full91."
+  -
+    type: "status"
+    at: "2026-10-13T14:18:08.557Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original scalar borrowed ScRefCellValue contract with actual SharedString identity, no copying/refcount/manager. Ordinary1451-byte stream, Calc130/shared246 raw100, source-absent build/profile and16gates pass; exact3222hashes and same-agent separate EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:17:47.904Z"
+doc_updated_at: "2026-10-13T14:18:08.559Z"
 doc_updated_by: "CODER"
 description: "Iteration87 UI and ODS prerequisite: actual ScRefCellValue scalar borrowed value boundary at original cellvalue header/core, no fake formula/text/document peers or memory management."
 sections:
