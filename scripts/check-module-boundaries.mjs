@@ -101,7 +101,8 @@ const allowedEdges = new Map([
   ],
   ["vcl", new Set(["svl"])],
   ["udkapi", new Set(["sal"])],
-  ["unotools", new Set()],
+  // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
+  ["unotools", new Set(["sal"])],
   ["tools", new Set()],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
 ]);

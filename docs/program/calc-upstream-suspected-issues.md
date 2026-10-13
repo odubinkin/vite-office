@@ -1712,3 +1712,13 @@ FormulaGrammar::extractRefConvention clears the English bit, performs signed rig
 Evidence: unchanged pinned grammar.hxx expression, original enum declarations and task93 ordinary full grammar caller. The preliminary observer was corrected before acceptance: negative grammar states retain valid English/language/support observations, while native convention/ref/Excel fields explicitly say excluded. No sanitizer or invalid-enum process behavior is certified. Portable code preserves the original signed arithmetic; no sentinel fallback or invented validation is added.
 
 Decision: retain upstream arithmetic and audit original caller preconditions when document/compiler owners are ported. Do not infer user-visible damage from this source expression alone.
+
+## CALC-083: document option equality omits ignore-line-breaks flag
+
+Status: source-inspected comparator omission; rationale and user-visible consequences are unverified.
+
+ScDocOptions declares bIgnoreLineBreaks, resets it to false, and exposes IsIgnoreLineBreaks/SetIgnoreLineBreaks. Its inline operator== explicitly compares the other option fields but never reads bIgnoreLineBreaks. The flag is therefore absent from the original equality expression.
+
+Evidence: pinned sc/inc/docoptio.hxx member/accessors/inline equality and sc/source/core/tool/docoptio.cxx reset body, inspected during task94 dependency analysis. No native ScDocOptions instance or document consumer has been reproduced: its genuine locale/configuration/formatter peers are still pending. This is source evidence only, not an executed document comparison or proven defect.
+
+Decision: preserve the original equality expression when the actual owner is ported and audit downstream change/save detection. Do not silently add the flag to comparison or supply fake peers to manufacture native evidence.
