@@ -1,10 +1,11 @@
 ---
 id: "202610132025-TXSGPJ"
 title: "Implement shared grid option values for Calc view defaults"
-status: "DOING"
+result_summary: "Implemented complete shared SvxOptionsGrid value defaults/copy/assignment/setters/getters with native parity evidence and registry; no duplicate Calc base, existing Writer shared unchanged; task101 full next, goal active until second full111."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task100-checks/gates-results.json"
   findings:
     - "Actual shared owner/header match original defaults, UInt32 boundaries, all getters/setters and complete copy histories; 3314 exact committed non-task hashes contain only 12 intentional changes and all raw coverage counters are positive."
-commit: null
+commit:
+  hash: "73cd6b15af2f88f4071cbea2257b0bfa58e0207c"
+  message: "🧩 TXSGPJ code: implement shared upstream grid option values"
 comments:
   -
     author: "CODER"
     body: "Start: complete actual shared grid option values/defaults/width/copy contract for real Calc view prerequisites, no fake metric/color/config/GUI or duplicate base."
+  -
+    author: "CODER"
+    body: "Verified: genuine shared grid value defaults and copy histories match native, whole Calc and affected shared raw coverage 100%, all16 gates and exact source review pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Whole Calc and complete shared grid owner raw 100% with every counter positive; native full stream, 16 gates, source-absence/static/Calc0UI, exact source review pass. Second upcoming full cycle111 stop preserved."
+  -
+    type: "status"
+    at: "2026-10-13T20:41:29.209Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: genuine shared grid value defaults and copy histories match native, whole Calc and affected shared raw coverage 100%, all16 gates and exact source review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T20:41:27.559Z"
+doc_updated_at: "2026-10-13T20:41:29.210Z"
 doc_updated_by: "CODER"
 description: "Task100 complete original SvxOptionsGrid value/default/copy/assignment/UInt32 getter/setter contract, shared prerequisite for real ScGridOptions/ScViewOptions and future UI grid options; no fake metric/color/config or Calc-only duplicate base."
 sections:
