@@ -4,7 +4,7 @@ title: "Implement Calc reference list and table tokens"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T18:45:39.197Z"
+  updated_by: "CODER"
+  note: "Task96 exact source e27d551efc36b01f51f6fd9c5e9d6222292fd0c3,3286 committed non-task hashes17 intentionalpaths, same-agent separate EVALUATOR pass not independent. Actual full RefList/table families plus unchanged task95 reference responsibility shard; genuine native474sources8normalcommands77781bytes. Calc135/shared252 rawS/B/F/L100 everycounterpositive;16gates/static/Calc0UI pass, source links absent/restored. CALC-085 preserved, no memory library/fake service or UI/ODS readiness claim; continue101 then pause111/repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T18:45:38.279Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR accepts exact e27d551efc36 original list/table token family and unchanged reference responsibility move against normal upstream and current-source raw/gate evidence; not independent review."
+  evaluated_sha: "e27d551efc36b01f51f6fd9c5e9d6222292fd0c3"
+  blueprint_digest: "3729794888c778367c36c076a59931339584d094e776b545a42bf01192d59104"
+  evidence_refs:
+    - ".agentplane/tasks/202610131826-DSFAQQ/README.md"
+    - ".agentplane/tasks/202610131826-DSFAQQ/quality/20261013-184538279-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131826-DSFAQQ/quality/20261013-184538279-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131826-DSFAQQ/quality/20261013-184538279-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131826-DSFAQQ/blueprint/resolved-snapshot.json"
+    - "output/playwright/task96-checks/exact-review.json"
+    - "output/playwright/task96-checks/unchanged-reference-move.json"
+    - "output/playwright/task96-checks/gates-results.json"
+    - "output/playwright/task96-checks/value-coverage-audit.json"
+    - "output/playwright/calc-list-table-token-native/manifest.json"
+  findings:
+    - "3286 current tracked non-task hashes match committed Git blobs; baseline3279 differs only17 approved paths (10 changed7 added). Complete task95 single/double/helper text moved identically into actual responsibility owner; public header/aggregate retained and explicit filename divergence mapped."
+    - "Complete original list/table class/Item/constructor/copy/Clone/getter/setter/comparison definitions plus real full shared/reference headers produce matching77781-byte normal stream,474sources8commands. Raw Calc135tests27owners3706S2479B697F3295L/shared252tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass, links absent/restored."
+    - "Original list-object identity and nullable structured-reference area cloning/payload comparison preserved, including CALC-085. Native value list insertion adapts with explicit data copy, logical move retains source list owner/transfers element identities; ordinary refs only, no generic memory/vector/refcount/finalizer library or fake document/config/compiler/matrix peers."
+    - "Initial observer-prefix/source-absence overlap/test typing/metadata declaration-property errors retained and bounded repairs reviewed; no source verifier/threshold weakening. Existing runtime declaration inventory now points to actual class owners, property/reexport anchors remain evidence. Real upstream table/ref-list QA functions unexecuted consumer context only."
 commit: null
 comments:
   -
@@ -35,8 +58,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: complete original list/table token families over genuine shared/data owners, reference responsibility shard, normal value proof and scoped raw100. No fake services or ownership manager."
+  -
+    type: "verify"
+    at: "2026-10-13T18:45:39.197Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task96 exact source e27d551efc36b01f51f6fd9c5e9d6222292fd0c3,3286 committed non-task hashes17 intentionalpaths, same-agent separate EVALUATOR pass not independent. Actual full RefList/table families plus unchanged task95 reference responsibility shard; genuine native474sources8normalcommands77781bytes. Calc135/shared252 rawS/B/F/L100 everycounterpositive;16gates/static/Calc0UI pass, source links absent/restored. CALC-085 preserved, no memory library/fake service or UI/ODS readiness claim; continue101 then pause111/repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T18:44:24.020Z"
+doc_updated_at: "2026-10-13T18:45:39.264Z"
 doc_updated_by: "CODER"
 description: "Task96 complete original ScRefListToken and ScTableRefToken value/copy/clone/member/equality families needed by real compiler/token array/UI table references, reusing actual existing formula/data/token owners with ordinary JS refs."
 sections:
@@ -63,6 +92,39 @@ sections:
     Result: all16pass.
     Evidence: consolidated gates-results.json preserves actual command argv, retained first failed lint/registry/inventory logs. Fullformat/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. Two test non-null assertions replaced by initialized casts under unchanged nonempty branch; fullformat/lint rerun pass. Existing declaration inventory excludes static properties/reexport specifiers: Item becomes actual property source evidence, moved reference classes declared solely by actual new owner. No checker/threshold weakening, duplicate implementation, fake peer or private forcing. Explicit source responsibility/filename divergence and existing public header/aggregate exports retained.
     Scope:17approved non-task paths including actual responsibility shard, native observer/test/fixture,6owner records/new capability/prior capability updated to moved real owner,3Calc docs. Exact committed source hashes and same-agent separate EVALUATOR required next; no independent review claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T18:45:39.197Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task96 exact source e27d551efc36b01f51f6fd9c5e9d6222292fd0c3,3286 committed non-task hashes17 intentionalpaths, same-agent separate EVALUATOR pass not independent. Actual full RefList/table families plus unchanged task95 reference responsibility shard; genuine native474sources8normalcommands77781bytes. Calc135/shared252 rawS/B/F/L100 everycounterpositive;16gates/static/Calc0UI pass, source links absent/restored. CALC-085 preserved, no memory library/fake service or UI/ODS readiness claim; continue101 then pause111/repairs.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T18:44:24.020Z, excerpt_hash=sha256:8e1d97ece0dc478f9c2f49b9c69696cd4c7197f60a41029275e021e521812635
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131826-DSFAQQ/blueprint/resolved-snapshot.json
+    - old_digest: 3729794888c778367c36c076a59931339584d094e776b545a42bf01192d59104
+    - current_digest: 3729794888c778367c36c076a59931339584d094e776b545a42bf01192d59104
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131826-DSFAQQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610131826-DSFAQQ -m 🧩 DSFAQQ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task96 changes through followup task; restore four links on every exit; do not merge/rewrite branches or alter unrelated tasks."
   Findings: |-
     Resolved native observer error: broad const ScRefList* prefix matched a local variable in extendRangeReference, pulling incomplete/duplicate scopes; original getter exact signature now selects unchanged complete list method block. Initial native-write.log/manifest retained; genuine --write passes.
@@ -110,6 +172,39 @@ Command: node output/playwright/task96-checks/gates.mjs --early; --lint-recheck;
 Result: all16pass.
 Evidence: consolidated gates-results.json preserves actual command argv, retained first failed lint/registry/inventory logs. Fullformat/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. Two test non-null assertions replaced by initialized casts under unchanged nonempty branch; fullformat/lint rerun pass. Existing declaration inventory excludes static properties/reexport specifiers: Item becomes actual property source evidence, moved reference classes declared solely by actual new owner. No checker/threshold weakening, duplicate implementation, fake peer or private forcing. Explicit source responsibility/filename divergence and existing public header/aggregate exports retained.
 Scope:17approved non-task paths including actual responsibility shard, native observer/test/fixture,6owner records/new capability/prior capability updated to moved real owner,3Calc docs. Exact committed source hashes and same-agent separate EVALUATOR required next; no independent review claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T18:45:39.197Z — VERIFY — ok
+
+By: CODER
+
+Note: Task96 exact source e27d551efc36b01f51f6fd9c5e9d6222292fd0c3,3286 committed non-task hashes17 intentionalpaths, same-agent separate EVALUATOR pass not independent. Actual full RefList/table families plus unchanged task95 reference responsibility shard; genuine native474sources8normalcommands77781bytes. Calc135/shared252 rawS/B/F/L100 everycounterpositive;16gates/static/Calc0UI pass, source links absent/restored. CALC-085 preserved, no memory library/fake service or UI/ODS readiness claim; continue101 then pause111/repairs.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T18:44:24.020Z, excerpt_hash=sha256:8e1d97ece0dc478f9c2f49b9c69696cd4c7197f60a41029275e021e521812635
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131826-DSFAQQ/blueprint/resolved-snapshot.json
+- old_digest: 3729794888c778367c36c076a59931339584d094e776b545a42bf01192d59104
+- current_digest: 3729794888c778367c36c076a59931339584d094e776b545a42bf01192d59104
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131826-DSFAQQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610131826-DSFAQQ -m 🧩 DSFAQQ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

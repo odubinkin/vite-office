@@ -1,0 +1,26 @@
+# EVALUATOR opinion: pass
+
+Same-agent separate EVALUATOR accepts exact e27d551efc36 original list/table token family and unchanged reference responsibility move against normal upstream and current-source raw/gate evidence; not independent review.
+
+## Findings
+- 3286 current tracked non-task hashes match committed Git blobs; baseline3279 differs only17 approved paths (10 changed7 added). Complete task95 single/double/helper text moved identically into actual responsibility owner; public header/aggregate retained and explicit filename divergence mapped.
+- Complete original list/table class/Item/constructor/copy/Clone/getter/setter/comparison definitions plus real full shared/reference headers produce matching77781-byte normal stream,474sources8commands. Raw Calc135tests27owners3706S2479B697F3295L/shared252tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass, links absent/restored.
+- Original list-object identity and nullable structured-reference area cloning/payload comparison preserved, including CALC-085. Native value list insertion adapts with explicit data copy, logical move retains source list owner/transfers element identities; ordinary refs only, no generic memory/vector/refcount/finalizer library or fake document/config/compiler/matrix peers.
+- Initial observer-prefix/source-absence overlap/test typing/metadata declaration-property errors retained and bounded repairs reviewed; no source verifier/threshold weakening. Existing runtime declaration inventory now points to actual class owners, property/reexport anchors remain evidence. Real upstream table/ref-list QA functions unexecuted consumer context only.
+
+## Evidence
+- .agentplane/tasks/202610131826-DSFAQQ/README.md
+- output/playwright/task96-checks/exact-review.json
+- output/playwright/task96-checks/unchanged-reference-move.json
+- output/playwright/task96-checks/gates-results.json
+- output/playwright/task96-checks/value-coverage-audit.json
+- output/playwright/calc-list-table-token-native/manifest.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Native counts/layout/ABI/memory/unsupported enum/invalid peers/debug assertions/full original QA excluded; same-agent phase not independent. Full compiler/config/ScTokenArray/document/grid/ODS pending. Goal continues101, pauses111/repairs; Writer-only coverage separate.
