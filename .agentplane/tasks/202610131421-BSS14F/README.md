@@ -1,10 +1,11 @@
 ---
 id: "202610131421-BSS14F"
 title: "Implement original Calc matrix result token owners"
-status: "DOING"
+result_summary: "Implemented actual ScMatrixToken/ScMatrixCellResultToken/ScMatrixFormulaCellToken and ScMatrixRef/ScConstMatrixRef aliases. Original clones/overload and base receiver aliases/dimensions/equality preserved, CALC-075/076 journal and inventory updated. Next actual ScFormulaResult/ScFormulaCell/storage/document/editing/ODS/UI dependencies, goal active, full91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Complete unchanged original class/member scopes, genuine formula and verified matrix context,472LO hashes/17Boost dependency hashes and10319-byte value/identity/payload stream pass normal-only check. No dummy pointee, native count output, sanitizer or new TS memory manager. Typed/generic and nonvirtual base Assign behavior, numeric clones, signed dimensions, resets/equality and CALC-075/076 retained."
     - "Whole Calc131cases raw3352S2256B625F2971L and complete related shared247cases raw4042S2063B829F3620L all100 every raw counter positive. Four source links absent/restored, static/profile0UI and16gates pass. Exact current/committed3226hashes and15intentional non-task paths match source; Writer/shared runtime unchanged. Final post-test implementation-file edits only replace line1 overview comments, no executable/counter-map change."
-commit: null
+commit:
+  hash: "a58d5cafaca3af92d126eac797d3e316cc82271a"
+  message: "🧩 BSS14F task: implement original matrix result token owners with JS references"
 comments:
   -
     author: "CODER"
     body: "Start: actual three matrix result token owners needed by formula result and ODS, reuse real matrix/shared token, preserve original alias/cloning overloads without memory manager."
+  -
+    author: "CODER"
+    body: "Verified: original three matrix result token owners and type-only JS GC aliases over genuine matrix/shared tokens; no runtime ownership library. Native10319-byte stream/8normal commands, Calc131/shared247 raw100, source-absent checks and16gates pass; exact3226hashes and same-agent separate EVALUATOR pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: three original matrix result token owners at a58d5cafaca3af92d126eac797d3e316cc82271a. Normal10319-byte full stream/8commands, Calc131/shared247 raw100 all counters positive, source-absent build/profile and16gates, exact3226hashes/15paths and same-agent separate EVALUATOR pass. Inventory/CALC-075/076 updated, genuine shared owners reused, no new memory manager/fake peer. Actual formula result/document/UI/ODS priority, full91."
+  -
+    type: "status"
+    at: "2026-10-13T14:51:18.554Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original three matrix result token owners and type-only JS GC aliases over genuine matrix/shared tokens; no runtime ownership library. Native10319-byte stream/8normal commands, Calc131/shared247 raw100, source-absent checks and16gates pass; exact3226hashes and same-agent separate EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:50:33.660Z"
+doc_updated_at: "2026-10-13T14:51:18.555Z"
 doc_updated_by: "CODER"
 description: "Iteration88 UI/ODS prerequisite for real ScFormulaResult/ScFormulaCell: actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken using existing matrix/formula token owners, no reference manager."
 sections:
