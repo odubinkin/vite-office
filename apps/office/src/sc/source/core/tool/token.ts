@@ -4,11 +4,6 @@ import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 
-import { OpCode } from "../../../../formula/inc/opcode";
-import { ScSingleRefData, ScComplexRefData } from "../../../inc/refdata";
-import { ScSheetLimits } from "../../../inc/sheetlimits";
-import { ScAddress } from "../../../inc/address";
-
 /** Original empty-cell token retaining inherited and display-as-string flags. */
 export class ScEmptyCellToken extends FormulaToken {
   private readonly bInherited: boolean;
@@ -315,120 +310,9 @@ export class ScMatrixFormulaCellToken extends ScMatrixCellResultToken {
   }
 }
 
-/** Original single-reference token copies data and borrows sheet limits through ordinary JS references. */
-export class ScSingleRefToken extends FormulaToken {
-  private readonly mrSheetLimits: ScSheetLimits;
-  private readonly aSingleRef: ScSingleRefData;
-  /** Original data/default-opcode and implicit copy construction. @param args - Bounds/data/opcode or copied token. @returns Reference token. */
-  constructor(
-    ...args:
-      | [source: ScSingleRefToken]
-      | [limits: ScSheetLimits, reference: ScSingleRefData, opcode?: OpCode]
-  ) {
-    const first = args[0];
-    super(
-      first instanceof ScSingleRefToken ? first : StackVar.svSingleRef,
-      args[2] ?? OpCode.ocPush,
-    );
-    this.mrSheetLimits = first instanceof ScSingleRefToken ? first.mrSheetLimits : first;
-    this.aSingleRef = new ScSingleRefData(
-      first instanceof ScSingleRefToken ? first.aSingleRef : (args[1] as ScSingleRefData),
-    );
-  }
-  /** Original stable mutable member reference, also used by const callers. @returns Owned reference data. */
-  GetSingleRef(): ScSingleRefData {
-    return this.aSingleRef;
-  }
-  /** Original base comparison precedes origin-range text comparison using receiver limits. @param token - True matching reference token or base mismatch. @returns Text equality. */
-  override TextEqual(token: FormulaTokenConstReference): boolean {
-    return (
-      super.equals(token) && checkTextEqual(this.mrSheetLimits, this, token as ScSingleRefToken)
-    );
-  }
-  /** Original data equality after base discriminator/opcode equality. @param token - Original compared token. @returns Equality. */
-  override equals(token: FormulaTokenConstReference): boolean {
-    return (
-      super.equals(token) && this.aSingleRef.equals((token as ScSingleRefToken).GetSingleRef())
-    );
-  }
-  /** Original implicit-copy clone has independent member storage and shared limits. @returns Copied token. */
-  override Clone(): FormulaToken {
-    return new ScSingleRefToken(this);
-  }
-}
-
-/** Original range-reference token copies both endpoints and trim state, retaining the original bounds owner. */
-export class ScDoubleRefToken extends FormulaToken {
-  private readonly mrSheetLimits: ScSheetLimits;
-  private readonly aDoubleRef: ScComplexRefData;
-  /** Original range/default-opcode and implicit copy construction. @param args - Bounds/data/opcode or copied token. @returns Range token. */
-  constructor(
-    ...args:
-      | [source: ScDoubleRefToken]
-      | [limits: ScSheetLimits, reference: ScComplexRefData, opcode?: OpCode]
-  ) {
-    const first = args[0];
-    super(
-      first instanceof ScDoubleRefToken ? first : StackVar.svDoubleRef,
-      args[2] ?? OpCode.ocPush,
-    );
-    this.mrSheetLimits = first instanceof ScDoubleRefToken ? first.mrSheetLimits : first;
-    this.aDoubleRef = new ScComplexRefData(
-      first instanceof ScDoubleRefToken ? first.aDoubleRef : (args[1] as ScComplexRefData),
-    );
-  }
-  /** Original first endpoint member reference. @returns Owned endpoint. */
-  GetSingleRef(): ScSingleRefData {
-    return this.aDoubleRef.Ref1;
-  }
-  /** Original stable mutable range member reference. @returns Owned range data. */
-  GetDoubleRef(): ScComplexRefData {
-    return this.aDoubleRef;
-  }
-  /** Original second endpoint member reference. @returns Owned endpoint. */
-  GetSingleRef2(): ScSingleRefData {
-    return this.aDoubleRef.Ref2;
-  }
-  /** Original base guard and origin-range text comparison with receiver limits. @param token - True matching range token or base mismatch. @returns Text equality. */
-  override TextEqual(token: FormulaTokenConstReference): boolean {
-    return (
-      super.equals(token) && checkTextEqual(this.mrSheetLimits, this, token as ScDoubleRefToken)
-    );
-  }
-  /** Original range data equality; original reference-data comparison ignores trim state. @param token - Compared token. @returns Equality. */
-  override equals(token: FormulaTokenConstReference): boolean {
-    return (
-      super.equals(token) && this.aDoubleRef.equals((token as ScDoubleRefToken).GetDoubleRef())
-    );
-  }
-  /** Original implicit-copy clone keeps independent endpoint owners and shared bounds. @returns Copied token. */
-  override Clone(): FormulaToken {
-    return new ScDoubleRefToken(this);
-  }
-}
-
-/** Original matching-reference text helper uses origin-normalized ranges and exact endpoint flags. @param limits - Receiver bounds. @param left - True reference token. @param right - Same concrete tag/opcode token. @returns Text equality. */
-function checkTextEqual(
-  limits: ScSheetLimits,
-  left: ScSingleRefToken | ScDoubleRefToken,
-  right: ScSingleRefToken | ScDoubleRefToken,
-): boolean {
-  const temp1 = new ScComplexRefData();
-  if (left.GetType() === StackVar.svSingleRef) {
-    temp1.Ref1.assign(left.GetSingleRef());
-    temp1.Ref2.assign(temp1.Ref1);
-  } else temp1.assign((left as ScDoubleRefToken).GetDoubleRef());
-  const temp2 = new ScComplexRefData();
-  if (right.GetType() === StackVar.svSingleRef) {
-    temp2.Ref1.assign(right.GetSingleRef());
-    temp2.Ref2.assign(temp2.Ref1);
-  } else temp2.assign((right as ScDoubleRefToken).GetDoubleRef());
-  const origin = new ScAddress();
-  const range1 = temp1.toAbs(limits, origin),
-    range2 = temp2.toAbs(limits, origin);
-  return (
-    range1.equals(range2) &&
-    temp1.Ref1.FlagValue() === temp2.Ref1.FlagValue() &&
-    temp1.Ref2.FlagValue() === temp2.Ref2.FlagValue()
-  );
-}
+export {
+  ScSingleRefToken,
+  ScDoubleRefToken,
+  ScRefListToken,
+  ScTableRefToken,
+} from "./token.references";

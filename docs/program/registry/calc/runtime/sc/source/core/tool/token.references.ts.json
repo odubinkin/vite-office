@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "capabilityIds": [
+      "CAP-503e376c-7b49-4dcf-8ce3-5a5f6651162f",
+      "CAP-553b5cad-56f6-4e1c-b863-8963b34cc509"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/token.references.ts#ScSingleRefToken",
+        "apps/office/src/sc/source/core/tool/token.references.ts#ScRefListToken",
+        "apps/office/src/sc/source/core/tool/list-table-token.test.ts#matches complete original list and table reference token state and alias histories",
+        "apps/office/src/sc/source/core/tool/reference-token.test.ts#matches complete original reference-token copy, mutation, flags and text comparisons",
+        "docs/program/calc-browser-gc-adaptation.md#Reference token values and retained bounds",
+        "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScTableRefToken::ScTableRefToken",
+        "apps/office/src/sc/source/core/tool/token.references.ts#static readonly Item"
+      ],
+      "justification": "Task96 ports complete original ScRefListToken and ScTableRefToken constructors/defaults/copies/Clone/getters/mutators/equality using existing shared FormulaToken and real reference data. Reference responsibility moves unchanged task95 single/double/helper implementation into token.references.ts because adding complete original list/table families exceeds enforced500line token.ts limit; canonical token.ts/header exports retained and explicit responsibility-split provenance records added. RefList owns initialized value arrays: native push_back(value) maps to push(new ScComplexRefData(value)); copy/Clone copies values, implicit move transfers initialized element identities while preserving and emptying the source list owner. No generic vector/memory/refcount/pool/finalizer library. RefList compares collection-object identity, so distinct copies/clones compare unequal (CALC-085). Table UInt16 index/original Item masks/nullable genuine token RPN references are retained; copy/Clone clones area tokens and equality compares payloads. Ordinary JS references own areas; existing SAL/SVL boundary unchanged. Complete original class definitions and methods over verified genuine reference/shared/header dependencies produce a full normal initialized native stream; native layout/count/memory/sanitizers/invalid casts/unsupported enum/uninitialized/whole QA excluded. Original structured-reference and reference-list array-result QA anchors are unexecuted document consumer context. Actual compiler/ScTokenArray/configuration/ScFormulaCell/document/grid/ODS remain prioritized pending owners; nextfull101 continues, pause after secondfull111/relevant repairs. Writer-only coverage remains separate. Original Item constants are anchored as actual static-property evidence; runtime callable/declaration symbol inventory excludes PropertyDeclaration by its existing contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScSingleRefToken",
+        "ScDoubleRefToken",
+        "checkTextEqual",
+        "ScRefListToken",
+        "ScTableRefToken",
+        "GetRefList",
+        "IsArrayResult",
+        "GetSingleRef",
+        "GetDoubleRef",
+        "GetSingleRef2",
+        "TextEqual",
+        "equals",
+        "Clone",
+        "move",
+        "GetIndex",
+        "SetIndex",
+        "GetItem",
+        "AddItem",
+        "SetAreaRefRPN",
+        "GetAreaRefRPN"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/token.cxx",
+      "upstreamSymbols": [
+        "ScSingleRefToken",
+        "ScDoubleRefToken",
+        "checkTextEqual",
+        "ScRefListToken",
+        "ScTableRefToken"
+      ]
+    }
+  }
+}

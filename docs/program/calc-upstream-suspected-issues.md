@@ -1732,3 +1732,13 @@ ScSingleRefToken/ScDoubleRefToken::TextEqual passes its own mrSheetLimits to che
 Evidence: task95 complete original class/helper/member definitions over genuine reference/address/limit headers, initialized normal-only bounds/copybounds/clonebounds observations, and matching portable replay. Intended same-document/bounds caller preconditions and real sorting consumers remain unverified; no unsupported staticcast, overflow, memory or full document experiment.
 
 Decision: preserve receiver-limit selection and original invalid-coordinate normalization. Audit real compiler/document/sort callers before attributing user-visible impact; do not silently symmetrize the comparison.
+
+## CALC-085: reference-list tokens compare collection identity
+
+Status: confirmed original initialized equality behavior; rationale and user-visible consequences are unverified.
+
+ScRefListToken::operator== compares the address of its own aRefList vector with the other token's GetRefList() before comparing mbArrayResult. Distinct copies/clones have independent vector objects and therefore compare unequal even when all copied ranges and the array-result flag match. Self comparison succeeds. ScTableRefToken copies clone an area token; a list-token area consequently makes a table copy compare unequal under the original area-payload comparator.
+
+Evidence: task96 complete unchanged original list/table class declarations and members over genuine shared/reference dependencies, initialized normal-only self/copy/Clone/list/table-area observations and full portable replay. Native getters and constructors permit this initialized list-area input; whether real document consumers use it remains unverified. No private-state forcing, fake type peers or memory/count experiment.
+
+Decision: preserve collection-object equality and area Clone semantics. Audit original union/structured-reference consumers before identifying a defect; do not substitute deep list equality.

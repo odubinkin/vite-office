@@ -3,6 +3,8 @@ export {
   ScEmptyCellToken,
   ScSingleRefToken,
   ScDoubleRefToken,
+  ScRefListToken,
+  ScTableRefToken,
   ScHybridCellToken,
   ScMatrixToken,
   ScMatrixCellResultToken,

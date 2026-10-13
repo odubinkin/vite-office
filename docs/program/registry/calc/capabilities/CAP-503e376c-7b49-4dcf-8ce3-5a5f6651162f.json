@@ -26,11 +26,11 @@
     "local": {
       "implementation": [
         {
-          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
           "marker": "ScSingleRefToken"
         },
         {
-          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
           "marker": "ScDoubleRefToken"
         },
         {
@@ -82,7 +82,8 @@
     "aspect": "model-operation",
     "atomicOperation": "original-reference-token-values-and-text-equality",
     "scopeLimitations": [
-      "Task95 implements actual ScSingleRefToken and ScDoubleRefToken constructor/default opcode, implicit copy/Clone, stable mutable data member references, value equality and complete checkTextEqual. Existing shared FormulaToken, ScSingleRefData/ScComplexRefData, ScSheetLimits/ScAddress/ScRange are reused. Single/range data are copied by value while sheet bounds use ordinary shared JS references; no reference counting, Boost, allocator, lifetime manager or fake document/compiler/matrix peer. Full original class declarations and complete doc-free member/helper/data definitions with genuine full headers produce a matching 1805559-byte normal-only initialized stream over all256flags, coordinate bounds, opcode/type mismatches, copies/clones/input/member mutations, trim retention and receiver limits. Normalized range text equality may differ from raw equality; receiver-bound asymmetry CALC-084 is preserved. Invalid staticcast peers, native counts/layout/debug assertions/overflow/memory behavior are excluded. Original formula token equality QA anchor is unexecuted document-level context only. Full compiler/ScTokenArray/ScFormulaCell/document/input/grid/ODS pipeline remain pending. Goal continues after upcoming full101 and pauses after second full111 plus relevant Calc/shared repairs."
+      "Task95 implements actual ScSingleRefToken and ScDoubleRefToken constructor/default opcode, implicit copy/Clone, stable mutable data member references, value equality and complete checkTextEqual. Existing shared FormulaToken, ScSingleRefData/ScComplexRefData, ScSheetLimits/ScAddress/ScRange are reused. Single/range data are copied by value while sheet bounds use ordinary shared JS references; no reference counting, Boost, allocator, lifetime manager or fake document/compiler/matrix peer. Full original class declarations and complete doc-free member/helper/data definitions with genuine full headers produce a matching 1805559-byte normal-only initialized stream over all256flags, coordinate bounds, opcode/type mismatches, copies/clones/input/member mutations, trim retention and receiver limits. Normalized range text equality may differ from raw equality; receiver-bound asymmetry CALC-084 is preserved. Invalid staticcast peers, native counts/layout/debug assertions/overflow/memory behavior are excluded. Original formula token equality QA anchor is unexecuted document-level context only. Full compiler/ScTokenArray/ScFormulaCell/document/input/grid/ODS pipeline remain pending. Goal continues after upcoming full101 and pauses after second full111 plus relevant Calc/shared repairs.",
+      "Task96 moves single/double implementation unchanged into explicit token.references.ts responsibility shard to satisfy500line cap; canonical header/aggregate reexports retain public names."
     ],
     "implemented": true,
     "contractParity": false,

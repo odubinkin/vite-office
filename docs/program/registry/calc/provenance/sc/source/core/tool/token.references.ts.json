@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/token.references.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/token.cxx",
+    "localSymbols": [
+      "ScSingleRefToken",
+      "ScDoubleRefToken",
+      "checkTextEqual",
+      "ScRefListToken",
+      "ScTableRefToken",
+      "GetRefList",
+      "IsArrayResult",
+      "GetSingleRef",
+      "GetDoubleRef",
+      "GetSingleRef2",
+      "TextEqual",
+      "equals",
+      "Clone",
+      "move",
+      "Item",
+      "GetIndex",
+      "SetIndex",
+      "GetItem",
+      "AddItem",
+      "SetAreaRefRPN",
+      "GetAreaRefRPN"
+    ],
+    "upstreamSymbols": [
+      "ScSingleRefToken",
+      "ScDoubleRefToken",
+      "checkTextEqual",
+      "ScRefListToken",
+      "ScTableRefToken"
+    ],
+    "preservedResponsibilities": [
+      "Original single/range/list/table reference token value/member/equality core responsibility.",
+      "Existing shared token/refdata/address/sheet limits reused, canonical token header/core aggregate exports retained."
+    ],
+    "omittedResponsibilities": [
+      "Task96 ports complete original ScRefListToken and ScTableRefToken constructors/defaults/copies/Clone/getters/mutators/equality using existing shared FormulaToken and real reference data. Reference responsibility moves unchanged task95 single/double/helper implementation into token.references.ts because adding complete original list/table families exceeds enforced500line token.ts limit; canonical token.ts/header exports retained and explicit responsibility-split provenance records added. RefList owns initialized value arrays: native push_back(value) maps to push(new ScComplexRefData(value)); copy/Clone copies values, implicit move transfers initialized element identities while preserving and emptying the source list owner. No generic vector/memory/refcount/pool/finalizer library. RefList compares collection-object identity, so distinct copies/clones compare unequal (CALC-085). Table UInt16 index/original Item masks/nullable genuine token RPN references are retained; copy/Clone clones area tokens and equality compares payloads. Ordinary JS references own areas; existing SAL/SVL boundary unchanged. Complete original class definitions and methods over verified genuine reference/shared/header dependencies produce a full normal initialized native stream; native layout/count/memory/sanitizers/invalid casts/unsupported enum/uninitialized/whole QA excluded. Original structured-reference and reference-list array-result QA anchors are unexecuted document consumer context. Actual compiler/ScTokenArray/configuration/ScFormulaCell/document/grid/ODS remain prioritized pending owners; nextfull101 continues, pause after secondfull111/relevant repairs. Writer-only coverage remains separate."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScRefListToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/list-table-token.test.ts",
+          "marker": "matches complete original list and table reference token state and alias histories"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "ScRefListToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScTableRefToken::ScTableRefToken"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/token.references.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Complete original reference-token responsibility exceeds the enforced500line core owner cap when combined with existing result/matrix tokens; token.references.ts holds the actual single/range/list/table family while token.ts remains canonical aggregate boundary."
+    }
+  }
+}

@@ -93,3 +93,7 @@ remains its current separate shared boundary.
 ## Reference token values and retained bounds
 
 Task95 single/range tokens keep copied reference-data members and an ordinary shared reference to ScSheetLimits. Mutable getters return those exact owned endpoint objects; implicit copy/Clone creates independent data while retaining the same bounds owner. No native reference counter, destructor timing, weak reference, finalizer, pool or custom allocator is reproduced. Text/value comparison and receiver-bound behavior remain original. Native observations cover initialized values and logical member identity, excluding physical addresses and counts.
+
+## Reference lists and structured-table areas
+
+Task96 list tokens own ordinary arrays of initialized reference-data values. Native vector insertion is translated as explicit data copy, not shared element insertion; copies/Clone copy each value, while logical move transfers elements and preserves/empties the source collection owner. Physical vector capacity/reallocation and pointer arithmetic are excluded. List-object identity equality stays original. Table area tokens use ordinary retained references; copy/Clone invokes the actual area token Clone. No refcounts, smart pointers, weak references, finalizers, pools or memory library are added. Existing shared SAL/SVL cleanup remains its separate unchanged boundary.
