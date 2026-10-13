@@ -1,10 +1,11 @@
 ---
 id: "202610131458-ZDH0CQ"
 title: "Implement original Calc formula result state owner"
-status: "DOING"
+result_summary: "Implemented original ScFormulaResult constructors/assignment/resolution/cache/error/empty/type/query/matrix/hybrid import behavior and grouped outputs, with ordinary JS refs/no native memory manager. Inventory, GC invariant proof and CALC-077/078 updated. Actual ScFormulaCell/storage/document/editing/UI/ODS remain next real owners, goal active and next full91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Full unchanged original result class/header/source over genuine matrix/token/value peers,474LO hashes/17verified Boost dependency headers,114594-byte full normal stream/8positive commands. Original cache/error/empty/type/copy/destination-matrix/hybrid/output and alias histories retained. JS refs omit physical ownership/policy/fixups, no memory library or fake peer. Unreachable guard specialization has explicit GetType/ResolveToken invariant proof; no private-state forcing or coverage ignores."
     - "Calc132tests43files raw3579S2400B658F3178L and related shared248tests54files raw4042S2063B829F3620L all100 every raw counter positive. Sources absent/restored, static and Calc profile0UI,16gates/36tooling/123inventory pass. Exact3230current/committed hashes and13intentional non-task paths, Writer/shared runtime unchanged. Original related two-owner file526lines stays below1000hard gate; no unnecessary source split. CALC-077/078 journal and inventory updated."
-commit: null
+commit:
+  hash: "78c6835ac9118a5001b388a81091624533be73ac"
+  message: "🧩 ZDH0CQ task: implement original formula result state and cached imports"
 comments:
   -
     author: "CODER"
     body: "Start: full original ScFormulaResult state/query/hybrid owner over actual existing peers, preserve legal value/cache/error/matrix transitions with GC refs and no memory manager."
+  -
+    author: "CODER"
+    body: "Verified: actual complete ScFormulaResult initialized state/query/hybrid owner over genuine existing peers, ordinary GC refs and invariant-specialized guards without ignored counters. Native114594-byte stream, Calc132/shared248 raw100, source-absent static/profile and16gates pass; exact3230hashes and same-agent separate EVALUATOR pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: actual complete ScFormulaResult legal value/cache/query/import owner at78c6835ac9118a5001b388a81091624533be73ac.114594-byte normal stream/8commands, Calc132/shared248 raw100 all counters positive, source-absent static/profile and16gates, exact3230hashes/13paths and same-agent separate EVALUATOR pass. Inventory/CALC-077/078/GC invariant proof updated, no new memory manager/fake peer. Actual formula cell/document/UI/ODS next, full91."
+  -
+    type: "status"
+    at: "2026-10-13T15:37:18.072Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual complete ScFormulaResult initialized state/query/hybrid owner over genuine existing peers, ordinary GC refs and invariant-specialized guards without ignored counters. Native114594-byte stream, Calc132/shared248 raw100, source-absent static/profile and16gates pass; exact3230hashes and same-agent separate EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T15:36:59.447Z"
+doc_updated_at: "2026-10-13T15:37:18.073Z"
 doc_updated_by: "CODER"
 description: "Iteration89 actual ScFormulaResult over real existing tokens/matrices/shared values, cached results and hybrid import transitions for ScFormulaCell/UI/ODS; ordinary JS refs, no memory manager."
 sections:
