@@ -1,10 +1,11 @@
 ---
 id: "202610130501-G2BDHD"
 title: "Replace Boost token ownership with native JavaScript references"
-status: "DOING"
+result_summary: "Replaced Boost token ownership and manual token reference counters with native JavaScript references while preserving semantic alias and clone behavior"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -59,6 +60,9 @@ comments:
   -
     author: "CODER"
     body: "Implementation: native JS token references committed atdf1dc1a89f35; Boost/token ownership hooks removed, entire Calc125/shared242 raw100 and16final gates pass. Original fixtures unchanged, user-authorized GC adaptation inventoried; same-agent separate EVALUATOR follows, main goal remains paused."
+  -
+    author: "CODER"
+    body: "Verified: removed Boost intrusive_ptr and token counter/policy/atomic/ADL/delete machinery, replaced references with nullable JS aliases and direct FAP identity. Clone/value/equality behavior passes original semantic projections and live-alias regressions; original captures unchanged. Whole Calc125/shared242 raw S/B/F/L100 every counter positive, source-absent static/profile0UI and16final gates/36tooling/123inventory pass. Exact3197committed hashes and42intentional paths atdf1dc1a89f35456ca3170c731dce33324e2e78c2 pass same-agent separate EVALUATOR. Current inventory records user-approved browser adaptation, shared value cleanup remains unchanged, main goal stays paused."
 events:
   -
     type: "status"
@@ -80,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: user-authorized native JS token references remove Boost and token ownership hooks atdf1dc1a89f35456ca3170c731dce33324e2e78c2. Calc125/shared242 whole raw100 every counter positive, original semantic projections/aliases/clone behavior, unchanged fixtures, source-absent build/profile0UI and16final gates/36tooling/123inventory pass. Exact3197hashes and same-agent separate EVALUATOR pass; legacy shared-value cleanup unchanged, main goal remains paused."
+  -
+    type: "status"
+    at: "2026-10-13T05:49:49.737Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: removed Boost intrusive_ptr and token counter/policy/atomic/ADL/delete machinery, replaced references with nullable JS aliases and direct FAP identity. Clone/value/equality behavior passes original semantic projections and live-alias regressions; original captures unchanged. Whole Calc125/shared242 raw S/B/F/L100 every counter positive, source-absent static/profile0UI and16final gates/36tooling/123inventory pass. Exact3197committed hashes and42intentional paths atdf1dc1a89f35456ca3170c731dce33324e2e78c2 pass same-agent separate EVALUATOR. Current inventory records user-approved browser adaptation, shared value cleanup remains unchanged, main goal stays paused."
 doc_version: 3
-doc_updated_at: "2026-10-13T05:48:25.710Z"
+doc_updated_at: "2026-10-13T05:49:49.739Z"
 doc_updated_by: "CODER"
 description: "Explicit user correction: remove Boost intrusive_ptr runtime and token retain/release/delete counters, use ordinary JS references for FormulaTokenRef/FormulaConstTokenRef and FAP. Preserve token identity/cloning/semantic values, retain existing shared value cleanup API where needed without token ownership hooks; no GC finalizers/refcount engine. Migrate native tests to explicit semantic projections, update current inventory/deviation docs and verify whole Calc/affected shared raw100. Main goal remains paused."
 sections:
