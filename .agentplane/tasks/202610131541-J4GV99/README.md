@@ -1,10 +1,11 @@
 ---
 id: "202610131541-J4GV99"
 title: "Honor native disabled-item traversal in menubar popups"
-status: "DOING"
+result_summary: "Restore native disabled menubar selection/default traversal; preserve registered Space adapter, verified current-source100four and1595unique assertions, cadence7/10."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 30
+revision: 31
 origin:
   system: "manual"
 depends_on: []
@@ -45,7 +46,9 @@ quality_review:
     - "Current final related1550pass/218files,26tooling,19unique Chromium including2new1280/390 cases and17old regressions; native states/Execute/history/focus use original WriterSession/Sfx bindings. Complete current original CommandMenuBar Istanbul100L205/S227/F48/B210,485positive raw counters and original locations/IDs/current source verified, no exclusions/normalization/threshold/provider changes. All9committed blobs match frozen final evidence;137static files unchanged."
     - "946other oldtestfiles byte-identical.7source-backed obsolete parameter cases in4files only;6approved declaration ranges preserve original helpers/imports/loops/independent-case bytes, End Omega role/focus semantics and ArrowLeft original tokens verified. Initial source-backed failures retained; actual helper module extraction justifies one current-source related revalidation. TS7 narrowed End cleanup tested2only, fresh permanent editing-host fixture corrected2only without17old browser replay. Protected explicitly registered Space adapter retained, demonstrated by old root/submenu Space Chromium cases."
     - "2canonical historical arrays/scalars/status/default/classification prefixes preserved, all4references physically hidden every actual producer and exact original links restored,9metadata/static/types/lint/docs/size/deps gates pass. No upstream code/runtime/helper/rawmap copies in Agentplane, no network/publication/global reads, no broad parity promotion."
-commit: null
+commit:
+  hash: "04fc280a053e2f96b76f534d8acaa3648152d89a"
+  message: "🧩 J4GV99 fix: retain native disabled menubar selection"
 comments:
   -
     author: "CODER"
@@ -56,6 +59,9 @@ comments:
   -
     author: "CODER"
     body: "Start: related1550 has1546pass/4source-obsolete parameter assertions; scope explicitly includes2shared old files with guarded Home/ArrowRight and native disabled traversal expectations. Current original whole module100four; no passing-profile replay, only4failures and pending static/browser checks."
+  -
+    author: "CODER"
+    body: "Verified: native disabled menubar popup traversal/preselection/Return cancellation via existing DOM attributes/focus/click and original Sfx bindings, registered Space/IO/recovery preserved.1595unique assertions, current whole module100four/485positive raw counters,946otheroldtests/2canonical prefixes/137staticfiles/9metadata checks pass,4refs absent every producer/exact restore. Exact04fc280a053e2f96b76f534d8acaa3648152d89a same-agent non-independent review; no full parity promotion. Cadence7/10, full once10 then user pause after full+repairs."
 events:
   -
     type: "status"
@@ -84,8 +90,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "1595unique assertions:1550current-related/26tooling/19Chromium; whole1original module100four/485positive counters/current original IDs/locations,946otheroldtests/2canonical prefixes/137staticfiles/9metadata gates pass. Source-backed7old parameter cases only; Space/IO/recovery preserved. Actual helper module extraction justifies one current-source related replay; failed-only fixture/TS7 closures retained.4refs absent every producer/restored. Cadence7/10."
+  -
+    type: "status"
+    at: "2026-10-13T16:28:13.777Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native disabled menubar popup traversal/preselection/Return cancellation via existing DOM attributes/focus/click and original Sfx bindings, registered Space/IO/recovery preserved.1595unique assertions, current whole module100four/485positive raw counters,946otheroldtests/2canonical prefixes/137staticfiles/9metadata checks pass,4refs absent every producer/exact restore. Exact04fc280a053e2f96b76f534d8acaa3648152d89a same-agent non-independent review; no full parity promotion. Cadence7/10, full once10 then user pause after full+repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T16:28:10.428Z"
+doc_updated_at: "2026-10-13T16:28:13.779Z"
 doc_updated_by: "CODER"
 description: "Use original bindings disabled states in native popup selection order; keep disabled HTML buttons unactivated and focus their owning menu, source Return cancellation. Preserve registered browser Space activation adapter and all IO/recovery differences. Original native/mounted/Chromium proof and whole current module100four; correction7/10."
 sections:
@@ -362,6 +375,10 @@ sections:
     Bounded represented native menubar disabled traversal, keyboard preselection and Return cancellation only. Full pointer timers/mnemonics, shared popup-controller integration, native full focus graph/platform behavior and full core/UI parity remain unverified. No suspected core bug introduced/invented, no upstream/helper/Python/rawmap copies in Agentplane, no network/global access/publication. Human native-JS principle respected and explicit Space adapter protected after source discovery. Exact semanticSHA same-agent non-independent EVALUATOR review follows. Goalactive cadence7/10; full once10, pause after next full plus repairs per human. This related218file profile is not the full suite.
 
     Exact semantic commit 04fc280a053e2f96b76f534d8acaa3648152d89a reviewed and accepted in same-agent EVALUATOR phase (not independent review), report .agentplane/tasks/202610131541-J4GV99/quality/20261013-162616807-recovery-context/quality-report.json. All9committed blobs match final frozen current-source/test/canonical evidence and137static files.1595unique accepted assertions, full original module100four/485positive counters,946otheroldtests/2canonical history prefixes/9metadata gates pass. Registered Space adapter/IO/recovery preserved. Ready for clean direct close; goalactive7/10, full once10 then human pause after next full plus repairs.
+extensions:
+  implementation_commit:
+    hash: "04fc280a053e2f96b76f534d8acaa3648152d89a"
+    message: "🧩 J4GV99 fix: retain native disabled menubar selection"
 id_source: "generated"
 ---
 ## Summary
