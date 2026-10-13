@@ -4,7 +4,7 @@ title: "Implement shared formula grammar operations for Calc and ODS"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T17:29:32.992Z"
+  updated_by: "CODER"
+  note: "Exact fd0b6de45d2a3265hashes16intentionalpaths reviewed; normal original grammar13349byte381line stream9sources2commands matches. Whole Calc133/shared2raw100 every counter, source links restored, static/Calc profile0UI and16gates pass. No Writer changes, native invalid enum/debug assertion/full UI/ODS claim; pause after full101/repairs pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T17:29:32.307Z"
+  updated_by: "EVALUATOR"
+  note: "Exact fd0b6de45d2a current/committed3265non-task hashes,16intentionalpaths; original shared grammar static family and IDL owner, scoped raw100 and16gates pass."
+  evaluated_sha: "fd0b6de45d2a0be15324aa322d5bec8aeefae903"
+  blueprint_digest: "514e3fe1dad4547ac14e030bd1e78252ec550ab63752eded98966196e040c28b"
+  evidence_refs:
+    - ".agentplane/tasks/202610131710-MCM7S2/README.md"
+    - ".agentplane/tasks/202610131710-MCM7S2/quality/20261013-172932307-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131710-MCM7S2/quality/20261013-172932307-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131710-MCM7S2/quality/20261013-172932307-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131710-MCM7S2/blueprint/resolved-snapshot.json"
+    - "output/playwright/task93-checks/exact-review.json"
+    - "output/playwright/task93-checks/gates-results.json"
+    - "output/playwright/task93-checks/value-coverage-audit.json"
+    - "output/playwright/formula-grammar-native/manifest.json"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "Full unchanged grammar header/source and genuine generated/configured headers compare13349bytes381lines,9original source hashes and2normal commands. Native negative convention casts explicitly excluded; original JS signed arithmetic/release behavior retained, no fake parser/library or sanitizer."
+    - "Whole Calc133tests44files and affected shared2tests1file every raw counter positive S/B/F/L100, exact links restored, static/Calc0UI pass. One source-backed formula-offapi dependency edge preserves cycle checks. Metadata/format failures retained and corrected without threshold/validation changes."
+    - "Source snapshots show Writer unchanged, existing shared grammar header extended with real core/IDL owners. Final post-profile edits only formatter/helper, boundary enforcement and metadata; runtime/test/capture values unchanged. Same-agent separate evaluator is not independent review; pause after full101/repairs remains pending."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: original shared formula grammar/static masks and FormulaLanguage owner for actual Calc default/storage grammars, portable JS bitops and no compiler/document substitute."
+  -
+    type: "verify"
+    at: "2026-10-13T17:29:32.992Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact fd0b6de45d2a3265hashes16intentionalpaths reviewed; normal original grammar13349byte381line stream9sources2commands matches. Whole Calc133/shared2raw100 every counter, source links restored, static/Calc profile0UI and16gates pass. No Writer changes, native invalid enum/debug assertion/full UI/ODS claim; pause after full101/repairs pending."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:28:17.528Z"
+doc_updated_at: "2026-10-13T17:29:33.042Z"
 doc_updated_by: "CODER"
 description: "Task93 completes original shared FormulaGrammar static value/mapping/mask/convention operations and actual FormulaLanguage IDL constants needed by real Calc formula cells/UI and ODF import/export; no substitute parser or model."
 sections:
@@ -62,6 +90,39 @@ sections:
     Command: node output/playwright/task93-checks/gates.mjs
     Result: pass; all16required terminal gates exit0, final metadata rechecks retained.
     Scope: whole format/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. Final changed provenance JSON passes targeted Prettier after the passed whole formatter scan. Exact commit/current hashes and same-agent separate EVALUATOR required before closure; not independent review.16intentional non-task paths, no unrelated Writer changes, goal active until full101/repairs then user pause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T17:29:32.992Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact fd0b6de45d2a3265hashes16intentionalpaths reviewed; normal original grammar13349byte381line stream9sources2commands matches. Whole Calc133/shared2raw100 every counter, source links restored, static/Calc profile0UI and16gates pass. No Writer changes, native invalid enum/debug assertion/full UI/ODS claim; pause after full101/repairs pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T17:28:17.528Z, excerpt_hash=sha256:be6a314e7e34db2430790f8ee59befda3aec07a19d305eaea600f1e6f0f102f9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131710-MCM7S2/blueprint/resolved-snapshot.json
+    - old_digest: 514e3fe1dad4547ac14e030bd1e78252ec550ab63752eded98966196e040c28b
+    - current_digest: 514e3fe1dad4547ac14e030bd1e78252ec550ab63752eded98966196e040c28b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131710-MCM7S2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610131710-MCM7S2 -m 🧩 MCM7S2 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task93 files through followup task; restore all reference links, no merge/history rewrite or unrelated tasks."
   Findings: |-
     Task93 completes original shared FormulaGrammar static value/mapping/query family and actual FormulaLanguage IDL owner required by real Calc grammar defaults, UI and ODS storage. Uses JS signed32bit ops directly, no flags library/parser/alternate model. Existing original address enum witness unchanged. Production NDEBUG semantics omit debug support assert; no invented rejection of unsupported packed merge results. Native invalid enum/ABI/full original QA not certified, original QA anchors remain unexecuted caller context. Compiler/document/storage/editing/input/view/UI/ODS still pending real owners; first-UI/shared-backed-ODS priority retained.
@@ -107,6 +168,39 @@ Scope: actual shared grammar/core/FormulaLanguage and Calc consumers; existing g
 Command: node output/playwright/task93-checks/gates.mjs
 Result: pass; all16required terminal gates exit0, final metadata rechecks retained.
 Scope: whole format/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. Final changed provenance JSON passes targeted Prettier after the passed whole formatter scan. Exact commit/current hashes and same-agent separate EVALUATOR required before closure; not independent review.16intentional non-task paths, no unrelated Writer changes, goal active until full101/repairs then user pause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T17:29:32.992Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact fd0b6de45d2a3265hashes16intentionalpaths reviewed; normal original grammar13349byte381line stream9sources2commands matches. Whole Calc133/shared2raw100 every counter, source links restored, static/Calc profile0UI and16gates pass. No Writer changes, native invalid enum/debug assertion/full UI/ODS claim; pause after full101/repairs pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T17:28:17.528Z, excerpt_hash=sha256:be6a314e7e34db2430790f8ee59befda3aec07a19d305eaea600f1e6f0f102f9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131710-MCM7S2/blueprint/resolved-snapshot.json
+- old_digest: 514e3fe1dad4547ac14e030bd1e78252ec550ab63752eded98966196e040c28b
+- current_digest: 514e3fe1dad4547ac14e030bd1e78252ec550ab63752eded98966196e040c28b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131710-MCM7S2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610131710-MCM7S2 -m 🧩 MCM7S2 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
