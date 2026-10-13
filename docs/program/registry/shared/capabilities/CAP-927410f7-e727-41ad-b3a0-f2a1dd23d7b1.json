@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-927410f7-e727-41ad-b3a0-f2a1dd23d7b1",
+    "capabilityId": "CAP-927410f7-e727-41ad-b3a0-f2a1dd23d7b1",
+    "suite": "shared",
+    "subsystem": "formula-grammar",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+    },
+    "capability": "Original shared formula address convention",
+    "gaps": [
+      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/include/formula/grammar.hxx",
+          "marker": "FormulaGrammar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "formula::FormulaGrammar::CONV_OOO"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/formula/grammar.hxx",
+          "marker": "enum AddressConvention"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "formula-grammar-values",
+    "scopeLimitations": [
+      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim.",
+      "Original QA anchors are unexecuted static caller context; complete normal native instance observations and current portable tests supply actual evidence."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/formula/inc/grammar.ts",
+          "marker": "FormulaGrammar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/formula/inc/grammar.test.ts",
+          "marker": "matches original shared address convention enum"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Document calculation configuration values (task92)"
+        }
+      ]
+    }
+  }
+}

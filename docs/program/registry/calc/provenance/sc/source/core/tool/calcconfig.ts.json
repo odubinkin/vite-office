@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/calcconfig.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/calcconfig.cxx",
+    "localSymbols": [
+      "ScCalcConfig",
+      "ScRecalcOptions",
+      "ForceCalculationType"
+    ],
+    "upstreamSymbols": [
+      "ScCalcConfig"
+    ],
+    "preservedResponsibilities": [
+      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
+    ],
+    "omittedResponsibilities": [
+      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig.ts",
+          "marker": "ScCalcConfig"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig.test.ts",
+          "marker": "matches complete original document calculation configuration stream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/calcconfig.cxx",
+          "marker": "ScCalcConfig"
+        }
+      ]
+    }
+  }
+}

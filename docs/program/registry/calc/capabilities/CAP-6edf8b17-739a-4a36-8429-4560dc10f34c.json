@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-6edf8b17-739a-4a36-8429-4560dc10f34c",
+    "capabilityId": "CAP-6edf8b17-739a-4a36-8429-4560dc10f34c",
+    "suite": "calc",
+    "subsystem": "document-calculation-config",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
+    },
+    "capability": "Original document calculation configuration values",
+    "gaps": [
+      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/calcconfig.hxx",
+          "marker": "ScCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/calcconfig.cxx",
+          "marker": "ScCalcConfig"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_export_test2.cxx",
+          "marker": "ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/calcconfig.hxx",
+          "marker": "Configuration options for formula interpreter."
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "document-calculation-config-values",
+    "scopeLimitations": [
+      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101.",
+      "Original QA anchors are unexecuted static caller context; complete normal native instance observations and current portable tests supply actual evidence."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/calcconfig.ts",
+          "marker": "ScCalcConfig"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig.ts",
+          "marker": "ScCalcConfig"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig.test.ts",
+          "marker": "matches complete original document calculation configuration stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Document calculation configuration values (task92)"
+        }
+      ]
+    }
+  }
+}

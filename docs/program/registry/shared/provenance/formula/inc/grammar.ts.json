@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/formula/inc/grammar.ts",
+    "status": "mapped",
+    "upstreamPath": "include/formula/grammar.hxx",
+    "localSymbols": [
+      "FormulaGrammar"
+    ],
+    "upstreamSymbols": [
+      "FormulaGrammar"
+    ],
+    "preservedResponsibilities": [
+      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+    ],
+    "omittedResponsibilities": [
+      "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/formula/inc/grammar.ts",
+          "marker": "FormulaGrammar"
+        },
+        {
+          "path": "apps/office/src/formula/inc/grammar.test.ts",
+          "marker": "matches original shared address convention enum"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/formula/grammar.hxx",
+          "marker": "FormulaGrammar"
+        }
+      ]
+    }
+  }
+}

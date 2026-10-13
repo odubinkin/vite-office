@@ -1692,3 +1692,13 @@ FormulaTokenArray::Move transfers buffers and zeros source nLen/nRPN but leaves 
 Evidence: task90 unchanged original constructor/Assign/Move/Finalize/Add functions, initialized normal source/copy/move histories and explicit moved-source append observation. Portable replay matches all flags, lengths, identities and rejection.
 
 Decision: preserve moved-source flags and original finalization/rejection. Do not silently reset or reopen the moved-from array. User-visible consumer effects remain unverified.
+
+## CALC-081: mutable shared default calculation opcode set
+
+Status: confirmed original cross-instance value alias; a user-visible defect is not established.
+
+ScCalcConfig::setOpenCLConfigToDefault assigns a static shared_ptr to a mutable sorted_vector. Changing a default configuration's set also changes later default constructions and reset results; reset reassigns that same set rather than rebuilding its contents. The partial default operation also leaves maOpenCLDevice and document-specific settings untouched, whereas full reset clears those value fields.
+
+Evidence: task92 unchanged original full headers and instance methods with genuine o3tl::sorted_vector and OUString, normal mode only. An initialized caller inserts ocOffset into the shared default, observes a later construction and reset, then removes it to restore the original set. Portable replay retains the exact alias/contents and ordered uniqueness. No memory/sanitizer experiment or actual document consumer defect claim.
+
+Decision: preserve original mutable default identity and partial-reset field behavior. Do not freeze, clone or reconstruct the static set. Audit actual configuration consumers when those owners are ported.

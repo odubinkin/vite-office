@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/formula/inc/grammar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formula-grammar",
+    "capabilityIds": [
+      "CAP-927410f7-e727-41ad-b3a0-f2a1dd23d7b1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/formula/inc/grammar.ts#FormulaGrammar",
+        "apps/office/src/formula/inc/grammar.test.ts#matches original shared address convention enum",
+        "vendor/libreoffice-reference/include/formula/grammar.hxx#FormulaGrammar"
+      ],
+      "justification": "Original shared FormulaGrammar AddressConvention enum only, values-1through7 including sequential LAST and special A1_XL_A1. Actual original full grammar header in ordinary ScCalcConfig caller confirms all values. Remaining grammar masks, language mapping and predicates pending; no full grammar/compiler/document/UI/ODS claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FormulaGrammar"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/formula/grammar.hxx",
+      "upstreamSymbols": [
+        "FormulaGrammar"
+      ]
+    }
+  }
+}
