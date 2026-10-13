@@ -1,10 +1,11 @@
 ---
 id: "202610131217-DR2TYK"
 title: "Implement public Calc matrix construction resize and geometry"
-status: "DOING"
+result_summary: "Implemented original partial public ScMatrix facade and necessary shared encoded-error preservation with ordinary JS slots/assignments. Native fallback anomaly CALC-072 and GC allocation policy documented/inventoried. Typed value operations and interpreter/document/UI remain subsequent owners; goal active, next full91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/calc-matrix-facade-native/manifest.json"
   findings:
     - "Exact3205current/committed non-task hashes match,19intentional non-task paths. Public constructors/resize/geometry and256tag classifiers match25016-byte original stream, including538/514 and grow-after-error preservation. Only two shared storage owners change: scalar assignments and undefined optional slots preserve native error values; no numeric wrapper/memory manager or Writer change. Per-matrix initial default cap is explicitly divergent from native live pool, CALC-072 retained."
-commit: null
+commit:
+  hash: "ed16483e271c00010416bad9497fd7ca33ec6b26"
+  message: "🧩 DR2TYK calc: implement matrix facade and preserve error values"
 comments:
   -
     author: "CODER"
     body: "Start: original public matrix facade over shared storage under continued user goal and GC-first resource adaptation."
+  -
+    author: "CODER"
+    body: "Verified: real public matrix construction resize geometry and classifiers over shared storage, encoded error preservation corrected in two shared owners. Native25016-byte stream, Calc127/shared243 whole raw100, source-absent checks and16gates pass, exact3205hashes and same-agent separate EVALUATOR pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: real partial public matrix facade ated16483e271c00010416bad9497fd7ca33ec6b26, native25016-byte stream and6ordinary commands. Calc127/shared243 raw S/B/F/L100 every raw counter positive, source-absent build/profile0UI and16gates/36tooling/123inventory pass. Exact3205hashes,19intentional paths and same-agent separate EVALUATOR pass. Shared numeric error preservation corrected without manager, Writer unchanged; GC adaptation and CALC-072 explicit. Goal active, next full91."
+  -
+    type: "status"
+    at: "2026-10-13T12:49:56.680Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: real public matrix construction resize geometry and classifiers over shared storage, encoded error preservation corrected in two shared owners. Native25016-byte stream, Calc127/shared243 whole raw100, source-absent checks and16gates pass, exact3205hashes and same-agent separate EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:49:38.143Z"
+doc_updated_at: "2026-10-13T12:49:56.681Z"
 doc_updated_by: "CODER"
 description: "Iteration84: original ScMatrix facade over actual ScMatrixImpl, three constructors, allocation shape/default per-matrix bound, Resize overloads, geometry delegates and six original type selectors. GC refs replace native ledger/refcounts; preserve differing fallback errors. Native original observations, inventory/journal and whole Calc/affected shared raw100."
 sections:
