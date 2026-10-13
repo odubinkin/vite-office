@@ -4,7 +4,7 @@ title: "Reuse original native table mouse frame hierarchy"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,30 @@ verification:
   updated_by: "CODER"
   note: "14242unique assertions, whole2current-source Istanbul100allfour/1071positive raw counters; original14195related+2new only standard raw-count merge,26tooling/19Chromium;4refs absent every producer,9metadata/947otheroldtests/4canonical prefixes/137staticfiles pass. Exact1oldcase migration. New390fixture scroll repair narrowed and finaldesktop fresh fixture rechecked; no prior browser regression replay. Bounded table hierarchy reuse, cadence6/10, full once10 then pause+repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T15:32:35.397Z"
+  updated_by: "EVALUATOR"
+  note: "Exact945a1f9943af51075e46f3c070f2add4e40c1678 same-agent non-independent review passes bounded native hierarchy reuse; whole2current-source100four and14242unique accepted assertions, explicit partial coverage failures resolved by unmodified original raw-count aggregation."
+  evaluated_sha: "945a1f9943af51075e46f3c070f2add4e40c1678"
+  blueprint_digest: "19850b427f7a3f6295e99d005ac4c16ec7fff63a9784c0eed704c165d51f78b4"
+  evidence_refs:
+    - ".agentplane/tasks/202610131456-7753KN/README.md"
+    - ".agentplane/tasks/202610131456-7753KN/quality/20261013-153235397-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131456-7753KN/quality/20261013-153235397-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131456-7753KN/quality/20261013-153235397-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131456-7753KN/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/coverage-merge.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/execution-hashes.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/browser-retry-tests.json"
+    - "apps/office/node_modules/.cache/parity-coverage/7753KN/browser-current-desktop-tests.json"
+  findings:
+    - "Reviewed original SwFEShell GetBox/WhichMouseTabCol existing layout query contracts. Actual DOM-element Map retains registered native table/row/cell clients, compares current model/format/link identities, batches device geometry before acceptance, destroys only new candidates on failed measurements and retires changed/removed clients. Primitive native frame setter cannot normally throw; no added low-level state machine, allocator or mirrored counters. Browser-only readonly geometry removal does not alter row/cell/default logic."
+    - "All9committed non-AP blobs equal final execution hashes; production source unchanged across related and supplementary coverage. Original instrumented statement/function/branch IDs and location maps byte-identical; installed Istanbul raw-count merge produces508lines573statements76functions422branches100 and1071positive original counters. Initial14195related assertions pass;2genuine new cases close measured gaps without repeated passing related tests or threshold/provider/exclusion/location/counter normalization."
+    - "947other oldtestfiles unchanged; exact1source-backed old lifetime case only, other3cases/imports/statement bytes identical. Canonical4record historical arrays/scalars/status/default/classification prefixes preserved.19unique Chromium regression/new scenarios accepted; initial failed390fixture repaired using native scrolling, narrow retry succeeds and changed fresh desktop fixture checked once.26tooling,TS7/lint/docs/size/dependencies/build/static,9restored-onlymetadata gates pass."
 commit: null
 comments:
   -
@@ -42,7 +66,7 @@ events:
     state: "ok"
     note: "14242unique assertions, whole2current-source Istanbul100allfour/1071positive raw counters; original14195related+2new only standard raw-count merge,26tooling/19Chromium;4refs absent every producer,9metadata/947otheroldtests/4canonical prefixes/137staticfiles pass. Exact1oldcase migration. New390fixture scroll repair narrowed and finaldesktop fresh fixture rechecked; no prior browser regression replay. Bounded table hierarchy reuse, cadence6/10, full once10 then pause+repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T15:31:00.531Z"
+doc_updated_at: "2026-10-13T15:33:21.569Z"
 doc_updated_by: "CODER"
 description: "Preserve native table/row/cell frame identity across browser device geometry resamples, update existing browser geometry field, replace disconnected/structurally changed/detached owners; atomic error preservation and shutdown. Native direct shell/mounted/Chromium tests, exact one old ephemeral frame lifetime case migration, whole2modules100four, cadence6/10."
 sections:
@@ -253,6 +277,8 @@ sections:
     Observation: Initial restored metadata check rejected new provenance evidence strings; corrected only the new entries to native path/marker object schema, preserved all old entries. Ignored proof helper used sw/inc/tabfrm.hxx; actual pinned header is sw/source/core/inc/tabfrm.hxx, now correct. No source/test change or passing runtime replay for metadata-only repairs.
 
     Browser Map retains original registered native table/row/cell objects, updates only device geometry after complete measurement, preserves native notifications and prior geometry on error, retires incompatible/unmounted clients. No custom low-level allocator/state machine/version registry/extra adapter. Full persistent root/page/master/follow/renderer and incremental row/cell structural update parity remain unverified. Registered recovery/open/save/settings exceptions unchanged. Human native-JS principle applies to subsequent tasks. Exact semanticSHA same-agent non-independent review follows. Cadence6/10, last full8V85V8, full once10 and pause after next full plus necessary repairs; this broad related532file selection is not the full app/inventory/tooling/Chromium profile.
+
+    Exact semantic commit 945a1f9943af51075e46f3c070f2add4e40c1678 reviewed and accepted by same-agent EVALUATOR phase (not independent): all9committed blobs match frozen evidence;14242unique assertions, whole2original modules100four/1071positive counters,4canonical prefixes/947otheroldtests/137staticfiles/9metadata gates pass. Quality report .agentplane/tasks/202610131456-7753KN/quality/20261013-153235397-recovery-context/quality-report.json. No further runtime/source/test/registry changes after acceptance. Safe local correction6/10 ready for clean direct close; goal remains active until full once10 and user pause after next full+repairs.
 id_source: "generated"
 ---
 ## Summary
@@ -480,3 +506,5 @@ Accepted14242unique assertions:14197related original app cases across532files (1
 Observation: Initial restored metadata check rejected new provenance evidence strings; corrected only the new entries to native path/marker object schema, preserved all old entries. Ignored proof helper used sw/inc/tabfrm.hxx; actual pinned header is sw/source/core/inc/tabfrm.hxx, now correct. No source/test change or passing runtime replay for metadata-only repairs.
 
 Browser Map retains original registered native table/row/cell objects, updates only device geometry after complete measurement, preserves native notifications and prior geometry on error, retires incompatible/unmounted clients. No custom low-level allocator/state machine/version registry/extra adapter. Full persistent root/page/master/follow/renderer and incremental row/cell structural update parity remain unverified. Registered recovery/open/save/settings exceptions unchanged. Human native-JS principle applies to subsequent tasks. Exact semanticSHA same-agent non-independent review follows. Cadence6/10, last full8V85V8, full once10 and pause after next full plus necessary repairs; this broad related532file selection is not the full app/inventory/tooling/Chromium profile.
+
+Exact semantic commit 945a1f9943af51075e46f3c070f2add4e40c1678 reviewed and accepted by same-agent EVALUATOR phase (not independent): all9committed blobs match frozen evidence;14242unique assertions, whole2original modules100four/1071positive counters,4canonical prefixes/947otheroldtests/137staticfiles/9metadata gates pass. Quality report .agentplane/tasks/202610131456-7753KN/quality/20261013-153235397-recovery-context/quality-report.json. No further runtime/source/test/registry changes after acceptance. Safe local correction6/10 ready for clean direct close; goal remains active until full once10 and user pause after next full+repairs.
