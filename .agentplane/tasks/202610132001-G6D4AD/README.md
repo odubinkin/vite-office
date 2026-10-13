@@ -1,10 +1,11 @@
 ---
 id: "202610132001-G6D4AD"
 title: "Implement Calc range reference extension"
-status: "DOING"
+result_summary: "Task99 completed on calc: original range guards/construction/extension/metadata/rejections over actual owners, explicit native unique in-place identity/input mutation omission under GC, CALC-088 preserved. Native474sources8normalcommands1198110byte12544case clone-domain proof,Calc138/shared255raw100,16gates/static/Calc0UI,3304exacthashes. Goalactive continue101 then pause111/repairs; compiler/config/document/UI/ODS pending, no fake/countlibrary or fullparity/readiness claim."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Complete original function unchanged with genuine real peer/header/data definitions produces matching1198110byte12544case stream474sources8normalcommands. Native internal GetRef condition remains in original function, observer adds no count query/assertion/output; bReusefalse and actual aliased reusetrue exercise real clone domain. No source rewriting/invalid casts/overflow/ownership experiment/link suppression."
     - "GC clone-only implementation explicitly omits native unique-owner in-place input identity/mutation optimization; retains argument hint and original output range/metadata/rejections in tested clone domain, broadparity flagsfalse. CALC-088 original external-double+single rejection and external-first/local-double metadata behavior preserved. Do not infer full unique/alias parity or editable UI/ODS readiness."
     - "Calc138tests29owners3898S2602B752F3467L/shared255tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,4links absent/restored. Initial path/pattern/lint failures retained, actual source paths and standard hint discard repaired without fake branches/checker overrides."
-commit: null
+commit:
+  hash: "ca40e158c19fb5492bd5ae270a0725826a9efc8c"
+  message: "🧮 G6D4AD calc: implement original range reference extension"
 comments:
   -
     author: "CODER"
     body: "Start: actual range-reference logical operation over real tokens/data, explicit GC clone-only adaptation/no reference-count manager; normal original clone-domain proof/scopedraw100."
+  -
+    author: "CODER"
+    body: "Verified: original logical range-reference operation with real token/data/shared owners and explicit GC clone-only adaptation; normal clone-domain fullstream/raw100/16gates/exactsource pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exactsourceca40e158c19fb5492bd5ae270a0725826a9efc8c/3304non-task committedhashes16intentionalpaths, same-agent separate EVALpass not independent. Complete logical range op with explicit GCclone-only native unique identity/input mutation omission; no fullownershipparity. Genuine474sources8normalcommands1198110byte12544case clone-domain stream matches; Calc138/shared255raw100/everycounterpositive,16gates/static/Calc0UI/sourceabsence-restored. CALC-088 preserved, no fake peers/countlibrary. Goalactive continue101 then pause111/repairs."
+  -
+    type: "status"
+    at: "2026-10-13T20:21:30.661Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original logical range-reference operation with real token/data/shared owners and explicit GC clone-only adaptation; normal clone-domain fullstream/raw100/16gates/exactsource pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T20:21:03.920Z"
+doc_updated_at: "2026-10-13T20:21:30.663Z"
 doc_updated_by: "CODER"
 description: "Task99 full original extendRangeReference logical range operation across actual local/external/list tokens and real reference data, required by compiler/ODS formula references; GC removes refcount-dependent in-place optimization without a new ownership library."
 sections:
