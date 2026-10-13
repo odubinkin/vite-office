@@ -4,7 +4,7 @@ title: "Implement original Calc matrix result token owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: actual three matrix result token owners needed by formula result and ODS, reuse real matrix/shared token, preserve original alias/cloning overloads without memory manager."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:22:19.156Z"
+doc_updated_at: "2026-10-13T14:43:16.521Z"
 doc_updated_by: "CODER"
 description: "Iteration88 UI/ODS prerequisite for real ScFormulaResult/ScFormulaCell: actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken using existing matrix/formula token owners, no reference manager."
 sections:
@@ -50,7 +50,28 @@ sections:
     4. Exact current/committed non-task hashes, same-agent separate EVALUATOR, canonical DONE/clean calc. Reference/matrix-range token and ScFormulaResult/ScFormulaCell/document/editing/UI/ODS still pending; full91.
   Verification: "Pending implementation."
   Rollback Plan: "Revert only intentional task88 changes through new task; no merge/history rewrite."
-  Findings: "Original CloneUpperLeftIfNecessary always clones double and needs no refcount branch. Generic FormulaToken Assign of an actual matrix-result token calls base Assign without numeric cloning, whereas typed result overload clones: preserve and record if alias observation confirms. JS ordinary references preserve identity and mutable aliases with no manager."
+  Findings: |-
+    Original CloneUpperLeftIfNecessary always clones double and needs no refcount branch. Generic FormulaToken Assign of an actual matrix-result token calls base Assign without numeric cloning, whereas typed result overload clones: preserve and record if alias observation confirms. JS ordinary references preserve identity and mutable aliases with no manager.
+
+    - Observation: First ordinary native caller compilation failed because selected original ScMatrixToken declaration requires SC_DLLPUBLIC from its genuine scdllapi.h include. No C++/TS test assertion ran or failed.
+      Impact: Caller include scaffold incomplete; original class/member scopes unchanged and scope/verification unchanged.
+      Resolution: Load genuine original scdllapi.h and include original sc/inc path, retain failed evidence and rerun ordinary native capture. No fake macro/class or criterion change.
+
+    - Observation: Second native caller compile exposed missing genuine osl/diagnose.h for OSL_ENSURE/OSL_FAIL in unchanged matrix formula definitions.
+      Impact: Only declaration/include scaffold incomplete; original implementations and certification domain unchanged.
+      Resolution: Include original osl/diagnose.h, retain source scopes unchanged and rerun ordinary native capture. No debug macro emulation, sanitizer or acceptance weakening.
+
+    - Observation: Native link succeeds after original includes; separate whole-header dependency compilation lacked the same sc/inc and mdds include paths, causing scdllapi.h lookup failure.
+      Impact: Dependency observation command mismatch only; no original runtime or behavioral assertion failure.
+      Resolution: Give dependency-only compile the same genuine include paths as normal caller build, preserving original scopes and thresholds. Final check will cover complete regenerated dependency hashes.
+
+    - Observation: Initial whole Calc131case profile:130pass and1new stream fails before token comparison because fixture passed a JS string to OUString, whose original port requires the existing UTF16/length constructor.
+      Impact: Test caller argument error only; ordinary C++10319-byte stream unchanged and no shared/runtime defect diagnosed.
+      Resolution: Use genuine existing UInt16/length constructor for A, retain initial log/manifest, verify fresh stream then rerun required whole Calc/shared raw100. No threshold/expectation or Writer change.
+
+    - Observation: Whole Calc131 and shared247 streams/tests pass. Static TS7 rejects generic Assign overload declaration for missing override modifier; implementation and other overload already marked override.
+      Impact: Type-only signature modifier missing, no behavioral/expectation failure. Source links restored by wrapper.
+      Resolution: Add required override to generic signature, rerun Calc on final source and source-absent static/profile checks; reuse unchanged passed shared-owner coverage. No criteria or native stream change.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +104,23 @@ Revert only intentional task88 changes through new task; no merge/history rewrit
 ## Findings
 
 Original CloneUpperLeftIfNecessary always clones double and needs no refcount branch. Generic FormulaToken Assign of an actual matrix-result token calls base Assign without numeric cloning, whereas typed result overload clones: preserve and record if alias observation confirms. JS ordinary references preserve identity and mutable aliases with no manager.
+
+- Observation: First ordinary native caller compilation failed because selected original ScMatrixToken declaration requires SC_DLLPUBLIC from its genuine scdllapi.h include. No C++/TS test assertion ran or failed.
+  Impact: Caller include scaffold incomplete; original class/member scopes unchanged and scope/verification unchanged.
+  Resolution: Load genuine original scdllapi.h and include original sc/inc path, retain failed evidence and rerun ordinary native capture. No fake macro/class or criterion change.
+
+- Observation: Second native caller compile exposed missing genuine osl/diagnose.h for OSL_ENSURE/OSL_FAIL in unchanged matrix formula definitions.
+  Impact: Only declaration/include scaffold incomplete; original implementations and certification domain unchanged.
+  Resolution: Include original osl/diagnose.h, retain source scopes unchanged and rerun ordinary native capture. No debug macro emulation, sanitizer or acceptance weakening.
+
+- Observation: Native link succeeds after original includes; separate whole-header dependency compilation lacked the same sc/inc and mdds include paths, causing scdllapi.h lookup failure.
+  Impact: Dependency observation command mismatch only; no original runtime or behavioral assertion failure.
+  Resolution: Give dependency-only compile the same genuine include paths as normal caller build, preserving original scopes and thresholds. Final check will cover complete regenerated dependency hashes.
+
+- Observation: Initial whole Calc131case profile:130pass and1new stream fails before token comparison because fixture passed a JS string to OUString, whose original port requires the existing UTF16/length constructor.
+  Impact: Test caller argument error only; ordinary C++10319-byte stream unchanged and no shared/runtime defect diagnosed.
+  Resolution: Use genuine existing UInt16/length constructor for A, retain initial log/manifest, verify fresh stream then rerun required whole Calc/shared raw100. No threshold/expectation or Writer change.
+
+- Observation: Whole Calc131 and shared247 streams/tests pass. Static TS7 rejects generic Assign overload declaration for missing override modifier; implementation and other overload already marked override.
+  Impact: Type-only signature modifier missing, no behavioral/expectation failure. Source links restored by wrapper.
+  Resolution: Add required override to generic signature, rerun Calc on final source and source-absent static/profile checks; reuse unchanged passed shared-owner coverage. No criteria or native stream change.

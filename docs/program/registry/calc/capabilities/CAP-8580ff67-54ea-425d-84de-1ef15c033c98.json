@@ -1,0 +1,106 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8580ff67-54ea-425d-84de-1ef15c033c98",
+    "capabilityId": "CAP-8580ff67-54ea-425d-84de-1ef15c033c98",
+    "suite": "calc",
+    "subsystem": "formula-result",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual matrix tokens preserve nullable matrix identity and shallow transport result references.",
+      "Stored formula result doubles are cloned by original constructors, copy and typed Assign; generic Assign preserves original alias asymmetry.",
+      "Signed16/32 dimensions, upper-left numeric updates/reset and identity equality follow original classes.",
+      "Type-only matrix aliases and ordinary JS token refs add no memory management library."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task88 implements actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken over the real ScMatrix and shared FormulaToken/primitive tokens. Original nullable matrix/token identity, shallow transport copies, formula numeric upper-left cloning, dimensions with signed16/32 narrowing, result reset/equality/numeric updates and overload-specific Assign aliases are retained. Generic FormulaToken Assign of an actual matrix result shares its numeric token; typed matrix-result Assign clones it (CALC-075). An explicit FormulaToken type witness preserves erased argument overloads, and qualified base prototype calls preserve nonvirtual native receiver selection. ScMatrixRef/ScConstMatrixRef are type-only ordinary JS aliases, no Boost/refcount/allocator/finalizer library. Native complete original class/member scopes over genuine formula headers and verified original matrix constructor/storage context run normally only; source identities and whole value/identity/payload stream checked, no native memory bookkeeping, ABI/debug assertions/full QA claim. Actual ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS, matrix-range/reference tokens and unrelated interpreter features remain pending. UI/ODS prerequisite priority and full91 retained."
+    },
+    "capability": "Original matrix result token owners",
+    "gaps": [
+      "ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS and reference/matrix-range tokens remain pending.",
+      "Native memory-management/ABI/assertions/full QA unverified; no runtime Boost/refcount or other owner duplication."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScMatrixToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScMatrixCellResultToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScMatrixFormulaCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "ScMatrixFormulaCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/types.ts",
+          "marker": "ScConstMatrixRef"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+          "marker": "matches original matrix result token reference and mutation stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original matrix result token owners (task88)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-075"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "class ScMatrixCellResultToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/types.hxx",
+          "marker": "ScConstMatrixRef"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "// Formula cell in C1:C2 should be a 1x2 matrix array."
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/token.hxx",
+          "marker": "Transports the result from the interpreter to the formula cell"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-matrix-result-token-ownership",
+    "scopeLimitations": [
+      "Task88 implements actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken over the real ScMatrix and shared FormulaToken/primitive tokens. Original nullable matrix/token identity, shallow transport copies, formula numeric upper-left cloning, dimensions with signed16/32 narrowing, result reset/equality/numeric updates and overload-specific Assign aliases are retained. Generic FormulaToken Assign of an actual matrix result shares its numeric token; typed matrix-result Assign clones it (CALC-075). An explicit FormulaToken type witness preserves erased argument overloads, and qualified base prototype calls preserve nonvirtual native receiver selection. ScMatrixRef/ScConstMatrixRef are type-only ordinary JS aliases, no Boost/refcount/allocator/finalizer library. Native complete original class/member scopes over genuine formula headers and verified original matrix constructor/storage context run normally only; source identities and whole value/identity/payload stream checked, no native memory bookkeeping, ABI/debug assertions/full QA claim. Actual ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS, matrix-range/reference tokens and unrelated interpreter features remain pending. UI/ODS prerequisite priority and full91 retained.",
+      "Original formula QA array-result anchor is unexecuted static consumer context only; portable replay and normal native caller provide actual evidence."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

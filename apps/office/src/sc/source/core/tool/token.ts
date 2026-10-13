@@ -1,5 +1,5 @@
-/** @fileoverview Original Calc empty and hybrid result tokens from token.hxx/token.cxx over the genuine shared token and string owners. */
-import { FormulaToken, StackVar } from "../../../../formula/inc/token";
+/** @fileoverview Original Calc empty, hybrid and matrix result tokens over genuine shared token, string and matrix owners; references use JS GC. */
+import { FormulaToken, FormulaDoubleToken, StackVar } from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -120,5 +120,192 @@ export class ScHybridCellToken extends FormulaToken {
   /** Original virtual copy clone. @returns Copied token with reset count/policy. */
   override Clone(): FormulaToken {
     return new ScHybridCellToken(this);
+  }
+}
+
+import type { ScMatrixRef, ScConstMatrixRef } from "../../../inc/types";
+import type { FormulaConstTokenRef } from "../../../../formula/inc/types";
+import type { MatrixCoordinates } from "../../../inc/scmatrix";
+
+/** Original matrix token keeps the actual mutable matrix identity. */
+export class ScMatrixToken extends FormulaToken {
+  private readonly pMatrix: ScMatrixRef;
+  /** Original value and defaulted copy constructors. @param source - Matrix or copied token. @returns Matrix token. */
+  constructor(source: ScMatrixRef | ScMatrixToken) {
+    super(source instanceof ScMatrixToken ? source : StackVar.svMatrix);
+    this.pMatrix = source instanceof ScMatrixToken ? source.pMatrix : source;
+  }
+  /** Original const/nonconst pointer getters share the same actual object. @returns Matrix or null. */
+  GetMatrix(): ScMatrixRef {
+    return this.pMatrix;
+  }
+  /** Original inline copy clone shares the matrix. @returns Copied token. */
+  override Clone(): ScMatrixToken {
+    return new ScMatrixToken(this);
+  }
+  /** Original matrix-reference identity equality after base tags/opcode. @param r - Compared token. @returns Equality. */
+  override equals(r: FormulaTokenConstReference): boolean {
+    return super.equals(r) && this.pMatrix === (r as ScMatrixToken).GetMatrix();
+  }
+  /** Original base matrix token is not a matrix-range token. @returns False. */
+  IsMatrixRangeToken(): boolean {
+    return false;
+  }
+}
+
+/** Original interpreter result transports the matrix and upper-left token by reference. */
+export class ScMatrixCellResultToken extends FormulaToken {
+  protected xMatrix: ScConstMatrixRef;
+  protected xUpperLeft: FormulaConstTokenRef;
+  /** Original value and defaulted copy constructors. @param args - Matrix/result or copied token. @returns Result token. */
+  constructor(
+    ...args:
+      | [source: ScMatrixCellResultToken]
+      | [matrix: ScConstMatrixRef, upperLeft: FormulaConstTokenRef]
+  ) {
+    const source = args[0];
+    super(source instanceof ScMatrixCellResultToken ? source : StackVar.svMatrixCell);
+    this.xMatrix = source instanceof ScMatrixCellResultToken ? source.xMatrix : source;
+    this.xUpperLeft =
+      source instanceof ScMatrixCellResultToken
+        ? source.xUpperLeft
+        : (args[1] as FormulaConstTokenRef);
+  }
+  /** Original matrix pointer query. @returns Same const matrix identity. */
+  GetMatrix(): ScConstMatrixRef {
+    return this.xMatrix;
+  }
+  /** Original nullable upper-left type query. @returns Result type or unknown. */
+  GetUpperLeftType(): StackVar {
+    return this.xUpperLeft ? this.xUpperLeft.GetType() : StackVar.svUnknown;
+  }
+  /** Original borrowed upper-left reference query. @returns Same token identity. */
+  GetUpperLeftToken(): FormulaConstTokenRef {
+    return this.xUpperLeft;
+  }
+  /** Original shallow copy clone. @returns Copied transport token. */
+  override Clone(): ScMatrixCellResultToken {
+    return new ScMatrixCellResultToken(this);
+  }
+  /** Original equality compares both reference identities after base tags. @param r - Compared token. @returns Equality. */
+  override equals(r: FormulaTokenConstReference): boolean {
+    return (
+      super.equals(r) &&
+      this.xUpperLeft === (r as ScMatrixCellResultToken).xUpperLeft &&
+      this.xMatrix === (r as ScMatrixCellResultToken).xMatrix
+    );
+  }
+  /** Original Assign copies references without base fields or numeric cloning. @param r - Result transport. @returns Nothing. */
+  Assign(r: ScMatrixCellResultToken): void {
+    this.xMatrix = r.xMatrix;
+    this.xUpperLeft = r.xUpperLeft;
+  }
+}
+
+/** Original stored matrix formula result adds signed row/column dimensions and selective numeric result copies. */
+export class ScMatrixFormulaCellToken extends ScMatrixCellResultToken {
+  private nRows: number;
+  private nCols: number;
+  /** Original dimension/value/copy constructors. @param args - Dimensions, optional result pair, or copied formula result. @returns Matrix formula token. */
+  constructor(
+    ...args:
+      | [source: ScMatrixFormulaCellToken]
+      | [column: number, row: number]
+      | [column: number, row: number, matrix: ScConstMatrixRef, upperLeft: FormulaConstTokenRef]
+  ) {
+    const source = args[0];
+    if (source instanceof ScMatrixFormulaCellToken) {
+      super(source);
+      this.nRows = source.nRows;
+      this.nCols = source.nCols;
+      this.CloneUpperLeftIfNecessary();
+    } else {
+      super(
+        args.length === 4 ? (args[2] as ScConstMatrixRef) : null,
+        args.length === 4 ? (args[3] as FormulaConstTokenRef) : null,
+      );
+      this.nRows = (args[1] as number) | 0;
+      this.nCols = (source << 16) >> 16;
+      if (args.length === 4) this.CloneUpperLeftIfNecessary();
+    }
+  }
+  /** Original mutable numeric upper-left boundary always clones doubles and shares other token families. @returns Nothing. */
+  private CloneUpperLeftIfNecessary(): void {
+    if (this.xUpperLeft && this.xUpperLeft.GetType() === StackVar.svDouble)
+      this.xUpperLeft = this.xUpperLeft.Clone();
+  }
+  /** Original inline dimensions assignment applies native signed field widths. @param column - Columns. @param row - Rows. @returns Nothing. */
+  SetMatColsRows(column: number, row: number): void {
+    this.nRows = row | 0;
+    this.nCols = (column << 16) >> 16;
+  }
+  /** Original two scalar out references grouped as existing matrix coordinates. @param dimensions - Caller-owned out values. @returns Nothing. */
+  GetMatColsRows(dimensions: MatrixCoordinates): void {
+    dimensions.row = this.nRows;
+    dimensions.column = this.nCols;
+  }
+  /** Original column query. @returns Column count. */
+  GetMatCols(): number {
+    return this.nCols;
+  }
+  /** Original row query. @returns Row count. */
+  GetMatRows(): number {
+    return this.nRows;
+  }
+  /** Original stored result copy clone. @returns Independent numeric upper-left result. */
+  override Clone(): ScMatrixFormulaCellToken {
+    return new ScMatrixFormulaCellToken(this);
+  }
+  /** Original equality requires the actual derived family, reference equality and dimensions. @param r - Compared token. @returns Equality. */
+  override equals(r: FormulaTokenConstReference): boolean {
+    return (
+      r instanceof ScMatrixFormulaCellToken &&
+      super.equals(r) &&
+      this.nCols === r.nCols &&
+      this.nRows === r.nRows
+    );
+  }
+  /** Original statically typed result overload clones numeric upper-left. @param r - Result transport. @returns Nothing. */
+  override Assign(r: ScMatrixCellResultToken): void;
+  /** Original generic token overload uses an explicit native type witness to preserve overload selection. @param r - Any result token. @param category - FormulaToken overload witness. @returns Nothing. */
+  override Assign(r: FormulaTokenConstReference, category: typeof FormulaToken): void;
+  /** Original two Assign bodies keep dimensions and preserve their distinct alias behavior. @param r - Result token. @param category - Optional static generic overload witness. @returns Nothing. */
+  override Assign(r: FormulaTokenConstReference, category?: typeof FormulaToken): void {
+    if (category === undefined) {
+      super.Assign(r as ScMatrixCellResultToken);
+      this.CloneUpperLeftIfNecessary();
+      return;
+    }
+    if (this === r) return;
+    if (r instanceof ScMatrixCellResultToken) super.Assign(r);
+    else if (r.GetType() === StackVar.svMatrix) {
+      this.xUpperLeft = null;
+      this.xMatrix = (r as ScMatrixToken).GetMatrix();
+    } else {
+      this.xUpperLeft = r;
+      this.xMatrix = null;
+      this.CloneUpperLeftIfNecessary();
+    }
+  }
+  /** Original numeric update replaces string/null results; unsupported result families remain unchanged. @param value - New double. @returns Nothing. */
+  SetUpperLeftDouble(value: number): void {
+    switch (this.GetUpperLeftType()) {
+      case StackVar.svDouble:
+        (this.xUpperLeft as FormulaDoubleToken).SetDouble(value);
+        break;
+      case StackVar.svString:
+        this.xUpperLeft = new FormulaDoubleToken(value);
+        break;
+      case StackVar.svUnknown:
+        if (!this.xUpperLeft) this.xUpperLeft = new FormulaDoubleToken(value);
+        break;
+      default:
+        break;
+    }
+  }
+  /** Original result reset preserves matrix formula dimensions. @returns Nothing. */
+  ResetResult(): void {
+    this.xMatrix = null;
+    this.xUpperLeft = null;
   }
 }

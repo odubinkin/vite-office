@@ -3327,3 +3327,34 @@ This is a prerequisite for document cell access, not a complete document.
 Formula/text-dependent getters, equality and document operations remain
 pending actual owners. Continue toward cell storage and ScColumn/ScTable/
 ScDocument, editing/undo and shared-backed ODS filters; next full run91.
+
+## Original matrix result token owners (task88)
+
+Task88 adds ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken
+at the existing original token header/core boundaries. They reuse the real
+ScMatrix and shared FormulaToken/primitive owners. Original ScMatrixRef and
+ScConstMatrixRef are type-only JS reference aliases, with no runtime smart
+pointer, refcount, allocator, finalizer or replacement matrix model.
+
+Transport result copies share matrix and upper-left identity. Stored formula
+constructors/copies and typed matrix-result Assign clone numeric upper-left
+tokens, matching original CloneUpperLeftIfNecessary. The generic FormulaToken
+Assign overload instead shares a numeric upper-left when its argument is a
+matrix-result token (CALC-075); an explicit FormulaToken type witness preserves
+that erased static overload. Numeric formula copies compare unequal by
+upper-left identity (CALC-076), also retained. Native qualified/nonvirtual base calls map to
+ScMatrixCellResultToken.prototype.Assign.call, preserving receiver selection.
+Columns/rows narrow to signed16/32 and resets preserve these dimensions.
+
+The complete normal native class/member streams compare real matrix
+identities/dimensions, null refs, copies/clones/assignments/self-assignment,
+overload aliases, upper-left mutations, signed field boundaries and exact
+finite/IEEE/error payloads. Original matrix constructor/storage declarations
+and definitions reuse verified native fixture context; genuine formula headers
+and source scopes are unchanged. Physical native lifetime, assertions and
+full original QA are outside certification.
+
+These are direct prerequisites of the actual ScFormulaResult/ScFormulaCell
+owners and ODS cached formula results, not unrelated matrix aggregation.
+Continue with those real owners and cell storage/document/editing/ODS;
+no editable sheet or ODS filter is claimed and next full run is91.

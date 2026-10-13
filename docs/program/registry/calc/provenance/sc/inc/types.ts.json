@@ -20,6 +20,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/scmatrix.test.ts",
           "marker": "matches all original matrix UInt8 tags, IEEE comparisons and error payload queries"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+          "marker": "matches original matrix result token reference and mutation stream"
         }
       ],
       "upstream": [
@@ -39,17 +43,21 @@
       "SCCOL",
       "SCTAB",
       "SCCOLROW",
-      "ScMatValType"
+      "ScMatValType",
+      "ScMatrixRef",
+      "ScConstMatrixRef"
     ],
     "omittedResponsibilities": [
       "Reference parsing/formatting, external links, native hashes, range subtraction and sticky reference updates remain subsequent Calc tasks.",
       "Undefined uninitialized native constructors, machine pointer storage and debug assertions have no browser implementation.",
-      "Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81."
+      "Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81.",
+      "Task88 implements actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken over the real ScMatrix and shared FormulaToken/primitive tokens. Original nullable matrix/token identity, shallow transport copies, formula numeric upper-left cloning, dimensions with signed16/32 narrowing, result reset/equality/numeric updates and overload-specific Assign aliases are retained. Generic FormulaToken Assign of an actual matrix result shares its numeric token; typed matrix-result Assign clones it (CALC-075). An explicit FormulaToken type witness preserves erased argument overloads, and qualified base prototype calls preserve nonvirtual native receiver selection. ScMatrixRef/ScConstMatrixRef are type-only ordinary JS aliases, no Boost/refcount/allocator/finalizer library. Native complete original class/member scopes over genuine formula headers and verified original matrix constructor/storage context run normally only; source identities and whole value/identity/payload stream checked, no native memory bookkeeping, ABI/debug assertions/full QA claim. Actual ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS, matrix-range/reference tokens and unrelated interpreter features remain pending. UI/ODS prerequisite priority and full91 retained."
     ],
     "preservedResponsibilities": [
       "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
       "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
-      "Original six matrix UInt8 tag values/aliases, used by the real matrix value owner."
+      "Original six matrix UInt8 tag values/aliases, used by the real matrix value owner.",
+      "Original matrix result references, numeric clone/alias overloads, signed dimensions and result mutations, using ordinary JS references."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/types.hxx",
@@ -58,7 +66,9 @@
       "SCCOL",
       "SCTAB",
       "SCCOLROW",
-      "ScMatValType"
+      "ScMatValType",
+      "ScMatrixRef",
+      "ScConstMatrixRef"
     ]
   }
 }

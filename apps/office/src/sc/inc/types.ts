@@ -20,3 +20,27 @@ export const ScMatValType = {
 } as const;
 /** Original UInt8 scoped enum type; readonly constants retain EmptyPath/NonvalueMask aliases without introducing a JS reverse map. */
 export type ScMatValType = (typeof ScMatValType)[keyof typeof ScMatValType];
+
+/** Original matrix reference uses the actual JS owner without a runtime smart pointer. */
+export type ScMatrixRef = import("./scmatrix").ScMatrix | null;
+/** Original const matrix reference exposes the implemented const query surface on the same object. */
+export type ScConstMatrixRef = Readonly<
+  Pick<
+    import("./scmatrix").ScMatrix,
+    | "GetDimensions"
+    | "GetElementCount"
+    | "ValidColRow"
+    | "ValidColRowReplicated"
+    | "ValidColRowOrReplicated"
+    | "IsNumeric"
+    | "Get"
+    | "IsStringOrEmpty"
+    | "IsEmpty"
+    | "IsEmptyCell"
+    | "IsEmptyResult"
+    | "IsEmptyPath"
+    | "IsValue"
+    | "IsValueOrEmpty"
+    | "IsBoolean"
+  >
+> | null;

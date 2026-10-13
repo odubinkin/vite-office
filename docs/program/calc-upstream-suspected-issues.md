@@ -1632,3 +1632,23 @@ ScCellValue::operator=(ScCellValue&&) first clears the destination, then moves r
 Evidence: task86 complete ordinary original scalar stream compares number/string self move, normal move source emptiness, scalar setters and swaps; only actual empty/number/SharedString alternatives are instantiated. No fake formula/rich-text object or sanitizer is used.
 
 Decision: preserve the clearing order and source reset. Do not insert a self-move early return to retain the value. Document/cell-store/UI consumer reachability remains future work.
+
+## CALC-075: matrix formula Assign overloads differ in numeric upper-left cloning
+
+Status: confirmed original overload/alias asymmetry; a user-visible defect is not established.
+
+ScMatrixFormulaCellToken::Assign(const ScMatrixCellResultToken&) calls base Assign then CloneUpperLeftIfNecessary. The generic Assign(const FormulaToken&) identifies a matrix-result argument and calls only base Assign, retaining its numeric upper-left reference. SetUpperLeftDouble on that generic target therefore also changes the source transport result and the original shared numeric token; the typed target keeps its independent original numeric value. Typed self-assignment clones its numeric upper-left; generic self-assignment returns immediately. A call through the nonvirtual ScMatrixCellResultToken base likewise shares the upper-left.
+
+Evidence: task88 scripts/calc-matrix-token-native-probe.mjs compiles complete unchanged original matrix-result token classes/member scopes with real formula tokens and verified real matrix constructor/storage dependencies, normally only. The full stream observes typed/generic assignments, source/target mutations, self-assignment and qualified base assignment. No pointer address, native ownership counter or sanitizer experiment is needed.
+
+Decision: preserve both overloads and their aliases. Use the actual FormulaToken type witness for the generic overload and qualified prototype calls for native nonvirtual base selection. Do not silently add numeric cloning to the generic branch. Real formula-cell/interpreter/UI reachability remains future work.
+
+## CALC-076: numeric matrix formula copies compare unequal to their source
+
+Status: confirmed surprising original clone/equality interaction; a user-visible defect is not established.
+
+ScMatrixFormulaCellToken copy construction clones a double upper-left via CloneUpperLeftIfNecessary. Its equality delegates to ScMatrixCellResultToken, which compares upper-left pointer identity. Thus a numeric matrix formula token compares unequal to its own copy/Clone despite equal values, matrix identity and dimensions. Null and shared nonnumeric upper-left tokens can compare equal after copying.
+
+Evidence: task88 complete original normal matrix-result token stream records formula_equal for null, double, string, unknown and error upper-left tokens, including original constructors and virtual Clone/equality bodies. Portable replay preserves every result. No native ownership count or memory-management experiment is required.
+
+Decision: preserve identity comparison and numeric cloning. Do not substitute upper-left value equality or share the mutable numeric token to make copies compare equal. Actual formula-cell/UI effects remain unverified.

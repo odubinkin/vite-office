@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "formula-result",
     "capabilityIds": [
-      "CAP-3ba27793-8c5e-49d2-b9ea-ebf3abae49b2"
+      "CAP-3ba27793-8c5e-49d2-b9ea-ebf3abae49b2",
+      "CAP-8580ff67-54ea-425d-84de-1ef15c033c98"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -25,9 +26,10 @@
         "vendor/libreoffice-reference/sc/inc/token.hxx#class ScHybridCellToken final",
         "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScEmptyCellToken::operator==",
         "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScHybridCellToken::ScHybridCellToken(",
-        "docs/program/calc-browser-gc-adaptation.md#Token references and object lifetime"
+        "docs/program/calc-browser-gc-adaptation.md#Token references and object lifetime",
+        "apps/office/src/sc/source/core/tool/matrix-token.test.ts#matches original matrix result token reference and mutation stream"
       ],
-      "justification": "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary.",
+      "justification": "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary. Task88 implements actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken over the real ScMatrix and shared FormulaToken/primitive tokens. Original nullable matrix/token identity, shallow transport copies, formula numeric upper-left cloning, dimensions with signed16/32 narrowing, result reset/equality/numeric updates and overload-specific Assign aliases are retained. Generic FormulaToken Assign of an actual matrix result shares its numeric token; typed matrix-result Assign clones it (CALC-075). An explicit FormulaToken type witness preserves erased argument overloads, and qualified base prototype calls preserve nonvirtual native receiver selection. ScMatrixRef/ScConstMatrixRef are type-only ordinary JS aliases, no Boost/refcount/allocator/finalizer library. Native complete original class/member scopes over genuine formula headers and verified original matrix constructor/storage context run normally only; source identities and whole value/identity/payload stream checked, no native memory bookkeeping, ABI/debug assertions/full QA claim. Actual ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS, matrix-range/reference tokens and unrelated interpreter features remain pending. UI/ODS prerequisite priority and full91 retained.",
       "knownViolations": [],
       "localSymbols": [
         "ScEmptyCellToken",
@@ -40,7 +42,22 @@
         "GetString",
         "equals",
         "Clone",
-        "dispose"
+        "dispose",
+        "ScMatrixToken",
+        "ScMatrixCellResultToken",
+        "ScMatrixFormulaCellToken",
+        "GetMatrix",
+        "IsMatrixRangeToken",
+        "GetUpperLeftType",
+        "GetUpperLeftToken",
+        "Assign",
+        "CloneUpperLeftIfNecessary",
+        "SetMatColsRows",
+        "GetMatColsRows",
+        "GetMatCols",
+        "GetMatRows",
+        "SetUpperLeftDouble",
+        "ResetResult"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/tool/token.cxx",
@@ -48,7 +65,10 @@
         "ScEmptyCellToken::operator==",
         "ScHybridCellToken::ScHybridCellToken(",
         "ScHybridCellToken::GetDouble",
-        "ScHybridCellToken::operator=="
+        "ScHybridCellToken::operator==",
+        "ScMatrixToken",
+        "ScMatrixCellResultToken",
+        "ScMatrixFormulaCellToken"
       ]
     }
   }

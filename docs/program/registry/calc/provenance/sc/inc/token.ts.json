@@ -8,18 +8,26 @@
     "upstreamPath": "sc/inc/token.hxx",
     "localSymbols": [
       "ScEmptyCellToken",
-      "ScHybridCellToken"
+      "ScHybridCellToken",
+      "ScMatrixToken",
+      "ScMatrixCellResultToken",
+      "ScMatrixFormulaCellToken"
     ],
     "upstreamSymbols": [
       "class ScEmptyCellToken final",
-      "class ScHybridCellToken final"
+      "class ScHybridCellToken final",
+      "ScMatrixToken",
+      "ScMatrixCellResultToken",
+      "ScMatrixFormulaCellToken"
     ],
     "preservedResponsibilities": [
       "Original Calc header/core tool responsibility and genuine empty/hybrid result token classes.",
-      "Original constructor/copy/clone/query/equality fields and actual shared ownership."
+      "Original constructor/copy/clone/query/equality fields and actual shared ownership.",
+      "Original matrix result references, numeric clone/alias overloads, signed dimensions and result mutations, using ordinary JS references."
     ],
     "omittedResponsibilities": [
-      "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81."
+      "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81.",
+      "Task88 implements actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken over the real ScMatrix and shared FormulaToken/primitive tokens. Original nullable matrix/token identity, shallow transport copies, formula numeric upper-left cloning, dimensions with signed16/32 narrowing, result reset/equality/numeric updates and overload-specific Assign aliases are retained. Generic FormulaToken Assign of an actual matrix result shares its numeric token; typed matrix-result Assign clones it (CALC-075). An explicit FormulaToken type witness preserves erased argument overloads, and qualified base prototype calls preserve nonvirtual native receiver selection. ScMatrixRef/ScConstMatrixRef are type-only ordinary JS aliases, no Boost/refcount/allocator/finalizer library. Native complete original class/member scopes over genuine formula headers and verified original matrix constructor/storage context run normally only; source identities and whole value/identity/payload stream checked, no native memory bookkeeping, ABI/debug assertions/full QA claim. Actual ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS, matrix-range/reference tokens and unrelated interpreter features remain pending. UI/ODS prerequisite priority and full91 retained."
     ],
     "evidence": {
       "local": [
@@ -42,6 +50,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/token.test.ts",
           "marker": "matches original hybrid result IEEE payload and compared field distinctions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/matrix-token.test.ts",
+          "marker": "matches original matrix result token reference and mutation stream"
         }
       ],
       "upstream": [
