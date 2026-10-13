@@ -1,10 +1,11 @@
 ---
 id: "202610131252-61PRG4"
 title: "Restore native popup submenu delay ownership"
-status: "DOING"
+result_summary: "Native popup delay and lifetime ownership restored;1473unique checks pass, whole module100four; goal cadence3/10, pause after next full plus repairs."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -53,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Start: exact native retain-owning-child leave rule and delayed replacement via actual current pointer highlight; unchanged file/100four scope, necessary waiter imports for exact old pointer migrations."
+  -
+    author: "CODER"
+    body: "Verified: native default150ms submenu timer ownership, immediate keyboard/direct activation and stale callback cancellation;1473unique assertions, entire target100four278positive counters and9metadata gatespass. Exact semantic5a2c9806d1fe same-agent review, explicit ancestor-highlight and global parity residuals; inventory preserved and clean closure."
 events:
   -
     type: "status"
@@ -98,8 +102,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Current corrected fixture:1438related/208files with41native mounted tests including15new; retained26tooling and9Chromium production-identical evidence=1473unique. Original whole target100four135lines147statements32functions99branches/278positive counters.939otheroldtestfiles and canonical histories preserved,9final restored metadata gatespass. Independent-depth Space avoids unsupported native parent selection claim; ancestor-highlight propagation remains separate explicit gap."
+  -
+    type: "status"
+    at: "2026-10-13T13:49:03.758Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native default150ms submenu timer ownership, immediate keyboard/direct activation and stale callback cancellation;1473unique assertions, entire target100four278positive counters and9metadata gatespass. Exact semantic5a2c9806d1fe same-agent review, explicit ancestor-highlight and global parity residuals; inventory preserved and clean closure."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:48:04.048Z"
+doc_updated_at: "2026-10-13T13:49:03.760Z"
 doc_updated_by: "CODER"
 description: "Match native default150ms submenu highlight/close timers, keyboard/direct activation immediate, cancel stale pointer work on sibling change/reentry/close/teardown; preserve original bindings/focus/admission. Source-backed exact immediate-pointer test migrations, deterministic native mounted timers and real Chromium. Cadence3, no full replay or IO/recovery changes."
 sections:
@@ -260,6 +271,10 @@ sections:
     Attempts: Genuine pre-fix red preserved in the ignored61PRG4 cache. First mounted implementation run exposed missing parent highlight for direct activation; original source owner selection was restored. Removed incidental global timer-count assertions because unrelated original React/Sfx work shares the clock; observable popup absence and unchanged native command state remain asserted. First related run:1436/208 pass but whole target statements99.31/branches97.97, uncovered active-child reuse and lower-depth timer preservation. Added actual direct reactivation and child-keyboard/parent-pointer timer ownership cases. Initial child mouse-entry fixture incorrectly expected no parent reentry; real React entry also enters its original parent and cancels replacement, so use child keyboard work to exercise independent depth without pointer reentry. Failed reports retained unmodified; production/provider/threshold/exclusions remain unchanged. Latest human rule: pause after the next full campaign and necessary repairs; goal cadence remains1full/10atomic corrections, current correction3. No full campaign has yet occurred in this task.
 
     Final source-review correction: provisional qualitypass at c7d1225f was explicitly superseded by qualityrework before closure. Native ChangeHighlightItem rehighlights its original parent when a child selection changes; the new independent-depth fixture used ArrowDown and incorrectly conflated this separate ancestor-highlight behavior with timer ownership. Fixture now uses nonselecting Space, leaving native selection unchanged; complete related/target coverage is recaptured with this current test, production/build unchanged. Descendant-to-ancestor highlight propagation remains an explicit separate native presentation gap for a later atomic task, no blanket pointer/key parity claim. Commit format initially rejected without commit; corrected to repository emoji/task/scope format. All lifecycle attempts remain traceable.
+extensions:
+  implementation_commit:
+    hash: "5a2c9806d1fe49148edb279eccf329dca2386c78"
+    message: "🧩 61PRG4 fix: isolate native submenu timer depth without selection changes"
 id_source: "generated"
 ---
 ## Summary
