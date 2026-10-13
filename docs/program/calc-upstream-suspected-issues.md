@@ -1762,3 +1762,13 @@ ScMatrixRangeToken adds maRef and true IsMatrixRangeToken but inherits ScMatrixT
 Evidence: task98 complete original class/header/member scopes over real matrix peers/full original matrix implementation declaration, normal initialized same-matrix/different-range/base-token/null-matrix comparisons and matching portable replay. Original range members remain distinct value copies. No invalid staticcast/type fabrication or memory/count experiment; original document/interpreter consumer behavior remains unexecuted.
 
 Decision: preserve inherited matrix identity comparison and range-value copying. Audit original interpreter/grouping consumers later, without silently adding coordinates or class-kind checks to equality.
+
+## CALC-088: external range extension has asymmetric result handling
+
+Status: confirmed original initialized token-level outcomes; actual compiler/parser consumer effects are unverified.
+
+The range helper accepts an external-double left operand in its initial kind guard but does not select it as the result double. With a local single on the right it reaches the no-result return and yields null. With a local double on the right it clones that local double, extends its data from the external left operand when 3D guards allow, and returns an ordinary local-double token without the original external file/table metadata. External-single plus local single has a separate branch that creates an external-double result and retains file/table identity.
+
+Evidence: task99 full unchanged original extendRangeReference/class/reference-data scopes with real initialized peers, clone-path normal complete result/input stream including external/local kind and flag combinations, and matching portable replay. Cases use the actual resulting type/file id, no invalid casts or fake metadata provider. Parser/compile preconditions, whether these combinations occur in normal documents and user-visible harm remain unverified; unique native reuse optimization is a separate explicitly documented GC boundary.
+
+Decision: preserve original acceptance/rejection/result kinds and metadata behavior. Audit real original parser/range consumers later; do not silently externalize results or extend rejected combinations.

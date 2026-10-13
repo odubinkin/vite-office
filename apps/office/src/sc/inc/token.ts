@@ -15,3 +15,5 @@ export {
   ScMatrixCellResultToken,
   ScMatrixFormulaCellToken,
 } from "../source/core/tool/token";
+
+export { extendRangeReference } from "../source/core/tool/token";

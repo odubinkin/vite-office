@@ -354,3 +354,5 @@ export {
   ScExternalDoubleRefToken,
   ScExternalNameToken,
 } from "./token.references";
+
+export { extendRangeReference } from "./token.ranges";
