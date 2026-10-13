@@ -1,10 +1,11 @@
 ---
 id: "202610131932-36FZ61"
 title: "Implement Calc range matrix and cell state values"
-status: "DOING"
+result_summary: "Task98 completed on calc: original range/cell-state defaults/width/copy/move/selfassignment/validation and matrix-range sharing/Clone/classification, CALC-087 inherited range omission retained. Native482sources8normalcommands61825bytes,Calc137/shared254raw100,16gates/static/Calc0UI,3297exactsourcehashes. Goal active continues101 then pauses111/repairs; interpreter/column/compiler/config/document/UI/ODS pending, no memoryengine/fakepeers/readiness claim."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Whole original matrix/type headers and full original private ScMatrixImpl declaration with unchanged needed doc-free constructor/storage/dimension/destruction/ref definitions use real bounded native peers, no reduced matrix scaffold/fake document/interpreter/config body or unresolved-link suppression. Exact original required mdds declarations/callbacks verified;482sources8normalcommands61825-byte full initialized stream matches."
     - "Original defaultnull/six-1coords/nonnegative-ordered geometry/pointer-independent validation, scalar32/16/UInt8widths, copy/move/selfassignment/source-retention and real matrix-range constructor/Clone/member/classification preserved. CALC-087 inherited identity equality omits range, retained. No count/pool/layout/memory/concurrency/ABI/invalid peer or original documentQA claim."
     - "Calc137tests28owners3829S2543B751F3409L/shared254tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,4source links absent/restored. Initial local locator/transitive header failure retained and bounded genuine scope repair reviewed, no threshold/source-check weakening."
-commit: null
+commit:
+  hash: "685622ca13dc27bf0b33554519123138922060bd"
+  message: "🧮 36FZ61 calc: implement range matrix and cell state values"
 comments:
   -
     author: "CODER"
     body: "Start: actual range-matrix/cell-state values and matrix-range token using real owners/full genuine native matrix headers and implementation declaration; normal value proof, no fake peers/memoryengine."
+  -
+    author: "CODER"
+    body: "Verified: actual RangeMatrix/cell-state values and matrix-range token, real shared/data owners/genuine complete native matrix declarations/normal full stream/scopedraw100/16gates/exactsource pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact source685622ca13dc27bf0b33554519123138922060bd,3297currentcommittedhashes21intentionalpaths/same-agent separate EVALUATOR pass not independent. Actual range-matrix/cell-state and matrix-range token values over true existing owners/full genuine native matrix/type headers/private declaration/no fake peers;482sources8normalcommands61825bytes. Calc137/shared254raw100/everycounterpositive,16gates/static/Calc0UI,4links absent/restored. CALC-087 preserved; no memoryengine/readiness/fullQA claim. Goal active continues101 then pauses111/repairs."
+  -
+    type: "status"
+    at: "2026-10-13T19:53:49.451Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual RangeMatrix/cell-state values and matrix-range token, real shared/data owners/genuine complete native matrix declarations/normal full stream/scopedraw100/16gates/exactsource pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T19:53:29.490Z"
+doc_updated_at: "2026-10-13T19:53:49.452Z"
 doc_updated_by: "CODER"
 description: "Task98 actual sc::RangeMatrix and MultiDataCellState value/default/copy/move/assignment/validation owners plus ScMatrixRangeToken constructor/copy/Clone/range query/classification using real matrix/refdata/shared token owners; needed by interpreter/column and future UI/ODS model."
 sections:
