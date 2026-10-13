@@ -1,10 +1,11 @@
 ---
 id: "202610131543-CD8JQC"
 title: "Implement shared formula token array storage and recalc state"
-status: "DOING"
+result_summary: "Implemented shared code/RPN defaults/copies/moves/edits/queries/finalization/8192stop/live ranges and recalc flags/priorities. Original alias traversal and moved-source flags preserved, CALC-079/080 and inventory/provenance/GC proof updated. No new memory/flags library or Calc-specific duplicate. Full array/ScTokenArray/ScFormulaCell/document/UI/ODS pending; goal active, next91full run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "463LO hashes/17Boost dependency headers,9positive normal native commands and complete463656-byte recalc/12009-byte array streams over unchanged selected original source/header scopes. Declaration scaffold/static compiler method only, no fake instantiated peer/full native layout or tail/count/sanitizer claim. Copy/move/finalize/8192stop/replace/remove/queries/live ranges and all256mode histories preserved; CALC-079/080 and GC RPN-gate proof recorded."
     - "Calc132tests43files raw3579S2400B658F3178L and shared250tests55files40owners raw4272S2147B897F3817L all100 every raw counter positive. Sources absent/restored, static/profile0UI and16gates/36tooling/123inventory pass after original Finalize case and provenance naming metadata correction; no threshold weakening. Exact3240current/committed hashes and13intentional paths, existing Writer/shared owners unchanged; two genuine new shared runtime owners and responsibility-split mapping registered."
-commit: null
+commit:
+  hash: "f77a1b27249019fd9e2837d345cf18c0bebec47c"
+  message: "🧩 CD8JQC task: register original token array definition shard provenance"
 comments:
   -
     author: "CODER"
     body: "Start: actual shared FormulaTokenArray code/RPN and recalc operation family needed by real Calc formula cell and ODS; existing token owners, original alias/copy/default logic and GC refs."
+  -
+    author: "CODER"
+    body: "Verified: genuine shared FormulaTokenArray storage/recalc family and live StandardRange over actual token owners with ordinary JS refs. Native463656/12009-byte streams/9normal commands, Calc132/shared250 raw100, source-absent static/profile and16gates pass; exact3240hashes and same-agent separate EVALUATOR pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original shared FormulaTokenArray storage/recalc family atf77a1b27249019fd9e2837d345cf18c0bebec47c. Normal463656/12009-byte streams/9commands, Calc132/shared250 all raw100, source-absent build/profile and16gates, exact3240hashes/13paths and same-agent separate EVALUATOR pass. Inventory/provenance/GC proof/CALC-079/080 updated, no runtime memory library. Actual ScTokenArray/formula cell/document/UI/ODS pending, goal active and full91 next."
+  -
+    type: "status"
+    at: "2026-10-13T16:20:42.559Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: genuine shared FormulaTokenArray storage/recalc family and live StandardRange over actual token owners with ordinary JS refs. Native463656/12009-byte streams/9normal commands, Calc132/shared250 raw100, source-absent static/profile and16gates pass; exact3240hashes and same-agent separate EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T16:19:34.306Z"
+doc_updated_at: "2026-10-13T16:20:42.560Z"
 doc_updated_by: "CODER"
 description: "Iteration90 direct prerequisite for genuine ScTokenArray/ScFormulaCell and ODS formulas: original shared FormulaTokenArray code/RPN ownership semantics, construction/copy/move/edit/query/finalization and recalculation state over actual tokens with JS GC."
 sections:
