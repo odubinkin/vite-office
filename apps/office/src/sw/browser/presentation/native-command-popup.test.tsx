@@ -86,7 +86,7 @@ function fixture(
   const mounted = render(<Host />);
   return { s, source, owner, outside, mounted };
 }
-it("standalone native popup starts unselected and navigates only enabled direct entries", /** Checks source standalone no-first-preselection and wrap/boundaries. @returns Nothing. */ () => {
+it("standalone native popup starts unselected and includes disabled entries by source default", /** Checks source standalone no-first-preselection and wrap/boundaries. @returns Nothing. */ () => {
   const f = fixture(),
     menu = screen.getByRole("menu", { name: "Original popup" }),
     a = within(menu).getByRole("menuitem", { name: "Alpha" }),
@@ -96,10 +96,20 @@ it("standalone native popup starts unselected and navigates only enabled direct 
   fireEvent.keyDown(menu, { key: "ArrowUp" });
   expect(b).toHaveFocus();
   fireEvent.keyDown(b, { key: "ArrowDown" });
+  expect(screen.getByRole("menuitem", { name: "Disabled" })).toHaveAttribute(
+    "data-popup-highlighted",
+    "true",
+  );
+  expect(menu).toHaveFocus();
+  fireEvent.keyDown(menu, { key: "ArrowDown" });
   expect(a).toHaveFocus();
   fireEvent.keyDown(a, { key: "Home" });
-  expect(a).toHaveFocus();
-  fireEvent.keyDown(a, { key: "ArrowUp" });
+  expect(screen.getByRole("menuitem", { name: "Disabled" })).toHaveAttribute(
+    "data-popup-highlighted",
+    "true",
+  );
+  expect(menu).toHaveFocus();
+  fireEvent.keyDown(menu, { key: "ArrowUp" });
   expect(b).toHaveFocus();
   fireEvent.keyDown(a, { key: "End" });
   expect(b).toHaveFocus();

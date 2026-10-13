@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 342
+revision: 343
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-11T23:38:06.134Z"
+doc_updated_at: "2026-10-13T12:27:16.187Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1516,6 +1516,10 @@ sections:
     - Observation: Correction10/10 task8V85V8 implements original SwCursorShell marked-ring/cell selection, SwEditWin context events and actual dispatcher text/table resource ownership; shared bindings popup and menubar renderer, native PopupLabel localization, independent Writer popup presentation state. Scheduled full campaign15740Vitest/761files plus316Chromium=16056 unique cases,0failure/skip/retry; app417modules, inventory and tooling configuration coverage100allfour. Raw app56446 positive counters and eleven full changed modules3189positive current-source counters;887 old test files unchanged.
       Impact: Full campaign exposed and repaired old marker default-event regression, fresh test ownership placement and platform Control-column context popup stealing Undo focus; original failed reports retained honestly. Registry statuses/classes/defaults and IO/recovery exceptions preserved; complete upstream parity remains unfinished.
       Resolution: Canonical22 append/new records and generated old prefixes preserved; all nine restored-only metadata gates pass. No upstream/Python/helper/rawmaps in Agentplane. Safe local semantic and exact-SHA same-agent quality closure pending, then explicit human goal pause; no next feature task. Cadence resets after this accepted scheduled full campaign.
+
+    - Observation: Post-integration cadence1 taskTWGN0F corrects native standalone popup default SkipDisabledInMenus=false. Original disabled/enabled binding state is independent of per-popup highlighted item; arrows/Home/End and child preselection include disabled items; disabled/unselected Return stops current popup and retains parent for child cancellation.
+      Impact: Confirmed actual VCL source default and StopExecute/PopupMenu::Run/ClosePopup. One prior enabled-only test case contradicted native default; migrated only it, other12 case bodies/file bytes unchanged and938 other old test files unchanged. Native setting override/NOSELECT/mnemonic/pointer/timers/full platform paths remain unverified; no general parity promotion or IO/recovery changes.
+      Resolution: Related1418/206files, tooling26/4files and7 unique Chromium=1451 pass; whole one changed source100allfour with208positive counters and original location/ID/current hash proof. Canonical two records appended with old history/default/status/class intact; nine restored-only metadata audits and static checks pass. No full replay, network/upstream runtime calls or source artifacts in Agentplane. Exact semantic review/clean atomic closure follows; goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -3005,3 +3009,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Correction10/10 task8V85V8 implements original SwCursorShell marked-ring/cell selection, SwEditWin context events and actual dispatcher text/table resource ownership; shared bindings popup and menubar renderer, native PopupLabel localization, independent Writer popup presentation state. Scheduled full campaign15740Vitest/761files plus316Chromium=16056 unique cases,0failure/skip/retry; app417modules, inventory and tooling configuration coverage100allfour. Raw app56446 positive counters and eleven full changed modules3189positive current-source counters;887 old test files unchanged.
   Impact: Full campaign exposed and repaired old marker default-event regression, fresh test ownership placement and platform Control-column context popup stealing Undo focus; original failed reports retained honestly. Registry statuses/classes/defaults and IO/recovery exceptions preserved; complete upstream parity remains unfinished.
   Resolution: Canonical22 append/new records and generated old prefixes preserved; all nine restored-only metadata gates pass. No upstream/Python/helper/rawmaps in Agentplane. Safe local semantic and exact-SHA same-agent quality closure pending, then explicit human goal pause; no next feature task. Cadence resets after this accepted scheduled full campaign.
+
+- Observation: Post-integration cadence1 taskTWGN0F corrects native standalone popup default SkipDisabledInMenus=false. Original disabled/enabled binding state is independent of per-popup highlighted item; arrows/Home/End and child preselection include disabled items; disabled/unselected Return stops current popup and retains parent for child cancellation.
+  Impact: Confirmed actual VCL source default and StopExecute/PopupMenu::Run/ClosePopup. One prior enabled-only test case contradicted native default; migrated only it, other12 case bodies/file bytes unchanged and938 other old test files unchanged. Native setting override/NOSELECT/mnemonic/pointer/timers/full platform paths remain unverified; no general parity promotion or IO/recovery changes.
+  Resolution: Related1418/206files, tooling26/4files and7 unique Chromium=1451 pass; whole one changed source100allfour with208positive counters and original location/ID/current hash proof. Canonical two records appended with old history/default/status/class intact; nine restored-only metadata audits and static checks pass. No full replay, network/upstream runtime calls or source artifacts in Agentplane. Exact semantic review/clean atomic closure follows; goal remains active.

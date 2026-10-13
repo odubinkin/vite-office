@@ -1,5 +1,5 @@
 /** @fileoverview Presents generated popup resources through the same original bindings clients as the menubar. */
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useId, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import {
   BindingsMenuCommand,
@@ -31,6 +31,32 @@ export function CommandPopupMenu({
   const root = useRef<HTMLDivElement>(null),
     savedFocus = useRef<HTMLElement | undefined>(undefined);
   const [openPath, setOpenPath] = useState<readonly string[]>([]);
+  const highlighted = useRef(new WeakMap<HTMLElement, HTMLElement>());
+  const entryId = useId();
+  const mark = useCallback(
+    /** Records native selection independently of DOM focus. @param menu - Actual popup owner. @param item - Selected native entry. @returns Nothing. */ (
+      menu: HTMLElement,
+      item: HTMLElement,
+    ): void => {
+      highlighted.current.get(menu)?.removeAttribute("data-popup-highlighted");
+      highlighted.current.set(menu, item);
+      item.dataset.popupHighlighted = "true";
+      if (item.id === "") item.id = `${menu.id}-item-${entries(menu).indexOf(item)}`;
+      menu.setAttribute("aria-activedescendant", item.id);
+    },
+    [],
+  );
+  const highlight = useCallback(
+    /** Keeps popup focus for disabled selection while retaining the enabled browser focus convention. @param menu - Original popup. @param item - Native highlighted entry. @returns Nothing. */ (
+      menu: HTMLElement,
+      item: HTMLElement,
+    ): void => {
+      mark(menu, item);
+      if (item.hasAttribute("disabled")) menu.focus();
+      else item.focus();
+    },
+    [mark],
+  );
   const pendingChildFocus = useRef(false);
   const closeMenu = useCallback(
     /** Dismisses before restoring the connected previous owner; outside focus retains its new owner. @param restore - Whether to restore menu-owned focus. @returns Nothing. */ (
@@ -67,18 +93,19 @@ export function CommandPopupMenu({
     [closeMenu],
   );
   useLayoutEffect(
-    /** Selects the first enabled child only after a keyboard submenu request. @returns Nothing. */ () => {
+    /** Selects the first selectable child with native SkipDisabledInMenus=false. @returns Nothing. */ () => {
       if (pendingChildFocus.current) {
         pendingChildFocus.current = false;
         const menu = (root.current as HTMLDivElement).querySelector<HTMLElement>(
           `[data-popup-depth="${openPath.length}"]`,
         );
         menu?.focus();
-        if (preselect.current) entries(menu).at(0)?.focus();
+        const first = entries(menu).at(0);
+        if (preselect.current && menu !== null && first !== undefined) highlight(menu, first);
         preselect.current = false;
       }
     },
-    [openPath],
+    [openPath, highlight],
   );
   const preselect = useRef(false);
   /** Opens a child while discarding former sibling descendants. @param id - Original resource identity. @param depth - Parent depth. @param keyboard - Whether to select first child. @returns Nothing. */ function open(
@@ -91,7 +118,7 @@ export function CommandPopupMenu({
     preselect.current = keyboard;
     setOpenPath([...openPath.slice(0, depth), id]);
   }
-  /** Returns enabled direct entries in resource order. @param menu - Actual menu owner. @returns Direct enabled entries. */ function entries(
+  /** Returns direct selectable entries in original resource order, including disabled commands by native default. @param menu - Actual menu owner. @returns Direct entries. */ function entries(
     menu: HTMLElement | null,
   ): HTMLElement[] {
     return menu === null
@@ -99,7 +126,7 @@ export function CommandPopupMenu({
       : [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')].filter(
           /** Retains native selectable entries at this level. @param item - Entry. @returns Whether admitted. */ (
             item,
-          ) => !item.hasAttribute("disabled") && item.closest('[role="menu"]') === menu,
+          ) => item.closest('[role="menu"]') === menu,
         );
   }
   /** Returns focus to the actual parent trigger while closing descendants. @param depth - Child depth. @param trigger - Actual owning parent button. @returns Nothing. */ function closeChild(
@@ -117,7 +144,8 @@ export function CommandPopupMenu({
     const target = event.target as HTMLElement,
       menu = event.currentTarget,
       list = entries(menu),
-      index = list.indexOf(target);
+      selected = list.includes(target) ? target : highlighted.current.get(menu),
+      index = list.indexOf(selected as HTMLElement);
     if (event.key === "Escape" || (event.key === "F6" && event.ctrlKey)) {
       event.preventDefault();
       if (depth === 0) closeMenu();
@@ -127,14 +155,18 @@ export function CommandPopupMenu({
       if (depth > 0) closeChild(depth, event.currentTarget.previousElementSibling as HTMLElement);
     } else if (event.key === "ArrowRight" || event.key === "Enter") {
       event.preventDefault();
-      const id = target.dataset.popupTrigger;
+      const id = selected?.dataset.popupTrigger;
       if (id !== undefined)
         flushSync(
           /** Opens original child before its keyboard preselection. @returns Nothing. */ () =>
             open(id, depth, true),
         );
-      else if (event.key === "Enter" && !list.includes(target)) closeMenu();
-      else if (event.key !== "ArrowRight") target.click();
+      else if (event.key === "Enter") {
+        if (selected === undefined || selected.hasAttribute("disabled")) {
+          if (depth === 0) closeMenu();
+          else closeChild(depth, event.currentTarget.previousElementSibling as HTMLElement);
+        } else selected.click();
+      }
     } else if (event.key === " ") {
       event.preventDefault();
     } else if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
@@ -147,7 +179,8 @@ export function CommandPopupMenu({
             : event.key === "ArrowDown"
               ? (index + 1) % list.length
               : (index < 0 ? list.length : index) - 1;
-      list[(next + list.length) % list.length]?.focus();
+      const item = list[(next + list.length) % list.length];
+      if (item !== undefined) highlight(menu, item);
     }
   }
   /** Renders original recursive resource placements using shared command controller items. @param values - Native placements. @param depth - Popup depth. @returns Menu items. */ function renderItems(
@@ -215,6 +248,7 @@ export function CommandPopupMenu({
               <CommandMenuPopup
                 aria-label={`${label} menu`}
                 data-popup-depth={depth + 1}
+                id={`${entryId}-${depth + 1}`}
                 onKeyDown={
                   /** Routes child keyboard input. @param event - Keyboard input. @returns Nothing. */ (
                     event,
@@ -232,11 +266,24 @@ export function CommandPopupMenu({
     );
   }
   return (
-    <div className="relative z-[60]" ref={root}>
+    <div
+      className="relative z-[60] [&_[data-popup-highlighted]]:bg-slate-100"
+      onFocusCapture={
+        /** Synchronizes browser focus with the owning native popup highlight. @param event - Actual focus event. @returns Nothing. */ (
+          event,
+        ) => {
+          const target = event.target,
+            menu = target.closest<HTMLElement>('[role="menu"]');
+          if (menu !== null && target.matches('[role^="menuitem"]')) mark(menu, target);
+        }
+      }
+      ref={root}
+    >
       <CommandMenuPopup
         anchorPoint={position}
         aria-label={ariaLabel}
         data-popup-depth={0}
+        id={`${entryId}-0`}
         onKeyDown={
           /** Routes root keyboard input. @param event - Keyboard input. @returns Nothing. */ (
             event,
