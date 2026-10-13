@@ -1,10 +1,11 @@
 ---
 id: "202610131251-5R92MS"
 title: "Implement Calc matrix coordinate values and type queries"
-status: "DOING"
+result_summary: "Implemented original coordinate matrix writes/Get/type flags and preserved encoded errors through shared conversion/copy. CALC-073 and current inventory updated. Prioritize real cell/store/ScColumn/ScTable/ScDocument, editing and ODS import/export next; no full UI/ODS claim, goal active, full cadence91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/calc-matrix-values-native/manifest.json"
   findings:
     - "Exact3209current/committed non-task hashes match,17intentional non-task paths and two necessary shared range/conversion owners. Complete37464-byte original production-mode stream covers scalar writes/Get/types/flags, UTF16 retained strings, replication and CALC-073 normal in-storage spill/bounds exception. Calc128/shared244 whole raw100 every counter positive and16gates pass; diagnostic partial coverage excluded from acceptance. No Writer change, error wrapper, memory manager or fake interpreter."
-commit: null
+commit:
+  hash: "786c34b686affca6834b2df620e798f3d0640bec"
+  message: "🧩 5R92MS calc: implement matrix values and preserve range errors"
 comments:
   -
     author: "CODER"
     body: "Start: original matrix coordinate values and predicates over real shared storage under active goal authorization."
+  -
+    author: "CODER"
+    body: "Verified: original coordinate matrix values/predicates and necessary shared range error preservation. Native37464-byte stream, Calc128/shared244 whole raw100, source-absent checks and16gates pass, exact3209hashes and same-agent separate EVALUATOR pass; UI/ODS priority recorded."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: actual matrix coordinate values/predicates and shared range error preservation at786c34b686affca6834b2df620e798f3d0640bec. Native37464-byte stream, Calc128/shared244 whole raw100 every raw counter positive, source-absent checks and16gates/36tooling/123inventory pass. Exact3209hashes,17intentional paths and same-agent separate EVALUATOR pass. No Writer/manager/interpreter substitute; actual document/UI/ODS priority recorded, next full91."
+  -
+    type: "status"
+    at: "2026-10-13T13:29:53.470Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original coordinate matrix values/predicates and necessary shared range error preservation. Native37464-byte stream, Calc128/shared244 whole raw100, source-absent checks and16gates pass, exact3209hashes and same-agent separate EVALUATOR pass; UI/ODS priority recorded."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:29:13.545Z"
+doc_updated_at: "2026-10-13T13:29:53.472Z"
 doc_updated_by: "CODER"
 description: "Iteration85: original coordinate PutDouble/String/Empty/EmptyPath/Error/Boolean, empty-result vector, Get value and all coordinate type/empty queries over real mdds/SharedString; public ScMatrix delegates. No interpreter stand-in, index/transposed/bulk families remain separate. Native source observations, exact original flag behavior and journal, whole Calc/related shared raw100, inventory and gates."
 sections:
