@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610130348-GA0F9C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T04:12:22.547Z",
+  "verdict": "pass",
+  "summary": "Both development histories integrated, full verification passed, reverse synchronization published with clean correct branches.",
+  "evaluated_sha": "e916331da7f2c06b835e11f3f6097e0158dbcc7b",
+  "blueprint_digest": "c0438dbe1df14ac8ab70a6681a9adb047a6715aa6a5f007cfbeed1f52588a2c7",
+  "findings": [
+    "The only merge conflict preserved independent tools/inc and formula/inc classifiers, both covered by existing passing regression tests.",
+    "Missing local Boost reference repaired with an ignored link to the already available original reference; all previously blocked checks passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610130348-GA0F9C/README.md",
+    ".agentplane/tasks/202610130348-GA0F9C/full-verify.log",
+    ".agentplane/tasks/202610130348-GA0F9C/provenance-verify.log",
+    "git ls-remote confirms main writer calc equal961e07a5; clean main writer calc working directories"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Existing broader LibreOffice parity gaps remain tracked; doctor reports two pre-existing metadata/tooling warnings."
+  ]
+}
