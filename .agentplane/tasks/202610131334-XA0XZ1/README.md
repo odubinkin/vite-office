@@ -1,10 +1,11 @@
 ---
 id: "202610131334-XA0XZ1"
 title: "Implement original Calc scalar cell value ownership"
-status: "DOING"
+result_summary: "Implemented original scalar ScCellValue alternatives empty/number/string with setters/queries/clear/swap/logical moves and original self-move clearing CALC-074. Inventory and UI/ODS prerequisite checkpoint updated. Actual peer/document/storage/UI/ODS families remain next priority; goal active, next full91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/calc-cell-value-native/manifest.json"
   findings:
     - "Exact3219current/committed non-task hashes match,12intentional paths and no Writer/shared runtime edits. Native3747-byte stream/6ordinary commands and451source hashes cover scalar constructors/set/clear/get/type/swap/move, UTF16 retained strings, IEEE/errors, wrong variant and CALC-074 self move clearing. Calc129/shared245 whole raw100 every counter positive and16gates pass. No variant/refcount library, fake peer owner or complete document/UI/ODS claim."
-commit: null
+commit:
+  hash: "1230cd9cac73b8ec27989106eb04c1a93256d91e"
+  message: "🧩 XA0XZ1 calc: implement original scalar cell value owner"
 comments:
   -
     author: "CODER"
     body: "Start: original scalar cell value owner under active UI/ODS priority, shared values reused and no fake peer owners."
+  -
+    author: "CODER"
+    body: "Verified: original scalar ScCellValue owner and logical moves over reused SharedString, no fake peer/DTO or memory library. Native3747-byte stream, Calc129/shared245 raw100, source-absent checks and16gates pass; exact3219hashes and same-agent separate EVALUATOR pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: original scalar ScCellValue owner at1230cd9cac73b8ec27989106eb04c1a93256d91e. Native3747-byte stream, Calc129/shared245 whole raw100 every raw counter positive, source-absent build/profile and16gates/36tooling/123inventory pass. Exact3219hashes,12intentional paths and same-agent separate EVALUATOR pass. No fake peer/DTO/memory manager or Writer/shared runtime change; scalar family partial, real document/UI/ODS next priority, full91."
+  -
+    type: "status"
+    at: "2026-10-13T13:56:52.980Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original scalar ScCellValue owner and logical moves over reused SharedString, no fake peer/DTO or memory library. Native3747-byte stream, Calc129/shared245 raw100, source-absent checks and16gates pass; exact3219hashes and same-agent separate EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:56:10.172Z"
+doc_updated_at: "2026-10-13T13:56:52.982Z"
 doc_updated_by: "CODER"
 description: "Iteration86 UI/ODS prerequisite: original ScCellValue empty/double/SharedString constructors, scalar set/clear/getType/getDouble/getSharedString/isEmpty/swap and semantic move construction/assignment over original variant indices. Ordinary GC refs, reused SharedString values, no fake EditTextObject/ScFormulaCell/document. Native original scalar-family observations, actual pointer-free forward declarations only; whole Calc/affected shared raw100, inventory and gates."
 sections:
