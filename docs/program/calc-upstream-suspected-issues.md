@@ -1752,3 +1752,13 @@ ScExternalDoubleRefToken::operator== declares auto rhs = static_cast<const ScExt
 Evidence: pinned sc/source/core/tool/token.cxx comparison declaration and sc/inc/token.hxx defaulted copy constructor, inspected in task97. The normal complete original method stream confirms equality outcomes, but no count/allocation/performance or concurrency experiment is performed. Whether this is intentional and whether real consumers are affected remain unverified.
 
 Decision: preserve observed synchronous value comparisons. Under the user-authorized JS GC adaptation, do not reproduce incidental native stack copies or reference-count traffic when reading initialized final-class values has the same result; actual string/refdata copy/move constructors remain explicit where their copied/moved state is observable. Do not claim a user-visible defect or silently alter equality.
+
+## CALC-087: matrix-range token equality omits its range
+
+Status: confirmed original initialized equality behavior; intended consumer semantics and user-visible consequences are unverified.
+
+ScMatrixRangeToken adds maRef and true IsMatrixRangeToken but inherits ScMatrixToken::operator== without overriding it. The inherited comparator checks only FormulaToken type/opcode and matrix identity. Two actual matrix-range tokens with different stored coordinate endpoints therefore compare equal when sharing a matrix. It also compares equal with an ordinary ScMatrixToken holding that same matrix; inherited TextEqual follows the same virtual comparison.
+
+Evidence: task98 complete original class/header/member scopes over real matrix peers/full original matrix implementation declaration, normal initialized same-matrix/different-range/base-token/null-matrix comparisons and matching portable replay. Original range members remain distinct value copies. No invalid staticcast/type fabrication or memory/count experiment; original document/interpreter consumer behavior remains unexecuted.
+
+Decision: preserve inherited matrix identity comparison and range-value copying. Audit original interpreter/grouping consumers later, without silently adding coordinates or class-kind checks to equality.

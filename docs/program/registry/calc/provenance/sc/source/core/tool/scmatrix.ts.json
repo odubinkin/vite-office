@@ -66,10 +66,12 @@
       "Original default/copy/assignment/query/equality semantics and fixed tag/member identity.",
       "Original internal data/flag matrix storage and constructor/coordinate replication semantics reuse genuine shared owners.",
       "Original public matrix constructors/resize/geometry/type classifier boundary delegates to actual shared storage.",
-      "Original coordinate value/flag/type responsibilities and public delegates reuse genuine shared stores and values."
+      "Original coordinate value/flag/type responsibilities and public delegates reuse genuine shared stores and values.",
+      "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations."
     ],
     "omittedResponsibilities": [
-      "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91."
+      "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91.",
+      "Task98 implements actual sc::RangeMatrix and MultiDataCellState value/default/copy/move/assignment/predicate owners plus ScMatrixRangeToken constructor/copy/Clone/const range query/classification using existing true ScMatrixToken/ScMatrix/refdata. RangeMatrix nullable matrix/default-1sixInt32 public fields and nonnegative/ordered geometry validity remain original; validation ignores matrix presence and document bounds. JS property assignment uses native bitops for signed32 coordinates, signed16 cell column and fixedUInt8 state, no extra SALlibrary. Matrix refs are ordinary JS aliases, source move clears matrix only and retains coordinates; selfmove is value-stable. Matrix-range ctor narrows original Int32 columns/tabs into actual reference data without normalization; copy/Clone shares matrix and owns copied range. Inherited matrix-pointer equality omits coordinates (CALC-087), preserve. Complete original matrix/type headers and real full private ScMatrixImpl declaration with unchanged needed doc-free ctor/storage/dimension/destruction/ref bodies compile actual bounded native peers; old synthetic declaration scaffold not reused. Exact original SharedString mdds declarations/callbacks selected without unrelated formula-cell/document dependencies, no fake class/provider or undefined-symbol suppression. Full61825-byte normal initialized stream482source hashes/17verified native-only Boost headers plus actual verified mdds dependencies/8commands. No count/pool/lifetime/physical layout/nativeABI/memory/concurrency/debug/invalid cast/wholeQA claims. Original matrix and nonempty-cell document QA anchors are unexecuted context only. Existing SAL/SVL cleanup unchanged; actual interpreter/column/compiler/config/ScTokenArray/document/grid/ODSpipeline pending, no readiness claim. Full101upcomingfirst/continue, pause after second111/repairs; Writer-only coverage separate."
     ],
     "evidence": {
       "local": [
@@ -108,6 +110,14 @@
         {
           "path": "apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
           "marker": "matches original coordinate matrix value flag and predicate stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/types.ts",
+          "marker": "RangeMatrix"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-matrix.test.ts",
+          "marker": "matches original range matrix, column cell state and range-token value stream"
         }
       ],
       "upstream": [
@@ -130,6 +140,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
           "marker": "ScMatrixImpl::PutError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/types.cxx",
+          "marker": "RangeMatrix::RangeMatrix()"
         }
       ]
     }

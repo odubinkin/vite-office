@@ -11,6 +11,7 @@ export {
   ScExternalNameToken,
   ScHybridCellToken,
   ScMatrixToken,
+  ScMatrixRangeToken,
   ScMatrixCellResultToken,
   ScMatrixFormulaCellToken,
 } from "../source/core/tool/token";

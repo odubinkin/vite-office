@@ -1,4 +1,6 @@
 /** @fileoverview Original Calc empty, hybrid, matrix result and reference tokens over genuine shared token, string and matrix owners; references use JS GC. */
+import { ScComplexRefData } from "../../../inc/refdata";
+import { RangeMatrix } from "../../../inc/types";
 import { FormulaToken, FormulaDoubleToken, StackVar } from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
@@ -150,6 +152,38 @@ export class ScMatrixToken extends FormulaToken {
   /** Original base matrix token is not a matrix-range token. @returns False. */
   IsMatrixRangeToken(): boolean {
     return false;
+  }
+}
+
+/** Original matrix-range result token shares matrix identity and owns copied range data. */
+export class ScMatrixRangeToken extends ScMatrixToken {
+  private readonly maRef: ScComplexRefData;
+  /** Original RangeMatrix/copy constructor retains matrix and initializes native narrowed coordinates. @param source - Range matrix or copied token. @returns Token. */
+  constructor(source: RangeMatrix | ScMatrixRangeToken) {
+    super(source instanceof ScMatrixRangeToken ? source : source.mpMat);
+    this.maRef = new ScComplexRefData();
+    if (source instanceof ScMatrixRangeToken) this.maRef.assign(source.maRef);
+    else
+      this.maRef.InitRange(
+        source.mnCol1,
+        source.mnRow1,
+        source.mnTab1,
+        source.mnCol2,
+        source.mnRow2,
+        source.mnTab2,
+      );
+  }
+  /** Original borrowed const range member. @returns Owned range view. */
+  GetDoubleRef(): Readonly<ScComplexRefData> {
+    return this.maRef;
+  }
+  /** Original implicit-copy clone shares matrix and copies range values. @returns Copied token. */
+  override Clone(): ScMatrixRangeToken {
+    return new ScMatrixRangeToken(this);
+  }
+  /** Original range-matrix classification. @returns True. */
+  override IsMatrixRangeToken(): boolean {
+    return true;
   }
 }
 

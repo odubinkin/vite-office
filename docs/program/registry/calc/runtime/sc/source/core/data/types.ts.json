@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/types.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "capabilityIds": [
+      "CAP-bd12e687-0fd0-42a8-a799-4643b6bc4676"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/types.ts#RangeMatrix",
+        "apps/office/src/sc/source/core/data/types.ts#MultiDataCellState",
+        "apps/office/src/sc/source/core/data/types.ts#static readonly StateType",
+        "apps/office/src/sc/source/core/tool/range-matrix.test.ts#matches original range matrix, column cell state and range-token value stream",
+        "vendor/libreoffice-reference/sc/source/core/data/types.cxx#RangeMatrix::isRangeValid()",
+        "docs/program/calc-browser-gc-adaptation.md#Range matrix and column cell-state values"
+      ],
+      "justification": "Task98 implements actual sc::RangeMatrix and MultiDataCellState value/default/copy/move/assignment/predicate owners plus ScMatrixRangeToken constructor/copy/Clone/const range query/classification using existing true ScMatrixToken/ScMatrix/refdata. RangeMatrix nullable matrix/default-1sixInt32 public fields and nonnegative/ordered geometry validity remain original; validation ignores matrix presence and document bounds. JS property assignment uses native bitops for signed32 coordinates, signed16 cell column and fixedUInt8 state, no extra SALlibrary. Matrix refs are ordinary JS aliases, source move clears matrix only and retains coordinates; selfmove is value-stable. Matrix-range ctor narrows original Int32 columns/tabs into actual reference data without normalization; copy/Clone shares matrix and owns copied range. Inherited matrix-pointer equality omits coordinates (CALC-087), preserve. Complete original matrix/type headers and real full private ScMatrixImpl declaration with unchanged needed doc-free ctor/storage/dimension/destruction/ref bodies compile actual bounded native peers; old synthetic declaration scaffold not reused. Exact original SharedString mdds declarations/callbacks selected without unrelated formula-cell/document dependencies, no fake class/provider or undefined-symbol suppression. Full61825-byte normal initialized stream482source hashes/17verified native-only Boost headers plus actual verified mdds dependencies/8commands. No count/pool/lifetime/physical layout/nativeABI/memory/concurrency/debug/invalid cast/wholeQA claims. Original matrix and nonempty-cell document QA anchors are unexecuted context only. Existing SAL/SVL cleanup unchanged; actual interpreter/column/compiler/config/ScTokenArray/document/grid/ODSpipeline pending, no readiness claim. Full101upcomingfirst/continue, pause after second111/repairs; Writer-only coverage separate.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RangeMatrix",
+        "MultiDataCellState",
+        "isRangeValid",
+        "copy_assign",
+        "move",
+        "move_assign"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/types.cxx",
+      "upstreamSymbols": [
+        "RangeMatrix",
+        "MultiDataCellState",
+        "isRangeValid"
+      ]
+    }
+  }
+}

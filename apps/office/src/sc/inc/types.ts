@@ -44,3 +44,5 @@ export type ScConstMatrixRef = Readonly<
     | "IsBoolean"
   >
 > | null;
+
+export { RangeMatrix, MultiDataCellState } from "../source/core/data/types";
