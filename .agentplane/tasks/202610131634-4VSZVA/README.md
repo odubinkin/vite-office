@@ -4,7 +4,7 @@ title: "Borrow original native table frames for border painting"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "1571unique assertions:1523related/26tooling/22Chromium, whole2current-source Istanbul100four/276positive original counters,949otheroldtests/3caller-lifetime-only APIs original assertion-data tokens/4canonical history prefixes/137staticfiles/9metadata gates pass. Original mrTabFrame/native lower graph borrowed, no duplicate row/cell clients/cleanup ownership.4refs absent every producer/exact restore; transient metadata availability retried without runtime replay. Protected deviations retained, cadence8/10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T17:04:37.962Z"
+  updated_by: "EVALUATOR"
+  note: "Exacte58737786be9018a9aeaee46717d19e0b43ca759 same-agent non-independent review passes original frame-borrow painter contract/duplicate graph removal;1571unique accepted assertions and whole2current-original modules100four."
+  evaluated_sha: "e58737786be9018a9aeaee46717d19e0b43ca759"
+  blueprint_digest: "62404b027429a09acbda954c59af93f6c1b4e09584084d2f19fe908fdd68f6f9"
+  evidence_refs:
+    - ".agentplane/tasks/202610131634-4VSZVA/README.md"
+    - ".agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131634-4VSZVA/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4VSZVA/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4VSZVA/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4VSZVA/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4VSZVA/execution-hashes.json"
+    - "apps/office/node_modules/.cache/parity-coverage/4VSZVA/browser-tests.json"
+  findings:
+    - "Pinned paintfrm.cxx SwTabFramePainter(const SwTabFrame&) retains mrTabFrame and walks existing layout lowers. Port now borrows the original actual frame, gets native row/cell links/current frame formats and performs no SwRowFrame/SwCellFrame construction/destruction/registration. Renderer supplies its already-owned nativeTable and retains existing finally ownership. No compatibility overload/model adapter/cache/state manager/new runtime module or low-level recreation added."
+    - "Native5/mounted3 fresh cases and exact3oldcaller API fixtures plus all219related files prove actual graph/client identity, alternate native frame format, partial lower membership, constructor/device failure and main rendering release. Original numeric/enum/color/coordinate/splitting/snapshot/throw acceptance tokens and data preserved in oldcaller files, caller-owned baseline explicit.949otheroldfiles byte-identical,4canonical history/scalars/status/default/classification prefixes preserved. Interval/arbitration/mirror/grid/default behavior unchanged;22Chromium real borders/mode/history/edit/row-column/headline/proportional scenarios pass including2new1280/390."
+    - "All12reviewed Git blobs match final execution hashes; actual entire2current-original Istanbul maps100L130/S135/F24/B117,276positive raw counters and original source locations/IDs, no map/source transfer/normalization/provider/threshold/exclusion changes.1523related/26tooling/22Chromium=1571unique; scoped30fresh overlapped broader required related and counted once.137staticfiles match acceptedbuild,all TS7/lint/docs/size/deps/static9metadata gates pass. Every producer4refs physically absent/finally exact original restore; transient external boost header metadata availability resolved with original link/header checks and metadata-only retry, no runtime replay/target mutation."
 commit: null
 comments:
   -
@@ -42,7 +64,7 @@ events:
     state: "ok"
     note: "1571unique assertions:1523related/26tooling/22Chromium, whole2current-source Istanbul100four/276positive original counters,949otheroldtests/3caller-lifetime-only APIs original assertion-data tokens/4canonical history prefixes/137staticfiles/9metadata gates pass. Original mrTabFrame/native lower graph borrowed, no duplicate row/cell clients/cleanup ownership.4refs absent every producer/exact restore; transient metadata availability retried without runtime replay. Protected deviations retained, cadence8/10."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:03:14.317Z"
+doc_updated_at: "2026-10-13T17:05:21.580Z"
 doc_updated_by: "CODER"
 description: "Align SwTabFramePainter constructor with pinned const SwTabFrame reference and actual linked row/cell ownership; remove duplicate temporary row/cell graph during existing React table paint. Original constructor API caller fixtures, native/mounted/Chromium evidence and whole2modules100four; preserve border outputs/defaults/history/registered deviations. Correction8/10."
 sections:
@@ -260,6 +282,8 @@ sections:
     Accepted1571unique assertions:1523related original app cases/219files including8fresh native/mounted borrowing cases and22original caller cases,26tooling and22Chromium (2new1280/390 actual native border/history/editing scenarios and20existing border/arbitration/mode/column-row-drag/headline/proportional regressions),0unresolved failure/skip/retry in accepted app/browser profiles. Fresh30/5files passed before broader required related coverage; overlapping cases counted once. Whole2current-original production modules actual Istanbul100 lines130/statements135/functions24/branches117,276positive original raw counters/current source hashes/IDs/locations; no source/map/function transfer, counter/location normalization, provider/exclusion/threshold changes.949other oldtestfiles byte-identical; exact3old API caller files construct/own/release original SwTabFrames, preserve every original assertion/data/test declaration token (only table-to-frame constructor receiver comparison admitted), original literal enum/numeric/color/coordinate/splitting/throw outputs unchanged. Native two-by-two client baseline now includes caller-owned graph before painter; painter creates/removes no layout clients.4canonical full old history/status/default/classification prefixes preserved. Renderer uses its existing nativeTable for paint; painter borrows actual mrTabFrame lower/next and cell formats, no temporary row/cell construction or destruction. Existing interval/Style/grid outputs/owned finally remain. TS7/full lint/scoped format/JSDoc/size/deps/build/static,137frozenstaticfiles and9final restored-onlymetadata gates pass. All producers physically hide4LO/mdds/ICU/boost links and exact native lstat finally restore original links; tests never execute pinned implementation.
 
     Bounded original frame ownership/API/traversal over represented flat table grid. Full physical VCL frame geometry/paint areas/root/page/master/follow/covered/rowspan/nested/RTL/vertical/Word ends/junctions/primitives/incremental formatting and whole native core/UI parity remain unverified. Original renderer still owns temporary table hierarchy for its render lifetime; this task removes the second painter graph, not complete persistent native layout. No compatibility overload/model wrapper/new runtime module/cache/state registry or low-level allocation machinery added. No upstream/helper/Python/rawmap source copies in Agentplane/network/global reads/publication; protected Space and registered save/open/recovery/settings exceptions remain. Same-agent non-independent semanticSHA review follows. Goalactive cadence8/10; full once10 then user pause after next full+necessary repairs.
+
+    Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-agent EVALUATOR phase (not independent), report .agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/quality-report.json. All12reviewed blobs equal frozen final evidence,137staticfiles unchanged.1571unique assertions, whole2current-original modules100four/276positive counters,949otheroldtests and original3caller assertion/data outputs,4canonical history prefixes/9metadata gates pass. No source/test/registry change after acceptance; clean direct close follows. Goalactive8/10, full once10 then user pause after next full and repairs.
 id_source: "generated"
 ---
 ## Summary
@@ -494,3 +518,5 @@ Observation: Initial8case red had6fail/2pass; real mounted Insert observed2regis
 Accepted1571unique assertions:1523related original app cases/219files including8fresh native/mounted borrowing cases and22original caller cases,26tooling and22Chromium (2new1280/390 actual native border/history/editing scenarios and20existing border/arbitration/mode/column-row-drag/headline/proportional regressions),0unresolved failure/skip/retry in accepted app/browser profiles. Fresh30/5files passed before broader required related coverage; overlapping cases counted once. Whole2current-original production modules actual Istanbul100 lines130/statements135/functions24/branches117,276positive original raw counters/current source hashes/IDs/locations; no source/map/function transfer, counter/location normalization, provider/exclusion/threshold changes.949other oldtestfiles byte-identical; exact3old API caller files construct/own/release original SwTabFrames, preserve every original assertion/data/test declaration token (only table-to-frame constructor receiver comparison admitted), original literal enum/numeric/color/coordinate/splitting/throw outputs unchanged. Native two-by-two client baseline now includes caller-owned graph before painter; painter creates/removes no layout clients.4canonical full old history/status/default/classification prefixes preserved. Renderer uses its existing nativeTable for paint; painter borrows actual mrTabFrame lower/next and cell formats, no temporary row/cell construction or destruction. Existing interval/Style/grid outputs/owned finally remain. TS7/full lint/scoped format/JSDoc/size/deps/build/static,137frozenstaticfiles and9final restored-onlymetadata gates pass. All producers physically hide4LO/mdds/ICU/boost links and exact native lstat finally restore original links; tests never execute pinned implementation.
 
 Bounded original frame ownership/API/traversal over represented flat table grid. Full physical VCL frame geometry/paint areas/root/page/master/follow/covered/rowspan/nested/RTL/vertical/Word ends/junctions/primitives/incremental formatting and whole native core/UI parity remain unverified. Original renderer still owns temporary table hierarchy for its render lifetime; this task removes the second painter graph, not complete persistent native layout. No compatibility overload/model wrapper/new runtime module/cache/state registry or low-level allocation machinery added. No upstream/helper/Python/rawmap source copies in Agentplane/network/global reads/publication; protected Space and registered save/open/recovery/settings exceptions remain. Same-agent non-independent semanticSHA review follows. Goalactive cadence8/10; full once10 then user pause after next full+necessary repairs.
+
+Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-agent EVALUATOR phase (not independent), report .agentplane/tasks/202610131634-4VSZVA/quality/20261013-170437962-recovery-context/quality-report.json. All12reviewed blobs equal frozen final evidence,137staticfiles unchanged.1571unique assertions, whole2current-original modules100four/276positive counters,949otheroldtests and original3caller assertion/data outputs,4canonical history prefixes/9metadata gates pass. No source/test/registry change after acceptance; clean direct close follows. Goalactive8/10, full once10 then user pause after next full and repairs.
