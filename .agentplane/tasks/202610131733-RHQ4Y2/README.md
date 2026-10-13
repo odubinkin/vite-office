@@ -1,10 +1,11 @@
 ---
 id: "202610131733-RHQ4Y2"
 title: "Implement shared search parameter values for Calc options and UI"
-status: "DOING"
+result_summary: "SearchParam shared owner reuses OUString for real Calc document/ODS options and UI search dependencies, no lifetime/search/config substitute. CALC083 source comparator note retained. Goal active until full101/repairs, then user pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Complete original SearchParam class and ctor/destructor definitions over genuine dependencies446sources/six normal commands compare17252byte whole stream; stable borrowed member/copy/defaults/UInt32 signed outputs and mode flags preserved without lifetime manager or fake peers."
     - "Whole Calc133tests44files and affected shared76tests23files, all raw counters positive100, links restored and static/Calc0UI pass. Only source-backed unotools-sal edge added with cycle enforcement preserved; native observer unicode/setup and mandatory QA-context metadata failures retained/corrected."
     - "CALC-083 is source-only ScDocOptions comparator evidence, not native consumer proof. Existing Writer/shared runtime unchanged, actual SearchParam new owner; QA context explicitly unexecuted. Same-agent separate evaluator not independent review; pause after full101/repairs pending."
-commit: null
+commit:
+  hash: "ba25ac4d77a006a890a206c3acbcc0ae675044ab"
+  message: "🧩 RHQ4Y2 unotools: implement original search parameter values"
 comments:
   -
     author: "CODER"
     body: "Start: actual shared SearchParam values and mode/boolean conversions with genuine OUString, no search engine/locale/configuration substitute or ownership manager."
+  -
+    author: "CODER"
+    body: "Verified: actual shared SearchParam value/static conversion family matches complete original normal stream; whole Calc/affected shared raw100,16gates and exact source review pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact ba25ac4d77a03275non-task hashes13intentionalpaths reviewed; native446sources6normalcommands17252byte SearchParam stream matches. Calc133/shared76raw100 every counter, original links restored, static/Calc0UI and16gates pass; real shared string owner reused, no memory/search/config substitute. QA context unexecuted, CALC083 source-only; pause after full101/repairs pending."
+  -
+    type: "status"
+    at: "2026-10-13T17:57:06.221Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared SearchParam value/static conversion family matches complete original normal stream; whole Calc/affected shared raw100,16gates and exact source review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:56:42.775Z"
+doc_updated_at: "2026-10-13T17:57:06.229Z"
 doc_updated_by: "CODER"
 description: "Task94 actual utl SearchParam value owner/static search-mode conversion prerequisite for ScDocOptions, ODS search settings and real UI search, reusing actual shared OUString without a substitute search engine or configuration defaults."
 sections:
