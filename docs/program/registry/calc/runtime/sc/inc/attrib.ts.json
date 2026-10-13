@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/attrib.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "capabilityIds": [
+      "CAP-18640d53-3447-4688-9c34-24982b036e5f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/attrib.ts#ScMergeFlagAttr",
+        "apps/office/src/sc/source/core/data/mergeflag.test.ts#distinguishes overlap, filter, scenario and all pivot control meanings",
+        "docs/program/calc-core.md#Merge/filter/pivot flag values (task102)",
+        "vendor/libreoffice-reference/sc/inc/attrib.hxx#ScMF"
+      ],
+      "justification": "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/attrib.hxx",
+      "upstreamSymbols": [
+        "ScMF",
+        "ScMergeFlagAttr"
+      ]
+    }
+  }
+}

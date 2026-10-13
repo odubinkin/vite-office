@@ -115,3 +115,7 @@ Explicit divergence: original unique-owner token identity and input-side mutatio
 ## Shared grid value settings
 
 Task100 SvxOptionsGrid is one shared ordinary value owner: four UInt32 field parameters and three bool fields, original defaults, independent scalar copies and stable value updates. Native integer narrowing uses JSunsigned32 bitops; no SAL/allocator/ownership library, refcounts, pools, weakrefs or finalizers. Actual service/GUI/Calc-derived defaults are separate pending owners and must use this sharedbase rather than duplicate it. No native physical layout/lifetime or memory proof is claimed.
+
+## Merge/filter/pivot attribute values
+
+Task102 reuses the Writer/shared SfxInt16Item and SfxPoolItem directly for ScMergeFlagAttr. Native enum-to-signed16 storage conversion uses JS bit operations; copies/clones are ordinary value-owning objects. No duplicate integer/pool/refcount/allocator/Boost library is added. Original itemset transport follows the existing shared browser boundary. The diagnostic XML hook, native UNO/assertion/ABI behavior and real Calc document/filter pipeline remain unported or unverified.
