@@ -4,7 +4,7 @@ title: "Support native popup auxiliary mouse buttons"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -17,12 +17,36 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T14:47:25.312Z"
+  updated_by: "CODER"
+  note: "Pass1497unique:1458related/210files with61mounted/11new,26tooling and13Chrome; whole original source100four163lines177statements38functions108branches/323positive counters.945otheroldtests and other bodies/imports preserved,2canonical histories and9metadata gates/137staticfilespass. Browser click/auxclick builtins, no custom press/release;4refs finally restored after cleanup-only dangling-link correction, no test replay."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T14:48:14.973Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact semanticfd6bca244fd8 review; browser-native click/auxclick auxiliary buttons satisfy explicit human steering and approved bounded source behavior, not independent/global parity certification."
+  evaluated_sha: "fd6bca244fd8b26715ed80e7062f3a6179129624"
+  blueprint_digest: "37d2a0fcb28a36140e19beed02a681fdea8f5f8955cb06ebb30c73eafee6dba2"
+  evidence_refs:
+    - ".agentplane/tasks/202610131423-JWE145/README.md"
+    - ".agentplane/tasks/202610131423-JWE145/quality/20261013-144814973-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131423-JWE145/quality/20261013-144814973-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131423-JWE145/quality/20261013-144814973-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131423-JWE145/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/JWE145/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/JWE145/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/JWE145/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/JWE145/reference-targets.json"
+    - "apps/office/node_modules/.cache/parity-coverage/JWE145/semantic-sha.txt"
+  findings:
+    - "Original BindingsMenuCommand always renders an enabled/disabled native HTMLbutton with original binding callback; auxclick reuses its click builtin, including disabled protection and flushSync close/focus-before-dispatch. Left/native keyboard/programmatic routes retained. Existing submenu handler extends source-admitted buttons, popup-owned browser context canceled; no custom low-level press/release machinery."
+    - "1497unique assertions:1458related/210files including61mounted/11new,26tooling and13actual Chromium; whole original module100four163lines177statements38functions108branches/323positive counters, unedited source-bound maps/IDs/locations. Six committed execution blobs and137built files match frozen hashes."
+    - "945other oldtestfiles and other statements/imports unchanged; exact1source-backed middle restriction migration.2canonical histories/status/default/class preserved,9metadata auditspass. All producer commands0; terminal ignored helper restore1 from dangling hidden symlink resolved after terminal by exact original link restoration,4currenttargets available; no successful test replay or upstream modification/copies."
+commit:
+  hash: "fd6bca244fd8b26715ed80e7062f3a6179129624"
+  message: "🧩 JWE145 fix: support native browser auxiliary popup buttons"
 comments:
   -
     author: "CODER"
@@ -35,8 +59,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: human-authorized native click/auxclick ingress and existing submenu button handler, no custom press/release machinery; original native bindings/resource/status, exact1oldcase migration, whole source100four, cadence5/10."
+  -
+    type: "status"
+    at: "2026-10-13T14:47:24.764Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-13T14:47:25.312Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass1497unique:1458related/210files with61mounted/11new,26tooling and13Chrome; whole original source100four163lines177statements38functions108branches/323positive counters.945otheroldtests and other bodies/imports preserved,2canonical histories and9metadata gates/137staticfilespass. Browser click/auxclick builtins, no custom press/release;4refs finally restored after cleanup-only dangling-link correction, no test replay."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:46:16.628Z"
+doc_updated_at: "2026-10-13T14:47:25.372Z"
 doc_updated_by: "CODER"
 description: "Use existing browser click plus native auxclick for middle/right activation through original bindings; preserve left input and existing submenu handler, extend admitted buttons per source. No custom press/release state machine. Whole module100four, native mounted/Chromium, precise1oldcase migration, cadence5/10."
 sections:
@@ -157,6 +193,39 @@ sections:
     Scope: metadata only, exact4references restored.
 
     Proof: apps/office/node_modules/.cache/parity-coverage/JWE145/proof.json, execution-hashes.json, build-hashes.json, reference-targets.json, accepted-results.json, original related-coverage maps and tests/browser reports. Human native-JS principle is controlling for later goal work. Full unmatched release/POPUPSELECT/first-move/synthetic/NOSELECT/scroll/mnemonic/settings/pixel platform/general parity remains unverified; registered IO/recovery untouched. Exact semanticSHA same-agent non-independent review follows. Goalactive cadence5/10; full once10, pause after next full+repairs per human.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T14:47:25.312Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass1497unique:1458related/210files with61mounted/11new,26tooling and13Chrome; whole original source100four163lines177statements38functions108branches/323positive counters.945otheroldtests and other bodies/imports preserved,2canonical histories and9metadata gates/137staticfilespass. Browser click/auxclick builtins, no custom press/release;4refs finally restored after cleanup-only dangling-link correction, no test replay.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T14:47:24.764Z, excerpt_hash=sha256:6683804df7aa67339ac7a28ae71e0dc4dc83ea58d20d23665faad6b01c7bb597
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131423-JWE145/blueprint/resolved-snapshot.json
+    - old_digest: 37d2a0fcb28a36140e19beed02a681fdea8f5f8955cb06ebb30c73eafee6dba2
+    - current_digest: 37d2a0fcb28a36140e19beed02a681fdea8f5f8955cb06ebb30c73eafee6dba2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131423-JWE145
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131423-JWE145
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped semantic commit only if needed; preserve human history and exact4reference link restoration finally. No network/global access/publication/history rewrite."
   Findings: |-
     Previous turn is verified progress:9N15Q3 at cbfdb607, exact reviewed544751a5, current writer clean. Pinned LO9bc445578031fecf56086729d8e4940c77e14d65 MouseButtonDown/ImplHighlightItem do not restrict button; MouseButtonUp executes enabled ordinary current entry. Human explicitly rejects unnecessary low-level press/release recreation and directs use of native JS/browser functions where equivalent. Earlier lower-level task proposal was not implemented and is superseded before start; click/auxclick native ingress retained. Detailed unmatched release/POPUPSELECT/platform and complete pointer parity are unverified, not promoted. General principle applies onward to goal; registered IO/recovery preserved.
@@ -294,6 +363,39 @@ Evidence: apps/office/node_modules/.cache/parity-coverage/JWE145/audit-diff.log
 Scope: metadata only, exact4references restored.
 
 Proof: apps/office/node_modules/.cache/parity-coverage/JWE145/proof.json, execution-hashes.json, build-hashes.json, reference-targets.json, accepted-results.json, original related-coverage maps and tests/browser reports. Human native-JS principle is controlling for later goal work. Full unmatched release/POPUPSELECT/first-move/synthetic/NOSELECT/scroll/mnemonic/settings/pixel platform/general parity remains unverified; registered IO/recovery untouched. Exact semanticSHA same-agent non-independent review follows. Goalactive cadence5/10; full once10, pause after next full+repairs per human.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T14:47:25.312Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass1497unique:1458related/210files with61mounted/11new,26tooling and13Chrome; whole original source100four163lines177statements38functions108branches/323positive counters.945otheroldtests and other bodies/imports preserved,2canonical histories and9metadata gates/137staticfilespass. Browser click/auxclick builtins, no custom press/release;4refs finally restored after cleanup-only dangling-link correction, no test replay.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T14:47:24.764Z, excerpt_hash=sha256:6683804df7aa67339ac7a28ae71e0dc4dc83ea58d20d23665faad6b01c7bb597
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131423-JWE145/blueprint/resolved-snapshot.json
+- old_digest: 37d2a0fcb28a36140e19beed02a681fdea8f5f8955cb06ebb30c73eafee6dba2
+- current_digest: 37d2a0fcb28a36140e19beed02a681fdea8f5f8955cb06ebb30c73eafee6dba2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131423-JWE145
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131423-JWE145
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
