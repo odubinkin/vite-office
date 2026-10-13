@@ -1,10 +1,11 @@
 ---
 id: "202610131709-529MQ3"
 title: "Use actual layout links for table border outer flags"
-status: "DOING"
+result_summary: "Match native table outer-edge predicates;1566unique checks, whole painter100four, inventory updated, cadence9/10."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Pinned Insert uses physical first Lower identity and last absent Next; port now follows actual row/cell links, no model-index first/last predicates or extra native graph. Partial/reordered row, complete/omitted-cell/empty-chain5native cases cover actual owners. Flat coordinate adaptation and arbitration/defaults remain unchanged; full geometry/follows/RTL/vertical/Word/nested/covered/whole parity unverified."
     - "Whole current-original painter100L74/S78/F9/B26,113positive original counters/IDs/source locations and all4semantic blobs equal frozen producer hashes;955oldtests byte-identical,2canonical history prefixes and137staticfiles/9metadata gates pass.1528related/26tooling/12Chromium=1566unique0fail/skip/retry. Four refs physically absent everyproducer/exactfinallyrestore. Shared boost metadata failures retained; retry only metadata after original header available, no target/source/link mutation/runtime replay."
-commit: null
+commit:
+  hash: "f5ca87108f62447de161bbbd5353552ae3aafde3"
+  message: "🧩 529MQ3 fix: derive table outer borders from native layout links"
 comments:
   -
     author: "CODER"
     body: "Start: pinned actual physical lower and sibling links replace model-index outer-edge classification; preserve native frame borrowing/grid/defaults and whole source100 evidence, cadence9/10."
+  -
+    author: "CODER"
+    body: "Verified: native Lower identity and absent Next classify actual table outer borders, including partial/reordered rows.1566unique tests and whole current painter100four/113positive original counters;955oldtests identical,2canonical histories/137staticfiles/9metadata gates pass. Exact f5ca87108f62 same-agent non-independent quality accepted;4refs absent everyproducer/exactrestore, no upstream artifacts/registered deviation changes. Cadence9/10; next full after10 then human pause after repairs."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "1566unique tests pass; whole current-source painter Istanbul100four/113positive original counters,955oldtests identical,2canonical history prefixes,137staticfiles,9metadata gates. Native lower/next outer-edge predicates match pinned source;4refs absent everyproducer/exactrestore; shared boost metadata-only retry after availability. Cadence9/10."
+  -
+    type: "status"
+    at: "2026-10-13T17:19:36.772Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Lower identity and absent Next classify actual table outer borders, including partial/reordered rows.1566unique tests and whole current painter100four/113positive original counters;955oldtests identical,2canonical histories/137staticfiles/9metadata gates pass. Exact f5ca87108f62 same-agent non-independent quality accepted;4refs absent everyproducer/exactrestore, no upstream artifacts/registered deviation changes. Cadence9/10; next full after10 then human pause after repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:19:01.524Z"
+doc_updated_at: "2026-10-13T17:19:36.774Z"
 doc_updated_by: "CODER"
 description: "Correction9/10: align SwTabFramePainter outer-edge classification with pinned physical lower/next ownership, including partial and reordered row chains; keep existing grid coordinate adaptation and registered deviations. Native tests, whole changed module Istanbul100 and related browser regression."
 sections:
@@ -112,6 +125,10 @@ sections:
     - Observation: Fresh5cases red2fail3pass confirmed model row-index misclassification of physical middle/reordered row fragments. Runtime final1566unique cases pass, whole current painter100four/113positive counters; no oldtests changed. Restored-only source-provenance twice found transient shared boost header unavailable, then actual original chain/header available.
       Impact: Source geometry adaptation remains flat model-index grid; corrected outer ownership only. All registered exceptions/history/defaults retained. Metadata could not initially verify shared header while unavailable; no runtime failure or hidden test dependency.
       Resolution: Use original lower identity and absent next siblings as pinned predicates, add5native cases; accept final9restored audits after header available without target/link mutation or runtime replay. No suspicious pinned core bug; full geometry/follows/RTL/vertical/Word/covered/nested/whole parity remain unverified. Cadence9/10.
+extensions:
+  implementation_commit:
+    hash: "f5ca87108f62447de161bbbd5353552ae3aafde3"
+    message: "🧩 529MQ3 fix: derive table outer borders from native layout links"
 id_source: "generated"
 ---
 ## Summary
