@@ -1,10 +1,11 @@
 ---
 id: "202610131622-FVA807"
 title: "Run Calc cycle91 full regression suites"
-status: "DOING"
+result_summary: "Full91 passed with no repairs; current Calc/shared coverage100, English checkpoint recorded, goal active prioritizing document/UI and ODS dependencies, next full101."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "All3240pre-run hashes unchanged except planned calc-core checkpoint; one added cycle9report. Runtime/tests/fixtures/configuration untouched, no repair needed; Writer-only exception not used."
     - "316 browser cases Writer314/shared2/Calc0. This proves current suite regression only; same-agent separate evaluator is not independent review. Real document/UI/ODS owners remain prioritized, goal active next101."
-commit: null
+commit:
+  hash: "e3740f45834ff97a8173c1f9432ee6fec0ce2185"
+  message: "✅ FVA807 calc: record ninth full regression checkpoint"
 comments:
   -
     author: "CODER"
     body: "Start: scheduled complete91office/inventory/tooling/browser/static regression with original links absent/restored, raw scopes audited and no Writer-only coverage repair or merge."
+  -
+    author: "CODER"
+    body: "Verified: ninth complete regression office15720/inventory123/tooling36/browser316/static and all remaining gates pass; exact source reviewed, raw100, links restored."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full office15720/inventory123/tooling36/browser316/static all exit0; remaining14gates pass; every raw office counter positive S/B/F/L100 plus inventory100. Exact commit e3740f45834f reviewed in separate same-agent EVALUATOR phase, runtime/config unchanged, links restored, no Writer repair; goal active next101."
+  -
+    type: "status"
+    at: "2026-10-13T16:45:40.198Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: ninth complete regression office15720/inventory123/tooling36/browser316/static and all remaining gates pass; exact source reviewed, raw100, links restored."
 doc_version: 3
-doc_updated_at: "2026-10-13T16:45:20.588Z"
+doc_updated_at: "2026-10-13T16:45:40.199Z"
 doc_updated_by: "CODER"
 description: "Scheduled tenth-task complete office/inventory/tooling/browser/static verification after Calc81-90 and GC/shared-array work; repair only Calc/shared failures, leave Writer-only coverage, keep real UI/ODS goal active."
 sections:
