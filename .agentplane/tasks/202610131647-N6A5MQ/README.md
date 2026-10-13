@@ -4,7 +4,7 @@ title: "Implement Calc document calculation configuration values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T17:07:30.813Z"
+  updated_by: "CODER"
+  note: "Exact ffea36fb0f37 reviewed3257non-task hashes,18intentionalpaths, existing Writer/shared runtime unchanged. Native450sources6ordinarycommands3328byte stream, Calc133/shared83raw100every counter, sources absent/restored, static/Calc profile0UI and16gates pass; no config service/GPU engine/full UI/ODS claim, goal active next full101."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T17:07:18.732Z"
+  updated_by: "EVALUATOR"
+  note: "Exact committed/current source review,18intentional non-task paths; original initialized ScCalcConfig document settings and shared address enum, existing Writer/shared runtime unchanged; all required scoped raw100 and16gates pass."
+  evaluated_sha: "ffea36fb0f37d699f405b2d60df10af4c3cd3f6e"
+  blueprint_digest: "17531a1cf3b33a2436e2254e4a2d0d55c0c9aca3f699bfec54050e18fbafc26d"
+  evidence_refs:
+    - ".agentplane/tasks/202610131647-N6A5MQ/README.md"
+    - ".agentplane/tasks/202610131647-N6A5MQ/quality/20261013-170718732-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131647-N6A5MQ/quality/20261013-170718732-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131647-N6A5MQ/quality/20261013-170718732-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131647-N6A5MQ/blueprint/resolved-snapshot.json"
+    - "output/playwright/task92-checks/exact-review.json"
+    - "output/playwright/task92-checks/gates-results.json"
+    - "output/playwright/task92-checks/value-coverage-audit.json"
+    - "output/playwright/calc-config-native/manifest.json"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "Complete unchanged native instance methods/full headers450source hashes and six normal commands compare3328byte value stream; no static service stub, OpenCL engine, ownership manager or sanitizer."
+    - "Whole Calc133tests44files and affected shared83tests25files raw100 every counter positive; links absent/restored, static/Calc profile0UI. Initial metadata/style/shared-selection/tooling boundary failures retained and corrected, no suppression/threshold changes or Writer-only repair."
+    - "Exact source scopes retain shared SortedVector/OUString; separate native shared witness respects test ownership. Same-agent separate evaluator is not independent review; document/UI/ODS and full config services remain pending prioritized owners."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual Calc document calculation value settings and shared grammar AddressConvention with real shared Writer containers, no configuration service stub or ownership manager."
+  -
+    type: "verify"
+    at: "2026-10-13T17:07:30.813Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact ffea36fb0f37 reviewed3257non-task hashes,18intentionalpaths, existing Writer/shared runtime unchanged. Native450sources6ordinarycommands3328byte stream, Calc133/shared83raw100every counter, sources absent/restored, static/Calc profile0UI and16gates pass; no config service/GPU engine/full UI/ODS claim, goal active next full101."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:06:59.310Z"
+doc_updated_at: "2026-10-13T17:07:30.868Z"
 doc_updated_by: "CODER"
 description: "Task92 original ScCalcConfig instance settings/defaults/copy/merge/reset/equality and shared FormulaGrammar AddressConvention prerequisite for real document/UI/ODS and ScTokenArray; reuse shared Writer SortedVector, GC references, no fake global config/listeners."
 sections:
@@ -62,6 +90,39 @@ sections:
     Command: node output/playwright/task92-checks/gates.mjs, final --recheck
     Result: pass; all16required gates exit0 with final affected rechecks recorded in gates-results.json.
     Scope: whole repository checks, existing source/Writer runtime unchanged,18intentional non-task paths. Exact current/committed hashes and separate same-agent EVALUATOR required before closure; separate phase not independent review. Goal remains active, next full101.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T17:07:30.813Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact ffea36fb0f37 reviewed3257non-task hashes,18intentionalpaths, existing Writer/shared runtime unchanged. Native450sources6ordinarycommands3328byte stream, Calc133/shared83raw100every counter, sources absent/restored, static/Calc profile0UI and16gates pass; no config service/GPU engine/full UI/ODS claim, goal active next full101.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T17:06:59.310Z, excerpt_hash=sha256:dff1aa6743c87d0cdd18945994fb65d3266eb8ecc9ab67e37522f575db9eb259
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131647-N6A5MQ/blueprint/resolved-snapshot.json
+    - old_digest: 17531a1cf3b33a2436e2254e4a2d0d55c0c9aca3f699bfec54050e18fbafc26d
+    - current_digest: 17531a1cf3b33a2436e2254e4a2d0d55c0c9aca3f699bfec54050e18fbafc26d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131647-N6A5MQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610131647-N6A5MQ -m 🧩 N6A5MQ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task92 files through followup task, restore source symlinks after checks, no merge/history rewrite or unrelated task mutation."
   Findings: |-
     Actual ScCalcConfig document value settings and FormulaGrammar address enum advance original ScDocument/ODS and ScTokenArray dependency graph. Existing shared SortedVector/OUString reused; no new container, memory manager or OpenCL engine. Static global configuration/env/listener methods and symbolic conversion pending, no constant replacements. CALC-081 retains mutable shared default opcode set and device-preserving partial reset. Native public value domain only, no ABI/const/lifetime or full upstream QA claim; QA anchors unexecuted context.
@@ -105,6 +166,39 @@ Scope: actual Calc and complete affected shared SAL/SortedVector/opcode/grammar 
 Command: node output/playwright/task92-checks/gates.mjs, final --recheck
 Result: pass; all16required gates exit0 with final affected rechecks recorded in gates-results.json.
 Scope: whole repository checks, existing source/Writer runtime unchanged,18intentional non-task paths. Exact current/committed hashes and separate same-agent EVALUATOR required before closure; separate phase not independent review. Goal remains active, next full101.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T17:07:30.813Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact ffea36fb0f37 reviewed3257non-task hashes,18intentionalpaths, existing Writer/shared runtime unchanged. Native450sources6ordinarycommands3328byte stream, Calc133/shared83raw100every counter, sources absent/restored, static/Calc profile0UI and16gates pass; no config service/GPU engine/full UI/ODS claim, goal active next full101.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T17:06:59.310Z, excerpt_hash=sha256:dff1aa6743c87d0cdd18945994fb65d3266eb8ecc9ab67e37522f575db9eb259
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131647-N6A5MQ/blueprint/resolved-snapshot.json
+- old_digest: 17531a1cf3b33a2436e2254e4a2d0d55c0c9aca3f699bfec54050e18fbafc26d
+- current_digest: 17531a1cf3b33a2436e2254e4a2d0d55c0c9aca3f699bfec54050e18fbafc26d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131647-N6A5MQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610131647-N6A5MQ -m 🧩 N6A5MQ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
