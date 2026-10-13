@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131622-FVA807",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T16:45:19.882Z",
+  "verdict": "pass",
+  "summary": "Exact e3740f45834f current/committed 3241 non-task hashes; five full stages and fourteen remaining gates pass, raw office/inventory100, source links restored, only planned checkpoint docs changed.",
+  "evaluated_sha": "e3740f45834ff97a8173c1f9432ee6fec0ce2185",
+  "blueprint_digest": "4be8499efb68063911a4d70b661e195ffb683b2e08c5a778c824192661b4ee0a",
+  "findings": [
+    "All3240pre-run hashes unchanged except planned calc-core checkpoint; one added cycle9report. Runtime/tests/fixtures/configuration untouched, no repair needed; Writer-only exception not used.",
+    "316 browser cases Writer314/shared2/Calc0. This proves current suite regression only; same-agent separate evaluator is not independent review. Real document/UI/ODS owners remain prioritized, goal active next101."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131622-FVA807/README.md",
+    "output/playwright/task91-checks/exact-review.json",
+    "output/playwright/task91-checks/task91-full-results.json",
+    "output/playwright/task91-checks/full-gates-results.json",
+    "output/playwright/task91-checks/office-coverage-audit.json",
+    "docs/program/calc-full-test-cycle-9.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Complete editable Calc document/UI and ODS import/export absent; no full original QA claim."
+  ]
+}
