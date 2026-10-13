@@ -1,10 +1,11 @@
 ---
 id: "202610131158-MQBXWY"
 title: "Implement Calc matrix storage initialization and coordinate replication"
-status: "DOING"
+result_summary: "Implemented original internal ScMatrixImpl storage initialization, dimensions/count and scalar/single-axis coordinate replication over shared owners; native pool/refcounts omitted per user GC-first instruction. Public facade/interpreter/document/UI remain subsequent work; goal active, next full91."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "output/playwright/calc-matrix-storage-native/manifest.json"
   findings:
     - "Exact3201current/committed non-task hashes match; nine intentional non-task paths, no Writer/shared runtime changes. Three original constructors preserve row/column inversion and input copy independence, original coordinate replication/short-circuit behavior and numeric query match complete ordinary41517-byte stream. Native declaration scaffolding and GC pool omission are explicit, no fake interpreter or public ScMatrix claim."
-commit: null
+commit:
+  hash: "98da928675e20b3af01d416f16bce957c72bec7b"
+  message: "🧩 MQBXWY calc: implement original matrix storage and coordinates"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved original matrix storage/coordinate slice under explicit user resume and GC-first constraints, calc checkout only."
+  -
+    author: "CODER"
+    body: "Verified: original internal matrix initialization and coordinate replication implemented over shared mdds/SharedString with explicit GC adaptation. Calc126/shared242 whole raw100, ordinary native stream, source-absent build/profile and16gates pass; exact3201hashes and separate same-agent EVALUATOR pass."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: actual internal matrix storage/coordinate slice at98da928675e20b3af01d416f16bce957c72bec7b. Calc126/shared242 whole raw S/B/F/L100 every raw counter positive, complete ordinary native41517-byte stream and source-absent build/profile0UI;16gates/36tooling/123inventory pass. Exact3201hashes and same-agent separate EVALUATOR pass. Shared owners reused, GC adaptation explicit, no Writer runtime change or public matrix/interpreter/UI claim. Goal active; next full91."
+  -
+    type: "status"
+    at: "2026-10-13T12:15:51.741Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original internal matrix initialization and coordinate replication implemented over shared mdds/SharedString with explicit GC adaptation. Calc126/shared242 whole raw100, ordinary native stream, source-absent build/profile and16gates pass; exact3201hashes and separate same-agent EVALUATOR pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:15:39.644Z"
+doc_updated_at: "2026-10-13T12:15:51.742Z"
 doc_updated_by: "CODER"
 description: "Iteration83: genuine ScMatrixImpl matrix/flag traits and three storage constructors plus dimensions, count, coordinate validation/replication and numeric query over reused shared mdds. JavaScript GC owns containers, no native pool/refcounts or interpreter substitutes. Preserve original empty/single-axis coordinate semantics; native source excerpts and scoped raw100 evidence, inventory and docs."
 sections:
