@@ -1,10 +1,11 @@
 ---
 id: "202610132042-9WMC0E"
 title: "Run Calc full test cycle10 and continue toward cycle11 pause"
-status: "DOING"
+result_summary: "Completed scheduled full Calc cycle10 with report, all5stages and16gates passing, exact source hashes prove runtime unchanged and rawcoverage100 for Calc/shared/Writer. First upcoming full done, continue goal toward second full111 pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task101-checks/full-gates-results.json"
   findings:
     - "Exact committed source review proves runtime/tests/fixtures/config unchanged, all5 portable stages terminal0, four source links restored and every Calc/shared/Writer raw coverage counter positive. Browser316 clearly separated with Calc0."
-commit: null
+commit:
+  hash: "a1e908136136b33016e6ed6d0b238e8519a939a5"
+  message: "🧪 9WMC0E docs: record scheduled full Calc test cycle10"
 comments:
   -
     author: "CODER"
     body: "Start: scheduled task101 full source-absent application/inventory/tooling/browser/static cycle and raw coverage audit; first of2upcoming full cycles, continue after this one."
+  -
+    author: "CODER"
+    body: "Verified: full office15730tests, inventory123, tooling36, browser316 and static pass; all473rawowners coverage100,16gates and exact source review pass, all4links restored, no repairs."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full five-stage source-absent run passes, office15730tests and all473rawowners100%, browser316 separatedCalc0,16gates/head-bound exact review pass. No repairs. Continue after first full101; pause after second111."
+  -
+    type: "status"
+    at: "2026-10-13T21:01:07.157Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: full office15730tests, inventory123, tooling36, browser316 and static pass; all473rawowners coverage100,16gates and exact source review pass, all4links restored, no repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T21:01:05.462Z"
+doc_updated_at: "2026-10-13T21:01:07.159Z"
 doc_updated_by: "CODER"
 description: "Task101: one scheduled full office/inventory/tooling/browser/static source-absent run, raw coverage audit and all repository gates. Repair only relevant Calc/shared issues if needed, leave Writer-only coverage untouched. Record report and current source evidence; continue after this first full run, pause only after second upcoming full run task111 and relevant repairs."
 sections:
