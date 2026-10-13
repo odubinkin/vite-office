@@ -315,6 +315,15 @@ export function CommandPopupMenu({
           return (
             <div
               key={item.commandId}
+              onAuxClick={
+                /** Reuses original binding activation for browser-native nonprimary clicks. @param event - Actual auxiliary click. @returns Nothing. */ (
+                  event,
+                ) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  (event.currentTarget.firstElementChild as HTMLElement).click();
+                }
+              }
               onMouseEnter={
                 /** Updates actual pointer selection without executing the command. @param event - Original command region. @returns Nothing. */ (
                   event,
@@ -367,10 +376,8 @@ export function CommandPopupMenu({
                 /** Native direct activation bypasses delay and preselects first child. @param event - Actual button input. @returns Nothing. */ (
                   event,
                 ) => {
-                  if (event.button === 0) {
-                    event.preventDefault();
-                    open(item, depth, event.currentTarget, true);
-                  }
+                  event.preventDefault();
+                  open(item, depth, event.currentTarget, true);
                 }
               }
               tabIndex={-1}
@@ -405,6 +412,14 @@ export function CommandPopupMenu({
   return (
     <div
       className="relative z-[60] [&_[data-popup-highlighted]]:bg-slate-100"
+      onContextMenu={
+        /** Keeps browser context handling within the original popup resource. @param event - Browser context event. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }
       onFocusCapture={
         /** Synchronizes browser focus with the owning native popup highlight. @param event - Actual focus event. @returns Nothing. */ (
           event,

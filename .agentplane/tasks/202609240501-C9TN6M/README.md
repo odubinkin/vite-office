@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 347
+revision: 349
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:15:22.066Z"
+doc_updated_at: "2026-10-13T14:46:16.947Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1536,6 +1536,12 @@ sections:
     - Observation: Post-full cadence4 task9N15Q3 restores original immediate parent highlight, current resource and active-window ownership at timer invocation; separate per-popup highlight/close timers replace captured pointer target and overbroad cancellation. Native mutable active child identity precedes React view publication; same window preserves selection through pending callbacks.
       Impact: Native bindings/resources andIO/recovery unchanged. Native INVALID leave and parent-reentry child-owned close behavior require2precise oldcase migrations; annotation-only pre-existing JSDoc repair found by enforcement.943other oldtestfiles unchanged, all other executable statements/imports preserved. Immediate parent assignment does not propagate recursively. Full pointer first-move/synthetic/scroll/NOSELECT/mnemonic/settings/pixel platform/global parity remain unverified.
       Resolution:1447related/209files including50mounted (9new),26tooling/4files,11Chromium=1484unique pass. Whole one source100allfour159lines173statements36functions110branches/319positive original counters; canonical2history/status/default/class preserved,9restored-onlymetadata gates and137staticbuild pass.4reference paths absent for every producer/exact finally restoration, no upstream source copies/helpers/rawmaps in Agentplane or pinned runtime invocation. Genuine red7/7, first TS7 and fresh old-expectation failure retained honestly ignoredcache. Exact semanticSHA same-agent review/clean close follows; goalactive4/10, pause after next full+repairs.
+
+    - Human steering: Prefer native JavaScript/browser mechanisms when they provide the required behavior; do not recreate lower-level mechanisms merely to imitate implementation details. Upstream audit still governs observable contracts/defaults/behavior. TaskJWE145 original unimplemented press/release proposal was superseded before code by click/auxclick and extension of the existing submenu handler; this principle applies to later goal work too. Registered IO/recovery and full-pause cadence unchanged.
+
+    - Observation: Post-full cadence5 JWE145 uses native browser click/auxclick for middle/right command activation and expands the existing direct submenu handler; cancels browser context menu in the owned popup. Human steering discarded an unimplemented custom press/release proposal; prefer built-in JS/browser mechanisms where equivalent throughout later work.
+      Impact: Original native bindings/resource/disabled state and left/keyboard/programmatic routes retained. Exact1old middle-button restriction case migrates,945otheroldtestfiles and other statements/imports byte-identical. Full unmatched-release/POPUPSELECT/pointer first-move/synthetic/NOSELECT/scroll/mnemonic/settings/pixel platform/general parity remain unverified, registered IO/recovery preserved.
+      Resolution:1458related/210files including61mounted/11new,26tooling/4files,13Chromium=1497unique pass; whole source100allfour163lines177statements38functions108branches/323positive original counters.2canonical history/status/default/class prefixes preserved,9metadata audits/137staticfilespass. All producer commands0 with4refs hidden; terminal helper cleanup1 from transient dangling boost target resolved by exact original link metadata restoration after terminal; current4targets available. No tests replayed for cleanup-only repair, native lstat fixes ignored helper; no upstream/helper source copies/rawmaps in Agentplane. Exact semanticSHA same-agent review/clean close follows. Goalactive5/10, pause after next full and necessary repairs.
 id_source: "generated"
 ---
 ## Summary
@@ -3045,3 +3051,9 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Post-full cadence4 task9N15Q3 restores original immediate parent highlight, current resource and active-window ownership at timer invocation; separate per-popup highlight/close timers replace captured pointer target and overbroad cancellation. Native mutable active child identity precedes React view publication; same window preserves selection through pending callbacks.
   Impact: Native bindings/resources andIO/recovery unchanged. Native INVALID leave and parent-reentry child-owned close behavior require2precise oldcase migrations; annotation-only pre-existing JSDoc repair found by enforcement.943other oldtestfiles unchanged, all other executable statements/imports preserved. Immediate parent assignment does not propagate recursively. Full pointer first-move/synthetic/scroll/NOSELECT/mnemonic/settings/pixel platform/global parity remain unverified.
   Resolution:1447related/209files including50mounted (9new),26tooling/4files,11Chromium=1484unique pass. Whole one source100allfour159lines173statements36functions110branches/319positive original counters; canonical2history/status/default/class preserved,9restored-onlymetadata gates and137staticbuild pass.4reference paths absent for every producer/exact finally restoration, no upstream source copies/helpers/rawmaps in Agentplane or pinned runtime invocation. Genuine red7/7, first TS7 and fresh old-expectation failure retained honestly ignoredcache. Exact semanticSHA same-agent review/clean close follows; goalactive4/10, pause after next full+repairs.
+
+- Human steering: Prefer native JavaScript/browser mechanisms when they provide the required behavior; do not recreate lower-level mechanisms merely to imitate implementation details. Upstream audit still governs observable contracts/defaults/behavior. TaskJWE145 original unimplemented press/release proposal was superseded before code by click/auxclick and extension of the existing submenu handler; this principle applies to later goal work too. Registered IO/recovery and full-pause cadence unchanged.
+
+- Observation: Post-full cadence5 JWE145 uses native browser click/auxclick for middle/right command activation and expands the existing direct submenu handler; cancels browser context menu in the owned popup. Human steering discarded an unimplemented custom press/release proposal; prefer built-in JS/browser mechanisms where equivalent throughout later work.
+  Impact: Original native bindings/resource/disabled state and left/keyboard/programmatic routes retained. Exact1old middle-button restriction case migrates,945otheroldtestfiles and other statements/imports byte-identical. Full unmatched-release/POPUPSELECT/pointer first-move/synthetic/NOSELECT/scroll/mnemonic/settings/pixel platform/general parity remain unverified, registered IO/recovery preserved.
+  Resolution:1458related/210files including61mounted/11new,26tooling/4files,13Chromium=1497unique pass; whole source100allfour163lines177statements38functions108branches/323positive original counters.2canonical history/status/default/class prefixes preserved,9metadata audits/137staticfilespass. All producer commands0 with4refs hidden; terminal helper cleanup1 from transient dangling boost target resolved by exact original link metadata restoration after terminal; current4targets available. No tests replayed for cleanup-only repair, native lstat fixes ignored helper; no upstream/helper source copies/rawmaps in Agentplane. Exact semanticSHA same-agent review/clean close follows. Goalactive5/10, pause after next full and necessary repairs.

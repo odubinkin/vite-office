@@ -145,7 +145,7 @@ it("reentering active parent retains selection but cannot stop the child-owned c
   expect(screen.queryByRole("menu", { name: "First menu" })).not.toBeInTheDocument();
   expect(first).toHaveAttribute("data-popup-highlighted", "true");
 });
-it("keyboard and direct left activation bypass delay and cancel pending pointer work", /** Checks native null-timer activation and first-child preselection. @returns Nothing. */ () => {
+it("keyboard and direct buttons bypass delay and cancel pending pointer work", /** Checks native null-timer activation and first-child preselection for every mouse button. @returns Nothing. */ () => {
   fixture();
   const first = screen.getByRole("menuitem", { name: "First" }),
     second = screen.getByRole("menuitem", { name: "Second" });
@@ -155,7 +155,7 @@ it("keyboard and direct left activation bypass delay and cancel pending pointer 
   advance(300);
   expect(screen.queryByRole("menu", { name: "First menu" })).not.toBeInTheDocument();
   fireEvent.mouseDown(first, { button: 1 });
-  expect(screen.queryByRole("menu", { name: "First menu" })).not.toBeInTheDocument();
+  expect(screen.getByRole("menu", { name: "First menu" })).toBeVisible();
   fireEvent.mouseDown(first, { button: 0 });
   expect(screen.getByRole("menuitemcheckbox", { name: "Bold" })).toHaveFocus();
 });
