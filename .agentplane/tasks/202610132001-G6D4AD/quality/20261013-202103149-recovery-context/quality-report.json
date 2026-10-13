@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610132001-G6D4AD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T20:21:03.149Z",
+  "verdict": "pass",
+  "summary": "Same-agent separate EVALUATOR accepts exactca40e158c19f full logical range operation within explicit user-authorized GC clone-domain adaptation; not independent or unique-owner identity parity.",
+  "evaluated_sha": "ca40e158c19fb5492bd5ae270a0725826a9efc8c",
+  "blueprint_digest": "1b6f699ba7a860e48ddf345ff425cec865f692d0296cf99afcca1b445dfdbfd8",
+  "findings": [
+    "3304currentnon-task hashes match committed Git blobs; baseline3297 differs only16intentionalpaths(9changed7added), actual free-operation responsibility shard/canonicalheader/aggregate/6ownerrecords/newcap/3Calcdocs/test/helper/fixture. Existing true token/refdata/shared owners reused, no fake model or memory/count library.",
+    "Complete original function unchanged with genuine real peer/header/data definitions produces matching1198110byte12544case stream474sources8normalcommands. Native internal GetRef condition remains in original function, observer adds no count query/assertion/output; bReusefalse and actual aliased reusetrue exercise real clone domain. No source rewriting/invalid casts/overflow/ownership experiment/link suppression.",
+    "GC clone-only implementation explicitly omits native unique-owner in-place input identity/mutation optimization; retains argument hint and original output range/metadata/rejections in tested clone domain, broadparity flagsfalse. CALC-088 original external-double+single rejection and external-first/local-double metadata behavior preserved. Do not infer full unique/alias parity or editable UI/ODS readiness.",
+    "Calc138tests29owners3898S2602B752F3467L/shared255tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,4links absent/restored. Initial path/pattern/lint failures retained, actual source paths and standard hint discard repaired without fake branches/checker overrides."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610132001-G6D4AD/README.md",
+    "output/playwright/task99-checks/exact-review.json",
+    "output/playwright/task99-checks/value-coverage-audit.json",
+    "output/playwright/task99-checks/gates-results.json",
+    "output/playwright/calc-range-extension-native/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Explicit unique-native-owner input identity/mutation divergence remains under GC; physical count/lifetime/ABI/debug/overflow/invalid peers/fullQA excluded, same-agent phase not independent. Full compiler/config/ScTokenArray/document/UI/ODS pending. Continue101 then pause111/repairs, Writer-only coverage separate."
+  ]
+}
