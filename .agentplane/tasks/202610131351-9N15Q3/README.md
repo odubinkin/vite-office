@@ -1,10 +1,11 @@
 ---
 id: "202610131351-9N15Q3"
 title: "Restore native popup parent highlight and current timer selection"
-status: "DOING"
+result_summary: "Native current popup highlight and per-window timer ownership restored;1484unique assertions/whole module100four, cadence4/10; pause after next full plus repairs."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -53,6 +54,9 @@ comments:
   -
     author: "CODER"
     body: "Start: source-confirmed separate close timer owner and native current active child identity; exact2oldcase INVALID-leave/parent-reentry expectation migrations, same one-module/100four scope and native binding boundaries."
+  -
+    author: "CODER"
+    body: "Verified: native current popup selection/active-window ownership, immediate parent highlight and separate per-window timers;1484unique assertions and whole source100four319positive original counters,9metadata audits, inventory preserved. Exact semantic544751a5c485 same-agent review, explicit global parity residuals and clean closure."
 events:
   -
     type: "status"
@@ -80,8 +84,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass1484unique assertions:1447related/209files including50native mounted cases/9new,26tooling,11Chromium. Whole source100four159lines173statements36functions110branches/319positive raw counters.943otheroldtests unchanged, exact2source-backed case statements+one required comment-only annotation,2canonical histories preserved;9metadata gates/137staticfilespass.4reference paths absent all producers, exactfinallyrestore; no global parity claim, full cadence4/10."
+  -
+    type: "status"
+    at: "2026-10-13T14:17:34.864Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native current popup selection/active-window ownership, immediate parent highlight and separate per-window timers;1484unique assertions and whole source100four319positive original counters,9metadata audits, inventory preserved. Exact semantic544751a5c485 same-agent review, explicit global parity residuals and clean closure."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:16:29.131Z"
+doc_updated_at: "2026-10-13T14:17:34.866Z"
 doc_updated_by: "CODER"
 description: "Source ChangeHighlightItem immediate parent selection and HighlightChanged current highlighted resource ownership, no captured pointer target reopening. Native mounted and Chromium evidence, existing test bytes preserved, whole one module100four; cadence4/10, no full yet, IO/recovery preserved."
 sections:
@@ -246,6 +257,10 @@ sections:
     Attempts: Genuine original runtime red7/7 with original Writer sessions/bindings proves parent highlight, captured sibling/command target, child close cancellation, independent descendant timer, INVALID selection and resource-admission discrepancies; raw evidence retained ignored9N15Q3cache. First TS7 gate found unused destructured timer and required fixture resolveArguments; corrected normal types without weakening checks. First fresh mounted run:47/48 pass, sole old parent-reentry expectation contradicts pinned separate child close ownership. Read actual MouseMove/ImplHighlightItem/ChangeHighlightItem/SubmenuClose/KillActivePopup; amended same-file plan for exact second oldcase migration, approved/start sequentially. Parent reentry stops parent-owned timer only; child selection stops actual child-owned close. Added synchronous native active-window reference to remove captured React projection identity and protect batched timer reuse. No upstream/helper/Python/rawmap in Agentplane, no source/pin calls from tests,4links finally restored. Source parent-reentry behavior is clear, no core suspected bug claim.
 
     check:docs discovered a pre-existing unannotated act focus callback from61PRG4 direct-reactivation case (added after its earlier JSDoc gate). Required inline annotation-only repair is explicitly recorded in Scope; exact marker removal proves all executable bytes/assertions and other statements preserved. No threshold/coverage/provider/exclusion changes; current frozen6files and4reference links kept immutable throughout accepted producer. Current fresh50passes; final related whole module/Chromium remain pending.
+extensions:
+  implementation_commit:
+    hash: "544751a5c485023b199f1244ddd9d23609c3a710"
+    message: "🧩 9N15Q3 fix: restore native popup highlight and timer ownership"
 id_source: "generated"
 ---
 ## Summary
