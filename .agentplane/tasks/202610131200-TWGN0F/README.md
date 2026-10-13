@@ -4,7 +4,7 @@ title: "Restore native disabled-item popup navigation"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -17,12 +17,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T12:27:19.180Z"
+  updated_by: "CODER"
+  note: "1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T12:28:19.651Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact semantic SHA review d54c1d5f4917, explicitly not independent. Source-backed native default disabled navigation, independent highlighted item and current-popup cancellation satisfy approved atomic scope; complete source/related/static/browser evidence passes."
+  evaluated_sha: "d54c1d5f4917baa598136234dbd85bc309c9cfd4"
+  blueprint_digest: "f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b"
+  evidence_refs:
+    - ".agentplane/tasks/202610131200-TWGN0F/README.md"
+    - ".agentplane/tasks/202610131200-TWGN0F/quality/20261013-122819651-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131200-TWGN0F/quality/20261013-122819651-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131200-TWGN0F/quality/20261013-122819651-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131200-TWGN0F/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/TWGN0F/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/TWGN0F/accepted-summary.json"
+    - "apps/office/node_modules/.cache/parity-coverage/TWGN0F/audit-results.json"
+  findings:
+    - "Reviewed actual native settings.cxx false default, ImplIsSelectable, ImplCursorUpDown, KEY_RETURN StopExecute, PopupMenu::Run and ClosePopup. UI preserves genuine disabled state and original bindings execution; per-popup highlight independent of DOM focus, source order and disabled child preselection; disabled/unselected child Return cancels only child and root remains. No simulated kernel/command ownership or new setting APIs."
+    - "Whole original source100allfour:96lines106statements22functions80branches,208 positive original counters with current IDs/locations/hashes; no provider/exclusion or counter normalization. Related1418/206files, tooling26/4 plus seven unique actual Chromium cases=1451pass, no accepted fail/skip/retry. All6 current/committed non-Agentplane bytes match accepted execution hashes, canonical prefixes and exact pin unchanged."
+    - "Only approved first enabled-only case migrated; all other12 bodies and remaining file bytes identical,938 other acceptance files unchanged. Static/build137 and nine metadata gates pass; all runtime/static producers hide3refs then restore exact targets. Initial Cut premise, stable callback dependency and Page Style end-order fixture failures recorded honestly and corrected; no full replay. Review phase uses same agent and does not claim independence."
+commit:
+  hash: "d54c1d5f4917baa598136234dbd85bc309c9cfd4"
+  message: "🧩 TWGN0F fix: restore native disabled popup highlight and navigation"
 comments:
   -
     author: "CODER"
@@ -45,8 +67,20 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: confirmed actual native Undo/Redo and non-hyperlinked Edit/Remove disabled fixtures; unchanged keyboard-default deliverable, single production scope and strict100four criteria."
+  -
+    type: "status"
+    at: "2026-10-13T12:27:18.321Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-13T12:27:19.180Z"
+    author: "CODER"
+    state: "ok"
+    note: "1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:27:15.513Z"
+doc_updated_at: "2026-10-13T12:27:19.234Z"
 doc_updated_by: "CODER"
 description: "Use pinned VCL default SkipDisabledInMenus=false and independent highlighted-item ownership for standalone Writer popup navigation. Disabled entries remain non-executable and preserve native popup focus. Correct the single source-contradicting enabled-only assertion sequence, add native/mounted/Chromium evidence and append canonical records. First correction after accepted full campaign; no full replay or registered IO/recovery changes."
 sections:
@@ -64,6 +98,39 @@ sections:
     TS7, scoped formatter, lint, JSDoc, file-size, dependencies, fresh build137 and static checks pass; all runtime/static producers physically hide three pinned references and restore exact targetsfinally. Final nine source-tree/provenance/registry/resources/invariants/parity/routing/doctor/diff audits pass after terminal/restored only.
 
     Native default=false and per-popup selection include disabled entries, child preselection and native current-popup Return cancellation; execution/state remain original binding-owned. Native settings override API, NOSELECT/header resources, pointer/timer/mnemonic/full platform layout and complete upstream parity remain unverified; IO/recovery deviations preserved. Exact semantic SHA same-agent review required, not independent. First correction after newest full, no full replay.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T12:27:19.180Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T12:27:18.321Z, excerpt_hash=sha256:f9ed3b60da3547ababff97b620d7185d49ceb71216b498ba93949eeafe22c5ad
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131200-TWGN0F/blueprint/resolved-snapshot.json
+    - old_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+    - current_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131200-TWGN0F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131200-TWGN0F
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only scoped semantic commit when necessary, preserving human work and prior history. Restore exact three reference targets in finally. No history rewrite or external publication."
   Findings: |-
     Standing user upstream goal and authoritative active resumption approve safe local source-backed corrections and internal plan lifecycle. Previous goal turn made verified source/test/state progress and ended paused after full; goal is now active, writer branch clean after human Calc integration. Only parentC9TN6M remains overarching; obsolete X6VV8G is not a live producer. Pinned LO9bc445578031fecf56086729d8e4940c77e14d65. Source first disabled navigation contradicts current enabled filter and DOM-focus-as-selection; native default false and disabled Return cancellation require explicit selection ownership. Do not claim native StyleSettings override API or complete menu parity; preserve registered IO/recovery exceptions.
@@ -104,6 +171,39 @@ Whole original CommandPopupMenu.tsx100:96lines106statements22functions80branches
 TS7, scoped formatter, lint, JSDoc, file-size, dependencies, fresh build137 and static checks pass; all runtime/static producers physically hide three pinned references and restore exact targetsfinally. Final nine source-tree/provenance/registry/resources/invariants/parity/routing/doctor/diff audits pass after terminal/restored only.
 
 Native default=false and per-popup selection include disabled entries, child preselection and native current-popup Return cancellation; execution/state remain original binding-owned. Native settings override API, NOSELECT/header resources, pointer/timer/mnemonic/full platform layout and complete upstream parity remain unverified; IO/recovery deviations preserved. Exact semantic SHA same-agent review required, not independent. First correction after newest full, no full replay.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T12:27:19.180Z — VERIFY — ok
+
+By: CODER
+
+Note: 1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T12:27:18.321Z, excerpt_hash=sha256:f9ed3b60da3547ababff97b620d7185d49ceb71216b498ba93949eeafe22c5ad
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131200-TWGN0F/blueprint/resolved-snapshot.json
+- old_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+- current_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131200-TWGN0F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131200-TWGN0F
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
