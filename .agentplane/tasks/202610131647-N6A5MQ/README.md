@@ -1,10 +1,11 @@
 ---
 id: "202610131647-N6A5MQ"
 title: "Implement Calc document calculation configuration values"
-status: "DOING"
+result_summary: "ScCalcConfig document defaults/copy/merge/reset/equality reuse shared Writer owners; CALC-081 recorded. Goal active prioritizing actual model/UI and ODS, no OpenCL engine or service stub, next full101."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Complete unchanged native instance methods/full headers450source hashes and six normal commands compare3328byte value stream; no static service stub, OpenCL engine, ownership manager or sanitizer."
     - "Whole Calc133tests44files and affected shared83tests25files raw100 every counter positive; links absent/restored, static/Calc profile0UI. Initial metadata/style/shared-selection/tooling boundary failures retained and corrected, no suppression/threshold changes or Writer-only repair."
     - "Exact source scopes retain shared SortedVector/OUString; separate native shared witness respects test ownership. Same-agent separate evaluator is not independent review; document/UI/ODS and full config services remain pending prioritized owners."
-commit: null
+commit:
+  hash: "ffea36fb0f37d699f405b2d60df10af4c3cd3f6e"
+  message: "🧩 N6A5MQ calc: implement original document calculation settings"
 comments:
   -
     author: "CODER"
     body: "Start: actual Calc document calculation value settings and shared grammar AddressConvention with real shared Writer containers, no configuration service stub or ownership manager."
+  -
+    author: "CODER"
+    body: "Verified: actual Calc document calculation value configuration and shared formula address enum match complete ordinary native stream; scoped raw100 and16gates, exact commit review pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact ffea36fb0f37 reviewed3257non-task hashes,18intentionalpaths, existing Writer/shared runtime unchanged. Native450sources6ordinarycommands3328byte stream, Calc133/shared83raw100every counter, sources absent/restored, static/Calc profile0UI and16gates pass; no config service/GPU engine/full UI/ODS claim, goal active next full101."
+  -
+    type: "status"
+    at: "2026-10-13T17:07:43.232Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual Calc document calculation value configuration and shared formula address enum match complete ordinary native stream; scoped raw100 and16gates, exact commit review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:07:30.868Z"
+doc_updated_at: "2026-10-13T17:07:43.233Z"
 doc_updated_by: "CODER"
 description: "Task92 original ScCalcConfig instance settings/defaults/copy/merge/reset/equality and shared FormulaGrammar AddressConvention prerequisite for real document/UI/ODS and ScTokenArray; reuse shared Writer SortedVector, GC references, no fake global config/listeners."
 sections:
