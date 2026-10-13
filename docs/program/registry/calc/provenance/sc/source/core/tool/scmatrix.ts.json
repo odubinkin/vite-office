@@ -5,7 +5,7 @@
     "classification": "upstream-mechanism",
     "localPath": "apps/office/src/sc/source/core/tool/scmatrix.ts",
     "status": "mapped",
-    "upstreamPath": "sc/inc/scmatrix.hxx",
+    "upstreamPath": "sc/source/core/tool/scmatrix.cxx",
     "localSymbols": [
       "ScMatrixValue",
       "aStr",
@@ -16,17 +16,32 @@
       "assign",
       "equals",
       "notEquals",
-      "dispose"
+      "dispose",
+      "matrix_traits",
+      "integer_type",
+      "matrix_flag_traits",
+      "ScMatrixImpl",
+      "Clear",
+      "GetDimensions",
+      "GetElementCount",
+      "ValidColRow",
+      "ValidColRowReplicated",
+      "ValidColRowOrReplicated",
+      "IsNumeric"
     ],
     "upstreamSymbols": [
-      "ScMatrixValue"
+      "ScMatrixValue",
+      "ScMatrixImpl",
+      "matrix_traits",
+      "matrix_flag_traits"
     ],
     "preservedResponsibilities": [
       "Original inline matrix value owner/header boundary and genuine shared value/error reuse.",
-      "Original default/copy/assignment/query/equality semantics and fixed tag/member identity."
+      "Original default/copy/assignment/query/equality semantics and fixed tag/member identity.",
+      "Original internal data/flag matrix storage and constructor/coordinate replication semantics reuse genuine shared owners."
     ],
     "omittedResponsibilities": [
-      "Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81."
+      "Iteration83 extends the real ScMatrixImpl internal storage slice with original matrix_traits/matrix_flag_traits over existing SharedString blocks and shared mdds multi_type_matrix, all three constructors, Clear, dimensions/count, strict coordinate validation, scalar/single-axis coordinate replication, short-circuit preservation and numeric query. No duplicated container or interpreter stand-in. Ordinary unchanged original definition excerpts compile over genuine pinned mdds/SAL/SVL; declaration scaffolding exposes storage only for caller observations. Complete41517-byte stream covers16dimensions, empty/scalar/vector initialization, copied input values, flags,25coordinate pairs per stage and actual UInt16/UInt8 trait casts. Native constructors debit a global allocation pool; JavaScript deliberately omits the allocation ledger and native destruction/refcount scheduling per the user GC-first instruction. Clear is a content operation, not object deallocation. Original matrix value contract remains implemented. Public ScMatrix, mutations/typed access, interpreter, result/cell/document/input/UI remain incomplete; broad parity flags remain false. Native exception suppression, allocation limits/ABI/concurrency and full upstream QA are not certified. Next full91."
     ],
     "evidence": {
       "local": [
@@ -45,6 +60,14 @@
         {
           "path": "apps/office/src/sc/source/core/tool/scmatrix.test.ts",
           "marker": "matches original matrix tag field UInt8 narrowing and scalar copy assignment"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "ScMatrixImpl"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
+          "marker": "matches original internal matrix storage and coordinate replication stream"
         }
       ],
       "upstream": [
@@ -55,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/types.hxx",
           "marker": "enum class ScMatValType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "ScMatrixImpl::ValidColRowReplicated"
         }
       ]
     }

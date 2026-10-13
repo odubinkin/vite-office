@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-03e0dc21-336a-4190-a05c-5f9bc3d9ef6b",
+    "capabilityId": "CAP-03e0dc21-336a-4190-a05c-5f9bc3d9ef6b",
+    "suite": "calc",
+    "subsystem": "matrix-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original data/flag traits reuse actual mdds and shared string blocks with UInt16/UInt8 casts.",
+      "Original empty/scalar/vector constructors, content Clear, dimensions/count and numeric query retain storage behavior.",
+      "Original coordinate validation and scalar/single-axis replication preserve reference mutation and short-circuit behavior.",
+      "JavaScript GC replaces native allocation ledger; no refcount, finalizer or interpreter substitute."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Iteration83 extends the real ScMatrixImpl internal storage slice with original matrix_traits/matrix_flag_traits over existing SharedString blocks and shared mdds multi_type_matrix, all three constructors, Clear, dimensions/count, strict coordinate validation, scalar/single-axis coordinate replication, short-circuit preservation and numeric query. No duplicated container or interpreter stand-in. Ordinary unchanged original definition excerpts compile over genuine pinned mdds/SAL/SVL; declaration scaffolding exposes storage only for caller observations. Complete41517-byte stream covers16dimensions, empty/scalar/vector initialization, copied input values, flags,25coordinate pairs per stage and actual UInt16/UInt8 trait casts. Native constructors debit a global allocation pool; JavaScript deliberately omits the allocation ledger and native destruction/refcount scheduling per the user GC-first instruction. Clear is a content operation, not object deallocation. Original matrix value contract remains implemented. Public ScMatrix, mutations/typed access, interpreter, result/cell/document/input/UI remain incomplete; broad parity flags remain false. Native exception suppression, allocation limits/ABI/concurrency and full upstream QA are not certified. Next full91."
+    },
+    "capability": "Original Calc internal matrix initialization and coordinate replication",
+    "gaps": [
+      "Public ScMatrix, mutation/access, interpreter/results/cell/document/UI remain required.",
+      "Native allocation pool/destruction scheduling intentionally omitted; exception/ABI/whole upstream QA unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "ScMatrixImpl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-storage.test.ts",
+          "marker": "matches original internal matrix storage and coordinate replication stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Internal matrix initialization and coordinates (task83)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Matrix storage"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "ScMatrixImpl::ValidColRowReplicated"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "element is not of empty type"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/core/tool/scmatrix.cxx",
+          "marker": "class ScMatrixImpl"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-matrix-storage-initialization-and-coordinates",
+    "scopeLimitations": [
+      "Iteration83 extends the real ScMatrixImpl internal storage slice with original matrix_traits/matrix_flag_traits over existing SharedString blocks and shared mdds multi_type_matrix, all three constructors, Clear, dimensions/count, strict coordinate validation, scalar/single-axis coordinate replication, short-circuit preservation and numeric query. No duplicated container or interpreter stand-in. Ordinary unchanged original definition excerpts compile over genuine pinned mdds/SAL/SVL; declaration scaffolding exposes storage only for caller observations. Complete41517-byte stream covers16dimensions, empty/scalar/vector initialization, copied input values, flags,25coordinate pairs per stage and actual UInt16/UInt8 trait casts. Native constructors debit a global allocation pool; JavaScript deliberately omits the allocation ledger and native destruction/refcount scheduling per the user GC-first instruction. Clear is a content operation, not object deallocation. Original matrix value contract remains implemented. Public ScMatrix, mutations/typed access, interpreter, result/cell/document/input/UI remain incomplete; broad parity flags remain false. Native exception suppression, allocation limits/ABI/concurrency and full upstream QA are not certified. Next full91."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
