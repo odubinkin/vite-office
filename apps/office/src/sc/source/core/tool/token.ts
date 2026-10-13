@@ -315,4 +315,8 @@ export {
   ScDoubleRefToken,
   ScRefListToken,
   ScTableRefToken,
+  ScExternalToken,
+  ScExternalSingleRefToken,
+  ScExternalDoubleRefToken,
+  ScExternalNameToken,
 } from "./token.references";

@@ -1,6 +1,7 @@
 /** @fileoverview Original Calc reference-token responsibility split from token.cxx; complete single/range/list/table values use existing shared and data owners. */
 import { FormulaToken, StackVar } from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
+import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { ScSingleRefData, ScComplexRefData } from "../../../inc/refdata";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
@@ -14,7 +15,7 @@ export class ScSingleRefToken extends FormulaToken {
   constructor(
     ...args:
       | [source: ScSingleRefToken]
-      | [limits: ScSheetLimits, reference: ScSingleRefData, opcode?: OpCode]
+      | [limits: ScSheetLimits, reference: Readonly<ScSingleRefData>, opcode?: OpCode]
   ) {
     const first = args[0];
     super(
@@ -235,5 +236,214 @@ export class ScTableRefToken extends FormulaToken {
   /** Original explicit copy clones the RPN area if present. @returns Copied token. */
   override Clone(): ScTableRefToken {
     return new ScTableRefToken(this);
+  }
+}
+
+/** Original external token base stores file index and discriminator; concrete construction uses the protected native boundary. */
+export class ScExternalToken extends FormulaToken {
+  private readonly mnFileId: number;
+  /** Original typed construction or base-field copy for actual derived owners. @param source - Type or copied owner. @param opcode - Explicit native opcode. @param fileId - UInt16 index. @returns Base. */
+  protected constructor(source: StackVar | ScExternalToken, opcode: OpCode, fileId: number) {
+    super(source, opcode);
+    this.mnFileId = source instanceof ScExternalToken ? source.mnFileId : fileId & 0xffff;
+  }
+  /** Original external document index. @returns UInt16 file id. */
+  GetFileId(): number {
+    return this.mnFileId;
+  }
+  /** Original base discriminator/opcode/file equality. @param token - True external owner or base mismatch. @returns Equality. */
+  override equals(token: FormulaTokenConstReference): boolean {
+    if (!super.equals(token)) return false;
+    return this.mnFileId === (token as ScExternalToken).mnFileId;
+  }
+}
+
+/** Original external reference token owns value members and retains literal ocPush. */
+export class ScExternalSingleRefToken extends ScExternalToken {
+  private readonly maTabName: SharedString;
+  private readonly maSingleRef: ScSingleRefData;
+  /** Original value/copy/implicit move construction; witnesses restore erased rvalue categories. @param args - File/string/data or copied/moved owner. @returns Token. */
+  constructor(
+    ...args:
+      | [source: ScExternalSingleRefToken, category?: typeof ScExternalSingleRefToken.move]
+      | [
+          fileId: number,
+          name: SharedStringConstReference,
+          reference: Readonly<ScSingleRefData>,
+          category?: typeof SharedString.move,
+        ]
+  ) {
+    const source = args[0];
+    super(
+      source instanceof ScExternalSingleRefToken ? source : StackVar.svExternalSingleRef,
+      OpCode.ocPush,
+      source instanceof ScExternalSingleRefToken ? 0 : source,
+    );
+    if (source instanceof ScExternalSingleRefToken) {
+      this.maTabName =
+        args[1] === ScExternalSingleRefToken.move
+          ? SharedString.move(source.maTabName)
+          : new SharedString(source.maTabName);
+      this.maSingleRef = new ScSingleRefData(source.maSingleRef);
+    } else {
+      this.maTabName =
+        args[3] === SharedString.move
+          ? SharedString.move(args[1] as SharedString)
+          : new SharedString(args[1] as SharedStringConstReference);
+      this.maSingleRef = new ScSingleRefData(args[2] as ScSingleRefData);
+    }
+  }
+  /** Original implicit move transfers only the string member and copies reference/base values. @param source - Rvalue owner. @returns Moved token. */
+  static move(source: ScExternalSingleRefToken): ScExternalSingleRefToken {
+    return new ScExternalSingleRefToken(source, ScExternalSingleRefToken.move);
+  }
+  /** Original stable const shared-string member. @returns Borrowed member. */
+  GetTableName(): SharedStringConstReference {
+    return this.maTabName;
+  }
+  /** Original stable mutable single reference, also used by const callers. @returns Owned data. */
+  GetSingleRef(): ScSingleRefData {
+    return this.maSingleRef;
+  }
+  /** Original file/base/string/data value comparison using actual owners. @param token - Genuine external token or base mismatch. @returns Equality. */
+  override equals(token: FormulaTokenConstReference): boolean {
+    if (!super.equals(token)) return false;
+    const other = token as ScExternalSingleRefToken;
+    if (!this.maTabName.equals(other.GetTableName())) return false;
+    return this.maSingleRef.equals(other.GetSingleRef());
+  }
+  /** Original implicit-copy clone has independent value members. @returns Copied token. */
+  override Clone(): ScExternalSingleRefToken {
+    return new ScExternalSingleRefToken(this);
+  }
+  /** Existing shared-value cleanup boundary; JS GC owns token lifetime. @returns Nothing. */
+  override dispose(): void {
+    this.maTabName.dispose();
+    super.dispose();
+  }
+}
+
+/** Original external reference token owns value members and retains literal ocPush. */
+export class ScExternalDoubleRefToken extends ScExternalToken {
+  private readonly maTabName: SharedString;
+  private readonly maDoubleRef: ScComplexRefData;
+  /** Original value/copy/implicit move construction; witnesses restore erased rvalue categories. @param args - File/string/data or copied/moved owner. @returns Token. */
+  constructor(
+    ...args:
+      | [source: ScExternalDoubleRefToken, category?: typeof ScExternalDoubleRefToken.move]
+      | [
+          fileId: number,
+          name: SharedStringConstReference,
+          reference: ScComplexRefData,
+          category?: typeof SharedString.move,
+        ]
+  ) {
+    const source = args[0];
+    super(
+      source instanceof ScExternalDoubleRefToken ? source : StackVar.svExternalDoubleRef,
+      OpCode.ocPush,
+      source instanceof ScExternalDoubleRefToken ? 0 : source,
+    );
+    if (source instanceof ScExternalDoubleRefToken) {
+      this.maTabName =
+        args[1] === ScExternalDoubleRefToken.move
+          ? SharedString.move(source.maTabName)
+          : new SharedString(source.maTabName);
+      this.maDoubleRef = new ScComplexRefData(source.maDoubleRef);
+    } else {
+      this.maTabName =
+        args[3] === SharedString.move
+          ? SharedString.move(args[1] as SharedString)
+          : new SharedString(args[1] as SharedStringConstReference);
+      this.maDoubleRef = new ScComplexRefData(args[2] as ScComplexRefData);
+    }
+  }
+  /** Original implicit move transfers only the string member and copies reference/base values. @param source - Rvalue owner. @returns Moved token. */
+  static move(source: ScExternalDoubleRefToken): ScExternalDoubleRefToken {
+    return new ScExternalDoubleRefToken(source, ScExternalDoubleRefToken.move);
+  }
+  /** Original stable const shared-string member. @returns Borrowed member. */
+  GetTableName(): SharedStringConstReference {
+    return this.maTabName;
+  }
+  /** Original first range endpoint reference. @returns Owned first endpoint. */
+  GetSingleRef(): ScSingleRefData {
+    return this.maDoubleRef.Ref1;
+  }
+  /** Original const second endpoint reference. @returns Owned second endpoint. */
+  GetSingleRef2(): Readonly<ScSingleRefData> {
+    return this.maDoubleRef.Ref2;
+  }
+  /** Original stable mutable range member. @returns Owned data. */
+  GetDoubleRef(): ScComplexRefData {
+    return this.maDoubleRef;
+  }
+  /** Original file/base/string/data value comparison using actual owners. @param token - Genuine external token or base mismatch. @returns Equality. */
+  override equals(token: FormulaTokenConstReference): boolean {
+    if (!super.equals(token)) return false;
+    const other = token as ScExternalDoubleRefToken;
+    if (!this.maTabName.equals(other.GetTableName())) return false;
+    return this.maDoubleRef.equals(other.GetDoubleRef());
+  }
+  /** Original implicit-copy clone has independent value members. @returns Copied token. */
+  override Clone(): ScExternalDoubleRefToken {
+    return new ScExternalDoubleRefToken(this);
+  }
+  /** Existing shared-value cleanup boundary; JS GC owns token lifetime. @returns Nothing. */
+  override dispose(): void {
+    this.maTabName.dispose();
+    super.dispose();
+  }
+}
+
+/** Original external name token owns value members and retains literal ocPush. */
+export class ScExternalNameToken extends ScExternalToken {
+  private readonly maName: SharedString;
+  /** Original value/copy/implicit move construction; witnesses restore erased rvalue categories. @param args - File/string/data or copied/moved owner. @returns Token. */
+  constructor(
+    ...args:
+      | [source: ScExternalNameToken, category?: typeof ScExternalNameToken.move]
+      | [fileId: number, name: SharedStringConstReference, category?: typeof SharedString.move]
+  ) {
+    const source = args[0];
+    super(
+      source instanceof ScExternalNameToken ? source : StackVar.svExternalName,
+      OpCode.ocPush,
+      source instanceof ScExternalNameToken ? 0 : source,
+    );
+    if (source instanceof ScExternalNameToken) {
+      this.maName =
+        args[1] === ScExternalNameToken.move
+          ? SharedString.move(source.maName)
+          : new SharedString(source.maName);
+    } else {
+      this.maName =
+        args[2] === SharedString.move
+          ? SharedString.move(args[1] as SharedString)
+          : new SharedString(args[1] as SharedStringConstReference);
+    }
+  }
+  /** Original implicit move transfers only the string member and copies reference/base values. @param source - Rvalue owner. @returns Moved token. */
+  static move(source: ScExternalNameToken): ScExternalNameToken {
+    return new ScExternalNameToken(source, ScExternalNameToken.move);
+  }
+  /** Original stable const shared-string member. @returns Borrowed member. */
+  GetName(): SharedStringConstReference {
+    return this.maName;
+  }
+  /** Original file/base/string value comparison using actual owners. @param token - Genuine external token or base mismatch. @returns Equality. */
+  override equals(token: FormulaTokenConstReference): boolean {
+    if (!super.equals(token)) return false;
+    const other = token as ScExternalNameToken;
+    return this.maName.equals(other.maName);
+  }
+  /** Original implicit-copy clone has independent value members. @returns Copied token. */
+  override Clone(): ScExternalNameToken {
+    return new ScExternalNameToken(this);
+  }
+  /** Existing shared-value cleanup boundary; JS GC owns token lifetime. @returns Nothing. */
+  override dispose(): void {
+    this.maName.dispose();
+    super.dispose();
   }
 }

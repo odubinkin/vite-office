@@ -9,7 +9,8 @@
     "subsystem": "formula-reference",
     "capabilityIds": [
       "CAP-503e376c-7b49-4dcf-8ce3-5a5f6651162f",
-      "CAP-553b5cad-56f6-4e1c-b863-8963b34cc509"
+      "CAP-553b5cad-56f6-4e1c-b863-8963b34cc509",
+      "CAP-36e7e849-b768-4866-ac7f-6237620d3151"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -23,9 +24,13 @@
         "apps/office/src/sc/source/core/tool/reference-token.test.ts#matches complete original reference-token copy, mutation, flags and text comparisons",
         "docs/program/calc-browser-gc-adaptation.md#Reference token values and retained bounds",
         "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScTableRefToken::ScTableRefToken",
-        "apps/office/src/sc/source/core/tool/token.references.ts#static readonly Item"
+        "apps/office/src/sc/source/core/tool/token.references.ts#static readonly Item",
+        "apps/office/src/sc/source/core/tool/token.references.ts#ScExternalSingleRefToken",
+        "apps/office/src/sc/source/core/tool/external-token.test.ts#matches complete original external reference and name token value and move stream",
+        "apps/office/src/sc/source/core/tool/native-external-token-cases.json#normalOnly",
+        "docs/program/calc-upstream-suspected-issues.md#CALC-086"
       ],
-      "justification": "Task96 ports complete original ScRefListToken and ScTableRefToken constructors/defaults/copies/Clone/getters/mutators/equality using existing shared FormulaToken and real reference data. Reference responsibility moves unchanged task95 single/double/helper implementation into token.references.ts because adding complete original list/table families exceeds enforced500line token.ts limit; canonical token.ts/header exports retained and explicit responsibility-split provenance records added. RefList owns initialized value arrays: native push_back(value) maps to push(new ScComplexRefData(value)); copy/Clone copies values, implicit move transfers initialized element identities while preserving and emptying the source list owner. No generic vector/memory/refcount/pool/finalizer library. RefList compares collection-object identity, so distinct copies/clones compare unequal (CALC-085). Table UInt16 index/original Item masks/nullable genuine token RPN references are retained; copy/Clone clones area tokens and equality compares payloads. Ordinary JS references own areas; existing SAL/SVL boundary unchanged. Complete original class definitions and methods over verified genuine reference/shared/header dependencies produce a full normal initialized native stream; native layout/count/memory/sanitizers/invalid casts/unsupported enum/uninitialized/whole QA excluded. Original structured-reference and reference-list array-result QA anchors are unexecuted document consumer context. Actual compiler/ScTokenArray/configuration/ScFormulaCell/document/grid/ODS remain prioritized pending owners; nextfull101 continues, pause after secondfull111/relevant repairs. Writer-only coverage remains separate. Original Item constants are anchored as actual static-property evidence; runtime callable/declaration symbol inventory excludes PropertyDeclaration by its existing contract.",
+      "justification": "Task96 ports complete original ScRefListToken and ScTableRefToken constructors/defaults/copies/Clone/getters/mutators/equality using existing shared FormulaToken and real reference data. Reference responsibility moves unchanged task95 single/double/helper implementation into token.references.ts because adding complete original list/table families exceeds enforced500line token.ts limit; canonical token.ts/header exports retained and explicit responsibility-split provenance records added. RefList owns initialized value arrays: native push_back(value) maps to push(new ScComplexRefData(value)); copy/Clone copies values, implicit move transfers initialized element identities while preserving and emptying the source list owner. No generic vector/memory/refcount/pool/finalizer library. RefList compares collection-object identity, so distinct copies/clones compare unequal (CALC-085). Table UInt16 index/original Item masks/nullable genuine token RPN references are retained; copy/Clone clones area tokens and equality compares payloads. Ordinary JS references own areas; existing SAL/SVL boundary unchanged. Complete original class definitions and methods over verified genuine reference/shared/header dependencies produce a full normal initialized native stream; native layout/count/memory/sanitizers/invalid casts/unsupported enum/uninitialized/whole QA excluded. Original structured-reference and reference-list array-result QA anchors are unexecuted document consumer context. Actual compiler/ScTokenArray/configuration/ScFormulaCell/document/grid/ODS remain prioritized pending owners; nextfull101 continues, pause after secondfull111/relevant repairs. Writer-only coverage remains separate. Original Item constants are anchored as actual static-property evidence; runtime callable/declaration symbol inventory excludes PropertyDeclaration by its existing contract. Task97 implements actual ScExternalToken file-index/base equality and concrete ScExternalSingleRefToken/ScExternalDoubleRefToken/ScExternalNameToken value/by-value-string/copy/implicit move/Clone/getter/equality family in existing token.references.ts reference owner (449lines, below500cap), avoiding another unnecessary shard. Canonical token.ts/header exports remain. Actual FormulaToken/SharedString/OUString/refdata reused; external tokens remain ordinary JS objects with no new counts/Boost/allocator/pool/finalizer library, existing SAL/SVL value cleanup unchanged. File id is UInt16 and kind/ocPush literal defaults retain original. Const shared member identity and raw data value copies remain; rvalue string/token witnesses preserve source string clearing while copying file/type/reference fields. Original assignments are deleted and no assignment API added. Base typed construction remains protected; independently sliced base-token inputs excluded. Genuine complete original class/method/constructor/destructor scopes and actual full formula/reference headers produce matching748045-byte normal-only initialized stream,474source hashes/17verified native-only Boost dependency headers/8terminal commands. UTF16 invalid/empty/NUL/supplementary/folded pairs,7UInt16 boundary inputs,10flag combinations, copied/moved member and input histories/Clone/file/string/data/type mismatch and both equality directions exercised; raw addresses/counts/memory/layout/debug assertions/invalid derived peers/native ABI excluded. External TextEqual uses inherited raw value equality, not local-reference origin normalization. Original external document/range-name QA functions are unexecuted contextual evidence only. Actual external manager/compiler/config/ScTokenArray/ScFormulaCell/document/UI/ODS remain prioritized missing owners. No full run before101, continue101 then pause secondfull111/repairs; Writer-only coverage separate. CALC-086 records original plain-auto RHS value temporary in external range equality; original initialized value comparisons preserved without reproducing incidental native memory/count traffic under authorized JS GC adaptation. No performance/count/concurrency claim.",
       "knownViolations": [],
       "localSymbols": [
         "ScSingleRefToken",
@@ -47,7 +52,14 @@
         "GetItem",
         "AddItem",
         "SetAreaRefRPN",
-        "GetAreaRefRPN"
+        "GetAreaRefRPN",
+        "ScExternalToken",
+        "ScExternalSingleRefToken",
+        "ScExternalDoubleRefToken",
+        "ScExternalNameToken",
+        "GetFileId",
+        "GetTableName",
+        "GetName"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/tool/token.cxx",
@@ -56,7 +68,11 @@
         "ScDoubleRefToken",
         "checkTextEqual",
         "ScRefListToken",
-        "ScTableRefToken"
+        "ScTableRefToken",
+        "ScExternalToken",
+        "ScExternalSingleRefToken",
+        "ScExternalDoubleRefToken",
+        "ScExternalNameToken"
       ]
     }
   }

@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/complex-refdata.test.ts",
           "marker": "matches all6400 native single-reference extensions and flag inheritance"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/external-token.test.ts",
+          "marker": "matches complete original external reference and name token value and move stream"
         }
       ],
       "upstream": [
@@ -67,7 +71,8 @@
       "Bounded native differential acceptance with exact original source/body hashes; upstream test initial single-reference assertions retained.",
       "Original complex range endpoint and trim owner, extension flag inheritance and alias semantics.",
       "Masked external ordering, sorted absolute conversion, whole-axis detection and relative/deleted sticky updates.",
-      "Original testFormulaRefData complex extension assertions and bounded compiled native differential outputs."
+      "Original testFormulaRefData complex extension assertions and bounded compiled native differential outputs.",
+      "Task97 native const second-end external getter exposed a TS qualification mismatch: data copy/assign accepts the const Readonly view, retaining actual-class private-field copy internally without fake fields, state mutation, allocation policy or changed value semantics. Current whole Calc and full existing data/references tests revalidated; copied initialized source stays unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/refdata.cxx",

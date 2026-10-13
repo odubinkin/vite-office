@@ -1742,3 +1742,13 @@ ScRefListToken::operator== compares the address of its own aRefList vector with 
 Evidence: task96 complete unchanged original list/table class declarations and members over genuine shared/reference dependencies, initialized normal-only self/copy/Clone/list/table-area observations and full portable replay. Native getters and constructors permit this initialized list-area input; whether real document consumers use it remains unverified. No private-state forcing, fake type peers or memory/count experiment.
 
 Decision: preserve collection-object equality and area Clone semantics. Audit original union/structured-reference consumers before identifying a defect; do not substitute deep list equality.
+
+## CALC-086: external range equality creates a value temporary
+
+Status: source-confirmed implicit right-hand token copy; rationale and user-visible impact are unverified.
+
+ScExternalDoubleRefToken::operator== declares auto rhs = static_cast<const ScExternalDoubleRefToken&>(r). Plain auto drops the reference qualifier, so rhs is a value copy rather than a borrowed reference. The original defaulted token copy constructor copies reference-data fields and the SharedString value before name/range comparison. This is an extra native value temporary on the comparison path.
+
+Evidence: pinned sc/source/core/tool/token.cxx comparison declaration and sc/inc/token.hxx defaulted copy constructor, inspected in task97. The normal complete original method stream confirms equality outcomes, but no count/allocation/performance or concurrency experiment is performed. Whether this is intentional and whether real consumers are affected remain unverified.
+
+Decision: preserve observed synchronous value comparisons. Under the user-authorized JS GC adaptation, do not reproduce incidental native stack copies or reference-count traffic when reading initialized final-class values has the same result; actual string/refdata copy/move constructors remain explicit where their copied/moved state is observable. Do not claim a user-visible defect or silently alter equality.
