@@ -16,7 +16,14 @@ import { BrowserWriterSelectionMapper, getWriterDomPosition } from "./writer-sel
 import type { WriterCursorSelection } from "./writer-selection-types";
 import { SwTab } from "../../inc/fesh";
 import { browserPointerStyle } from "../../../vcl/browser/pointer";
-import { SwTabFrame, type SwTableMouseCell } from "../../source/core/layout/tabfrm";
+import {
+  SwTabFrame,
+  SwRowFrame,
+  SwCellFrame,
+  type SwTableMouseCell,
+  type SwTableMouseGeometry,
+} from "../../source/core/layout/tabfrm";
+import type { SwTable } from "../../source/core/table/swtable";
 import { measureWriterCursorTextLines } from "./writer-line-measurement";
 import { KEY_SHIFT, KEY_MOD1, KEY_MOD2, KEY_MOD3 } from "../../../vcl/keycodes";
 
@@ -44,7 +51,7 @@ export class BrowserWriterEditWindow {
   private suppressNextCommittedInput = false;
   private root: HTMLElement | undefined;
   private tableCapture = false;
-  private tableFrames: SwTabFrame[] = [];
+  private tableFrames = new Map<HTMLTableElement, SwTabFrame>();
   private tableBorderGuide: HTMLDivElement | undefined;
   private suppressBorderClick = false;
 
@@ -139,8 +146,8 @@ export class BrowserWriterEditWindow {
       this.suppressBorderClick = false;
       this.root = undefined;
       this.editWindow.SetTableMouseFrames([]);
-      for (const frame of this.tableFrames) frame.DestroyImpl();
-      this.tableFrames = [];
+      for (const frame of this.tableFrames.values()) frame.DestroyImpl();
+      this.tableFrames.clear();
       unsubscribeSelection();
     };
   }
@@ -516,7 +523,9 @@ export class BrowserWriterEditWindow {
 
   /** Measures live table frames over canonical model boxes; the browser owns only device rectangles. @returns Nothing. */
   private MeasureTableFrames(): void {
-    const frames: SwTabFrame[] = [];
+    const frames = new Map<HTMLTableElement, SwTabFrame>();
+    const geometries = new Map<SwTabFrame, SwTableMouseGeometry>();
+    const created: SwTabFrame[] = [];
     let assigned = false;
     try {
       if (this.root !== undefined)
@@ -576,25 +585,61 @@ export class BrowserWriterEditWindow {
             ),
           };
           const previous = element.parentElement?.previousElementSibling;
-          frames.push(
-            new SwTabFrame(table, {
-              rect: printArea,
-              cells,
-              pageTop: element.closest("[data-writer-page]")?.getBoundingClientRect().top ?? 0,
-              ...(previous === null || previous === undefined
-                ? {}
-                : { previous: previous.getBoundingClientRect() }),
-            }),
-          );
+          const geometry: SwTableMouseGeometry = {
+            rect: printArea,
+            cells,
+            pageTop: element.closest("[data-writer-page]")?.getBoundingClientRect().top ?? 0,
+            ...(previous === null || previous === undefined
+              ? {}
+              : { previous: previous.getBoundingClientRect() }),
+          };
+          let frame = this.tableFrames.get(element);
+          if (frame === undefined || !this.IsCurrentTableFrame(frame, table)) {
+            frame = new SwTabFrame(table);
+            created.push(frame);
+          }
+          frames.set(element, frame);
+          geometries.set(frame, geometry);
         }
       const previous = this.tableFrames;
-      this.editWindow.SetTableMouseFrames(frames);
+      for (const [frame, geometry] of geometries) frame.mouseGeometry = geometry;
+      this.editWindow.SetTableMouseFrames(Array.from(frames.values()));
       this.tableFrames = frames;
       assigned = true;
-      for (const frame of previous) frame.DestroyImpl();
+      for (const [element, frame] of previous)
+        if (frames.get(element) !== frame) frame.DestroyImpl();
     } finally {
-      if (!assigned) for (const frame of frames) frame.DestroyImpl();
+      if (!assigned) for (const frame of created) frame.DestroyImpl();
     }
+  }
+
+  /** Checks the original model and registered lower hierarchy before retaining a device frame. @param frame - Current native frame. @param table - Mounted native table. @returns Whether the original hierarchy remains current. */
+  private IsCurrentTableFrame(frame: SwTabFrame, table: SwTable): boolean {
+    if (frame.GetTable() !== table || frame.GetRegisteredIn() !== table.GetFrameFormat())
+      return false;
+    let row = frame.Lower();
+    for (const line of table.GetTabLines()) {
+      if (line.GetTabBoxes().length === 0) continue;
+      if (
+        !(row instanceof SwRowFrame) ||
+        row.GetTabLine() !== line ||
+        row.GetRegisteredIn() !== line.GetFrameFormat()
+      )
+        return false;
+      let cell = row.Lower();
+      for (const box of line.GetTabBoxes()) {
+        if (
+          !(cell instanceof SwCellFrame) ||
+          cell.GetTabBox() !== box ||
+          cell.GetRegisteredIn() !== box.GetFrameFormat()
+        )
+          return false;
+        cell = cell.GetNext();
+      }
+      if (cell !== undefined) return false;
+      row = row.GetNext();
+    }
+    return row === undefined;
   }
 
   /** Routes one native input intent before browser DOM mutation. @param input - Native input event. @returns Nothing. */

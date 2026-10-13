@@ -240,7 +240,7 @@ export class SwTabFrame extends SwLayoutFrame {
   /** Binds this layout frame to its original table. @param table - Canonical table. @param mouseGeometry - Optional live device frames. @returns Nothing. */
   public constructor(
     private readonly table: SwTable,
-    public readonly mouseGeometry?: SwTableMouseGeometry,
+    public mouseGeometry?: SwTableMouseGeometry,
   ) {
     super(table.GetFrameFormat());
     this.mnFrameType = SwFrameType.Tab;

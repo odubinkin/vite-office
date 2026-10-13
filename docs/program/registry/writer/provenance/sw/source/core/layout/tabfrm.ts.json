@@ -306,6 +306,18 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-table-lr-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-table-frame-reuse.test.tsx",
+          "marker": "original table row and cell identities"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-table-frame-reuse.spec.ts",
+          "marker": "Writer retained table devices"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+          "marker": "IsCurrentTableFrame"
         }
       ],
       "upstream": [
@@ -432,11 +444,20 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
           "marker": "RES_LAYOUT_SPLIT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "const SwFrame* SwFEShell::GetBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/frmedt/fetab.cxx",
+          "marker": "SwTab SwFEShell::WhichMouseTabCol"
         }
       ]
     },
     "browserResponsibilities": [
-      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners.",
+      "Task202610131456-7753KN retains the original registered SwTabFrame and linked SwRowFrame/SwCellFrame for each actual mounted HTMLTableElement while native table, row, box and format registrations remain current. Ordinary JS Map ownership and existing native identities replace per-pointer hierarchy reconstruction without a mirrored version registry or custom allocator. Browser-owned mouseGeometry updates only after complete device measurement; failed later samples preserve accepted native identities and exact geometry, and release only fresh candidates. Structural or disconnected owners and removed DOM fragments retire the obsolete hierarchy; original native attribute notifications remain connected. Source SwFEShell::GetBox and WhichMouseTabCol query existing layout frames. The mutable device geometry field does not change native row/cell logic/defaults. Native persistent page/root/master/follow formatting, incremental structure updates and whole module/core/UI parity remain unverified; existing semantic statuses/defaults/classifications/history and registered recovery/open/save/settings deviations retained."
     ]
   },
   "legacyOrder": 193
