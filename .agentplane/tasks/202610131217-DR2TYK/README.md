@@ -4,7 +4,7 @@ title: "Implement public Calc matrix construction resize and geometry"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T12:49:38.087Z"
+  updated_by: "CODER"
+  note: "Verified: real partial public matrix facade ated16483e271c00010416bad9497fd7ca33ec6b26, native25016-byte stream and6ordinary commands. Calc127/shared243 raw S/B/F/L100 every raw counter positive, source-absent build/profile0UI and16gates/36tooling/123inventory pass. Exact3205hashes,19intentional paths and same-agent separate EVALUATOR pass. Shared numeric error preservation corrected without manager, Writer unchanged; GC adaptation and CALC-072 explicit. Goal active, next full91."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: original public matrix facade over shared storage under continued user goal and GC-first resource adaptation."
+  -
+    type: "verify"
+    at: "2026-10-13T12:49:38.087Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: real partial public matrix facade ated16483e271c00010416bad9497fd7ca33ec6b26, native25016-byte stream and6ordinary commands. Calc127/shared243 raw S/B/F/L100 every raw counter positive, source-absent build/profile0UI and16gates/36tooling/123inventory pass. Exact3205hashes,19intentional paths and same-agent separate EVALUATOR pass. Shared numeric error preservation corrected without manager, Writer unchanged; GC adaptation and CALC-072 explicit. Goal active, next full91."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:47:15.585Z"
+doc_updated_at: "2026-10-13T12:49:38.143Z"
 doc_updated_by: "CODER"
 description: "Iteration84: original ScMatrix facade over actual ScMatrixImpl, three constructors, allocation shape/default per-matrix bound, Resize overloads, geometry delegates and six original type selectors. GC refs replace native ledger/refcounts; preserve differing fallback errors. Native original observations, inventory/journal and whole Calc/affected shared raw100."
 sections:
@@ -70,7 +76,41 @@ sections:
     2. node output/playwright/task84-checks/portable.mjs: whole Calc and whole affected shared owners/tests raw S/B/F/L100 every raw counter positive, four source links absent/restored, static build and Calc profile.
     3. node output/playwright/task84-checks/gates.mjs: all16existing repository/tooling/inventory gates. No Writer repairs, exclusions or weakened thresholds; next full91.
     4. Exact committed/current source/test/fixture/config hashes, same-agent separate EVALUATOR pass, canonical DONE and clean all-files git status on calc. Original new fallback anomaly recorded, no complete matrix/interpreter/UI claim.
-  Verification: "Command: node scripts/calc-matrix-facade-native-probe.mjs --write then --check. Result: pass. Evidence:453original source hashes,6ordinary positive terminal commands,25016-byte stream for original public constructors/resize/geometry and all256tags; allocation-boundary queries before native objects and no large allocation. Declaration scaffold is explicit, native pool/refcount timing excluded; no sanitizer run. Command: node output/playwright/task84-checks/portable.mjs. Result: pass. Evidence: Calc127tests38files raw3139S2132B551F2776L24executable owners; shared243tests49files raw4032S2063B829F3613L39executable owners; S/B/F/L100 every raw counter positive. Existing shared owners entirely covered, four upstream links absent/restored, static/profile0UI pass. Final complete facade test replays grow-after-error and readonly typing edits on unchanged covered runtime; native stream matches. Command: node output/playwright/task84-checks/gates.mjs plus bounded failed-gate recheck. Result:16final gates pass,36tooling tests10files and123inventory tests38files coverage100. Initial NaN fill/array-transition loss, caller regex, test typing/JSDoc and reexport evidence failures recorded and corrected without weakening expected native behavior or thresholds. Scope: genuine partial public ScMatrix and necessary two shared numeric-storage corrections, ordinary refs/undefined slots, no memory manager or Writer change. CALC-072 preserves original fallback asymmetry/old-cell copy behavior; per-matrix default bound is explicit browser adaptation. Typed access/Clone/interpreter/document/UI remain incomplete, full91. Exact source commit and separate same-agent EVALUATOR pending before canonical close."
+  Verification: |-
+    Pass: ordinary unchanged original native constructor/resize/geometry/256tag stream25016bytes,453source hashes and6positive terminal commands, native check on final caller bytes; no sanitizer/large allocation. Whole Calc127tests38files24owners raw3139S2132B551F2776L and shared243tests49files39owners raw4032S2063B829F3613L, S/B/F/L100 every raw counter positive. Four links absent/restored, static build and Calc browser profile0UI pass. Final complete facade replay includes grow-after-error preservation and final readonly typing edits on unchanged covered runtime. All16final gates pass,36tooling tests10files and123inventory tests38files configured coverage100; initial failures retained/remediated without expectation weakening. Exact3205current/committed non-task hashes matched ed16483e271c00010416bad9497fd7ca33ec6b26,19intentional paths; same-agent separate EVALUATOR pass, not an independent reviewer. Evidence: output/playwright/task84-checks/exact-review.json, value-coverage-audit.json, gates-results.json and native manifest; task quality report. Necessary shared scalar-fill/optional-slot corrections preserve538/514 using ordinary JS data, no numeric wrapper/memory manager or Writer change. CALC-072 and GC per-matrix resource policy documented/inventoried. Typed access/Clone/interpreter/document/UI and native live-pool/environment override/exception/ABI/full QA remain incomplete or deliberately divergent. Goal active, next full91.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T12:49:38.087Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: real partial public matrix facade ated16483e271c00010416bad9497fd7ca33ec6b26, native25016-byte stream and6ordinary commands. Calc127/shared243 raw S/B/F/L100 every raw counter positive, source-absent build/profile0UI and16gates/36tooling/123inventory pass. Exact3205hashes,19intentional paths and same-agent separate EVALUATOR pass. Shared numeric error preservation corrected without manager, Writer unchanged; GC adaptation and CALC-072 explicit. Goal active, next full91.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T12:49:37.615Z, excerpt_hash=sha256:cd47ffa456bad942a962b06c82037485d10e5ce8ec4ad4a7556f1870a187bef5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131217-DR2TYK/blueprint/resolved-snapshot.json
+    - old_digest: 01b3743978c52e9f0eab53feb0bad3a78ae55223f57ee26864074a49bc311842
+    - current_digest: 01b3743978c52e9f0eab53feb0bad3a78ae55223f57ee26864074a49bc311842
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131217-DR2TYK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131217-DR2TYK
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional iteration84 changes through a new task; preserve existing owners/native evidence, no merge or history rewriting."
   Findings: |-
     C++ native global live-allocation ledger is omitted under user GC-first instruction. Preserve its initial64bit default as per-matrix validation, explicitly divergent resource policy. Default Resize error is MatrixSize, filled Resize error is StackOverflow; preserve and document. Interpreter/Clone and typed cell access remain actual subsequent owners.
@@ -90,6 +130,10 @@ sections:
     - Observation: Whole Calc127/shared243 raw100 and portable build/profile pass; initial final gates reject two test non-null assertions, one missing helper JSDoc parameter and reexport ScMatrix incorrectly listed as a local declaration in runtime inventory.
       Impact: Type/documentation/evidence corrections only; runtime/native fixture unchanged. Tests cover original encoded errors, both Resize overloads and grow-after-error preservation.
       Resolution: Use readonly tuple types, document source parameter and keep public-header reexport localSymbols empty as before. Replay final complete facade test and only failed lint/docs/registry/invariant gates; retain first results.
+
+    - Observation: Exact3205current/committed non-task hashes match ed16483e271c00010416bad9497fd7ca33ec6b26,19intentional paths, ordinary native25016-byte stream and6positive commands. Calc127/shared243 raw100, source-absent build/profile0UI and16final gates pass; same-agent separate EVALUATOR pass recorded.
+      Impact: Real partial public matrix owner and necessary two shared numeric-storage fixes satisfy acceptance, retain original resize anomaly and explicit GC resource-policy adaptation. No Writer change or full matrix/interpreter/UI certification.
+      Resolution: Record final blueprint verification after task docs, commit metadata and canonical finish. Goal remains active, next full91; proceed toward actual typed matrix value operations.
 id_source: "generated"
 ---
 ## Summary
@@ -113,7 +157,40 @@ Implement original public matrix facade/resize/classifiers over actual shared st
 
 ## Verification
 
-Command: node scripts/calc-matrix-facade-native-probe.mjs --write then --check. Result: pass. Evidence:453original source hashes,6ordinary positive terminal commands,25016-byte stream for original public constructors/resize/geometry and all256tags; allocation-boundary queries before native objects and no large allocation. Declaration scaffold is explicit, native pool/refcount timing excluded; no sanitizer run. Command: node output/playwright/task84-checks/portable.mjs. Result: pass. Evidence: Calc127tests38files raw3139S2132B551F2776L24executable owners; shared243tests49files raw4032S2063B829F3613L39executable owners; S/B/F/L100 every raw counter positive. Existing shared owners entirely covered, four upstream links absent/restored, static/profile0UI pass. Final complete facade test replays grow-after-error and readonly typing edits on unchanged covered runtime; native stream matches. Command: node output/playwright/task84-checks/gates.mjs plus bounded failed-gate recheck. Result:16final gates pass,36tooling tests10files and123inventory tests38files coverage100. Initial NaN fill/array-transition loss, caller regex, test typing/JSDoc and reexport evidence failures recorded and corrected without weakening expected native behavior or thresholds. Scope: genuine partial public ScMatrix and necessary two shared numeric-storage corrections, ordinary refs/undefined slots, no memory manager or Writer change. CALC-072 preserves original fallback asymmetry/old-cell copy behavior; per-matrix default bound is explicit browser adaptation. Typed access/Clone/interpreter/document/UI remain incomplete, full91. Exact source commit and separate same-agent EVALUATOR pending before canonical close.
+Pass: ordinary unchanged original native constructor/resize/geometry/256tag stream25016bytes,453source hashes and6positive terminal commands, native check on final caller bytes; no sanitizer/large allocation. Whole Calc127tests38files24owners raw3139S2132B551F2776L and shared243tests49files39owners raw4032S2063B829F3613L, S/B/F/L100 every raw counter positive. Four links absent/restored, static build and Calc browser profile0UI pass. Final complete facade replay includes grow-after-error preservation and final readonly typing edits on unchanged covered runtime. All16final gates pass,36tooling tests10files and123inventory tests38files configured coverage100; initial failures retained/remediated without expectation weakening. Exact3205current/committed non-task hashes matched ed16483e271c00010416bad9497fd7ca33ec6b26,19intentional paths; same-agent separate EVALUATOR pass, not an independent reviewer. Evidence: output/playwright/task84-checks/exact-review.json, value-coverage-audit.json, gates-results.json and native manifest; task quality report. Necessary shared scalar-fill/optional-slot corrections preserve538/514 using ordinary JS data, no numeric wrapper/memory manager or Writer change. CALC-072 and GC per-matrix resource policy documented/inventoried. Typed access/Clone/interpreter/document/UI and native live-pool/environment override/exception/ABI/full QA remain incomplete or deliberately divergent. Goal active, next full91.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T12:49:38.087Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: real partial public matrix facade ated16483e271c00010416bad9497fd7ca33ec6b26, native25016-byte stream and6ordinary commands. Calc127/shared243 raw S/B/F/L100 every raw counter positive, source-absent build/profile0UI and16gates/36tooling/123inventory pass. Exact3205hashes,19intentional paths and same-agent separate EVALUATOR pass. Shared numeric error preservation corrected without manager, Writer unchanged; GC adaptation and CALC-072 explicit. Goal active, next full91.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T12:49:37.615Z, excerpt_hash=sha256:cd47ffa456bad942a962b06c82037485d10e5ce8ec4ad4a7556f1870a187bef5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131217-DR2TYK/blueprint/resolved-snapshot.json
+- old_digest: 01b3743978c52e9f0eab53feb0bad3a78ae55223f57ee26864074a49bc311842
+- current_digest: 01b3743978c52e9f0eab53feb0bad3a78ae55223f57ee26864074a49bc311842
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131217-DR2TYK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131217-DR2TYK
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -138,3 +215,7 @@ C++ native global live-allocation ledger is omitted under user GC-first instruct
 - Observation: Whole Calc127/shared243 raw100 and portable build/profile pass; initial final gates reject two test non-null assertions, one missing helper JSDoc parameter and reexport ScMatrix incorrectly listed as a local declaration in runtime inventory.
   Impact: Type/documentation/evidence corrections only; runtime/native fixture unchanged. Tests cover original encoded errors, both Resize overloads and grow-after-error preservation.
   Resolution: Use readonly tuple types, document source parameter and keep public-header reexport localSymbols empty as before. Replay final complete facade test and only failed lint/docs/registry/invariant gates; retain first results.
+
+- Observation: Exact3205current/committed non-task hashes match ed16483e271c00010416bad9497fd7ca33ec6b26,19intentional paths, ordinary native25016-byte stream and6positive commands. Calc127/shared243 raw100, source-absent build/profile0UI and16final gates pass; same-agent separate EVALUATOR pass recorded.
+  Impact: Real partial public matrix owner and necessary two shared numeric-storage fixes satisfy acceptance, retain original resize anomaly and explicit GC resource-policy adaptation. No Writer change or full matrix/interpreter/UI certification.
+  Resolution: Record final blueprint verification after task docs, commit metadata and canonical finish. Goal remains active, next full91; proceed toward actual typed matrix value operations.
