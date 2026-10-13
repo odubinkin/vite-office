@@ -1,10 +1,11 @@
 ---
 id: "202610131721-W6QHFR"
 title: "Route native auxiliary mouse clicks through the menubar"
-status: "DOING"
+result_summary: "Native auxiliary menubar activation with original bindings;1607accepted cases, whole menu100four, inventory updated, correction10/10."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Pinned MenuBarWindow::MouseButtonDown/MenuFloatingWindow::MouseButtonUp have no button filter; ImplHighlightItem bMBDown directly opens enabled original child when none active. Port uses one native auxclick delegate and original HTML click/disabled admission, existing openSubmenu, context suppression. No new low-level press-release/state/command adapter. Source exact1old post-Escape Lists click assertion changes no-op closed to visible; allotherbytes retained,955otheroldtestfiles identical. Registered Space/IO/recovery preserved."
     - "1562unique related (1561initialpass1obsolete oldassertion then1failed-onlypass),26tooling19Chromium=1607accepted;9new native4new Chromium mouse/focus/history/disabled/nested/background cases. Whole current-original menu100L209/S231/F51/B210 with492positive original raw counters/IDs/locations; no source/map/counter transfer/normalization/provider/exclusion/threshold change. All6reviewed blobs match frozen evidence;2canonical histories/137staticfiles/9metadata pass,4refs absent everyproducer/exactfinallyrestore."
-commit: null
+commit:
+  hash: "bfdc6734535c64e2379c45ef8952232050db6ae6"
+  message: "🧩 W6QHFR fix: activate menubar with native auxiliary clicks"
 comments:
   -
     author: "CODER"
     body: "Start: native button-neutral menubar activation through auxclick and original HTML click/disabled guards, no press-release machinery. Original bindings/focus/history retained, whole module100four, cadence10/10."
+  -
+    author: "CODER"
+    body: "Verified: native button-neutral menubar root/command/submenu activation through browser auxclick/original button.click and existing bindings/disabled/focus;1607unique accepted cases, whole current menu100four492positive original counters.955oldtestfiles identical/1exactsourceassertion,2canonical prefixes/137staticfiles/9metadata pass,4refs absent/exactrestore. Exact bfdc6734535c same-agent non-independent quality pass. Correction10/10; scheduled full immediately follows then user pause after fixes."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "1607unique accepted cases, native auxclick/original click button-neutral admission/bindings/focus/disabled;1562related1obsolete oldassertion failed-only closure,26tooling19Chromium. Whole current menu100four492positive original counters,955oldfiles identical/1exactsourceassertion,2canonical histories137staticfiles9metadata pass.4refs absent/exactrestore. Correction10/10; full follows then human pause after repairs."
+  -
+    type: "status"
+    at: "2026-10-13T17:33:00.624Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native button-neutral menubar root/command/submenu activation through browser auxclick/original button.click and existing bindings/disabled/focus;1607unique accepted cases, whole current menu100four492positive original counters.955oldtestfiles identical/1exactsourceassertion,2canonical prefixes/137staticfiles/9metadata pass,4refs absent/exactrestore. Exact bfdc6734535c same-agent non-independent quality pass. Correction10/10; scheduled full immediately follows then user pause after fixes."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:32:16.570Z"
+doc_updated_at: "2026-10-13T17:33:00.628Z"
 doc_updated_by: "CODER"
 description: "Correction10/10: match pinned menu button-neutral activation through native browser auxclick and existing click, preserve disabled/bindings/focus/Space and registered deviations. Native and Chromium regressions; whole changed module100 then scheduled full checkpoint and user pause."
 sections:
@@ -112,6 +125,10 @@ sections:
     - Observation: Initial related1562cases:1561pass/1source-obsolete oldexpectation; whole current menu100L209/S231/F51/B210. WriterMenuBar traversesMenuStateMachine expects closed Lists popup after clicking its trigger following Escape.
       Impact: Pinned ImplHighlightItem bMBDown invokes HighlightChanged(nullptr) when original enabled submenu has no active child, so the previous no-op click assertion conflicts with source. New9native cases all pass.
       Resolution: Migrate only that one existing assertion to visible popup; preserve all other literals/test declarations/imports/cases. Add exact WriterMenuBar.test.tsx to task scope and document original source admission. Retry only failed case; retain original related map and counters because production source remains identical. Continue remaining tooling/browser checks, no passing replay.
+extensions:
+  implementation_commit:
+    hash: "bfdc6734535c64e2379c45ef8952232050db6ae6"
+    message: "🧩 W6QHFR fix: activate menubar with native auxiliary clicks"
 id_source: "generated"
 ---
 ## Summary
