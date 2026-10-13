@@ -15,6 +15,7 @@ import { SwFrame, SwFrameType, SwLayoutFrame } from "./wsfrm";
 import { SwFrameFormat } from "./atrfrm";
 import {
   createSwTextFrameInputs,
+  createSwParaPortion,
   getSwTextFrameGap,
   makeSwTextFrame,
   projectSwLineNumbers,
@@ -117,32 +118,88 @@ export class SwRootFrame extends SwLayoutFrame {
     fragments: readonly SwCursorTextFrameMeasurement[],
   ): void {
     this.BindRootFormat(this.getDocument());
+    const formatted =
+      this.snapshot?.pages.flatMap(
+        /** Borrows original snapshot frame clients, never projected replacements. @param page - Existing physical page. @returns Original frames. */
+        (page) => page.textFrames,
+      ) ?? [];
+    const borrowed = new Set(formatted);
     const previous = this.cursorFrames.get(node);
-    for (const frame of previous?.frames ?? []) SwFrame.DestroyFrame(frame);
-    const frames = fragments.map(
-      /** Registers an original native fragment on its original node and layout. @param fragment - Actual device geometry. @returns Original frame. */
-      (fragment) =>
-        new SwTextFrame(
-          node,
-          String(node.GetIndex()),
-          fragment.start,
-          fragment.end,
-          0,
-          fragment.lines,
-          this,
-        ),
+    for (const frame of previous?.frames ?? [])
+      if (!borrowed.has(frame) && !frame.IsInDtor()) SwFrame.DestroyFrame(frame);
+    const body = formatted.filter(
+      /** Selects the current node's actual live formatted occurrences. @param frame - Native formatter client. @returns Whether owned. */
+      (frame) => frame.GetTextNodeFirst() === node && !frame.IsInDtor(),
     );
-    for (let index = 1; index < frames.length; index++)
-      (frames[index - 1] as SwTextFrame).SetFollow(frames[index]);
+    let frames: readonly SwTextFrame[];
+    if (body.length > 0) {
+      const claimed = new Set<SwTextFrame>();
+      const matches = fragments.map(
+        /** Resolves each original occurrence once, including equal native source spans. @param fragment - Current device fragment. @returns Borrowed original frame or stale projection. */
+        (fragment) => {
+          const frame = body.find(
+            /** Matches one unclaimed original source fragment. @param candidate - Original formatter client. @returns Whether it represents this occurrence. */
+            (candidate) =>
+              !claimed.has(candidate) &&
+              candidate.start === fragment.start &&
+              candidate.end === fragment.end,
+          );
+          if (frame !== undefined) claimed.add(frame);
+          return frame;
+        },
+      );
+      if (
+        matches.every(
+          /** Rejects stale mounted spans without registering duplicate body clients. @param frame - Original match. @returns Whether current. */
+          (frame) => frame !== undefined,
+        )
+      ) {
+        frames = matches as readonly SwTextFrame[];
+        for (let index = 0; index < frames.length; index++)
+          (frames[index] as SwTextFrame).SetPara(
+            createSwParaPortion((fragments[index] as SwCursorTextFrameMeasurement).lines),
+          );
+      } else frames = [];
+    } else {
+      frames = fragments.map(
+        /** Creates native clients only for genuinely unformatted content. @param fragment - Actual device geometry. @returns Original frame. */
+        (fragment) =>
+          new SwTextFrame(
+            node,
+            String(node.GetIndex()),
+            fragment.start,
+            fragment.end,
+            0,
+            fragment.lines,
+            this,
+          ),
+      );
+      for (let index = 1; index < frames.length; index++)
+        (frames[index - 1] as SwTextFrame).SetFollow(frames[index]);
+    }
     this.cursorFrames.set(node, {
       text: node.GetText(),
       frames,
     });
   }
+  /** Temporary browser-device freshness admission while native Calc/text invalidation is unported; this never selects a frame and needs no published lease. @param node - Original content owner. @returns Whether original native query may proceed. */
+  public IsCursorTextGeometryCurrent(node: SwTextNode): boolean {
+    const document = this.getDocument(),
+      measured = this.cursorFrames.get(node);
+    return (
+      node.GetDoc() === document &&
+      (measured === undefined
+        ? this.snapshot === undefined ||
+          this.lastModelRevision === document.GetDocumentStateManager().GetModelRevision()
+        : measured.text === node.GetText())
+    );
+  }
   /** Resolves the current native cursor's measured frame without stale text geometry. @param node - Existing model text owner. @returns Current frame, or no valid measurement. */
   public GetCursorTextFrame(node: SwTextNode): SwTextFrame | undefined {
     const measured = this.cursorFrames.get(node);
-    return node.GetDoc() === this.getDocument() && measured?.text === node.GetText()
+    return node.GetDoc() === this.getDocument() &&
+      measured?.text === node.GetText() &&
+      measured.frames[0]?.IsInDtor() !== true
       ? measured.frames[0]
       : undefined;
   }
@@ -151,11 +208,13 @@ export class SwRootFrame extends SwLayoutFrame {
     if (this.IsInDtor()) return;
     const format = this.GetFormat();
     format.DisposeModify();
+    const frames = new Set<SwTextFrame>();
     for (const measured of this.cursorFrames.values())
-      for (const frame of measured.frames) SwFrame.DestroyFrame(frame);
-    this.cursorFrames.clear();
+      for (const frame of measured.frames) frames.add(frame);
     for (const page of this.snapshot?.pages ?? [])
-      for (const frame of page.textFrames) SwFrame.DestroyFrame(frame);
+      for (const frame of page.textFrames) frames.add(frame);
+    for (const frame of frames) if (!frame.IsInDtor()) SwFrame.DestroyFrame(frame);
+    this.cursorFrames.clear();
     this.snapshot = undefined;
     this.lastInputs = [];
     this.lastDocument = undefined;
@@ -318,6 +377,24 @@ export class SwRootFrame extends SwLayoutFrame {
     );
     for (const page of [...created, ...previous])
       for (const frame of page.textFrames) if (!retained.has(frame)) SwFrame.DestroyFrame(frame);
+    const formattedNodes = new Set(
+      [...retained].map(
+        /** Reads the actual retained content owner. @param frame - Original formatter client. @returns Native node. */
+        (frame) => frame.GetTextNodeFirst(),
+      ),
+    );
+    for (const [node, measured] of this.cursorFrames)
+      if (formattedNodes.has(node)) {
+        for (const frame of measured.frames)
+          if (!retained.has(frame) && !frame.IsInDtor()) SwFrame.DestroyFrame(frame);
+        if (
+          measured.frames.some(
+            /** Drops an obsolete measured lease after native body formatting replaced its original clients. @param frame - Previous measured client. @returns Whether no longer retained. */
+            (frame) => !retained.has(frame),
+          )
+        )
+          this.cursorFrames.delete(node);
+      }
     linkTextFrameFollows(
       pages.map(
         /** Reads retained original fragments. @param page - Physical page. @returns Native frames. */ (

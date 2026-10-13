@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/CommandPopupMenu.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115",
+      "CAP-0116"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/CommandPopupMenu.tsx#CommandPopupMenu",
+        "apps/office/src/sw/browser/presentation/native-command-popup.test.tsx#native",
+        "apps/office/e2e/writer-native-context-menu.spec.ts#Writer native context menu"
+      ],
+      "justification": "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CommandPopupMenu"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

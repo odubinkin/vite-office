@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/framework/browser/presentation/CommandPopupMenu.tsx",
+    "localSymbols": [
+      "CommandPopupMenu"
+    ],
+    "status": "local-only",
+    "rationale": "React and DOM implement the native popup presentation boundary; native frame dispatcher and bindings retain command and document semantics.",
+    "responsibilities": [
+      "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandPopupMenu.tsx",
+          "marker": "CommandPopupMenu"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-command-popup.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
+          "marker": "Writer native context menu"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "void SwEditWin::SelectMenuPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "bool SwCursorShell::TestCurrPam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+          "marker": "sal_uInt16 PopupMenu::Execute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "case KEY_RETURN:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+          "marker": "<prop oor:name=\"PopupLabel\""
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "DOM focus and viewport geometry replace native VCL window presentation."
+    }
+  }
+}

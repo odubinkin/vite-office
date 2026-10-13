@@ -2,7 +2,7 @@
 import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -17,6 +17,7 @@ import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
+  RES_TXTATR_INETFMT,
   RES_MARGIN_FIRSTLINE,
   RES_BREAK,
   RES_PAGEDESC,
@@ -35,7 +36,8 @@ import {
   projectWriterCharacterAttributes,
   type WriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
-import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
+import { GetTextAttrMode } from "../../../inc/swtypes";
+import type { SwFormatINetFormat, WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import {
   CreateWriterFontSizeUndo,
@@ -47,6 +49,7 @@ import {
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import type { WriterBookmarkDialogResult } from "../dialog/writer-dialog-controller";
+import { getWriterINetFormatStateAtCursor } from "../../core/edit/edattr";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import { createWriterTextCommandRegistry } from "./textsh1-commands";
@@ -65,10 +68,15 @@ export interface SwTextShellTarget extends Pick<
   | "IsNumRuleStart"
   | "SetNumRuleStart"
 > {
-  readonly ApplyAction: (action: SfxUndoAction<SwUndoRedoContext>) => boolean;
+  readonly ApplyAction: (
+    action: SfxUndoAction<SwUndoRedoContext>,
+    tryMerge?: boolean,
+    execute?: (context: SwUndoRedoContext) => void,
+  ) => boolean;
   readonly CaptureCursorState: () => SwUndoCursorState;
   readonly GetActiveParagraph: () => SwTextNode;
   readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
+  readonly IsTableMode: () => boolean;
   readonly GetDefaultFontFamily: () => string;
   readonly GetDefaultFontSizePt: () => number;
   readonly GetDoc: () => import("../../core/doc/doc").SwDoc;
@@ -123,6 +131,7 @@ export class SwTextShell {
     dialogs: WriterDialogController,
   ) {
     this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
+    this.shell.GetInterface().RegisterPopupMenu("text");
   }
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
@@ -203,6 +212,53 @@ export class SwTextShell {
     return getWriterHyperlinkAtCursor(this.target.GetDoc(), this.target.GetCursor());
   }
 
+  /** Tests represented native HasSelection without treating an equal mark as selected; fly selection remains unrepresented. @returns Whether table mode or actual point/mark selection exists. */
+  private HasHyperlinkSelection(): boolean {
+    if (this.target.IsTableMode()) return true;
+    const cursor = this.target.GetCursor();
+    return cursor.HasMark() && cursor.GetPoint().compare(cursor.GetMark()) !== 0;
+  }
+
+  /** Implements represented SID_EDIT_HYPERLINK state: current SET or an unselected original nonempty Default-mode hint. @returns Whether edit is enabled. */
+  public CanEditHyperlink(): boolean {
+    if (
+      getWriterINetFormatStateAtCursor(this.target.GetDoc(), this.target.GetCursor()).GetItemState(
+        RES_TXTATR_INETFMT,
+        false,
+      ) >= SfxItemState.SET
+    )
+      return true;
+    if (this.HasHyperlinkSelection()) return false;
+    const point = this.target.GetCursor().GetPoint(),
+      node = point.GetNode(),
+      hint =
+        node instanceof SwTextNode
+          ? node.GetTextAttrAt(point.GetContentIndex(), RES_TXTATR_INETFMT, GetTextAttrMode.Default)
+          : undefined;
+    return hint !== undefined && (hint.GetAttr() as SwFormatINetFormat).GetValue().length > 0;
+  }
+
+  /** Implements SID_EDIT_HYPERLINK beginning fallback before dialog: select the original native hint with the persistent point at its end and mark at its start. Full core overlap/readonly/fly movement is unrepresented. @returns Whether execution may proceed. */
+  public PrepareEditHyperlink(): boolean {
+    if (this.HasHyperlinkSelection() || this.GetHyperlinkAtCursor() !== undefined) return true;
+    const cursor = this.target.GetCursor(),
+      point = cursor.GetPoint(),
+      node = point.GetNode(),
+      hint =
+        node instanceof SwTextNode
+          ? node.GetTextAttrAt(point.GetContentIndex(), RES_TXTATR_INETFMT, GetTextAttrMode.Default)
+          : undefined;
+    if (hint === undefined) return false;
+    cursor.DeleteMark();
+    point.Assign(node, hint.GetStart());
+    cursor.SetMark();
+    point.Assign(node, hint.GetEnd());
+    this.target.SetPendingCharacterItems((node as SwTextNode).GetCharacterItemsAt(hint.GetEnd()));
+    this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
+    this.target.NotifySelectionChanged();
+    return true;
+  }
+
   /** Returns document bookmarks in position order. @returns Names. */
   public GetBookmarkNames(): readonly string[] {
     return this.target.GetDoc().GetIDocumentMarkAccess().GetBookmarkNames();
@@ -259,6 +315,45 @@ export class SwTextShell {
       text,
     );
     return action === undefined ? false : this.target.ApplyAction(action);
+  }
+
+  /** Tests native selected Remove admission including INVALID mixed item state; collapsed Default/word fallback remains pending. @returns Whether the represented command is enabled. */
+  public CanRemoveHyperlink(): boolean {
+    const state = getWriterINetFormatStateAtCursor(
+      this.target.GetDoc(),
+      this.target.GetCursor(),
+    ).GetItemState(RES_TXTATR_INETFMT, false);
+    return state >= SfxItemState.SET || state === SfxItemState.INVALID;
+  }
+
+  /** Resets internet attributes in original marked native ranges as one history operation. Full native SwUndoResetAttr/SwHistory and unmarked-ring word selection remain unverified. @returns Whether attributes changed. */
+  public RemoveHyperlink(): boolean {
+    if (!this.HasHyperlinkSelection()) return this.SetHyperlink(undefined);
+    const before = this.target.CaptureCursorState(),
+      actions: SwUndoAttr[] = [];
+    for (const range of getWriterSelectedTextRanges(this.target.GetCursor()) ?? []) {
+      const original = range.node.CaptureTextFragment(range.start, range.end),
+        replacement = range.node.CreateHyperlinkTextFragment(range.start, range.end, undefined);
+      if (!original.hints.equals(replacement.hints))
+        actions.push(
+          new SwUndoAttr(range.node, range.start, original, replacement, before, before),
+        );
+    }
+    if (actions.length === 0) return false;
+    let action: SfxUndoAction<SwUndoRedoContext> = actions[0] as SwUndoAttr;
+    if (actions.length > 1) {
+      const group = new SfxListUndoAction<SwUndoRedoContext>("Remove Hyperlink");
+      for (const child of actions) group.AddAction(child);
+      action = group;
+    }
+    return this.target.ApplyAction(
+      action,
+      false,
+      /** Runs initial attribute reset without history cursor restoration. @param context - Original shell context. @returns Nothing. */
+      (context) => {
+        for (const child of actions) child.ApplyExact(context);
+      },
+    );
   }
 
   /** Applies a font family through one text-shell history action. @param fontFamily - Requested family. @returns Whether changed. */

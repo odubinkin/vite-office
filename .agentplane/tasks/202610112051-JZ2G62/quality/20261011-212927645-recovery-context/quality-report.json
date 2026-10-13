@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610112051-JZ2G62",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T21:29:27.645Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent exact semantic1f2ea1cd review under correctly activated EVALUATOR; supersedes earlier role-alias invocation. Original native query owner/state and marked ranges now drive Remove; approved bounded scope verified by current hashes/maps and actual acceptance.",
+  "evaluated_sha": "1f2ea1cd2a73656c107ab0e395f0464ae35f204b",
+  "blueprint_digest": "b4bf9655313a588d16533df545f1d9fbf1c7d4ccb748f36082dec579dd8a605d",
+  "findings": [
+    "Five complete original modules100allfour1222positive counters;14140 distinct accepted assertions/532files and881old test bytes unchanged. Ten append-only canonical records preserve classifications/statuses/defaults. Final restored-reference metadata9pass and137freshbuild unchanged. Full native history/caret/generic readonly/style/frame and browser popup are explicitly pending; no production debug globals or upstream artifact copies."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610112051-JZ2G62/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/totals.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/certificate-tests.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/results.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/audit-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/JZ2G62/build-hashes.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

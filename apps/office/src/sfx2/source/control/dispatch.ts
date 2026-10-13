@@ -85,6 +85,19 @@ export class SfxDispatcher {
     return this.shells[this.shells.length - index - 1];
   }
 
+  /** Selects the first original nonempty popup in native top-to-bottom order and invokes final browser presentation once. Native global/parent dispatchers, quiet mode and UNO/vcl popup execution remain unrepresented. @param execute - Final resource presenter corresponding to native resource-name ExecutePopup overload. @returns Nothing. */
+  public ExecutePopup(execute: (resourceName: string) => void): void {
+    let level = 0,
+      shell: SfxShell | undefined;
+    while ((shell = this.GetShell(level++)) !== undefined) {
+      const name = shell.GetInterface().GetPopupMenuName();
+      if (name.length > 0) {
+        execute(name);
+        return;
+      }
+    }
+  }
+
   /** Resolves a command URL through the highest active shell. @param commandUrl - Canonical command URL. @returns Resolved command. */
   public QueryDispatch(commandUrl: string): ResolvedShellCommand | undefined {
     const baseCommandUrl = commandUrl.split("?", 1)[0] as string;

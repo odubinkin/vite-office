@@ -8,8 +8,11 @@ import {
   readBrowserWriterClipboardPaste,
 } from "./writer-clipboard-events";
 import { WriterTransferError } from "../../source/uibase/dochdl/swdtflvr";
-import { BrowserWriterPointerSelectionController } from "./writer-geometry";
-import { BrowserWriterSelectionMapper } from "./writer-selection";
+import {
+  BrowserWriterPointerSelectionController,
+  getBrowserWriterCaretFromPoint,
+} from "./writer-geometry";
+import { BrowserWriterSelectionMapper, getWriterDomPosition } from "./writer-selection";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import { SwTab } from "../../inc/fesh";
 import { browserPointerStyle } from "../../../vcl/browser/pointer";
@@ -328,10 +331,91 @@ export class BrowserWriterEditWindow {
         event.preventDefault();
     };
 
+  /** Routes actual mouse geometry through native selection policy before showing the resource selected by the frame. @param event - Original browser context request. @param execute - Final device presenter. @returns Whether handled. */
+  public HandleContextMenu(
+    event: React.MouseEvent<HTMLElement>,
+    execute: (resourceName: string, position: Readonly<{ x: number; y: number }>) => void,
+  ): boolean {
+    if (this.tableCapture || this.suppressBorderClick) {
+      event.preventDefault();
+      return true;
+    }
+    const doc = this.environment.document;
+    const caret = getBrowserWriterCaretFromPoint(
+      {
+        ...(doc.caretRangeFromPoint === undefined
+          ? {}
+          : { caretRangeFromPoint: doc.caretRangeFromPoint.bind(doc) }),
+        ...(doc.elementFromPoint === undefined
+          ? {}
+          : { elementFromPoint: doc.elementFromPoint.bind(doc) }),
+      },
+      event.clientX,
+      event.clientY,
+    );
+    if (caret === undefined) return false;
+    const point = getWriterDomPosition(caret.node, caret.offset);
+    const hit = point === undefined ? undefined : this.ToEditPosition(point);
+    if (hit === undefined) return false;
+    this.SynchronizeSelection();
+    const handled = this.editWindow.ContextMenu(
+      hit,
+      /** Presents only the resource selected by original native owners. @param name - Original resource. @returns Nothing. */
+      (name) => execute(name, { x: event.clientX, y: event.clientY }),
+    );
+    if (handled) event.preventDefault();
+    return handled;
+  }
+
+  /** Opens keyboard context input at the live caret rectangle, retaining the original native PaM. @param event - Keyboard device request. @param execute - Final device presenter. @returns Whether handled. */
+  public HandleContextMenuKey(
+    event: React.KeyboardEvent<HTMLElement>,
+    execute: (resourceName: string, position: Readonly<{ x: number; y: number }>) => void,
+  ): boolean {
+    if (
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey ||
+      event.nativeEvent.isComposing ||
+      !((event.key === "ContextMenu" && !event.shiftKey) || (event.key === "F10" && event.shiftKey))
+    )
+      return false;
+    this.SynchronizeSelection();
+    const selection = this.environment.getSelection();
+    const range =
+      selection !== null && selection.focusNode !== null
+        ? this.environment.document.createRange()
+        : undefined;
+    if (range !== undefined) {
+      range.setStart(
+        (selection as Selection).focusNode as Node,
+        (selection as Selection).focusOffset,
+      );
+      range.collapse(true);
+    }
+    const rect = range?.getBoundingClientRect?.() ?? event.currentTarget.getBoundingClientRect();
+    this.editWindow.ContextMenu(
+      undefined,
+      /** Uses device geometry only at final presentation. @param name - Original resource. @returns Nothing. */
+      (name) => execute(name, { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }),
+    );
+    event.preventDefault();
+    return true;
+  }
+
   public readonly HandlePointerDown =
     /** Starts pointer selection stabilization. @param event - React mouse event. @returns Nothing. */ (
       event: React.MouseEvent<HTMLElement>,
     ): void => {
+      const marker =
+        event.target instanceof Element
+          ? event.target.closest<HTMLElement>("[data-writer-list-marker]")
+          : null;
+      if (event.button === 2) {
+        this.suppressBorderClick = false;
+        if (marker === null) event.preventDefault();
+        return;
+      }
       this.EndTableCapture(true);
       this.suppressBorderClick = false;
       this.MeasureTableFrames();
@@ -358,10 +442,6 @@ export class BrowserWriterEditWindow {
         event.preventDefault();
         return;
       }
-      const marker =
-        event.target instanceof Element
-          ? event.target.closest<HTMLElement>("[data-writer-list-marker]")
-          : null;
       if (event.button === 0 && marker?.parentElement != null) {
         const parent = marker.parentElement,
           offset = Array.from(parent.childNodes).indexOf(marker) + 1;

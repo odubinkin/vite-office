@@ -8,12 +8,44 @@
         {
           "marker": "getWriterCommandResource",
           "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts"
+        },
+        {
+          "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+          "marker": "getWriterCommandResource"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-context-menu.test.tsx",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
+          "marker": "Writer native context menu"
         }
       ],
       "upstream": [
         {
           "marker": ".uno:AddDirect",
           "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
+          "marker": "void SwEditWin::SelectMenuPosition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/crsr/crsrsh.cxx",
+          "marker": "bool SwCursorShell::TestCurrPam"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menu.cxx",
+          "marker": "sal_uInt16 PopupMenu::Execute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "case KEY_RETURN:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+          "marker": "<prop oor:name=\"PopupLabel\""
         }
       ]
     },
@@ -27,7 +59,8 @@
       "Unsupported desktop resource entries are recorded as filtered X entries instead of receiving local replacement commands."
     ],
     "preservedResponsibilities": [
-      "Loads generated labels, placement context, semantics, shortcuts, and slot identities from the pinned Writer resources."
+      "Loads generated labels, placement context, semantics, shortcuts, and slot identities from the pinned Writer resources.",
+      "Task202610112158-8V85V8 adds bounded original native context-menu selection/resource execution and browser presentation. Native selected text uses inclusive start/exclusive end and all marked rings; represented selected cell sections retain original table ownership. Actual device caret mapping stays at browser ingress. Keyboard retains original native selection and moving-endpoint device geometry. Shared popup and menubar reuse the same bindings command item and viewport/submenu renderer; native standalone popup starts without entry preselection, Enter without highlighted command dismisses, child key/pointer routes and synchronous teardown/focus precede Execute. Context surfaces select original XCU PopupLabel when present while general labels remain unchanged. Full native pixel/model/layout, cell-follow/merged/nested/RTL, drawing/spell/readonly/GCAttr, global/quiet/UNO/VCL timers/mnemonics/disabled platform styles and complete parity remain unverified. Existing states/defaults/classes and registered IO/recovery deviations preserved; changed complete modules and native/mounted/Chromium evidence pending final certification."
     ],
     "status": "mapped",
     "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",

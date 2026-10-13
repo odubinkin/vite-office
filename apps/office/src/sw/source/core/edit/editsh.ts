@@ -1,14 +1,15 @@
 /** @fileoverview Implements Writer hyperlink shell operations from pinned LibreOffice `sw/source/core/edit/editsh.cxx`. */
 
+import { getWriterINetFormatStateAtCursor } from "./edattr";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwDoc as WriterDocument } from "../doc/doc";
 import type { SwTextNode as WriterParagraph } from "../txtnode/ndtxt";
-import { copyWriterTextRangeRuns, projectWriterTextRuns } from "../txtnode/ndtxt";
-import type { WriterHyperlink } from "../txtnode/fmtatr2";
+import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
+import { GetTextAttrMode } from "../../../inc/swtypes";
+import type { SwFormatINetFormat, WriterHyperlink } from "../txtnode/fmtatr2";
 import type { SwPaM } from "../crsr/pam";
-import { equalWriterHyperlinks } from "../txtnode/fmtatr2";
 import { SwUndoAttr } from "../undo/unattr";
 import { SwUndoInsert, type SwUndoInsertGroup } from "../undo/unins";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
@@ -40,30 +41,15 @@ export function createWriterInsertTextAction(
   );
 }
 
-/** Reads one uniform selected or caret hyperlink. @param document - Active Writer document. @param selection - Persistent cursor selection. @returns Hyperlink metadata or undefined. */
+/** Projects native SET internet attributes only at the dialog boundary. @param document - Original document. @param cursor - Actual native ring. @returns Dialog fields for uniform native attributes. */
 export function getWriterHyperlinkAtCursor(
   document: WriterDocument,
   cursor: SwPaM,
 ): WriterHyperlink | undefined {
-  const range = getWriterSelectedTextRange(cursor) ?? getHyperlinkRangeAtCursor(cursor);
-  if (range === undefined) {
-    const point = cursor.GetPoint();
-    const paragraph = point.GetNode() as WriterParagraph;
-    return paragraph.GetDoc() === document
-      ? paragraph.getHyperlinkAt(point.GetContentIndex())
-      : undefined;
-  }
-  const paragraph = range.node;
-  if (paragraph.GetDoc() !== document) return undefined;
-  const runs = copyWriterTextRangeRuns(paragraph, range.start, range.end);
-  const hyperlink = runs[0]?.hyperlink;
-  return runs.length > 0 &&
-    runs.every(
-      /** Requires one uniform link across the selection. @param run - Selected run. @returns Whether hyperlink metadata matches. */
-      (run) => equalWriterHyperlinks(run.hyperlink, hyperlink),
-    )
-    ? hyperlink
-    : undefined;
+  return (
+    getWriterINetFormatStateAtCursor(document, cursor).GetItemIfSet(RES_TXTATR_INETFMT, false) as
+      SwFormatINetFormat | undefined
+  )?.GetHyperlink();
 }
 
 /** Creates the undo action for applying or removing a hyperlink. @param document - Active document. @param selection - Command selection. @param pendingAttributes - Caret character attributes. @param before - Cursor state before execution. @param hyperlink - Replacement hyperlink or undefined. @param text - Optional inserted link text. @returns Undo action or undefined when unchanged. */
@@ -118,44 +104,18 @@ export function createWriterHyperlinkAction(
   );
 }
 
-/** Resolves the complete contiguous hyperlink containing a caret. @param document - Active document. @param selection - Collapsed cursor selection. @returns Hyperlink range or undefined. */
+/** Borrows one original internet attribute range under the represented caret inheritance policy; native UI default selection/word fallback remain separate work. @param cursor - Actual original caret. @returns Original hinted bounds or no inherited attribute. */
 function getHyperlinkRangeAtCursor(cursor: SwPaM): WriterTextRange | undefined {
   if (cursor.HasMark()) return undefined;
-  const point = cursor.GetPoint();
-  const paragraph = point.GetNode() as WriterParagraph;
-  const offset = point.GetContentIndex();
-  const hyperlink = paragraph.getHyperlinkAt(offset);
-  if (hyperlink === undefined) return undefined;
-  const ranges = getRunRanges(paragraph);
-  const containingIndex = ranges.findIndex(
-    /** Locates the run whose inherited hyperlink contains the caret. @param range - Run offsets. @returns Whether it contains the caret. */
-    (range) => range.start <= offset && offset <= range.end,
+  const point = cursor.GetPoint(),
+    paragraph = point.GetNode() as WriterParagraph,
+    offset = point.GetContentIndex();
+  const hint = paragraph.GetTextAttrAt(
+    offset,
+    RES_TXTATR_INETFMT,
+    offset === 0 ? GetTextAttrMode.Default : GetTextAttrMode.Expand,
   );
-  /* istanbul ignore next -- A normalized hyperlink hint always covers one projected run. */
-  if (containingIndex < 0) return undefined;
-  let first = containingIndex;
-  let last = containingIndex;
-  const runs = projectWriterTextRuns(paragraph);
-  while (first > 0 && equalWriterHyperlinks(runs[first - 1]?.hyperlink, hyperlink)) first -= 1;
-  while (last + 1 < runs.length && equalWriterHyperlinks(runs[last + 1]?.hyperlink, hyperlink))
-    last += 1;
-  return {
-    end: (ranges[last] as { readonly end: number }).end,
-    node: paragraph,
-    start: (ranges[first] as { readonly start: number }).start,
-  };
-}
-
-/** Projects paragraph runs to UTF-16 ranges. @param paragraph - Source paragraph. @returns Run ranges. */
-function getRunRanges(
-  paragraph: WriterParagraph,
-): readonly { readonly end: number; readonly start: number }[] {
-  const ranges: { readonly end: number; readonly start: number }[] = [];
-  let consumed = 0;
-  for (const run of projectWriterTextRuns(paragraph)) {
-    const start = consumed;
-    consumed += run.text.length;
-    ranges.push({ end: consumed, start });
-  }
-  return ranges;
+  return hint === undefined
+    ? undefined
+    : { node: paragraph, start: hint.GetStart(), end: hint.GetEnd() };
 }

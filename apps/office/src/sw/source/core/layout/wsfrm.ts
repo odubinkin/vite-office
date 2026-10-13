@@ -17,6 +17,8 @@ import type { SwFrameFormat } from "./atrfrm";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwTabFrame } from "./tabfrm";
 import type { SwRootFrame } from "./newfrm";
+import { SwFrameAreaDefinition } from "../inc/frame";
+import type { ReadonlySwRect } from "../../../inc/swrect";
 /** Native represented frame type bits from frame.hxx. */
 export enum SwFrameType {
   None = 0,
@@ -48,9 +50,8 @@ export enum SwFrameInvFlags {
 export class SwFrame extends SwClient {
   protected mnFrameType = SwFrameType.None;
   private mbInDtor = false;
-  private mbFrameAreaPositionValid = false;
-  private mbFrameAreaSizeValid = false;
-  private mbFramePrintAreaValid = false;
+  /** Original frame-area base component preserving the native registered frame identity. */
+  public readonly areaDefinition = new SwFrameAreaDefinition();
   private mbCompletePaint = true;
   private mpRoot: SwRootFrame | undefined;
   private mpUpper: SwLayoutFrame | undefined;
@@ -170,33 +171,43 @@ export class SwFrame extends SwClient {
   }
   /** Reads native position validity. @returns Whether positioned. */
   public isFrameAreaPositionValid(): boolean {
-    return this.mbFrameAreaPositionValid;
+    return this.areaDefinition.isFrameAreaPositionValid();
   }
   /** Reads native size validity. @returns Whether sized. */
   public isFrameAreaSizeValid(): boolean {
-    return this.mbFrameAreaSizeValid;
+    return this.areaDefinition.isFrameAreaSizeValid();
   }
   /** Reads native print-area validity. @returns Whether calculated. */
   public isFramePrintAreaValid(): boolean {
-    return this.mbFramePrintAreaValid;
+    return this.areaDefinition.isFramePrintAreaValid();
   }
   /** Reads complete native area validity. @returns Whether all geometry is valid. */
   public isFrameAreaDefinitionValid(): boolean {
-    return (
-      this.isFrameAreaPositionValid() && this.isFrameAreaSizeValid() && this.isFramePrintAreaValid()
-    );
+    return this.areaDefinition.isFrameAreaDefinitionValid();
   }
   /** Sets native position validity. @param value - New flag. @returns Nothing. */
   public setFrameAreaPositionValid(value: boolean): void {
-    if (this.mbFrameAreaPositionValid !== value) this.mbFrameAreaPositionValid = value;
+    this.areaDefinition.setFrameAreaPositionValid(value);
   }
   /** Sets native size validity. @param value - New flag. @returns Nothing. */
   public setFrameAreaSizeValid(value: boolean): void {
-    if (this.mbFrameAreaSizeValid !== value) this.mbFrameAreaSizeValid = value;
+    this.areaDefinition.setFrameAreaSizeValid(value);
   }
   /** Sets native print-area validity. @param value - New flag. @returns Nothing. */
   public setFramePrintAreaValid(value: boolean): void {
-    if (this.mbFramePrintAreaValid !== value) this.mbFramePrintAreaValid = value;
+    this.areaDefinition.setFramePrintAreaValid(value);
+  }
+  /** Reads the original composed native frame identity. @returns Native ID. */
+  public GetFrameId(): number {
+    return this.areaDefinition.GetFrameId();
+  }
+  /** Borrows original absolute frame geometry. @returns Native const area. */
+  public getFrameArea(): ReadonlySwRect {
+    return this.areaDefinition.getFrameArea();
+  }
+  /** Borrows original frame-relative print geometry. @returns Native const print area. */
+  public getFramePrintArea(): ReadonlySwRect {
+    return this.areaDefinition.getFramePrintArea();
   }
   /** Requests complete native painting. @returns Nothing. */
   public SetCompletePaint(): void {

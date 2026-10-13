@@ -12,6 +12,11 @@ import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
 import { AttrSetHandleHelper, type SwAttrSetHandle } from "./node-attribute-handle";
 import type { SwTable } from "../table/swtable";
+import type { SwPosition } from "../crsr/pam";
+import type { SwRootFrame } from "../layout/newfrm";
+import type { SwContentFrame } from "../layout/ssfrm";
+import { SwFrameType } from "../layout/wsfrm";
+import { GetFrameOfModify } from "../layout/frmtool";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
 export type SwNodeType = "end" | "start" | "text";
@@ -149,6 +154,11 @@ export class SwEndNode extends SwNode {
 /** Base class for nodes that own indexable content. */
 export abstract class SwContentNode extends SwNode {
   private readonly mpAttrSet: SwAttrSetHandle = { value: undefined };
+
+  /** Borrows a registered content frame through the native no-view-position query. Only text content frames are represented; native geometry/Calc and non-text content remain unported. @param layout - Optional original layout filter. @param position - Optional original model position. @returns Original text content frame or no registered match. */
+  public getLayoutFrame(layout?: SwRootFrame, position?: SwPosition): SwContentFrame | undefined {
+    return GetFrameOfModify(layout, this, SwFrameType.Txt, position) as SwContentFrame | undefined;
+  }
 
   /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
   protected constructor(

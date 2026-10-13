@@ -10,6 +10,7 @@ export interface WriterCommandResource {
   readonly capabilityId?: `CAP-${string}`;
   readonly controlLabel: string;
   readonly label: string;
+  readonly popupLabel?: string;
   readonly iconName?: string;
   readonly placements: readonly string[];
   readonly selectionValue?: string;

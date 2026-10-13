@@ -114,6 +114,7 @@ export function createWriterTextCommandRegistry(
       capabilityId: "CAP-0135",
       /** Replaces the current hyperlink using dialog data. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether changed. */
       execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
+        if (!target.PrepareEditHyperlink()) return false;
         const args = getWriterCommandArguments<WriterHyperlinkCommandArguments>(arguments_);
         if (args?.hyperlink !== undefined) return target.SetHyperlink(args.hyperlink);
         return dialogController
@@ -127,8 +128,8 @@ export function createWriterTextCommandRegistry(
       /** Reads current hyperlink metadata for dialog initialization. @returns Hyperlink or undefined. */
       getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
       id: WRITER_COMMAND_IDS.editHyperlink,
-      /** Enables editing only for a uniform selected or caret link. @returns Whether enabled. */
-      isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
+      /** Uses native current SET or beginning-of-link Default lookup. @returns Whether enabled. */
+      isEnabled: (): boolean => target.CanEditHyperlink(),
     },
     {
       capabilityId: "CAP-0113",
@@ -173,10 +174,10 @@ export function createWriterTextCommandRegistry(
     {
       capabilityId: "CAP-0135",
       /** Removes hyperlink metadata from the current selected link. @returns Whether changed. */
-      execute: (): boolean => target.SetHyperlink(undefined),
+      execute: (): boolean => target.RemoveHyperlink(),
       id: WRITER_COMMAND_IDS.removeHyperlink,
       /** Enables removal only for a uniform selected or caret link. @returns Whether enabled. */
-      isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
+      isEnabled: (): boolean => target.CanRemoveHyperlink(),
     },
     {
       capabilityId: "CAP-0109",

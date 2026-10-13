@@ -220,6 +220,30 @@ ranges omitted this already registered item; taskPW1696 restores its membership
 so the represented direct/inherited item-profile examples are admitted. Caller
 population invariants and original layout-frame behavior remain unreviewed.
 
+## WRITER-006: A zero-area rectangle contains its original point
+
+Baseline: LibreOffice26.8.0.2, commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+Original [SwRect integer edges and emptiness](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/inc/swrect.hxx#L67)
+return the left/top origin for zero width/height and define HasArea as both
+dimensions being nonzero. Original [Contains](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/inc/swrect.hxx#L218)
+compares inclusive integer edges without an area guard.
+
+Initialized example: SwRect(7,11,0,0) has HasArea false and IsEmpty true,
+but Right is7 and Bottom is11. Contains(Point(7,11)) and containment of another
+zero-area rectangle at that origin both return true; Point(8,11) is outside.
+Size::IsEmpty also differs from SwRect::IsEmpty for negative dimensions: Size
+uses nonpositive dimensions, whereas SwRect tests zeros only.
+
+Evidence: pinned swrect.hxx edge/Contains/HasArea definitions and literal
+portable checks in [native-frame-area.test.ts](../../apps/office/src/sw/source/core/inc/native-frame-area.test.ts).
+Task202610111735-R760SH checks these contracts on the portable implementation;
+the tests never execute pinned upstream sources.
+
+This is a suspicious empty-containment result, not a confirmed upstream defect.
+Native consumer invariants and a compiled native differential remain unverified.
+Decision: preserve zero-origin fallback, inclusive predicates and distinct size
+and rectangle emptiness. Do not add an area guard or normalize negative sizes.
+
 ## Recording future observations
 
 Add a stable `WRITER-###` case ID, pinned source location, original condition,

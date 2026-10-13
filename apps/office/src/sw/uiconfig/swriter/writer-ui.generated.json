@@ -228,7 +228,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -245,7 +246,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -262,7 +264,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -291,10 +294,12 @@
       "capabilityId": "CAP-0135",
       "controlLabel": "Hyperlink",
       "label": "Hyperlink",
+      "popupLabel": "Edit Hyperlink",
       "iconName": "lc_edithyperlink.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": true,
@@ -491,7 +496,10 @@
       "controlLabel": "Insert Rows Above",
       "label": "Insert Rows Above",
       "iconName": "lc_insertrowsbefore.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -504,7 +512,10 @@
       "controlLabel": "Insert Rows Below",
       "label": "Insert Rows Below",
       "iconName": "lc_insertrowsafter.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -517,7 +528,10 @@
       "controlLabel": "Insert Columns Before",
       "label": "Insert Columns Before",
       "iconName": "lc_insertcolumnsbefore.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -530,7 +544,10 @@
       "controlLabel": "Insert Columns After",
       "label": "Insert Columns After",
       "iconName": "lc_insertcolumnsafter.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -635,7 +652,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": true,
@@ -669,7 +687,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -686,7 +705,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -728,7 +748,8 @@
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "action",
       "showsDialog": false,
@@ -776,7 +797,8 @@
       "iconName": "lc_removebullets.svg",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ],
       "semantics": "radio",
       "showsDialog": false,
@@ -790,7 +812,10 @@
       "controlLabel": "Remove Hyperlink",
       "label": "Remove Hyperlink",
       "iconName": "lc_removehyperlink.svg",
-      "placements": ["sw/uiconfig/swriter/popupmenu/text.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": false,
       "shortcuts": [],
@@ -903,7 +928,10 @@
       ],
       "controlLabel": "Paragraph style",
       "label": "Apply Style",
-      "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "radio",
       "showsDialog": false,
       "shortcuts": [],
@@ -915,8 +943,12 @@
       "capabilityId": "CAP-0137",
       "controlLabel": "Table Properties",
       "label": "Table Properties",
+      "popupLabel": "Table Properties",
       "iconName": "lc_tabledialog.svg",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": true,
       "shortcuts": [],
@@ -928,7 +960,10 @@
       "capabilityId": "CAP-0137",
       "controlLabel": "Row Height",
       "label": "Row Height",
-      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ],
       "semantics": "action",
       "showsDialog": true,
       "shortcuts": [],
@@ -1044,7 +1079,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1053,7 +1089,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1062,7 +1099,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1078,7 +1116,8 @@
       "commandUrl": ".uno:EditHyperlink",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1156,22 +1195,34 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:InsertRowsBefore",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:InsertRowsAfter",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:InsertColumnsBefore",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:InsertColumnsAfter",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
@@ -1221,7 +1272,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1239,7 +1291,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1248,7 +1301,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1265,7 +1319,8 @@
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
@@ -1289,13 +1344,17 @@
       "commandUrl": ".uno:RemoveBullets",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
-        "sw/uiconfig/swriter/popupmenu/text.xml"
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
       ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:RemoveHyperlink",
-      "sources": ["sw/uiconfig/swriter/popupmenu/text.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/popupmenu/text.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
@@ -1336,17 +1395,26 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:StyleApply",
-      "sources": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:TableDialog",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:SetRowHeight",
-      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/table.xml"
+      ]
     },
     {
       "classification": "supported-upstream",
@@ -6409,6 +6477,662 @@
       "sourceUrl": ".uno:EditCurrentRegion",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NoBreak",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PasteSpecialMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PasteNestedTable",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PasteSpecialMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PasteRowsBefore",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PasteSpecialMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PasteColumnsBefore",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PasteSpecialMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PasteUnformatted",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PasteSpecialMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PasteSpecial",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:PasteSpecialMenu",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:UpdateCurIndex",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:EditCurIndex",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:RemoveTableOf",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:UnsetCellsReadOnly",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:MergeCells",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SplitCell",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableInsertMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertRowDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableInsertMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertColumnDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableDeleteMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DeleteRows",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableDeleteMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DeleteColumns",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableDeleteMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DeleteTable",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:TableDeleteMenu",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SetMinimalRowHeight",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SetOptimalRowHeight",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DistributeRows",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SetColumnWidth",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SetMinimalColumnWidth",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SetOptimalColumnWidth",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:TableAutoFitMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DistributeColumns",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:HeadingRowsRepeat",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:RowSplit",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Academic&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Elegant&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Financial&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Box List Blue&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Box List Green&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Box List Red&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StyleApply?Style:string=Box List Yellow&amp;FamilyName:string=TableStyles",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:StyleMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AutoFormat",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:StyleMenu",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:FormatPaintbrush",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:ResetAttributes",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:CharacterMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:FontDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:CharacterMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:DefaultCharStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:CharacterMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:EmphasisCharStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:CharacterMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:StrongEmphasisCharStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:CharacterMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:QuoteCharStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:CharacterMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SourceCharStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:CharacterMenu",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:TextBodyParaStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Heading1ParaStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Heading2ParaStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Heading3ParaStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:QuotationsParStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PreformattedParaStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:ParagraphMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:EditStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:OutlineBullet",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:BulletListStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberListStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AlphaListStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AlphaLowListStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:RomanListStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:RomanLowListStyle",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:NumberingMenu"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NumberingStart",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertFormula",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertAnnotation",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:UpdateSelectedField",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:ConvertSelectedField",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:FieldDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AcceptTrackedChange",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:RejectTrackedChange",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:NextTrackedChange",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:PreviousTrackedChange",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:ContentControlProperties",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:EditFootnote",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:IndexEntryDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AuthoritiesEntryDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertHyperlink",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:OpenHyperlinkOnCursor",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:CopyHyperlinkLocation",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:OpenSmartTagMenuOnCursor",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:ThesaurusFromContext",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:BreakAboveTable",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:InsertCaptionDialog",
+      "reason": "outside-p1-supported-command-slice",
+      "sourcePath": "sw/uiconfig/swriter/popupmenu/table.xml"
     }
   ],
   "locale": "en-US",
@@ -6623,6 +7347,55 @@
       { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true }
+    ],
+    "popupTable": [
+      { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      {
+        "id": ".uno:TableInsertMenu",
+        "items": [
+          { "commandUrl": ".uno:InsertRowsBefore", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Insert"
+      },
+      {
+        "id": ".uno:TableAutoFitMenu",
+        "items": [{ "commandUrl": ".uno:SetRowHeight", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Size"
+      },
+      { "kind": "separator" },
+      {
+        "id": ".uno:ParagraphMenu",
+        "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Paragraph"
+      },
+      {
+        "id": ".uno:NumberingMenu",
+        "items": [
+          { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ContinueNumbering", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "List"
+      },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:TableDialog", "kind": "command", "visible": true }
     ],
     "standardbar": [
       { "commandUrl": ".uno:AddDirect", "kind": "command", "visible": true },
@@ -10394,6 +11167,490 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:EditCurrentRegion"
+      }
+    ],
+    "sw/uiconfig/swriter/popupmenu/table.xml": [
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:NoBreak" },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteNestedTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteRowsBefore"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteColumnsBefore"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteUnformatted"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteSpecial"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:PasteSpecialMenu"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateCurIndex"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditCurIndex"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RemoveTableOf"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnsetCellsReadOnly"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MergeCells"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SplitCell"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertRowDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertColumnDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableDeleteMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteRows"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableDeleteMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteColumns"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableDeleteMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteTable"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TableDeleteMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetMinimalRowHeight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetOptimalRowHeight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DistributeRows"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetColumnWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetMinimalColumnWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetOptimalColumnWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DistributeColumns"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HeadingRowsRepeat"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RowSplit"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Academic&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Elegant&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Financial&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Box List Blue&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Box List Green&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Box List Red&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleApply?Style:string=Box List Yellow&amp;FamilyName:string=TableStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:StyleMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoFormat"
+      },
+      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:StyleMenu" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatPaintbrush"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResetAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DefaultCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EmphasisCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StrongEmphasisCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuoteCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SourceCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:CharacterMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TextBodyParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading1ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading2ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading3ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuotationsParStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PreformattedParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OutlineBullet"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BulletListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AlphaListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AlphaLowListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RomanListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RomanLowListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberingStart"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFormula"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertAnnotation"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateSelectedField"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConvertSelectedField"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FieldDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AcceptTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RejectTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NextTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PreviousTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContentControlProperties"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditFootnote"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IndexEntryDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AuthoritiesEntryDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertHyperlink"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenHyperlinkOnCursor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CopyHyperlinkLocation"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenSmartTagMenuOnCursor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ThesaurusFromContext"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BreakAboveTable"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertCaptionDialog"
       }
     ]
   }

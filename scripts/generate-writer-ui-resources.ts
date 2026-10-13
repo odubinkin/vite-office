@@ -283,6 +283,7 @@ const resourcePaths = [
   "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
   "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
   "sw/uiconfig/swriter/popupmenu/text.xml",
+  "sw/uiconfig/swriter/popupmenu/table.xml",
 ] as const;
 
 const sdiPaths = ["sw/sdi/swriter.sdi", "sfx2/sdi/sfx.sdi", "svx/sdi/svx.sdi"] as const;
@@ -336,6 +337,10 @@ const commands = Object.fromEntries(
       const sourceUrl = spec.sourceUrl ?? spec.commandUrl;
       const label =
         spec.browserLabel ?? findEnglishLabel(spec.commandUrl, genericCommands, writerCommands);
+      const popupLabel =
+        spec.browserLabel === undefined
+          ? findEnglishLabelProperty(spec.commandUrl, "PopupLabel", genericCommands, writerCommands)
+          : undefined;
       const shortcuts =
         spec.browserLabel === undefined ? findShortcuts(spec.commandUrl, accelerators) : [];
       const placements = resourcePaths.filter(
@@ -357,6 +362,7 @@ const commands = Object.fromEntries(
           capabilityId: commandCapabilities[spec.commandUrl],
           controlLabel: spec.browserControlLabel ?? stripMnemonic(label),
           label: stripMnemonic(label),
+          ...(popupLabel === undefined ? {} : { popupLabel: stripMnemonic(popupLabel) }),
           ...(upstreamIconFiles.has(iconName) ? { iconName } : {}),
           placements:
             spec.browserLabel === undefined ? placements : ["browser-extension:file-menu"],
@@ -405,6 +411,7 @@ const surfaces = {
   menubar: augmentedMenu,
   numobjectbar: resourceGraphs[resourcePaths[3]]?.nodes ?? [],
   popupText: resourceGraphs[resourcePaths[4]]?.nodes ?? [],
+  popupTable: resourceGraphs[resourcePaths[5]]?.nodes ?? [],
   standardbar: resourceGraphs[resourcePaths[1]]?.nodes ?? [],
   textobjectbar: resourceGraphs[resourcePaths[2]]?.nodes ?? [],
 };
@@ -518,6 +525,17 @@ function addBrowserMenuExtensions(nodes: readonly ResourceNode[]): readonly Reso
 
 /** Finds the pinned English command label. @param commandUrl - UNO command URL. @param catalogs - XCU command catalogs. @returns Localized label. */
 function findEnglishLabel(commandUrl: string, ...catalogs: readonly string[]): string {
+  const label = findEnglishLabelProperty(commandUrl, "Label", ...catalogs);
+  if (label !== undefined) return label;
+  throw new Error(`Missing upstream English label: ${commandUrl}`);
+}
+
+/** Reads an original native label property without fabricating a popup override when absent. @param commandUrl - Native URL. @param property - Original XCU property. @param catalogs - Pinned catalogs. @returns Original English property, or absent. */
+function findEnglishLabelProperty(
+  commandUrl: string,
+  property: "Label" | "PopupLabel",
+  ...catalogs: readonly string[]
+): string | undefined {
   for (const catalog of catalogs) {
     const marker = `<node oor:name="${commandUrl}"`;
     const start = catalog.indexOf(marker);
@@ -525,11 +543,13 @@ function findEnglishLabel(commandUrl: string, ...catalogs: readonly string[]): s
     const next = catalog.indexOf("\n      <node oor:name=", start + marker.length);
     const block = catalog.slice(start, next < 0 ? undefined : next);
     const label = block.match(
-      /<prop oor:name="Label"[\s\S]*?<value xml:lang="en-US">([\s\S]*?)<\/value>/,
+      new RegExp(
+        `<prop oor:name="${property}"[\\s\\S]*?<value xml:lang="en-US">([\\s\\S]*?)<\\/value>`,
+      ),
     )?.[1];
     if (label !== undefined) return decodeXml(label.trim());
   }
-  throw new Error(`Missing upstream English label: ${commandUrl}`);
+  return undefined;
 }
 
 /** Finds default shortcuts for one command. @param commandUrl - UNO command URL. @param catalog - Accelerator XCU. @returns Browser-normalized shortcuts. */

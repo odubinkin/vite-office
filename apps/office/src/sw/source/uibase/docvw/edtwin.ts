@@ -288,6 +288,28 @@ export class SwEditWin {
     return this.m_rView.GetWrtShell().GetDoc();
   }
 
+  /** Retains a hit inside original selected text/cells; otherwise places the native cursor at the actual hit, following edtwin SelectMenuPosition. Drawing/spell/readonly paths remain unrepresented. @param hit - Device-resolved original node/content position. @returns Whether the hit belongs to this document. */
+  public SelectMenuPosition(hit: SwEditWindowPosition): boolean {
+    const position = this.ResolvePosition(hit);
+    if (position === undefined) return false;
+    try {
+      if (!this.m_rView.GetWrtShell().TestCurrPam(position)) this.SetSelection({ point: hit });
+      return true;
+    } finally {
+      position.Dispose();
+    }
+  }
+
+  /** Handles represented native context-menu input before selecting its resource through the active frame dispatcher. Keyboard input retains its original native selection. @param hit - Actual mouse position, or absent for keyboard. @param execute - Final browser resource presenter. @returns Whether the original edit window admitted the request. */
+  public ContextMenu(
+    hit: SwEditWindowPosition | undefined,
+    execute: (resourceName: string) => void,
+  ): boolean {
+    if (hit !== undefined && !this.SelectMenuPosition(hit)) return false;
+    this.m_rView.GetViewFrame().GetDispatcher().ExecutePopup(execute);
+    return true;
+  }
+
   /** Applies a current SwNodes selection to the shell PaM. @param selection - Point and optional mark. @returns Whether every endpoint was accepted. */
   public SetSelection(selection: SwEditWindowSelection): boolean {
     const point = this.ResolvePosition(selection.point);

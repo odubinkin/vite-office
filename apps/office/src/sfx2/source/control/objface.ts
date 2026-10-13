@@ -9,6 +9,7 @@ import { SfxSlot, type SfxSlotDefinition } from "./msg";
 export class SfxInterface<Context> {
   private readonly byCommand = new Map<string, SfxSlot<Context>>();
   private readonly byId = new Map<number, SfxSlot<Context>>();
+  private popupMenuName = "";
   private readonly slots: readonly SfxSlot<Context>[];
 
   /** Validates and installs one generated slot map. @param definitions - Generated slots. @returns Nothing. */
@@ -36,6 +37,16 @@ export class SfxInterface<Context> {
         if (shortcuts.has(shortcut)) throw new Error(`Duplicate command shortcut: ${shortcut}`);
         shortcuts.add(shortcut);
       }
+  }
+
+  /** Registers this interface's own popup resource, replacing its previous name exactly as native objface.cxx. @param resourceName - Original resource name, including empty. @returns Nothing. */
+  public RegisterPopupMenu(resourceName: string): void {
+    this.popupMenuName = resourceName;
+  }
+
+  /** Returns the independently registered resource without inheriting another interface's popup. @returns Original default-empty name. */
+  public GetPopupMenuName(): string {
+    return this.popupMenuName;
   }
 
   /** Returns the complete interface slot map in generated declaration order. @returns Slots. */

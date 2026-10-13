@@ -1,10 +1,12 @@
 /** @fileoverview Ports the supported SwEditShell::IsMoveLeftMargin and MoveLeftMargin selection traversal from pinned `sw/source/core/edit/edattr.cxx`. */
 
+import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
+import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SwDoc } from "../doc/doc";
 import { getMoveLeftMarginDistance } from "../doc/docfmt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
-import { RES_LR_SPACE } from "../../../inc/hintids";
+import { RES_TXTATR_INETFMT, RES_LR_SPACE } from "../../../inc/hintids";
 import type { SwPaM } from "../crsr/pam";
 import type { SwUndoCursorState } from "../undo/undobj";
 
@@ -47,4 +49,115 @@ export function moveLeftMarginAtShell(
     /** Executes the document-owned range history once. @returns Nothing. */ () =>
       document.MoveLeftMargin(cursor, right, modulus, state),
   );
+}
+
+/** Reads represented INET state through original native node/ring rules; generic GetCurAttr/style expansion and merged redlines remain unverified. @param document - Active Writer document. @param cursor - Actual native selection ring. @returns Original SET/default/INVALID item state with limit failures clearing prior state. */
+export function getWriterINetFormatStateAtCursor(document: SwDoc, cursor: SwPaM): SfxItemSet {
+  const state = new SfxItemSet(document.GetAttrPool(), [[RES_TXTATR_INETFMT, RES_TXTATR_INETFMT]]);
+  const cursors = [...cursor.GetRingContainer()];
+  if (cursors.length > 10000) return state;
+  let first = true;
+  for (const current of cursors) {
+    if (current.GetPoint().GetNode().GetDoc() !== document) {
+      state.ClearItem();
+      return state;
+    }
+    if (current.IsInFrontOfLabel()) continue;
+    const start = current.Start(),
+      end = current.End();
+    if (end.GetNodeIndex() - start.GetNodeIndex() >= 10000) {
+      state.ClearItem();
+      return state;
+    }
+    for (let index = start.GetNodeIndex(); index <= end.GetNodeIndex(); index++) {
+      const node = document.GetNodes().at(index);
+      if (node.IsTextNode()) {
+        const paragraph = node as SwTextNode,
+          local = getINetFormatState(
+            paragraph,
+            index === start.GetNodeIndex() ? start.GetContentIndex() : 0,
+            index === end.GetNodeIndex() ? end.GetContentIndex() : paragraph.Len(),
+          );
+        if (first) state.PutSet(local, false);
+        else mergeINetFormatState(state, local);
+      }
+      first = false;
+    }
+  }
+  return state;
+}
+
+/** Ports the represented single-INET GetParaAttr state branch from thints.cxx without text projection or ownership mutation. Node attribute ranges currently exclude INET and automatic character styles cannot supply it. @param node - Original native text owner. @param start - Sorted native start. @param end - Sorted native end. @returns SET/default/INVALID native item state. */
+function getINetFormatState(node: SwTextNode, start: number, end: number): SfxItemSet {
+  const state = new SfxItemSet(node.GetDoc().GetAttrPool(), [
+      [RES_TXTATR_INETFMT, RES_TXTATR_INETFMT],
+    ]),
+    format = new SfxItemSet(state.GetPool(), state.GetRanges());
+  let previous: SwFormatINetFormat | undefined,
+    previousEnd = 0,
+    invalid = false;
+  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+    const hintStart = hint.GetStart(),
+      hintEnd = hint.GetEnd();
+    if (hintStart > end) break;
+    if (hint.Which() !== RES_TXTATR_INETFMT) continue;
+    const item = hint.GetAttr() as SwFormatINetFormat;
+    if (start === end) {
+      if (
+        (hintStart < start && (hint.DontExpand() ? start < hintEnd : start <= hintEnd)) ||
+        (start === hintStart && (hintStart === hintEnd || start === 0))
+      )
+        state.Put(item);
+      continue;
+    }
+    let partial = false;
+    if (hintStart <= start) {
+      if (hintEnd <= start) continue;
+      if (end <= hintEnd) format.Put(item);
+      else partial = true;
+    } else if (hintStart < end) partial = true;
+    if (partial) {
+      if (previous === undefined && !invalid) {
+        if (!item.equals(format.Get(RES_TXTATR_INETFMT))) {
+          if (hintStart > start) {
+            state.InvalidateItem(RES_TXTATR_INETFMT);
+            invalid = true;
+          } else {
+            previous = item;
+            previousEnd = hintEnd;
+          }
+        }
+      } else if (!invalid) {
+        if (previousEnd === hintStart && (previous as SwFormatINetFormat).equals(item)) {
+          previous = item;
+          previousEnd = hintEnd;
+        } else {
+          state.InvalidateItem(RES_TXTATR_INETFMT);
+          invalid = true;
+        }
+      }
+    }
+  }
+  if (previous !== undefined && !invalid) {
+    if (end <= previousEnd) {
+      if (!previous.equals(format.Get(RES_TXTATR_INETFMT))) state.Put(previous);
+    } else state.InvalidateItem(RES_TXTATR_INETFMT);
+  }
+  if (format.Count() > 0 && state.Count() === 0) state.PutSet(format);
+  return state;
+}
+
+/** Applies the single represented INET MergeValues decision table from native itemset.cxx with defaults participating. @param target - Accumulated native state. @param source - Next original node state. @returns Nothing. */
+function mergeINetFormatState(target: SfxItemSet, source: SfxItemSet): void {
+  if (target.GetItemState(RES_TXTATR_INETFMT, false) === SfxItemState.INVALID) return;
+  if (source.GetItemState(RES_TXTATR_INETFMT, false) === SfxItemState.INVALID) {
+    target.InvalidateItem(RES_TXTATR_INETFMT);
+    return;
+  }
+  const first = target.GetItemIfSet(RES_TXTATR_INETFMT, false),
+    second = source.GetItemIfSet(RES_TXTATR_INETFMT, false),
+    defaults = target.GetPool().GetUserOrPoolDefaultItem(RES_TXTATR_INETFMT);
+  if (first === undefined) {
+    if (second !== undefined && !defaults.equals(second)) target.InvalidateItem(RES_TXTATR_INETFMT);
+  } else if (!first.equals(second ?? defaults)) target.InvalidateItem(RES_TXTATR_INETFMT);
 }

@@ -266,7 +266,7 @@ export function getWriterCollapsedParagraphCaret(
 }
 
 /** Converts one native endpoint to a paragraph-relative Writer model position. @param node - Native endpoint node. @param offset - Native endpoint offset. @returns Writer position or undefined outside the editable body. */
-function getWriterDomPosition(
+export function getWriterDomPosition(
   node: Node,
   offset: number,
 ): WriterCursorSelection["point"] | undefined {
