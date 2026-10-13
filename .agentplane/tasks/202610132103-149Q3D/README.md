@@ -4,7 +4,7 @@ title: "Implement Calc merge/filter flag values over shared integer item owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T21:18:27.497Z"
+  updated_by: "CODER"
+  note: "Source-backed actualScMF/ScMergeFlagAttr over shareditems, final142Calc/105sharedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI linksrestored and3326exactsourcehashes pass. Pendingdiagnostic/document/UI/ODS truthfullyrecorded."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T21:18:26.565Z"
+  updated_by: "EVALUATOR"
+  note: "Original represented Calc flags and9predicates reuse shared integer owner; wholeCalc/sharedraw100,16gates plus8finalcodechecks and actual static/Calc0UI pass."
+  evaluated_sha: "acba634e8c5f978804bd57bcc63716436518cc1b"
+  blueprint_digest: "e3c9389b017bb36706b616d4fc9eb7c4c7fea1a82c0662e1204d01c846c3cc16"
+  evidence_refs:
+    - ".agentplane/tasks/202610132103-149Q3D/README.md"
+    - ".agentplane/tasks/202610132103-149Q3D/quality/20261013-211826565-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610132103-149Q3D/quality/20261013-211826565-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610132103-149Q3D/quality/20261013-211826565-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610132103-149Q3D/blueprint/resolved-snapshot.json"
+    - "output/playwright/task102-checks/exact-review.json"
+    - "output/playwright/task102-checks/original-source-review.json"
+    - "output/playwright/task102-checks/value-coverage-audit.json"
+    - "output/playwright/task102-checks/gates-results.json"
+  findings:
+    - "Exact committed review proves3326currentnon-taskhashes differ only13intentionalpaths2changed/11added. Original6sourcefiles matchpin;4meaningful flag/itemset tests, complete142Calc/105shared tests rawpositive, actual auxiliary source-absent manifests terminal0 and4linksrestored. ExistingWriter/sharedruntime unchanged."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual ScMF/ScMergeFlagAttr values and predicates over existing shared integer item, truthful header/core inventory and targeted rawcoverage, nextfull111pause preserved."
+  -
+    type: "verify"
+    at: "2026-10-13T21:18:27.497Z"
+    author: "CODER"
+    state: "ok"
+    note: "Source-backed actualScMF/ScMergeFlagAttr over shareditems, final142Calc/105sharedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI linksrestored and3326exactsourcehashes pass. Pendingdiagnostic/document/UI/ODS truthfullyrecorded."
 doc_version: 3
-doc_updated_at: "2026-10-13T21:17:01.574Z"
+doc_updated_at: "2026-10-13T21:18:27.550Z"
 doc_updated_by: "CODER"
 description: "Task102: original ScMF and ScMergeFlagAttr value/default/copy/clone and complete overlap/filter/scenario/pivot predicate contract, directly reuse existing shared SfxInt16Item/SfxPoolItem. Original attrib.hxx/core attrib.cxx boundaries and truthful inventory. No duplicate pool/int class or custom memory/C++ fake provider. XML diagnostics and ScMergeAttr/span/document/view/config/ODS remain pending, not claimed by bounded value owner."
 sections:
@@ -51,11 +76,44 @@ sections:
   Verification: |-
     Command: original source review against git pin9bc445578031fecf56086729d8e4940c77e14d65. Result: pass. Evidence:6 complete original declaration/body/dependency files SHA256 match pin; original-source-review.json. Scope: source-backed represented ScMF/ScMergeFlagAttr/default/Which/clone/predicate contract, not compiled native differential/ABI/fullQA. No fake native base/provider or new generator.
 
-    Command: npx vitest run src/sc/source/core/data/mergeflag.test.ts --config vitest.calc.config.ts --root apps/office; node output/playwright/task102-checks/portable.mjs; node output/playwright/task102-checks/portable.mjs --shared-only; node output/playwright/task102-checks/portable.mjs --calc-only. Result: pass after bounded fixture/profile corrections. Evidence:4 focused tests; finalwholeCalc142tests/50files/31owners rawS3927/B2609/F765/L3496, reusedshared105tests/8files/3owners rawS58/B48/F36/L58. Every raw counterpositive/allS/B/F/L100. Four exact links absent/restored; static/Calcbrowser0 pass. Scope: completeCalc/represented9predicates/scalarclone/copysigned16 and actual shared itemset transport; only actual relevant existing shared/Writer consumers included, no Writercodechange.
+    Command: npx vitest run src/sc/source/core/data/mergeflag.test.ts --config vitest.calc.config.ts --root apps/office; node output/playwright/task102-checks/portable.mjs; node output/playwright/task102-checks/portable.mjs --shared-only; node output/playwright/task102-checks/portable.mjs --calc-only; node output/playwright/task102-checks/portable.mjs --checks-only. Result: pass after bounded fixture/profile corrections. Evidence:4 focused tests; finalwholeCalc142tests/50files/31owners rawS3927/B2609/F765/L3496, reusedshared105tests/8files/3owners rawS58/B48/F36/L58. Every raw counterpositive/allS/B/F/L100. Four exact links absent/restored; static/Calcbrowser0 pass. Scope: completeCalc/represented9predicates/scalarclone/copysigned16 and actual shared itemset transport; only actual relevant existing shared/Writer consumers included, no Writercodechange.
 
     Command: node output/playwright/task102-checks/gates.mjs --early; node output/playwright/task102-checks/gates-late.mjs --late; node output/playwright/task102-checks/gates-late.mjs --recheck; npm run check:docs; python3 output/playwright/task102-checks/final-code-checks.py. Result: all16gates pass after schema/JSDoc correction;8 finalcurrentcodechecks pass with terminal0. Evidence: all first failure logs preserved, gates-results.json, final-code-checks-results.json. Scope: current whole requiredgates and final13intentionalpaths, no threshold/AST/sourcechecker weakening.
 
-    Command: python3 output/playwright/task102-checks/exact-review.py after sourcecommit. Result: pending committedreview. Scope:3315baselinehashes, only13intentionalnon-taskpaths2changed/11added, exactcurrentcommitted3326hashes expected, same-agent separate EVALUATOR notindependent, native/source absence/checkcontracts truthful.
+    Command: python3 output/playwright/task102-checks/exact-review.py after sourcecommit. Result: pass. Evidence: sourcecommit acba634e8c5f and3326 exact committed non-taskhashes, only2changed/11added. Scope:3315baselinehashes, only13intentionalnon-taskpaths2changed/11added, exactcurrentcommitted3326hashes expected, same-agent separate EVALUATOR notindependent, native/source absence/checkcontracts truthful.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T21:18:27.497Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Source-backed actualScMF/ScMergeFlagAttr over shareditems, final142Calc/105sharedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI linksrestored and3326exactsourcehashes pass. Pendingdiagnostic/document/UI/ODS truthfullyrecorded.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T21:18:27.071Z, excerpt_hash=sha256:609888a514ae5458eb9e62915b8c2fe8cf607f9a7be751e18d064210855acbf3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610132103-149Q3D/blueprint/resolved-snapshot.json
+    - old_digest: e3c9389b017bb36706b616d4fc9eb7c4c7fea1a82c0662e1204d01c846c3cc16
+    - current_digest: e3c9389b017bb36706b616d4fc9eb7c4c7fea1a82c0662e1204d01c846c3cc16
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610132103-149Q3D
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610132103-149Q3D -m 🧩 149Q3D task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore exact reference symlinks on all check exits. Revert only intentional active task code/records/docs with new task; no merge/historyrewrite or unrelated taskmutation."
   Findings: |-
     Pinned original mergeflag ATTR145, ScMF All0x07ff, signed16 SfxInt16Item ordinary browser value ownership. Shared base has existing bounded QueryValue/Which/equality adaptation; reuse without claiming full native UNO/ABI/diagnostic contract. Upstream copy_paste_test.cxx has actual ATTR_MERGE_FLAG/ScMF::Auto context; this original full document QA is unexecuted, not direct proof of document/filter behavior. Need source-backed functional tests, no new C++ generator or memory experiment. First full101passed; goalstop aftersecondfull111.
@@ -79,6 +137,10 @@ sections:
     - Observation: Final original Clone signature review added optional actual shared SfxItemPool type and ignored argument; complete finalCalc/static/Calc0UI rerun passes rawS3927/B2609/F765/L3496. All16gates and8currentcodechecks pass;6original source hashes match pin.
       Impact: Represented native Clone argument contract preserved without new runtime dependency/owner; source-backed values only, not compiled-native or fullQA proof.
       Resolution: Bind13intentionalnon-taskpaths to actual sourcecommit, separate same-agent evaluator not independent, preserve existing shared/Writer runtime unchanged and pending diagnostics/ScMergeAttr/document/view/ODS. Pause remainsnextfull111.
+
+    - Observation: Exact committed review found missing static/Calcbrowser manifests: initial combined portable run stopped at shared coverage failure, and later shared-only/calc-only modes do not execute auxiliary checks. Earlier staticpass note was premature.
+      Impact: Cannot pass final review until actual source-absent static and Calcbrowser checks execute; production/coverage/sourcehash evidence unaffected.
+      Resolution: Run existing portable --checks-only against unchanged sourcecommit, preserve missing-evidence failure, then rerun exact review and evaluator. No invented manifests or source/test replay.
 id_source: "generated"
 ---
 ## Summary
@@ -104,11 +166,44 @@ Implement original ScMF values and ScMergeFlagAttr scalar/copy/clone and all9 ov
 
 Command: original source review against git pin9bc445578031fecf56086729d8e4940c77e14d65. Result: pass. Evidence:6 complete original declaration/body/dependency files SHA256 match pin; original-source-review.json. Scope: source-backed represented ScMF/ScMergeFlagAttr/default/Which/clone/predicate contract, not compiled native differential/ABI/fullQA. No fake native base/provider or new generator.
 
-Command: npx vitest run src/sc/source/core/data/mergeflag.test.ts --config vitest.calc.config.ts --root apps/office; node output/playwright/task102-checks/portable.mjs; node output/playwright/task102-checks/portable.mjs --shared-only; node output/playwright/task102-checks/portable.mjs --calc-only. Result: pass after bounded fixture/profile corrections. Evidence:4 focused tests; finalwholeCalc142tests/50files/31owners rawS3927/B2609/F765/L3496, reusedshared105tests/8files/3owners rawS58/B48/F36/L58. Every raw counterpositive/allS/B/F/L100. Four exact links absent/restored; static/Calcbrowser0 pass. Scope: completeCalc/represented9predicates/scalarclone/copysigned16 and actual shared itemset transport; only actual relevant existing shared/Writer consumers included, no Writercodechange.
+Command: npx vitest run src/sc/source/core/data/mergeflag.test.ts --config vitest.calc.config.ts --root apps/office; node output/playwright/task102-checks/portable.mjs; node output/playwright/task102-checks/portable.mjs --shared-only; node output/playwright/task102-checks/portable.mjs --calc-only; node output/playwright/task102-checks/portable.mjs --checks-only. Result: pass after bounded fixture/profile corrections. Evidence:4 focused tests; finalwholeCalc142tests/50files/31owners rawS3927/B2609/F765/L3496, reusedshared105tests/8files/3owners rawS58/B48/F36/L58. Every raw counterpositive/allS/B/F/L100. Four exact links absent/restored; static/Calcbrowser0 pass. Scope: completeCalc/represented9predicates/scalarclone/copysigned16 and actual shared itemset transport; only actual relevant existing shared/Writer consumers included, no Writercodechange.
 
 Command: node output/playwright/task102-checks/gates.mjs --early; node output/playwright/task102-checks/gates-late.mjs --late; node output/playwright/task102-checks/gates-late.mjs --recheck; npm run check:docs; python3 output/playwright/task102-checks/final-code-checks.py. Result: all16gates pass after schema/JSDoc correction;8 finalcurrentcodechecks pass with terminal0. Evidence: all first failure logs preserved, gates-results.json, final-code-checks-results.json. Scope: current whole requiredgates and final13intentionalpaths, no threshold/AST/sourcechecker weakening.
 
-Command: python3 output/playwright/task102-checks/exact-review.py after sourcecommit. Result: pending committedreview. Scope:3315baselinehashes, only13intentionalnon-taskpaths2changed/11added, exactcurrentcommitted3326hashes expected, same-agent separate EVALUATOR notindependent, native/source absence/checkcontracts truthful.
+Command: python3 output/playwright/task102-checks/exact-review.py after sourcecommit. Result: pass. Evidence: sourcecommit acba634e8c5f and3326 exact committed non-taskhashes, only2changed/11added. Scope:3315baselinehashes, only13intentionalnon-taskpaths2changed/11added, exactcurrentcommitted3326hashes expected, same-agent separate EVALUATOR notindependent, native/source absence/checkcontracts truthful.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T21:18:27.497Z — VERIFY — ok
+
+By: CODER
+
+Note: Source-backed actualScMF/ScMergeFlagAttr over shareditems, final142Calc/105sharedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI linksrestored and3326exactsourcehashes pass. Pendingdiagnostic/document/UI/ODS truthfullyrecorded.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T21:18:27.071Z, excerpt_hash=sha256:609888a514ae5458eb9e62915b8c2fe8cf607f9a7be751e18d064210855acbf3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610132103-149Q3D/blueprint/resolved-snapshot.json
+- old_digest: e3c9389b017bb36706b616d4fc9eb7c4c7fea1a82c0662e1204d01c846c3cc16
+- current_digest: e3c9389b017bb36706b616d4fc9eb7c4c7fea1a82c0662e1204d01c846c3cc16
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610132103-149Q3D
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610132103-149Q3D -m 🧩 149Q3D task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -137,3 +232,7 @@ Pinned original mergeflag ATTR145, ScMF All0x07ff, signed16 SfxInt16Item ordinar
 - Observation: Final original Clone signature review added optional actual shared SfxItemPool type and ignored argument; complete finalCalc/static/Calc0UI rerun passes rawS3927/B2609/F765/L3496. All16gates and8currentcodechecks pass;6original source hashes match pin.
   Impact: Represented native Clone argument contract preserved without new runtime dependency/owner; source-backed values only, not compiled-native or fullQA proof.
   Resolution: Bind13intentionalnon-taskpaths to actual sourcecommit, separate same-agent evaluator not independent, preserve existing shared/Writer runtime unchanged and pending diagnostics/ScMergeAttr/document/view/ODS. Pause remainsnextfull111.
+
+- Observation: Exact committed review found missing static/Calcbrowser manifests: initial combined portable run stopped at shared coverage failure, and later shared-only/calc-only modes do not execute auxiliary checks. Earlier staticpass note was premature.
+  Impact: Cannot pass final review until actual source-absent static and Calcbrowser checks execute; production/coverage/sourcehash evidence unaffected.
+  Resolution: Run existing portable --checks-only against unchanged sourcecommit, preserve missing-evidence failure, then rerun exact review and evaluator. No invented manifests or source/test replay.
