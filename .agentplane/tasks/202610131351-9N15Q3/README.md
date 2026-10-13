@@ -4,7 +4,7 @@ title: "Restore native popup parent highlight and current timer selection"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -17,12 +17,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T14:16:29.054Z"
+  updated_by: "CODER"
+  note: "Pass1484unique assertions:1447related/209files including50native mounted cases/9new,26tooling,11Chromium. Whole source100four159lines173statements36functions110branches/319positive raw counters.943otheroldtests unchanged, exact2source-backed case statements+one required comment-only annotation,2canonical histories preserved;9metadata gates/137staticfilespass.4reference paths absent all producers, exactfinallyrestore; no global parity claim, full cadence4/10."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T14:17:14.687Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact semantic544751a5c485023b199f1244ddd9d23609c3a710 bounded native popup highlight/current-window/timer ownership review; not independent or global parity certification."
+  evaluated_sha: "544751a5c485023b199f1244ddd9d23609c3a710"
+  blueprint_digest: "3153167807a202430bec4421a0a591d5ed14feff58308aca0d894b9edd4b5643"
+  evidence_refs:
+    - ".agentplane/tasks/202610131351-9N15Q3/README.md"
+    - ".agentplane/tasks/202610131351-9N15Q3/quality/20261013-141714687-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131351-9N15Q3/quality/20261013-141714687-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131351-9N15Q3/quality/20261013-141714687-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131351-9N15Q3/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/9N15Q3/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/9N15Q3/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/9N15Q3/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/9N15Q3/semantic-sha.txt"
+  findings:
+    - "Pinned ChangeHighlightItem immediate parent assignment and own close-timer stop, HighlightChanged current selected original resource and active child, SubmenuClose child-owned parent kill and KillActivePopup ownership match implemented native mutable chain/per-popup timers. Parent reentry does not cancel child-owned close; exact2source-backed oldcase migrations are justified."
+    - "Six committed source/test/registry blobs equal frozen execution hashes.1447current related/209files includes50mounted with9new,26tooling and11actual Chromium=1484unique; no failure/skip/retry. Whole original source100four159lines173statements36functions110branches/319positive raw counters with unedited source-bound IDs/locations."
+    - "943otheroldtestfiles unchanged; other executable statements/imports preserved after one exact required JSDoc annotation repair.2canonical histories/status/default/class preserved,9final metadata audits and137frozen built files pass;4reference paths absent every producer/exact restored finally. Failed attempts retained honestly ignoredcache; no upstream/helper/Python/rawmaps in Agentplane."
+commit:
+  hash: "544751a5c485023b199f1244ddd9d23609c3a710"
+  message: "🧩 9N15Q3 fix: restore native popup highlight and timer ownership"
 comments:
   -
     author: "CODER"
@@ -45,8 +68,20 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: source-confirmed separate close timer owner and native current active child identity; exact2oldcase INVALID-leave/parent-reentry expectation migrations, same one-module/100four scope and native binding boundaries."
+  -
+    type: "status"
+    at: "2026-10-13T14:16:28.337Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-13T14:16:29.054Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass1484unique assertions:1447related/209files including50native mounted cases/9new,26tooling,11Chromium. Whole source100four159lines173statements36functions110branches/319positive raw counters.943otheroldtests unchanged, exact2source-backed case statements+one required comment-only annotation,2canonical histories preserved;9metadata gates/137staticfilespass.4reference paths absent all producers, exactfinallyrestore; no global parity claim, full cadence4/10."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:15:21.401Z"
+doc_updated_at: "2026-10-13T14:16:29.131Z"
 doc_updated_by: "CODER"
 description: "Source ChangeHighlightItem immediate parent selection and HighlightChanged current highlighted resource ownership, no captured pointer target reopening. Native mounted and Chromium evidence, existing test bytes preserved, whole one module100four; cadence4/10, no full yet, IO/recovery preserved."
 sections:
@@ -171,6 +206,39 @@ sections:
     Scope: metadata only,4references restored.
 
     Proof: apps/office/node_modules/.cache/parity-coverage/9N15Q3/proof.json, execution-hashes.json, build-hashes.json, accepted-results.json, original related-coverage maps, final native/mounted/Chromium reports. Exact semanticSHA same-agent review follows, not independent. Full pointer first-move/synthetic/scroll/NOSELECT/mnemonic/settings/pixel platform/global parity remains unverified. Registered IO/recovery preserved. Cadence4/10, full once10; pause after next full and necessary repairs per human.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T14:16:29.054Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass1484unique assertions:1447related/209files including50native mounted cases/9new,26tooling,11Chromium. Whole source100four159lines173statements36functions110branches/319positive raw counters.943otheroldtests unchanged, exact2source-backed case statements+one required comment-only annotation,2canonical histories preserved;9metadata gates/137staticfilespass.4reference paths absent all producers, exactfinallyrestore; no global parity claim, full cadence4/10.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T14:16:28.337Z, excerpt_hash=sha256:652458fca3787ea27dc4b54b7814dd49102290aaa1b109d66bc9f879599b9a02
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131351-9N15Q3/blueprint/resolved-snapshot.json
+    - old_digest: 3153167807a202430bec4421a0a591d5ed14feff58308aca0d894b9edd4b5643
+    - current_digest: 3153167807a202430bec4421a0a591d5ed14feff58308aca0d894b9edd4b5643
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131351-9N15Q3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131351-9N15Q3
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only scoped semantic commit if needed, preserve human history. Always restore4reference symlinks finally. No publication/network/global files/history rewrite."
   Findings: |-
     Previous goal turn is verified progress:61PRG4 native150ms timer deliverable finished at a2abbfd8, tested exact5a2c9806. Current writer clean. Source9bc445578031fecf56086729d8e4940c77e14d65 ChangeHighlightItem updates immediate parent native highlight without changing focus or propagating recursively, stops its own submenu-close timer; HighlightChanged reads nHighlightedItem at invocation. Current generic depth Map/captured target do not reflect these native owners. Full first-move/synthetic/scroll/NOSELECT/mnemonic/settings/native pixel platform and general parity remain unverified. Full pause rule retained, no whole-goal completion.
@@ -312,6 +380,39 @@ Evidence: apps/office/node_modules/.cache/parity-coverage/9N15Q3/audit-diff.log
 Scope: metadata only,4references restored.
 
 Proof: apps/office/node_modules/.cache/parity-coverage/9N15Q3/proof.json, execution-hashes.json, build-hashes.json, accepted-results.json, original related-coverage maps, final native/mounted/Chromium reports. Exact semanticSHA same-agent review follows, not independent. Full pointer first-move/synthetic/scroll/NOSELECT/mnemonic/settings/pixel platform/global parity remains unverified. Registered IO/recovery preserved. Cadence4/10, full once10; pause after next full and necessary repairs per human.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T14:16:29.054Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass1484unique assertions:1447related/209files including50native mounted cases/9new,26tooling,11Chromium. Whole source100four159lines173statements36functions110branches/319positive raw counters.943otheroldtests unchanged, exact2source-backed case statements+one required comment-only annotation,2canonical histories preserved;9metadata gates/137staticfilespass.4reference paths absent all producers, exactfinallyrestore; no global parity claim, full cadence4/10.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T14:16:28.337Z, excerpt_hash=sha256:652458fca3787ea27dc4b54b7814dd49102290aaa1b109d66bc9f879599b9a02
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131351-9N15Q3/blueprint/resolved-snapshot.json
+- old_digest: 3153167807a202430bec4421a0a591d5ed14feff58308aca0d894b9edd4b5643
+- current_digest: 3153167807a202430bec4421a0a591d5ed14feff58308aca0d894b9edd4b5643
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131351-9N15Q3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131351-9N15Q3
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
