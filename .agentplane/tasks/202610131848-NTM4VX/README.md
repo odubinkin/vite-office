@@ -1,10 +1,11 @@
 ---
 id: "202610131848-NTM4VX"
 title: "Implement Calc external reference and name tokens"
-status: "DOING"
+result_summary: "Task97 completed on calc: actual external file/string/reference value-copy-move-Clone/query/equality family using existing449line reference owner; native474sources8normalcommands748045bytes,Calc136/shared253raw100,16gates/static/Calc0UI,3290exactsourcehashes. CALC-086 source-only temporary documented; no memory manager/fake peers/readiness claim. Goal continues101 then pauses111/repairs; external manager/compiler/document/UI/ODS pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Complete unchanged original external class/member/ctor/dtor scopes over genuine reference/formula headers produce matching748045-byte stream,474sources8normalcommands. Actual kind/ocPush/UInt16/default string/data/copy/implicit move/Clone/getter/file/string/data/type comparisons match. Protected construction and true concrete input domain only, no fake document/compiler/config/matrix peers or memory engine."
     - "Original const second-end getter exposed existing TS data-copy qualification mismatch; real copy/assign/native value input contracts now accept const views and read only actual initialized owner private fields. No test-only state forcing/public fake fields, output changes or expectation weakening; current whole Calc136/shared253raw100 all counterspositive,16gates/static/Calc0UI pass,4links absent/restored."
     - "CALC-086 records source-only plain-auto RHS value temporary. Visible comparisons preserve original outcomes under authorized GC adaptation without incidental native count/stack traffic. Actual external document/range-name QA is unexecuted context; full external manager/compiler/config/document/grid/ODS remain pending."
-commit: null
+commit:
+  hash: "3fd9a895c657de1272b7f9232e4af61cc5f5ead6"
+  message: "🧮 NTM4VX calc: implement original external reference tokens"
 comments:
   -
     author: "CODER"
     body: "Start: actual external reference/name token concrete family with existing shared strings/reference/base owners, normal initialized proof and scoped raw100; no ownership engine/fake peers."
+  -
+    author: "CODER"
+    body: "Verified: genuine external reference/name concrete tokens and const-source data-copy contracts with real shared owners; normal original full stream/scoped raw100/16gates/exact source review pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact source3fd9a895c657de1272b7f9232e4af61cc5f5ead6,3290currentcommittedhashes19intentionalpaths; same-agent separate EVALUATOR pass not independent. Real external concrete value/move/copy/Clone/getters/equality/const-data copy-source family; native474sources8normalcommands748045bytes. Calc136tests27owners3767S2523B722F3350L/shared253tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,links absent/restored. CALC-086 preserved visible comparisons, no memory library/fake peers/full UI/ODS claim. Goal active continue101 then pause111/repairs."
+  -
+    type: "status"
+    at: "2026-10-13T19:20:36.550Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: genuine external reference/name concrete tokens and const-source data-copy contracts with real shared owners; normal original full stream/scoped raw100/16gates/exact source review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T19:19:58.414Z"
+doc_updated_at: "2026-10-13T19:20:36.551Z"
 doc_updated_by: "CODER"
 description: "Task97 actual external file-index base and single/range/name token ctor/copy/move/Clone/query/equality family, prerequisite for real range operator/compiler/ODS external references using existing genuine shared/data owners."
 sections:
