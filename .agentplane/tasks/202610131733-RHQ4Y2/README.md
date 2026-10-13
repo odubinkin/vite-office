@@ -4,7 +4,7 @@ title: "Implement shared search parameter values for Calc options and UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T17:56:42.482Z"
+  updated_by: "CODER"
+  note: "Exact ba25ac4d77a03275non-task hashes13intentionalpaths reviewed; native446sources6normalcommands17252byte SearchParam stream matches. Calc133/shared76raw100 every counter, original links restored, static/Calc0UI and16gates pass; real shared string owner reused, no memory/search/config substitute. QA context unexecuted, CALC083 source-only; pause after full101/repairs pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T17:55:58.906Z"
+  updated_by: "EVALUATOR"
+  note: "Exact committed/current3275non-task hashes,13intentionalpaths; real shared SearchParam initialized values/static conversions reuse OUString, scoped raw100 and16gates pass."
+  evaluated_sha: "ba25ac4d77a006a890a206c3acbcc0ae675044ab"
+  blueprint_digest: "44148727893e29a02ab402552c05d28c2261e2772a52b9f19a2e37cbbe2a58a3"
+  evidence_refs:
+    - ".agentplane/tasks/202610131733-RHQ4Y2/README.md"
+    - ".agentplane/tasks/202610131733-RHQ4Y2/quality/20261013-175558906-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131733-RHQ4Y2/quality/20261013-175558906-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131733-RHQ4Y2/quality/20261013-175558906-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131733-RHQ4Y2/blueprint/resolved-snapshot.json"
+    - "output/playwright/task94-checks/exact-review.json"
+    - "output/playwright/task94-checks/gates-results.json"
+    - "output/playwright/task94-checks/value-coverage-audit.json"
+    - "output/playwright/search-param-native/manifest.json"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "Complete original SearchParam class and ctor/destructor definitions over genuine dependencies446sources/six normal commands compare17252byte whole stream; stable borrowed member/copy/defaults/UInt32 signed outputs and mode flags preserved without lifetime manager or fake peers."
+    - "Whole Calc133tests44files and affected shared76tests23files, all raw counters positive100, links restored and static/Calc0UI pass. Only source-backed unotools-sal edge added with cycle enforcement preserved; native observer unicode/setup and mandatory QA-context metadata failures retained/corrected."
+    - "CALC-083 is source-only ScDocOptions comparator evidence, not native consumer proof. Existing Writer/shared runtime unchanged, actual SearchParam new owner; QA context explicitly unexecuted. Same-agent separate evaluator not independent review; pause after full101/repairs pending."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual shared SearchParam values and mode/boolean conversions with genuine OUString, no search engine/locale/configuration substitute or ownership manager."
+  -
+    type: "verify"
+    at: "2026-10-13T17:56:42.482Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact ba25ac4d77a03275non-task hashes13intentionalpaths reviewed; native446sources6normalcommands17252byte SearchParam stream matches. Calc133/shared76raw100 every counter, original links restored, static/Calc0UI and16gates pass; real shared string owner reused, no memory/search/config substitute. QA context unexecuted, CALC083 source-only; pause after full101/repairs pending."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:55:34.922Z"
+doc_updated_at: "2026-10-13T17:56:42.775Z"
 doc_updated_by: "CODER"
 description: "Task94 actual utl SearchParam value owner/static search-mode conversion prerequisite for ScDocOptions, ODS search settings and real UI search, reusing actual shared OUString without a substitute search engine or configuration defaults."
 sections:
@@ -62,6 +90,39 @@ sections:
     Command: node output/playwright/task94-checks/gates.mjs --early and --late; npm run check:dependencies final supporting-file recheck
     Result: pass; all16required terminal gates exit0, initial failed dependency/metadata results and final rechecks retained.
     Scope: whole repository gates; only added unotools->sal edge is pinned original textsearch.hxx->rtl/ustring.hxx, cycle enforcement retained. Passed whole format/lint followed by targeted final supporting-file Prettier/ESLint checks and changed docs formatting; no other runtime changes. Exact current/committed source hashes and separate same-agent EVALUATOR required before closure; not independent review.13intentional non-task paths, goal active until full101/repairs then pause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T17:56:42.482Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact ba25ac4d77a03275non-task hashes13intentionalpaths reviewed; native446sources6normalcommands17252byte SearchParam stream matches. Calc133/shared76raw100 every counter, original links restored, static/Calc0UI and16gates pass; real shared string owner reused, no memory/search/config substitute. QA context unexecuted, CALC083 source-only; pause after full101/repairs pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T17:55:34.922Z, excerpt_hash=sha256:adf31d845ee827594161ca5670fe3a9ee333afe9de95e13a7f1cedd1f72a7ef0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131733-RHQ4Y2/blueprint/resolved-snapshot.json
+    - old_digest: 44148727893e29a02ab402552c05d28c2261e2772a52b9f19a2e37cbbe2a58a3
+    - current_digest: 44148727893e29a02ab402552c05d28c2261e2772a52b9f19a2e37cbbe2a58a3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131733-RHQ4Y2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610131733-RHQ4Y2 -m 🧩 RHQ4Y2 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional task94 changes through followup task, restore all reference symlinks; no merges/history rewrite or unrelated tasks."
   Findings: |-
     Original shared SearchParam values/static mode conversions advance actual ScDocOptions/ODS settings and UI search dependencies. Genuine OUString reuse/copy and stable borrowed member references, UInt32 escape/signed32 API, wildcard priority and exact boolean writes. No new SearchParam dispose/count/finalizer/allocator wrapper; existing SAL cleanup remains separate unchanged boundary. No TextSearch backend/cache/diagnostic ostream, metric/year/config defaults or actual document/UI/ODS substitute. Native446source hashes/six ordinary commands/17252byte stream with full original class/constructor definitions, no fake peers/native ABI/lifetime/count/sanitizer/full QA claim. Scoped unnamed SearchType values valid for fixed Int32 enum. Original QA search had no relevant exact SearchParam class anchor; source/name-similar makeSearchParam functions are not used as fake proof; native/portable actual comparison is evidence.
@@ -107,6 +168,39 @@ Scope: complete affected SAL/string-view/SearchParam owners with existing genuin
 Command: node output/playwright/task94-checks/gates.mjs --early and --late; npm run check:dependencies final supporting-file recheck
 Result: pass; all16required terminal gates exit0, initial failed dependency/metadata results and final rechecks retained.
 Scope: whole repository gates; only added unotools->sal edge is pinned original textsearch.hxx->rtl/ustring.hxx, cycle enforcement retained. Passed whole format/lint followed by targeted final supporting-file Prettier/ESLint checks and changed docs formatting; no other runtime changes. Exact current/committed source hashes and separate same-agent EVALUATOR required before closure; not independent review.13intentional non-task paths, goal active until full101/repairs then pause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T17:56:42.482Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact ba25ac4d77a03275non-task hashes13intentionalpaths reviewed; native446sources6normalcommands17252byte SearchParam stream matches. Calc133/shared76raw100 every counter, original links restored, static/Calc0UI and16gates pass; real shared string owner reused, no memory/search/config substitute. QA context unexecuted, CALC083 source-only; pause after full101/repairs pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T17:55:34.922Z, excerpt_hash=sha256:adf31d845ee827594161ca5670fe3a9ee333afe9de95e13a7f1cedd1f72a7ef0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131733-RHQ4Y2/blueprint/resolved-snapshot.json
+- old_digest: 44148727893e29a02ab402552c05d28c2261e2772a52b9f19a2e37cbbe2a58a3
+- current_digest: 44148727893e29a02ab402552c05d28c2261e2772a52b9f19a2e37cbbe2a58a3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131733-RHQ4Y2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610131733-RHQ4Y2 -m 🧩 RHQ4Y2 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

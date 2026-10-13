@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131733-RHQ4Y2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T17:55:58.906Z",
+  "verdict": "pass",
+  "summary": "Exact committed/current3275non-task hashes,13intentionalpaths; real shared SearchParam initialized values/static conversions reuse OUString, scoped raw100 and16gates pass.",
+  "evaluated_sha": "ba25ac4d77a006a890a206c3acbcc0ae675044ab",
+  "blueprint_digest": "44148727893e29a02ab402552c05d28c2261e2772a52b9f19a2e37cbbe2a58a3",
+  "findings": [
+    "Complete original SearchParam class and ctor/destructor definitions over genuine dependencies446sources/six normal commands compare17252byte whole stream; stable borrowed member/copy/defaults/UInt32 signed outputs and mode flags preserved without lifetime manager or fake peers.",
+    "Whole Calc133tests44files and affected shared76tests23files, all raw counters positive100, links restored and static/Calc0UI pass. Only source-backed unotools-sal edge added with cycle enforcement preserved; native observer unicode/setup and mandatory QA-context metadata failures retained/corrected.",
+    "CALC-083 is source-only ScDocOptions comparator evidence, not native consumer proof. Existing Writer/shared runtime unchanged, actual SearchParam new owner; QA context explicitly unexecuted. Same-agent separate evaluator not independent review; pause after full101/repairs pending."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131733-RHQ4Y2/README.md",
+    "output/playwright/task94-checks/exact-review.json",
+    "output/playwright/task94-checks/gates-results.json",
+    "output/playwright/task94-checks/value-coverage-audit.json",
+    "output/playwright/search-param-native/manifest.json",
+    "docs/program/calc-upstream-suspected-issues.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "No full TextSearch engine/backend/ABI/lifetime/full QA; actual locale/config/formatter/DocOptions/document/UI/ODS remain pending real owners."
+  ]
+}
