@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 357
+revision: 358
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:32:15.626Z"
+doc_updated_at: "2026-10-13T18:12:02.885Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1568,6 +1568,10 @@ sections:
     - Observation: Correction10/10 W6QHFR aligns menubar middle/right root/command/submenu mouse activation with pinned button-neutral handlers, using original native browser auxclick/button.click and bindings.
       Impact: Original HTML disabled protects execution and synchronous popup teardown/focus/history remain; no press-release state/new adapter module. Registered Space/IO/recovery retained; whole native popup timers/mnemonics/platform/focus graph parity unverified.
       Resolution: 1607unique accepted1562related/26tooling/19Chromium; exactly1source-obsolete oldsubmenu-click assertion closed failed-only,955otheroldfiles identical. Whole menu Istanbul100L209/S231/F51/B210 with492positive original counters,2canonical histories/137staticfiles/9metadata pass.4refs absent everyproducer/exactrestore. Ten corrections complete; one scheduled full now required, then human pause after any fixes.
+
+    - Observation: Scheduled full7X3HVW after10atomicDONE corrections accepts16292unique cases:15958Vitest (15799app772files,123inventory38files,36tooling/resources10files),334Chromium. Whole465app42inventory1tooling100four/66880positive current-original counters. One old foundation enabled-only first/End traversal fixture required native disabled Undo/Redo/Hyperlink additions.
+      Impact: No production changes in checkpoint; original coverage source/test bodies unchanged, except1foundation fixture adds assertions/navigation while retaining all original acceptance bytes.957otheroldtestfiles identical,2canonical history prefixes retained,137staticfiles frozen. Whole upstream core/UI parity remains unverified; protectedIO/recovery/Space kept.
+      Resolution: 333initialChromium pass preserved; same1failed foundation scenario closed with final1pass, no passing runtime replay. Full/source-bound raw IDs/locations/maps remain unedited, original remapper if header ranges validated.4refs absent everyacceptedproducer/exactrestore,9metadata gates pass; final TS7 closure absent after reference-present diagnostic excluded. Exactreview/cleanfinish then explicit human goal pause, cadence resets afterfull.
 id_source: "generated"
 ---
 ## Summary
@@ -3109,3 +3113,7 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
 - Observation: Correction10/10 W6QHFR aligns menubar middle/right root/command/submenu mouse activation with pinned button-neutral handlers, using original native browser auxclick/button.click and bindings.
   Impact: Original HTML disabled protects execution and synchronous popup teardown/focus/history remain; no press-release state/new adapter module. Registered Space/IO/recovery retained; whole native popup timers/mnemonics/platform/focus graph parity unverified.
   Resolution: 1607unique accepted1562related/26tooling/19Chromium; exactly1source-obsolete oldsubmenu-click assertion closed failed-only,955otheroldfiles identical. Whole menu Istanbul100L209/S231/F51/B210 with492positive original counters,2canonical histories/137staticfiles/9metadata pass.4refs absent everyproducer/exactrestore. Ten corrections complete; one scheduled full now required, then human pause after any fixes.
+
+- Observation: Scheduled full7X3HVW after10atomicDONE corrections accepts16292unique cases:15958Vitest (15799app772files,123inventory38files,36tooling/resources10files),334Chromium. Whole465app42inventory1tooling100four/66880positive current-original counters. One old foundation enabled-only first/End traversal fixture required native disabled Undo/Redo/Hyperlink additions.
+  Impact: No production changes in checkpoint; original coverage source/test bodies unchanged, except1foundation fixture adds assertions/navigation while retaining all original acceptance bytes.957otheroldtestfiles identical,2canonical history prefixes retained,137staticfiles frozen. Whole upstream core/UI parity remains unverified; protectedIO/recovery/Space kept.
+  Resolution: 333initialChromium pass preserved; same1failed foundation scenario closed with final1pass, no passing runtime replay. Full/source-bound raw IDs/locations/maps remain unedited, original remapper if header ranges validated.4refs absent everyacceptedproducer/exactrestore,9metadata gates pass; final TS7 closure absent after reference-present diagnostic excluded. Exactreview/cleanfinish then explicit human goal pause, cadence resets afterfull.

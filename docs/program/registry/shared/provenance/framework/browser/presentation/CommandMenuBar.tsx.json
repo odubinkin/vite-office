@@ -172,6 +172,10 @@
         {
           "path": "apps/office/e2e/writer-native-menubar-auxclick.spec.ts",
           "marker": "Writer native auxiliary menubar history"
+        },
+        {
+          "path": "apps/office/e2e/foundation.spec.ts",
+          "marker": "const undoMenuItem"
         }
       ],
       "upstream": [
@@ -222,6 +226,10 @@
         {
           "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
           "marker": "void MenuFloatingWindow::MouseButtonUp"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "!rSettings.GetSkipDisabledInMenus()"
         }
       ]
     },
@@ -254,7 +262,8 @@
     },
     "browserResponsibilities": [
       "Task202610131541-J4GV99 applies source SkipDisabledInMenus=false to represented menubar popup preselection and arrow/Home/End/wrap traversal. Original bindings determine enabled state; the original HTML disabled button is never made focusable or enabled. Actual direct resource nodes own data-popup-highlighted and aria-activedescendant selection, independently of browser menu focus. Later keys use that selected node; native Return cancels only the current disabled popup without execution. Existing JS DOM queries/attributes/focus/click callbacks suffice, with no separate mirrored map/state manager/new adapter module. The previously registered browser Space activation adapter remains intact, including existing enabled root/submenu activation and HTML disabled-click protection. Source-confirmed obsolete enabled-only first/last assumptions migrate in precisely7old cases (guarded shared templates retain original End/ArrowLeft assertion semantics). Full native pointer timers/mnemonics/shared popup controller/root focus graph/platform parity remain unverified; all historical statuses/defaults/classifications and registered IO/recovery deviations preserved.",
-      "Task202610131721-W6QHFR uses browser-native auxclick completion and original button.click for middle/right menubar/root/popup commands. Existing bindings and HTML disabled admission own dispatch; original synchronous teardown/focus/history remain. Submenu button activation calls existing openSubmenu, and the owned menu suppresses browser context surface. No press-release engine, new mirrored state, command adapter or runtime module added. Original primary keyboard/Space and registered IO/recovery exceptions remain. Full native pointer timers/mnemonics/platform/focus graph/whole parity remain unverified."
+      "Task202610131721-W6QHFR uses browser-native auxclick completion and original button.click for middle/right menubar/root/popup commands. Existing bindings and HTML disabled admission own dispatch; original synchronous teardown/focus/history remain. Submenu button activation calls existing openSubmenu, and the owned menu suppresses browser context surface. No press-release engine, new mirrored state, command adapter or runtime module added. Original primary keyboard/Space and registered IO/recovery exceptions remain. Full native pointer timers/mnemonics/platform/focus graph/whole parity remain unverified.",
+      "Task202610131733-7X3HVW scheduled full checkpoint repairs one stale foundation browser traversal fixture after native SkipDisabledInMenus=false. The original comprehensive launcher/menu/toolbar/editor/accessibility scenario now asserts disabled Undo/Redo highlight and actual menu focus, takes two ArrowDown steps to its unchanged Cut assertion, and validates disabled final Hyperlink on End before ArrowUp reaches its unchanged SelectAll assertion. Every original acceptance statement/declaration/literal remains in order. Production behavior and complete original coverage inputs remain unchanged; only the failed Chromium scenario is rerun. All old canonical fields/status/defaults/classes/history and registered IO/recovery/Space deviations remain. Full native menu/core/UI parity is not inferred from full green tests."
     ]
   },
   "legacyOrder": 18
