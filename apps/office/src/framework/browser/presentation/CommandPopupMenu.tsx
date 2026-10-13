@@ -108,15 +108,23 @@ export function CommandPopupMenu({
     [openPath, highlight],
   );
   const preselect = useRef(false);
-  /** Opens a child while discarding former sibling descendants. @param id - Original resource identity. @param depth - Parent depth. @param keyboard - Whether to select first child. @returns Nothing. */ function open(
-    id: string,
+  /** Applies native HighlightChanged admission before creating a child window. @param item - Actual child resource. @param depth - Parent depth. @param trigger - Original parent entry. @param keyboard - Whether to select first child. @returns Nothing. */ function open(
+    item: Extract<CommandMenuItemPlacement, { kind: "submenu" }>,
     depth: number,
+    trigger: HTMLElement,
     keyboard = false,
   ): void {
-    if (openPath[depth] === id) return;
+    if (item.items.length === 0) {
+      pendingChildFocus.current = false;
+      preselect.current = false;
+      setOpenPath(openPath.slice(0, depth));
+      trigger.focus();
+      return;
+    }
+    if (openPath[depth] === item.id) return;
     pendingChildFocus.current = true;
     preselect.current = keyboard;
-    setOpenPath([...openPath.slice(0, depth), id]);
+    setOpenPath([...openPath.slice(0, depth), item.id]);
   }
   /** Returns direct selectable entries in original resource order, including disabled commands by native default. @param menu - Actual menu owner. @returns Direct entries. */ function entries(
     menu: HTMLElement | null,
@@ -136,9 +144,10 @@ export function CommandPopupMenu({
     setOpenPath(openPath.slice(0, depth - 1));
     trigger.focus();
   }
-  /** Routes menu input without invoking document shortcuts. @param event - Current menu keyboard input. @param depth - Native popup depth. @returns Nothing. */ function key(
+  /** Routes menu input without invoking document shortcuts. @param event - Current menu keyboard input. @param depth - Native popup depth. @param values - Current native resource entries. @returns Nothing. */ function key(
     event: React.KeyboardEvent<HTMLDivElement>,
     depth: number,
+    values: readonly CommandMenuItemPlacement[],
   ): void {
     event.stopPropagation();
     const target = event.target as HTMLElement,
@@ -156,12 +165,19 @@ export function CommandPopupMenu({
     } else if (event.key === "ArrowRight" || event.key === "Enter") {
       event.preventDefault();
       const id = selected?.dataset.popupTrigger;
-      if (id !== undefined)
-        flushSync(
-          /** Opens original child before its keyboard preselection. @returns Nothing. */ () =>
-            open(id, depth, true),
+      if (id !== undefined) {
+        const item = values.find(
+          /** Resolves the original child resource of the current menu. @param value - Native placement. @returns Whether it owns the entry. */ (
+            value,
+          ): value is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
+            value.kind === "submenu" && value.id === id,
         );
-      else if (event.key === "Enter") {
+        if (item !== undefined)
+          flushSync(
+            /** Applies original child admission before its keyboard preselection. @returns Nothing. */ () =>
+              open(item, depth, selected as HTMLElement, true),
+          );
+      } else if (event.key === "Enter") {
         if (selected === undefined || selected.hasAttribute("disabled")) {
           if (depth === 0) closeMenu();
           else closeChild(depth, event.currentTarget.previousElementSibling as HTMLElement);
@@ -218,8 +234,9 @@ export function CommandPopupMenu({
             className="relative"
             key={item.id}
             onMouseEnter={
-              /** Opens native child for pointer entry. @returns Nothing. */ () =>
-                open(item.id, depth)
+              /** Applies original child admission for pointer entry. @param event - Native parent region. @returns Nothing. */ (
+                event,
+              ) => open(item, depth, event.currentTarget.firstElementChild as HTMLElement)
             }
             onMouseLeave={
               /** Releases this child's pointer ownership. @param event - Actual parent popup region. @returns Nothing. */ (
@@ -252,7 +269,7 @@ export function CommandPopupMenu({
                 onKeyDown={
                   /** Routes child keyboard input. @param event - Keyboard input. @returns Nothing. */ (
                     event,
-                  ) => key(event, depth + 1)
+                  ) => key(event, depth + 1, item.items)
                 }
                 role="menu"
                 submenu
@@ -287,7 +304,7 @@ export function CommandPopupMenu({
         onKeyDown={
           /** Routes root keyboard input. @param event - Keyboard input. @returns Nothing. */ (
             event,
-          ) => key(event, 0)
+          ) => key(event, 0, items)
         }
         role="menu"
       >

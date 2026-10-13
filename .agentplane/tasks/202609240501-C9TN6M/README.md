@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 343
+revision: 344
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:27:16.187Z"
+doc_updated_at: "2026-10-13T12:48:44.880Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1520,6 +1520,10 @@ sections:
     - Observation: Post-integration cadence1 taskTWGN0F corrects native standalone popup default SkipDisabledInMenus=false. Original disabled/enabled binding state is independent of per-popup highlighted item; arrows/Home/End and child preselection include disabled items; disabled/unselected Return stops current popup and retains parent for child cancellation.
       Impact: Confirmed actual VCL source default and StopExecute/PopupMenu::Run/ClosePopup. One prior enabled-only test case contradicted native default; migrated only it, other12 case bodies/file bytes unchanged and938 other old test files unchanged. Native setting override/NOSELECT/mnemonic/pointer/timers/full platform paths remain unverified; no general parity promotion or IO/recovery changes.
       Resolution: Related1418/206files, tooling26/4files and7 unique Chromium=1451 pass; whole one changed source100allfour with208positive counters and original location/ID/current hash proof. Canonical two records appended with old history/default/status/class intact; nine restored-only metadata audits and static checks pass. No full replay, network/upstream runtime calls or source artifacts in Agentplane. Exact semantic review/clean atomic closure follows; goal remains active.
+
+    - Observation: Post-full cadence2 Z8JA2E corrects native nonempty submenu admission and differing sibling replacement before child creation. Actual parent highlighted/focused; empty never creates popup or executes; keyboard/pointer use actual current resource owner, nonempty original bindings unchanged.
+      Impact: 940 old test files unchanged; one exact prior empty-window assumption migrated, other12 cases/remaining file bytes preserved. Native timings150ms and complete pointer/mnemonic/NOSELECT/platform paths stay unverified and next task, no blanket inventory promotions or registered IO/recovery changes.
+      Resolution: Current related/source100four, tooling/Chromium7 and native fresh cases pass,224 positive original whole-module counters, two canonical histories intact and nine restored audits. No full replay or pinned upstream runtime calls/artifact source copies. Atomic commit/exact-SHA same-agent review/clean close follows, goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -3013,3 +3017,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Post-integration cadence1 taskTWGN0F corrects native standalone popup default SkipDisabledInMenus=false. Original disabled/enabled binding state is independent of per-popup highlighted item; arrows/Home/End and child preselection include disabled items; disabled/unselected Return stops current popup and retains parent for child cancellation.
   Impact: Confirmed actual VCL source default and StopExecute/PopupMenu::Run/ClosePopup. One prior enabled-only test case contradicted native default; migrated only it, other12 case bodies/file bytes unchanged and938 other old test files unchanged. Native setting override/NOSELECT/mnemonic/pointer/timers/full platform paths remain unverified; no general parity promotion or IO/recovery changes.
   Resolution: Related1418/206files, tooling26/4files and7 unique Chromium=1451 pass; whole one changed source100allfour with208positive counters and original location/ID/current hash proof. Canonical two records appended with old history/default/status/class intact; nine restored-only metadata audits and static checks pass. No full replay, network/upstream runtime calls or source artifacts in Agentplane. Exact semantic review/clean atomic closure follows; goal remains active.
+
+- Observation: Post-full cadence2 Z8JA2E corrects native nonempty submenu admission and differing sibling replacement before child creation. Actual parent highlighted/focused; empty never creates popup or executes; keyboard/pointer use actual current resource owner, nonempty original bindings unchanged.
+  Impact: 940 old test files unchanged; one exact prior empty-window assumption migrated, other12 cases/remaining file bytes preserved. Native timings150ms and complete pointer/mnemonic/NOSELECT/platform paths stay unverified and next task, no blanket inventory promotions or registered IO/recovery changes.
+  Resolution: Current related/source100four, tooling/Chromium7 and native fresh cases pass,224 positive original whole-module counters, two canonical histories intact and nine restored audits. No full replay or pinned upstream runtime calls/artifact source copies. Atomic commit/exact-SHA same-agent review/clean close follows, goal active.

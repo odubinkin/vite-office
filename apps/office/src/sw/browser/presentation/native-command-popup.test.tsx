@@ -226,13 +226,15 @@ it("unavailable saved focus does not invent a replacement owner on cancellation"
   expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   expect(f.owner).not.toHaveFocus();
 });
-it("empty child grabs popup focus without fabricating an enabled command", /** Checks child keyboard focus independently of command preselection. @returns Nothing. */ () => {
+it("empty child retains its parent entry without creating a popup window", /** Checks native GetItemCount admission before child preselection. @returns Nothing. */ () => {
   fixture([{ kind: "submenu", id: "empty", label: "Empty", items: [] }]);
   const trigger = screen.getByRole("menuitem", { name: "Empty" });
   fireEvent.keyDown(trigger, { key: "ArrowRight" });
-  const menu = screen.getByRole("menu", { name: "Empty menu" });
-  expect(menu).toHaveFocus();
-  fireEvent.keyDown(menu, { key: "ArrowLeft" });
+  expect(screen.queryByRole("menu", { name: "Empty menu" })).not.toBeInTheDocument();
+  expect(screen.getByRole("menu", { name: "Original popup" })).toHaveAttribute(
+    "aria-activedescendant",
+    trigger.id,
+  );
   expect(trigger).toHaveFocus();
 });
 it("temporarily unavailable child lookup retains popup ownership and admits cancellation", /** Checks device lookup failure while retaining original resource and commands. @returns Nothing. */ () => {
