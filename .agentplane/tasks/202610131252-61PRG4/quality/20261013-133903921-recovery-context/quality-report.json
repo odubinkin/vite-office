@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131252-61PRG4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T13:39:03.921Z",
+  "verdict": "rework",
+  "summary": "Final source review supersedes provisional pass: one fresh independent-depth fixture uses ArrowDown, whose native ChangeHighlightItem also rehighlights the parent. Use nonselecting Space to isolate timer ownership; keep whole current-source coverage and explicit ancestor-highlight residual.",
+  "evaluated_sha": "c7d1225fa11f73eddda9eab299f1dee0b1cb606b",
+  "blueprint_digest": "0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726",
+  "findings": [
+    "No production defect found in bounded delay deliverable; fresh scenario must not present unsupported ancestor-highlight behavior as upstream evidence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131252-61PRG4/README.md",
+    "apps/office/src/sw/browser/presentation/native-popup-delay.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native descendant-to-ancestor highlight propagation remains separate unverified behavior."
+  ]
+}

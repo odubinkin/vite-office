@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 345
+revision: 346
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:36:30.145Z"
+doc_updated_at: "2026-10-13T13:47:06.165Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1528,6 +1528,10 @@ sections:
     - Observation: Post-full cadence3 task61PRG4 restores native default150ms popup highlight/close timer ownership, keyboard/direct activation immediate, pointer activation unselected. Owning parent leave retains child; different current highlight delays replacement/closure; reentry, siblings, depth and lifetimes cancel stale work.
       Impact: Native frame/bindings command state and resource admission retained. Four precise source-backed old case statements across3files migrate only asynchronous pointer expectations;939other old test files byte-identical. Global pointer first-move/synthetic/scroll/NOSELECT/mnemonic/platform settings and complete parity remain unverified; registered IO/recovery exceptions preserved.
       Resolution:1438related/208files including41fresh (15new),26tooling/4files,9Chromium=1473 unique assertions pass. Whole source100allfour135lines147statements32functions99branches/278positive original counters. Canonical2historical records preserved;9restored-onlymetadata audits and137staticbuild pass. Genuine red, first mounted failures and incomplete coverage retained honestly in ignored cache. No full replay/upstream runtime or upstream/helper source artifacts in Agentplane. Exact semanticSHA same-agent review/clean close follows; goalactive correction3/10. Human stop rule: pause after next full plus any necessary fixes.
+
+    - Observation: Final61PRG4 source review superseded provisional qualitypass with rework before closure: native child selection changes also rehighlight the original parent. Fresh independent timer-depth fixture now uses nonselecting Space instead of ArrowDown, avoiding an unsupported ancestor-selection claim.
+      Impact: Production/native150ms timer deliverable and137built files unchanged; descendant-to-ancestor native highlight propagation remains a separate unverified UI mechanism and priority for the next atomic task.
+      Resolution: Recapture related whole-target100four from current fresh fixture and preserve exact-SHA lineage; no general menu parity promotion, original pass/rework attempts retained. Human pause rule and1full/10atomic cadence unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -3029,3 +3033,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Post-full cadence3 task61PRG4 restores native default150ms popup highlight/close timer ownership, keyboard/direct activation immediate, pointer activation unselected. Owning parent leave retains child; different current highlight delays replacement/closure; reentry, siblings, depth and lifetimes cancel stale work.
   Impact: Native frame/bindings command state and resource admission retained. Four precise source-backed old case statements across3files migrate only asynchronous pointer expectations;939other old test files byte-identical. Global pointer first-move/synthetic/scroll/NOSELECT/mnemonic/platform settings and complete parity remain unverified; registered IO/recovery exceptions preserved.
   Resolution:1438related/208files including41fresh (15new),26tooling/4files,9Chromium=1473 unique assertions pass. Whole source100allfour135lines147statements32functions99branches/278positive original counters. Canonical2historical records preserved;9restored-onlymetadata audits and137staticbuild pass. Genuine red, first mounted failures and incomplete coverage retained honestly in ignored cache. No full replay/upstream runtime or upstream/helper source artifacts in Agentplane. Exact semanticSHA same-agent review/clean close follows; goalactive correction3/10. Human stop rule: pause after next full plus any necessary fixes.
+
+- Observation: Final61PRG4 source review superseded provisional qualitypass with rework before closure: native child selection changes also rehighlight the original parent. Fresh independent timer-depth fixture now uses nonselecting Space instead of ArrowDown, avoiding an unsupported ancestor-selection claim.
+  Impact: Production/native150ms timer deliverable and137built files unchanged; descendant-to-ancestor native highlight propagation remains a separate unverified UI mechanism and priority for the next atomic task.
+  Resolution: Recapture related whole-target100four from current fresh fixture and preserve exact-SHA lineage; no general menu parity promotion, original pass/rework attempts retained. Human pause rule and1full/10atomic cadence unchanged.

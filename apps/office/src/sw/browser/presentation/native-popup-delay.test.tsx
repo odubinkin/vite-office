@@ -223,14 +223,14 @@ it("direct reactivation retains the selected active child", /** Checks native ac
   expect(screen.getByRole("menu", { name: "First menu" })).toBeVisible();
   expect(deep).toHaveFocus();
 });
-it("child keyboard work leaves a pending parent replacement owned by the parent", /** Checks independent timer depth through observable native admission. @returns Nothing. */ () => {
+it("child nonselecting keyboard work leaves a pending parent replacement owned by the parent", /** Checks independent timer depth without native parent rehighlighting. @returns Nothing. */ () => {
   fixture();
   fireEvent.keyDown(screen.getByRole("menuitem", { name: "First" }), { key: "ArrowRight" });
   fireEvent.mouseEnter(
     screen.getByRole("menuitem", { name: "Second" }).parentElement as HTMLElement,
   );
   advance(50);
-  fireEvent.keyDown(screen.getByRole("menu", { name: "First menu" }), { key: "ArrowDown" });
+  fireEvent.keyDown(screen.getByRole("menu", { name: "First menu" }), { key: " " });
   advance(100);
   expect(screen.queryByRole("menu", { name: "First menu" })).not.toBeInTheDocument();
   expect(screen.getByRole("menu", { name: "Second menu" })).toHaveFocus();
