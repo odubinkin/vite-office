@@ -1,0 +1,93 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-503e376c-7b49-4dcf-8ce3-5a5f6651162f",
+    "capabilityId": "CAP-503e376c-7b49-4dcf-8ce3-5a5f6651162f",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual single and double reference token constructor/default/copy/Clone retain value-copied reference data and shared sheet limits.",
+      "Mutable getters expose stable owned endpoints; copies and clones retain independent data.",
+      "Original value comparison and origin-normalized text comparison retain flags, receiver bounds and trim omission.",
+      "Existing shared formula/address/data owners reused; ordinary JS refs add no memory library."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task95 implements actual ScSingleRefToken and ScDoubleRefToken constructor/default opcode, implicit copy/Clone, stable mutable data member references, value equality and complete checkTextEqual. Existing shared FormulaToken, ScSingleRefData/ScComplexRefData, ScSheetLimits/ScAddress/ScRange are reused. Single/range data are copied by value while sheet bounds use ordinary shared JS references; no reference counting, Boost, allocator, lifetime manager or fake document/compiler/matrix peer. Full original class declarations and complete doc-free member/helper/data definitions with genuine full headers produce a matching 1805559-byte normal-only initialized stream over all256flags, coordinate bounds, opcode/type mismatches, copies/clones/input/member mutations, trim retention and receiver limits. Normalized range text equality may differ from raw equality; receiver-bound asymmetry CALC-084 is preserved. Invalid staticcast peers, native counts/layout/debug assertions/overflow/memory behavior are excluded. Original formula token equality QA anchor is unexecuted document-level context only. Full compiler/ScTokenArray/ScFormulaCell/document/input/grid/ODS pipeline remain pending. Goal continues after upcoming full101 and pauses after second full111 plus relevant Calc/shared repairs."
+    },
+    "capability": "Original matrix result token owners",
+    "gaps": [
+      "ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS and reference/matrix-range tokens remain pending.",
+      "Native memory-management/ABI/assertions/full QA unverified; no runtime Boost/refcount or other owner duplication."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScSingleRefToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScDoubleRefToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "ScDoubleRefToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/reference-token.test.ts",
+          "marker": "matches complete original reference-token copy, mutation, flags and text comparisons"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Single and double reference tokens (task95)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-084"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "ScSingleRefToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "bool checkTextEqual("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaTokenEquality)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/core/tool/token.cxx",
+          "marker": "TextEqual: if same formula entered"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-reference-token-values-and-text-equality",
+    "scopeLimitations": [
+      "Task95 implements actual ScSingleRefToken and ScDoubleRefToken constructor/default opcode, implicit copy/Clone, stable mutable data member references, value equality and complete checkTextEqual. Existing shared FormulaToken, ScSingleRefData/ScComplexRefData, ScSheetLimits/ScAddress/ScRange are reused. Single/range data are copied by value while sheet bounds use ordinary shared JS references; no reference counting, Boost, allocator, lifetime manager or fake document/compiler/matrix peer. Full original class declarations and complete doc-free member/helper/data definitions with genuine full headers produce a matching 1805559-byte normal-only initialized stream over all256flags, coordinate bounds, opcode/type mismatches, copies/clones/input/member mutations, trim retention and receiver limits. Normalized range text equality may differ from raw equality; receiver-bound asymmetry CALC-084 is preserved. Invalid staticcast peers, native counts/layout/debug assertions/overflow/memory behavior are excluded. Original formula token equality QA anchor is unexecuted document-level context only. Full compiler/ScTokenArray/ScFormulaCell/document/input/grid/ODS pipeline remain pending. Goal continues after upcoming full101 and pauses after second full111 plus relevant Calc/shared repairs."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1722,3 +1722,13 @@ ScDocOptions declares bIgnoreLineBreaks, resets it to false, and exposes IsIgnor
 Evidence: pinned sc/inc/docoptio.hxx member/accessors/inline equality and sc/source/core/tool/docoptio.cxx reset body, inspected during task94 dependency analysis. No native ScDocOptions instance or document consumer has been reproduced: its genuine locale/configuration/formatter peers are still pending. This is source evidence only, not an executed document comparison or proven defect.
 
 Decision: preserve the original equality expression when the actual owner is ported and audit downstream change/save detection. Do not silently add the flag to comparison or supply fake peers to manufacture native evidence.
+
+## CALC-084: reference text equality depends on receiver sheet limits
+
+Status: confirmed original initialized comparison asymmetry with different bounds; a user-visible defect is not established.
+
+ScSingleRefToken/ScDoubleRefToken::TextEqual passes its own mrSheetLimits to checkTextEqual. Both references are converted at the origin using only those limits. A single token at(4,4,0) with maximum column/row1 and another at(5,5,0) with maxima20/30 therefore compare text-equal in the first direction (both coordinates collapse to invalid), but not in reverse (both are distinct valid coordinates). Raw token equality remains false. Copies and clones retain the receiver limits and the same result.
+
+Evidence: task95 complete original class/helper/member definitions over genuine reference/address/limit headers, initialized normal-only bounds/copybounds/clonebounds observations, and matching portable replay. Intended same-document/bounds caller preconditions and real sorting consumers remain unverified; no unsupported staticcast, overflow, memory or full document experiment.
+
+Decision: preserve receiver-limit selection and original invalid-coordinate normalization. Audit real compiler/document/sort callers before attributing user-visible impact; do not silently symmetrize the comparison.

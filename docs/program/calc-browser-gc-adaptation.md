@@ -89,3 +89,7 @@ Only active initialized slots and valid removal ranges are certified; native
 tail/capacity, invalid UInt16 overflow ranges, vtable/layout, None-policy and
 physical cleanup timing are outside parity. Existing SAL/SVL value cleanup
 remains its current separate shared boundary.
+
+## Reference token values and retained bounds
+
+Task95 single/range tokens keep copied reference-data members and an ordinary shared reference to ScSheetLimits. Mutable getters return those exact owned endpoint objects; implicit copy/Clone creates independent data while retaining the same bounds owner. No native reference counter, destructor timing, weak reference, finalizer, pool or custom allocator is reproduced. Text/value comparison and receiver-bound behavior remain original. Native observations cover initialized values and logical member identity, excluding physical addresses and counts.
