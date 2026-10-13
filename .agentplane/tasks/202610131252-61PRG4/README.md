@@ -4,7 +4,7 @@ title: "Restore native popup submenu delay ownership"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 24
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -17,28 +17,35 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-13T13:39:04.928Z"
+  state: "ok"
+  updated_at: "2026-10-13T13:48:03.968Z"
   updated_by: "CODER"
-  note: "Correct one fresh independent-depth fixture per final pinned source review; ArrowDown changes native parent highlight, use Space without selection change. Production/build unchanged, retain previous related regression evidence and recapture complete target coverage from current fresh native suite."
-  attempts: 1
+  note: "Current corrected fixture:1438related/208files with41native mounted tests including15new; retained26tooling and9Chromium production-identical evidence=1473unique. Original whole target100four135lines147statements32functions99branches/278positive counters.939otheroldtestfiles and canonical histories preserved,9final restored metadata gatespass. Independent-depth Space avoids unsupported native parent selection claim; ancestor-highlight propagation remains separate explicit gap."
+  attempts: 0
 quality_review:
-  state: "rework"
-  updated_at: "2026-10-13T13:39:03.921Z"
+  state: "pass"
+  updated_at: "2026-10-13T13:48:37.639Z"
   updated_by: "EVALUATOR"
-  note: "Final source review supersedes provisional pass: one fresh independent-depth fixture uses ArrowDown, whose native ChangeHighlightItem also rehighlights the parent. Use nonselecting Space to isolate timer ownership; keep whole current-source coverage and explicit ancestor-highlight residual."
-  evaluated_sha: "c7d1225fa11f73eddda9eab299f1dee0b1cb606b"
+  note: "Same-agent final exact semantic5a2c9806d1fe49148edb279eccf329dca2386c78 review supersedes provisional pass and rework; approved bounded native timer deliverable passes, not independent/global parity certification."
+  evaluated_sha: "5a2c9806d1fe49148edb279eccf329dca2386c78"
   blueprint_digest: "0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726"
   evidence_refs:
     - ".agentplane/tasks/202610131252-61PRG4/README.md"
-    - ".agentplane/tasks/202610131252-61PRG4/quality/20261013-133903921-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202610131252-61PRG4/quality/20261013-133903921-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202610131252-61PRG4/quality/20261013-133903921-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131252-61PRG4/quality/20261013-134837639-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131252-61PRG4/quality/20261013-134837639-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131252-61PRG4/quality/20261013-134837639-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202610131252-61PRG4/blueprint/resolved-snapshot.json"
-    - "apps/office/src/sw/browser/presentation/native-popup-delay.test.tsx"
+    - "apps/office/node_modules/.cache/parity-coverage/61PRG4/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/61PRG4/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/61PRG4/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/61PRG4/semantic-sha.txt"
   findings:
-    - "No production defect found in bounded delay deliverable; fresh scenario must not present unsupported ancestor-highlight behavior as upstream evidence."
-commit: null
+    - "Corrected independent-depth fixture uses nonselecting Space, consistent with native source; native descendant selection rehighlights parent remains a separate explicit gap. Default150ms, immediate keyboard/direct admission, owning-child leave retention and lifecycle cancellation verified without command mocks."
+    - "1438current related assertions/208files include41mounted cases with15new; unchanged-production26tooling and9Chromium retained=1473unique. Whole current original target100four135lines147statements32functions99branches,278positive raw counters with original IDs/locations/hash proof, no normalization/provider/exclusion changes."
+    - "Eight current committed source/test/registry blobs match frozen hashes;137built static files unchanged.939other oldtests unchanged, exact4oldcase statements and waitFor imports only, canonical2history prefixes intact,9restored-onlymetadata gatespass. Attempts honestly retained in ignored cache, no upstream/helper source copies in Agentplane."
+commit:
+  hash: "5a2c9806d1fe49148edb279eccf329dca2386c78"
+  message: "🧩 61PRG4 fix: isolate native submenu timer depth without selection changes"
 comments:
   -
     author: "CODER"
@@ -79,8 +86,20 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Correct one fresh independent-depth fixture per final pinned source review; ArrowDown changes native parent highlight, use Space without selection change. Production/build unchanged, retain previous related regression evidence and recapture complete target coverage from current fresh native suite."
+  -
+    type: "status"
+    at: "2026-10-13T13:48:03.293Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-13T13:48:03.968Z"
+    author: "CODER"
+    state: "ok"
+    note: "Current corrected fixture:1438related/208files with41native mounted tests including15new; retained26tooling and9Chromium production-identical evidence=1473unique. Original whole target100four135lines147statements32functions99branches/278positive counters.939otheroldtestfiles and canonical histories preserved,9final restored metadata gatespass. Independent-depth Space avoids unsupported native parent selection claim; ancestor-highlight propagation remains separate explicit gap."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:47:28.911Z"
+doc_updated_at: "2026-10-13T13:48:04.048Z"
 doc_updated_by: "CODER"
 description: "Match native default150ms submenu highlight/close timers, keyboard/direct activation immediate, cancel stale pointer work on sibling change/reentry/close/teardown; preserve original bindings/focus/admission. Source-backed exact immediate-pointer test migrations, deterministic native mounted timers and real Chromium. Cadence3, no full replay or IO/recovery changes."
 sections:
@@ -201,6 +220,39 @@ sections:
     Scope: metadata only; references restored.
 
     Proof: apps/office/node_modules/.cache/parity-coverage/61PRG4/proof.json, original related-coverage maps, execution-hashes.json, build-hashes.json, accepted-results.json. No provider/threshold/exclusion/map normalization. Same-agent review, not independent. Full native pointer/mnemonic/platform/ancestor-highlight and global parity remain unverified; IO/recovery exceptions preserved.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T13:48:03.968Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Current corrected fixture:1438related/208files with41native mounted tests including15new; retained26tooling and9Chromium production-identical evidence=1473unique. Original whole target100four135lines147statements32functions99branches/278positive counters.939otheroldtestfiles and canonical histories preserved,9final restored metadata gatespass. Independent-depth Space avoids unsupported native parent selection claim; ancestor-highlight propagation remains separate explicit gap.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T13:48:03.293Z, excerpt_hash=sha256:9d5b47035e1e22952151c43e32f3f33bfc7fa738a07263314b22bf6d82be55bc
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131252-61PRG4/blueprint/resolved-snapshot.json
+    - old_digest: 0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726
+    - current_digest: 0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131252-61PRG4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131252-61PRG4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert scoped semantic commit only if needed; preserve human history and prior work. Restore3refs finally, no publication/history rewrite."
   Findings: |-
     Previous turn is verified progress: native empty child admission completed at1a0ac34c, clean current writer6c6b2d34. Standing resumed goal authorizes safe local source-backed fix/internal plan lifecycle. LO pin9bc445578031fecf56086729d8e4940c77e14d65. Native ctor timers use MouseSettings.GetMenuDelay, default150; keyboard/direct call HighlightChanged(nullptr) preselects, timer activation does not. Current immediate hover/leave contradicts source. Full pointer first-move/NOSELECT/mnemonics/platform settings and complete parity remain unverified; no full/global claims.
@@ -340,6 +392,39 @@ Evidence: apps/office/node_modules/.cache/parity-coverage/61PRG4/audit-diff.log
 Scope: metadata only; references restored.
 
 Proof: apps/office/node_modules/.cache/parity-coverage/61PRG4/proof.json, original related-coverage maps, execution-hashes.json, build-hashes.json, accepted-results.json. No provider/threshold/exclusion/map normalization. Same-agent review, not independent. Full native pointer/mnemonic/platform/ancestor-highlight and global parity remain unverified; IO/recovery exceptions preserved.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T13:48:03.968Z — VERIFY — ok
+
+By: CODER
+
+Note: Current corrected fixture:1438related/208files with41native mounted tests including15new; retained26tooling and9Chromium production-identical evidence=1473unique. Original whole target100four135lines147statements32functions99branches/278positive counters.939otheroldtestfiles and canonical histories preserved,9final restored metadata gatespass. Independent-depth Space avoids unsupported native parent selection claim; ancestor-highlight propagation remains separate explicit gap.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T13:48:03.293Z, excerpt_hash=sha256:9d5b47035e1e22952151c43e32f3f33bfc7fa738a07263314b22bf6d82be55bc
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131252-61PRG4/blueprint/resolved-snapshot.json
+- old_digest: 0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726
+- current_digest: 0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131252-61PRG4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131252-61PRG4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
