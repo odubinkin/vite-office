@@ -3423,3 +3423,7 @@ peer is supplied; full native layout/vtable and memory/tail/invalid-state
 behavior are outside certification. Full UNO/opcode jump builders/rewrites/
 reference ranges, ScTokenArray/ScFormulaCell/document/storage/editing/UI/ODS
 remain pending real owners. Next scheduled full run91.
+
+### Full verification checkpoint (task91)
+
+[Full test cycle9](calc-full-test-cycle-9.md) verifies tasks82 through90 with four original reference links absent/restored. Office15720tests769files, inventory123tests38files, tooling36tests10files, browser316scenarios (Writer314/shared2/Calc0) and static build pass first run. Whole raw office465owners are S34287/B23052/F7002/L31197all100 with every counter positive; Calc25/shared227/Writer213. Inventory1734S1292B436F1668L100. No runtime or Writer-only coverage repair is needed. Task202610131622-FVA807 records gates, exact review and closure. The active priority is missing original owners for editable UI and ODS spreadsheet reading/saving, reusing shared package/ZIP, manifest, SAX and xmloff modules. ScTokenArray/ScFormulaCell, column/table/document and editing/undo/input/view remain pending; this checkpoint establishes no editable UI or ODS readiness. Next scheduled full run101.
