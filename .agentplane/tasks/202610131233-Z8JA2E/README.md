@@ -1,10 +1,11 @@
 ---
 id: "202610131233-Z8JA2E"
 title: "Restore native empty submenu admission"
-status: "DOING"
+result_summary: "Native nonempty submenu admission and sibling replacement restored;1456pass, source100four; goal active,cadence2."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -49,6 +50,9 @@ comments:
   -
     author: "CODER"
     body: "Start: native nonempty child admission and sibling replacement order, genuine native frame tests and one exact old empty-case migration; related-only100four, cadence2."
+  -
+    author: "CODER"
+    body: "Verified: native empty child never creates a popup; requesting it closes previous different sibling descendants before retaining actual parent selection/focus. Original current resources and bindings own admission/state/execute.1456 unique related/tooling/Chromium pass, source100four and224positive raw counters.940 old files plus12/remaining old case bytes unchanged, one exact source-backed migration. Canonical2 histories/default/status/class/pin intact; runtime/static3refs absent/restoredfinally and static/build137/nine metadata gates pass. Exact semantic1a0ac34c reviewed same-agent/not independent. No full replay; timing/platform/mnemonics remain unverified. Goal active,cadence2."
 events:
   -
     type: "status"
@@ -69,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "1456 unique pass: related1423/207files,tooling26,Chromium7; fresh26 included once. Whole CommandPopupMenu100four105lines115statements23functions86branches,224 positive original counters,current IDs/locations/hashes.940 old files untouched; only exact empty-child case migrated with12/remaining file bytes identical. Two canonical prefixes/defaults/status/classes and native pin preserved. Runtime/static refs absent restoredfinally; TS7/format/lint/docs/size/deps/build137/static and final nine metadata gates pass. Exact semantic review then clean scoped closure; cadence2,no full replay/full parity claim."
+  -
+    type: "status"
+    at: "2026-10-13T12:50:12.754Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native empty child never creates a popup; requesting it closes previous different sibling descendants before retaining actual parent selection/focus. Original current resources and bindings own admission/state/execute.1456 unique related/tooling/Chromium pass, source100four and224positive raw counters.940 old files plus12/remaining old case bytes unchanged, one exact source-backed migration. Canonical2 histories/default/status/class/pin intact; runtime/static3refs absent/restoredfinally and static/build137/nine metadata gates pass. Exact semantic1a0ac34c reviewed same-agent/not independent. No full replay; timing/platform/mnemonics remain unverified. Goal active,cadence2."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:49:41.325Z"
+doc_updated_at: "2026-10-13T12:50:12.755Z"
 doc_updated_by: "CODER"
 description: "Match MenuFloatingWindow HighlightChanged admission: close previous different child, open only nonempty submenu, preserve selected parent/focus and native keyboard/command behavior. Source-backed exact empty-child acceptance migration, native fresh/browser evidence and append inventory. Cadence2 after newest full; delays remain next separate delivery."
 sections:
@@ -126,6 +137,10 @@ sections:
     - Observation: Corrected empty-child admission is source-backed by HighlightChanged GetItemCount guard and replacement order. Genuine fresh red reproduced a created empty popup window. Current keyboard/pointer empty request preserves actual parent selection/focus, closes differing prior descendants first, and never executes or creates child; later nonempty native command remains functional.
       Impact: Only exact old empty-window case contradicted native admission; migrated it, preserved all other12/remaining file bytes and940 other old test files. No timing/mnemonic/NOSELECT/platform settings or broad parity claim.
       Resolution: Fresh26, related/current whole source100allfour and original positive location/ID/hash certificate; tooling and seven Chromium old integrations pass refs absent. Two canonical records append only; static/build137 and nine restored metadata gates pass. Exact clean semantic SHA same-agent review then scoped closure; cadence2, native delays remain next source-backed task.
+extensions:
+  implementation_commit:
+    hash: "1a0ac34c1217d045c63f553883289ff612c6f389"
+    message: "🧩 Z8JA2E fix: enforce native nonempty submenu admission"
 id_source: "generated"
 ---
 ## Summary
