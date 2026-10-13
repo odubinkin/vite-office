@@ -1,0 +1,634 @@
+
+> vite-office@0.1.0 verify
+> npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:tooling && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity
+
+
+> vite-office@0.1.0 format:check
+> prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+> vite-office@0.1.0 typecheck
+> npm run typecheck:tools && npm run typecheck --workspace @vite-office/office
+
+
+> vite-office@0.1.0 typecheck:tools
+> tsc --project tsconfig.tools.json
+
+
+> @vite-office/office@0.1.0 typecheck
+> tsc --noEmit
+
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check passed: 503 runtime sources, 2371 relative imports, 51 allowed cross-module edges.
+
+> vite-office@0.1.0 check:writer-resources
+> tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  10:54:13
+   Duration  127ms (transform 27ms, setup 0ms, import 36ms, tests 4ms, environment 0ms)
+
+
+> vite-office@0.1.0 test:tooling
+> vitest run scripts/*.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  10 passed (10)
+      Tests  36 passed (36)
+   Start at  10:54:14
+   Duration  3.66s (transform 459ms, setup 0ms, import 15.40s, tests 4.23s, environment 1ms)
+
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office --
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  761 passed (761)
+      Tests  15713 passed (15713)
+   Start at  10:54:19
+   Duration  646.19s (transform 74.53s, setup 54.91s, import 350.41s, tests 388.71s, environment 296.63s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 33614/33614 )
+Branches     : 100% ( 22696/22696 )
+Functions    : 100% ( 6829/6829 )
+Lines        : 100% ( 30599/30599 )
+================================================================================
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+      Coverage enabled with v8
+
+
+ Test Files  38 passed (38)
+      Tests  123 passed (123)
+   Start at  11:05:07
+   Duration  33.91s (transform 835ms, setup 0ms, import 2.10s, tests 28.66s, environment 2ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1734/1734 )
+Branches     : 100% ( 1292/1292 )
+Functions    : 100% ( 436/436 )
+Lines        : 100% ( 1668/1668 )
+================================================================================
+
+> vite-office@0.1.0 test:e2e
+> npm run build && playwright test --config apps/office/playwright.config.ts
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 2128 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.56 kB │ gzip:   0.34 kB
+dist/assets/tblsels-CrFA-9L6.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblselw-D9zQinbS.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblsele-ndGfGfAd.svg        5.16 kB │ gzip:   0.61 kB
+dist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB
+dist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB
+dist/assets/odt-worker-DsWujZOh.js    465.76 kB
+dist/assets/index-DynTF_QJ.css         64.83 kB │ gzip:  10.58 kB
+dist/assets/index-DFDVftNn.js       1,359.17 kB │ gzip: 320.33 kB
+
+✓ built in 1.26s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:85605) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 316 tests using 2 workers
+
+(node:85617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:85616) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    2 [writer] › apps/office/e2e/native-bullet-font-roundtrip.spec.ts:30:3 › native bullet font ODT body cell width=1280 (2.0s)
+  ✓    1 [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (3.5s)
+  ✓    3 [writer] › apps/office/e2e/native-bullet-font-roundtrip.spec.ts:30:3 › native bullet font ODT body cell width=390 (1.7s)
+  ✓    4 [writer] › apps/office/e2e/native-empty-bullet.spec.ts:8:3 › native zero bullet body cell width=1280 (1.2s)
+  ✓    5 [writer] › apps/office/e2e/native-label-affinity.spec.ts:7:3 › native before-label caret and input body cell width=1280 (1.3s)
+  ✓    6 [writer] › apps/office/e2e/native-empty-bullet.spec.ts:8:3 › native zero bullet body cell width=390 (1.1s)
+  ✓    7 [writer] › apps/office/e2e/native-label-affinity.spec.ts:7:3 › native before-label caret and input body cell width=390 (1.1s)
+  ✓    9 [writer] › apps/office/e2e/native-line-margin.spec.ts:6:3 › native visual-line Home End and Shift body cell width=1280 (1.1s)
+  ✓    8 [writer] › apps/office/e2e/native-legacy-bullet-symbol.spec.ts:30:3 › native legacy bullet symbols body cell width=1280 (1.7s)
+  ✓   10 [writer] › apps/office/e2e/native-line-margin.spec.ts:6:3 › native visual-line Home End and Shift body cell width=390 (924ms)
+  ✓   11 [writer] › apps/office/e2e/native-legacy-bullet-symbol.spec.ts:30:3 › native legacy bullet symbols body cell width=390 (1.6s)
+  ✓   12 [writer] › apps/office/e2e/native-marked-list-paint.spec.ts:7:3 › native marked label paint body cell width=1280 (1.3s)
+  ✓   14 [writer] › apps/office/e2e/native-marked-list-paint.spec.ts:7:3 › native marked label paint body cell width=390 (1.3s)
+  ✓   13 [writer] › apps/office/e2e/native-numbering-font.spec.ts:30:3 › native numbering font body cell width=1280 (1.7s)
+  ✓   15 [writer] › apps/office/e2e/native-table-name.spec.ts:6:3 › native table name validation unique allocation and history width=1280 (1.7s)
+  ✓   16 [writer] › apps/office/e2e/native-numbering-font.spec.ts:30:3 › native numbering font body cell width=390 (1.6s)
+  ✓   18 [writer] › apps/office/e2e/writer-accelerator-ownership.spec.ts:5:3 › Writer consumed accelerator ownership at width 1280 (520ms)
+  ✓   19 [writer] › apps/office/e2e/writer-accelerator-ownership.spec.ts:5:3 › Writer consumed accelerator ownership at width 390 (480ms)
+  ✓   17 [writer] › apps/office/e2e/native-table-name.spec.ts:6:3 › native table name validation unique allocation and history width=390 (1.6s)
+  ✓   20 [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:27:5 › Writer automatic body layout width=1280 disregard=true (1.4s)
+  ✓   21 [writer] › apps/office/e2e/writer-cell-list-backspace.spec.ts:3:1 › Writer Backspace hides a cell marker and ShiftBackspace restores native numbering (1.1s)
+  ✓   23 [writer] › apps/office/e2e/writer-cell-list-continue.spec.ts:4:3 › Writer Continue Numbering joins a plain table cell to the preceding list (1.2s)
+  ✓   22 [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:27:5 › Writer automatic body layout width=1280 disregard=false (1.4s)
+  ✓   24 [writer] › apps/office/e2e/writer-cell-list-continue.spec.ts:4:3 › Writer Continue Numbering joins a bullet table cell to the preceding list (1.2s)
+  ✓   25 [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:27:5 › Writer automatic body layout width=390 disregard=true (1.3s)
+  ✓   26 [writer] › apps/office/e2e/writer-cell-list-enter.spec.ts:3:1 › Writer Enter ends an empty cell list without inserting a paragraph (973ms)
+  ✓   27 [writer] › apps/office/e2e/writer-auto-first-layout.spec.ts:27:5 › Writer automatic body layout width=390 disregard=false (1.2s)
+  ✓   28 [writer] › apps/office/e2e/writer-cell-list-level.spec.ts:4:1 › Writer cell list levels use native commands and survive history and ODT reopen (1.5s)
+  ✓   29 [writer] › apps/office/e2e/writer-cell-paragraph-format.spec.ts:4:1 › Writer cell paragraph alignment and native list display survive history and ODT reopen (1.5s)
+  ✓   30 [writer] › apps/office/e2e/writer-character-formatting.spec.ts:5:1 › Writer direct character formatting (1.1s)
+  ✓   31 [writer] › apps/office/e2e/writer-clipboard.spec.ts:5:1 › copies visible formatted Writer content through the native browser copy event (675ms)
+  ✓   32 [writer] › apps/office/e2e/writer-clipboard.spec.ts:54:1 › Writer list clipboard (873ms)
+  ✓   33 [writer] › apps/office/e2e/writer-collapsing-border-arbitration.spec.ts:9:3 › native shared-border winner and mode history width=1280 (1.7s)
+  ✓   34 [writer] › apps/office/e2e/writer-counted-list-layout.spec.ts:12:3 › Writer counted axes stay independent through paragraph history cell=false (986ms)
+  ✓   36 [writer] › apps/office/e2e/writer-counted-list-layout.spec.ts:12:3 › Writer counted axes stay independent through paragraph history cell=true (1.2s)
+  ✓   35 [writer] › apps/office/e2e/writer-collapsing-border-arbitration.spec.ts:9:3 › native shared-border winner and mode history width=390 (1.6s)
+  ✓   38 [writer] › apps/office/e2e/writer-document-key.spec.ts:5:3 › Ctrl-F6 from the Writer toolbar focuses the document and retains editing (396ms)
+  ✓   37 [writer] › apps/office/e2e/writer-cut-paste.spec.ts:5:1 › Writer Cut and Paste (639ms)
+  ✓   39 [writer] › apps/office/e2e/writer-document-key.spec.ts:5:3 › Ctrl-F6 from the Writer root focuses the document and retains editing (452ms)
+  ✓   40 [writer] › apps/office/e2e/writer-cut-paste.spec.ts:55:1 › Writer immediate spaces and structured list Paste (645ms)
+  ✓   41 [writer] › apps/office/e2e/writer-document-key.spec.ts:5:3 › Ctrl-F6 from the Writer child focuses the document and retains editing (518ms)
+  ✓   43 [writer] › apps/office/e2e/writer-document-key.spec.ts:36:1 › Ctrl-F6 retains the Writer Hyperlink modal's input focus (539ms)
+  ✓   42 [writer] › apps/office/e2e/writer-document-selection.spec.ts:5:1 › supports document-wide selection through Ctrl/Cmd+A and pointer dragging (858ms)
+  ✓   44 [writer] › apps/office/e2e/writer-document-selection.spec.ts:139:1 › places the caret at the first clicked position in a different paragraph (473ms)
+  ✓   45 [writer] › apps/office/e2e/writer-headline-selection.spec.ts:14:3 › Writer native table range excludes repeated headline selection width=1280 (993ms)
+  ✓   46 [writer] › apps/office/e2e/writer-hyperlinks.spec.ts:9:1 › Writer creates, edits, and round-trips hyperlinks (1.2s)
+  ✓   47 [writer] › apps/office/e2e/writer-headline-selection.spec.ts:14:3 › Writer native table range excludes repeated headline selection width=390 (893ms)
+  ✓   49 [writer] › apps/office/e2e/writer-headline-selection.spec.ts:151:1 › Writer native cross-cell bold formats the selected original rectangle and all headline text copies (905ms)
+  ✓   48 [writer] › apps/office/e2e/writer-imported-table-lists.spec.ts:16:1 › Writer imported restarted table row Add to List preserves both starts and atomic selection (1.2s)
+  ✓   51 [writer] › apps/office/e2e/writer-imported-table-lists.spec.ts:107:1 › Writer imported table list Enter edits native cell paragraphs and history (979ms)
+  ✓   50 [writer] › apps/office/e2e/writer-insert-table-dialog.spec.ts:7:3 › native Insert Table inputs width=1280 (1.2s)
+  ✓   53 [writer] › apps/office/e2e/writer-insert-table-dialog.spec.ts:7:3 › native Insert Table inputs width=390 (1.1s)
+  ✓   52 [writer] › apps/office/e2e/writer-layout-ratios.spec.ts:11:1 › Writer keeps measured page breaks across device pixel ratios (1.9s)
+  ✓   54 [writer] › apps/office/e2e/writer-list-label-drag.spec.ts:9:3 › Writer native label document ruler width=1280 (1.1s)
+  ✓   55 [writer] › apps/office/e2e/writer-lists.spec.ts:5:1 › Writer bullets and numbering (1.2s)
+  ✓   56 [writer] › apps/office/e2e/writer-list-label-drag.spec.ts:9:3 › Writer native label document ruler width=390 (958ms)
+  ✓   58 [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (604ms)
+  ✓   59 [writer] › apps/office/e2e/writer-menu-document-focus.spec.ts:4:1 › unopened menu Escape without a saved owner focuses the Writer document (402ms)
+  ✓   57 [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=1280 raw=65537 (1.4s)
+  ✓   60 [writer] › apps/office/e2e/writer-menu-document-focus.spec.ts:23:1 › unopened menu Escape restores its saved Writer toolbar control (366ms)
+  ✓   62 [writer] › apps/office/e2e/writer-menu-key.spec.ts:4:1 › F10 activates the first Writer root without opening and closes its keyboard popup (483ms)
+  ✓   63 [writer] › apps/office/e2e/writer-menu-key.spec.ts:27:1 › repeated F10 restores a saved Writer toolbar owner (482ms)
+  ✓   61 [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=1280 raw=-65537 (1.5s)
+  ✓   64 [writer] › apps/office/e2e/writer-menu-key.spec.ts:39:1 › F10 leaves a modal Writer Hyperlink dialog's focus untouched (555ms)
+  ✓   66 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor (441ms)
+  ✓   65 [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=390 raw=65537 (1.4s)
+  ✓   67 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch (759ms)
+  ✓   69 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:38:1 › a menu command leaves focus in its newly opened Hyperlink dialog (510ms)
+  ✓   70 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control (443ms)
+  ✓   68 [writer] › apps/office/e2e/writer-manual-first-layout.spec.ts:17:5 › Writer manual signed-short layout width=390 raw=-65537 (1.3s)
+  ✓   71 [writer] › apps/office/e2e/writer-named-style-history.spec.ts:16:3 › Writer named-style history width=1280 (1.4s)
+  ✓   72 [writer] › apps/office/e2e/writer-native-attribute-portions.spec.ts:20:3 › Writer native body and cell portions retain formatting and editing width=1280 (2.3s)
+  ✓   73 [writer] › apps/office/e2e/writer-named-style-history.spec.ts:16:3 › Writer named-style history width=390 (1.4s)
+  ✓   75 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=1280 (918ms)
+  ✓   74 [writer] › apps/office/e2e/writer-native-attribute-portions.spec.ts:20:3 › Writer native body and cell portions retain formatting and editing width=390 (2.0s)
+  ✓   76 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=390 (812ms)
+  ✓   77 [writer] › apps/office/e2e/writer-native-cell-alignment.spec.ts:10:3 › native common cell alignment and changed item history width=1280 (1.8s)
+  ✓   78 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:60:3 › native six-line border page and selected history width=1280 (2.2s)
+  ✓   79 [writer] › apps/office/e2e/writer-native-cell-alignment.spec.ts:10:3 › native common cell alignment and changed item history width=390 (1.6s)
+  ✓   81 [writer] › apps/office/e2e/writer-native-cell-alignment.spec.ts:113:1 › native primitive cell orientation remains numeric across the browser open boundary (828ms)
+  ✓   80 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:60:3 › native six-line border page and selected history width=390 (2.0s)
+  ✓   82 [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:11:5 › native four-edge cell paint and text history width=1280 fixed=false (804ms)
+  ✓   83 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=false kind=numbered (896ms)
+  ✓   84 [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:11:5 › native four-edge cell paint and text history width=1280 fixed=true (761ms)
+  ✓   85 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=false kind=bullet (913ms)
+  ✓   86 [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:11:5 › native four-edge cell paint and text history width=390 fixed=false (710ms)
+  ✓   87 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=true kind=numbered (894ms)
+  ✓   88 [writer] › apps/office/e2e/writer-native-cell-box.spec.ts:11:5 › native four-edge cell paint and text history width=390 fixed=true (716ms)
+  ✓   89 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=false reverse=true kind=bullet (956ms)
+  ✓   90 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:10:3 › native coupled border and merging item acceptance width=1280 (1.4s)
+  ✓   91 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=false kind=numbered (1.1s)
+  ✓   92 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:10:3 › native coupled border and merging item acceptance width=390 (1.5s)
+  ✓   93 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=false kind=bullet (1.1s)
+  ✓   95 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=true kind=numbered (1.2s)
+  ✓   94 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:75:5 › native table merging model=collapsing width=1280 (1.7s)
+  ✓   96 [writer] › apps/office/e2e/writer-native-clipboard-lists.spec.ts:6:7 › Writer native clipboard lists cell=true reverse=true kind=bullet (1.2s)
+  ✓   97 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:75:5 › native table merging model=separating width=1280 (1.7s)
+  ✓   98 [writer] › apps/office/e2e/writer-native-column-commands.spec.ts:4:3 › native column insertion width=1280 (1.2s)
+  ✓  100 [writer] › apps/office/e2e/writer-native-column-commands.spec.ts:4:3 › native column insertion width=390 (1.6s)
+  ✓   99 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:75:5 › native table merging model=undefined width=1280 (2.2s)
+  ✓  101 [writer] › apps/office/e2e/writer-native-context-menu.spec.ts:31:1 › Writer native context menu removes actual mixed hyperlinks with one undo and redo (980ms)
+  ✓  103 [writer] › apps/office/e2e/writer-native-context-menu.spec.ts:71:1 › Writer native context menu follows the actual table shell and inserts a native row (659ms)
+  ✓  104 [writer] › apps/office/e2e/writer-native-context-menu.spec.ts:90:1 › Writer native context menu keyboard cancellation retains the reversed original range (496ms)
+  ✓  102 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:75:5 › native table merging model=collapsing width=390 (1.8s)
+  ✓  105 [writer] › apps/office/e2e/writer-native-cursor-frame-chain.spec.ts:5:1 › native body follow Home retains its original model offset and edit history (1.5s)
+  ✓  106 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:75:5 › native table merging model=separating width=390 (1.7s)
+  ✓  107 [writer] › apps/office/e2e/writer-native-document-row.spec.ts:4:3 › document-owned styled final-row Tab width=1280 (769ms)
+  ✓  109 [writer] › apps/office/e2e/writer-native-document-row.spec.ts:4:3 › document-owned styled final-row Tab width=390 (679ms)
+  ✓  108 [writer] › apps/office/e2e/writer-native-collapsing-borders.spec.ts:75:5 › native table merging model=undefined width=390 (1.7s)
+  ✓  111 [writer] › apps/office/e2e/writer-native-hyperlink-begin-edit.spec.ts:39:1 › Chromium edits from the original link beginning and keeps selection on cancel (1.2s)
+  ✓  110 [writer] › apps/office/e2e/writer-native-formatted-cursor-frame-reuse.spec.ts:5:1 › repeated physical follow Home/End retains text and source edit/history boundaries (2.2s)
+  ✓  112 [writer] › apps/office/e2e/writer-native-hyperlink-mixed-remove.spec.ts:41:1 › Chromium preserves mixed native dispatch and one undo with pending popup presentation (1.5s)
+  ✓  114 [writer] › apps/office/e2e/writer-native-insert-table-row-history.spec.ts:4:3 › native inserted table and appended row history width=1280 (949ms)
+  ✓  115 [writer] › apps/office/e2e/writer-native-insert-table-row-history.spec.ts:4:3 › native inserted table and appended row history width=390 (948ms)
+  ✓  113 [writer] › apps/office/e2e/writer-native-independent-table-properties.spec.ts:60:3 › native independent properties columns frame-width and history width=1280 (3.2s)
+  ✓  116 [writer] › apps/office/e2e/writer-native-insert-table.spec.ts:7:3 › native table insertion history width=1280 (1.0s)
+  ✓  118 [writer] › apps/office/e2e/writer-native-insert-table.spec.ts:7:3 › native table insertion history width=390 (885ms)
+  ✓  119 [writer] › apps/office/e2e/writer-native-internet-edit-range.spec.ts:39:1 › Chromium edits one independent identical hyperlink and replays native history (1.2s)
+  ✓  117 [writer] › apps/office/e2e/writer-native-independent-table-properties.spec.ts:60:3 › native independent properties columns frame-width and history width=390 (3.1s)
+  ✓  120 [writer] › apps/office/e2e/writer-native-internet-state-query.spec.ts:3:1 › Chromium hyperlink state distinguishes original interior and non-expanding end (725ms)
+  ✓  122 [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=1280 cell=false (1.2s)
+  ✓  121 [writer] › apps/office/e2e/writer-native-list-context.spec.ts:11:3 › Writer native list context and point state width=1280 (2.0s)
+  ✓  123 [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=1280 cell=true (1.2s)
+  ✓  125 [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=390 cell=false (973ms)
+  ✓  124 [writer] › apps/office/e2e/writer-native-list-context.spec.ts:11:3 › Writer native list context and point state width=390 (1.9s)
+  ✓  126 [writer] › apps/office/e2e/writer-native-list-marker-width.spec.ts:59:5 › Writer native label width prevents overlap width=390 cell=true (1.1s)
+  ✓  127 [writer] › apps/office/e2e/writer-native-list-tab.spec.ts:16:3 › Writer body list and table Tab retain editing focus width=1280 (1.2s)
+  ✓  128 [writer] › apps/office/e2e/writer-native-margin-admission.spec.ts:7:3 › Writer ordinary native decrease owns no-op history cell=false (1.0s)
+  ✓  129 [writer] › apps/office/e2e/writer-native-list-tab.spec.ts:16:3 › Writer body list and table Tab retain editing focus width=390 (1.1s)
+  ✓  130 [writer] › apps/office/e2e/writer-native-margin-admission.spec.ts:7:3 › Writer ordinary native decrease owns no-op history cell=true (1.1s)
+  ✓  131 [writer] › apps/office/e2e/writer-native-none-numbering.spec.ts:11:3 › Writer native NONE numbering roundtrip width=1280 (1.5s)
+  ✓  132 [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:17:5 › Writer exhausted bullet tab keeps native text gap width=1280 cell=false (913ms)
+  ✓  134 [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:17:5 › Writer exhausted bullet tab keeps native text gap width=1280 cell=true (927ms)
+  ✓  133 [writer] › apps/office/e2e/writer-native-none-numbering.spec.ts:11:3 › Writer native NONE numbering roundtrip width=390 (1.4s)
+  ✓  135 [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:17:5 › Writer exhausted bullet tab keeps native text gap width=390 cell=false (894ms)
+  ✓  137 [writer] › apps/office/e2e/writer-native-numbering-tab.spec.ts:17:5 › Writer exhausted bullet tab keeps native text gap width=390 cell=true (883ms)
+  ✓  136 [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:9:3 › Writer native heading Tab retains styles and history width=1280 (2.1s)
+  ✓  138 [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=false reverse=false (699ms)
+  ✓  140 [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=false reverse=true (678ms)
+  ✓  141 [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=true reverse=false (926ms)
+  ✓  139 [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:9:3 › Writer native heading Tab retains styles and history width=390 (2.1s)
+  ✓  142 [writer] › apps/office/e2e/writer-native-paragraph-text-surface.spec.ts:54:5 › Writer native text surface cell=true reverse=true (962ms)
+  ✓  143 [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:96:3 › Writer native tenth heading boundary width=1280 (998ms)
+  ✓  145 [writer] › apps/office/e2e/writer-native-outline-tab.spec.ts:96:3 › Writer native tenth heading boundary width=390 (880ms)
+  ✓  144 [writer] › apps/office/e2e/writer-native-properties-height.spec.ts:7:3 › Writer unrelated properties preserve fixed row height width=1280 (1.4s)
+  ✓  146 [writer] › apps/office/e2e/writer-native-row-commands.spec.ts:4:3 › native row menu and caret width=1280 (1.2s)
+  ✓  147 [writer] › apps/office/e2e/writer-native-properties-height.spec.ts:7:3 › Writer unrelated properties preserve fixed row height width=390 (1.4s)
+  ✓  149 [writer] › apps/office/e2e/writer-native-row-frame-size.spec.ts:13:3 › Writer native fixed row clipping and minimum growth width=1280 (680ms)
+  ✓  148 [writer] › apps/office/e2e/writer-native-row-commands.spec.ts:4:3 › native row menu and caret width=390 (1.1s)
+  ✓  150 [writer] › apps/office/e2e/writer-native-row-frame-size.spec.ts:13:3 › Writer native fixed row clipping and minimum growth width=390 (654ms)
+  ✓  152 [writer] › apps/office/e2e/writer-native-section-navigation.spec.ts:3:1 › Writer Ctrl Home End follows native cell and table boundaries (1.1s)
+  ✓  151 [writer] › apps/office/e2e/writer-native-row-height-dialog.spec.ts:7:3 › Writer native row height dialog width=1280 (2.0s)
+  ✓  153 [writer] › apps/office/e2e/writer-native-section-navigation.spec.ts:54:1 › Writer Shift Ctrl Home selects cell paragraphs through native point and mark (976ms)
+  ✓  155 [writer] › apps/office/e2e/writer-native-section-navigation.spec.ts:94:1 › Writer inherited table editing host keeps split join and typing history (858ms)
+  ✓  154 [writer] › apps/office/e2e/writer-native-row-height-dialog.spec.ts:7:3 › Writer native row height dialog width=390 (2.0s)
+  ✓  156 [writer] › apps/office/e2e/writer-native-select-all.spec.ts:37:1 › Writer Select All escalates cell table and outer text (890ms)
+  ✓  158 [writer] › apps/office/e2e/writer-native-select-all.spec.ts:61:1 › Writer cell Select All replacement retains neighbors and native undo redo (1.1s)
+  ✓  159 [writer] › apps/office/e2e/writer-native-select-all.spec.ts:84:1 › Writer empty cell Select All immediately selects the native table (969ms)
+  ✓  157 [writer] › apps/office/e2e/writer-native-tabcols.spec.ts:8:3 › native physical column draft from relative table width=1280 (2.6s)
+  ✓  160 [writer] › apps/office/e2e/writer-native-table-column-drag.spec.ts:8:3 › native mouse column tracking width=1280 (1.4s)
+  ✓  161 [writer] › apps/office/e2e/writer-native-tabcols.spec.ts:8:3 › native physical column draft from relative table width=390 (2.4s)
+  ✓  162 [writer] › apps/office/e2e/writer-native-table-column-drag.spec.ts:8:3 › native mouse column tracking width=390 (1.3s)
+  ✓  164 [writer] › apps/office/e2e/writer-native-table-column-drag.spec.ts:130:1 › native outer-left tracking accepts Enter and preserves the editing cursor (917ms)
+  ✓  163 [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:42:3 › native column page modes and history width=1280 (2.3s)
+  ✓  165 [writer] › apps/office/e2e/writer-native-table-cursor-rings.spec.ts:4:1 › Writer selected row character formatting covers full cells and survives Undo Redo (1.1s)
+  ✓  167 [writer] › apps/office/e2e/writer-native-table-delete.spec.ts:6:5 › Writer native table deletion › Writer selected row Delete preserves table cells and native Undo Redo (1.2s)
+  ✓  166 [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:135:3 › native column page window and selection width=1280 (1.5s)
+  ✓  168 [writer] › apps/office/e2e/writer-native-table-delete.spec.ts:6:5 › Writer native table deletion › Writer selected row Backspace preserves table cells and native Undo Redo (1.2s)
+  ✓  170 [writer] › apps/office/e2e/writer-native-table-editing.spec.ts:3:1 › Writer table cell typing, split, join and formatting use document history (1.0s)
+  ✓  169 [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:42:3 › native column page modes and history width=390 (2.1s)
+  ✓  171 [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:36:3 › native format page local metrics cancel and native acceptance width=1280 (1.5s)
+  ✓  172 [writer] › apps/office/e2e/writer-native-table-column-page.spec.ts:135:3 › native column page window and selection width=390 (1.5s)
+  ✓  174 [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=1280 split=true (1.0s)
+  ✓  173 [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:98:3 › native format page activation consumes Columns width and retains browser input width=1280 (1.1s)
+  ✓  175 [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=1280 split=false (977ms)
+  ✓  176 [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:36:3 › native format page local metrics cancel and native acceptance width=390 (1.7s)
+  ✓  177 [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=390 split=true (816ms)
+  ✓  179 [writer] › apps/office/e2e/writer-native-table-layout-split.spec.ts:9:5 › native table split policy uses physical page owners width=390 split=false (840ms)
+  ✓  178 [writer] › apps/office/e2e/writer-native-table-format-lifecycle.spec.ts:98:3 › native format page activation consumes Columns width and retains browser input width=390 (1.0s)
+  ✓  180 [writer] › apps/office/e2e/writer-native-table-linear-drag.spec.ts:11:3 › Writer solitary Shift translates following column borders width=1280 (1.3s)
+  ✓  181 [writer] › apps/office/e2e/writer-native-table-mouse.spec.ts:14:3 › Writer native table mouse edge and drag width=1280 (1.3s)
+  ✓  182 [writer] › apps/office/e2e/writer-native-table-linear-drag.spec.ts:11:3 › Writer solitary Shift translates following column borders width=390 (1.1s)
+  ✓  183 [writer] › apps/office/e2e/writer-native-table-mouse.spec.ts:14:3 › Writer native table mouse edge and drag width=390 (1.2s)
+  ✓  184 [writer] › apps/office/e2e/writer-native-table-paste.spec.ts:4:1 › Writer selected row paste appends in every cell and retains native Undo selection (1.0s)
+  ✓  185 [writer] › apps/office/e2e/writer-native-table-plain-paste.spec.ts:5:3 › Writer native plain table clipboard "X" preserves cells and inherited bold history (1.2s)
+  ✓  186 [writer] › apps/office/e2e/writer-native-table-pointer.spec.ts:14:3 › Writer native table interior and gutter pointer width=1280 (1.3s)
+  ✓  187 [writer] › apps/office/e2e/writer-native-table-plain-paste.spec.ts:5:3 › Writer native plain table clipboard "A\nB\n" preserves cells and inherited bold history (1.2s)
+  ✓  188 [writer] › apps/office/e2e/writer-native-table-pointer.spec.ts:14:3 › Writer native table interior and gutter pointer width=390 (1.7s)
+  ✓  189 [writer] › apps/office/e2e/writer-native-table-properties-reset.spec.ts:38:3 › native current-page table Reset preserves other pages and canonical history width=1280 (2.0s)
+  ✓  190 [writer] › apps/office/e2e/writer-native-table-proportional-drag.spec.ts:11:3 › Writer solitary Control proportionally resizes following columns width=1280 (1.2s)
+  ✓  192 [writer] › apps/office/e2e/writer-native-table-proportional-drag.spec.ts:11:3 › Writer solitary Control proportionally resizes following columns width=390 (1.0s)
+  ✓  191 [writer] › apps/office/e2e/writer-native-table-properties-reset.spec.ts:38:3 › native current-page table Reset preserves other pages and canonical history width=390 (2.1s)
+  ✓  193 [writer] › apps/office/e2e/writer-native-table-row-drag.spec.ts:7:3 › native mouse row tracking width=1280 (1.6s)
+  ✓  194 [writer] › apps/office/e2e/writer-native-table-selection-commands.spec.ts:4:3 › native table selection menu width=1280 (1.5s)
+  ✓  195 [writer] › apps/office/e2e/writer-native-table-row-drag.spec.ts:7:3 › native mouse row tracking width=390 (1.4s)
+  ✓  196 [writer] › apps/office/e2e/writer-native-table-selection-commands.spec.ts:4:3 › native table selection menu width=390 (1.5s)
+  ✓  197 [writer] › apps/office/e2e/writer-native-table-selection.spec.ts:17:1 › Writer row selection paints core boxes and typing after caret kill preserves neighbors (955ms)
+  ✓  198 [writer] › apps/office/e2e/writer-native-table-tab.spec.ts:3:1 › Writer Tab traverses native cell sections and appends one row with history (1.1s)
+  ✓  199 [writer] › apps/office/e2e/writer-native-table-selection.spec.ts:44:1 › Writer native keyboard box selection and caret properties context agree (897ms)
+  ✓  201 [writer] › apps/office/e2e/writer-native-table-text-flow-split.spec.ts:9:3 › native split properties controls and physical pages width=1280 (2.8s)
+  ✓  200 [writer] › apps/office/e2e/writer-native-table-text-flow-headline.spec.ts:39:3 › native Table Properties headline defaults and history width=1280 (3.6s)
+  ✓  202 [writer] › apps/office/e2e/writer-native-table-text-flow-split.spec.ts:9:3 › native split properties controls and physical pages width=390 (2.5s)
+  ✓  203 [writer] › apps/office/e2e/writer-native-table-text-flow-headline.spec.ts:39:3 › native Table Properties headline defaults and history width=390 (3.0s)
+  ✓  204 [writer] › apps/office/e2e/writer-native-text-frame-follow.spec.ts:15:1 › one original bullet has native master/follows through reformat, edit, history and reopen (2.6s)
+  ✓  206 [writer] › apps/office/e2e/writer-odt-file.spec.ts:15:1 › Writer opens and saves a bounded ODT file (1.1s)
+  ✓  207 [writer] › apps/office/e2e/writer-odt-file.spec.ts:87:1 › Writer keeps one ODT text node across visible page fragments after reopen (1.4s)
+  ✓  205 [writer] › apps/office/e2e/writer-native-text-frame-owner.spec.ts:15:1 › native body/cell geometry survives reformat and history before document replacement (4.4s)
+  ✓  209 [writer] › apps/office/e2e/writer-print.spec.ts:5:1 › Print appears in upstream locations and print media keeps only pages (561ms)
+  ✓  208 [writer] › apps/office/e2e/writer-odt-file.spec.ts:139:1 › Writer types in a table cell and reopens the edited ODT (1.0s)
+  ✓  210 [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:7:1 › long menus scroll inside the viewport and nested commands stay reachable (481ms)
+  ✓  211 [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:5:3 › Home replaces the active Writer root popup and returns to editing on Escape (509ms)
+  ✓  212 [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:61:1 › sidebar remains reachable and its checked state follows visibility on a touch viewport (580ms)
+  ✓  213 [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:5:3 › End replaces the active Writer root popup and returns to editing on Escape (491ms)
+  ✓  214 [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:87:1 › the page stays within the viewport while the document and modal body scroll (513ms)
+  ✓  215 [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:31:1 › Writer F10 boundary navigation stays unopened until an explicit popup key (423ms)
+  ✓  217 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command (521ms)
+  ✓  216 [writer] › apps/office/e2e/writer-responsive-sidebar.spec.ts:139:1 › the mobile table grid dismisses outside and More Options opens the full dialog (712ms)
+  ✓  218 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle (430ms)
+  ✓  220 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle (459ms)
+  ✓  221 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle (446ms)
+  ✓  222 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle (424ms)
+  ✓  219 [writer] › apps/office/e2e/writer-ruler-auto-first.spec.ts:17:3 › Writer automatic first-line ruler at width 1280 (1.9s)
+  ✓  223 [writer] › apps/office/e2e/writer-ruler-default-tabs.spec.ts:5:3 › Writer default ruler tabs at width 1280 (837ms)
+  ✓  225 [writer] › apps/office/e2e/writer-ruler-default-tabs.spec.ts:5:3 › Writer default ruler tabs at width 390 (702ms)
+  ✓  224 [writer] › apps/office/e2e/writer-ruler-auto-first.spec.ts:17:3 › Writer automatic first-line ruler at width 390 (1.6s)
+  ✓  226 [writer] › apps/office/e2e/writer-ruler-indent-items.spec.ts:17:3 › Writer automatic ruler item history at width 1280 (2.1s)
+  ✓  227 [writer] › apps/office/e2e/writer-ruler-indent-pixels.spec.ts:17:3 › Writer rounded paragraph indents at width 1280 (2.0s)
+  ✓  228 [writer] › apps/office/e2e/writer-ruler-indent-items.spec.ts:17:3 › Writer automatic ruler item history at width 390 (1.8s)
+  ✓  229 [writer] › apps/office/e2e/writer-ruler-indent-pixels.spec.ts:17:3 › Writer rounded paragraph indents at width 390 (1.8s)
+  ✓  231 [writer] › apps/office/e2e/writer-ruler-tab-identity.spec.ts:5:3 › Writer ruler tab identity at width 1280 (880ms)
+  ✓  230 [writer] › apps/office/e2e/writer-ruler-tab-glyphs.spec.ts:56:3 › Writer ruler typed glyphs at width 1280 (1.3s)
+  ✓  232 [writer] › apps/office/e2e/writer-ruler-tab-identity.spec.ts:5:3 › Writer ruler tab identity at width 390 (830ms)
+  ✓  233 [writer] › apps/office/e2e/writer-ruler-tab-glyphs.spec.ts:56:3 › Writer ruler typed glyphs at width 390 (1.2s)
+  ✓  234 [writer] › apps/office/e2e/writer-ruler-tab-insertion.spec.ts:12:3 › Writer replaces a hidden default ruler tab at width 1280 (916ms)
+  ✓  236 [writer] › apps/office/e2e/writer-ruler-tab-insertion.spec.ts:12:3 › Writer replaces a hidden default ruler tab at width 390 (754ms)
+  ✓  235 [writer] › apps/office/e2e/writer-ruler-tab-pixels.spec.ts:12:3 › Writer rounded tab anchors at width 1280 (1.2s)
+  ✓  237 [writer] › apps/office/e2e/writer-ruler-tracking.spec.ts:5:3 › Writer ruler tracking at width 1280 (1.3s)
+  ✓  238 [writer] › apps/office/e2e/writer-ruler-tab-pixels.spec.ts:12:3 › Writer rounded tab anchors at width 390 (1.2s)
+  ✓  240 [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected body toggle Ordered List as one list range (925ms)
+  ✓  239 [writer] › apps/office/e2e/writer-ruler-tracking.spec.ts:5:3 › Writer ruler tracking at width 390 (1.1s)
+  ✓  242 [writer] › apps/office/e2e/writer-sidebar-deck.spec.ts:8:3 › Properties deck closes and reopens with document focus at width 1280 (731ms)
+  ✓  241 [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected body toggle Unordered List as one list range (978ms)
+  ✓  243 [writer] › apps/office/e2e/writer-sidebar-deck.spec.ts:8:3 › Properties deck closes and reopens with document focus at width 390 (665ms)
+  ✓  244 [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected table cells toggle Ordered List as one list range (1.1s)
+  ✓  245 [writer] › apps/office/e2e/writer-sidebar-escape.spec.ts:8:3 › Paragraph panel Escape returns to title then document at width 1280 (678ms)
+  ✓  247 [writer] › apps/office/e2e/writer-sidebar-escape.spec.ts:8:3 › Paragraph panel Escape returns to title then document at width 390 (737ms)
+  ✓  246 [writer] › apps/office/e2e/writer-selected-list-toggle.spec.ts:5:5 › Writer selected table cells toggle Unordered List as one list range (1.4s)
+  ✓  248 [writer] › apps/office/e2e/writer-sidebar-key-isolation.spec.ts:5:3 › Sidebar docking key isolation at width 1280 (1.3s)
+  ✓  249 [writer] › apps/office/e2e/writer-sidebar-navigation.spec.ts:8:3 › Sidebar managed Tab and arrow navigation at width 1280 (1.1s)
+  ✓  250 [writer] › apps/office/e2e/writer-sidebar-key-isolation.spec.ts:5:3 › Sidebar docking key isolation at width 390 (917ms)
+  ✓  251 [writer] › apps/office/e2e/writer-sidebar-navigation.spec.ts:8:3 › Sidebar managed Tab and arrow navigation at width 390 (997ms)
+  ✓  252 [writer] › apps/office/e2e/writer-sidebar-panel.spec.ts:8:3 › Paragraph panel expansion and More Options at width 1280 (846ms)
+  ✓  253 [writer] › apps/office/e2e/writer-sidebar-scroll.spec.ts:5:3 › Sidebar ShowPanel reveals an oversized Paragraph panel at width 1280 (570ms)
+  ✓  255 [writer] › apps/office/e2e/writer-sidebar-scroll.spec.ts:5:3 › Sidebar ShowPanel reveals an oversized Paragraph panel at width 390 (605ms)
+  ✓  254 [writer] › apps/office/e2e/writer-sidebar-panel.spec.ts:8:3 › Paragraph panel expansion and More Options at width 390 (833ms)
+  ✓  256 [writer] › apps/office/e2e/writer-style-focus.spec.ts:68:3 › Writer direct style choice focus width=1280 (1.0s)
+  ✓  257 [writer] › apps/office/e2e/writer-style-redo.spec.ts:39:3 › Writer native paired style history width=1280 (1.4s)
+  ✓  258 [writer] › apps/office/e2e/writer-style-focus.spec.ts:99:3 › Writer keyboard style choice focus width=1280 (1.1s)
+  ✓  259 [writer] › apps/office/e2e/writer-style-redo.spec.ts:39:3 › Writer native paired style history width=390 (1.2s)
+  ✓  260 [writer] › apps/office/e2e/writer-style-focus.spec.ts:68:3 › Writer direct style choice focus width=390 (950ms)
+  ✓  261 [writer] › apps/office/e2e/writer-style-reset.spec.ts:81:3 › Writer ordinary native style reset width=1280 (1.5s)
+  ✓  262 [writer] › apps/office/e2e/writer-style-focus.spec.ts:99:3 › Writer keyboard style choice focus width=390 (1.2s)
+  ✓  264 [writer] › apps/office/e2e/writer-style-selection.spec.ts:63:3 › Writer inclusive paragraph style range width=1280 (1.2s)
+  ✓  263 [writer] › apps/office/e2e/writer-style-reset.spec.ts:81:3 › Writer ordinary native style reset width=390 (1.4s)
+  ✓  265 [writer] › apps/office/e2e/writer-style-selection.spec.ts:63:3 › Writer inclusive paragraph style range width=390 (1.3s)
+  ✓  266 [writer] › apps/office/e2e/writer-style-selector.spec.ts:16:3 › Writer live style selector width=1280 (1.6s)
+  ✓  267 [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (646ms)
+  ✓  269 [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (608ms)
+  ✓  268 [writer] › apps/office/e2e/writer-style-selector.spec.ts:16:3 › Writer live style selector width=390 (1.4s)
+  ✓  270 [writer] › apps/office/e2e/writer-submenu-preselection.spec.ts:4:1 › pointer submenu owns focus without a selected Writer command (710ms)
+  ✓  272 [writer] › apps/office/e2e/writer-submenu-preselection.spec.ts:35:1 › keyboard opening still preselects and executes one Writer command (629ms)
+  ✓  271 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:9:3 › native automatic restores edited width viewport=1280 (912ms)
+  ✓  274 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:9:3 › native automatic restores edited width viewport=390 (850ms)
+  ✓  273 [writer] › apps/office/e2e/writer-table-border-changed-items.spec.ts:7:3 › native changed border properties preserve untouched cells width=1280 (1.5s)
+  ✓  275 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Automatic viewport=1280 (1.2s)
+  ✓  276 [writer] › apps/office/e2e/writer-table-border-changed-items.spec.ts:7:3 › native changed border properties preserve untouched cells width=390 (1.4s)
+  ✓  277 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Left viewport=1280 (1.1s)
+  ✓  279 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table From left viewport=1280 (1.2s)
+  ✓  278 [writer] › apps/office/e2e/writer-table-border-common-state.spec.ts:10:3 › native common border input and selected four-distance history width=1280 (1.8s)
+  ✓  280 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Right viewport=1280 (1.1s)
+  ✓  281 [writer] › apps/office/e2e/writer-table-border-common-state.spec.ts:10:3 › native common border input and selected four-distance history width=390 (1.8s)
+  ✓  282 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Center viewport=1280 (1.1s)
+  ✓  283 [writer] › apps/office/e2e/writer-table-headlines.spec.ts:9:1 › Writer headline-adjacent text reflow retains a source caret beyond the old page fragment (751ms)
+  ✓  284 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Manual viewport=1280 (1.4s)
+  ✓  285 [writer] › apps/office/e2e/writer-table-headlines.spec.ts:109:3 › Writer repeated table headlines edit the original native header width=1280 (994ms)
+  ✓  286 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Automatic viewport=390 (1.1s)
+  ✓  287 [writer] › apps/office/e2e/writer-table-headlines.spec.ts:109:3 › Writer repeated table headlines edit the original native header width=390 (864ms)
+  ✓  289 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry left width=1280 (889ms)
+  ✓  288 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Left viewport=390 (1.1s)
+  ✓  290 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry center width=1280 (955ms)
+  ✓  291 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table From left viewport=390 (1.1s)
+  ✓  292 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry right width=1280 (978ms)
+  ✓  293 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Right viewport=390 (1.1s)
+  ✓  294 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry margins width=1280 (947ms)
+  ✓  295 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Center viewport=390 (1.1s)
+  ✓  296 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry left width=390 (808ms)
+  ✓  297 [writer] › apps/office/e2e/writer-table-alignment.spec.ts:48:5 › native table Manual viewport=390 (1.1s)
+  ✓  298 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry center width=390 (843ms)
+  ✓  300 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry right width=390 (888ms)
+  ✓  299 [writer] › apps/office/e2e/writer-table-properties-history.spec.ts:13:3 › Writer table properties native history width=1280 (1.5s)
+  ✓  301 [writer] › apps/office/e2e/writer-table-print-area.spec.ts:22:5 › Writer native table print geometry margins width=390 (877ms)
+  ✓  302 [writer] › apps/office/e2e/writer-table-properties-history.spec.ts:13:3 › Writer table properties native history width=390 (1.6s)
+  ✓  303 [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Ordered List/plain (1.4s)
+  ✓  304 [writer] › apps/office/e2e/writer-table-row-lists.spec.ts:5:3 › Writer table row native list commands Ordered List (1.5s)
+  ✓  305 [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Ordered List/different (1.6s)
+  ✓  306 [writer] › apps/office/e2e/writer-table-row-lists.spec.ts:5:3 › Writer table row native list commands Unordered List (1.5s)
+  ✓  307 [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Unordered List/plain (1.4s)
+  ✓  308 [writer] › apps/office/e2e/writer-uncounted-list-layout.spec.ts:4:3 › Writer uncounted list keeps native text-left through history cell=false (969ms)
+  ✓  309 [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:12:5 › Writer table row Add to List Unordered List/different (1.7s)
+  ✓  310 [writer] › apps/office/e2e/writer-uncounted-list-layout.spec.ts:4:3 › Writer uncounted list keeps native text-left through history cell=true (1.2s)
+(node:86105) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  311 [writer] › apps/office/e2e/writer-table-ring-continue.spec.ts:96:1 › Writer table row Add to List continues an imported restarted body list (1.7s)
+(node:86111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  313 [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to the Calc foundation without a Writer session (931ms)
+  ✓  314 [shared] › apps/office/e2e/shared/launcher.spec.ts:21:1 › shared launcher handles unknown application routes (279ms)
+  ✓  312 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:311:3 › Writer dialog layout 1280x800 (7.0s)
+  ✓  315 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:311:3 › Writer dialog layout 390x600 (5.2s)
+  ✓  316 [writer] › apps/office/e2e/writer-dialog-layout.spec.ts:311:3 › Writer dialog layout 640x360 (5.4s)
+
+  316 passed (3.5m)
+
+> vite-office@0.1.0 test:static
+> npm run build && node scripts/check-static-build.mjs
+
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 2128 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.56 kB │ gzip:   0.34 kB
+dist/assets/tblsels-CrFA-9L6.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblselw-D9zQinbS.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblsele-ndGfGfAd.svg        5.16 kB │ gzip:   0.61 kB
+dist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB
+dist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB
+dist/assets/odt-worker-DsWujZOh.js    465.76 kB
+dist/assets/index-DynTF_QJ.css         64.83 kB │ gzip:  10.58 kB
+dist/assets/index-DFDVftNn.js       1,359.17 kB │ gzip: 320.33 kB
+
+✓ built in 1.17s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Static build smoke passed: relative assets, 2 JavaScript bundle(s), no backend endpoints.
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+JSDoc validation passed for 1623 authored source files.
+
+> vite-office@0.1.0 check:file-size
+> node scripts/check-file-size.mjs
+
+File-size check scanned 1626 authored files.
+Decomposition review candidates:
+apps/office/src/cppu/source/typelib/registry.test.ts: 707 lines
+apps/office/src/cppu/source/typelib/typelib-lookup.test.ts: 685 lines
+apps/office/src/cppu/source/typelib/typelib.ts: 910 lines
+apps/office/src/cppu/source/uno/copy.ts: 541 lines
+apps/office/src/cppu/source/uno/destr.test.ts: 780 lines
+apps/office/src/cppuhelper/source/weakref.test.ts: 547 lines
+apps/office/src/editeng/inc/lrspitem.ts: 930 lines
+apps/office/src/editeng/source/items/frmitems.ts: 643 lines
+apps/office/src/external/mdds/include/mdds/flat_segment_tree.ts: 592 lines
+apps/office/src/external/mdds/include/mdds/multi_type_matrix.ts: 742 lines
+apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container.test.ts: 863 lines
+apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts: 559 lines
+apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts: 672 lines
+apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.ts: 999 lines
+apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts: 973 lines
+apps/office/src/external/mdds/include/mdds/multi_type_vector/types.ts: 796 lines
+apps/office/src/formula/inc/opcode.enum.ts: 512 lines
+apps/office/src/formula/inc/opcode.ts: 986 lines
+apps/office/src/framework/browser/app/desktop.test.tsx: 544 lines
+apps/office/src/framework/browser/presentation/CommandMenuBar.tsx: 636 lines
+apps/office/src/sc/source/core/data/markdata.ts: 738 lines
+apps/office/src/sc/source/core/data/segmenttree.ts: 543 lines
+apps/office/src/sc/source/core/tool/rangelst.ts: 824 lines
+apps/office/src/sc/source/core/tool/refdata.ts: 524 lines
+apps/office/src/svl/source/items/itemset.test.ts: 677 lines
+apps/office/src/sw/browser/editor/browser-writer-edit-window.ts: 727 lines
+apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx: 546 lines
+apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx: 587 lines
+apps/office/src/sw/browser/filter/xml/writer-document-codec.ts: 925 lines
+apps/office/src/sw/browser/presentation/writer-view-projection.ts: 660 lines
+apps/office/src/sw/browser/presentation/writer-view.test.tsx: 961 lines
+apps/office/src/sw/browser/presentation/writer-view.tsx: 998 lines
+apps/office/src/sw/browser/presentation/WriterFileDialog.tsx: 553 lines
+apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx: 651 lines
+apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx: 841 lines
+apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx: 555 lines
+apps/office/src/sw/browser/presentation/WriterRulers.tsx: 762 lines
+apps/office/src/sw/browser/presentation/WriterTableDialog.tsx: 734 lines
+apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts: 575 lines
+apps/office/src/sw/source/core/attr/swatrset.ts: 524 lines
+apps/office/src/sw/source/core/doc/doc.ts: 958 lines
+apps/office/src/sw/source/core/doc/number.ts: 690 lines
+apps/office/src/sw/source/core/doc/writer-attributes.test.ts: 731 lines
+apps/office/src/sw/source/core/doc/writer-model.test.ts: 967 lines
+apps/office/src/sw/source/core/docnode/nodes.ts: 625 lines
+apps/office/src/sw/source/core/edit/native-list-continuation-ring.test.ts: 593 lines
+apps/office/src/sw/source/core/edit/native-list-ring.test.ts: 663 lines
+apps/office/src/sw/source/core/layout/newfrm.test.ts: 647 lines
+apps/office/src/sw/source/core/layout/newfrm.ts: 985 lines
+apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts: 506 lines
+apps/office/src/sw/source/core/table/swtable.ts: 902 lines
+apps/office/src/sw/source/core/txtnode/ndhints.ts: 982 lines
+apps/office/src/sw/source/core/txtnode/ndtxt.ts: 994 lines
+apps/office/src/sw/source/core/undo/native-format-node-index.test.ts: 547 lines
+apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts: 544 lines
+apps/office/src/sw/source/core/undo/undobj.test.ts: 666 lines
+apps/office/src/sw/source/filter/xml/odt-list-continuation.test.ts: 517 lines
+apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts: 948 lines
+apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts: 952 lines
+apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts: 526 lines
+apps/office/src/sw/source/filter/xml/xmlexp.ts: 828 lines
+apps/office/src/sw/source/filter/xml/xmlimp.ts: 926 lines
+apps/office/src/sw/source/ui/table/tabledlg.ts: 649 lines
+apps/office/src/sw/source/uibase/app/docsh.ts: 532 lines
+apps/office/src/sw/source/uibase/docvw/edtwin.ts: 555 lines
+apps/office/src/sw/source/uibase/shells/textsh1.ts: 897 lines
+apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts: 544 lines
+apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts: 586 lines
+apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts: 965 lines
+apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts: 999 lines
+apps/office/src/test/uno-native-values.ts: 584 lines
+apps/office/src/vcl/browser/lo-runtime-fonts.css: 963 lines
+apps/office/src/xmloff/source/style/xmlstyle.ts: 613 lines
+apps/office/src/xmloff/source/text/txtparae.ts: 998 lines
+apps/office/src/xmloff/source/text/txtparai.test.ts: 741 lines
+apps/office/src/xmloff/source/text/txtparai.ts: 604 lines
+scripts/calc-markmulti-native-probe.mjs: 517 lines
+scripts/check-module-boundaries.mjs: 570 lines
+scripts/check-module-boundaries.test.ts: 511 lines
+scripts/check-source-provenance.ts: 717 lines
+scripts/generate-writer-ui-resources.ts: 678 lines
+scripts/libreoffice-inventory/contracts.ts: 536 lines
+scripts/libreoffice-inventory/parity-mappings.test.ts: 887 lines
+scripts/libreoffice-inventory/parity-mappings.ts: 997 lines
+scripts/libreoffice-inventory/runtime-inventory.test.ts: 592 lines
+scripts/libreoffice-inventory/runtime-inventory.ts: 807 lines
+scripts/mdds-container-native-probe.mjs: 992 lines
+scripts/uno-type-primitives-native-probe.mjs: 612 lines
+
+> vite-office@0.1.0 check:source-tree
+> node scripts/check-lo-source-tree.mjs
+
+LibreOffice source-tree check passed for 114 required paths and 33 retired roots.
+
+> vite-office@0.1.0 check:source-provenance
+> tsx scripts/check-source-provenance.ts
+
+node:internal/fs/promises:637
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/Users/odubinkin/Projects/vite-office/vendor/boost-reference/boost/smart_ptr/intrusive_ptr.hpp'
+    at async open (node:internal/fs/promises:637:25)
+    at async readFile (node:internal/fs/promises:1269:14)
+    at async validateSourceProvenanceManifest (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:157:32)
+    at async main (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:699:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office/scripts/check-source-provenance.ts:716:57) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/odubinkin/Projects/vite-office/vendor/boost-reference/boost/smart_ptr/intrusive_ptr.hpp'
+}
+
+Node.js v24.13.1
