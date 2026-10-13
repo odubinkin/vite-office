@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610121401-NEW0HT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-12T15:09:00.301Z",
+  "verdict": "pass",
+  "summary": "Same-agent separate EVALUATOR review of efab390538c488bafda21b00455a91394382b728: original15token family/shared ownership scope passes source-exact ordinary native witnesses, raw100portable checks and14local gates; full compiler/document/UI remain unverified.",
+  "evaluated_sha": "efab390538c488bafda21b00455a91394382b728",
+  "blueprint_digest": "552bd8656c92d415b9ad0afb26a8ec806a86dcf287cfe4e0642fdb1e58fff5d6",
+  "findings": [
+    "All78current source hashes match implementation commit; original shared owners and actual full native headers/selected definitions are reused without fake classes, runtime cycles, thresholds or sanitizer changes. Registry3newcapabilities and18records retain foundation/broadfalse claims. First generated extraction lint failure fixed without exclusions. Scope and residual native/consumer limits are explicit; review is same-agent, not independent."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610121401-NEW0HT/README.md",
+    "output/playwright/task75-checks/exact-review.json",
+    "output/playwright/task75-checks/final-audit.json",
+    "output/playwright/task75-checks/gates-results.json",
+    "output/playwright/task75-checks/value-coverage-audit.json",
+    "output/playwright/formula-token-native/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

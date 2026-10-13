@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-13d7cb0b-dec2-491f-adaa-af49e308d033",
+    "capabilityId": "CAP-13d7cb0b-dec2-491f-adaa-af49e308d033",
+    "suite": "calc",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve actual owned value construction/assignment/destruction and initialized defaults in the existing original block/storage boundaries.",
+      "Compare complete unchanged original native owned and Calc value streams in normal-only mode; no synthetic native owner/provider.",
+      "Verify all Calc and related whole shared owners/tests source-absent at raw S/B/F/L100, scoped gates and exact-SHA quality evidence."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task65 connects actual initialized object ValueT ownership to the existing delayed_delete_vector/default_element_block operation family, reusing shared vector special-member helpers. Count/default constructs independent values; count/fill and range/copy perform actual value copies including hidden constructed prefixes. Reference assignment, append/lvalue emplace, range insertion, resize/default construction, erase, reserve/shrink, equality and destructor preserve original native operators. Original mdds block swap performs two copies and copy assignments; actual std::iter_swap remains a distinct move-temporary operation. Scalar and borrowed-pointer paths remain shared. Pure callers over unchanged mdds3.2.1 headers and full actual SharedString/CellTextAttr sources use verified existing complete native dependency objects and normal-only witness execution, comparing whole owned and Calc streams. Existing SharedString and CellTextAttr owners are reused; external mdds imports no Calc/SVL. Custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes, complete perfect-forwarding/rvalue overload families, physical ABI, pointee/callback/container/document/UI owners remain unverified."
+    },
+    "capability": "Original Calc string and text attribute value blocks",
+    "gaps": [
+      "Full allocator/StoreT, failure cleanup, undefined ranges/lifetimes, perfect-forwarding/rvalue overload families and physical ABI are unverified.",
+      "Other Calc pointee owners, typed callbacks, complete MTV/ScColumn/Table/Document/input/view/UI remain subsequent work.",
+      "Original buildability QA is contextual evidence only, not a whole QA port."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp",
+          "marker": "struct default_element_block"
+        },
+        {
+          "path": "sc/inc/mtvelements.hxx",
+          "marker": "string_block"
+        },
+        {
+          "path": "sc/source/core/data/celltextattr.cxx",
+          "marker": "CellTextAttr::CellTextAttr()"
+        },
+        {
+          "path": "svl/source/misc/sharedstring.cxx",
+          "marker": "SharedString& SharedString::operator="
+        },
+        {
+          "path": "include/svl/sharedstring.hxx",
+          "marker": "SharedString::SharedString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/element-blocks/test_basic.cpp",
+          "marker": "using my_block2"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/mtvelements.ts",
+          "marker": "string_block"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/inc/mtvelements.test.ts",
+          "marker": "matches whole original Calc object value block stream"
+        },
+        {
+          "path": "scripts/mdds-object-value-native-probe.mjs",
+          "marker": "Whole original owned blocks captured"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original Calc object value blocks"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "calc-value-block-specializations",
+    "scopeLimitations": [
+      "Task65 connects actual initialized object ValueT ownership to the existing delayed_delete_vector/default_element_block operation family, reusing shared vector special-member helpers. Count/default constructs independent values; count/fill and range/copy perform actual value copies including hidden constructed prefixes. Reference assignment, append/lvalue emplace, range insertion, resize/default construction, erase, reserve/shrink, equality and destructor preserve original native operators. Original mdds block swap performs two copies and copy assignments; actual std::iter_swap remains a distinct move-temporary operation. Scalar and borrowed-pointer paths remain shared. Pure callers over unchanged mdds3.2.1 headers and full actual SharedString/CellTextAttr sources use verified existing complete native dependency objects and normal-only witness execution, comparing whole owned and Calc streams. Existing SharedString and CellTextAttr owners are reused; external mdds imports no Calc/SVL. Custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes, complete perfect-forwarding/rvalue overload families, physical ABI, pointee/callback/container/document/UI owners remain unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

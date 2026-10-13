@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/formula/inc/opcode.enum.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formula-opcode",
+    "capabilityIds": [
+      "CAP-c3238842-956e-4d79-9055-79ff0eddc240"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/formula/inc/opcode.enum.ts#OpCode",
+        "apps/office/src/formula/inc/opcode.test.ts#retains every original opcode and parameter name value and alias",
+        "apps/office/src/formula/inc/opcode.test.ts#matches every original UInt16 release opcode diagnostic",
+        "apps/office/src/formula/inc/opcode.test.ts#narrows original finite integer calls to the native UInt16 argument",
+        "vendor/libreoffice-reference/include/formula/opcode.hxx#enum OpCode",
+        "vendor/libreoffice-reference/include/formula/opcode.hxx#OpCodeEnumToString"
+      ],
+      "justification": "Task74 ports the complete shared OpCode and ParamClass header contracts needed by original FormulaToken. All505opcode names/aliases/range sentinels,487diagnostic cases and10parameter classifications retain original values. Whole genuine native headers verify every65536UInt16 release diagnostic; unknown codes retain???, while a separate normal debug caller demonstrates native assertion termination. Browser binding deliberately claims release behavior only, not native debug process abort or unreachable numeric fallback. Enum-only opcode.enum declaration shard retains original header responsibility under authored1000line budget; opcode header consumes it without a cycle or a second engine. Whole Calc and affected formula raw100/source-absent build/profile and exact source-bound review are required. Full formula/token/cell/document/input/UI/native ABI/upstream QA remain unverified; next full81.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OpCode"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/formula/opcode.hxx",
+      "upstreamSymbols": [
+        "enum OpCode",
+        "OpCodeEnumToString"
+      ]
+    }
+  }
+}

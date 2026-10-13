@@ -20,4 +20,9 @@ export {
   uno_copyData,
   uno_type_copyAndConvertData,
   uno_copyAndConvertData,
+  uno_type_equalData,
+  uno_equalData,
+  uno_type_assignData,
+  uno_assignData,
+  uno_type_isAssignableFromData,
 } from "../../source/uno/data";

@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-476ea52d-9853-45e2-ad3f-ee61ee7503c9",
+    "capabilityId": "CAP-476ea52d-9853-45e2-ad3f-ee61ee7503c9",
+    "suite": "shared",
+    "subsystem": "formula-compiler-jump",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original initialized token or ownership contracts reuse the actual shared owners.",
+      "Whole ordinary native streams match the bounded implementation without substituted native classes."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81."
+    },
+    "capability": "Original shared compiler contracts",
+    "gaps": [
+      "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/formula/FormulaCompiler.hxx",
+          "marker": "IsOpCodeJumpCommand"
+        },
+        {
+          "path": "formula/source/core/api/FormulaCompiler.cxx",
+          "marker": "FormulaCompiler::IsOpCodeJumpCommand"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/formula/FormulaCompiler.hxx",
+          "marker": "IsOpCodeJumpCommand"
+        },
+        {
+          "path": "formula/source/core/api/FormulaCompiler.cxx",
+          "marker": "FormulaCompiler::IsOpCodeJumpCommand"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "ocPush"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-formula-compiler",
+    "scopeLimitations": [
+      "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81.",
+      "Referenced Calc QA is context only; not executed or certified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/formula/inc/FormulaCompiler.ts",
+          "marker": "FormulaCompiler"
+        },
+        {
+          "path": "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+          "marker": "FormulaCompiler"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "matches all original UInt16 opcode classifications"
+        },
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "matches original intrusive reference and FAP lifetime streams"
+        },
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "matches all original string-op parameter counts"
+        },
+        {
+          "path": "apps/office/src/formula/inc/token.test.ts",
+          "marker": "uses real shared string ownership"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original shared formula token family and ownership (task75)"
+        }
+      ]
+    }
+  }
+}

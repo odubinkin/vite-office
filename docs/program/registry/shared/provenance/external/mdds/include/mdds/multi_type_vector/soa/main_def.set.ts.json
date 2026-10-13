@@ -1,0 +1,143 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set_impl"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set_cell_to_empty_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set_cell_to_non_empty_block_of_size_one"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set_cell_to_middle_of_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set_cell_to_top_of_data_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "set_cell_to_bottom_of_data_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "append_cell_to_block"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "push_back_impl"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+          "marker": "append_empty"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-set.test.ts",
+          "marker": "matches complete original scalar single-value set permutation stream"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-set-owned.test.ts",
+          "marker": "matches original owned single-value set whole stream"
+        },
+        {
+          "path": "apps/office/src/sc/inc/mtvelements-set.test.ts",
+          "marker": "matches complete original Calc single-value write stream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_impl"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cell_to_empty_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cell_to_non_empty_block_of_size_one"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cell_to_middle_of_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cell_to_top_of_data_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cell_to_bottom_of_data_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::append_cell_to_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::push_back_impl"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::append_empty"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+    "localSymbols": [
+      "set",
+      "set_impl",
+      "set_cell_to_empty_block",
+      "set_cell_to_non_empty_block_of_size_one",
+      "set_cell_to_middle_of_block",
+      "set_cell_to_top_of_data_block",
+      "set_cell_to_bottom_of_data_block",
+      "append_cell_to_block",
+      "push_back_impl",
+      "append_empty"
+    ],
+    "omittedResponsibilities": [
+      "Full original module, range mutations, arbitrary value/pointee/allocator/throwing/undefined/ABI/debug/QA and complete Calc document/UI behavior remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "Task69 implements both original const-reference single-value set overloads, complete category/top/middle/bottom/empty/singleton dispatch and both size-based neighboring merges over the original existing SoA fields and actual shared macro/default/value operations. main_def.set.ts is a source-mapped original main_def.inl single-value/append definition shard needed for authored file limits; no separate engine, replacement metadata or runtime cycle. The original append/new-cell private wrapper is retained, append primitive size updates precede iterator construction, and unchanged append_empty/resize bodies stay at the mapped definition boundary with actual owner-field bindings. Whole unchanged native normal-only scalar2189311/owned278399/Calc1510-byte initialized streams exercise10016 scalar permutation writes, actual owned special members/events/capacity/returned pointer identity, empty top/bottom private members through standard caller-only access and actual SharedString/CellTextAttr replacement/refcount/independent reads. Source references are physically absent during full scoped tests/build; whole raw owner coverage must remain100 and all counters positive. Both set overloads take const T&, no invented move setter. Range-set/other container families, actual pointee ADL/forwarding/allocator/throwing/undefined/native ABI/debug/trace/upstream QA and complete formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain unverified. Full sc mtvelements.hxx graph is not compiled; only exact original CellTextAttrTraits declaration is witnessed. No full module/kernel/UI parity promotion; next full71."
+    ],
+    "status": "mapped",
+    "upstreamPath": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+    "upstreamSymbols": [
+      "multi_type_vector<Traits>::set",
+      "multi_type_vector<Traits>::set_impl",
+      "multi_type_vector<Traits>::set_cell_to_empty_block",
+      "multi_type_vector<Traits>::set_cell_to_non_empty_block_of_size_one",
+      "multi_type_vector<Traits>::set_cell_to_middle_of_block",
+      "multi_type_vector<Traits>::set_cell_to_top_of_data_block",
+      "multi_type_vector<Traits>::set_cell_to_bottom_of_data_block",
+      "multi_type_vector<Traits>::append_cell_to_block",
+      "multi_type_vector<Traits>::push_back_impl",
+      "multi_type_vector<Traits>::append_empty"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.set.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Split the original main_def.inl single-value set and append member definitions into a source-mapped ESM definition shard under the same SoA source boundary to respect the authored1000line limit. The shard borrows the original actual owner fields and existing helpers; it introduces no alternate storage engine or runtime cycle. The original header wrappers and private helper acceptance are retained."
+    }
+  }
+}

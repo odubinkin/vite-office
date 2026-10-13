@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/lang/DisposedException.idl",
+    "localSymbols": [
+      "DisposedException",
+      "cppu_detail_getUnoType",
+      "getCppuType",
+      "disposedType"
+    ],
+    "upstreamSymbols": [
+      "DisposedException",
+      "RuntimeException"
+    ],
+    "preservedResponsibilities": [
+      "Original comprehensive internal cppumaker DisposedException value derives from the existing shared RuntimeException/Exception owner. Default/two-field constructors initialize the base before the derived type; implicit copies/moves and inherited assignments retain actual stable OUString/Reference fields and reverse destruction. Generated derived type initialization uses actual shared typelib factory/register/release with the real RuntimeException base and leaked cached Type. Native JS catch/finally represents typed catch and caught object lifetime over actual generated hierarchy, without a second type/value/default provider. Complete genuine normal-ASan/UBSan native streams and source-absent whole raw100 checks are required. Physical ABI, allocator/resource, native threading/shutdown, source-location/debug/external-only headers and complete consumer QA remain unverified; generic exception bridge and weak object/services/Calc document/edit/view/UI remain subsequent. Broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Native physical ABI, source-location/debug/external-only headers, allocator/resource, native threads/shutdown and complete consumer QA remain unverified. Generic exception bridge/weak object family/services/Calc document/edit/view/UI remain subsequent."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts",
+          "marker": "DisposedException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.test.ts",
+          "marker": "matches complete original"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/lang/DisposedException.idl",
+          "marker": "exception DisposedException"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void ExceptionType::dumpComprehensiveGetCppuType"
+        }
+      ]
+    }
+  }
+}

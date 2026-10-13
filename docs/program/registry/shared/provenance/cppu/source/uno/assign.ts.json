@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/uno/assign.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/uno/assign.hxx",
+    "localSymbols": [
+      "_assignInterface",
+      "_queryInterface",
+      "_assignStruct",
+      "_assignData"
+    ],
+    "upstreamSymbols": [
+      "_assignInterface",
+      "_queryInterface",
+      "_assignStruct",
+      "_assignData"
+    ],
+    "preservedResponsibilities": [
+      "Task45 ports complete original assign.hxx/data.cxx assignment and value compatibility through actual shared SAL/CPPu type, address, default, copy, destruction, sequence, string, query and callback owners. Preserve initial address/type shortcut, null default destruction/construction, Any flatten and flattened alias shortcut, exact numeric source switches and signed/unsigned same-width reads, boolean normalization, type release-before-acquire, compound base walk/base-first/reverse member partial writes, sequence type-before-pointer short circuit and acquire-before-destruction, interface direct base/query/null/default paths and ordered callbacks. Native JS bit-width operators, BigInt and Math.fround suffice for these defined source assignments; no new numeric/type/provider library. Original --write and --check verify358 complete source hashes and13 generated inputs with all72 genuine translation units rebuilt normal and ASan/UBSan. The five complete defined/initialized bounded diagnostic streams are identical: numeric174096, matrix2594720, compounds54368, interfaces123792 and diagnostics180 bytes. Separately named interface-chain normal24896-byte capture has exact original assign.hxx422 UBSan null-member SIGABRT, never sanitizer/defined/UB parity. All six complete portable streams match. Source-absent Calc106/24 and directly related shared134/39 tests pass with raw S/B/F/L100 across19/55 executable owners; every raw counter is positive. Shared raw S3683/B2003/F460/L3289 and Calc S2920/B2055/F474/L2564. Equality caller extraction preserves exact assembled SHA99748b8af4602d2ddfe58311e4bb5d99738549bf8e86f08ecfaa18cc7da54536 and all five original portable replays; actual query/Any/type observation helpers are reused unchanged. All13 scoped gates pass; final registry evidence checked again. CALC-053/054 preserve source behavior and bound undefined/unsupported producer observations explicitly. Physical ABI/allocator/OOM/arbitrary NaN/debug/thread/shutdown, undefined original null base-member expression, unsupported diagnostic producers and complete consumer QA remain unverified. Any/genfunc/public Sequence and downstream service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent; broad parity/default/verified flags false."
+    ],
+    "omittedResponsibilities": [
+      "Physical ABI/allocator/OOM/arbitrary NaN/debug/thread/shutdown/full consumer QA; original undefined null-base expression and unsupported diagnostic producers. Public Any/genfunc/Sequence and downstream service/CharClass/pool/Calc document/UI closure remain subsequent."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/uno/assign.ts",
+          "marker": "_assignInterface"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/assign.test.ts",
+          "marker": "matches all original defined numeric assignment switches and typed values"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/uno/assign.hxx",
+          "marker": "_assignInterface"
+        }
+      ]
+    }
+  }
+}

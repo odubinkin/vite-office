@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-4c59a13f-2e6d-415d-9b9b-c88d634884d2"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.ts#cppu_detail_getUnoType",
+        "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.test.ts#matches complete original exception interface",
+        "cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl#XExceptionThrower"
+      ],
+      "justification": "Complete original internal XExceptionThrower IDL and comprehensive cppumaker interface metadata reuse existing actual Type/Any/Reference/RuntimeException/Exception builtin/OUString and C typelib owners. Original leaked Type cache, bInitStarted-before-bootstrap gate, RuntimeException then Exception order, inherited XInterface base, two method references, positions3/4, one in-any exc parameter, Exception and RuntimeException declarations, register/release/temporary string order and ADL/static/deprecated getters are preserved. Native JS synchronous initialization adapts mutex/barriers without a thread simulator. Complete interface/method/Type/Any observers are shared with existing generated interface tests/probes; whole original normal-ASan/UBSan streams and source-absent complete related raw100 are required. No virtual exception/environment/mapping/default/type/library provider. Physical ABI/compiler const/thread/resource/leaks/shutdown, full exception engine and consumer/upstream QA remain unverified; broad parity flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XExceptionThrower",
+        "cppu_detail_getUnoType",
+        "getCppuType",
+        "interfaceType",
+        "bInitStarted"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl",
+      "upstreamSymbols": [
+        "XExceptionThrower",
+        "throwException",
+        "rethrowException"
+      ]
+    }
+  }
+}

@@ -94,6 +94,12 @@ export class OUString {
     this.slot[0] = value;
   }
 
+  /** Logical compiler binding for the original address expression &pData. The existing field storage and object identity are borrowed without acquisition or a second owner. @returns Live pointer-field address. */
+  getDataAddress(): rtl_uStringSlot {
+    OUString.references.set(this.slot, this);
+    return this.slot;
+  }
+
   /** Selects original constructor argument combinations; numeric input witnesses sal_Unicode, whose C++ type is erased in JS. @param args - Default, value, no-acquire or known-length arguments. @returns Initialized value owner. */
   constructor(
     ...args:

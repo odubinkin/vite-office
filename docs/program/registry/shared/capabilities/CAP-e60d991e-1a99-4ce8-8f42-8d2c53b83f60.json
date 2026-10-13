@@ -1,0 +1,113 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e60d991e-1a99-4ce8-8f42-8d2c53b83f60",
+    "capabilityId": "CAP-e60d991e-1a99-4ce8-8f42-8d2c53b83f60",
+    "suite": "shared",
+    "subsystem": "formula-errors",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Every original FormulaError name/value and explicit public/internal condition is retained.",
+      "Original numeric error construction and decoding precedence matches whole unchanged native initialized streams.",
+      "Existing native JS numeric/DataView primitives implement the contract without duplicating SAL or formula owners."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task72 supplies the complete original shared include/formula/errorcodes.hxx enum and all three helper functions required by ScFormulaResult and ScFormulaCell. Original explicit published/internal cases, finite/infinite/NaN precedence and UInt16 code payload are preserved through Number.isFinite and DataView, without a second SAL union library or synthetic formula token/cell. Normal-only caller compiles the whole unchanged pinned header, verifies all seven original header dependencies and one reused configuration, and captures every65536 UInt16 error creation/decoding/publication plus300finite/infinite/quiet/signaling NaN bit witnesses. Compiler-reported SDK metadata is recorded without reading outside-repository files or claiming its bytes are pinned. Portable complete raw100 and actual Chromium production-module scalar/object/Float64 storage witnesses are required. No claim is made for other browser engines, payload preservation through arithmetic/JSON/cross-process transport, arbitrary native ABI, full formula module/upstream QA or complete Calc document/UI. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full71; next full81."
+    },
+    "capability": "Original shared formula error contracts",
+    "gaps": [
+      "Actual formula tokens/results/cells/document/input/UI remain required.",
+      "Other browser engines and arithmetic/transport payload preservation remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "enum class FormulaError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "CreateDoubleError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "GetDoubleErrorValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "isPublishedFormulaError"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/formula/errorcodes.hxx",
+          "marker": "Unconditionally construct a double value of NAN"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "FormulaError::Spill"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-formula-errorcodes",
+    "scopeLimitations": [
+      "Task72 supplies the complete original shared include/formula/errorcodes.hxx enum and all three helper functions required by ScFormulaResult and ScFormulaCell. Original explicit published/internal cases, finite/infinite/NaN precedence and UInt16 code payload are preserved through Number.isFinite and DataView, without a second SAL union library or synthetic formula token/cell. Normal-only caller compiles the whole unchanged pinned header, verifies all seven original header dependencies and one reused configuration, and captures every65536 UInt16 error creation/decoding/publication plus300finite/infinite/quiet/signaling NaN bit witnesses. Compiler-reported SDK metadata is recorded without reading outside-repository files or claiming its bytes are pinned. Portable complete raw100 and actual Chromium production-module scalar/object/Float64 storage witnesses are required. No claim is made for other browser engines, payload preservation through arithmetic/JSON/cross-process transport, arbitrary native ABI, full formula module/upstream QA or complete Calc document/UI. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full71; next full81.",
+      "Referenced upstream spreadsheet QA is contextual only; full ScDocument formula QA is not executed or certified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "FormulaError"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "CreateDoubleError"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "GetDoubleErrorValue"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "isPublishedFormulaError"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "retains every original enum name and UInt16 value"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "matches original encoded and published errors for the entire UInt16 domain"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "matches the full original finite infinite and NaN bit classification stream"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "preserves encoded errors through scalar object and Float64 result storage"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original shared formula errors (task72)"
+        }
+      ]
+    }
+  }
+}

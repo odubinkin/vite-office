@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.soa.range-insert-empty",
+    "modulePath": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts",
+    "symbol": "insert_empty_impl",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-7fb6dbea-4750-4799-bafc-2e5e3ec76069",
+    "description": "Original insert_empty_impl definition retains original metadata/events/smaller-side copy/loop-unrolling and actual primitive owner size update before iterator construction."
+  }
+}

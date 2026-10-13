@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/XAggregation.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/uno/XAggregation.idl",
+    "localSymbols": [
+      "XAggregation",
+      "cppu_detail_getUnoType",
+      "getCppuType",
+      "interfaceType",
+      "bInitStarted"
+    ],
+    "upstreamSymbols": [
+      "XAggregation",
+      "setDelegator",
+      "queryAggregation"
+    ],
+    "preservedResponsibilities": [
+      "Task52 preserves complete original IDL method declarations and normal comprehensive cppumaker interface metadata for XWeak/XAdapter/XReference/XAggregation/XServiceInfo. Each original source getter owns its actual leaked Type cache and method-stage bInitStarted gate, sets the gate before actual RuntimeException initialization, registers real base/member/parameter/exception descriptions in original declaration order, and releases real original temporary names/references/descriptions. Original ADL/static_type/deprecated getCppuType use existing UnoType function arguments without inference or a new provider. Existing Type/Reference/Any/RuntimeException/OUString and C typelib engines are reused. Synchronous browser initialization adapts original mutex/barrier operations without a thread simulator; physical ABI/compiler-only/const restrictions, native threads/shutdown/resources and full consumers remain unverified. Actual weak object/adapter/listener/aggregation lifecycle, service manager/context/locale/CharClass/pool/Calc cell/document/edit/view/UI remain subsequent. Broad parity flags stay false. Genuine native --write and --check pass with72 unchanged complete original translation units,374 full source hashes,23 generated files (21 headers and2 parser sources) and161 terminal commands exit0. Seven complete initialized normal-ASan/UBSan streams match pure TypeScript replay. With all3 upstream links absent together, Calc106/24 and related shared161/46 tests pass; whole19/66 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4261/2178/552/3844). The task50 shared profile is preserved append-only and original links restored exactly. All13 scoped gates pass. These observations do not establish untested native threading, physical ABI or complete weak/service behavior."
+    ],
+    "omittedResponsibilities": [
+      "Original virtual interface implementation and weak/service lifecycle remain subsequent; physical ABI, native compiler-only/const/thread/resource/shutdown behavior and full consumer QA unverified. Generated metadata alone does not establish Calc UI readiness."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/XAggregation.ts",
+          "marker": "cppu_detail_getUnoType"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/generated-interfaces.test.ts",
+          "marker": "matches complete original generated interface"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/uno/XAggregation.idl",
+          "marker": "XAggregation"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "dumpComprehensiveGetCppuType"
+        }
+      ]
+    }
+  }
+}

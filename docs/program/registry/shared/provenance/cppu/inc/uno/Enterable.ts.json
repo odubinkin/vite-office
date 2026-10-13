@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/uno/Enterable.ts",
+    "status": "mapped",
+    "upstreamPath": "include/uno/Enterable.h",
+    "localSymbols": [
+      "uno_Enterable",
+      "uno_Enterable_enter",
+      "uno_Enterable_leave",
+      "uno_Enterable_callInto_v",
+      "uno_Enterable_callOut_v",
+      "uno_Enterable_isValid_v"
+    ],
+    "upstreamSymbols": [
+      "uno_Enterable",
+      "uno_Enterable_enter",
+      "uno_Enterable_leave",
+      "uno_Enterable_callInto_v",
+      "uno_Enterable_callOut_v",
+      "uno_Enterable_isValid_v"
+    ],
+    "preservedResponsibilities": [
+      "Complete original Enterable C callback adapters and abstract wrapper reuse the actual shared OUString owner. One borrowed field-address compiler binding preserves original object identity without string acquisition; EnvDcp wrappers reuse it. Native JS array iterators transport one valid advancing logical argument cursor with original callee/context identity, value order, mutable reason and bool-to-int conversion. All environment and extended-environment record fields/callback declarations are represented; no runtime environment API/provider is implemented. Whole unchanged original header/dependency normal-ASan/UBSan streams and source-absent whole related owner raw100 are required. Physical va_list/ABI, native thread/resource/leaks/shutdown, full environment/mapping/generic exception engine and complete consumer/upstream QA are unverified; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Physical va_list/ABI, runtime environment APIs/engine, mapping/generic exceptions, native thread/resource/leaks/shutdown and complete consumer/upstream QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/Enterable.ts",
+          "marker": "uno_Enterable"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/Enterable.test.ts",
+          "marker": "matches complete original"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/uno/Enterable.h",
+          "marker": "uno_Enterable"
+        }
+      ]
+    }
+  }
+}

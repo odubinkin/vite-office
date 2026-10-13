@@ -24,6 +24,8 @@ import { g_emptySeq, g_pVoidType, emptySequenceCountAddress } from "./data";
 export const _type_equals = typelib_typedescriptionreference_equals;
 /** Original TYPE_ACQUIRE expands to the identical existing public C atomic acquisition, reused without a second count owner. */
 export const TYPE_ACQUIRE = typelib_typedescriptionreference_acquire;
+/** Original external binary query declaration forwards to its actual data.cxx owner. */
+export { binuno_queryInterface } from "./data";
 /** Original mapping helper preserves null shortcut, inout initialization and temporary danger-description ownership. @param p - Borrowed interface pointer. @param pType - Original type reference. @param pTypeDescr - Optional borrowed full description. @param mapping - Actual caller-supplied mapping record. @returns Mapped interface pointer, including source-defined null. */
 export function _map(
   p: unknown,

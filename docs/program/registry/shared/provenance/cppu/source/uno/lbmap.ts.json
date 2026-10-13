@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/source/uno/lbmap.ts",
+    "status": "mapped",
+    "upstreamPath": "cppu/source/uno/lbmap.cxx",
+    "localSymbols": [
+      "Mapping",
+      "MappingEntry"
+    ],
+    "upstreamSymbols": [
+      "Mapping",
+      "MappingEntry"
+    ],
+    "preservedResponsibilities": [
+      "Complete original cppu-private Mapping pointer/default/copy/move/destruction/pointer assignment/move assignment/get/is and MappingEntry original by-value string constructor plus logical compiler values reuse existing actual C mapping records and OUString owners. Pointer assignment acquires new before releasing old and publishing the pointer. Original private copy assignment remains deleted. MappingEntry owns only its name; mapping/free-function pointers are borrowed. Whole unchanged lbmap.cxx is compiled in a pure caller normal-ASan/UBSan over verified reused full genuine desktop dependencies, with complete previous dependency witnesses replayed and concrete artifact hashes retained. Native compile/link/capture commands are distinguished from reused219positive dependency commands/101units per variant. Whole mapping560 and entries828-byte initialized streams match actual portable owners; full related source-absent raw100 is required. No registry/mediation/environment/mapping provider/public descriptor wrapper/exception engine is synthesized. Physical ABI/allocator/pointer hash/leaks/native threads/shutdown/full consumers/upstream QA remain unverified; broad parity flags false."
+    ],
+    "omittedResponsibilities": [
+      "Original full mapping registry/mediation, environment wrappers/engine and exception consumers remain absent. Physical ABI/allocator/pointer hashes/leaks/native threads/shutdown and full consumer/upstream QA unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/source/uno/lbmap.ts",
+          "marker": "Mapping"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/lbmap.test.ts",
+          "marker": "matches complete original private mapping"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppu/source/uno/lbmap.cxx",
+          "marker": "class Mapping"
+        },
+        {
+          "path": "cppu/source/uno/lbmap.cxx",
+          "marker": "struct MappingEntry"
+        }
+      ]
+    }
+  }
+}

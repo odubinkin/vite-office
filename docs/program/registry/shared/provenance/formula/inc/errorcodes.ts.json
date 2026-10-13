@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/formula/inc/errorcodes.ts",
+    "status": "mapped",
+    "upstreamPath": "include/formula/errorcodes.hxx",
+    "localSymbols": [
+      "FormulaError",
+      "CreateDoubleError",
+      "GetDoubleErrorValue",
+      "isPublishedFormulaError"
+    ],
+    "upstreamSymbols": [
+      "enum class FormulaError",
+      "CreateDoubleError",
+      "GetDoubleErrorValue",
+      "isPublishedFormulaError"
+    ],
+    "preservedResponsibilities": [
+      "Complete original shared enum and explicit published/internal constant policy.",
+      "All original double error construction/decoding branches using native JS number and DataView primitives."
+    ],
+    "omittedResponsibilities": [
+      "Other formula owners and engines, error string presentation, full upstream QA/native ABI/cross-engine or arithmetic/transport payload preservation remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "FormulaError"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "CreateDoubleError"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "GetDoubleErrorValue"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.ts",
+          "marker": "isPublishedFormulaError"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "retains every original enum name and UInt16 value"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "matches original encoded and published errors for the entire UInt16 domain"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "matches the full original finite infinite and NaN bit classification stream"
+        },
+        {
+          "path": "apps/office/src/formula/inc/errorcodes.test.ts",
+          "marker": "preserves encoded errors through scalar object and Float64 result storage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "enum class FormulaError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "CreateDoubleError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "GetDoubleErrorValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/formula/errorcodes.hxx",
+          "marker": "isPublishedFormulaError"
+        }
+      ]
+    }
+  }
+}

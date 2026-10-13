@@ -237,11 +237,11 @@ it("permits Calc mdds dependency while keeping external owners independent", /**
 
 describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
   it("isolates Calc and Writer while admitting shared dependencies", /** Verifies independent application owners. @returns Nothing. */ () => {
-    for (const dependency of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"])
+    for (const dependency of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff", "sal"])
       expect(isForbiddenModuleEdge("sc", dependency)).toBe(false);
     expect(isForbiddenModuleEdge("sc", "sw")).toBe(true);
     expect(isForbiddenModuleEdge("sw", "sc")).toBe(true);
-    for (const shared of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff"]) {
+    for (const shared of ["framework", "sfx2", "svl", "svx", "editeng", "vcl", "xmloff", "sal"]) {
       expect(isForbiddenModuleEdge(shared, "sc")).toBe(true);
       expect(isForbiddenModuleEdge(shared, "sw")).toBe(true);
     }
@@ -462,4 +462,49 @@ it("retains actual mutual SAL and o3tl string-header owners without application 
       getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
     ).toMatch(/browser adapters/u);
   }
+});
+
+it("permits original cppuhelper UNO and SAL owners while retaining application and browser gates", /** Protects original helper ownership, without reverse or application-layer permission. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "sal"])
+    expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(false);
+  for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi", "svl"])
+    expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "cppuhelper")).toBe(true);
+  expect(getRuntimeOwnershipLayer("cppuhelper/source/supportsservice.ts")).toBe(
+    "upstream-mechanism",
+  );
+  expect(getRuntimeOwnershipViolation("cppuhelper/inc/queryinterface.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "cppuhelper/source/supportsservice.ts",
+      "vcl/browser/font-list.ts",
+      "../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("keeps shared formula header ownership independent of applications and browser presentation", /** Protects the original shared formula boundary against reverse application and browser dependencies. @returns Nothing. */ () => {
+  expect(getRuntimeOwnershipLayer("formula/inc/errorcodes.ts")).toBe("upstream-mechanism");
+  expect(isForbiddenModuleEdge("sc", "formula")).toBe(false);
+  for (const target of ["sal", "svl", "external"])
+    expect(isForbiddenModuleEdge("formula", target)).toBe(false);
+  for (const target of ["sc", "sw", "framework"])
+    expect(isForbiddenModuleEdge("formula", target)).toBe(true);
+  expect(isForbiddenModuleEdge("external", "formula")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "formula/inc/errorcodes.ts",
+      "framework/browser/app/desktop.tsx",
+      "react",
+    ),
+  ).toBeDefined();
+  expect(
+    getRuntimeOwnershipViolation(
+      "formula/inc/errorcodes.ts",
+      "framework/browser/app/desktop.tsx",
+      "../../framework/browser/app/desktop",
+    ),
+  ).toBeDefined();
 });

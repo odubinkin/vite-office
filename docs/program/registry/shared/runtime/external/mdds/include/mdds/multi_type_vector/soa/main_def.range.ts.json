@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "cell-storage",
+    "capabilityIds": [
+      "CAP-7fb6dbea-4750-4799-bafc-2e5e3ec76069"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#set",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#set_cells_impl",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#set_cells_to_single_block",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#set_cells_to_multi_blocks",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#set_cells_to_multi_blocks_block1_non_equal",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#set_cells_to_multi_blocks_block1_non_empty",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#append_to_prev_block",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts#insert_empty_impl",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range.test.ts#matches complete original scalar input-range set permutation stream",
+        "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range-owned.test.ts#matches original owned input-range set whole stream",
+        "apps/office/src/sc/inc/mtvelements-range.test.ts#matches complete original Calc input-range write stream"
+      ],
+      "justification": "Task70 implements both original plain/hinted input-range set overloads and the complete single/multi-block dispatch, previous/next block transfers, metadata and original macro/value/event/iterator ordering. The existing actual nested block_slot_type is supplied as an erased native type witness; external mdds imports no sc/svl and owns no parallel cell store. main_def.range.ts maps the original main_def.inl range family and unchanged insert_empty_impl body under the authored file budget, using original loop-unrolling and actual primitive size-field updates before iterator construction. Whole unchanged normal-only native headers and complete genuine SharedString/CellTextAttr sources match full scalar23968-case, owned special-member and Calc refcount/text streams. Original empty-input-before-hint, unsigned input-end arithmetic and exact diagnostics are retained. Prefix replacement intentionally emits no block events, and original unique_ptr null/throw cleanup is checked through caller-only trait failure injection. The original nonempty-first/different-last partial erase intentionally does not add overwrite_values. These are bounded initialized native witnesses, not full generic allocator/throwing/undefined/ABI/debug/trace/upstream QA or module/kernel/UI certification. Only the exact original CellTextAttrTraits declaration is witnessed; full sc mtvelements.hxx pointee graph is not compiled. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full61; next full71.",
+      "knownViolations": [],
+      "localSymbols": [
+        "set",
+        "set_cells_impl",
+        "set_cells_to_single_block",
+        "set_cells_to_multi_blocks",
+        "set_cells_to_multi_blocks_block1_non_equal",
+        "set_cells_to_multi_blocks_block1_non_empty",
+        "append_to_prev_block",
+        "insert_empty_impl"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+      "upstreamSymbols": [
+        "multi_type_vector<Traits>::set",
+        "multi_type_vector<Traits>::set_cells_impl",
+        "multi_type_vector<Traits>::set_cells_to_single_block",
+        "multi_type_vector<Traits>::set_cells_to_multi_blocks",
+        "multi_type_vector<Traits>::set_cells_to_multi_blocks_block1_non_equal",
+        "multi_type_vector<Traits>::set_cells_to_multi_blocks_block1_non_empty",
+        "multi_type_vector<Traits>::append_to_prev_block",
+        "multi_type_vector<Traits>::insert_empty_impl"
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/uno/Enterable.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-53ff0875-4a13-472f-91c8-e0d1c5fb81d8"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/uno/Enterable.ts#uno_Enterable",
+        "apps/office/src/cppu/inc/Enterable.test.ts#matches complete original"
+      ],
+      "justification": "Complete original Enterable C callback adapters and abstract wrapper reuse the actual shared OUString owner. One borrowed field-address compiler binding preserves original object identity without string acquisition; EnvDcp wrappers reuse it. Native JS array iterators transport one valid advancing logical argument cursor with original callee/context identity, value order, mutable reason and bool-to-int conversion. All environment and extended-environment record fields/callback declarations are represented; no runtime environment API/provider is implemented. Whole unchanged original header/dependency normal-ASan/UBSan streams and source-absent whole related owner raw100 are required. Physical va_list/ABI, native thread/resource/leaks/shutdown, full environment/mapping/generic exception engine and complete consumer/upstream QA are unverified; broad parity flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uno_Enterable",
+        "uno_Enterable_enter",
+        "uno_Enterable_leave",
+        "uno_Enterable_callInto_v",
+        "uno_Enterable_callOut_v",
+        "uno_Enterable_isValid_v"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/uno/Enterable.h",
+      "upstreamSymbols": [
+        "uno_Enterable",
+        "uno_Enterable_enter",
+        "uno_Enterable_leave",
+        "uno_Enterable_callInto_v",
+        "uno_Enterable_callOut_v",
+        "uno_Enterable_isValid_v"
+      ]
+    }
+  }
+}

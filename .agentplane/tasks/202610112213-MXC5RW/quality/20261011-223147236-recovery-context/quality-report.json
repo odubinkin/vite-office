@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610112213-MXC5RW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-11T22:31:47.236Z",
+  "verdict": "pass",
+  "summary": "Task51 final acceptance tied to recorded evidence717505774be6; supersedes earlier automatic persistence-SHA reports. Full regression and raw100 independently verified.",
+  "evaluated_sha": "3596ed6d81ff6e8ab7ea67ca24d7dfdfa868ef9c",
+  "blueprint_digest": "6e7d1e451d1d463cc69825c99f542dbd7eb8ac43e42506e63781546a33365163",
+  "findings": [
+    "Actual committed evidence717505774be6 and aggregate-audit.json establish five complete original full commands all exit0 with all three upstream links absent and exact final restoration. Office15457/702 inventory123/38 tooling34/9 browser308 pass, with Writer306/shared2/Calc0; static2bundle smoke passes.",
+    "Every raw office counter positive and S/B/F/L100 across424 executable owners: Calc19/shared196/Writer209; exact totals30286/20815/6280/27418. Inventory configured V8 summary100 with exact equal covered/total counters. No Writer-only gap or repair.",
+    "All13 effective gates pass. Initial lint1 and subject rejection retained; the only operational repair is one ignored JSDoc comment, full lint rerun0. No tracked runtime/test/configuration edits or weakened thresholds/assertions/timeouts. Superseded review fields selected the old persistence snapshot while task.commit was null; now the actual evidence commit is explicitly recorded through supported task lifecycle CLI."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610112213-MXC5RW/README.md",
+    "output/playwright/task51-checks/aggregate-audit.json",
+    "output/playwright/task51-checks/task51-full-results.json",
+    "output/playwright/task51-checks/full-gates-results.json",
+    "output/playwright/task51-checks/office-coverage-audit.json",
+    "output/playwright/task51-checks/ignored-lint-repair.json",
+    "output/playwright/task51-checks/lint-recheck-result.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Incomplete Calc services/pool/document/edit/view/UI; Calc browser0 does not certify readiness. No broad upstream native/binary ABI claim. Existing build-size advisory and inherited doctor warnings retained. Next full61."
+  ]
+}

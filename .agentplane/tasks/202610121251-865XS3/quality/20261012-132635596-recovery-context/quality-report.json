@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610121251-865XS3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-12T13:26:35.596Z",
+  "verdict": "pass",
+  "summary": "Same-agent separate EVALUATOR phase passes exact FormulaResultValue implementation; no independent reviewer claim.",
+  "evaluated_sha": "14639632a54ce990d48c05ea41e41d19805cd0ce",
+  "blueprint_digest": "c93594f94cb43b67b6ea3fb0446fd01309f3087ff33ed9a9f95773a342180da0",
+  "findings": [
+    "Original actual named struct and four constructor contracts preserve defaults, all enum-vs-double distinctions, genuine shared string special members, reference identity and fixed-width fields; whole native captures match without substitutes.",
+    "Exact committed47source hashes match current maps/evidence; Calc116 and shared63 tests pass raw100, affected4case recheck and all13aggregate gates plus23tooling cases pass; first failures preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610121251-865XS3/README.md",
+    "output/playwright/task73-checks/exact-review.json",
+    "output/playwright/task73-checks/final-audit.json",
+    "output/playwright/task73-checks/first-gates-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full ScFormulaResult/token/matrix/CellStoreType/column/table/document/edit/input/view/UI remain required; actual Calc browser scenarios0. Native ABI/concurrency/undefined lifetimes and full upstream QA remain unverified."
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/formula/inc/opcode.enum.ts",
+    "status": "mapped",
+    "upstreamPath": "include/formula/opcode.hxx",
+    "localSymbols": [
+      "OpCode"
+    ],
+    "upstreamSymbols": [
+      "enum OpCode",
+      "OpCodeEnumToString"
+    ],
+    "preservedResponsibilities": [
+      "Original complete shared header declaration and actual diagnostic responsibility.",
+      "Original enum values/aliases/defaults and initialized release behavior."
+    ],
+    "omittedResponsibilities": [
+      "Full formula/token/document/UI/native debug process termination/native ABI/full upstream QA remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/formula/inc/opcode.enum.ts",
+          "marker": "OpCode"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "retains every original opcode and parameter name value and alias"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "matches every original UInt16 release opcode diagnostic"
+        },
+        {
+          "path": "apps/office/src/formula/inc/opcode.test.ts",
+          "marker": "narrows original finite integer calls to the native UInt16 argument"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/formula/opcode.hxx",
+          "marker": "enum OpCode"
+        },
+        {
+          "path": "include/formula/opcode.hxx",
+          "marker": "OpCodeEnumToString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/formula/inc/opcode.enum.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Enum-only declaration shard of the complete original opcode.hxx header, preserving every named alias and range sentinel. Required by authored1000line limit; original header owns diagnostic switch and imports this declaration without a runtime cycle, extra engine or alternate model."
+    }
+  }
+}

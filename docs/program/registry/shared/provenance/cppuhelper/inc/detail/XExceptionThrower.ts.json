@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.ts",
+    "status": "mapped",
+    "upstreamPath": "cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl",
+    "localSymbols": [
+      "XExceptionThrower",
+      "cppu_detail_getUnoType",
+      "getCppuType",
+      "interfaceType",
+      "bInitStarted"
+    ],
+    "upstreamSymbols": [
+      "XExceptionThrower",
+      "throwException",
+      "rethrowException"
+    ],
+    "preservedResponsibilities": [
+      "Complete original internal XExceptionThrower IDL and comprehensive cppumaker interface metadata reuse existing actual Type/Any/Reference/RuntimeException/Exception builtin/OUString and C typelib owners. Original leaked Type cache, bInitStarted-before-bootstrap gate, RuntimeException then Exception order, inherited XInterface base, two method references, positions3/4, one in-any exc parameter, Exception and RuntimeException declarations, register/release/temporary string order and ADL/static/deprecated getters are preserved. Native JS synchronous initialization adapts mutex/barriers without a thread simulator. Complete interface/method/Type/Any observers are shared with existing generated interface tests/probes; whole original normal-ASan/UBSan streams and source-absent complete related raw100 are required. No virtual exception/environment/mapping/default/type/library provider. Physical ABI/compiler const/thread/resource/leaks/shutdown, full exception engine and consumer/upstream QA remain unverified; broad parity flags stay false."
+    ],
+    "omittedResponsibilities": [
+      "Original virtual exception/environment/mapping engine and full consumer/upstream QA remain absent; physical ABI/compiler const/thread/resource/leaks/shutdown unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.ts",
+          "marker": "cppu_detail_getUnoType"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.test.ts",
+          "marker": "matches complete original exception interface"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl",
+          "marker": "XExceptionThrower"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "dumpComprehensiveGetCppuType"
+        }
+      ]
+    }
+  }
+}

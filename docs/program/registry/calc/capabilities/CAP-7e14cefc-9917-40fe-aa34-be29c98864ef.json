@@ -1,0 +1,117 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7e14cefc-9917-40fe-aa34-be29c98864ef",
+    "capabilityId": "CAP-7e14cefc-9917-40fe-aa34-be29c98864ef",
+    "suite": "calc",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve original new/matching/category/empty segment append with actual lvalue/rvalue/alias special members and acquire/metadata/returned-iterator ordering.",
+      "Original positional value_type reads construct independent owned values while borrowed at and bool/scalar/pointer semantics remain unchanged.",
+      "Complete original normal-only streams and whole source-absent Calc/related raw100 pass without whole module/document/UI/upstream-QA certification."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task68 connects original owned lvalue/rvalue push_back forwarding through the existing original SoA pipeline and actual typed macros/default-block/value owners. Explicit push_back_move selects erased native rvalue category; the same new-cell and matching-block paths acquire an empty block before append and update original metadata/size/returned iterator fields in native order. ValueT aliases on original concrete default blocks bind already existing actual copy/move/default/destructor members. Original positional get retains bool-store iterator versus checked-at dispatch; its non-bool value_type return invokes actual owned copy construction, preserving borrowed at access and scalar/pointer identity. Original metadata calc_block_position/calc_next_block_position/reserve bodies occupy main_def.inl boundary through existing header wrappers, no second engine or runtime import cycle. Complete normal-only whole original mdds SoA/type/macro headers plus full genuine SharedString/CellTextAttr sources match owned1380 and Calc575-byte initialized traces, including category transitions, acquire-before-append, actual lvalue/rvalue/aliased append special members, every returned cached/private iterator field, metadata/capacity/payload, string refcounts and independent positional copies. Native event/value types are instrumentation-only caller inputs, not fake Calc owners/providers. Exact selected original CellTextAttrTraits declaration is verified from complete pinned source; full sc mtvelements.hxx pointee graph is not compiled or certified. Actual Calc strings/text attributes reuse original callbacks/traits/store; no partial CellStoreType is fabricated. Other full container set/insert/transfer/resize/emplace/release and pointee ADL/forwarding families, arbitrary allocator/value/throwing operators/undefined lifetimes/physical ABI/trace-debug modes and complete upstream QA remain unverified. Actual formula/edittext/pointee/ScColumn/Table/Document/edit/undo/input/view/UI remain next dependencies; no full module/kernel/UI parity promotion. Last full61; next full71."
+    },
+    "capability": "Original owned append forwarding and positional value copies",
+    "gaps": [
+      "Full container set/insert/transfer/resize/emplace/release and actual pointee ADL/forwarding families remain subsequent.",
+      "Arbitrary allocator/value/throwing-operator/undefined-lifetime/physical ABI/trace-debug modes and full upstream QA remain unverified.",
+      "Full original sc mtvelements.hxx pointee graph and complete CellStoreType/formula/edittext/column/table/document/edit/undo/input/view/UI are not certified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::push_back_impl"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp",
+          "marker": "get_block_element_at"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "T multi_type_vector<Traits>::get(size_type pos) const"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/macro.hpp",
+          "marker": "#define MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/types.hpp",
+          "marker": "struct default_element_block"
+        },
+        {
+          "path": "sc/inc/mtvelements.hxx",
+          "marker": "string_block"
+        },
+        {
+          "path": "sc/source/core/data/celltextattr.cxx",
+          "marker": "CellTextAttr::CellTextAttr()"
+        },
+        {
+          "path": "svl/source/misc/sharedstring.cxx",
+          "marker": "SharedString& SharedString::operator="
+        },
+        {
+          "path": "include/svl/sharedstring.hxx",
+          "marker": "SharedString::SharedString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/element-blocks/test_basic.cpp",
+          "marker": "using my_block2"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/mtvelements.ts",
+          "marker": "CellTextAttrStoreType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-append.test.ts",
+          "marker": "matches original owned append and position-copy whole stream"
+        },
+        {
+          "path": "apps/office/src/sc/inc/mtvelements-append.test.ts",
+          "marker": "matches complete original Calc append and positional read stream"
+        },
+        {
+          "path": "scripts/mdds-container-append-native-probe.mjs",
+          "marker": "Whole original SoA append captured"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original owned append and positional value reads (task68)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "owned-container-append-position",
+    "scopeLimitations": [
+      "Task68 connects original owned lvalue/rvalue push_back forwarding through the existing original SoA pipeline and actual typed macros/default-block/value owners. Explicit push_back_move selects erased native rvalue category; the same new-cell and matching-block paths acquire an empty block before append and update original metadata/size/returned iterator fields in native order. ValueT aliases on original concrete default blocks bind already existing actual copy/move/default/destructor members. Original positional get retains bool-store iterator versus checked-at dispatch; its non-bool value_type return invokes actual owned copy construction, preserving borrowed at access and scalar/pointer identity. Original metadata calc_block_position/calc_next_block_position/reserve bodies occupy main_def.inl boundary through existing header wrappers, no second engine or runtime import cycle. Complete normal-only whole original mdds SoA/type/macro headers plus full genuine SharedString/CellTextAttr sources match owned1380 and Calc575-byte initialized traces, including category transitions, acquire-before-append, actual lvalue/rvalue/aliased append special members, every returned cached/private iterator field, metadata/capacity/payload, string refcounts and independent positional copies. Native event/value types are instrumentation-only caller inputs, not fake Calc owners/providers. Exact selected original CellTextAttrTraits declaration is verified from complete pinned source; full sc mtvelements.hxx pointee graph is not compiled or certified. Actual Calc strings/text attributes reuse original callbacks/traits/store; no partial CellStoreType is fabricated. Other full container set/insert/transfer/resize/emplace/release and pointee ADL/forwarding families, arbitrary allocator/value/throwing operators/undefined lifetimes/physical ABI/trace-debug modes and complete upstream QA remain unverified. Actual formula/edittext/pointee/ScColumn/Table/Document/edit/undo/input/view/UI remain next dependencies; no full module/kernel/UI parity promotion. Last full61; next full71."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

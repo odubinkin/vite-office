@@ -32,6 +32,92 @@ import {
   type ContainerCallbacks,
   type BlocksTraits,
 } from "./main.ts";
+import { type ReferenceCallbacks, type NativeValueType } from "../macro.ts";
+/** Original blocks_type calc_block_position member body. @param store - Metadata. @param index - Native argument. @returns Nothing. */
+export function store_calc_block_position(store: blocks_type, index: number): void {
+  if (index === 0) {
+    store.positions.set(index, 0);
+    return;
+  }
+  store.positions.set(index, store.positions.get(index - 1) + store.sizes.get(index - 1));
+}
+/** Original blocks_type calc_next_block_position member body. @param store - Metadata. @param index - Native argument. @returns Position. */
+export function store_calc_next_block_position(store: blocks_type, index: number): number {
+  return store.positions.get(index) + store.sizes.get(index);
+}
+/** Original blocks_type reserve member body. @param store - Metadata. @param n - Native argument. @returns Nothing. */
+export function store_reserve(store: blocks_type, n: number): void {
+  store.positions.reserve(n);
+  store.sizes.reserve(n);
+  store.element_blocks.reserve(n);
+}
+/** Original metadata insert overloads. @param store - Metadata. @param index - Slot. @param posOrSource - Count, position or store. @param size - Length. @param data - Pointer. @returns Nothing. */
+export function store_insert(
+  store: blocks_type,
+  index: number,
+  posOrSource: number | blocks_type,
+  size?: number,
+  data?: base_element_block | null,
+): void {
+  if (typeof posOrSource !== "number") {
+    store.positions.insert(index, posOrSource.positions.snapshot());
+    store.sizes.insert(index, posOrSource.sizes.snapshot());
+    store.element_blocks.insert(index, posOrSource.element_blocks.snapshot());
+  } else if (size === undefined) {
+    store.positions.insert(index, Array<number>(posOrSource).fill(0));
+    store.sizes.insert(index, Array<number>(posOrSource).fill(0));
+    store.element_blocks.insert(index, Array<null>(posOrSource).fill(null));
+  } else {
+    store.positions.insert(index, [posOrSource]);
+    store.sizes.insert(index, [size]);
+    store.element_blocks.insert(index, [data as base_element_block | null]);
+  }
+}
+/** Original metadata swap overloads. @param store - Metadata. @param otherOrIndex - Store or first slot. @param index2 - Second slot. @returns Nothing. */
+export function store_swap(
+  store: blocks_type,
+  otherOrIndex: blocks_type | number,
+  index2?: number,
+): void {
+  if (typeof otherOrIndex !== "number") {
+    store.positions.swap(otherOrIndex.positions);
+    store.sizes.swap(otherOrIndex.sizes);
+    store.element_blocks.swap(otherOrIndex.element_blocks);
+  } else {
+    const j = index2 as number;
+    for (const arr of [store.positions, store.sizes]) {
+      const value = arr.get(otherOrIndex);
+      arr.set(otherOrIndex, arr.get(j));
+      arr.set(j, value);
+    }
+    const value = store.element_blocks.get(otherOrIndex);
+    store.element_blocks.set(otherOrIndex, store.element_blocks.get(j));
+    store.element_blocks.set(j, value);
+  }
+}
+/** Original metadata equality before block values. @param store - Metadata. @param other - Compared store. @returns Equality. */
+export function store_equals(store: blocks_type, other: blocks_type): boolean {
+  if (!store.positions.equals(other.positions)) return false;
+  if (!store.sizes.equals(other.sizes)) return false;
+  if (store.element_blocks.size() !== other.element_blocks.size()) return false;
+  return equal_blocks(
+    store.element_blocks,
+    other.element_blocks,
+    store.Traits.block_funcs.equal_block,
+  );
+}
+/** Original metadata single/range erase with synchronized vector order. @param store - Metadata. @param index - Start slot. @param size - Optional count. @returns Nothing. */
+export function store_erase(store: blocks_type, index: number, size?: number): void {
+  if (size === undefined) {
+    store.positions.erase(index, 1);
+    store.sizes.erase(index, 1);
+    store.element_blocks.erase(index, 1);
+  } else {
+    erase(store.positions, index, size);
+    erase(store.sizes, index, size);
+    erase(store.element_blocks, index, size);
+  }
+}
 /** Original internal vector erase helper. @param arr - Vector. @param index - Start. @param size - Count. @returns Nothing. */
 export function erase<T>(arr: std_vector<T>, index: number, size: number): void {
   arr.erase(index, size);
@@ -85,9 +171,9 @@ export function initialize_element_blocks(
   store: blocks_type,
   event: ContainerEvent,
   init_size: number,
-  callbacks?: ContainerCallbacks,
-  valueOrFirst?: DelayedVectorValue | delayed_delete_vector_iterator<DelayedVectorValue>,
-  last?: delayed_delete_vector_iterator<DelayedVectorValue>,
+  callbacks?: ContainerCallbacks<unknown>,
+  valueOrFirst?: unknown,
+  last?: delayed_delete_vector_iterator<unknown>,
 ): void {
   if (!init_size) return;
   if (!callbacks) {
@@ -96,14 +182,14 @@ export function initialize_element_blocks(
   }
   let data: base_element_block;
   if (last !== undefined) {
-    const first = valueOrFirst as delayed_delete_vector_iterator<DelayedVectorValue>;
+    const first = valueOrFirst as delayed_delete_vector_iterator<unknown>;
     const data_len = first.distance_to(last);
     if (init_size !== data_len)
       throw new invalid_arg_error(
         "Specified size does not match the size of the initial data array.",
       );
     data = callbacks.mdds_mtv_create_new_block(first.get(), first, last);
-  } else data = callbacks.mdds_mtv_create_new_block(init_size, valueOrFirst as DelayedVectorValue);
+  } else data = callbacks.mdds_mtv_create_new_block(init_size, valueOrFirst);
   event.element_block_acquired(data);
   store.push_back(0, init_size, data);
 }
@@ -210,13 +296,29 @@ export function get_block_position_hint<P>(
   }
   return get_block_position(store, size, row, block_index);
 }
-/** Original scalar read member body; __LINE__ uses its pinned native source-call witness504. @param store - Fields. @param size - Logical size. @param pos - Native row. @param callbacks - Original typed overloads. @returns Original output-reference result. */
-export function get_impl<T extends DelayedVectorValue>(
+/** Original scalar output syntax. @param store - Fields. @param size - Logical size. @param pos - Row. @param callbacks - Typed overloads. @returns Scalar. */
+export function get_impl<T>(
   store: blocks_type,
   size: number,
   pos: number | bigint,
   callbacks: ContainerCallbacks<T>,
-): T {
+): T;
+/** Original reference get_impl. @param store - Fields. @param size - Logical size. @param pos - Row. @param callbacks - Typed overloads. @param output - Existing target. @returns Nothing. */
+export function get_impl<T>(
+  store: blocks_type,
+  size: number,
+  pos: number | bigint,
+  callbacks: ReferenceCallbacks<T>,
+  output: [T],
+): void;
+/** Original get_impl lookup and empty/data assignment; line504 is the pinned native bounds witness. @param store - Fields. @param size - Logical size. @param pos - Row. @param callbacks - Typed overloads. @param output - Optional writable reference. @returns Scalar result or nothing. */
+export function get_impl<T>(
+  store: blocks_type,
+  size: number,
+  pos: number | bigint,
+  callbacks: ContainerCallbacks<T> | ReferenceCallbacks<T>,
+  output?: [T],
+): T | void {
   const block_index = get_block_position(store, size, pos);
   if (block_index === store.positions.size())
     throw_block_position_not_found(
@@ -227,9 +329,32 @@ export function get_impl<T extends DelayedVectorValue>(
       size,
     );
   const data = store.element_blocks.get(block_index);
-  if (!data) return callbacks.mdds_mtv_get_empty_value();
-  const start_row = store.positions.get(block_index);
-  return callbacks.mdds_mtv_get_value(data, Number(pos) - start_row);
+  if (output !== undefined) {
+    const ref = callbacks as ReferenceCallbacks<T>;
+    if (!data) ref.mdds_mtv_get_empty_value(output);
+    else ref.mdds_mtv_get_value(data, Number(pos) - store.positions.get(block_index), output);
+    return;
+  }
+  const result = callbacks as ContainerCallbacks<T>;
+  if (!data) return result.mdds_mtv_get_empty_value();
+  return result.mdds_mtv_get_value(data, Number(pos) - store.positions.get(block_index));
+}
+/** Original T get(pos) default declaration, reference assignment and exceptional local destruction. @param store - Fields. @param size - Size. @param pos - Row. @param callbacks - Actual ADL overloads. @param valueType - Actual native ValueT members. @returns Owned result. */
+export function get_value<T>(
+  store: blocks_type,
+  size: number,
+  pos: number | bigint,
+  callbacks: ReferenceCallbacks<T>,
+  valueType: NativeValueType<T>,
+): T {
+  const output: [T] = [valueType.default_construct()];
+  try {
+    get_impl(store, size, pos, callbacks, output);
+    return output[0];
+  } catch (error) {
+    valueType.destroy(output[0]);
+    throw error;
+  }
 }
 
 /** Original mutable/const position member body over erased iterator aliases; end returns before reading cached hint data. @param store - Fields. @param size - Size. @param parent - Owner. @param rowOrHint - Row or cached hint. @param Iterator - Native alias. @param hinted_row - Hinted row. @returns Iterator/offset pair. */
@@ -686,14 +811,15 @@ export function release(
   }
   store.clear();
 }
-/** Original new-cell member retains release/delete/create/null/install/acquire/append order. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param block_index - Slot. @param cell - Scalar. @param callbacks - Native family. @returns Nothing. */
-export function create_new_block_with_new_cell<T extends DelayedVectorValue>(
+/** Original new-cell member retains release/delete/create/null/install/acquire/append order. @param store - Metadata. @param event - Handler. @param funcs - Operations. @param block_index - Slot. @param cell - Native value. @param callbacks - Native family. @param move - Erased forwarding category. @returns Nothing. */
+export function create_new_block_with_new_cell<T>(
   store: blocks_type,
   event: ContainerEvent,
   funcs: BlocksTraits["block_funcs"],
   block_index: number,
   cell: T,
   callbacks: ContainerCallbacks<T>,
+  move: boolean,
 ): void {
   let data: base_element_block | null = store.element_blocks.get(block_index);
   if (data) {
@@ -704,7 +830,8 @@ export function create_new_block_with_new_cell<T extends DelayedVectorValue>(
   if (!data) throw new general_error("Failed to create new block.");
   store.element_blocks.set(block_index, data);
   event.element_block_acquired(data);
-  callbacks.mdds_mtv_append_value(data, cell);
+  if (move) callbacks.mdds_mtv_append_value_move(data, cell);
+  else callbacks.mdds_mtv_append_value(data, cell);
 }
 
 /** Original destructor body retains positions.size bound and does not clear metadata or logical size. @param store - Actual metadata. @param event - Handler. @param funcs - Operations. @returns Nothing. */
@@ -821,4 +948,51 @@ export function release_impl<P>(
   const offset = pos - start_pos;
   value.value = callbacks.mdds_mtv_get_value(blk_data, offset);
   return set_empty_in_single_block(store, event, funcs, parent, pos, pos, block_index, false);
+}
+
+/** Original resize member over actual fields. @param store - Metadata. @param size - Logical size. @param event - Handler. @param funcs - Block operations. @param new_size - Requested size. @param append_empty - Actual owner member. @param set_size - Actual primitive field assignment. @returns Nothing. */
+export function resize(
+  store: blocks_type,
+  size: number,
+  event: ContainerEvent,
+  funcs: BlocksTraits["block_funcs"],
+  new_size: number,
+  append_empty: (count: number) => boolean,
+  set_size: (size: number) => void,
+): void {
+  if (new_size === size) return;
+  if (!new_size) {
+    clear(store, event, funcs);
+    set_size(0);
+    return;
+  }
+  if (new_size > size) {
+    append_empty(new_size - size);
+    return;
+  }
+  const new_end_row = new_size - 1;
+  const block_index = get_block_position(store, size, new_end_row);
+  if (block_index === store.positions.size())
+    throw_block_position_not_found(
+      "multi_type_vector::resize",
+      4833,
+      new_end_row,
+      store.positions.size(),
+      size,
+    );
+  const data = store.element_blocks.get(block_index);
+  const start_row_in_block = store.positions.get(block_index);
+  const end_row_in_block = start_row_in_block + store.sizes.get(block_index) - 1;
+  if (new_end_row < end_row_in_block) {
+    const new_block_size = new_end_row - start_row_in_block + 1;
+    if (data) {
+      funcs.overwrite_values(data, new_end_row + 1, end_row_in_block - new_end_row);
+      funcs.resize_block(data, new_block_size);
+    }
+    store.sizes.set(block_index, new_block_size);
+  }
+  delete_element_blocks(store, event, funcs, block_index + 1, store.element_blocks.size());
+  const len = store.element_blocks.size() - block_index - 1;
+  store.erase(block_index + 1, len);
+  set_size(new_size);
 }

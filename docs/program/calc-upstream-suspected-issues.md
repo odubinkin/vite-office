@@ -1220,3 +1220,382 @@ and are not claimed to have zero defaults.
 
 Decision: preserve early end checking, reset ordering and returned units. Add no
 pending-tail drain or adjusted logical length.
+
+## CALC-051: Boolean scalar copy normalizes bytes that sequence copy preserves
+
+Status: reproduced through unchanged original CPPu/SAL owners with initialized
+unsigned-byte inputs. Ordinary producer reachability, consumer effects and
+upstream intent remain unverified.
+
+Pinned `include/sal/types.h` defines sal_Bool as unsigned char. The BOOLEAN
+branches of `cppu/source/uno/copy.hxx` explicitly apply bool(source) when copying
+a scalar into data or Any. Inputs 2 and 255 become 1. Original
+`cppu/source/uno/sequence.cxx::icopyConstructFromElements` instead uses memcpy
+for BOOLEAN elements and retains 2 and 255 across its copied sequence histories.
+These paths therefore preserve different representations for initialized nonzero
+unsigned-byte values. This bounded difference does not establish an application
+bug or that supported ordinary boolean producers emit such values.
+
+Evidence: `scripts/uno-copy-native-probe.mjs` and its existing complete portable
+replay retain scalar normalization. `scripts/uno-sequence-native-probe.mjs`
+lifecycle mode executes the complete unchanged original sequence/data/any units
+and genuine dependencies, including both values across construction, COW, resize
+and assignment histories. Complete normal and ASan/UBSan streams match
+(2089840 lifecycle bytes); the portable replay matches every captured byte.
+Shared observers keep their default strict scalar boolean contract and opt into
+unsigned-byte observations only for the original sequence corpus.
+
+Decision: preserve both original paths. Add no sequence normalization or scalar
+raw-byte preservation. Do not infer binary ABI or full downstream behavior parity.
+
+## CALC-052: Signed scalar comparison reinterprets an unsigned-hyper source
+
+Status: reproduced through complete unchanged original numeric equality and
+initialized supported scalar types. Ordinary consumer effects and upstream intent
+remain unverified.
+
+Pinned `cppu/source/uno/eq.hxx::_equalData` reads an UNSIGNED_HYPER source
+as sal_Int64 in the BYTE, SHORT, LONG and HYPER destination branches. Those
+branches then call std::cmp_equal with that signed value. For example, BYTE -1
+compared to UNSIGNED_HYPER 18446744073709551615 returns true. Reversing those
+operands reaches the UNSIGNED_HYPER destination branch, which reads the unsigned
+value correctly, and returns false. The equality result is therefore asymmetric
+for this initialized pair. This is a bounded source comparison observation; it
+does not establish that an ordinary Calc producer relies on the result or that
+the cast is unintended.
+
+Evidence: `scripts/uno-equality-native-probe.mjs` numeric mode records all declared
+operand labels, typed value bits and original internal/reference/full-description
+comparison results. Complete normal and ASan/UBSan streams match (2112864 bytes).
+Both directions above are present and all three APIs agree per direction. The
+portable replay matches the entire stream and retains the explicit signed reads.
+Original out-of-range floating-to-unsigned casts are excluded from this corpus
+and do not participate in this observation.
+
+Decision: preserve the source destination/source switches and signed reads.
+Add no mathematical equality repair, symmetric dispatch or numeric coercion gate.
+
+## CALC-053: Interface assignment takes a base member address through null
+
+Status: reproduced in complete unchanged original assignment with real registered
+interface types. Normal build observations are bounded; native undefined behavior
+and ordinary application reachability remain unverified.
+
+Pinned `cppu/source/uno/assign.hxx::_assignData` walks a supplied interface
+description's first-base chain using `&pBaseTypeDescription->aBase`. When a
+nonmatching chain reaches the root interface, its base is null. The original
+expression takes the common-prefix member address through that null pointer.
+In the tested normal LP64 build, the resulting pointer becomes null and assignment
+continues to queryInterface. UBSan rejects this expression at assign.hxx422 with
+"member access within null pointer"; the process aborts under the existing halt
+configuration. The types come from the real original interface factory; no fake
+provider or substitute type descriptor participates.
+
+Evidence: `scripts/uno-assignment-native-probe.mjs` separates `interface-chain`
+from the five defined modes. Its normal capture is 24896 bytes; its sanitized
+capture terminates with SIGABRT and the exact original null-member diagnostic.
+The other five modes have identical complete normal/ASan/UBSan streams. This
+observes a source expression and a compiler configuration, without claiming
+stable native undefined behavior or a Calc consumer bug.
+
+Decision: preserve the original normal control flow using the existing common
+record identity. Add no rejection or alternate interface conversion. Record the
+sanitizer result separately; do not label this path defined or sanitizer parity.
+
+## CALC-054: Flattened Any address alias bypasses assignment type compatibility
+
+Status: reproduced with original Any construction and initialized caller addresses.
+Supported ordinary producer reachability and upstream intent remain unverified.
+
+Pinned `cppu/source/uno/assign.hxx::_assignData` checks type equality when the
+initial destination and source addresses are identical. After flattening a source
+Any, it instead returns true immediately if the destination address matches the
+flattened data address. It does not repeat the type check. In the bounded caller,
+an original CHAR Any holds 0xd800 and the destination names SHORT while pointing
+to that Any's actual data. Assignment returns true without a value write; ordinary
+CHAR-to-SHORT assignment otherwise returns false. Only the actual initialized
+CHAR value is observed, with no reinterpretation claim for a SHORT object.
+
+Evidence: the native assignment `diagnostics` mode includes this real constructor
+and alias shortcut. Complete normal/ASan/UBSan streams match (180 bytes), including
+original result, Any type/name/count and CHAR observations. Unsupported initialized
+compound metadata in the same diagnostic mode certifies no ordinary producer.
+
+Decision: retain the flattened address shortcut and its lack of a second type
+check. Add no compatibility repair or extra value conversion.
+
+## CALC-055: Any move construction leaves a non-null moved-from VOID address
+
+Status: reproduced and explicitly documented as intentional in upstream. This
+looks like a dangling pointer, but no incorrect ordinary consumer result is proven.
+
+Pinned `include/com/sun/star/uno/Any.hxx::Any(Any&&)` first constructs an empty
+Any, swaps pType/pData/pReserved, then repairs only the destination's inline
+reserved-data address. The moved-from object becomes VOID while its pData points
+to the new Any's original empty-data address. That address can later dangle.
+Upstream explicitly says only non-nullness is relevant: assignment treats a null
+source as a request for default construction. Native VOID operations do not read
+a value through this pointer. Move assignment has different behavior: it swaps
+both existing values and repairs both inline aliases.
+
+Evidence: `scripts/uno-any-ownership-native-probe.mjs` histories mode records all
+initialized supported type pairs, move/copy/clear/setValue operations, actual
+borrowed Type/name/description/ref/value fields and ordered virtual callbacks.
+The complete 5871200-byte normal/ASan/UBSan histories agree. It directly observes
+the moved-from VOID type and pData equal to the new Any's empty address, remaining
+non-null. Empty/moved VOID reserved contents and dangling-pointer dereferences are
+not observed or certified; physical/native uninitialized byte semantics remain
+unverified.
+
+Decision: preserve both original move variants and the moved-from non-null
+address. Add no source reset, null normalization or dangling-pointer dereference.
+
+
+## CALC-056: Distinct interface pointers can compare equal after invalid root replies
+
+Status: reproduced only with diagnostic callers that violate the XInterface root
+query contract. No incorrect result from a valid UNO producer is established.
+
+Pinned `include/com/sun/star/uno/Reference.hxx::BaseReference::operator ==` first
+checks raw pointer identity, then compares the pointers returned by two root
+XInterface queries. It catches RuntimeException but does not reject a null query
+result. Two distinct diagnostic callers returning VOID, STRING or a null interface
+therefore yield two null roots and can compare equal. The original root query
+contract requires the proper canonical interface identity; these replies violate
+that producer requirement. This is a noteworthy defensive behavior, not a proven
+upstream defect for ordinary valid interfaces.
+
+Evidence: complete `identity` capture in
+`scripts/uno-reference-query-native-probe.mjs`, including ordered actual virtual
+callbacks, both queried owners, all initialized type/name/ref/count fields and
+exception destruction. The complete 5189724-byte normal/ASan/UBSan streams match,
+and the portable replay matches every byte. No null dereference or uninitialized
+reserved contents are observed.
+
+Decision: preserve original comparison and exception selection. Add no extra
+null-result rejection or substitute identity provider.
+
+## CALC-057: queryInterface omits arities15 and16 between14 and17
+
+Status: reproduced compile-time contract gap; no incorrect runtime result or
+valid consumer failure is established.
+
+Pinned `include/cppuhelper/queryinterface.hxx` declares ordered template overloads
+for1..14 and17..19 interface pointers. The source jumps directly from14 to17,
+with no15/16 declarations. Both ordinary calls fail overload resolution. This
+may be intentional legacy coverage rather than an implementation defect; the
+absence alone does not prove a bug. Existing overloads still compare declared
+static types in order and return the first acquired interface Any, including
+a matching typed NULL.
+
+Evidence: Task50 first genuine caller compilation against the complete unchanged
+header fails with “no matching function for call to queryInterface” beginning
+with15 pointers. Compiler notes show14 requires15 total arguments (including
+rType), while17 requires18. Full failed compiler diagnostics are retained in
+`output/playwright/task50-checks/native-write.log` and the native build manifest.
+Dedicated repeatable compile-only15/16 witnesses in the final native probe
+both exit1 with complete original diagnostics and source/diagnostic hashes.
+Final --write/--check reproduces them; no rejected body is executed.
+
+Decision: preserve the actual1..14/17..19 family and restrict the erased declared
+argument-list arities accordingly. Add no missing overload or runtime fallback.
+
+
+## CALC-058: internal WeakReference<XWeak> duplicates assignment signatures
+
+Status: reproduced original compiler rejection; no valid runtime consumer failure
+is established.
+
+Pinned `include/cppuhelper/weakref.hxx` declares both a typed
+`operator=(Reference<interface_type> const&)` and a `LIBO_INTERNAL_ONLY` overload
+for `Reference<XWeak> const&`. Instantiating `WeakReference<XWeak>` in this
+configuration gives the same signature twice and the original compiler rejects
+the class. The public helper's separate XWeak constructor/assignment overloads
+remain valid; other typed wrappers are usable. This may be an intentionally
+unsupported specialization rather than an upstream defect.
+
+Evidence: Task53 complete unchanged original `weak.cxx` builds successfully,
+but the first genuine full caller fails when instantiating this specialization.
+Original diagnostic is “multiple overloads of 'operator=' instantiate to the
+same signature”. Complete failed compiler diagnostics and source/configuration
+hashes remain in `output/playwright/task53-checks/native-write-first.log` and
+`native-first-failed-manifest.json`. An isolated genuine syntax-only compiler witness now reproduces exit1 with complete source, argv, diagnostics and header hash in the native fixture/probe. No rejected specialization body executes.
+
+Decision: preserve the restriction at the erased compiler specialization binding.
+Retain the usable XWeak helper overloads and valid XInterface/XAdapter wrappers.
+Do not invent a missing overload, discard an original declaration or change the
+source/configuration to make the rejected class run.
+
+## CALC-059: clear retains the helper pointer after disposal throws
+
+Status: source-inspected suspicious failure state; allocator leakage and a valid
+ordinary consumer failure have not been independently established.
+
+Pinned `cppuhelper/source/weak.cxx::WeakReferenceHelper::clear` disposes its listener,
+releases it and resets `m_pImpl` inside one try block. If listener disposal throws
+RuntimeException, the catch only diagnoses it; release/reset are not reached.
+The listener already cleared its adapter member before calling `removeReference`,
+so `get()` can return an empty reference while the helper still owns its listener.
+A later successful clear releases it. Nonempty assignment calls clear and then
+replaces `m_pImpl`, which appears capable of losing the retained pointer if that
+clear fails. This is a failure-state ownership concern, not a proven allocation
+leak or general invalidity of the normal API.
+
+Evidence: complete pinned `OWeakRefListener::dispose`,
+`WeakReferenceHelper::clear` and both hard-reference assignment bodies. Task53's
+whole original `errors` stream includes a concrete adapter throwing RuntimeException
+from removal and a subsequent clear; the portable stream preserves the original
+callback/state/ownership observations. The pointer-overwrite allocation concern
+above is an inference from source order, not a separate native leak certificate.
+
+Decision: preserve the exact catch boundary, pointer publication and assignment
+order. Add no unconditional reset, retry or cleanup rule to repair this concern.
+
+## CALC-060: normal generated enum getter rejects internal scoped enums
+
+Status: confirmed original compiler restriction for a configuration combination;
+not an established defect in the upstream library build.
+
+Original `codemaker/source/cppumaker/cpputype.cxx::EnumType::dumpNormalGetCppuType`
+passes its first generated enum constant directly to the `sal_Int32` default-value
+parameter of `typelib_static_enum_type_init`. With `LIBO_INTERNAL_ONLY`, the
+original generated declaration is an enum class, so that implicit conversion is
+rejected. A genuine default-mode cppumaker InteractionClassification header and
+an unchanged syntax-only caller reproduce the error. No rejected body executes.
+
+Evidence: task55 full failure at both InteractionClassification and IOErrorCode
+in `native-write-semantic-idl.log`; failed manifest retains complete original and
+generated hashes. The isolated original witness in
+`output/playwright/task55-checks/enum-normal/manifest.json` retains the complete
+caller, real generation/compiler argv, exit1, full diagnostics and both generated
+header hashes. Its complete headers are retained in the adjacent generated folder.
+Original `EnumType::dumpComprehensiveGetCppuType` emits an explicit integer cast.
+
+Decision: preserve original generated behavior. Actual `cppuhelper/Library_cppuhelper.mk`
+and the selected bridge use internal comprehensive API; task55 uses original
+cppumaker `-C` accordingly. Do not patch the normal getter, remove scoped enums
+or infer that the supported comprehensive library configuration is broken.
+
+## CALC-061: descriptor type name treats embedded NUL differently by delimiter branch
+
+Status: confirmed original branch-dependent string boundary; not an established
+defect for supported/loadable environment names.
+
+In cppu/source/uno/EnvDcp.cxx, uno_EnvDcp_getTypeName searches for the first colon
+over the descriptor's explicit length. With a colon, it constructs that bounded
+prefix. Without a colon, it calls rtl_uString_newFromStr on terminated input.
+A real OUString can retain embedded NUL, so UTF16 units [103,0,99] produce a
+one-unit type name [103]; [103,0,99,58,112] produce the three-unit prefix
+[103,0,99]. Whether such names denote a supported environment is not certified.
+The purpose path retains its leading colon and entire explicit-length suffix.
+
+Evidence: task57 genuine --write/--check builds the complete original descriptor
+source/header and every dependency owner normal-ASan/UBSan. Whole functions24684,
+aliases16572 and wrappers11944-byte observations match the portable shared
+owners. output/playwright/task57-checks/decoded-functions.json consumes both
+complete original C streams, preserving every initialized string/refcount/
+identity observation. Input indices8/9 reproduce the branch difference.
+
+Decision: preserve the original bounded-versus-terminated calls and all output
+ownership. Do not normalize with a single native JS split/slice rule, discard
+NUL units uniformly, add descriptor validation or repair upstream behavior.
+
+## CALC-062: ObjectEntry type lookup ignores secondary interface bases
+
+Status: confirmed original lookup difference; full environment consumers and a user-visible defect are unverified.
+
+At pinned9bc445578031fecf56086729d8e4940c77e14d65, cppu/source/uno/lbenv.cxx ObjectEntry::find walks only pBaseTypeDescription. cppu/source/typelib/typelib.cxx initializes this compatibility field from ppBaseTypes[0]. A genuine interface entry.Child deriving from entry.Multi(entry.A, entry.B) is assignable to entry.B according to the original typelib_typedescriptionreference_isAssignableFrom, but an ObjectEntry storing only entry.Child returns null for entry.B. Adding a separate entry.B record makes the lookup succeed. Root XInterface returns the first record directly. Distinct actual descriptors named entry.A still match through td_equals.
+
+Evidence: scripts/uno-object-entry-native-probe.mjs builds all101 original desktop dependencies and includes the whole unchanged lbenv.cxx in a pure caller; normal-ASan/UBSan find836-byte streams match all initialized portable observations in lbenv.test.ts. output/playwright/task60-checks/decoded-find-prefix.json records the exact initial query rows: entry.B misses while assignability is true. The full stream remains in native-object-entry-cases.json and normal/asan caller.find outputs. This is a direct internal lookup experiment, not a complete environment or consumer QA port.
+
+Decision: preserve the primary-base chain and first-record root shortcut. Do not replace it with a traversal of every ppBaseTypes entry or a JS inheritance shortcut.
+
+## CALC-063: mdds block swap copies two values even when moves are available
+
+Status: confirmed original copy-based swap; not an established defect. Copy-only ValueT requirements may explain the choice.
+
+Pinned mdds3.2.1 types.hpp element_block::swap_values declares ValueT v1=*it1, v2=*it2, then copy-assigns both references. An instrumented movable noexcept ValueT therefore has two copy constructions, two copy assignments and two temporary destructions for each pair, including the same reference. Direct std::iter_swap over the same real storage uses one move temporary and two move assignments. This may create additional transient string references, but no complete Calc consumer defect or performance regression is demonstrated.
+
+Evidence: task65 scripts/mdds-object-value-native-probe.mjs includes whole unchanged verified original headers and captures full normal-only owned streams in native-object-value-cases.json. swap_d/swap_f/swap_self retain the two copies; reverse_d/reverse_f witness the separate std::iter_swap path. Actual SharedString/CellTextAttr full source owners are also compiled unchanged.
+
+Decision: retain the original two-copy block algorithm. Do not replace it with std::swap, pointer/reference exchange or a JS destructuring swap for owned values. The selected native iterator swap remains a separate language binding.
+
+## CALC-064: range write skips overwrite_values for a different partial last block
+
+Status: confirmed source asymmetry; a managed-pointee or Calc consumer defect is not established.
+
+Pinned mdds3.2.1 soa/main_def.inl set_cells_to_multi_blocks_block1_non_empty extends a first block of the incoming category. If the range ends inside a nonempty last block of a different category, it calls block_funcs::erase for that last block without a preceding overwrite_values. The corresponding set_cells_to_multi_blocks_block1_non_equal path calls overwrite_values before erase. This is suspicious for block categories whose overwrite operation owns separate pointee cleanup. Actual Calc pointee registrations and supported consumer reachability are still unported, so no leak or user-visible defect is claimed.
+
+Evidence: task70 scripts/mdds-container-range-native-probe.mjs includes the complete unchanged original SoA/types/macros headers and compares whole normal-only scalar23968-case and owned-value streams. These streams cover the asymmetric category transition and retain its original special-member/event behavior; owned unmanaged values do not prove managed-pointee cleanup. No sanitizer or memory-safety conclusion is inferred.
+
+Decision: preserve the exact original erase call and ordering. Do not insert overwrite_values or normalize the two algorithms. Revisit this suspicion when actual managed Calc cell owners and their consumers are connected.
+
+## CALC-065: failed prefix replacement retains shortened metadata and old payload
+
+Status: confirmed controlled original trait-failure outcome; ordinary Calc failure handling and its recovery behavior are unverified.
+
+Pinned mdds3.2.1 soa/main_def.inl set_cells_to_single_block first shortens the current block metadata when replacing its upper part, then creates and fills a replacement block for the lower values. A creation failure or throwing assign_values_from_block propagates without restoring the original metadata. For a three-row double block and a one-row uint16 prefix, the retained container has logical size3, metadata size2 and old element payload size3. This is suspicious for callers that continue using the container after an exception; no guarantee of such continued use or full Calc consumer defect is established.
+
+Evidence: task70 native-container-range-cases.json scalar stream includes two controlled caller-only trait failures against complete unchanged original headers. The null creation throws the original logic_error text; assignment failure invokes the original unique_ptr deleter on the empty new block before propagation. Both complete retained-state/clear streams match the portable owner. These are explicit fault-injection witnesses, not naturally occurring allocation failures, sanitizer results or a certification of generic exception safety.
+
+Decision: preserve the original metadata-before-allocation order, temporary cleanup and retained partial state. Do not add rollback or normalize the block after failure.
+
+## CALC-066: opcode diagnostic numeric fallback is unreachable
+
+Status: confirmed original unreachable tail; no Calc consumer defect is established.
+
+At pinned9bc445578031fecf56086729d8e4940c77e14d65, include/formula/opcode.hxx OpCodeEnumToString returns a name in every explicit switch case. Its default asserts(false) and returns "???". The following ostringstream conversion of the numeric opcode can therefore never run, including in release builds where assert is disabled. This looks like a leftover fallback; the header explicitly labels the helper as debug-only with unstable output, so this is not a demonstrated spreadsheet defect.
+
+Evidence: task74 scripts/formula-opcode-native-probe.mjs compiles the whole unchanged original header normally with NDEBUG and compares all65536UInt16 diagnostics. Unknown code1 returns "???"; original range-end sentinel values36/49/67/72/84/180/521 also return "???". A separate ordinary debug caller without NDEBUG confirms the original assertion and SIGABRT for code1. No sanitizer or memory-safety inference is involved.
+
+Decision: preserve the actual release switch output. Do not replace "???" with the unreachable numeric conversion or manufacture names for range sentinels. Native debug process termination is recorded as a separate profile; the browser owner claims release behavior only.
+
+## CALC-067: early parameter-count return hides some string-op byte fields
+
+Status: confirmed original control-flow asymmetry; no user-visible Calc defect is established.
+
+At pinned9bc445578031fecf56086729d8e4940c77e14d65, FormulaToken::GetParamCount first returns zero for special opcodes below ocStopDiv unless they belong to its explicit exception list. The later string-token branch nevertheless checks ocBad, ocStringXML, ocStringName and ocDPFieldName and reads their byte count. In particular, a real FormulaStringOpToken(ocStringXML, string) with SetByte(3) returns zero before reaching that branch. The coexistence of the early filter and later explicit cases looks suspicious, but the complete compiler and Calc consumers are not implemented and their intended use is not established.
+
+Evidence: task75 scripts/formula-token-native-probe.mjs compiles whole original token and compiler headers plus complete original selected member definitions over actual SAL, SharedString and Boost owners. Its normal-only values stream observes byte3 through original initialization and a zero parameter count for the actual ocStringXML token. The portable implementation preserves the same early return and reachable string cases; the initial unit-test expectation of three was corrected to the observed zero. The two already-excluded ocBad/ocStringXML comparisons are documented at the original TS branch rather than emitted as unreachable comparisons. A further whole65536-opcode stream checks original GetParamCount for actual FormulaStringOpToken values with bytes0/1/255, including the reachable ocStringName/ocDPFieldName alternatives. No sanitizer or memory-safety conclusion is involved.
+
+Decision: preserve the original early return and later cases. Do not move the string-token branch or derive parameter counts directly from stored bytes. Revisit consumer reachability when the original compiler/input owners are connected.
+
+## CALC-068: hybrid result equality omits the empty-display flag
+
+Status: confirmed original field omission; a Calc consumer defect is not established.
+
+Pinned sc/source/core/tool/token.cxx ScHybridCellToken::operator== compares the base type/opcode, mfDouble, maString and maFormula, but does not compare mbEmptyDisplayedAsString. Two valid zero-valued tokens with an empty shared string and the same formula therefore compare equal even when IsEmptyDisplayedAsString differs. The analogous ScEmptyCellToken equality does compare its display flag. Full consumer behavior is still unported, so this is a suspicious asymmetry, not a demonstrated spreadsheet defect.
+
+Evidence: task76 scripts/sc-result-token-native-probe.mjs compiles complete unchanged original selected class declarations/member definitions over real shared owners. The ordinary NDEBUG hybrid stream includes the valid empty-string flag pair (pattern0) and preserves flag_equal1; other initialized release-only combinations do not claim satisfaction of the native debug assertion.
+
+Decision: retain the original omission and both query results. Do not add the flag to equality. Native debug assertion termination and full ScFormulaResult consumers remain unverified.
+
+## CALC-069: scalar matrix construction accepts a type rejected by matrix queries
+
+Status: confirmed original constructor/query asymmetry in the pinned mdds dependency; a Calc consumer defect is not established.
+
+The original multi_type_matrix mtv_traits registers int8_element_block, while to_mtm_type and get_numeric/numeric do not recognize int8 for std_string_traits. Its scalar constructor delegates directly to the vector without matrix type validation. A fully initialized 1x1 matrix filled with int8_t(4) therefore constructs successfully, but get_numeric and numeric throw the original unknown-element-type diagnostic. The range constructor explicitly validates its first block and rejects an int8 range during construction. This may be intentional legacy/internal support; actual Calc consumers use their own UInt16/UInt8 integer aliases, which are recognized.
+
+Evidence: task78 scripts/calc-matrix-native-probe.mjs compiles the full unchanged mdds3.2.1 multi_type_matrix/vector headers from the pinned LibreOffice download.lst archive and patch, over genuine dependencies. The ordinary scalar stream captures rangeerror, numericerror and allnumericerror from initialized actual int8 matrices. No invalid lifetime, sanitizer or memory-safety inference is involved.
+
+Decision: preserve registration and the different validation points. Do not silently promote int8 to the configured integer type or add a scalar-constructor check. Revisit consumer reachability when the original ScMatrix owner is connected.
+
+## CALC-070: matrix geometry dispatch omits its supported integer element type
+
+Status: confirmed original dependency dispatch omission; a user-visible Calc defect is not established.
+
+Pinned mdds3.2.1 multi_type_matrix recognizes its configured integer block as element_integer for typed queries and input-range copy. The matrix-to-matrix copy and transpose switches handle numeric, boolean, string and empty, but omit element_integer. Their default throws the original unknown-element-type diagnostic. Resize constructs a temporary and calls matrix copy, so it also throws when copying a nonempty integer section. A zero dimension bypasses copying and clears successfully.
+
+Evidence: task79 scripts/calc-matrix-geometry-native-probe.mjs compiles full unchanged original matrix/vector headers over genuine dependencies. Its ordinary initialized streams observe the omission for std_string_traits int32, original Calc matrix_traits UInt16 and matrix_flag_traits UInt8. An earlier string section is retained in the destination when matrix copy later encounters an integer; failed transpose and resize preserve the source and release temporary strings. Input-range integer copy succeeds. Original ScMatrixImpl::MatCopy/MatTrans/Resize source paths use these operations, but their complete consumers and document behavior are not yet implemented or certified.
+
+Decision: preserve the missing switch alternatives, partial destination updates and exception/lifetime behavior. Do not add integer branches or make copy transactional. Revisit actual consumer reachability when ScMatrix and its flag operations are connected.
+
+## CALC-071: inclusive matrix walk endpoint accepts the row count
+
+Status: confirmed original range validation asymmetry in the pinned mdds dependency; a Calc consumer defect is not established.
+
+Original ranged multi_type_matrix::walk rejects an endpoint only when end.row is greater than the row count, although the endpoint is inclusive. A fully initialized 2x2 matrix containing one numeric block therefore accepts start(0,0), end(2,0) and calls the visitor with three elements: the third belongs to the next column in the underlying column-major store. This observation uses an existing initialized third element, not an invalid iterator or an out-of-storage read. The parallel ranged overload has the same strict greater-than validation; its corresponding boundary behavior has not yet been separately certified.
+
+Evidence: task80 scripts/calc-matrix-walk-native-probe.mjs compiles whole unchanged original matrix/vector headers with verified pinned dependency sources. Its ordinary scalar stream records one numeric section of size3 for the initialized 2x2 spill caller. The portable full-stream replay matches the same section. Original ScMatrix/input consumers and user-visible reachability remain unimplemented.
+
+Decision: preserve the original validation and inclusive traversal. Do not change greater-than to greater-than-or-equal or clamp the section to a column. Do not use this initialized case to claim safety for endpoints at the final column or invalid store positions.

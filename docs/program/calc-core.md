@@ -2704,3 +2704,545 @@ archives/implementations, coverage thresholds and runtime behavior are unchanged
 All3 exact original symlinks were restored. Remaining full static/repository gates
 pass; task41 closes and the goal pauses at the user's requested full-run boundary.
 Original service/pool/column/table/document/edit/view/UI work remains incomplete.
+
+
+### Original UNO sequence C engine
+
+Task42 ports the original sequence.cxx engine at its original shared CPPu owner,
+with source-helper functions split into sequence-elements.ts for the600-line
+budget. Actual SAL records/counts and CPPu construction/copy/destruction/type
+owners are reused. All reference/full-description constructors, reallocation,
+reference2One, assignment and zero-count destruction keep their original ordering.
+Primitive raw memory operations adapt existing typed logical address views;
+source tag/width selection and initialized scalar values remain intact.
+Native sal_Bool memcpy preserves bytes2/255 while scalar copy.hxx converts them
+to bool. The actual original source difference is preserved, not normalized away.
+
+Shared native type/value/callback callers and portable observers are extracted
+from the existing copy proof rather than duplicated. The old assembled native
+copy driver remains byte-identical. Sequence observations include all actual
+initialized values, type/string/count ownership and ordered callbacks. Native
+physical allocator address/capacity/byte layout/resource OOM/NaN payloads and
+indeterminate cells remain unverified. Signed-count diagnostic observations are
+separately bounded and do not establish valid producer/malformed-header parity.
+Native --write and --check verify 358 unchanged source hashes and complete
+normal/ASan/UBSan streams (2089840 lifecycle, 1288 helper and 4460 guard bytes).
+With all three original source links removed, Calc passes 106 tests in 24 files
+and directly related shared modules pass 120 tests in 36 files. Raw coverage
+is S/B/F/L100 for all 19 Calc and 49 shared executable owners; all counters
+are positive. Public C++ Sequence template and real downstream casing service,
+CharClass/SharedStringPool/cell/document/edit/view/UI owners remain required.
+The next scheduled full run is task51; task41 remains the last complete run.
+
+### Original CPPu UNO equality engine
+
+Task43 represents original eq.hxx at shared CPPu eq.ts, with numeric and sequence
+responsibilities split into adjacent eq-numeric.ts and eq-sequence.ts for the
+authored file budget. Existing typed values, type references, logical addressed
+storage, string equality, Any and callback/destruction owners are reused.
+Actual data.cxx C/recursive equality entry points and retained binary query
+dispatch stay at their source owner; prim.hxx only declares that query function.
+
+Any flattening, exact numeric switches/casts, type identity, base-first/reverse
+compound members, descending sequence elements, root-interface queries and
+ordered releases follow the original. A native int64-to-float witness shows that
+Math.fround(Number(integer64)) can double round. Native JS remains in use for
+number/exact binary64 inputs; wider integer64 values need one exact ties-to-even
+discarded-bit adaptation using BigInt. No additional SAL numeric library is added.
+
+Native --write and --check verify all358 complete source hashes and identical
+normal/ASan/UBSan streams: numeric2112864, scalar651680, sequence89468,
+interface5008 and diagnostic28 bytes. All five complete portable replays match,
+including cached method-description fields/identity and integer64 rounding ties.
+With all three original source links absent, Calc106/24 and related shared125/37
+tests pass; raw S/B/F/L100 spans all19/52 executable owners. A strengthened
+five-case replay has raw100 for all three equality owners and verifies unchanged
+hashes for every owner covered by the combined profile. All scoped gates pass.
+Filtered native SAL_WARN output, physical allocation/ABI, NaN payload families,
+undefined floating-to-u64 conversions and full upstream consumer QA remain
+unverified. Public Sequence/UnoType and original services/CharClass/pool/Calc
+cells/document/edit/view/UI remain required. Next scheduled full run is task51.
+
+### Original UnoType and sequence type helpers
+
+Task44 completes internal unotype.hxx overload selection and Sequence.hxx type
+helper bodies through existing actual typelib and borrowed Type owners. Explicit
+C++ type argument spellings and nested tuples adapt compiler erasure; they create
+no UNO types and infer none from JS values. Actual generated ADL getters remain
+at their original owners. Equivalent nested argument expressions retain the same
+compiler specialization key, while different C++ types keep different keys even
+when their canonical UNO reference is equal.
+
+UnoSequenceType, Sequence<E>::s_pType, favourChar and global char-sequence helpers
+retain independent original pointer cells. Recursive favour dispatch and the
+supplied-element helper's first-call-only behavior are preserved. The stateless
+UnoType template uses the repository's readonly ESM record convention.
+Original --write and --check verify364 complete source hashes and13 generated
+inputs, with all69 genuine dependency translation units rebuilt. Normal and
+ASan/UBSan streams match: types1865864, sequences1915688 and seeded71876 bytes.
+All three source-absent portable replays match. Calc106/24 and related shared128/38
+tests pass with raw S/B/F/L100 across all19/53 executable owners; every raw
+counter is positive. All13 scoped gates and exact Prettier pass. Physical ABI,
+compiler-only enforcement, external SDK sal_Unicode alias configuration and full
+consumer QA remain unverified. Public Any/genfunc/Sequence and original services,
+CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Next full51.
+
+### Original CPPu data assignment and value compatibility
+
+Task45 adds original assign.hxx and data.cxx assignment prerequisites for public
+Any extraction/isExtractableTo/has and genfunc. The exact numeric switches live
+in adjacent assign-numeric.ts; actual C entry points and compound recursion stay
+at data.ts. Existing shared type/default/copy/destruction/string/sequence/query
+owners are reused. Native JS width operators, BigInt and Math.fround represent
+these defined assignments without another library or conversion policy.
+
+Initial self-address/type equality, null-source reset, Any flattening and alias
+shortcut, type release-before-acquire, base-first/reverse compound partial writes,
+sequence type-before-pointer equality and interface base/query/callback ordering
+follow original source. Original --write and --check verify358 complete source hashes and13 generated
+inputs, rebuilding all72 real translation units normal/ASan/UBSan. The five
+defined/initialized diagnostic modes match completely: numeric174096,
+matrix2594720, compounds54368, interfaces123792 and diagnostics180 bytes.
+The separate interface-chain normal24896-byte stream has original assign.hxx422
+UBSan SIGABRT, with no defined/UB/sanitizer parity claim. All six complete portable
+replays match. Source-absent Calc106/24 and shared134/39 tests pass with raw
+S/B/F/L100 across19/55 executable owners, every raw counter positive. The equality
+caller remains byte-identical after observer extraction; all five old equality
+replays still match. All13 scoped gates pass. CALC-053/054 record source quirks.
+Undefined original expressions and initialized unsupported diagnostic inputs are
+bounded separately; physical ABI/allocation/debug/thread/full consumer QA remain
+unverified. Public Any/genfunc/Sequence and service/CharClass/pool/Calc document
+and UI owners remain subsequent. Task41 is the last full run; next scheduled51.
+
+### Original public Any ownership and C++ interface callbacks
+
+Task46 adds original Any.h/Any.hxx ownership and metadata, with complete
+original genfunc.h/hxx C++ acquire/release/query callbacks. Existing C Any,
+copy/default/destruction, canonical reserved field address, Type/UnoType,
+OUString and generated RuntimeException owners are reused. XInterface provides
+only the genuine three-virtual-method declaration; Reference now borrows its
+two-method projection instead of a duplicate contract.
+
+Constructors, copy/self/move swaps, inline address repair, stable borrowed Type
+view, metadata/setValue/clear and query reserved-interface transfer follow source.
+Explicit source addresses/type arguments adapt erased C++ templates without type
+inference or a runtime provider. Finally/dispose pairs adapt real returned Any
+and caught RuntimeException destruction; other exceptions propagate.
+Native --write/--check pass: 72 complete original translation units (69 genuine dependencies plus any/data/sequence), 367 complete source hashes and 13 genuine generated headers; four full initialized normal-ASan/UBSan streams identical (constructors266088, histories5871200, templates70928, callbacks13612 bytes). With all3 upstream links absent, Calc106/24 and related shared138/41 tests pass; 19/57 executable owners have every raw S/F/B counter positive and whole S/B/F/L100 (Calc2920/2055/474/2564; shared3754/2040/481/3353). All13 scoped gates and9 exact authored-source Prettier checks pass.
+CALC-055 records the original intentional moved-from VOID data pointer; preserve it. Empty/moved VOID reserved
+bytes and physical ABI/allocation/compile-only/debug/thread/full QA are unverified.
+Any extraction/comparison/get/query/fromAny/toAny/ostream and public Sequence,
+Reference/service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent.
+Next full51; task41 remains the last full regression.
+
+
+## Original public Any insertion extraction and data operations
+
+Task47 continues the actual public Any owner with isExtractableTo/has, Any
+comparison, selected insertion/extraction and toAny/fromAny copy/move helpers.
+Actual C data/type/query/ownership and Type/OUString/Any owners are reused. The
+original numeric specialization switches match existing shared assignNumeric;
+reuse that source responsibility with each original direct source-class guard.
+Generic extraction retains original C assignment and Any unwrapping instead.
+Declared template types and source/destination addresses explicitly adapt erasure.
+
+The caller's generated RuntimeException destination must use the actual class
+default: its OUString literal empty storage differs from C data default flags.
+Portable observations use nonowning direct field lvalues at genuine description
+offsets and the actual class destructor, preserving initialized counts and values.
+Three complete native initialized normal-ASan/UBSan streams match (949008,
+2082240 and147104 bytes);369 complete source hashes and13 genuine generated
+headers verified.
+Source-absent Calc106/24 and related shared141/42 tests pass; all3 original links restored exactly. Whole19/57 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared3791/2068/490/3386). All13 effective scoped gates and3 exact authored-source Prettier checks pass. Remaining typed comparison/BaseReference interface identity, get/ostream, string-expression and external-only helper overloads, XInterface static helpers, public Sequence/Reference/services/CharClass/pool and Calc cells/document/edit/view/UI are subsequent source families. Physical ABI/allocator/resource/uninitialized reserved bytes/compile-only/debug/thread/shutdown/full consumer QA remain unverified.
+Last full41; next full51, whole Calc goal active.
+
+
+## Original Reference queries throwing and interface identity
+
+Task48 ports original Reference.h/hxx query/queryThrow/setThrow constructors/set/static/member and Any query helpers, protected iquery/iquery_throw, root identity equality/inequality and selected non-null logical dereferences. Actual public Any, Type/UnoType, XInterface, generated RuntimeException, Reference and SAL OUString/lazy concatenation owners are reused. iquery transfers the real returned Any reserved interface ownership before destruction and propagates exceptions; equality catches only RuntimeException and destroys original temporaries. Failed throwing set retains prior pointer. Explicit erased template argument and distinct immutable enum type/value witnesses preserve native zero values without an inferred type/value provider or per-instance metadata. Non-interface Any/QUERY construction skips interface static initialization; set uses the typed helper even for non-interface Any. cppu_opt.cxx three complete C message owners preserve borrowed type-name fields, lazy concatenation, result acquire and local destruction. Whole normal-ASan/UBSan streams match queries319544/members73372/identity5189724/messages2042880 bytes:73 unchanged translation units,368 full source hashes and13 generated headers. Diagnostic invalid root replies are bounded observations, not valid UNO producer certification. Native --write and final --check pass:73 full unchanged translation units,368 complete source hashes,13 generated headers and156 terminal commands0. Complete initialized normal-ASan/UBSan streams identical queries319544/members73372/identity5189724/messages2042880 bytes. All3 original source links absent: Calc106/24 and related shared145/43 tests pass with every raw S/F/B counter positive and whole S/B/F/L100 for19/58 executable owners (Calc2920/2055/474/2564; shared3885/2112/511/3476). Exact links restored. All13 effective scoped gates and5 exact authored-source Prettier checks pass. Native null dereference assertions, physical Reference pointer ordering/hash/ostream/multiple-inheritance casts and compile-only deleted instantiations; later Any typed comparison/get/string expressions/external-only helpers, public Sequence/services/CharClass/pool and Calc cells/document/edit/view/UI remain subsequent. Physical ABI/allocator/uninitialized reserved bytes/debug/thread/shutdown/full consumer QA unverified. Broad flags remain false.
+Last full41; next full51, whole Calc goal active.
+
+
+## Original public Sequence value ownership and arrays
+
+Task49 ports normal internal Sequence.h/hxx default/copy/adopt/length/elements/initializer constructor body, one actual pointer-cell ownership, destructor, copy assignment, true swap move assignment, get/length/has/size/const arrays/COW arrays/index/iterators/resize/swap and mutable range. Existing real C sequence allocation/default/copy/destruction, Sequence-type member-static cells, Type/UnoType/OSL/genfunc/data/array storage remain actual shared owners. Source has no move constructor: native rvalue construction copies the handle, unlike its move-assignment swap. The shared actual SAL enum typed witness preserves adoption versus integer length0, including NULL field adoption; existing numeric symbols stay0. Erased declared E and sizeof(E) bind compiler specialization identity only, with no instance type metadata, inferred value type or type/default/data provider. Const array/index/pointer-end expressions retain actual logical source storage and field addresses rather than claiming JS binary ABI or assembling copied E values. Native std::bad_alloc failure is represented by native JS RangeError at the same failed C result; original assertion rejection uses the existing browser Error adaptation. Genuine unchanged native --write passes:73 original translation units,370 full source hashes13 genuine generated headers; lifecycle239396/cold1004/guards896 bytes normal-ASan/UBSan identical, five separate original index/range/size assertion SIGABRT diagnostics agree. Pure caller uses actual scalar/OUString/Type/Any/Reference/nested Sequence/RuntimeException owning objects, native E initializer copy and raw live actual field lvalues; class defaults are never replaced by C-default inputs. Header-only huge guard observations never read absent tails and certify no ordinary producer. Native --write and final --check pass:73 full unchanged translation units,370 complete source hashes,13 generated headers and164 terminal commands (154 exit0;10 separately expected SIGABRT). Complete initialized normal-ASan/UBSan streams identical lifecycle239396/cold1004/guards896 bytes. All3 original source links absent: Calc106/24 and related shared149/44 tests pass with every raw S/F/B counter positive and whole S/B/F/L100 for19/59 executable owners (Calc2920/2055/474/2564; shared3952/2152/535/3539). Exact links restored. All13 effective scoped gates and6 exact authored-source Prettier checks pass. External-only mutable iterator/index bodies, ByteSequence bridge and ostream; physical pointer/layout/ABI/resource/native const/compiler-only restrictions (including prohibited Sequence<bool>), arbitrary element producer/alias/metadata safety, thread/shutdown/full consumer QA and service/CharClass/pool/Calc document/edit/view/UI remain unverified or subsequent. Broad flags remain false.
+The real character-classification implementations return Sequence<OUString> and accept Sequence<Any>; this public owner closes that existing C-engine dependency before service/pool and Calc document/UI work. Last full41,next51, whole goal active.
+
+## Original cppuhelper interface and service contract helpers
+
+Task50 implements all actually declared original cppuhelper queryInterface overloads (1..14 and17..19;15/16 are absent, CALC-057) through one erased ordered argument list. Each declared static_type getter is evaluated in original order and later getters remain untouched after the first match. Matching NULL returns original typed NULL Any, mismatch returns actual empty Any, without a virtual interface query or inferred pointer type/provider. Real Type equality and Any default/acquisition/destruction remain existing shared owners. supportsService calls the original implementation getter once, retains that exact returned local Sequence, searches with existing full-length case-sensitive OUString equality over actual logical element field addresses, never requests COW, and destroys the local owner on return or exception. Original declaration reexports the single cxx body. XServiceInfo is the complete structural IDL method contract over the actual root interface, with logical addressed Sequence<string> output and no generated type/default/service implementation. Only original cppuhelper-to-cppu/SAL module edges are added; reverse/application/browser edges remain forbidden. Genuine full native helper/header/IDL ownership and complete initialized callback/type/name/ref/value streams are required; custom declared source-caller static_type methods invoke actual root/static typelib factories and supply no replacement library provider. Native --write and --check pass:74 complete unchanged translation units,375 full source hashes and15 genuine generated headers,161 terminal commands (157 exit0;2 expected NULL assertion SIGABRT;2 expected original missing-arity compiler exit1). Whole initialized normal-ASan/UBSan streams identical cold716/queries455732/services23136 bytes. With all3 original links absent together, Calc106/24 and related shared154/45 tests pass; all raw S/F/B counters positive and whole S/B/F/L100 for19/61 executable owners (Calc2920/2055/474/2564; shared3966/2158/537/3549). Exact links restored; task49 profile preserved append-only by the new helper test and all4 new source modules, including structural/reexport owners without executable counters. Scoped gate acceptance is recorded in the task evidence. Generated XServiceInfo static type/default implementations, actual weak object/adapter/listener/ImplHelper and service manager/context/locale/CharClass/pool/Calc cell/document/edit/view/UI remain subsequent. Physical pointer/ABI/resource/const/compiler-only/concurrency/shutdown/full consumer QA unverified. C++ NULL assertion is an explicit browser Error adaptation; no full public module parity claim. Broad flags false.
+Last full41;next scheduled51. Whole Calc goal remains active; verified scope is limited to these real shared helper contracts.
+
+
+## Original generated weak and service interface type owners
+
+Task52 adds complete original IDL declarations and normal comprehensive cppumaker type owners for XWeak, XAdapter, XReference, XAggregation and XServiceInfo. Each original ADL getter retains its real leaked Type cache, base/member registration and separately gated method initialization; bInitStarted is set before real RuntimeException initialization. Source name/reference construction, C factory registration, method/parameter/exception metadata, release and local reverse destruction order remain original. Existing Type, Reference, Any, OUString, RuntimeException, UnoType function-argument ADL and the full C typelib owners are reused, with no alternate type/default/provider or virtual implementation. Native JS synchronous initialization represents the original initialization stages without another mutex library; native threads, physical ABI, compiler-only/const and resource/shutdown behavior remain unverified.
+
+Genuine native --write and --check pass:72 full unchanged original translation units,374 complete source hashes,23 genuine generated files (21 headers and2 parser sources) and161 terminal commands exit0; complete initialized normal-ASan/UBSan streams identical cold0=30704, cold1=46020, cold2=32028, cold3=41372, cold4=49920, forward=200044 and reverse=200044 bytes. All7 complete streams match pure TypeScript caller replay. With all3 original source links absent together, Calc106/24 and related shared161/46 tests pass; whole19/66 executable owners have every raw S/F/B counter positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4261/2178/552/3844). The task50 related shared profile is preserved append-only; original links restored exactly. All13 scoped gates and20 exact authored file Prettier checks pass. Broad flags remain false. Actual weak object/adapter/listener/aggregation lifecycle, service manager/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Task51 completed the latest full regression: office15457/702, inventory123/38, tooling34/9 and browser308 (Writer306/shared2/Calc0), all424 executable office owners raw S/B/F/L100;13 effective gates pass, exact source links restored. Next scheduled full61.
+
+
+## Original weak reference listener and helper lifecycle
+
+Task53 ports complete original OWeakRefListener and WeakReferenceHelper bodies and WeakReference wrapper from weak.cxx/weakref.hxx. Actual Reference/RuntimeException/OSL/queryInterface and original generated XWeak/XAdapter/XReference/Type/Any remain reused. Constructor count1 gate, explicit XWeak versus root-query overload, returned adapter move, actual temporary destruction and callback hardening retain source order. Native JS catch/finally adapts typed catch/destruction; mutex/physical/native thread/compiler/allocator/shutdown/fullconsumer behavior is not claimed. Erased WeakReference specialization stores only declared interface identity on its compiler-emitted class, never on instances or in a new type/default/value provider. Original internal WeakReference<XWeak> duplicate assignment signatures are preserved as a compile-binding rejection; WeakReferenceHelper XWeak overload remains valid. Genuine native --write and final --check pass:73 unchanged complete original translation units per normal-ASan/UBSan build,379 full source hashes,23 generated files (21 headers and2 parser sources),159 runtime/build commands exit0/signalnull and one separate expected original syntax-only compiler exit1. Five whole initialized runtime streams match normal/sanitized/pure replay: lifecycle5524/overloads6800/nulls1888/errors7408/destructor1812 bytes; runtime stderr empty. The actual original Reference<T> upcast is a borrowed root view, with no extra acquire/release. With all3 source links absent together, Calc106/24 and related shared167/47 tests pass, whole19/68 owners every raw S/F/B positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4399/2226/575/3975). Task52 profile retained append-only; exact source links restored. Six adjacent cases pass including the original internal template rejection. No original exception bridge symbols remain unresolved; full weak.cxx is compiled and unrelated owners naturally dead-stripped without substitutes or unresolved-symbol suppression. Broad parity flags remain false. OWeakObject/OWeakConnectionPoint/OWeakAggObject and generic C++ exception bridge are subsequent owners, not stubbed by this task.
+
+All13 scoped gates and10 exact authored file format checks pass; related tooling35/4 passes. CALC-058 records the actual rejected internal XWeak specialization; CALC-059 records the original suspicious clear failure state and distinguishes source-order inference from an allocation leak certificate. Full weak object/connection/aggregation, generic exception bridge, ImplHelper/service manager/context/locale/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent. Last full51; next scheduled full61. The full Calc goal remains active.
+
+
+## Original DisposedException value and type ownership
+
+Task54 adds the original comprehensive internal DisposedException value and its
+generated type initializer. Existing RuntimeException/Exception, OUString,
+Reference, Type and typelib owners are reused. Explicit default/two-field
+construction initializes base then derived type; implicit copies/moves preserve
+actual field ownership without type initialization, assignments retain stable
+fields, and destruction releases Context before Message. Native JS typed catch
+and finally represent source catch selection and caught object destruction.
+
+The actual derived type factory/register/release uses RuntimeException as its
+base and returns the original cached leaked Type. Native --write/--check
+rebuild72 complete unchanged original units per normal-ASan/UBSan configuration;
+368 complete source hashes,15 genuine generated files and153 terminal commands
+are verified. Whole values2656/type6768/catches488-byte streams match original,
+sanitized and strict pure replay. Three adjacent cases pass.
+
+With all3 upstream links absent together, Calc106/24 and related shared170/48
+tests pass. Whole19/69 executable owners have every raw S/F/B counter positive
+and S/B/F/L100 (Calc2920/2055/474/2564; shared4420/2234/580/3993). The task53
+shared argv is preserved append-only; exact link targets restored. All13 scoped
+gates,35 related tooling tests and7 exact authored file format checks pass.
+ No second exception type/value
+provider is introduced. Genuine original full stream and scoped checks are
+recorded in task54 verification. Generic exception bridge, weak object family,
+services and Calc document/edit/view/UI remain subsequent. Physical ABI,
+allocator/resource, native threads/shutdown, source-location/debug/external-only
+headers and full consumer QA remain unverified. Last full51; next scheduled61.
+
+## Original desktop generic exception contract experiment
+
+Task55 captures the full original getCaughtException/throwException path before
+implementing browser helpers. Complete genuine CPPU environments/mappings, the
+macOS AARCH64 bridge selected by upstream, and cppuhelper exception helpers are
+built without replacement bodies or unresolved-symbol suppression. Native
+--write/--check pass: 101 complete original units per normal/ASan/UBSan build,
+443 full source hashes, 39 genuine generated files and 219 terminal commands
+exit0/signalnull. Whole capture12944/roundtrip12992/nested1308/rejects2132-byte
+streams match; runtime stderr is empty. Actual dynamic base/derived types,
+extra exception fields, non-null Context query/acquire/release, nested catches,
+Any copy/clear and rejected nonexception arguments are observed.
+
+Ten exact original configure.ac C++ ABI compile probes retain complete inputs,
+diagnostics and expected results (7 unavailable declarations). A native UNIX
+loader check verifies dlsym/dladdr support; owned configuration headers preserve
+original feature rules. Cached value-only configuration is unchanged. Original
+cppuhelper/bridge internal comprehensive API requires cppumaker -C. CALC-060
+records the separate normal/internal enum compiler restriction without changing
+original code. Assembly and the system runtime are not sanitizer-instrumented;
+physical ABI, allocator/leaks/thread/shutdown and full consumer QA are not certified.
+
+A complete decode of the capture stream and a bounded diagnostic over actual
+shared RuntimeException/Reference/Any owners disprove direct JS catch plus one
+Any copy as an equivalent replacement. With a non-null Context, the candidate
+has3acquire callbacks through the first Any. Original behavior includes one
+queryInterface(XInterface),6acquire and3release callbacks, ending at the same
+strong count. Final ownership alone would conceal this difference. The temporary
+diagnostic is retained under task55 evidence and removed from app sources.
+No browser exception helper implementation or full portable exception parity is
+claimed. The next implementation must preserve original logical mapping/query
+and temporary ownership phases while reusing shared owners; native JS remains
+appropriate for actual throw/catch only where these observable contracts hold.
+
+Source-absent Calc106/24 and unchanged related shared170/48 tests pass, with whole
+19/69 executable owners every raw S/F/B positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4420/2234/580/3993). The task54 shared argv is
+unchanged except report destination; all3 source links restored exactly. All13
+scoped gates,35 related tooling tests and3 authored native/fixture format checks
+pass. No new browser runtime owner was added, so runtime inventory remains
+unchanged. Last full51; next scheduled61.
+
+## Original binary UNO interface holder
+
+Task56 implements the complete original internal UnoInterfaceReference in the
+existing shared dispatcher owner, a direct dependency of getCaughtException.
+Pointer/no-acquire/copy/move constructors and assignments, clear/destruction,
+and borrowed dispatch addresses follow include/uno/dispatcher.hxx. Release
+callbacks observe the previous pointer in set/clear; this differs from the
+existing C++ Reference owner and is preserved. Null dispatch arguments and the
+actual inout exception cell are forwarded without copying or a callback provider.
+Two existing non-null caller witnesses use explicit argument-array views after
+the C callback declaration is corrected to include its actual null contract.
+
+Whole original --write/--check pass over 69 complete genuine dependency units
+per normal/ASan/UBSan build, 348 complete source hashes, 13 generated headers,
+8 configuration hashes and 146 terminal commands exit0/signalnull. Complete
+ownership952/moves276/dispatch124-byte streams match both native builds and the
+actual browser owner; callback observations include the current holder pointer,
+all caller counts and borrowed return/argument/exception address identities.
+The original real typelib XInterface::queryInterface member is used; no library,
+interface, type or default provider replaces an upstream operation.
+
+Source-absent Calc106/24 and related shared173/49 tests pass, with whole19/70
+executable owners every raw S/F/B positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4448/2255/590/4021). The complete task55 shared argv
+is retained, adding only dispatcher.test.ts and changing the report destination;
+the existing dispatcher owner was already included. All3source links restored
+exactly. All13 scoped gates and35 tooling tests pass; matching runtime/provenance
+records and the new limited capability preserve broad parity flags false.
+The upstream testInterface reference concerns surrounding CPPU interface
+ownership; no direct original holder QA port or complete consumer QA is claimed.
+Generic exception helpers, environment/mapping and later weak objects/services/
+Calc document/edit/view/UI remain subsequent. Physical ABI, allocator/leaks,
+native thread/shutdown and full consumer QA are unverified. Last full51;
+next scheduled61.
+
+## Original UNO environment descriptor operations
+
+Task57 implements complete original EnvDcp.cxx and published C/C++ boundaries
+over shared SAL/OUString owners, a dependency of actual EnvStack and lbmap.
+Type-prefix and purpose branches, initialized inout replacement, retained source
+aliases and borrowed live output field addresses preserve original ownership.
+No separate string parser/default policy or environment/mapping provider is
+introduced. CALC-061 records the confirmed branch-dependent embedded-NUL boundary;
+the original behavior is preserved.
+
+Original --write/--check pass over70complete genuine translation units per
+normal/ASan/UBSan build,349full source hashes,13genuine generated headers and
+8configuration hashes. All148terminal commands exit0/signalnull; whole functions
+24684/aliases16572/wrappers11944-byte streams match native normal/sanitized builds
+and the actual browser owners. Both C streams are fully decoded, including all
+initialized string/refcount/identity observations; no selected-byte certificate.
+
+Source-absent Calc106/24 and related shared176/50 tests pass, with whole19/72
+executable owners every raw S/F/B counter positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4467/2259/597/4039). Complete task56 shared argv is
+retained, adding only the actual descriptor test/three whole source owners and
+changing the report destination. All3source links restored exactly. Published
+C header is a pure reexport, with actual C bodies inventoried separately.
+Scoped gate acceptance is recorded in task57 evidence. Matching registry records
+and the limited capability keep broad parity flags false. Original
+StringLiterals::checkEmbeddedNul is contextual shared string QA, not a direct
+descriptor QA port. Generic exception/environment/mapping, further weak objects/
+services and Calc document/edit/view/UI remain subsequent. Physical ABI/native
+thread/resource/leaks/shutdown and full consumer/upstream QA are unverified.
+Last full51; next scheduled61.
+
+## Original UNO Enterable callback boundaries
+
+Task58 implements the complete original cppu/Enterable.hxx callback adapters,
+abstract wrapper, constructor-populated C slots and empty virtual destructor.
+The C Enterable declarations and complete environment/ext-environment records
+retain original boundaries; runtime environment APIs are still absent.
+One shared OUString.getDataAddress compiler binding preserves the actual object
+and its mutable string field without copying or acquiring. EnvDcp wrappers reuse
+this mechanism; their complete existing original observation streams still match.
+Native JS iterators represent valid advancing argument cursors, retaining actual
+callee/context identity and mixed argument order; physical va_list ABI is unclaimed.
+
+Original --write/--check pass over69complete genuine translation units per
+normal/ASan/UBSan build,349full source hashes,13generated headers and
+8configuration hashes. All146terminal commands exit0/signalnull. Complete
+calls324/reasons1336/throwing112-byte streams match both native builds and the
+actual shared browser owners, including object/raw-field aliases, retained old
+string refcounts, reason mutation, bool-to-int conversion and propagated throws.
+
+Source-absent Calc106/24 and related shared179/51 tests pass. All19/73 executable
+owners have every raw S/F/B counter positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4483/2259/609/4055). Complete task57 shared argv is
+retained, adding only the Enterable test/three whole source owners and changing
+the report destination. All3source links are restored exactly. Matching registry
+records keep broad parity flags false. Original StringLiterals::checkEmbeddedNul
+is contextual string QA, not a direct Enterable QA port. Full environment/mapping/
+generic exceptions, further weak objects/services and Calc document/edit/view/UI
+remain subsequent; native ABI/thread/resource/leaks/shutdown and full consumer/
+upstream QA are unverified. Last full51; next scheduled61.
+
+## Original internal exception interface type
+
+Task59 implements complete original XExceptionThrower IDL/generated comprehensive
+interface metadata over existing actual Type/Any/Reference, RuntimeException,
+the Exception builtin type, shared OUString and C typelib owners. The original
+leaked Type cache, initialization gate, bootstrap order, two method references,
+positions3/4, one in-any exc parameter and both Exception/RuntimeException
+declarations retain original registration/release/temporary order.
+ADL/static_type/deprecated getCppuType use real UnoType; no virtual throw or
+environment/mapping implementation is synthesized.
+
+Complete initialized interface/method/map/Type/Any observers are shared with
+the earlier five generated interfaces. Their seven original whole streams remain
+unchanged after extraction. New cold/runtime-first/exception-first streams are
+45164/45532/45476bytes over72whole original translation units per native build,
+370complete source hashes,15genuine generated files and8configuration hashes.
+Normal and ASan/UBSan builds agree completely. Additional whole root11060 and
+pending-method11780-byte streams use the actual original public typelib factories;
+all157terminal commands exit0/signalnull. The first three streams are unchanged.
+
+Source-absent Calc106/24 and shared184/52 pass. All19/75 executable owners have
+every raw S/F/B counter positive and S/B/F/L100
+(Calc2920/2055/474/2564; shared4630/2269/616/4190). Existing task58 runtime owner
+maps and full shared argv are retained; the new test/type/shared observer are
+added. Task-local exclusion arguments retain existing exclusions except the exact
+new observation helper, which is measured completely. Global test configuration
+and strict100 thresholds are unchanged; all3source links restored exactly.
+All13 actual scoped gates and35tooling tests pass; first failure logs retained.
+
+The original cppuhelper/qa/misc/test_misc.cxx::testgetCaughtException reference
+is contextual exception-helper QA, not a direct metadata test port. Broad parity
+flags stay false. Full environment/mapping/exception mechanism, further weak
+objects/services and Calc cell/document/edit/view/UI remain subsequent. Physical
+ABI/compiler const/native threading/resource/leaks/shutdown and complete consumer/
+upstream QA are unverified. Last full51; next scheduled61.
+
+## Original UNO environment object entry
+
+Task60 ports cppu/source/uno/lbenv.cxx ObjectEntry, InterfaceEntry and td_equals over existing shared OUString/C typelib and ext-environment declarations. Complete constructor, append, both find overloads and logical compiler value lifetimes match whole original construct904, append1820, find836 and values2008-byte normal-ASan/UBSan streams. The probe builds all101 original native dependency units and includes the complete unchanged owner in its pure caller; no replacement provider or extracted body. Original primary-base-only lookup is retained (CALC-062).
+
+The borrowed ext-record and pointer map are caller input, not the full DefaultEnvironment engine. Native arrays/Map represent accessed elements and insertion identity only; physical vector capacity/allocator/hash ordering/ABI/leaks/native threads/shutdown and complete consumer QA remain unverified. Full environment/mapping/exception machinery, weak objects, services, character classification, actual SharedStringPool, cell storage, ScColumn/ScTable/ScDocument and editing/view ownership remain prerequisites. Browser UI readiness is unchanged. Complete source-absent coverage and scoped gates are recorded in task60 evidence before completion.
+
+## Original private UNO mapping lifetime owners
+
+Task62 ports complete cppu-private Mapping and MappingEntry from cppu/source/uno/lbmap.cxx, reusing actual mapping C callbacks and OUString ownership. Pointer assignment acquires new, releases old, then publishes new; private copy assignment remains deleted. MappingEntry owns its name and borrows mapping/free-function pointers. Whole mapping560 and entries828-byte normal-ASan/UBSan streams match actual portable owners, including publication observers and initialized copy/move/assignment/destruction. The complete unchanged lbmap.cxx is compiled in the native caller. The full task60 genuine desktop dependency build is reused after complete original/source/generated/config/feature/loader/219terminal verification, replay of all eight whole previous witnesses and concrete artifact hashes before/after. New caller commands are recorded separately; no dependency rebuild is claimed. The original full builder remains required if the dependency build is unavailable or invalid.
+
+C mapping declarations add original free/get callbacks over existing environment/string records. Full registry/mediation/environment/public descriptor wrappers/exception consumers, physical ABI/allocator/pointer hash/leaks/native threads/shutdown and full upstream QA remain unverified; broad parity flags stay false. Cell storage, ScColumn/Table/Document, input/view/UI are subsequent. Full61 passed15491application tests and308browser scenarios, with all438owner raw100; next scheduled full71. Task62 complete source-absent related profile and scoped gates are recorded before completion.
+
+## Original managed mdds object blocks (task63)
+
+Task63 implements complete original managed_element_block and noncopyable_managed_element_block over the existing shared element_block/delayed_delete_vector, with explicit erased native ValueT copy/delete, optional equality used only by noncopyable equal_block, and optional clone_value specialization. Pointer storage is borrowed; destructor and overwrite delete only active pointees and preserve original dangling slots until caller replacement. Managed copy constructor deep-copies only live elements, resets delayed front offset, and implicit copy assignment copies pointer storage. Noncopyable copy throws the original error; default clone throws and clone_value transforms the copied live range retaining original delayed offset. Static noncopyable equality dereferences values; copyable and instance equality compare pointers. Full unchanged verified mdds3.2.1 headers match complete13383byte normal/ASan/UBSan initialized streams; actual ValueT operations are type witnesses, not a replacement provider. Generalized borrowed-pointer generic constraints retain scalar behavior. Complete bases, clone functor and managed factory specializations share the original types.ts boundary, within the repository file budget and without a runtime module cycle. Scalar object-value copying/destruction, custom StoreT/allocator/parallel execution policy, exceptions/invalid dangling or null dereferences, physical pointer/ABI and full MTV/Calc cell objects/document/UI remain unverified; no whole-module or upstream QA certification.
+
+Calc mtvelements.hxx requires this shared ownership layer for formula/edittext/note/broadcaster/sparkline blocks. Scalar storage is reused rather than duplicated. Those actual Calc pointee owners, object-value SharedString/CellTextAttr storage, typed callbacks and complete MTV mutators/ScColumn/Table/Document/input/view/UI remain subsequent work. Full61 passed; next full71. Task63 raw source-absent coverage, scoped checks and implementation-bound review are recorded before completion.
+
+## Shared vector object value ownership (task64)
+
+Task64 extends the existing shared reserved-slot adapter with erased native ValueT copy/move construction, in-place assignment, destruction, optional operator== and move-if-noexcept traits. All existing initialized vector helpers and std_vector operations preserve object ownership; copy/move constructor and assignment, rvalue append and destructor bindings reuse the same storage. Native selected libc++ whole streams compare object identities, values, capacities and every special-member event for both move traits, aliased append, all insertion branches, retained/reallocated assignment, empty operations and self copy/move. Borrowed scalar/pointer stores remain shared. This is language infrastructure, not a new mdds container or certified whole STL implementation. Custom allocators, throwing operator cleanup, invalid/self-inserting ranges, other standard-library implementations, physical ABI and complete mdds/Calc cell/document/UI remain unverified.
+
+Actual svl::SharedString special members already exist and will be reused when the original delayed/default object-value block specialization is connected. The external mdds layer receives actual ValueT operator witnesses and does not import svl or sc owners. This task does not claim editable cells or readiness of ScColumn/Table/Document and UI. Full61 passed; next full71.
+
+## Original Calc object value blocks (task65)
+
+Task65 connects actual initialized object ValueT ownership to the existing delayed_delete_vector/default_element_block operation family, reusing shared vector special-member helpers. Count/default constructs independent values; count/fill and range/copy perform actual value copies including hidden constructed prefixes. Reference assignment, append/lvalue emplace, range insertion, resize/default construction, erase, reserve/shrink, equality and destructor preserve original native operators. Original mdds block swap performs two copies and copy assignments; actual std::iter_swap remains a distinct move-temporary operation. Scalar and borrowed-pointer paths remain shared. Pure callers over unchanged mdds3.2.1 headers and full actual SharedString/CellTextAttr sources use verified existing complete native dependency objects and normal-only witness execution, comparing whole owned and Calc streams. Existing SharedString and CellTextAttr owners are reused; external mdds imports no Calc/SVL. Custom allocators/StoreT, throwing cleanup, undefined ranges/lifetimes, complete perfect-forwarding/rvalue overload families, physical ABI, pointee/callback/container/document/UI owners remain unverified.
+
+Calc string_block and celltextattr_block now instantiate the original default block family with actual existing svl::SharedString/sc::CellTextAttr operators; their object copies remain independent and delayed prefix string references remain held until the original clearing/destruction points. Discriminators and standard aliases follow sc/inc/mtvelements.hxx. Typed callbacks and complete CellStoreType/ScColumn/Table/Document remain next UI prerequisites. Related portable coverage selects complete mdds, SAL/string dependencies, SharedString and script discriminator tests, with existing cached-key and UNO caller bindings for whole SAL owner paths. Unrelated UNO/ICU runtime owner coverage is excluded; using existing caller tests adds no UNO/ICU parity claim. Full61 passed; next full71.
+
+## Original typed value callbacks (task66)
+
+Task66 extends original initialized value and pointer callback families through existing owners. Original output-reference extraction copy-assigns the existing owned target; by-value extraction constructs an independent result. Rvalue append and actual erased forwarded constructor packs use the same original store, constructing incoming values before alias relocation. The existing scalar container requires its actual value-result binding only, so its heterogeneous callback type omits unrelated writable-reference overload requirements without runtime changes. Original value macro, pointer macro and Calc SharedString/CellTextAttr registrations reuse original block and actual value owners. Normal-only pure callers over whole unchanged mdds macros/headers and full actual SharedString/CellTextAttr sources compare complete value, borrowed-pointer and Calc streams. Original ValueT() empty expressions use actual default temporary, move assignment and destruction. Explicit type/reference/value-category/constructor witnesses replace erased C++ overload/ADL/parameter-pack syntax; no runtime type guessing, duplicate store or fake Calc pointee/provider. Other macro empty-expression categories, arbitrary ValueT/constructor families, throwing cleanup, custom allocators/StoreT, undefined ranges/lifetimes and physical ABI remain unverified. Full MTV/actual other Calc pointees/document/input/view/UI remain subsequent work; no whole module or upstream QA certification.
+
+Calc string_element_callbacks and celltextattr_element_callbacks now instantiate the original value macro with actual existing value members. The original pointer macro is available in shared mdds; no absent Calc pointees or registrations are fabricated. This establishes required value-block callbacks, not complete CellStoreType or editable ScColumn/Table/Document. Existing scalar registrations and container behavior remain shared. Full61 passed; next full71.
+
+## Original owned container reads and text metadata store (task67)
+
+Task67 generalizes the existing original SoA count/fill/range constructor bindings to actual owned values. Original get(pos,T&) assigns an existing output reference; owned T get(pos) declares a default value, calls reference get_impl and returns that value, destroying the fresh local before propagating a failed lookup. Scalar result callers remain unchanged. Existing blocks_type insert/swap/equality/erase member bodies now occupy original main_def.inl boundary through thin header wrappers, with original algorithms and no runtime import cycle. Actual SharedString and CellTextAttr value members, macros, default traits, block dispatch and empty event owners are reused. Original CellTextAttrTraits and CellTextAttrStoreType bind the same shared constructor/prototype, not a second container engine. Whole unchanged mdds SoA headers with actual full SharedString/CellTextAttr sources produce normal-only complete owned1203 and Calc505-byte streams; original Calc trait declaration is a selected exact declaration witness from full pinned mtvelements.hxx, not a compilation or certification of its absent full pointee dependency graph. Erased ADL/type/output/ValueT constructor/destructor witnesses replace C++ syntax without runtime value-type inference. Reference/value reads, count/fill/range, copy/clone/move and failed result cleanup are bounded initialized witnesses. Other value/allocator/constructor/throwing-operator families, undefined ranges/lifetimes, physical ABI and complete upstream QA remain unverified. Full CellStoreType requires actual formula/edittext and associated owners; ScColumn/Table/Document/edit/undo/input/view/UI remain next prerequisites, with no whole module/kernel/UI parity promotion. Last full61; next full71.
+
+## Original owned append and positional value reads (task68)
+
+Task68 connects original owned lvalue/rvalue push_back forwarding through the existing original SoA pipeline and actual typed macros/default-block/value owners. Explicit push_back_move selects erased native rvalue category; the same new-cell and matching-block paths acquire an empty block before append and update original metadata/size/returned iterator fields in native order. ValueT aliases on original concrete default blocks bind already existing actual copy/move/default/destructor members. Original positional get retains bool-store iterator versus checked-at dispatch; its non-bool value_type return invokes actual owned copy construction, preserving borrowed at access and scalar/pointer identity. Original metadata calc_block_position/calc_next_block_position/reserve bodies occupy main_def.inl boundary through existing header wrappers, no second engine or runtime import cycle. Complete normal-only whole original mdds SoA/type/macro headers plus full genuine SharedString/CellTextAttr sources match owned1380 and Calc575-byte initialized traces, including category transitions, acquire-before-append, actual lvalue/rvalue/aliased append special members, every returned cached/private iterator field, metadata/capacity/payload, string refcounts and independent positional copies. Native event/value types are instrumentation-only caller inputs, not fake Calc owners/providers. Exact selected original CellTextAttrTraits declaration is verified from complete pinned source; full sc mtvelements.hxx pointee graph is not compiled or certified. Actual Calc strings/text attributes reuse original callbacks/traits/store; no partial CellStoreType is fabricated. Other full container set/insert/transfer/resize/emplace/release and pointee ADL/forwarding families, arbitrary allocator/value/throwing operators/undefined lifetimes/physical ABI/trace-debug modes and complete upstream QA remain unverified. Actual formula/edittext/pointee/ScColumn/Table/Document/edit/undo/input/view/UI remain next dependencies; no full module/kernel/UI parity promotion. Last full61; next full71.
+
+## Original single-value writes (task69)
+
+Task69 implements both original const-reference single-value set overloads, complete category/top/middle/bottom/empty/singleton dispatch and both size-based neighboring merges over the original existing SoA fields and actual shared macro/default/value operations. main_def.set.ts is a source-mapped original main_def.inl single-value/append definition shard needed for authored file limits; no separate engine, replacement metadata or runtime cycle. The original append/new-cell private wrapper is retained, append primitive size updates precede iterator construction, and unchanged append_empty/resize bodies stay at the mapped definition boundary with actual owner-field bindings. Whole unchanged native normal-only scalar2189311/owned278399/Calc1510-byte initialized streams exercise10016 scalar permutation writes, actual owned special members/events/capacity/returned pointer identity, empty top/bottom private members through standard caller-only access and actual SharedString/CellTextAttr replacement/refcount/independent reads. Source references are physically absent during full scoped tests/build; whole raw owner coverage must remain100 and all counters positive. Both set overloads take const T&, no invented move setter. Range-set/other container families, actual pointee ADL/forwarding/allocator/throwing/undefined/native ABI/debug/trace/upstream QA and complete formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain unverified. Full sc mtvelements.hxx graph is not compiled; only exact original CellTextAttrTraits declaration is witnessed. No full module/kernel/UI parity promotion; next full71.
+
+## Original range-value writes (task70)
+
+Task70 implements both original plain/hinted input-range set overloads and the complete single/multi-block dispatch, previous/next block transfers, metadata and original macro/value/event/iterator ordering. The existing actual nested block_slot_type is supplied as an erased native type witness; external mdds imports no sc/svl and owns no parallel cell store. main_def.range.ts maps the original main_def.inl range family and unchanged insert_empty_impl body under the authored file budget, using original loop-unrolling and actual primitive size-field updates before iterator construction. Whole unchanged normal-only native headers and complete genuine SharedString/CellTextAttr sources match full scalar23968-case, owned special-member and Calc refcount/text streams. Original empty-input-before-hint, unsigned input-end arithmetic and exact diagnostics are retained. Prefix replacement intentionally emits no block events, and original unique_ptr null/throw cleanup is checked through caller-only trait failure injection. The original nonempty-first/different-last partial erase intentionally does not add overwrite_values. These are bounded initialized native witnesses, not full generic allocator/throwing/undefined/ABI/debug/trace/upstream QA or module/kernel/UI certification. Only the exact original CellTextAttrTraits declaration is witnessed; full sc mtvelements.hxx pointee graph is not compiled. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full61; next full71.
+
+## Full regression checkpoint (task71)
+
+Full71 completes the scheduled ten-task regression after full61. Complete source-absent office15510tests727files, inventory123tests38files (serial corrective rerun), tooling34tests9files, browser308(Writer306/shared2/Calc0) and static build pass. All442executable office owners (Writer209/Calc20/shared213) have positive raw statement/branch/function counters and S/B/F/L100:31818/21295/6484/28892. Writer has no coverage gaps; no Writer code or coverage criteria changed. Inventory summary100:1734/1292/436/1668. All13aggregate gates pass after exact lint recheck. Current Calc112/30 and exact task70 related shared219/39 source-absent profiles retain whole20/33owners raw100, every raw counter positive and complete task70 maps/selection; fourteen complete declaration-facade ASTs parsed. All3original reference symlinks restored exactly; pinned original9bc445578031fecf56086729d8e4940c77e14d65 and normal-only task70 native proof unchanged, no native rebuild.
+
+The only tracked code edit is the shared inventory validation test: with an empty capability registry it still demands the exact error for the first declared operation, but obtains that operation from the current validated manifest rather than a stale hard-coded ID. Whole serial inventory rerun passes without timeout/assertion/threshold/exclusion changes. Concurrent rerun timeouts in unchanged Cppunit/ODT fixtures and the initial stale assertion failure are retained separately. Five ignored lint artifacts were cleaned: original historical snapshot bytes retained under explicit text name, and four unused imports removed without changing executable helper bodies. The initial lint failure and repair byte/hash audit are retained.
+
+Application, package/config/test ownership trees remain identical to task70;457current source hashes bind the complete full-office runtime, unchanged facade profile and modified test. Full kernel/ScFormulaCell/EditTextObject/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain unverified. The next scheduled full regression is81; intervening tasks retain Calc plus directly related shared raw100 gates.
+
+## Original shared formula errors (task72)
+
+Task72 supplies the complete original shared include/formula/errorcodes.hxx enum and all three helper functions required by ScFormulaResult and ScFormulaCell. Original explicit published/internal cases, finite/infinite/NaN precedence and UInt16 code payload are preserved through Number.isFinite and DataView, without a second SAL union library or synthetic formula token/cell. Normal-only caller compiles the whole unchanged pinned header, verifies all seven original header dependencies and one reused configuration, and captures every65536 UInt16 error creation/decoding/publication plus300finite/infinite/quiet/signaling NaN bit witnesses. Compiler-reported SDK metadata is recorded without reading outside-repository files or claiming its bytes are pinned. Portable complete raw100 and actual Chromium production-module scalar/object/Float64 storage witnesses are required. No claim is made for other browser engines, payload preservation through arithmetic/JSON/cross-process transport, arbitrary native ABI, full formula module/upstream QA or complete Calc document/UI. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full71; next full81.
+
+The original unconditional NaN construction with FormulaError::NONE decodes as IllegalFPOperation, not NONE. This is retained as specified by the original helper; ordinary finite values decode as NONE. Complete enum38, UInt16-domain65536 and bit-classification300 witnesses are committed independently of reference source availability.
+
+## Original formula result value owner (task73)
+
+Task73 implements the actual complete sc::FormulaResultValue struct and all four explicit constructors, with original Invalid/Value/String/Error tags, direct unscoped tag aliases, defaults and implicit copy/move/assignment/destructor semantics. Genuine existing FormulaError and SharedString owners are reused, without a parallel string or result model. Native fixed UInt8/UInt16 field assignment and shared member reference identity are retained; public string assignment delegates to its actual shared value assignment. Explicit actual FormulaError enum and SharedString.move witnesses restore erased enum-vs-double and caller value-category contracts; values and NaNs are never guessed as errors. Complete selected original struct/four-constructor scopes from full pinned files compile over whole genuine SharedString/SAL dependencies with four reused normal witnesses, one new normal link and three complete capture commands. All65536error/double/encoded-double constructor distinctions,52ownership/assignment combinations,16public field narrowing/copy/move observations and initialized special doubles are compared. The full ScFormulaResult/token/matrix/document graph is neither compiled through substitutes nor certified. Raw whole Calc and directly related shared100 plus source-absent build/profile checks are required. Other constructors/native ABI/concurrency/undefined lifetimes and whole formula/kernel/upstream QA/document/input/UI remain unverified. Explicit native special members/value category bindings replace erased C++ syntax; plain JS reference aliasing is not a native value copy. Last full71; next full81.
+
+## Original shared formula opcode and parameter contracts (task74)
+
+Task74 ports the complete shared OpCode and ParamClass header contracts needed by original FormulaToken. All505opcode names/aliases/range sentinels,487diagnostic cases and10parameter classifications retain original values. Whole genuine native headers verify every65536UInt16 release diagnostic; unknown codes retain???, while a separate normal debug caller demonstrates native assertion termination. Browser binding deliberately claims release behavior only, not native debug process abort or unreachable numeric fallback. Enum-only opcode.enum declaration shard retains original header responsibility under authored1000line budget; opcode header consumes it without a cycle or a second engine. Whole Calc and affected formula raw100/source-absent build/profile and exact source-bound review are required. Full formula/token/cell/document/input/UI/native ABI/upstream QA remain unverified; next full81.
+
+The native duplicate-valued opcode aliases use one typed constant declaration and an associated named value type. This preserves all505original names/values without inventing C++-absent reverse lookup names or disabling lint rules. Native fixture generation uses the existing repository Prettier configuration so --write and --check are reproducible. Current raw coverage is remeasured after this language binding change.
+
+
+### Original shared formula token family and ownership (task75)
+
+Task `202610121401-NEW0HT` implements the original `include/formula/token.hxx`
+family of15classes at shared `formula/inc` and `formula/source/core/api`
+boundaries. StackVar and RefCntPolicy retain their original UInt8 values;
+copies and Clone reset the count and policy exactly as the base constructor
+specifies. Function/parameter/reference/array classification, scalar members,
+string values, jump arrays and equality retain original responsibilities.
+FormulaErrorToken assignment copies only its error. Original compiler-only
+access and protected string construction have explicit erased access witnesses.
+
+Existing SAL interlocked, OUString, SharedString, errors, opcodes and parameter
+classes are reused. The real FAP token owns its original FormulaToken through
+shared Boost intrusive_ptr ownership. Its generic ADL and raw/copy/move argument
+categories are explicit bindings, rather than guessed from pointer-shaped
+objects. Mutable/const formula pointer aliases bind the genuine formula hooks
+once. The generic owner has no application or formula dependency. Additional
+Boost conversion/cast/comparison/hash/stream operators remain unimplemented.
+
+FormulaCompiler currently binds only its actual static IsOpCodeJumpCommand
+member. It does not construct compiler instances or compile expressions. Source
+shards preserve original token.hxx/token.cxx responsibilities under the authored
+1000line limit and do not create a runtime dependency cycle or another engine.
+
+The normal-only native caller includes whole unchanged token/types/compiler
+headers and complete selected actual member definitions. Original cppumaker
+produces FormulaLanguage from its pinned IDL; no compiler or dependency class is
+substituted.463whole pinned source files and17actual Boost headers are verified;
+Boost1.91is checked against the archive hash in original download.lst. Complete
+65536-opcode byte/space classification,65536string-op parameter counts,
+256stack diagnostics, constructor/Clone rows, scalar field narrowing/IEEE payload/jump-copy
+observations,30string-family copy/move/member-assignment cases and genuine
+intrusive/FAP lifetime streams match the portable owners. CALC-067 records the original early-return
+asymmetry without changing its behavior. The browser implements the original
+release-build dummy setter; native debug process abort is outside its claim.
+
+Current source-absent checks pass116Calc tests in31files and82directly affected
+shared tests in22files. Raw Calc S3021/B2065/F501/L2665and shared
+S1692/B1344/F303/L1503are100with every raw statement/function/branch counter
+positive. Source-absent static build and the actual Calc browser profile pass;
+there are0actual Calc UI scenarios. Capability/runtime/provenance entries remain
+foundation with broad contract/behavior/default/verified flags false. Final source-bound review and lifecycle closure are required for task completion. Full tokenarray/compiler/native ABI/invalid lifetimes,
+complete upstream QA and Calc cell/matrix/document/input/view/UI remain unfinished
+or unverified. Last full71; next full81.
+
+### Original empty and hybrid result tokens (task76)
+
+Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81.
+
+Whole Calc119tests in32files and directly affected shared82tests in22files pass with raw S/B/F/L100 and every raw counter positive. Calc totals3054statements/2085branches/514functions/2697lines; shared totals1692/1344/303/1503. Original four reference links are absent during portable verification and restored afterward. All14local gates pass, including whole23affected tooling tests. Source-absent static build and Calc browser profile pass with0actual Calc UI scenarios. Source-bound evaluation and lifecycle closure are tracked in task76 separately; these tokens do not provide an editable Calc document.
+
+### Original matrix value contract (task77)
+
+Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81.
+
+Whole Calc122tests in33files and directly affected shared82tests in22files pass raw S/B/F/L100 with every raw counter positive. Calc totals3080statements/2092branches/526functions/2721lines; shared1692/1344/303/1503. Four original reference links are absent during portable checks and restored afterward. Static build and Calc browser profile pass with0actual UI scenarios. All14local gates and23whole affected tooling tests pass. The actual matrix container and ScMatrix owner remain next dependencies; exact source review and closure are tracked separately in task77.
+
+### Original matrix storage and typed access (task78)
+
+Task78 implements original mdds3.2.1 multi_type_matrix core geometry/storage/access over the genuine existing SoA vector. Original trait registration, size_pair_type, default/size/value/range/copy/defaulted move and assignments/destructor, equality, plain/hinted/const positions, typed scalar and owned reads, borrowed string queries, scalar/range/column/empty writes, numeric/empty/clear/swap retain original contracts. Erased template aliases/value categories use explicit witnesses; numeric conversion is certified only for initialized representable native casts and exact bounded size_t coordinates. Ordinary full unchanged matrix/vector headers and genuine SharedString dependencies provide whole native streams; Calc custom string/UInt16/UInt8 traits are source excerpts, not fake pointees. Transpose, matrix copy/resize/block walks, ScMatrix/ScFormulaResult/formula cells/column/table/document/edit/undo/input/view/UI, native ABI/invalid lifetimes/concurrency/full upstream QA remain required or unverified. Foundation and broad parity flags remain false; next full81.
+
+Whole original ordinary scalar28105byte and Calc ownership585byte streams match. Entire Calc123tests34files and directly affected shared221tests41files pass raw S/B/F/L100 with every counter positive; matrix owner118statements37functions64branches all positive. Initial build type inference error in the test witness was repaired with explicit MatrixTraits<SharedString>; no runtime semantics changed. Native --write/--check pass; source-absent static/profile and remaining local gates/exact source evaluation are tracked by task202610121608-SAM7JV. CALC-069 records original scalar/range int8 validation asymmetry without a fix. Original matrix QA reference is unexecuted field/type context only.
+
+### Original matrix geometry operations (task79)
+
+Task79 ports original matrix element_block_node_type, transpose, matrix copy, range copy and resize over genuine shared SoA vector and existing strings/blocks. Source block section order, early self/empty exits, range validation, clipping, partial writes, temporary default string construction/assignment/destruction, resize reset-before-clear and temp copy/swap are retained. Explicit string ADL callbacks and NativeValueType witnesses restore erased native template aliases, reusing actual SharedString members; primitive std::string value witnesses use existing JS string semantics, not a new string owner. Full unchanged original matrix/vector headers and genuine SharedString dependencies produce ordinary initialized full streams. Original canonical integer type is omitted in matrix-copy/transpose dispatch while range-copy accepts it; preserve and journal this asymmetry and consequent resize exceptions. Debug assertions, invalid iterator lifetimes, unrepresentable native casts/dimensions, ABI/concurrency/full QA remain unverified. Matrix block walks, actual ScMatrix/result/cell/document/edit/undo/input/view/UI remain required; foundation and broad parity flags false, next full81. Original matrix QA marker is unexecuted field/type context only.
+
+Whole ordinary original scalar66673byte and Calc ownership946byte streams match, including original integer dispatch omissions and partial/temporary exception state recorded in CALC-070. Whole Calc124tests35files and directly affected shared223tests43files pass raw S/B/F/L100 with every counter positive: Calc3080S2092B526F2721L; shared3697S1768B727F3296L across35 executable owners. Four original source links are absent during portable validation and restored; static/build and actual Calc profile0UI pass. Initial erased trait shorthand and native caller newline formatting issues were repaired within scope before terminal checks. All14 local gates and23whole tooling tests pass. Exact-source evaluation and lifecycle closure are tracked by task202610121640-EEQ2PY; no complete matrix/ScMatrix/document/UI readiness claim.
+
+### Original matrix block walks (task80)
+
+Task80 ports four original matrix block walks and walk_func over the real shared SoA vector. Exact whole/ranged/parallel section order, original type mapping, validation, borrowed node offsets, copied/moved FuncT parameter and returned state, and exception destruction use explicit existing ValueOperations witnesses. Ordinary full unchanged matrix headers and genuine SharedString/Calc trait excerpts match whole27666byte scalar and251byte Calc streams; all initialized dimensions0..3/subranges, differing parallel dimensions, typed integer/string/flag sections, callback exceptions and callable lifetime/category state are covered. CALC-071 preserves inclusive endpoint row-count spill within initialized flat storage. No native invalid iterator/UB/ABI/concurrency or full upstream QA claim. Actual ScMatrix/result/formula cells/column/table/document/edit/undo/input/view/UI remain required; broad flags false. Original QA marker is unexecuted context only. Full81 follows, then pause at user request.
+
+Whole Calc125tests36files and directly affected shared225tests45files pass raw S/B/F/L100 with every counter positive: Calc3080S2092B526F2721L and shared3766S1805B731F3361L across35 executable owners. Four original reference links are absent during portable checks and restored; static build and actual Calc browser profile pass with0UI scenarios. Ordinary native --write/--check and current full-stream tests pass. All14 local gates and23whole related tooling tests pass after initial new formatting/JSDoc and registry-overlap failures were corrected. Final shared raw map refreshed after comment relocation. Exact source review and lifecycle closure are tracked separately in task202610121711-DBTFFV; no UI readiness claim.
+
+### Full verification checkpoint (task81)
+
+[Full test cycle8](calc-full-test-cycle-8.md) runs all current suites after tasks72 through80 with four original reference links absent/restored. Office15550tests740files, inventory123tests38files, tooling35tests9files, browser308scenarios (Writer306/shared2/Calc0) and static build pass first run. Whole raw office459executable owners are S33129/B22303/F6705/L30164all100 with every counter positive, including Calc24/shared226/Writer209. Inventory JSON summary1734S1292B436F1668L100. No runtime or Writer-only coverage repairs needed. Exact source/gate review and closure are tracked by task202610121732-1D97V7; user requests pausing the goal after completion. Original ScMatrix/result/cells/document/edit/undo/input/view/UI remain subsequent, with no editable UI readiness claim.

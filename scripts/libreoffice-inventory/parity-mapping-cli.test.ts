@@ -140,6 +140,8 @@ describe("parity mapping CLI" /**
         capabilityIds: expect.arrayContaining(["CAP-80646669-70d5-4641-9fe5-29b1639adab9"]),
       }),
     );
+    const firstOperation = runtimeDeclaration.internalOperations[0];
+    expect(firstOperation).toBeDefined();
     await expect(
       runParityMappingCli(
         validArguments,
@@ -153,7 +155,7 @@ describe("parity mapping CLI" /**
         async () => new Set<string>(),
       ),
     ).rejects.toThrow(
-      "shared.internal.insert-storage references unknown capability CAP-fea462db-89f8-4359-a95d-7c253562827f.",
+      `${firstOperation.id} references unknown capability ${firstOperation.capabilityId}.`,
     );
     await expect(
       runParityMappingCli(

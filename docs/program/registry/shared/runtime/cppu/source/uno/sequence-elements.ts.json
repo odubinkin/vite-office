@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/source/uno/sequence-elements.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-ca9b5489-27c1-47d2-85a4-7d9102219189"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/source/uno/sequence-elements.ts#copyRange",
+        "cppu/source/uno/sequence.cxx#reallocSeq",
+        "apps/office/src/cppu/source/uno/sequence-engine.test.ts#matches complete original sequence construction COW resize assignment and ownership histories"
+      ],
+      "justification": "Task42 original sequence.cxx C engine: original element tags/widths, initialized defaults and ascending copy, base-first/reverse own compound fields, exact allocation size guards, shared/non-memcopyable COW split, prefix-copy/tail-default ordering, unique grow/shrink destruction, description/reference boundaries and assignment acquire-before-release/self identity. Reuse actual existing SAL record/atomic count, CPPu type/element storage, default/copy/destruction owners. Identical native primitive memset/memcpy operations use shared typed addressed-storage adapters; sal_Bool sequence bytes retain their source values while scalar data copy still normalizes through bool(source). Native free/realloc uses browser GC and stable logical views, not native addresses/capacity/byte ABI/OOM/NaN payload parity. Original negative-count guards retained; bounded diagnostic-only metadata observations do not establish supported producer/general malformed-header parity. Complete native --write/--check verified 358 original source hashes and three sanitizer-identical streams; source-absent Calc and directly related shared replay have every raw S/F/B counter positive and S/B/F/L100. Acceptance is bounded to the recorded initialized observations. Public C++ Sequence template, weak/service/classification/CharClass/pool/cell/document/UI remain subsequent work; broad semantic parity flags false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "copyRange",
+        "defaultRange",
+        "icopyConstructFromElements",
+        "idefaultConstructElements",
+        "reallocSeq"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppu/source/uno/sequence.cxx",
+      "upstreamSymbols": [
+        "reallocSeq",
+        "idefaultConstructElements",
+        "icopyConstructFromElements"
+      ]
+    }
+  }
+}

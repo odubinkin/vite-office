@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d82b7b60-fd3c-44c2-b7e0-13fba6da1983",
+    "capabilityId": "CAP-d82b7b60-fd3c-44c2-b7e0-13fba6da1983",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve complete original UnoInterfaceReference pointer ownership, callback/publication order, copy/move/self assignment and borrowed dispatch address forwarding.",
+      "Match whole initialized original ownership/move/dispatch streams over unchanged native dependencies and source-absent complete-owner raw100."
+    ],
+    "capability": "Original binary UNO interface holder ownership and dispatch",
+    "gaps": [
+      "Generic exception/environment/mapping and downstream weak object/services remain subsequent; physical ABI/native thread/resource/shutdown and full consumer QA unverified.",
+      "Original testInterface is a contextual CPPU interface ownership QA reference, not a direct UnoInterfaceReference test port. No direct holder QA was located in cppu/cppuhelper/bridges; whole genuine header caller evidence covers the implemented holder only."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/uno/dispatcher.hxx",
+          "marker": "class UnoInterfaceReference"
+        },
+        {
+          "path": "include/uno/dispatcher.h",
+          "marker": "uno_DispatchMethod"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "void Test::testInterface()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/uno/dispatcher.hxx",
+          "marker": "C++ holder reference for binary C uno_Interface"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/dispatcher.ts",
+          "marker": "class UnoInterfaceReference"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/dispatcher.test.ts",
+          "marker": "matches complete original"
+        },
+        {
+          "path": "scripts/uno-dispatcher-native-probe.mjs",
+          "marker": "Original binary dispatcher observations"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original binary UNO interface holder"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Complete original internal UnoInterfaceReference holder in the existing shared dispatcher owner. Pointer/no-acquire/copy/move constructors, assignment, clear and destructor preserve their own callback and pointer publication order; dispatch forwards actual borrowed member, return/argument and exception cell addresses including null arguments. Existing SAL no-acquire tag, binary interface callback record and typelib/Any owners are reused. Valid initialized caller traces must match whole genuine original normal-ASan/UBSan observations, with all original dependencies and hashes; portable Calc and full related shared owners require raw100. No generic exception helper, environment/mapping/interface/type/default provider, physical ABI, allocator/leaks, native thread/shutdown or full consumer QA claim; broad parity flags remain false."
+    },
+    "scopeLimitations": [
+      "Complete original internal UnoInterfaceReference holder in the existing shared dispatcher owner. Pointer/no-acquire/copy/move constructors, assignment, clear and destructor preserve their own callback and pointer publication order; dispatch forwards actual borrowed member, return/argument and exception cell addresses including null arguments. Existing SAL no-acquire tag, binary interface callback record and typelib/Any owners are reused. Valid initialized caller traces must match whole genuine original normal-ASan/UBSan observations, with all original dependencies and hashes; portable Calc and full related shared owners require raw100. No generic exception helper, environment/mapping/interface/type/default provider, physical ABI, allocator/leaks, native thread/shutdown or full consumer QA claim; broad parity flags remain false.",
+      "The upstream testInterface reference concerns surrounding interface ownership; no direct upstream holder QA port or full consumer QA is claimed."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "binary-interface-holder-ownership-dispatch"
+  }
+}

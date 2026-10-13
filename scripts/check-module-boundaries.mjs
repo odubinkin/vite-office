@@ -10,9 +10,11 @@ import ts from "typescript";
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "cppu",
+  "cppuhelper",
   "cui",
   "editeng",
   "external",
+  "formula",
   "framework",
   "i18nutil",
   "o3tl",
@@ -35,9 +37,13 @@ const moduleNames = [
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
+  // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
+  ["cppuhelper", new Set(["cppu", "sal"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
+  // Original token.hxx/types.hxx use SAL interlocked/OUString, SVL SharedString and Boost intrusive_ptr.
+  ["formula", new Set(["sal", "svl", "external"])],
   ["framework", new Set(["sfx2", "svl"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
@@ -52,10 +58,14 @@ const allowedEdges = new Map([
       "cui",
       "editeng",
       "external",
+      // Original Calc formularesult.hxx includes the shared formula error contracts.
+      "formula",
       "framework",
       "o3tl",
       "offapi",
       "package",
+      // Original Calc global.hxx/token.hxx use rtl/ustring.hxx; hybrid results own OUString.
+      "sal",
       "sax",
       "sfx2",
       "svl",
@@ -131,8 +141,11 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("cppu/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("cppuhelper/inc/") || portablePath.startsWith("cppuhelper/source/"))
+    return "upstream-mechanism";
   if (
     portablePath.startsWith("i18nutil/inc/") ||
     portablePath.startsWith("udkapi/") ||

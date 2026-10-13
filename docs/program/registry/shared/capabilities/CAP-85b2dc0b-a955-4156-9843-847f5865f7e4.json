@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-85b2dc0b-a955-4156-9843-847f5865f7e4",
+    "capabilityId": "CAP-85b2dc0b-a955-4156-9843-847f5865f7e4",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain complete original typed/Any/type/string/compound/sequence equality switches, native cast semantics and descending short circuits.",
+      "Retain root-interface identity query/release and original binuno_queryInterface retained method/dispatch/return/exception ownership through actual shared owners."
+    ],
+    "capability": "Original CPPu UNO typed equality and binary query ownership",
+    "gaps": [
+      "Public Sequence/UnoType templates and downstream services/CharClass/pool/Calc cells/document/edit/view/UI unported; native physical ABI/allocator/resources/NaN payload families/filtered SAL logging/undefined casts/consumer QA unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppu/source/uno/eq.hxx",
+          "marker": "_equalData"
+        },
+        {
+          "path": "cppu/source/uno/data.cxx",
+          "marker": "binuno_queryInterface"
+        },
+        {
+          "path": "include/uno/data.h",
+          "marker": "uno_type_equalData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "void Test::testSequence()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/uno/data.h",
+          "marker": "Tests if two values are equal"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/source/uno/eq.ts",
+          "marker": "_equalData"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/eq-numeric.ts",
+          "marker": "equalNumeric"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/eq-sequence.ts",
+          "marker": "_equalSequence"
+        },
+        {
+          "path": "apps/office/src/cppu/source/uno/data.ts",
+          "marker": "binuno_queryInterface"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/source/uno/eq.test.ts",
+          "marker": "matches complete original numeric typed pairs and comparison cast ordering"
+        },
+        {
+          "path": "scripts/uno-equality-native-probe.mjs",
+          "marker": "prepareCaseNative"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original CPPu UNO equality engine"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "typed-value-equality",
+    "scopeLimitations": [
+      "Complete initialized original normal-ASan-UBSan and portable streams verified through5 full modes;358 complete source hashes bound to pin. Floating-to-u64 at or beyond2^64 excluded as undefined native cast. Diagnostic-only unsupported element/TYPEDEF/nested Any observations make no ordinary producer claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task43 original eq.hxx equality: independent Any flattening, exact source destination/source class switches, original signed interpretation of unsigned-hyper source in signed destination cases, mathematical cmp_equal, binary32/double/floor/nonnegative guards, real type/string/compound/sequence equality and descending short circuit, root-interface query and reverse ordered releases. Existing SAL/CPPu values/type/count/storage/default/copy/destruction and OUString.equals owners reused. Native Math.fround and Number used when original direct cast agrees; actual native integer64 cast witness proves double rounding for0x4000004000000001, so only wider integer64-to-binary32 conversion uses explicit discarded-bit ties-to-even rounding via native BigInt. data.cxx binuno_queryInterface retains original first-call method description, dispatch and return/exception destruction using actual Any owners; browser filtered SAL_WARN output remains unported. Original --write and --check verify358 complete source hashes and identical normal/ASan/UBSan numeric2112864, scalar651680, sequence89468, interface5008 and diagnostic28-byte streams. Complete source-absent portable equality replay passes all5 cases, including actual retained method-description fields/identity and integer64 even/odd rounding ties. Combined source-absent Calc106/24 and shared125/37 tests have raw S/B/F/L100 across19/52 executable owners; strengthened test-only replay retains raw100 for all3 equality owners and verifies every combined runtime owner hash unchanged. Scoped gates pass. Native byte/pointer ABI, allocator/OOM, NaN payload families, undefined floating-to-u64 out-of-range casts, arbitrary unsupported inputs, native threads/shutdown and original consumer QA remain unverified. Public C++ Sequence/UnoType templates and downstream service/CharClass/pool/Calc cells/document/edit/view/UI remain subsequent work; broad parity flags false."
+    }
+  }
+}

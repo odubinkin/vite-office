@@ -1,0 +1,120 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-71c36f68-d212-4d89-8178-4e124bb8e6b9",
+    "capabilityId": "CAP-71c36f68-d212-4d89-8178-4e124bb8e6b9",
+    "suite": "calc",
+    "subsystem": "cell-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Both original plain/hinted range set overloads preserve input-end ordering, complete block transfers and returned iterator/event/value state.",
+      "Genuine existing SharedString/CellTextAttr owners reuse the same shared container and original macros.",
+      "Original replacement cleanup is exercised against unchanged native code; whole kernel and editable UI remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task70 implements both original plain/hinted input-range set overloads and the complete single/multi-block dispatch, previous/next block transfers, metadata and original macro/value/event/iterator ordering. The existing actual nested block_slot_type is supplied as an erased native type witness; external mdds imports no sc/svl and owns no parallel cell store. main_def.range.ts maps the original main_def.inl range family and unchanged insert_empty_impl body under the authored file budget, using original loop-unrolling and actual primitive size-field updates before iterator construction. Whole unchanged normal-only native headers and complete genuine SharedString/CellTextAttr sources match full scalar23968-case, owned special-member and Calc refcount/text streams. Original empty-input-before-hint, unsigned input-end arithmetic and exact diagnostics are retained. Prefix replacement intentionally emits no block events, and original unique_ptr null/throw cleanup is checked through caller-only trait failure injection. The original nonempty-first/different-last partial erase intentionally does not add overwrite_values. These are bounded initialized native witnesses, not full generic allocator/throwing/undefined/ABI/debug/trace/upstream QA or module/kernel/UI certification. Only the exact original CellTextAttrTraits declaration is witnessed; full sc mtvelements.hxx pointee graph is not compiled. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full61; next full71."
+    },
+    "capability": "Original Calc string and text attribute input-range writes",
+    "gaps": [
+      "Remaining original container/pointee/allocator/undefined/native ABI/debug/upstream QA remain unverified.",
+      "Original ScFormulaCell/EditTextObject/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cells_impl"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cells_to_single_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cells_to_multi_blocks"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cells_to_multi_blocks_block1_non_equal"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::set_cells_to_multi_blocks_block1_non_empty"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::append_to_prev_block"
+        },
+        {
+          "path": "vendor/mdds-reference/include/mdds/multi_type_vector/soa/main_def.inl",
+          "marker": "multi_type_vector<Traits>::insert_empty_impl"
+        },
+        {
+          "path": "sc/inc/mtvelements.hxx",
+          "marker": "CellTextAttrTraits"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/mdds-reference/test/multi_type_vector/element-blocks/test_basic.cpp",
+          "marker": "using my_block2"
+        }
+      ],
+      "docs": [
+        {
+          "path": "download.lst",
+          "marker": "mdds-3.2.1.tar.xz"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main_def.range.ts",
+          "marker": "set_cells_impl"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/main.ts",
+          "marker": "set_range_body"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range.test.ts",
+          "marker": "matches complete original scalar input-range set permutation stream"
+        },
+        {
+          "path": "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range-owned.test.ts",
+          "marker": "matches original owned input-range set whole stream"
+        },
+        {
+          "path": "apps/office/src/sc/inc/mtvelements-range.test.ts",
+          "marker": "matches complete original Calc input-range write stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original range-value writes (task70)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-range-container-set",
+    "scopeLimitations": [
+      "Task70 implements both original plain/hinted input-range set overloads and the complete single/multi-block dispatch, previous/next block transfers, metadata and original macro/value/event/iterator ordering. The existing actual nested block_slot_type is supplied as an erased native type witness; external mdds imports no sc/svl and owns no parallel cell store. main_def.range.ts maps the original main_def.inl range family and unchanged insert_empty_impl body under the authored file budget, using original loop-unrolling and actual primitive size-field updates before iterator construction. Whole unchanged normal-only native headers and complete genuine SharedString/CellTextAttr sources match full scalar23968-case, owned special-member and Calc refcount/text streams. Original empty-input-before-hint, unsigned input-end arithmetic and exact diagnostics are retained. Prefix replacement intentionally emits no block events, and original unique_ptr null/throw cleanup is checked through caller-only trait failure injection. The original nonempty-first/different-last partial erase intentionally does not add overwrite_values. These are bounded initialized native witnesses, not full generic allocator/throwing/undefined/ABI/debug/trace/upstream QA or module/kernel/UI certification. Only the exact original CellTextAttrTraits declaration is witnessed; full sc mtvelements.hxx pointee graph is not compiled. Actual formula/edittext/CellStoreType/ScColumn/Table/Document/edit/undo/input/view/UI remain required. Last full61; next full71."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

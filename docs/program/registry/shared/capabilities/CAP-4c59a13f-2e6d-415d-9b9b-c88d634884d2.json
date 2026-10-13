@@ -1,0 +1,88 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4c59a13f-2e6d-415d-9b9b-c88d634884d2",
+    "capabilityId": "CAP-4c59a13f-2e6d-415d-9b9b-c88d634884d2",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Preserve complete generated interface metadata, original actual shared bootstrap/register/release/cache/temporary order and all public type access expressions.",
+      "Match whole cold/runtime-first/exception-first native streams and unchanged seven original interface streams over shared observers; preserve source-absent complete related raw100.",
+      "Observe genuine root and pending-method interface registration via actual public typelib factories, with complete native and portable metadata/Type/Any streams. No alternative library or virtual interface provider."
+    ],
+    "capability": "Original internal XExceptionThrower interface and comprehensive type registration",
+    "gaps": [
+      "Virtual exception implementation/environment/mapping engine and later weak objects/services/Calc cell/document/edit/view/UI remain subsequent. Physical ABI/compiler const/native thread/resource/leaks/shutdown and complete consumer/upstream QA are unverified.",
+      "cppuhelper/qa/misc/test_misc.cxx::testgetCaughtException is a contextual consuming exception helper QA reference, not a direct XExceptionThrower metadata QA port."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl",
+          "marker": "XExceptionThrower"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "dumpComprehensiveGetCppuType"
+        },
+        {
+          "path": "cppuhelper/source/exc_thrower.cxx",
+          "marker": "XExceptionThrower"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppuhelper/qa/misc/test_misc.cxx",
+          "marker": "testgetCaughtException"
+        }
+      ],
+      "docs": [
+        {
+          "path": "cppuhelper/unotypes/cppuhelper/detail/XExceptionThrower.idl",
+          "marker": "interface XExceptionThrower"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.ts",
+          "marker": "cppu_detail_getUnoType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/detail/XExceptionThrower.test.ts",
+          "marker": "matches complete original exception interface"
+        },
+        {
+          "path": "scripts/cppuhelper-exception-interface-native-probe.mjs",
+          "marker": "Original exception interface observations"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original internal exception interface type"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Complete original internal XExceptionThrower IDL and comprehensive cppumaker interface metadata reuse existing actual Type/Any/Reference/RuntimeException/Exception builtin/OUString and C typelib owners. Original leaked Type cache, bInitStarted-before-bootstrap gate, RuntimeException then Exception order, inherited XInterface base, two method references, positions3/4, one in-any exc parameter, Exception and RuntimeException declarations, register/release/temporary string order and ADL/static/deprecated getters are preserved. Native JS synchronous initialization adapts mutex/barriers without a thread simulator. Complete interface/method/Type/Any observers are shared with existing generated interface tests/probes; whole original normal-ASan/UBSan streams and source-absent complete related raw100 are required. No virtual exception/environment/mapping/default/type/library provider. Physical ABI/compiler const/thread/resource/leaks/shutdown, full exception engine and consumer/upstream QA remain unverified; broad parity flags stay false."
+    },
+    "scopeLimitations": [
+      "Complete original internal XExceptionThrower IDL and comprehensive cppumaker interface metadata reuse existing actual Type/Any/Reference/RuntimeException/Exception builtin/OUString and C typelib owners. Original leaked Type cache, bInitStarted-before-bootstrap gate, RuntimeException then Exception order, inherited XInterface base, two method references, positions3/4, one in-any exc parameter, Exception and RuntimeException declarations, register/release/temporary string order and ADL/static/deprecated getters are preserved. Native JS synchronous initialization adapts mutex/barriers without a thread simulator. Complete interface/method/Type/Any observers are shared with existing generated interface tests/probes; whole original normal-ASan/UBSan streams and source-absent complete related raw100 are required. No virtual exception/environment/mapping/default/type/library provider. Physical ABI/compiler const/thread/resource/leaks/shutdown, full exception engine and consumer/upstream QA remain unverified; broad parity flags stay false."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "exception-interface-type-registration-ownership"
+  }
+}

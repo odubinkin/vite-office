@@ -1,0 +1,29 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "dependencyManifestHash": "e47199063c500d19ca96cea316d4a384e8cce9c5481e8e726404679bfcbd9810",
+  "mddsArchiveHashes": {
+    "mdds": "673f5bb94612dbba581fc92b99b5e5dd1a53e29496a5dbc936432f6b0687c112",
+    "boost": "2f975c10da79511c2f218189fc8a12eef1a92e3bd18206e9841d406296d065eb"
+  },
+  "mddsSourceHashes": {
+    "global.hpp": "1267207aeb62432ac770ad2578c4b370367766f429968d186710716fa9184ecd",
+    "multi_type_vector/types.hpp": "b22de4d75774af2aa8f8423cc33e61ddd0c8cae6d9c641f6105c36bfbd8b3291",
+    "multi_type_vector/types_util.hpp": "331d70cdd77e4a2365ccbec91c62600b010d6fe0099f81194be33d38e4eb19b4",
+    "multi_type_vector/delayed_delete_vector.hpp": "eae6a3b966aa9eda88a560c8637c3d1a32b3d6a1f54ad55e6dda097e0f8ce939",
+    "multi_type_vector/standard_element_blocks.hpp": "42482fa57ff3cf7389e618a896863f971a30700ed02814379a438973a2ac759d",
+    "multi_type_vector/block_funcs.hpp": "9b3d8418f48c4237395cc73fd65dee4119566c71f771817cf2eb89e369b9f55f",
+    "multi_type_vector/macro.hpp": "7b6432057fa0d35e8902cb7f0720b38e641206a8b6f25eec0e446435be989583",
+    "multi_type_vector/util.hpp": "f4d7cfcd79986c5ec2714f694fae50307c03d84056d7d1e2ec30f2512f3bb7bc",
+    "multi_type_vector/soa/main.hpp": "fa23b0046758009d58e5be69856e167656a212b4d937f83b8bce6f643115cdb9",
+    "multi_type_vector/soa/main_def.inl": "08ac72ad06b18d746a0a7830cca74b5bbf08b2b1b46724f461c2089767b5b660",
+    "multi_type_vector/soa/iterator.hpp": "3da24a13bfa102b8aab639ba340f7e52812f34202616ffbfeff043a0e93b2893",
+    "multi_type_vector/iterator_node.hpp": "4beac64b5fe1c76542d8c36821a85c1e475f17b08acc857fe012c3e54aa4d5b1",
+    "multi_type_vector/soa/block_util.hpp": "8dcf3c0024b8eaa5076d63bc4e89f74f0f048d14643e037fabc32e3e8cbffc3e"
+  },
+  "callerHash": "23b954f38d0c109f29a021b957cf8908ebe77650eaed97936730dd8c8a4166e5",
+  "sourceDigest": "3dd14ec070c48d61d6ff1183f0207516f3dae800605dea425d0fb36d43a533a1",
+  "captures": {
+    "owned": "owned\nnew 1 0\nnew 2 10\nnew 3 20\nnew 4 30\nnew 5 80\nempty 3 1 0 | 0 3 -1\ncopy 2 6 10\ncopy 2 7 10\nfilled 2 1 0 | 0 2 59 2 6:10 7:10\ncopy 2 8 10\ncopy 3 9 20\ncopy 4 10 30\nrange 3 1 0 | 0 3 59 3 8:10 9:20 10:30\nzero 0 0 1\nrange_error Specified size does not match the size of the initial data array.\nassign 5 7 10\noutput 5:10\ndefault 11 0\nassign 11 6 10\nresult 11:10\ndelete 11 10\ndefault 12 0\nmoveassign 5 12 0\ndelete 12 -1\nempty_output 5:0\ndefault 13 0\ndefault 14 0\nmoveassign 13 14 0\ndelete 14 -1\nempty_result 13:0\ndelete 13 0\ndefault 15 0\ndelete 15 0\nresult_error multi_type_vector::get#504: block position not found! (logical pos=2, block size=1, logical size=2)\noutput_error multi_type_vector::get#504: block position not found! (logical pos=2, block size=1, logical size=2) 5:0\ncopy 8 16 10\ncopy 9 17 20\ncopy 10 18 30\ncopy 3 1 0 | 0 3 59 3 16:10 17:20 18:30\ncopy 8 19 10\ncopy 9 20 20\ncopy 10 21 30\nclone 3 1 0 | 0 3 59 3 19:10 20:20 21:30\nmoved 3 1 0 | 0 3 59 3 16:10 17:20 18:30\nmoved_source 3 0 1\ndelete 18 30\ndelete 17 20\ndelete 16 10\ndelete 21 30\ndelete 20 20\ndelete 19 10\ndelete 10 30\ndelete 9 20\ndelete 8 10\ndelete 7 10\ndelete 6 10\ninputs\ndelete 5 0\ndelete 4 30\ndelete 3 20\ndelete 2 10\ndelete 1 0\n",
+    "calc": "calc\nfill 5 65 2 1\noutput 5 65 2 1\nresult 6 65\nafter_result 5 65 2 1\nempty_output 4 -1 2 1\nempty_result 4 -1\nresult_error multi_type_vector::get#504: block position not found! (logical pos=2, block size=1, logical size=2)\nafter_error 4 -1 2 1\ncleared 2 -1 0 0\nattr_fill 2 1 | 0 2 51 9:1 9:1 65535:8\nattr_output 2 1 | 0 2 51 9:1 9:1 9:1\nattr_result 44:1\nattr_independent 2 1 | 0 2 51 9:1 9:1 9:1\nattr_empty_output 2 1 | 0 2 51 9:1 9:1 65535:8\nattr_empty_result 65535:8\nattr_next 1\nattr_cleared 0 0 65535:8\n"
+  }
+}

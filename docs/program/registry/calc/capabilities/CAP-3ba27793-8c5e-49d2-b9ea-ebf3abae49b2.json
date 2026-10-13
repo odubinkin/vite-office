@@ -1,0 +1,109 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3ba27793-8c5e-49d2-b9ea-ebf3abae49b2",
+    "capabilityId": "CAP-3ba27793-8c5e-49d2-b9ea-ebf3abae49b2",
+    "suite": "calc",
+    "subsystem": "formula-result",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original two result token classes retain fields, constructors, queries, clone and equality responsibilities.",
+      "Real shared string and formula owners preserve copy/move arguments and release ordering without duplicated shared engines.",
+      "Hybrid equality retains the original display-flag omission and IEEE NaN behavior."
+    ],
+    "stackDivergence": {
+      "kind": "none",
+      "rationale": "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81."
+    },
+    "capability": "Original Calc empty and hybrid result tokens",
+    "gaps": [
+      "Matrix/tokenarray/compiler/result/formula-cell/document/edit/input/UI owners remain pending.",
+      "Native debug assertion/implicit class move/ABI/concurrency/invalid lifetimes/full upstream QA remain unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScEmptyCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ts",
+          "marker": "ScHybridCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "ScEmptyCellToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "ScHybridCellToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "matches complete original empty token flags, clone policy and equality stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "matches complete original hybrid token shared ownership and formula copy move stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "matches original hybrid result IEEE payload and compared field distinctions"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original empty and hybrid result tokens (task76)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "class ScEmptyCellToken final"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "class ScHybridCellToken final"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScEmptyCellToken::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScHybridCellToken::ScHybridCellToken("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "We should correctly count with empty string key."
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/token.hxx",
+          "marker": "class ScHybridCellToken final"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-empty-hybrid-result-tokens",
+    "scopeLimitations": [
+      "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81.",
+      "Referenced original QA is unexecuted empty-string calculation context only, not direct hybrid token equality/ownership or full upstream QA proof."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
