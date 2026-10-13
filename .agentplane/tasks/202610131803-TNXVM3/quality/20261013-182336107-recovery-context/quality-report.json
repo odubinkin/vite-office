@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131803-TNXVM3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T18:23:36.107Z",
+  "verdict": "pass",
+  "summary": "Same-agent separate EVALUATOR phase accepts exact d0b668c430aa task95 reference tokens against genuine original methods and current raw/gate evidence; not independent review.",
+  "evaluated_sha": "d0b668c430aa292e5d77c82e5a64476a6812a11c",
+  "blueprint_digest": "e1daa54a5a00bc6094a86982a4cb50b1fa04ecfb6253651b15e81c48659b62fb",
+  "findings": [
+    "3279 current tracked non-task SHA256 identities match committed Git blobs; baseline3275 differs only13 approved paths (9 changed4 added). Calc134/shared251 scenarios pass raw100, every raw counter positive;16gates pass after recorded bounded repairs and source links restored.",
+    "Actual shared FormulaToken and Calc refdata/address/bounds owners reused. Native full original two classes/checkTextEqual/methods/doc-free data bodies and genuine headers,474sources8ordinary commands, complete1805559-byte replay. No fake native peers, new smart pointers, sanitizer commands or memory emulation.",
+    "CALC-084 preserves receiver-limit text comparison asymmetry; copies/clones value-copy data and share bounds. Default opcode, flags, normalized ranges, mutable stable members and trim omission retain original behavior. Full compiler/document/UI/ODS remain pending; original document-level QA not executed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131803-TNXVM3/README.md",
+    "output/playwright/task95-checks/exact-review.json",
+    "output/playwright/task95-checks/value-coverage-audit.json",
+    "output/playwright/task95-checks/gates-results.json",
+    "output/playwright/calc-reference-token-native/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native ABI/memory/count/invalid derived peers/overflow/debug assertions excluded; same-agent phase is not independent review. Goal continues past101 and pauses111 plus relevant repairs; no Writer-only coverage repair."
+  ]
+}

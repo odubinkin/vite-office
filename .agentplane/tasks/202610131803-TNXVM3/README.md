@@ -4,7 +4,7 @@ title: "Implement Calc single and double reference tokens"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T18:23:36.821Z"
+  updated_by: "CODER"
+  note: "Task95 exact source d0b668c430aa292e5d77c82e5a64476a6812a11c,3279 committed non-task hashes13 approved paths; same-agent separate EVALUATOR pass not independent. Genuine reference token --write/check474sources8normalcommands1805559bytes; raw Calc134tests26owners3655S2443B682F3253L/shared251tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass; links absent/restored. CALC-084 preserved, no memory library/fake peers/full compiler/document/UI/ODS claim. Goal active pause111, continue101."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T18:23:36.107Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR phase accepts exact d0b668c430aa task95 reference tokens against genuine original methods and current raw/gate evidence; not independent review."
+  evaluated_sha: "d0b668c430aa292e5d77c82e5a64476a6812a11c"
+  blueprint_digest: "e1daa54a5a00bc6094a86982a4cb50b1fa04ecfb6253651b15e81c48659b62fb"
+  evidence_refs:
+    - ".agentplane/tasks/202610131803-TNXVM3/README.md"
+    - ".agentplane/tasks/202610131803-TNXVM3/quality/20261013-182336107-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131803-TNXVM3/quality/20261013-182336107-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131803-TNXVM3/quality/20261013-182336107-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131803-TNXVM3/blueprint/resolved-snapshot.json"
+    - "output/playwright/task95-checks/exact-review.json"
+    - "output/playwright/task95-checks/value-coverage-audit.json"
+    - "output/playwright/task95-checks/gates-results.json"
+    - "output/playwright/calc-reference-token-native/manifest.json"
+  findings:
+    - "3279 current tracked non-task SHA256 identities match committed Git blobs; baseline3275 differs only13 approved paths (9 changed4 added). Calc134/shared251 scenarios pass raw100, every raw counter positive;16gates pass after recorded bounded repairs and source links restored."
+    - "Actual shared FormulaToken and Calc refdata/address/bounds owners reused. Native full original two classes/checkTextEqual/methods/doc-free data bodies and genuine headers,474sources8ordinary commands, complete1805559-byte replay. No fake native peers, new smart pointers, sanitizer commands or memory emulation."
+    - "CALC-084 preserves receiver-limit text comparison asymmetry; copies/clones value-copy data and share bounds. Default opcode, flags, normalized ranges, mutable stable members and trim omission retain original behavior. Full compiler/document/UI/ODS remain pending; original document-level QA not executed."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual Calc single/double reference tokens and original TextEqual using existing real shared/data/bounds owners and normal native scopes, no fake document or ownership engine."
+  -
+    type: "verify"
+    at: "2026-10-13T18:23:36.821Z"
+    author: "CODER"
+    state: "ok"
+    note: "Task95 exact source d0b668c430aa292e5d77c82e5a64476a6812a11c,3279 committed non-task hashes13 approved paths; same-agent separate EVALUATOR pass not independent. Genuine reference token --write/check474sources8normalcommands1805559bytes; raw Calc134tests26owners3655S2443B682F3253L/shared251tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass; links absent/restored. CALC-084 preserved, no memory library/fake peers/full compiler/document/UI/ODS claim. Goal active pause111, continue101."
 doc_version: 3
-doc_updated_at: "2026-10-13T18:22:52.026Z"
+doc_updated_at: "2026-10-13T18:23:36.888Z"
 doc_updated_by: "CODER"
 description: "Task95 actual ScSingleRefToken/ScDoubleRefToken ctor/copy/clone/member references/equality/TextEqual using existing reference data and sheet limits, prerequisite for real compiler/token array/UI/ODS formula references; no document/config substitute."
 sections:
@@ -63,6 +90,39 @@ sections:
     Result: all16 pass.
     Evidence: gates-results.json and gate logs. format/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. First three source-evidence gates rejected a local script marker routed as upstream; actual app fixture/test anchors repaired without resolver/threshold weakening. Other13 gates passed first.
     Scope: current task95 runtime/header/native/test/fixture/metadata/docs; exact source commit and same-agent separate EVALUATOR audit required next. No independent review claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T18:23:36.821Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Task95 exact source d0b668c430aa292e5d77c82e5a64476a6812a11c,3279 committed non-task hashes13 approved paths; same-agent separate EVALUATOR pass not independent. Genuine reference token --write/check474sources8normalcommands1805559bytes; raw Calc134tests26owners3655S2443B682F3253L/shared251tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass; links absent/restored. CALC-084 preserved, no memory library/fake peers/full compiler/document/UI/ODS claim. Goal active pause111, continue101.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T18:22:52.026Z, excerpt_hash=sha256:5701323dd88cf91b94fa53fbc6b2b80ba02cc8caa451f9aee6ff81df61bbad44
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131803-TNXVM3/blueprint/resolved-snapshot.json
+    - old_digest: e1daa54a5a00bc6094a86982a4cb50b1fa04ecfb6253651b15e81c48659b62fb
+    - current_digest: e1daa54a5a00bc6094a86982a4cb50b1fa04ecfb6253651b15e81c48659b62fb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131803-TNXVM3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610131803-TNXVM3 -m 🧩 TNXVM3 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task95 files through followup task; restore links on every exit; no branch merges/history rewrite or unrelated tasks."
   Findings: |-
     Resolved native failure: original ScSheetLimits inherits actual salhelper::SimpleReferenceObject but reused UNO link omitted its compiled implementation; native-write.log/manifest diagnostics retained. Complete actual salhelper/source/simplereferenceobject.cxx is now linked, no synthetic destructor/typeinfo/refcount. 8 normal commands complete.
@@ -108,6 +168,39 @@ Command: node output/playwright/task95-checks/gates.mjs --early then --late; --r
 Result: all16 pass.
 Evidence: gates-results.json and gate logs. format/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. First three source-evidence gates rejected a local script marker routed as upstream; actual app fixture/test anchors repaired without resolver/threshold weakening. Other13 gates passed first.
 Scope: current task95 runtime/header/native/test/fixture/metadata/docs; exact source commit and same-agent separate EVALUATOR audit required next. No independent review claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T18:23:36.821Z — VERIFY — ok
+
+By: CODER
+
+Note: Task95 exact source d0b668c430aa292e5d77c82e5a64476a6812a11c,3279 committed non-task hashes13 approved paths; same-agent separate EVALUATOR pass not independent. Genuine reference token --write/check474sources8normalcommands1805559bytes; raw Calc134tests26owners3655S2443B682F3253L/shared251tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass; links absent/restored. CALC-084 preserved, no memory library/fake peers/full compiler/document/UI/ODS claim. Goal active pause111, continue101.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T18:22:52.026Z, excerpt_hash=sha256:5701323dd88cf91b94fa53fbc6b2b80ba02cc8caa451f9aee6ff81df61bbad44
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131803-TNXVM3/blueprint/resolved-snapshot.json
+- old_digest: e1daa54a5a00bc6094a86982a4cb50b1fa04ecfb6253651b15e81c48659b62fb
+- current_digest: e1daa54a5a00bc6094a86982a4cb50b1fa04ecfb6253651b15e81c48659b62fb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131803-TNXVM3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610131803-TNXVM3 -m 🧩 TNXVM3 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
