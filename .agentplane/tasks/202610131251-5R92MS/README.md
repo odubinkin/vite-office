@@ -4,7 +4,7 @@ title: "Implement Calc matrix coordinate values and type queries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T13:29:13.455Z"
+  updated_by: "CODER"
+  note: "Verified: actual matrix coordinate values/predicates and shared range error preservation at786c34b686affca6834b2df620e798f3d0640bec. Native37464-byte stream, Calc128/shared244 whole raw100 every raw counter positive, source-absent checks and16gates/36tooling/123inventory pass. Exact3209hashes,17intentional paths and same-agent separate EVALUATOR pass. No Writer/manager/interpreter substitute; actual document/UI/ODS priority recorded, next full91."
   attempts: 0
 quality_review:
   state: "pass"
@@ -57,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: original matrix coordinate values and predicates over real shared storage under active goal authorization."
+  -
+    type: "verify"
+    at: "2026-10-13T13:29:13.455Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: actual matrix coordinate values/predicates and shared range error preservation at786c34b686affca6834b2df620e798f3d0640bec. Native37464-byte stream, Calc128/shared244 whole raw100 every raw counter positive, source-absent checks and16gates/36tooling/123inventory pass. Exact3209hashes,17intentional paths and same-agent separate EVALUATOR pass. No Writer/manager/interpreter substitute; actual document/UI/ODS priority recorded, next full91."
 doc_version: 3
-doc_updated_at: "2026-10-13T13:27:35.905Z"
+doc_updated_at: "2026-10-13T13:29:13.545Z"
 doc_updated_by: "CODER"
 description: "Iteration85: original coordinate PutDouble/String/Empty/EmptyPath/Error/Boolean, empty-result vector, Get value and all coordinate type/empty queries over real mdds/SharedString; public ScMatrix delegates. No interpreter stand-in, index/transposed/bulk families remain separate. Native source observations, exact original flag behavior and journal, whole Calc/related shared raw100, inventory and gates."
 sections:
@@ -70,7 +76,41 @@ sections:
     2. node output/playwright/task85-checks/portable.mjs: entire Calc and whole affected shared mdds/SAL/SVL/formula owners raw S/B/F/L100 every raw counter positive, four source links absent/restored, static build and Calc profile0UI.
     3. node output/playwright/task85-checks/gates.mjs: all16repository/tooling/inventory gates, no coverage weakening or Writer-only repairs; next full91.
     4. Exact source/test/fixture/config hashes tied to commit, same-agent separate EVALUATOR, canonical DONE and clean all-files git status. Record suspicious original flag behavior, keep full matrix/interpreter/document/UI completion unclaimed.
-  Verification: "Command: node scripts/calc-matrix-values-native-probe.mjs --write then --check. Result: pass. Evidence: original production-mode definition stream37464bytes,453source hashes and6positive ordinary terminal commands over genuine mdds/SAL/SVL/formula; scalar/flag histories, string retention/UTF16, errors/replication and CALC-073 in-storage row spill/bounds exception. Original internal unsupported type/flag witness is release-only context, no browser debug assertion claim or sanitizer run. Command: portable.mjs full Calc plus final --shared-only and --checks-only. Result: pass. Evidence: Calc128tests39files24owners raw3236S2188B584F2863L and shared244tests50files39owners raw4042S2063B829F3620L, all S/B/F/L100 every raw counter positive. Current Calc runtime maps unchanged; final shared replay exercises both complete matrix witnesses and all related owners after generic range fixes. Four links absent/restored, static build and Calc profile0UI pass. Command: gates.mjs. Result:16gates pass,36tooling tests10files and123inventory tests38files configured coverage100. First type import edits and shared numeric push/map error loss corrected without changing native expected data; isolated two-test coverage diagnostic is explicitly not acceptance evidence. Scope: genuine coordinate operations and necessary two shared range/conversion owners, no new numeric wrapper/memory manager/Writer change. Inventory and CALC-073 updated, UI/ODS priority reinforced; actual cells/document/UI/ODS remain incomplete. Exact commit/same-agent separate EVALUATOR pending canonical closure; goal active, next full91."
+  Verification: |-
+    Pass: original production-mode stream37464bytes,453source hashes and6positive ordinary commands, native check on final caller bytes. Actual coordinate writes/Get/predicates, UTF16 retained strings and CALC-073 row spill/bounds exception match; release-only internal flag context, no sanitizer/debug assertion certification. Whole Calc128tests39files24owners raw3236S2188B584F2863L and shared244tests50files39owners raw4042S2063B829F3620L, all S/B/F/L100 every raw counter positive. Existing Calc runtime maps unchanged; final shared replay includes both complete matrix fixtures after generic range/conversion fixes. Four links absent/restored, static build and Calc profile0UI pass. All16gates,36tooling tests10files and123inventory tests38files configured coverage100 pass. Initial mechanical import and numeric push/map loss corrected without native expectation weakening; isolated diagnostic coverage is not acceptance evidence. Exact3209current/committed hashes match786c34b686affca6834b2df620e798f3d0640bec,17intentional non-task paths; same-agent separate EVALUATOR pass, not independent review. Evidence: output/playwright/task85-checks/exact-review.json, value-coverage-audit.json, gates-results.json, native manifest and task quality report. No Writer change, new error wrapper/memory manager or fake interpreter. Inventory/journal and first-editable-UI/ODS priority updated. Real cells/document/UI/ODS, matrix remaining families/Clone/interpreter and native debug assertion/ABI/full QA remain pending. Goal active, next full91.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T13:29:13.455Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: actual matrix coordinate values/predicates and shared range error preservation at786c34b686affca6834b2df620e798f3d0640bec. Native37464-byte stream, Calc128/shared244 whole raw100 every raw counter positive, source-absent checks and16gates/36tooling/123inventory pass. Exact3209hashes,17intentional paths and same-agent separate EVALUATOR pass. No Writer/manager/interpreter substitute; actual document/UI/ODS priority recorded, next full91.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T13:29:12.532Z, excerpt_hash=sha256:3c8ab034a4e6d78242f2be66edf175e3e92312020a0b943dbed672a96dff4099
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131251-5R92MS/blueprint/resolved-snapshot.json
+    - old_digest: 8a86db8afe043ccd90b5ddf631cb80fd423aa155df1441d4e632f6efe8e7b0ef
+    - current_digest: 8a86db8afe043ccd90b5ddf631cb80fd423aa155df1441d4e632f6efe8e7b0ef
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131251-5R92MS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131251-5R92MS
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional iteration85 changes through a new task; no history rewrite, merges or unrelated task changes."
   Findings: |-
     Original scalar value/string/bool/error writes retain flags; PutEmpty clears flags, PutEmptyPath/empty-result writes set flags. Get deliberately exposes empty result as Empty, while predicates distinguish it. Invalid IsEmptyPath returns true; other type predicates return false. Preserve these behaviors and investigate actual consumer intent later. GC-first allocation/refcount adaptation remains unchanged.
@@ -86,6 +126,10 @@ sections:
     - Observation: The default_element_block conversion layer also builds numeric push/map temporaries before delayed storage. Their optional-slot initialization preserves538 through the existing grow-after-error fixture. Two instrumented diagnostic semantic replays pass; their partial types.ts coverage is diagnostic only, never acceptance evidence.
       Impact: Second necessary existing shared types.ts owner and two current records, authorized by shared-improvement scope. No error model/wrapper or memory manager, original native fixture unchanged.
       Resolution: Run whole affected shared profile at unchanged100 thresholds, retain both diagnostic/failing maps separately. Original Calc runtime map unchanged; verify source-absent build/profile and16gates, exact current-source review. Next priority is actual document/cell/ODS owners.
+
+    - Observation: Exact3209current/committed non-task hashes match786c34b686affca6834b2df620e798f3d0640bec,17intentional paths. Native37464-byte stream/6ordinary commands, Calc128/shared244 raw100, source-absent checks and16gates pass; separate same-agent EVALUATOR pass recorded.
+      Impact: Coordinate values and necessary shared error-copy preservation are complete for this leaf; unsupported debug/internal flag context is explicit. No full document/UI/ODS claim or Writer change.
+      Resolution: Record final blueprint verification after docs, commit task metadata and canonical finish. Goal active, next full91. User priority is actual cell/store/ScColumn/ScTable/ScDocument, editing and ODS over unrelated matrix/library completion.
 id_source: "generated"
 ---
 ## Summary
@@ -109,7 +153,40 @@ Actual coordinate matrix mutation/value extraction/type predicates and public de
 
 ## Verification
 
-Command: node scripts/calc-matrix-values-native-probe.mjs --write then --check. Result: pass. Evidence: original production-mode definition stream37464bytes,453source hashes and6positive ordinary terminal commands over genuine mdds/SAL/SVL/formula; scalar/flag histories, string retention/UTF16, errors/replication and CALC-073 in-storage row spill/bounds exception. Original internal unsupported type/flag witness is release-only context, no browser debug assertion claim or sanitizer run. Command: portable.mjs full Calc plus final --shared-only and --checks-only. Result: pass. Evidence: Calc128tests39files24owners raw3236S2188B584F2863L and shared244tests50files39owners raw4042S2063B829F3620L, all S/B/F/L100 every raw counter positive. Current Calc runtime maps unchanged; final shared replay exercises both complete matrix witnesses and all related owners after generic range fixes. Four links absent/restored, static build and Calc profile0UI pass. Command: gates.mjs. Result:16gates pass,36tooling tests10files and123inventory tests38files configured coverage100. First type import edits and shared numeric push/map error loss corrected without changing native expected data; isolated two-test coverage diagnostic is explicitly not acceptance evidence. Scope: genuine coordinate operations and necessary two shared range/conversion owners, no new numeric wrapper/memory manager/Writer change. Inventory and CALC-073 updated, UI/ODS priority reinforced; actual cells/document/UI/ODS remain incomplete. Exact commit/same-agent separate EVALUATOR pending canonical closure; goal active, next full91.
+Pass: original production-mode stream37464bytes,453source hashes and6positive ordinary commands, native check on final caller bytes. Actual coordinate writes/Get/predicates, UTF16 retained strings and CALC-073 row spill/bounds exception match; release-only internal flag context, no sanitizer/debug assertion certification. Whole Calc128tests39files24owners raw3236S2188B584F2863L and shared244tests50files39owners raw4042S2063B829F3620L, all S/B/F/L100 every raw counter positive. Existing Calc runtime maps unchanged; final shared replay includes both complete matrix fixtures after generic range/conversion fixes. Four links absent/restored, static build and Calc profile0UI pass. All16gates,36tooling tests10files and123inventory tests38files configured coverage100 pass. Initial mechanical import and numeric push/map loss corrected without native expectation weakening; isolated diagnostic coverage is not acceptance evidence. Exact3209current/committed hashes match786c34b686affca6834b2df620e798f3d0640bec,17intentional non-task paths; same-agent separate EVALUATOR pass, not independent review. Evidence: output/playwright/task85-checks/exact-review.json, value-coverage-audit.json, gates-results.json, native manifest and task quality report. No Writer change, new error wrapper/memory manager or fake interpreter. Inventory/journal and first-editable-UI/ODS priority updated. Real cells/document/UI/ODS, matrix remaining families/Clone/interpreter and native debug assertion/ABI/full QA remain pending. Goal active, next full91.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T13:29:13.455Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: actual matrix coordinate values/predicates and shared range error preservation at786c34b686affca6834b2df620e798f3d0640bec. Native37464-byte stream, Calc128/shared244 whole raw100 every raw counter positive, source-absent checks and16gates/36tooling/123inventory pass. Exact3209hashes,17intentional paths and same-agent separate EVALUATOR pass. No Writer/manager/interpreter substitute; actual document/UI/ODS priority recorded, next full91.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T13:29:12.532Z, excerpt_hash=sha256:3c8ab034a4e6d78242f2be66edf175e3e92312020a0b943dbed672a96dff4099
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131251-5R92MS/blueprint/resolved-snapshot.json
+- old_digest: 8a86db8afe043ccd90b5ddf631cb80fd423aa155df1441d4e632f6efe8e7b0ef
+- current_digest: 8a86db8afe043ccd90b5ddf631cb80fd423aa155df1441d4e632f6efe8e7b0ef
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131251-5R92MS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131251-5R92MS
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -130,3 +207,7 @@ Original scalar value/string/bool/error writes retain flags; PutEmpty clears fla
 - Observation: The default_element_block conversion layer also builds numeric push/map temporaries before delayed storage. Their optional-slot initialization preserves538 through the existing grow-after-error fixture. Two instrumented diagnostic semantic replays pass; their partial types.ts coverage is diagnostic only, never acceptance evidence.
   Impact: Second necessary existing shared types.ts owner and two current records, authorized by shared-improvement scope. No error model/wrapper or memory manager, original native fixture unchanged.
   Resolution: Run whole affected shared profile at unchanged100 thresholds, retain both diagnostic/failing maps separately. Original Calc runtime map unchanged; verify source-absent build/profile and16gates, exact current-source review. Next priority is actual document/cell/ODS owners.
+
+- Observation: Exact3209current/committed non-task hashes match786c34b686affca6834b2df620e798f3d0640bec,17intentional paths. Native37464-byte stream/6ordinary commands, Calc128/shared244 raw100, source-absent checks and16gates pass; separate same-agent EVALUATOR pass recorded.
+  Impact: Coordinate values and necessary shared error-copy preservation are complete for this leaf; unsupported debug/internal flag context is explicit. No full document/UI/ODS claim or Writer change.
+  Resolution: Record final blueprint verification after docs, commit task metadata and canonical finish. Goal active, next full91. User priority is actual cell/store/ScColumn/ScTable/ScDocument, editing and ODS over unrelated matrix/library completion.
