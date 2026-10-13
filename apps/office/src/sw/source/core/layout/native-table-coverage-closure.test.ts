@@ -1,5 +1,5 @@
 /** @fileoverview Checks original table format inheritance and complete border-paint snapshots after the full profile. */
-import { expect, it } from "vitest";
+import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
@@ -7,6 +7,20 @@ import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { Style } from "../../../../svx/source/dialog/framelink";
 import { OverlapType, SwLineEntry, SwTabFramePainter } from "./paintfrm";
+import { SwTabFrame } from "./tabfrm";
+
+const ownedFrames: SwTabFrame[] = [];
+afterEach(
+  /** Releases original caller-owned painter frames after each native case. @returns Nothing. */ () => {
+    for (const frame of ownedFrames.splice(0)) frame.DestroyImpl();
+  },
+);
+/** Creates the actual original frame required by the source painter API. @param table - Original native model. @returns Caller-owned layout frame. */
+function ownedFrame(table: ReturnType<SwDoc["nodes"]["MakeTableNode"]>): SwTabFrame {
+  const frame = new SwTabFrame(table);
+  ownedFrames.push(frame);
+  return frame;
+}
 
 /** Reads original client registrations. @param owner - Native broadcaster. @returns Borrowed client identities. */
 function clients(owner: SwModify): unknown[] {
@@ -117,9 +131,10 @@ it("two by two native border painting releases temporary frame clients and retur
         ),
       ],
     ),
+    nativeFrame = ownedFrame(table),
     before = owners.map(clients),
     lines: (boolean | number)[][] = [],
-    painter = new SwTabFramePainter(table);
+    painter = new SwTabFramePainter(nativeFrame);
   try {
     expect(owners.map(clients)).toEqual(before);
     painter.PaintLines(
@@ -164,7 +179,9 @@ function entry(start: number, end: number, color: number, width: number): SwLine
 
 it("insertion order preserves native coordinate order in both paint families", /** Checks independently ordered disjoint intervals in the represented native ordered set. @returns Nothing. */ () => {
   const doc = new SwDoc(),
-    painter = new SwTabFramePainter(doc.nodes.MakeTableNode("Unordered source borders")),
+    painter = new SwTabFramePainter(
+      ownedFrame(doc.nodes.MakeTableNode("Unordered source borders")),
+    ),
     lines: (boolean | number)[][] = [];
   try {
     for (const horizontal of [false, true]) {
@@ -205,7 +222,7 @@ it.each([
     interval,
   ) => {
     const doc = new SwDoc(),
-      painter = new SwTabFramePainter(doc.nodes.MakeTableNode("Empty intervals")),
+      painter = new SwTabFramePainter(ownedFrame(doc.nodes.MakeTableNode("Empty intervals"))),
       lines: SwLineEntry[] = [];
     try {
       painter.Insert(entry(interval.start, interval.end, 1, 20), false);
@@ -288,7 +305,7 @@ it.each([
     scenario,
   ) => {
     const doc = new SwDoc(),
-      painter = new SwTabFramePainter(doc.nodes.MakeTableNode("Arbitration")),
+      painter = new SwTabFramePainter(ownedFrame(doc.nodes.MakeTableNode("Arbitration"))),
       [a = 0, b = 0, color = 0, width = 0] = scenario.old,
       [c = 0, d = 0, nextColor = 0, nextWidth = 0] = scenario.next;
     try {

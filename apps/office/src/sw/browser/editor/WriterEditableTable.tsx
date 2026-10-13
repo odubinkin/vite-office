@@ -86,7 +86,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
     const collapsing = nativeTable.IsCollapsingBorders();
     const resolved = new Map<string, Style>();
     if (collapsing)
-      new SwTabFramePainter(table).PaintLines(
+      new SwTabFramePainter(nativeTable).PaintLines(
         /** Projects resolved native line ownership onto the existing flat cell paint device. @param line - Native interval. @param horizontal - Native family. @returns Nothing. */
         (line, horizontal) => {
           resolved.set(`${horizontal}:${line.mnKey}:${line.mnStartPos}`, line.maAttribute);

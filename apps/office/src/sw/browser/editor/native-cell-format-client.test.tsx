@@ -162,23 +162,33 @@ it("native painter and box print-width measurement release registered cell frame
       nativeTable.DestroyImpl();
     }
     for (const box of boxes) checkClients(box);
-    new SwTabFramePainter(table).PaintLines(
-      /** Reads actual copied painted lines. @param line - Native paint interval. @returns Nothing. */ (
-        line,
-      ) => {
-        expect(line.maAttribute.GetWidth()).toBe(0);
-      },
-    );
+    const paintFrame = new SwTabFrame(table);
+    try {
+      new SwTabFramePainter(paintFrame).PaintLines(
+        /** Reads actual copied painted lines. @param line - Native paint interval. @returns Nothing. */ (
+          line,
+        ) => {
+          expect(line.maAttribute.GetWidth()).toBe(0);
+        },
+      );
+    } finally {
+      paintFrame.DestroyImpl();
+    }
     for (const box of boxes) checkClients(box);
     const paint = vi.spyOn(SwTabFramePainter.prototype, "Insert").mockImplementation(
       /** Rejects native paint insertion to exercise original cleanup. @returns Never. */ () => {
         throw Error("Device paint failure");
       },
     );
-    expect(
-      /** Executes the actual painter constructor. @returns Native painter. */ () =>
-        new SwTabFramePainter(table),
-    ).toThrow("Device paint failure");
+    const failedFrame = new SwTabFrame(table);
+    try {
+      expect(
+        /** Executes the actual painter constructor. @returns Native painter. */ () =>
+          new SwTabFramePainter(failedFrame),
+      ).toThrow("Device paint failure");
+    } finally {
+      failedFrame.DestroyImpl();
+    }
     for (const box of boxes) checkClients(box);
     paint.mockRestore();
   } finally {
