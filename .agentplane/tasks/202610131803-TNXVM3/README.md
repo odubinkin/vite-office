@@ -1,10 +1,11 @@
 ---
 id: "202610131803-TNXVM3"
 title: "Implement Calc single and double reference tokens"
-status: "DOING"
+result_summary: "Task95 completed on calc: genuine reference token semantics, independent copied data and borrowed bounds via ordinary JS refs, CALC-084 preserved;134 Calc and251 affected shared tests/raw100,16gates/static/Calc0UI pass,3279 exact source hashes. Goal continues past full101 then pauses full111/repairs; full compiler/document/UI/ODS remains pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "3279 current tracked non-task SHA256 identities match committed Git blobs; baseline3275 differs only13 approved paths (9 changed4 added). Calc134/shared251 scenarios pass raw100, every raw counter positive;16gates pass after recorded bounded repairs and source links restored."
     - "Actual shared FormulaToken and Calc refdata/address/bounds owners reused. Native full original two classes/checkTextEqual/methods/doc-free data bodies and genuine headers,474sources8ordinary commands, complete1805559-byte replay. No fake native peers, new smart pointers, sanitizer commands or memory emulation."
     - "CALC-084 preserves receiver-limit text comparison asymmetry; copies/clones value-copy data and share bounds. Default opcode, flags, normalized ranges, mutable stable members and trim omission retain original behavior. Full compiler/document/UI/ODS remain pending; original document-level QA not executed."
-commit: null
+commit:
+  hash: "d0b668c430aa292e5d77c82e5a64476a6812a11c"
+  message: "🧮 TNXVM3 calc: implement original reference tokens"
 comments:
   -
     author: "CODER"
     body: "Start: actual Calc single/double reference tokens and original TextEqual using existing real shared/data/bounds owners and normal native scopes, no fake document or ownership engine."
+  -
+    author: "CODER"
+    body: "Verified: actual Calc single/double reference token value/copy/Clone/member/TextEqual family with existing shared owners; normal original replay, scoped raw100,16gates and exact source review pass."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task95 exact source d0b668c430aa292e5d77c82e5a64476a6812a11c,3279 committed non-task hashes13 approved paths; same-agent separate EVALUATOR pass not independent. Genuine reference token --write/check474sources8normalcommands1805559bytes; raw Calc134tests26owners3655S2443B682F3253L/shared251tests40owners4272S2147B897F3817L all100/everycounterpositive;16gates/static/Calc0UI pass; links absent/restored. CALC-084 preserved, no memory library/fake peers/full compiler/document/UI/ODS claim. Goal active pause111, continue101."
+  -
+    type: "status"
+    at: "2026-10-13T18:23:53.045Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual Calc single/double reference token value/copy/Clone/member/TextEqual family with existing shared owners; normal original replay, scoped raw100,16gates and exact source review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T18:23:36.888Z"
+doc_updated_at: "2026-10-13T18:23:53.047Z"
 doc_updated_by: "CODER"
 description: "Task95 actual ScSingleRefToken/ScDoubleRefToken ctor/copy/clone/member references/equality/TextEqual using existing reference data and sheet limits, prerequisite for real compiler/token array/UI/ODS formula references; no document/config substitute."
 sections:
