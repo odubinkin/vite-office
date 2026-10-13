@@ -3511,3 +3511,9 @@ Whole unchanged original class/constructor over true sal/svx headers and verifie
 Calc-specific ScGridOptions defaults1000/1270 depend on actual metric service, and ScViewOptions color/config depend on real owners; these remain pending without substituting sharedbase100 defaults. Grid items/dialog/Sfx and actual Calc view/document/UI/ODS pipeline still missing prioritized integrations. Next task101 is fullfirst; continue after it and pause only after secondfull111/repairs, no Writer-only repair.
 
 Task100 verification: source-absent whole Calc 138 tests/49 files/29 executable owners, raw S3898/B2602/F752/L3467; complete shared grid owner 1 test/1 file, raw S32/B2/F16/L31. Every raw counter is positive and S/B/F/L coverage is 100%. All 16 repository gates pass; static and Calc browser inventory pass (0 UI scenarios). Four reference links were absent during portable checks and restored exactly. Existing Writer/shared runtime is unchanged. Next full cycle is task101; continue after it and pause after the second upcoming full cycle task111 and relevant repairs.
+
+## Full test cycle10 (task101)
+
+Scheduled task101 full source-absent checks passed: office15,730 tests/778 files, inventory123/38, tooling36/10, browser316 (Writer314/shared2/Calc0), static build. Raw office coverage contains473 executable owners: Calc29 S3898/B2602/F752/L3467; shared231 S14871/B9275/F2778/L13610; Writer213 S15942/B11429/F3603/L14507. Every raw counter is positive and all S/B/F/L metrics are100. No repair or Writer-only coverage work was needed; four reference links were restored exactly. See [cycle10 evidence](calc-full-test-cycle-10.md).
+
+This is the first upcoming full run under the revised stop instruction. Continue toward missing core owners for UI and ODS; pause after the second upcoming full cycle task111 and relevant Calc/shared repairs. No editable Calc UI readiness claim.
