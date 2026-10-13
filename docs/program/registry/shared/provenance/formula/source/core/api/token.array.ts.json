@@ -102,6 +102,11 @@
           "marker": "FormulaTokenArray"
         }
       ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/formula/source/core/api/token.array.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original token.cxx shared FormulaTokenArray class operation family follows existing token.values/token.string source-shaped shards; single genuine class owner and original header boundary, no second engine, temporary model or runtime cycle."
     }
   }
 }

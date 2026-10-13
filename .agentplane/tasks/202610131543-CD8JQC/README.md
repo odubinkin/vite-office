@@ -4,7 +4,7 @@ title: "Implement shared formula token array storage and recalc state"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: actual shared FormulaTokenArray code/RPN and recalc operation family needed by real Calc formula cell and ODS; existing token owners, original alias/copy/default logic and GC refs."
 doc_version: 3
-doc_updated_at: "2026-10-13T16:07:32.296Z"
+doc_updated_at: "2026-10-13T16:14:06.029Z"
 doc_updated_by: "CODER"
 description: "Iteration90 direct prerequisite for genuine ScTokenArray/ScFormulaCell and ODS formulas: original shared FormulaTokenArray code/RPN ownership semantics, construction/copy/move/edit/query/finalization and recalculation state over actual tokens with JS GC."
 sections:
@@ -60,6 +60,10 @@ sections:
     - Observation: Whole Calc132 passes; shared250tests55files all pass but strict raw coverage leaves Finalize nonempty/unfinalized true path unexecuted:4271/4272statements2146/2147branches, functions/lines100. Empty finalization and already-finalized copy tested.
       Impact: Meaningful original mutation transition missing from fixture, no runtime or Writer defect and no threshold change.
       Resolution: Add original Finalize on nonempty open source array to normal native stream and portable replay, regenerate/check fixture then rerun only affected whole shared profile and remaining source-absent static/profile checks. Preserve initial failure logs/counters.
+
+    - Observation: Final tests/type/lint/build/raw100 pass. Four inventory/provenance checks fail on the same missing filenameDivergence entry for original token.cxx class shard token.array.ts; inventory122pass1fail.
+      Impact: Registry naming metadata incomplete, no runtime/coverage defect and no new path or scope.
+      Resolution: Add responsibility-split filenameDivergence to existing new source provenance record using established token.values/token.string pattern, recheck failed provenance/registry/invariant/inventory and formatting gates. Runtime/native/test evidence unchanged. Initial raw coverage map was read with location146zero counter before Vitest replaced it; retained initial log records totals and failure, final full raw map is acceptance evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -100,3 +104,7 @@ Default ScFormulaCell requires actual ScTokenArray, whose base FormulaTokenArray
 - Observation: Whole Calc132 passes; shared250tests55files all pass but strict raw coverage leaves Finalize nonempty/unfinalized true path unexecuted:4271/4272statements2146/2147branches, functions/lines100. Empty finalization and already-finalized copy tested.
   Impact: Meaningful original mutation transition missing from fixture, no runtime or Writer defect and no threshold change.
   Resolution: Add original Finalize on nonempty open source array to normal native stream and portable replay, regenerate/check fixture then rerun only affected whole shared profile and remaining source-absent static/profile checks. Preserve initial failure logs/counters.
+
+- Observation: Final tests/type/lint/build/raw100 pass. Four inventory/provenance checks fail on the same missing filenameDivergence entry for original token.cxx class shard token.array.ts; inventory122pass1fail.
+  Impact: Registry naming metadata incomplete, no runtime/coverage defect and no new path or scope.
+  Resolution: Add responsibility-split filenameDivergence to existing new source provenance record using established token.values/token.string pattern, recheck failed provenance/registry/invariant/inventory and formatting gates. Runtime/native/test evidence unchanged. Initial raw coverage map was read with location146zero counter before Vitest replaced it; retained initial log records totals and failure, final full raw map is acceptance evidence.
