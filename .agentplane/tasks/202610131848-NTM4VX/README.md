@@ -4,7 +4,7 @@ title: "Implement Calc external reference and name tokens"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-13T19:19:58.360Z"
+  updated_by: "CODER"
+  note: "Exact source3fd9a895c657de1272b7f9232e4af61cc5f5ead6,3290currentcommittedhashes19intentionalpaths; same-agent separate EVALUATOR pass not independent. Real external concrete value/move/copy/Clone/getters/equality/const-data copy-source family; native474sources8normalcommands748045bytes. Calc136tests27owners3767S2523B722F3350L/shared253tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,links absent/restored. CALC-086 preserved visible comparisons, no memory library/fake peers/full UI/ODS claim. Goal active continue101 then pause111/repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T19:19:57.656Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent separate EVALUATOR accepts exact3fd9a895c657 actual external token family and original const-copy input correction against genuine normal stream and current-source raw/gate evidence; not independent review."
+  evaluated_sha: "3fd9a895c657de1272b7f9232e4af61cc5f5ead6"
+  blueprint_digest: "0fb119ad8b610fff3415aea2f1f104144094258a27cc8c06129a4b524fe0c7b6"
+  evidence_refs:
+    - ".agentplane/tasks/202610131848-NTM4VX/README.md"
+    - ".agentplane/tasks/202610131848-NTM4VX/quality/20261013-191957656-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131848-NTM4VX/quality/20261013-191957656-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131848-NTM4VX/quality/20261013-191957656-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131848-NTM4VX/blueprint/resolved-snapshot.json"
+    - "output/playwright/task97-checks/exact-review.json"
+    - "output/playwright/task97-checks/value-coverage-audit.json"
+    - "output/playwright/task97-checks/gates-results.json"
+    - "output/playwright/calc-external-token-native/manifest.json"
+  findings:
+    - "3290 current non-task hashes match committed Git blobs; baseline3286 differs only19 intentional paths (15changed4added),8actual existing owner records/newcap/3Calc docs/nativehelper-test-fixture. External family fits existing449line reference owner; canonical aggregate/header exports retained, no new duplicate shard/library."
+    - "Complete unchanged original external class/member/ctor/dtor scopes over genuine reference/formula headers produce matching748045-byte stream,474sources8normalcommands. Actual kind/ocPush/UInt16/default string/data/copy/implicit move/Clone/getter/file/string/data/type comparisons match. Protected construction and true concrete input domain only, no fake document/compiler/config/matrix peers or memory engine."
+    - "Original const second-end getter exposed existing TS data-copy qualification mismatch; real copy/assign/native value input contracts now accept const views and read only actual initialized owner private fields. No test-only state forcing/public fake fields, output changes or expectation weakening; current whole Calc136/shared253raw100 all counterspositive,16gates/static/Calc0UI pass,4links absent/restored."
+    - "CALC-086 records source-only plain-auto RHS value temporary. Visible comparisons preserve original outcomes under authorized GC adaptation without incidental native count/stack traffic. Actual external document/range-name QA is unexecuted context; full external manager/compiler/config/document/grid/ODS remain pending."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual external reference/name token concrete family with existing shared strings/reference/base owners, normal initialized proof and scoped raw100; no ownership engine/fake peers."
+  -
+    type: "verify"
+    at: "2026-10-13T19:19:58.360Z"
+    author: "CODER"
+    state: "ok"
+    note: "Exact source3fd9a895c657de1272b7f9232e4af61cc5f5ead6,3290currentcommittedhashes19intentionalpaths; same-agent separate EVALUATOR pass not independent. Real external concrete value/move/copy/Clone/getters/equality/const-data copy-source family; native474sources8normalcommands748045bytes. Calc136tests27owners3767S2523B722F3350L/shared253tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,links absent/restored. CALC-086 preserved visible comparisons, no memory library/fake peers/full UI/ODS claim. Goal active continue101 then pause111/repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T19:18:34.943Z"
+doc_updated_at: "2026-10-13T19:19:58.414Z"
 doc_updated_by: "CODER"
 description: "Task97 actual external file-index base and single/range/name token ctor/copy/move/Clone/query/equality family, prerequisite for real range operator/compiler/ODS external references using existing genuine shared/data owners."
 sections:
@@ -63,6 +91,39 @@ sections:
     Result: all16pass.
     Evidence: consolidated gates-results.json/current-code/metadata recheck logs; first type/static failure retained. Wholeformat/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. No checker/threshold/private-state weakening. External classes fit existing449line reference owner, no second source shard/duplicate shared library. Runtime declaration symbols mapped to actual owner, aggregate/header export evidence retained;2existing refdata records updated for native const copy source. Exact source/committed hash and same-agent separate EVALUATOR next; not independent review.
     Scope:19intentional non-task paths (15changed4added), actual existing source/header/data owners and8existing records/new capability/native test/helper/fixture/3Calc docs. No external publication/merge/network/permission expansion.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T19:19:58.360Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Exact source3fd9a895c657de1272b7f9232e4af61cc5f5ead6,3290currentcommittedhashes19intentionalpaths; same-agent separate EVALUATOR pass not independent. Real external concrete value/move/copy/Clone/getters/equality/const-data copy-source family; native474sources8normalcommands748045bytes. Calc136tests27owners3767S2523B722F3350L/shared253tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,links absent/restored. CALC-086 preserved visible comparisons, no memory library/fake peers/full UI/ODS claim. Goal active continue101 then pause111/repairs.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T19:18:34.943Z, excerpt_hash=sha256:9c4fe4bf8dcc54fe7bf260b08e4da0d15c0583124021c11094feb24ba1d27c81
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131848-NTM4VX/blueprint/resolved-snapshot.json
+    - old_digest: 0fb119ad8b610fff3415aea2f1f104144094258a27cc8c06129a4b524fe0c7b6
+    - current_digest: 0fb119ad8b610fff3415aea2f1f104144094258a27cc8c06129a4b524fe0c7b6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131848-NTM4VX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610131848-NTM4VX -m 🧩 NTM4VX task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task97 intentional paths through followup; restore4links on every exit, no merging/history rewrites/unrelated task changes."
   Findings: |-
     Resolved focused observer error: called nonexistent OUString.at; focused.log retained, actual existing getStr()[i] under initialized native length loop now matches full stream. No shared owner API invented or expectation change.
@@ -109,6 +170,39 @@ Command: gates.mjs --early then --code-recheck; gates-late.mjs --late then --rec
 Result: all16pass.
 Evidence: consolidated gates-results.json/current-code/metadata recheck logs; first type/static failure retained. Wholeformat/lint/type/docs/size/dependencies/resources/tooling/tree/provenance/registry/invariants/inventory/routing/doctor/diff. No checker/threshold/private-state weakening. External classes fit existing449line reference owner, no second source shard/duplicate shared library. Runtime declaration symbols mapped to actual owner, aggregate/header export evidence retained;2existing refdata records updated for native const copy source. Exact source/committed hash and same-agent separate EVALUATOR next; not independent review.
 Scope:19intentional non-task paths (15changed4added), actual existing source/header/data owners and8existing records/new capability/native test/helper/fixture/3Calc docs. No external publication/merge/network/permission expansion.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T19:19:58.360Z — VERIFY — ok
+
+By: CODER
+
+Note: Exact source3fd9a895c657de1272b7f9232e4af61cc5f5ead6,3290currentcommittedhashes19intentionalpaths; same-agent separate EVALUATOR pass not independent. Real external concrete value/move/copy/Clone/getters/equality/const-data copy-source family; native474sources8normalcommands748045bytes. Calc136tests27owners3767S2523B722F3350L/shared253tests40owners4272S2147B897F3817L raw100/everycounterpositive;16gates/static/Calc0UI pass,links absent/restored. CALC-086 preserved visible comparisons, no memory library/fake peers/full UI/ODS claim. Goal active continue101 then pause111/repairs.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T19:18:34.943Z, excerpt_hash=sha256:9c4fe4bf8dcc54fe7bf260b08e4da0d15c0583124021c11094feb24ba1d27c81
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610131848-NTM4VX/blueprint/resolved-snapshot.json
+- old_digest: 0fb119ad8b610fff3415aea2f1f104144094258a27cc8c06129a4b524fe0c7b6
+- current_digest: 0fb119ad8b610fff3415aea2f1f104144094258a27cc8c06129a4b524fe0c7b6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131848-NTM4VX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610131848-NTM4VX -m 🧩 NTM4VX task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
