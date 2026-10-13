@@ -1,10 +1,11 @@
 ---
 id: "202610131456-7753KN"
 title: "Reuse original native table mouse frame hierarchy"
-status: "DOING"
+result_summary: "Retain original native table frames across DOM geometry samples; verified current-source100four,14242unique assertions, inventory retained, cadence6/10."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "Reviewed original SwFEShell GetBox/WhichMouseTabCol existing layout query contracts. Actual DOM-element Map retains registered native table/row/cell clients, compares current model/format/link identities, batches device geometry before acceptance, destroys only new candidates on failed measurements and retires changed/removed clients. Primitive native frame setter cannot normally throw; no added low-level state machine, allocator or mirrored counters. Browser-only readonly geometry removal does not alter row/cell/default logic."
     - "All9committed non-AP blobs equal final execution hashes; production source unchanged across related and supplementary coverage. Original instrumented statement/function/branch IDs and location maps byte-identical; installed Istanbul raw-count merge produces508lines573statements76functions422branches100 and1071positive original counters. Initial14195related assertions pass;2genuine new cases close measured gaps without repeated passing related tests or threshold/provider/exclusion/location/counter normalization."
     - "947other oldtestfiles unchanged; exact1source-backed old lifetime case only, other3cases/imports/statement bytes identical. Canonical4record historical arrays/scalars/status/default/classification prefixes preserved.19unique Chromium regression/new scenarios accepted; initial failed390fixture repaired using native scrolling, narrow retry succeeds and changed fresh desktop fixture checked once.26tooling,TS7/lint/docs/size/dependencies/build/static,9restored-onlymetadata gates pass."
-commit: null
+commit:
+  hash: "945a1f9943af51075e46f3c070f2add4e40c1678"
+  message: "🧩 7753KN fix: retain original native table mouse frames"
 comments:
   -
     author: "CODER"
     body: "Start: ordinary JS Map retains actual native table/row/cell hierarchy between geometry samples, updates browser-only rectangle field, precise1oldcase migration; native clients, atomic sample failure,2wholemodules100four and cadence6/10."
+  -
+    author: "CODER"
+    body: "Verified: original native table/row/cell hierarchy retained by ordinary DOM-element Map, atomic geometry updates and precise client cleanup;14242unique accepted cases, whole2Istanbul100four/1071positive raw counters,947otheroldtests/4canonical prefixes/137staticfiles/9metadata checks pass. Exact945a1f9943af51075e46f3c070f2add4e40c1678 same-agent non-independent review;4reference paths absent every producer/exactly restored. Scope bounded, no full parity promotion; cadence6/10, full once10 then user pause after full+repairs."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14242unique assertions, whole2current-source Istanbul100allfour/1071positive raw counters; original14195related+2new only standard raw-count merge,26tooling/19Chromium;4refs absent every producer,9metadata/947otheroldtests/4canonical prefixes/137staticfiles pass. Exact1oldcase migration. New390fixture scroll repair narrowed and finaldesktop fresh fixture rechecked; no prior browser regression replay. Bounded table hierarchy reuse, cadence6/10, full once10 then pause+repairs."
+  -
+    type: "status"
+    at: "2026-10-13T15:33:36.694Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original native table/row/cell hierarchy retained by ordinary DOM-element Map, atomic geometry updates and precise client cleanup;14242unique accepted cases, whole2Istanbul100four/1071positive raw counters,947otheroldtests/4canonical prefixes/137staticfiles/9metadata checks pass. Exact945a1f9943af51075e46f3c070f2add4e40c1678 same-agent non-independent review;4reference paths absent every producer/exactly restored. Scope bounded, no full parity promotion; cadence6/10, full once10 then user pause after full+repairs."
 doc_version: 3
-doc_updated_at: "2026-10-13T15:33:21.569Z"
+doc_updated_at: "2026-10-13T15:33:36.696Z"
 doc_updated_by: "CODER"
 description: "Preserve native table/row/cell frame identity across browser device geometry resamples, update existing browser geometry field, replace disconnected/structurally changed/detached owners; atomic error preservation and shutdown. Native direct shell/mounted/Chromium tests, exact one old ephemeral frame lifetime case migration, whole2modules100four, cadence6/10."
 sections:
@@ -279,6 +292,10 @@ sections:
     Browser Map retains original registered native table/row/cell objects, updates only device geometry after complete measurement, preserves native notifications and prior geometry on error, retires incompatible/unmounted clients. No custom low-level allocator/state machine/version registry/extra adapter. Full persistent root/page/master/follow/renderer and incremental row/cell structural update parity remain unverified. Registered recovery/open/save/settings exceptions unchanged. Human native-JS principle applies to subsequent tasks. Exact semanticSHA same-agent non-independent review follows. Cadence6/10, last full8V85V8, full once10 and pause after next full plus necessary repairs; this broad related532file selection is not the full app/inventory/tooling/Chromium profile.
 
     Exact semantic commit 945a1f9943af51075e46f3c070f2add4e40c1678 reviewed and accepted by same-agent EVALUATOR phase (not independent): all9committed blobs match frozen evidence;14242unique assertions, whole2original modules100four/1071positive counters,4canonical prefixes/947otheroldtests/137staticfiles/9metadata gates pass. Quality report .agentplane/tasks/202610131456-7753KN/quality/20261013-153235397-recovery-context/quality-report.json. No further runtime/source/test/registry changes after acceptance. Safe local correction6/10 ready for clean direct close; goal remains active until full once10 and user pause after next full+repairs.
+extensions:
+  implementation_commit:
+    hash: "945a1f9943af51075e46f3c070f2add4e40c1678"
+    message: "🧩 7753KN fix: retain original native table mouse frames"
 id_source: "generated"
 ---
 ## Summary
