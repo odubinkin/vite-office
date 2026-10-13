@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 356
+revision: 357
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:19:00.365Z"
+doc_updated_at: "2026-10-13T17:32:15.626Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1564,6 +1564,10 @@ sections:
     - Observation: Correction9/10 task202610131709-529MQ3 fixes SwTabFramePainter outer flags from actual frame links instead of model row indexes; partial/reordered chains now match pinned Insert predicates.
       Impact: Original painter/native owner/grid/Style arbitration/defaults and protected IO/recovery/Space preserved; whole physical/native parity remains unverified.
       Resolution: 1566unique assertions1528related/26tooling/12Chromium pass; whole painter100L74/S78/F9/B26 and113positive original counters,955oldtests identical,2canonical histories and9metadata gates pass.4refs absent everyproducer/exactfinallyrestore; transient shared boost metadata retry only. Full once10 then human-requested pause after full+repairs.
+
+    - Observation: Correction10/10 W6QHFR aligns menubar middle/right root/command/submenu mouse activation with pinned button-neutral handlers, using original native browser auxclick/button.click and bindings.
+      Impact: Original HTML disabled protects execution and synchronous popup teardown/focus/history remain; no press-release state/new adapter module. Registered Space/IO/recovery retained; whole native popup timers/mnemonics/platform/focus graph parity unverified.
+      Resolution: 1607unique accepted1562related/26tooling/19Chromium; exactly1source-obsolete oldsubmenu-click assertion closed failed-only,955otheroldfiles identical. Whole menu Istanbul100L209/S231/F51/B210 with492positive original counters,2canonical histories/137staticfiles/9metadata pass.4refs absent everyproducer/exactrestore. Ten corrections complete; one scheduled full now required, then human pause after any fixes.
 id_source: "generated"
 ---
 ## Summary
@@ -3101,3 +3105,7 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
 - Observation: Correction9/10 task202610131709-529MQ3 fixes SwTabFramePainter outer flags from actual frame links instead of model row indexes; partial/reordered chains now match pinned Insert predicates.
   Impact: Original painter/native owner/grid/Style arbitration/defaults and protected IO/recovery/Space preserved; whole physical/native parity remains unverified.
   Resolution: 1566unique assertions1528related/26tooling/12Chromium pass; whole painter100L74/S78/F9/B26 and113positive original counters,955oldtests identical,2canonical histories and9metadata gates pass.4refs absent everyproducer/exactfinallyrestore; transient shared boost metadata retry only. Full once10 then human-requested pause after full+repairs.
+
+- Observation: Correction10/10 W6QHFR aligns menubar middle/right root/command/submenu mouse activation with pinned button-neutral handlers, using original native browser auxclick/button.click and bindings.
+  Impact: Original HTML disabled protects execution and synchronous popup teardown/focus/history remain; no press-release state/new adapter module. Registered Space/IO/recovery retained; whole native popup timers/mnemonics/platform/focus graph parity unverified.
+  Resolution: 1607unique accepted1562related/26tooling/19Chromium; exactly1source-obsolete oldsubmenu-click assertion closed failed-only,955otheroldfiles identical. Whole menu Istanbul100L209/S231/F51/B210 with492positive original counters,2canonical histories/137staticfiles/9metadata pass.4refs absent everyproducer/exactrestore. Ten corrections complete; one scheduled full now required, then human pause after any fixes.

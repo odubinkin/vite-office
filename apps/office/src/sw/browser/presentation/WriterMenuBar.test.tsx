@@ -677,7 +677,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.keyDown(noList, { key: "Escape" });
       expect(lists).toHaveFocus();
       fireEvent.click(lists);
-      expect(screen.queryByRole("menu", { name: "Lists menu" })).not.toBeInTheDocument();
+      expect(screen.queryByRole("menu", { name: "Lists menu" })).toBeVisible();
       fireEvent.mouseEnter(lists);
       expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
       fireEvent.mouseLeave(lists.parentElement as HTMLElement);

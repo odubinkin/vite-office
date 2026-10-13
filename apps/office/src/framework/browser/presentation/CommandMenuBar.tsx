@@ -350,6 +350,10 @@ export function CommandMenuBar({
                 aria-haspopup="menu"
                 className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
                 data-submenu-trigger={item.id}
+                onClick={
+                  /** Opens the original child on native browser activation. @returns Nothing. */ () =>
+                    openSubmenu(item.id, false)
+                }
                 role="menuitem"
                 tabIndex={-1}
                 type="button"
@@ -397,6 +401,19 @@ export function CommandMenuBar({
     <div
       aria-label={ariaLabel}
       className="flex items-center gap-1 [&_[data-popup-highlighted]]:bg-slate-100"
+      onAuxClick={
+        /** Reuses original button activation for native nonprimary mouse completion. @param event - Browser auxiliary click. @returns Nothing. */ (
+          event,
+        ) => {
+          event.preventDefault();
+          (event.target as HTMLElement).closest<HTMLButtonElement>("button")?.click();
+        }
+      }
+      onContextMenu={
+        /** Keeps native menu ownership instead of opening the browser context surface. @param event - Browser context request. @returns Nothing. */ (
+          event,
+        ) => event.preventDefault()
+      }
       onBlurCapture={
         /** Cancels a cycle after focus transfers outside without restoring it. @param event - Focus transfer. @returns Nothing. */ (
           event,
