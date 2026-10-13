@@ -1,10 +1,11 @@
 ---
 id: "202610131710-MCM7S2"
 title: "Implement shared formula grammar operations for Calc and ODS"
-status: "DOING"
+result_summary: "FormulaGrammar ready as shared static dependency for real Calc default/storage grammar and ODS; CALC-082 recorded, no parser/document substitute. Goal active until scheduled full101 and relevant repairs, then user-requested pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Full unchanged grammar header/source and genuine generated/configured headers compare13349bytes381lines,9original source hashes and2normal commands. Native negative convention casts explicitly excluded; original JS signed arithmetic/release behavior retained, no fake parser/library or sanitizer."
     - "Whole Calc133tests44files and affected shared2tests1file every raw counter positive S/B/F/L100, exact links restored, static/Calc0UI pass. One source-backed formula-offapi dependency edge preserves cycle checks. Metadata/format failures retained and corrected without threshold/validation changes."
     - "Source snapshots show Writer unchanged, existing shared grammar header extended with real core/IDL owners. Final post-profile edits only formatter/helper, boundary enforcement and metadata; runtime/test/capture values unchanged. Same-agent separate evaluator is not independent review; pause after full101/repairs remains pending."
-commit: null
+commit:
+  hash: "fd0b6de45d2a0be15324aa322d5bec8aeefae903"
+  message: "🧩 MCM7S2 formula: implement original grammar for Calc and ODS"
 comments:
   -
     author: "CODER"
     body: "Start: original shared formula grammar/static masks and FormulaLanguage owner for actual Calc default/storage grammars, portable JS bitops and no compiler/document substitute."
+  -
+    author: "CODER"
+    body: "Verified: original shared grammar static operations and FormulaLanguage values match full ordinary original stream; whole Calc/affected shared raw100,16gates and exact source review pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Exact fd0b6de45d2a3265hashes16intentionalpaths reviewed; normal original grammar13349byte381line stream9sources2commands matches. Whole Calc133/shared2raw100 every counter, source links restored, static/Calc profile0UI and16gates pass. No Writer changes, native invalid enum/debug assertion/full UI/ODS claim; pause after full101/repairs pending."
+  -
+    type: "status"
+    at: "2026-10-13T17:29:49.328Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original shared grammar static operations and FormulaLanguage values match full ordinary original stream; whole Calc/affected shared raw100,16gates and exact source review pass."
 doc_version: 3
-doc_updated_at: "2026-10-13T17:29:33.042Z"
+doc_updated_at: "2026-10-13T17:29:49.329Z"
 doc_updated_by: "CODER"
 description: "Task93 completes original shared FormulaGrammar static value/mapping/mask/convention operations and actual FormulaLanguage IDL constants needed by real Calc formula cells/UI and ODF import/export; no substitute parser or model."
 sections:
