@@ -1621,3 +1621,14 @@ ScMatrixImpl::PutError calls maMat.set directly, whereas coordinate number/strin
 Evidence: task85 ordinary unchanged original coordinate definitions over genuine mdds/SAL/SVL/formula dependencies. Complete original/portable streams compare this initialized in-storage write and a normal bounds exception, alongside coordinate Get/predicate observations. No out-of-storage read, sanitizer or fake interpreter is needed.
 
 Decision: preserve the missing guard, column-major mapping and native exception behavior. Do not clamp coordinates or normalize PutError to other scalar writes. Actual interpreter/UI consumer reachability remains future work.
+
+
+## CALC-074: ScCellValue self move assignment empties the cell
+
+Status: confirmed original logical behavior for scalar families; no claim that self move must retain the old value.
+
+ScCellValue::operator=(ScCellValue&&) first clears the destination, then moves rCell.maData and resets the source. When destination and source are the same cell, the first clear already makes the source empty. Self move assignment therefore loses a prior numeric or string value and leaves CELLTYPE_NONE. This is defined scalar behavior in the selected source, not a pointer lifetime or allocator experiment.
+
+Evidence: task86 complete ordinary original scalar stream compares number/string self move, normal move source emptiness, scalar setters and swaps; only actual empty/number/SharedString alternatives are instantiated. No fake formula/rich-text object or sanitizer is used.
+
+Decision: preserve the clearing order and source reset. Do not insert a self-move early return to retain the value. Document/cell-store/UI consumer reachability remains future work.
