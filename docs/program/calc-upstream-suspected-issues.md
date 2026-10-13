@@ -1610,3 +1610,14 @@ In pinned sc/source/core/tool/scmatrix.cxx, invalid-size constructors and the un
 Evidence: task84 ordinary unchanged original constructor/Resize/geometry definitions over genuine mdds/SAL/SVL. Complete native and portable streams cover both overloads, empty-before-invalid fallback and initialized-cell preservation; no invalid memory access, sanitizer or large allocation is required.
 
 Decision: preserve the two error choices and the existing-cell copy behavior. Do not force the new error into retained cells or normalize the filled overload to MatrixSize. Revisit actual interpreter/UI consumer reachability when those owners are implemented.
+
+
+## CALC-073: PutError omits coordinate validation and can write into the next column
+
+Status: confirmed original coordinate-write asymmetry; a user-visible defect is not established.
+
+ScMatrixImpl::PutError calls maMat.set directly, whereas coordinate number/string/boolean/empty/path writes first check ValidColRow. In a2x2 matrix, PutError(StackOverflow,0,3) therefore writes the encoded error at flat offset3, corresponding to column1,row1, despite row3 being outside the declared rows. A column9,row0 write instead exceeds the underlying storage and throws its normal bounds exception. Other scalar writes with invalid coordinates do nothing.
+
+Evidence: task85 ordinary unchanged original coordinate definitions over genuine mdds/SAL/SVL/formula dependencies. Complete original/portable streams compare this initialized in-storage write and a normal bounds exception, alongside coordinate Get/predicate observations. No out-of-storage read, sanitizer or fake interpreter is needed.
+
+Decision: preserve the missing guard, column-major mapping and native exception behavior. Do not clamp coordinates or normalize PutError to other scalar writes. Actual interpreter/UI consumer reachability remains future work.

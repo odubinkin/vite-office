@@ -303,9 +303,10 @@ export class delayed_delete_vector<T> {
     last: delayed_delete_vector_iterator<T>,
   ): T[] {
     if (!(first instanceof delayed_delete_vector_iterator)) return [...first];
-    const result: T[] = [];
-    for (const it = first.copy(); !it.equals(last); it.advance(1)) result.push(it.get());
-    return result;
+    const result = Array<T | undefined>(first.distance_to(last)).fill(undefined);
+    let index = 0;
+    for (const it = first.copy(); !it.equals(last); it.advance(1)) result[index++] = it.get();
+    return result as T[];
   }
   /** Implements selected libc++ vector<bool> word capacity; other native allocators are unverified. @param count - Slots. @returns Allocated slots. */
   private aligned_capacity(count: number): number {

@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-cdc110ed-77a1-4e8a-bb62-78b3d385456e",
+    "capabilityId": "CAP-cdc110ed-77a1-4e8a-bb62-78b3d385456e",
+    "suite": "calc",
+    "subsystem": "matrix-storage",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original coordinate writes retain or clear flags exactly as their source definitions.",
+      "Get returns original scalar tags and an owned shared string copy; empty result remains Empty in Get and distinct in predicates.",
+      "Coordinate replication, invalid query/write behavior and actual internal supported block types follow original definitions.",
+      "No interpreter or memory-manager substitute; existing shared values and data containers are reused."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91."
+    },
+    "capability": "Original coordinate matrix values and type queries",
+    "gaps": [
+      "Index/transposed/bulk families, interpreter-specific getters/Clone/results/document/UI remain unported.",
+      "GC resource policy deliberately differs; native debug assertions/ABI/full QA unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "PutEmptyResultVector"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "Get(nC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+          "marker": "matches original coordinate matrix value flag and predicate stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Coordinate matrix values and predicates (task85)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-073"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "ScMatrixImpl::PutError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "ScMatrixImpl::Get(SCSIZE"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "element is not of empty type"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/scmatrix.hxx",
+          "marker": "SC_DLLPUBLIC void PutError"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-coordinate-matrix-values-and-type-queries",
+    "scopeLimitations": [
+      "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

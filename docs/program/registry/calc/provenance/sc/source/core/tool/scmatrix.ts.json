@@ -36,7 +36,23 @@
       "IsNonValueType",
       "IsRealStringType",
       "IsEmptyType",
-      "IsEmptyPathType"
+      "IsEmptyPathType",
+      "PutDouble",
+      "PutString",
+      "PutEmpty",
+      "PutEmptyPath",
+      "PutError",
+      "PutBoolean",
+      "PutEmptyResultVector",
+      "Get",
+      "IsStringOrEmpty",
+      "IsEmpty",
+      "IsEmptyCell",
+      "IsEmptyResult",
+      "IsEmptyPath",
+      "IsValue",
+      "IsValueOrEmpty",
+      "IsBoolean"
     ],
     "upstreamSymbols": [
       "ScMatrixValue",
@@ -49,10 +65,11 @@
       "Original inline matrix value owner/header boundary and genuine shared value/error reuse.",
       "Original default/copy/assignment/query/equality semantics and fixed tag/member identity.",
       "Original internal data/flag matrix storage and constructor/coordinate replication semantics reuse genuine shared owners.",
-      "Original public matrix constructors/resize/geometry/type classifier boundary delegates to actual shared storage."
+      "Original public matrix constructors/resize/geometry/type classifier boundary delegates to actual shared storage.",
+      "Original coordinate value/flag/type responsibilities and public delegates reuse genuine shared stores and values."
     ],
     "omittedResponsibilities": [
-      "Iteration84 implements original public ScMatrix constructors, genuine pImpl delegation, resize overloads, dimensions/count/coordinate validation and six inline UInt8 classifiers over actual ScMatrixImpl/shared mdds. The original64bit initial default536870912-element bound is preserved as a per-matrix bound; native live-pool debit/credit, environment override and refcount/unique_ptr destruction timing are deliberately omitted under the user GC-first instruction. Ordinary original definition excerpts over genuine dependencies compare25016-byte constructor/resize/coordinate observations and all256tags; allocation-boundary queries run before native objects exist and do not certify native live-pool equivalence. Invalid constructors/default resize use MatrixSize, filled resize uses StackOverflow; mdds resize may preserve existing cell data over the error initializer (CALC-072). No interpreter/Clone substitute, no duplicated storage. Typed access/mutations, Clone/interpreter/results/cell/document/input/UI, allocation exceptions/ABI and full upstream QA remain incomplete; broad parity flags stay false. Original QA anchors are unexecuted context. Next full91."
+      "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91."
     ],
     "evidence": {
       "local": [
@@ -87,6 +104,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
           "marker": "matches original public matrix construction resize and classification stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+          "marker": "matches original coordinate matrix value flag and predicate stream"
         }
       ],
       "upstream": [
@@ -105,6 +126,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/scmatrix.hxx",
           "marker": "IsRealStringType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "ScMatrixImpl::PutError"
         }
       ]
     }

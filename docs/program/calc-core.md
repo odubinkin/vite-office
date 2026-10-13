@@ -14,7 +14,13 @@ priority over unrelated completion of generic mdds or formula features:
    operations required by the first editable sheet.
 4. Original edit notifications and undo, reusing existing shared Svt/Sfx
    services where their contracts apply.
-5. Original Calc view/input owners and browser presentation connected to those
+5. Original ODS (ODF spreadsheet) reading/writing bound to the same real
+   document owners, reusing shared package ZIP, manifest, SAX and xmloff owners.
+   Preserve document values, strings, typed/date/boolean/error data, sheet
+   structure, repeated rows/cells, formulas and styles where the original
+   document/filter contracts require them; unsupported features remain explicit
+   pending owners, never a temporary independent file model.
+6. Original Calc view/input owners and browser presentation connected to those
    document operations, using the existing shared command/UI infrastructure.
 
 Dependencies still control execution: a leaf declaration does not establish
@@ -22,6 +28,18 @@ document or UI readiness. Original formula and rich-text cell owners must be
 ported where the actual cell-store contract needs them; they cannot be
 replaced by synthetic browser cell variants. The existing browser Foundation
 and coordinate/selection services do not yet provide an editable Calc sheet.
+
+The user reiterated this priority during task85 and explicitly includes ODS
+reading and saving as UI prerequisites. Finish the current coordinate-value
+leaf, then prioritize actual cell-store/value, ScColumn/ScTable/ScDocument and
+ODS filter owners rather than completing unrelated matrix aggregation,
+interpreter or generic library features. Shared package owners already exist
+at package/source/zipapi/ZipFile.ts, ZipOutputStream.ts and
+package/source/manifest/ManifestExport.ts, with shared sax/fastparser and
+xmloff core owners. Their current bounded/partial contracts must be audited
+and extended where ODS requires it; availability alone does not establish
+complete ODS support. Calc-specific filter ownership follows sc/source/filter/xml.
+No ODS importer/exporter or editable sheet is claimed at this checkpoint.
 
 Task32 (`202610101342-SSE4NF`), the first task since task31's full run, ports
 original `CellType` at `sc/inc/global`, `TEXTWIDTH_DIRTY` at
@@ -3272,3 +3290,10 @@ Iteration84 also corrects generic shared `delayed_delete_vector` scalar fill: or
 
 
 Generic vector reserved slots are also initialized with `undefined`, matching the existing optional-slot representation, before scalar assignments. This prevents numeric array transitions from losing encoded errors during allocation/copy. The fix is in the shared owner and adds no error decoder, alternate number wrapper or memory manager.
+
+
+### Coordinate matrix values and predicates (task85)
+
+Original coordinate PutDouble/String/Empty/EmptyPath/Error/Boolean, PutEmptyResultVector, Get and all coordinate type/empty predicates now operate on actual mdds storage with public ScMatrix delegates. Const string input is borrowed, stored/returned strings use the existing SharedString value copies. Scalar writes retain flags, PutEmpty clears them, and empty-result Get intentionally returns Empty while IsEmptyResult remains distinct. Invalid IsEmptyPath returns true; other predicates return false. Production release source observations include genuine internal supported block/flag cases without certifying public reachability or a browser debug-assertion subsystem.
+
+The complete37464-byte original/portable stream covers five shapes, value/flag histories, UTF16 embedded NUL and non-ASCII, retained returned strings, errors/replication and invalid writes. CALC-073 records unguarded PutError row spill. Index/transposed/bulk families and interpreter-specific queries/Clone/results/document/UI remain subsequent original owners. Existing GC allocation/refcount adaptation stays unchanged; no alternate data engine, string wrapper or interpreter substitute. Next full91.

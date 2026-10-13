@@ -9,10 +9,13 @@ import {
 
 import {
   multi_type_matrix,
+  element_t,
   type MatrixTraits,
 } from "../../../../external/mdds/include/mdds/multi_type_matrix";
 import {
   double_element_callbacks,
+  boolean_element_callbacks,
+  uint8_element_callbacks,
   uint8_element_block,
 } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
 import { delayed_delete_vector_iterator } from "../../../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector";
@@ -43,6 +46,10 @@ const matrix_flag_traits: MatrixTraits<SharedString> = {
     return value & 255;
   },
 };
+/** Original UInt8 empty-result and empty-path flags. */
+const SC_MATFLAG_EMPTYRESULT = 1;
+const SC_MATFLAG_EMPTYPATH = 2;
+
 /** Native mutable coordinate references grouped for the browser call boundary. */
 export interface MatrixCoordinates {
   column: number;
@@ -132,6 +139,166 @@ export class ScMatrixImpl {
       this.ValidColRow(coordinates.column, coordinates.row) ||
       this.ValidColRowReplicated(coordinates)
     );
+  }
+  /** Original coordinate numeric write retains the flag matrix. @param fVal - Numeric value. @param nC - Column. @param nR - Row. @returns Nothing. */
+  PutDouble(fVal: number, nC: number, nR: number): void {
+    if (this.ValidColRow(nC, nR)) this.maMat.set(nR, nC, fVal, double_element_callbacks);
+  }
+  /** Original coordinate string copy retains the flag matrix. @param rStr - Const shared value. @param nC - Column. @param nR - Row. @returns Nothing. */
+  PutString(rStr: SharedStringConstReference, nC: number, nR: number): void {
+    if (this.ValidColRow(nC, nR))
+      this.maMat.set<SharedStringConstReference>(nR, nC, rStr, string_element_callbacks);
+  }
+  /** Original coordinate empty write clears both data and flag. @param nC - Column. @param nR - Row. @returns Nothing. */
+  PutEmpty(nC: number, nR: number): void {
+    if (this.ValidColRow(nC, nR)) {
+      this.maMat.set_empty(nR, nC);
+      this.maMatFlag.set_empty(nR, nC);
+    }
+  }
+  /** Original empty-path write sets its UInt8 flag. @param nC - Column. @param nR - Row. @returns Nothing. */
+  PutEmptyPath(nC: number, nR: number): void {
+    if (this.ValidColRow(nC, nR)) {
+      this.maMat.set_empty(nR, nC);
+      this.maMatFlag.set(nR, nC, SC_MATFLAG_EMPTYPATH, uint8_element_callbacks);
+    }
+  }
+  /** Original error write delegates without a coordinate guard. @param nErrorCode - Error. @param nC - Column. @param nR - Row. @returns Nothing. */
+  PutError(nErrorCode: FormulaError, nC: number, nR: number): void {
+    this.maMat.set(nR, nC, CreateDoubleError(nErrorCode), double_element_callbacks);
+  }
+  /** Original boolean write retains the flag matrix. @param bVal - Boolean. @param nC - Column. @param nR - Row. @returns Nothing. */
+  PutBoolean(bVal: boolean, nC: number, nR: number): void {
+    if (this.ValidColRow(nC, nR)) this.maMat.set(nR, nC, bVal, boolean_element_callbacks);
+  }
+  /** Original empty-result vector validates both endpoints and fills UInt8 flags. @param nCount - Element count. @param nC - Column. @param nR - Starting row. @returns Nothing. */
+  PutEmptyResultVector(nCount: number, nC: number, nR: number): void {
+    if (nCount && this.ValidColRow(nC, nR) && this.ValidColRow(nC, nR + nCount - 1)) {
+      this.maMat.set_empty(nR, nC, nCount);
+      const values = Array<number>(nCount).fill(SC_MATFLAG_EMPTYRESULT),
+        storage = { values, size: nCount };
+      this.maMatFlag.set_range(
+        nR,
+        nC,
+        new delayed_delete_vector_iterator(storage, 0),
+        new delayed_delete_vector_iterator(storage, nCount),
+        uint8_element_callbacks,
+      );
+    }
+  }
+  /** Original value extraction replicates scalar/axis coordinates and returns an owned shared value copy. Empty-result distinction intentionally stays in predicates. @param nC - Column. @param nR - Row. @returns Original matrix value. */
+  Get(nC: number, nR: number): ScMatrixValue {
+    const value = new ScMatrixValue(),
+      coord = { column: nC, row: nR };
+    if (this.ValidColRowOrReplicated(coord)) {
+      const pos = this.maMat.cposition(coord.row, coord.column);
+      switch (this.maMat.get_type(pos)) {
+        case element_t.element_boolean:
+          value.nType = ScMatValType.Boolean;
+          value.fVal = Number(this.maMat.get_boolean(pos));
+          break;
+        case element_t.element_numeric:
+          value.nType = ScMatValType.Value;
+          value.fVal = this.maMat.get_numeric(pos);
+          break;
+        case element_t.element_string:
+          value.nType = ScMatValType.String;
+          value.aStr = this.maMat.get_string(pos);
+          break;
+        case element_t.element_empty:
+          switch (this.maMatFlag.get_type(coord.row, coord.column)) {
+            case element_t.element_empty:
+              value.nType = ScMatValType.Empty;
+              break;
+            case element_t.element_integer:
+              value.nType =
+                this.maMatFlag.get(coord.row, coord.column, uint8_element_callbacks) ===
+                SC_MATFLAG_EMPTYPATH
+                  ? ScMatValType.EmptyPath
+                  : ScMatValType.Empty;
+              break;
+          }
+          value.fVal = 0.0;
+          break;
+      }
+    }
+    return value;
+  }
+  /** Original coordinate IsStringOrEmpty query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsStringOrEmpty(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    switch (this.maMat.get_type(coord.row, coord.column)) {
+      case element_t.element_empty:
+      case element_t.element_string:
+        return true;
+    }
+    return false;
+  }
+  /** Original coordinate IsEmpty query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsEmpty(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    return (
+      this.maMat.get_type(coord.row, coord.column) === element_t.element_empty &&
+      this.maMatFlag.get_integer(coord.row, coord.column) !== SC_MATFLAG_EMPTYPATH
+    );
+  }
+  /** Original coordinate IsEmptyCell query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsEmptyCell(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    return (
+      this.maMat.get_type(coord.row, coord.column) === element_t.element_empty &&
+      this.maMatFlag.get_type(coord.row, coord.column) === element_t.element_empty
+    );
+  }
+  /** Original coordinate IsEmptyResult query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsEmptyResult(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    return (
+      this.maMat.get_type(coord.row, coord.column) === element_t.element_empty &&
+      this.maMatFlag.get_integer(coord.row, coord.column) === SC_MATFLAG_EMPTYRESULT
+    );
+  }
+  /** Original coordinate IsEmptyPath query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsEmptyPath(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return true;
+    return (
+      this.maMat.get_type(coord.row, coord.column) === element_t.element_empty &&
+      this.maMatFlag.get_integer(coord.row, coord.column) === SC_MATFLAG_EMPTYPATH
+    );
+  }
+  /** Original coordinate IsValue query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsValue(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    switch (this.maMat.get_type(coord.row, coord.column)) {
+      case element_t.element_boolean:
+      case element_t.element_numeric:
+        return true;
+    }
+    return false;
+  }
+  /** Original coordinate IsValueOrEmpty query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsValueOrEmpty(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    switch (this.maMat.get_type(coord.row, coord.column)) {
+      case element_t.element_boolean:
+      case element_t.element_numeric:
+      case element_t.element_empty:
+        return true;
+    }
+    return false;
+  }
+  /** Original coordinate IsBoolean query with replication. @param nC - Column. @param nR - Row. @returns Original predicate. */
+  IsBoolean(nC: number, nR: number): boolean {
+    const coord = { column: nC, row: nR };
+    if (!this.ValidColRowOrReplicated(coord)) return false;
+    return this.maMat.get_type(coord.row, coord.column) === element_t.element_boolean;
   }
   /** Original numeric query delegates to the genuine mdds matrix. @returns Whether all stored values are numeric/boolean. */
   IsNumeric(): boolean {
@@ -275,5 +442,73 @@ export class ScMatrix {
       this.ValidColRow(coordinates.column, coordinates.row) ||
       this.ValidColRowReplicated(coordinates)
     );
+  }
+  /** Original coordinate PutDouble delegate. @param fVal - Original argument. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutDouble(fVal: number, nC: number, nR: number): void {
+    this.pImpl.PutDouble(fVal, nC, nR);
+  }
+  /** Original coordinate PutString delegate. @param rStr - Original argument. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutString(rStr: SharedStringConstReference, nC: number, nR: number): void {
+    this.pImpl.PutString(rStr, nC, nR);
+  }
+  /** Original coordinate PutEmpty delegate. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutEmpty(nC: number, nR: number): void {
+    this.pImpl.PutEmpty(nC, nR);
+  }
+  /** Original coordinate PutEmptyPath delegate. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutEmptyPath(nC: number, nR: number): void {
+    this.pImpl.PutEmptyPath(nC, nR);
+  }
+  /** Original coordinate PutError delegate. @param nErrorCode - Original argument. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutError(nErrorCode: FormulaError, nC: number, nR: number): void {
+    this.pImpl.PutError(nErrorCode, nC, nR);
+  }
+  /** Original coordinate PutBoolean delegate. @param bVal - Original argument. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutBoolean(bVal: boolean, nC: number, nR: number): void {
+    this.pImpl.PutBoolean(bVal, nC, nR);
+  }
+  /** Original coordinate PutEmptyResultVector delegate. @param nCount - Original argument. @param nC - Original argument. @param nR - Original argument. @returns Nothing. */
+  PutEmptyResultVector(nCount: number, nC: number, nR: number): void {
+    this.pImpl.PutEmptyResultVector(nCount, nC, nR);
+  }
+  /** Original coordinate Get delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  Get(nC: number, nR: number): ScMatrixValue {
+    return this.pImpl.Get(nC, nR);
+  }
+  /** Original coordinate IsStringOrEmpty delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsStringOrEmpty(nC: number, nR: number): boolean {
+    return this.pImpl.IsStringOrEmpty(nC, nR);
+  }
+  /** Original coordinate IsEmpty delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsEmpty(nC: number, nR: number): boolean {
+    return this.pImpl.IsEmpty(nC, nR);
+  }
+  /** Original coordinate IsEmptyCell delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsEmptyCell(nC: number, nR: number): boolean {
+    return this.pImpl.IsEmptyCell(nC, nR);
+  }
+  /** Original coordinate IsEmptyResult delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsEmptyResult(nC: number, nR: number): boolean {
+    return this.pImpl.IsEmptyResult(nC, nR);
+  }
+  /** Original coordinate IsEmptyPath delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsEmptyPath(nC: number, nR: number): boolean {
+    return this.pImpl.IsEmptyPath(nC, nR);
+  }
+  /** Original coordinate IsValue delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsValue(nC: number, nR: number): boolean {
+    return this.pImpl.IsValue(nC, nR);
+  }
+  /** Original coordinate IsValueOrEmpty delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsValueOrEmpty(nC: number, nR: number): boolean {
+    return this.pImpl.IsValueOrEmpty(nC, nR);
+  }
+  /** Original coordinate IsBoolean delegate. @param nC - Column. @param nR - Row. @returns Original query. */
+  IsBoolean(nC: number, nR: number): boolean {
+    return this.pImpl.IsBoolean(nC, nR);
+  }
+  /** Original numeric matrix delegate. @returns Original predicate. */
+  IsNumeric(): boolean {
+    return this.pImpl.IsNumeric();
   }
 }
