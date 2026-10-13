@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/sc/inc/token.ts#ScEmptyCellToken",
         "apps/office/src/sc/inc/token.ts#ScHybridCellToken",
-        "apps/office/src/sc/source/core/tool/token.test.ts#matches complete original empty token flags, clone policy and equality stream",
+        "apps/office/src/sc/source/core/tool/token.test.ts#matches original empty token flags, semantic clones and equality stream",
         "apps/office/src/sc/source/core/tool/token.test.ts#matches complete original hybrid token shared ownership and formula copy move stream",
         "apps/office/src/sc/source/core/tool/token.test.ts#matches original hybrid result IEEE payload and compared field distinctions",
         "vendor/libreoffice-reference/sc/inc/token.hxx#class ScEmptyCellToken final",

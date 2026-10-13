@@ -1,4 +1,4 @@
-/** @fileoverview Whole original ordinary C++ classification, stack and constructor output comparison using real portable token owners. */
+/** @fileoverview Original semantic classification, stack and constructor observations; C++ token memory fields are explicitly projected out. */
 import { expect, it } from "vitest";
 import { gunzipSync } from "node:zlib";
 import original from "./native-token-cases.json";
@@ -8,7 +8,6 @@ import { ParamClass } from "./paramclass";
 import { FormulaError, CreateDoubleError } from "./errorcodes";
 import {
   FormulaToken,
-  FormulaFAPToken,
   FormulaByteToken,
   FormulaSpaceToken,
   FormulaDoubleToken,
@@ -24,20 +23,15 @@ import {
   FormulaErrorToken,
   StackVar,
   StackVarEnumToString,
-  RefCntPolicy,
 } from "./token";
 import { OUString } from "../../sal/inc/rtl/ustring";
 import { SharedString, type SharedStringConstReference } from "../../svl/inc/sharedstring";
-import { FormulaTokenRef, FormulaConstTokenRef } from "./types";
-import { intrusive_ptr } from "../../external/boost/include/boost/smart_ptr/intrusive_ptr";
 
 /** Serializes the actual original query fields in native output order. @param t - Actual token. @returns Whole query row. */
 function value(t: FormulaToken): string {
   return [
     t.GetType(),
     t.GetOpCode(),
-    t.GetRef(),
-    t.GetRefCntPolicy(),
     Number(t.IsFunction()),
     t.GetParamCount(),
     Number(t.IsRef()),
@@ -52,7 +46,7 @@ function copied(t: FormulaToken): string {
   const p = t.Clone();
   const row =
     value(t) + " | " + value(p) + " " + Number(t.equals(p)) + " " + Number(t.TextEqual(p)) + "\n";
-  p.DeleteIfZeroRef();
+  p.dispose();
   return row;
 }
 
@@ -65,11 +59,11 @@ it("matches all original UInt16 opcode classifications for initialized actual by
       const t =
         op === OpCode.ocWhitespace ? new FormulaSpaceToken(b, 32) : new FormulaByteToken(op, b);
       row += " | " + value(t);
-      t.Delete();
+      t.dispose();
     }
     rows.push(row + "\n");
   }
-  expect(rows.join("")).toBe(capture("classification"));
+  expect(rows.join("")).toBe(semanticCapture("classification"));
 });
 
 it("matches all original UInt8 stack names, initialized base queries and clones", /** Verifies: matches all original UInt8 stack names, initialized base queries and clones. @returns Nothing. */ () => {
@@ -78,9 +72,9 @@ it("matches all original UInt8 stack names, initialized base queries and clones"
     const type = n as StackVar;
     const token = new FormulaToken(type);
     rows.push(n + " " + StackVarEnumToString(type) + " " + copied(token));
-    token.Delete();
+    token.dispose();
   }
-  expect(rows.join("")).toBe(capture("stack"));
+  expect(rows.join("")).toBe(semanticCapture("stack"));
 });
 
 it("matches original named token constructor and clone rows", /** Verifies: matches original named token constructor and clone rows. @returns Nothing. */ () => {
@@ -121,8 +115,6 @@ it("matches original named token constructor and clone rows", /** Verifies: matc
   const error = new FormulaErrorToken();
   rows.push(copied(error));
   const rhs = new FormulaErrorToken(FormulaError.DivisionByZero);
-  error.IncRef();
-  error.SetRefCntPolicy(RefCntPolicy.UnsafeRef);
   error.assign(rhs);
   rows.push(copied(error));
   for (const token of [
@@ -142,61 +134,9 @@ it("matches original named token constructor and clone rows", /** Verifies: matc
     error,
     rhs,
   ])
-    token.Delete();
+    token.dispose();
   string.dispose();
-  expect(rows.join("")).toBe(capture("values"));
-});
-
-it("matches original intrusive reference and FAP lifetime streams through actual pointee hooks", /** Verifies: matches original intrusive reference and FAP lifetime streams through actual pointee hooks. @returns Nothing. */ () => {
-  const originalToken = new FormulaDoubleToken(9);
-  const a = new FormulaTokenRef(originalToken);
-  const rows: string[] = [];
-  /** Emits the original live raw pointer/count observation. @param label - Native row label. @returns Nothing. */
-  function emit(label: string): void {
-    rows.push(
-      label + " " + originalToken.GetRef() + " " + Number(a.get() === originalToken) + "\n",
-    );
-  }
-  emit("raw");
-  const b = new FormulaTokenRef(a);
-  emit("copy");
-  a.assign(a);
-  emit("self_copy");
-  a.assignPointer(originalToken);
-  emit("raw_assign");
-  const m = intrusive_ptr.move(b);
-  emit("move");
-  rows.push("moved_null " + Number(b.get() === null) + "\n");
-  m.moveAssign(m);
-  emit("self_move");
-  a.moveAssign(m);
-  emit("move_assign");
-  const p = a.detach();
-  emit("detach");
-  a.reset(p, false);
-  emit("adopt");
-  a.reset(originalToken);
-  emit("same_reset");
-  const c = new FormulaConstTokenRef(originalToken);
-  emit("const");
-  c.dispose();
-  emit("const_end");
-  const f = new FormulaFAPToken(OpCode.ocSum, 2, originalToken);
-  emit("fap");
-  const clone = f.Clone();
-  emit("fap_copy");
-  rows.push("fap_equal " + Number(f.equals(clone)) + "\n");
-  clone.Delete();
-  emit("fap_copy_end");
-  f.Delete();
-  emit("fap_end");
-  m.dispose();
-  b.dispose();
-  emit("copy_scope_end");
-  a.reset();
-  rows.push("reset_null " + Number(a.get() === null) + "\n");
-  a.dispose();
-  expect(rows.join("")).toBe(capture("ownership"));
+  expect(rows.join("")).toBe(semanticCapture("values"));
 });
 
 /** Decodes the complete native output, retaining the stored length invariant. @param mode - Original capture mode. @returns Whole original output. */
@@ -269,9 +209,9 @@ it("matches original shared string token ownership, assignment and member identi
           rows.push("after_assign_equal " + Number(t.equals(c)) + "\n");
           replacement.dispose();
         }
-        c.Delete();
+        c.dispose();
         snap("clone_end", t);
-        t.Delete();
+        t.dispose();
         rows.push("token_end " + x.pData?.refCount + " " + y.pData?.refCount + "\n");
         s.dispose();
         rows.push("source_end " + x.pData?.refCount + " " + y.pData?.refCount + "\n");
@@ -317,7 +257,7 @@ it("matches original scalar narrowing, typed doubles and owned jump payload fiel
         e.GetError(),
       ].join(" ") + "\n",
     );
-    for (const token of [space, s, byte, b, typed, t, index, i, error, e]) token.Delete();
+    for (const token of [space, s, byte, b, typed, t, index, i, error, e]) token.dispose();
   }
   for (const n of [
     0,
@@ -344,8 +284,8 @@ it("matches original scalar narrowing, typed doubles and owned jump payload fiel
     a.SetDouble(17.25);
     row += " " + a.GetDouble() + "\n";
     rows.push(row);
-    a.Delete();
-    c.Delete();
+    a.dispose();
+    c.dispose();
   }
   for (const count of [0, 1, 3]) {
     const j = new FormulaJumpToken(OpCode.ocIf, new Int16Array([count, 1, -7, 32000]));
@@ -363,8 +303,8 @@ it("matches original scalar narrowing, typed doubles and owned jump payload fiel
     if (count !== 0) c.GetJump()[1] = -8;
     row += " " + Number(j.equals(c)) + "\n";
     rows.push(row);
-    j.Delete();
-    c.Delete();
+    j.dispose();
+    c.dispose();
   }
   expect(rows.join("")).toBe(capture("fields"));
 });
@@ -378,10 +318,36 @@ it("matches all original string-op parameter counts including the early-filtered
       const token = new FormulaStringOpToken(n as OpCode, string);
       token.SetByte(b);
       row += " " + token.GetParamCount();
-      token.Delete();
+      token.dispose();
     }
     rows.push(row + "\n");
   }
   string.dispose();
   expect(rows.join("")).toBe(capture("string-param"));
 });
+
+/** Projects only removed C++ token count/policy fields out of unchanged native captures. @param mode - Original query stream. @returns Semantic token rows. */
+function semanticCapture(mode: "classification" | "stack" | "values"): string {
+  return (
+    capture(mode)
+      .trimEnd()
+      .split("\n")
+      .map(
+        /** Preserves opcode/name prefixes and all semantic token and clone fields. @param row - Original row. @returns Semantic row. */
+        (row) =>
+          row
+            .split(" | ")
+            .map(
+              /** Removes exactly the original count/policy pair, not value or equality fields. @param section - Original group. @param index - Group position. @returns Semantic group. */
+              (section, index) => {
+                if (mode === "classification" && index === 0) return section;
+                const fields = section.split(" ");
+                fields.splice((mode === "stack" && index === 0 ? 2 : 0) + 2, 2);
+                return fields.join(" ");
+              },
+            )
+            .join(" | "),
+      )
+      .join("\n") + "\n"
+  );
+}

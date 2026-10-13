@@ -14,13 +14,12 @@
       "Hybrid equality retains the original display-flag omission and IEEE NaN behavior."
     ],
     "stackDivergence": {
-      "kind": "none",
-      "rationale": "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81."
+      "kind": "browser-adaptation",
+      "rationale": "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary."
     },
     "capability": "Original Calc empty and hybrid result tokens",
     "gaps": [
-      "Matrix/tokenarray/compiler/result/formula-cell/document/edit/input/UI owners remain pending.",
-      "Native debug assertion/implicit class move/ABI/concurrency/invalid lifetimes/full upstream QA remain unverified."
+      "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary."
     ],
     "local": {
       "implementation": [
@@ -44,7 +43,7 @@
       "tests": [
         {
           "path": "apps/office/src/sc/source/core/tool/token.test.ts",
-          "marker": "matches complete original empty token flags, clone policy and equality stream"
+          "marker": "matches original empty token flags, semantic clones and equality stream"
         },
         {
           "path": "apps/office/src/sc/source/core/tool/token.test.ts",
@@ -59,6 +58,10 @@
         {
           "path": "docs/program/calc-core.md",
           "marker": "Original empty and hybrid result tokens (task76)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Token references and object lifetime"
         }
       ]
     },
@@ -97,8 +100,7 @@
     "aspect": "model-operation",
     "atomicOperation": "original-empty-hybrid-result-tokens",
     "scopeLimitations": [
-      "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81.",
-      "Referenced original QA is unexecuted empty-string calculation context only, not direct hybrid token equality/ownership or full upstream QA proof."
+      "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary."
     ],
     "implemented": true,
     "contractParity": false,

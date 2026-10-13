@@ -488,9 +488,8 @@ it("permits original cppuhelper UNO and SAL owners while retaining application a
 it("keeps shared formula header ownership independent of applications and browser presentation", /** Protects the original shared formula boundary against reverse application and browser dependencies. @returns Nothing. */ () => {
   expect(getRuntimeOwnershipLayer("formula/inc/errorcodes.ts")).toBe("upstream-mechanism");
   expect(isForbiddenModuleEdge("sc", "formula")).toBe(false);
-  for (const target of ["sal", "svl", "external"])
-    expect(isForbiddenModuleEdge("formula", target)).toBe(false);
-  for (const target of ["sc", "sw", "framework"])
+  for (const target of ["sal", "svl"]) expect(isForbiddenModuleEdge("formula", target)).toBe(false);
+  for (const target of ["sc", "sw", "framework", "external"])
     expect(isForbiddenModuleEdge("formula", target)).toBe(true);
   expect(isForbiddenModuleEdge("external", "formula")).toBe(true);
   expect(

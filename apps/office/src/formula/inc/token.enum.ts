@@ -29,13 +29,6 @@ export enum StackVar {
   svUnknown,
 }
 
-/** Original UInt8 reference-counting policy. */
-export enum RefCntPolicy {
-  ThreadSafe,
-  UnsafeRef,
-  None,
-}
-
 /** Original diagnostic switch and numeric fallback. @param e - Stack discriminator, narrowed at the original UInt8 call boundary. @returns Original diagnostic text. */
 export function StackVarEnumToString(e: StackVar): string {
   switch (e & 0xff) {

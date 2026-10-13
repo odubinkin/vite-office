@@ -14,7 +14,7 @@
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/formula/inc/token.ts#FormulaToken",
         "apps/office/src/formula/inc/token.ts#FormulaSpaceToken",
@@ -32,16 +32,19 @@
         "apps/office/src/formula/inc/token.ts#FormulaUnknownToken",
         "apps/office/src/formula/inc/token.ts#FormulaErrorToken",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
-        "apps/office/src/formula/inc/native-token.test.ts#matches original intrusive reference and FAP lifetime streams",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
         "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
         "include/formula/token.hxx#class FORMULA_DLLPUBLIC FormulaToken",
-        "include/formula/token.hxx#FormulaStringOpToken"
+        "include/formula/token.hxx#FormulaStringOpToken",
+        "docs/program/calc-browser-gc-adaptation.md#Token references and object lifetime",
+        "apps/office/src/formula/inc/token.test.ts#keeps FAP aliases alive and clones independent fields without ownership hooks",
+        "apps/office/src/formula/inc/native-token.test.ts#semanticCapture",
+        "apps/office/src/sc/source/core/tool/token.test.ts#semanticCapture"
       ],
-      "justification": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81.",
+      "justification": "Task82 user-authorized browser adaptation removes the Boost intrusive_ptr runtime, token ownership counters/policies and acquire/release/delete hooks. FormulaTokenRef and FormulaConstTokenRef are nullable native JS references; FormulaFAPToken retains its original token directly, including across Clone. JS GC owns ordinary token lifetime. Semantic token values/opcodes/types/equality, independent payload clones and FAP identity remain original-shaped. Existing SAL/SVL shared-value cleanup API is unchanged and does not cascade through FAP references; this is not a global shared-string memory migration. Original immutable native captures remain intact; comparison explicitly projects only C++ token count/policy fields, and obsolete pointer-manager lifecycle assertions are replaced by meaningful live-alias/clone tests. No WeakRef/FinalizationRegistry, allocator, new pointer class, ownership counter or pretend GC timing is introduced. Future unported GetRef-based reuse algorithms must be adapted to protect aliases through semantic copying. Original physical lifetime/count/policy/ABI and full compiler/document/UI remain outside parity claims.",
       "knownViolations": [],
       "localSymbols": [],
-      "sourceResponsibility": "aligned",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "include/formula/token.hxx",
       "upstreamSymbols": [
         "class FORMULA_DLLPUBLIC FormulaToken",

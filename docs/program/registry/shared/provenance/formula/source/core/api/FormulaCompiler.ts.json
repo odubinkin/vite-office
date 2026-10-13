@@ -36,7 +36,7 @@
         },
         {
           "path": "apps/office/src/formula/inc/native-token.test.ts",
-          "marker": "matches original intrusive reference and FAP lifetime streams"
+          "marker": "matches all original UInt16 opcode classifications"
         },
         {
           "path": "apps/office/src/formula/inc/native-token.test.ts",

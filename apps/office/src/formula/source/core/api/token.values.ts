@@ -5,7 +5,7 @@ import { StackVar } from "../../../inc/token.enum";
 import { OpCode } from "../../../inc/opcode";
 import { ParamClass } from "../../../inc/paramclass";
 import { FormulaError } from "../../../inc/errorcodes";
-import { FormulaTokenRef } from "../../../inc/types";
+import type { FormulaTokenRef } from "../../../inc/types";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 
 /** Original whitespace token stores UInt8 count and UInt16 character. */
@@ -85,10 +85,10 @@ export class FormulaByteToken extends FormulaToken {
   }
 }
 
-/** Original AutoPilot token owns a real intrusive reference to its original token. */
+/** Original AutoPilot token retains original token identity through an ordinary JavaScript reference. */
 export class FormulaFAPToken extends FormulaToken {
   private mnByte: number;
-  private pOrigToken: FormulaTokenRef;
+  private readonly pOrigToken: FormulaTokenRef;
   /** Original opcode/count/raw-pointer and copy constructors. @param args - Required opcode/count/pointer triple or copied token. @returns Token. */
   constructor(...args: [e: OpCode, n: number, p: FormulaToken | null] | [source: FormulaFAPToken]) {
     const source = args[0];
@@ -97,22 +97,16 @@ export class FormulaFAPToken extends FormulaToken {
       source instanceof FormulaFAPToken ? source.GetOpCode() : source,
     );
     this.mnByte = source instanceof FormulaFAPToken ? source.mnByte : (args[1] as number) & 0xff;
-    this.pOrigToken = new FormulaTokenRef(
-      source instanceof FormulaFAPToken ? source.pOrigToken : (args[2] as FormulaToken | null),
-    );
+    this.pOrigToken =
+      source instanceof FormulaFAPToken ? source.pOrigToken : (args[2] as FormulaToken | null);
   }
   /** Original clone retains the original pointer. @returns Copied token. */
   override Clone(): FormulaToken {
     return new FormulaFAPToken(this);
   }
-  /** Original implicit destructor destroys the intrusive member before the base. @returns Nothing. */
-  override dispose(): void {
-    this.pOrigToken.dispose();
-    super.dispose();
-  }
   /** Original pointer query. @returns Original raw token pointer. */
   GetFAPOrigToken(): FormulaToken | null {
-    return this.pOrigToken.get();
+    return this.pOrigToken;
   }
   /** Original byte query. @returns UInt8 count. */
   GetByte(): number {
@@ -123,7 +117,7 @@ export class FormulaFAPToken extends FormulaToken {
     return (
       super.equals(r) &&
       this.mnByte === (r as FormulaFAPToken).mnByte &&
-      this.pOrigToken.get() === (r as FormulaFAPToken).GetFAPOrigToken()
+      this.pOrigToken === (r as FormulaFAPToken).GetFAPOrigToken()
     );
   }
 }

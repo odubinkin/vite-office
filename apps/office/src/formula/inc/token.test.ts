@@ -17,38 +17,26 @@ import {
   FormulaStringOpToken,
   FormulaStringNameToken,
   StackVar,
-  RefCntPolicy,
   StackVarEnumToString,
 } from "./token";
-import { FormulaTokenRef, FormulaConstTokenRef } from "./types";
+import type { FormulaTokenRef, FormulaConstTokenRef } from "./types";
 import { FormulaCompiler } from "./FormulaCompiler";
 import { OpCode } from "./opcode";
 import { FormulaError } from "./errorcodes";
 import { ParamClass } from "./paramclass";
 import { OUString } from "../../sal/inc/rtl/ustring";
 import { SharedString } from "../../svl/inc/sharedstring";
-import { intrusive_ptr } from "../../external/boost/include/boost/smart_ptr/intrusive_ptr";
 import type { FormulaTokenPrivateAccess } from "./token";
 
 describe("original formula token family", /** Groups original formula token family. @returns Nothing. */ () => {
-  it("retains erased compiler access, default pointer aliases and unknown UInt8 policy dispatch", /** Verifies: retains erased compiler access, default pointer aliases and unknown UInt8 policy dispatch. @returns Nothing. */ () => {
-    const empty = new FormulaTokenRef();
-    const constEmpty = new FormulaConstTokenRef();
-    const constCopy = new FormulaConstTokenRef(constEmpty);
-    expect([empty.get(), constEmpty.get(), constCopy.get()]).toEqual([null, null, null]);
-    empty.dispose();
-    constEmpty.dispose();
-    constCopy.dispose();
+  it("retains compiler access and nullable native reference aliases", /** Verifies semantic access without a runtime smart pointer. @returns Nothing. */ () => {
+    const empty: FormulaTokenRef = null;
+    const constEmpty: FormulaConstTokenRef = empty;
+    expect([empty, constEmpty]).toEqual([null, null]);
     const token = new FormulaToken(StackVar.svIndex, OpCode.ocName);
-    // Test-only erased reference to the original empty PrivateAccess value; no public production factory is introduced.
     const access = {} as FormulaTokenPrivateAccess;
     token.NewOpCode(OpCode.ocTableRef, access);
     expect([token.GetOpCode(), token.IsRef()]).toEqual([OpCode.ocTableRef, true]);
-    token.SetRefCntPolicy(255 as RefCntPolicy);
-    token.IncRef();
-    token.DeleteIfZeroRef();
-    expect(token.GetRef()).toBe(1);
-    token.DecRef();
   });
 
   it("moves string-op and named arguments through the genuine shared value owner", /** Verifies: moves string-op and named arguments through the genuine shared value owner. @returns Nothing. */ () => {
@@ -66,49 +54,29 @@ describe("original formula token family", /** Groups original formula token fami
     const lengthMismatch = new FormulaJumpToken(OpCode.ocIf, new Int16Array([2, 7, 8]));
     expect(jump.equals(lengthMismatch)).toBe(false);
     expect(jump.equals(op)).toBe(false);
-    op.Delete();
-    name.Delete();
+    op.dispose();
+    name.dispose();
     first.dispose();
     second.dispose();
-    jump.Delete();
-    lengthMismatch.Delete();
+    jump.dispose();
+    lengthMismatch.dispose();
     expect(text.pData?.refCount).toBe(1);
     text.dispose();
   });
-  it("retains stack/policy defaults and resets copied counts and policy", /** Verifies: retains stack/policy defaults and resets copied counts and policy. @returns Nothing. */ () => {
+  it("retains stack defaults and independent semantic clones", /** Verifies semantic defaults and copying without lifetime counters. @returns Nothing. */ () => {
     expect(StackVarEnumToString(StackVar.svExternalDoubleRef)).toBe("ExternalDoubleRef");
     expect(StackVarEnumToString(255 as StackVar)).toBe("255");
     const token = new FormulaToken(StackVar.svMatrix);
-    expect([token.GetType(), token.GetOpCode(), token.GetRef(), token.GetRefCntPolicy()]).toEqual([
-      StackVar.svMatrix,
-      OpCode.ocPush,
-      0,
-      RefCntPolicy.ThreadSafe,
-    ]);
+    expect([token.GetType(), token.GetOpCode()]).toEqual([StackVar.svMatrix, OpCode.ocPush]);
     expect(token.IsInForceArray()).toBe(true);
-    token.SetRefCntPolicy(RefCntPolicy.UnsafeRef);
-    token.IncRef();
-    token.IncRef();
-    token.DecRef();
     const clone = token.Clone();
-    expect([clone.GetRef(), clone.GetRefCntPolicy(), clone.TextEqual(token)]).toEqual([
-      0,
-      RefCntPolicy.ThreadSafe,
-      true,
-    ]);
-    token.SetRefCntPolicy(RefCntPolicy.None);
-    token.IncRef();
-    token.DecRef();
-    expect(token.GetRef()).toBe(1);
-    token.SetRefCntPolicy(RefCntPolicy.ThreadSafe);
-    token.DecRef();
-    clone.DeleteIfZeroRef();
+    expect(clone).not.toBe(token);
+    expect(clone.TextEqual(token)).toBe(true);
     const other = new FormulaToken(StackVar.svDouble);
     expect(other.equals(token)).toBe(false);
     expect(other.GetInForceArray()).toBe(ParamClass.Unknown);
-    other.SetInForceArray(ParamClass.Array); // Original NDEBUG dummy is a no-op.
+    other.SetInForceArray(ParamClass.Array);
     expect(other.IsInForceArray()).toBe(false);
-    other.Delete();
   });
 
   it("classifies actual byte, space, jump and external tokens", /** Verifies: classifies actual byte, space, jump and external tokens. @returns Nothing. */ () => {
@@ -133,7 +101,7 @@ describe("original formula token family", /** Groups original formula token fami
     ] as const) {
       const t = new FormulaByteToken(op);
       expect(t.GetParamCount()).toBe(count);
-      t.Delete();
+      t.dispose();
     }
     const whitespace = new FormulaSpaceToken(2, 0x10020);
     expect([whitespace.GetByte(), whitespace.GetChar(), whitespace.IsFunction()]).toEqual([
@@ -158,77 +126,39 @@ describe("original formula token family", /** Groups original formula token fami
     for (const op of [OpCode.ocIf, OpCode.ocIfError, OpCode.ocIfNA, OpCode.ocChoose, OpCode.ocLet])
       expect(FormulaCompiler.IsOpCodeJumpCommand(op)).toBe(true);
     expect(FormulaCompiler.IsOpCodeJumpCommand(OpCode.ocSum)).toBe(false);
-    jump.Delete();
-    copy.Delete();
-    whitespace.Delete();
-    b.Delete();
+    jump.dispose();
+    copy.dispose();
+    whitespace.dispose();
+    b.dispose();
   });
 
-  it("keeps real original FAP pointer identity and balanced intrusive lifetimes", /** Verifies: keeps real original FAP pointer identity and balanced intrusive lifetimes. @returns Nothing. */ () => {
+  it("keeps FAP aliases alive and clones independent fields without ownership hooks", /** Verifies persistent JS references, original FAP identity and clone isolation. @returns Nothing. */ () => {
     const original = new FormulaDoubleToken(4);
-    const owner = new FormulaTokenRef(original);
-    const fap = new FormulaFAPToken(OpCode.ocSum, 2, original);
-    expect(original.GetRef()).toBe(2);
+    let owner: FormulaTokenRef = original;
+    const fap = new FormulaFAPToken(OpCode.ocSum, 2, owner);
     const copied = fap.Clone() as FormulaFAPToken;
-    expect([
-      original.GetRef(),
-      copied.GetFAPOrigToken(),
-      copied.GetByte(),
-      copied.GetParamCount(),
-      copied.equals(fap),
-    ]).toEqual([3, original, 2, 2, true]);
-    const copiedOwner = new FormulaTokenRef(owner);
-    const constOwner = new FormulaConstTokenRef(owner);
-    const constView = constOwner.get();
-    expect(constView?.TextEqual(original)).toBe(true);
-    expect(original.TextEqual(constView as NonNullable<typeof constView>)).toBe(true);
-    const fromConst = new FormulaToken(constView as NonNullable<typeof constView>);
-    expect(fromConst.GetRef()).toBe(0);
-    fromConst.Delete();
-    expect(original.GetRef()).toBe(5);
-    copiedOwner.dispose();
-    constOwner.dispose();
-    copied.Delete();
-    fap.Delete();
-    expect(original.GetRef()).toBe(1);
-    owner.dispose();
+    const constView: FormulaConstTokenRef = owner;
+    expect(constView.TextEqual(original)).toBe(true);
+    expect(new FormulaToken(constView).equals(original)).toBe(true);
+    owner = null;
+    expect(owner).toBeNull();
+    expect(fap.GetFAPOrigToken()).toBe(original);
+    expect(copied.GetFAPOrigToken()).toBe(original);
+    expect([copied.GetByte(), copied.GetParamCount(), copied.equals(fap)]).toEqual([2, 2, true]);
+    original.SetDouble(9);
+    expect((copied.GetFAPOrigToken() as FormulaDoubleToken).GetDouble()).toBe(9);
+    const semanticCopy = original.Clone() as FormulaDoubleToken;
+    semanticCopy.SetDouble(12);
+    expect(original.GetDouble()).toBe(9);
+    expect(semanticCopy.GetDouble()).toBe(12);
     const nil = new FormulaFAPToken(OpCode.ocSum, 0, null);
     expect([nil.GetFAPOrigToken(), nil.GetParamCount()]).toEqual([null, 0]);
-    nil.Delete();
-  });
-
-  it("preserves actual intrusive temporary/swap/move/reset order including self assignment", /** Verifies: preserves actual intrusive temporary/swap/move/reset order including self assignment. @returns Nothing. */ () => {
-    const original = new FormulaDoubleToken(9);
-    const a = new FormulaTokenRef(original);
-    const b = intrusive_ptr.copy(a);
-    expect(original.GetRef()).toBe(2);
-    expect([a.get(), a.dereference(), a.arrow(), a.bool()]).toEqual([
-      original,
-      original,
-      original,
-      true,
-    ]);
-    a.assign(a);
-    expect(original.GetRef()).toBe(2);
-    a.assignPointer(original);
-    expect(original.GetRef()).toBe(2);
-    const moved = intrusive_ptr.move(b);
-    expect([b.get(), moved.get(), original.GetRef()]).toEqual([null, original, 2]);
-    moved.moveAssign(moved);
-    expect(original.GetRef()).toBe(2);
-    a.moveAssign(moved);
-    expect([moved.bool(), original.GetRef()]).toEqual([false, 1]);
-    const detached = a.detach();
-    expect([detached, a.bool(), original.GetRef()]).toEqual([original, false, 1]);
-    const adopt = new FormulaTokenRef(detached, false);
-    adopt.reset(original);
-    expect(original.GetRef()).toBe(1);
-    adopt.reset();
-    expect(adopt.get()).toBe(null);
-    a.dispose();
-    b.dispose();
-    moved.dispose();
-    adopt.dispose();
+    expect(fap.equals(nil)).toBe(false);
+    expect(new FormulaFAPToken(OpCode.ocSum, 2, new FormulaDoubleToken(9)).equals(fap)).toBe(false);
+    // Existing shared-value cleanup does not cascade through FAP's ordinary token reference.
+    fap.dispose();
+    copied.dispose();
+    expect(original.GetDouble()).toBe(9);
   });
 
   it("copies typed numbers, narrows index/error fields and retains error-only assignment", /** Verifies: copies typed numbers, narrows index/error fields and retains error-only assignment. @returns Nothing. */ () => {
@@ -251,22 +181,17 @@ describe("original formula token family", /** Groups original formula token fami
     const error = new FormulaErrorToken();
     expect(error.GetError()).toBe(FormulaError.IllegalChar);
     const rhs = new FormulaErrorToken(FormulaError.DivisionByZero);
-    error.IncRef();
-    error.SetRefCntPolicy(RefCntPolicy.UnsafeRef);
     expect(error.assign(rhs)).toBe(error);
-    expect([
-      error.GetError(),
-      error.GetRef(),
-      error.GetRefCntPolicy(),
-      error.Clone().equals(error),
-    ]).toEqual([FormulaError.DivisionByZero, 1, RefCntPolicy.UnsafeRef, true]);
+    expect([error.GetError(), error.Clone().equals(error)]).toEqual([
+      FormulaError.DivisionByZero,
+      true,
+    ]);
     error.SetError(65537 as FormulaError);
     expect(error.GetError()).toBe(1);
-    error.DecRef();
-    rhs.Delete();
-    index.Delete();
-    typed.Delete();
-    d.Delete();
+    rhs.dispose();
+    index.dispose();
+    typed.dispose();
+    d.dispose();
     const missing = new FormulaMissingToken();
     expect([missing.GetType(), missing.GetOpCode(), missing.Clone().equals(missing)]).toEqual([
       StackVar.svMissing,
@@ -281,8 +206,8 @@ describe("original formula token family", /** Groups original formula token fami
       unknown.IsRef(),
       unknown.IsExternalRef(),
     ]).toEqual([false, 0, false, false]);
-    missing.Delete();
-    unknown.Delete();
+    missing.dispose();
+    unknown.dispose();
   });
 
   it("uses real shared string ownership for public, protected and named token constructors", /** Verifies: uses real shared string ownership for public, protected and named token constructors. @returns Nothing. */ () => {
@@ -312,13 +237,13 @@ describe("original formula token family", /** Groups original formula token fami
     const name = new FormulaStringNameToken(StackVar.svStringName, token.GetString());
     const nameCopy = name.Clone();
     expect(nameCopy.equals(name)).toBe(true);
-    clone.Delete();
-    token.Delete();
-    moved.Delete();
-    op.Delete();
-    opCopy.Delete();
-    name.Delete();
-    nameCopy.Delete();
+    clone.dispose();
+    token.dispose();
+    moved.dispose();
+    op.dispose();
+    opCopy.dispose();
+    name.dispose();
+    nameCopy.dispose();
     value.dispose();
     expect(text.pData?.refCount).toBe(1);
     text.dispose();
@@ -342,12 +267,12 @@ describe("original formula token family", /** Groups original formula token fami
       ParamClass.ForceArrayReturn,
       true,
     ]);
-    copy.Delete();
-    external.Delete();
+    copy.dispose();
+    external.dispose();
     expect(text.pData?.refCount).toBe(1);
     const move = new FormulaExternalToken(OpCode.ocExternal, text, OUString.move);
     expect([move.GetExternal().getLength(), move.GetParamCount()]).toEqual([1, 0]);
-    move.Delete();
+    move.dispose();
     text.dispose();
     for (const [type, ref, ext] of [
       [StackVar.svSingleRef, true, false],
@@ -358,10 +283,10 @@ describe("original formula token family", /** Groups original formula token fami
     ] as const) {
       const token = new FormulaToken(type);
       expect([token.IsRef(), token.IsExternalRef()]).toEqual([ref, ext]);
-      token.Delete();
+      token.dispose();
     }
     const table = new FormulaToken(StackVar.svIndex, OpCode.ocTableRef);
     expect(table.IsRef()).toBe(true);
-    table.Delete();
+    table.dispose();
   });
 });

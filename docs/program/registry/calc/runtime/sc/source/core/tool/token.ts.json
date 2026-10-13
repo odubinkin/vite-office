@@ -14,19 +14,20 @@
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/tool/token.ts#ScEmptyCellToken",
         "apps/office/src/sc/source/core/tool/token.ts#ScHybridCellToken",
-        "apps/office/src/sc/source/core/tool/token.test.ts#matches complete original empty token flags, clone policy and equality stream",
+        "apps/office/src/sc/source/core/tool/token.test.ts#matches original empty token flags, semantic clones and equality stream",
         "apps/office/src/sc/source/core/tool/token.test.ts#matches complete original hybrid token shared ownership and formula copy move stream",
         "apps/office/src/sc/source/core/tool/token.test.ts#matches original hybrid result IEEE payload and compared field distinctions",
         "vendor/libreoffice-reference/sc/inc/token.hxx#class ScEmptyCellToken final",
         "vendor/libreoffice-reference/sc/inc/token.hxx#class ScHybridCellToken final",
         "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScEmptyCellToken::operator==",
-        "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScHybridCellToken::ScHybridCellToken("
+        "vendor/libreoffice-reference/sc/source/core/tool/token.cxx#ScHybridCellToken::ScHybridCellToken(",
+        "docs/program/calc-browser-gc-adaptation.md#Token references and object lifetime"
       ],
-      "justification": "Task76 ports original ScEmptyCellToken and ScHybridCellToken value/copy/Clone/query/equality and owned-member destruction, reusing existing FormulaToken, SharedString and OUString owners. Explicit OUString.move preserves erased by-value formula category. Complete selected original two class declarations and named member definitions compile unchanged over whole genuine formula headers and verified SAL/SVL/Boost dependencies under normal NDEBUG only. Whole empty flag/equality,40shared ownership/formula-category cases and9IEEE equality/payload cases match portable output. CALC-068 preserves original hybrid equality omission of empty-display flag. Native debug assertion, implicit class move constructors, physical ABI/invalid lifetimes/concurrency/full token header/matrix/compiler/ScFormulaResult/document/input/UI and upstream QA remain unverified. Broad parity flags remain false; next full81.",
+      "justification": "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary.",
       "knownViolations": [],
       "localSymbols": [
         "ScEmptyCellToken",
@@ -41,7 +42,7 @@
         "Clone",
         "dispose"
       ],
-      "sourceResponsibility": "aligned",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/tool/token.cxx",
       "upstreamSymbols": [
         "ScEmptyCellToken::operator==",

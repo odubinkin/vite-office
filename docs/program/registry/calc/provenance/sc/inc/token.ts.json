@@ -33,7 +33,7 @@
         },
         {
           "path": "apps/office/src/sc/source/core/tool/token.test.ts",
-          "marker": "matches complete original empty token flags, clone policy and equality stream"
+          "marker": "matches original empty token flags, semantic clones and equality stream"
         },
         {
           "path": "apps/office/src/sc/source/core/tool/token.test.ts",

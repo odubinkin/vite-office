@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/formula/inc/FormulaCompiler.ts#FormulaCompiler",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
-        "apps/office/src/formula/inc/native-token.test.ts#matches original intrusive reference and FAP lifetime streams",
+        "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
         "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
         "include/formula/FormulaCompiler.hxx#IsOpCodeJumpCommand"

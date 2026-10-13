@@ -42,8 +42,8 @@ const allowedEdges = new Map([
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
-  // Original token.hxx/types.hxx use SAL interlocked/OUString, SVL SharedString and Boost intrusive_ptr.
-  ["formula", new Set(["sal", "svl", "external"])],
+  // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
+  ["formula", new Set(["sal", "svl"])],
   ["framework", new Set(["sfx2", "svl"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],

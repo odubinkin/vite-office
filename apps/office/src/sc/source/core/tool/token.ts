@@ -35,7 +35,7 @@ export class ScEmptyCellToken extends FormulaToken {
       this.bDisplayedAsString === (r as ScEmptyCellToken).IsDisplayedAsString()
     );
   }
-  /** Original copy clone resets base reference count and policy. @returns Original copied token. */
+  /** Original copy clone preserves semantic flags independently. @returns Original copied token. */
   override Clone(): FormulaToken {
     return new ScEmptyCellToken(this);
   }

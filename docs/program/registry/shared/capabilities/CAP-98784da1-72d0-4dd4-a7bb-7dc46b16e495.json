@@ -9,16 +9,16 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Original initialized token or ownership contracts reuse the actual shared owners.",
-      "Whole ordinary native streams match the bounded implementation without substituted native classes."
+      "Native token semantic values and clone/equality fields remain matched by explicit projections of unmodified original evidence.",
+      "Native JavaScript references preserve FAP original identity without token acquire/release/delete or custom memory management."
     ],
     "stackDivergence": {
-      "kind": "none",
-      "rationale": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81."
+      "kind": "browser-adaptation",
+      "rationale": "Task82 user-authorized browser adaptation removes the Boost intrusive_ptr runtime, token ownership counters/policies and acquire/release/delete hooks. FormulaTokenRef and FormulaConstTokenRef are nullable native JS references; FormulaFAPToken retains its original token directly, including across Clone. JS GC owns ordinary token lifetime. Semantic token values/opcodes/types/equality, independent payload clones and FAP identity remain original-shaped. Existing SAL/SVL shared-value cleanup API is unchanged and does not cascade through FAP references; this is not a global shared-string memory migration. Original immutable native captures remain intact; comparison explicitly projects only C++ token count/policy fields, and obsolete pointer-manager lifecycle assertions are replaced by meaningful live-alias/clone tests. No WeakRef/FinalizationRegistry, allocator, new pointer class, ownership counter or pretend GC timing is introduced. Future unported GetRef-based reuse algorithms must be adapted to protect aliases through semantic copying. Original physical lifetime/count/policy/ABI and full compiler/document/UI remain outside parity claims."
     },
     "capability": "Original shared token contracts",
     "gaps": [
-      "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81."
+      "Task82 user-authorized browser adaptation removes the Boost intrusive_ptr runtime, token ownership counters/policies and acquire/release/delete hooks. FormulaTokenRef and FormulaConstTokenRef are nullable native JS references; FormulaFAPToken retains its original token directly, including across Clone. JS GC owns ordinary token lifetime. Semantic token values/opcodes/types/equality, independent payload clones and FAP identity remain original-shaped. Existing SAL/SVL shared-value cleanup API is unchanged and does not cascade through FAP references; this is not a global shared-string memory migration. Original immutable native captures remain intact; comparison explicitly projects only C++ token count/policy fields, and obsolete pointer-manager lifecycle assertions are replaced by meaningful live-alias/clone tests. No WeakRef/FinalizationRegistry, allocator, new pointer class, ownership counter or pretend GC timing is introduced. Future unported GetRef-based reuse algorithms must be adapted to protect aliases through semantic copying. Original physical lifetime/count/policy/ABI and full compiler/document/UI remain outside parity claims."
     ],
     "upstream": {
       "implementation": [
@@ -83,8 +83,7 @@
     "aspect": "model-operation",
     "atomicOperation": "original-formula-token",
     "scopeLimitations": [
-      "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81.",
-      "Referenced Calc QA is context only; not executed or certified."
+      "Task82 user-authorized browser adaptation removes the Boost intrusive_ptr runtime, token ownership counters/policies and acquire/release/delete hooks. FormulaTokenRef and FormulaConstTokenRef are nullable native JS references; FormulaFAPToken retains its original token directly, including across Clone. JS GC owns ordinary token lifetime. Semantic token values/opcodes/types/equality, independent payload clones and FAP identity remain original-shaped. Existing SAL/SVL shared-value cleanup API is unchanged and does not cascade through FAP references; this is not a global shared-string memory migration. Original immutable native captures remain intact; comparison explicitly projects only C++ token count/policy fields, and obsolete pointer-manager lifecycle assertions are replaced by meaningful live-alias/clone tests. No WeakRef/FinalizationRegistry, allocator, new pointer class, ownership counter or pretend GC timing is introduced. Future unported GetRef-based reuse algorithms must be adapted to protect aliases through semantic copying. Original physical lifetime/count/policy/ABI and full compiler/document/UI remain outside parity claims."
     ],
     "implemented": true,
     "contractParity": false,
@@ -120,26 +119,26 @@
       ],
       "tests": [
         {
-          "path": "apps/office/src/formula/inc/native-token.test.ts",
-          "marker": "matches all original UInt16 opcode classifications"
-        },
-        {
-          "path": "apps/office/src/formula/inc/native-token.test.ts",
-          "marker": "matches original intrusive reference and FAP lifetime streams"
-        },
-        {
-          "path": "apps/office/src/formula/inc/native-token.test.ts",
-          "marker": "matches all original string-op parameter counts"
-        },
-        {
           "path": "apps/office/src/formula/inc/token.test.ts",
-          "marker": "uses real shared string ownership"
+          "marker": "keeps FAP aliases alive and clones independent fields without ownership hooks"
+        },
+        {
+          "path": "apps/office/src/formula/inc/native-token.test.ts",
+          "marker": "semanticCapture"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.test.ts",
+          "marker": "semanticCapture"
         }
       ],
       "docs": [
         {
           "path": "docs/program/calc-core.md",
           "marker": "Original shared formula token family and ownership (task75)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Token references and object lifetime"
         }
       ]
     }

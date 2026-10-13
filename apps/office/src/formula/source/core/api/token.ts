@@ -1,9 +1,8 @@
-/** @fileoverview Original FormulaToken base and inline intrusive hooks; original concrete cast targets are erased type imports to retain a single acyclic owner. */
-import { osl_atomic_increment, osl_atomic_decrement } from "../../../../sal/inc/osl/interlck";
+/** @fileoverview FormulaToken semantic base with JavaScript-managed object lifetime; original concrete cast targets are erased type imports to retain a single acyclic owner. */
 import { FormulaCompiler } from "./FormulaCompiler";
 import { OpCode } from "../../../inc/opcode";
 import { ParamClass } from "../../../inc/paramclass";
-import { StackVar, RefCntPolicy } from "../../../inc/token.enum";
+import { StackVar } from "../../../inc/token.enum";
 import type {
   FormulaSpaceToken,
   FormulaByteToken,
@@ -19,14 +18,12 @@ export interface FormulaTokenPrivateAccess {
   readonly [privateAccess]: true;
 }
 
-/** Original base token with immutable stack type and separate opcode, policy and signed32 count. */
+/** Original token value/type contract; ordinary JS references keep the token alive. */
 export class FormulaToken {
   private eOp: OpCode;
   private readonly eType: StackVar;
-  private eRefCntPolicy = RefCntPolicy.ThreadSafe;
-  private readonly mnRefCnt = new Int32Array(1);
 
-  /** Original type/opcode or copy constructor; copies reset policy and count through member initialization. @param source - Stack type or original token. @param e - Opcode for the stack-type constructor. @returns Initialized token. */
+  /** Original type/opcode or copy constructor; copies retain semantic fields independently. @param source - Stack type or original token. @param e - Opcode for the stack-type constructor. @returns Initialized token. */
   constructor(source: StackVar | FormulaTokenConstReference, e: OpCode = OpCode.ocPush) {
     if (source instanceof FormulaToken) {
       this.eOp = source.eOp;
@@ -37,16 +34,8 @@ export class FormulaToken {
     }
   }
 
-  /** Original virtual destructor; base owns no destructible members. @returns Nothing. */
+  /** Existing shared-value cleanup boundary; the base has no value resources and JS GC owns token lifetime. @returns Nothing. */
   dispose(): void {}
-  /** Original delete-this dispatches the virtual destructor. No post-destruction access is contracted. @returns Nothing. */
-  Delete(): void {
-    this.dispose();
-  }
-  /** Original conditional deletion for a zero reference count. @returns Nothing. */
-  DeleteIfZeroRef(): void {
-    if (this.GetRef() === 0) this.Delete();
-  }
   /** Original stack discriminator query. @returns Original type. */
   GetType(): StackVar {
     return this.eType;
@@ -163,47 +152,6 @@ export class FormulaToken {
     return 0;
   }
 
-  /** Original policy-specific reference acquisition. @returns Nothing. */
-  IncRef(): void {
-    switch (this.eRefCntPolicy) {
-      case RefCntPolicy.ThreadSafe:
-      default:
-        osl_atomic_increment(this.mnRefCnt);
-        break;
-      case RefCntPolicy.UnsafeRef:
-        this.mnRefCnt[0] = (this.GetRef() + 1) | 0;
-        break;
-      case RefCntPolicy.None:
-        break;
-    }
-  }
-  /** Original policy-specific release deletes when the adjusted count becomes zero. @returns Nothing. */
-  DecRef(): void {
-    switch (this.eRefCntPolicy) {
-      case RefCntPolicy.ThreadSafe:
-      default:
-        if (osl_atomic_decrement(this.mnRefCnt) === 0) this.Delete();
-        break;
-      case RefCntPolicy.UnsafeRef:
-        this.mnRefCnt[0] = (this.GetRef() - 1) | 0;
-        if (this.GetRef() === 0) this.Delete();
-        break;
-      case RefCntPolicy.None:
-        break;
-    }
-  }
-  /** Original UInt8 policy assignment. @param ePolicy - New policy. @returns Nothing. */
-  SetRefCntPolicy(ePolicy: RefCntPolicy): void {
-    this.eRefCntPolicy = (ePolicy & 0xff) as RefCntPolicy;
-  }
-  /** Original policy query. @returns Current policy. */
-  GetRefCntPolicy(): RefCntPolicy {
-    return this.eRefCntPolicy;
-  }
-  /** Original signed32 counter query. @returns Reference count. */
-  GetRef(): number {
-    return this.mnRefCnt[0] as number;
-  }
   /** Original opcode query. @returns UInt16 opcode. */
   GetOpCode(): OpCode {
     return this.eOp;
@@ -245,13 +193,4 @@ export class FormulaToken {
     void _access;
     this.eOp = (e & 0xffff) as OpCode;
   }
-}
-
-/** Original formula namespace ADL acquire hook. @param p - Actual non-null token. @returns Nothing. */
-export function intrusive_ptr_add_ref(p: FormulaTokenConstReference): void {
-  p.IncRef();
-}
-/** Original formula namespace ADL release hook. @param p - Actual non-null token. @returns Nothing. */
-export function intrusive_ptr_release(p: FormulaTokenConstReference): void {
-  p.DecRef();
 }
