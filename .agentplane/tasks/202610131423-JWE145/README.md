@@ -1,10 +1,11 @@
 ---
 id: "202610131423-JWE145"
 title: "Support native popup auxiliary mouse buttons"
-status: "DOING"
+result_summary: "Native browser auxiliary popup input implemented;1497unique assertions/whole source100four, clean cadence5/10; pause after next full+repairs."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -51,6 +52,9 @@ comments:
   -
     author: "CODER"
     body: "Start: human-authorized native click/auxclick ingress and existing submenu button handler, no custom press/release machinery; original native bindings/resource/status, exact1oldcase migration, whole source100four, cadence5/10."
+  -
+    author: "CODER"
+    body: "Verified: browser-native click/auxclick auxiliary popup activation and existing all-button submenu handler;1497unique assertions, entire source100four323positive original counters,9metadata gates and inventory histories preserved. Exact semanticfd6bca244fd8 same-agent review,4links exactly restored after cleanup correction; no custom press/release machinery, human native-JS principle retained."
 events:
   -
     type: "status"
@@ -71,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pass1497unique:1458related/210files with61mounted/11new,26tooling and13Chrome; whole original source100four163lines177statements38functions108branches/323positive counters.945otheroldtests and other bodies/imports preserved,2canonical histories and9metadata gates/137staticfilespass. Browser click/auxclick builtins, no custom press/release;4refs finally restored after cleanup-only dangling-link correction, no test replay."
+  -
+    type: "status"
+    at: "2026-10-13T14:48:53.470Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: browser-native click/auxclick auxiliary popup activation and existing all-button submenu handler;1497unique assertions, entire source100four323positive original counters,9metadata gates and inventory histories preserved. Exact semanticfd6bca244fd8 same-agent review,4links exactly restored after cleanup correction; no custom press/release machinery, human native-JS principle retained."
 doc_version: 3
-doc_updated_at: "2026-10-13T14:47:25.372Z"
+doc_updated_at: "2026-10-13T14:48:53.471Z"
 doc_updated_by: "CODER"
 description: "Use existing browser click plus native auxclick for middle/right activation through original bindings; preserve left input and existing submenu handler, extend admitted buttons per source. No custom press/release state machine. Whole module100four, native mounted/Chromium, precise1oldcase migration, cadence5/10."
 sections:
@@ -231,6 +242,10 @@ sections:
     Previous turn is verified progress:9N15Q3 at cbfdb607, exact reviewed544751a5, current writer clean. Pinned LO9bc445578031fecf56086729d8e4940c77e14d65 MouseButtonDown/ImplHighlightItem do not restrict button; MouseButtonUp executes enabled ordinary current entry. Human explicitly rejects unnecessary low-level press/release recreation and directs use of native JS/browser functions where equivalent. Earlier lower-level task proposal was not implemented and is superseded before start; click/auxclick native ingress retained. Detailed unmatched release/POPUPSELECT/platform and complete pointer parity are unverified, not promoted. General principle applies onward to goal; registered IO/recovery preserved.
 
     Attempts/evidence: Original pre-fix native red11cases:6fail/5pass (auxiliary enabled/nested/context and nonprimary child admission missing). All current61mounted/1458related/26tooling/13Chromium pass, native button actual Paragraph dialog at1280/390 includes middle/right/left. Runner exit1 occurred only after all producer commands status0: existsSync dereferences hidden boost symlink and missed it during transient target unavailability, then readlink at original path failed. Terminal runner confirmed before safe metadata restoration: exact original hidden link renamed back using lstat without changing its target. Current4targets available, exact restored metadata verified;9project audit commands and whole-source proof pass. Preserve original executed runner and successful raw results; use native lstat throwIfNoEntry:false for future physical-link existence/restore, no passing tests replayed for cleanup-only correction. This changes only ignored verification helper, no repo implementation/helper source copied to Agentplane or upstream source modification. No custom pointer state machine introduced; human native-JS principle remains controlling.
+extensions:
+  implementation_commit:
+    hash: "fd6bca244fd8b26715ed80e7062f3a6179129624"
+    message: "🧩 JWE145 fix: support native browser auxiliary popup buttons"
 id_source: "generated"
 ---
 ## Summary
