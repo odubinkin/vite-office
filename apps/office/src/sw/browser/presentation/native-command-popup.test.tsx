@@ -1,5 +1,5 @@
 /** @fileoverview Verifies popup focus, navigation and execution using original native frame bindings. */
-import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import {
@@ -173,18 +173,24 @@ it("keyboard children retain parent ownership and close one level at a time", /*
   fireEvent.keyDown(child, { key: "F6", ctrlKey: true });
   expect(f.owner).toHaveFocus();
 });
-it("pointer child opening stays unselected and sibling departure closes its descendants", /** Checks pointer policy independently of key preselection. @returns Nothing. */ () => {
+it("pointer child opens after native delay and stays while its owner is highlighted", /** Checks source timer activation and owning-child retention. @returns Completion. */ async () => {
   fixture(undefined, true);
   const child = screen.getByRole("menuitem", { name: "Localized Child" });
   fireEvent.mouseLeave(child.parentElement as HTMLElement);
   expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
   fireEvent.mouseEnter(child.parentElement as HTMLElement);
-  const menu = screen.getByRole("menu", { name: "Localized Child menu" });
-  expect(menu).toBeVisible();
+  expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
+  const menu = await screen.findByRole("menu", { name: "Localized Child menu" });
   expect(within(menu).getByRole("menuitem", { name: "Beta" })).not.toHaveFocus();
   fireEvent.mouseLeave(child.parentElement as HTMLElement);
-  expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
-  expect(child).toHaveFocus();
+  expect(menu).toBeVisible();
+  const root = screen.getByRole("menu", { name: "Original popup" });
+  const command = within(root).getAllByRole("menuitem", { name: "Beta" }).at(-1) as HTMLElement;
+  fireEvent.mouseEnter(command.parentElement as HTMLElement);
+  await waitFor(
+    /** Waits for the native delayed replacement. @returns Nothing. */ () =>
+      expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument(),
+  );
 });
 it("outside pointer cancellation retains the new owner without a native command", /** Keeps external focus transfer owned by its actual target. @returns Nothing. */ () => {
   const f = fixture(),

@@ -1,5 +1,5 @@
 /** @fileoverview Verifies native child popup admission with original Writer frame bindings. */
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, expect, it } from "vitest";
 import { CommandPopupMenu } from "../../../framework/browser/presentation/CommandPopupMenu";
@@ -14,12 +14,15 @@ afterEach(
     for (const s of sessions.splice(0)) s.Close();
   },
 );
-it("native empty pointer admission keeps the original parent highlight and never executes", /** Checks nonempty gate is shared by pointer input. @returns Nothing. */ () => {
+it("native empty pointer admission keeps the original parent highlight and never executes", /** Checks nonempty gate is shared by pointer input. @returns Completion. */ async () => {
   const session = fixture(),
     trigger = screen.getByRole("menuitem", { name: "Empty" });
   fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
   expect(screen.queryByRole("menu", { name: "Empty menu" })).not.toBeInTheDocument();
-  expect(trigger).toHaveFocus();
+  await waitFor(
+    /** Waits for original delayed empty admission. @returns Nothing. */ () =>
+      expect(trigger).toHaveFocus(),
+  );
   expect(trigger).toHaveAttribute("data-popup-highlighted", "true");
   fireEvent.mouseLeave(trigger.parentElement as HTMLElement);
   fireEvent.keyDown(trigger, { key: "Enter" });
@@ -28,7 +31,7 @@ it("native empty pointer admission keeps the original parent highlight and never
 });
 it.each(["keyboard", "pointer"])(
   "native %s empty request closes a different active sibling and all descendants",
-  /** Checks native replacement precedes the empty-child gate. @param input - Original event family. @returns Nothing. */ (
+  /** Checks native replacement precedes the empty-child gate. @param input - Original event family. @returns Completion. */ async (
     input,
   ) => {
     fixture();
@@ -38,7 +41,13 @@ it.each(["keyboard", "pointer"])(
     expect(screen.getByRole("menu", { name: "Deep menu" })).toBeVisible();
     const empty = screen.getByRole("menuitem", { name: "Empty" });
     if (input === "keyboard") fireEvent.keyDown(empty, { key: "Enter" });
-    else fireEvent.mouseEnter(empty.parentElement as HTMLElement);
+    else {
+      fireEvent.mouseEnter(empty.parentElement as HTMLElement);
+      await waitFor(
+        /** Waits for the original150ms replacement before assertions. @returns Nothing. */ () =>
+          expect(screen.queryByRole("menu", { name: "Filled menu" })).not.toBeInTheDocument(),
+      );
+    }
     expect(screen.queryByRole("menu", { name: "Filled menu" })).not.toBeInTheDocument();
     expect(screen.queryByRole("menu", { name: "Deep menu" })).not.toBeInTheDocument();
     expect(screen.queryByRole("menu", { name: "Empty menu" })).not.toBeInTheDocument();

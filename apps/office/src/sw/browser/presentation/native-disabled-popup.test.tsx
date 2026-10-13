@@ -128,7 +128,7 @@ it("disabled first child retains child focus and Return closes only that popup",
   expect(parent).toHaveAttribute("aria-activedescendant", trigger.id);
   expect(session.docShell.GetDoc().GetUndoManager().GetUndoActionCount()).toBe(0);
 });
-it("unselected child Return cancels its popup without executing or dismissing the root", /** Checks pointer-open child has no invented first selection. @returns Nothing. */ () => {
+it("unselected child Return cancels its popup without executing or dismissing the root", /** Checks pointer-open child has no invented first selection. @returns Completion. */ async () => {
   fixture([
     {
       kind: "submenu",
@@ -139,7 +139,7 @@ it("unselected child Return cancels its popup without executing or dismissing th
   ]);
   const trigger = screen.getByRole("menuitem", { name: "Child" });
   fireEvent.mouseEnter(trigger.parentElement as HTMLElement);
-  const child = screen.getByRole("menu", { name: "Child menu" });
+  const child = await screen.findByRole("menu", { name: "Child menu" });
   expect(child).not.toHaveAttribute("aria-activedescendant");
   fireEvent.keyDown(child, { key: "Enter" });
   expect(screen.queryByRole("menu", { name: "Child menu" })).not.toBeInTheDocument();

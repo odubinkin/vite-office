@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 344
+revision: 345
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-13T12:48:44.880Z"
+doc_updated_at: "2026-10-13T13:36:30.145Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1524,6 +1524,10 @@ sections:
     - Observation: Post-full cadence2 Z8JA2E corrects native nonempty submenu admission and differing sibling replacement before child creation. Actual parent highlighted/focused; empty never creates popup or executes; keyboard/pointer use actual current resource owner, nonempty original bindings unchanged.
       Impact: 940 old test files unchanged; one exact prior empty-window assumption migrated, other12 cases/remaining file bytes preserved. Native timings150ms and complete pointer/mnemonic/NOSELECT/platform paths stay unverified and next task, no blanket inventory promotions or registered IO/recovery changes.
       Resolution: Current related/source100four, tooling/Chromium7 and native fresh cases pass,224 positive original whole-module counters, two canonical histories intact and nine restored audits. No full replay or pinned upstream runtime calls/artifact source copies. Atomic commit/exact-SHA same-agent review/clean close follows, goal active.
+
+    - Observation: Post-full cadence3 task61PRG4 restores native default150ms popup highlight/close timer ownership, keyboard/direct activation immediate, pointer activation unselected. Owning parent leave retains child; different current highlight delays replacement/closure; reentry, siblings, depth and lifetimes cancel stale work.
+      Impact: Native frame/bindings command state and resource admission retained. Four precise source-backed old case statements across3files migrate only asynchronous pointer expectations;939other old test files byte-identical. Global pointer first-move/synthetic/scroll/NOSELECT/mnemonic/platform settings and complete parity remain unverified; registered IO/recovery exceptions preserved.
+      Resolution:1438related/208files including41fresh (15new),26tooling/4files,9Chromium=1473 unique assertions pass. Whole source100allfour135lines147statements32functions99branches/278positive original counters. Canonical2historical records preserved;9restored-onlymetadata audits and137staticbuild pass. Genuine red, first mounted failures and incomplete coverage retained honestly in ignored cache. No full replay/upstream runtime or upstream/helper source artifacts in Agentplane. Exact semanticSHA same-agent review/clean close follows; goalactive correction3/10. Human stop rule: pause after next full plus any necessary fixes.
 id_source: "generated"
 ---
 ## Summary
@@ -3021,3 +3025,7 @@ Task202610111710-QJTZN0 correction1 after the full checkpoint: Original no-view-
 - Observation: Post-full cadence2 Z8JA2E corrects native nonempty submenu admission and differing sibling replacement before child creation. Actual parent highlighted/focused; empty never creates popup or executes; keyboard/pointer use actual current resource owner, nonempty original bindings unchanged.
   Impact: 940 old test files unchanged; one exact prior empty-window assumption migrated, other12 cases/remaining file bytes preserved. Native timings150ms and complete pointer/mnemonic/NOSELECT/platform paths stay unverified and next task, no blanket inventory promotions or registered IO/recovery changes.
   Resolution: Current related/source100four, tooling/Chromium7 and native fresh cases pass,224 positive original whole-module counters, two canonical histories intact and nine restored audits. No full replay or pinned upstream runtime calls/artifact source copies. Atomic commit/exact-SHA same-agent review/clean close follows, goal active.
+
+- Observation: Post-full cadence3 task61PRG4 restores native default150ms popup highlight/close timer ownership, keyboard/direct activation immediate, pointer activation unselected. Owning parent leave retains child; different current highlight delays replacement/closure; reentry, siblings, depth and lifetimes cancel stale work.
+  Impact: Native frame/bindings command state and resource admission retained. Four precise source-backed old case statements across3files migrate only asynchronous pointer expectations;939other old test files byte-identical. Global pointer first-move/synthetic/scroll/NOSELECT/mnemonic/platform settings and complete parity remain unverified; registered IO/recovery exceptions preserved.
+  Resolution:1438related/208files including41fresh (15new),26tooling/4files,9Chromium=1473 unique assertions pass. Whole source100allfour135lines147statements32functions99branches/278positive original counters. Canonical2historical records preserved;9restored-onlymetadata audits and137staticbuild pass. Genuine red, first mounted failures and incomplete coverage retained honestly in ignored cache. No full replay/upstream runtime or upstream/helper source artifacts in Agentplane. Exact semanticSHA same-agent review/clean close follows; goalactive correction3/10. Human stop rule: pause after next full plus any necessary fixes.
