@@ -4,7 +4,7 @@ title: "Use actual layout links for table border outer flags"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "1566unique tests pass; whole current-source painter Istanbul100four/113positive original counters,955oldtests identical,2canonical history prefixes,137staticfiles,9metadata gates. Native lower/next outer-edge predicates match pinned source;4refs absent everyproducer/exactrestore; shared boost metadata-only retry after availability. Cadence9/10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T17:19:33.082Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of exact f5ca87108f62 passes native outer-edge ownership correction,1566unique assertions/whole current painter100four."
+  evaluated_sha: "f5ca87108f62447de161bbbd5353552ae3aafde3"
+  blueprint_digest: "5f634912e14c4185eaa5ba456cdd0b9214c53ba03771c057238db1ce192fa036"
+  evidence_refs:
+    - ".agentplane/tasks/202610131709-529MQ3/README.md"
+    - ".agentplane/tasks/202610131709-529MQ3/quality/20261013-171933082-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131709-529MQ3/quality/20261013-171933082-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131709-529MQ3/quality/20261013-171933082-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131709-529MQ3/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/529MQ3/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/529MQ3/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/529MQ3/execution-hashes.json"
+    - "apps/office/node_modules/.cache/parity-coverage/529MQ3/audit-results.json"
+  findings:
+    - "Pinned Insert uses physical first Lower identity and last absent Next; port now follows actual row/cell links, no model-index first/last predicates or extra native graph. Partial/reordered row, complete/omitted-cell/empty-chain5native cases cover actual owners. Flat coordinate adaptation and arbitration/defaults remain unchanged; full geometry/follows/RTL/vertical/Word/nested/covered/whole parity unverified."
+    - "Whole current-original painter100L74/S78/F9/B26,113positive original counters/IDs/source locations and all4semantic blobs equal frozen producer hashes;955oldtests byte-identical,2canonical history prefixes and137staticfiles/9metadata gates pass.1528related/26tooling/12Chromium=1566unique0fail/skip/retry. Four refs physically absent everyproducer/exactfinallyrestore. Shared boost metadata failures retained; retry only metadata after original header available, no target/source/link mutation/runtime replay."
 commit: null
 comments:
   -
