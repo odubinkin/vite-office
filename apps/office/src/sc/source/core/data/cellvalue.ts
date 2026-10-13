@@ -82,3 +82,52 @@ export class ScCellValue {
     other.maData = data;
   }
 }
+
+/** Original non-owning scalar cell view; callers keep its source valid and use only the getter matching getType(). */
+export class ScRefCellValue {
+  private meType = CellType.CELLTYPE_NONE;
+  private mfValue = 0;
+  private mpString: SharedStringConstReference | null = null;
+  /** Original scalar constructors and implicit memberwise copy; null selects the string-pointer overload. @param value - Optional scalar or copied view. @returns Cell reference. */
+  constructor(value?: number | SharedStringConstReference | null | ScRefCellValue) {
+    if (value instanceof ScRefCellValue) this.copy_assign(value);
+    else if (value !== undefined) {
+      if (typeof value === "number") {
+        this.meType = CellType.CELLTYPE_VALUE;
+        this.mfValue = value;
+      } else {
+        this.meType = CellType.CELLTYPE_STRING;
+        this.mpString = value;
+      }
+    }
+  }
+  /** Native implicit assignment copies the value/reference without acquiring a string owner. @param source - Copied view. @returns This view. */
+  copy_assign(source: ScRefCellValue): this {
+    this.meType = source.meType;
+    this.mfValue = source.mfValue;
+    this.mpString = source.mpString;
+    return this;
+  }
+  /** Original clear resets the tag and numeric value; drop the inactive JS reference for GC. @returns Nothing. */
+  clear(): void {
+    this.meType = CellType.CELLTYPE_NONE;
+    this.mfValue = 0;
+    this.mpString = null;
+  }
+  /** Original inline cell type query. @returns Native cell type. */
+  getType(): CellType {
+    return this.meType;
+  }
+  /** Original numeric getter requires VALUE; wrong union alternatives are outside its contract. @returns Numeric value. */
+  getDouble(): number {
+    return this.mfValue;
+  }
+  /** Original borrowed pointer getter requires STRING and can return null. @returns Actual borrowed shared value. */
+  getSharedString(): SharedStringConstReference | null {
+    return this.mpString;
+  }
+  /** Original emptiness tests the tag alone. @returns Empty-cell predicate. */
+  isEmpty(): boolean {
+    return this.meType === CellType.CELLTYPE_NONE;
+  }
+}

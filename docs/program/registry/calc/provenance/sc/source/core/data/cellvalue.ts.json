@@ -17,16 +17,21 @@
       "getSharedString",
       "isEmpty",
       "move_assign",
-      "swap"
+      "swap",
+      "ScRefCellValue",
+      "copy_assign"
     ],
     "upstreamSymbols": [
-      "ScCellValue"
+      "ScCellValue",
+      "ScRefCellValue"
     ],
     "preservedResponsibilities": [
-      "Original scalar cell variant tags, constructors/setters/queries/clear/swap and move source emptiness reuse actual SharedString values."
+      "Original scalar cell variant tags, constructors/setters/queries/clear/swap and move source emptiness reuse actual SharedString values.",
+      "Original scalar borrowed cell tags, live SharedString identity and memberwise reference copies, no string ownership."
     ],
     "omittedResponsibilities": [
-      "Iteration86 implements actual ScCellValue empty/double/SharedString constructors, scalar set/clear/getType/type-specific get/isEmpty/swap and original logical move construction/assignment for variant alternatives0/1/2. Native JS tagged values and GC refs replace physical std::variant/pointer allocation; genuine SharedString scalar value copies and existing cleanup boundary are reused. Source emptied after moves, self move assignment clears the value (CALC-074), and empty SharedString remains a STRING cell. Wrong variant access maps std::bad_variant_access to native JS TypeError with observed message. Complete3747-byte ordinary production-mode stream uses unchanged original constructor/move/reset/clear/set/getType/isEmpty/swap definitions and header getters over real dependencies. Genuine forward-declared peer pointer types permit compiling original clear but no EditTextObject/ScFormulaCell pointee is constructed, dereferenced or certified; compiler incomplete-delete warnings remain contextual. Scalar contents/string retention and finite/IEEE/encoded errors are compared, no native memory-management/ABI/lifetime timing claim. Rich-text/formula alternatives, copy/ref constructors requiring real peers, document commit/release/assign/string formatting, actual storage/ScColumn/Table/Document/UI/ODS remain pending. User UI/ODS prerequisite priority remains, broad parity flags false, next full91."
+      "Iteration86 implements actual ScCellValue empty/double/SharedString constructors, scalar set/clear/getType/type-specific get/isEmpty/swap and original logical move construction/assignment for variant alternatives0/1/2. Native JS tagged values and GC refs replace physical std::variant/pointer allocation; genuine SharedString scalar value copies and existing cleanup boundary are reused. Source emptied after moves, self move assignment clears the value (CALC-074), and empty SharedString remains a STRING cell. Wrong variant access maps std::bad_variant_access to native JS TypeError with observed message. Complete3747-byte ordinary production-mode stream uses unchanged original constructor/move/reset/clear/set/getType/isEmpty/swap definitions and header getters over real dependencies. Genuine forward-declared peer pointer types permit compiling original clear but no EditTextObject/ScFormulaCell pointee is constructed, dereferenced or certified; compiler incomplete-delete warnings remain contextual. Scalar contents/string retention and finite/IEEE/encoded errors are compared, no native memory-management/ABI/lifetime timing claim. Rich-text/formula alternatives, copy/ref constructors requiring real peers, document commit/release/assign/string formatting, actual storage/ScColumn/Table/Document/UI/ODS remain pending. User UI/ODS prerequisite priority remains, broad parity flags false, next full91.",
+      "Iteration87 adds actual scalar ScRefCellValue default/double/const SharedString pointer constructors, legal typed getters/type/isEmpty/clear and compiler-provided memberwise copy construction/assignment (JS copy_assign). References borrow the original SharedString object with no copy/acquire/dispose; its reassignment is observable through all views. Explicit null selects STRING, including null and empty strings. Original implicit assignment preserves source and self-copy. Ordinary JS fields replace union ABI; clear drops inactive reference for GC, original debug getter assertions and invalid union reads are not certified. Complete unchanged original scalar definitions/inline getters and actual union declarations produce1451-byte normal-mode stream over genuine shared dependencies; no fake peer, memory manager or sanitizer. Rich-text/formula/document/query/equality families remain pending, no full cell/document/UI/ODS readiness claim."
     ],
     "evidence": {
       "local": [
@@ -37,6 +42,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/cellvalue.test.ts",
           "marker": "matches original scalar cell value and logical move stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/refcellvalue.test.ts",
+          "marker": "matches original scalar borrowed cell reference stream"
         }
       ],
       "upstream": [

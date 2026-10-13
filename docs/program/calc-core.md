@@ -3304,3 +3304,26 @@ The complete37464-byte original/portable stream covers five shapes, value/flag h
 The original `ScCellValue` owner now exists at sc/inc/cellvalue and sc/source/core/data/cellvalue for empty, numeric and shared string alternatives0/1/2. Scalar setters/clear, type-specific access, emptiness, swaps and logical moves follow original source definitions; string construction/set copies the existing SharedString value and empty strings remain STRING cells. GC refs/tagged values replace native allocation/physical variant representation; moves still clear their source because that is observable cell behavior. Existing shared-value cleanup is reused; no variant/refcount library is introduced. Wrong variant access uses JS TypeError at the native exception boundary.
 
 The complete3747-byte original scalar stream covers finite/IEEE/encoded errors, UTF16 retained strings, setters, wrong getters, swap/self-swap, move constructor/assignment/self-move and repeated clear. Native unchanged definitions compile with real SharedString and genuine uninstantiated forward-declared rich-text/formula pointers; their cleanup/ABI is not certified. CALC-074 preserves self-move clearing. No fake peer owner, alternative browser cell engine or complete ScCellValue claim is made. Rich-text/formula/ref/copy families and document commit/release/assign remain subsequent real owners. The task directly supports cell/store/document editing and ODS work; first-editable-UI/ODS priority stays above unrelated matrix/library completion. Next full91.
+
+## Scalar borrowed cell values (task87)
+
+Task87 adds original `ScRefCellValue` at the existing cellvalue header/core
+boundary. Default NONE and numeric VALUE are copied by value; STRING holds
+the genuine borrowed `SharedString` object, including a null pointer. Copies
+and assignment preserve this identity without creating/acquiring string
+ownership. Reassigning the original SharedString is visible through all views.
+Only the getter matching getType() is supported, as required by original
+assertions; wrong union reads and ABI are not certified. Ordinary JS fields
+replace native union layout, and clear drops the inactive reference for GC.
+
+The normal native probe retains complete original constructor/clear/isEmpty
+definitions, inline getters and union declaration over genuine shared string
+dependencies. Its1451-byte stream covers default/finite/IEEE/encoded error
+values, embedded-NUL UTF16 strings, borrowed/null/empty-string identity,
+memberwise copy/assignment/self-copy and source/target clears. No fake
+formula/rich-text peer, ownership manager or sanitizer is introduced.
+
+This is a prerequisite for document cell access, not a complete document.
+Formula/text-dependent getters, equality and document operations remain
+pending actual owners. Continue toward cell storage and ScColumn/ScTable/
+ScDocument, editing/undo and shared-backed ODS filters; next full run91.
