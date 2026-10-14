@@ -97,10 +97,16 @@ export function CommandMenuBar({
     }
   }
 
-  /** Opens a child popup with origin-specific preselection. @param id - Submenu identity. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
-  function openSubmenu(id: string | undefined, preSelectFirst: boolean): void {
+  /** Borrows an original nonempty child resource with origin-specific preselection. @param item - Current native placement. @param preSelectFirst - Whether keyboard opening requests its first item. @param trigger - Original parent entry. @returns Nothing. */
+  function openSubmenu(
+    item: Extract<CommandMenuItemPlacement, { kind: "submenu" }>,
+    preSelectFirst: boolean,
+    trigger: HTMLElement,
+  ): void {
+    if (openSubmenuId === item.id) return;
     preselectSubmenuFirst.current = preSelectFirst;
-    setOpenSubmenuId(id);
+    setOpenSubmenuId(item.items.length === 0 ? undefined : item.id);
+    if (item.items.length === 0) trigger.focus();
   }
 
   /** Closes the current popup and restores its parent focus. @param menu - Current popup. @returns Nothing. */
@@ -239,21 +245,30 @@ export function CommandMenuBar({
     } else if (event.key === "Escape") closeMenu(true, openMenuIndex === undefined);
   }
 
-  /** Applies popup keyboard navigation. @param event - Menu event. @param menuIndex - Owning menu index. @returns Nothing. */
-  function handleMenuKeyDown(event: React.KeyboardEvent<HTMLElement>, menuIndex: number): void {
+  /** Applies popup keyboard navigation over its original resources. @param event - Menu event. @param menuIndex - Owning menu index. @param items - Current direct native placements. @returns Nothing. */
+  function handleMenuKeyDown(
+    event: React.KeyboardEvent<HTMLElement>,
+    menuIndex: number,
+    items: readonly CommandMenuItemPlacement[],
+  ): void {
     const eventTarget = event.target as HTMLElement;
     const menu = eventTarget.closest<HTMLElement>('[role="menu"]');
     /* istanbul ignore next -- This handler is installed only on elements inside a rendered menu. */
     if (menu === null) return;
     if (menu !== event.currentTarget) return;
     const target = eventTarget === menu ? (selectedMenuItem(menu) ?? menu) : eventTarget;
+    const child = items.find(
+      /** Resolves only this popup's original child resource. @param item - Actual placement. @returns Whether it is the selected native child. */
+      (item): item is Extract<CommandMenuItemPlacement, { kind: "submenu" }> =>
+        item.kind === "submenu" && item.id === target.dataset.submenuTrigger,
+    );
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       if (target === menu || (event.key === "Enter" && target.hasAttribute("disabled")))
         closePopup(menu);
-      else if (target.getAttribute("aria-haspopup") === "menu")
-        openSubmenu(target.dataset.submenuTrigger, true);
-      else target.click();
+      else if (target.getAttribute("aria-haspopup") === "menu") {
+        if (child !== undefined) openSubmenu(child, true, target);
+      } else target.click();
     } else if (
       event.key === "ArrowDown" ||
       event.key === "ArrowUp" ||
@@ -278,7 +293,7 @@ export function CommandMenuBar({
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {
-        openSubmenu(target.dataset.submenuTrigger, true);
+        if (child !== undefined) openSubmenu(child, true, target);
       } else openMenu((menuIndex + 1) % menus.length, true);
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
@@ -333,8 +348,9 @@ export function CommandMenuBar({
               className="relative"
               key={item.id}
               onMouseEnter={
-                /** Opens this submenu while the pointer is inside its trigger region. @returns Nothing. */ () =>
-                  openSubmenu(item.id, false)
+                /** Borrows the current child and original parent entry for pointer admission. @param event - Original trigger region event. @returns Nothing. */ (
+                  event,
+                ) => openSubmenu(item, false, event.currentTarget.firstElementChild as HTMLElement)
               }
               onMouseLeave={
                 /** Closes this submenu and restores parent focus after the pointer leaves. @param event - Submenu region event. @returns Nothing. */ (
@@ -351,8 +367,9 @@ export function CommandMenuBar({
                 className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
                 data-submenu-trigger={item.id}
                 onClick={
-                  /** Opens the original child on native browser activation. @returns Nothing. */ () =>
-                    openSubmenu(item.id, false)
+                  /** Opens the current original child on native browser activation. @param event - Original button activation. @returns Nothing. */ (
+                    event,
+                  ) => openSubmenu(item, false, event.currentTarget)
                 }
                 role="menuitem"
                 tabIndex={-1}
@@ -372,7 +389,7 @@ export function CommandMenuBar({
                   onKeyDown={
                     /** Routes submenu keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
                       event,
-                    ) => handleMenuKeyDown(event, menuIndex)
+                    ) => handleMenuKeyDown(event, menuIndex, item.items)
                   }
                   role="menu"
                   submenu
@@ -485,7 +502,7 @@ export function CommandMenuBar({
                   onKeyDown={
                     /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
                       event,
-                    ) => handleMenuKeyDown(event, index)
+                    ) => handleMenuKeyDown(event, index, menu.items)
                   }
                   role="menu"
                 >
