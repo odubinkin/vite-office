@@ -1,10 +1,11 @@
 ---
 id: "202610141326-GENBJF"
 title: "Implement canonical shared Color values for Calc document attributes"
-status: "DOING"
+result_summary: "Native Color value slice implemented with existing Any and ordinary JS; border migration follows, actual UI/ODS readiness pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/task128-checks/value-coverage-audit.json"
   findings:
     - "Four existing and ten new paths, 3695 hashes, six native pins; actual Any and JS scalar arithmetic; strict whole changed shared and Calc raw100; 31 boundary tests and12gates pass."
-commit: null
+commit:
+  hash: "669fbc5f3dc60fcf8af8c1a80cab0b2fa0a4a84f"
+  message: "🚧 GENBJF core: implement shared native Color values"
 comments:
   -
     author: "CODER"
     body: "Start: implement original shared Color value and basic numeric/Any contracts for Calc attribute prerequisites."
+  -
+    author: "CODER"
+    body: "Verified: canonical logical Color foundation and inventory, strict shared/Calc coverage, all focused gates."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Shared Color7tests and Calc171tests pass strict raw100;12gates31boundarytests; exact source669fbc5f3dc6,14paths3695hashes6nativepins; same-agent review not independent. Full readiness checkpoint still pending."
+  -
+    type: "status"
+    at: "2026-10-14T13:42:03.307Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical logical Color foundation and inventory, strict shared/Calc coverage, all focused gates."
 doc_version: 3
-doc_updated_at: "2026-10-14T13:41:39.051Z"
+doc_updated_at: "2026-10-14T13:42:03.308Z"
 doc_updated_by: "CODER"
 description: "Port original logical Color constructors/tags/channels/constants, basic luminance/contrast and actual Any operators without memory machinery. Reuse actual shared CPPU, guard original Tools->CPPU dependency, test native Calc color defaults as values without fake item/document owners."
 sections:
