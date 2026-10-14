@@ -4,7 +4,7 @@ title: "Restore native table flow links and follow constructor"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Command: exact producer argv and hashes in ignored apps/office/node_modules/.cache/parity-coverage/J7J6FY/results.json; node apps/office/node_modules/.cache/parity-coverage/J7J6FY/proof.cjs; node apps/office/node_modules/.cache/parity-coverage/J7J6FY/audit.cjs. Result: pass. Evidence: 14286 related native tests / 546 files, 26 tooling tests, 13 Chromium table cases = 14325 unique passing assertions. Whole current tabfrm.ts Istanbul lines246/statements277/functions38/branches187 all100%, 502 positive original counters; raw map fdf319fee38ae394eafa8c845a3a93da046967d00a50567f0061bb1ba8d48795. Four reference links physically absent during every producer and exactly restored. Format/lint/TS7/docs/size/dependencies/build/static and all nine restored metadata gates pass. 966 old test files byte-identical; two canonical historical prefixes preserved. Existing copied-descriptor native suite plus fresh actual follow notifications cover copy consumption and follow invalidation independently. Source hash 6a1a11b45a9417d428b9401681f493f5718d27bbc9355149ff8b249b0d4b0c6e. Scope: original table flow component and native master/follow constructor/client lookup; actual physical paginator still creates no follows."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T06:33:22.490Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of semantic commit 06ed7e40b972: native flow links, follow construction, registered master lookup and split gate match pinned source in bounded scope."
+  evaluated_sha: "06ed7e40b9720e03952a58a49a7d76d444e289fb"
+  blueprint_digest: "e8dec701fd520d6bfab8f9e21cebcb264fa9dc52486e18fe206ba2eb075346e8"
+  evidence_refs:
+    - ".agentplane/tasks/202610140558-J7J6FY/README.md"
+    - ".agentplane/tasks/202610140558-J7J6FY/quality/20261014-063322490-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140558-J7J6FY/quality/20261014-063322490-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140558-J7J6FY/quality/20261014-063322490-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140558-J7J6FY/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/J7J6FY/proof.json: 502 positive original counters, whole tabfrm100four, 966 unchanged old tests, canonical prefixes retained"
+    - "apps/office/node_modules/.cache/parity-coverage/J7J6FY/results.json and audit-results.json: 14325 passing assertions, static checks and nine metadata gates"
+  findings:
+    - "Existing SwFlowFrame reused in the same composition pattern as native content; no clone of lower rows or new adapter. Original lower lifetime and reciprocal detachment are tested."
 commit: null
 comments:
   -

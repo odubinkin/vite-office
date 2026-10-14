@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140558-J7J6FY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T06:33:22.490Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review of semantic commit 06ed7e40b972: native flow links, follow construction, registered master lookup and split gate match pinned source in bounded scope.",
+  "evaluated_sha": "06ed7e40b9720e03952a58a49a7d76d444e289fb",
+  "blueprint_digest": "e8dec701fd520d6bfab8f9e21cebcb264fa9dc52486e18fe206ba2eb075346e8",
+  "findings": [
+    "Existing SwFlowFrame reused in the same composition pattern as native content; no clone of lower rows or new adapter. Original lower lifetime and reciprocal detachment are tested."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140558-J7J6FY/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/J7J6FY/proof.json: 502 positive original counters, whole tabfrm100four, 966 unchanged old tests, canonical prefixes retained",
+    "apps/office/node_modules/.cache/parity-coverage/J7J6FY/results.json and audit-results.json: 14325 passing assertions, static checks and nine metadata gates"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Physical paginator does not yet allocate native follows; full native flow flags, physical page/paint/hit integration and separate pointer ownership remain pending."
+  ]
+}
