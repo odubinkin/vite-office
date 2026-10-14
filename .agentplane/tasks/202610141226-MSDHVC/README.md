@@ -4,7 +4,7 @@ title: "Use canonical Tools font enums throughout Writer and shared consumers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T12:37:49.946Z"
+  updated_by: "CODER"
+  note: "Source df795f1b4b213fab1c78e76529e0f4e67329311a: exact44paths42changed2new,3653source blobs,9native pins; Calc168/64 strict raw100; shared2owners194S96B56F179L raw100; related957/17 and6Chromium cases pass,12gates+29boundaries+build pass. Writer-only coverage gaps retained per user exemption; all temporary enum bridges removed, direct canonical consumers. Same-agent evaluator pass, not independent. Full deferred until actual UI+ODS readiness, then fixes and goal pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T12:37:39.488Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical Tools enum consumer migration passes declared gates at df795f1b4b213fab1c78e76529e0f4e67329311a; same-agent review, not independent."
+  evaluated_sha: "df795f1b4b213fab1c78e76529e0f4e67329311a"
+  blueprint_digest: "8cd76bf3c89a37aca7a827f4f299112dcf9f11bb078077460f5dfdd709ac618c"
+  evidence_refs:
+    - ".agentplane/tasks/202610141226-MSDHVC/README.md"
+    - ".agentplane/tasks/202610141226-MSDHVC/quality/20261014-123739488-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141226-MSDHVC/quality/20261014-123739488-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141226-MSDHVC/quality/20261014-123739488-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141226-MSDHVC/blueprint/resolved-snapshot.json"
+    - "output/playwright/task124-checks/exact-review.json"
+    - "output/playwright/task124-checks/writer-coverage-report.json"
+    - "output/playwright/task124-checks/browser-manifest.json"
+  findings:
+    - "Exact44paths42changed2new,3651to3653current source hashes,9native pins. Shared2complete owners strict raw100; Calc168tests64files33owners strict100. Related957tests17files and6production Chromium cases pass; all12gates and29boundary tests pass. Writer-only raw gaps reported without repair per human exception; no threshold/config/source-counter manipulation or alias workarounds. Actual mapped/local-only provenance and save/open/recovery deviations preserved."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-14T12:37:49.946Z"
+    author: "CODER"
+    state: "ok"
+    note: "Source df795f1b4b213fab1c78e76529e0f4e67329311a: exact44paths42changed2new,3653source blobs,9native pins; Calc168/64 strict raw100; shared2owners194S96B56F179L raw100; related957/17 and6Chromium cases pass,12gates+29boundaries+build pass. Writer-only coverage gaps retained per user exemption; all temporary enum bridges removed, direct canonical consumers. Same-agent evaluator pass, not independent. Full deferred until actual UI+ODS readiness, then fixes and goal pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:37:05.525Z"
+doc_updated_at: "2026-10-14T12:37:50.013Z"
 doc_updated_by: "CODER"
 description: "Task124: user explicitly authorizes canonical shared/Writer fixes without compatibility crutches. Remove TextItemFontWeight/FontItalic alias bridges, migrate all Writer/shared consumers to original Tools enum owners/member names, update actual inventory and related tests. Calcbranch only; targetedCalc/sharedraw100, Writer-onlycoverage gaps remain untouched, readiness-drivenfull/pause."
 sections:
@@ -59,6 +83,39 @@ sections:
     Command: node output/playwright/task124-checks/gates.mjs; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence: all12focused gates pass;29boundarytests pass; build pass; allapplication+e2e legacy import/member search empty. Scope: exact44source/registry/docs paths,3651baseline source blobs,9actual native source SHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Initial command/profile/metadata issues and repairs retained Findings/logs.
 
     Skipped: full application regression. Reason: user explicitly moved next full checkpoint to actual minimumUI+ODSload/save readiness; current cleanup does not satisfy that checkpoint. Risk: broad unrelated application behavior not re-certified. Approval: human readiness/pause instruction. No Writer-only coverage repair. Same-agent evaluator review is not independent. Exact source commit and final clean checkout recorded at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T12:37:49.946Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Source df795f1b4b213fab1c78e76529e0f4e67329311a: exact44paths42changed2new,3653source blobs,9native pins; Calc168/64 strict raw100; shared2owners194S96B56F179L raw100; related957/17 and6Chromium cases pass,12gates+29boundaries+build pass. Writer-only coverage gaps retained per user exemption; all temporary enum bridges removed, direct canonical consumers. Same-agent evaluator pass, not independent. Full deferred until actual UI+ODS readiness, then fixes and goal pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:37:05.525Z, excerpt_hash=sha256:a62cd57f104e0306b8dfb7c89935ebd209db9cadbe484e8a5f018c77f1ae752d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141226-MSDHVC/blueprint/resolved-snapshot.json
+    - old_digest: 8cd76bf3c89a37aca7a827f4f299112dcf9f11bb078077460f5dfdd709ac618c
+    - current_digest: 8cd76bf3c89a37aca7a827f4f299112dcf9f11bb078077460f5dfdd709ac618c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141226-MSDHVC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141226-MSDHVC -m 🧩 MSDHVC task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task124source commit preserving123/user changes; no reset/merge/external publication."
   Findings: |-
     Task123verifieddone/clean. Human explicitly authorizes canonical Writer corrections and rejects crutches preserving incorrect shared code. Existing alias bridges merely kept old import names/types, but now removed in favor of direct original owner imports rather than further compatibility accommodation. Original enum values/defaults/constructor/factory/copy/Any/VCL behavior remain as verified in122123. Earlier user exception for Writer-only coverage gaps remains active, as does readiness-driven fullregression/repair/pause condition. No subagent delegation.
@@ -97,6 +154,39 @@ Command: node output/playwright/task124-checks/portable.mjs (initial Calc+relate
 Command: node output/playwright/task124-checks/gates.mjs; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence: all12focused gates pass;29boundarytests pass; build pass; allapplication+e2e legacy import/member search empty. Scope: exact44source/registry/docs paths,3651baseline source blobs,9actual native source SHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Initial command/profile/metadata issues and repairs retained Findings/logs.
 
 Skipped: full application regression. Reason: user explicitly moved next full checkpoint to actual minimumUI+ODSload/save readiness; current cleanup does not satisfy that checkpoint. Risk: broad unrelated application behavior not re-certified. Approval: human readiness/pause instruction. No Writer-only coverage repair. Same-agent evaluator review is not independent. Exact source commit and final clean checkout recorded at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T12:37:49.946Z — VERIFY — ok
+
+By: CODER
+
+Note: Source df795f1b4b213fab1c78e76529e0f4e67329311a: exact44paths42changed2new,3653source blobs,9native pins; Calc168/64 strict raw100; shared2owners194S96B56F179L raw100; related957/17 and6Chromium cases pass,12gates+29boundaries+build pass. Writer-only coverage gaps retained per user exemption; all temporary enum bridges removed, direct canonical consumers. Same-agent evaluator pass, not independent. Full deferred until actual UI+ODS readiness, then fixes and goal pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:37:05.525Z, excerpt_hash=sha256:a62cd57f104e0306b8dfb7c89935ebd209db9cadbe484e8a5f018c77f1ae752d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141226-MSDHVC/blueprint/resolved-snapshot.json
+- old_digest: 8cd76bf3c89a37aca7a827f4f299112dcf9f11bb078077460f5dfdd709ac618c
+- current_digest: 8cd76bf3c89a37aca7a827f4f299112dcf9f11bb078077460f5dfdd709ac618c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141226-MSDHVC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141226-MSDHVC -m 🧩 MSDHVC task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
