@@ -1,10 +1,11 @@
 ---
 id: "202610140634-X9GQHZ"
 title: "Run full upstream-absent checkpoint after native table flow and pause"
-status: "DOING"
+result_summary: "Full checkpoint after native table flow passed; pause goal now per latest human instruction."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Original child Ctrl-F6 assertion contradicted pinned vcl popup-parent behavior; added explicit parent-focus and second-key checks while preserving every original assertion byte."
     - "One full app/tooling/inventory/browser run retained; only the failed Chromium case reran after fixture correction, with no source or provider changes."
-commit: null
+commit:
+  hash: "795cbf3b33307ecf4f46c59450be2703088ad2dc"
+  message: "🧩 X9GQHZ fix: align child Ctrl-F6 browser expectation with upstream"
 comments:
   -
     author: "CODER"
     body: "Start: full upstream-absent checkpoint immediately after J7J6FY; faithful failure repair, whole coverage and metadata, then pause goal."
+  -
+    author: "CODER"
+    body: "Verified: complete upstream-absent checkpoint accepted 16018 Vitest and 337 Chromium cases after one pinned-source browser fixture repair; whole Istanbul100four, 67031 positive original counters, nine metadata gates, exact link restoration and reviewed semantic commit."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node apps/office/node_modules/.cache/parity-coverage/X9GQHZ/run.cjs (exact argv in commands.json); node apps/office/node_modules/.cache/parity-coverage/X9GQHZ/closure-run.cjs (one failed-only Chromium closure); node apps/office/node_modules/.cache/parity-coverage/X9GQHZ/audit-with-boost-overlay.cjs; node apps/office/node_modules/.cache/parity-coverage/X9GQHZ/coverage-proof.cjs; node apps/office/node_modules/.cache/parity-coverage/X9GQHZ/proof.cjs. Result: pass after one source-backed browser fixture correction. Evidence: app 15,859/781 files, tooling 36/10, inventory 123/38; Chromium 336 initial pass plus one failed child Ctrl-F6 case repaired and passed failed-only, total 337. Unique accepted 16355. Whole original Istanbul app 465, inventory 42, tooling 1 modules all 100% four metrics, 67031 positive original counters and complete original locations/IDs on frozen bytes; app source 502 candidates = 465 instrumented + 36 declaration/reexport only + 1 existing worker ignore. Static checks, 137-file build and nine restored-reference metadata gates pass; 967 unchanged old test files and all previous assertions in the repaired browser test retained byte-for-byte. Four references absent throughout every test/static producer. Metadata-only Boost overlay to existing generated source was restored in finally; no network or external repo mutation. Scope: full current Writer app/inventory/tooling/Chromium checkpoint, no new feature. Raw hashes/results/proofs stay only in ignored cache."
+  -
+    type: "status"
+    at: "2026-10-14T07:34:43.744Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete upstream-absent checkpoint accepted 16018 Vitest and 337 Chromium cases after one pinned-source browser fixture repair; whole Istanbul100four, 67031 positive original counters, nine metadata gates, exact link restoration and reviewed semantic commit."
 doc_version: 3
-doc_updated_at: "2026-10-14T07:33:49.344Z"
+doc_updated_at: "2026-10-14T07:34:43.746Z"
 doc_updated_by: "CODER"
 description: "Latest explicit human instruction overrides cadence10: after completed J7J6FY run all current app/inventory/tooling/resource Vitest and Chromium, whole Istanbul100four, static and nine metadata gates; repair actual failures faithfully, finish clean, pause goal. No next parity correction."
 sections:
@@ -108,6 +121,10 @@ sections:
     Preflight clean writer branch at 2b683ce4faf9; J7J6FY DONE with14325 related/tooling/Chromium checks and whole changed module100four. Older X6VV8G is obsolete bookkeeping, not a live producer. Latest explicit human stop rule replaces cadence10: full now, repair all failures, then pause. Physical table pagination follows and pointer owners remain pending; not a claim of complete upstream parity.
 
     Pinned vcl/source/window/menufloatingwindow.cxx treats Ctrl-F6 from a child popup as Escape to its immediate parent; menubar then focuses the document. The old Chromium child case expected direct focus in one key, while current native UI and fresh unit cases already follow the two-step contract. First full browser run: 336 passed, one original child case failed; inserted parent focus/one-root-menu assertions and second Ctrl-F6, with all original acceptance bytes preserved; failed-only rerun passed. No production code changed. Initial metadata source-provenance failed because existing writer→office→calc/vendor Boost chain was temporarily dangling; existing Calc generated header was present. Temporary Writer-local symlink overlay used only for metadata, exact original symlink restored in finally; reran metadata only, all nine gates passed. Full runtime was never replayed. Latest human stop rule: pause goal immediately after this completed full checkpoint; actual physical table follows and pointer ownership remain future parity work.
+extensions:
+  implementation_commit:
+    hash: "795cbf3b33307ecf4f46c59450be2703088ad2dc"
+    message: "🧩 X9GQHZ fix: align child Ctrl-F6 browser expectation with upstream"
 id_source: "generated"
 ---
 ## Summary
