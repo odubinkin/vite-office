@@ -3716,3 +3716,28 @@ caller observes Type through its public method. This corrects host type erasure,
 not upstream behavior. No new memory/lifetime engine or binary layout is added.
 Actual XTypeProvider/helper/component color transport and DocPool/document/UI/ODS
 remain pending; this prerequisite alone does not trigger the full-run checkpoint.
+
+## Weak-object dependency audit (task134)
+
+The native `include/docmodel/uno/UnoComplexColor.hxx` derives from
+`cppu::WeakImplHelper<XComplexColor>`, whose inherited UNO contract includes
+`XWeak`, `XTypeProvider` and root interface identity. Completing that exact
+component contract eventually requires the relevant shared helper protocol.
+This inheritance alone does not make C++ memory management a requirement for
+browser color values, calculation, document storage or ODS serialization.
+
+The current production tree has no Calc/Writer consumer of `OWeakObject`,
+`WeakImplHelper`, `WeakReferenceHelper`, typed `WeakReference` or `queryAdapter`;
+only existing shared helper/interface definitions refer to them. Task134's
+uncommitted weak-object/adapter proposal was therefore discarded after the
+human questioned its immediate need. Existing shared runtime and inventory
+remain unchanged. No replacement helper or incomplete UNO component was added.
+Native JS GC continues to own object memory; no C++ refcount/delete engine is
+required. Any future weak-interface protocol must be justified by a concrete
+consumer and use native JS facilities rather than recreate memory ownership.
+
+Prioritize the real Calc attribute pool, cell/document owners and same-model
+ODS filters. Full `UnoComplexColor` inherited-interface integration and the
+complex-color Any member of `SvxColorItem` remain pending, not certified by
+value-only color support. This deferral does not claim UI/ODS readiness or
+change the human readiness-gated full-regression/pause instruction.
