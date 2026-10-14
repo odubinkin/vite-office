@@ -38,3 +38,23 @@ it("retains native Calc font auto and transparent fill colors in actual complex 
   copy.setFinalColor(new Color(0));
   expect(font.getFinalColor().toUInt32()).toBe(0xffffffff);
 });
+
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { ATTR_FONT_COLOR } from "../../../inc/scitems";
+import { SfxItemPool } from "../../../../svl/source/items/itempool";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+it("retains actual Calc font-color109 Auto and defaultUnused complex state through real itemset copies", /** Uses the native item and shared itemset, without a substitute ScDocumentPool or resolver. @returns Nothing. */ () => {
+  expect(ATTR_FONT_COLOR).toBe(109);
+  const item = new SvxColorItem(COL_AUTO, ATTR_FONT_COLOR),
+    set = new SfxItemSet(new SfxItemPool(), [[ATTR_FONT_COLOR, ATTR_FONT_COLOR]]);
+  set.Put(item);
+  item.setColor(new Color(0x123456));
+  item.setComplexColor(ComplexColor.createRGB(new Color(0xabcdef)));
+  const stored = set.Get(ATTR_FONT_COLOR) as SvxColorItem;
+  expect(stored.GetValue().toUInt32()).toBe(0xffffffff);
+  expect(stored.getComplexColor().getType()).toBe(ColorType.Unused);
+  expect(stored.getComplexColor().getFinalColor().toUInt32()).toBe(0);
+  const clone = stored.Clone();
+  clone.setColor(new Color(0));
+  expect(stored.GetValue().toUInt32()).toBe(0xffffffff);
+});

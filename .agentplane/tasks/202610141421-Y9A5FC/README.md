@@ -4,7 +4,7 @@ title: "Implement native shared font-color attribute ownership for Calc"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: original shared ColorItem value prerequisites and actual Calc font-color109 ownership, no fake UNO or DocPool/provider."
 doc_version: 3
-doc_updated_at: "2026-10-14T14:23:25.403Z"
+doc_updated_at: "2026-10-14T14:29:24.022Z"
 doc_updated_by: "CODER"
 description: "Task131: actual SvxColorItem value ownership, canonical colritem header, original defaults/constructors/copy/clone/color and ComplexColor access/equality/hash. Use real shared Color/ComplexColor and actual item sets, no fake DocPool. Native Any interface transport/presentation/Writer string migration remain a later phase once actual shared UNO helper exists, no scalar compatibility proxy."
 sections:
@@ -46,7 +46,12 @@ sections:
   Verify Steps: "Read include/editeng/colritem.hxx and editeng/source/items/textitem.cxx constructors/operator==/hash/Clone/getters; actual include/docmodel/color/ComplexColor.hxx, sc/inc/scitems.hxx ATTR_FONT_COLOR109, sc/source/core/data/docpool.cxx COL_AUTO default. Native real sc/qa/unit/ucalc_DocumentThemes.cxx color/complex/Which value usage. Literal all4constructors/headerconstant/factory defaults, stable borrowed color/complex, input/copy/clone independence, setters do not synchronize unrelated final/complex fields, samevalue/differentWhich equality/hash, all equality guards and original hash fold. Actual itemset copy/default ownership with109/COL_AUTO/UnusedComplex; themed ctor retains caller state, no fake resolver. Strict related8completeowners100S/B/F/L everycounterpositive and npm run test:coverage:calc.4upstream links absent/restoredfinally.12format/lint/typecheck/docs/size/dependency/tree/provenance/inventory/routing/doctor/diff gates and33boundaries. Exactallowlist/sourcehash/nativepins and clean calc, no full/browser before actual readiness."
   Verification: "Pending implementation and checks."
   Rollback Plan: "Revert only this task implementation and metadata with a later approved task; no reset, merging or unrelated edits."
-  Findings: "Previous turn authoritative progress: shared ComplexColor completed. Preflight clean calc. SvxColorItem natively owns Color plus defaultUnused ComplexColor; fontAuto is Which109 from actual ScDocPool. Existing canonical wrappers for XComplexColor/WeakImplHelper are absent; value phase avoids replacing those helpers with a fake provider or rebuilding native memory-management mechanisms. Any methods are not implemented in this value phase and inherited base unsupported projection is not claimed as native SvxColorItem transport. Native textitem shared owner already split for size; color methods get their own source shard. Direct editeng QA search and sw attr search had no explicit ColorItem tests; bounded Calc QA fallback found real ucalc_DocumentThemes ctor/getColor consumers, no fullQA claim. Existing Writer scalar string state is not converted until full actual transport/state integration exists, no compatibility constructor added."
+  Findings: |-
+    Previous turn authoritative progress: shared ComplexColor completed. Preflight clean calc. SvxColorItem natively owns Color plus defaultUnused ComplexColor; fontAuto is Which109 from actual ScDocPool. Existing canonical wrappers for XComplexColor/WeakImplHelper are absent; value phase avoids replacing those helpers with a fake provider or rebuilding native memory-management mechanisms. Any methods are not implemented in this value phase and inherited base unsupported projection is not claimed as native SvxColorItem transport. Native textitem shared owner already split for size; color methods get their own source shard. Direct editeng QA search and sw attr search had no explicit ColorItem tests; bounded Calc QA fallback found real ucalc_DocumentThemes ctor/getColor consumers, no fullQA claim. Existing Writer scalar string state is not converted until full actual transport/state integration exists, no compatibility constructor added.
+
+    All12focused static gates passed on first implementation run;33module boundary tests pass. Actual new value shard87lines plus existing main402 currently489, but the complete native ColorItem Any/presentation responsibility exceeds500 and is kept under a single final shard owner, avoiding a false current-size claim. Native ATTR_FONT_COLOR109 added to actual scitems.ts and both existing Calc registry records, with defaultUnused complex state tested through real itemset clones. No declaration duplication, legacy string constructor or replacement pool/helper provider. Source-review pin set8 at original commit; expected exact15paths7existing8new and3709to3717sourceblobs.
+
+    Runtime checks pass first run:19relatedtests6files8wholeowners358S86B107F345L100; wholeCalc173tests66files33owners4162S2731B821F3710L100, everyrawcounter positive. All4native source symlinks absent during runtime/restoredfinally. No source changes after static checks or test results. Native Any transport and Writer scalar migration not implemented or certified by this value task; no browser/full run before actual readiness checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -76,3 +81,7 @@ Revert only this task implementation and metadata with a later approved task; no
 ## Findings
 
 Previous turn authoritative progress: shared ComplexColor completed. Preflight clean calc. SvxColorItem natively owns Color plus defaultUnused ComplexColor; fontAuto is Which109 from actual ScDocPool. Existing canonical wrappers for XComplexColor/WeakImplHelper are absent; value phase avoids replacing those helpers with a fake provider or rebuilding native memory-management mechanisms. Any methods are not implemented in this value phase and inherited base unsupported projection is not claimed as native SvxColorItem transport. Native textitem shared owner already split for size; color methods get their own source shard. Direct editeng QA search and sw attr search had no explicit ColorItem tests; bounded Calc QA fallback found real ucalc_DocumentThemes ctor/getColor consumers, no fullQA claim. Existing Writer scalar string state is not converted until full actual transport/state integration exists, no compatibility constructor added.
+
+All12focused static gates passed on first implementation run;33module boundary tests pass. Actual new value shard87lines plus existing main402 currently489, but the complete native ColorItem Any/presentation responsibility exceeds500 and is kept under a single final shard owner, avoiding a false current-size claim. Native ATTR_FONT_COLOR109 added to actual scitems.ts and both existing Calc registry records, with defaultUnused complex state tested through real itemset clones. No declaration duplication, legacy string constructor or replacement pool/helper provider. Source-review pin set8 at original commit; expected exact15paths7existing8new and3709to3717sourceblobs.
+
+Runtime checks pass first run:19relatedtests6files8wholeowners358S86B107F345L100; wholeCalc173tests66files33owners4162S2731B821F3710L100, everyrawcounter positive. All4native source symlinks absent during runtime/restoredfinally. No source changes after static checks or test results. Native Any transport and Writer scalar migration not implemented or certified by this value task; no browser/full run before actual readiness checkpoint.

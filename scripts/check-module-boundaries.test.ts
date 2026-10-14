@@ -676,3 +676,14 @@ it("admits native docmodel color values using Tools and o3tl without app or reve
     /browser presentation package/u,
   );
 });
+
+it("admits the original color-item dependency on docmodel without reverse item or app edges", /** Checks the native colritem.hxx Color and ComplexColor owner boundary. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "docmodel")).toBe(false);
+  expect(isForbiddenModuleEdge("docmodel", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sc")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+  expect(getRuntimeOwnershipLayer("editeng/inc/colritem.ts")).toBe("upstream-mechanism");
+  expect(
+    getRuntimeOwnershipViolation("editeng/source/items/textitem.color.ts", "", "react"),
+  ).toMatch(/browser presentation package/u);
+});

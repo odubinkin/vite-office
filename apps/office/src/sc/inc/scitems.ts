@@ -100,3 +100,6 @@ export const ATTR_FONT_HEIGHT = 101;
 export const ATTR_CJK_FONT_HEIGHT = 112;
 /** Original CTL font height. */
 export const ATTR_CTL_FONT_HEIGHT = 117;
+
+/** Original typed font-color item identity from scitems.hxx. */
+export const ATTR_FONT_COLOR = 109;
