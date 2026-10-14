@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/inc/fontenum.ts",
+    "status": "mapped",
+    "upstreamPath": "include/tools/fontenum.hxx",
+    "localSymbols": [
+      "FontStrikeout",
+      "FontEmphasisMark"
+    ],
+    "upstreamSymbols": [
+      "FontStrikeout",
+      "FontEmphasisMark"
+    ],
+    "preservedResponsibilities": [
+      "Task121 ports original SvxCrossedOutItem enum/bool/short member values and SvxEmphasisMarkItem unsigned16storage/9wiremappings/style/position masks using actual shared SfxEnumItem/SfxUInt16Item/Any. Factories/copy/Clone/Which and unknown-member untouchedsuccess retained. Native Any2Bool bool-then-signed32/falsefallback now lives once in original SVL header with explicit browser scalar family; existing Writer LR2sites reuse it, including actual Any transport. Original FontStrikeout/FontEmphasisMark/FontEmphasis constants and member narrowing/convertbit preserved. Calc106and121NONE defaults tested through actual shared itemset copies, no fake DocPool/document/provider. textitem.effects shard documents enforced file-size responsibility split, original headers remain canonical. CALC106 records unknown-member success, invalid bool reset and emphasis fallback/below precedence without changing native behavior. Existing metadata history/status retained; broad parity flags unchanged. Other font enums/native diagnostics/localized presentation/cache/refcounts/ABI, actual fullDocPool/config/storage/document/UI/ODS remain pending/excluded. No native compilation/generator/sanitizer/memory library. Full suite not triggered by121; only at actual minimum UI+ODSread/save readiness, then relevant repairs/pause."
+    ],
+    "omittedResponsibilities": [
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/strikeout-emphasis.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/tools/fontenum.hxx",
+          "marker": "FontStrikeout"
+        }
+      ]
+    }
+  }
+}

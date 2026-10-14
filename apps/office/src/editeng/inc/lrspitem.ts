@@ -1,5 +1,6 @@
 /** @fileoverview Owns the native LR item declared by include/editeng/lrspitem.hxx and implemented in editeng/source/items/frmitems.cxx; typed twip/font-relative indentation, native copy and represented UNO values retain source behavior. */
 import { convertTwipToMm100 } from "../../tools/inc/UnitConversion";
+import { Any2Bool } from "../../svl/inc/poolitem";
 import { toTwips, Length } from "../../o3tl/inc/unit_conversion";
 import { SfxPoolItem } from "../../svl/source/items/poolitem";
 import { MeasureUnit } from "../../offapi/com/sun/star/util/MeasureUnit";
@@ -400,7 +401,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
       return true;
     }
     if (id === 10) {
-      this.SetAutoFirst(typeof value === "boolean" ? value : integer(value) && value !== 0);
+      this.SetAutoFirst(Any2Bool(value));
       return true;
     }
     if (id === MID_FIRST_LINE_UNIT_INDENT || id === MID_R_UNIT_MARGIN || id === MID_L_UNIT_MARGIN) {
@@ -865,15 +866,7 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_FIRST_AUTO) {
-      this.SetAutoFirst(
-        typeof value === "boolean"
-          ? value
-          : typeof value === "number" &&
-              Number.isInteger(value) &&
-              value >= -2147483648 &&
-              value <= 2147483647 &&
-              value !== 0,
-      );
+      this.SetAutoFirst(Any2Bool(value));
       return true;
     }
     if (id === MID_FIRST_LINE_UNIT_INDENT) {

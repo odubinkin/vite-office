@@ -25,3 +25,10 @@ export const MID_HORJUST_ADJUST = 1;
 
 /** Original font relief member. */
 export const MID_RELIEF = 0;
+
+/** Original strikeout bool member. */
+export const MID_CROSSED_OUT = 0;
+/** Original strikeout enum member. */
+export const MID_CROSS_OUT = 1;
+/** Original emphasis member. */
+export const MID_EMPHASIS = 0;

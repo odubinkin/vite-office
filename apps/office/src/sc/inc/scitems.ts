@@ -74,3 +74,8 @@ export const ATTR_FONT_SHADOWED = 108;
 export const ATTR_FONT_WORDLINE = 123;
 /** Original font relief identity. */
 export const ATTR_FONT_RELIEF = 124;
+
+/** Original strikeout attribute identity. */
+export const ATTR_FONT_CROSSEDOUT = 106;
+/** Original emphasis attribute identity. */
+export const ATTR_FONT_EMPHASISMARK = 121;

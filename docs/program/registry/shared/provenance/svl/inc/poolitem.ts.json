@@ -7,17 +7,21 @@
     "status": "mapped",
     "upstreamPath": "include/svl/poolitem.hxx",
     "localSymbols": [
-      "CONVERT_TWIPS"
+      "CONVERT_TWIPS",
+      "Any2Bool"
     ],
     "upstreamSymbols": [
       "CONVERT_TWIPS",
-      "SfxPoolItem"
+      "SfxPoolItem",
+      "Any2Bool"
     ],
     "preservedResponsibilities": [
-      "Actual original IDL/header scalar declarations and logical value responsibility, no duplicated type/pool provider."
+      "Actual original IDL/header scalar declarations and logical value responsibility, no duplicated type/pool provider.",
+      "Task121 ports original SvxCrossedOutItem enum/bool/short member values and SvxEmphasisMarkItem unsigned16storage/9wiremappings/style/position masks using actual shared SfxEnumItem/SfxUInt16Item/Any. Factories/copy/Clone/Which and unknown-member untouchedsuccess retained. Native Any2Bool bool-then-signed32/falsefallback now lives once in original SVL header with explicit browser scalar family; existing Writer LR2sites reuse it, including actual Any transport. Original FontStrikeout/FontEmphasisMark/FontEmphasis constants and member narrowing/convertbit preserved. Calc106and121NONE defaults tested through actual shared itemset copies, no fake DocPool/document/provider. textitem.effects shard documents enforced file-size responsibility split, original headers remain canonical. CALC106 records unknown-member success, invalid bool reset and emphasis fallback/below precedence without changing native behavior. Existing metadata history/status retained; broad parity flags unchanged. Other font enums/native diagnostics/localized presentation/cache/refcounts/ABI, actual fullDocPool/config/storage/document/UI/ODS remain pending/excluded. No native compilation/generator/sanitizer/memory library. Full suite not triggered by121; only at actual minimum UI+ODSread/save readiness, then relevant repairs/pause."
     ],
     "omittedResponsibilities": [
-      "Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause."
+      "Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause.",
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
     ],
     "evidence": {
       "local": [
@@ -28,12 +32,20 @@
         {
           "path": "apps/office/src/sc/source/core/data/protectionattr.test.ts",
           "marker": "reads and writes every native member with conversion-bit aliases and copied struct output"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/strikeout-emphasis.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx",
           "marker": "CONVERT_TWIPS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx",
+          "marker": "Any2Bool"
         }
       ]
     }
