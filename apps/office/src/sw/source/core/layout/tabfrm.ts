@@ -5,6 +5,7 @@ import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
+import { SwFlowFrame } from "./flowfrm";
 import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
@@ -247,21 +248,84 @@ export interface SwTableMouseGeometry {
 export class SwTabFrame extends SwLayoutFrame {
   /** Optional browser device geometry, supplied independently of the native constructor. */
   public mouseGeometry: SwTableMouseGeometry | undefined;
-  /** Binds this layout frame to its original table and root-bearing sibling. @param table - Canonical table. @param sibling - Existing original native layout frame. @returns Nothing. */
-  public constructor(
-    private readonly table: SwTable,
-    sibling?: SwFrame,
-  ) {
-    super(table.GetFrameFormat(), sibling);
+  private readonly table: SwTable;
+  private readonly flow: SwFlowFrame;
+  /** Binds an original table master or inserts an original native follow without lower copying. @param table - Model table or original table frame. @param sibling - Root-bearing original frame for master construction. @returns Nothing. */
+  public constructor(table: SwTable | SwTabFrame, sibling?: SwFrame) {
+    super(
+      table instanceof SwTabFrame ? table.GetFormat() : table.GetFrameFormat(),
+      table instanceof SwTabFrame ? table : sibling,
+    );
+    this.table = table instanceof SwTabFrame ? table.GetTable() : table;
+    this.flow = new SwFlowFrame(this);
     this.mnFrameType = SwFrameType.Tab;
-    let previous: SwRowFrame | undefined;
-    for (const line of table.GetTabLines()) {
-      const row = new SwRowFrame(line, this);
-      if (row.Lower()) {
-        row.InsertBehind(this, previous);
-        previous = row;
-      } else SwFrame.DestroyFrame(row);
+    if (table instanceof SwTabFrame) {
+      this.SetFollow(table.GetFollow());
+      table.SetFollow(this);
+    } else {
+      let previous: SwRowFrame | undefined;
+      for (const line of table.GetTabLines()) {
+        const row = new SwRowFrame(line, this);
+        if (row.Lower()) {
+          row.InsertBehind(this, previous);
+          previous = row;
+        } else SwFrame.DestroyFrame(row);
+      }
     }
+  }
+  /** Reads the next original native table flow frame. @returns Original follow or absent. */
+  public GetFollow(): SwTabFrame | undefined {
+    return this.flow.GetFollow()?.m_rThis as SwTabFrame | undefined;
+  }
+  /** Reads the original native predecessor. @returns Original preceding table frame or absent. */
+  public GetPrecede(): SwTabFrame | undefined {
+    return this.flow.GetPrecede()?.m_rThis as SwTabFrame | undefined;
+  }
+  /** Tests original native follow ownership. @returns Whether a follow exists. */
+  public HasFollow(): boolean {
+    return this.flow.HasFollow();
+  }
+  /** Classifies original native predecessor ownership. @returns Whether this is a follow. */
+  public IsFollow(): boolean {
+    return this.flow.IsFollow();
+  }
+  /** Re-chains original table frames through the existing native flow component. @param follow - Original next table flow frame. @returns Nothing. */
+  public SetFollow(follow: SwTabFrame | undefined): void {
+    this.flow.SetFollow(follow?.flow);
+  }
+  /** Finds the original registered table predecessor or the first native master in its actual chain. @param firstMaster - Follow source first-master mode instead of immediate predecessor. @returns Original master or lost link. */
+  public FindMaster(firstMaster = false): SwTabFrame | undefined {
+    let result: SwTabFrame | undefined;
+    this.table.GetFrameFormat().ForAllListeners(
+      /** Scans only original registered table frame clients, in source order. @param client - Original native format client. @returns Whether the source search found its owner. */
+      (client) => {
+        if (!(client instanceof SwTabFrame)) return false;
+        if (firstMaster) {
+          if (!client.IsFollow()) {
+            for (
+              let next: SwTabFrame | undefined = client;
+              next !== undefined;
+              next = next.GetFollow()
+            ) {
+              if (next.GetFollow() === this) {
+                result = client;
+                return true;
+              }
+            }
+          }
+        } else if (client.GetFollow() === this) {
+          result = client;
+          return true;
+        }
+        return false;
+      },
+    );
+    return result;
+  }
+  /** Releases original lowers and registration, then detaches flow neighbors without stitching. @returns Nothing. */
+  public override DestroyImpl(): void {
+    super.DestroyImpl();
+    this.flow.DestroyImpl();
   }
   /** Releases the complete native table lower hierarchy. @returns Nothing. */
   public override Dispose(): void {
@@ -316,8 +380,7 @@ export class SwTabFrame extends SwLayoutFrame {
         flags |= SwTabFrameInvFlags.InvalidatePos | SwTabFrameInvFlags.InvalidateNextPos;
         break;
       case RES_LAYOUT_SPLIT:
-        // Represented table frames are masters; native follow identity remains unrepresented.
-        flags |= SwTabFrameInvFlags.InvalidatePos;
+        if (!this.IsFollow()) flags |= SwTabFrameInvFlags.InvalidatePos;
         break;
       case RES_COLLAPSING_BORDERS:
         flags |= SwTabFrameInvFlags.InvalidatePrt;
