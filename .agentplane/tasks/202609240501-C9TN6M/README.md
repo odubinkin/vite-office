@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 364
+revision: 365
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-14T06:32:09.290Z"
+doc_updated_at: "2026-10-14T07:33:47.786Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1586,6 +1586,8 @@ sections:
     2026-10-14: correction 202610140458-3F7TV1 shares original layout-owned native table master/lower hierarchy across row measurement and actual visible/shadow rendering. No new manager/module/map/controller; private duplicated model freshness scan consolidated, table measurement moved into existing table module for size gate. Original master reused until structural/document/root lifetime ends; renderer borrows without disposal. Accepted 14,313 unique scenarios, five whole current modules 100% four metrics, 2,303 positive counters. Four source-backed lifetime observation migrations retain 52 functional assertions/238 literal tokens; 960 other old tests unchanged. Four live references follow moved function with exact before/after history; ten historical/scalar/status/default/classification prefixes retained, 137 build files frozen, all static/nine metadata gates pass. Physical page/body/follow and paint/hit graph and independent mouse ownership remain unresolved. Cycle 5/10; upcoming full continues, following full pauses after repairs. Goal active.
 
     2026-10-14 J7J6FY: original table SwFlowFrame composition, copy-follow constructor, reciprocal links, registered immediate/first master lookup and master-only split invalidation restored. 14325 unique related/tooling/Chromium assertions pass; whole changed module100four/502 positive counters, 966 old tests unchanged, nine metadata gates pass. Physical follow pagination and pointer ownership remain pending. Latest human instruction: finish this task, full checkpoint NOW, repair failures, pause goal; do not wait for correction10.
+
+    2026-10-14 X9GQHZ full checkpoint now: app15,859/tooling36/inventory123 and Chromium337 accepted (16355 unique); 100% four metrics across 465+42+1 original source modules and 67031 positive counters; 137 build files, nine metadata gates. One original browser Ctrl-F6 child expectation corrected to upstream two-step parent→document focus; failed-only closure passed, no production change. The only metadata interruption was a dangling external Boost chain, resolved by temporary Writer-local metadata-only symlink to existing Calc generated output and exact restoration. Per latest human request pause after closeout, no next parity task.
 id_source: "generated"
 ---
 ## Summary
@@ -3145,3 +3147,5 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
 2026-10-14: correction 202610140458-3F7TV1 shares original layout-owned native table master/lower hierarchy across row measurement and actual visible/shadow rendering. No new manager/module/map/controller; private duplicated model freshness scan consolidated, table measurement moved into existing table module for size gate. Original master reused until structural/document/root lifetime ends; renderer borrows without disposal. Accepted 14,313 unique scenarios, five whole current modules 100% four metrics, 2,303 positive counters. Four source-backed lifetime observation migrations retain 52 functional assertions/238 literal tokens; 960 other old tests unchanged. Four live references follow moved function with exact before/after history; ten historical/scalar/status/default/classification prefixes retained, 137 build files frozen, all static/nine metadata gates pass. Physical page/body/follow and paint/hit graph and independent mouse ownership remain unresolved. Cycle 5/10; upcoming full continues, following full pauses after repairs. Goal active.
 
 2026-10-14 J7J6FY: original table SwFlowFrame composition, copy-follow constructor, reciprocal links, registered immediate/first master lookup and master-only split invalidation restored. 14325 unique related/tooling/Chromium assertions pass; whole changed module100four/502 positive counters, 966 old tests unchanged, nine metadata gates pass. Physical follow pagination and pointer ownership remain pending. Latest human instruction: finish this task, full checkpoint NOW, repair failures, pause goal; do not wait for correction10.
+
+2026-10-14 X9GQHZ full checkpoint now: app15,859/tooling36/inventory123 and Chromium337 accepted (16355 unique); 100% four metrics across 465+42+1 original source modules and 67031 positive counters; 137 build files, nine metadata gates. One original browser Ctrl-F6 child expectation corrected to upstream two-step parent→document focus; failed-only closure passed, no production change. The only metadata interruption was a dangling external Boost chain, resolved by temporary Writer-local metadata-only symlink to existing Calc generated output and exact restoration. Per latest human request pause after closeout, no next parity task.

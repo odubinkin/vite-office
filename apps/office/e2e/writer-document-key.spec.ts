@@ -21,6 +21,14 @@ for (const origin of ["toolbar", "root", "child"] as const) {
       ).toBeFocused();
     }
     await page.keyboard.press("Control+F6");
+    if (origin === "child") {
+      await expect(page.getByRole("menuitemcheckbox", { name: "Rulers", exact: true })).toHaveCount(
+        0,
+      );
+      await expect(page.getByRole("menuitem", { name: "Rulers", exact: true })).toBeFocused();
+      await expect(page.getByRole("menu")).toHaveCount(1);
+      await page.keyboard.press("Control+F6");
+    }
     const editor = page.getByLabel("Writer document body", { exact: true });
     await expect(editor).toBeFocused();
     await expect(page.getByRole("menu")).toHaveCount(0);
