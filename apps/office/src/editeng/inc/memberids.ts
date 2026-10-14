@@ -58,3 +58,14 @@ export const MID_TRANSPARENT = 0x4b;
 export const MID_BG_COLOR = 0x22;
 /** Original shadow transparency percent member. */
 export const MID_SHADOW_TRANSPARENCE = 1;
+
+/** Original line foreground color member. */
+export const MID_FG_COLOR = 0x2c;
+/** Original line outer-width member. */
+export const MID_OUTER_WIDTH = 0x41;
+/** Original line inner-width member. */
+export const MID_INNER_WIDTH = 0x35;
+/** Original line gap member. */
+export const MID_DISTANCE = 0x29;
+/** Original style member overlaps CONVERT_TWIPS; stripping preserves the native unreachable case. */
+export const MID_LINE_STYLE = 0x90;

@@ -3,6 +3,17 @@
  */
 import { Color, ColorTransparency } from "../../../tools/inc/color";
 
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import {
+  BorderLine,
+  cppu_detail_getUnoType_BorderLine as borderLineType,
+} from "../../../offapi/com/sun/star/table/BorderLine";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2 as borderLine2Type,
+} from "../../../offapi/com/sun/star/table/BorderLine2";
+import { convert as convertLength, Length } from "../../../o3tl/inc/unit_conversion";
+import { convertTwipToMm100 } from "../../../tools/inc/UnitConversion";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { SvxBorderLine, SvxBorderLineStyle, roundBorderMetric } from "./borderline";
 
@@ -119,15 +130,6 @@ export enum SvxBoxInfoItemValidFlags {
   DISABLE = 128,
   ALL = 255,
 }
-/** UNO BorderLine2 represented numeric fields. */
-export interface BorderLine2 {
-  readonly Color: number;
-  readonly InnerLineWidth: number;
-  readonly OuterLineWidth: number;
-  readonly LineDistance: number;
-  readonly LineStyle: number;
-  readonly LineWidth: number;
-}
 /** Casts a native metric to signed16. @param value - Metric. @returns Signed metric. */
 function boxInt16(value: number): number {
   return (Math.trunc(value) << 16) >> 16;
@@ -136,40 +138,50 @@ function boxInt16(value: number): number {
 function boxUnoMetric(value: number, convert: boolean): number {
   return convert ? roundBorderMetric(value, 127 / 72) : value;
 }
-/** Validates and converts a represented UNO line. @param value - UNO payload. @param convert - Input uses mm100. @returns Native line, absent line, or false on invalid input. */
+/** Projects actual native line fields only at the existing browser record boundary. @param line - Native value. @returns Complete logical record. */
+function boxUnoRecord(line: Readonly<BorderLine2>) {
+  return {
+    Color: line.Color,
+    InnerLineWidth: line.InnerLineWidth,
+    OuterLineWidth: line.OuterLineWidth,
+    LineDistance: line.LineDistance,
+    LineStyle: line.LineStyle,
+    LineWidth: line.LineWidth,
+  };
+}
+/** Validates an existing browser line record then delegates to the single native converter. @param value - Browser record or actual native value. @param convert - Input uses mm100. @returns Native line, absence, or invalid input. */
 function boxUnoLine(value: unknown, convert: boolean): SvxBorderLine | undefined | false {
   if (typeof value !== "object" || value === null) return false;
   const data = value as Record<string, unknown>;
   if (
     ![data.Color, data.InnerLineWidth, data.OuterLineWidth, data.LineDistance].every(
-      /** Admits numeric UNO components. @param field - Component. @returns Whether integer. */
+      /** Admits the native scalar fields at the browser boundary. @param field - Record field. @returns Integer admission. */
       (field) => typeof field === "number" && Number.isInteger(field),
     )
   )
     return false;
-  const metric =
-    /** Converts input metric. @param number - Metric. @returns Twips. */
-    (number: number): number => (convert ? roundBorderMetric(number, 72 / 127) : number);
-  const rawStyle = typeof data.LineStyle === "number" ? data.LineStyle : SvxBorderLineStyle.SOLID;
-  const style = rawStyle < 0 || rawStyle > 17 ? SvxBorderLineStyle.SOLID : rawStyle;
-  const line = new SvxBorderLine();
-  line.SetBorderLineStyle(style);
-  line.SetColor(new Color(ColorTransparency, data.Color as number, "ColorTransparencyTag"));
-  const width = typeof data.LineWidth === "number" ? data.LineWidth : 0;
-  if (width !== 0) line.SetWidth(metric(width));
-  if (
-    width === 0 ||
-    ((style === 3 || style === 15) &&
-      (data.InnerLineWidth as number) > 0 &&
-      (data.OuterLineWidth as number) > 0)
-  )
-    line.GuessLinesWidths(
-      style,
-      metric(data.OuterLineWidth as number) & 0xffff,
-      metric(data.InnerLineWidth as number) & 0xffff,
-      metric(data.LineDistance as number) & 0xffff,
-    );
-  return line.isEmpty() ? undefined : line;
+  const input = new BorderLine2(
+      data.Color as number,
+      data.InnerLineWidth as number,
+      data.OuterLineWidth as number,
+      data.LineDistance as number,
+      typeof data.LineStyle === "number" ? data.LineStyle : SvxBorderLineStyle.SOLID,
+      typeof data.LineWidth === "number" ? data.LineWidth : 0,
+    ),
+    line = new SvxBorderLine();
+  return SvxBoxItem.LineToSvxLine(input, line, convert, "BorderLine2") ? line : undefined;
+}
+/** Original shared extraction helper: derived struct first, then legacy base fields and SOLID, leaving existing total width intact. @param value - Native Any. @param line - Actual native output. @returns Extraction success. */
+export function lcl_extractBorderLine(value: Any, line: BorderLine2): boolean {
+  if (value.extract(line, borderLine2Type)) return true;
+  const base = new BorderLine();
+  if (!value.extract(base, borderLineType)) return false;
+  line.Color = base.Color;
+  line.InnerLineWidth = base.InnerLineWidth;
+  line.OuterLineWidth = base.OuterLineWidth;
+  line.LineDistance = base.LineDistance;
+  line.LineStyle = SvxBorderLineStyle.SOLID;
+  return true;
 }
 
 /** Owns four native lines and four signed cell distances. */
@@ -295,16 +307,81 @@ export class SvxBoxItem extends SfxPoolItem {
   public HasMetrics(): boolean {
     return true;
   }
-  /** Converts a native line to its represented UNO fields. @param line - Native line. @param convert - Convert to mm100. @returns UNO line. */
-  public static SvxLineToLine(line: SvxBorderLine | undefined, convert = false): BorderLine2 {
-    return {
-      Color: line?.GetColor().toInt32() ?? 0,
-      InnerLineWidth: boxUnoMetric(line?.GetInWidth() ?? 0, convert) & 0xffff,
-      OuterLineWidth: boxUnoMetric(line?.GetOutWidth() ?? 0, convert) & 0xffff,
-      LineDistance: boxUnoMetric(line?.GetDistance() ?? 0, convert) & 0xffff,
-      LineStyle: line?.GetBorderLineStyle() ?? SvxBorderLineStyle.NONE,
-      LineWidth: boxUnoMetric(line?.GetWidth() ?? 0, convert) >>> 0,
-    };
+  /** Original native line-to-struct conversion with signed16 component assignment. @param line - Optional native border. @param convert - Convert to mm100. @returns Actual published struct. */
+  public static SvxLineToLine(
+    line: Readonly<SvxBorderLine> | null | undefined,
+    convert: boolean,
+  ): BorderLine2 {
+    const result = new BorderLine2();
+    if (line === null || line === undefined) {
+      result.LineStyle = SvxBorderLineStyle.NONE;
+      return result;
+    }
+    result.Color = line.GetColor().toInt32();
+    result.InnerLineWidth = convert ? convertTwipToMm100(line.GetInWidth()) : line.GetInWidth();
+    result.OuterLineWidth = convert ? convertTwipToMm100(line.GetOutWidth()) : line.GetOutWidth();
+    result.LineDistance = convert ? convertTwipToMm100(line.GetDistance()) : line.GetDistance();
+    result.LineStyle = line.GetBorderLineStyle();
+    result.LineWidth = convert ? convertTwipToMm100(line.GetWidth()) : line.GetWidth();
+    return result;
+  }
+  /** Original base overload; the final literal binds the erased static C++ argument type. @param line - Base view, possibly of a derived object. @param target - Existing border. @param convert - Input uses mm100. @param family - Erased declared type. @returns Native nonempty state. */
+  public static LineToSvxLine(
+    line: Readonly<BorderLine>,
+    target: SvxBorderLine,
+    convert: boolean,
+    family: "BorderLine",
+  ): boolean;
+  /** Original extended overload. @param line - Extended value. @param target - Existing border. @param convert - Input uses mm100. @param family - Erased declared type. @returns Native nonempty state. */
+  public static LineToSvxLine(
+    line: Readonly<BorderLine2>,
+    target: SvxBorderLine,
+    convert: boolean,
+    family: "BorderLine2",
+  ): boolean;
+  /** Dispatches the original statically selected overload, preserving target scale/mirror. Runtime subclass identity cannot replace C++ static overload selection. @param line - Declared base/extended value. @param target - Existing border. @param convert - Input uses mm100. @param family - Explicit erased argument type. @returns Native nonempty state. */
+  public static LineToSvxLine(
+    line: Readonly<BorderLine>,
+    target: SvxBorderLine,
+    convert: boolean,
+    family: "BorderLine" | "BorderLine2",
+  ): boolean {
+    let guess = true;
+    if (family === "BorderLine2") {
+      const extended = line as Readonly<BorderLine2>;
+      const style =
+        extended.LineStyle < 0 || extended.LineStyle > SvxBorderLineStyle.BORDER_LINE_STYLE_MAX
+          ? SvxBorderLineStyle.SOLID
+          : extended.LineStyle;
+      target.SetBorderLineStyle(style);
+      if (extended.LineWidth !== 0) {
+        target.SetWidth(
+          convert
+            ? Number(convertLength(BigInt(extended.LineWidth), Length.mm100, Length.twip))
+            : extended.LineWidth,
+        );
+        guess =
+          (style === SvxBorderLineStyle.DOUBLE || style === SvxBorderLineStyle.DOUBLE_THIN) &&
+          line.InnerLineWidth > 0 &&
+          line.OuterLineWidth > 0;
+      }
+    }
+    target.SetColor(new Color(ColorTransparency, line.Color, "ColorTransparencyTag"));
+    if (guess) {
+      const metric =
+        /** Original signed metric conversion before unsigned16 argument assignment. @param width - Native component. @returns Twip width. */ (
+          width: number,
+        ): number =>
+          (convert ? Number(convertLength(BigInt(width), Length.mm100, Length.twip)) : width) &
+          0xffff;
+      target.GuessLinesWidths(
+        target.GetBorderLineStyle(),
+        metric(line.OuterLineWidth),
+        metric(line.InnerLineWidth),
+        metric(line.LineDistance),
+      );
+    }
+    return !target.isEmpty();
   }
   /** Reads native default sequence or individual border/distance members. @param member - Native member plus optional CONVERT_TWIPS. @returns Represented UNO value. */
   public override QueryValue(member = 0): unknown {
@@ -314,7 +391,7 @@ export class SvxBoxItem extends SfxPoolItem {
       return [
         ...[2, 3, 1, 0].map(
           /** Projects one native border. @param edge - Edge. @returns UNO line. */
-          (edge) => SvxBoxItem.SvxLineToLine(this.GetLine(edge), convert),
+          (edge) => boxUnoRecord(SvxBoxItem.SvxLineToLine(this.GetLine(edge), convert)),
         ),
         ...[this.GetSmallestDistance(), ...this.distances].map(
           /** Projects one distance. @param distance - Metric. @returns UNO scalar. */
@@ -331,7 +408,7 @@ export class SvxBoxItem extends SfxPoolItem {
     if (member >= 6 && member <= 9)
       return boxUnoMetric(this.GetDistance(edge as number, true), convert);
     if (member === 14 || member === 15) return undefined;
-    return SvxBoxItem.SvxLineToLine(this.GetLine(edge ?? -1), convert);
+    return boxUnoRecord(SvxBoxItem.SvxLineToLine(this.GetLine(edge ?? -1), convert));
   }
   /** Applies represented native sequence or border/distance members. @param value - UNO payload. @param member - Native member plus optional CONVERT_TWIPS. @returns Whether admitted. */
   public override PutValue(value: unknown, member = 0): boolean {
@@ -528,14 +605,14 @@ export class SvxBoxInfoItem extends SfxPoolItem {
     const flags = (this.IsTable() ? 1 : 0) | (this.distance ? 2 : 0) | (this.minimum ? 4 : 0);
     if (member === 0)
       return [
-        SvxBoxItem.SvxLineToLine(this.GetHori(), convert),
-        SvxBoxItem.SvxLineToLine(this.GetVert(), convert),
+        boxUnoRecord(SvxBoxItem.SvxLineToLine(this.GetHori(), convert)),
+        boxUnoRecord(SvxBoxItem.SvxLineToLine(this.GetVert(), convert)),
         flags,
         this.validFlags,
         boxUnoMetric(this.defaultDistance, convert),
       ];
     if (member === 1 || member === 2)
-      return SvxBoxItem.SvxLineToLine(this.GetLine(member - 1), convert);
+      return boxUnoRecord(SvxBoxItem.SvxLineToLine(this.GetLine(member - 1), convert));
     if (member === 0x2e) return flags;
     if (member === 4) return this.validFlags;
     if (member === 0x29) return boxUnoMetric(this.defaultDistance, convert);
@@ -643,3 +720,5 @@ export {
 } from "../../inc/lrspitem";
 
 export { SvxShadowItem, SvxShadowItemSide } from "./frmitems.shadow";
+
+export { SvxLineItem } from "./frmitems.line";

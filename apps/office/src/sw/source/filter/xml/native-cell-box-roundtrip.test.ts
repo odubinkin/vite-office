@@ -1,4 +1,5 @@
 /** @fileoverview Verifies independent native box ODF properties and complete primitive process/storage rehydration. */
+import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { Color } from "../../../../tools/inc/color";
 import { expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
@@ -31,16 +32,18 @@ it("retains native border export fallbacks and rejects malformed legacy storage 
           decodeWriterDocument(record),
       ).toThrow("Stored Writer legacy box is invalid.");
     }
-    const empty = SvxBoxItem.SvxLineToLine(undefined),
+    const empty = SvxBoxItem.SvxLineToLine(undefined, false),
       handler = new XMLBorderHdl();
     expect(handler.importXML("bad solid", { value: empty })).toBe(false);
-    expect(handler.exportXML({ ...empty, LineWidth: 35, LineStyle: 32767 })).toBe(
-      "0.99pt solid #000000",
-    );
-    expect(handler.exportXML({ ...empty, LineWidth: 35, LineStyle: 18 })).toBe(
-      "0.99pt solid #000000",
-    );
-    expect(new XMLBorderWidthHdl().exportXML({ ...empty, LineStyle: 3 })).toBeUndefined();
+    const authored = new BorderLine2(empty);
+    authored.LineWidth = 35;
+    authored.LineStyle = 32767;
+    expect(handler.exportXML(authored)).toBe("0.99pt solid #000000");
+    authored.LineStyle = 18;
+    expect(handler.exportXML(authored)).toBe("0.99pt solid #000000");
+    authored.assign(empty);
+    authored.LineStyle = 3;
+    expect(new XMLBorderWidthHdl().exportXML(authored)).toBeUndefined();
     expect(
       /** Rejects an invalid authored border token. @returns Attempted box. */ () =>
         importBoxProperties({ borderTop: "bad" }, RES_BOX),
@@ -312,15 +315,17 @@ it("filter shorthand applies per-edge overrides, source style tokens and native 
     "1pt solid solid",
     "1pt 2pt solid",
   ])
-    expect(handler.importXML(invalid, { value: SvxBoxItem.SvxLineToLine(undefined) })).toBe(false);
+    expect(handler.importXML(invalid, { value: SvxBoxItem.SvxLineToLine(undefined, false) })).toBe(
+      false,
+    );
   for (const named of ["thin", "middle", "thick"])
     expect(
-      handler.importXML(`${named} solid`, { value: SvxBoxItem.SvxLineToLine(undefined) }),
+      handler.importXML(`${named} solid`, { value: SvxBoxItem.SvxLineToLine(undefined, false) }),
     ).toBe(true);
   const target = { value: SvxBoxItem.SvxLineToLine(new SvxBorderLine(new Color(0), 60, 3), true) };
   expect(compound.importXML("0.035cm 0.035cm 0.035cm", target)).toBe(true);
   expect(compound.exportXML(target.value)).toBe("0.035cm 0.035cm 0.035cm");
   expect(compound.importXML("1pt 2pt", target)).toBe(false);
   expect(compound.importXML("bad 1pt 1pt", target)).toBe(false);
-  expect(compound.exportXML(SvxBoxItem.SvxLineToLine(undefined))).toBeUndefined();
+  expect(compound.exportXML(SvxBoxItem.SvxLineToLine(undefined, false))).toBeUndefined();
 });

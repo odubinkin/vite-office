@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/table/BorderLine2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "diagonal-border-values",
+    "capabilityIds": [
+      "CAP-41f3f348-a769-403d-8ab8-1c93d245cf61"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/table/BorderLine2.ts",
+        "docs/program/calc-core.md#Canonical diagonal border item and inherited line values (task137)"
+      ],
+      "justification": "Original real base inheritance and two direct members; shared typelib base size and cppumaker alignment govern existing logical lvalues, not a persisted ABI. Task137 implements the missing SvxLineItem dependency with optional owned shared SvxBorderLine values and actual published BorderLine/BorderLine2 inherited CPPU bindings. Canonical shared Box line conversion/extraction is reused, with signed16 components and source-preserved scale/mirror/identity; native static C++ overload selection is an explicit erased argument-family literal, including a derived object viewed as its base. Required native convert arguments are explicit at actual call sites. Existing browser QueryValue records project all six fields, while XML handlers use real native value copies instead of class spreads. Original style0x90/convert0x80 overlap and allocation-before-invalid-member remain intact. Ordinary JS GC/scalar cells only, no new lifetime engine or binary wire format. Full Box Any/theme interfaces, localized presentation/XML diagnostics and real Calc pool/document/UI/ODS remain pending. Prior status/classification/history and deliberate I/O/recovery deviations are retained; no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BorderLine2",
+        "cppu_detail_getUnoType_BorderLine2"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/table/BorderLine2.idl",
+      "upstreamSymbols": [
+        "BorderLine2",
+        "LineStyle",
+        "LineWidth"
+      ],
+      "expectedBaseClass": "BorderLine"
+    }
+  }
+}

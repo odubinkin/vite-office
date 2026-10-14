@@ -113,3 +113,8 @@ export const ATTR_CTL_FONT = 116;
 
 /** Original cell shadow item identity. */
 export const ATTR_SHADOW = 152;
+
+/** Original top-left to bottom-right diagonal border item. */
+export const ATTR_BORDER_TLBR = 141;
+/** Original bottom-left to top-right diagonal border item. */
+export const ATTR_BORDER_BLTR = 142;

@@ -1,5 +1,6 @@
 /** @fileoverview Imports and exports represented native border properties from bordrhdl.cxx. */
-import { SvxBoxItem, type BorderLine2 } from "../../../editeng/source/items/frmitems";
+import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
+import { BorderLine2 } from "../../../offapi/com/sun/star/table/BorderLine2";
 import { SvxBorderLineStyle, type SvxBorderLine } from "../../../editeng/source/items/borderline";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 
@@ -83,7 +84,7 @@ export class XMLBorderHdl {
     }
     if (style === undefined || (style !== SvxBorderLineStyle.NONE && width === undefined))
       return false;
-    const value = { ...target.value };
+    const value = new BorderLine2(target.value);
     if (style === SvxBorderLineStyle.NONE || (!named && width === 0)) {
       value.InnerLineWidth = 0;
       value.OuterLineWidth = 0;
@@ -119,12 +120,11 @@ export class XMLBorderWidthHdl {
       (token) => converter.convertMeasureToCore(token, 0, 500),
     );
     if (widths.includes(null)) return false;
-    target.value = {
-      ...target.value,
-      InnerLineWidth: widths[0] as number,
-      LineDistance: widths[1] as number,
-      OuterLineWidth: widths[2] as number,
-    };
+    const value = new BorderLine2(target.value);
+    value.InnerLineWidth = widths[0] as number;
+    value.LineDistance = widths[1] as number;
+    value.OuterLineWidth = widths[2] as number;
+    target.value = value;
     return true;
   }
   /** Exports a represented compound line when native style permits it. @param value - UNO line. @param converter - XML measure device. @returns Triple or absent. */

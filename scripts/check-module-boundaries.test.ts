@@ -711,3 +711,9 @@ it("admits native Writer charset declarations without granting shared reverse de
   expect(isForbiddenModuleEdge("sw", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "sw")).toBe(true);
 });
+
+it("admits original ODF border IDL values without application or reverse dependencies", /** Original bordrhdl.cxx consumes the published BorderLine2 type. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("xmloff", "offapi")).toBe(false);
+  expect(isForbiddenModuleEdge("offapi", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "sw")).toBe(true);
+});

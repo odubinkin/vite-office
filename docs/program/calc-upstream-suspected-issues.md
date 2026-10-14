@@ -2030,3 +2030,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source example: an opaque shadow remains opaque after a successful IsTransparent=true write. Width65535 queried in mm100 becomes115596, narrows to-15476, converts back to-8774twips and stores uint16 value56762 even when the incoming width Any has the wrong type.
 - Status: suspicious behavior or legacy contract, not a confirmed upstream bug. Preserve the original path and verify it with actual shared Any values; no corrective normalization.
 - Local evidence: `apps/office/src/editeng/source/items/native-shadow-item.test.ts`, `apps/office/src/editeng/source/items/frmitems.shadow.ts`. Native localized presentation, raw boolean bytes and full document integration remain outside this record.
+
+## CALC-116: SvxLineItem style member overlaps the conversion flag
+
+- Upstream: `include/editeng/memberids.h` defines MID_LINE_STYLE0x90; `include/svl/poolitem.hxx` defines CONVERT_TWIPS0x80. `editeng/source/items/frmitems.cxx`, SvxLineItem::PutValue strips the conversion bit before switching on the member, including its MID_LINE_STYLE case. Pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: after byte conversion and removing0x80, the member is at most0x7f. The MID_LINE_STYLE0x90 branch therefore cannot be selected; passing0x90 selects unsupported0x10 and returns false. For a numeric Any, the source allocates a new zero-width border before rejecting the member. An absent-line scalar QueryValue returns true with untouched Any, whereas the same unsupported member on a present line returns false.
+- Status: suspicious identifier/control-flow overlap, not a confirmed upstream bug. Preserve the failed style write and the observable allocation. Source-fold the unreachable style mutation instead of introducing a dead branch or fake test provider.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-item.test.ts`, `apps/office/src/editeng/source/items/frmitems.line.ts`. Complete BoxItem Any and broad native document behavior remain separately unverified.
