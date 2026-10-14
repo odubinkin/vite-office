@@ -1,10 +1,11 @@
 ---
 id: "202610140601-N2Q20N"
 title: "Implement shared XML pull reader for Calc configuration schemas"
-status: "DOING"
+result_summary: "Implemented shared configuration XML pull reader; source2693bff00e45, all checks pass within approved scope."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/task110-checks/original-source-review.json"
   findings:
     - "Exact3425 committed/current non-task hashes match, only28 planned paths changed. Actual source-absent Calc152tests/raw100 and XML33tests/8owners/raw100, actual static/Calc0UI and all4links restored. Original10source hashes reviewed; CALC094-096 preserved, native hex dead guard proven unreachable. First lint/docs/provenance failures and unrelated inventory fixture timeout retained, corrected without guard weakening; final inventory123pass/raw100. Same-agent separate evaluator phase is not independent review. Native OS/debug/UB/private visibility/ABI/fullQA and configuration/default/document/ODS integration remain excluded or pending."
-commit: null
+commit:
+  hash: "2693bff00e45dc40a73c266fa9a9e9f7238ada1e"
+  message: "🧩 N2Q20N xmlreader: implement shared configuration pull parser"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: shared XML pull reader follows original logical parser over real shared values, preserves CALC094-096, passes Calc/XML raw100, static/Calc0UI/all16gates and exact3425hash/source review. Browser and native boundaries explicit; full111 next then requestedpause."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed Calc152 and XML33 source-absent tests/raw100; current16gates and inventory123/raw100; static/Calc0UI/exact3425hashes. Same-agent eval is not independent review; first failures retained and boundaries explicit."
+  -
+    type: "status"
+    at: "2026-10-14T06:44:16.006Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared XML pull reader follows original logical parser over real shared values, preserves CALC094-096, passes Calc/XML raw100, static/Calc0UI/all16gates and exact3425hash/source review. Browser and native boundaries explicit; full111 next then requestedpause."
 doc_version: 3
-doc_updated_at: "2026-10-14T06:44:12.433Z"
+doc_updated_at: "2026-10-14T06:44:16.009Z"
 doc_updated_by: "CODER"
 description: "Task110: full logical upstream xmlreader event/state/namespace/attribute/text/reference parser over actual Span/Pad and existing shared values, with browser supplied bytes and URL instead of native filesystem/mmap ownership. Preserve source quirks and record them; no SAX substitution or memory/provider library. Calc/affected raw100, static/Calc0UI/16serialgates. Next task111full thenpause."
 sections:
