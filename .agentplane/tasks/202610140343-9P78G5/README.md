@@ -4,7 +4,7 @@ title: "Implement Calc cell protection values over shared UNO struct and pool it
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T03:59:59.132Z"
+  updated_by: "CODER"
+  note: "Actual protection/member/default/sharedIDL/commonupdate source-backed contracts,152Calc/117relatedraw100/allpositive,16currentgates actualstatic/Calc0UI4linksrestored,5identicalJS and3340exactsourcehashes pass. Native/fullQA/UI/ODS gaps explicit;nextfull111pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T03:59:58.206Z"
+  updated_by: "EVALUATOR"
+  note: "Actual protection/member/default/copy and shared IDL/common update contracts pass source-backed tests,152Calc/117relatedraw100 andall16currentgates."
+  evaluated_sha: "699a2a585a185a624d12cfbd46660486f93d4a56"
+  blueprint_digest: "8447e76782b378c1a2fc632efb629365a4cd4f6c4364e03011322928a15384b9"
+  evidence_refs:
+    - ".agentplane/tasks/202610140343-9P78G5/README.md"
+    - ".agentplane/tasks/202610140343-9P78G5/quality/20261014-035958206-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140343-9P78G5/quality/20261014-035958206-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140343-9P78G5/quality/20261014-035958206-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140343-9P78G5/blueprint/resolved-snapshot.json"
+    - "output/playwright/task104-checks/exact-review.json"
+    - "output/playwright/task104-checks/original-source-review.json"
+    - "output/playwright/task104-checks/override-javascript-equivalence.json"
+    - "output/playwright/task104-checks/value-coverage-audit.json"
+  findings:
+    - "3340exactcommittednon-taskhashes differ only33plannedpaths21changed/12added;8pinned sourcefiles reviewed, actualCalc/shared/static/Calc0UI manifests exit0/all4linksrestore, rawcountersallpositive.11descendant qualifiers5files preserve identical emittedJS; no fakeAny/typeprovider/newmemorylibrary."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual protectionattr/membervalues withsharedIDL/pool protocols, foreseeable11PutValueoverridequalifiers includedinplan; sourcebackedraw100 andtruthfulinventory, nextfull111pause."
+  -
+    type: "verify"
+    at: "2026-10-14T03:59:59.132Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual protection/member/default/sharedIDL/commonupdate source-backed contracts,152Calc/117relatedraw100/allpositive,16currentgates actualstatic/Calc0UI4linksrestored,5identicalJS and3340exactsourcehashes pass. Native/fullQA/UI/ODS gaps explicit;nextfull111pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:59:11.536Z"
+doc_updated_at: "2026-10-14T03:59:59.186Z"
 doc_updated_by: "CODER"
 description: "Task104: actual ScProtectionAttr149 defaults/copy/Clone/assignment/equality/getters/setters/CreateDefault and all0..4 member query/update semantics; shared actual CellProtection IDL value, svl poolitem.hxx CONVERT_TWIPS and sc mid.h constants. Restore native shared unsupported PutValue default and foreseeable11 descendant override qualifiers in5files, emittedJS equivalence. Existing browser generic-value boundary reused, no fake Any/provider/ICU/memorylib; original localized presentation/XMLdiagnostics/document/ODS integration pending. Targetedraw100/gates/inventory, nextfull111pause."
 sections:
@@ -57,7 +82,40 @@ sections:
 
     Command: node output/playwright/task104-checks/gates.mjs --early; node output/playwright/task104-checks/gates-late.mjs --late. Result: pass. Evidence: all16currentgates terminal0 afterlastcode/metadataedit. Scope: wholeformat/lint/type/docs/size/deps/resources/tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory,33intentionalpaths andtruthfulfoundation/unverified records. No compiler/sourcechecker/threshold relaxation.
 
-    Command: python3 output/playwright/task104-checks/exact-review.py aftersourcecommit. Result: pendingcommittedreview. Scope:3328baselinehashes,33intentionalpaths21changed/12added,expected3340exactcommittednon-taskhashes, source/coverage/gate/qualifier evidence bound toactualcommit; same-agent separateEVALUATOR notindependent, canonicalDONE/cleanbranchcalc. Goalactive; nextfull111requestedpause.
+    Command: python3 output/playwright/task104-checks/exact-review.py aftersourcecommit. Result: pass. Evidence: sourcecommit699a2a585a185a624d12cfbd46660486f93d4a56,3340exactcommittednon-taskhashes/only33plannedpaths21changed12added. Scope:3328baselinehashes,33intentionalpaths21changed/12added,expected3340exactcommittednon-taskhashes, source/coverage/gate/qualifier evidence bound toactualcommit; same-agent separateEVALUATOR notindependent, canonicalDONE/cleanbranchcalc. Goalactive; nextfull111requestedpause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T03:59:59.132Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Actual protection/member/default/sharedIDL/commonupdate source-backed contracts,152Calc/117relatedraw100/allpositive,16currentgates actualstatic/Calc0UI4linksrestored,5identicalJS and3340exactsourcehashes pass. Native/fullQA/UI/ODS gaps explicit;nextfull111pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T03:59:58.725Z, excerpt_hash=sha256:03288d5ab48530f8134899ed0144a64d4fe6b218dc08cd9b798b28a3eec2e046
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140343-9P78G5/blueprint/resolved-snapshot.json
+    - old_digest: 8447e76782b378c1a2fc632efb629365a4cd4f6c4364e03011322928a15384b9
+    - current_digest: 8447e76782b378c1a2fc632efb629365a4cd4f6c4364e03011322928a15384b9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610140343-9P78G5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610140343-9P78G5 -m 🧩 9P78G5 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restoreall4exactreference links in finally. Revert intentionaltaskchanges throughnewtask, no merge/historyrewrite/unrelatedtaskmutation. PreserveWriter/globalunsupporteddefaultsandstrictgates."
   Findings: |-
     OriginalScProtectionAttr nativeBool query/update supportsstructmember0 andindividual1..4, masksCONVERT_TWIPS afterUInt8narrowing; invalidmember/type doesnotmutatepayload. ExistingbrowservalueQueryValue convention reused, not native outputAny/status API or physicalformat. IDLstructall4booldefaultfalse differsattributeprotectedtrue. NativebasePutValue requiresmemberargument(no default), all existing11descendantmethods returnbool; no dynamicpresenceguards found. Sourcecopyreset149/payloadassignpreserveWhich/equalityignoreWhich parallelsCALC-089. Actualcolumnstyle/import/ODS QA iscontextunexecuted. Sheetprotection itself andeditingvalidationremainpending; flagsalone donotblockediting on unprotectedsheets.
@@ -96,7 +154,40 @@ Command: qualifier byte audit and localTypeScript transpileModule before/after c
 
 Command: node output/playwright/task104-checks/gates.mjs --early; node output/playwright/task104-checks/gates-late.mjs --late. Result: pass. Evidence: all16currentgates terminal0 afterlastcode/metadataedit. Scope: wholeformat/lint/type/docs/size/deps/resources/tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory,33intentionalpaths andtruthfulfoundation/unverified records. No compiler/sourcechecker/threshold relaxation.
 
-Command: python3 output/playwright/task104-checks/exact-review.py aftersourcecommit. Result: pendingcommittedreview. Scope:3328baselinehashes,33intentionalpaths21changed/12added,expected3340exactcommittednon-taskhashes, source/coverage/gate/qualifier evidence bound toactualcommit; same-agent separateEVALUATOR notindependent, canonicalDONE/cleanbranchcalc. Goalactive; nextfull111requestedpause.
+Command: python3 output/playwright/task104-checks/exact-review.py aftersourcecommit. Result: pass. Evidence: sourcecommit699a2a585a185a624d12cfbd46660486f93d4a56,3340exactcommittednon-taskhashes/only33plannedpaths21changed12added. Scope:3328baselinehashes,33intentionalpaths21changed/12added,expected3340exactcommittednon-taskhashes, source/coverage/gate/qualifier evidence bound toactualcommit; same-agent separateEVALUATOR notindependent, canonicalDONE/cleanbranchcalc. Goalactive; nextfull111requestedpause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T03:59:59.132Z — VERIFY — ok
+
+By: CODER
+
+Note: Actual protection/member/default/sharedIDL/commonupdate source-backed contracts,152Calc/117relatedraw100/allpositive,16currentgates actualstatic/Calc0UI4linksrestored,5identicalJS and3340exactsourcehashes pass. Native/fullQA/UI/ODS gaps explicit;nextfull111pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T03:59:58.725Z, excerpt_hash=sha256:03288d5ab48530f8134899ed0144a64d4fe6b218dc08cd9b798b28a3eec2e046
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140343-9P78G5/blueprint/resolved-snapshot.json
+- old_digest: 8447e76782b378c1a2fc632efb629365a4cd4f6c4364e03011322928a15384b9
+- current_digest: 8447e76782b378c1a2fc632efb629365a4cd4f6c4364e03011322928a15384b9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610140343-9P78G5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610140343-9P78G5 -m 🧩 9P78G5 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
