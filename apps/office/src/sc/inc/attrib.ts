@@ -8,3 +8,12 @@ export {
   ScLineBreakCell,
   ScHyphenateCell,
 } from "../source/core/data/attrib";
+
+export {
+  ScCondFormatItem,
+  ScCondFormatIndexes,
+  ScPageScaleToItem,
+  SC_MID_PAGE_SCALETO_WIDTH,
+  SC_MID_PAGE_SCALETO_HEIGHT,
+  type ScCondFormatIndexesConstReference,
+} from "../source/core/data/attrib.values";

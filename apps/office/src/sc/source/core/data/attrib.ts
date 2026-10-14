@@ -337,3 +337,12 @@ export class ScHyphenateCell extends SfxBoolItem {
     return new ScHyphenateCell(this.GetValue());
   }
 }
+
+export {
+  ScCondFormatItem,
+  ScCondFormatIndexes,
+  ScPageScaleToItem,
+  SC_MID_PAGE_SCALETO_WIDTH,
+  SC_MID_PAGE_SCALETO_HEIGHT,
+  type ScCondFormatIndexesConstReference,
+} from "./attrib.values";

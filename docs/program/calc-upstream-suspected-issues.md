@@ -1866,3 +1866,16 @@ ScShrinkToFitCell, ScVerticalStackCell, ScLineBreakCell and ScHyphenateCell have
 Evidence: complete pinned attrib.hxx/cxx, scitems.hxx, include/svl/eitem.hxx, cenumitm.cxx and SfxPoolItem::operator== scopes; task112 actual owned-item copy/Clone/equality histories and real shared pool/item-set consumers. No fake provider, native invalid downcast execution, compiled differential, native instance-cache or full document QA claim.
 
 Decision: preserve implicit-copy identity, fixed-id Clone and payload-only same-type equality. Correct shared bool behavior and its previous Which-sensitive test rather than duplicate a Calc-specific workaround. Audit normal document/pool callers before calling this a defect.
+
+
+## CALC-098: sorted_vector initializer-list construction retains duplicate values
+
+Status: source-confirmed constructor difference; user-visible impact remains unverified.
+
+The original include/o3tl/sorted_vector.hxx initializer-list constructor copies values and calls std::sort without a unique pass. Single insertion rejects comparator-equivalent values. ScCondFormatItem takes that actual vector by const reference or move, so construction and copies must preserve duplicate indices. Its Clone reconstructs from the vector and restores Which154, whereas implicit copy retains the source Which. Preserve this behavior; do not normalize through repeated unique insertions. Task113 tests real shared vector and Calc item histories. No compiled native or full-document QA claim.
+
+## CALC-099: page-scale Any accepts signed16 negative values as unsigned dimensions
+
+Status: source-confirmed typed conversion, not identified as a defect.
+
+ScPageScaleToItem::PutValue extracts sal_uInt16 from an actual Any. Original cppu/source/uno/assign.hxx accepts SHORT and UNSIGNED_SHORT at equal width by reading their bits as unsigned16. Thus a typed signed16 -1 becomes65535, while a LONG is rejected even when its value would fit. Preserve actual shared Any conversion; do not add a value-range policy to the native typed path. The explicit browser scalar transport only accepts unsigned16 numbers. Task113 uses the existing actual CPPU owners; no duplicate conversion engine.

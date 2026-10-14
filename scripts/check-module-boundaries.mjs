@@ -60,6 +60,8 @@ const allowedEdges = new Map([
   [
     "sc",
     new Set([
+      // Original Calc attrib.cxx exposes actual UNO Any member query/extraction.
+      "cppu",
       "cui",
       "editeng",
       "external",

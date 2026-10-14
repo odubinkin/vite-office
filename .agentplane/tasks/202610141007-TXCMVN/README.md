@@ -4,7 +4,7 @@ title: "Implement Calc conditional-format index and page-scale value attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: port native condition-index/page-scale values over real SortedVector and Any, preserving initializer duplicates and shared value moves without lifetime machinery."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:11:47.350Z"
+doc_updated_at: "2026-10-14T10:21:22.656Z"
 doc_updated_by: "CODER"
 description: "Task113 prepares native document pool and ODS style values: complete logical ScCondFormatItem sorted index/copy/move/Clone/equality/hash contracts and ScPageScaleToItem size/validity/copy/Clone/member query/update contracts. Reuse existing SortedVector/Any/pool owners, add only native unsigned integer hash-combine arithmetic and exact Calc-to-CPPU dependency evidence. No memory manager or fake document/provider; raw100 Calc/affected owners and focused checks, full121."
 sections:
@@ -48,9 +48,16 @@ sections:
     2. Whole current Calc plus complete hash/SortedVector shared owner profiles rawS/B/F/L100/everycounterpositive, source links all4absent/restoredfinally. Include real existing vector consumers and unchanged Any reuse without claiming remeasured-owner coverage. No Writer-only coverage repairs or fulloffice before121.
     3. Focused format/lint, actual app typecheck, JSDoc/size/dependency/tree/provenance/registry/routing/doctor/diff and targeted module-boundary checker tests. Preserve failure logs and assertions/thresholds. No unrelated full tooling/inventory/browser replay.
     4. Derive baseline from current Git, never assume prior-cycle snapshot. Exact committed/current hashes and intentional paths/source pins/source-bound runtime/gate results; same-agent EVAL explicitly not independent. APverify/close clean branchcalc; original goal remains active/incomplete.
-  Verification: "Pending current task113 source implementation and declared checks."
+  Verification: |-
+    Command: node output/playwright/task113-checks/portable.mjs
+    Result: pass. Whole Calc158tests54files33owners rawS4113/B2723/F814/L3664; shared10tests3files complete2owners rawS73/B30/F18/L71. All S/B/F/L100 and every raw counterpositive. All4reference symlinks absent during tests and restored finally. Actual Writer container consumer retained.
+    Command: npx vitest run scripts/check-module-boundaries.test.ts
+    Result: pass23tests. Exact sc→cppu allowed, reverse and browser dependencies remain forbidden.
+    Command: node output/playwright/task113-checks/gates.mjs
+    Result: final focused12gate run recorded in gates-results.json after metadata corrections; exact source review and committed hashes recorded before final verification. Scope: intentional28paths only. Native source contracts reviewed, no native compilation.
+    Full office/browser/static: next scheduled full121 under user once-per10tasks cadence; no Writer-only coverage work.
   Rollback Plan: "Revert only task113 intentional implementation/tests/metadata/docs. Preserve integrated Writer/main changes and unrelated tasks. Restore all4reference symlinks exactly in finally, no upstream tree edits/network/worktrees/merges/history reset."
-  Findings: "Task112 DONE source8aa7354e9574/close20e64048c051, current3459source hashes and clean calc, actual Calc155/raw100/related67raw100. It corrected shared bool rather than duplicate it. This task directly continues real DocPool value dependencies. Source SortedVector initializer-list ctor sorts but does not unique: constructor-copying through insert would silently alter valid native duplicate vectors, so extend the actual shared constructor/copy/move scopes. Actual sourcehash baseline must include pre-task integration and is generated from Git/current bytes before edits. Full121 remains scheduled, no pause requested."
+  Findings: "Initial Calc157pass/1fail: new test incorrectly expected typed signed16 -1 rejection. Existing CPPU and original assign.hxx correctly reinterpret the16bits asunsigned65535. Test corrected to source behavior, retaining unchanged-output and invalid-type assertions; implementation unchanged. Initial lint rejected redundant overloads; merged erased seed signature without arithmetic change. Initial provenance and registry failed new metadata: hash needed original nSeed symbol evidence beyond basename; canonical attribute reexports are not runtime declarations. Corrected metadata, retaining prior history/status. CALC098duplicate initializer and CALC099typed signed dimension conversion documented; upstream behavior preserved. All initial logs retained. Same-agent evaluator is not independent review. Logical hash specialization makes no external stdlib/native ABI/binary parity claim. Whole document storage/configuration/UI/ODS filters and localized presentation remain pending. No fake document/provider or new memory ownership engine. Goal active; task121nextfull."
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +81,13 @@ Port complete logical ScCondFormatItem default/scalar/const-index-vector/implici
 
 ## Verification
 
-Pending current task113 source implementation and declared checks.
+Command: node output/playwright/task113-checks/portable.mjs
+Result: pass. Whole Calc158tests54files33owners rawS4113/B2723/F814/L3664; shared10tests3files complete2owners rawS73/B30/F18/L71. All S/B/F/L100 and every raw counterpositive. All4reference symlinks absent during tests and restored finally. Actual Writer container consumer retained.
+Command: npx vitest run scripts/check-module-boundaries.test.ts
+Result: pass23tests. Exact sc→cppu allowed, reverse and browser dependencies remain forbidden.
+Command: node output/playwright/task113-checks/gates.mjs
+Result: final focused12gate run recorded in gates-results.json after metadata corrections; exact source review and committed hashes recorded before final verification. Scope: intentional28paths only. Native source contracts reviewed, no native compilation.
+Full office/browser/static: next scheduled full121 under user once-per10tasks cadence; no Writer-only coverage work.
 
 ## Rollback Plan
 
@@ -82,4 +95,4 @@ Revert only task113 intentional implementation/tests/metadata/docs. Preserve int
 
 ## Findings
 
-Task112 DONE source8aa7354e9574/close20e64048c051, current3459source hashes and clean calc, actual Calc155/raw100/related67raw100. It corrected shared bool rather than duplicate it. This task directly continues real DocPool value dependencies. Source SortedVector initializer-list ctor sorts but does not unique: constructor-copying through insert would silently alter valid native duplicate vectors, so extend the actual shared constructor/copy/move scopes. Actual sourcehash baseline must include pre-task integration and is generated from Git/current bytes before edits. Full121 remains scheduled, no pause requested.
+Initial Calc157pass/1fail: new test incorrectly expected typed signed16 -1 rejection. Existing CPPU and original assign.hxx correctly reinterpret the16bits asunsigned65535. Test corrected to source behavior, retaining unchanged-output and invalid-type assertions; implementation unchanged. Initial lint rejected redundant overloads; merged erased seed signature without arithmetic change. Initial provenance and registry failed new metadata: hash needed original nSeed symbol evidence beyond basename; canonical attribute reexports are not runtime declarations. Corrected metadata, retaining prior history/status. CALC098duplicate initializer and CALC099typed signed dimension conversion documented; upstream behavior preserved. All initial logs retained. Same-agent evaluator is not independent review. Logical hash specialization makes no external stdlib/native ABI/binary parity claim. Whole document storage/configuration/UI/ODS filters and localized presentation remain pending. No fake document/provider or new memory ownership engine. Goal active; task121nextfull.

@@ -20,3 +20,8 @@ export const ATTR_LINEBREAK = 139;
 
 /** Original typed WhichId of ScHyphenateCell. */
 export const ATTR_HYPHENATE = 125;
+
+/** Original conditional-format index item identity. */
+export const ATTR_CONDITIONAL = 154;
+/** Original page-scale-to item identity. */
+export const ATTR_PAGE_SCALETO = 187;

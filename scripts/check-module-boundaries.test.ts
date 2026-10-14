@@ -544,3 +544,15 @@ it("keeps shared formula header ownership independent of applications and browse
     ),
   ).toBeDefined();
 });
+
+it("permits Calc attribute Any transport while protecting reverse and browser boundaries", /** Checks only the actual original dependency. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sc", "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("cppu", "sc")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "sc/source/core/data/attrib.values.ts",
+      "vcl/browser/font-list.ts",
+      "../../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});

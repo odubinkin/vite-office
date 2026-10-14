@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c3a6cb3a-aa10-4dc8-877a-e5782afe33eb",
+    "capabilityId": "CAP-c3a6cb3a-aa10-4dc8-877a-e5782afe33eb",
+    "suite": "shared",
+    "subsystem": "container-hash-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original logical value construction, equality and mutation use actual shared owners.",
+      "Initializer-list duplicates and typed Any integer extraction are preserved."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task113 adds ScCondFormatItem index/default/copy/move/equality/Clone/hash values and ScPageScaleToItem width/height/default/copy/Clone/validity/member transport. Actual shared SortedVector primitive initializer lists sort without deduplicating, primitive copies preserve all entries, and moves transfer ordinary JS array references. The scalar unsigned32-key o3tl hash helper binds identity hashing with 32/64 seed arithmetic; general std::hash and binary hash parity are not claimed. Actual shared UNO Any handles native output and extraction, including signed16 -1 reinterpretation as unsigned65535. Plain browser unsigned16 scalar transport remains explicit. Public page-scale default0,0 differs from actual DocPool explicit1,1. Conditional implicit copy retainsWhich while Clone restores154; page-scale copy and Clone retainWhich187 or changed source identity. Localization/presentation/XML diagnostics/native caches/debug/ABI/invalid casts/general class-value vector copying/full document/UI/ODS integration remain pending or excluded. No C++ generator, sanitizer or memory management engine. Existing shared owners are reused; source responsibility split only addresses the enforced file-size limit."
+    },
+    "capability": "Shared primitive vector construction and scalar hashing",
+    "gaps": [
+      "Localization/presentation/diagnostics, general templates, native ABI and complete document/UI/ODS integration pending or excluded.",
+      "Source-backed logical validation; no compiled native differential or whole native QA claim."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/o3tl/inc/hash_combine.ts",
+          "marker": "hash_combine"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/sorted_vector.ts",
+          "marker": "SortedVector"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/o3tl/inc/hash_combine.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/sorted_vector.test.ts",
+          "marker": "preserves initializer duplicates and independent primitive copies and moves"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Conditional-format indices and page-scale values (task113)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/o3tl/hash_combine.hxx",
+          "marker": "hash_combine"
+        },
+        {
+          "path": "include/o3tl/sorted_vector.hxx",
+          "marker": "class sorted_vector"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-vector-hash-values",
+    "scopeLimitations": [
+      "Task113 adds ScCondFormatItem index/default/copy/move/equality/Clone/hash values and ScPageScaleToItem width/height/default/copy/Clone/validity/member transport. Actual shared SortedVector primitive initializer lists sort without deduplicating, primitive copies preserve all entries, and moves transfer ordinary JS array references. The scalar unsigned32-key o3tl hash helper binds identity hashing with 32/64 seed arithmetic; general std::hash and binary hash parity are not claimed. Actual shared UNO Any handles native output and extraction, including signed16 -1 reinterpretation as unsigned65535. Plain browser unsigned16 scalar transport remains explicit. Public page-scale default0,0 differs from actual DocPool explicit1,1. Conditional implicit copy retainsWhich while Clone restores154; page-scale copy and Clone retainWhich187 or changed source identity. Localization/presentation/XML diagnostics/native caches/debug/ABI/invalid casts/general class-value vector copying/full document/UI/ODS integration remain pending or excluded. No C++ generator, sanitizer or memory management engine. Existing shared owners are reused; source responsibility split only addresses the enforced file-size limit."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

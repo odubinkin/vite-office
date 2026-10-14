@@ -14,7 +14,9 @@
       "ScShrinkToFitCell",
       "ScVerticalStackCell",
       "ScLineBreakCell",
-      "ScHyphenateCell"
+      "ScHyphenateCell",
+      "ScCondFormatItem",
+      "ScPageScaleToItem"
     ],
     "upstreamSymbols": [
       "ScMF",
@@ -24,19 +26,23 @@
       "ScShrinkToFitCell",
       "ScVerticalStackCell",
       "ScLineBreakCell",
-      "ScHyphenateCell"
+      "ScHyphenateCell",
+      "ScCondFormatItem",
+      "ScPageScaleToItem"
     ],
     "preservedResponsibilities": [
       "Original attribute header/core boundary and actual scalar flag owner; reuses shared SfxInt16Item.",
       "Original ScMergeAttr explicit copy/default/Clone/payload assignment/equality and span widths in original header/core responsibility.",
       "Original protection attribute/Which/header/core values, source member read/write and actual shared IDL value boundary.",
-      "Task112 implements the four false-default Calc bool cell attributes with IDs140/134/139/125 over the actual shared SfxBoolItem. Implicit copies retain sourceWhich, while Clone reconstructs fixedWhich from payload. Shared bool default factory/copy/Clone/unchanged SetValue/payload-only same-type equality/bool-only PutValue/uppercase parameter-driven OUString text follow original value scopes. Existing browser scalar QueryValue/PutValue transport is retained, without another UNO wrapper. Same-type bool equality ignoresWhich; item-set key identity remains separate. Host cross-type comparisons returnfalse outside the native asserted domain. Native bool instance/refcount/address cache is not ported under the requested GC adaptation. Existing legacy statuses/evidence/history remain, not new whole-module/native certification. Presentation/localization/XML diagnostics/native caches/debug/invalid downcasts/ABI and complete DocPool/document/configuration/UI/ODS integration remain excluded or pending. Actual Calc155tests/raw100 and affected Bool67tests/8files/raw100 pass after a new fixture range correction and one existing related shared equality expectation migration. No fake document/provider, native compilation, sanitizer or new ownership engine. Goal resumed active; next scheduled full121."
+      "Task112 implements the four false-default Calc bool cell attributes with IDs140/134/139/125 over the actual shared SfxBoolItem. Implicit copies retain sourceWhich, while Clone reconstructs fixedWhich from payload. Shared bool default factory/copy/Clone/unchanged SetValue/payload-only same-type equality/bool-only PutValue/uppercase parameter-driven OUString text follow original value scopes. Existing browser scalar QueryValue/PutValue transport is retained, without another UNO wrapper. Same-type bool equality ignoresWhich; item-set key identity remains separate. Host cross-type comparisons returnfalse outside the native asserted domain. Native bool instance/refcount/address cache is not ported under the requested GC adaptation. Existing legacy statuses/evidence/history remain, not new whole-module/native certification. Presentation/localization/XML diagnostics/native caches/debug/invalid downcasts/ABI and complete DocPool/document/configuration/UI/ODS integration remain excluded or pending. Actual Calc155tests/raw100 and affected Bool67tests/8files/raw100 pass after a new fixture range correction and one existing related shared equality expectation migration. No fake document/provider, native compilation, sanitizer or new ownership engine. Goal resumed active; next scheduled full121.",
+      "Task113 adds ScCondFormatItem index/default/copy/move/equality/Clone/hash values and ScPageScaleToItem width/height/default/copy/Clone/validity/member transport. Actual shared SortedVector primitive initializer lists sort without deduplicating, primitive copies preserve all entries, and moves transfer ordinary JS array references. The scalar unsigned32-key o3tl hash helper binds identity hashing with 32/64 seed arithmetic; general std::hash and binary hash parity are not claimed. Actual shared UNO Any handles native output and extraction, including signed16 -1 reinterpretation as unsigned65535. Plain browser unsigned16 scalar transport remains explicit. Public page-scale default0,0 differs from actual DocPool explicit1,1. Conditional implicit copy retainsWhich while Clone restores154; page-scale copy and Clone retainWhich187 or changed source identity. Localization/presentation/XML diagnostics/native caches/debug/ABI/invalid casts/general class-value vector copying/full document/UI/ODS integration remain pending or excluded. No C++ generator, sanitizer or memory management engine. Existing shared owners are reused; source responsibility split only addresses the enforced file-size limit."
     ],
     "omittedResponsibilities": [
       "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
       "Task103 adds actual ScMergeAttr zero0/0 defaults, signed16 columns/signed32 rows, value queries, either-axis>1 predicate, explicit copy/Clone and payload-only assignment/equality over existing shared SfxPoolItem. Copy/Clone reset Which144; assignment retains recipient Which; same-type equality ignores Which as original base only asserts ItemType then returns true (CALC-089). Browser foreign-type guard is not a native invalid-type assertion claim. Clone accepts and ignores actual optional shared SfxItemPool. Original unsupported SfxPoolItem QueryValue is restored in shared existing no-payload browser representation asundefined; native false/status and untouchedAny/UNO ABI are not certified, existing concrete overrides unchanged. Header/core/Which responsibility remains separate, signed widths use native JS bits, ordinary refs no new allocator/refcount/Boost/library. Seven pinned original source files reviewed; fixed source-backed shape/copy/identity/width cases and actual existing shared itemset transport, no C++ generator/compiled differential/full original QA. XMLdiagnostics, real ScPatternAttr/column/table/document/merged grid/config/view/ODS integrations remain pending; existing package/ZIP/manifest/SAX/xmloff must be reused. WholeCalc/completeaffected shared strict raw100 and current gates required; firstfull101passed, nextfull111pause.",
       "Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause.",
-      "Task112 covers value operations only; localization/presentation/diagnostics/native caches/debug/ABI/invalid-type outcomes/full document and ODS integration remain excluded or unverified."
+      "Task112 covers value operations only; localization/presentation/diagnostics/native caches/debug/ABI/invalid-type outcomes/full document and ODS integration remain excluded or unverified.",
+      "Task113 does not certify whole native modules, presentation/diagnostics, general templates, ABI or complete document/UI/ODS integration."
     ],
     "evidence": {
       "local": [
@@ -67,6 +73,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/boolean-cellattr.test.ts",
           "marker": "retains Which on implicit copies but resets Clone to the original attribute identity"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.values.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -77,6 +87,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/attrib.hxx",
           "marker": "enum class ScMF"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/attrib.hxx",
+          "marker": "ScCondFormatItem"
         }
       ]
     }
