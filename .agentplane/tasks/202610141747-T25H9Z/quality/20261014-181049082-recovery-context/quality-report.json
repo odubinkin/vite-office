@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141747-T25H9Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T18:10:49.082Z",
+  "verdict": "pass",
+  "summary": "Canonical page values and original shared numbering declarations meet task138 scope; same-agent review is not independent.",
+  "evaluated_sha": "b47d718022b3edd3837e3fc79e3349c1ec2daed1",
+  "blueprint_digest": "f0810725bfbc2524c085f2f3d84064cd760d010d7dc24d0cefd92fe4f438ee1d",
+  "findings": [
+    "Source-compared Arabic/portrait/All/name defaults, copy/equality omission, all Any members/unknown behavior, fixed signed16 numbering and actual Any2Bool/layout enum fallback. Browser noarg projection is explicitly separate; no fake native getter, formatter, localization provider or lifetime engine.",
+    "Source audit compares all76actual constant and73alias runtime values to pinned IDL/header. One enum-scoped style exception preserves original direct shared aliases; global lint configuration unchanged, no duplicated numeric definitions. CALC-117/118 retain source observations without a confirmed-bug or native-crash claim.",
+    "19related/5files,178Calc/71files,37boundaries pass;5whole changed shared and33Calc owners every raw counterpositive100. Build,12source gates,631records zero violations,27intentional paths/3802hashes/8native pins/four restored links verified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141747-T25H9Z/README.md",
+    "output/playwright/task138-checks/verification.json",
+    "output/playwright/task138-checks/numbering-source-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native page presentation/default numbering services, wider formatters, SfxSetItem/SvxSetItem and real Calc pool/document/UI/ODS remain unverified. Same-agent quality is explicitly not independent."
+  ]
+}

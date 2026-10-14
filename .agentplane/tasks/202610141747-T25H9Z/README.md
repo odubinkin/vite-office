@@ -4,7 +4,7 @@ title: "Implement canonical shared page attribute and native numbering declarati
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T18:11:12.707Z"
+  updated_by: "CODER"
+  note: "Verified native page/default/Any and original numbering declarations:19related/5files,178Calc/71files,37boundaries;5whole shared S268B34F22L266 and33Calc S4169B2731F821L3717 raw100 every counterpositive. All76constants/73aliases match pinned source, build and12source gates pass,631records zero violations,27paths/3802hashes/8pins/four links/calc retained. Local style alias exception documented, presentation/services/SetItem/UIODS pending, same-agent quality not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T18:10:49.082Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical page values and original shared numbering declarations meet task138 scope; same-agent review is not independent."
+  evaluated_sha: "b47d718022b3edd3837e3fc79e3349c1ec2daed1"
+  blueprint_digest: "f0810725bfbc2524c085f2f3d84064cd760d010d7dc24d0cefd92fe4f438ee1d"
+  evidence_refs:
+    - ".agentplane/tasks/202610141747-T25H9Z/README.md"
+    - ".agentplane/tasks/202610141747-T25H9Z/quality/20261014-181049082-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141747-T25H9Z/quality/20261014-181049082-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141747-T25H9Z/quality/20261014-181049082-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141747-T25H9Z/blueprint/resolved-snapshot.json"
+    - "output/playwright/task138-checks/verification.json"
+    - "output/playwright/task138-checks/numbering-source-audit.json"
+  findings:
+    - "Source-compared Arabic/portrait/All/name defaults, copy/equality omission, all Any members/unknown behavior, fixed signed16 numbering and actual Any2Bool/layout enum fallback. Browser noarg projection is explicitly separate; no fake native getter, formatter, localization provider or lifetime engine."
+    - "Source audit compares all76actual constant and73alias runtime values to pinned IDL/header. One enum-scoped style exception preserves original direct shared aliases; global lint configuration unchanged, no duplicated numeric definitions. CALC-117/118 retain source observations without a confirmed-bug or native-crash claim."
+    - "19related/5files,178Calc/71files,37boundaries pass;5whole changed shared and33Calc owners every raw counterpositive100. Build,12source gates,631records zero violations,27intentional paths/3802hashes/8native pins/four restored links verified."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port actual shared page value/Any and native numbering declarations for Calc158; retain source name-copy behavior and reuse Any2Bool, no formatting-service or lifetime stubs."
+  -
+    type: "verify"
+    at: "2026-10-14T18:11:12.707Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native page/default/Any and original numbering declarations:19related/5files,178Calc/71files,37boundaries;5whole shared S268B34F22L266 and33Calc S4169B2731F821L3717 raw100 every counterpositive. All76constants/73aliases match pinned source, build and12source gates pass,631records zero violations,27paths/3802hashes/8pins/four links/calc retained. Local style alias exception documented, presentation/services/SetItem/UIODS pending, same-agent quality not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T18:06:55.317Z"
+doc_updated_at: "2026-10-14T18:11:12.761Z"
 doc_updated_by: "CODER"
 description: "Task138: missing ScDocPool SvxPageItem default dependency. Native page value/default/copy/clone/setters/equality and full typed Any query/put through actual PageStyleLayout enum, existing Any2Bool and real NumberingType declarations/SvxNumType aliases. Original descriptor-name copy omission retained, source quirks recorded. Calc158 real item-set defaults. Existing browser noarg value projection, no new Getter/provider or localization/numbering service fake; no memory machinery."
 sections:
@@ -60,6 +85,39 @@ sections:
     - Evidence:1884JSDoc-authored files,630runtime dependency owners/2824relative imports/92allowed edges,114required tree paths/33retired roots,631runtime/provenance records/zero semantic violations,37boundary cases. Existing hook-shim warning/chunk-size advisory remain outside scope. A single enum-scoped prefer-literal-enum-member style exception preserves the original IDL alias references; no global lint configuration changes. Exact27paths within35approved,7runtime/provenance pairs and bounded capability. Source fingerprint3786to3802:11existing changes,16new,3775unchanged;8native source pins and4reference links retained. Evidence: `output/playwright/task138-checks/verification.json`, final logs and source audit manifest.
 
     Native localized presentation/default numbering-provider services, all wider numbering formatters, SfxSetItem/SvxSetItem and real Calc DocPool/document/UI/ODS remain unverified. CALC-117 preserves descriptor-copy/equality omission, possibly intentional auxiliary state. CALC-118 records only a source-level negative presentation-index concern; defined Put/Query admission is tested and undefined native memory is not executed/simulated. No full suite: human moved checkpoint to actual minimal connected UI+ODS readiness then requested pause. Same-agent EVALUATOR is not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T18:11:12.707Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native page/default/Any and original numbering declarations:19related/5files,178Calc/71files,37boundaries;5whole shared S268B34F22L266 and33Calc S4169B2731F821L3717 raw100 every counterpositive. All76constants/73aliases match pinned source, build and12source gates pass,631records zero violations,27paths/3802hashes/8pins/four links/calc retained. Local style alias exception documented, presentation/services/SetItem/UIODS pending, same-agent quality not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T18:06:55.317Z, excerpt_hash=sha256:e5cc6cdbf9c5baa1559e9d4cdd1f2261b717fa97b0c09265b21e6c71b2da94e0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141747-T25H9Z/blueprint/resolved-snapshot.json
+    - old_digest: f0810725bfbc2524c085f2f3d84064cd760d010d7dc24d0cefd92fe4f438ee1d
+    - current_digest: f0810725bfbc2524c085f2f3d84064cd760d010d7dc24d0cefd92fe4f438ee1d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141747-T25H9Z
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141747-T25H9Z -m 🧩 T25H9Z task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task changes through a later authorized task; never reset unrelated work, merge or publish."
   Findings: |-
     Task138 closes actual SvxPageItem158 dependency with native defaults/value/copy/equality/setters and full supported Any paths. The original descriptor-name omission is retained, visible through the existing distinct browser noarg pooled-state projection rather than a new native getter. Native Any member0 remains the short number type. Actual PageStyleLayout and shared Any2Bool are reused. Source unknown members return true/no-op, invalid usage query returns false/untouched, bad orientation input resets false, layout uses enum/long fallback, and numbering uses the original signed16 domain.
@@ -104,6 +162,39 @@ Source-faithful page defaults, allowed empty/Unicode descriptor names, setters, 
 - Evidence:1884JSDoc-authored files,630runtime dependency owners/2824relative imports/92allowed edges,114required tree paths/33retired roots,631runtime/provenance records/zero semantic violations,37boundary cases. Existing hook-shim warning/chunk-size advisory remain outside scope. A single enum-scoped prefer-literal-enum-member style exception preserves the original IDL alias references; no global lint configuration changes. Exact27paths within35approved,7runtime/provenance pairs and bounded capability. Source fingerprint3786to3802:11existing changes,16new,3775unchanged;8native source pins and4reference links retained. Evidence: `output/playwright/task138-checks/verification.json`, final logs and source audit manifest.
 
 Native localized presentation/default numbering-provider services, all wider numbering formatters, SfxSetItem/SvxSetItem and real Calc DocPool/document/UI/ODS remain unverified. CALC-117 preserves descriptor-copy/equality omission, possibly intentional auxiliary state. CALC-118 records only a source-level negative presentation-index concern; defined Put/Query admission is tested and undefined native memory is not executed/simulated. No full suite: human moved checkpoint to actual minimal connected UI+ODS readiness then requested pause. Same-agent EVALUATOR is not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T18:11:12.707Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native page/default/Any and original numbering declarations:19related/5files,178Calc/71files,37boundaries;5whole shared S268B34F22L266 and33Calc S4169B2731F821L3717 raw100 every counterpositive. All76constants/73aliases match pinned source, build and12source gates pass,631records zero violations,27paths/3802hashes/8pins/four links/calc retained. Local style alias exception documented, presentation/services/SetItem/UIODS pending, same-agent quality not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T18:06:55.317Z, excerpt_hash=sha256:e5cc6cdbf9c5baa1559e9d4cdd1f2261b717fa97b0c09265b21e6c71b2da94e0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141747-T25H9Z/blueprint/resolved-snapshot.json
+- old_digest: f0810725bfbc2524c085f2f3d84064cd760d010d7dc24d0cefd92fe4f438ee1d
+- current_digest: f0810725bfbc2524c085f2f3d84064cd760d010d7dc24d0cefd92fe4f438ee1d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141747-T25H9Z
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141747-T25H9Z -m 🧩 T25H9Z task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
