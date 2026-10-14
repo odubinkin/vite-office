@@ -1,10 +1,11 @@
 ---
 id: "202610141156-717H84"
 title: "Align shared native font posture and Calc script defaults"
-status: "DOING"
+result_summary: "Canonical SvxPostureItem/DONTKNOWtrue/payload equality, real FontSlant type and VCL conversion, one tools FontItalic with Writer aliases, Calc103114119NONE defaults andCALC107. Calc167/shared34tests raw100,29boundaries12gates,34exactpaths16nativepins. Invariant witness moved without value changes. Same-agent review not independent. Goalactive; full at actual minimum UI+ODSread/save readiness then repair/pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task122-checks/exact-review.json"
   findings:
     - "Calc167/shared34tests,29boundaries12gates pass;34exactpaths18changed16added,3625to3641sourcehashes16nativepins. DONTKNOWtrue/Which-independent equality/nativeunknown4 corrected; invariant witness moved to actual tools enum keeping ID/value/evidence. CALC107 records native oddities. No Writer-only repair/threshold weakening/full suite; UI+ODS readiness checkpoint still pending."
-commit: null
+commit:
+  hash: "9abdae6e1b2969d58defecb53f3de48fd3221716"
+  message: "🚧 717H84 core: align native font posture and Calc script defaults"
 comments:
   -
     author: "CODER"
     body: "Start: align real shared posture enum Any and VCL slant conversion, preserve existing Writer aliases, source-backed expectations and Calc3script defaults; targeted100."
+  -
+    author: "CODER"
+    body: "Verified: shared native posture enum bool Any and VCL slant mappings, Writer reuse and Calc3script defaults; complete targeted raw100 and focused gates pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc167/shared34tests rawS/B/F/L100;29boundaries12gates;34exactpaths16nativepins. Actual SfxEnumItem/Any/VCL conversion used, Writer aliases/consumers preserved, source-backed expectation migrations andCALC107. Same-agent EVAL not independent. Goalactive; full at minimum UI+ODSread/save readiness then repair/pause."
+  -
+    type: "status"
+    at: "2026-10-14T12:07:43.996Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared native posture enum bool Any and VCL slant mappings, Writer reuse and Calc3script defaults; complete targeted raw100 and focused gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:07:20.897Z"
+doc_updated_at: "2026-10-14T12:07:43.998Z"
 doc_updated_by: "CODER"
 description: "Task122: canonical existing SvxPostureItem over real SfxEnumItem with native FontItalic/VCL ConvertFontSlant/real UNO FontSlant enum; preserve browser aliases once, source-backed expectation migration and Calc103114119NONE defaults. Targeted raw100; full only at minimum UI+ODS readiness then repair/pause."
 sections:
