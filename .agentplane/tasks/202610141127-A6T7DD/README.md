@@ -1,10 +1,11 @@
 ---
 id: "202610141127-A6T7DD"
 title: "Share native frame direction and Calc Asian text attribute values"
-status: "DOING"
+result_summary: "Native8direction mappings,3Asian bool classes, shared typed bool Any and Calc126127128false/138Environment defaults. Calc164/shared38tests raw100,28boundaries,12gates,36exactpaths15nativepins; CALC105 documented. Same-agent review not independent. Goalactive; next full on actual minimum UI+ODS readiness then repair/pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task119-checks/exact-review.json"
   findings:
     - "Calc164tests/shared38tests/28boundarytests and12gates pass; exactly36paths11changed25added,3562to3587sourcehashes,15nativepins. Initial import/lint/selection/metadata failures corrected without weakening assertions. CALC105 documented. Complete document/UI/ODS pending; goalactive until readiness then full/repair/pause."
-commit: null
+commit:
+  hash: "8a7dbde40fa54765864ebace21ceabfa6fe80597"
+  message: "🚧 A6T7DD core: share native direction and Asian cell text values"
 comments:
   -
     author: "CODER"
     body: "Start: implement native frame direction and Asian text values using actual shared bool/enum/Any; targeted raw100 and minimum UI ODS readiness checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: frame direction and Asian cell text values reuse actual shared item and Any contracts; all focused tests and raw coverage pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc164/shared38tests rawS/B/F/L100;28boundaries;12focusedgates;36exactpaths15nativepins. Actual shared bool/enum/Any reused, CALC105 recorded. Same-agent EVAL not independent. No full suite now; minimum UI+ODS checkpoint then repair/pause."
+  -
+    type: "status"
+    at: "2026-10-14T11:35:58.423Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: frame direction and Asian cell text values reuse actual shared item and Any contracts; all focused tests and raw coverage pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:35:46.634Z"
+doc_updated_at: "2026-10-14T11:35:58.425Z"
 doc_updated_by: "CODER"
 description: "Task119: actual EditEng frame direction and3Asian bool values with shared item/Any reuse, native headers/constants and Calc126127128138 defaults. Targeted raw100; full only on real minimum UI+ODS readiness then repair/pause."
 sections:
