@@ -1,10 +1,11 @@
 ---
 id: "202610140558-J7J6FY"
 title: "Restore native table flow links and follow constructor"
-status: "DOING"
+result_summary: "Restore original table master/follow construction and flow links; immediate full checkpoint next, pause after repairs."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "apps/office/node_modules/.cache/parity-coverage/J7J6FY/results.json and audit-results.json: 14325 passing assertions, static checks and nine metadata gates"
   findings:
     - "Existing SwFlowFrame reused in the same composition pattern as native content; no clone of lower rows or new adapter. Original lower lifetime and reciprocal detachment are tested."
-commit: null
+commit:
+  hash: "06ed7e40b9720e03952a58a49a7d76d444e289fb"
+  message: "🧩 J7J6FY fix: restore native table follow construction and flow links"
 comments:
   -
     author: "CODER"
     body: "Start: reuse original SwFlowFrame component for table flow links and native follow constructor/master lookup; copied table has no rows, split invalidation is master-only. No new adapter/map/manager. Cycle 6/10."
+  -
+    author: "CODER"
+    body: "Verified: native table flow constructor and registered master lookup restored; 14325 passing assertions, whole changed module100four, nine metadata gates and clean same-agent reviewed semantic scope."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: exact producer argv and hashes in ignored apps/office/node_modules/.cache/parity-coverage/J7J6FY/results.json; node apps/office/node_modules/.cache/parity-coverage/J7J6FY/proof.cjs; node apps/office/node_modules/.cache/parity-coverage/J7J6FY/audit.cjs. Result: pass. Evidence: 14286 related native tests / 546 files, 26 tooling tests, 13 Chromium table cases = 14325 unique passing assertions. Whole current tabfrm.ts Istanbul lines246/statements277/functions38/branches187 all100%, 502 positive original counters; raw map fdf319fee38ae394eafa8c845a3a93da046967d00a50567f0061bb1ba8d48795. Four reference links physically absent during every producer and exactly restored. Format/lint/TS7/docs/size/dependencies/build/static and all nine restored metadata gates pass. 966 old test files byte-identical; two canonical historical prefixes preserved. Existing copied-descriptor native suite plus fresh actual follow notifications cover copy consumption and follow invalidation independently. Source hash 6a1a11b45a9417d428b9401681f493f5718d27bbc9355149ff8b249b0d4b0c6e. Scope: original table flow component and native master/follow constructor/client lookup; actual physical paginator still creates no follows."
+  -
+    type: "status"
+    at: "2026-10-14T06:34:02.399Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native table flow constructor and registered master lookup restored; 14325 passing assertions, whole changed module100four, nine metadata gates and clean same-agent reviewed semantic scope."
 doc_version: 3
-doc_updated_at: "2026-10-14T06:32:10.753Z"
+doc_updated_at: "2026-10-14T06:34:02.403Z"
 doc_updated_by: "CODER"
 description: "Cycle 6/10 prerequisite for actual physical table follows: existing SwFlowFrame component supplies table flow links, original SwTabFrame follow constructor inserts before prior follow without row clone, FindMaster scans original registered table frames, native layout-split reaction excludes follows. One original module, no new manager/adapter/map or visible feature. Preserve registered IO/recovery/Space and all old acceptance."
 sections:
@@ -108,6 +121,10 @@ sections:
 
     Command: exact producer argv and hashes in ignored apps/office/node_modules/.cache/parity-coverage/J7J6FY/results.json; node apps/office/node_modules/.cache/parity-coverage/J7J6FY/proof.cjs; node apps/office/node_modules/.cache/parity-coverage/J7J6FY/audit.cjs. Result: pass. Evidence: 14286 related native tests / 546 files, 26 tooling tests, 13 Chromium table cases = 14325 unique passing assertions. Whole current tabfrm.ts Istanbul lines246/statements277/functions38/branches187 all100%, 502 positive original counters; raw map fdf319fee38ae394eafa8c845a3a93da046967d00a50567f0061bb1ba8d48795. Four reference links physically absent during every producer and exactly restored. Format/lint/TS7/docs/size/dependencies/build/static and all nine restored metadata gates pass. 966 old test files byte-identical; two canonical historical prefixes preserved. Existing copied-descriptor native suite plus fresh actual follow notifications cover copy consumption and follow invalidation independently. Source hash 6a1a11b45a9417d428b9401681f493f5718d27bbc9355149ff8b249b0d4b0c6e. Scope: original table flow component and native master/follow constructor/client lookup; actual physical paginator still creates no follows.
     Latest human stop rule supersedes prior cadence: full checkpoint immediately after this task, then pause after all failures are repaired. Related producer completed normally in 1330.86s; no replay or termination.
+extensions:
+  implementation_commit:
+    hash: "06ed7e40b9720e03952a58a49a7d76d444e289fb"
+    message: "🧩 J7J6FY fix: restore native table follow construction and flow links"
 id_source: "generated"
 ---
 ## Summary
