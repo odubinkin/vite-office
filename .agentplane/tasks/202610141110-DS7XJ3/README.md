@@ -1,10 +1,11 @@
 ---
 id: "202610141110-DS7XJ3"
 title: "Share native length conversion and Calc cell margin/orientation values"
-status: "DOING"
+result_summary: "Shared native normal20length conversions replace7Writer integer formulas; actual margin/orientation and Calc143default, inventory and CALC104. Calc163/shared232tests raw100,28boundaries,12gates,40exactpaths/17nativepins. Same-agent evaluation not independent. Goalactive; full suite deferred until minimal UI+ODS readiness then repair and pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task118-checks/exact-review.json"
   findings:
     - "Exactly40paths17changed23added;3539to3562committedsource hashes;17nativepins; Calc163tests and shared232tests raw100;28boundaries and12gates pass. Initial failed checks retained and corrected. UI/ODS still pending; next full only on minimum readiness then repair/pause."
-commit: null
+commit:
+  hash: "b3db9b59addf82f426c7d0e12047ae4c52f59a72"
+  message: "🚧 DS7XJ3 core: share length conversion and cell margin orientation"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved common unit values and actual margin/orientation, reuse Writer integer conversions and persist new readiness/full-run/pause rule; no fake document/provider or native memory library."
+  -
+    author: "CODER"
+    body: "Verified: native common length conversion and cell margin/orientation; actual Writer reuse; all focused raw100 and source evidence pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc163 and related232 tests raw S/B/F/L100;28boundary tests;12focusedgates pass;40exactpaths/17nativepins. Shared Writer conversions reused; same-agent EVAL not independent. Full deferred until minimum UI and ODS readiness then repair/pause per user."
+  -
+    type: "status"
+    at: "2026-10-14T11:26:20.294Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native common length conversion and cell margin/orientation; actual Writer reuse; all focused raw100 and source evidence pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:26:11.436Z"
+doc_updated_at: "2026-10-14T11:26:20.296Z"
 doc_updated_by: "CODER"
 description: "Task118: common normal20Length conversions/Tools twip wrapper and Writer LR reuse, actual SVX margin/orientation/UNO enum and Calc margin default. Primitive JS/BigInt value arithmetic, no memory library. Targeted raw100; full checkpoint only on minimum UI+ODS readiness then repair and pause, replacing121cadence."
 sections:
