@@ -1,10 +1,11 @@
 ---
 id: "202610141137-12HE23"
 title: "Share native font contour shadow word-line and relief values for Calc"
-status: "DOING"
+result_summary: "Native contour shadow word-line and relief factories/copies/Clone and member transport, Calc107108123false124NONE. Calc165/shared28tests raw100,28boundaries12gates,29exactpaths13nativepins. Same-agent review not independent. Goalactive; next full at actual minimum UI+ODS readiness then repair/pause, no121trigger."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task120-checks/exact-review.json"
   findings:
     - "Calc165/shared28tests,28boundaries and12gates pass;29exactpaths10changed19added,3587to3606sourcehashes,13nativepins. Existing Writer attributes test included to cover complete shared owner, no Writer-only repair or weakened thresholds. UI/ODS still pending; no full at121."
-commit: null
+commit:
+  hash: "731f70325cd5baa8c14a1bc6100d05a3fb04c4bf"
+  message: "🚧 12HE23 core: share native font effects and Calc defaults"
 comments:
   -
     author: "CODER"
     body: "Start: port4native shared font value classes with real bool enum Any and Calc defaults; targeted100 and readiness-driven full regression checkpoint."
+  -
+    author: "CODER"
+    body: "Verified:4native shared font effect classes and Calc defaults, typed bool enum Any reuse; targeted complete owners raw100 and focused gates pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc165/shared28tests rawS/B/F/L100;28boundaries12gates;29exactpaths13nativepins.4native shared font effects/Calc defaults, Writer reuse. Same-agent EVAL not independent. Goalactive; full at minimum real UI+ODS readiness then repair/pause."
+  -
+    type: "status"
+    at: "2026-10-14T11:43:26.553Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:4native shared font effect classes and Calc defaults, typed bool enum Any reuse; targeted complete owners raw100 and focused gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:43:16.380Z"
+doc_updated_at: "2026-10-14T11:43:26.555Z"
 doc_updated_by: "CODER"
 description: "Task120:4real EditEng font attribute values, canonical headers/VCL FontRelief/memberid and Calc107108123124defaults. Shared SVL/Any reuse. Targeted raw100 only; full checkpoint at actual minimal UI+ODS readiness then repair/pause."
 sections:
