@@ -4,7 +4,7 @@ title: "Implement shared configuration modification paths and additions"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement actual configuration modification/addition path responsibilities using existing shared value containers, preserve recursive prefix semantics and source-backed invalid-domain documentation under active goal approval."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:49:38.465Z"
+doc_updated_at: "2026-10-14T04:54:24.013Z"
 doc_updated_by: "CODER"
 description: "Task107: implement actual configmgr Modifications prefix tree and Additions path-list type, needed by real Data settings storage. Use existing shared sorted key/value container and ordinary JS references, no Boost/ownership/hash allocator port. Preserve original add/remove prefix behavior and record last-root recursion precondition issue. Calc/affected raw100, actual static/Calc0UI/16gates, no full office before111."
 sections:
@@ -50,7 +50,13 @@ sections:
     4. Exact3369baseline/current/committed non-task hashes and only11intentionalpaths; source/gate/coverage manifests bound to sourceSHA. Separate same-agent evaluator not independent review; APverify/DONE/clean branchcalc. Goalactive and secondfull111 pause after relevant repairs remains.
   Verification: "Pending implementation and actual current checks."
   Rollback Plan: "Finally restore four exact source links on all test exits. Revert only intentional task changes via a new task if needed; no branch merge/history rewrite/unrelated task changes."
-  Findings: "Original Modifications::remove recursively calls remove(parent) when the immediate parent becomes empty. With the last root subtree this reaches an empty vector despite its assertion; preserve algorithm and document invalid native domain as CALC-092, not a defined no-op/crash/bug claim. Genuine consumer writemodfile explicitly sorts modification children, confirming hash iteration is storage detail there; other callback traversal order remains unverified. Existing shared ordered entries preserve key membership and stable values without porting Boost allocator/hash machinery. No fake Data/provider or copy/lifetime engine. Native DConf feature-conditioned availability and native bucket/iteration/ABI contracts are excluded."
+  Findings: |-
+    Command: source review of complete pinned configmgr/source/modifications.hxx/cxx and additions.hxx, plus actual writemodfile child sorting scope.
+    Result: four original files match pinned bytes; no native compilation or memory experiment. Original unordered children have key membership/copy/stable value semantics; existing shared SortedVector/ConfigEntry/LengthContentsCompare represent these with actual OUString keys, without a Boost/hash/refcount/allocator wrapper. Hash bucket/iteration permutation and other callback-order effects are not certified. Original writemodfile explicitly sorts entries. Nested Node scope erases to ModificationsNode plus Modifications.Node binding; const borrowing is the caller contract. Additions is pure native-array path-list type with no executable counters; implicit vector copies belong to actual consumers, not a new copy/lifetime engine.
+    CALC-092: last-root removal recursively reaches empty path despite the original assertion. Preserve control flow without a root-stop fix. Defined valid removal tests retain another root sibling. Native invalid empty-path/debug/release outcome, dangling pointers, ABI and fullQA are not executed or certified. Original ENABLE_DCONF clear inline body is a pure value operation without providing DConf or claiming feature-conditioned API availability parity.
+    Command: node output/playwright/task107-checks/portable.mjs.
+    Result: first-pass success. WholeCalc152tests/52files/32owners rawS4006/B2654/F787/L3570; complete actual modification/key-comparison/SortedVector13tests/3files/3executableowners rawS94/B38/F22/L87. Allrawcounterspositive/SBFL100. Actual static and Calc0UI pass, four links absent during execution and restored exactly. No fake producer/private-state forcing/counter suppression/Writer-only coverage repair or full office before111.
+    Scope:11intentionalpaths (3changed/8added), baseline3369hashes; no shared runtime changes. Actual Data/Set/Property/XML/backend/configuration/default/document/grid/ODS integration remains pending. Goalactive until requested secondfull111 plus relevant repairs; same-agent separate evaluator is not independent review.
 id_source: "generated"
 ---
 ## Summary
@@ -82,4 +88,9 @@ Finally restore four exact source links on all test exits. Revert only intention
 
 ## Findings
 
-Original Modifications::remove recursively calls remove(parent) when the immediate parent becomes empty. With the last root subtree this reaches an empty vector despite its assertion; preserve algorithm and document invalid native domain as CALC-092, not a defined no-op/crash/bug claim. Genuine consumer writemodfile explicitly sorts modification children, confirming hash iteration is storage detail there; other callback traversal order remains unverified. Existing shared ordered entries preserve key membership and stable values without porting Boost allocator/hash machinery. No fake Data/provider or copy/lifetime engine. Native DConf feature-conditioned availability and native bucket/iteration/ABI contracts are excluded.
+Command: source review of complete pinned configmgr/source/modifications.hxx/cxx and additions.hxx, plus actual writemodfile child sorting scope.
+Result: four original files match pinned bytes; no native compilation or memory experiment. Original unordered children have key membership/copy/stable value semantics; existing shared SortedVector/ConfigEntry/LengthContentsCompare represent these with actual OUString keys, without a Boost/hash/refcount/allocator wrapper. Hash bucket/iteration permutation and other callback-order effects are not certified. Original writemodfile explicitly sorts entries. Nested Node scope erases to ModificationsNode plus Modifications.Node binding; const borrowing is the caller contract. Additions is pure native-array path-list type with no executable counters; implicit vector copies belong to actual consumers, not a new copy/lifetime engine.
+CALC-092: last-root removal recursively reaches empty path despite the original assertion. Preserve control flow without a root-stop fix. Defined valid removal tests retain another root sibling. Native invalid empty-path/debug/release outcome, dangling pointers, ABI and fullQA are not executed or certified. Original ENABLE_DCONF clear inline body is a pure value operation without providing DConf or claiming feature-conditioned API availability parity.
+Command: node output/playwright/task107-checks/portable.mjs.
+Result: first-pass success. WholeCalc152tests/52files/32owners rawS4006/B2654/F787/L3570; complete actual modification/key-comparison/SortedVector13tests/3files/3executableowners rawS94/B38/F22/L87. Allrawcounterspositive/SBFL100. Actual static and Calc0UI pass, four links absent during execution and restored exactly. No fake producer/private-state forcing/counter suppression/Writer-only coverage repair or full office before111.
+Scope:11intentionalpaths (3changed/8added), baseline3369hashes; no shared runtime changes. Actual Data/Set/Property/XML/backend/configuration/default/document/grid/ODS integration remains pending. Goalactive until requested secondfull111 plus relevant repairs; same-agent separate evaluator is not independent review.

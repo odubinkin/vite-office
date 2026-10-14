@@ -1,0 +1,88 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7daa06b1-31e1-4365-b285-aa63aa8c8e04",
+    "capabilityId": "CAP-7daa06b1-31e1-4365-b285-aa63aa8c8e04",
+    "suite": "shared",
+    "subsystem": "configuration-modifications",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual original modification prefix dominance/subtree replacement/duplicate identity and recursive pruning control flow retained for initialized valid paths.",
+      "Copied UTF16 keys and stable ordinary child/root aliases use existing shared value containers without a Boost/memory library.",
+      "Native empty-remove invalid domain, unordered permutation/ABI, DConf backend/build-conditioned availability and implicit vector copies are not certified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task107 implements original configmgr Modifications prefix-tree add/remove/empty/getRoot and the inline ENABLE_DCONF clear value body, plus Additions path-list type responsibility. Actual copied OUString keys/content uniqueness/stable child and root refs use existing ConfigEntry/LengthContentsCompare/SortedVector, without Boost/hash/refcount/allocator/finalizer wrappers. Native unordered bucket/iteration permutation/iterator-address/ABI is excluded; writemodfile explicitly sorts child entries, while other callback order effects remain unverified. ModificationsNode and Modifications.Node erase original nested-type syntax; native const borrowing is the caller contract. Preserve prefix dominance, subtree replacement, duplicate identity and recursive pruning. Last-root removal can recurse into forbidden empty path (CALC-092); preserve algorithm without a root-stop fix, and do not execute/certify undefined native release behavior. Clear represents its original value body without a DConf backend or build-conditioned API availability parity. Additions uses native arrays; implicit C++ vector-copy/ABI semantics are not certified and real consumers must own value copies. Original source-backed valid histories, no compiled differential/fullQA/memory experiment or new C++ generator. Actual Data/Set/Property/XML/backend/settings/default/document/grid/ODS pipeline remains pending. Nextfull111 requested pause after relevant repairs; no Writer-only repair."
+    },
+    "capability": "Original shared configuration modification and addition paths",
+    "gaps": [
+      "Actual Data/Set/Property/XML/backend/default/Calc document/grid/ODS integration pending.",
+      "Native invalid empty-remove outcome/hash order/ABI/const qualification/implicit vector copying and complete original QA excluded or unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/configmgr/source/modifications.ts",
+          "marker": "ModificationsNode"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/additions.ts",
+          "marker": "Additions"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/configmgr/source/modifications.test.ts",
+          "marker": "prunes valid deep paths recursively while retaining a root sibling and ignores missing descendants"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Configuration modification and addition paths (task107)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Configuration modification paths"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/modifications.cxx",
+          "marker": "void Modifications::add"
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/additions.hxx",
+          "marker": "typedef std::vector<std::vector<OUString>> Additions"
+        }
+      ],
+      "tests": [
+        {
+          "path": "configmgr/qa/unit/test.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "configmgr/source/additions.hxx",
+          "marker": "Additions is a list of configuration node paths"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "configuration-modification-prefix-tree-and-additions",
+    "scopeLimitations": [
+      "Task107 implements original configmgr Modifications prefix-tree add/remove/empty/getRoot and the inline ENABLE_DCONF clear value body, plus Additions path-list type responsibility. Actual copied OUString keys/content uniqueness/stable child and root refs use existing ConfigEntry/LengthContentsCompare/SortedVector, without Boost/hash/refcount/allocator/finalizer wrappers. Native unordered bucket/iteration permutation/iterator-address/ABI is excluded; writemodfile explicitly sorts child entries, while other callback order effects remain unverified. ModificationsNode and Modifications.Node erase original nested-type syntax; native const borrowing is the caller contract. Preserve prefix dominance, subtree replacement, duplicate identity and recursive pruning. Last-root removal can recurse into forbidden empty path (CALC-092); preserve algorithm without a root-stop fix, and do not execute/certify undefined native release behavior. Clear represents its original value body without a DConf backend or build-conditioned API availability parity. Additions uses native arrays; implicit C++ vector-copy/ABI semantics are not certified and real consumers must own value copies. Original source-backed valid histories, no compiled differential/fullQA/memory experiment or new C++ generator. Actual Data/Set/Property/XML/backend/settings/default/document/grid/ODS pipeline remains pending. Nextfull111 requested pause after relevant repairs; no Writer-only repair."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -1804,3 +1804,13 @@ configmgr getDynamicType selects a signed schema type for unsigned short/long/hy
 Evidence: pinned configmgr/source/type.cxx, include/com/sun/star/uno/Any.hxx, cppu/source/uno/data.cxx and cppu/source/typelib/typelib.cxx, inspected in task106. Source-backed tests use actual Any/UnoType values, including maximum unsigned boundaries. No fake has result or value-provider subclass, compiled differential, native memory or full configuration-service QA claim. False alternatives remain source-reviewed only; raw TypeScript coverage does not certify their reachability.
 
 Decision: retain the original assignability call and classification. Boolean-indexed result alternatives preserve the original selection in JS without inventing range checks or unreachable producer states. Audit real configuration/parser consumers before labeling it a defect.
+
+## CALC-092: modification removal can recurse to an empty forbidden path
+
+Status: source-confirmed recursion into a failed precondition; native release outcome and real consumer reachability are unverified.
+
+Modifications::remove asserts that its path is nonempty. After removing the addressed child, it recursively calls remove on the parent path whenever the immediate parent has no children. If deleting the last root subtree, that parent path is empty. A native debug assertion can therefore fail; with assertions disabled the next path iterator dereference is outside the valid domain, so no particular no-op, crash or return value is promised.
+
+Evidence: complete pinned configmgr/source/modifications.hxx and modifications.cxx, reviewed in task107. Valid removal histories retain another root sibling and verify recursive parent pruning without entering the invalid domain. No invalid native execution, sanitizer/memory experiment, compiled differential or complete configuration-service QA claim.
+
+Decision: preserve the recursive algorithm without silently adding a root-stop guard. Document the invalid-domain boundary and audit actual callers before identifying a user-visible defect.

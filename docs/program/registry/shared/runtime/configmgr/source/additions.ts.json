@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/additions.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-modifications",
+    "capabilityIds": [
+      "CAP-7daa06b1-31e1-4365-b285-aa63aa8c8e04"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/additions.ts#Additions",
+        "apps/office/src/configmgr/source/modifications.test.ts#prunes valid deep paths recursively while retaining a root sibling and ignores missing descendants",
+        "docs/program/calc-core.md#Configuration modification and addition paths (task107)"
+      ],
+      "justification": "Task107 implements original configmgr Modifications prefix-tree add/remove/empty/getRoot and the inline ENABLE_DCONF clear value body, plus Additions path-list type responsibility. Actual copied OUString keys/content uniqueness/stable child and root refs use existing ConfigEntry/LengthContentsCompare/SortedVector, without Boost/hash/refcount/allocator/finalizer wrappers. Native unordered bucket/iteration permutation/iterator-address/ABI is excluded; writemodfile explicitly sorts child entries, while other callback order effects remain unverified. ModificationsNode and Modifications.Node erase original nested-type syntax; native const borrowing is the caller contract. Preserve prefix dominance, subtree replacement, duplicate identity and recursive pruning. Last-root removal can recurse into forbidden empty path (CALC-092); preserve algorithm without a root-stop fix, and do not execute/certify undefined native release behavior. Clear represents its original value body without a DConf backend or build-conditioned API availability parity. Additions uses native arrays; implicit C++ vector-copy/ABI semantics are not certified and real consumers must own value copies. Original source-backed valid histories, no compiled differential/fullQA/memory experiment or new C++ generator. Actual Data/Set/Property/XML/backend/settings/default/document/grid/ODS pipeline remains pending. Nextfull111 requested pause after relevant repairs; no Writer-only repair.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Additions"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "configmgr/source/additions.hxx",
+      "upstreamSymbols": [
+        "Additions",
+        "std::vector"
+      ]
+    }
+  }
+}
