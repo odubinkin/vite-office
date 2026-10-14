@@ -1,10 +1,11 @@
 ---
 id: "202610141717-BED3FX"
 title: "Implement canonical diagonal border item and shared border struct conversion"
-status: "DOING"
+result_summary: "Implement native diagonal border item and canonical shared line conversion"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Source-compared optional line/default/copy/equality/metrics/Any contracts and real inherited struct metadata; static native overload selection is explicit and derived-as-base behavior is tested. Shared converter/extraction and XML value copying avoid parallel border models or class spreads."
     - "Original source style/convert overlap and allocation before unsupported scalar failure are preserved and documented as CALC-116; no dead mutation branch or fake provider. Signed16 component correction and explicit browser projections preserve source contracts and existing normal Writer inputs."
     - "318related/29files,177Calc/70files,12Chromium/4specs and37boundary cases pass. Sixwhole shared and33Calc owners have every raw counter positive at100. Build,12source gates,627registry/provenance records/zero violations,34intentional paths/3786hashes/14native pins verified, four reference links restored."
-commit: null
+commit:
+  hash: "fde3ac9f07cfa15c7cf608ba2d2dea9b50a1158e"
+  message: "Implement BED3FX core: native diagonal border and shared struct conversion"
 comments:
   -
     author: "CODER"
     body: "Start: port missing native diagonal border item using real inherited line structs and shared canonical converters; migrate actual XML/Writer boundaries under standing authorization, no duplicate line engine."
+  -
+    author: "CODER"
+    body: "Verified: original diagonal item, inherited native structs and single shared converter;318related,177Calc,12Chromium and37boundary cases pass; all changedshared/Calc raw100, build/source gates/inventory pass,34intentional paths and native pins retained."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native diagonal border/shared struct conversion:318related cases/29files,177Calc/70files,12Chromium/4specs,37boundaries;6whole changedshared S546B405F132L490 and33Calc S4168B2731F821L3716 all raw100. Build/12source gates/627records zero violations,34exact paths/3786hashes/14native pins/four reference links/calc retained. Source quirks/static overload binding retained; fullUIODS pending, no full run; same-agent quality not independent."
+  -
+    type: "status"
+    at: "2026-10-14T17:40:20.651Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original diagonal item, inherited native structs and single shared converter;318related,177Calc,12Chromium and37boundary cases pass; all changedshared/Calc raw100, build/source gates/inventory pass,34intentional paths and native pins retained."
 doc_version: 3
-doc_updated_at: "2026-10-14T17:40:08.207Z"
+doc_updated_at: "2026-10-14T17:40:20.653Z"
 doc_updated_by: "CODER"
 description: "Task137: missing ScDocPool SvxLineItem dependency; native owned optional border/default/copy/equality/metrics/typed Any member contracts. Real published BorderLine/BorderLine2 generated value/type inheritance over existing CPPU; canonical shared SvxBoxItem line converters and shared extract helper, actual browser/xmloff/Writer consumers migrated without duplicate model or compatibility stubs. Calc141142 and real item ownership tests; source quirks/inventory. UI/ODS critical path, no native lifetime machinery."
 sections:
