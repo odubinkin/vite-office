@@ -30,7 +30,7 @@ export class SfxStringItem extends SfxPoolItem {
   }
 
   /** Returns the string value through the generic item contract. @returns String value. */
-  public QueryValue(): string {
+  public override QueryValue(): string {
     return this.value;
   }
 }

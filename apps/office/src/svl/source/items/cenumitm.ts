@@ -35,7 +35,7 @@ export class SfxBoolItem extends SfxPoolItem {
   }
 
   /** Returns the boolean through the generic item contract. @returns Boolean value. */
-  public QueryValue(): boolean {
+  public override QueryValue(): boolean {
     return this.value;
   }
 }

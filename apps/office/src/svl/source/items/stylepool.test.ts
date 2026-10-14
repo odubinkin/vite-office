@@ -22,7 +22,7 @@ class OwnedItem extends SfxPoolItem {
     return other instanceof OwnedItem;
   }
   /** Exposes a fixed concrete payload. @returns Literal value. */
-  public QueryValue(): number {
+  public override QueryValue(): number {
     return 7;
   }
 }

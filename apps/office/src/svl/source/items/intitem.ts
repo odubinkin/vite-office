@@ -58,7 +58,7 @@ export class SfxInt16Item extends SfxPoolItem {
   }
 
   /** Returns the integer value through the generic item contract. @returns Integer value. */
-  public QueryValue(): number {
+  public override QueryValue(): number {
     return this.value;
   }
 }

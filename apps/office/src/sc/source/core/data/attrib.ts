@@ -1,8 +1,60 @@
-/** @fileoverview Original ScMF/ScMergeFlagAttr value and flag predicates; uses actual shared integer item, XML diagnostic hook remains unported. */
+/** @fileoverview Original merge spans and ScMF/ScMergeFlagAttr predicates over actual shared pool/integer items; XML diagnostic hooks remain unported. */
 
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
-import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
+import type { SCCOL, SCROW } from "../../../inc/types";
+
+/** Original merged-cell span attribute; native copy resets Which and assignment copies only payload. */
+export class ScMergeAttr extends SfxPoolItem {
+  private nColMerge: SCCOL;
+  private nRowMerge: SCROW;
+  /** Original coordinate constructor. @param columns - Signed16 span. @param rows - Signed32 span. @returns Attribute. */
+  constructor(columns: SCCOL, rows: SCROW);
+  /** Original zero-span default or explicit copy construction resets the base identity. @param source - Optional actual initialized copy source. @returns Attribute. */
+  constructor(source?: Readonly<ScMergeAttr>);
+  /** Implements original overloads without a document or substitute provider. @param columnsOrSource - Span or source. @param rows - Signed32 span. @returns Attribute. */
+  constructor(columnsOrSource: SCCOL | Readonly<ScMergeAttr> = 0, rows: SCROW = 0) {
+    super(ATTR_MERGE);
+    this.nColMerge =
+      typeof columnsOrSource === "number"
+        ? (columnsOrSource << 16) >> 16
+        : columnsOrSource.GetColMerge();
+    this.nRowMerge = typeof columnsOrSource === "number" ? rows | 0 : columnsOrSource.GetRowMerge();
+  }
+  /** Original column span query. @returns Stored span. */
+  public GetColMerge(): SCCOL {
+    return this.nColMerge;
+  }
+  /** Original row span query. @returns Stored span. */
+  public GetRowMerge(): SCROW {
+    return this.nRowMerge;
+  }
+  /** Original predicate accepts either axis greater than one. @returns Whether merged. */
+  public IsMerged(): boolean {
+    return this.nColMerge > 1 || this.nRowMerge > 1;
+  }
+  /** Original assignment leaves the destination base identity unchanged. @param source - Actual initialized source. @returns Recipient. */
+  public copy_assign(source: Readonly<ScMergeAttr>): this {
+    this.nColMerge = source.GetColMerge();
+    this.nRowMerge = source.GetRowMerge();
+    return this;
+  }
+  /** Original same-type payload equality ignores Which; foreign type lies outside the native assertion contract. @param other - Candidate item. @returns Whether equal. */
+  public override equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof ScMergeAttr &&
+      this.nColMerge === other.nColMerge &&
+      this.nRowMerge === other.nRowMerge
+    );
+  }
+  /** Original clone uses the explicit copy constructor and resets Which. @param pool - Original unused optional pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScMergeAttr {
+    void pool;
+    return new ScMergeAttr(this);
+  }
+}
 
 /** Original flags for merge overlap, filter arrows, scenario and pivot controls. */
 export enum ScMF {

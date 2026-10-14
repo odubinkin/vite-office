@@ -109,7 +109,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
   }
 
   /** Exposes the contained item values to the persistence codec. @returns Nested item records. */
-  public QueryValue(): readonly SfxPoolItemSnapshot[] {
+  public override QueryValue(): readonly SfxPoolItemSnapshot[] {
     return this.styleHandle.entries().map(
       /** Projects one nested item. @param item - Direct pooled item. @returns Primitive item record. */ (
         item,

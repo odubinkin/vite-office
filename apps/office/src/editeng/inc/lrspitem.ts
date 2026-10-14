@@ -304,7 +304,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     );
   }
   /** Queries represented native twip-backed UNO members. @param member - Native member and conversion flag. @returns Member value or unsupported font-unit/unknown member. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     const metric =
       /** Converts resolved integer twip measures. @param value - Twips. @returns Native measure. */
@@ -545,7 +545,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
     );
   }
   /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     switch (member & ~0x80) {
       case 0: {
@@ -692,7 +692,7 @@ export class SvxRightMarginItem extends SfxPoolItem {
     );
   }
   /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     switch (member & ~0x80) {
       case 0: {
@@ -845,7 +845,7 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     );
   }
   /** Queries original absolute, percentage, automatic or unit-pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     switch (member & ~0x80) {
       case MID_FIRST_AUTO:

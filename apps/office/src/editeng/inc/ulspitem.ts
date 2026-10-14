@@ -90,7 +90,7 @@ export class SvxULSpaceItem extends SfxPoolItem {
     );
   }
   /** Queries native UNO members, retaining the pinned unconverted aggregate Lower=nPropUpper quirk. @param member - Native member and conversion flag. @returns Native value or unknown-member absence. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     const metric =
       /** Converts unsigned native twips to mm100. @param value - Twips. @returns Native measure. */

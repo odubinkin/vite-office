@@ -119,3 +119,7 @@ Task100 SvxOptionsGrid is one shared ordinary value owner: four UInt32 field par
 ## Merge/filter/pivot attribute values
 
 Task102 reuses the Writer/shared SfxInt16Item and SfxPoolItem directly for ScMergeFlagAttr. Native enum-to-signed16 storage conversion uses JS bit operations; copies/clones are ordinary value-owning objects. No duplicate integer/pool/refcount/allocator/Boost library is added. Original itemset transport follows the existing shared browser boundary. The diagnostic XML hook, native UNO/assertion/ABI behavior and real Calc document/filter pipeline remain unported or unverified.
+
+## Merge span attribute values
+
+ScMergeAttr uses the existing shared SfxPoolItem. Scalar copies/assignment and signed coordinate widths use ordinary objects/native JS bits; no count/pool/allocator library is added. The shared unsupported query default returnsundefined within the existing browser generic-value boundary; concrete overrides remain unchanged. This does not serialize merge spans or certify native Any/status/ABI; real ODS must use original filter/model span responsibilities. Original diagnosticXML remains unported.

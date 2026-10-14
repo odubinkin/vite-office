@@ -1772,3 +1772,13 @@ The range helper accepts an external-double left operand in its initial kind gua
 Evidence: task99 full unchanged original extendRangeReference/class/reference-data scopes with real initialized peers, clone-path normal complete result/input stream including external/local kind and flag combinations, and matching portable replay. Cases use the actual resulting type/file id, no invalid casts or fake metadata provider. Parser/compile preconditions, whether these combinations occur in normal documents and user-visible harm remain unverified; unique native reuse optimization is a separate explicitly documented GC boundary.
 
 Decision: preserve original acceptance/rejection/result kinds and metadata behavior. Audit real original parser/range consumers later; do not silently externalize results or extend rejected combinations.
+
+## CALC-089: merge span copying and equality handle Which differently
+
+Status: confirmed original source behavior; caller consequences and whether this is intentional are unverified.
+
+ScMergeAttr explicit copy construction initializes SfxPoolItem with fixed ATTR_MERGE144, so copying and Clone reset a source whose Which was changed. Its assignment operator copies only the two spans and leaves the recipient base identity unchanged. Same-type equality delegates to SfxPoolItem::operator==, which asserts matching ItemType and returns true without comparing Which, then compares the spans. Thus equal spans in the same item type compare equal despite different Which values. ScMergeFlagAttr uses a defaulted copy constructor instead, retaining the base identity.
+
+Evidence: complete original declarations and bodies in sc/inc/attrib.hxx, sc/source/core/data/attrib.cxx and svl/source/items/poolitem.cxx at the repository pin; task103 source-backed copy/Clone/assignment/equality tests over real shared items. No compiled-native differential, invalid-type assertion or complete document QA claim. Normal Calc callers may always retain the fixed attribute id, making this a deliberate type-specific contract rather than a defect.
+
+Decision: preserve fixed-id copying, payload-only assignment and same-type Which-independent equality. Do not normalize equality or copy the base id in ScMergeAttr; audit real document callers later.

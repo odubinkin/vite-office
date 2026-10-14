@@ -36,7 +36,7 @@ export class CntUInt32Item extends SfxPoolItem {
     );
   }
   /** Exposes native signed32 UNO bits. @returns Signed scalar. */
-  public QueryValue(): number {
+  public override QueryValue(): number {
     return this.value | 0;
   }
   /** Accepts a signed32 UNO scalar and preserves its unsigned bits. @param value - UNO scalar. @returns Whether accepted. */
@@ -86,7 +86,7 @@ export class CntUInt16Item extends SfxPoolItem {
   }
 
   /** Projects the scalar through the browser item contract. @returns Unsigned value. */
-  public QueryValue(): number {
+  public override QueryValue(): number {
     return this.value;
   }
 }

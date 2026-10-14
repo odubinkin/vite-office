@@ -157,7 +157,7 @@ export class SvxColumnItem extends SfxPoolItem {
     return true;
   }
   /** Represents the native failed default member-zero value query. @returns No scalar payload. */
-  public QueryValue(): undefined {
+  public override QueryValue(): undefined {
     return undefined;
   }
 }

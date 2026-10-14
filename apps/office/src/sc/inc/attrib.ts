@@ -1,3 +1,3 @@
-/** @fileoverview Original Calc attribute header boundary; represented merge flags only. */
+/** @fileoverview Original Calc attribute header boundary; represented merge spans and flags. */
 
-export { ScMF, ScMergeFlagAttr } from "../source/core/data/attrib";
+export { ScMF, ScMergeAttr, ScMergeFlagAttr } from "../source/core/data/attrib";
