@@ -1,4 +1,5 @@
 /** @fileoverview Native Calc font/background color values before their real pooled item owners are available. */
+import { ComplexColor, ColorType } from "../../../../docmodel/inc/color/ComplexColor";
 import { expect, it } from "vitest";
 import {
   Color,
@@ -23,4 +24,17 @@ it("retains original automatic font and transparent background values through in
   } finally {
     any.dispose();
   }
+});
+
+it("retains native Calc font auto and transparent fill colors in actual complex value copies", /** Checks real shared owners without fabricating font/brush item defaults. @returns Nothing. */ () => {
+  const font = ComplexColor.createRGB(COL_AUTO),
+    fill = ComplexColor.createRGB(COL_TRANSPARENT),
+    copy = new ComplexColor(font);
+  expect(font.getType()).toBe(ColorType.RGB);
+  expect(font.getFinalColor().toUInt32()).toBe(0xffffffff);
+  expect(font.getRGBColor().toUInt32()).toBe(0xffffff);
+  expect(fill.getFinalColor().toUInt32()).toBe(0xffffffff);
+  expect(font.isTransparent()).toBe(false);
+  copy.setFinalColor(new Color(0));
+  expect(font.getFinalColor().toUInt32()).toBe(0xffffffff);
 });

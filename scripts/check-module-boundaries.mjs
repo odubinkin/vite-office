@@ -14,6 +14,7 @@ const moduleNames = [
   "cppu",
   "cppuhelper",
   "cui",
+  "docmodel",
   "editeng",
   "external",
   "formula",
@@ -49,6 +50,7 @@ const allowedEdges = new Map([
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
+  ["docmodel", new Set(["tools", "o3tl"])],
   ["editeng", new Set(["cppu", "o3tl", "offapi", "svl", "svtools", "tools", "vcl"])],
   ["external", new Set()],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
@@ -165,6 +167,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
     return "upstream-mechanism";
+  if (portablePath.startsWith("docmodel/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("editeng/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("svx/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";

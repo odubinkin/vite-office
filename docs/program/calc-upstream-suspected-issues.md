@@ -1992,3 +1992,14 @@ Status: source behavior preserved; the explicit exception may be intentional, no
 Pinned tools/source/generic/color.cxx IsDark compares the complete stored value with 0x729fcf. This opaque default shape color takes the integer luminance threshold62: its luminance151 therefore returns false. The same RGB channels with transparency1 bypass that exception and use WCAG luminance83 against threshold87, returning true. Transparency thus changes this brightness predicate even though both luminance methods themselves depend only on RGB.
 
 The initialized color.test.ts assertions retain both cases. No RGB-only normalization or upstream fix is applied. Automatic and transparent constants sharing 0xffffffff are preserved as deliberate role aliases, not classified as an error.
+
+
+## CALC-113: ComplexColor equality and hashing use different state fields
+
+Status: original field behavior retained; potential equality/hash invariant violation, no upstream defect claim.
+
+Pinned docmodel/source/color/ComplexColor.cxx operator== compares representation, three components, system type, last Color, theme index and transformation sequence. It omits final Color and theme usage. getHash includes final Color, but omits theme index and usage.
+
+Two initialized RGB values with identical components and transformations compare equal after only one final Color is changed, while their field-based hashes can differ. This may conflict with equal-key hash requirements if such states enter the same hashed container. Different theme indices can compare unequal while sharing a hash; that collision alone is valid.
+
+ComplexColor.test.ts preserves these cases, including usage-only equality/hash stability. No fields are added to equality or removed from hashing. Browser logical hashes deliberately reuse the existing scalar binding and do not certify binary std::hash<double>/size_t results; the source field mismatch exists independently of that language adaptation. Native theme/UNO consumers still require further integration review.

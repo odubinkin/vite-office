@@ -664,3 +664,15 @@ it("admits original Tools Color Any operators while retaining reverse and applic
     /presentation package/u,
   );
 });
+
+it("admits native docmodel color values using Tools and o3tl without app or reverse edges", /** Checks shared color value ownership. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("docmodel", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("docmodel", "o3tl")).toBe(false);
+  for (const module of ["sw", "sc", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("docmodel", module)).toBe(true);
+  expect(isForbiddenModuleEdge("tools", "docmodel")).toBe(true);
+  expect(getRuntimeOwnershipLayer("docmodel/inc/color/ComplexColor.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("docmodel/inc/color/ComplexColor.ts", "", "react")).toMatch(
+    /browser presentation package/u,
+  );
+});
