@@ -1,10 +1,11 @@
 ---
 id: "202610141310-EK4H2E"
 title: "Implement native font-height Any transport with browser arithmetic"
-status: "DOING"
+result_summary: "Implemented native queries/updates, admission and partialmutations with actualAny. OrdinaryJSrounding, no RTLport/newmemoryengine. Calc170tests65files33ownersraw100; related13/4files4ownersraw100;12gates30boundariespass. Inventory current and CALC111 recorded. RealfullDocPool/document/UI/ODS remainpending; continue preparation, fullregression andpause onlyatactualreadiness."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task127-checks/gates-results.json"
   findings:
     - "Exact15paths9changed6new,3679to3685sourcehashes12nativepins. Real existing CPPU static_struct binding and3ordinaryscalarcells, no new allocator/memorymanager. Complete normalbrowser Any members preserve signed/unsigned fields, admission, original partialmutations/reconstruction/defaultsuccess; CALC111 records source oddities. JSrounding with short meaningful integer-rational witnesses, no RTLround library. Changedshared4owners163S94B29F152L raw100; related13tests4files, Calc170/65files33ownersraw100;12gates30boundaries pass. Metadata basename-only evidence repaired with actualIDL fields, history/statuses intact."
-commit: null
+commit:
+  hash: "2ca441c99b98f3d49b82173eb4e42599855b9292"
+  message: "🚧 EK4H2E core: implement native font-height Any transport"
 comments:
   -
     author: "CODER"
     body: "Start: complete original font-height Any members with real shared type binding and bounded JS arithmetic."
+  -
+    author: "CODER"
+    body: "Verified: complete normal-browser font-height Any members and actual FontHeight type binding using JS arithmetic and existing CPPU."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "2ca441c99b98f3d49b82173eb4e42599855b9292 exact15paths3679to3685hashes12nativepins. Shared4owners163S94B29F152L raw100; related13/4files, Calc170/65files33ownersraw100;12gates30boundaries pass. NativeAny partialmutations/type binding preserved, JSrounding used, CALC111 recorded. No newmemoryengine/nativebuild/RTLport. Nativepresentation and fullDocPool/UI/ODS stillpending, nextfullactualreadiness thenrepairs/pause; same-agent evaluator notindependent."
+  -
+    type: "status"
+    at: "2026-10-14T13:21:30.315Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete normal-browser font-height Any members and actual FontHeight type binding using JS arithmetic and existing CPPU."
 doc_version: 3
-doc_updated_at: "2026-10-14T13:21:15.676Z"
+doc_updated_at: "2026-10-14T13:21:30.317Z"
 doc_updated_by: "CODER"
 description: "Complete actual FontHeight IDL value/type binding and all SvxFontHeightItem Any members, preserving partial mutations/default success and native numeric domains with JS arithmetic. Reuse existing CPPU, no new allocator or memory engine, no rounding library port."
 sections:
