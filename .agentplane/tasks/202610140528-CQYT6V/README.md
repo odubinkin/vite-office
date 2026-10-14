@@ -1,10 +1,11 @@
 ---
 id: "202610140528-CQYT6V"
 title: "Implement shared XML reader spans and text accumulation for Calc configuration"
-status: "DOING"
+result_summary: "Implemented actual XML reader Span/Pad source/header value responsibilities, copied descriptor fields/borrowed bytes/ephemeral accumulation/zero input/value outputs and strict UTF8 with BOM retained. All1112064Unicode scalars/all65536two-byte classifications plus malformed categories pass.18intentionalpaths/3400exacthashes reviewed; no new memory/provider library. Native debug/ABI/allocation/address/postmutation borrowing/fullQA excluded; XML reader/config schema/backend/default/document/grid/ODS remain pending. Goalactive until requested secondfull111 and relevant repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task109-checks/exact-review.json"
   findings:
     - "Reviewed source7e1200b4c3b7883263d51150aeb4d4ebd508f966 against eleven pinned header/core/SAL UTF8/flags/encoding scopes and real span/pad histories. Exact3400committedhashes18intentionalpaths,16serialfirstpass gates, strict Calc/new2owner raw100, actual source-absent static/Calc0UI/restored links verified. Native fatal TextDecoder with BOM retained covers every Unicode scalar/all65536two-byte classifications and longer malformed categories; not exhaustive longer strings or compiled LO differential. Real byte borrows/shallow copies/clear/ephemeral accumulation/terminators retained with native arrays, no converter/ICU/allocator/refcount/provider library. Initial static unused test parameter errors retained, identifier-only correction leaves production/test semantics unchanged. Native invalid ranges/debug/ABI/capacity/address/postmutation borrows/fullQA excluded. XML reader/config schema/backend/default/document/ODS pending. Separate same-agent role, not independent review."
-commit: null
+commit:
+  hash: "7e1200b4c3b7883263d51150aeb4d4ebd508f966"
+  message: "🧩 CQYT6V xmlreader: implement shared spans and text accumulation"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual Span/Pad shared XML value contracts over native byte views/arrays and real OUString/UNO, verify native strict UTF8/BOM equivalence broadly before converter reuse, complete source-absent focused verification under active goal approval."
+  -
+    author: "CODER"
+    body: "Verified: actual Span/Pad shared byte-view and accumulation contracts use real OUString/UNO and ordinary JS arrays. Native strictTextDecoder BOM/scalar/error correspondence verified broadly without a converter/ICU/lifetime library. WholeCalc/newowners raw100, actual source-absent static/Calc0UI,16serialgates and exact committed review pass; inventory recorded."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "WholeCalc152tests raw4006S2654B787F3570L and complete Span/Pad23tests raw68S26B15F58L are100/everycounterpositive. Native strictUTF8 all1112064scalars/all65536two-byte classifications/BOM/malformed categories match source rules. Actual source-absent static/Calc0UI/fourrestoredlinks and16serialfirstpass gates pass. Exact3400committedhashes18intentionalpaths11originalpins verified; same-agent EVAL passed source7e1200b4c3b7883263d51150aeb4d4ebd508f966, not independent review. No converter/ICU/allocator/provider library; native debug/ABI/allocation/postmutation borrows excluded. Nextfull111pause remains."
+  -
+    type: "status"
+    at: "2026-10-14T05:51:30.583Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual Span/Pad shared byte-view and accumulation contracts use real OUString/UNO and ordinary JS arrays. Native strictTextDecoder BOM/scalar/error correspondence verified broadly without a converter/ICU/lifetime library. WholeCalc/newowners raw100, actual source-absent static/Calc0UI,16serialgates and exact committed review pass; inventory recorded."
 doc_version: 3
-doc_updated_at: "2026-10-14T05:51:20.723Z"
+doc_updated_at: "2026-10-14T05:51:30.586Z"
 doc_updated_by: "CODER"
 description: "Task109: actual xmlreader Span/Pad header/core responsibilities needed by real configmgr readers. Reuse actual OUString/UNO values, native strict TextDecoder only after source-backed scalar/error/BOM correspondence; ordinary JS byte views/arrays no buffer allocator/ICU/ownership library. Preserve borrowing/copy/ephemeral accumulation/value outputs. Calc/affected raw100, static/Calc0UI/current gates; full111pause unchanged."
 sections:
