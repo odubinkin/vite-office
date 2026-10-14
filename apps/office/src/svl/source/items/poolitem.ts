@@ -56,8 +56,16 @@ export abstract class SfxPoolItem {
   /** Compares item class, WhichId, and concrete value. @param other - Candidate item. @returns True for equal items. */
   public abstract equals(other: SfxPoolItem): boolean;
 
-  /** Exposes the UNO-compatible value used by filter and persistence boundaries. @returns Item value. */
-  public abstract QueryValue(): unknown;
+  /** Original unsupported query default, represented by the existing browser no-payload boundary. Concrete item overrides retain their values. @returns No value. */
+  public QueryValue(): unknown {
+    return undefined;
+  }
+  /** Original unsupported value update; member is required as in the native declaration. @param value - Generic browser value payload. @param member - Native member identifier. @returns False without mutation. */
+  public PutValue(value: unknown, member: number): boolean {
+    void value;
+    void member;
+    return false;
+  }
 }
 
 /** Static invalid-state item owned by the pinned poolitem.cxx module. */
@@ -79,7 +87,7 @@ class InvalidItem extends SfxPoolItem {
   }
 
   /** Exposes no payload, matching the base failed QueryValue operation. @returns No value. */
-  public QueryValue(): undefined {
+  public override QueryValue(): undefined {
     return undefined;
   }
 }
@@ -103,7 +111,7 @@ class DisabledItem extends SfxPoolItem {
   }
 
   /** Exposes no payload, matching the base failed QueryValue operation. @returns No value. */
-  public QueryValue(): undefined {
+  public override QueryValue(): undefined {
     return undefined;
   }
 }

@@ -32,7 +32,7 @@ class QueryValueItem extends SfxPoolItem {
   }
 
   /** Returns the test value. @returns Configured value. */
-  public QueryValue(): unknown {
+  public override QueryValue(): unknown {
     return this.value;
   }
 }

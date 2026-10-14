@@ -1,0 +1,112 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1c1aecdc-1a00-4c6f-8901-eead267e1b6f",
+    "capabilityId": "CAP-1c1aecdc-1a00-4c6f-8901-eead267e1b6f",
+    "suite": "shared",
+    "subsystem": "configuration-tree",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "UTF16 length-first ordering, copied keys, stable mutable member entries, duplicate insertion and live ordered iteration retain logical map behavior.",
+      "Real group/root values preserve layer/finalized/mandatory/extensibility, clone templates and source-independent children; copy drops descriptions as original.",
+      "Existing shared SortedVector and SAL/cppu value owners reused; JS GC owns node lifetimes without new refcount/staticization/allocator mechanisms."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task105 implements shared configmgr Node/NodeMap/GroupNode/RootNode logical tree and length-first UTF16 config_map order using actual existing SortedVector/OUString/RuntimeException/SAL values. Ordinary JS node references omit native SimpleReferenceObject/staticize/refcount machinery under user GC instruction. Stable first/second entries, undefined end and getOrInsert erase native iterator/operator syntax; no native iterator address, private-copy accessibility, STL/ABI/debug assertion parity claim. Copy drops description (CALC-090), clones optionally drop own template but retain child templates, layers/finalized/mandatory/extensibility and independent child values. Actual source-backed Root/Group histories and unchanged SortedVector tests, no fake node/provider/Data/default-setting or C++ generator/compiled-native claim. Property/set/localized nodes, XML/layers/backend/config services and actual Calc defaults/document/grid/ODS integration remain pending; unchanged SAL/cppu dependency internals are reused without new lifetime mechanisms. Next full111 requested pause; Writer-only coverage repair excluded."
+    },
+    "capability": "Original shared configuration tree and layered member lookup",
+    "gaps": [
+      "Actual Property/Set/Localized/Data/backend/XML/configuration service and Calc defaults integration pending.",
+      "Native iterator/pointer/private-access/ABI/debug assertion and lifetime/staticization mechanisms excluded; no compiled differential or full original QA claim."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/configmgr/source/config_map.ts",
+          "marker": "ConfigEntry"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/node.ts",
+          "marker": "Node"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/nodemap.ts",
+          "marker": "NodeMap"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/groupnode.ts",
+          "marker": "GroupNode"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/rootnode.ts",
+          "marker": "RootNode"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/configmgr/source/configuration-tree.test.ts",
+          "marker": "preserves scalar metadata and child templates while clones drop descriptions and optionally the own template"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared configuration group tree (task105)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Configuration node lifetimes"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/config_map.hxx",
+          "marker": "struct LengthContentsCompare"
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/node.cxx",
+          "marker": "Node::Node(int layer)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/nodemap.cxx",
+          "marker": "void NodeMap::cloneInto"
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/groupnode.cxx",
+          "marker": "GroupNode::GroupNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/rootnode.cxx",
+          "marker": "RootNode::RootNode()"
+        }
+      ],
+      "tests": [
+        {
+          "path": "configmgr/qa/unit/test.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "configmgr/source/config_map.hxx",
+          "marker": "LengthContentsCompare"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "configuration-tree-layered-member-lookup",
+    "scopeLimitations": [
+      "Task105 implements shared configmgr Node/NodeMap/GroupNode/RootNode logical tree and length-first UTF16 config_map order using actual existing SortedVector/OUString/RuntimeException/SAL values. Ordinary JS node references omit native SimpleReferenceObject/staticize/refcount machinery under user GC instruction. Stable first/second entries, undefined end and getOrInsert erase native iterator/operator syntax; no native iterator address, private-copy accessibility, STL/ABI/debug assertion parity claim. Copy drops description (CALC-090), clones optionally drop own template but retain child templates, layers/finalized/mandatory/extensibility and independent child values. Actual source-backed Root/Group histories and unchanged SortedVector tests, no fake node/provider/Data/default-setting or C++ generator/compiled-native claim. Property/set/localized nodes, XML/layers/backend/config services and actual Calc defaults/document/grid/ODS integration remain pending; unchanged SAL/cppu dependency internals are reused without new lifetime mechanisms. Next full111 requested pause; Writer-only coverage repair excluded."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

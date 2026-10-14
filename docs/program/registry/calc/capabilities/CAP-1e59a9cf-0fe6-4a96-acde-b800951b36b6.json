@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task103 adds actual ScMergeAttr zero0/0 defaults, signed16 columns/signed32 rows, value queries, either-axis>1 predicate, explicit copy/Clone and payload-only assignment/equality over existing shared SfxPoolItem. Copy/Clone reset Which144; assignment retains recipient Which; same-type equality ignores Which as original base only asserts ItemType then returns true (CALC-089). Browser foreign-type guard is not a native invalid-type assertion claim. Clone accepts and ignores actual optional shared SfxItemPool. Original unsupported SfxPoolItem QueryValue is restored in shared existing no-payload browser representation asundefined; native false/status and untouchedAny/UNO ABI are not certified, existing concrete overrides unchanged. Header/core/Which responsibility remains separate, signed widths use native JS bits, ordinary refs no new allocator/refcount/Boost/library. Seven pinned original source files reviewed; fixed source-backed shape/copy/identity/width cases and actual existing shared itemset transport, no C++ generator/compiled differential/full original QA. XMLdiagnostics, real ScPatternAttr/column/table/document/merged grid/config/view/ODS integrations remain pending; existing package/ZIP/manifest/SAX/xmloff must be reused. WholeCalc/completeaffected shared strict raw100 and current gates required; firstfull101passed, nextfull111pause."
+    },
+    "capability": "Original Calc merge span values",
+    "gaps": [
+      "DiagnosticXML, remaining Calc attributes and actual document/merged-grid/ODS integration remain pending.",
+      "Native Any/status/ABI/assertions/full original QA and compiled-native differential remain unverified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScMergeAttr"
+        },
+        {
+          "path": "apps/office/src/sc/inc/scitems.ts",
+          "marker": "ATTR_MERGE"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/poolitem.ts",
+          "marker": "public QueryValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/mergeattr.test.ts",
+          "marker": "resets copy and Clone identity while assignment retains recipient identity"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/mergeattr.test.ts",
+          "marker": "uses shared unsupported query default and independent itemset span transport"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Merge span values and shared unsupported query default (task103)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-089"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/attrib.hxx",
+          "marker": "class SC_DLLPUBLIC ScMergeAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attrib.cxx",
+          "marker": "ScMergeAttr::ScMergeAttr()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx",
+          "marker": "bool SfxPoolItem::QueryValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/copy_paste_test.cxx",
+          "marker": "void ScCopyPasteTest::testTdf40993_fillMergedCells()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/attrib.hxx",
+          "marker": "GetColMerge()"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-merge-span-values-and-shared-unsupported-query-default",
+    "scopeLimitations": [
+      "Task103 adds actual ScMergeAttr zero0/0 defaults, signed16 columns/signed32 rows, value queries, either-axis>1 predicate, explicit copy/Clone and payload-only assignment/equality over existing shared SfxPoolItem. Copy/Clone reset Which144; assignment retains recipient Which; same-type equality ignores Which as original base only asserts ItemType then returns true (CALC-089). Browser foreign-type guard is not a native invalid-type assertion claim. Clone accepts and ignores actual optional shared SfxItemPool. Original unsupported SfxPoolItem QueryValue is restored in shared existing no-payload browser representation asundefined; native false/status and untouchedAny/UNO ABI are not certified, existing concrete overrides unchanged. Header/core/Which responsibility remains separate, signed widths use native JS bits, ordinary refs no new allocator/refcount/Boost/library. Seven pinned original source files reviewed; fixed source-backed shape/copy/identity/width cases and actual existing shared itemset transport, no C++ generator/compiled differential/full original QA. XMLdiagnostics, real ScPatternAttr/column/table/document/merged grid/config/view/ODS integrations remain pending; existing package/ZIP/manifest/SAX/xmloff must be reused. WholeCalc/completeaffected shared strict raw100 and current gates required; firstfull101passed, nextfull111pause."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "capabilityId": "CAP-1e59a9cf-0fe6-4a96-acde-b800951b36b6",
+    "id": "CAP-1e59a9cf-0fe6-4a96-acde-b800951b36b6",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original0,0/default144, signed16col/signed32row, getters and either-axis>1 predicate retained.",
+      "Explicit copy/Clone resetWhich144, payload assignment preserves recipientWhich, same-type equality ignoresWhich.",
+      "Actual shared pool item and itemset reused; inherited unsupportedQueryValue uses existing browser no-payload boundary, no Calc-specific substitute."
+    ]
+  }
+}

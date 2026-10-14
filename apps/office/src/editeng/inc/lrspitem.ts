@@ -304,7 +304,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     );
   }
   /** Queries represented native twip-backed UNO members. @param member - Native member and conversion flag. @returns Member value or unsupported font-unit/unknown member. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     const metric =
       /** Converts resolved integer twip measures. @param value - Twips. @returns Native measure. */
@@ -363,7 +363,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     }
   }
   /** Applies represented native UNO values with source ordering and unsigned proportion storage. @param value - UNO member payload. @param member - Native member and conversion flag. @returns Whether admitted and applied. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0;
     const id = member & ~0x80;
     const integer =
@@ -545,7 +545,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
     );
   }
   /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     switch (member & ~0x80) {
       case 0: {
@@ -576,7 +576,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
     }
   }
   /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
-  public PutValue(value: unknown, member: number): boolean {
+  public override PutValue(value: unknown, member: number): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_L_UNIT_MARGIN) {
@@ -692,7 +692,7 @@ export class SvxRightMarginItem extends SfxPoolItem {
     );
   }
   /** Queries source status, absolute, proportion or unit pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     switch (member & ~0x80) {
       case 0: {
@@ -723,7 +723,7 @@ export class SvxRightMarginItem extends SfxPoolItem {
     }
   }
   /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
-  public PutValue(value: unknown, member: number): boolean {
+  public override PutValue(value: unknown, member: number): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_R_UNIT_MARGIN) {
@@ -845,7 +845,7 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     );
   }
   /** Queries original absolute, percentage, automatic or unit-pair members. @param member - Native member and conversion flag. @returns Native value or unsupported member/unit. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     switch (member & ~0x80) {
       case MID_FIRST_AUTO:
@@ -865,7 +865,7 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     }
   }
   /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
-  public PutValue(value: unknown, member: number): boolean {
+  public override PutValue(value: unknown, member: number): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_FIRST_AUTO) {

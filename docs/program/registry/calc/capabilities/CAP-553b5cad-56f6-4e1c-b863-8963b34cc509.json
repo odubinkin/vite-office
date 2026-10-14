@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-553b5cad-56f6-4e1c-b863-8963b34cc509",
+    "capabilityId": "CAP-553b5cad-56f6-4e1c-b863-8963b34cc509",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual reference-list constructor/default/copy/move/Clone preserve value-owned list elements and stable collection identity.",
+      "Original list identity equality is retained, including unequal distinct copies with equal values.",
+      "Original structured-table Item flags/UInt16 index/current area setters and getters preserve retained token identity.",
+      "Table copy/Clone clones actual area token; equality uses original base/index/item/null/payload checks."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task96 ports complete original ScRefListToken and ScTableRefToken constructors/defaults/copies/Clone/getters/mutators/equality using existing shared FormulaToken and real reference data. Reference responsibility moves unchanged task95 single/double/helper implementation into token.references.ts because adding complete original list/table families exceeds enforced500line token.ts limit; canonical token.ts/header exports retained and explicit responsibility-split provenance records added. RefList owns initialized value arrays: native push_back(value) maps to push(new ScComplexRefData(value)); copy/Clone copies values, implicit move transfers initialized element identities while preserving and emptying the source list owner. No generic vector/memory/refcount/pool/finalizer library. RefList compares collection-object identity, so distinct copies/clones compare unequal (CALC-085). Table UInt16 index/original Item masks/nullable genuine token RPN references are retained; copy/Clone clones area tokens and equality compares payloads. Ordinary JS references own areas; existing SAL/SVL boundary unchanged. Complete original class definitions and methods over verified genuine reference/shared/header dependencies produce a full normal initialized native stream; native layout/count/memory/sanitizers/invalid casts/unsupported enum/uninitialized/whole QA excluded. Original structured-reference and reference-list array-result QA anchors are unexecuted document consumer context. Actual compiler/ScTokenArray/configuration/ScFormulaCell/document/grid/ODS remain prioritized pending owners; nextfull101 continues, pause after secondfull111/relevant repairs. Writer-only coverage remains separate."
+    },
+    "capability": "Original matrix result token owners",
+    "gaps": [
+      "ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS and reference/matrix-range tokens remain pending.",
+      "Native memory-management/ABI/assertions/full QA unverified; no runtime Boost/refcount or other owner duplication."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScRefListToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScTableRefToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "ScTableRefToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/list-table-token.test.ts",
+          "marker": "matches complete original list and table reference token state and alias histories"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Reference-list and structured-table tokens (task96)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-085"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "ScRefListToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScTableRefToken::ScTableRefToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula2.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncTableRef)"
+        },
+        {
+          "path": "sc/qa/unit/ucalc_formula2.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncRefListArraySUBTOTAL)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/token.hxx",
+          "marker": "Special token to remember details of ocTableRef"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-reference-list-table-token-values",
+    "scopeLimitations": [
+      "Task96 ports complete original ScRefListToken and ScTableRefToken constructors/defaults/copies/Clone/getters/mutators/equality using existing shared FormulaToken and real reference data. Reference responsibility moves unchanged task95 single/double/helper implementation into token.references.ts because adding complete original list/table families exceeds enforced500line token.ts limit; canonical token.ts/header exports retained and explicit responsibility-split provenance records added. RefList owns initialized value arrays: native push_back(value) maps to push(new ScComplexRefData(value)); copy/Clone copies values, implicit move transfers initialized element identities while preserving and emptying the source list owner. No generic vector/memory/refcount/pool/finalizer library. RefList compares collection-object identity, so distinct copies/clones compare unequal (CALC-085). Table UInt16 index/original Item masks/nullable genuine token RPN references are retained; copy/Clone clones area tokens and equality compares payloads. Ordinary JS references own areas; existing SAL/SVL boundary unchanged. Complete original class definitions and methods over verified genuine reference/shared/header dependencies produce a full normal initialized native stream; native layout/count/memory/sanitizers/invalid casts/unsupported enum/uninitialized/whole QA excluded. Original structured-reference and reference-list array-result QA anchors are unexecuted document consumer context. Actual compiler/ScTokenArray/configuration/ScFormulaCell/document/grid/ODS remain prioritized pending owners; nextfull101 continues, pause after secondfull111/relevant repairs. Writer-only coverage remains separate."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

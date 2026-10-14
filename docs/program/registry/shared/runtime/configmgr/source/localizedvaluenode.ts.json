@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/localizedvaluenode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "capabilityIds": [
+      "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/localizedvaluenode.ts#LocalizedValueNode",
+        "apps/office/src/configmgr/source/localizednodes.test.ts#keeps real localized Any ownership stable across value and pointer modifications",
+        "docs/program/calc-core.md#Configuration types and localized nodes (task106)"
+      ],
+      "justification": "Task106 implements the complete logical configmgr Type enum/list/element/UNO mapping/dynamic sequence whitelist and actual LocalizedPropertyNode/LocalizedValueNode contracts over existing Any/UnoType/Node/NodeMap/SAL owners. Numeric unsigned classification retains the original Any.has call and its result via boolean-indexed alternatives; original UNO primitive compatibility makes the false alternatives unreachable for initialized unsigned primitive owners (CALC-091). No invented range check, fake has result, type/provider replacement, counter mutation or coverage suppression. False alternatives are source-reviewed, not executed native behavior proof; raw100 does not prove unreachable alternatives. Nodes retain independent Any copies, stable value pointer, metadata/user-modified updates including self-set, deep child clones and base-copy description omission (CALC-090). Native const/private-copy syntax and ABI/assertions/staticize/refcount/lifetime machinery are outside represented behavior; ordinary JS node refs add no memory library. Original QA is unexecuted integration context only; no new C++ generator/compiled differential/sanitizer. Property/Set/Data/XML/backend/configuration services and actual Calc defaults/document/grid/ODS integration remain pending. Nextfull111 requested pause after relevant repairs, no Writer-only repair.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LocalizedValueNode",
+        "clone",
+        "getTemplateName",
+        "getValue",
+        "getValuePtr",
+        "setValue",
+        "isModified",
+        "kind"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "configmgr/source/localizedvaluenode.cxx",
+      "upstreamSymbols": [
+        "LocalizedValueNode",
+        "clone",
+        "getTemplateName",
+        "setValue",
+        "kind"
+      ]
+    }
+  }
+}

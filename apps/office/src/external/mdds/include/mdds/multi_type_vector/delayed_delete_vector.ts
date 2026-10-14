@@ -107,12 +107,13 @@ export class delayed_delete_vector<T> {
             operations ? operations.default_construct() : defaultValue,
           this.aligned_capacity(initial),
         );
-      } else
-        assign_storage(
-          this.m_vec,
-          Array<T>(initial).fill(valueOrLast as T),
-          this.aligned_capacity(initial),
-        );
+      } else {
+        // Array.fill may canonicalize NaN payloads; native
+        // scalar copies must retain encoded formula error values.
+        const values = Array<T | undefined>(initial).fill(undefined);
+        for (let i = 0; i < initial; ++i) values[i] = valueOrLast as T;
+        assign_storage(this.m_vec, values as T[], this.aligned_capacity(initial));
+      }
     } else
       assign_storage(
         this.m_vec,
@@ -302,9 +303,10 @@ export class delayed_delete_vector<T> {
     last: delayed_delete_vector_iterator<T>,
   ): T[] {
     if (!(first instanceof delayed_delete_vector_iterator)) return [...first];
-    const result: T[] = [];
-    for (const it = first.copy(); !it.equals(last); it.advance(1)) result.push(it.get());
-    return result;
+    const result = Array<T | undefined>(first.distance_to(last)).fill(undefined);
+    let index = 0;
+    for (const it = first.copy(); !it.equals(last); it.advance(1)) result[index++] = it.get();
+    return result as T[];
   }
   /** Implements selected libc++ vector<bool> word capacity; other native allocators are unverified. @param count - Slots. @returns Allocated slots. */
   private aligned_capacity(count: number): number {

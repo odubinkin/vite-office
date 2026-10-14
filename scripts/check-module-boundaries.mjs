@@ -9,6 +9,7 @@ import ts from "typescript";
 
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
+  "configmgr",
   "cppu",
   "cppuhelper",
   "cui",
@@ -33,17 +34,21 @@ const moduleNames = [
   "unotools",
   "vcl",
   "xmloff",
+  "xmlreader",
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
+  // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
+  ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
   ["cppuhelper", new Set(["cppu", "sal"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
-  // Original token.hxx/types.hxx use SAL interlocked/OUString, SVL SharedString and Boost intrusive_ptr.
-  ["formula", new Set(["sal", "svl", "external"])],
+  // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
+  // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
+  ["formula", new Set(["offapi", "sal", "svl"])],
   ["framework", new Set(["sfx2", "svl"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
@@ -100,9 +105,12 @@ const allowedEdges = new Map([
   ],
   ["vcl", new Set(["svl"])],
   ["udkapi", new Set(["sal"])],
-  ["unotools", new Set()],
+  // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
+  ["unotools", new Set(["sal"])],
   ["tools", new Set()],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
+  // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
+  ["xmlreader", new Set(["cppu", "sal"])],
 ]);
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
@@ -140,6 +148,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";

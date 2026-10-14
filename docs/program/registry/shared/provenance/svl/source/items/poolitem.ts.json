@@ -20,6 +20,14 @@
         {
           "path": "apps/office/src/sw/source/uibase/uiview/native-column-item-boundary.test.ts",
           "marker": "document column drag consumes native view item"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/mergeattr.test.ts",
+          "marker": "uses shared unsupported query default and independent itemset span transport"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/protectionattr.test.ts",
+          "marker": "reads and writes every native member with conversion-bit aliases and copied struct output"
         }
       ],
       "upstream": [
@@ -42,6 +50,14 @@
         {
           "marker": "IsInvalidItem",
           "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx",
+          "marker": "bool SfxPoolItem::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx",
+          "marker": "bool SfxPoolItem::PutValue"
         }
       ]
     },
@@ -53,17 +69,22 @@
       "DISABLED_POOL_ITEM",
       "IsDisabledItem",
       "INVALID_POOL_ITEM",
-      "IsInvalidItem"
+      "IsInvalidItem",
+      "PutValue"
     ],
     "omittedResponsibilities": [
-      "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
+      "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted.",
+      "Native output Any/status, diagnostics/assertions/ABI and complete item service contracts remain unverified.",
+      "Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause."
     ],
     "preservedResponsibilities": [
       "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx.",
       "Owns the pinned disabled-state singleton and pointer-identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload.",
       "Owns the separate pinned invalid-state singleton and identity helper, including its zero WhichId, null Clone result, trivial equality and lack of UNO value payload.",
       "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
-      "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged."
+      "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
+      "Task103 restores original shared unsupported QueryValue default using existing browser no-payload representation; concrete Writer/shared overrides unchanged.",
+      "Task104 restores native common unsupported PutValue default false with required member; existing override bodies unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/poolitem.cxx",
@@ -75,7 +96,8 @@
       "DisabledItem",
       "DISABLED_POOL_ITEM",
       "InvalidItem",
-      "INVALID_POOL_ITEM"
+      "INVALID_POOL_ITEM",
+      "PutValue"
     ]
   },
   "legacyOrder": 59

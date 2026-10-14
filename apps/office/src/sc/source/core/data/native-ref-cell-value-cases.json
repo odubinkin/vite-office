@@ -1,0 +1,9 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "dependencyManifestHash": "e47199063c500d19ca96cea316d4a384e8cce9c5481e8e726404679bfcbd9810",
+  "callerHash": "2737e5041529365c3bcfc77b97758d9b33b6478954a28dd536b1ce4d79ed19a4",
+  "sourceDigest": "bb84eefaa2467b4b30457476c8240fe48a82ca3464a7d3f8c5a0f9d096196004",
+  "captures": {
+    "reference": "default 0 1\nemptycopy 0 1\nclear 0 1\nnumber 1 0 | 0 0 0\ncopied 1 0 | 0 0 0\nclearsource 0 1\nretained 1 0 | 0 0 0\nassigned 1 0 | 0 0 0\nselfcopy 1 0 | 0 0 0\ncleartarget 0 1\nnumber 1 0 | 0 1 -0\ncopied 1 0 | 0 1 -0\nclearsource 0 1\nretained 1 0 | 0 1 -0\nassigned 1 0 | 0 1 -0\nselfcopy 1 0 | 0 1 -0\ncleartarget 0 1\nnumber 1 0 | 0 0 2.5\ncopied 1 0 | 0 0 2.5\nclearsource 0 1\nretained 1 0 | 0 0 2.5\nassigned 1 0 | 0 0 2.5\nselfcopy 1 0 | 0 0 2.5\ncleartarget 0 1\nnumber 1 0 | 0 1 -3.5\ncopied 1 0 | 0 1 -3.5\nclearsource 0 1\nretained 1 0 | 0 1 -3.5\nassigned 1 0 | 0 1 -3.5\nselfcopy 1 0 | 0 1 -3.5\ncleartarget 0 1\nnumber 1 0 | 503 0 0\ncopied 1 0 | 503 0 0\nclearsource 0 1\nretained 1 0 | 503 0 0\nassigned 1 0 | 503 0 0\nselfcopy 1 0 | 503 0 0\ncleartarget 0 1\nnumber 1 0 | 503 1 0\ncopied 1 0 | 503 1 0\nclearsource 0 1\nretained 1 0 | 503 1 0\nassigned 1 0 | 503 1 0\nselfcopy 1 0 | 503 1 0\ncleartarget 0 1\nnumber 1 0 | 538 0 0\ncopied 1 0 | 538 0 0\nclearsource 0 1\nretained 1 0 | 538 0 0\nassigned 1 0 | 538 0 0\nselfcopy 1 0 | 538 0 0\ncleartarget 0 1\nstring 2 0 | 1 1 3 65 0 937\nstringcopy 2 0 | 1 1 3 65 0 937\nstringassigned 2 0 | 1 1 3 65 0 937\nstringselfcopy 2 0 | 1 1 3 65 0 937\nstringcleared 0 1\nstringretained 2 0 | 1 1 3 65 0 937\nretargeted 2 0 | 1 1 0\nretargetedassigned 2 0 | 1 1 0\nretargetedback 2 0 | 1 1 3 65 0 937\nfinalclear 0 1\nnullstring 2 0 | 1 0\nnullcopy 2 0 | 1 0\nnullassigned 2 0 | 1 0\nemptystring 2 0 | 1 1 0\nemptystringcopy 2 0 | 1 1 0\nemptyassigned 0 1\n"
+  }
+}

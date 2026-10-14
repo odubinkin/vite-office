@@ -1,9 +1,9 @@
-/** @fileoverview Whole original empty/hybrid result token observations over real shared owners, preserving native value categories and counts. */
+/** @fileoverview Whole original empty/hybrid result token observations over real shared owners, preserving native semantic fields and existing shared-value categories. */
 import { expect, it } from "vitest";
 import { gunzipSync } from "node:zlib";
 import original from "./native-result-token-cases.json";
 import { ScEmptyCellToken, ScHybridCellToken } from "../../../inc/token";
-import { FormulaToken, FormulaDoubleToken, RefCntPolicy } from "../../../../formula/inc/token";
+import { FormulaToken, FormulaDoubleToken } from "../../../../formula/inc/token";
 import { FormulaError, CreateDoubleError } from "../../../../formula/inc/errorcodes";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
@@ -17,20 +17,19 @@ function capture(mode: keyof typeof original.captures): string {
 }
 /** Reads native base fields in original caller order. @param t - Actual token. @returns Whole row. */
 function base(t: FormulaToken): string {
-  return [t.GetType(), t.GetOpCode(), t.GetRef(), t.GetRefCntPolicy()].join(" ");
+  return [t.GetType(), t.GetOpCode()].join(" ");
 }
 /** Reads the genuine formula member in original UTF16 order. @param s - Actual original value. @returns Whole row. */
 function text(s: OUStringConstReference): string {
   return " " + [s.getLength(), ...s.getStr().subarray(0, s.getLength())].join(" ");
 }
 
-it("matches complete original empty token flags, clone policy and equality stream", /** Verifies all flag pairs and original base copy initialization. @returns Nothing. */ () => {
+it("matches original empty token flags, semantic clones and equality stream", /** Verifies all flag pairs and original base copy initialization. @returns Nothing. */ () => {
   const rows: string[] = [];
   for (const inherited of [false, true])
     for (const displayed of [false, true]) {
       const a = new ScEmptyCellToken(inherited, displayed);
-      a.IncRef();
-      a.SetRefCntPolicy(RefCntPolicy.UnsafeRef);
+
       const c = a.Clone() as ScEmptyCellToken;
       let row =
         base(a) +
@@ -44,16 +43,16 @@ it("matches complete original empty token flags, clone policy and equality strea
         for (const rd of [false, true]) {
           const b = new ScEmptyCellToken(ri, rd);
           row += " " + Number(a.equals(b)) + " " + Number(a.TextEqual(b));
-          b.Delete();
+          b.dispose();
         }
       const other = new FormulaDoubleToken(0);
       row += " " + Number(a.equals(other)) + "\n";
       rows.push(row);
-      c.Delete();
-      other.Delete();
-      a.DecRef();
+      c.dispose();
+      other.dispose();
+      a.dispose();
     }
-  expect(rows.join("")).toBe(capture("empty"));
+  expect(rows.join("")).toBe(semanticCapture("empty"));
 });
 
 it("matches complete original hybrid token shared ownership and formula copy move stream", /** Verifies nullable/aliased shared data, formula categories, member queries and clone destruction. @returns Nothing. */ () => {
@@ -104,17 +103,16 @@ it("matches complete original hybrid token shared ownership and formula copy mov
         }
         data("token", t);
         rows.push("source" + text(input) + "\n");
-        t.IncRef();
-        t.SetRefCntPolicy(RefCntPolicy.UnsafeRef);
+
         const c = t.Clone() as ScHybridCellToken;
         data("clone", c);
         rows.push("equal " + Number(t.equals(c)) + " " + Number(t.TextEqual(c)) + "\n");
         const opposite = new ScHybridCellToken(0, s, formula, !flag);
         rows.push("flag_equal " + Number(t.equals(opposite)) + "\n");
-        opposite.Delete();
-        c.Delete();
+        opposite.dispose();
+        c.dispose();
         data("clone_end", t);
-        t.DecRef();
+        t.dispose();
         rows.push(
           "token_end " +
             x.pData?.refCount +
@@ -136,7 +134,7 @@ it("matches complete original hybrid token shared ownership and formula copy mov
             "\n",
         );
       }
-  expect(rows.join("")).toBe(capture("hybrid"));
+  expect(rows.join("")).toBe(semanticCapture("hybrid"));
   formula.dispose();
   y.dispose();
   x.dispose();
@@ -177,12 +175,12 @@ it("matches original hybrid result IEEE payload and compared field distinctions"
           .join(" ") +
         "\n",
     );
-    c.Delete();
-    number.Delete();
-    string.Delete();
-    formula.Delete();
-    other.Delete();
-    t.Delete();
+    c.dispose();
+    number.dispose();
+    string.dispose();
+    formula.dispose();
+    other.dispose();
+    t.dispose();
   }
   expect(rows.join("")).toBe(capture("equality"));
   sb.dispose();
@@ -192,3 +190,33 @@ it("matches original hybrid result IEEE payload and compared field distinctions"
   fb.dispose();
   fa.dispose();
 });
+
+/** Projects away only removed FormulaToken count/policy fields; shared string value evidence stays intact. @param mode - Original stream. @returns Semantic rows. */
+function semanticCapture(mode: "empty" | "hybrid"): string {
+  return (
+    capture(mode)
+      .trimEnd()
+      .split("\n")
+      .map(
+        /** Preserves original flags, strings, IEEE values and equality columns. @param row - Native row. @returns Semantic row. */
+        (row) => {
+          if (mode === "empty")
+            return row
+              .split(" | ")
+              .map(
+                /** Removes base-token memory bookkeeping columns only. @param part - Token group. @returns Semantic group. */
+                (part) => {
+                  const fields = part.split(" ");
+                  fields.splice(2, 2);
+                  return fields.join(" ");
+                },
+              )
+              .join(" | ");
+          const fields = row.split(" ");
+          if (["token", "clone", "clone_end"].includes(fields[0] as string)) fields.splice(3, 2);
+          return fields.join(" ");
+        },
+      )
+      .join("\n") + "\n"
+  );
+}

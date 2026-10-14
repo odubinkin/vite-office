@@ -1599,3 +1599,259 @@ Original ranged multi_type_matrix::walk rejects an endpoint only when end.row is
 Evidence: task80 scripts/calc-matrix-walk-native-probe.mjs compiles whole unchanged original matrix/vector headers with verified pinned dependency sources. Its ordinary scalar stream records one numeric section of size3 for the initialized 2x2 spill caller. The portable full-stream replay matches the same section. Original ScMatrix/input consumers and user-visible reachability remain unimplemented.
 
 Decision: preserve the original validation and inclusive traversal. Do not change greater-than to greater-than-or-equal or clamp the section to a column. Do not use this initialized case to claim safety for endpoints at the final column or invalid store positions.
+
+
+## CALC-072: matrix resize overloads use different error initializers and may preserve prior cell data
+
+Status: confirmed original fallback asymmetry and storage behavior; a user-visible defect is not established.
+
+In pinned sc/source/core/tool/scmatrix.cxx, invalid-size constructors and the unfilled ScMatrixImpl::Resize initialize a1x1 matrix with FormulaError::MatrixSize. The filled Resize overload instead uses FormulaError::StackOverflow. The underlying mdds resize constructs a filled temporary and copies existing cells into it, so an existing cell can overwrite that fallback error. Starting from a zero-sized matrix preserves the selected error; resizing an already initialized1x1 matrix to an invalid one-zero shape may retain its old cell instead.
+
+Evidence: task84 ordinary unchanged original constructor/Resize/geometry definitions over genuine mdds/SAL/SVL. Complete native and portable streams cover both overloads, empty-before-invalid fallback and initialized-cell preservation; no invalid memory access, sanitizer or large allocation is required.
+
+Decision: preserve the two error choices and the existing-cell copy behavior. Do not force the new error into retained cells or normalize the filled overload to MatrixSize. Revisit actual interpreter/UI consumer reachability when those owners are implemented.
+
+
+## CALC-073: PutError omits coordinate validation and can write into the next column
+
+Status: confirmed original coordinate-write asymmetry; a user-visible defect is not established.
+
+ScMatrixImpl::PutError calls maMat.set directly, whereas coordinate number/string/boolean/empty/path writes first check ValidColRow. In a2x2 matrix, PutError(StackOverflow,0,3) therefore writes the encoded error at flat offset3, corresponding to column1,row1, despite row3 being outside the declared rows. A column9,row0 write instead exceeds the underlying storage and throws its normal bounds exception. Other scalar writes with invalid coordinates do nothing.
+
+Evidence: task85 ordinary unchanged original coordinate definitions over genuine mdds/SAL/SVL/formula dependencies. Complete original/portable streams compare this initialized in-storage write and a normal bounds exception, alongside coordinate Get/predicate observations. No out-of-storage read, sanitizer or fake interpreter is needed.
+
+Decision: preserve the missing guard, column-major mapping and native exception behavior. Do not clamp coordinates or normalize PutError to other scalar writes. Actual interpreter/UI consumer reachability remains future work.
+
+
+## CALC-074: ScCellValue self move assignment empties the cell
+
+Status: confirmed original logical behavior for scalar families; no claim that self move must retain the old value.
+
+ScCellValue::operator=(ScCellValue&&) first clears the destination, then moves rCell.maData and resets the source. When destination and source are the same cell, the first clear already makes the source empty. Self move assignment therefore loses a prior numeric or string value and leaves CELLTYPE_NONE. This is defined scalar behavior in the selected source, not a pointer lifetime or allocator experiment.
+
+Evidence: task86 complete ordinary original scalar stream compares number/string self move, normal move source emptiness, scalar setters and swaps; only actual empty/number/SharedString alternatives are instantiated. No fake formula/rich-text object or sanitizer is used.
+
+Decision: preserve the clearing order and source reset. Do not insert a self-move early return to retain the value. Document/cell-store/UI consumer reachability remains future work.
+
+## CALC-075: matrix formula Assign overloads differ in numeric upper-left cloning
+
+Status: confirmed original overload/alias asymmetry; a user-visible defect is not established.
+
+ScMatrixFormulaCellToken::Assign(const ScMatrixCellResultToken&) calls base Assign then CloneUpperLeftIfNecessary. The generic Assign(const FormulaToken&) identifies a matrix-result argument and calls only base Assign, retaining its numeric upper-left reference. SetUpperLeftDouble on that generic target therefore also changes the source transport result and the original shared numeric token; the typed target keeps its independent original numeric value. Typed self-assignment clones its numeric upper-left; generic self-assignment returns immediately. A call through the nonvirtual ScMatrixCellResultToken base likewise shares the upper-left.
+
+Evidence: task88 scripts/calc-matrix-token-native-probe.mjs compiles complete unchanged original matrix-result token classes/member scopes with real formula tokens and verified real matrix constructor/storage dependencies, normally only. The full stream observes typed/generic assignments, source/target mutations, self-assignment and qualified base assignment. No pointer address, native ownership counter or sanitizer experiment is needed.
+
+Decision: preserve both overloads and their aliases. Use the actual FormulaToken type witness for the generic overload and qualified prototype calls for native nonvirtual base selection. Do not silently add numeric cloning to the generic branch. Real formula-cell/interpreter/UI reachability remains future work.
+
+## CALC-076: numeric matrix formula copies compare unequal to their source
+
+Status: confirmed surprising original clone/equality interaction; a user-visible defect is not established.
+
+ScMatrixFormulaCellToken copy construction clones a double upper-left via CloneUpperLeftIfNecessary. Its equality delegates to ScMatrixCellResultToken, which compares upper-left pointer identity. Thus a numeric matrix formula token compares unequal to its own copy/Clone despite equal values, matrix identity and dimensions. Null and shared nonnumeric upper-left tokens can compare equal after copying.
+
+Evidence: task88 complete original normal matrix-result token stream records formula_equal for null, double, string, unknown and error upper-left tokens, including original constructors and virtual Clone/equality bodies. Portable replay preserves every result. No native ownership count or memory-management experiment is required.
+
+Decision: preserve identity comparison and numeric cloning. Do not substitute upper-left value equality or share the mutable numeric token to make copies compare equal. Actual formula-cell/UI effects remain unverified.
+
+## CALC-077: formula multiline cache survives an external string-token mutation
+
+Status: confirmed original cache/alias behavior; a user-visible defect is not established.
+
+ScFormulaResult stores ordinary string-token identity and caches IsMultiline. If a caller retains the genuine mutable FormulaStringToken and changes its string after that query, subsequent GetString/GetResult expose the new text but keep the prior multiline flag. Calling SetToken again resets the cache and rescans. A string changing from A to A-LF-B can therefore retain false until the result setter runs.
+
+Evidence: task89 full unchanged ScFormulaResult/header/source over genuine token/matrix/string dependencies, normal native public histories and complete portable replay. The caller retains an actual token and uses original SetString; no private-state or lifetime violation is forced.
+
+Decision: preserve cache and reset responsibilities. Do not rescan on every query or invent an observer binding to mutate the result flag. Actual formula-cell/UI reachability remains unverified.
+
+## CALC-078: GetErrorOrDouble retains caller error output
+
+Status: confirmed original output-reference behavior; caller requirements and user-visible defects remain unverified.
+
+The cached-value fast path assigns rVal but does not clear rErr. Later paths likewise test the caller's existing rErr before numeric classification and may return true without writing rVal, even for string/unknown values. An initialized caller error can therefore survive a successful numeric query; fresh NONE is observably different. Internal SetResultError controls the result's own error and does not reset caller storage.
+
+Evidence: task89 complete unchanged native result class/source histories query each state with initialized NONE and DivisionByZero out errors and a fixed initialized numeric output. Portable replay preserves all return values and untouched fields without changing thresholds or forcing private state.
+
+Decision: preserve original output writes and precedence. Do not automatically clear caller error or numeric storage. Audit actual original consumer initialization when those owners are ported.
+
+## CALC-079: token removal skips adjacent duplicate RPN references
+
+Status: confirmed original traversal asymmetry; a user-visible defect is not established.
+
+FormulaTokenArray::RemoveToken shifts remaining RPN entries down after a match, then the outer forward loop increments its index. An adjacent equal reference shifted into the current slot is skipped. Removing code token x from RPN x,x,x,y leaves one x reference and y, despite removal from active code. Nonadjacent duplicates can both be removed.
+
+Evidence: task90 complete unchanged selected normal array functions and initialized pointer ranges over genuine tokens. The caller retains genuine token references, so the leftover RPN identity is live; no freed-pointer or sanitizer experiment is used. Complete portable replay preserves active RPN contents and lengths.
+
+Decision: preserve original forward-index traversal and leftover identity. Do not decrement the scan index, deduplicate or clean all matches. Audit actual compiler/document consumer effects when those owners are ported.
+
+## CALC-080: moved token array retains finalized source flag
+
+Status: confirmed original moved-source metadata behavior; a defect is not established.
+
+FormulaTokenArray::Move transfers buffers and zeros source nLen/nRPN but leaves source flags/error/recalc state. Moving a finalized code array therefore leaves an empty source that still rejects appending a new token. Clear restores the ordinary editable default. Copying nonempty code also finalizes its copied buffer, irrespective of the source's prior flag.
+
+Evidence: task90 unchanged original constructor/Assign/Move/Finalize/Add functions, initialized normal source/copy/move histories and explicit moved-source append observation. Portable replay matches all flags, lengths, identities and rejection.
+
+Decision: preserve moved-source flags and original finalization/rejection. Do not silently reset or reopen the moved-from array. User-visible consumer effects remain unverified.
+
+## CALC-081: mutable shared default calculation opcode set
+
+Status: confirmed original cross-instance value alias; a user-visible defect is not established.
+
+ScCalcConfig::setOpenCLConfigToDefault assigns a static shared_ptr to a mutable sorted_vector. Changing a default configuration's set also changes later default constructions and reset results; reset reassigns that same set rather than rebuilding its contents. The partial default operation also leaves maOpenCLDevice and document-specific settings untouched, whereas full reset clears those value fields.
+
+Evidence: task92 unchanged original full headers and instance methods with genuine o3tl::sorted_vector and OUString, normal mode only. An initialized caller inserts ocOffset into the shared default, observes a later construction and reset, then removes it to restore the original set. Portable replay retains the exact alias/contents and ordered uniqueness. No memory/sanitizer experiment or actual document consumer defect claim.
+
+Decision: preserve original mutable default identity and partial-reset field behavior. Do not freeze, clone or reconstruct the static set. Audit actual configuration consumers when those owners are ported.
+
+## CALC-082: unspecified grammar convention extraction leaves enum range
+
+Status: source-confirmed unsupported sentinel conversion; a user-visible defect is not established.
+
+FormulaGrammar::extractRefConvention clears the English bit, performs signed right shift and subtracts kConventionOffset, then casts to AddressConvention. For GRAM_UNSPECIFIED=-1 the integer expression computes-259, outside the original AddressConvention enum range. Calling convention-dependent OOXML/Excel predicates on this sentinel therefore cannot serve as valid initialized native enum evidence.
+
+Evidence: unchanged pinned grammar.hxx expression, original enum declarations and task93 ordinary full grammar caller. The preliminary observer was corrected before acceptance: negative grammar states retain valid English/language/support observations, while native convention/ref/Excel fields explicitly say excluded. No sanitizer or invalid-enum process behavior is certified. Portable code preserves the original signed arithmetic; no sentinel fallback or invented validation is added.
+
+Decision: retain upstream arithmetic and audit original caller preconditions when document/compiler owners are ported. Do not infer user-visible damage from this source expression alone.
+
+## CALC-083: document option equality omits ignore-line-breaks flag
+
+Status: source-inspected comparator omission; rationale and user-visible consequences are unverified.
+
+ScDocOptions declares bIgnoreLineBreaks, resets it to false, and exposes IsIgnoreLineBreaks/SetIgnoreLineBreaks. Its inline operator== explicitly compares the other option fields but never reads bIgnoreLineBreaks. The flag is therefore absent from the original equality expression.
+
+Evidence: pinned sc/inc/docoptio.hxx member/accessors/inline equality and sc/source/core/tool/docoptio.cxx reset body, inspected during task94 dependency analysis. No native ScDocOptions instance or document consumer has been reproduced: its genuine locale/configuration/formatter peers are still pending. This is source evidence only, not an executed document comparison or proven defect.
+
+Decision: preserve the original equality expression when the actual owner is ported and audit downstream change/save detection. Do not silently add the flag to comparison or supply fake peers to manufacture native evidence.
+
+## CALC-084: reference text equality depends on receiver sheet limits
+
+Status: confirmed original initialized comparison asymmetry with different bounds; a user-visible defect is not established.
+
+ScSingleRefToken/ScDoubleRefToken::TextEqual passes its own mrSheetLimits to checkTextEqual. Both references are converted at the origin using only those limits. A single token at(4,4,0) with maximum column/row1 and another at(5,5,0) with maxima20/30 therefore compare text-equal in the first direction (both coordinates collapse to invalid), but not in reverse (both are distinct valid coordinates). Raw token equality remains false. Copies and clones retain the receiver limits and the same result.
+
+Evidence: task95 complete original class/helper/member definitions over genuine reference/address/limit headers, initialized normal-only bounds/copybounds/clonebounds observations, and matching portable replay. Intended same-document/bounds caller preconditions and real sorting consumers remain unverified; no unsupported staticcast, overflow, memory or full document experiment.
+
+Decision: preserve receiver-limit selection and original invalid-coordinate normalization. Audit real compiler/document/sort callers before attributing user-visible impact; do not silently symmetrize the comparison.
+
+## CALC-085: reference-list tokens compare collection identity
+
+Status: confirmed original initialized equality behavior; rationale and user-visible consequences are unverified.
+
+ScRefListToken::operator== compares the address of its own aRefList vector with the other token's GetRefList() before comparing mbArrayResult. Distinct copies/clones have independent vector objects and therefore compare unequal even when all copied ranges and the array-result flag match. Self comparison succeeds. ScTableRefToken copies clone an area token; a list-token area consequently makes a table copy compare unequal under the original area-payload comparator.
+
+Evidence: task96 complete unchanged original list/table class declarations and members over genuine shared/reference dependencies, initialized normal-only self/copy/Clone/list/table-area observations and full portable replay. Native getters and constructors permit this initialized list-area input; whether real document consumers use it remains unverified. No private-state forcing, fake type peers or memory/count experiment.
+
+Decision: preserve collection-object equality and area Clone semantics. Audit original union/structured-reference consumers before identifying a defect; do not substitute deep list equality.
+
+## CALC-086: external range equality creates a value temporary
+
+Status: source-confirmed implicit right-hand token copy; rationale and user-visible impact are unverified.
+
+ScExternalDoubleRefToken::operator== declares auto rhs = static_cast<const ScExternalDoubleRefToken&>(r). Plain auto drops the reference qualifier, so rhs is a value copy rather than a borrowed reference. The original defaulted token copy constructor copies reference-data fields and the SharedString value before name/range comparison. This is an extra native value temporary on the comparison path.
+
+Evidence: pinned sc/source/core/tool/token.cxx comparison declaration and sc/inc/token.hxx defaulted copy constructor, inspected in task97. The normal complete original method stream confirms equality outcomes, but no count/allocation/performance or concurrency experiment is performed. Whether this is intentional and whether real consumers are affected remain unverified.
+
+Decision: preserve observed synchronous value comparisons. Under the user-authorized JS GC adaptation, do not reproduce incidental native stack copies or reference-count traffic when reading initialized final-class values has the same result; actual string/refdata copy/move constructors remain explicit where their copied/moved state is observable. Do not claim a user-visible defect or silently alter equality.
+
+## CALC-087: matrix-range token equality omits its range
+
+Status: confirmed original initialized equality behavior; intended consumer semantics and user-visible consequences are unverified.
+
+ScMatrixRangeToken adds maRef and true IsMatrixRangeToken but inherits ScMatrixToken::operator== without overriding it. The inherited comparator checks only FormulaToken type/opcode and matrix identity. Two actual matrix-range tokens with different stored coordinate endpoints therefore compare equal when sharing a matrix. It also compares equal with an ordinary ScMatrixToken holding that same matrix; inherited TextEqual follows the same virtual comparison.
+
+Evidence: task98 complete original class/header/member scopes over real matrix peers/full original matrix implementation declaration, normal initialized same-matrix/different-range/base-token/null-matrix comparisons and matching portable replay. Original range members remain distinct value copies. No invalid staticcast/type fabrication or memory/count experiment; original document/interpreter consumer behavior remains unexecuted.
+
+Decision: preserve inherited matrix identity comparison and range-value copying. Audit original interpreter/grouping consumers later, without silently adding coordinates or class-kind checks to equality.
+
+## CALC-088: external range extension has asymmetric result handling
+
+Status: confirmed original initialized token-level outcomes; actual compiler/parser consumer effects are unverified.
+
+The range helper accepts an external-double left operand in its initial kind guard but does not select it as the result double. With a local single on the right it reaches the no-result return and yields null. With a local double on the right it clones that local double, extends its data from the external left operand when 3D guards allow, and returns an ordinary local-double token without the original external file/table metadata. External-single plus local single has a separate branch that creates an external-double result and retains file/table identity.
+
+Evidence: task99 full unchanged original extendRangeReference/class/reference-data scopes with real initialized peers, clone-path normal complete result/input stream including external/local kind and flag combinations, and matching portable replay. Cases use the actual resulting type/file id, no invalid casts or fake metadata provider. Parser/compile preconditions, whether these combinations occur in normal documents and user-visible harm remain unverified; unique native reuse optimization is a separate explicitly documented GC boundary.
+
+Decision: preserve original acceptance/rejection/result kinds and metadata behavior. Audit real original parser/range consumers later; do not silently externalize results or extend rejected combinations.
+
+## CALC-089: merge span copying and equality handle Which differently
+
+Status: confirmed original source behavior; caller consequences and whether this is intentional are unverified.
+
+ScMergeAttr explicit copy construction initializes SfxPoolItem with fixed ATTR_MERGE144, so copying and Clone reset a source whose Which was changed. Its assignment operator copies only the two spans and leaves the recipient base identity unchanged. Same-type equality delegates to SfxPoolItem::operator==, which asserts matching ItemType and returns true without comparing Which, then compares the spans. Thus equal spans in the same item type compare equal despite different Which values. ScMergeFlagAttr uses a defaulted copy constructor instead, retaining the base identity.
+
+Evidence: complete original declarations and bodies in sc/inc/attrib.hxx, sc/source/core/data/attrib.cxx and svl/source/items/poolitem.cxx at the repository pin; task103 source-backed copy/Clone/assignment/equality tests over real shared items. No compiled-native differential, invalid-type assertion or complete document QA claim. Normal Calc callers may always retain the fixed attribute id, making this a deliberate type-specific contract rather than a defect.
+
+Decision: preserve fixed-id copying, payload-only assignment and same-type Which-independent equality. Do not normalize equality or copy the base id in ScMergeAttr; audit real document callers later.
+
+Task104 source follow-up for CALC-089: ScProtectionAttr also explicitly initializes its fixed ATTR_PROTECTION149 in the copy constructor, copies only payload in assignment and ignores Which in same-type equality. Preserve the same pattern; intended fixed-id caller constraints remain unverified.
+
+## CALC-090: configuration node copying drops description
+
+Status: source-confirmed omission; intended schema/consumer semantics and user-visible impact are unverified.
+
+Node copy construction initializes only layer and finalized metadata. Its OUString description member is default-constructed empty. GroupNode clone invokes that base copy constructor, so both clone modes lose the group description; cloned child groups lose their descriptions too, although child templates are retained through clone(true). This may intentionally strip schema metadata.
+
+Evidence: pinned configmgr/source/node.hxx and node.cxx plus groupnode.cxx, reviewed in task105. Source-backed tests use real initialized GroupNode trees and verify empty cloned descriptions while originals retain theirs. No compiled-native differential or complete configuration-service QA claim.
+
+Decision: preserve omission without silently copying descriptions. Audit real schema/configuration consumers before calling it a defect.
+
+## CALC-091: unsigned configuration type classification uses type compatibility rather than range
+
+Status: source-confirmed initialized type-level behavior; intended schema/parser constraints and user-visible impact are unverified.
+
+configmgr getDynamicType selects a signed schema type for unsigned short/long/hyper when Any.has of the corresponding signed type succeeds. That predicate delegates through isExtractableTo and uno_type_isAssignableFromData to the original typelib primitive compatibility table. The table accepts each same-width signed/unsigned pair regardless of the stored numeric value. Thus even maximum unsigned values classify as TYPE_SHORT/TYPE_INT/TYPE_LONG; the wider/error false alternatives cannot be reached through ordinary initialized primitive Any values. This is not a numeric fit test.
+
+Evidence: pinned configmgr/source/type.cxx, include/com/sun/star/uno/Any.hxx, cppu/source/uno/data.cxx and cppu/source/typelib/typelib.cxx, inspected in task106. Source-backed tests use actual Any/UnoType values, including maximum unsigned boundaries. No fake has result or value-provider subclass, compiled differential, native memory or full configuration-service QA claim. False alternatives remain source-reviewed only; raw TypeScript coverage does not certify their reachability.
+
+Decision: retain the original assignability call and classification. Boolean-indexed result alternatives preserve the original selection in JS without inventing range checks or unreachable producer states. Audit real configuration/parser consumers before labeling it a defect.
+
+## CALC-092: modification removal can recurse to an empty forbidden path
+
+Status: source-confirmed recursion into a failed precondition; native release outcome and real consumer reachability are unverified.
+
+Modifications::remove asserts that its path is nonempty. After removing the addressed child, it recursively calls remove on the parent path whenever the immediate parent has no children. If deleting the last root subtree, that parent path is empty. A native debug assertion can therefore fail; with assertions disabled the next path iterator dereference is outside the valid domain, so no particular no-op, crash or return value is promised.
+
+Evidence: complete pinned configmgr/source/modifications.hxx and modifications.cxx, reviewed in task107. Valid removal histories retain another root sibling and verify recursive parent pruning without entering the invalid domain. No invalid native execution, sanitizer/memory experiment, compiled differential or complete configuration-service QA claim.
+
+Decision: preserve the recursive algorithm without silently adding a root-stop guard. Document the invalid-domain boundary and audit actual callers before identifying a user-visible defect.
+
+## CALC-093: malformed configuration suffix validation depends on node existence
+
+Status: source-confirmed early-return behavior; real consumer expectations and user-visible impact are unverified.
+
+Data::resolvePathRepresentation returns null as soon as the current node is missing, before validating the separator or parsing remaining segments. For example, a bare quoted first component followed by junk is resolved to a component key before checking the trailing separator. When that component exists, the method throws bad path; when absent, it returns null without rejecting the same malformed suffix. Canonical/finalized outputs remain unassigned, while the path vector may contain a successfully traversed prefix. This may deliberately prioritize missing-node lookup over full syntax validation.
+
+Evidence: complete pinned configmgr/source/data.hxx/cxx, reviewed in task108, with source-backed real Data/Group tests comparing the same malformed suffix for an existing and absent component. No fake node/provider, compiled differential, native invalid-domain experiment or full configuration-service QA claim.
+
+Decision: retain early return and partial-output timing. Do not introduce eager whole-path validation or transactional outputs without an upstream contract change; audit real consumers before calling it a defect.
+
+
+## CALC-094: hexadecimal XML references overwrite the numeric value
+
+Status: source-confirmed algorithm; native debug/release difference and consumer impact require care.
+
+XmlReader::handleReference assigns each hex digit to val instead of accumulating it. The terminating semicolon is then passed to convertToHex and replaces val with its uint32 error sentinel0xffffffff before the loop breaks. Native debug asserts isUnicodeCodePoint(val); the source release encoder truncates its four output bytes to FF BF BF BF, which strict UTF8 conversion rejects. The earlier overflow throw inside the loop is unreachable: valid digits0..15 are Unicode code points and all invalid digits break before that test.
+
+Evidence: pinned xmlreader/source/xmlreader.cxx, include/o3tl/numeric.hxx and include/rtl/character.hxx; task110 public Reader byte-output tests and exhaustive256byte native JS classification proof. No compiled-native differential, debug execution or claim that malformed hex input returns a valid scalar.
+
+Decision: preserve the source release byte behavior and conversion failure; omit only the provably unreachable overflow throw. Audit actual configuration consumers before identifying user-visible consequences.
+
+## CALC-095: normalized CDATA can retain markup and duplicate content
+
+Status: source-confirmed flow-boundary behavior; intended semantics and real caller impact unverified.
+
+In normalized text mode, scanCdataSection advances pos beyond the CDATA closing delimiter. If the prior whitespace state is None or Span, handleNormalizedText appends flowBegin through this advanced pos, including the CDATA markup, then appends the CDATA content again through normalizeLineEnds. Thus a<![CDATA[b]]> produces a<![CDATA[b]]>b. Initial CDATA and a preceding whitespace Break use different paths.
+
+Evidence: complete pinned XmlReader::handleNormalizedText and scanCdataSection, with task110 actual reader tests of Start/None/Span/Break cases. No compiled-native differential or full configuration-service QA claim.
+
+Decision: retain source output without moving the flush boundary or normalizing CDATA differently. Audit real consumers later.
+
+## CALC-096: attribute CR normalization consults the global reader position
+
+Status: source-confirmed use of global peek; defined in-range behavior covered, invalid native ranges excluded.
+
+The non-collapsing handleAttributeValue CR branch advances the local pointer but checks peek(), which reads global pos rather than the byte after the CR. For an actual attribute X CR LF Y, text not starting LF yields two spaces; text starting LF yields one space. With attribute X CR Y and following text starting LF, Y is skipped. Values ending CR with that same global LF can violate the native local range invariant; no native release result is promised for those invalid accesses.
+
+Evidence: pinned XmlReader::handleAttributeValue and header peek; task110 actual public reader inputs and attribute queries. No invalid native execution, sanitizer, memory experiment or compiled differential claim.
+
+Decision: preserve global-peek behavior on defined inputs. Browser invalid input offsets retain native DataView RangeError; this is a host boundary, not native undefined-behavior emulation. Audit schema/configuration consumers later.

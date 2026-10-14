@@ -197,7 +197,7 @@ export class SvxTabStopItem extends SfxPoolItem {
     );
   }
   /** Exposes the complete persistence-safe tab contract. @returns Tab record. */
-  public QueryValue(): {
+  public override QueryValue(): {
     readonly defaultDistance: number;
     readonly stops: readonly {
       readonly position: number;
@@ -265,7 +265,7 @@ export class SvxAdjustItem extends SfxPoolItem {
   }
 
   /** Creates a persisted adjustment item record. @returns Item snapshot. */
-  public QueryValue(): SvxAdjust {
+  public override QueryValue(): SvxAdjust {
     return this.adjust;
   }
 }
@@ -317,7 +317,7 @@ export class SvxLineSpacingItem extends SfxPoolItem {
     );
   }
   /** Serializes line spacing compatibly with existing percentage records. @returns Percent or rule tuple. */
-  public QueryValue(): number | readonly [number, number, number] {
+  public override QueryValue(): number | readonly [number, number, number] {
     return this.mode === "proportional" && !this.fontIndependent
       ? this.value
       : [

@@ -50,7 +50,7 @@ export class SvxFontItem extends SfxPoolItem {
     );
   }
   /** Serializes the item. @returns Snapshot. */
-  public QueryValue(): string {
+  public override QueryValue(): string {
     return this.familyName;
   }
 }
@@ -87,7 +87,7 @@ export class SvxFontHeightItem extends SfxPoolItem {
   }
 
   /** Serializes the twip height. @returns Height. */
-  public QueryValue(): number {
+  public override QueryValue(): number {
     return this.height;
   }
 }
@@ -174,7 +174,7 @@ export class SvxWeightItem extends SfxPoolItem {
   }
 
   /** Serializes the item. @returns Snapshot. */
-  public QueryValue(): FontWeight {
+  public override QueryValue(): FontWeight {
     return this.weight;
   }
 }
@@ -215,7 +215,7 @@ export class SvxPostureItem extends SfxPoolItem {
   }
 
   /** Serializes the item. @returns Snapshot. */
-  public QueryValue(): FontItalic {
+  public override QueryValue(): FontItalic {
     return this.posture;
   }
 }
@@ -256,7 +256,7 @@ export class SvxUnderlineItem extends SfxPoolItem {
   }
 
   /** Serializes the item. @returns Snapshot. */
-  public QueryValue(): FontLineStyle {
+  public override QueryValue(): FontLineStyle {
     return this.style;
   }
 }

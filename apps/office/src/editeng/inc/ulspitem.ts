@@ -90,7 +90,7 @@ export class SvxULSpaceItem extends SfxPoolItem {
     );
   }
   /** Queries native UNO members, retaining the pinned unconverted aggregate Lower=nPropUpper quirk. @param member - Native member and conversion flag. @returns Native value or unknown-member absence. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     const metric =
       /** Converts unsigned native twips to mm100. @param value - Twips. @returns Native measure. */
@@ -118,7 +118,7 @@ export class SvxULSpaceItem extends SfxPoolItem {
     }
   }
   /** Applies native UNO values including the pinned ScaleLower-to-nPropUpper aggregate write quirk. @param value - UNO payload. @param member - Native member and conversion flag. @returns Whether admitted and applied. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     const integer =

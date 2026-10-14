@@ -44,7 +44,7 @@ export class SwFormatPageDesc extends SfxPoolItem {
   }
 
   /** Persists the page-style reference without a document pointer. @returns Name and offset pair. */
-  public QueryValue(): readonly [string, number] {
+  public override QueryValue(): readonly [string, number] {
     return [this.name, this.numOffset ?? 0];
   }
 }

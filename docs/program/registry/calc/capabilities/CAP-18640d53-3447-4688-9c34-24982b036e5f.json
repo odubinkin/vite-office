@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause."
+    },
+    "capability": "Original Calc merge/filter/pivot flag values",
+    "gaps": [
+      "Original diagnostic XML hook and other Calc attribute/Which owners remain unported.",
+      "Real ScMergeAttr/document/filter/UI/ODS integrations pending; native ABI/UNO/assertion and complete original QA not verified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/attrib.ts",
+          "marker": "ScMergeFlagAttr"
+        },
+        {
+          "path": "apps/office/src/sc/inc/scitems.ts",
+          "marker": "ATTR_MERGE_FLAG"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScMergeFlagAttr"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/mergeflag.test.ts",
+          "marker": "distinguishes overlap, filter, scenario and all pivot control meanings"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/mergeflag.test.ts",
+          "marker": "transports the concrete flag owner through the existing shared item set"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Merge/filter/pivot flag values (task102)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Merge/filter/pivot attribute values"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/attrib.hxx",
+          "marker": "enum class ScMF"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attrib.cxx",
+          "marker": "ScMergeFlagAttr::ScMergeFlagAttr()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scitems.hxx",
+          "marker": "ATTR_MERGE_FLAG"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/copy_paste_test.cxx",
+          "marker": "void ScCopyPasteTest::testTdf107394()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/attrib.hxx",
+          "marker": "flags for cells hidden by merge"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-merge-filter-scenario-pivot-flag-values",
+    "scopeLimitations": [
+      "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "capabilityId": "CAP-18640d53-3447-4688-9c34-24982b036e5f",
+    "id": "CAP-18640d53-3447-4688-9c34-24982b036e5f",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original ScMF13 values and ATTR_MERGE_FLAG145/default0/signed16 value conversion retained.",
+      "All9 overlap/filter/scenario/pivot predicates preserve source conditions and named flag meanings.",
+      "Real shared SfxInt16Item and SfxItemSet used unchanged; copies/Clone own independent objects and preserve base identity."
+    ]
+  }
+}

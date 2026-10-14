@@ -14,7 +14,13 @@ priority over unrelated completion of generic mdds or formula features:
    operations required by the first editable sheet.
 4. Original edit notifications and undo, reusing existing shared Svt/Sfx
    services where their contracts apply.
-5. Original Calc view/input owners and browser presentation connected to those
+5. Original ODS (ODF spreadsheet) reading/writing bound to the same real
+   document owners, reusing shared package ZIP, manifest, SAX and xmloff owners.
+   Preserve document values, strings, typed/date/boolean/error data, sheet
+   structure, repeated rows/cells, formulas and styles where the original
+   document/filter contracts require them; unsupported features remain explicit
+   pending owners, never a temporary independent file model.
+6. Original Calc view/input owners and browser presentation connected to those
    document operations, using the existing shared command/UI infrastructure.
 
 Dependencies still control execution: a leaf declaration does not establish
@@ -22,6 +28,18 @@ document or UI readiness. Original formula and rich-text cell owners must be
 ported where the actual cell-store contract needs them; they cannot be
 replaced by synthetic browser cell variants. The existing browser Foundation
 and coordinate/selection services do not yet provide an editable Calc sheet.
+
+The user reiterated this priority during task85 and explicitly includes ODS
+reading and saving as UI prerequisites. Finish the current coordinate-value
+leaf, then prioritize actual cell-store/value, ScColumn/ScTable/ScDocument and
+ODS filter owners rather than completing unrelated matrix aggregation,
+interpreter or generic library features. Shared package owners already exist
+at package/source/zipapi/ZipFile.ts, ZipOutputStream.ts and
+package/source/manifest/ManifestExport.ts, with shared sax/fastparser and
+xmloff core owners. Their current bounded/partial contracts must be audited
+and extended where ODS requires it; availability alone does not establish
+complete ODS support. Calc-specific filter ownership follows sc/source/filter/xml.
+No ODS importer/exporter or editable sheet is claimed at this checkpoint.
 
 Task32 (`202610101342-SSE4NF`), the first task since task31's full run, ports
 original `CellType` at `sc/inc/global`, `TEXTWIDTH_DIRTY` at
@@ -3246,3 +3264,316 @@ Whole Calc125tests36files and directly affected shared225tests45files pass raw S
 ### Full verification checkpoint (task81)
 
 [Full test cycle8](calc-full-test-cycle-8.md) runs all current suites after tasks72 through80 with four original reference links absent/restored. Office15550tests740files, inventory123tests38files, tooling35tests9files, browser308scenarios (Writer306/shared2/Calc0) and static build pass first run. Whole raw office459executable owners are S33129/B22303/F6705/L30164all100 with every counter positive, including Calc24/shared226/Writer209. Inventory JSON summary1734S1292B436F1668L100. No runtime or Writer-only coverage repairs needed. Exact source/gate review and closure are tracked by task202610121732-1D97V7; user requests pausing the goal after completion. Original ScMatrix/result/cells/document/edit/undo/input/view/UI remain subsequent, with no editable UI readiness claim.
+
+### Native JavaScript token references (task82)
+
+The user's explicit [browser GC correction](calc-browser-gc-adaptation.md) supersedes task75's C++ token lifetime emulation. Boost intrusive_ptr and token ownership counters/policies/acquire/release/delete hooks are removed. Nullable FormulaTokenRef/FormulaConstTokenRef aliases and direct FAP references preserve semantic identities; value Clone remains independent as required. Native count/policy fields are deliberately excluded from semantic projections of unchanged original captures. Existing Writer/Calc SAL/SVL shared-value cleanup is a separate unchanged boundary, with no FAP cascading cleanup. No new smart-pointer engine, GC finalizer or logical ownership counter is introduced. Current inventory records the approved browser adaptation; complete shared-value lifetime migration, compiler/document/UI remain outside this task. Whole scoped verification and exact review are tracked by task202610130501-G2BDHD, main goal remains paused.
+
+Task82 scoped checks pass125Calc/shared242tests with raw S/B/F/L100 every counter positive (Calc3080S2092B526F2721L; shared4028S2063B829F3611L39executable owners). Original fixtures remain byte-identical, four source links absent/restored, static/profile0UI pass and all16final gates/36tooling/123inventory tests pass. Only obsolete evidence anchors and the retired formula-to-external edge assertions needed migration after the semantic code changes. Exact review/closure follow, main goal remains paused.
+
+
+### Internal matrix initialization and coordinates (task83)
+
+The actual internal `ScMatrixImpl` now owns the original data and flag matrices over the existing shared mdds container. The three empty/scalar/vector constructors, content `Clear`, dimensions/count, numeric query and coordinate replication follow their original definitions. The column/row inversion into mdds is preserved, as are scalar, single-column and single-row replication and unchanged coordinates on valid short-circuit queries. The public `ScMatrix` facade, mutations/accessors, interpreter binding and document/UI owners remain subsequent work. There is no interpreter substitute or additional container engine.
+
+Ordinary native source-excerpt observations cover16dimension pairs, all constructor forms and clear,25coordinate pairs per stage and genuine UInt16/UInt8 traits. The native caller declaration exposes storage only to observe initial data/flags; original selected method bodies remain unchanged. Native memory-pool accounting is deliberately omitted under the user GC-first instruction, documented in `calc-browser-gc-adaptation.md`. Shared value cleanup remains the existing separate boundary. No native exception/allocation/lifetime timing or whole upstream QA certification is claimed. Next full-suite cadence is91 after81.
+
+
+### Public matrix construction and geometry (task84)
+
+The public `ScMatrix` now delegates its three constructors, dimensions/count, coordinate validation/replication and Resize overloads to the actual `ScMatrixImpl`. Six original inline tag classifiers retain their UInt8 masks. Initial64bit upstream536870912-element validation applies per matrix; GC replaces the native live-allocation ledger, environment override and reference-counted ownership. Ordinary native observations compare the initial allocation boundary before any matrices exist, all256tags, zero/one-zero/rectangular constructors and repeated grow/shrink/zero/error resize. No large matrix is allocated for boundary queries. See `calc-browser-gc-adaptation.md` for the resource-policy divergence and `calc-upstream-suspected-issues.md` CALC-072 for the original resize fallback asymmetry.
+
+The public typed mutation/accessors, Clone/interpreter/results and document/UI graph remain subsequent original owners. No substitute interpreter or cloning algorithm is provided. Native allocation exceptions/lifetime timing and full original QA are unverified. Next full91.
+
+
+Iteration84 also corrects generic shared `delayed_delete_vector` scalar fill: ordinary assignments retain encoded NaN error values where `Array.fill` canonicalized them. The public matrix native replay covers actual MatrixSize538/StackOverflow514 behavior through shared storage. No memory manager or Calc-specific error representation is introduced in mdds.
+
+
+Generic vector reserved slots are also initialized with `undefined`, matching the existing optional-slot representation, before scalar assignments. This prevents numeric array transitions from losing encoded errors during allocation/copy. The fix is in the shared owner and adds no error decoder, alternate number wrapper or memory manager.
+
+
+### Coordinate matrix values and predicates (task85)
+
+Original coordinate PutDouble/String/Empty/EmptyPath/Error/Boolean, PutEmptyResultVector, Get and all coordinate type/empty predicates now operate on actual mdds storage with public ScMatrix delegates. Const string input is borrowed, stored/returned strings use the existing SharedString value copies. Scalar writes retain flags, PutEmpty clears them, and empty-result Get intentionally returns Empty while IsEmptyResult remains distinct. Invalid IsEmptyPath returns true; other predicates return false. Production release source observations include genuine internal supported block/flag cases without certifying public reachability or a browser debug-assertion subsystem.
+
+The complete37464-byte original/portable stream covers five shapes, value/flag histories, UTF16 embedded NUL and non-ASCII, retained returned strings, errors/replication and invalid writes. CALC-073 records unguarded PutError row spill. Index/transposed/bulk families and interpreter-specific queries/Clone/results/document/UI remain subsequent original owners. Existing GC allocation/refcount adaptation stays unchanged; no alternate data engine, string wrapper or interpreter substitute. Next full91.
+
+
+### Scalar cell value ownership (task86)
+
+The original `ScCellValue` owner now exists at sc/inc/cellvalue and sc/source/core/data/cellvalue for empty, numeric and shared string alternatives0/1/2. Scalar setters/clear, type-specific access, emptiness, swaps and logical moves follow original source definitions; string construction/set copies the existing SharedString value and empty strings remain STRING cells. GC refs/tagged values replace native allocation/physical variant representation; moves still clear their source because that is observable cell behavior. Existing shared-value cleanup is reused; no variant/refcount library is introduced. Wrong variant access uses JS TypeError at the native exception boundary.
+
+The complete3747-byte original scalar stream covers finite/IEEE/encoded errors, UTF16 retained strings, setters, wrong getters, swap/self-swap, move constructor/assignment/self-move and repeated clear. Native unchanged definitions compile with real SharedString and genuine uninstantiated forward-declared rich-text/formula pointers; their cleanup/ABI is not certified. CALC-074 preserves self-move clearing. No fake peer owner, alternative browser cell engine or complete ScCellValue claim is made. Rich-text/formula/ref/copy families and document commit/release/assign remain subsequent real owners. The task directly supports cell/store/document editing and ODS work; first-editable-UI/ODS priority stays above unrelated matrix/library completion. Next full91.
+
+## Scalar borrowed cell values (task87)
+
+Task87 adds original `ScRefCellValue` at the existing cellvalue header/core
+boundary. Default NONE and numeric VALUE are copied by value; STRING holds
+the genuine borrowed `SharedString` object, including a null pointer. Copies
+and assignment preserve this identity without creating/acquiring string
+ownership. Reassigning the original SharedString is visible through all views.
+Only the getter matching getType() is supported, as required by original
+assertions; wrong union reads and ABI are not certified. Ordinary JS fields
+replace native union layout, and clear drops the inactive reference for GC.
+
+The normal native probe retains complete original constructor/clear/isEmpty
+definitions, inline getters and union declaration over genuine shared string
+dependencies. Its1451-byte stream covers default/finite/IEEE/encoded error
+values, embedded-NUL UTF16 strings, borrowed/null/empty-string identity,
+memberwise copy/assignment/self-copy and source/target clears. No fake
+formula/rich-text peer, ownership manager or sanitizer is introduced.
+
+This is a prerequisite for document cell access, not a complete document.
+Formula/text-dependent getters, equality and document operations remain
+pending actual owners. Continue toward cell storage and ScColumn/ScTable/
+ScDocument, editing/undo and shared-backed ODS filters; next full run91.
+
+## Original matrix result token owners (task88)
+
+Task88 adds ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken
+at the existing original token header/core boundaries. They reuse the real
+ScMatrix and shared FormulaToken/primitive owners. Original ScMatrixRef and
+ScConstMatrixRef are type-only JS reference aliases, with no runtime smart
+pointer, refcount, allocator, finalizer or replacement matrix model.
+
+Transport result copies share matrix and upper-left identity. Stored formula
+constructors/copies and typed matrix-result Assign clone numeric upper-left
+tokens, matching original CloneUpperLeftIfNecessary. The generic FormulaToken
+Assign overload instead shares a numeric upper-left when its argument is a
+matrix-result token (CALC-075); an explicit FormulaToken type witness preserves
+that erased static overload. Numeric formula copies compare unequal by
+upper-left identity (CALC-076), also retained. Native qualified/nonvirtual base calls map to
+ScMatrixCellResultToken.prototype.Assign.call, preserving receiver selection.
+Columns/rows narrow to signed16/32 and resets preserve these dimensions.
+
+The complete normal native class/member streams compare real matrix
+identities/dimensions, null refs, copies/clones/assignments/self-assignment,
+overload aliases, upper-left mutations, signed field boundaries and exact
+finite/IEEE/error payloads. Original matrix constructor/storage declarations
+and definitions reuse verified native fixture context; genuine formula headers
+and source scopes are unchanged. Physical native lifetime, assertions and
+full original QA are outside certification.
+
+These are direct prerequisites of the actual ScFormulaResult/ScFormulaCell
+owners and ODS cached formula results, not unrelated matrix aggregation.
+Continue with those real owners and cell storage/document/editing/ODS;
+no editable sheet or ODS filter is claimed and next full run is91.
+
+## Original formula result state owner (task89)
+
+Task89 adds actual ScFormulaResult alongside existing FormulaResultValue at
+the original formularesult header/core boundaries. Default/token/copy, Assign,
+scalar resolution, error/cache/empty precedence, all queries, matrix updates
+and hybrid import setters reuse real FormulaToken/Calc matrix/empty/hybrid
+tokens and shared strings. This supports cached ODS formula results without
+creating a second document/result model. No ScFormulaCell/document/UI/ODS
+filter is claimed yet; those remain required real owners.
+
+Native token refs and None-policy/fixup bookkeeping are replaced by ordinary
+JS references. Numeric matrix copies and original destination-matrix
+assignment semantics remain. Complete original C++ result class/header/source
+and genuine token/matrix dependencies are observed normally only, including
+copy/assignment, error-masked matrix dimensions, all hybrid import transitions,
+caller out-reference preservation and multiline cache alias histories.
+Only genuine stored matrix-formula owners are used; transport input is
+applied to that valid context, not cast into a fabricated stored owner.
+
+Three error queries specialize the resolved-scalar invariant: ResolveToken
+never retains a scalar svError, instead setting mnError and direct zero.
+When mnError is NONE, a svError result can therefore only come from matrix
+upper-left. GetResult's non-token string guard after isValue is likewise
+unreachable: GetType yields svDouble for non-token nonempty nonerror state.
+These are explicit logical proofs over the original methods, not private
+state forcing, missing-feature defaults or Istanbul ignore directives.
+
+CALC-077 records multiline cache retention after an external shared-token
+string mutation. CALC-078 records caller error retention in GetErrorOrDouble.
+Both preserve original behavior; real consumer/UI effects are unverified.
+Continue toward ScFormulaCell and actual storage/ScColumn/ScTable/ScDocument,
+editing/undo and shared-backed ODS; next full run91.
+
+## Shared token array storage and recalculation (task90)
+
+Task90 installs actual shared FormulaTokenArray code/RPN storage and
+FormulaTokenArrayStandardRange at formula/inc/tokenarray and the original
+token.cxx class shard token.array. This is the required base of ScTokenArray
+used by ScFormulaCell construction and formula/ODS code storage; it is not a
+parallel Calc-specific sequence or a full compiler implementation.
+
+Default/copy/move/assignment/reset/finalization, initialized XML/RPN inputs,
+append/token clones/numeric/string/error builders,8192limit/ocStop sentinel,
+replacement/removal and opcode/reference/name/index queries reuse real
+shared token owners. Copies share tokens but finalize nonempty code. Moves
+transfer arrays and active lengths while retaining source metadata. Standard
+ranges borrow live buffer identity and a fixed end, so later entry replacement
+remains visible through the range. Only active initialized data is certified.
+
+Original ScRecalcMode constants and complete byte/priority histories use
+native bitops. The original o3tl typed_flags7f complement makes the combined
+mask60; a new flags library is unnecessary. JS GC owns token/array lifetime,
+with no capacity32/unique_ptr/refcount/pool/allocator/finalizer mechanism.
+Refcount gates in replace/remove specialize to actual RPN identity scans;
+original forward-index adjacency skip remains CALC-079. Moved-source flags
+and finalized append rejection remain CALC-080.
+
+Normal native selected complete methods/header inlines compile over genuine
+tokens with a declaration scaffold limited to the supported operation family
+and original static compiler method. No unsupported virtual function or fake
+peer is supplied; full native layout/vtable and memory/tail/invalid-state
+behavior are outside certification. Full UNO/opcode jump builders/rewrites/
+reference ranges, ScTokenArray/ScFormulaCell/document/storage/editing/UI/ODS
+remain pending real owners. Next scheduled full run91.
+
+### Full verification checkpoint (task91)
+
+[Full test cycle9](calc-full-test-cycle-9.md) verifies tasks82 through90 with four original reference links absent/restored. Office15720tests769files, inventory123tests38files, tooling36tests10files, browser316scenarios (Writer314/shared2/Calc0) and static build pass first run. Whole raw office465owners are S34287/B23052/F7002/L31197all100 with every counter positive; Calc25/shared227/Writer213. Inventory1734S1292B436F1668L100. No runtime or Writer-only coverage repair is needed. Task202610131622-FVA807 records gates, exact review and closure. The active priority is missing original owners for editable UI and ODS spreadsheet reading/saving, reusing shared package/ZIP, manifest, SAX and xmloff modules. ScTokenArray/ScFormulaCell, column/table/document and editing/undo/input/view remain pending; this checkpoint establishes no editable UI or ODS readiness. Next scheduled full run101.
+
+### Document calculation configuration values (task92)
+
+The actual ScCalcConfig instance owner now provides document string-conversion/reference settings, original OpenCL value fields/defaults, implicit value copy/assignment, four-field MergeDocumentSpecific, SetStringRefSyntax, partial defaults/reset and value equality. The existing Writer/shared SortedVector and OUString owners are reused. FormulaGrammar AddressConvention lives in the original shared header boundary with all original-1through7values. Ordinary unchanged full headers and complete instance definitions compare3328-byte initialized state/alias/copy/reset/equality stream. CALC-081 records the original mutable shared default set; device strings remain independent value copies.
+
+No OpenCL runtime or process/configuration-listener substitute is implemented. Static ScCalcConfig service methods, symbolic opcode conversion, full shared grammar/compiler and actual ScTokenArray/ScFormulaCell/document remain subsequent owners. ScXMLImport::SetStringRefSyntaxIfMissing uses this value configuration; this task does not create an ODS filter or editable UI. Native ABI/lifetime and whole upstream QA remain unverified. The goal stays focused on original model owners required by UI and shared-backed ODS read/save; next full101.
+
+Whole Calc133tests44files and affected shared83tests25files pass with original links absent/restored. Raw Calc26owners3623S2412B669F3221L and shared16owners1264S969B171F1109L are100 with every counter positive. The shared selection includes existing genuine OUString consumer suites required for whole-owner coverage; no Writer-only repair or threshold change. Static build and Calc browser profile pass, still0editable-UI scenarios. The six ordinary native commands and450original source hashes support the instance value observations, not static configuration services or a full container/grammar certification. Gate/exact review and lifecycle closure are tracked by task202610131647-N6A5MQ.
+
+### Shared formula grammar operations (task93)
+
+The existing FormulaGrammar shared owner now implements all original static grammar constants, API mapping, support classification, language/convention extraction, English-bit update, convention merge and ODF1.1/OpenFormula/OOXML/Excel predicates. FormulaLanguage has its original shared IDL owner. Native JS signed32 bitops reproduce these operations without another flags library or parser. The header/core boundary follows include/formula/grammar.hxx and formula/source/core/api/grammar.cxx; the existing AddressConvention interface and task92 witness remain.
+
+Full unchanged original header/source and genuine generated IDL headers/configuration compare13349-byte381-line normal release stream, two ordinary commands and9original source hashes. Negative sentinel convention-dependent observations are excluded from native certification (CALC-082); production merge omits the original debug assert, retaining release unsupported-return behavior. No native enum ABI/assertion-process/full QA claim. Default UI grammar is GRAM_NATIVE_UI and storage grammar is GRAM_ODFF, required by future actual Calc formula cells and ODS filters. Compiler/document/storage/editing/view/UI/ODS remain pending prioritized owners. User requests pausing after next full101 and relevant repairs; goal active until then.
+
+Whole Calc133tests44files and affected shared2tests1file pass raw100 with original source links absent/restored. Calc26owners3623S2412B669F3221L unchanged; actual shared grammar/FormulaLanguage2executable owners34S36B12F30L, every raw counter positive. The header reexport has no executable owner. Static build and Calc profile pass with0UI scenarios. Ordinary native --write/--check and exact full stream pass; task202610131710-MCM7S2 records repository gates, exact review and closure. User pause remains scheduled after full101 and relevant repairs.
+
+### Shared search parameter values (task94)
+
+Original utl::SearchParam now supplies the genuine shared parameter class needed by Calc document options, ODS search-mode settings and future UI search. Complete text/copy constructors and defaults, implicit copy assignment, stable borrowed const OUString member, type/case/selection/signed escape getters and mode/boolean converters reuse existing shared OUString. Wildcard precedence and conditional regex output writes remain original; scoped unnamed search modes convert to normal flags. Native JS integer operations handle the UInt32 escape and signed API return. Ordinary references/GC own parameters; native destruction has no new browser dispose/count/finalizer API, and existing SAL value cleanup remains separate unchanged.
+
+Complete unchanged original class declaration and constructor/destructor definitions over real dependencies compare17252-byte ordinary value/copy/member-reference stream,446source hashes and six normal commands. No memory count/invalid lifetime/sanitizer/ABI or whole original QA claim. TextSearch backend/cache/diagnostic stream and Calc document options requiring genuine locale/config/formatter services remain subsequent owners; no fake metric/year defaults. Actual compiler/document/editing/view/UI and shared-backed ODS filters remain unfinished prioritized work. Goal remains active until scheduled full101 and relevant Calc/shared repairs, then user-requested pause.
+
+Whole Calc133tests44files and affected shared76tests23files pass raw S/B/F/L100 with every counter positive: Calc26owners3623S2412B669F3221L unchanged; affected SAL/string-view/SearchParam13executable owners755S473B165F600L. Four original links are absent during portable/static/Calc-profile checks and exact targets restored; Calc still has0UI scenarios. Whole ordinary native --write/--check streams pass. Exact gate/source evaluation and lifecycle closure are tracked by task202610131733-RHQ4Y2; no editable document/ODS or full engine readiness claim.
+
+### Single and double reference tokens (task95)
+
+Actual ScSingleRefToken/ScDoubleRefToken owners now implement data/default-opcode and implicit-copy construction, Clone, stable mutable single/range/end member getters, base-and-data equality and complete original checkTextEqual. Existing shared FormulaToken and Calc address/range/reference-data/sheet-limit owners are reused. Copies retain independent endpoint storage and the same bounds owner through ordinary JS references, without a memory library. Range trim state is copied but omitted from equality as in original reference data. TextEqual normalizes origin ranges and compares exact endpoint flags; it can differ from raw equality, and receiver-limit asymmetry is retained (CALC-084).
+
+Full original class declarations and complete doc-free original methods/data/helper, genuine full formula/address/reference/limit headers and real SALhelper implementation produce a matching1805559-byte ordinary initialized value/identity stream. All256flags, negative/in-range/out-of-range coordinates, default/custom opcodes, true type/opcode mismatches, source/copy/clone/member mutations and both comparison directions are exercised. No fake ScDocument/compiler/matrix methods, native counts/layout/overflow/memory/sanitizer or original full QA claim. Formula token equality QA remains unexecuted document-level context. Actual compiler/ScTokenArray/ScFormulaCell/document/editing/grid and shared-backed ODS read/save remain prioritized pending owners.
+
+The user changed the stop rule: continue past first upcoming full101; pause after second upcoming full111 and relevant Calc/shared repairs. Writer-only coverage remains deferred to its separate branch.
+
+Whole Calc134tests45files and affected shared251tests56files pass with original source links absent and restored. Calc26executable owners have raw3655statements/2443branches/682functions/3253lines; shared40owners have4272/2147/897/3817. All raw S/F/B counters are positive and S/B/F/L coverage is100. Static build/Calc profile pass with0UI scenarios; these results do not prove editable-grid readiness. Existing16repository gates pass after bounded test typing and metadata-anchor corrections; task202610131803-TNXVM3 records failures, evidence and exact review. No Writer source or coverage repair.
+
+### Reference-list and structured-table tokens (task96)
+
+Original ScRefListToken and ScTableRefToken now use actual shared FormulaToken and Calc reference-data owners. List default/bool/copy/implicit move/Clone and stable mutable collection/array marker queries retain original initialized vector-value semantics. Native push_back(value) maps to an explicit copied ScComplexRefData in a JS array; move transfers existing element identities and empties the same source collection, without a generic vector or memory library. List equality compares the collection object, making distinct copies/clones unequal despite matching values (CALC-085).
+
+Table tokens retain original Item constants/mask union, UInt16 index, nullable area token identity, explicit area-cloning copy/Clone and base/index/item/null/payload equality. Ordinary references retain current areas; source mutations through retained area tokens remain visible, while copied areas are independent. Single/range task95 implementation moves unchanged into token.references.ts with explicit responsibility-split provenance because adding complete list/table responsibility exceeds the original token.ts500line cap. Original header and token.ts aggregate remain canonical exports.
+
+Complete original classes/methods over genuine task95/shared/reference headers run normally; no fake document/compiler/config/matrix methods or counts/ABI/memory/sanitizer proof. Original QA is unexecuted document consumer context. Full compiler/ScTokenArray/configuration/ScFormulaCell/document/editable grid and ODS read/save remain prioritized pending owners; next full101 first, continue then pause after secondfull111 and relevant Calc/shared repairs.
+
+Whole Calc135tests46files27executable owners pass raw3706S2479B697F3295L; affected shared252tests57files40owners4272S2147B897F3817L pass. Every raw S/F/B counter is positive and S/B/F/L100. Four source symlinks absent for portable/static/Calc-profile checks and restored exactly; Calc browser still0UI scenarios. Native77781-byte full initialized stream and unchanged complete task95 reference-class/helper text verified. Existing16repository gates pass after bounded test-typing and declaration/property evidence corrections. Task202610131826-DSFAQQ records exact review and clean closure; no Writer-only repair or full run before101.
+
+### External reference and name tokens (task97)
+
+Actual ScExternalToken file-id/base equality and concrete ScExternalSingleRefToken/ScExternalDoubleRefToken/ScExternalNameToken families now reuse real FormulaToken, SharedString/OUString and Calc reference-data owners. Original UInt16 index/kind/ocPush defaults, value and by-value string construction, copy/implicit move/Clone, stable string/data member queries and base/file/string/data equality are preserved. External TextEqual inherits raw value equality; it does not use the local single/double origin-range normalizer. String moves clear only the source string member, retaining source file/type/reference fields; copied reference data remains independent. Original assignment deletion is respected.
+
+The complete external family fits in the existing reference-token owner (449lines) after import consolidation, so another source shard is unnecessary. Existing canonical token.ts/header aggregate and explicit reference responsibility mapping remain. Tokens use ordinary JS object references; existing shared SAL/SVL value cleanup is unchanged, without new counts, Boost, allocator, finalizer or pool. Protected base construction and true concrete typed comparisons are the tested domain; independent base slices/invalid derived casts are excluded.
+
+Complete unchanged original external classes/member/constructor/destructor definitions over genuine full formula/reference headers compare748045-byte initialized normal-only stream with474source hashes,17verified native-only Boost headers and8terminal commands. Five UTF16/null/empty/NUL/supplementary/folded inputs,7file-index boundaries,10flags and full copied/moved/member/input/Clone/file/string/data/type mismatch histories replay identically. Original external-reference and range-name document QA is unexecuted context only. Actual external manager/compiler/configuration/ScTokenArray/ScFormulaCell/document/grid/ODS pipeline remains prioritized pending. Next full101 first, continue then pause after secondfull111 plus relevant Calc/shared repairs; no Writer-only repair.
+
+Const second-end references also exposed a TS qualifier mismatch in existing ScSingleRefData copy/assign: those operations and single-reference value constructors now accept the original const-source view while copying only the actual initialized owner's private fields. No fake public data or mutable const-source test workaround was added. Current whole Calc136tests47files27owners pass raw3767S2523B722F3350L; affected shared253tests58files40owners4272S2147B897F3817L pass. All raw counters positive/S/B/F/L100,4links absent/restored, static/Calc0UI and16gates pass. Native RHS value temporary is recorded source-only as CALC-086; native incidental stack/refcount traffic is not reproduced. Task202610131848-NTM4VX records failures, current-source evidence and exact review.
+
+### Range matrix, column cell-state and matrix-range tokens (task98)
+
+Actual RangeMatrix/MultiDataCellState now retain original core/data/types.cxx responsibility with types.hxx header exports. RangeMatrix defaults to null matrix and six-1coordinates, checks nonnegative/ordered geometry independently of matrix/document bounds, and copies/transfers actual matrix refs through ordinary JS references. Move clears only source matrix and retains coordinates, including original self-move value stability. Native signed32 range/row, signed16 cell-column and UInt8 state assignments use JS bitops at public property boundaries; default cell state is Invalid with row/column-1. No scalar/memory library or document scaffold is introduced.
+
+Actual ScMatrixRangeToken uses existing real matrix/token/refdata owners, narrows range coordinates through original reference-data initialization, shares matrix while copying its own range on Clone/copy, and reports true matrix-range classification. Inherited equality compares matrix identity and omits range coordinates (CALC-087), retained. True interpreter/column/compiler/configuration/ScTokenArray/document/grid/ODS owners remain prioritized pending.
+
+Complete genuine original matrix/type headers and full original private matrix implementation declaration, unchanged required doc-free constructor/storage/dimension/destruction/ref scopes and exact required mdds element declarations/callbacks produce61825-byte normal full initialized stream. Actual bounded matrices, default/scalar narrowing/geometry512cases/copy/move/selfassignment/member/Clone/classification/equality histories match.482original source hashes/17verified native-only Boost headers and actual mdds dependencies/8normal commands; no reduced matrix declaration scaffold/fake document/interpreter/config method or link suppression. Native count/pool/physical layout/memory/ABI/concurrency/debug/wholeQA excluded; document QA anchors are unexecuted context only. Next full101first/continue, pause after second111/repairs; Writer-only repair separate.
+
+Whole Calc137tests48files28executable owners pass raw3829S2543B751F3409L; affected shared254tests59files40owners4272S2147B897F3817L pass. Every raw S/F/Bcounterpositive/S/B/F/L100. Fourexact source links absent during portable/static/Calc-profile checks and restored; Calc0UI remains unready for editable document claims. Existing16repository gates pass first current attempt; normal original full witness and source scopes verify. Task202610131932-36FZ61 records failures in initial locator/transitive include discovery, exact committed review and clean closure. No Writer-only coverage repair or full run before101.
+
+### Range-reference extension operation (task99)
+
+Actual extendRangeReference now follows original kind guards/single-single construction/real double/list selection/extension/sheet-relative-3D inheritance/external metadata and rejection rules. Existing true local/external/list tokens, SharedString and reference-data/address/limits owners are reused. The actual free-operation responsibility is token.ranges.ts because108lines plus449line reference owner exceeds500line cap; original canonical token/header exports stay. No alternate range model or fake document/compiler/config peer is created.
+
+The user-authorized GC adaptation always clones existing double tokens rather than inspecting native GetRef1 ownership. The original reuse boolean hint remains in the signature, with explicit divergence: unique native in-place input identity/mutation behavior is omitted. Resulting ranges and original clone-path input/metadata behavior match; no false ownership/unique-input parity. See the GC document for the boundary. Original external-double+single rejection and external-first/local-double metadata loss are retained (CALC-088); real consumer consequences are unverified.
+
+Full unchanged original function over full genuine peer classes/required doc-free reference bodies compares1198110-byte normal stream:12544bounded initialized type/flag/position/reusefalse/real aliased-reusetrue cases,474source hashes/17native-only verified Boost headers/8commands. Native source never rewritten to accommodate GC behavior; unique input mutation/count/lifetime/layout/ABI/overflow/invalid cast/sanitizer/wholeQA excluded. Original formula reference QA anchors are unexecuted document context only. Actual compiler/config/ScTokenArray/document/grid/ODSpipeline remains prioritized missing work; nextfull101first/continue then pause second111/repairs, Writer-only repair separate.
+
+Whole Calc138tests49files29executable owners pass current raw3898S2602B752F3467L; affected shared255tests60files40owners4272S2147B897F3817L pass. Every raw S/F/Bcounterpositive/S/B/F/L100. Fourexactlinks absent/restored; static/Calc0UI and16gates pass after explicit standard hint-discard lint correction, no rule override. Native full clone-domain stream/source identities match; task202610132001-G6D4AD records exact committed review and closure. User-authorized GC unique optimization divergence remains explicit, no false fullidentity parity; no Writer-only repair/full office before101.
+
+### Shared grid option values (task100)
+
+Complete original shared SvxOptionsGrid now owns original protected fields100/0/100/0/false/true/false, all14getter/setter methods and implicit value copy/assignment through nativeJS UInt32 boundary operations. Source-shaped svx/optgrid.hxx header and svx/source/dialog/optgrid.cxx owner are reused by future genuine integrations; no Calc-only base, fake metric/color/config/GUI service or generic memory library. Writer code is unchanged: its current bounded view option owner is a different API, and corresponding future grid integration should use this actual shared owner.
+
+Whole unchanged original class/constructor over true sal/svx headers and verified real configuration compare19099-byte625-line normal initialized stream:13UInt32boundary inputs8bool-combinations/default/copy/selfassignment/value updates match,7sourcehashes1configuration2commands. Native ABI/layout/lifetime/GUI/wholeQA/sanitizer/memory excluded. The original cell-grid visibility QA anchor is a different display setting and unexecuted view context only, not direct SvxOptionsGrid proof; full native value stream supplies actual evidence.
+
+Calc-specific ScGridOptions defaults1000/1270 depend on actual metric service, and ScViewOptions color/config depend on real owners; these remain pending without substituting sharedbase100 defaults. Grid items/dialog/Sfx and actual Calc view/document/UI/ODS pipeline still missing prioritized integrations. Next task101 is fullfirst; continue after it and pause only after secondfull111/repairs, no Writer-only repair.
+
+Task100 verification: source-absent whole Calc 138 tests/49 files/29 executable owners, raw S3898/B2602/F752/L3467; complete shared grid owner 1 test/1 file, raw S32/B2/F16/L31. Every raw counter is positive and S/B/F/L coverage is 100%. All 16 repository gates pass; static and Calc browser inventory pass (0 UI scenarios). Four reference links were absent during portable checks and restored exactly. Existing Writer/shared runtime is unchanged. Next full cycle is task101; continue after it and pause after the second upcoming full cycle task111 and relevant repairs.
+
+## Full test cycle10 (task101)
+
+Scheduled task101 full source-absent checks passed: office15,730 tests/778 files, inventory123/38, tooling36/10, browser316 (Writer314/shared2/Calc0), static build. Raw office coverage contains473 executable owners: Calc29 S3898/B2602/F752/L3467; shared231 S14871/B9275/F2778/L13610; Writer213 S15942/B11429/F3603/L14507. Every raw counter is positive and all S/B/F/L metrics are100. No repair or Writer-only coverage work was needed; four reference links were restored exactly. See [cycle10 evidence](calc-full-test-cycle-10.md).
+
+This is the first upcoming full run under the revised stop instruction. Continue toward missing core owners for UI and ODS; pause after the second upcoming full cycle task111 and relevant Calc/shared repairs. No editable Calc UI readiness claim.
+
+## Merge/filter/pivot flag values (task102)
+
+Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.
+
+Task102 final verification: whole source-absent Calc142 tests/50 files/31 executable owners, raw S3927/B2609/F765/L3496; complete reused shared integer/pool owners105 tests/8 files/3 executable owners, raw S58/B48/F36/L58. Every raw counter is positive and all four metrics are100. Static and Calc browser inventory pass (0 UI scenarios); four reference links restored exactly. All16 repository gates pass after bounded new schema/JSDoc corrections. Existing Writer/shared runtime implementation is unchanged. Clone accepts the actual optional shared item pool argument and ignores it as original. Source-backed original6 pinned declarations/value-body files reviewed; no compiled-native differential or full original QA claim.
+
+## Merge span values and shared unsupported query default (task103)
+
+Task103 adds actual ScMergeAttr zero0/0 defaults, signed16 columns/signed32 rows, value queries, either-axis>1 predicate, explicit copy/Clone and payload-only assignment/equality over existing shared SfxPoolItem. Copy/Clone reset Which144; assignment retains recipient Which; same-type equality ignores Which as original base only asserts ItemType then returns true (CALC-089). Browser foreign-type guard is not a native invalid-type assertion claim. Clone accepts and ignores actual optional shared SfxItemPool. Original unsupported SfxPoolItem QueryValue is restored in shared existing no-payload browser representation asundefined; native false/status and untouchedAny/UNO ABI are not certified, existing concrete overrides unchanged. Header/core/Which responsibility remains separate, signed widths use native JS bits, ordinary refs no new allocator/refcount/Boost/library. Seven pinned original source files reviewed; fixed source-backed shape/copy/identity/width cases and actual existing shared itemset transport, no C++ generator/compiled differential/full original QA. XMLdiagnostics, real ScPatternAttr/column/table/document/merged grid/config/view/ODS integrations remain pending; existing package/ZIP/manifest/SAX/xmloff must be reused. WholeCalc/completeaffected shared strict raw100 and current gates required; firstfull101passed, nextfull111pause.
+
+Task103 verification: whole source-absent Calc147 tests/51 files/31 executable owners, raw S3940/B2620/F772/L3509; complete affected shared owners110 tests/9 files/3 executable owners, raw S59/B48/F37/L59. Every raw counter is positive and all S/B/F/L metrics are100. Existing Writer/shared descendants received34 approved TypeScript override annotations in19files (18 extra paths); byte normalization and emitted JavaScript comparison prove their implementations unchanged. Native unsupported query default exists in the actual shared base; actual Calc inherits it without a local substitute. Source-backed seven pinned declaration/body files and meaningful shared transport tests provide represented value evidence, not compiled native/fullQA/UNO/ABI proof. Firstfull101 passed, nextfull111 requestedpause; Writer-onlycoverage repair remains excluded.
+
+## Cell protection values and shared member contracts (task104)
+
+Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause.
+
+Whole source-absent Calc152 tests/52files/32 executableowners rawS4006/B2654/F787/L3570 and completeaffectedshared117 tests/11files/5owners rawS79/B58/F42/L79 pass allmetrics100 with everyrawcounterpositive. Actualstatic/Calc0UI checks pass and4linksrestoreexact. Existing11PutValue qualifiers in5files yield identical emittedJS. Inventory/currentrepo gates and exactcommittedreview remain task closure requirements.
+
+## Shared configuration group tree (task105)
+
+Task105 implements shared configmgr Node/NodeMap/GroupNode/RootNode logical tree and length-first UTF16 config_map order using actual existing SortedVector/OUString/RuntimeException/SAL values. Ordinary JS node references omit native SimpleReferenceObject/staticize/refcount machinery under user GC instruction. Stable first/second entries, undefined end and getOrInsert erase native iterator/operator syntax; no native iterator address, private-copy accessibility, STL/ABI/debug assertion parity claim. Copy drops description (CALC-090), clones optionally drop own template but retain child templates, layers/finalized/mandatory/extensibility and independent child values. Actual source-backed Root/Group histories and unchanged SortedVector tests, no fake node/provider/Data/default-setting or C++ generator/compiled-native claim. Property/set/localized nodes, XML/layers/backend/config services and actual Calc defaults/document/grid/ODS integration remain pending; unchanged SAL/cppu dependency internals are reused without new lifetime mechanisms. Next full111 requested pause; Writer-only coverage repair excluded.
+
+Whole source-absent Calc152tests/52files/32owners rawS4006/B2654/F787/L3570 and complete new shared tree plus reused SortedVector9tests/2files/6owners rawS141/B48/F52/L136 pass100 with every raw counter positive. Source-absence/static/Calc-browser and repository gates require actual current results before task closure. Original configuration QA is unexecuted integration context only, not direct NodeMap unit proof.
+
+## Configuration types and localized nodes (task106)
+
+Task106 implements the complete logical configmgr Type enum/list/element/UNO mapping/dynamic sequence whitelist and actual LocalizedPropertyNode/LocalizedValueNode contracts over existing Any/UnoType/Node/NodeMap/SAL owners. Numeric unsigned classification retains the original Any.has call and its result via boolean-indexed alternatives; original UNO primitive compatibility makes the false alternatives unreachable for initialized unsigned primitive owners (CALC-091). No invented range check, fake has result, type/provider replacement, counter mutation or coverage suppression. False alternatives are source-reviewed, not executed native behavior proof; raw100 does not prove unreachable alternatives. Nodes retain independent Any copies, stable value pointer, metadata/user-modified updates including self-set, deep child clones and base-copy description omission (CALC-090). Native const/private-copy syntax and ABI/assertions/staticize/refcount/lifetime machinery are outside represented behavior; ordinary JS node refs add no memory library. Original QA is unexecuted integration context only; no new C++ generator/compiled differential/sanitizer. Property/Set/Data/XML/backend/configuration services and actual Calc defaults/document/grid/ODS integration remain pending. Nextfull111 requested pause after relevant repairs, no Writer-only repair.
+
+Whole source-absent Calc152tests/52files/32owners rawS4006/B2654/F787/L3570 and complete shared type/localized/tree/SortedVector/Any/UnoType11owners rawS407/B221/F108/L385 pass all four metrics100 with every raw counter positive. Related profile uses genuine existing query tests to cover the complete unchanged Any owner; no Writer-only repair or counter suppression. Static/Calc0UI and all16repository gates require actual current results before closure.
+
+## Configuration modification and addition paths (task107)
+
+Task107 implements original configmgr Modifications prefix-tree add/remove/empty/getRoot and the inline ENABLE_DCONF clear value body, plus Additions path-list type responsibility. Actual copied OUString keys/content uniqueness/stable child and root refs use existing ConfigEntry/LengthContentsCompare/SortedVector, without Boost/hash/refcount/allocator/finalizer wrappers. Native unordered bucket/iteration permutation/iterator-address/ABI is excluded; writemodfile explicitly sorts child entries, while other callback order effects remain unverified. ModificationsNode and Modifications.Node erase original nested-type syntax; native const borrowing is the caller contract. Preserve prefix dominance, subtree replacement, duplicate identity and recursive pruning. Last-root removal can recurse into forbidden empty path (CALC-092); preserve algorithm without a root-stop fix, and do not execute/certify undefined native release behavior. Clear represents its original value body without a DConf backend or build-conditioned API availability parity. Additions uses native arrays; implicit C++ vector-copy/ABI semantics are not certified and real consumers must own value copies. Original source-backed valid histories, no compiled differential/fullQA/memory experiment or new C++ generator. Actual Data/Set/Property/XML/backend/settings/default/document/grid/ODS pipeline remains pending. Nextfull111 requested pause after relevant repairs; no Writer-only repair.
+
+Whole source-absent Calc152tests/52files/32owners rawS4006/B2654/F787/L3570 and complete actual modification/key-comparison/SortedVector3 executable owners13tests/3files rawS94/B38/F22/L87 pass100 with every raw counter positive. Additions is a pure type with no executable counters. Actual static and Calc0UI pass and four links are restored exactly. All16repository gates and exact committed review remain task closure requirements.
+
+## Configuration Data paths and set templates (task108)
+
+Task108 implements the complete logical configmgr Data/SetNode storage/path/template/extension bodies over actual existing Root/NodeMap/Node/Modifications/Additions/OUString/RuntimeException owners. Local UTF16 view/buffer operations use native JS strings and explicit full-code-unit conversion; public strings remain genuine OUString, no fake buffer/ICU/provider or new lifetime library. Preserve three-entity decoding/name escaping, partial parser outputs, canonical/path/finalized output timing, minfinalized metadata, ignored final slash, set/localized template guards, real template visibility and duplicate/live extension additions. Missing nodes return before malformed suffix validation (CALC-093), retained. Set clone copies actual default/own/additional string values and children, retains metadata and drops only its own template when requested; Node description omission remains CALC-090. Primitive output pointers use tuples; native arrays erase vector references and callers explicitly copy OUString on value insertion, with actual Set clone/output path copies implemented. ExtensionXcu has ordinary JS refs, actual add initializes its signed32 layer, no fabricated uninitialized default or SimpleReferenceObject machinery. Data has a type-only Set import; Set calls actual Data equality helper without an eager class cycle. Native debug/invalid-pointer/ABI/const/private-copy/implicit vector-insertion/diagnostic logging/wholeQA and compiled differential are excluded or unverified. Original QA is unexecuted integration context only. Actual Property/XML/backend/configuration services and Calc defaults/document/grid/ODS pipeline remain pending. Nextfull111 requested pause after relevant repairs; no Writer-only repair.
+
+Whole source-absent Calc152tests/52files/32owners rawS4006/B2654/F787/L3570 and complete actual configmgr/SortedVector/Any/UnoType14executableowners41tests/12files rawS626/B345/F143/L574 pass100 with every raw counter positive. Pure Additions has no executable counters. Actual static and Calc0UI pass and four links restore exactly. All16repository gates and exact committed review remain task closure requirements.
+
+## XML reader spans and text accumulation (task109)
+
+Task109 implements actual xmlreader Span/Pad header/core byte-view and text-accumulation values needed by configmgr readers, distinct from existing shared SAX responsibilities. Span default/raw/literal/copy/clear/is/signed32 length/unsigned byte comparisons and strict UTF8 conversion reuse actual OUString/RuntimeException values. Native TextDecoder fatal/ignoreBOMtrue preserves BOM like original strict RTL UTF8 flags without GLOBAL_SIGNATURE; source-backed verification covers all1112064validUnicode scalars across17planes, all65536two-byte classifications and representative malformed/truncated/overlong/surrogate/out-of-range/5-6byte sequences. This is not compiled native/fullQA proof or exhaustive longer-byte-string enumeration. No converter/ICU/type/provider/memory library added. Span field copies share actual borrowed byte views; clear only nulls begin and retains length. Pad first stable input borrows, later nonzero append flushes, ephemeral input copies, zero input is ignored and get returns span values over current borrowed/empty/owned terminated bytes. Owned bytes use ordinary native arrays, not OStringBuffer capacity/allocator/refcount machinery; native capacity256/allocation/reallocation/address/ABI/postmutation borrow behavior excluded. Native char pointer and literal syntax erase to byte-indexed views/complete arrays; invalid native ranges/debug assertions are not emulated or tested. Exact header/source ownership and xmlreader cppu/sal dependencies retain reverse/app/browser restrictions. Original configuration QA is unexecuted integration context only. Actual XML reader/configuration schema/backend/Calc defaults/document/grid/ODS remain pending. Nextfull111 requestedpause after relevant repairs; no Writer-only repair.
+
+Whole source-absent Calc152tests/52files/32owners rawS4006/B2654/F787/L3570 and complete new XML Span/Pad2executableowners23tests/1file rawS68/B26/F15/L58 pass100 with every raw counter positive. All1112064validUnicode scalars/65536two-byte classifications plus BOM and malformed categories pass in native runtime without a converter/ICU port. Header aggregates own no executable counters. Actual static/Calc0UI/current16gates and exact committed review remain closure requirements.
+
+
+## Shared XML pull reader for configuration (task110)
+
+Task110 ports the complete logical xmlreader event parser over actual shared Span/Pad/OUString/UNO values. Browser construction binds the native URL/file mapping to a copied URL and supplied private byte copy; native open/mmap/close/destructor/OS errors are not implemented or claimed. All three text modes, event/output timing, scoped/default/unknown/legacy xsi namespaces, attributes, references, permissive names/DTD skipping and root termination follow the pinned source. Numeric byte offsets and actual Uint8Array/DataView replace pointer syntax without ownership/capacity/refcount machinery. Helper shards operate this actual reader through an erased state type, without a second object. Fields use TypeScript protected visibility for cross-file implementation and unused-private diagnostics; native private access, deleted-copy enforcement, debug assertions, invalid ranges, pointer/address/ABI/postmutation borrow behavior and native file I/O are excluded. Out-of-range invalid native accesses retain host DataView RangeError, not a promised native outcome. Native JS single-byte parseInt hex conversion is checked for all256bytes; the source hex accumulation omission/sentinel, normalized CDATA prefix markup and attribute CR global peek remain unchanged and are recorded as CALC-094..096. The native hex overflow check is unreachable after valid0..15 digits or invalid-sentinel break and is source-reviewed rather than reproduced as a dead throw. Source-backed tests, not compiled native differential/full configuration QA. Configmgr schema/backend/defaults, Calc document/grid/ODS integration remain pending. Existing Writer SAX/document XML remains shared separately, as upstream does. Nextfull111 then requestedpause after relevant repairs; no Writer-only repair.
+
+Verification: source-absent XML profile passes33tests in4files,8executable owners, raw563statements/280branches/54functions/504lines, every raw counter positive. These local checks do not establish full native parity; integration and repository gates are recorded in the task findings.
+
+
+## Full cycle11 and requested pause (task111)
+
+[Full test cycle11](calc-full-test-cycle-11.md) verifies tasks102-110: office15,801tests/792files, inventory123/38, tooling38/10, browser316 (Writer314/shared2/Calc0) and static build pass. All497executable owners have every raw counter positive and100S/B/F/L: Calc32, shared252, Writer213. All five stages ran without the four original reference links, restored exactly afterward. No runtime/test/configuration or Writer-only coverage repair was needed. This is the second requested full run after task101; pause the goal after clean task111 verification/closure. Current passing tests do not certify missing configuration/default services, document/formula/storage owners, editable Calc UI or ODS filters.

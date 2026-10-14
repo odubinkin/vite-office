@@ -1,0 +1,93 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9a68597f-d3bc-45f6-a080-adea39f184b2",
+    "capabilityId": "CAP-9a68597f-d3bc-45f6-a080-adea39f184b2",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original range-reference guard/construction/extension/flag/metadata/list/external3D failure logic implemented using real existing peers.",
+      "Native clone-domain result and input values/metadata match full initialized original stream.",
+      "Ordinary JS GC retains tokens and always clones reusable doubles; native unique-owner in-place identity/input mutation explicitly omitted, no hidden parity claim.",
+      "Actual operation responsibility shard preserves original canonical exports and does not duplicate models or memory libraries."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task99 implements original extendRangeReference logical guard/construction/extension/metadata/3D/list rejection flow over real existing local/external/list tokens and reference geometry, no fake compiler/document/config or ownership library. Actual operation responsibility split token.ranges.ts required by449line reference owner plus108line operation exceeding500line cap; original token.ts/header exports retained. User-authorized GC adaptation intentionally clones existing double refs irrespective of bReuseDoubleRef hint; no native GetRef/uniqueness/ownership ledger. Explicit divergence: native unique-owner in-place input identity/mutation optimization is omitted, not claimed equivalent; observable resulting range values/metadata and native clone-domain input histories preserved. Full unchanged original native function and complete genuine class/needed doc-free refdata scopes produce matching1198110-byte normal stream474source hashes/17verified native-only Boost headers/8commands across12544initialized bounded type/flags/positions/reusefalse and real aliased reusetrue cases. No private-state/count/lifetime/unique ownership experiment/source rewrite/invalid cast/overflow/new sanitizer/nativeABI/wholeQA claim. Original external-double+single rejects; external-first/local-double may return local token without file metadata (CALC-088), preserve and audit actual consumers. Source memory optimization adaptation is documented separately from suspected defects. Actual compiler/ScTokenArray/config/document/UI/ODSpipeline pending, no editable-ready claim. Nextfull101first/continue, pause after second111/relevant repairs; Writer-only coverage separate."
+    },
+    "capability": "Original matrix result token owners",
+    "gaps": [
+      "ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS and reference/matrix-range tokens remain pending.",
+      "Native memory-management/ABI/assertions/full QA unverified; no runtime Boost/refcount or other owner duplication."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ranges.ts",
+          "marker": "extendRangeReference"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "extendRangeReference"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-extension.test.ts",
+          "marker": "matches complete original range extension values and clone-path input histories"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Range-reference extension operation (task99)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Range operator cloning and native uniqueness"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-088"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "FormulaTokenRef extendRangeReference("
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaParseReference)"
+        },
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaRefData)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/token.hxx",
+          "marker": "extend/merge"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-range-reference-extension-with-explicit-gc-clone-adaptation",
+    "scopeLimitations": [
+      "Task99 implements original extendRangeReference logical guard/construction/extension/metadata/3D/list rejection flow over real existing local/external/list tokens and reference geometry, no fake compiler/document/config or ownership library. Actual operation responsibility split token.ranges.ts required by449line reference owner plus108line operation exceeding500line cap; original token.ts/header exports retained. User-authorized GC adaptation intentionally clones existing double refs irrespective of bReuseDoubleRef hint; no native GetRef/uniqueness/ownership ledger. Explicit divergence: native unique-owner in-place input identity/mutation optimization is omitted, not claimed equivalent; observable resulting range values/metadata and native clone-domain input histories preserved. Full unchanged original native function and complete genuine class/needed doc-free refdata scopes produce matching1198110-byte normal stream474source hashes/17verified native-only Boost headers/8commands across12544initialized bounded type/flags/positions/reusefalse and real aliased reusetrue cases. No private-state/count/lifetime/unique ownership experiment/source rewrite/invalid cast/overflow/new sanitizer/nativeABI/wholeQA claim. Original external-double+single rejects; external-first/local-double may return local token without file metadata (CALC-088), preserve and audit actual consumers. Source memory optimization adaptation is documented separately from suspected defects. Actual compiler/ScTokenArray/config/document/UI/ODSpipeline pending, no editable-ready claim. Nextfull101first/continue, pause after second111/relevant repairs; Writer-only coverage separate."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

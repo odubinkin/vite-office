@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610132025-TXSGPJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T20:41:26.390Z",
+  "verdict": "pass",
+  "summary": "Complete shared grid value contract matches genuine native stream; current source hashes and all required checks pass.",
+  "evaluated_sha": "73cd6b15af2f88f4071cbea2257b0bfa58e0207c",
+  "blueprint_digest": "00c34c040894431b89b70ef419192945ea9062a7f4473369bd694f497577a21e",
+  "findings": [
+    "Actual shared owner/header match original defaults, UInt32 boundaries, all getters/setters and complete copy histories; 3314 exact committed non-task hashes contain only 12 intentional changes and all raw coverage counters are positive."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610132025-TXSGPJ/README.md",
+    "output/playwright/task100-checks/exact-review.json",
+    "output/playwright/task100-checks/value-coverage-audit.json",
+    "output/playwright/task100-checks/gates-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent separate evaluator phase, not independent review. Calc derived view/config/metric/color/document/UI/ODS remain pending; contextual original QA not executed."
+  ]
+}

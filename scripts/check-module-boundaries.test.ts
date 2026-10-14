@@ -12,6 +12,43 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("keeps XML reader byte values below application and browser owners", /** Admits only original shared value dependencies and header/source ownership. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "sal"])
+    expect(isForbiddenModuleEdge("xmlreader", dependency)).toBe(false);
+  for (const dependency of ["sc", "sw", "configmgr", "sax", "o3tl", "framework"])
+    expect(isForbiddenModuleEdge("xmlreader", dependency)).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "xmlreader")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "xmlreader")).toBe(true);
+  for (const source of [
+    "xmlreader/inc/span.ts",
+    "xmlreader/inc/pad.ts",
+    "xmlreader/source/span.ts",
+    "xmlreader/source/pad.ts",
+  ]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+    expect(
+      getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
+    ).toMatch(/browser adapters/u);
+  }
+});
+
+it("keeps shared configuration nodes below application and browser owners", /** Verifies the exact new owner edges and existing reverse/browser restrictions. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "o3tl", "sal", "udkapi"])
+    expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(false);
+  for (const dependency of ["sc", "sw", "vcl", "framework", "offapi"])
+    expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "configmgr")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "configmgr")).toBe(true);
+  expect(isForbiddenModuleEdge("udkapi", "configmgr")).toBe(true);
+  const source = "configmgr/source/node.ts";
+  expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+  expect(getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list")).toMatch(
+    /browser adapters/u,
+  );
+});
+
 it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);
@@ -488,9 +525,8 @@ it("permits original cppuhelper UNO and SAL owners while retaining application a
 it("keeps shared formula header ownership independent of applications and browser presentation", /** Protects the original shared formula boundary against reverse application and browser dependencies. @returns Nothing. */ () => {
   expect(getRuntimeOwnershipLayer("formula/inc/errorcodes.ts")).toBe("upstream-mechanism");
   expect(isForbiddenModuleEdge("sc", "formula")).toBe(false);
-  for (const target of ["sal", "svl", "external"])
-    expect(isForbiddenModuleEdge("formula", target)).toBe(false);
-  for (const target of ["sc", "sw", "framework"])
+  for (const target of ["sal", "svl"]) expect(isForbiddenModuleEdge("formula", target)).toBe(false);
+  for (const target of ["sc", "sw", "framework", "external"])
     expect(isForbiddenModuleEdge("formula", target)).toBe(true);
   expect(isForbiddenModuleEdge("external", "formula")).toBe(true);
   expect(

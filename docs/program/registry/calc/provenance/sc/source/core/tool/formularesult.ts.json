@@ -15,17 +15,52 @@
       "move",
       "assign",
       "moveAssign",
-      "dispose"
+      "dispose",
+      "ScFormulaResult",
+      "isValue",
+      "isString",
+      "ResetToDefaults",
+      "ResolveToken",
+      "Assign",
+      "SetToken",
+      "SetDouble",
+      "GetType",
+      "GetCellResultType",
+      "IsEmptyDisplayedAsString",
+      "IsValue",
+      "IsValueNoError",
+      "IsMultiline",
+      "GetErrorOrDouble",
+      "GetResult",
+      "GetResultError",
+      "SetResultError",
+      "GetToken",
+      "GetCellResultToken",
+      "GetDouble",
+      "GetString",
+      "GetMatrix",
+      "GetHybridFormula",
+      "SetHybridDouble",
+      "SetHybridString",
+      "SetHybridEmptyDisplayedAsString",
+      "SetHybridFormula",
+      "SetMatrix",
+      "GetMatrixFormulaCellToken",
+      "GetMatrixFormulaCellTokenNonConst",
+      "HandleStuffAfterParallelCalculation"
     ],
     "upstreamSymbols": [
-      "FormulaResultValue::FormulaResultValue"
+      "FormulaResultValue::FormulaResultValue",
+      "ScFormulaResult"
     ],
     "preservedResponsibilities": [
       "Original actual named result value owner and header/core-tool boundary, reusing genuine shared strings and errors.",
-      "Complete explicit/implicit value special members, exact tags/defaults and actual fixed-width/public shared member semantics."
+      "Complete explicit/implicit value special members, exact tags/defaults and actual fixed-width/public shared member semantics.",
+      "Original complete formula result value/type/cache/error/matrix/hybrid transitions and native query/output/copy behavior, using actual existing peers and GC refs."
     ],
     "omittedResponsibilities": [
-      "Full ScFormulaResult/token/matrix/cell/document/input/view/UI, native ABI/invalid lifetimes/full upstream QA remain unverified."
+      "Full ScFormulaResult/token/matrix/cell/document/input/view/UI, native ABI/invalid lifetimes/full upstream QA remain unverified.",
+      "Task89 adds actual ScFormulaResult default/token/copy constructors, assignment, reset/resolve/cache/error/empty/type transitions, complete result/string/double/token/matrix queries, multiline cache, all hybrid import setters and matrix updates over real existing FormulaResultValue/FormulaToken/Calc tokens/matrices. Original destination matrix context, signed dimensions, numeric copies and cache/error precedence retained. GetErrorOrDouble groups caller out refs and preserves untouched values. Ordinary JS refs replace union lifetime/refcount/None-policy fields; parallel ownership fixup is no-op, no memory library. ResolveToken immediately consumes scalar svError into mnError/mfValue; after mnError NONE only matrix upper-left can yield svError, so three error query bodies specialize the redundant direct stored error-token guards. GetType returns svDouble for non-token nonempty nonerror states, so GetResult non-token string guard after isValue is provably unreachable and removed, not coverage-ignored or exercised through fake private state. Complete original native class/header/source and genuine dependencies compare public state/copy/import/cache/alias/output histories normally only. Stored matrix owners are actual ScMatrixFormulaCellToken; transport result input tested only into that valid context, no invalid derived cast. ABI/assertions/native ownership counts/concurrency/full original QA unverified. ScFormulaCell/storage/document/editing/UI/ODS remain pending real owners; UI/ODS priority and full91 retained."
     ],
     "evidence": {
       "local": [
@@ -80,6 +115,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/formularesult.test.ts",
           "marker": "preserves explicit original error type even when its code is NONE"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult-state.test.ts",
+          "marker": "matches complete original formula result state and hybrid import stream"
         }
       ],
       "upstream": [

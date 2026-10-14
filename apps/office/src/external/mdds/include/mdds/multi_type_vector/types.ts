@@ -532,9 +532,10 @@ function convert_range<T>(
   last: delayed_delete_vector_iterator<T>,
   cast: (value: T) => T,
 ): T[] {
-  const values: T[] = [];
-  for (const it = first.copy(); !it.equals(last); it.advance(1)) values.push(cast(it.get()));
-  return values;
+  const values = Array<T | undefined>(first.distance_to(last)).fill(undefined);
+  let index = 0;
+  for (const it = first.copy(); !it.equals(last); it.advance(1)) values[index++] = cast(it.get());
+  return values as T[];
 }
 /** Specializes original unmanaged default block template without generated native substitutes. @param TypeId - Native discriminator. @param zero - Native value_type{}. @param cast - Erased native scalar conversion. @param debug - Original compile-time MDDS_MULTI_TYPE_VECTOR_DEBUG witness. @param operations - Actual object ValueT special members. @returns Original static specialization. */
 export function default_element_block<T>(
@@ -561,12 +562,15 @@ export function default_element_block<T>(
       initial: BlockInitial<T> = 0,
       valueOrLast?: T | delayed_delete_vector_iterator<T>,
     ) {
-      const prepared =
-        initial instanceof delayed_delete_vector_iterator
-          ? convert_range(initial, valueOrLast as delayed_delete_vector_iterator<T>, cast)
-          : typeof initial === "number" || initial instanceof element_block
-            ? initial
-            : initial.map(cast);
+      let prepared: BlockInitial<T>;
+      if (initial instanceof delayed_delete_vector_iterator)
+        prepared = convert_range(initial, valueOrLast as delayed_delete_vector_iterator<T>, cast);
+      else if (typeof initial === "number" || initial instanceof element_block) prepared = initial;
+      else {
+        const values = Array<T | undefined>(initial.length).fill(undefined);
+        for (let i = 0; i < initial.length; ++i) values[i] = cast(initial[i] as T);
+        prepared = values as T[];
+      }
       super(
         TypeId,
         zero,

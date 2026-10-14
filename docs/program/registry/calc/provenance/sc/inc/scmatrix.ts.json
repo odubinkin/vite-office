@@ -7,17 +7,21 @@
     "status": "mapped",
     "upstreamPath": "sc/inc/scmatrix.hxx",
     "localSymbols": [
-      "ScMatrixValue"
+      "ScMatrixValue",
+      "ScMatrix"
     ],
     "upstreamSymbols": [
-      "ScMatrixValue"
+      "ScMatrixValue",
+      "ScMatrix"
     ],
     "preservedResponsibilities": [
       "Original inline matrix value owner/header boundary and genuine shared value/error reuse.",
-      "Original default/copy/assignment/query/equality semantics and fixed tag/member identity."
+      "Original default/copy/assignment/query/equality semantics and fixed tag/member identity.",
+      "Original public matrix constructors/resize/geometry/type classifier boundary delegates to actual shared storage.",
+      "Original coordinate value/flag/type responsibilities and public delegates reuse genuine shared stores and values."
     ],
     "omittedResponsibilities": [
-      "Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81."
+      "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91."
     ],
     "evidence": {
       "local": [
@@ -36,6 +40,18 @@
         {
           "path": "apps/office/src/sc/source/core/tool/scmatrix.test.ts",
           "marker": "matches original matrix tag field UInt8 narrowing and scalar copy assignment"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.ts",
+          "marker": "ScMatrix"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-facade.test.ts",
+          "marker": "matches original public matrix construction resize and classification stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix-values.test.ts",
+          "marker": "matches original coordinate matrix value flag and predicate stream"
         }
       ],
       "upstream": [
@@ -46,6 +62,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/types.hxx",
           "marker": "enum class ScMatValType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scmatrix.hxx",
+          "marker": "IsRealStringType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "ScMatrixImpl::PutError"
         }
       ]
     }

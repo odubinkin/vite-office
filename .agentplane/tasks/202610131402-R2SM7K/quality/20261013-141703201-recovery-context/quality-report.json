@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131402-R2SM7K",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T14:17:03.201Z",
+  "verdict": "pass",
+  "summary": "Same-agent separate EVALUATOR: original scalar ScRefCellValue borrowed boundary with legal typed getters and implicit memberwise copies verified; no independent-review claim.",
+  "evaluated_sha": "18d66dae0a4da8f7fe154ba0da3770f6703701c0",
+  "blueprint_digest": "ec4a1d442aad745d13f308b1f3a6c56ee1b37b7d598efd4342785cec0480b39f",
+  "findings": [
+    "Actual SharedString identity is borrowed without copy/acquire/dispose. Null retains STRING tag. Clear drops inactive JS reference for GC; original union ABI, assertions/invalid reads, rich-text/formula/document families unverified. No fake peers or memory manager.",
+    "Whole Calc130 and related shared246 tests raw S/B/F/L100 with every raw counter positive; four original links absent/restored, static and Calc profile0UI pass. All16repository/tooling/inventory gates pass. Exact current/committed hashes and11 intentional non-task changes match source commit, Writer/shared runtime unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131402-R2SM7K/README.md",
+    "output/playwright/task87-checks/exact-review.json",
+    "output/playwright/task87-checks/value-coverage-audit.json",
+    "output/playwright/task87-checks/gates-results.json",
+    "output/playwright/calc-ref-cell-value-native/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Only actual scalar ScRefCellValue family certified; document/storage/text/formula/UI/ODS owners pending and full original QA not executed. Goal active, next full91."
+  ]
+}

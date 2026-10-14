@@ -65,7 +65,7 @@ export class SwTableBoxFormula extends SfxPoolItem {
     );
   }
   /** Projects formula text through the existing browser snapshot boundary. @returns Formula text. */
-  public QueryValue(): string {
+  public override QueryValue(): string {
     return this.formula;
   }
 }
@@ -93,7 +93,7 @@ export class SwTableBoxValue extends SfxPoolItem {
     );
   }
   /** Projects the value at the existing browser boundary. @returns Native double. */
-  public QueryValue(): number {
+  public override QueryValue(): number {
     return this.value;
   }
 }

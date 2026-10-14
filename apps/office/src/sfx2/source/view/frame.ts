@@ -29,7 +29,7 @@ export class SfxUnoAnyItem extends SfxPoolItem {
   }
 
   /** Exposes the UNO Any value. @returns Boundary value. */
-  public QueryValue(): unknown {
+  public override QueryValue(): unknown {
     return this.value;
   }
 }

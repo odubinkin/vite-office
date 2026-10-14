@@ -1,2 +1,19 @@
-/** @fileoverview Original Calc token.hxx boundary for the real empty and hybrid result tokens; matrix/reference token owners remain separate prerequisites. */
-export { ScEmptyCellToken, ScHybridCellToken } from "../source/core/tool/token";
+/** @fileoverview Original Calc token.hxx boundary for real empty, hybrid, matrix result and single/double reference tokens; remaining token families are subsequent owners. */
+export {
+  ScEmptyCellToken,
+  ScSingleRefToken,
+  ScDoubleRefToken,
+  ScRefListToken,
+  ScTableRefToken,
+  ScExternalToken,
+  ScExternalSingleRefToken,
+  ScExternalDoubleRefToken,
+  ScExternalNameToken,
+  ScHybridCellToken,
+  ScMatrixToken,
+  ScMatrixRangeToken,
+  ScMatrixCellResultToken,
+  ScMatrixFormulaCellToken,
+} from "../source/core/tool/token";
+
+export { extendRangeReference } from "../source/core/tool/token";

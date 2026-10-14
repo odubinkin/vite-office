@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8522dbad-a14b-4155-9535-8f969ca205df",
+    "capabilityId": "CAP-8522dbad-a14b-4155-9535-8f969ca205df",
+    "suite": "calc",
+    "subsystem": "formula-result",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual ScFormulaResult retains original ordered type/cache/error/empty and scalar result transitions over real peers.",
+      "Matrix copy and assignment retain original destination dimensions/context and numeric upper-left copy behavior.",
+      "Hybrid cached import setters, multiline cache and query/out-reference preservation match original public histories.",
+      "Ordinary GC references omit native refcount policy/union lifetime/fixup machinery; unreachable guards specialized through explicit state invariants without coverage ignores."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task89 adds actual ScFormulaResult default/token/copy constructors, assignment, reset/resolve/cache/error/empty/type transitions, complete result/string/double/token/matrix queries, multiline cache, all hybrid import setters and matrix updates over real existing FormulaResultValue/FormulaToken/Calc tokens/matrices. Original destination matrix context, signed dimensions, numeric copies and cache/error precedence retained. GetErrorOrDouble groups caller out refs and preserves untouched values. Ordinary JS refs replace union lifetime/refcount/None-policy fields; parallel ownership fixup is no-op, no memory library. ResolveToken immediately consumes scalar svError into mnError/mfValue; after mnError NONE only matrix upper-left can yield svError, so three error query bodies specialize the redundant direct stored error-token guards. GetType returns svDouble for non-token nonempty nonerror states, so GetResult non-token string guard after isValue is provably unreachable and removed, not coverage-ignored or exercised through fake private state. Complete original native class/header/source and genuine dependencies compare public state/copy/import/cache/alias/output histories normally only. Stored matrix owners are actual ScMatrixFormulaCellToken; transport result input tested only into that valid context, no invalid derived cast. ABI/assertions/native ownership counts/concurrency/full original QA unverified. ScFormulaCell/storage/document/editing/UI/ODS remain pending real owners; UI/ODS priority and full91 retained."
+    },
+    "capability": "Original formula result state and cached imports",
+    "gaps": [
+      "ScFormulaCell/storage/document/editing/UI/ODS remain pending real owners.",
+      "Native ABI/assertions/invalid casts/refcounts/concurrency/full original QA unverified; existing shared value cleanup unchanged."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult.ts",
+          "marker": "ScFormulaResult"
+        },
+        {
+          "path": "apps/office/src/sc/inc/formularesult.ts",
+          "marker": "ScFormulaResult"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/formularesult-state.test.ts",
+          "marker": "matches complete original formula result state and hybrid import stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original formula result state owner (task89)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Formula result references and state invariants"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-077"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/formularesult.hxx",
+          "marker": "class ScFormulaResult"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/formularesult.cxx",
+          "marker": "void ScFormulaResult::SetHybridDouble"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula.cxx",
+          "marker": "// Formula cell in C1:C2 should be a 1x2 matrix array."
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/formularesult.hxx",
+          "marker": "Store a variable formula cell result"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-formula-result-state-and-cached-imports",
+    "scopeLimitations": [
+      "Task89 adds actual ScFormulaResult default/token/copy constructors, assignment, reset/resolve/cache/error/empty/type transitions, complete result/string/double/token/matrix queries, multiline cache, all hybrid import setters and matrix updates over real existing FormulaResultValue/FormulaToken/Calc tokens/matrices. Original destination matrix context, signed dimensions, numeric copies and cache/error precedence retained. GetErrorOrDouble groups caller out refs and preserves untouched values. Ordinary JS refs replace union lifetime/refcount/None-policy fields; parallel ownership fixup is no-op, no memory library. ResolveToken immediately consumes scalar svError into mnError/mfValue; after mnError NONE only matrix upper-left can yield svError, so three error query bodies specialize the redundant direct stored error-token guards. GetType returns svDouble for non-token nonempty nonerror states, so GetResult non-token string guard after isValue is provably unreachable and removed, not coverage-ignored or exercised through fake private state. Complete original native class/header/source and genuine dependencies compare public state/copy/import/cache/alias/output histories normally only. Stored matrix owners are actual ScMatrixFormulaCellToken; transport result input tested only into that valid context, no invalid derived cast. ABI/assertions/native ownership counts/concurrency/full original QA unverified. ScFormulaCell/storage/document/editing/UI/ODS remain pending real owners; UI/ODS priority and full91 retained.",
+      "Original formula/matrix QA anchor is unexecuted static consumer context only; full unchanged native class and portable result histories provide actual evidence."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

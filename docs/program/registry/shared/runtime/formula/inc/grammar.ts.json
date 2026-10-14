@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/formula/inc/grammar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "formula-grammar",
+    "capabilityIds": [
+      "CAP-927410f7-e727-41ad-b3a0-f2a1dd23d7b1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/formula/inc/grammar.ts#FormulaGrammar",
+        "apps/office/src/formula/inc/grammar.test.ts#matches complete original shared grammar and language stream",
+        "vendor/libreoffice-reference/include/formula/grammar.hxx#FormulaGrammar"
+      ],
+      "justification": "Task93 extends actual shared FormulaGrammar to all original static constants/21Grammar enumerators and aliases, API mapping, support switch, language/convention masks, English-bit updates, release-mode convention merges and ODF1.1/OpenFormula/OOXML/Excel predicates. Actual FormulaLanguage IDL constants have a separate shared owner; no literal-language duplication/parser/flags library. Signed32 native JS bitops retain original arithmetic. Full unchanged original header and grammar.cxx produce13349-byte381-line ordinary NDEBUG stream with9whole source hashes/verified original configuration/genuine generated headers and two normal commands. Negative grammar states can be queried for language/English/support, but native convention/ref/Excel observations are excluded because original enum cast can leave AddressConvention range (CALC-082); JS retains signed arithmetic without native enum ABI claim. Native debug merge assert is omitted according to production release contract, so initialized unsupported packed merges may return unsupported grammars. Existing address enum witness preserved. Native invalid enum/assertion process/ABI/full original QA and actual compiler/document/UI/ODS remain unverified; user UI/ODS priority and pause after full101 remain.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/formula/grammar.hxx",
+      "upstreamSymbols": [
+        "FormulaGrammar"
+      ]
+    }
+  }
+}

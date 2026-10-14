@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/configmgr/source/groupnode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "configuration-tree",
+    "capabilityIds": [
+      "CAP-1c1aecdc-1a00-4c6f-8901-eead267e1b6f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/configmgr/source/groupnode.ts#GroupNode",
+        "apps/office/src/configmgr/source/configuration-tree.test.ts#preserves scalar metadata and child templates while clones drop descriptions and optionally the own template",
+        "docs/program/calc-core.md#Shared configuration group tree (task105)"
+      ],
+      "justification": "Task105 implements shared configmgr Node/NodeMap/GroupNode/RootNode logical tree and length-first UTF16 config_map order using actual existing SortedVector/OUString/RuntimeException/SAL values. Ordinary JS node references omit native SimpleReferenceObject/staticize/refcount machinery under user GC instruction. Stable first/second entries, undefined end and getOrInsert erase native iterator/operator syntax; no native iterator address, private-copy accessibility, STL/ABI/debug assertion parity claim. Copy drops description (CALC-090), clones optionally drop own template but retain child templates, layers/finalized/mandatory/extensibility and independent child values. Actual source-backed Root/Group histories and unchanged SortedVector tests, no fake node/provider/Data/default-setting or C++ generator/compiled-native claim. Property/set/localized nodes, XML/layers/backend/config services and actual Calc defaults/document/grid/ODS integration remain pending; unchanged SAL/cppu dependency internals are reused without new lifetime mechanisms. Next full111 requested pause; Writer-only coverage repair excluded.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GroupNode",
+        "clone",
+        "getMembers",
+        "getTemplateName",
+        "setMandatory",
+        "getMandatory",
+        "isExtensible",
+        "kind"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "configmgr/source/groupnode.cxx",
+      "upstreamSymbols": [
+        "GroupNode",
+        "getMembers",
+        "clone"
+      ]
+    }
+  }
+}

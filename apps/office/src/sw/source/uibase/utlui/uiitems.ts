@@ -24,7 +24,7 @@ export class SwPtrItem extends SfxPoolItem {
     );
   }
   /** Preserves the native base failed UNO value query. @returns No exported pointer payload. */
-  public QueryValue(): undefined {
+  public override QueryValue(): undefined {
     return undefined;
   }
 }

@@ -57,7 +57,7 @@ export class SvxProtectItem extends SfxPoolItem {
     );
   }
   /** Projects native member flags; omitted member selects the existing browser snapshot boundary. @param member - Native member identity. @returns Member flag or browser snapshot. */
-  public QueryValue(member?: number): boolean | readonly boolean[] | undefined {
+  public override QueryValue(member?: number): boolean | readonly boolean[] | undefined {
     if (member === undefined) return [this.bCntnt, this.bSize, this.bPos];
     switch (member & ~0x80) {
       case 0:
@@ -71,7 +71,7 @@ export class SvxProtectItem extends SfxPoolItem {
     }
   }
   /** Changes one native member flag. @param value - New flag. @param member - Native member identity. @returns Whether recognized. */
-  public PutValue(value: boolean, member: number): boolean {
+  public override PutValue(value: boolean, member: number): boolean {
     switch (member & ~0x80) {
       case 0:
         this.bCntnt = value;
@@ -306,7 +306,7 @@ export class SvxBoxItem extends SfxPoolItem {
     };
   }
   /** Reads native default sequence or individual border/distance members. @param member - Native member plus optional CONVERT_TWIPS. @returns Represented UNO value. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     member &= 0x7f;
     if (member === 0)
@@ -333,7 +333,7 @@ export class SvxBoxItem extends SfxPoolItem {
     return SvxBoxItem.SvxLineToLine(this.GetLine(edge ?? -1), convert);
   }
   /** Applies represented native sequence or border/distance members. @param value - UNO payload. @param member - Native member plus optional CONVERT_TWIPS. @returns Whether admitted. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0;
     member &= 0x7f;
     if (member === 0) {
@@ -521,7 +521,7 @@ export class SvxBoxInfoItem extends SfxPoolItem {
     return true;
   }
   /** Reads the native five-field sequence or represented member. @param member - Member plus optional CONVERT_TWIPS. @returns UNO payload. */
-  public QueryValue(member = 0): unknown {
+  public override QueryValue(member = 0): unknown {
     const convert = (member & 0x80) !== 0;
     member &= 0x7f;
     const flags = (this.IsTable() ? 1 : 0) | (this.distance ? 2 : 0) | (this.minimum ? 4 : 0);
@@ -541,7 +541,7 @@ export class SvxBoxInfoItem extends SfxPoolItem {
     return undefined;
   }
   /** Applies represented native sequence or member values. @param value - UNO payload. @param member - Native member plus optional CONVERT_TWIPS. @returns Native admission result. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0;
     member &= 0x7f;
     if (member === 0) {
@@ -625,7 +625,7 @@ export class SvxSizeItem extends SfxPoolItem {
     );
   }
   /** Exposes the supported default native size value without twip conversion. @returns Native dimensions. */
-  public QueryValue(): Readonly<{ Width: number; Height: number }> {
+  public override QueryValue(): Readonly<{ Width: number; Height: number }> {
     return { Width: this.GetWidth(), Height: this.GetHeight() };
   }
 }

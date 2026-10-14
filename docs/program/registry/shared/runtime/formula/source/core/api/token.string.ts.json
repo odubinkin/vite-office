@@ -14,13 +14,12 @@
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/formula/source/core/api/token.string.ts#FormulaStringToken",
         "apps/office/src/formula/source/core/api/token.string.ts#FormulaStringOpToken",
         "apps/office/src/formula/source/core/api/token.string.ts#FormulaStringNameToken",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
-        "apps/office/src/formula/inc/native-token.test.ts#matches original intrusive reference and FAP lifetime streams",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
         "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
         "formula/source/core/api/token.cxx#FormulaStringToken::FormulaStringToken",
@@ -28,16 +27,17 @@
         "formula/source/core/api/token.cxx#FormulaStringNameToken::FormulaStringNameToken",
         "include/formula/token.hxx#FormulaStringToken",
         "include/formula/token.hxx#FormulaStringOpToken",
-        "include/formula/token.hxx#FormulaStringNameToken"
+        "include/formula/token.hxx#FormulaStringNameToken",
+        "docs/program/calc-browser-gc-adaptation.md#Token references and object lifetime"
       ],
-      "justification": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81. Original declaration/definition responsibility is split solely to retain the authored1000line budget, without duplicate owners or runtime import cycles.",
+      "justification": "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary.",
       "knownViolations": [],
       "localSymbols": [
         "FormulaStringToken",
         "FormulaStringOpToken",
         "FormulaStringNameToken"
       ],
-      "sourceResponsibility": "aligned",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "formula/source/core/api/token.cxx",
       "upstreamSymbols": [
         "FormulaStringToken::FormulaStringToken",

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610132103-149Q3D",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T21:18:26.565Z",
+  "verdict": "pass",
+  "summary": "Original represented Calc flags and9predicates reuse shared integer owner; wholeCalc/sharedraw100,16gates plus8finalcodechecks and actual static/Calc0UI pass.",
+  "evaluated_sha": "acba634e8c5f978804bd57bcc63716436518cc1b",
+  "blueprint_digest": "e3c9389b017bb36706b616d4fc9eb7c4c7fea1a82c0662e1204d01c846c3cc16",
+  "findings": [
+    "Exact committed review proves3326currentnon-taskhashes differ only13intentionalpaths2changed/11added. Original6sourcefiles matchpin;4meaningful flag/itemset tests, complete142Calc/105shared tests rawpositive, actual auxiliary source-absent manifests terminal0 and4linksrestored. ExistingWriter/sharedruntime unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610132103-149Q3D/README.md",
+    "output/playwright/task102-checks/exact-review.json",
+    "output/playwright/task102-checks/original-source-review.json",
+    "output/playwright/task102-checks/value-coverage-audit.json",
+    "output/playwright/task102-checks/gates-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent separate evaluator not independent. Source-backed value contract, no native differential/full original document QA/UNO/ABI/type-assertion claim. XMLdiagnostics/ScMergeAttr/document/config/view/ODS pending; nextfull111pause."
+  ]
+}

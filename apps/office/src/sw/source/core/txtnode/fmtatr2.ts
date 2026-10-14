@@ -189,7 +189,7 @@ export class SwFormatINetFormat extends SfxPoolItem {
   }
 
   /** Exposes the bounded hyperlink value for filter/persistence codecs. @returns JSON value. */
-  public QueryValue(): string {
+  public override QueryValue(): string {
     return JSON.stringify(this.GetHyperlink());
   }
 }

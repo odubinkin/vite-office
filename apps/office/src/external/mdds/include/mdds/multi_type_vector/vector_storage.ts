@@ -30,7 +30,7 @@ function destroy_suffix<T>(storage: vector_storage<T>, first: number): void {
 }
 /** Allocates reserved slots with native move-if-noexcept value relocation. @param storage - State. @param capacity - Slots. @returns Nothing. */
 export function allocate_storage<T>(storage: vector_storage<T>, capacity: number): void {
-  const values = Array<T | undefined>(capacity);
+  const values = Array<T | undefined>(capacity).fill(undefined);
   const operations = storage.operations;
   for (let i = 0; i < storage.size; ++i)
     values[i] = operations ? relocate(operations, storage.values[i] as T) : storage.values[i];
@@ -62,7 +62,9 @@ export function insert_storage<T>(
   } else if (count > 0) {
     const old_size = storage.size;
     if (old_size + count > storage.values.length) {
-      const next = Array<T | undefined>(Math.max(aligned_count, storage.values.length * 2));
+      const next = Array<T | undefined>(Math.max(aligned_count, storage.values.length * 2)).fill(
+        undefined,
+      );
       for (let i = 0; i < count; ++i) next[index + i] = operations.copy_construct(values[i] as T);
       for (let i = index; i < old_size; ++i)
         next[i + count] = relocate(operations, storage.values[i] as T);
@@ -112,7 +114,7 @@ export function assign_storage<T>(
   if (values.length > storage.values.length) {
     destroy_suffix(storage, 0);
     storage.size = 0;
-    storage.values = Array<T | undefined>(aligned_count);
+    storage.values = Array<T | undefined>(aligned_count).fill(undefined);
   }
   const retained = Math.min(storage.size, values.length);
   for (let i = 0; i < retained; ++i) {

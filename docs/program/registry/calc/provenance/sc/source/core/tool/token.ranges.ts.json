@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/token.ranges.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/token.cxx",
+    "localSymbols": [
+      "extendRangeReference"
+    ],
+    "upstreamSymbols": [
+      "extendRangeReference"
+    ],
+    "preservedResponsibilities": [
+      "Original logical range-reference extension guard/construction/metadata/list/local/external/3D rejection flow over genuine existing owners."
+    ],
+    "omittedResponsibilities": [
+      "Task99 implements original extendRangeReference logical guard/construction/extension/metadata/3D/list rejection flow over real existing local/external/list tokens and reference geometry, no fake compiler/document/config or ownership library. Actual operation responsibility split token.ranges.ts required by449line reference owner plus108line operation exceeding500line cap; original token.ts/header exports retained. User-authorized GC adaptation intentionally clones existing double refs irrespective of bReuseDoubleRef hint; no native GetRef/uniqueness/ownership ledger. Explicit divergence: native unique-owner in-place input identity/mutation optimization is omitted, not claimed equivalent; observable resulting range values/metadata and native clone-domain input histories preserved. Full unchanged original native function and complete genuine class/needed doc-free refdata scopes produce matching1198110-byte normal stream474source hashes/17verified native-only Boost headers/8commands across12544initialized bounded type/flags/positions/reusefalse and real aliased reusetrue cases. No private-state/count/lifetime/unique ownership experiment/source rewrite/invalid cast/overflow/new sanitizer/nativeABI/wholeQA claim. Original external-double+single rejects; external-first/local-double may return local token without file metadata (CALC-088), preserve and audit actual consumers. Source memory optimization adaptation is documented separately from suspected defects. Actual compiler/ScTokenArray/config/document/UI/ODSpipeline pending, no editable-ready claim. Nextfull101first/continue, pause after second111/relevant repairs; Writer-only coverage separate."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.ranges.ts",
+          "marker": "extendRangeReference"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/range-extension.test.ts",
+          "marker": "matches complete original range extension values and clone-path input histories"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "FormulaTokenRef extendRangeReference("
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/token.ranges.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Actual original free range-operation responsibility108lines plus449line reference token value owner exceeds enforced500line cap; canonical token/header aggregate retained, no duplicate engine or alternative range model."
+    }
+  }
+}

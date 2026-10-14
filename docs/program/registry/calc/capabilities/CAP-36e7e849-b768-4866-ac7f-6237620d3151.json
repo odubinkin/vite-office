@@ -1,0 +1,110 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-36e7e849-b768-4866-ac7f-6237620d3151",
+    "capabilityId": "CAP-36e7e849-b768-4866-ac7f-6237620d3151",
+    "suite": "calc",
+    "subsystem": "formula-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original external UInt16 file id/kind/ocPush and complete concrete single/range/name value/copy/move/Clone/query/equality semantics retained.",
+      "By-value shared strings retain independent member values; moved token source clears its string while reference/file fields remain.",
+      "Original stable mutable reference-data and borrowed const shared-string member identities preserved, source input mutations do not mutate token copies.",
+      "Existing real shared/data owners reused within reference responsibility shard; no additional memory engine or generic token/library model."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task97 implements actual ScExternalToken file-index/base equality and concrete ScExternalSingleRefToken/ScExternalDoubleRefToken/ScExternalNameToken value/by-value-string/copy/implicit move/Clone/getter/equality family in existing token.references.ts reference owner (449lines, below500cap), avoiding another unnecessary shard. Canonical token.ts/header exports remain. Actual FormulaToken/SharedString/OUString/refdata reused; external tokens remain ordinary JS objects with no new counts/Boost/allocator/pool/finalizer library, existing SAL/SVL value cleanup unchanged. File id is UInt16 and kind/ocPush literal defaults retain original. Const shared member identity and raw data value copies remain; rvalue string/token witnesses preserve source string clearing while copying file/type/reference fields. Original assignments are deleted and no assignment API added. Base typed construction remains protected; independently sliced base-token inputs excluded. Genuine complete original class/method/constructor/destructor scopes and actual full formula/reference headers produce matching748045-byte normal-only initialized stream,474source hashes/17verified native-only Boost dependency headers/8terminal commands. UTF16 invalid/empty/NUL/supplementary/folded pairs,7UInt16 boundary inputs,10flag combinations, copied/moved member and input histories/Clone/file/string/data/type mismatch and both equality directions exercised; raw addresses/counts/memory/layout/debug assertions/invalid derived peers/native ABI excluded. External TextEqual uses inherited raw value equality, not local-reference origin normalization. Original external document/range-name QA functions are unexecuted contextual evidence only. Actual external manager/compiler/config/ScTokenArray/ScFormulaCell/document/UI/ODS remain prioritized missing owners. No full run before101, continue101 then pause secondfull111/repairs; Writer-only coverage separate."
+    },
+    "capability": "Original matrix result token owners",
+    "gaps": [
+      "ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS and reference/matrix-range tokens remain pending.",
+      "Native memory-management/ABI/assertions/full QA unverified; no runtime Boost/refcount or other owner duplication."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScExternalToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScExternalSingleRefToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScExternalDoubleRefToken"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.references.ts",
+          "marker": "ScExternalNameToken"
+        },
+        {
+          "path": "apps/office/src/sc/inc/token.ts",
+          "marker": "ScExternalNameToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/external-token.test.ts",
+          "marker": "matches complete original external reference and name token value and move stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "External reference and name tokens (task97)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "External token string and reference values"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-086"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/token.hxx",
+          "marker": "ScExternalSingleRefToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/token.cxx",
+          "marker": "ScExternalToken::ScExternalToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_formula2.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)"
+        },
+        {
+          "path": "sc/qa/unit/ucalc_formula2.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRangeName)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/token.hxx",
+          "marker": "name of the first sheet"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-external-reference-name-token-values",
+    "scopeLimitations": [
+      "Task97 implements actual ScExternalToken file-index/base equality and concrete ScExternalSingleRefToken/ScExternalDoubleRefToken/ScExternalNameToken value/by-value-string/copy/implicit move/Clone/getter/equality family in existing token.references.ts reference owner (449lines, below500cap), avoiding another unnecessary shard. Canonical token.ts/header exports remain. Actual FormulaToken/SharedString/OUString/refdata reused; external tokens remain ordinary JS objects with no new counts/Boost/allocator/pool/finalizer library, existing SAL/SVL value cleanup unchanged. File id is UInt16 and kind/ocPush literal defaults retain original. Const shared member identity and raw data value copies remain; rvalue string/token witnesses preserve source string clearing while copying file/type/reference fields. Original assignments are deleted and no assignment API added. Base typed construction remains protected; independently sliced base-token inputs excluded. Genuine complete original class/method/constructor/destructor scopes and actual full formula/reference headers produce matching748045-byte normal-only initialized stream,474source hashes/17verified native-only Boost dependency headers/8terminal commands. UTF16 invalid/empty/NUL/supplementary/folded pairs,7UInt16 boundary inputs,10flag combinations, copied/moved member and input histories/Clone/file/string/data/type mismatch and both equality directions exercised; raw addresses/counts/memory/layout/debug assertions/invalid derived peers/native ABI excluded. External TextEqual uses inherited raw value equality, not local-reference origin normalization. Original external document/range-name QA functions are unexecuted contextual evidence only. Actual external manager/compiler/config/ScTokenArray/ScFormulaCell/document/UI/ODS remain prioritized missing owners. No full run before101, continue101 then pause secondfull111/repairs; Writer-only coverage separate.",
+      "CALC-086 records original plain-auto RHS value temporary in external range equality; original initialized value comparisons preserved without reproducing incidental native memory/count traffic under authorized JS GC adaptation. No performance/count/concurrency claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

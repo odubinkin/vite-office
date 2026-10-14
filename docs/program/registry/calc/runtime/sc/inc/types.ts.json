@@ -9,13 +9,15 @@
     "subsystem": "coordinate-model",
     "capabilityIds": [
       "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
-      "CAP-877498e5-ba0b-4824-afe6-6cfcf2ed9f82"
+      "CAP-877498e5-ba0b-4824-afe6-6cfcf2ed9f82",
+      "CAP-8580ff67-54ea-425d-84de-1ef15c033c98",
+      "CAP-bd12e687-0fd0-42a8-a799-4643b6bc4676"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/inc/types.ts#SCROW",
         "apps/office/src/sc/source/core/tool/address.test.ts#moves and clamps with native error outputs",
@@ -23,25 +25,35 @@
         "vendor/libreoffice-reference/sc/inc/types.hxx#SCROW",
         "apps/office/src/sc/inc/types.ts#ScMatValType",
         "apps/office/src/sc/source/core/tool/scmatrix.test.ts#matches all original matrix UInt8 tags, IEEE comparisons and error payload queries",
-        "vendor/libreoffice-reference/sc/inc/types.hxx#enum class ScMatValType"
+        "vendor/libreoffice-reference/sc/inc/types.hxx#enum class ScMatValType",
+        "apps/office/src/sc/source/core/tool/matrix-token.test.ts#matches original matrix result token reference and mutation stream",
+        "apps/office/src/sc/source/core/data/types.ts#RangeMatrix",
+        "apps/office/src/sc/source/core/tool/token.ts#ScMatrixRangeToken",
+        "apps/office/src/sc/source/core/tool/range-matrix.test.ts#matches original range matrix, column cell state and range-token value stream"
       ],
-      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81.",
+      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task77 implements original ScMatValType six fixed UInt8 constants/aliases and real ScMatrixValue default/copy constructor, explicitly defaulted copy assignment, fields, const string/error/boolean queries and equality/inequality. Existing SharedString and formula error helpers are reused. Native member assignment retains aStr identity and fixed UInt8 narrowing. Rvalue callers copy, because explicit copy declarations suppress native move generation; no invented move factory exists. Complete selected original enum/struct scopes compile unchanged over genuine full SAL/SVL/error dependencies normally only. Whole streams compare all256tags over9IEEE values,65536encoded errors,5nullable/aliased owned copy/assignment/rvalue-copy sequences and16field narrowing witnesses. Original matrix QA references are unexecuted field/type context only. Actual mdds multi_type_matrix, ScMatrix/pImpl/matrix tokens/ScFormulaResult/cell/document/input/UI, native ABI/concurrency/invalid lifetimes/full upstream QA remain unverified; broad flags remain false, next full81. Task88 implements actual ScMatrixToken, ScMatrixCellResultToken and ScMatrixFormulaCellToken over the real ScMatrix and shared FormulaToken/primitive tokens. Original nullable matrix/token identity, shallow transport copies, formula numeric upper-left cloning, dimensions with signed16/32 narrowing, result reset/equality/numeric updates and overload-specific Assign aliases are retained. Generic FormulaToken Assign of an actual matrix result shares its numeric token; typed matrix-result Assign clones it (CALC-075). An explicit FormulaToken type witness preserves erased argument overloads, and qualified base prototype calls preserve nonvirtual native receiver selection. ScMatrixRef/ScConstMatrixRef are type-only ordinary JS aliases, no Boost/refcount/allocator/finalizer library. Native complete original class/member scopes over genuine formula headers and verified original matrix constructor/storage context run normally only; source identities and whole value/identity/payload stream checked, no native memory bookkeeping, ABI/debug assertions/full QA claim. Actual ScFormulaResult/ScFormulaCell/document/storage/editing/UI/ODS, matrix-range/reference tokens and unrelated interpreter features remain pending. UI/ODS prerequisite priority and full91 retained. Task98 implements actual sc::RangeMatrix and MultiDataCellState value/default/copy/move/assignment/predicate owners plus ScMatrixRangeToken constructor/copy/Clone/const range query/classification using existing true ScMatrixToken/ScMatrix/refdata. RangeMatrix nullable matrix/default-1sixInt32 public fields and nonnegative/ordered geometry validity remain original; validation ignores matrix presence and document bounds. JS property assignment uses native bitops for signed32 coordinates, signed16 cell column and fixedUInt8 state, no extra SALlibrary. Matrix refs are ordinary JS aliases, source move clears matrix only and retains coordinates; selfmove is value-stable. Matrix-range ctor narrows original Int32 columns/tabs into actual reference data without normalization; copy/Clone shares matrix and owns copied range. Inherited matrix-pointer equality omits coordinates (CALC-087), preserve. Complete original matrix/type headers and real full private ScMatrixImpl declaration with unchanged needed doc-free ctor/storage/dimension/destruction/ref bodies compile actual bounded native peers; old synthetic declaration scaffold not reused. Exact original SharedString mdds declarations/callbacks selected without unrelated formula-cell/document dependencies, no fake class/provider or undefined-symbol suppression. Full61825-byte normal initialized stream482source hashes/17verified native-only Boost headers plus actual verified mdds dependencies/8commands. No count/pool/lifetime/physical layout/nativeABI/memory/concurrency/debug/invalid cast/wholeQA claims. Original matrix and nonempty-cell document QA anchors are unexecuted context only. Existing SAL/SVL cleanup unchanged; actual interpreter/column/compiler/config/ScTokenArray/document/grid/ODSpipeline pending, no readiness claim. Full101upcomingfirst/continue, pause after second111/repairs; Writer-only coverage separate.",
       "knownViolations": [],
       "localSymbols": [
         "SCROW",
         "SCCOL",
         "SCTAB",
         "SCCOLROW",
-        "ScMatValType"
+        "ScMatValType",
+        "ScMatrixRef",
+        "ScConstMatrixRef"
       ],
-      "sourceResponsibility": "aligned",
+      "sourceResponsibility": "divergent",
       "upstreamFile": "sc/inc/types.hxx",
       "upstreamSymbols": [
         "SCROW",
         "SCCOL",
         "SCTAB",
         "SCCOLROW",
-        "ScMatValType"
+        "ScMatValType",
+        "ScMatrixRef",
+        "ScConstMatrixRef",
+        "RangeMatrix",
+        "MultiDataCellState"
       ]
     }
   }

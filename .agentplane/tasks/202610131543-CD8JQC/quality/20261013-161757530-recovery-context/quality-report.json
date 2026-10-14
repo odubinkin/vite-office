@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131543-CD8JQC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T16:17:57.530Z",
+  "verdict": "pass",
+  "summary": "Same-agent separate EVALUATOR: actual shared FormulaTokenArray initialized storage/recalc family with original live StandardRange and GC refs meets scoped Calc/UI/ODS prerequisite. Not independent review or full token/compiler/document completion.",
+  "evaluated_sha": "f77a1b27249019fd9e2837d345cf18c0bebec47c",
+  "blueprint_digest": "76ba0068e1e034f21c2c13eb425e0adb023066e972430ca02bbaefddeb86798e",
+  "findings": [
+    "463LO hashes/17Boost dependency headers,9positive normal native commands and complete463656-byte recalc/12009-byte array streams over unchanged selected original source/header scopes. Declaration scaffold/static compiler method only, no fake instantiated peer/full native layout or tail/count/sanitizer claim. Copy/move/finalize/8192stop/replace/remove/queries/live ranges and all256mode histories preserved; CALC-079/080 and GC RPN-gate proof recorded.",
+    "Calc132tests43files raw3579S2400B658F3178L and shared250tests55files40owners raw4272S2147B897F3817L all100 every raw counter positive. Sources absent/restored, static/profile0UI and16gates/36tooling/123inventory pass after original Finalize case and provenance naming metadata correction; no threshold weakening. Exact3240current/committed hashes and13intentional paths, existing Writer/shared owners unchanged; two genuine new shared runtime owners and responsibility-split mapping registered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131543-CD8JQC/README.md",
+    "output/playwright/task90-checks/exact-review.json",
+    "output/playwright/task90-checks/value-coverage-audit.json",
+    "output/playwright/task90-checks/gates-results.json",
+    "output/playwright/formula-token-array-native/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Partial initialized array/recalc operation family only; full UNO/opcode/compiler/rewriters/reference iterators/ScTokenArray/ScFormulaCell/document/UI/ODS pending. Native layout/vtable/capacity/tails/None-policy/ownership timing/overflow invalid ranges/assertions/full original QA unverified. Goal active, full91 next."
+  ]
+}

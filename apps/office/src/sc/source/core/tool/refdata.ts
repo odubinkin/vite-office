@@ -19,11 +19,12 @@ export class ScSingleRefData {
   declare private mnFlagValue: number;
 
   /** Represents native trivial storage or implicit copy, without zero initialization. @param source - Initialized source, if copying. @returns New reference storage. */
-  public constructor(source?: ScSingleRefData) {
+  public constructor(source?: Readonly<ScSingleRefData>) {
     if (source) this.assign(source);
   }
-  /** Copies raw coordinates and flags, including deleted values. @param source - Initialized source. @returns Recipient. */
-  public assign(source: ScSingleRefData): this {
+  /** Copies raw coordinates and flags, including deleted values. @param sourceReference - Initialized source. @returns Recipient. */
+  public assign(sourceReference: Readonly<ScSingleRefData>): this {
+    const source = sourceReference as ScSingleRefData;
     this.mnCol = source.mnCol;
     this.mnRow = source.mnRow;
     this.mnTab = source.mnTab;
