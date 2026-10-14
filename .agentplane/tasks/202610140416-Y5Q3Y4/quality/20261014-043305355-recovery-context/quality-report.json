@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140416-Y5Q3Y4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T04:33:05.355Z",
+  "verdict": "pass",
+  "summary": "Actual shared configuration tree and layered lookup match the represented pinned source contracts; complete owner coverage and all required gates pass.",
+  "evaluated_sha": "b964fd65ffce3ed8a4f83ced4a495527ffcd3c40",
+  "blueprint_digest": "d90ed343c600cf8a2a69d352b4d32bcbe084f852577d76f7ec5bf2b434219516",
+  "findings": [
+    "Reviewed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40 against ten original declarations/bodies and real Root/Group histories. Exact3357 committed hashes,22 intentional paths,16 passing gates and strict raw100 Calc/shared profiles verified. Two necessary boundary integration paths retain reverse/application/browser restrictions. No new lifetime mechanism or fake configuration provider. Full native ABI/private access/assertions/QA and actual configuration/default/document/ODS integration remain excluded. This is a separate role of the same agent, not independent review."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140416-Y5Q3Y4/README.md",
+    "output/playwright/task105-checks/exact-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

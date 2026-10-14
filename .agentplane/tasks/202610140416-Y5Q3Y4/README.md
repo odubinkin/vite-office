@@ -4,7 +4,7 @@ title: "Implement shared configuration group tree and layered member lookup for 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T04:33:12.026Z"
+  updated_by: "CODER"
+  note: "Whole Calc152 tests/raw4006S2654B787F3570L and complete shared tree plus reused SortedVector9 tests/raw141S48B52F136L are100 with every raw counter positive. Source-absent static/Calc0UI and16currentgates pass. Exact3357 committed hashes/22intentionalpaths/10originalsourcepins and four restored links verified. Separate same-agent evaluator passed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; not independent review. No memory/provider shortcut, CALC-090 preserved, nextfull111pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T04:33:05.355Z"
+  updated_by: "EVALUATOR"
+  note: "Actual shared configuration tree and layered lookup match the represented pinned source contracts; complete owner coverage and all required gates pass."
+  evaluated_sha: "b964fd65ffce3ed8a4f83ced4a495527ffcd3c40"
+  blueprint_digest: "d90ed343c600cf8a2a69d352b4d32bcbe084f852577d76f7ec5bf2b434219516"
+  evidence_refs:
+    - ".agentplane/tasks/202610140416-Y5Q3Y4/README.md"
+    - ".agentplane/tasks/202610140416-Y5Q3Y4/quality/20261014-043305355-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140416-Y5Q3Y4/quality/20261014-043305355-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140416-Y5Q3Y4/quality/20261014-043305355-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140416-Y5Q3Y4/blueprint/resolved-snapshot.json"
+    - "output/playwright/task105-checks/exact-review.json"
+  findings:
+    - "Reviewed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40 against ten original declarations/bodies and real Root/Group histories. Exact3357 committed hashes,22 intentional paths,16 passing gates and strict raw100 Calc/shared profiles verified. Two necessary boundary integration paths retain reverse/application/browser restrictions. No new lifetime mechanism or fake configuration provider. Full native ABI/private access/assertions/QA and actual configuration/default/document/ODS integration remain excluded. This is a separate role of the same agent, not independent review."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual sharedconfig group/root/member tree andlayerlookup over existingSortedVector/SAL, plainJSrefs,no fakeData/settings or newmemorylibrary;source-backedstrictchecks/nextfull111pause."
+  -
+    type: "verify"
+    at: "2026-10-14T04:33:12.026Z"
+    author: "CODER"
+    state: "ok"
+    note: "Whole Calc152 tests/raw4006S2654B787F3570L and complete shared tree plus reused SortedVector9 tests/raw141S48B52F136L are100 with every raw counter positive. Source-absent static/Calc0UI and16currentgates pass. Exact3357 committed hashes/22intentionalpaths/10originalsourcepins and four restored links verified. Separate same-agent evaluator passed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; not independent review. No memory/provider shortcut, CALC-090 preserved, nextfull111pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:29:21.047Z"
+doc_updated_at: "2026-10-14T04:33:12.080Z"
 doc_updated_by: "CODER"
 description: "Task105: genuine configmgr Node/GroupNode/RootNode/NodeMap and config_map length-contents comparator/type responsibility over existing SortedVector, OUString, RuntimeException and SAL_MAX_INT32. Full represented logical layer/finalized/mandatory/description/template/deepclone/cache/ordered entry contracts; ordinaryJSrefs, no new SAL/refcount/staticize/allocator/provider or fake Data/settings. Preserve Node copy description omission, document suspectedcase. No property/XML/backend/locale/defaultConfig stubs; targetedCalc/complete sharedraw100/inventory/gates, nextfull111pause."
 sections:
@@ -73,7 +95,54 @@ sections:
     snapshot_route_changed: no
     snapshot_required_evidence: code_direct.paths, code_direct.check, code_direct.commit, code_direct.quality
     snapshot_safe_command: agentplane blueprint snapshot 202610140416-Y5Q3Y4
-  Verification: "Pending implementation and actual checks."
+  Verification: |-
+    Command: node output/playwright/task105-checks/portable.mjs; node output/playwright/task105-checks/portable.mjs --shared-only after the test-only lint correction.
+    Result: pass.
+    Evidence: Calc 152 tests in 52 files, 32 executable owners, raw S4006/B2654/F787/L3570. New configuration tree plus unchanged reused SortedVector: 9 tests in 2 files, 6 owners, raw S141/B48/F52/L136. Every raw statement/function/branch counter is positive; S/B/F/L coverage is 100%. Actual test:static and test:e2e:calc pass with all four original source links absent; Calc UI inventory remains 0. All links restored to their exact original targets.
+    Scope: complete five new shared configuration owners and reused SortedVector, without Writer-only coverage repair or full office run.
+
+    Command: node output/playwright/task105-checks/gates.mjs --early; node output/playwright/task105-checks/gates-late.mjs --late; bounded affected rechecks after corrections.
+    Result: pass.
+    Evidence: all 16 declared gates pass: format, lint, typecheck, docs, file size, dependencies, Writer resource validation, source tree, provenance, registry, invariants, routing, doctor, diff whitespace, tooling and inventory coverage. Tooling 37 tests in 10 files. Inventory coverage S1734/B1292/F436/L1668 is 100%. Provenance validates 530 modules; dependency graph validates 529 runtime sources / 2454 imports / 57 edges. Initial metadata/lint/new-module-classification failures and corrections are recorded in Findings and gate firstExitCode fields.
+    Scope: current intentional implementation/tests/metadata plus the required two existing dependency integration files. No threshold or source-routing weakening.
+
+    Command: python3 output/playwright/task105-checks/exact-review.py.
+    Result: pass.
+    Evidence: source commit b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; 3340 baseline and 3357 exact current/committed non-task hashes; only 22 intentional paths (5 changed, 17 added). Ten original source/header/Data files match pinned upstream bytes; no native compilation, sanitizer, fake provider, or new memory library. All coverage/gate/source-absence manifests and exact source-link restoration checked. Same-agent separate evaluator is not independent review.
+    Scope: actual initialized tree metadata, UTF16 ordering, stable entries/cache/layer filtering and clone behavior; descriptions intentionally omitted as CALC-090. Native ABI/iterator address/private-copy accessibility/assertions/refcount/staticization/full QA excluded. Real configuration services/defaults/document/grid/ODS still pending. First full101 passed; next full111 requires pausing the active goal after relevant repairs.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T04:33:12.026Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Whole Calc152 tests/raw4006S2654B787F3570L and complete shared tree plus reused SortedVector9 tests/raw141S48B52F136L are100 with every raw counter positive. Source-absent static/Calc0UI and16currentgates pass. Exact3357 committed hashes/22intentionalpaths/10originalsourcepins and four restored links verified. Separate same-agent evaluator passed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; not independent review. No memory/provider shortcut, CALC-090 preserved, nextfull111pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T04:33:04.785Z, excerpt_hash=sha256:77fc8462cadc93ee221f116f709f74ca66b80de7f5eb48d35debcf9da9704e38
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140416-Y5Q3Y4/blueprint/resolved-snapshot.json
+    - old_digest: d90ed343c600cf8a2a69d352b4d32bcbe084f852577d76f7ec5bf2b434219516
+    - current_digest: d90ed343c600cf8a2a69d352b4d32bcbe084f852577d76f7ec5bf2b434219516
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610140416-Y5Q3Y4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610140416-Y5Q3Y4 -m 🧩 Y5Q3Y4 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Finallyrestore4exactreference links onalltest exits. Revert onlyintentionaltaskchanges throughnewtask, no merge/historyrewrite/unrelatedtask changes."
   Findings: |-
     Command: node output/playwright/task105-checks/portable.mjs; rerun --shared-only after lint-only test annotation correction.
@@ -129,7 +198,53 @@ snapshot_safe_command: agentplane blueprint snapshot 202610140416-Y5Q3Y4
 
 ## Verification
 
-Pending implementation and actual checks.
+Command: node output/playwright/task105-checks/portable.mjs; node output/playwright/task105-checks/portable.mjs --shared-only after the test-only lint correction.
+Result: pass.
+Evidence: Calc 152 tests in 52 files, 32 executable owners, raw S4006/B2654/F787/L3570. New configuration tree plus unchanged reused SortedVector: 9 tests in 2 files, 6 owners, raw S141/B48/F52/L136. Every raw statement/function/branch counter is positive; S/B/F/L coverage is 100%. Actual test:static and test:e2e:calc pass with all four original source links absent; Calc UI inventory remains 0. All links restored to their exact original targets.
+Scope: complete five new shared configuration owners and reused SortedVector, without Writer-only coverage repair or full office run.
+
+Command: node output/playwright/task105-checks/gates.mjs --early; node output/playwright/task105-checks/gates-late.mjs --late; bounded affected rechecks after corrections.
+Result: pass.
+Evidence: all 16 declared gates pass: format, lint, typecheck, docs, file size, dependencies, Writer resource validation, source tree, provenance, registry, invariants, routing, doctor, diff whitespace, tooling and inventory coverage. Tooling 37 tests in 10 files. Inventory coverage S1734/B1292/F436/L1668 is 100%. Provenance validates 530 modules; dependency graph validates 529 runtime sources / 2454 imports / 57 edges. Initial metadata/lint/new-module-classification failures and corrections are recorded in Findings and gate firstExitCode fields.
+Scope: current intentional implementation/tests/metadata plus the required two existing dependency integration files. No threshold or source-routing weakening.
+
+Command: python3 output/playwright/task105-checks/exact-review.py.
+Result: pass.
+Evidence: source commit b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; 3340 baseline and 3357 exact current/committed non-task hashes; only 22 intentional paths (5 changed, 17 added). Ten original source/header/Data files match pinned upstream bytes; no native compilation, sanitizer, fake provider, or new memory library. All coverage/gate/source-absence manifests and exact source-link restoration checked. Same-agent separate evaluator is not independent review.
+Scope: actual initialized tree metadata, UTF16 ordering, stable entries/cache/layer filtering and clone behavior; descriptions intentionally omitted as CALC-090. Native ABI/iterator address/private-copy accessibility/assertions/refcount/staticization/full QA excluded. Real configuration services/defaults/document/grid/ODS still pending. First full101 passed; next full111 requires pausing the active goal after relevant repairs.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T04:33:12.026Z — VERIFY — ok
+
+By: CODER
+
+Note: Whole Calc152 tests/raw4006S2654B787F3570L and complete shared tree plus reused SortedVector9 tests/raw141S48B52F136L are100 with every raw counter positive. Source-absent static/Calc0UI and16currentgates pass. Exact3357 committed hashes/22intentionalpaths/10originalsourcepins and four restored links verified. Separate same-agent evaluator passed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; not independent review. No memory/provider shortcut, CALC-090 preserved, nextfull111pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T04:33:04.785Z, excerpt_hash=sha256:77fc8462cadc93ee221f116f709f74ca66b80de7f5eb48d35debcf9da9704e38
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140416-Y5Q3Y4/blueprint/resolved-snapshot.json
+- old_digest: d90ed343c600cf8a2a69d352b4d32bcbe084f852577d76f7ec5bf2b434219516
+- current_digest: d90ed343c600cf8a2a69d352b4d32bcbe084f852577d76f7ec5bf2b434219516
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610140416-Y5Q3Y4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610140416-Y5Q3Y4 -m 🧩 Y5Q3Y4 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
