@@ -1,10 +1,11 @@
 ---
 id: "202610141822-MZPZ3F"
 title: "Implement canonical shared set items for Calc page attributes"
-status: "DOING"
+result_summary: "Implement shared set items and canonical base item-set value copies"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "Source-grounded base copy slicing and CloneAsValue pool/state/parent rules, actual set-item flag, SfxSetItem abstract ownership and SvxSetItem concrete copy/equality/presentation are implemented through existing services. Named rvalue still copies; CALC-119 documents it without a defect claim or memory engine."
     - "96related cases,180Calc,38boundary cases pass;5complete shared owners and33Calc owners every raw counter positive100. One changed Writer owner coverage-only gap is measured/exempt and untouched; runtime behavior unchanged apart from TS-required override annotation."
     - "Portable build and13source gates pass;635runtime/provenance records zero violations,34intentional paths/3819source hashes/11native pins/four restored links. Native type dependencies are explicit without reverse edges; inline flags have actual header evidence. No full document/UI/ODS or readiness claim."
-commit: null
+commit:
+  hash: "d575937ec4433a37e47faa2e2ce329517c52e0de"
+  message: "Implement MZPZ3F core: canonical shared set items and base value copies"
 comments:
   -
     author: "CODER"
     body: "Start: implement original shared set items/base value-copy contracts and Calc183/184 dependencies; preserve native named-rvalue copy and Writer hidden overload without move or lifetime machinery."
+  -
+    author: "CODER"
+    body: "Verified: canonical shared set-item ownership and Calc header/footer183/184 dependencies;96related,180Calc,38boundaries pass, shared/Calc raw100, Writer-only gaps left, portable build/source/inventory gates pass with34intentional paths."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original shared set items/base copies verified:96related/9files,180Calc/71files,38boundaries;5shared raw S279B188F72L248 and33Calc S4172B2731F821L3720 everycounterpositive100. One Writer-only owner gap measured/left. Portable build/13source gates/635records zero violations,34paths/3819hashes/11pins/four links. CALC-119 retained named-rvalue copy, no move/lifetime/provider fake; full document/UIODS pending. Same-agent quality not independent."
+  -
+    type: "status"
+    at: "2026-10-14T18:34:18.330Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical shared set-item ownership and Calc header/footer183/184 dependencies;96related,180Calc,38boundaries pass, shared/Calc raw100, Writer-only gaps left, portable build/source/inventory gates pass with34intentional paths."
 doc_version: 3
-doc_updated_at: "2026-10-14T18:33:58.372Z"
+doc_updated_at: "2026-10-14T18:34:18.331Z"
 doc_updated_by: "CODER"
 description: "Task140 ports actual SfxSetItem/SvxSetItem and required SfxItemSet copy/CloneAsValue plus isSetItem flag for real Calc183/184. Both native initial-value overloads copy even rvalue; no move or lifetime engine. Preserve native pool/parent/state behavior and reuse existing item-set ownership."
 sections:
