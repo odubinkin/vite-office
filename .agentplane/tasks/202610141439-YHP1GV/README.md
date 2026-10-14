@@ -1,10 +1,11 @@
 ---
 id: "202610141439-YHP1GV"
 title: "Implement canonical UNO complex-color and theme interface contracts"
-status: "DOING"
+result_summary: "Shared color interface contracts ready; SAL getLength/Copy now select native overloads across JS realms. Concrete component/full ColorItemAny and document/UI/ODS readiness remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Source3676cb94264c exact17paths4existing13new,3730hashes12nativepins;34relatedtests11files3complete executableowners and174Calc tests raw100. Color alias is compile-only, not a false executable coverage owner.12gates33boundaries pass."
     - "Actual normal offapi build route, real shared CPPU factories/Any/Reference/Sequence contracts. New metadata test exposed foreign-realm typed array dispatch; getLength and Copy fixed in their common SAL owner with standard JS predicates, public constructor tests, existing related cases and registry updates. No workaround/type provider/new native or memory probe."
-commit: null
+commit:
+  hash: "3676cb94264cb3e372ff1e93194f719c0db5c343"
+  message: "🚧 YHP1GV core: add native UNO color types and fix shared string realm dispatch"
 comments:
   -
     author: "CODER"
     body: "Start: original offapi normal color/theme type contracts over existing CPPU; actual typed-null interfaces, no component/default provider or memory engine."
+  -
+    author: "CODER"
+    body: "Verified: canonical normal UNO color/theme types, actual shared typed-null transport and corrected SAL array realm dispatch; all focused checks and raw100."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source3676cb94264c exact17paths3730hashes12nativepins; native normal color interfaces and shared SAL getLength/Copy realm-independent selection. Related34tests3wholeexecutableowners and Calc174tests strict raw100;12gates33boundaries. Same-agent review not independent; concrete components/full ColorItemAny/UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-14T15:12:03.595Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical normal UNO color/theme types, actual shared typed-null transport and corrected SAL array realm dispatch; all focused checks and raw100."
 doc_version: 3
-doc_updated_at: "2026-10-14T15:11:40.017Z"
+doc_updated_at: "2026-10-14T15:12:03.597Z"
 doc_updated_by: "CODER"
 description: "Task132: actual offapi Color typedef, XTheme/XComplexColor structural interfaces and original cppumaker-normal static type getters using existing CPPU. Normal offapi build route confirmed from upstream gbuild/cppumaker, no comprehensive method metadata substitute or new memory engine. Actual Any/Reference typed-null and scalar alias integration for Calc; component implementations and full ColorItem Any remain later."
 sections:
