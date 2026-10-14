@@ -1,10 +1,11 @@
 ---
 id: "202610141210-V4A692"
 title: "Align shared native font weight and Calc script defaults"
-status: "DOING"
+result_summary: "Nativeweight/floatthresholds/Calc102113118NORMAL, actualsharedreuse andCALC108. Calc168/shared92tests raw100,29boundaries12gates,32exactpaths16nativepins. Same-agentreview notindependent. User authorizes canonical Writer/shared corrections; nexttask removes legacy enum bridges. Goalactive/full only minimum UI+ODSready then repairs/pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task123-checks/exact-review.json"
   findings:
     - "Calc168/shared92tests,29boundaries12gates pass;32exactpaths22changed10added,3641to3651sourcehashes16nativepins. Writeralias broad enum types restored without Writer edits, source-backed equality/unknown11 corrections, nativefloat32thresholds/admissionmatrix tested. Weight invariant ID/value retained with canonical tools witness, CALC108 documented. No threshold weakening/Writer-onlyrepair/full suite; real UI+ODS readiness checkpoint pending."
-commit: null
+commit:
+  hash: "364db42d858ce75a10d8835ffe846877009df31b"
+  message: "🚧 V4A692 core: align native font weight and Calc script defaults"
 comments:
   -
     author: "CODER"
     body: "Start: align real shared font weight enum/Any/VCL float conversion, Writeraliases and Calc3scriptNORMAL defaults; targeted100/minimum UI ODS readiness checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: canonical weight values/Any/VCLfloat and Calc script defaults, complete raw100 and native evidence. New user authorization routes Writer enum consumer cleanup to next task."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc168/shared92tests rawS/B/F/L100;29boundaries12gates;32exactpaths16nativepins. Real enum/Any/VCLfloat with Math.fround and native thresholds, Writer aliases/consumers preserved, Calc3scriptNORMAL defaults andCALC108. Same-agentEVAL not independent. Goalactive; full at actual minimum UI+ODSread/save readiness then repair/pause."
+  -
+    type: "status"
+    at: "2026-10-14T12:23:52.626Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical weight values/Any/VCLfloat and Calc script defaults, complete raw100 and native evidence. New user authorization routes Writer enum consumer cleanup to next task."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:23:49.725Z"
+doc_updated_at: "2026-10-14T12:23:52.628Z"
 doc_updated_by: "CODER"
 description: "Task123: canonical SvxWeightItem/shared tools enum with preserved Writer aliases, actual VCL float conversion/native awt constants/typed Any and Calc102113118NORMAL defaults. Targeted raw100; full only at minimum actual UI+ODSread/save readiness then repair/pause."
 sections:
