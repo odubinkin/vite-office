@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610132120-TSGXG3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T03:36:07.462Z",
+  "verdict": "pass",
+  "summary": "Actual merge-span value owner/shared unsupported query default preserve represented source contracts;147Calc/110relatedraw100 andall16gates8finalchecks pass.",
+  "evaluated_sha": "0f37b0befa05360334bfa91c6bc7fd94a34f5c8a",
+  "blueprint_digest": "338dee7da395752227c88e6a9f6a1f70936ae111055ac1edaa2359932e88f2ed",
+  "findings": [
+    "3328exactcommittednon-taskhashes cover approved35paths33changed/2added. All19descendant emittedJSidentical after34approvedoverride annotations; actualsource-absent Calc/shared/static/Calc0UI manifests pass and4linksrestored.7pinned original files reviewed, no fake native base or duplicated shared owner."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610132120-TSGXG3/README.md",
+    "output/playwright/task103-checks/exact-review.json",
+    "output/playwright/task103-checks/override-javascript-equivalence.json",
+    "output/playwright/task103-checks/original-source-review.json",
+    "output/playwright/task103-checks/value-coverage-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent separate evaluator, not independent review. Source-backed represented values only; nativeAny/status/ABI/assertions/compiled differential/fullQA and diagnostics/document/config/view/UI/ODS remain unverified. Nextscheduledfull111requestedpause."
+  ]
+}

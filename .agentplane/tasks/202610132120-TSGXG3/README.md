@@ -4,7 +4,7 @@ title: "Implement Calc merge spans using shared pool item fallback contract"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T03:36:08.760Z"
+  updated_by: "CODER"
+  note: "Original ScMergeAttr/sharedquerydefault plusapproved34override annotations complete:147Calc/110relatedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI4linksrestored,3328exacthashes and19identicalJS outputs pass; no broadnative/UI/ODS claims."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T03:36:07.462Z"
+  updated_by: "EVALUATOR"
+  note: "Actual merge-span value owner/shared unsupported query default preserve represented source contracts;147Calc/110relatedraw100 andall16gates8finalchecks pass."
+  evaluated_sha: "0f37b0befa05360334bfa91c6bc7fd94a34f5c8a"
+  blueprint_digest: "338dee7da395752227c88e6a9f6a1f70936ae111055ac1edaa2359932e88f2ed"
+  evidence_refs:
+    - ".agentplane/tasks/202610132120-TSGXG3/README.md"
+    - ".agentplane/tasks/202610132120-TSGXG3/quality/20261014-033607462-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610132120-TSGXG3/quality/20261014-033607462-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610132120-TSGXG3/quality/20261014-033607462-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610132120-TSGXG3/blueprint/resolved-snapshot.json"
+    - "output/playwright/task103-checks/exact-review.json"
+    - "output/playwright/task103-checks/override-javascript-equivalence.json"
+    - "output/playwright/task103-checks/original-source-review.json"
+    - "output/playwright/task103-checks/value-coverage-audit.json"
+  findings:
+    - "3328exactcommittednon-taskhashes cover approved35paths33changed/2added. All19descendant emittedJSidentical after34approvedoverride annotations; actualsource-absent Calc/shared/static/Calc0UI manifests pass and4linksrestored.7pinned original files reviewed, no fake native base or duplicated shared owner."
 commit: null
 comments:
   -
@@ -55,8 +74,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: user approved exact34override/19file mechanical expansion, resume ScMergeAttr/shareddefault task and complete all targeted checks; nextfull111pause preserved."
+  -
+    type: "verify"
+    at: "2026-10-14T03:36:08.760Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original ScMergeAttr/sharedquerydefault plusapproved34override annotations complete:147Calc/110relatedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI4linksrestored,3328exacthashes and19identicalJS outputs pass; no broadnative/UI/ODS claims."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:35:25.604Z"
+doc_updated_at: "2026-10-14T03:36:08.831Z"
 doc_updated_by: "CODER"
 description: "Task103: original ScMergeAttr default0/0, signed16col/signed32row, copy/Clone identity reset, payload-only assignment/equality and IsMerged over existing shared SfxPoolItem. Restore genuine base unsupported QueryValue in existing shared browser representation, no Calc-only stub. Whole Calc/complete affected shared raw100, truthful inventory/source evidence and suspected behavior note; diagnostic/document/UI/ODS remain pending, nextfull111pause."
 sections:
@@ -77,7 +102,40 @@ sections:
 
     Command: node output/playwright/task103-checks/gates.mjs --early; node output/playwright/task103-checks/gates-late.mjs --late; python3 output/playwright/task103-checks/final-code-checks.py. Result: pass. Evidence: all16gates and8finalcurrentcodechecks terminal0, initial type/lintfailures retained. Scope: currentapproved35paths/wholeexistinggates, finalformat/lint/type/docs/size/deps/provenance/diff.
 
-    Command: python3 output/playwright/task103-checks/exact-review.py aftersourcecommit. Result: pendingcommittedreview. Scope:3326baseline non-taskhashes,35intentionalpaths33changed/2added, expected3328currentcommittedhashes and currentcoverage/gates/annotations, same-agent separateEVALUATOR notindependent, canonicalclosure/cleanbranchcalc. Goalactive; firstfull101passed, nextfull111requestedpause.
+    Command: python3 output/playwright/task103-checks/exact-review.py aftersourcecommit. Result: pass. Evidence: sourcecommit0f37b0befa05360334bfa91c6bc7fd94a34f5c8a,3328exactcommittedhashes, only35approvedpaths33changed/2added. Scope:3326baseline non-taskhashes,35intentionalpaths33changed/2added, expected3328currentcommittedhashes and currentcoverage/gates/annotations, same-agent separateEVALUATOR notindependent, canonicalclosure/cleanbranchcalc. Goalactive; firstfull101passed, nextfull111requestedpause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T03:36:08.760Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original ScMergeAttr/sharedquerydefault plusapproved34override annotations complete:147Calc/110relatedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI4linksrestored,3328exacthashes and19identicalJS outputs pass; no broadnative/UI/ODS claims.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T03:36:08.146Z, excerpt_hash=sha256:1204bc47157725d317d0731e6a446d258ee9c2822aabbe0aa1e4f53cb65becbb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610132120-TSGXG3/blueprint/resolved-snapshot.json
+    - old_digest: 338dee7da395752227c88e6a9f6a1f70936ae111055ac1edaa2359932e88f2ed
+    - current_digest: 338dee7da395752227c88e6a9f6a1f70936ae111055ac1edaa2359932e88f2ed
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610132120-TSGXG3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610132120-TSGXG3 -m 🧩 TSGXG3 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore exact4reference symlinks in finally on every test exit. Revert only intentional task code/records/docs through newtask, no merge/historyrewrite/unrelatedtaskmutation."
   Findings: |-
     Original SfxPoolItem equality checks/asserts ItemType thenreturns true, ignoresWhich; same-type ScMergeAttr payload equality therefore ignoresWhich. Explicit ScMergeAttr copy ctor builds SfxPoolItem(ATTR_MERGE144), resetting identity; payload assignment omits base and preserves destinationWhich; Clone invokes that copy. Sourceconfirmed potentiallyintentional fixed-ID contract, actualcaller consequencesunverified. Preserve anddocument. Original unsupported QueryValue returnsfalse/leavesAny untouched; existing browser generic-return boundary represents no payload asundefined. Restorethisdefaultinsharedbase, retainoverrides; fullnativeUNO/ABI/assertionsunverified. Xml diagnostics and actual document/UI/ODS integrationpending.
@@ -124,7 +182,40 @@ Command: git apply exact prepared override patch; before/after byte audit and lo
 
 Command: node output/playwright/task103-checks/gates.mjs --early; node output/playwright/task103-checks/gates-late.mjs --late; python3 output/playwright/task103-checks/final-code-checks.py. Result: pass. Evidence: all16gates and8finalcurrentcodechecks terminal0, initial type/lintfailures retained. Scope: currentapproved35paths/wholeexistinggates, finalformat/lint/type/docs/size/deps/provenance/diff.
 
-Command: python3 output/playwright/task103-checks/exact-review.py aftersourcecommit. Result: pendingcommittedreview. Scope:3326baseline non-taskhashes,35intentionalpaths33changed/2added, expected3328currentcommittedhashes and currentcoverage/gates/annotations, same-agent separateEVALUATOR notindependent, canonicalclosure/cleanbranchcalc. Goalactive; firstfull101passed, nextfull111requestedpause.
+Command: python3 output/playwright/task103-checks/exact-review.py aftersourcecommit. Result: pass. Evidence: sourcecommit0f37b0befa05360334bfa91c6bc7fd94a34f5c8a,3328exactcommittedhashes, only35approvedpaths33changed/2added. Scope:3326baseline non-taskhashes,35intentionalpaths33changed/2added, expected3328currentcommittedhashes and currentcoverage/gates/annotations, same-agent separateEVALUATOR notindependent, canonicalclosure/cleanbranchcalc. Goalactive; firstfull101passed, nextfull111requestedpause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T03:36:08.760Z — VERIFY — ok
+
+By: CODER
+
+Note: Original ScMergeAttr/sharedquerydefault plusapproved34override annotations complete:147Calc/110relatedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI4linksrestored,3328exacthashes and19identicalJS outputs pass; no broadnative/UI/ODS claims.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T03:36:08.146Z, excerpt_hash=sha256:1204bc47157725d317d0731e6a446d258ee9c2822aabbe0aa1e4f53cb65becbb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610132120-TSGXG3/blueprint/resolved-snapshot.json
+- old_digest: 338dee7da395752227c88e6a9f6a1f70936ae111055ac1edaa2359932e88f2ed
+- current_digest: 338dee7da395752227c88e6a9f6a1f70936ae111055ac1edaa2359932e88f2ed
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610132120-TSGXG3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610132120-TSGXG3 -m 🧩 TSGXG3 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
