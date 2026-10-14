@@ -39,16 +39,27 @@ export class SfxBoolItem extends SfxPoolItem {
       other.value === this.value
     );
   }
-  /** Original bool Any query through the existing browser scalar binding. @returns Bool payload. */
-  public override QueryValue(): boolean {
-    return this.value;
+  /** Original bool output retaining scalar browser projection. @param output - Optional Any. @param member - Ignored member. @returns Success or bool value. */
+  public override QueryValue(output?: Any, member = 0): boolean {
+    void member;
+    if (output === undefined) return this.value;
+    output.insert([this.value], "bool");
+    return true;
   }
   /** Original bool extraction, unchanged success and wrong-type failure through the existing browser scalar binding. @param value - Payload. @param member - Ignored native member identifier. @returns Extraction success. */
   public override PutValue(value: unknown, member: number): boolean {
     void member;
-    if (typeof value !== "boolean") return false;
-    if (this.value === value) return true;
-    this.value = value;
+    let extracted: boolean;
+    if (value instanceof Any) {
+      const result: [boolean] = [false];
+      if (!value.extract(result, "bool")) return false;
+      extracted = result[0];
+    } else {
+      if (typeof value !== "boolean") return false;
+      extracted = value;
+    }
+    if (this.value === extracted) return true;
+    this.value = extracted;
     return true;
   }
   /** Original parameter-driven uppercase value text, independent of this item's current value. @param value - Presented bool. @returns Actual Unicode value. */

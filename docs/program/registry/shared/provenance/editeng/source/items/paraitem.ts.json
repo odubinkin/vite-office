@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/editeng/source/items/paraitem.ts",
           "marker": "SetDefaultDistance"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/frame-direction.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -26,6 +30,10 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
           "marker": "SvxTabStopItem::SetDefaultDistance"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxScriptSpaceItem"
         }
       ]
     },
@@ -36,14 +44,19 @@
       "SvxTabAdjust",
       "SvxTabStop",
       "SvxTabStopItem",
-      "SvxLineSpacingItem"
+      "SvxLineSpacingItem",
+      "SvxScriptSpaceItem",
+      "SvxHangingPunctuationItem",
+      "SvxForbiddenRuleItem"
     ],
     "omittedResponsibilities": [
-      "Native UNO presentation, full line-spacing mutation APIs and paragraph item contracts outside the implemented subset remain omitted."
+      "Native UNO presentation, full line-spacing mutation APIs and paragraph item contracts outside the implemented subset remain omitted.",
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
     ],
     "preservedResponsibilities": [
       "Reimplements bounded paragraph alignment, tab-stop ordering and replacement, and line-spacing values from pinned editeng/source/items/paraitem.cxx.",
-      "Preserves signed sal_Int32 tab positions and direct default-distance setter storage, including clone and browser value restoration; this direct API is distinct from UNO PutValue validation."
+      "Preserves signed sal_Int32 tab positions and direct default-distance setter storage, including clone and browser value restoration; this direct API is distinct from UNO PutValue validation.",
+      "Task119 ports original frame direction constructors/copy/Clone and8exact signed16 Any mappings plus native false unchanged writes/queries. Browser scalar projection retains inherited unsigned16 enum behavior on unknown values. WritingMode2 PAGE and CONTEXT remain aliases4. Actual shared bool owner gains native typed Any transport alongside existing scalar calls, reused by Writer and Calc;3Asian bool subclasses preserve original bool/Which order and copies. Calc126127128defaultfalse and138Environment tested through actual pooled copies, no fake DocPool/document/provider. Normal JS values/GC; no cache/refcount/memory library/native build/generator/ABI/presentation certification. Existing metadata history/status retained. Real DocPool/pattern/storage/config/document/view/input/ODS remain pending. Next full regression is at minimum actual UI contracts plus same-model ODS read/save readiness, then relevant repairs and pause; no fixed task121cadence."
     ],
     "status": "mapped",
     "upstreamPath": "editeng/source/items/paraitem.cxx",
@@ -54,7 +67,10 @@
       "SvxTabStopItem",
       "SvxTabStopItem::Insert",
       "SvxLineSpacingItem::CreateDefault",
-      "SvxAdjustItem::CreateDefault"
+      "SvxAdjustItem::CreateDefault",
+      "SvxScriptSpaceItem",
+      "SvxHangingPunctuationItem",
+      "SvxForbiddenRuleItem"
     ]
   },
   "legacyOrder": 5

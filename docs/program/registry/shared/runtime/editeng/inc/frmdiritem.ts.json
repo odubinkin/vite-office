@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/frmdiritem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "asian-text-values",
+    "capabilityIds": [
+      "CAP-662071f7-6380-479a-8e74-e97e12da58c6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/frame-direction.test.ts",
+        "docs/program/calc-core.md#Frame direction and Asian cell text values (task119)"
+      ],
+      "justification": " Task119 ports original frame direction constructors/copy/Clone and8exact signed16 Any mappings plus native false unchanged writes/queries. Browser scalar projection retains inherited unsigned16 enum behavior on unknown values. WritingMode2 PAGE and CONTEXT remain aliases4. Actual shared bool owner gains native typed Any transport alongside existing scalar calls, reused by Writer and Calc;3Asian bool subclasses preserve original bool/Which order and copies. Calc126127128defaultfalse and138Environment tested through actual pooled copies, no fake DocPool/document/provider. Normal JS values/GC; no cache/refcount/memory library/native build/generator/ABI/presentation certification. Existing metadata history/status retained. Real DocPool/pattern/storage/config/document/view/input/ODS remain pending. Next full regression is at minimum actual UI contracts plus same-model ODS read/save readiness, then relevant repairs and pause; no fixed task121cadence.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/editeng/frmdiritem.hxx",
+      "upstreamSymbols": [
+        "SvxFrameDirectionItem"
+      ]
+    }
+  }
+}

@@ -1922,3 +1922,10 @@ Status: source-confirmed behavior, consumer-visible defect not established.
 SvxMarginItem::PutValue extracts sal_Int32 and rejects values greater than SHRT_MAX, or its rounded mm100 equivalent when CONVERT_TWIPS is selected. It does not reject values below SHRT_MIN. Negative values can therefore narrow into positive signed16 margins: raw -32769 becomes32767; converted -60000mm100 rounds to -34016twips and narrows to31520. Preserve the upper-only check and original conversion order using actual shared integral conversion, without adding a lower clamp. QueryValue returns signed32 and converts in the other direction when requested.
 
 SvxOrientationItem matches only exact9000/27000hundredths when not stacked; negative -9000 and45000 remain Standard, while stacked overrides the angle. Keep these constructor rules without modulo normalization. Task118 uses real items/Any/common unit definitions and Writer consumers, not a fake document or compiled native probe.
+
+
+## CALC-105: Stacked direction has no entry in the frame-direction presentation table
+
+Status: source-level suspicion; no native memory experiment or consumer-visible failure established.
+
+The pinned include/editeng/frmdir.hxx declares Stacked from WritingMode2::STACKED (7). SvxFrameDirectionItem QueryValue and PutValue explicitly handle this direction. In editeng/source/items/frmitems.cxx, getFrmDirResId has seven resource entries (indices0through6), and GetPresentation indexes that table using GetEnumValue without a local bounds check. Stacked and Unknown therefore deserve review if they reach that presentation path. The logical value/UNO mappings retain native behavior. Localized resource presentation remains unported; no fallback label or new clamp has been introduced. Task119 documents this discrepancy without executing invalid native memory access.

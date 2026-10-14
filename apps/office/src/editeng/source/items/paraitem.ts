@@ -2,6 +2,8 @@
  * @fileoverview Reimplements bounded paragraph-alignment, tab-stop, and line-spacing values from pinned `editeng/source/items/paraitem.cxx`.
  */
 
+import { SfxBoolItem } from "../../../svl/inc/eitem";
+import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Pinned `SvxTabAdjust` order from `include/editeng/svxenum.hxx`. */
@@ -325,5 +327,49 @@ export class SvxLineSpacingItem extends SfxPoolItem {
           this.value,
           Number(this.fontIndependent),
         ];
+  }
+}
+
+/** Original Asian paragraph boolean value owner. */
+export class SvxScriptSpaceItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxScriptSpaceItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original copy-based Clone. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxScriptSpaceItem {
+    void pool;
+    return new SvxScriptSpaceItem(this);
+  }
+}
+
+/** Original Asian paragraph boolean value owner. */
+export class SvxHangingPunctuationItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */
+  constructor(
+    ...args: [value: boolean, which: number] | [source: Readonly<SvxHangingPunctuationItem>]
+  ) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original copy-based Clone. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxHangingPunctuationItem {
+    void pool;
+    return new SvxHangingPunctuationItem(this);
+  }
+}
+
+/** Original Asian paragraph boolean value owner. */
+export class SvxForbiddenRuleItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxForbiddenRuleItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original copy-based Clone. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxForbiddenRuleItem {
+    void pool;
+    return new SvxForbiddenRuleItem(this);
   }
 }

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "formatting-model",
     "capabilityIds": [
-      "CAP-0112"
+      "CAP-0112",
+      "CAP-662071f7-6380-479a-8e74-e97e12da58c6"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -24,9 +25,11 @@
         "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::SetDefaultDistance",
         "vendor/libreoffice-reference/include/editeng/tstpitem.hxx#sal_Int32       nTabPos",
         "apps/office/src/editeng/source/items/paraitem.test.ts#preserves signed int32 positions and direct default distances through ordered items and codec",
-        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties"
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#imports and round-trips signed tab positions in paragraph and inherited style properties",
+        "apps/office/src/editeng/source/items/frame-direction.test.ts",
+        "docs/program/calc-core.md#Frame direction and Asian cell text values (task119)"
       ],
-      "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Frame-owned margin and spacing classes have been moved to frmitems.ts; alignment, tabs and line spacing remain with their pinned paraitem.cxx owner. Tab-stop positions and the direct SetDefaultDistance setter now preserve the signed sal_Int32 domain, including both endpoints; focused assertions cover rejected fractional/nonfinite/out-of-domain values, signed ordering/replacement, clone independence, complete snapshot and real Writer-pool browser-codec restoration. The generated-stop constructor retains its unsigned spacing domain. This direct setter is distinct from the native UNO PutValue negative-distance restriction. Broader paragraph contracts remain unverified.",
+      "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified. Frame-owned margin and spacing classes have been moved to frmitems.ts; alignment, tabs and line spacing remain with their pinned paraitem.cxx owner. Tab-stop positions and the direct SetDefaultDistance setter now preserve the signed sal_Int32 domain, including both endpoints; focused assertions cover rejected fractional/nonfinite/out-of-domain values, signed ordering/replacement, clone independence, complete snapshot and real Writer-pool browser-codec restoration. The generated-stop constructor retains its unsigned spacing domain. This direct setter is distinct from the native UNO PutValue negative-distance restriction. Broader paragraph contracts remain unverified. Task119 ports original frame direction constructors/copy/Clone and8exact signed16 Any mappings plus native false unchanged writes/queries. Browser scalar projection retains inherited unsigned16 enum behavior on unknown values. WritingMode2 PAGE and CONTEXT remain aliases4. Actual shared bool owner gains native typed Any transport alongside existing scalar calls, reused by Writer and Calc;3Asian bool subclasses preserve original bool/Which order and copies. Calc126127128defaultfalse and138Environment tested through actual pooled copies, no fake DocPool/document/provider. Normal JS values/GC; no cache/refcount/memory library/native build/generator/ABI/presentation certification. Existing metadata history/status retained. Real DocPool/pattern/storage/config/document/view/input/ODS remain pending. Next full regression is at minimum actual UI contracts plus same-model ODS read/save readiness, then relevant repairs and pause; no fixed task121cadence.",
       "knownViolations": [],
       "localSymbols": [
         "SvxAdjust",
@@ -34,7 +37,10 @@
         "SvxLineSpacingItem",
         "SvxTabAdjust",
         "SvxTabStop",
-        "SvxTabStopItem"
+        "SvxTabStopItem",
+        "SvxScriptSpaceItem",
+        "SvxHangingPunctuationItem",
+        "SvxForbiddenRuleItem"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "editeng/source/items/paraitem.cxx",
@@ -45,7 +51,10 @@
         "SvxAdjustItem::CreateDefault",
         "SvxTabStop",
         "SvxTabStopItem",
-        "SvxTabStopItem::Insert"
+        "SvxTabStopItem::Insert",
+        "SvxScriptSpaceItem",
+        "SvxHangingPunctuationItem",
+        "SvxForbiddenRuleItem"
       ]
     }
   }

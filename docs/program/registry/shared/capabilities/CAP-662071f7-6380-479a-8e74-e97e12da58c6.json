@@ -1,0 +1,140 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-662071f7-6380-479a-8e74-e97e12da58c6",
+    "capabilityId": "CAP-662071f7-6380-479a-8e74-e97e12da58c6",
+    "suite": "shared",
+    "subsystem": "asian-text-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "WritingMode2 aliases and all8directions preserve native signed16 Any mappings.",
+      "Wrong direction values and failed native queries leave state/output unchanged.",
+      "Three original bool subclasses share actual bool transport; Calc defaults remain false and Environment."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task119 ports original frame direction constructors/copy/Clone and8exact signed16 Any mappings plus native false unchanged writes/queries. Browser scalar projection retains inherited unsigned16 enum behavior on unknown values. WritingMode2 PAGE and CONTEXT remain aliases4. Actual shared bool owner gains native typed Any transport alongside existing scalar calls, reused by Writer and Calc;3Asian bool subclasses preserve original bool/Which order and copies. Calc126127128defaultfalse and138Environment tested through actual pooled copies, no fake DocPool/document/provider. Normal JS values/GC; no cache/refcount/memory library/native build/generator/ABI/presentation certification. Existing metadata history/status retained. Real DocPool/pattern/storage/config/document/view/input/ODS remain pending. Next full regression is at minimum actual UI contracts plus same-model ODS read/save readiness, then relevant repairs and pause; no fixed task121cadence."
+    },
+    "capability": "Shared frame direction and Asian text values",
+    "gaps": [
+      "Native localized presentation/resources/cache/ABI and actual complete DocPool/document/UI/ODS pending or excluded.",
+      "No full native QA certification or full application regression now."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/inc/frmdir.ts",
+          "marker": "SvxFrameDirection"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/frmdiritem.ts",
+          "marker": "SvxFrameDirectionItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.direction.ts",
+          "marker": "SvxFrameDirectionItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.ts",
+          "marker": "SvxScriptSpaceItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/WritingMode2.ts",
+          "marker": "WritingMode2"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/cenumitm.ts",
+          "marker": "SfxBoolItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/scriptspaceitem.ts",
+          "marker": "SvxScriptSpaceItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/hngpnctitem.ts",
+          "marker": "SvxHangingPunctuationItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/forbiddenruleitem.ts",
+          "marker": "SvxForbiddenRuleItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/frame-direction.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Frame direction and Asian cell text values (task119)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/editeng/frmdir.hxx",
+          "marker": "SvxFrameDirection"
+        },
+        {
+          "path": "include/editeng/frmdiritem.hxx",
+          "marker": "SvxFrameDirectionItem"
+        },
+        {
+          "path": "editeng/source/items/frmitems.cxx",
+          "marker": "SvxFrameDirectionItem"
+        },
+        {
+          "path": "editeng/source/items/paraitem.cxx",
+          "marker": "SvxScriptSpaceItem"
+        },
+        {
+          "path": "offapi/com/sun/star/text/WritingMode2.idl",
+          "marker": "WritingMode2"
+        },
+        {
+          "path": "svl/source/items/cenumitm.cxx",
+          "marker": "SfxBoolItem"
+        },
+        {
+          "path": "include/editeng/scriptspaceitem.hxx",
+          "marker": "SvxScriptSpaceItem"
+        },
+        {
+          "path": "include/editeng/hngpnctitem.hxx",
+          "marker": "SvxHangingPunctuationItem"
+        },
+        {
+          "path": "include/editeng/forbiddenruleitem.hxx",
+          "marker": "SvxForbiddenRuleItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-frame-direction-asian-values",
+    "scopeLimitations": [
+      "Task119 ports original frame direction constructors/copy/Clone and8exact signed16 Any mappings plus native false unchanged writes/queries. Browser scalar projection retains inherited unsigned16 enum behavior on unknown values. WritingMode2 PAGE and CONTEXT remain aliases4. Actual shared bool owner gains native typed Any transport alongside existing scalar calls, reused by Writer and Calc;3Asian bool subclasses preserve original bool/Which order and copies. Calc126127128defaultfalse and138Environment tested through actual pooled copies, no fake DocPool/document/provider. Normal JS values/GC; no cache/refcount/memory library/native build/generator/ABI/presentation certification. Existing metadata history/status retained. Real DocPool/pattern/storage/config/document/view/input/ODS remain pending. Next full regression is at minimum actual UI contracts plus same-model ODS read/save readiness, then relevant repairs and pause; no fixed task121cadence."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

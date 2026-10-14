@@ -56,3 +56,12 @@ export const ATTR_ROTATE_MODE = 136;
 
 /** Original four-sided cell margin item identity. */
 export const ATTR_MARGIN = 143;
+
+/** Original script spacing attribute. */
+export const ATTR_SCRIPTSPACE = 126;
+/** Original hanging punctuation attribute. */
+export const ATTR_HANGPUNCTUATION = 127;
+/** Original forbidden line-breaking rules attribute. */
+export const ATTR_FORBIDDEN_RULES = 128;
+/** Original writing direction attribute. */
+export const ATTR_WRITINGDIR = 138;
