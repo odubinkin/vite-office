@@ -4,7 +4,7 @@ title: "Share native font contour shadow word-line and relief values for Calc"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T11:43:16.304Z"
+  updated_by: "CODER"
+  note: "Calc165/shared28tests rawS/B/F/L100;28boundaries12gates;29exactpaths13nativepins.4native shared font effects/Calc defaults, Writer reuse. Same-agent EVAL not independent. Goalactive; full at minimum real UI+ODS readiness then repair/pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T11:43:15.240Z"
+  updated_by: "EVALUATOR"
+  note: "Native4font effect value classes and Calc defaults reuse shared bool enum Any owners; complete targeted raw100 passes. Same-agent evaluator, not independent review."
+  evaluated_sha: "731f70325cd5baa8c14a1bc6100d05a3fb04c4bf"
+  blueprint_digest: "c2120318c390a2aec83ac25adfeae86a627bcadc88cfa3ec745afa8a97026df5"
+  evidence_refs:
+    - ".agentplane/tasks/202610141137-12HE23/README.md"
+    - ".agentplane/tasks/202610141137-12HE23/quality/20261014-114315240-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141137-12HE23/quality/20261014-114315240-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141137-12HE23/quality/20261014-114315240-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141137-12HE23/blueprint/resolved-snapshot.json"
+    - "output/playwright/task120-checks/exact-review.json"
+  findings:
+    - "Calc165/shared28tests,28boundaries and12gates pass;29exactpaths10changed19added,3587to3606sourcehashes,13nativepins. Existing Writer attributes test included to cover complete shared owner, no Writer-only repair or weakened thresholds. UI/ODS still pending; no full at121."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port4native shared font value classes with real bool enum Any and Calc defaults; targeted100 and readiness-driven full regression checkpoint."
+  -
+    type: "verify"
+    at: "2026-10-14T11:43:16.304Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc165/shared28tests rawS/B/F/L100;28boundaries12gates;29exactpaths13nativepins.4native shared font effects/Calc defaults, Writer reuse. Same-agent EVAL not independent. Goalactive; full at minimum real UI+ODS readiness then repair/pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:42:58.029Z"
+doc_updated_at: "2026-10-14T11:43:16.380Z"
 doc_updated_by: "CODER"
 description: "Task120:4real EditEng font attribute values, canonical headers/VCL FontRelief/memberid and Calc107108123124defaults. Shared SVL/Any reuse. Targeted raw100 only; full checkpoint at actual minimal UI+ODS readiness then repair/pause."
 sections:
@@ -56,6 +78,39 @@ sections:
     Scope:4shared font value classes, native header/VCL FontRelief/MID_RELIEF and Calc107108123false/124NONE defaults through actual SfxItemSet copies. Existing shared metadata histories/status retained, broad parity flags unchanged. Initial shared profile threshold failure retained; complete existing related test added, no source/assertion/threshold change.
     Limits: localized presentation/resources/cache/refcount/memory ABI/FontKerning/fullDocPool/document/config/UI/ODS pending or excluded. No fake provider/C++generator/build/sanitizer or memory library. No newly established suspicious upstream behavior.
     Full suite not run per latest user instruction; next full only at real minimum UI contracts and same-model ODS load/save readiness, then relevant repairs and pause goal; no task121trigger. Goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T11:43:16.304Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc165/shared28tests rawS/B/F/L100;28boundaries12gates;29exactpaths13nativepins.4native shared font effects/Calc defaults, Writer reuse. Same-agent EVAL not independent. Goalactive; full at minimum real UI+ODS readiness then repair/pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:42:58.029Z, excerpt_hash=sha256:71b296ba13c9fce3ef5e80990f22c1e2f617a3a8aedf1309e9fb0a5f7c3d593d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141137-12HE23/blueprint/resolved-snapshot.json
+    - old_digest: c2120318c390a2aec83ac25adfeae86a627bcadc88cfa3ec745afa8a97026df5
+    - current_digest: c2120318c390a2aec83ac25adfeae86a627bcadc88cfa3ec745afa8a97026df5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141137-12HE23
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141137-12HE23 -m 🧩 12HE23 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task120source commit preserving task119/user changes. No merges/resets/globalfiles/network."
   Findings: |-
     Previous turn verified progress task119. Fresh preflight clean oncalc; two unrelated DOINGtasks untouched. UI/ODS remain unready. Next full when minimum actual UI contracts and ODSread/save roundtrip supported on same model, then relevant repairs and requested pause; no task121trigger.
@@ -94,6 +149,39 @@ Evidence: fresh3587base/current3606committedhashes;29exactintentionalpaths10chan
 Scope:4shared font value classes, native header/VCL FontRelief/MID_RELIEF and Calc107108123false/124NONE defaults through actual SfxItemSet copies. Existing shared metadata histories/status retained, broad parity flags unchanged. Initial shared profile threshold failure retained; complete existing related test added, no source/assertion/threshold change.
 Limits: localized presentation/resources/cache/refcount/memory ABI/FontKerning/fullDocPool/document/config/UI/ODS pending or excluded. No fake provider/C++generator/build/sanitizer or memory library. No newly established suspicious upstream behavior.
 Full suite not run per latest user instruction; next full only at real minimum UI contracts and same-model ODS load/save readiness, then relevant repairs and pause goal; no task121trigger. Goalactive.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T11:43:16.304Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc165/shared28tests rawS/B/F/L100;28boundaries12gates;29exactpaths13nativepins.4native shared font effects/Calc defaults, Writer reuse. Same-agent EVAL not independent. Goalactive; full at minimum real UI+ODS readiness then repair/pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:42:58.029Z, excerpt_hash=sha256:71b296ba13c9fce3ef5e80990f22c1e2f617a3a8aedf1309e9fb0a5f7c3d593d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141137-12HE23/blueprint/resolved-snapshot.json
+- old_digest: c2120318c390a2aec83ac25adfeae86a627bcadc88cfa3ec745afa8a97026df5
+- current_digest: c2120318c390a2aec83ac25adfeae86a627bcadc88cfa3ec745afa8a97026df5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141137-12HE23
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141137-12HE23 -m 🧩 12HE23 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

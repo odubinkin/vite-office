@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141137-12HE23",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T11:43:15.240Z",
+  "verdict": "pass",
+  "summary": "Native4font effect value classes and Calc defaults reuse shared bool enum Any owners; complete targeted raw100 passes. Same-agent evaluator, not independent review.",
+  "evaluated_sha": "731f70325cd5baa8c14a1bc6100d05a3fb04c4bf",
+  "blueprint_digest": "c2120318c390a2aec83ac25adfeae86a627bcadc88cfa3ec745afa8a97026df5",
+  "findings": [
+    "Calc165/shared28tests,28boundaries and12gates pass;29exactpaths10changed19added,3587to3606sourcehashes,13nativepins. Existing Writer attributes test included to cover complete shared owner, no Writer-only repair or weakened thresholds. UI/ODS still pending; no full at121."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141137-12HE23/README.md",
+    "output/playwright/task120-checks/exact-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
