@@ -1824,3 +1824,34 @@ Data::resolvePathRepresentation returns null as soon as the current node is miss
 Evidence: complete pinned configmgr/source/data.hxx/cxx, reviewed in task108, with source-backed real Data/Group tests comparing the same malformed suffix for an existing and absent component. No fake node/provider, compiled differential, native invalid-domain experiment or full configuration-service QA claim.
 
 Decision: retain early return and partial-output timing. Do not introduce eager whole-path validation or transactional outputs without an upstream contract change; audit real consumers before calling it a defect.
+
+
+## CALC-094: hexadecimal XML references overwrite the numeric value
+
+Status: source-confirmed algorithm; native debug/release difference and consumer impact require care.
+
+XmlReader::handleReference assigns each hex digit to val instead of accumulating it. The terminating semicolon is then passed to convertToHex and replaces val with its uint32 error sentinel0xffffffff before the loop breaks. Native debug asserts isUnicodeCodePoint(val); the source release encoder truncates its four output bytes to FF BF BF BF, which strict UTF8 conversion rejects. The earlier overflow throw inside the loop is unreachable: valid digits0..15 are Unicode code points and all invalid digits break before that test.
+
+Evidence: pinned xmlreader/source/xmlreader.cxx, include/o3tl/numeric.hxx and include/rtl/character.hxx; task110 public Reader byte-output tests and exhaustive256byte native JS classification proof. No compiled-native differential, debug execution or claim that malformed hex input returns a valid scalar.
+
+Decision: preserve the source release byte behavior and conversion failure; omit only the provably unreachable overflow throw. Audit actual configuration consumers before identifying user-visible consequences.
+
+## CALC-095: normalized CDATA can retain markup and duplicate content
+
+Status: source-confirmed flow-boundary behavior; intended semantics and real caller impact unverified.
+
+In normalized text mode, scanCdataSection advances pos beyond the CDATA closing delimiter. If the prior whitespace state is None or Span, handleNormalizedText appends flowBegin through this advanced pos, including the CDATA markup, then appends the CDATA content again through normalizeLineEnds. Thus a<![CDATA[b]]> produces a<![CDATA[b]]>b. Initial CDATA and a preceding whitespace Break use different paths.
+
+Evidence: complete pinned XmlReader::handleNormalizedText and scanCdataSection, with task110 actual reader tests of Start/None/Span/Break cases. No compiled-native differential or full configuration-service QA claim.
+
+Decision: retain source output without moving the flush boundary or normalizing CDATA differently. Audit real consumers later.
+
+## CALC-096: attribute CR normalization consults the global reader position
+
+Status: source-confirmed use of global peek; defined in-range behavior covered, invalid native ranges excluded.
+
+The non-collapsing handleAttributeValue CR branch advances the local pointer but checks peek(), which reads global pos rather than the byte after the CR. For an actual attribute X CR LF Y, text not starting LF yields two spaces; text starting LF yields one space. With attribute X CR Y and following text starting LF, Y is skipped. Values ending CR with that same global LF can violate the native local range invariant; no native release result is promised for those invalid accesses.
+
+Evidence: pinned XmlReader::handleAttributeValue and header peek; task110 actual public reader inputs and attribute queries. No invalid native execution, sanitizer, memory experiment or compiled differential claim.
+
+Decision: preserve global-peek behavior on defined inputs. Browser invalid input offsets retain native DataView RangeError; this is a host boundary, not native undefined-behavior emulation. Audit schema/configuration consumers later.
