@@ -1,10 +1,11 @@
 ---
 id: "202610141556-8TJGNR"
 title: "Restore canonical shared font-family attribute state and migrate Writer consumers"
-status: "DOING"
+result_summary: "Restore canonical font-family values and shared ODF font metadata"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Compared native five-field defaults/constructors/setters/equality/hash, full pool comparator/name allocation and original Add return with pinned sources; reuses existing shared SortedVector and SAL/o3tl without a second lifetime engine."
     - "Actual history/browser/3script ODT tests,411related cases and175Calc cases pass; all10changedshared and33Calc owners have positive raw coverage counters. Build and8Chromium cases pass without reference links;36boundary cases and12source gates pass."
     - "Exact97paths within100approved,24runtime/provenance pairs, zero semantic inventory violations,3751source hashes and10native pins audited. Writer-only gaps in6owners remain explicitly exempt, not silently certified."
-commit: null
+commit:
+  hash: "a16c186d0c61b9c5ee322ddbb0a7e904f052a78d"
+  message: "Implement 8TJGNR core: canonical font values and shared ODF metadata"
 comments:
   -
     author: "CODER"
     body: "Start: restore canonical shared font attribute and migrate actual Writer consumers under explicit human authorization; no duplicate or compatibility item."
+  -
+    author: "CODER"
+    body: "Verified: canonical shared font values and complete supported Writer ODF metadata;411related,175Calc,8browser and36boundary cases pass; changedshared/Calc raw100; exact97paths and native pins retained."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified canonical shared font values and actual Writer/ODF consumers:411related cases/68files and175Calc cases/68files;10shared and33Calc owners every raw counter positive,100percent;8Chromium and36boundary cases,production build,12source gates. Exact97source paths/24runtime-provenance pairs/3751hashes/10native pins/calcbranch. SixWriter-only gaps explicitly exempt; fullUI/ODS/nativeFontDescriptor remain pending. Same-agent quality is not independent."
+  -
+    type: "status"
+    at: "2026-10-14T16:55:53.652Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical shared font values and complete supported Writer ODF metadata;411related,175Calc,8browser and36boundary cases pass; changedshared/Calc raw100; exact97paths and native pins retained."
 doc_version: 3
-doc_updated_at: "2026-10-14T16:55:43.552Z"
+doc_updated_at: "2026-10-14T16:55:53.653Z"
 doc_updated_by: "CODER"
 description: "Task135: source-faithful SvxFontItem value fields/constructors/default/copy/get-set/equality/hash/clone, shared FontFamily/FontPitch and charset declarations, exact Calc100/111/116 IDs and owned defaults tests; remove item-local resolved/generic CSS state and migrate Writer/filter/browser snapshot consumers to canonical state. Native Any FontDescriptor transport remains separately unported, no fake helper/lifecycle. Standing human shared/Writer canonical correction authorization and UI/ODS priority."
 sections:
