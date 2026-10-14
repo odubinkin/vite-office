@@ -1,10 +1,11 @@
 ---
 id: "202610141657-MED75Z"
 title: "Implement canonical shared shadow attribute and Calc pool defaults"
-status: "DOING"
+result_summary: "Implement canonical shared cell shadow values and native typed transport"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Compared native gray100NONE/default/copy/Color ownership/equality/hash/metrics/side-space and complete Any member switches with11pinned native sources. Uses existing Color/CPPU/o3tl and ordinary JS cells with no custom lifetime machinery."
     - "Actual enum/struct metadata and Any tests preserve memberbyte conversion, short width narrowing, enum/short fallback, ignored IsTransparent/extraction failures and transparency overflow. Native final Query0 redundant true conjunct is folded with both real calls retained; no fake coverage failure path."
     - "321related cases/29files,176Calc cases/69files,7shared and33Calc owners have every raw counter positive at100; build without references,12source gates,36boundary cases and exact33paths/3770hashes pass. Nine runtime/provenance pairs and bounded capability preserve old statuses;623records have zero semantic violations."
-commit: null
+commit:
+  hash: "e832f32a524513627b248ee9446afc5b653140ed"
+  message: "Implement MED75Z core: canonical shadow values and typed transport"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-faithful shared shadow attribute and actual Any contracts for missing Calc default dependency; reuse existing shared Color/CPPU, no lifetime engine."
+  -
+    author: "CODER"
+    body: "Verified: original shared shadow defaults/value/typed Any and Calc152 owned clones;321related,176Calc and36boundary cases pass; changedshared/Calc raw100,build and source gates pass,33intentional paths/pins retained."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified original shared shadow values and typed Any:321related/29files,176Calc/69files;7shared S502B350F123L468 and33Calc S4166B2731F821L3714 all raw counters positive100. Build and12source gates/36boundaries pass,33intentional paths/3770source hashes/11native pins/four links/calc branch retained. Native presentation/diagnostics/noncanonical bool bytes/ABI/fullCalcUIODS remain pending; same-agent quality is not independent."
+  -
+    type: "status"
+    at: "2026-10-14T17:13:48.232Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original shared shadow defaults/value/typed Any and Calc152 owned clones;321related,176Calc and36boundary cases pass; changedshared/Calc raw100,build and source gates pass,33intentional paths/pins retained."
 doc_version: 3
-doc_updated_at: "2026-10-14T17:13:24.595Z"
+doc_updated_at: "2026-10-14T17:13:48.233Z"
 doc_updated_by: "CODER"
 description: "Task136: missing real ScDocumentPool dependency SvxShadowItem. Port native color/width/location value/default/copy/setters/equality/hash/metrics/space and complete typed QueryValue/PutValue over actual CPPU ShadowFormat/ShadowLocation generated declarations, reusing Color/o3tl. Calc ATTR_SHADOW and real owned-item tests; precise inventory/provenance and source quirks. No native memory machinery, full presentation/DocPool/UI/ODS not claimed."
 sections:
