@@ -165,17 +165,17 @@ describe("EditEngine character items" /** Groups pooled character item contracts
   });
 
   it("preserves source-derived font-height and paragraph metric items", /** Covers validation, cloning, equality, and persistence for the style-default item subset. @returns Nothing. */ () => {
-    const height = new SvxFontHeightItem(240, weightWhich);
+    const height = new SvxFontHeightItem(240, 100, weightWhich);
     expect(height.GetHeight()).toBe(240);
-    expect(height.QueryValue()).toBe(240);
+    expect(height.QueryValue()).toEqual({ height: 240, prop: 100, propUnit: 13 });
     expect(height.Clone()).not.toBe(height);
     expect(height.Clone().equals(height)).toBe(true);
-    expect(height.equals(new SvxFontHeightItem(241, weightWhich))).toBe(false);
-    expect(height.equals(new SvxFontHeightItem(240, alternateWhich))).toBe(false);
+    expect(height.equals(new SvxFontHeightItem(241, 100, weightWhich))).toBe(false);
+    expect(height.equals(new SvxFontHeightItem(240, 100, alternateWhich))).toBe(true);
     expect(height.equals(new SfxInt16Item(weightWhich, 240))).toBe(false);
     expect(
       /** Creates an invalid font height. @returns Invalid item. */ () =>
-        new SvxFontHeightItem(0, weightWhich),
+        new SvxFontHeightItem(-1, 100, weightWhich),
     ).toThrow("value is invalid");
 
     const line = new SvxLineSpacingItem(115, weightWhich);

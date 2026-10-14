@@ -76,7 +76,7 @@ for (const cell of [false, true])
               new SvxUnderlineItem(1, 14),
               new SfxStringItem(3, "#123456"),
               new SfxStringItem(42, "#abcdef"),
-              new SvxFontHeightItem(320, 8),
+              new SvxFontHeightItem(320, 100, 8),
               new SvxFontItem("Stored Face", 7, "Resolved Face", generic ? "modern" : undefined),
             ),
             2,

@@ -251,7 +251,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
       collection.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, which));
   for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
     if (defaults.fontSizeTwips !== undefined)
-      collection.SetFormatAttr(new SvxFontHeightItem(defaults.fontSizeTwips, which));
+      collection.SetFormatAttr(new SvxFontHeightItem(defaults.fontSizeTwips, 100, which));
   if (defaults.fontRole !== undefined) applyScriptFonts(collection, defaults.fontRole);
 }
 

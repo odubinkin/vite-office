@@ -1961,3 +1961,14 @@ Pinned `svtools/source/misc/unitconv.cxx:138` implements `ControlToItem(nIn, eCt
 Initialized examples: `ControlToItem(200, FieldUnit::POINT, MapUnit::MapTwip)` gives10, as does `ItemToControl(200, MapUnit::MapTwip, FieldUnit::POINT)`. Converting200points into twips would instead give4000. Native `SvxFontHeightItem::SetHeight` with four arguments also calls this helper; its caller invariants and intended historical behavior have not been established.
 
 The shared implementation retains the exact same-direction delegation. Literal initialized assertions in `apps/office/src/svtools/source/misc/native-unitconv.test.ts` distinguish it from a plausible inverse. Source inspection and ordinary TypeScript tests provide the evidence; no native build, sanitizer, binary/ABI certification or upstream issue publication occurred. An upstream correction would require separate evidence and user direction; this record does not authorize changing behavior.
+
+
+## CALC-110: Font-height percentages multiply in unsigned32 before division
+
+Status: source-defined arithmetic preserved; caller overflow limits remain unreviewed.
+
+Pinned editeng/source/items/textitem.cxx:1055 and:1071 compute sal_uInt32((nNewHeight*nNewProp)/100) in both SvxFontHeightItem::SetHeight overloads. Height is unsigned32 and property unsigned16: multiplication wraps in unsigned32 before division. Keeping an unbounded product until after division changes the result.
+
+Initialized height4294967295 and prop65535 produce product modulo2^32 equal4294901761 and stored height42949017. The TypeScript value owner casts unsigned32 before integral division and asserts the literal result. Zero height is native-valid; native same-type equality compares height/property/unit and ignoresWhich, correcting the prior local expectation.
+
+The4argument overload also uses the same-direction ControlToItem helper from CALC109: height100, delta2points and coremm100 store123. Native callers may constrain these values; no full caller invariant, native binary execution, sanitizer or upstream issue report is claimed. Original defined behavior is preserved.

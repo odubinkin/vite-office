@@ -45,7 +45,9 @@ it("mounted native notifier updates original row height cell alignment and inher
       /** Writes original native item values without editing document text. @returns Nothing. */ () => {
         format.SetFormatAttr(new SwFormatVertOrient(0, 2, 0));
         rowFormat.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 0, 720));
-        doc.GetDfltTextFormatColl().SetFormatAttr(new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE));
+        doc
+          .GetDfltTextFormatColl()
+          .SetFormatAttr(new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE));
       },
     );
     expect(cell).toHaveStyle({ verticalAlign: "middle" });

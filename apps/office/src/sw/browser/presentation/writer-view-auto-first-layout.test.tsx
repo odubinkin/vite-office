@@ -59,7 +59,7 @@ function fixture(
     )(),
     new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(240), RES_MARGIN_RIGHT),
-    new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
+    new SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE),
     new SvxLineSpacingItem(value, RES_PARATR_LINESPACING, mode),
   ];
   if (inherited)
@@ -193,9 +193,9 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
     const before = state(owner);
     const retained = owner.store.GetSnapshot().activeParagraph;
     const history = owner.session.docShell.GetUndoManager().GetUndoActionCount();
-    expect(owner.shell.SetParagraphItems([new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE)])).toBe(
-      true,
-    );
+    expect(
+      owner.shell.SetParagraphItems([new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE)]),
+    ).toBe(true);
     const after = state(owner);
     expect(owner.store.GetSnapshot().activeParagraph.computedStyle.resolvedFirstLineIndentPt).toBe(
       36,
@@ -206,9 +206,9 @@ describe("Writer automatic first-line layout", /** Groups native literal contrac
     expect(retained.computedStyle.resolvedFirstLineIndentPt).toBe(24);
     expect(retained.computedStyle.firstLineIndentPt).toBe(18.35);
     expect(owner.session.docShell.GetUndoManager().GetUndoActionCount()).toBe(history + 1);
-    expect(owner.shell.SetParagraphItems([new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE)])).toBe(
-      false,
-    );
+    expect(
+      owner.shell.SetParagraphItems([new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE)]),
+    ).toBe(false);
     expect(owner.shell.Undo()).toBe(true);
     expect(state(owner)).toEqual(before);
     expect(owner.store.GetSnapshot().activeParagraph.computedStyle.resolvedFirstLineIndentPt).toBe(

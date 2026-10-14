@@ -50,18 +50,18 @@ for (const width of [1280, 390])
           }
         )(),
         new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
-        new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE),
-        new SvxFontHeightItem(360, RES_CHRATR_CJK_FONTSIZE),
-        new SvxFontHeightItem(360, RES_CHRATR_CTL_FONTSIZE),
+        new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE),
+        new SvxFontHeightItem(360, 100, RES_CHRATR_CJK_FONTSIZE),
+        new SvxFontHeightItem(360, 100, RES_CHRATR_CTL_FONTSIZE),
         new SvxLineSpacingItem(500, RES_PARATR_LINESPACING, "fixed"),
       ]);
       shell.SplitNode();
       shell.Insert("UntouchedLayoutProof");
       shell.SetParagraphItems([
         new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE),
-        new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
-        new SvxFontHeightItem(240, RES_CHRATR_CJK_FONTSIZE),
-        new SvxFontHeightItem(240, RES_CHRATR_CTL_FONTSIZE),
+        new SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE),
+        new SvxFontHeightItem(240, 100, RES_CHRATR_CJK_FONTSIZE),
+        new SvxFontHeightItem(240, 100, RES_CHRATR_CTL_FONTSIZE),
       ]);
       const bytes = writeOdtDocument(document, metadata);
       if (!disregard) {

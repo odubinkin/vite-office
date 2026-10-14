@@ -78,7 +78,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
     owner.node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-80), RES_MARGIN_FIRSTLINE));
     owner.node.SetParagraphRightMargin(300);
     owner.node.SetAttr(new SvxULSpaceItem(100, 200, RES_UL_SPACE));
-    owner.node.SetAttr(new SvxFontHeightItem(280, RES_CHRATR_FONTSIZE));
+    owner.node.SetAttr(new SvxFontHeightItem(280, 100, RES_CHRATR_FONTSIZE));
     owner.node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
     owner.node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#abcdef"));
     mount(owner);
@@ -102,7 +102,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
   });
   it("uses the core automatic first-line result inside the cell", /** Checks authored automatic state stays separate from rendered layout. @returns Nothing. */ () => {
     const owner = fixture();
-    owner.node.SetAttr(new SvxFontHeightItem(300, RES_CHRATR_FONTSIZE));
+    owner.node.SetAttr(new SvxFontHeightItem(300, 100, RES_CHRATR_FONTSIZE));
     owner.node.SetAttr(
       (
         /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {

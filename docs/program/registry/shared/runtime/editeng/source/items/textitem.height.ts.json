@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/textitem.height.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-height-values",
+    "capabilityIds": [
+      "CAP-07d57ff8-65d9-4a82-8a4f-ba4d37252d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/native-font-height.test.ts",
+        "docs/program/calc-core.md#Canonical font-height value state and Writer consumers (task126)"
+      ],
+      "justification": " Task126 ports original SvxFontHeightItem height/property/unit value state, original3argument/copy constructors,240100factory,SetProp,bothSetHeightoverloads,copyClone,payload equality ignoringWhich,4fieldhash and llround-basedScaleMetrics/HasMetrics. Original unsigned32product wraps before /100 and signed16absolute delta/4argument ControlToItem direction retained (CALC109110). Existing checkedJS height guard retains negative/fractional errors and admits native0/MAX. All40original calls across24files migrate to native3argument form without2argcompatibility overload. Existing Writer browser snapshot now retains height,prop,propUnit; its pool factory restores stored height with100thenSetProp to avoid applying property twice. Old scalar-height snapshot payloads are rejected; no fallback that discards native fields. Actual Writer history/itemset/graph roundtrip tests retain complete absolute/relative state. Native typedAny transport and localizedpresentation remain unported, not simulated by the existing browser state projection. Source shard required by enforced500line budget; canonical textitem/fhgtitem reexport oneowner. Calc101112117height200prop100relative defaults use actualitemset clones, no fakeDocPool/document/provider. Existing metadata histories/statuses and IO/recovery exceptions preserved, no broad parity promotion. FullDocPool/config/document/UI/same-modelODS pending. No C++build/generator/sanitizer/custommemoryengine. Full regression only actualminimumUI+ODSread/save readiness then repairs/pause; Writer-only coverage gaps remain exempt.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxFontHeightItem"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "editeng/source/items/textitem.cxx",
+      "upstreamSymbols": [
+        "SvxFontHeightItem"
+      ]
+    }
+  }
+}

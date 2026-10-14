@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/textitem.height.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/textitem.cxx",
+    "localSymbols": [
+      "SvxFontHeightItem"
+    ],
+    "upstreamSymbols": [
+      "SvxFontHeightItem"
+    ],
+    "preservedResponsibilities": [
+      "Task126 ports original SvxFontHeightItem height/property/unit value state, original3argument/copy constructors,240100factory,SetProp,bothSetHeightoverloads,copyClone,payload equality ignoringWhich,4fieldhash and llround-basedScaleMetrics/HasMetrics. Original unsigned32product wraps before /100 and signed16absolute delta/4argument ControlToItem direction retained (CALC109110). Existing checkedJS height guard retains negative/fractional errors and admits native0/MAX. All40original calls across24files migrate to native3argument form without2argcompatibility overload. Existing Writer browser snapshot now retains height,prop,propUnit; its pool factory restores stored height with100thenSetProp to avoid applying property twice. Old scalar-height snapshot payloads are rejected; no fallback that discards native fields. Actual Writer history/itemset/graph roundtrip tests retain complete absolute/relative state. Native typedAny transport and localizedpresentation remain unported, not simulated by the existing browser state projection. Source shard required by enforced500line budget; canonical textitem/fhgtitem reexport oneowner. Calc101112117height200prop100relative defaults use actualitemset clones, no fakeDocPool/document/provider. Existing metadata histories/statuses and IO/recovery exceptions preserved, no broad parity promotion. FullDocPool/config/document/UI/same-modelODS pending. No C++build/generator/sanitizer/custommemoryengine. Full regression only actualminimumUI+ODSread/save readiness then repairs/pause; Writer-only coverage gaps remain exempt."
+    ],
+    "omittedResponsibilities": [
+      "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-height.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "SvxFontHeightItem"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/textitem.height.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Height value and metric methods split from original textitem owner to respect enforced500line budget; canonical fhgtitem header borrows the single source declaration. Native typedAny and presentation remain pending."
+    }
+  }
+}

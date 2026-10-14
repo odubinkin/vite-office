@@ -39,7 +39,7 @@ for (const width of [1280, 390])
         if (node === undefined) throw Error("Missing item");
         node.SetText(profile.name + "Proof");
         for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-          node.SetAttr(new SvxFontHeightItem(profile.font * 20, which));
+          node.SetAttr(new SvxFontHeightItem(profile.font * 20, 100, which));
         if (profile.explicit)
           node.SetAttr(
             SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360, SvxTabAdjust.Left)]),

@@ -59,7 +59,7 @@ for (const width of [1280, 390])
           ],
         ] as const) {
           node.SetAttr(new SvxFontItem("Liberation Serif", family));
-          node.SetAttr(new SvxFontHeightItem(480, height));
+          node.SetAttr(new SvxFontHeightItem(480, 100, height));
           node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, weight));
           node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, posture));
         }

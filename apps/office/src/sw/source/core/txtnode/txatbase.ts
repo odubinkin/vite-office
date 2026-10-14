@@ -413,7 +413,7 @@ export function createSwFormatAutoFormat(
     attributes.fontSizeTwips !== undefined
   )
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, which));
+      items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, 100, which));
   if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
     items.Put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, attributes.highlight));
   if (attributes.bold !== inherited.bold)

@@ -190,7 +190,7 @@ describe("Writer manual signed-short layout", /** Groups literal native boundari
           return item;
         }
       )(),
-      new SvxFontHeightItem(40000, RES_CHRATR_FONTSIZE),
+      new SvxFontHeightItem(40000, 100, RES_CHRATR_FONTSIZE),
     ]);
     expect(owner.shell.GetActiveParagraph().GetParagraphFirstLineIndent()).toBe(80000);
     expect(owner.store.GetSnapshot().activeParagraph.computedStyle.resolvedFirstLineIndentPt).toBe(

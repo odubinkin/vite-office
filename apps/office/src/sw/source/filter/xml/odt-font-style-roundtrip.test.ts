@@ -219,7 +219,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
         ),
       );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      textBody.SetFormatAttr(new SvxFontHeightItem(13 * 20, which));
+      textBody.SetFormatAttr(new SvxFontHeightItem(13 * 20, 100, which));
     const paragraph = writer.paragraphs[0];
     paragraph?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])

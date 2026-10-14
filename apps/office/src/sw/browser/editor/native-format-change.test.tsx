@@ -18,7 +18,7 @@ it("original paragraph style parent changes invalidate native bindings and mount
     if (!node) throw Error("Missing original style node");
     node.ChgFormatColl(child);
     node.SetText("Original style text");
-    parent.SetFormatAttr(new SvxFontHeightItem(440, RES_CHRATR_FONTSIZE));
+    parent.SetFormatAttr(new SvxFontHeightItem(440, 100, RES_CHRATR_FONTSIZE));
     render(<WriterWorkbench isActive view={session.view} />);
     const model = vi.spyOn(doc, "NotifyModelChange"),
       revision = doc.GetDocumentStateManager().GetModelRevision();

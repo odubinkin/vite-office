@@ -45,7 +45,7 @@ it("native format store invalidates actual root and Sfx caches from original row
     expect(format.HasWriterListeners()).toBe(true);
     format.SetFormatAttr(new SwFormatVertOrient(720, 2, 7));
     rowFormat.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 0, 720));
-    style.SetFormatAttr(new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE));
+    style.SetFormatAttr(new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE));
     const after = session.viewStore.GetSnapshot();
     expect(after).not.toBe(baseline);
     expect(session.viewStore.GetSnapshot()).toBe(after);
@@ -91,10 +91,10 @@ it("native format store follows actual inherited styles default reset and exact 
     node.SetText("Original inherited text");
     const signal = vi.spyOn(doc.GetDocumentStateManager(), "CallSwClientNotify");
     const revision = doc.GetDocumentStateManager().GetModelRevision();
-    parent.SetFormatAttr(new SvxFontHeightItem(440, RES_CHRATR_FONTSIZE));
+    parent.SetFormatAttr(new SvxFontHeightItem(440, 100, RES_CHRATR_FONTSIZE));
     expect(session.viewStore.GetSnapshot().paragraphs[0]?.computedStyle.fontSizePt).toBe(22);
-    child.SetFormatAttr(new SvxFontHeightItem(280, RES_CHRATR_FONTSIZE));
-    parent.SetFormatAttr(new SvxFontHeightItem(480, RES_CHRATR_FONTSIZE));
+    child.SetFormatAttr(new SvxFontHeightItem(280, 100, RES_CHRATR_FONTSIZE));
+    parent.SetFormatAttr(new SvxFontHeightItem(480, 100, RES_CHRATR_FONTSIZE));
     expect(session.viewStore.GetSnapshot().paragraphs[0]?.computedStyle.fontSizePt).toBe(14);
     child.ResetFormatAttr(RES_CHRATR_FONTSIZE);
     expect(session.viewStore.GetSnapshot().paragraphs[0]?.computedStyle.fontSizePt).toBe(24);

@@ -42,7 +42,10 @@
       "ATTR_CTL_FONT_POSTURE",
       "ATTR_FONT_WEIGHT",
       "ATTR_CJK_FONT_WEIGHT",
-      "ATTR_CTL_FONT_WEIGHT"
+      "ATTR_CTL_FONT_WEIGHT",
+      "ATTR_FONT_HEIGHT",
+      "ATTR_CJK_FONT_HEIGHT",
+      "ATTR_CTL_FONT_HEIGHT"
     ],
     "upstreamSymbols": [
       "ATTR_MERGE_FLAG",
@@ -80,7 +83,10 @@
       "ATTR_CTL_FONT_POSTURE",
       "ATTR_FONT_WEIGHT",
       "ATTR_CJK_FONT_WEIGHT",
-      "ATTR_CTL_FONT_WEIGHT"
+      "ATTR_CTL_FONT_WEIGHT",
+      "ATTR_FONT_HEIGHT",
+      "ATTR_CJK_FONT_HEIGHT",
+      "ATTR_CTL_FONT_HEIGHT"
     ],
     "preservedResponsibilities": [
       "Original attribute header/core boundary and actual scalar flag owner; reuses shared SfxInt16Item.",
@@ -97,7 +103,8 @@
       "Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger.",
       "Task121 ports original SvxCrossedOutItem enum/bool/short member values and SvxEmphasisMarkItem unsigned16storage/9wiremappings/style/position masks using actual shared SfxEnumItem/SfxUInt16Item/Any. Factories/copy/Clone/Which and unknown-member untouchedsuccess retained. Native Any2Bool bool-then-signed32/falsefallback now lives once in original SVL header with explicit browser scalar family; existing Writer LR2sites reuse it, including actual Any transport. Original FontStrikeout/FontEmphasisMark/FontEmphasis constants and member narrowing/convertbit preserved. Calc106and121NONE defaults tested through actual shared itemset copies, no fake DocPool/document/provider. textitem.effects shard documents enforced file-size responsibility split, original headers remain canonical. CALC106 records unknown-member success, invalid bool reset and emphasis fallback/below precedence without changing native behavior. Existing metadata history/status retained; broad parity flags unchanged. Other font enums/native diagnostics/localized presentation/cache/refcounts/ABI, actual fullDocPool/config/storage/document/UI/ODS remain pending/excluded. No native compilation/generator/sanitizer/memory library. Full suite not triggered by121; only at actual minimum UI+ODSread/save readiness, then relevant repairs/pause.",
       "Task122 aligns existing SvxPostureItem with actual SfxEnumItem value/factory/copy/Clone/bool/Any contract: DONTKNOW booltrue, payload-only same-type equality ignoresWhich, bool setterNORMAL/NONE, native bool/FontSlant members with common Any2Bool and exactenum/signed32 fallback. Existing browser FontItalic names are aliases/type alias to one canonical tools enum, not a second enum implementation. Checked JS constructor boundary preserves negative/fractional errors while admitting native nonnegative enum range including initialized unknown4/sentinel; invalid native abort/ABI not certified. Native VCL ConvertFontSlant both switch families use explicit erased-enum source selection for overlapping JSnumbers, not value inference; reverse slants map forward, unknown mapsDONTKNOW and sentinels preserved. Actual FontSlant enum/normal static getter uses existing CPPU, no generator execution/fake types. Original VCL tools/offapi edges and reverse application guards retained. Calc103114119NONE default real itemset copies tested. Existing Writer posture consumer tests and source-backed expected corrections retained, raw100thresholds unchanged. CALC107 records DONTKNOW bool and reverse/unknown member behavior. Existing metadata history/status retained without broad parity promotion. Other VCL helper families/native localized presentation/cache/diagnostics/memoryABI/fullDocPool/config/document/storage/UI/ODS pending/excluded. Next full only at real minimum UI+ODSread/save readiness then repairs/pause, no fixedtasknumber trigger.",
-      "Task123 aligns existing SvxWeightItem with actual SfxEnumItem enum/factory/copy/Clone/boldthreshold/BOLD-or-NORMAL setter/payload equality and native bool/float Any transport. Native tools FontWeight exists once, legacy Writer names are readonly const/type aliases with broad canonical enum value types preserving old parameter inference; same type-only widening applied to existing FontItalic aliases. CheckedJS constructor negative/fractional/out-of-enum-range guards retained, native initialized unknown11/sentinel accepted. VCL ConvertFontWeight preserves original11AWTfloat constants (MEDIUM105) and ordered<=float mapping/defaultDONTKNOW using Math.fround for nativefloat parameter/cast. Explicit erased-family selector avoids number-based overload guessing. Actual Any double then signed32 calls retained in short-circuit form; native assignLONG source set is subsetofDOUBLE, no fake fallback-success peer/private forcing. Unknown members untouchedsuccess and invalid bool resetsNORMAL; float above200orNaN mapsDONTKNOW. Calc102113118NORMAL defaults use real shared itemset copies. Existing equality/unknown11 expectations corrected from source; negative/fractional guards and raw100thresholds retained. FontWeight invariant witness moves to tools keeping ID/value/native evidence. CALC108 records threshold/default/fallback oddities. Existing metadata history/status retained without broad parity promotion. Other VCL helpers/native presentation/cache/diagnostics/refcounts/ABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No C++build/generator/sanitizer/memory library. Next full only real minimum UI+ODSread/save readiness then relevant repairs/pause."
+      "Task123 aligns existing SvxWeightItem with actual SfxEnumItem enum/factory/copy/Clone/boldthreshold/BOLD-or-NORMAL setter/payload equality and native bool/float Any transport. Native tools FontWeight exists once, legacy Writer names are readonly const/type aliases with broad canonical enum value types preserving old parameter inference; same type-only widening applied to existing FontItalic aliases. CheckedJS constructor negative/fractional/out-of-enum-range guards retained, native initialized unknown11/sentinel accepted. VCL ConvertFontWeight preserves original11AWTfloat constants (MEDIUM105) and ordered<=float mapping/defaultDONTKNOW using Math.fround for nativefloat parameter/cast. Explicit erased-family selector avoids number-based overload guessing. Actual Any double then signed32 calls retained in short-circuit form; native assignLONG source set is subsetofDOUBLE, no fake fallback-success peer/private forcing. Unknown members untouchedsuccess and invalid bool resetsNORMAL; float above200orNaN mapsDONTKNOW. Calc102113118NORMAL defaults use real shared itemset copies. Existing equality/unknown11 expectations corrected from source; negative/fractional guards and raw100thresholds retained. FontWeight invariant witness moves to tools keeping ID/value/native evidence. CALC108 records threshold/default/fallback oddities. Existing metadata history/status retained without broad parity promotion. Other VCL helpers/native presentation/cache/diagnostics/refcounts/ABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No C++build/generator/sanitizer/memory library. Next full only real minimum UI+ODSread/save readiness then relevant repairs/pause.",
+      "Task126 ports original SvxFontHeightItem height/property/unit value state, original3argument/copy constructors,240100factory,SetProp,bothSetHeightoverloads,copyClone,payload equality ignoringWhich,4fieldhash and llround-basedScaleMetrics/HasMetrics. Original unsigned32product wraps before /100 and signed16absolute delta/4argument ControlToItem direction retained (CALC109110). Existing checkedJS height guard retains negative/fractional errors and admits native0/MAX. All40original calls across24files migrate to native3argument form without2argcompatibility overload. Existing Writer browser snapshot now retains height,prop,propUnit; its pool factory restores stored height with100thenSetProp to avoid applying property twice. Old scalar-height snapshot payloads are rejected; no fallback that discards native fields. Actual Writer history/itemset/graph roundtrip tests retain complete absolute/relative state. Native typedAny transport and localizedpresentation remain unported, not simulated by the existing browser state projection. Source shard required by enforced500line budget; canonical textitem/fhgtitem reexport oneowner. Calc101112117height200prop100relative defaults use actualitemset clones, no fakeDocPool/document/provider. Existing metadata histories/statuses and IO/recovery exceptions preserved, no broad parity promotion. FullDocPool/config/document/UI/same-modelODS pending. No C++build/generator/sanitizer/custommemoryengine. Full regression only actualminimumUI+ODSread/save readiness then repairs/pause; Writer-only coverage gaps remain exempt."
     ],
     "omittedResponsibilities": [
       "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
@@ -114,7 +121,8 @@
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
-      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
+      "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending."
     ],
     "evidence": {
       "local": [
@@ -189,6 +197,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/weightattr.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/heightattr.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -243,6 +255,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/scitems.hxx",
           "marker": "ATTR_FONT_WEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scitems.hxx",
+          "marker": "ATTR_FONT_HEIGHT"
         }
       ]
     }

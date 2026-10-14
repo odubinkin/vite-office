@@ -93,3 +93,10 @@ export const ATTR_FONT_WEIGHT = 102;
 export const ATTR_CJK_FONT_WEIGHT = 113;
 /** Original CTL weight identity. */
 export const ATTR_CTL_FONT_WEIGHT = 118;
+
+/** Original Latin font height. */
+export const ATTR_FONT_HEIGHT = 101;
+/** Original CJK font height. */
+export const ATTR_CJK_FONT_HEIGHT = 112;
+/** Original CTL font height. */
+export const ATTR_CTL_FONT_HEIGHT = 117;

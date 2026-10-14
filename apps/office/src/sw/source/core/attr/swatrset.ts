@@ -199,10 +199,25 @@ export class SwAttrPool extends SfxItemPool {
       );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       this.RegisterDefaultItem(
-        new SvxFontHeightItem(12 * 20, which),
-        /** Restores a font height. @param value - Persisted twip height. @returns Font-height item. */ (
+        new SvxFontHeightItem(12 * 20, 100, which),
+        /** Restores all native height/property/unit state without applying the property twice. @param value - Complete logical state. @returns Font-height item. */ (
           value,
-        ) => new SvxFontHeightItem(Number(value), which),
+        ) => {
+          if (
+            typeof value !== "object" ||
+            Array.isArray(value) ||
+            !("height" in value) ||
+            !("prop" in value) ||
+            !("propUnit" in value) ||
+            typeof value.height !== "number" ||
+            typeof value.prop !== "number" ||
+            typeof value.propUnit !== "number"
+          )
+            throw new Error("Invalid font-height item state.");
+          const item = new SvxFontHeightItem(value.height, 100, which);
+          item.SetProp(value.prop, value.propUnit);
+          return item;
+        },
       );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(

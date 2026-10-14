@@ -43,7 +43,7 @@ for (const preserve of [false, true])
       node.SetAttr(
         new SvxFontItem("Liberation Serif", RES_CHRATR_FONT, "Liberation Serif", "roman"),
       );
-      node.SetAttr(new SvxFontHeightItem(400, RES_CHRATR_FONTSIZE));
+      node.SetAttr(new SvxFontHeightItem(400, 100, RES_CHRATR_FONTSIZE));
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
       node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, RES_CHRATR_POSTURE));
       node.SetAttr(new SvxUnderlineItem(FontLineStyle.DOUBLE, RES_CHRATR_UNDERLINE));

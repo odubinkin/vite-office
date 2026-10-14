@@ -796,7 +796,7 @@ function putCharacterProperties(
   if (complexFamily !== undefined) put(new SvxFontItem(complexFamily, RES_CHRATR_CTL_FONT));
   if (properties.fontSizeTwips !== undefined)
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      put(new SvxFontHeightItem(properties.fontSizeTwips, which));
+      put(new SvxFontHeightItem(properties.fontSizeTwips, 100, which));
   if (properties.highlight !== undefined)
     put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, properties.highlight));
   if (properties.bold !== undefined)
