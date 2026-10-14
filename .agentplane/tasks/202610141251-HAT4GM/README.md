@@ -1,10 +1,11 @@
 ---
 id: "202610141251-HAT4GM"
 title: "Align shared font-height value state and Writer consumers with native constructors"
-status: "DOING"
+result_summary: "Font-height value and metric contract now follows original constructors/copies/defaults/SetHeight/ScaleMetrics/hash.40consumer calls migrated, realWriterhistory/snapshot roundtrips and Calc3scriptdefaults tested.169Calc/65files plus147related/19files and18Chromiumcases pass; shared andCalcraw100,12gates30boundariesbuildpass. NativeAny/presentation and fullDocPool/document/UI/ODS stillpending; continue prioritized preparation, fullregression thenpause atactualreadiness."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task126-checks/browser-manifest.json"
   findings:
     - "Exact51paths39changed12new,3667to3679sourcehashes14nativepins. Original height/property/unit, native3arg/copy/factory/SetHeightoverloads/metrics/hash retain defined arithmetic including unsigned32product and signed16delta.40calls24files migrate without2argbridge. ActualWriterhistory+graph snapshots preserve full state; old scalar-height payloads rejected without lossyfallback. Shared3completeowners191S112B60F174L raw100, Calc169/65files33ownersraw100, related147/19files,18Chromiumcases6specs,12gates30boundariesbuild pass. Inventory/provenance retains historical statuses, registered source-shard necessity and IO/recovery exceptions; CALC110 preserves native oddity. No native builds/generators/memory engine."
-commit: null
+commit:
+  hash: "41faf20662d8c5ff9f1f724e9bf6a7f6690f680a"
+  message: "🚧 HAT4GM core: align native font-height state and Writer consumers"
 comments:
   -
     author: "CODER"
     body: "Start: port original height proportion metric state and migrate actual Writer consumers and complete state persistence."
+  -
+    author: "CODER"
+    body: "Verified: canonical height/property/unit value ownership, original constructors and complete Writer snapshot/history state; native arithmetic preserved."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "41faf20662d8c5ff9f1f724e9bf6a7f6690f680a: exact51paths3667to3679hashes14nativepins. Calc169tests65files33ownersraw100; shared3owners191S112B60F174L raw100; related147/19,18Chromiumcases6specs,12gates30boundariesbuildpass.40constructors migrated, native0/Which/arithmetic corrected, completeWriterhistory/snapshotstate retained. NativeAny/presentation and fullDocPool/UI/ODS remainpending; same-agent evaluator notindependent. Full onlyactualreadiness thenrepairs/pause."
+  -
+    type: "status"
+    at: "2026-10-14T13:05:44.941Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical height/property/unit value ownership, original constructors and complete Writer snapshot/history state; native arithmetic preserved."
 doc_version: 3
-doc_updated_at: "2026-10-14T13:05:27.331Z"
+doc_updated_at: "2026-10-14T13:05:44.943Z"
 doc_updated_by: "CODER"
 description: "Port real height/prop/unit value contract, factory/copy/hash/metrics/SetHeight overloads; migrate consumers to original3argument constructor and preserve complete state in existing Writer snapshot boundary. Native Any transport/presentation remain explicitly pending, no stubs. Calc3script default values tested through real items."
 sections:
