@@ -4,7 +4,7 @@ title: "Admit menubar children from original nonempty submenu resources"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Original current child resources/empty GetItemCount/sibling teardown/trigger focus/native samechildreuse;1621unique accepted1576related26tooling19Chromium,14nativefreshcases. Whole current menu100four513positive original counters from exact-definitions standard same-source merge;958oldfiles identical2canonical histories137staticfiles9metadata pass.4refs absent/exactrestore, no raw data edits/passing replay. Goalactive1/10; pause after NEXTfull+repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T03:50:39.486Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent exact6941909d5ca0 review passes original current menubar child-resource ownership/native empty admission,1621unique accepted/whole current module100four."
+  evaluated_sha: "6941909d5ca0dca40fba560b0b842635e5348922"
+  blueprint_digest: "9244187fd5d405b781504414eb30bc624ce82add6f75d40744812aa4dcaa2a86"
+  evidence_refs:
+    - ".agentplane/tasks/202610140328-39B6T7/README.md"
+    - ".agentplane/tasks/202610140328-39B6T7/quality/20261014-035039486-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140328-39B6T7/quality/20261014-035039486-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140328-39B6T7/quality/20261014-035039486-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140328-39B6T7/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/39B6T7/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/39B6T7/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/39B6T7/execution-hashes.json"
+    - "apps/office/node_modules/.cache/parity-coverage/39B6T7/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/39B6T7/final-static-results.json"
+  findings:
+    - "Pinned HighlightChanged kills a different active child before GetItemCount/nonactive admission. Port borrows original current submenu object/trigger, keyboard receives current direct original arrays and resolves only owned child; empty request clears different child then restores parent focus/highlight without creating empty popup. Same active-id child retained even after current count becomes empty. Original nonempty pointer/click/aux/keyboard/preselection behavior and protectedSpace/IO/recovery remain. No new manager/cache/mirrored resource model/low-level mechanism; full nested/timer/mnemonic/platform/native focus/core/UI parity unverified."
+    - "14fresh actualWriterSession/Sfxbindings DOM cases cover empty keyboard/pointer/click/middle/right, sibling teardown/reopen/native dispatch, stale current-resource admission and existing active-child reuse.1574initialrelated/221files0fail;2new Enter/Space stale cases close1branch gap without passing replay;26tooling19Chromium allpass,1621unique accepted.958oldtestfiles byte-identical,2canonical alloldscalar/history/default/classification prefixes retained,137staticfiles and all4semantic blobs equal frozen evidence.9finalmetadata gates pass,4refs absent everyproducer/exactrestore."
+    - "Entire current-original menu100L213/S239/F52/B222,513positive raw counters. Original initial/closure maps and threshold failures retained immutable; standard istanbul-lib-coverage whole same-current-source merge only after exact statementMap/fnMap/branchMap ID/location equality. No counter/location normalization/provider/threshold/exclusion changes or previous-source transfer. Source/metadata/static hashes bind reviewed commit. Initial full/scoped format/lint/TS7/docs/size/deps/build/static and final added-case lint/TS7 pass. Human resume verified active, correction1/10; pause after NEXT full+repairs."
 commit: null
 comments:
   -
