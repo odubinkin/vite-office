@@ -1,10 +1,11 @@
 ---
 id: "202610140415-WTXZMM"
 title: "Route native Ctrl-F6 through owning menubar popups"
-status: "DOING"
+result_summary: "Native menubar Ctrl-F6 ownership verified; goal active at cycle correction 3/10."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/node_modules/.cache/parity-coverage/WTXZMM/audit-results.json"
   findings:
     - "Source MenuFloatingWindow nearest parent cancellation and MenuBarWindow document-focus override match root/child behavior. Seven original-bindings cases and three actual Writer Chromium cases exercise both global focus interaction and fresh F10 cycle. No new input machinery or old acceptance edits."
-commit: null
+commit:
+  hash: "383664b6aa238f83a65f7e6cb901fd9981d601a4"
+  message: "🧩 WTXZMM fix: route menubar Ctrl-F6 through native popup owners"
 comments:
   -
     author: "CODER"
     body: "Start: existing native Ctrl-F6 ownership through root/child menubar keydown using existing close and focus callbacks; no new adapter. Correction 3/10 with upstream-absent whole-current-source 100% coverage."
+  -
+    author: "CODER"
+    body: "Verified: existing menubar Ctrl-F6 follows root document focus and child nearest parent cancellation with native keydown and existing callbacks. 1,641 unique accepted, whole current module 100% four metrics and 538 positive original counters; nine metadata gates pass. Same-agent non-independent quality pass. Cycle 3/10; upcoming full continues, following full pauses after repairs."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "1,641 unique accepted; whole current production module 100% four metrics, 538 positive original counters; all static and nine metadata gates pass, 960 old test files unchanged. Evidence apps/office/node_modules/.cache/parity-coverage/WTXZMM/proof.json, accepted-results.json and audit-results.json. Cycle 3/10; upcoming full continues, following full pauses after repairs."
+  -
+    type: "status"
+    at: "2026-10-14T04:27:29.971Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: existing menubar Ctrl-F6 follows root document focus and child nearest parent cancellation with native keydown and existing callbacks. 1,641 unique accepted, whole current module 100% four metrics and 538 positive original counters; nine metadata gates pass. Same-agent non-independent quality pass. Cycle 3/10; upcoming full continues, following full pauses after repairs."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:26:37.618Z"
+doc_updated_at: "2026-10-14T04:27:29.973Z"
 doc_updated_by: "CODER"
 description: "Cycle correction 3/10: existing Ctrl-F6 focus routing must cancel root menubar into its document and close only immediate nested child; plain F6 remains untouched. Ordinary React keydown and existing close/focus functions, no new manager or low-level input. Preserve IO/recovery/Space and all old acceptance."
 sections:
@@ -108,6 +121,10 @@ sections:
     Previous correction 5VA8Q8 DONE at 1d24dc77cebd. Clean writer checkout. Pin 9bc445578031fecf56086729d8e4940c77e14d65: Ctrl-F6 shares Escape nearest parent ownership in MenuFloatingWindow; MenuBarWindow deactivates then GrabFocusToDocument. Current menubar ignores F6; global Writer route moves focus to document while popup stays open, and incorrectly bypasses child nearest parent ownership. Bounded existing keyboard behavior repair. No suspicious core logic observed. Full timers/platform/mnemonics/core/UI parity remains unverified. Latest human pause is after full following upcoming full, with all failures repaired.
 
     Implemented only two existing keydown branches. Ctrl-F6 shares nearest cancellation with Escape; root follows existing saved-owner cleanup with original frame-client focus callback, nested child prevents default before global Writer document routing. Trigger Escape is now consumed as native MenuBarWindow bDone does. Plain F6 and protected Space/IO/recovery unchanged. Genuine pre-change red: six of seven new native cases failed; all seven now pass, no old assertions changed. Full declared focused producers pass on first final-code attempt. Restored-reference provenance and registry initially failed because the existing Boost output target temporarily lacked its header; original symlink chain and code left intact, header became available on bounded recheck, only failed metadata gates retried. No runtime replay or source/dependency setup. Same-agent EVALUATOR phase is explicitly non-independent. Cadence 3/10; upcoming full continues and following full pauses after repairs.
+extensions:
+  implementation_commit:
+    hash: "383664b6aa238f83a65f7e6cb901fd9981d601a4"
+    message: "🧩 WTXZMM fix: route menubar Ctrl-F6 through native popup owners"
 id_source: "generated"
 ---
 ## Summary
