@@ -1,10 +1,11 @@
 ---
 id: "202610141226-MSDHVC"
 title: "Use canonical Tools font enums throughout Writer and shared consumers"
-status: "DOING"
+result_summary: "Removed TextItem compatibility aliases and migrated all actual Writer/shared/browser-fixture consumers. Inventory/provenance current; literal values and behavior preserved. 168 Calc tests strict100,957related tests,6Chromium cases,12gates29boundarytests pass. Writer-only coverage gaps retained per user exception; full readiness checkpoint remains pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task124-checks/browser-manifest.json"
   findings:
     - "Exact44paths42changed2new,3651to3653current source hashes,9native pins. Shared2complete owners strict raw100; Calc168tests64files33owners strict100. Related957tests17files and6production Chromium cases pass; all12gates and29boundary tests pass. Writer-only raw gaps reported without repair per human exception; no threshold/config/source-counter manipulation or alias workarounds. Actual mapped/local-only provenance and save/open/recovery deviations preserved."
-commit: null
+commit:
+  hash: "df795f1b4b213fab1c78e76529e0f4e67329311a"
+  message: "🚧 MSDHVC core: use canonical Tools font enums in Writer consumers"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: direct canonical Tools font enum ownership across shared and Writer consumers; strict shared/Calc coverage and related Chromium pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source df795f1b4b213fab1c78e76529e0f4e67329311a: exact44paths42changed2new,3653source blobs,9native pins; Calc168/64 strict raw100; shared2owners194S96B56F179L raw100; related957/17 and6Chromium cases pass,12gates+29boundaries+build pass. Writer-only coverage gaps retained per user exemption; all temporary enum bridges removed, direct canonical consumers. Same-agent evaluator pass, not independent. Full deferred until actual UI+ODS readiness, then fixes and goal pause."
+  -
+    type: "status"
+    at: "2026-10-14T12:38:02.740Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: direct canonical Tools font enum ownership across shared and Writer consumers; strict shared/Calc coverage and related Chromium pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:37:50.013Z"
+doc_updated_at: "2026-10-14T12:38:02.741Z"
 doc_updated_by: "CODER"
 description: "Task124: user explicitly authorizes canonical shared/Writer fixes without compatibility crutches. Remove TextItemFontWeight/FontItalic alias bridges, migrate all Writer/shared consumers to original Tools enum owners/member names, update actual inventory and related tests. Calcbranch only; targetedCalc/sharedraw100, Writer-onlycoverage gaps remain untouched, readiness-drivenfull/pause."
 sections:
