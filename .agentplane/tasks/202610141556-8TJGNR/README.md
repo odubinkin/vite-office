@@ -4,7 +4,7 @@ title: "Restore canonical shared font-family attribute state and migrate Writer 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T16:55:43.500Z"
+  updated_by: "CODER"
+  note: "Verified canonical shared font values and actual Writer/ODF consumers:411related cases/68files and175Calc cases/68files;10shared and33Calc owners every raw counter positive,100percent;8Chromium and36boundary cases,production build,12source gates. Exact97source paths/24runtime-provenance pairs/3751hashes/10native pins/calcbranch. SixWriter-only gaps explicitly exempt; fullUI/ODS/nativeFontDescriptor remain pending. Same-agent quality is not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T16:55:19.026Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical shared font values, actual Writer consumers and ODF metadata satisfy approved task135 scope; same-agent review is not independent."
+  evaluated_sha: "a16c186d0c61b9c5ee322ddbb0a7e904f052a78d"
+  blueprint_digest: "7b20c3203d26737c6466960d4b24cecde434bda00edaf1efccd6c52adb70724b"
+  evidence_refs:
+    - ".agentplane/tasks/202610141556-8TJGNR/README.md"
+    - ".agentplane/tasks/202610141556-8TJGNR/quality/20261014-165519026-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141556-8TJGNR/quality/20261014-165519026-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141556-8TJGNR/quality/20261014-165519026-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141556-8TJGNR/blueprint/resolved-snapshot.json"
+    - "output/playwright/task135-checks/verification.json"
+    - "output/playwright/task135-checks/inventory-final.log"
+  findings:
+    - "Compared native five-field defaults/constructors/setters/equality/hash, full pool comparator/name allocation and original Add return with pinned sources; reuses existing shared SortedVector and SAL/o3tl without a second lifetime engine."
+    - "Actual history/browser/3script ODT tests,411related cases and175Calc cases pass; all10changedshared and33Calc owners have positive raw coverage counters. Build and8Chromium cases pass without reference links;36boundary cases and12source gates pass."
+    - "Exact97paths within100approved,24runtime/provenance pairs, zero semantic inventory violations,3751source hashes and10native pins audited. Writer-only gaps in6owners remain explicitly exempt, not silently certified."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore canonical shared font attribute and migrate actual Writer consumers under explicit human authorization; no duplicate or compatibility item."
+  -
+    type: "verify"
+    at: "2026-10-14T16:55:43.500Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified canonical shared font values and actual Writer/ODF consumers:411related cases/68files and175Calc cases/68files;10shared and33Calc owners every raw counter positive,100percent;8Chromium and36boundary cases,production build,12source gates. Exact97source paths/24runtime-provenance pairs/3751hashes/10native pins/calcbranch. SixWriter-only gaps explicitly exempt; fullUI/ODS/nativeFontDescriptor remain pending. Same-agent quality is not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T16:54:55.811Z"
+doc_updated_at: "2026-10-14T16:55:43.552Z"
 doc_updated_by: "CODER"
 description: "Task135: source-faithful SvxFontItem value fields/constructors/default/copy/get-set/equality/hash/clone, shared FontFamily/FontPitch and charset declarations, exact Calc100/111/116 IDs and owned defaults tests; remove item-local resolved/generic CSS state and migrate Writer/filter/browser snapshot consumers to canonical state. Native Any FontDescriptor transport remains separately unported, no fake helper/lifecycle. Standing human shared/Writer canonical correction authorization and UI/ODS priority."
 sections:
@@ -56,6 +81,39 @@ sections:
     - Scope: exact97approved source/doc/inventory paths, 24runtime/provenance pairs and one new bounded capability; no existing broad parity/default/status promotion. Source fingerprint3731to3751files,77existing changes/20new/3654unchanged;10native source pins and4reference symlinks retained, calcbranch. Evidence: `output/playwright/task135-checks/verification.json` and final gate logs.
 
     No full-suite command was run: human moved that checkpoint to actual minimal connected UI plus same-model ODS readiness. That milestone is not reached. Full native FontDescriptor Any/presentation/device services and real Calc document/pool/storage/UI/ODS remain pending; no native memory/lifetime emulation added. Same-agent EVALUATOR review is not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T16:55:43.500Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified canonical shared font values and actual Writer/ODF consumers:411related cases/68files and175Calc cases/68files;10shared and33Calc owners every raw counter positive,100percent;8Chromium and36boundary cases,production build,12source gates. Exact97source paths/24runtime-provenance pairs/3751hashes/10native pins/calcbranch. SixWriter-only gaps explicitly exempt; fullUI/ODS/nativeFontDescriptor remain pending. Same-agent quality is not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T16:54:55.811Z, excerpt_hash=sha256:18f629acf415e6f0cbbbe60fa9163a0001a6af0486d3763fec2ebe686f4d12c4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141556-8TJGNR/blueprint/resolved-snapshot.json
+    - old_digest: 7b20c3203d26737c6466960d4b24cecde434bda00edaf1efccd6c52adb70724b
+    - current_digest: 7b20c3203d26737c6466960d4b24cecde434bda00edaf1efccd6c52adb70724b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141556-8TJGNR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141556-8TJGNR -m 🧩 8TJGNR task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task intentional changes in a later authorized task; never reset unrelated work, merge or publish."
   Findings: |-
     Task135 finishes the existing canonical shared-font migration, including actual Writer/browser/ODT consumers under explicit human authorization. Old resolved/generic CSS item fields and legacy constructors are removed; native five-field values are retained across actual owned clones, history and browser persistence. Native ODF key equivalence, naming, pitch/family mapping, default encoding and Symbol-only charset export are preserved. Add first-insertion empty return is recorded as CALC-114, not repaired. Shared SortedVector is reused instead of a second ordered container, with JS GC owning entries and no custom lifetime/refcount mechanism. FontDescriptor Any and full device/config/font services remain genuinely pending, not stubbed.
@@ -94,6 +152,39 @@ Source-faithful native font defaults empty names/FAMILY_SWISS/PITCH_VARIABLE/DON
 - Scope: exact97approved source/doc/inventory paths, 24runtime/provenance pairs and one new bounded capability; no existing broad parity/default/status promotion. Source fingerprint3731to3751files,77existing changes/20new/3654unchanged;10native source pins and4reference symlinks retained, calcbranch. Evidence: `output/playwright/task135-checks/verification.json` and final gate logs.
 
 No full-suite command was run: human moved that checkpoint to actual minimal connected UI plus same-model ODS readiness. That milestone is not reached. Full native FontDescriptor Any/presentation/device services and real Calc document/pool/storage/UI/ODS remain pending; no native memory/lifetime emulation added. Same-agent EVALUATOR review is not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T16:55:43.500Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified canonical shared font values and actual Writer/ODF consumers:411related cases/68files and175Calc cases/68files;10shared and33Calc owners every raw counter positive,100percent;8Chromium and36boundary cases,production build,12source gates. Exact97source paths/24runtime-provenance pairs/3751hashes/10native pins/calcbranch. SixWriter-only gaps explicitly exempt; fullUI/ODS/nativeFontDescriptor remain pending. Same-agent quality is not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T16:54:55.811Z, excerpt_hash=sha256:18f629acf415e6f0cbbbe60fa9163a0001a6af0486d3763fec2ebe686f4d12c4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141556-8TJGNR/blueprint/resolved-snapshot.json
+- old_digest: 7b20c3203d26737c6466960d4b24cecde434bda00edaf1efccd6c52adb70724b
+- current_digest: 7b20c3203d26737c6466960d4b24cecde434bda00edaf1efccd6c52adb70724b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141556-8TJGNR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141556-8TJGNR -m 🧩 8TJGNR task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
