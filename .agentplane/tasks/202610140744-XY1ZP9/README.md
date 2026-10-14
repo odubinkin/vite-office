@@ -1,10 +1,11 @@
 ---
 id: "202610140744-XY1ZP9"
 title: "Integrate writer and calc and synchronize all checkouts"
-status: "DOING"
+result_summary: "Integrated and fully verified writer/calc/main; all three clean original branches synchronized and published."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -45,11 +46,16 @@ quality_review:
     - "Live ls-remote and clean checkout evidence: ca2121f2d44740afdb197d7c212721b813e7923f on main/writer/calc"
   findings:
     - "Full verification passed without changes to runtime, test expectations, exclusions, coverage counters or thresholds; no integration regression or missing regression test was found."
-commit: null
+commit:
+  hash: "a49f6be65813d19268b2f9981e6259c6081a0681"
+  message: "🧩 XY1ZP9 integrate: merge calc into main"
 comments:
   -
     author: "CODER"
     body: "Start: execute the user-approved integration and synchronization of writer, calc and main across the three named clones."
+  -
+    author: "CODER"
+    body: "Verified: writer and calc were published, merged into main without content conflicts, full project checks and strict 100 coverage passed, main was published and back-merged into clean writer/calc checkouts with matching remote heads."
 events:
   -
     type: "status"
@@ -70,8 +76,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify and routing/doctor passed. Live remote main/writer/calc and all three clean named checkouts equal ca2121f2d447; both feature branches contain published main. All nine authorized steps are implemented; only deterministic task closure publication remains."
+  -
+    type: "status"
+    at: "2026-10-14T08:39:49.806Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: writer and calc were published, merged into main without content conflicts, full project checks and strict 100 coverage passed, main was published and back-merged into clean writer/calc checkouts with matching remote heads."
 doc_version: 3
-doc_updated_at: "2026-10-14T08:38:54.064Z"
+doc_updated_at: "2026-10-14T08:39:49.808Z"
 doc_updated_by: "CODER"
 description: "User authorizes push of current writer/calc, merge into main, resolve conflicts, run full project verification and fix regressions, publish main and back-merge into writer/calc in the three named repositories."
 sections:
