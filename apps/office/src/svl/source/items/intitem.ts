@@ -3,31 +3,41 @@
 import { SfxPoolItem } from "./poolitem";
 import { CntUInt16Item, CntUInt32Item } from "./cintitem";
 
-/** Native unsigned32 subclass and zero-valued constructor defaults. */
+import type { SfxItemPool } from "./itempool";
+/** Original unsigned32 subclass with default factory and implicit copying. */
 export class SfxUInt32Item extends CntUInt32Item {
-  /** Creates an unsigned item. @param which - Item identity. @param value - Unsigned scalar. @returns Nothing. */
-  public constructor(which = 0, value = 0) {
-    super(which, value);
+  /** Original zero/default/value and copy forms. @param source - Which or actual const source. @param value - Unsigned payload. @returns Item. */
+  constructor(source: number | Readonly<SfxUInt32Item> = 0, value = 0) {
+    if (typeof source === "number") super(source, value);
+    else super(source);
   }
-  /** Preserves the concrete subclass when cloning. @returns Owned scalar item. */
-  public override Clone(): SfxUInt32Item {
-    return new SfxUInt32Item(this.Which(), this.GetValue());
+  /** Original zero-Which/zero-value factory. @returns Default item. */
+  public static CreateDefault(): SfxUInt32Item {
+    return new SfxUInt32Item();
+  }
+  /** Original copy-based Clone retains concrete type and Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SfxUInt32Item {
+    void pool;
+    return new SfxUInt32Item(this);
   }
 }
-
-/** Native unsigned item subclass with the zero-valued SfxUInt16Item constructor defaults. */
+/** Original unsigned16 subclass with default factory and implicit copying. */
 export class SfxUInt16Item extends CntUInt16Item {
-  /** Creates an unsigned item. @param which - Item identity. @param value - Unsigned value. @returns Nothing. */
-  public constructor(which = 0, value = 0) {
-    super(which, value);
+  /** Original zero/default/value and copy forms. @param source - Which or actual const source. @param value - Unsigned payload. @returns Item. */
+  constructor(source: number | Readonly<SfxUInt16Item> = 0, value = 0) {
+    if (typeof source === "number") super(source, value);
+    else super(source);
   }
-
-  /** Preserves the concrete unsigned item type when cloning. @returns Independent item. */
-  public override Clone(): SfxUInt16Item {
-    return new SfxUInt16Item(this.Which(), this.GetValue());
+  /** Original zero-Which/zero-value factory. @returns Default item. */
+  public static CreateDefault(): SfxUInt16Item {
+    return new SfxUInt16Item();
+  }
+  /** Original copy-based Clone retains concrete type and Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SfxUInt16Item {
+    void pool;
+    return new SfxUInt16Item(this);
   }
 }
-
 /** Signed-16-bit SfxPoolItem counterpart used by Writer list levels. */
 export class SfxInt16Item extends SfxPoolItem {
   /** Creates a signed-16-bit item. @param which - Item identity. @param value - Signed-16-bit value. @returns Nothing. */

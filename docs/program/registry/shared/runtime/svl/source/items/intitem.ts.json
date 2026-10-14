@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "formatting-model",
     "capabilityIds": [
-      "CAP-0112"
+      "CAP-0112",
+      "CAP-3cc5a63a-582e-4928-b8c0-4c2d69605e56"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -26,19 +27,24 @@
         "vendor/libreoffice-reference/include/svl/intitem.hxx#class SVL_DLLPUBLIC SfxUInt16Item",
         "apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts#@fileoverview",
         "apps/office/src/sw/source/core/undo/native-format-attribute-notify-history.test.ts#@fileoverview",
-        "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx#@fileoverview"
+        "apps/office/src/sw/browser/editor/native-format-attribute-notify.test.tsx#@fileoverview",
+        "apps/office/src/svl/source/items/native-unsigned-item.test.ts",
+        "docs/program/calc-core.md#Unsigned shared item values and cell indentation (task115)"
       ],
-      "justification": "The implemented signed-16-bit item constructor default and bounds, GetValue, QueryValue, Clone and equality match the pinned SfxInt16Item source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted. Bounded CntUInt16Item owns immutable unsigned values,scalar QueryValue,concrete-type equality and base cloning;SfxUInt16Item retains native zero constructor defaults and concrete subclass cloning. Native UNO PutValue,mutable refcount policy,presentation,hashing and pool lifetime remain separately unverified. Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion. Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245.",
+      "justification": "The implemented signed-16-bit item constructor default and bounds, GetValue, QueryValue, Clone and equality match the pinned SfxInt16Item source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted. Bounded CntUInt16Item owns immutable unsigned values,scalar QueryValue,concrete-type equality and base cloning;SfxUInt16Item retains native zero constructor defaults and concrete subclass cloning. Native UNO PutValue,mutable refcount policy,presentation,hashing and pool lifetime remain separately unverified. Iteration245 ports precise native AttrSetChangeHint old/new effective values, modify locking and inherited Differentiate filtering to original registered clients. Row/cell generic attribute overrides are removed and copying claims are locked. Native default items127/157/158/159 supply actual protection flags, numeric format100/locale normalization, detached non-shareable formula and zero double. Browser snapshot restoration stays a bounded boundary. Full SwTableFormula inheritance/parser/calculation/name conversion, presentation/UNO and native frame invalidation/geometry remain unverified. Targeted verification pending; last full237,next247; no semantic promotion. Iteration245 verified1575 unique app cases including20 fresh native format notification/default/ownership/history/UI cases and13 Chromium cases. Initial1538pass6fail; closure1 resolves6failures and explicitly revalidates3 materially affected fresh device/UI scenarios,9pass30skip; closure2 only new/unexecuted related cases31pass14skip. All660 prior acceptance files byte-identical. Actual app/inventory all-four100 binds current complete sources/maps and complete unchanged native declarations/signatures/bodies/enclosing branches/all locations from244; generated V8 duplicate method display ordinal changes are documented with full source hashes, no individual counter sanitization. Browser paint notification follows native clients without adding a document mutation. Existing317 metadata fields/order/status/default/classification/evidence prefixes preserved, one new cellatr record unverified. Full SwTableFormula second-base/calculation/name conversion/UNO, native frame invalidation/geometry and direct native UI registration remain partial. Registered IO/recovery/settings deviations preserved; last full237,next247; no full245. Task115 restores CntUInt16/32 mutable values, implicit copy/Clone, same-type payload equality ignoringWhich, hash support through existing o3tl64seed logical arithmetic, and native typed Any queries/updates using existing CPPU owners. UInt16 tries unsigned16 extraction then original legacy signed32 fallback and wraps; UInt32 signed32 projection/extraction preserves unsigned bits. Existing checked unsigned constructor/SetValue domains and plain signed32 browser transport remain explicit adaptations; invalid JS arguments are not native typed-domain claims. SfxUInt16/32 default factory, implicit copy and concrete Clone use actual shared bases; canonical cintitem/intitem headers reexport existing owners. ScIndentItem default0/Which131, implicit copy retainingWhich and value-based Clone restoring131 serve the real DocPool prerequisite. Native same-type equality ignoresWhich while hash includesWhich; retain original behavior. Existing signed16 implementation and other unported numeric families are unchanged and not certified by this scope. Original localized/metric presentation, diagnostic XML/JSON, native cache/assertion/invalid downcast/thread/lifetime/ABI/full document/config/storage/UI/ODS remain pending/excluded. No generic memory/refcount library, new native build/generator/sanitizer or fake provider/document. Existing metadata history/status preserved, not whole-module parity promotion. WholeCalc/complete affected shared raw100 and related actual consumers required; nextfull121, goalactive.",
       "knownViolations": [],
       "localSymbols": [
         "SfxInt16Item",
-        "SfxUInt16Item"
+        "SfxUInt16Item",
+        "SfxUInt32Item"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "svl/source/items/intitem.cxx",
       "upstreamSymbols": [
         "SfxInt16Item",
-        "SfxInt16Item::Clone"
+        "SfxInt16Item::Clone",
+        "SfxUInt16Item",
+        "SfxUInt32Item"
       ]
     }
   }

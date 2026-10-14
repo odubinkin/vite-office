@@ -1,0 +1,33 @@
+/** @fileoverview Checks actual Calc indentation defaults, implicit copy, fixed-identity Clone and shared numeric transport. */
+import { expect, it } from "vitest";
+import { ScIndentItem } from "../../../inc/attrib";
+import { ATTR_INDENT } from "../../../inc/scitems";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SfxItemPool } from "../../../../svl/source/items/itempool";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxUInt16Item } from "../../../../svl/inc/intitem";
+it("retains original zero indentation and independent copy/Clone Which histories", /** Uses real shared numeric and pool owners. @returns Nothing. */ () => {
+  const item = new ScIndentItem();
+  expect(ATTR_INDENT).toBe(131);
+  expect([item.Which(), item.GetValue()]).toEqual([131, 0]);
+  expect(item).toBeInstanceOf(SfxUInt16Item);
+  const explicit = new ScIndentItem(240);
+  explicit.SetWhich(999);
+  const copy = new ScIndentItem(explicit);
+  const clone = explicit.Clone();
+  expect([copy.Which(), clone.Which()]).toEqual([999, 131]);
+  expect(copy.equals(explicit)).toBe(true);
+  expect(clone.equals(explicit)).toBe(true);
+  explicit.SetValue(480);
+  expect([copy.GetValue(), clone.GetValue()]).toEqual([240, 240]);
+  const value = new Any([65537], "sal_Int32");
+  expect(clone.PutValue(value, 0)).toBe(true);
+  expect(clone.GetValue()).toBe(1);
+  value.dispose();
+  const set = new SfxItemSet(new SfxItemPool(), [[131, 131]]);
+  set.Put(clone);
+  expect(set.Get(131)).toBeInstanceOf(ScIndentItem);
+  expect((set.Get(131) as ScIndentItem).GetValue()).toBe(1);
+  clone.SetValue(2);
+  expect((set.Get(131) as ScIndentItem).GetValue()).toBe(1);
+});

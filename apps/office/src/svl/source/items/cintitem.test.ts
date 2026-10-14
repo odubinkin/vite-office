@@ -1,4 +1,4 @@
-/** @fileoverview Verifies unsigned item defaults, source-owned subclass cloning and the explicit immutable browser value boundary. */
+/** @fileoverview Verifies unsigned item defaults, source-owned subclass cloning and the explicit checked browser scalar domain. */
 import { expect, it } from "vitest";
 import { CntUInt16Item } from "./cintitem";
 import { SfxInt16Item, SfxUInt16Item } from "./intitem";
@@ -18,7 +18,8 @@ it("owns unsigned values and preserves concrete item type through independent cl
     expect(item.Clone()).not.toBe(item);
     expect(item.Clone()).toBeInstanceOf(SfxUInt16Item);
     expect(item.equals(item.Clone())).toBe(true);
-    expect(item.equals(new SfxUInt16Item(81, value))).toBe(false);
+    // Original CntUInt16Item equality compares payload after the item-type assertion; Which is separate pool identity.
+    expect(item.equals(new SfxUInt16Item(81, value))).toBe(true);
     expect(item.equals(new SfxUInt16Item(80, value === 0 ? 1 : 0))).toBe(false);
     expect(item.equals(base)).toBe(false);
     expect(base.equals(item)).toBe(false);

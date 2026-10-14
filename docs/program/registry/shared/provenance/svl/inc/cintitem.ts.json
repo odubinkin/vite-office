@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/cintitem.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/cintitem.hxx",
+    "localSymbols": [
+      "CntUInt16Item",
+      "CntUInt32Item"
+    ],
+    "upstreamSymbols": [
+      "CntUInt16Item",
+      "CntUInt32Item"
+    ],
+    "preservedResponsibilities": [
+      "Task115 restores CntUInt16/32 mutable values, implicit copy/Clone, same-type payload equality ignoringWhich, hash support through existing o3tl64seed logical arithmetic, and native typed Any queries/updates using existing CPPU owners. UInt16 tries unsigned16 extraction then original legacy signed32 fallback and wraps; UInt32 signed32 projection/extraction preserves unsigned bits. Existing checked unsigned constructor/SetValue domains and plain signed32 browser transport remain explicit adaptations; invalid JS arguments are not native typed-domain claims. SfxUInt16/32 default factory, implicit copy and concrete Clone use actual shared bases; canonical cintitem/intitem headers reexport existing owners. ScIndentItem default0/Which131, implicit copy retainingWhich and value-based Clone restoring131 serve the real DocPool prerequisite. Native same-type equality ignoresWhich while hash includesWhich; retain original behavior. Existing signed16 implementation and other unported numeric families are unchanged and not certified by this scope. Original localized/metric presentation, diagnostic XML/JSON, native cache/assertion/invalid downcast/thread/lifetime/ABI/full document/config/storage/UI/ODS remain pending/excluded. No generic memory/refcount library, new native build/generator/sanitizer or fake provider/document. Existing metadata history/status preserved, not whole-module parity promotion. WholeCalc/complete affected shared raw100 and related actual consumers required; nextfull121, goalactive."
+    ],
+    "omittedResponsibilities": [
+      "Task115 covers unsigned16/32 normal value contracts only. Explicit browser scalar bounds remain; original presentation/diagnostics/native caches/debug/ABI/other numeric families/full document/UI/ODS are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/items/native-unsigned-item.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/cintitem.hxx",
+          "marker": "CntUInt16Item"
+        }
+      ]
+    }
+  }
+}

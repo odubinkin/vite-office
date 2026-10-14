@@ -1886,3 +1886,12 @@ ScPageScaleToItem::PutValue extracts sal_uInt16 from an actual Any. Original cpp
 Status: source-confirmed asymmetry; valid pooled-caller impact remains unverified.
 
 SfxEnumItemInterface compares GetEnumValue after the native base type assertion, without comparing Which. SfxEnumItem additionally compares full EnumT payload. Its hashCode returns Which xor GetEnumValue. Consequently same-type equal enum items with different Which values can have different hashes. Calc ScViewObjectModeItem reuses the template for three page-output identities. Keep equality and hashing as written; audit native item-manager key partitioning before identifying a defect. Task114 checks actual shared generic values and Calc copies. No full document/native runtime certification.
+
+
+## CALC-101: unsigned16 legacy Any input wraps out-of-range signed32 values
+
+Status: explicit upstream compatibility, not identified as a defect.
+
+CntUInt16Item::PutValue first attempts sal_uInt16 extraction, then deliberately accepts sal_Int32 for old callers. It emits warnings for negative or overflowing values but still static_casts to unsigned16, so signed32 65537 becomes1 and -1 becomes65535. CntUInt32Item projects unsigned bits through signed32 Any, accepting the corresponding signed32 extraction. Preserve these paths through actual shared CPPU, without adding a range rejection to typed Any input. Existing checked JS scalar constructor bounds remain a separately documented browser domain.
+
+Unsigned16/32 same-type equality also ignores Which after the original base assertion, while their o3tl hash fold includes Which. This parallels CALC-100; keep the source contracts and inspect native pool key partitioning before declaring a defect. ScIndentItem implicit copy retains Which, but its value-based Clone restores131. Task115 checks these real shared/Calc histories; no compiled native or full-document certification.

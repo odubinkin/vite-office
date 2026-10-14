@@ -1,4 +1,6 @@
 /** @fileoverview Original conditional-index and page-scale attribute value families from attrib.hxx/cxx; localization/diagnostics remain separate pending scopes. */
+import { SfxUInt16Item } from "../../../../svl/inc/intitem";
+import { ATTR_INDENT } from "../../../inc/scitems";
 import { SfxEnumItem } from "../../../../svl/inc/eitem";
 import { ScVObjMode } from "../../../inc/global";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -209,5 +211,19 @@ export class ScViewObjectModeItem extends SfxEnumItem<ScVObjMode> {
   public override Clone(pool?: SfxItemPool): ScViewObjectModeItem {
     void pool;
     return new ScViewObjectModeItem(this);
+  }
+}
+
+/** Original cell indentation item; implicit copy retains Which and Clone restores the fixed identity. */
+export class ScIndentItem extends SfxUInt16Item {
+  /** Original unsigned16/default or implicit-copy construction. @param value - Indentation or actual const source. @returns Item. */
+  constructor(value: number | Readonly<ScIndentItem> = 0) {
+    if (typeof value === "number") super(ATTR_INDENT, value);
+    else super(value);
+  }
+  /** Original value-based Clone restores Which131. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScIndentItem {
+    void pool;
+    return new ScIndentItem(this.GetValue());
   }
 }

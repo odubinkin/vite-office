@@ -10,6 +10,7 @@ export {
 } from "../source/core/data/attrib";
 
 export {
+  ScIndentItem,
   ScViewObjectModeItem,
   ScCondFormatItem,
   ScCondFormatIndexes,

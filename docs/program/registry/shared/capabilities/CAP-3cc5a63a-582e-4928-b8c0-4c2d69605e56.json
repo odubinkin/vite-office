@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3cc5a63a-582e-4928-b8c0-4c2d69605e56",
+    "capabilityId": "CAP-3cc5a63a-582e-4928-b8c0-4c2d69605e56",
+    "suite": "shared",
+    "subsystem": "unsigned-item-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original unsigned numeric operations and typed Any use existing shared owners.",
+      "Calc indentation reuses actual shared unsigned16, preserving default/copy/Clone behavior."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task115 restores CntUInt16/32 mutable values, implicit copy/Clone, same-type payload equality ignoringWhich, hash support through existing o3tl64seed logical arithmetic, and native typed Any queries/updates using existing CPPU owners. UInt16 tries unsigned16 extraction then original legacy signed32 fallback and wraps; UInt32 signed32 projection/extraction preserves unsigned bits. Existing checked unsigned constructor/SetValue domains and plain signed32 browser transport remain explicit adaptations; invalid JS arguments are not native typed-domain claims. SfxUInt16/32 default factory, implicit copy and concrete Clone use actual shared bases; canonical cintitem/intitem headers reexport existing owners. ScIndentItem default0/Which131, implicit copy retainingWhich and value-based Clone restoring131 serve the real DocPool prerequisite. Native same-type equality ignoresWhich while hash includesWhich; retain original behavior. Existing signed16 implementation and other unported numeric families are unchanged and not certified by this scope. Original localized/metric presentation, diagnostic XML/JSON, native cache/assertion/invalid downcast/thread/lifetime/ABI/full document/config/storage/UI/ODS remain pending/excluded. No generic memory/refcount library, new native build/generator/sanitizer or fake provider/document. Existing metadata history/status preserved, not whole-module parity promotion. WholeCalc/complete affected shared raw100 and related actual consumers required; nextfull121, goalactive."
+    },
+    "capability": "Shared unsigned16/32 item values and typed Any transport",
+    "gaps": [
+      "Native localized/metric presentation/diagnostics/caches/ABI/invalid typed domains and full document/UI/ODS remain pending/excluded.",
+      "Existing checked scalar browser bounds remain; source-backed logical hashes do not certify native stdlib/binary ABI. Other integer owners unchanged and uncertified."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/cintitem.ts",
+          "marker": "CntUInt16Item"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/intitem.ts",
+          "marker": "SfxUInt16Item"
+        },
+        {
+          "path": "apps/office/src/svl/inc/cintitem.ts",
+          "marker": "CntUInt16Item"
+        },
+        {
+          "path": "apps/office/src/svl/inc/intitem.ts",
+          "marker": "SfxUInt16Item"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-unsigned-item.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Unsigned shared item values and cell indentation (task115)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/cintitem.cxx",
+          "marker": "CntUInt16Item"
+        },
+        {
+          "path": "svl/source/items/intitem.cxx",
+          "marker": "SfxUInt16Item"
+        },
+        {
+          "path": "include/svl/cintitem.hxx",
+          "marker": "CntUInt16Item"
+        },
+        {
+          "path": "include/svl/intitem.hxx",
+          "marker": "SfxUInt16Item"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-unsigned-item-value-contracts",
+    "scopeLimitations": [
+      "Task115 restores CntUInt16/32 mutable values, implicit copy/Clone, same-type payload equality ignoringWhich, hash support through existing o3tl64seed logical arithmetic, and native typed Any queries/updates using existing CPPU owners. UInt16 tries unsigned16 extraction then original legacy signed32 fallback and wraps; UInt32 signed32 projection/extraction preserves unsigned bits. Existing checked unsigned constructor/SetValue domains and plain signed32 browser transport remain explicit adaptations; invalid JS arguments are not native typed-domain claims. SfxUInt16/32 default factory, implicit copy and concrete Clone use actual shared bases; canonical cintitem/intitem headers reexport existing owners. ScIndentItem default0/Which131, implicit copy retainingWhich and value-based Clone restoring131 serve the real DocPool prerequisite. Native same-type equality ignoresWhich while hash includesWhich; retain original behavior. Existing signed16 implementation and other unported numeric families are unchanged and not certified by this scope. Original localized/metric presentation, diagnostic XML/JSON, native cache/assertion/invalid downcast/thread/lifetime/ABI/full document/config/storage/UI/ODS remain pending/excluded. No generic memory/refcount library, new native build/generator/sanitizer or fake provider/document. Existing metadata history/status preserved, not whole-module parity promotion. WholeCalc/complete affected shared raw100 and related actual consumers required; nextfull121, goalactive."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -577,3 +577,10 @@ it("keeps original enum extraction below SVL and Calc without reverse or browser
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("permits the original shared integer hash dependency while retaining reverse restrictions", /** Protects original unsigned item hashing. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svl", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "svl")).toBe(true);
+  for (const source of ["svl/inc/cintitem.ts", "svl/inc/intitem.ts"])
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+});

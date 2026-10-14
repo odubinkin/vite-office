@@ -88,7 +88,8 @@ const allowedEdges = new Map([
   ],
   ["sfx2", new Set(["svl"])],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
-  ["svl", new Set(["comphelper", "cppu", "sal"])],
+  // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
+  ["svl", new Set(["comphelper", "cppu", "o3tl", "sal"])],
   ["svtools", new Set()],
   ["svx", new Set(["editeng", "svl", "svtools", "vcl"])],
   [

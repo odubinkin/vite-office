@@ -32,3 +32,6 @@ export const ATTR_PAGE_CHARTS = 170;
 export const ATTR_PAGE_OBJECTS = 171;
 /** Original page drawing visibility item identity. */
 export const ATTR_PAGE_DRAWINGS = 172;
+
+/** Original cell indentation item identity. */
+export const ATTR_INDENT = 131;
