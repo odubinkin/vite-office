@@ -1794,3 +1794,13 @@ Node copy construction initializes only layer and finalized metadata. Its OUStri
 Evidence: pinned configmgr/source/node.hxx and node.cxx plus groupnode.cxx, reviewed in task105. Source-backed tests use real initialized GroupNode trees and verify empty cloned descriptions while originals retain theirs. No compiled-native differential or complete configuration-service QA claim.
 
 Decision: preserve omission without silently copying descriptions. Audit real schema/configuration consumers before calling it a defect.
+
+## CALC-091: unsigned configuration type classification uses type compatibility rather than range
+
+Status: source-confirmed initialized type-level behavior; intended schema/parser constraints and user-visible impact are unverified.
+
+configmgr getDynamicType selects a signed schema type for unsigned short/long/hyper when Any.has of the corresponding signed type succeeds. That predicate delegates through isExtractableTo and uno_type_isAssignableFromData to the original typelib primitive compatibility table. The table accepts each same-width signed/unsigned pair regardless of the stored numeric value. Thus even maximum unsigned values classify as TYPE_SHORT/TYPE_INT/TYPE_LONG; the wider/error false alternatives cannot be reached through ordinary initialized primitive Any values. This is not a numeric fit test.
+
+Evidence: pinned configmgr/source/type.cxx, include/com/sun/star/uno/Any.hxx, cppu/source/uno/data.cxx and cppu/source/typelib/typelib.cxx, inspected in task106. Source-backed tests use actual Any/UnoType values, including maximum unsigned boundaries. No fake has result or value-provider subclass, compiled differential, native memory or full configuration-service QA claim. False alternatives remain source-reviewed only; raw TypeScript coverage does not certify their reachability.
+
+Decision: retain the original assignability call and classification. Boolean-indexed result alternatives preserve the original selection in JS without inventing range checks or unreachable producer states. Audit real configuration/parser consumers before labeling it a defect.

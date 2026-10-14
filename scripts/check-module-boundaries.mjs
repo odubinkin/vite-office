@@ -37,8 +37,8 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
-  // Original configuration nodes use SAL/UNO values; shared SortedVector adapts config_map ordering.
-  ["configmgr", new Set(["cppu", "o3tl", "sal"])],
+  // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
+  ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
   ["cppuhelper", new Set(["cppu", "sal"])],

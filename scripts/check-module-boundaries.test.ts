@@ -13,12 +13,13 @@ import {
 } from "./check-module-boundaries.mjs";
 
 it("keeps shared configuration nodes below application and browser owners", /** Verifies the exact new owner edges and existing reverse/browser restrictions. @returns Nothing. */ () => {
-  for (const dependency of ["cppu", "o3tl", "sal"])
+  for (const dependency of ["cppu", "o3tl", "sal", "udkapi"])
     expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(false);
   for (const dependency of ["sc", "sw", "vcl", "framework", "offapi"])
     expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(true);
   expect(isForbiddenModuleEdge("sal", "configmgr")).toBe(true);
   expect(isForbiddenModuleEdge("cppu", "configmgr")).toBe(true);
+  expect(isForbiddenModuleEdge("udkapi", "configmgr")).toBe(true);
   const source = "configmgr/source/node.ts";
   expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
   expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);

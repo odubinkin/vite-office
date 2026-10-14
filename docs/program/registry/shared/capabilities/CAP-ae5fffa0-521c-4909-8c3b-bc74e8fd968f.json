@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f",
+    "capabilityId": "CAP-ae5fffa0-521c-4909-8c3b-bc74e8fd968f",
+    "suite": "shared",
+    "subsystem": "configuration-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "All17schema enum values, list-element types, original real cached UNO type mapping and dynamic primitive/sequence-name classifier are retained.",
+      "Real localized property/value nodes preserve nil/static type, independent Any values, deep member clones, stable value pointer and modified/layer updates.",
+      "Existing shared CPPU/Node/SAL owners reused without fake providers or added native lifetime machinery."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task106 implements the complete logical configmgr Type enum/list/element/UNO mapping/dynamic sequence whitelist and actual LocalizedPropertyNode/LocalizedValueNode contracts over existing Any/UnoType/Node/NodeMap/SAL owners. Numeric unsigned classification retains the original Any.has call and its result via boolean-indexed alternatives; original UNO primitive compatibility makes the false alternatives unreachable for initialized unsigned primitive owners (CALC-091). No invented range check, fake has result, type/provider replacement, counter mutation or coverage suppression. False alternatives are source-reviewed, not executed native behavior proof; raw100 does not prove unreachable alternatives. Nodes retain independent Any copies, stable value pointer, metadata/user-modified updates including self-set, deep child clones and base-copy description omission (CALC-090). Native const/private-copy syntax and ABI/assertions/staticize/refcount/lifetime machinery are outside represented behavior; ordinary JS node refs add no memory library. Original QA is unexecuted integration context only; no new C++ generator/compiled differential/sanitizer. Property/Set/Data/XML/backend/configuration services and actual Calc defaults/document/grid/ODS integration remain pending. Nextfull111 requested pause after relevant repairs, no Writer-only repair."
+    },
+    "capability": "Original shared configuration types and localized values",
+    "gaps": [
+      "Actual Property/Set/Data/XML/backend/configuration services and Calc defaults/document/grid/ODS integration pending.",
+      "Native const/private-access/ABI/debug/lifetime machinery and complete original QA unverified or excluded; unreachable unsigned false alternatives source-reviewed only."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/configmgr/source/type.ts",
+          "marker": "Type"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/localizedpropertynode.ts",
+          "marker": "LocalizedPropertyNode"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/localizedvaluenode.ts",
+          "marker": "LocalizedValueNode"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/configmgr/source/type.test.ts",
+          "marker": "classifies actual primitive, unsigned boundary and sequence values through existing UNO contracts"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/localizednodes.test.ts",
+          "marker": "deep-clones actual localized property trees with original static types and nil flags"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/localizednodes.test.ts",
+          "marker": "keeps real localized Any ownership stable across value and pointer modifications"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Configuration types and localized nodes (task106)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Localized configuration values"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/type.cxx",
+          "marker": "bool isListType(Type type)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/localizedpropertynode.cxx",
+          "marker": "LocalizedPropertyNode::LocalizedPropertyNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/localizedvaluenode.cxx",
+          "marker": "LocalizedValueNode::LocalizedValueNode("
+        }
+      ],
+      "tests": [
+        {
+          "path": "configmgr/qa/unit/test.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "configmgr/source/type.hxx",
+          "marker": "enum Type"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "configuration-type-and-localized-value-contracts",
+    "scopeLimitations": [
+      "Task106 implements the complete logical configmgr Type enum/list/element/UNO mapping/dynamic sequence whitelist and actual LocalizedPropertyNode/LocalizedValueNode contracts over existing Any/UnoType/Node/NodeMap/SAL owners. Numeric unsigned classification retains the original Any.has call and its result via boolean-indexed alternatives; original UNO primitive compatibility makes the false alternatives unreachable for initialized unsigned primitive owners (CALC-091). No invented range check, fake has result, type/provider replacement, counter mutation or coverage suppression. False alternatives are source-reviewed, not executed native behavior proof; raw100 does not prove unreachable alternatives. Nodes retain independent Any copies, stable value pointer, metadata/user-modified updates including self-set, deep child clones and base-copy description omission (CALC-090). Native const/private-copy syntax and ABI/assertions/staticize/refcount/lifetime machinery are outside represented behavior; ordinary JS node refs add no memory library. Original QA is unexecuted integration context only; no new C++ generator/compiled differential/sanitizer. Property/Set/Data/XML/backend/configuration services and actual Calc defaults/document/grid/ODS integration remain pending. Nextfull111 requested pause after relevant repairs, no Writer-only repair."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
