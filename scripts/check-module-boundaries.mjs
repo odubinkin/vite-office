@@ -48,7 +48,8 @@ const allowedEdges = new Map([
   ["cppuhelper", new Set(["cppu", "sal"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
-  ["editeng", new Set(["cppu", "offapi", "svl", "svtools", "vcl"])],
+  // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
+  ["editeng", new Set(["cppu", "o3tl", "offapi", "svl", "svtools", "tools", "vcl"])],
   ["external", new Set()],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
@@ -95,7 +96,7 @@ const allowedEdges = new Map([
   ["svtools", new Set()],
   // Original sdangitm.hxx includes tools/degree.hxx.
   // Original rotmodit.cxx exposes Any and CellVertJustify2.
-  ["svx", new Set(["cppu", "editeng", "offapi", "svl", "svtools", "tools", "vcl"])],
+  ["svx", new Set(["cppu", "editeng", "o3tl", "offapi", "svl", "svtools", "tools", "vcl"])],
   [
     "sw",
     new Set([
@@ -118,7 +119,8 @@ const allowedEdges = new Map([
   ["udkapi", new Set(["sal"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
   ["unotools", new Set(["sal"])],
-  ["tools", new Set()],
+  // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
+  ["tools", new Set(["o3tl"])],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
@@ -337,6 +339,8 @@ function findCycle(graph) {
 }
 
 const originalSalO3tlBindings = new Map([
+  // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
+  ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
   ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svx/source/items/algitem.ts",
+    "status": "mapped",
+    "upstreamPath": "svx/source/items/algitem.cxx",
+    "localSymbols": [
+      "SvxMarginItem",
+      "SvxOrientationItem"
+    ],
+    "upstreamSymbols": [
+      "SvxMarginItem",
+      "SvxOrientationItem"
+    ],
+    "preservedResponsibilities": [
+      "Task118 adds original normal20Length base ratios/minimal pair table/getConversionMulDiv/convert/toTwips and Tools convertTwipToMm100 over shared SAL64 bounds. BigInt selects integral N and exact signed64 rounding/preconditions; number selects floating N even for numerically integral doubles. No value-based type guessing, memory library or generic ownership mechanism. Native positive-factor/index/overflow assertions have explicit checked host errors only, not native abort/ABI certification. Immutable constexpr table positivity/product/nonzero-gcd assertions are source-proven static invariants rather than runtime private fault cases. Saturating/status overloads and other Tools helpers remain pending. Writer existing LR owner reuses seven exact integer conversions; fractional font-relative rounding remains unchanged. SvxMarginItem actual default20twips on four signed16 sides, explicit/copy/Clone/get/set/payload equality and complete member Any/metric transport preserve original upper-only admission and negative narrowing. SvxOrientationItem actual enum/rotation+stacked/copy/Clone/typed enum output and enum-integer input use original shared SfxEnumItem/CPPU/CellOrientation normal generated type binding; no generator execution or fake provider. Exact9000/27000 angles are matched without modulo normalization, stacked wins. Calc143uses the actual margin default/real pooled copies and existing rotation/stacked values. Native locale/presentation/diagnostics/caches/invalid domains/ABI/fullDocPool/document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status retained without broad parity promotion. Latest user instruction supersedes task121cadence: full regression at minimum real document/cell/UI-contract and ODS load/save readiness, repair then pausegoal. Goalactive; no full suite now."
+    ],
+    "omittedResponsibilities": [
+      "Task118 covers normal Length integral/floating and margin/orientation values only. Saturating/status helpers, native abort/privateconstexpr invalid-domain experiments, localized presentation/diagnostics/caches/ABI/fullDocPool/document/UI/ODS pending or excluded."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/items/algitem.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/items/algitem.cxx",
+          "marker": "SvxMarginItem"
+        }
+      ]
+    }
+  }
+}

@@ -606,3 +606,27 @@ it("permits actual generated alignment enum dependencies without reverse or brow
     /presentation package/u,
   );
 });
+
+it("permits original metric owners and only the exact SAL64 numeric header witness", /** Protects native value dependencies without broader SAL/o3tl permissions. @returns Nothing. */ () => {
+  for (const source of ["editeng", "svx", "tools"])
+    expect(isForbiddenModuleEdge(source, "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("editeng", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "editeng")).toBe(true);
+  const path = "../../sal/inc/types";
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/unit_conversion.ts",
+      "sal/inc/types",
+      `import { SAL_MIN_INT64, SAL_MAX_INT64 } from "${path}";`,
+      path,
+    ),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/unit_conversion.ts",
+      "sal/inc/types",
+      `import { SAL_MIN_INT32, SAL_MAX_INT32 } from "${path}";`,
+      path,
+    ),
+  ).toBe(false);
+});

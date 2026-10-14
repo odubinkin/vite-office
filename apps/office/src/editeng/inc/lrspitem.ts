@@ -1,4 +1,6 @@
 /** @fileoverview Owns the native LR item declared by include/editeng/lrspitem.hxx and implemented in editeng/source/items/frmitems.cxx; typed twip/font-relative indentation, native copy and represented UNO values retain source behavior. */
+import { convertTwipToMm100 } from "../../tools/inc/UnitConversion";
+import { toTwips, Length } from "../../o3tl/inc/unit_conversion";
 import { SfxPoolItem } from "../../svl/source/items/poolitem";
 import { MeasureUnit } from "../../offapi/com/sun/star/util/MeasureUnit";
 import { roundBorderMetric } from "../source/items/borderline";
@@ -308,8 +310,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     const convert = (member & 0x80) !== 0;
     const metric =
       /** Converts resolved integer twip measures. @param value - Twips. @returns Native measure. */
-      (value: number): number =>
-        (convert ? Math.trunc((value * 127 + (value >= 0 ? 36 : -36)) / 72) : value) | 0;
+      (value: number): number => (convert ? Number(convertTwipToMm100(BigInt(value))) : value) | 0;
     const absolute =
       /** Converts the original double measure before native llround. @param value - Original twips. @returns Rounded UNO integer. */
       (value: ConstIndentValue): number | undefined =>
@@ -375,8 +376,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
         field <= 2147483647;
     const metric =
       /** Converts signed mm100 to native twips. @param field - UNO measure. @returns Twips. */
-      (field: number): number =>
-        convert ? Math.trunc((field * 72 + (field >= 0 ? 63 : -63)) / 127) : field;
+      (field: number): number => (convert ? Number(toTwips(BigInt(field), Length.mm100)) : field);
     if (id === 0) {
       if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
       const data = value as Record<string, unknown>;
@@ -551,7 +551,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
       case 0: {
         const left = this.ResolveTextLeft();
         return {
-          TextLeft: (convert ? Math.trunc((left * 127 + (left >= 0 ? 36 : -36)) / 72) : left) | 0,
+          TextLeft: (convert ? Number(convertTwipToMm100(BigInt(left))) : left) | 0,
           Left: 0,
           Right: 0,
           FirstLine: 0,
@@ -602,9 +602,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
       return false;
     if (id === MID_TXT_LMARGIN) {
       this.SetTextLeft(
-        SvxIndentValue.twips(
-          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
-        ),
+        SvxIndentValue.twips(convert ? Number(toTwips(BigInt(value), Length.mm100)) : value),
       );
       return true;
     }
@@ -700,7 +698,7 @@ export class SvxRightMarginItem extends SfxPoolItem {
         return {
           TextLeft: 0,
           Left: 0,
-          Right: (convert ? Math.trunc((right * 127 + (right >= 0 ? 36 : -36)) / 72) : right) | 0,
+          Right: (convert ? Number(convertTwipToMm100(BigInt(right))) : right) | 0,
           FirstLine: 0,
           ScaleLeft: 0,
           ScaleRight: (this.m_nPropRightMargin << 16) >> 16,
@@ -749,9 +747,7 @@ export class SvxRightMarginItem extends SfxPoolItem {
       return false;
     if (id === 5) {
       this.SetRight(
-        SvxIndentValue.twips(
-          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
-        ),
+        SvxIndentValue.twips(convert ? Number(toTwips(BigInt(value), Length.mm100)) : value),
       );
       return true;
     }
@@ -904,9 +900,7 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     if (id === MID_FIRST_LINE_INDENT) {
       Object.assign(
         this.m_stFirstLineOffset,
-        SvxIndentValue.twips(
-          convert ? Math.trunc((value * 72 + (value >= 0 ? 63 : -63)) / 127) : value,
-        ),
+        SvxIndentValue.twips(convert ? Number(toTwips(BigInt(value), Length.mm100)) : value),
       );
       this.m_nPropFirstLineOffset = 100;
       return true;

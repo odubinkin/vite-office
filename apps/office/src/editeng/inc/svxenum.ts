@@ -31,3 +31,11 @@ export enum SvxCellJustifyMethod {
   Auto = 0,
   Distribute = 1,
 }
+
+/** Original fixed-int cell orientation values. */
+export enum SvxCellOrientation {
+  Standard = 0,
+  TopBottom = 1,
+  BottomUp = 2,
+  Stacked = 3,
+}

@@ -30,3 +30,8 @@ export const SAL_SEQUENCE_HEADER_SIZE = 4 + 4;
 export const SAL_NO_ACQUIRE_ARGUMENT = Object.freeze([__sal_NoAcquire, SAL_NO_ACQUIRE] as const);
 /** Original declared no-acquire enum argument, retaining its actual existing type/value owner. */
 export type SalNoAcquireArgument = typeof SAL_NO_ACQUIRE_ARGUMENT;
+
+/** Original minimum signed64 integer macro, represented exactly as a primitive BigInt. */
+export const SAL_MIN_INT64 = -0x8000000000000000n;
+/** Original maximum signed64 integer macro, represented exactly as a primitive BigInt. */
+export const SAL_MAX_INT64 = 0x7fffffffffffffffn;

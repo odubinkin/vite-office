@@ -1,0 +1,76 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e2ffb50d-7bec-48bc-898a-6955c5423424",
+    "capabilityId": "CAP-e2ffb50d-7bec-48bc-898a-6955c5423424",
+    "suite": "calc",
+    "subsystem": "cell-margin-orientation",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Normal20unit conversion preserves original integer versus floating rounding with real common owners.",
+      "Existing Writer LR integer sites reuse the common conversion implementation.",
+      "Actual margin defaults, upper-only checks and orientation angle/stacked mappings are preserved."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task118 adds original normal20Length base ratios/minimal pair table/getConversionMulDiv/convert/toTwips and Tools convertTwipToMm100 over shared SAL64 bounds. BigInt selects integral N and exact signed64 rounding/preconditions; number selects floating N even for numerically integral doubles. No value-based type guessing, memory library or generic ownership mechanism. Native positive-factor/index/overflow assertions have explicit checked host errors only, not native abort/ABI certification. Immutable constexpr table positivity/product/nonzero-gcd assertions are source-proven static invariants rather than runtime private fault cases. Saturating/status overloads and other Tools helpers remain pending. Writer existing LR owner reuses seven exact integer conversions; fractional font-relative rounding remains unchanged. SvxMarginItem actual default20twips on four signed16 sides, explicit/copy/Clone/get/set/payload equality and complete member Any/metric transport preserve original upper-only admission and negative narrowing. SvxOrientationItem actual enum/rotation+stacked/copy/Clone/typed enum output and enum-integer input use original shared SfxEnumItem/CPPU/CellOrientation normal generated type binding; no generator execution or fake provider. Exact9000/27000 angles are matched without modulo normalization, stacked wins. Calc143uses the actual margin default/real pooled copies and existing rotation/stacked values. Native locale/presentation/diagnostics/caches/invalid domains/ABI/fullDocPool/document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status retained without broad parity promotion. Latest user instruction supersedes task121cadence: full regression at minimum real document/cell/UI-contract and ODS load/save readiness, repair then pausegoal. Goalactive; no full suite now."
+    },
+    "capability": "Calc cell margin/default and rotation-stacked values",
+    "gaps": [
+      "Saturating/status conversion helpers, native abort/constexpr invalid-domain/private forcing, presentation/diagnostics/caches/ABI and fullDocPool/document/UI/ODS remain pending/excluded.",
+      "Source-backed logical values and actual normal enum type getter; no generator execution/native build/full original QA certification."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/scitems.ts",
+          "marker": "ATTR_MARGIN"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/marginattr.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared normal length conversion and cell margin/orientation values (task118)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/scitems.hxx",
+          "marker": "ATTR_MARGIN"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Calc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "calc-cell-margin-orientation-values",
+    "scopeLimitations": [
+      "Task118 adds original normal20Length base ratios/minimal pair table/getConversionMulDiv/convert/toTwips and Tools convertTwipToMm100 over shared SAL64 bounds. BigInt selects integral N and exact signed64 rounding/preconditions; number selects floating N even for numerically integral doubles. No value-based type guessing, memory library or generic ownership mechanism. Native positive-factor/index/overflow assertions have explicit checked host errors only, not native abort/ABI certification. Immutable constexpr table positivity/product/nonzero-gcd assertions are source-proven static invariants rather than runtime private fault cases. Saturating/status overloads and other Tools helpers remain pending. Writer existing LR owner reuses seven exact integer conversions; fractional font-relative rounding remains unchanged. SvxMarginItem actual default20twips on four signed16 sides, explicit/copy/Clone/get/set/payload equality and complete member Any/metric transport preserve original upper-only admission and negative narrowing. SvxOrientationItem actual enum/rotation+stacked/copy/Clone/typed enum output and enum-integer input use original shared SfxEnumItem/CPPU/CellOrientation normal generated type binding; no generator execution or fake provider. Exact9000/27000 angles are matched without modulo normalization, stacked wins. Calc143uses the actual margin default/real pooled copies and existing rotation/stacked values. Native locale/presentation/diagnostics/caches/invalid domains/ABI/fullDocPool/document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status retained without broad parity promotion. Latest user instruction supersedes task121cadence: full regression at minimum real document/cell/UI-contract and ODS load/save readiness, repair then pausegoal. Goalactive; no full suite now."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

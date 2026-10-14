@@ -4,7 +4,7 @@ title: "Share native length conversion and Calc cell margin/orientation values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved common unit values and actual margin/orientation, reuse Writer integer conversions and persist new readiness/full-run/pause rule; no fake document/provider or native memory library."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:11:59.065Z"
+doc_updated_at: "2026-10-14T11:25:55.608Z"
 doc_updated_by: "CODER"
 description: "Task118: common normal20Length conversions/Tools twip wrapper and Writer LR reuse, actual SVX margin/orientation/UNO enum and Calc margin default. Primitive JS/BigInt value arithmetic, no memory library. Targeted raw100; full checkpoint only on minimum UI+ODS readiness then repair and pause, replacing121cadence."
 sections:
@@ -47,9 +47,40 @@ sections:
     1. Read complete relevant pinned algitem orientation/margin values, enums/unomid/IDL/DocPool, original normal unit conversion20table/muldiv/prepare/public functions, Toolswrapper, SAL64macros and Writer seveninteger sites. Validate actual constructors/default/copy/Clone/members/Any/type/errors/upper-only bounds/negative wrap, all400unit ratios and integer/floating rounding/bounds against independent units-per-inch arithmetic, actual Writer LR values. No C++ generator/build/sanitizer/fakeprovider/privateforcing/generalABI or fullnativeQA claim.
     2. WholeCalc and complete changedshared owners rawS/B/F/L100 everycounterpositive source-links4absent/restoredfinally. Related current LR integer/font-relative/Any/enum tests and exact module checker. Preserve assertions/thresholds/failures, no Writer-only coverage repair or full suite now.
     3. Focused format/lint/app typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff, fresh3539Gitbaseline/currentcommitted40paths and nativepins, exact named SAL64 source witness. Same-agent EVAL not independent. CleanAPfinish oncalc; goalactive. Full-regression readiness checkpoint and requested post-regression pause persisted in current Calc docs and task; historic task121 references superseded, not rewritten.
-  Verification: "Pending implementation and rawcoverage/gates."
+  Verification: |-
+    Command: node output/playwright/task118-checks/portable.mjs
+    Result: pass. Whole Calc163tests/59files/33owners raw S4142/B2731/F821/L3690; related shared232tests/9files/8nonemptyowners S582/B448/F126/L547. All100%, every raw counter positive. Four reference links absent during tests and restored finally. Covers native400unit pairs, integer/floating families/bounds, margins/orientation actual Any and pools, existing Writer LR/font-unit consumers. No Writer-only coverage edits.
+    Command: npx vitest run scripts/check-module-boundaries.test.ts
+    Result: pass28tests; initial27pass/1fail retained and corrected approved Tools→o3tl edge only.
+    Command: node output/playwright/task118-checks/gates.mjs; focused provenance/registry rerun after reference link restoration
+    Result: pass all12gates: format/lint/app typecheck/docs/file-size/dependencies/tree/provenance/inventory/routing/doctor/diff. Initial lint/test-typecheck and scheduling ENOENT logs retained with findings. No assertions or thresholds weakened.
+    Command: python3 output/playwright/task118-checks/exact-review.py (after source commit)
+    Evidence: fresh3539baseline→3562committedsource hashes; exactly40intentionalpaths17changed23added and17pinnednativeSHA256sources. Same-agent separate evaluator is not independent review.
+    Scope: original normal length conversion and cell margin/orientation values, actual shared Writer reuse. Saturating/status helpers, native localized presentation/cache/ABI, complete DocPool/document/config/UI/ODS pending/excluded. No C++ execution/generator/memory library. CALC104 documents native negative wrapping and exact angle mapping.
+    Full suite: not run under latest user instruction. Next full regression when actual minimum UI contracts and real ODS loading/saving are ready, then repair relevant failures and pause goal. No task121trigger; goal remains active.
   Rollback Plan: "Revert only task118 source commit preserving task117/userintegration/unrelated active tasks. No reset/merge/global or outside-repo changes."
-  Findings: "Previous turn instruction acknowledged new checkpoint; task117finished/verifiedclean while new fullrun stop rule arrived. Current branchcalc clean, old unrelated DOINGtasks untouched. Latest user instruction: next full run when minimally ready for real UI+ODS loading/saving, not task121; after full run/relevant repairs pausegoal. This changes regression timing only; core fidelity/reuse/strict Calc and changedshared coverage retained. Writer LR already duplicates signed integer twip formulas; new common native primitive value owners replace those7sites, no new memory mechanism."
+  Findings: |-
+    Previous turn instruction acknowledged new checkpoint; task117finished/verifiedclean while new fullrun stop rule arrived. Current branchcalc clean, old unrelated DOINGtasks untouched. Latest user instruction: next full run when minimally ready for real UI+ODS loading/saving, not task121; after full run/relevant repairs pausegoal. This changes regression timing only; core fidelity/reuse/strict Calc and changedshared coverage retained. Writer LR already duplicates signed integer twip formulas; new common native primitive value owners replace those7sites, no new memory mechanism.
+
+    - Observation: Initial focused lint rejects16non-null assertions in new table/index tests and implementation.
+      Impact: Lint policy only; typecheck and runtime checks passed.
+      Resolution: Use explicit erased index types for statically bounded tables and readonly tuple inference for test cases. Preserve runtime semantics and every assertion; rerun focused checks and portable coverage.
+
+    - Observation: Initial implementation typecheck passed; new test typecheck rejected one unused Array.from callback parameter.
+      Impact: Test binding only, no runtime or assertion failure.
+      Resolution: Rename callback _unused; retain test values and raw100 requirements. Final app typecheck rerun.
+
+    - Observation: Initial module boundary tests27pass/1fail because the scripted Tools→o3tl edit expected new Set([]), while the original entry used new Set().
+      Impact: Approved source-backed Tools→o3tl edge remained unregistered.
+      Resolution: Register precisely the approved edge; retain assertions/reverse/browser guards. Final28tests pass, initial failure retained.
+
+    - Observation: Provenance and registry checks were accidentally scheduled while portable tests temporarily removed native reference links; both failed ENOENT.
+      Impact: Verification scheduling error, not product behavior. Failed logs retained.
+      Resolution: Wait for portable runner final restoration, then rerun only those two checks with restored links; no source or threshold change.
+
+    - Observation: Source commit subject omitted required emoji/task suffix; AP rejected it before commit. Premature committed-hash review then correctly rejected dirty baseline.
+      Impact: No source commit was created; implementation unchanged.
+      Resolution: Recompute route, use required subject format and run exact committed review only after actual successful commit.
 id_source: "generated"
 ---
 ## Summary
@@ -72,7 +103,16 @@ Port complete normal20Length enum/base ratios/prepareMDArray/getConversionMulDiv
 
 ## Verification
 
-Pending implementation and rawcoverage/gates.
+Command: node output/playwright/task118-checks/portable.mjs
+Result: pass. Whole Calc163tests/59files/33owners raw S4142/B2731/F821/L3690; related shared232tests/9files/8nonemptyowners S582/B448/F126/L547. All100%, every raw counter positive. Four reference links absent during tests and restored finally. Covers native400unit pairs, integer/floating families/bounds, margins/orientation actual Any and pools, existing Writer LR/font-unit consumers. No Writer-only coverage edits.
+Command: npx vitest run scripts/check-module-boundaries.test.ts
+Result: pass28tests; initial27pass/1fail retained and corrected approved Tools→o3tl edge only.
+Command: node output/playwright/task118-checks/gates.mjs; focused provenance/registry rerun after reference link restoration
+Result: pass all12gates: format/lint/app typecheck/docs/file-size/dependencies/tree/provenance/inventory/routing/doctor/diff. Initial lint/test-typecheck and scheduling ENOENT logs retained with findings. No assertions or thresholds weakened.
+Command: python3 output/playwright/task118-checks/exact-review.py (after source commit)
+Evidence: fresh3539baseline→3562committedsource hashes; exactly40intentionalpaths17changed23added and17pinnednativeSHA256sources. Same-agent separate evaluator is not independent review.
+Scope: original normal length conversion and cell margin/orientation values, actual shared Writer reuse. Saturating/status helpers, native localized presentation/cache/ABI, complete DocPool/document/config/UI/ODS pending/excluded. No C++ execution/generator/memory library. CALC104 documents native negative wrapping and exact angle mapping.
+Full suite: not run under latest user instruction. Next full regression when actual minimum UI contracts and real ODS loading/saving are ready, then repair relevant failures and pause goal. No task121trigger; goal remains active.
 
 ## Rollback Plan
 
@@ -81,3 +121,23 @@ Revert only task118 source commit preserving task117/userintegration/unrelated a
 ## Findings
 
 Previous turn instruction acknowledged new checkpoint; task117finished/verifiedclean while new fullrun stop rule arrived. Current branchcalc clean, old unrelated DOINGtasks untouched. Latest user instruction: next full run when minimally ready for real UI+ODS loading/saving, not task121; after full run/relevant repairs pausegoal. This changes regression timing only; core fidelity/reuse/strict Calc and changedshared coverage retained. Writer LR already duplicates signed integer twip formulas; new common native primitive value owners replace those7sites, no new memory mechanism.
+
+- Observation: Initial focused lint rejects16non-null assertions in new table/index tests and implementation.
+  Impact: Lint policy only; typecheck and runtime checks passed.
+  Resolution: Use explicit erased index types for statically bounded tables and readonly tuple inference for test cases. Preserve runtime semantics and every assertion; rerun focused checks and portable coverage.
+
+- Observation: Initial implementation typecheck passed; new test typecheck rejected one unused Array.from callback parameter.
+  Impact: Test binding only, no runtime or assertion failure.
+  Resolution: Rename callback _unused; retain test values and raw100 requirements. Final app typecheck rerun.
+
+- Observation: Initial module boundary tests27pass/1fail because the scripted Tools→o3tl edit expected new Set([]), while the original entry used new Set().
+  Impact: Approved source-backed Tools→o3tl edge remained unregistered.
+  Resolution: Register precisely the approved edge; retain assertions/reverse/browser guards. Final28tests pass, initial failure retained.
+
+- Observation: Provenance and registry checks were accidentally scheduled while portable tests temporarily removed native reference links; both failed ENOENT.
+  Impact: Verification scheduling error, not product behavior. Failed logs retained.
+  Resolution: Wait for portable runner final restoration, then rerun only those two checks with restored links; no source or threshold change.
+
+- Observation: Source commit subject omitted required emoji/task suffix; AP rejected it before commit. Premature committed-hash review then correctly rejected dirty baseline.
+  Impact: No source commit was created; implementation unchanged.
+  Resolution: Recompute route, use required subject format and run exact committed review only after actual successful commit.
