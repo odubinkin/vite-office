@@ -47,7 +47,9 @@
       "ATTR_CJK_FONT_HEIGHT",
       "ATTR_CTL_FONT_HEIGHT",
       "ATTR_FONT_COLOR",
-      "ATTR_PAGE_PAPERBIN"
+      "ATTR_PAGE_PAPERBIN",
+      "ATTR_PAGE_HEADERSET",
+      "ATTR_PAGE_FOOTERSET"
     ],
     "upstreamSymbols": [
       "ATTR_MERGE_FLAG",
@@ -90,7 +92,9 @@
       "ATTR_CJK_FONT_HEIGHT",
       "ATTR_CTL_FONT_HEIGHT",
       "ATTR_FONT_COLOR",
-      "ATTR_PAGE_PAPERBIN"
+      "ATTR_PAGE_PAPERBIN",
+      "ATTR_PAGE_HEADERSET",
+      "ATTR_PAGE_FOOTERSET"
     ],
     "preservedResponsibilities": [
       "Original attribute header/core boundary and actual scalar flag owner; reuses shared SfxInt16Item.",
@@ -114,7 +118,8 @@
       "Task136: Declares actual ATTR_SHADOW152; real item-set tests preserve default gray100NONE through independent clones without a fake document pool. Task136 adds the missing native SvxShadowItem pool dependency with owned Color values, gray100NONE defaults, original constructors/copy/clone/setters/equality/hash/side-space/metrics and complete supported typed Any query/put. Published ShadowFormat/ShadowLocation use existing CPPU normal metadata and ordinary scalar member cells, with no new allocator or lifetime engine. IsTransparent write omission, ignored extraction failures, signed short widths and checked transparency multiplication are preserved. Native final-class Query0 is always true, so its redundant left conjunct is source-folded while both actual query/extraction operations still execute. JS logical booleans represent valid IDL boolean values; binary boolean byte domains, native ABI, localized presentation/XML diagnostics, full DocPool/document/UI/ODS remain unverified. Existing metadata history/status/classification and conscious I/O/recovery deviations remain intact.",
       "Task137: Adds original141142 diagonal slots; real shared item-set clone tests retain optional owned borders without a fake ScDocPool. Task137 implements the missing SvxLineItem dependency with optional owned shared SvxBorderLine values and actual published BorderLine/BorderLine2 inherited CPPU bindings. Canonical shared Box line conversion/extraction is reused, with signed16 components and source-preserved scale/mirror/identity; native static C++ overload selection is an explicit erased argument-family literal, including a derived object viewed as its base. Required native convert arguments are explicit at actual call sites. Existing browser QueryValue records project all six fields, while XML handlers use real native value copies instead of class spreads. Original style0x90/convert0x80 overlap and allocation-before-invalid-member remain intact. Ordinary JS GC/scalar cells only, no new lifetime engine or binary wire format. Full Box Any/theme interfaces, localized presentation/XML diagnostics and real Calc pool/document/UI/ODS remain pending. Prior status/classification/history and deliberate I/O/recovery deviations are retained; no broad parity promotion.",
       "Task138: Adds original ATTR_PAGE158, with actual shared item-set owned defaults and source descriptor omission tested; no ScDocPool stub. Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion.",
-      "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion."
+      "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion.",
+      "Task140 ports actual shared SfxSetItem/SvxSetItem with independent contained base sets, original Which/copy(pool)/Clone and concrete nested Equals(true). Original SfxItemSet base copy slices derived inputs, retains same-pool parent and direct SET/INVALID/DISABLED; base-only CloneAsValue uses existing pool/state clone behavior and guards invalid derived base calls. Existing SwAttrSet native own value overload is unchanged except required TS override annotation. Native set-item classification flag is ordinary boolean state, not lifetime management. Both native initial-set overloads copy, including the rvalue overload whose initializer uses named lvalue pS; no move/reset is invented. Original presentation enum Nameless0/Complete1 is shared; SfxSetItem presentation returns false/untouched and SvxSetItem returns false/cleared via actual OUString. Unused IntlWrapper is an erased opaque argument, not a provider implementation. Source-backed MapUnit/OUString dependency edges are registered without reverse edges. Real Calc183/184 source ranges are tested directly; ItemInfoDynamic and complete DocPool/document/UI/ODS remain unported. Native refcount/cache/registration/allocator/ABI/debug machinery is not recreated; JS GC owns lifetime. Existing metadata history/classification/status and deliberate I/O/recovery differences remain without broad parity promotion."
     ],
     "omittedResponsibilities": [
       "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
@@ -133,7 +138,8 @@
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
       "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending.",
-      "Task139 does not implement localized or numeric presentation, native diagnostics/ABI/lifetime, ScDocumentPool/document/UI/ODS."
+      "Task139 does not implement localized or numeric presentation, native diagnostics/ABI/lifetime, ScDocumentPool/document/UI/ODS.",
+      "Task140 does not port native lifetime/registration/ABI or full item-pool/type/presentation services, ItemInfoDynamic, Calc document/UI/ODS."
     ],
     "evidence": {
       "local": [
@@ -220,6 +226,10 @@
         {
           "path": "apps/office/src/sc/inc/scitems.ts",
           "marker": "ATTR_PAGE_PAPERBIN"
+        },
+        {
+          "path": "apps/office/src/sc/inc/scitems.ts",
+          "marker": "ATTR_PAGE_HEADERSET"
         }
       ],
       "upstream": [
@@ -286,6 +296,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/scitems.hxx",
           "marker": "ATTR_PAGE_PAPERBIN"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scitems.hxx",
+          "marker": "ATTR_PAGE_HEADERSET"
         }
       ]
     }

@@ -717,3 +717,10 @@ it("admits original ODF border IDL values without application or reverse depende
   expect(isForbiddenModuleEdge("offapi", "xmloff")).toBe(true);
   expect(isForbiddenModuleEdge("xmloff", "sw")).toBe(true);
 });
+
+it("admits original set-item MapUnit and page-item OUString dependencies without reverse edges", /** Native presentation signatures borrow existing shared types and no browser service. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svl", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "svl")).toBe(true);
+  expect(isForbiddenModuleEdge("svx", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "svx")).toBe(true);
+});

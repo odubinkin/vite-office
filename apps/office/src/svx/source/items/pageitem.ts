@@ -1,4 +1,9 @@
-/** @fileoverview Original SvxPageItem value and typed Any contracts from pageitem.hxx/cxx. Localized presentation, numbering services and SvxSetItem remain unported. */
+/** @fileoverview Original SvxPageItem value and typed Any contracts from pageitem.hxx/cxx. Localized page presentation and numbering services remain unported. */
+import { SfxSetItem } from "../../../svl/inc/setitem";
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
+import type { SfxItemPresentation } from "../../../svl/inc/poolitem";
+import type { MapUnit } from "../../../tools/inc/mapunit";
+import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any2Bool, CONVERT_TWIPS } from "../../../svl/inc/poolitem";
@@ -168,5 +173,37 @@ export class SvxPageItem extends SfxPoolItem {
       }
     }
     return true;
+  }
+}
+
+/** Original header/footer set item, reusing shared by-value set ownership. */
+export class SvxSetItem extends SfxSetItem {
+  /** Original initial-set and pool-targeted implicit-copy forms. @param args - Which/set or actual const item/optional pool. @returns Set item. */
+  constructor(
+    ...args:
+      | [which: number, set: SfxItemSet]
+      | [source: Readonly<SvxSetItem>, pool?: SfxItemPool | undefined]
+  ) {
+    if (typeof args[0] === "number") super(args[0], args[1] as SfxItemSet);
+    else super(args[0], args[1] as SfxItemPool | undefined);
+  }
+  /** Original concrete copy with optional destination pool. @param pool - Optional target pool. @returns Independent set item. */
+  public override Clone(pool?: SfxItemPool): SvxSetItem {
+    return new SvxSetItem(this, pool);
+  }
+  /** Original empty presentation clears the destination and returns false, without consulting services. @param presentation - Ignored degree. @param coreMetric - Ignored unit. @param presentationMetric - Ignored unit. @param text - Real mutable output OUString. @param intl - Unused original service argument. @returns False. */
+  public override GetPresentation(
+    presentation: SfxItemPresentation,
+    coreMetric: MapUnit,
+    presentationMetric: MapUnit,
+    text: OUString,
+    intl: unknown,
+  ): boolean {
+    void presentation;
+    void coreMetric;
+    void presentationMetric;
+    void intl;
+    text.clear();
+    return false;
   }
 }

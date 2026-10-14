@@ -21,6 +21,15 @@ export interface SfxPoolItemSnapshot {
 /** Base value object stored by SfxItemPool and SfxItemSet. */
 export abstract class SfxPoolItem {
   private shareable = true;
+  private m_bIsSetItem = false;
+  /** Original classification flag for items containing an SfxItemSet. @returns Whether a set item. */
+  public isSetItem(): boolean {
+    return this.m_bIsSetItem;
+  }
+  /** Original protected set-item classification assignment; no lifetime action. @returns Nothing. */
+  protected setIsSetItem(): void {
+    this.m_bIsSetItem = true;
+  }
 
   /** Reports the native item-dependent sharing policy. @returns Whether pools may share this item. */
   public isShareable(): boolean {

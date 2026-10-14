@@ -31,14 +31,26 @@ export class SfxItemSet {
   private readonly poolItemMap = new Map<number, SfxPoolItem>();
   private parent: SfxItemSet | undefined;
 
-  /** Creates an item set for one pool and bounded WhichId ranges. @param pool - Owning item pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited item set. @returns Nothing. */
+  private readonly pool: SfxItemPool;
+  private readonly ranges: WhichRangesContainer;
+  /** Original pool/ranges constructor and base copy constructor. Copying slices derived source sets, without invoking virtual Clone. @param args - Pool/ranges/optional browser parent or actual const source. @returns Item set. */
   public constructor(
-    private readonly pool: SfxItemPool,
-    private readonly ranges: WhichRangesContainer,
-    parent?: SfxItemSet,
+    ...args:
+      | [pool: SfxItemPool, ranges: WhichRangesContainer, parent?: SfxItemSet | undefined]
+      | [source: SfxItemSet]
   ) {
-    validateRanges(ranges);
-    this.SetParent(parent);
+    const source = args[0];
+    if (source instanceof SfxItemSet) {
+      this.pool = source.pool;
+      this.ranges = source.ranges;
+      this.parent = source.parent;
+      if (this.ranges.length !== 0) source.CopyItemsTo(this);
+    } else {
+      this.pool = source;
+      this.ranges = args[1] as WhichRangesContainer;
+      validateRanges(this.ranges);
+      this.SetParent(args[2]);
+    }
   }
 
   /** Returns the owning pool. @returns Item pool. */
@@ -197,6 +209,13 @@ export class SfxItemSet {
     );
     if (includeItems) this.CopyItemsTo(clone, pool === this.pool);
     return clone;
+  }
+
+  /** Original nonvirtual value clone, valid only on actual base sets. The existing Clone body implements the same pool/parent/state cases. @param includeItems - Copy direct values and native same-pool states. @param pool - Optional destination pool. @returns Independent actual base set. */
+  public CloneAsValue(includeItems = true, pool = this.pool): SfxItemSet {
+    if (this.constructor !== SfxItemSet)
+      throw new Error("SfxItemSet::CloneAsValue requires an actual base SfxItemSet.");
+    return this.Clone(includeItems, pool);
   }
 
   /** Receives old and new entries before storage changes, as in the native virtual hook. @param oldItem - Previous direct entry. @param newItem - Replacement entry. @returns Nothing. */

@@ -124,3 +124,8 @@ export const ATTR_PAGE = 158;
 
 /** Original page paper-bin item identity. */
 export const ATTR_PAGE_PAPERBIN = 159;
+
+/** Original dynamic header set item identity. */
+export const ATTR_PAGE_HEADERSET = 183;
+/** Original dynamic footer set item identity. */
+export const ATTR_PAGE_FOOTERSET = 184;

@@ -25,3 +25,9 @@ export function Any2Bool(input: unknown): boolean {
     input !== 0
   );
 }
+
+/** Original degree of textual item presentation. */
+export enum SfxItemPresentation {
+  Nameless,
+  Complete,
+}

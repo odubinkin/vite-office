@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d593215d-5903-4959-83c6-72b5f58c8467",
+    "capabilityId": "CAP-d593215d-5903-4959-83c6-72b5f58c8467",
+    "suite": "shared",
+    "subsystem": "set-item-ownership",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original by-value set ownership and base-only value cloning preserve pool, parent and direct states.",
+      "Calc header/footer set items reuse the actual shared base; native named rvalue still copies."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task140 ports actual shared SfxSetItem/SvxSetItem with independent contained base sets, original Which/copy(pool)/Clone and concrete nested Equals(true). Original SfxItemSet base copy slices derived inputs, retains same-pool parent and direct SET/INVALID/DISABLED; base-only CloneAsValue uses existing pool/state clone behavior and guards invalid derived base calls. Existing SwAttrSet native own value overload is unchanged except required TS override annotation. Native set-item classification flag is ordinary boolean state, not lifetime management. Both native initial-set overloads copy, including the rvalue overload whose initializer uses named lvalue pS; no move/reset is invented. Original presentation enum Nameless0/Complete1 is shared; SfxSetItem presentation returns false/untouched and SvxSetItem returns false/cleared via actual OUString. Unused IntlWrapper is an erased opaque argument, not a provider implementation. Source-backed MapUnit/OUString dependency edges are registered without reverse edges. Real Calc183/184 source ranges are tested directly; ItemInfoDynamic and complete DocPool/document/UI/ODS remain unported. Native refcount/cache/registration/allocator/ABI/debug machinery is not recreated; JS GC owns lifetime. Existing metadata history/classification/status and deliberate I/O/recovery differences remain without broad parity promotion."
+    },
+    "capability": "Shared set-item ownership for page header and footer attributes",
+    "gaps": [
+      "Full ItemInfoDynamic/pool/document/UI/ODS remain pending.",
+      "Unused IntlWrapper argument is opaque; no full presentation/localization service or ABI/lifetime claim."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/sitem.ts",
+          "marker": "SfxSetItem"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "marker": "CloneAsValue"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/pageitem.ts",
+          "marker": "SvxSetItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/sitem.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/pageattr.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared set-item ownership for page header and footer attributes (task140)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/sitem.cxx",
+          "marker": "SfxSetItem::SfxSetItem"
+        },
+        {
+          "path": "svl/source/items/itemset.cxx",
+          "marker": "SfxItemSet::CloneAsValue"
+        },
+        {
+          "path": "svx/source/items/pageitem.cxx",
+          "marker": "SvxSetItem::GetPresentation"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-by-value-set-item",
+    "scopeLimitations": [
+      "Task140 ports actual shared SfxSetItem/SvxSetItem with independent contained base sets, original Which/copy(pool)/Clone and concrete nested Equals(true). Original SfxItemSet base copy slices derived inputs, retains same-pool parent and direct SET/INVALID/DISABLED; base-only CloneAsValue uses existing pool/state clone behavior and guards invalid derived base calls. Existing SwAttrSet native own value overload is unchanged except required TS override annotation. Native set-item classification flag is ordinary boolean state, not lifetime management. Both native initial-set overloads copy, including the rvalue overload whose initializer uses named lvalue pS; no move/reset is invented. Original presentation enum Nameless0/Complete1 is shared; SfxSetItem presentation returns false/untouched and SvxSetItem returns false/cleared via actual OUString. Unused IntlWrapper is an erased opaque argument, not a provider implementation. Source-backed MapUnit/OUString dependency edges are registered without reverse edges. Real Calc183/184 source ranges are tested directly; ItemInfoDynamic and complete DocPool/document/UI/ODS remain unported. Native refcount/cache/registration/allocator/ABI/debug machinery is not recreated; JS GC owns lifetime. Existing metadata history/classification/status and deliberate I/O/recovery differences remain without broad parity promotion.",
+      "Native QA reference concerns general set ownership, not complete page/document QA."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "page-values",
     "capabilityIds": [
-      "CAP-1ec640c3-fa7b-49b0-a56a-fccee52fddc3"
+      "CAP-1ec640c3-fa7b-49b0-a56a-fccee52fddc3",
+      "CAP-d593215d-5903-4959-83c6-72b5f58c8467"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,20 +18,26 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/svx/source/items/pageitem.ts",
-        "docs/program/calc-core.md#Canonical page defaults and original numbering declarations (task138)"
+        "docs/program/calc-core.md#Canonical page defaults and original numbering declarations (task138)",
+        "apps/office/src/svx/source/items/pageitem.ts",
+        "apps/office/src/svl/source/items/sitem.test.ts",
+        "docs/program/calc-core.md#Shared set-item ownership for page header and footer attributes (task140)"
       ],
-      "justification": "Original page values and typed Any; complete logical browser state is a declared host boundary, not a UNO struct. Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion.",
+      "justification": "Original page values and typed Any; complete logical browser state is a declared host boundary, not a UNO struct. Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion. Task140 ports actual shared SfxSetItem/SvxSetItem with independent contained base sets, original Which/copy(pool)/Clone and concrete nested Equals(true). Original SfxItemSet base copy slices derived inputs, retains same-pool parent and direct SET/INVALID/DISABLED; base-only CloneAsValue uses existing pool/state clone behavior and guards invalid derived base calls. Existing SwAttrSet native own value overload is unchanged except required TS override annotation. Native set-item classification flag is ordinary boolean state, not lifetime management. Both native initial-set overloads copy, including the rvalue overload whose initializer uses named lvalue pS; no move/reset is invented. Original presentation enum Nameless0/Complete1 is shared; SfxSetItem presentation returns false/untouched and SvxSetItem returns false/cleared via actual OUString. Unused IntlWrapper is an erased opaque argument, not a provider implementation. Source-backed MapUnit/OUString dependency edges are registered without reverse edges. Real Calc183/184 source ranges are tested directly; ItemInfoDynamic and complete DocPool/document/UI/ODS remain unported. Native refcount/cache/registration/allocator/ABI/debug machinery is not recreated; JS GC owns lifetime. Existing metadata history/classification/status and deliberate I/O/recovery differences remain without broad parity promotion.",
       "knownViolations": [],
       "localSymbols": [
         "SvxPageItem",
         "SvxPageUsage",
-        "PageItemState"
+        "PageItemState",
+        "SvxSetItem"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svx/source/items/pageitem.cxx",
       "upstreamSymbols": [
         "SvxPageItem",
-        "SvxPageItem::PutValue"
+        "SvxPageItem::PutValue",
+        "SvxSetItem::SvxSetItem",
+        "SvxSetItem::GetPresentation"
       ]
     }
   }

@@ -2051,3 +2051,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: PutValue accepts an extracted signed32 numbering value and casts to the fixed signed16 SvxNumType, including-1. GetNumberingDescription checks only `eNumType <= NUMBER_NONE` before indexing its six-entry classic-name array with that value; it has no explicit nonnegative check.
 - Status: source-level suspicious invalid-data path, not a reproduced native runtime failure. Preserve the defined Put/Query behavior; do not execute/simulate undefined native array memory access or assert a specific crash outcome. Localized presentation/numbering services remain unported.
 - Local evidence: `apps/office/src/svx/source/items/pageitem.test.ts` verifies negative admission and query only. The native source audit is the evidence for the unported presentation path.
+
+## CALC-119: set-item rvalue constructor copies its named argument
+
+- Upstream: `svl/source/items/sitem.cxx`, `SfxSetItem(sal_uInt16, SfxItemSet&&)`, and `svx/source/items/pageitem.cxx` forwarding constructor, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the Svx wrapper forwards `std::move(_pSet)`, but the base initializes `maSet(pS)`. A named rvalue-reference parameter is an lvalue expression, so this selects the `SfxItemSet` copy constructor; it does not move or reset the original set. This looks surprising for the rvalue overload and may be intentional or an overlooked copy optimization.
+- Status: source-level ownership/copy observation, not a confirmed defect or memory failure. Preserve the actual copy behavior. Both erased argument categories share the same ordinary JS copy path; do not infer a move operation from the signature, port native reference counting, or add a memory manager.
+- Local evidence: `apps/office/src/svl/source/items/sitem.ts`, `apps/office/src/svl/source/items/sitem.test.ts`, `apps/office/src/sc/source/core/data/pageattr.test.ts` verify independent copies with retained input pool/parent/states and unchanged source. No native compiler or memory probe is used.
