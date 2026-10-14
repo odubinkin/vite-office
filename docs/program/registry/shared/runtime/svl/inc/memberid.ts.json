@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/inc/memberid.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "cell-shadow-values",
+    "capabilityIds": [
+      "CAP-c2fbe373-256e-4e80-9400-11bf4dc133b5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/inc/memberid.ts",
+        "docs/program/calc-core.md#Canonical shared cell shadow values and transport (task136)"
+      ],
+      "justification": "Original shared width member declaration only. Task136 adds the missing native SvxShadowItem pool dependency with owned Color values, gray100NONE defaults, original constructors/copy/clone/setters/equality/hash/side-space/metrics and complete supported typed Any query/put. Published ShadowFormat/ShadowLocation use existing CPPU normal metadata and ordinary scalar member cells, with no new allocator or lifetime engine. IsTransparent write omission, ignored extraction failures, signed short widths and checked transparency multiplication are preserved. Native final-class Query0 is always true, so its redundant left conjunct is source-folded while both actual query/extraction operations still execute. JS logical booleans represent valid IDL boolean values; binary boolean byte domains, native ABI, localized presentation/XML diagnostics, full DocPool/document/UI/ODS remain unverified. Existing metadata history/status/classification and conscious I/O/recovery deviations remain intact.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MID_WIDTH"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/svl/memberid.h",
+      "upstreamSymbols": [
+        "MID_WIDTH"
+      ]
+    }
+  }
+}

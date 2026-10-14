@@ -641,3 +641,5 @@ export {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
 } from "../../inc/lrspitem";
+
+export { SvxShadowItem, SvxShadowItemSide } from "./frmitems.shadow";

@@ -2022,3 +2022,11 @@ The same pool deliberately compares symbol encoding separately from all
 non-symbol encodings. Full style/family/pitch values participate in its key,
 while different non-symbol encodings compare equivalent. Preserve this source
 rule and the source encoding export, which writes only `x-symbol`.
+
+## CALC-115: shadow PutValue ignores IsTransparent and most extraction failures
+
+- Upstream: `editeng/source/items/frmitems.cxx`, `SvxShadowItem::PutValue`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: `QueryValue` publishes both packed Color transparency and IsTransparent. Put reads IsTransparent but commits only Location, ShadowWidth and packed Color, so changing only the flag does not change the stored Color alpha. Non-location member extraction results and full ShadowFormat extraction results do not replace the initial success result; an incompatible Any can therefore return true and commit the queried state. A conversion query narrows width through signed short before conversion back, so even a failed field extraction can change a large stored width.
+- Source example: an opaque shadow remains opaque after a successful IsTransparent=true write. Width65535 queried in mm100 becomes115596, narrows to-15476, converts back to-8774twips and stores uint16 value56762 even when the incoming width Any has the wrong type.
+- Status: suspicious behavior or legacy contract, not a confirmed upstream bug. Preserve the original path and verify it with actual shared Any values; no corrective normalization.
+- Local evidence: `apps/office/src/editeng/source/items/native-shadow-item.test.ts`, `apps/office/src/editeng/source/items/frmitems.shadow.ts`. Native localized presentation, raw boolean bytes and full document integration remain outside this record.

@@ -110,3 +110,6 @@ export const ATTR_FONT = 100;
 export const ATTR_CJK_FONT = 111;
 /** Original complex-script font-family attribute. */
 export const ATTR_CTL_FONT = 116;
+
+/** Original cell shadow item identity. */
+export const ATTR_SHADOW = 152;

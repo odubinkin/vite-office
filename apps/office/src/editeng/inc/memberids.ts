@@ -49,3 +49,12 @@ export const MID_FONTHEIGHT = 1;
 export const MID_FONTHEIGHT_PROP = 2;
 /** Original font-height difference member. */
 export const MID_FONTHEIGHT_DIFF = 3;
+
+/** Original shadow location member. */
+export const MID_LOCATION = 0x3c;
+/** Original shadow transparency flag member. */
+export const MID_TRANSPARENT = 0x4b;
+/** Original shadow background color member. */
+export const MID_BG_COLOR = 0x22;
+/** Original shadow transparency percent member. */
+export const MID_SHADOW_TRANSPARENCE = 1;

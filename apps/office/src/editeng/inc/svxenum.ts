@@ -39,3 +39,13 @@ export enum SvxCellOrientation {
   BottomUp = 2,
   Stacked = 3,
 }
+
+/** Original native shadow positions, including its End sentinel. */
+export enum SvxShadowLocation {
+  NONE,
+  TopLeft,
+  TopRight,
+  BottomLeft,
+  BottomRight,
+  End,
+}
