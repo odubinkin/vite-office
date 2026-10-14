@@ -118,3 +118,6 @@ export const ATTR_SHADOW = 152;
 export const ATTR_BORDER_TLBR = 141;
 /** Original bottom-left to top-right diagonal border item. */
 export const ATTR_BORDER_BLTR = 142;
+
+/** Original page-description attribute identity. */
+export const ATTR_PAGE = 158;

@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/style/NumberingType.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/style/NumberingType.idl",
+    "localSymbols": [
+      "ARABIC",
+      "NUMBER_NONE",
+      "PAGE_DESCRIPTOR"
+    ],
+    "upstreamSymbols": [
+      "NumberingType",
+      "ARABIC",
+      "PAGE_DESCRIPTOR"
+    ],
+    "preservedResponsibilities": [
+      "Complete original76short declarations only; the constants group does not invent an enum/UNO type or formatter service.",
+      "Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Native localized presentation/default numbering-provider services, SetItem and real Calc pool/document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/NumberingType.ts",
+          "marker": "ARABIC"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/style/NumberingType.idl",
+          "marker": "NumberingType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/style/NumberingType.idl",
+          "marker": "ARABIC"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/style/NumberingType.idl",
+          "marker": "PAGE_DESCRIPTOR"
+        }
+      ]
+    }
+  }
+}

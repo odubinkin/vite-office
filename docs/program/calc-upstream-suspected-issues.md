@@ -2037,3 +2037,17 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: after byte conversion and removing0x80, the member is at most0x7f. The MID_LINE_STYLE0x90 branch therefore cannot be selected; passing0x90 selects unsupported0x10 and returns false. For a numeric Any, the source allocates a new zero-width border before rejecting the member. An absent-line scalar QueryValue returns true with untouched Any, whereas the same unsupported member on a present line returns false.
 - Status: suspicious identifier/control-flow overlap, not a confirmed upstream bug. Preserve the failed style write and the observable allocation. Source-fold the unreachable style mutation instead of introducing a dead branch or fake test provider.
 - Local evidence: `apps/office/src/editeng/source/items/native-line-item.test.ts`, `apps/office/src/editeng/source/items/frmitems.line.ts`. Complete BoxItem Any and broad native document behavior remain separately unverified.
+
+## CALC-117: page descriptor name is omitted from copy and equality
+
+- Upstream: `include/svx/pageitem.hxx` and `svx/source/items/pageitem.cxx`, SvxPageItem copy constructor/operator==, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the class stores descriptor name, numbering type, landscape and usage. The copy constructor copies only the three latter fields, leaving the name default-empty. Equality also ignores the name. Native GetPresentation reads the name, so copying can change later presentation text despite value equality.
+- Status: possibly intentional auxiliary presentation state, not a confirmed defect. Preserve omission and do not invent a name getter or copy fix. The existing browser noarg state projection observes the actual fields separately from native typed Any.
+- Local evidence: `apps/office/src/svx/source/items/pageitem.test.ts`, `apps/office/src/sc/source/core/data/pageattr.test.ts`; actual shared item-set copy retains the same omission. Native localized presentation is still pending.
+
+## CALC-118: page numbering admission has no matching lower-bound presentation guard
+
+- Upstream: `svx/source/items/pageitem.cxx`, SvxPageItem::PutValue and GetNumberingDescription, same pinned commit.
+- Observation: PutValue accepts an extracted signed32 numbering value and casts to the fixed signed16 SvxNumType, including-1. GetNumberingDescription checks only `eNumType <= NUMBER_NONE` before indexing its six-entry classic-name array with that value; it has no explicit nonnegative check.
+- Status: source-level suspicious invalid-data path, not a reproduced native runtime failure. Preserve the defined Put/Query behavior; do not execute/simulate undefined native array memory access or assert a specific crash outcome. Localized presentation/numbering services remain unported.
+- Local evidence: `apps/office/src/svx/source/items/pageitem.test.ts` verifies negative admission and query only. The native source audit is the evidence for the unported presentation path.

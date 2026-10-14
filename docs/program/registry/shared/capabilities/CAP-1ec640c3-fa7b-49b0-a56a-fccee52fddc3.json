@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1ec640c3-fa7b-49b0-a56a-fccee52fddc3",
+    "capabilityId": "CAP-1ec640c3-fa7b-49b0-a56a-fccee52fddc3",
+    "suite": "shared",
+    "subsystem": "page-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native page defaults, original copy/equality omission and actual member query/put behavior are retained.",
+      "Actual published layout enum and all native numbering declarations are shared without a replacement formatter/type provider."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion."
+    },
+    "capability": "Canonical page defaults and original numbering declarations",
+    "gaps": [
+      "Native localized presentation and default numbering services remain unported.",
+      "No full native page/document QA or connected Calc pool/document/UI/ODS claim; set items remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svx/source/items/pageitem.ts",
+          "marker": "SvxPageItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/NumberingType.ts",
+          "marker": "ARABIC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svx/source/items/pageitem.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/NumberingType.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/pageattr.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical page defaults and original numbering declarations (task138)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svx/source/items/pageitem.cxx",
+          "marker": "SvxPageItem::PutValue"
+        },
+        {
+          "path": "include/svx/pageitem.hxx",
+          "marker": "SvxPageItem"
+        },
+        {
+          "path": "offapi/com/sun/star/style/NumberingType.idl",
+          "marker": "ARABIC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-native-page-values",
+    "scopeLimitations": [
+      "Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion.",
+      "The native test reference covers general pooled item-set ownership, not a full page presentation/provider certificate."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

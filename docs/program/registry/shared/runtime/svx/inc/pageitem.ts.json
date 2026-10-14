@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/inc/pageitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "page-values",
+    "capabilityIds": [
+      "CAP-1ec640c3-fa7b-49b0-a56a-fccee52fddc3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/inc/pageitem.ts",
+        "docs/program/calc-core.md#Canonical page defaults and original numbering declarations (task138)"
+      ],
+      "justification": "Canonical header borrows actual implemented page values; native set-item class remains pending, no fake export. Task138 ports missing SvxPageItem default/copy/setters/equality and complete supported Any member behavior through actual PageStyleLayout and existing Any2Bool. Native Arabic/portrait/All/empty-name defaults, descriptor omission from copy/equality, byte/convert rules, unknown-member success and unsupported orientation resetting are retained. The existing browser noarg pooled-state contract projects four actual fields without a new native getter; full localization/numbering-provider services remain genuinely unported. All76published NumberingType constants and73original SvxNumType aliases reference one shared definition and are compared to pinned source at runtime; no numbering formatter is claimed. A single scoped prefer-literal-enum-member lint exception retains original IDL references without duplicating constants; repository lint configuration is unchanged. No custom string/allocator/lifetime engine, native build/generator/probe or ABI claim. SvxSetItem/SfxSetItem, real Calc DocPool/document/UI/ODS remain pending. Existing status/classification/history and deliberate I/O/recovery exceptions retained, no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/svx/pageitem.hxx",
+      "upstreamSymbols": [
+        "SvxPageItem",
+        "SvxPageUsage"
+      ]
+    }
+  }
+}
