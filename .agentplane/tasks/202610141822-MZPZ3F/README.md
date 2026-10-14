@@ -4,7 +4,7 @@ title: "Implement canonical shared set items for Calc page attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T18:33:58.321Z"
+  updated_by: "CODER"
+  note: "Original shared set items/base copies verified:96related/9files,180Calc/71files,38boundaries;5shared raw S279B188F72L248 and33Calc S4172B2731F821L3720 everycounterpositive100. One Writer-only owner gap measured/left. Portable build/13source gates/635records zero violations,34paths/3819hashes/11pins/four links. CALC-119 retained named-rvalue copy, no move/lifetime/provider fake; full document/UIODS pending. Same-agent quality not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T18:33:51.510Z"
+  updated_by: "EVALUATOR"
+  note: "Original shared set-item ownership and Calc header/footer dependencies meet task140 scope; same-agent review is not independent."
+  evaluated_sha: "d575937ec4433a37e47faa2e2ce329517c52e0de"
+  blueprint_digest: "09c0093ac4a6b83b41b154dc5aebe46004f375fc1e60d6a4554c1b758dea39ac"
+  evidence_refs:
+    - ".agentplane/tasks/202610141822-MZPZ3F/README.md"
+    - ".agentplane/tasks/202610141822-MZPZ3F/quality/20261014-183351510-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141822-MZPZ3F/quality/20261014-183351510-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141822-MZPZ3F/quality/20261014-183351510-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141822-MZPZ3F/blueprint/resolved-snapshot.json"
+    - "output/playwright/task140-checks/verification.json"
+    - "output/playwright/task140-checks/source-gates.json"
+    - "output/playwright/task140-checks/source-contract-audit.json"
+  findings:
+    - "Source-grounded base copy slicing and CloneAsValue pool/state/parent rules, actual set-item flag, SfxSetItem abstract ownership and SvxSetItem concrete copy/equality/presentation are implemented through existing services. Named rvalue still copies; CALC-119 documents it without a defect claim or memory engine."
+    - "96related cases,180Calc,38boundary cases pass;5complete shared owners and33Calc owners every raw counter positive100. One changed Writer owner coverage-only gap is measured/exempt and untouched; runtime behavior unchanged apart from TS-required override annotation."
+    - "Portable build and13source gates pass;635runtime/provenance records zero violations,34intentional paths/3819source hashes/11native pins/four restored links. Native type dependencies are explicit without reverse edges; inline flags have actual header evidence. No full document/UI/ODS or readiness claim."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement original shared set items/base value-copy contracts and Calc183/184 dependencies; preserve native named-rvalue copy and Writer hidden overload without move or lifetime machinery."
+  -
+    type: "verify"
+    at: "2026-10-14T18:33:58.321Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original shared set items/base copies verified:96related/9files,180Calc/71files,38boundaries;5shared raw S279B188F72L248 and33Calc S4172B2731F821L3720 everycounterpositive100. One Writer-only owner gap measured/left. Portable build/13source gates/635records zero violations,34paths/3819hashes/11pins/four links. CALC-119 retained named-rvalue copy, no move/lifetime/provider fake; full document/UIODS pending. Same-agent quality not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T18:33:28.479Z"
+doc_updated_at: "2026-10-14T18:33:58.372Z"
 doc_updated_by: "CODER"
 description: "Task140 ports actual SfxSetItem/SvxSetItem and required SfxItemSet copy/CloneAsValue plus isSetItem flag for real Calc183/184. Both native initial-value overloads copy even rvalue; no move or lifetime engine. Preserve native pool/parent/state behavior and reuse existing item-set ownership."
 sections:
@@ -61,6 +87,39 @@ sections:
     - Scope:34intentional paths within45approved,9runtime/provenance pairs and bounded capability.3811to3819non-agent source hashes,26existing changes/8new/3785unchanged;11native source pins/original native HEAD/four restored links/calc branch. Evidence: `output/playwright/task140-checks/verification.json`, `source-gates.json`, `source-contract-audit.json` and retained logs. Source audit confirms named-rvalue copy, exact base-value clone precondition, Calc constants/ranges and actual MapUnit forward declaration/OUString output; initial parser whitespace and assumed direct-header-include checks were corrected by reading the source. This is not C++ execution, generated probes or ABI evidence. Same-agent evaluation is explicitly not independent.
 
     CALC-119 records the surprising named-rvalue copy as possibly intentional, not a confirmed defect. Native cache/refcount/registration/ABI/assertion infrastructure is not recreated, and unused IntlWrapper stays an erased opaque parameter without a service stub. ItemInfoDynamic/full page services, real ScDocumentPool/ScPatternAttr/ScColumn/ScTable/ScDocument, connected UI and same-model ODS remain pending. Human moved full-suite/pause checkpoint to actual minimum UI+ODS readiness; it is not reached by this task.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T18:33:58.321Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original shared set items/base copies verified:96related/9files,180Calc/71files,38boundaries;5shared raw S279B188F72L248 and33Calc S4172B2731F821L3720 everycounterpositive100. One Writer-only owner gap measured/left. Portable build/13source gates/635records zero violations,34paths/3819hashes/11pins/four links. CALC-119 retained named-rvalue copy, no move/lifetime/provider fake; full document/UIODS pending. Same-agent quality not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T18:33:28.479Z, excerpt_hash=sha256:3dee479264818e07131ffd91328bf8778d20505f273e977e98a7f5b09e863cbb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141822-MZPZ3F/blueprint/resolved-snapshot.json
+    - old_digest: 09c0093ac4a6b83b41b154dc5aebe46004f375fc1e60d6a4554c1b758dea39ac
+    - current_digest: 09c0093ac4a6b83b41b154dc5aebe46004f375fc1e60d6a4554c1b758dea39ac
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141822-MZPZ3F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141822-MZPZ3F -m 🧩 MZPZ3F task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task changes through a subsequent authorized task; no destructive reset, merge or publication."
   Findings: |-
     Native SfxSetItem rvalue overload initializes maSet(pS), which copies the named lvalue. Preserve source behavior and do not infer a move from the signature or build memory machinery. Native CloneAsValue asserts base type; construction from a derived source uses real base copy instead. Existing SwAttrSet hides the C++ nonvirtual method with its native own return type; TypeScript requires an override annotation without new Writer behavior. Same-agent quality review is not independent.
@@ -112,6 +171,39 @@ Original SfxItemSet copy constructor with SET/INVALID/DISABLED and parent/ranges
 - Scope:34intentional paths within45approved,9runtime/provenance pairs and bounded capability.3811to3819non-agent source hashes,26existing changes/8new/3785unchanged;11native source pins/original native HEAD/four restored links/calc branch. Evidence: `output/playwright/task140-checks/verification.json`, `source-gates.json`, `source-contract-audit.json` and retained logs. Source audit confirms named-rvalue copy, exact base-value clone precondition, Calc constants/ranges and actual MapUnit forward declaration/OUString output; initial parser whitespace and assumed direct-header-include checks were corrected by reading the source. This is not C++ execution, generated probes or ABI evidence. Same-agent evaluation is explicitly not independent.
 
 CALC-119 records the surprising named-rvalue copy as possibly intentional, not a confirmed defect. Native cache/refcount/registration/ABI/assertion infrastructure is not recreated, and unused IntlWrapper stays an erased opaque parameter without a service stub. ItemInfoDynamic/full page services, real ScDocumentPool/ScPatternAttr/ScColumn/ScTable/ScDocument, connected UI and same-model ODS remain pending. Human moved full-suite/pause checkpoint to actual minimum UI+ODS readiness; it is not reached by this task.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T18:33:58.321Z — VERIFY — ok
+
+By: CODER
+
+Note: Original shared set items/base copies verified:96related/9files,180Calc/71files,38boundaries;5shared raw S279B188F72L248 and33Calc S4172B2731F821L3720 everycounterpositive100. One Writer-only owner gap measured/left. Portable build/13source gates/635records zero violations,34paths/3819hashes/11pins/four links. CALC-119 retained named-rvalue copy, no move/lifetime/provider fake; full document/UIODS pending. Same-agent quality not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T18:33:28.479Z, excerpt_hash=sha256:3dee479264818e07131ffd91328bf8778d20505f273e977e98a7f5b09e863cbb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141822-MZPZ3F/blueprint/resolved-snapshot.json
+- old_digest: 09c0093ac4a6b83b41b154dc5aebe46004f375fc1e60d6a4554c1b758dea39ac
+- current_digest: 09c0093ac4a6b83b41b154dc5aebe46004f375fc1e60d6a4554c1b758dea39ac
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141822-MZPZ3F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141822-MZPZ3F -m 🧩 MZPZ3F task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
