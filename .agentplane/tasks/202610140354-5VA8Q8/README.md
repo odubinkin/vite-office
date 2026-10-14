@@ -1,10 +1,11 @@
 ---
 id: "202610140354-5VA8Q8"
 title: "Retain native parent popups across nested menubar children"
-status: "DOING"
+result_summary: "Native recursive menu ownership verified; goal active with deferred full checkpoint pause."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/node_modules/.cache/parity-coverage/5VA8Q8/audit-results.json"
   findings:
     - "One active path retains ancestors and truncates only owned siblings; one-shot focus avoids ancestor reselection on close. Native browser APIs retained; no manager or visible resource expansion. All 959 old test files unchanged and two canonical prefixes preserved."
-commit: null
+commit:
+  hash: "456d6d7e068fb18c1257553718fd88e8d9a45dbf"
+  message: "🧩 5VA8Q8 fix: retain native menubar parent popup chains"
 comments:
   -
     author: "CODER"
     body: "Start: native per-parent recursive popup path replaces scalar menubar shortcut; one-shot opening focus/nearest parent close and original resources/bindings retained, no new UI layer. Whole currentmodule100four,newcycle2/10."
+  -
+    author: "CODER"
+    body: "Verified: existing recursive menubar retains original parent popups and nearest parent focus; 1,631 unique accepted, whole current module 100% four metrics, 521 positive counters and nine metadata gates pass. Same-agent non-independent quality pass. Correction 2/10; upcoming full continues, following full pauses after repairs."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "1,631 unique accepted; whole current module 100% four metrics and 521 positive original counters; all static and nine metadata gates pass; old acceptance and canonical prefixes preserved. Ignored evidence apps/office/node_modules/.cache/parity-coverage/5VA8Q8/proof.json and accepted-results.json. Cadence 2/10; upcoming full continues, following full pauses after repairs."
+  -
+    type: "status"
+    at: "2026-10-14T04:14:00.089Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: existing recursive menubar retains original parent popups and nearest parent focus; 1,631 unique accepted, whole current module 100% four metrics, 521 positive counters and nine metadata gates pass. Same-agent non-independent quality pass. Correction 2/10; upcoming full continues, following full pauses after repairs."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:13:11.784Z"
+doc_updated_at: "2026-10-14T04:14:00.090Z"
 doc_updated_by: "CODER"
 description: "New cycle2/10: remove single global menubar child-id state and preserve original per-parent active popup chain through recursive resource depth. Native nested window ownership, nearest-parent close/focus and sibling subtree replacement; one original path and one-shot focus request, no new layer/manager. Protected IO/recovery/Space."
 sections:
@@ -110,6 +123,10 @@ sections:
     Completed bounded recursive ownership correction. Parent DOM identity and nearest close/focus now follow original pActivePopup/pStartedFrom semantics with one path and a one-shot focus request. Initial TS7 rejected an unsupported exact option in new role queries; removed it. Initial pointer fixture omitted relatedTarget and therefore correctly exited all ancestor regions; changed only the new fixture to transition into its original parent Bold entry. Failed-only case passes; old acceptance untouched. One ignored closure command construction error ran no tests and was corrected without replaying passing cases. Partial failed-only profile reports its unchanged thresholds; exact-definition whole current-source merge passes 100% without exemptions. Same-agent EVALUATOR review is non-independent. No new visible resources or native manager; timing/platform/mnemonic/full core/UI parity remains unverified.
 
     Latest human stop rule supersedes previous pause wording: upcoming scheduled full does not pause the goal; the following full pauses it after all failures are repaired. Current cadence 2/10; goal remains active.
+extensions:
+  implementation_commit:
+    hash: "456d6d7e068fb18c1257553718fd88e8d9a45dbf"
+    message: "🧩 5VA8Q8 fix: retain native menubar parent popup chains"
 id_source: "generated"
 ---
 ## Summary
