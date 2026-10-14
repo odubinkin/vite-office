@@ -4,7 +4,7 @@ title: "Implement shared configuration types and localized setting nodes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T04:45:52.583Z"
+  updated_by: "CODER"
+  note: "Whole Calc152tests raw4006S2654B787F3570L and complete shared11owners30tests raw407S221B108F385L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourlinksrestored and16gates pass. Exact3369committedhashes17intentionalpaths9originalpins reviewed; same-agent evaluator pass bound b04dd931fb59ca688b32ebdc8ca274d0955bc10e is not independent review. CALC-091 source-only unsigned compatibility recorded, no fake has/producer or added lifetime/provider library. Full111 requestedpause remains."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T04:45:42.566Z"
+  updated_by: "EVALUATOR"
+  note: "Original configuration type and localized-node logical contracts over actual shared CPPU/Node owners; complete current coverage and required gates pass."
+  evaluated_sha: "b04dd931fb59ca688b32ebdc8ca274d0955bc10e"
+  blueprint_digest: "a72913da6eed0b5a78f6988e886534086a2ac2118bfff10e3fbdeddf6ad863c7"
+  evidence_refs:
+    - ".agentplane/tasks/202610140434-C59ZJG/README.md"
+    - ".agentplane/tasks/202610140434-C59ZJG/quality/20261014-044542566-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140434-C59ZJG/quality/20261014-044542566-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140434-C59ZJG/quality/20261014-044542566-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140434-C59ZJG/blueprint/resolved-snapshot.json"
+    - "output/playwright/task106-checks/exact-review.json"
+  findings:
+    - "Reviewed source b04dd931fb59ca688b32ebdc8ca274d0955bc10e against nine pinned original declaration/body/Any/typelib scopes and real owner tests. Exact3369 committed hashes/17intentionalpaths and16passing gates; Calc/shared11owner raw100, actual source-absent static/Calc0UI and restored links verified. Unsigned has choices retain actual calls and boolean-indexed alternatives; original compatibility makes false alternatives unreachable for initialized primitives, explicitly source-only CALC-091 evidence rather than fabricated producer/coverage proof. Independent Any copies/stable member and modified/clone rules verified. No added lifetime/provider library or threshold weakening. Native const/private access/ABI/assertions/compiled differential/fullQA and real configuration/default/document/ODS remain excluded. Separate same-agent role, not independent review."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement original shared configuration type and localized-node contracts over actual Any/UnoType/Node owners, with source-backed tests and strict affected coverage; goal approval applies."
+  -
+    type: "verify"
+    at: "2026-10-14T04:45:52.583Z"
+    author: "CODER"
+    state: "ok"
+    note: "Whole Calc152tests raw4006S2654B787F3570L and complete shared11owners30tests raw407S221B108F385L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourlinksrestored and16gates pass. Exact3369committedhashes17intentionalpaths9originalpins reviewed; same-agent evaluator pass bound b04dd931fb59ca688b32ebdc8ca274d0955bc10e is not independent review. CALC-091 source-only unsigned compatibility recorded, no fake has/producer or added lifetime/provider library. Full111 requestedpause remains."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:43:13.423Z"
+doc_updated_at: "2026-10-14T04:45:52.683Z"
 doc_updated_by: "CODER"
 description: "Task106: unblock real Calc configuration loading by implementing original configmgr type classification/mapping plus LocalizedPropertyNode and LocalizedValueNode, reusing actual existing CPPU Any/UnoType and Node/NodeMap. No fake type/configuration provider or lifetime library. Source-backed tests, complete affected owner raw100, Calc/static/Calc0UI and16gates; no full office before111."
 sections:
@@ -48,7 +70,54 @@ sections:
     2. Whole source-absent Calc coverage plus complete3new+5existingtree+SortedVector+Any+UnoType owner profile with new and genuine existing tests, rawS/B/F/L100 and allrawcounterspositive. Actual static/Calc0UI, four links absent and exact restoration. Unchanged remaining SAL/cppu dependencies reused without modified-owner claims; Writer-only repairs/full office before111 excluded.
     3. All16 repository gates, exact configmgr->udkapi edge and reverse/browser/application restrictions, current intentional formatting and truthful runtime/provenance/capability/GC records. No source/threshold weakening. Retain failures before bounded corrections. Record any newly discovered suspected behavior while preserving upstream.
     4. Exact3357 baseline/current/committed hashes and only17intentionalpaths (16planned plus suspected-issues record); actual source/gate/coverage manifests bound to source commit. Separate same-agent evaluator is not independent review. APverify/DONE/clean branchcalc; goalactive until requested full111/repairs pause.
-  Verification: "Pending actual implementation and current checks."
+  Verification: |-
+    Command: node output/playwright/task106-checks/portable.mjs; --shared-only after including genuine existing Reference-query tests; --checks-only for actual static/Calc browser.
+    Result: pass.
+    Evidence: whole Calc152 tests/52files/32owners, rawS4006/B2654/F787/L3570. Complete shared3new type/localized owners plus existing5tree/SortedVector/Any/UnoType:30tests/9files/11owners rawS407/B221/F108/L385. All raw counters positive and S/B/F/L100. Four reference links absent during actual execution and restored exactly. Static build and Calc browser inventory pass; Calc UI remains0. Initial related selection coverage failure retained; no shared implementation/threshold change, only genuine existing missing query consumer tests added.
+    Scope: initialized original logical contracts. Seventeen enum values, all list elements/static mapped shapes and actual dynamic primitive/sequence types, independent Any values/stable pointer/modified metadata/deep child clones tested. False unsigned has alternatives are source-reviewed only; original primitive table makes them unreachable under ordinary initialized values. No fabricated has result/private state/counter suppression, native compiled differential/debug/ABI/const/private-access/lifetime/fullQA claim.
+
+    Command: node output/playwright/task106-checks/gates.mjs --early; node output/playwright/task106-checks/gates-late.mjs --late.
+    Result: all16 gates pass first attempt.
+    Evidence: format/lint/typecheck/docs/size/dependencies/Writer resources/source tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory coverage pass. Inventory rawS1734/B1292/F436/L1668 is100; provenance validates533 modules. Actual configmgr->udkapi edge matches original TypeClass include; reverse/application/browser restrictions retained.
+    Scope: exact17 intentional implementation/test/metadata/docs/integration files, no new provider/lifetime library, source-routing or threshold weakening, Writer-only coverage repair, or full office run.
+
+    Command: python3 output/playwright/task106-checks/exact-review.py.
+    Result: pass.
+    Evidence: b04dd931fb59ca688b32ebdc8ca274d0955bc10e,3357baseline/3369exactcurrent committed source hashes,5changed+12added paths; nine original declaration/body/UNO source files match pinned bytes; current rawcoverage/gates/manifests and four source-link targets verified. Same-agent separate evaluator is not independent review.
+    Scope: CALC-091 retained and documented; CALC-090 copy omission preserved. Actual Property/Set/Data/XML/backend/configuration/default/document/grid/ODS pipeline remains pending. Firstfull101 passed; nextfull111 requested pause after relevant repairs. Goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T04:45:52.583Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Whole Calc152tests raw4006S2654B787F3570L and complete shared11owners30tests raw407S221B108F385L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourlinksrestored and16gates pass. Exact3369committedhashes17intentionalpaths9originalpins reviewed; same-agent evaluator pass bound b04dd931fb59ca688b32ebdc8ca274d0955bc10e is not independent review. CALC-091 source-only unsigned compatibility recorded, no fake has/producer or added lifetime/provider library. Full111 requestedpause remains.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T04:45:41.431Z, excerpt_hash=sha256:bfdd0eac999d45bc00032657cd6557d0bc545632aae6fcf35de7263918ca14ba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140434-C59ZJG/blueprint/resolved-snapshot.json
+    - old_digest: a72913da6eed0b5a78f6988e886534086a2ac2118bfff10e3fbdeddf6ad863c7
+    - current_digest: a72913da6eed0b5a78f6988e886534086a2ac2118bfff10e3fbdeddf6ad863c7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610140434-C59ZJG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610140434-C59ZJG -m 🧩 C59ZJG task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Restore four exact source links in finally on every test exit. Revert only intentional task changes through a new task if needed; no branch merge/history rewrite/unrelated work changes."
   Findings: |-
     Source review: complete original type/localized property/localized value declarations/bodies plus original Any.has -> isExtractableTo -> uno_type_isAssignableFromData -> typelib primitive compatibility table, nine files matching pinned bytes. Original unsigned signed-width has results are true independently of payload; preserved with actual calls and boolean-indexed alternatives, documented CALC-091. False alternatives remain source-reviewed only; no fake input state/has override, private-state forcing, payload-range invention, counter mutation, coverage suppression or compiled differential/fullQA/native assertion/ABI claim. Native const/private-copy syntax erased explicitly; ordinary JS node references add no lifetime library. Node description omission continues CALC-090.
@@ -82,7 +151,53 @@ Port complete original type.hxx/type.cxx enum/list/element/mapType/getDynamicTyp
 
 ## Verification
 
-Pending actual implementation and current checks.
+Command: node output/playwright/task106-checks/portable.mjs; --shared-only after including genuine existing Reference-query tests; --checks-only for actual static/Calc browser.
+Result: pass.
+Evidence: whole Calc152 tests/52files/32owners, rawS4006/B2654/F787/L3570. Complete shared3new type/localized owners plus existing5tree/SortedVector/Any/UnoType:30tests/9files/11owners rawS407/B221/F108/L385. All raw counters positive and S/B/F/L100. Four reference links absent during actual execution and restored exactly. Static build and Calc browser inventory pass; Calc UI remains0. Initial related selection coverage failure retained; no shared implementation/threshold change, only genuine existing missing query consumer tests added.
+Scope: initialized original logical contracts. Seventeen enum values, all list elements/static mapped shapes and actual dynamic primitive/sequence types, independent Any values/stable pointer/modified metadata/deep child clones tested. False unsigned has alternatives are source-reviewed only; original primitive table makes them unreachable under ordinary initialized values. No fabricated has result/private state/counter suppression, native compiled differential/debug/ABI/const/private-access/lifetime/fullQA claim.
+
+Command: node output/playwright/task106-checks/gates.mjs --early; node output/playwright/task106-checks/gates-late.mjs --late.
+Result: all16 gates pass first attempt.
+Evidence: format/lint/typecheck/docs/size/dependencies/Writer resources/source tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory coverage pass. Inventory rawS1734/B1292/F436/L1668 is100; provenance validates533 modules. Actual configmgr->udkapi edge matches original TypeClass include; reverse/application/browser restrictions retained.
+Scope: exact17 intentional implementation/test/metadata/docs/integration files, no new provider/lifetime library, source-routing or threshold weakening, Writer-only coverage repair, or full office run.
+
+Command: python3 output/playwright/task106-checks/exact-review.py.
+Result: pass.
+Evidence: b04dd931fb59ca688b32ebdc8ca274d0955bc10e,3357baseline/3369exactcurrent committed source hashes,5changed+12added paths; nine original declaration/body/UNO source files match pinned bytes; current rawcoverage/gates/manifests and four source-link targets verified. Same-agent separate evaluator is not independent review.
+Scope: CALC-091 retained and documented; CALC-090 copy omission preserved. Actual Property/Set/Data/XML/backend/configuration/default/document/grid/ODS pipeline remains pending. Firstfull101 passed; nextfull111 requested pause after relevant repairs. Goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T04:45:52.583Z — VERIFY — ok
+
+By: CODER
+
+Note: Whole Calc152tests raw4006S2654B787F3570L and complete shared11owners30tests raw407S221B108F385L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourlinksrestored and16gates pass. Exact3369committedhashes17intentionalpaths9originalpins reviewed; same-agent evaluator pass bound b04dd931fb59ca688b32ebdc8ca274d0955bc10e is not independent review. CALC-091 source-only unsigned compatibility recorded, no fake has/producer or added lifetime/provider library. Full111 requestedpause remains.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T04:45:41.431Z, excerpt_hash=sha256:bfdd0eac999d45bc00032657cd6557d0bc545632aae6fcf35de7263918ca14ba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140434-C59ZJG/blueprint/resolved-snapshot.json
+- old_digest: a72913da6eed0b5a78f6988e886534086a2ac2118bfff10e3fbdeddf6ad863c7
+- current_digest: a72913da6eed0b5a78f6988e886534086a2ac2118bfff10e3fbdeddf6ad863c7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610140434-C59ZJG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610140434-C59ZJG -m 🧩 C59ZJG task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
