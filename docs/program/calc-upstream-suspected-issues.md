@@ -1814,3 +1814,13 @@ Modifications::remove asserts that its path is nonempty. After removing the addr
 Evidence: complete pinned configmgr/source/modifications.hxx and modifications.cxx, reviewed in task107. Valid removal histories retain another root sibling and verify recursive parent pruning without entering the invalid domain. No invalid native execution, sanitizer/memory experiment, compiled differential or complete configuration-service QA claim.
 
 Decision: preserve the recursive algorithm without silently adding a root-stop guard. Document the invalid-domain boundary and audit actual callers before identifying a user-visible defect.
+
+## CALC-093: malformed configuration suffix validation depends on node existence
+
+Status: source-confirmed early-return behavior; real consumer expectations and user-visible impact are unverified.
+
+Data::resolvePathRepresentation returns null as soon as the current node is missing, before validating the separator or parsing remaining segments. For example, a bare quoted first component followed by junk is resolved to a component key before checking the trailing separator. When that component exists, the method throws bad path; when absent, it returns null without rejecting the same malformed suffix. Canonical/finalized outputs remain unassigned, while the path vector may contain a successfully traversed prefix. This may deliberately prioritize missing-node lookup over full syntax validation.
+
+Evidence: complete pinned configmgr/source/data.hxx/cxx, reviewed in task108, with source-backed real Data/Group tests comparing the same malformed suffix for an existing and absent component. No fake node/provider, compiled differential, native invalid-domain experiment or full configuration-service QA claim.
+
+Decision: retain early return and partial-output timing. Do not introduce eager whole-path validation or transactional outputs without an upstream contract change; audit real consumers before calling it a defect.

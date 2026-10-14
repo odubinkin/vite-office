@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/configmgr/source/setnode.ts",
+    "status": "mapped",
+    "upstreamPath": "configmgr/source/setnode.cxx",
+    "localSymbols": [
+      "SetNode",
+      "clone",
+      "getMembers",
+      "getTemplateName",
+      "setMandatory",
+      "getMandatory",
+      "getDefaultTemplateName",
+      "getAdditionalTemplateNames",
+      "isValidTemplate",
+      "kind"
+    ],
+    "upstreamSymbols": [
+      "SetNode::clone",
+      "SetNode::isValidTemplate",
+      "SetNode::getTemplateName"
+    ],
+    "preservedResponsibilities": [
+      "Actual Data/Set source/header path/template/storage/extension contracts and real shared tree/value dependencies.",
+      "Original partial output, missing-node short circuit, template acceptance/clone/value-copy rules retained."
+    ],
+    "omittedResponsibilities": [
+      "Task108 implements the complete logical configmgr Data/SetNode storage/path/template/extension bodies over actual existing Root/NodeMap/Node/Modifications/Additions/OUString/RuntimeException owners. Local UTF16 view/buffer operations use native JS strings and explicit full-code-unit conversion; public strings remain genuine OUString, no fake buffer/ICU/provider or new lifetime library. Preserve three-entity decoding/name escaping, partial parser outputs, canonical/path/finalized output timing, minfinalized metadata, ignored final slash, set/localized template guards, real template visibility and duplicate/live extension additions. Missing nodes return before malformed suffix validation (CALC-093), retained. Set clone copies actual default/own/additional string values and children, retains metadata and drops only its own template when requested; Node description omission remains CALC-090. Primitive output pointers use tuples; native arrays erase vector references and callers explicitly copy OUString on value insertion, with actual Set clone/output path copies implemented. ExtensionXcu has ordinary JS refs, actual add initializes its signed32 layer, no fabricated uninitialized default or SimpleReferenceObject machinery. Data has a type-only Set import; Set calls actual Data equality helper without an eager class cycle. Native debug/invalid-pointer/ABI/const/private-copy/implicit vector-insertion/diagnostic logging/wholeQA and compiled differential are excluded or unverified. Original QA is unexecuted integration context only. Actual Property/XML/backend/configuration services and Calc defaults/document/grid/ODS pipeline remain pending. Nextfull111 requested pause after relevant repairs; no Writer-only repair."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/configmgr/source/setnode.ts",
+          "marker": "SetNode"
+        },
+        {
+          "path": "apps/office/src/configmgr/source/data-tree.test.ts",
+          "marker": "copies actual set template metadata and child values with original clone modes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/setnode.cxx",
+          "marker": "SetNode::SetNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/configmgr/source/setnode.hxx",
+          "marker": "class SetNode"
+        }
+      ]
+    }
+  }
+}

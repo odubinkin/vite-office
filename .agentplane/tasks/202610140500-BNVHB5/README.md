@@ -4,7 +4,7 @@ title: "Implement shared configuration Data storage path resolution and set temp
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement complete logical Data and SetNode configuration storage/path/template/extension contracts over actual existing shared values; native JS UTF16 temporary strings and strict affected verification under active goal approval."
 doc_version: 3
-doc_updated_at: "2026-10-14T05:01:38.709Z"
+doc_updated_at: "2026-10-14T05:20:33.841Z"
 doc_updated_by: "CODER"
 description: "Task108: complete logical configmgr Data/SetNode implementation over actual shared tree/types/modification/addition values, including path parsing/escaping/canonical resolution/finalized tracking/templates/extension lists. Native JS UTF16 local string building, no fake Data/backend or missing buffer library. WholeCalc/affected raw100, static/Calc0UI/16gates, no full office before111."
 sections:
@@ -50,7 +50,15 @@ sections:
     4. Exact3377baseline/current/committed hashes and only12intentionalpaths, actual source/gate/coverage manifests bound to sourceSHA; same-agent separate EVAL not independent review, APverify/DONE/clean branchcalc. Goalactive until secondfull111 requestedpause after relevant repairs.
   Verification: "Pending implementation and actual current checks."
   Rollback Plan: "Finally restore four exact reference links on all test exits. Revert only intentional task changes via a new task if necessary; no branch merge/history rewrite/unrelated task changes."
-  Findings: "No actual shared OUStringBuffer implementation exists; native JS UTF16 string operations replace local buffer/view syntax with public actual OUString values and explicit conversion, without a fake buffer/memory library. Node uses SAL_MAX_INT32 equal to Data::NO_LAYER; no forced Node->Data->Root eager cycle. Actual Data imports SetNode only as an erased type, Set calls real Data.equalTemplateNames. Preserve native partial output and early missing-node resolution, not transactional path validation. Native container/const/private-copy/lifetime/diagnostic details remain explicitly outside certification; actual Set clone does value copies, callers must copy OUString at erased vector value insertion."
+  Findings: |-
+    Command: pinned source review of complete Data/Set declarations and bodies, four files matching original bytes.
+    Result: implemented logical actual Data storage/path/template/extension and Set metadata/clone responsibilities. Real Root/NodeMap/Node/Modifications/Additions/OUString/RuntimeException/SortedVector owners reused unchanged. Native JS UTF16 local view/buffer conversion preserves code units including NUL/unpaired surrogates and names exceeding spread argument limits; no fake buffer/ICU/lifetime/provider library. Primitive output pointers use tuples; canonical string/output vectors preserve original timing and identities. Explicit value copies occur for resolved segments and Set clone; callers copy OUString at erased vector insertion. Native invalid pointers/debug/ABI/const/private-copy/implicit vector insertion/diagnostic logging/fullQA/compiled differential excluded or unverified.
+    CALC-093: original missing-node early return can bypass malformed suffix validation; preserve and source-backed test the same suffix with existing/absent components. Canonical/finalized outputs remain untouched on missing-node paths; path output may contain a traversed prefix. No eager validation/transactional rollback fix. Nodecopy omission remains CALC-090. ExtensionXcu ordinary refs omit SimpleReferenceObject; actual add initializes signed32 layer before exposure, no invented uninitialized default. Type-only Data->Set import avoids eager class cycle while Set uses actual Data.equalTemplateNames.
+    Command: node output/playwright/task108-checks/portable.mjs.
+    Result: first-pass success. WholeCalc152tests/52files/32owners rawS4006/B2654/F787/L3570; complete actual configmgr/SortedVector/Any/UnoType41tests/12files/14executableowners rawS626/B345/F143/L574. Every raw counter positive/SBFL100; pure Additions no executable counters. Actual static/Calc0UI pass with four source links absent and exactly restored. No counter suppression/private-state forcing/fake provider/Writer-only repair or full office before111.
+    Scope:12intentionalpaths (3changed/9added),3377baselinehashes. Actual Property/XML/backend/configuration services/default/document/grid/ODS integration remains pending. Firstfull101passed, goalactive until requested secondfull111 and relevant repairs; separate same-agent evaluator is not independent review.
+
+    Verification infrastructure observation: the first inventory coverage run completed121tests but timed out two existing filesystem/large-XML diagnostic cases at their unchanged30000ms/20000ms limits while whole-repository format/lint ran concurrently. The original full log and gate manifest are retained as first-inventory-timeouts.log and first-gates-late-results.json. No implementation/test/timeout/threshold changes made. After all six early gates completed successfully, repeat exactly npm run test:inventory:coverage in isolation, preserving firstExitCode1. This is a bounded serial infrastructure retry, not a Writer coverage repair or pass-criteria change. Current-source Calc/shared coverage and actual static/Calc0UI already passed first attempt.
 id_source: "generated"
 ---
 ## Summary
@@ -82,4 +90,11 @@ Finally restore four exact reference links on all test exits. Revert only intent
 
 ## Findings
 
-No actual shared OUStringBuffer implementation exists; native JS UTF16 string operations replace local buffer/view syntax with public actual OUString values and explicit conversion, without a fake buffer/memory library. Node uses SAL_MAX_INT32 equal to Data::NO_LAYER; no forced Node->Data->Root eager cycle. Actual Data imports SetNode only as an erased type, Set calls real Data.equalTemplateNames. Preserve native partial output and early missing-node resolution, not transactional path validation. Native container/const/private-copy/lifetime/diagnostic details remain explicitly outside certification; actual Set clone does value copies, callers must copy OUString at erased vector value insertion.
+Command: pinned source review of complete Data/Set declarations and bodies, four files matching original bytes.
+Result: implemented logical actual Data storage/path/template/extension and Set metadata/clone responsibilities. Real Root/NodeMap/Node/Modifications/Additions/OUString/RuntimeException/SortedVector owners reused unchanged. Native JS UTF16 local view/buffer conversion preserves code units including NUL/unpaired surrogates and names exceeding spread argument limits; no fake buffer/ICU/lifetime/provider library. Primitive output pointers use tuples; canonical string/output vectors preserve original timing and identities. Explicit value copies occur for resolved segments and Set clone; callers copy OUString at erased vector insertion. Native invalid pointers/debug/ABI/const/private-copy/implicit vector insertion/diagnostic logging/fullQA/compiled differential excluded or unverified.
+CALC-093: original missing-node early return can bypass malformed suffix validation; preserve and source-backed test the same suffix with existing/absent components. Canonical/finalized outputs remain untouched on missing-node paths; path output may contain a traversed prefix. No eager validation/transactional rollback fix. Nodecopy omission remains CALC-090. ExtensionXcu ordinary refs omit SimpleReferenceObject; actual add initializes signed32 layer before exposure, no invented uninitialized default. Type-only Data->Set import avoids eager class cycle while Set uses actual Data.equalTemplateNames.
+Command: node output/playwright/task108-checks/portable.mjs.
+Result: first-pass success. WholeCalc152tests/52files/32owners rawS4006/B2654/F787/L3570; complete actual configmgr/SortedVector/Any/UnoType41tests/12files/14executableowners rawS626/B345/F143/L574. Every raw counter positive/SBFL100; pure Additions no executable counters. Actual static/Calc0UI pass with four source links absent and exactly restored. No counter suppression/private-state forcing/fake provider/Writer-only repair or full office before111.
+Scope:12intentionalpaths (3changed/9added),3377baselinehashes. Actual Property/XML/backend/configuration services/default/document/grid/ODS integration remains pending. Firstfull101passed, goalactive until requested secondfull111 and relevant repairs; separate same-agent evaluator is not independent review.
+
+Verification infrastructure observation: the first inventory coverage run completed121tests but timed out two existing filesystem/large-XML diagnostic cases at their unchanged30000ms/20000ms limits while whole-repository format/lint ran concurrently. The original full log and gate manifest are retained as first-inventory-timeouts.log and first-gates-late-results.json. No implementation/test/timeout/threshold changes made. After all six early gates completed successfully, repeat exactly npm run test:inventory:coverage in isolation, preserving firstExitCode1. This is a bounded serial infrastructure retry, not a Writer coverage repair or pass-criteria change. Current-source Calc/shared coverage and actual static/Calc0UI already passed first attempt.
