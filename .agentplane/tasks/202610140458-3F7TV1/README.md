@@ -4,7 +4,7 @@ title: "Share layout-owned native table frames with browser rendering"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "14,313 unique accepted, five whole current production modules 100% four metrics and 2,303 positive raw counters. Original functional/literal acceptance preserved; four live refs follow moved predicate, other canonical fields preserved, 137 build files retained. All static/nine metadata gates pass; proof/accepted-results/audit-results in ignored apps/office/node_modules/.cache/parity-coverage/3F7TV1. Cycle 5/10; upcoming full continues, following full pauses."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T05:50:55.762Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review: semantic 5b0476cc4d97 shares actual root-owned native table master across row measurement and both actual browser paint surfaces; declared gates pass."
+  evaluated_sha: "5b0476cc4d9735d7ac17ae84b4e48f751c358221"
+  blueprint_digest: "12467d54e5001f9e03567789aae3f57ba67ad50a5f690c77b8c33d7a6ec54f1c"
+  evidence_refs:
+    - ".agentplane/tasks/202610140458-3F7TV1/README.md"
+    - ".agentplane/tasks/202610140458-3F7TV1/quality/20261014-055055762-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140458-3F7TV1/quality/20261014-055055762-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140458-3F7TV1/quality/20261014-055055762-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140458-3F7TV1/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/3F7TV1/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/3F7TV1/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/3F7TV1/audit-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/3F7TV1/live-reference-moves.json"
+  findings:
+    - "Original master/lower identity reused until structural/document/root replacement, with exception cleanup. No duplicate measurement hierarchy or actual per-render owner disposal; no new manager/module/map/controller. Four lifetime observation migrations retain 52 functional assertions/238 original literals; 960 other tests unchanged. Four exact live source pointers follow moved predicate; all historical/status/default/classification prefixes retained."
 commit: null
 comments:
   -
