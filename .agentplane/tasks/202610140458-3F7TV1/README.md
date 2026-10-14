@@ -1,10 +1,11 @@
 ---
 id: "202610140458-3F7TV1"
 title: "Share layout-owned native table frames with browser rendering"
-status: "DOING"
+result_summary: "Layout-owned native table master now shared with actual browser measurement and paint."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/node_modules/.cache/parity-coverage/3F7TV1/live-reference-moves.json"
   findings:
     - "Original master/lower identity reused until structural/document/root replacement, with exception cleanup. No duplicate measurement hierarchy or actual per-render owner disposal; no new manager/module/map/controller. Four lifetime observation migrations retain 52 functional assertions/238 original literals; 960 other tests unchanged. Four exact live source pointers follow moved predicate; all historical/status/default/classification prefixes retained."
-commit: null
+commit:
+  hash: "5b0476cc4d9735d7ac17ae84b4e48f751c358221"
+  message: "🧩 3F7TV1 fix: share layout-owned native table frames with UI"
 comments:
   -
     author: "CODER"
     body: "Start: original root owns represented native table masters; row measurement and actual visible/shadow paint borrow original hierarchy, shared freshness scan replaces private duplicate. No new manager/map. Cycle 5/10 with whole current five-module 100% coverage."
+  -
+    author: "CODER"
+    body: "Verified: actual root-owned native table hierarchy shared across measurement and visible/shadow render, with original ownership/reuse/exception/root-close lifetime. 14,313 unique accepted, five whole current modules 100% four metrics and 2,303 positive counters; original acceptance/data retained, four live evidence pointers relocated, all static/nine metadata gates pass. Same-agent non-independent quality pass. Cycle 5/10; upcoming full continues, following full pauses after repairs."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14,313 unique accepted, five whole current production modules 100% four metrics and 2,303 positive raw counters. Original functional/literal acceptance preserved; four live refs follow moved predicate, other canonical fields preserved, 137 build files retained. All static/nine metadata gates pass; proof/accepted-results/audit-results in ignored apps/office/node_modules/.cache/parity-coverage/3F7TV1. Cycle 5/10; upcoming full continues, following full pauses."
+  -
+    type: "status"
+    at: "2026-10-14T05:52:12.205Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual root-owned native table hierarchy shared across measurement and visible/shadow render, with original ownership/reuse/exception/root-close lifetime. 14,313 unique accepted, five whole current modules 100% four metrics and 2,303 positive counters; original acceptance/data retained, four live evidence pointers relocated, all static/nine metadata gates pass. Same-agent non-independent quality pass. Cycle 5/10; upcoming full continues, following full pauses after repairs."
 doc_version: 3
-doc_updated_at: "2026-10-14T05:49:28.082Z"
+doc_updated_at: "2026-10-14T05:52:12.206Z"
 doc_updated_by: "CODER"
 description: "Cycle 5/10: original root owns/reuses one represented native master per table, row measurement and visible/shadow rendering borrow it. Remove per-render/pagination ownership on actual path and consolidate existing model hierarchy freshness predicate without a manager/map. Preserve detached standalone compatibility and consciously registered IO/recovery/Space. Physical page/follow and pointer ownership remain separate pending scope."
 sections:
@@ -113,6 +126,10 @@ sections:
     Initial static corrections: unused empty-table fixture variable, exact optional property typing, natural module decomposition required by size gate; no runtime producer yet at those corrections. First related final-production run: five test failures, no production behavior change needed. Native listener ordering after history format movement is not a model-before-frame contract; exact identity sets/cardinality/root/model checks replace that invented order. Explicit standalone plus owning-root frame coexistence accounted for in last-row observation; original cursor/geometry/history checks retained. New core fixture now supplies actual native body-node device lines, so its table is placed after the body paragraph; five other affected new cases revalidated. One genuine new empty physical row reaches previously unexecuted zero-height measurement branch. Only failures/new materially affected fixtures rerun, passing old runtime cases retained.
 
     Metadata initially exposed four retired live evidence pointers (two records each in browser edit window and tabfrm); those exact pointers now reference shared actual implementation with raw before/after history, all other fields/prefixes unchanged. No compatibility method stub or source/comment alias introduced; no runtime replay for metadata repair. No suspected source core bug observed. Physical page/body/follow and paint/hit geometry graphs, independent mouse frame ownership and detached fallback removal remain unresolved. Cycle 5/10; upcoming full continues, following full pauses after repairs.
+extensions:
+  implementation_commit:
+    hash: "5b0476cc4d9735d7ac17ae84b4e48f751c358221"
+    message: "🧩 3F7TV1 fix: share layout-owned native table frames with UI"
 id_source: "generated"
 ---
 ## Summary
