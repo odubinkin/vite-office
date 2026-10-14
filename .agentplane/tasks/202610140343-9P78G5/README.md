@@ -1,10 +1,11 @@
 ---
 id: "202610140343-9P78G5"
 title: "Implement Calc cell protection values over shared UNO struct and pool item contracts"
-status: "DOING"
+result_summary: "Implemented actual ScProtectionAttr and shared CellProtection/header/MID values and unsupported common PutValue default;11mechanicalqualifiers preservelegacyJS, inventory/sourcebehaviorgaps explicit, alltargetedchecks pass, goalactive untilfull111pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task104-checks/value-coverage-audit.json"
   findings:
     - "3340exactcommittednon-taskhashes differ only33plannedpaths21changed/12added;8pinned sourcefiles reviewed, actualCalc/shared/static/Calc0UI manifests exit0/all4linksrestore, rawcountersallpositive.11descendant qualifiers5files preserve identical emittedJS; no fakeAny/typeprovider/newmemorylibrary."
-commit: null
+commit:
+  hash: "699a2a585a185a624d12cfbd46660486f93d4a56"
+  message: "🧩 9P78G5 code: implement cell protection and shared member contracts"
 comments:
   -
     author: "CODER"
     body: "Start: actual protectionattr/membervalues withsharedIDL/pool protocols, foreseeable11PutValueoverridequalifiers includedinplan; sourcebackedraw100 andtruthfulinventory, nextfull111pause."
+  -
+    author: "CODER"
+    body: "Verified: actual protection/sharedIDL/membercontracts,152Calc/117relatedraw100,16gates actualstatic/Calc0UI4linksrestored,5identicalJS/3340exacthashes pass; no fakeowners/broadnativeclaims."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual protection/member/default/sharedIDL/commonupdate source-backed contracts,152Calc/117relatedraw100/allpositive,16currentgates actualstatic/Calc0UI4linksrestored,5identicalJS and3340exactsourcehashes pass. Native/fullQA/UI/ODS gaps explicit;nextfull111pause."
+  -
+    type: "status"
+    at: "2026-10-14T04:00:00.870Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual protection/sharedIDL/membercontracts,152Calc/117relatedraw100,16gates actualstatic/Calc0UI4linksrestored,5identicalJS/3340exacthashes pass; no fakeowners/broadnativeclaims."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:59:59.186Z"
+doc_updated_at: "2026-10-14T04:00:00.872Z"
 doc_updated_by: "CODER"
 description: "Task104: actual ScProtectionAttr149 defaults/copy/Clone/assignment/equality/getters/setters/CreateDefault and all0..4 member query/update semantics; shared actual CellProtection IDL value, svl poolitem.hxx CONVERT_TWIPS and sc mid.h constants. Restore native shared unsupported PutValue default and foreseeable11 descendant override qualifiers in5files, emittedJS equivalence. Existing browser generic-value boundary reused, no fake Any/provider/ICU/memorylib; original localized presentation/XMLdiagnostics/document/ODS integration pending. Targetedraw100/gates/inventory, nextfull111pause."
 sections:
