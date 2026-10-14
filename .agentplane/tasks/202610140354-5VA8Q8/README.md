@@ -4,7 +4,7 @@ title: "Retain native parent popups across nested menubar children"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "1,631 unique accepted; whole current module 100% four metrics and 521 positive original counters; all static and nine metadata gates pass; old acceptance and canonical prefixes preserved. Ignored evidence apps/office/node_modules/.cache/parity-coverage/5VA8Q8/proof.json and accepted-results.json. Cadence 2/10; upcoming full continues, following full pauses after repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T04:13:39.429Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review: bounded recursive parent ownership follows source; accepted semantic 456d6d7e068f, whole original current module 100% and all gates pass."
+  evaluated_sha: "456d6d7e068fb18c1257553718fd88e8d9a45dbf"
+  blueprint_digest: "0203d9c105adcf7645ccd86b0b42c191650572de43bdd52b9d01f44a6a9eed73"
+  evidence_refs:
+    - ".agentplane/tasks/202610140354-5VA8Q8/README.md"
+    - ".agentplane/tasks/202610140354-5VA8Q8/quality/20261014-041339429-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140354-5VA8Q8/quality/20261014-041339429-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140354-5VA8Q8/quality/20261014-041339429-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140354-5VA8Q8/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/5VA8Q8/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/5VA8Q8/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/5VA8Q8/audit-results.json"
+  findings:
+    - "One active path retains ancestors and truncates only owned siblings; one-shot focus avoids ancestor reselection on close. Native browser APIs retained; no manager or visible resource expansion. All 959 old test files unchanged and two canonical prefixes preserved."
 commit: null
 comments:
   -
