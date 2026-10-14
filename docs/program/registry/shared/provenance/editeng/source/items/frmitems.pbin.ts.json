@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/frmitems.pbin.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/frmitems.cxx",
+    "localSymbols": [
+      "SvxPaperBinItem",
+      "PAPERBIN_PRINTER_SETTINGS"
+    ],
+    "upstreamSymbols": [
+      "SvxPaperBinItem::Clone"
+    ],
+    "preservedResponsibilities": [
+      "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Task139 does not implement localized or numeric presentation, native diagnostics/ABI/lifetime, ScDocumentPool/document/UI/ODS."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.pbin.ts",
+          "marker": "SvxPaperBinItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxPaperBinItem::Clone"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/frmitems.pbin.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Paper-bin value implementation is one responsibility shard of native frmitems.cxx; canonical header and frmitems reexports borrow the same class."
+    }
+  }
+}

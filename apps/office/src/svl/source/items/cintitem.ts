@@ -234,3 +234,66 @@ export class CntInt32Item extends SfxPoolItem {
     return true;
   }
 }
+
+/** Original byte item, storing unsigned8 and transporting signed8 through UNO. */
+export class CntByteItem extends SfxPoolItem {
+  private value: number;
+  /** Original value and implicit-copy forms. Native unsigned8 parameter narrowing is a JS bit operation. @param args - Which/value or actual const source. @returns Item. */
+  constructor(...args: [which: number, value: number] | [source: Readonly<CntByteItem>]) {
+    const source = args[0];
+    super(typeof source === "number" ? source : source.Which());
+    this.value = (typeof source === "number" ? (args[1] as number) : source.GetValue()) & 0xff;
+  }
+  /** Original unsigned byte accessor. @returns Stored unsigned value. */
+  public GetValue(): number {
+    return this.value;
+  }
+  /** Original unsigned8 assignment with native narrowing. @param value - New native byte value. @returns Nothing. */
+  public SetValue(value: number): void {
+    this.value = value & 0xff;
+  }
+  /** Original implicit-copy clone. @param pool - Unused native pool. @returns Independent base item. */
+  public Clone(pool?: SfxItemPool): CntByteItem {
+    void pool;
+    return new CntByteItem(this);
+  }
+  /** Original concrete-type payload equality ignores Which. @param other - Candidate item. @returns Payload equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof CntByteItem &&
+      other.constructor === this.constructor &&
+      other.value === this.value
+    );
+  }
+  /** Original hash availability. @returns True. */
+  public supportsHashCode(): boolean {
+    return true;
+  }
+  /** Original Which/value hash using the existing logical unsigned64 fold. @returns Logical hash, not a serialized value. */
+  public hashCode(): bigint {
+    const seed: [bigint] = [0n];
+    hash_combine(seed, this.Which());
+    hash_combine(seed, this.value);
+    return seed[0];
+  }
+  /** Browser scalar projection of the original signed8 UNO value. @returns Signed byte. */
+  public override QueryValue(): number;
+  /** Original signed8 output Any. @param output - Actual Any destination. @param member - Ignored native member. @returns True. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original byte query and explicit browser scalar projection. @param output - Optional actual Any destination. @param member - Ignored native member. @returns Success or signed byte. */
+  public override QueryValue(output?: Any, member = 0): boolean | number {
+    void member;
+    const value = (this.value << 24) >> 24;
+    if (output === undefined) return value;
+    output.insert([value], "sal_Int8");
+    return true;
+  }
+  /** Original signed8 extraction followed by unsigned8 assignment. @param input - Actual input Any. @param member - Ignored native member. @returns Success, leaving the value unchanged on extraction failure. */
+  public override PutValue(input: unknown, member = 0): boolean {
+    void member;
+    const value: [number] = [0];
+    if (!(input instanceof Any) || !input.extract(value, "sal_Int8")) return false;
+    this.value = value[0] & 0xff;
+    return true;
+  }
+}

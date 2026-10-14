@@ -121,3 +121,6 @@ export const ATTR_BORDER_BLTR = 142;
 
 /** Original page-description attribute identity. */
 export const ATTR_PAGE = 158;
+
+/** Original page paper-bin item identity. */
+export const ATTR_PAGE_PAPERBIN = 159;

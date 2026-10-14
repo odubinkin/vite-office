@@ -722,3 +722,5 @@ export {
 export { SvxShadowItem, SvxShadowItemSide } from "./frmitems.shadow";
 
 export { SvxLineItem } from "./frmitems.line";
+
+export { SvxPaperBinItem } from "./frmitems.pbin";

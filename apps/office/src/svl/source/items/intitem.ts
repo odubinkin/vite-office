@@ -1,7 +1,7 @@
 /** @fileoverview Shared integer item value families from pinned svl/source/items/intitem.cxx. */
 
 import { SfxPoolItem } from "./poolitem";
-import { CntInt32Item, CntUInt16Item, CntUInt32Item } from "./cintitem";
+import { CntByteItem, CntInt32Item, CntUInt16Item, CntUInt32Item } from "./cintitem";
 
 import type { SfxItemPool } from "./itempool";
 /** Original unsigned32 subclass with default factory and implicit copying. */
@@ -88,5 +88,23 @@ export class SfxInt32Item extends CntInt32Item {
   public override Clone(pool?: SfxItemPool): SfxInt32Item {
     void pool;
     return new SfxInt32Item(this);
+  }
+}
+
+/** Original byte subclass with default factory and concrete copy cloning. */
+export class SfxByteItem extends CntByteItem {
+  /** Original default/value and implicit-copy forms. @param source - Which or const source. @param value - Unsigned byte. @returns Item. */
+  constructor(source: number | Readonly<SfxByteItem> = 0, value = 0) {
+    if (typeof source === "number") super(source, value);
+    else super(source);
+  }
+  /** Original zero-Which/zero-value factory. @returns Default byte item. */
+  public static CreateDefault(): SfxByteItem {
+    return new SfxByteItem();
+  }
+  /** Original concrete copy clone. @param pool - Unused native pool. @returns Independent byte item. */
+  public override Clone(pool?: SfxItemPool): SfxByteItem {
+    void pool;
+    return new SfxByteItem(this);
   }
 }
