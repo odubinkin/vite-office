@@ -1,10 +1,11 @@
 ---
 id: "202610141040-7VT65J"
 title: "Implement signed item values and Calc cell rotation attributes"
-status: "DOING"
+result_summary: "Completed task116 signed angle and Calc rotation prerequisites; full document/UI/ODS remain pending, goalactive, nextfull121."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task116-checks/gates-results.json"
   findings:
     - "Shared signed32/angle/primitive Degree100 and Calc rotation preserve normal value/Any/hash/copy/Clone contracts; no angle normalization or memory wrapper. Signed native zero and negative-key modular binding tested."
-commit: null
+commit:
+  hash: "67ea47926772b3e3f713410a5e6a37bcecbe6def"
+  message: "🧩 7VT65J core: share signed angle items and Calc cell rotation"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved signed/angle value chain and Calc rotation with primitive Degree100 unit binding, actual shared Any/hash, no generic memory/strong-int library."
+  -
+    author: "CODER"
+    body: "Verified: actual shared signed/angle and Calc rotation value chain;161Calc/85related/26module tests pass, complete raw100 and12focused gates, exact47paths and15nativepins."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Current wholeCalc161tests/85related tests pass, complete Calc33/shared4owners rawS/B/F/L100 everycounterpositive. Module26tests/12focused gates and exact47paths3507hashes15nativepins pass. Primitive Degree100 erasure/no strong_int or memory library, signed32/Any/hash and native copy/Clone preserved. Same-agent EVAL not independent; full121next, document/UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-14T10:49:09.138Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared signed/angle and Calc rotation value chain;161Calc/85related/26module tests pass, complete raw100 and12focused gates, exact47paths and15nativepins."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:48:53.497Z"
+doc_updated_at: "2026-10-14T10:49:09.140Z"
 doc_updated_by: "CODER"
 description: "Task116: actual shared signed32/SdrAngle item values and original ScRotateValueItem for DocPool. Primitive Degree100 unit alias erases native strong_int, existing Any/hash reused; no native memory library. WholeCalc/changedshared raw100 and scoped checks, full121next."
 sections:
