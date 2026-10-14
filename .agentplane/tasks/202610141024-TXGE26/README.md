@@ -1,10 +1,11 @@
 ---
 id: "202610141024-TXGE26"
 title: "Implement shared enum item contracts and Calc object display modes"
-status: "DOING"
+result_summary: "Completed task114 shared enum and Calc page-mode prerequisites; full document/UI/ODS integration pending, goalactive, nextfull121."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task114-checks/gates-results.json"
   findings:
     - "Actual shared enum interface/template/helper preserve value, narrowing, Any extraction, bool defaults and equality/hash contracts; Calc three real page-output defaults/copy/Clone use shared owners. No fake service or memory engine."
-commit: null
+commit:
+  hash: "292f1e492734fe9aab080efa01b34fe765f70a84"
+  message: "🧩 TXGE26 core: share native enum items and Calc object display modes"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved original shared enum transport and Calc object display values, complete targeted raw100 gates; branchcalc only, no fake providers or memory engines."
+  -
+    author: "CODER"
+    body: "Verified: actual shared enum item/interface/extraction and Calc chart/object/drawing output modes;159Calc and28related tests raw100,24boundary tests and12gates pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual wholeCalc159tests and related28tests pass with complete Calc33/shared3owner rawS/B/F/L100/everycounterpositive;24module tests and12focused gates pass. Exact37paths/current3483hashes/native12pins reviewed. Same-agent evaluator not independent; no fake provider or memory engine. Full121next, document/UI/ODS remain pending."
+  -
+    type: "status"
+    at: "2026-10-14T10:30:35.544Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared enum item/interface/extraction and Calc chart/object/drawing output modes;159Calc and28related tests raw100,24boundary tests and12gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:30:26.588Z"
+doc_updated_at: "2026-10-14T10:30:35.546Z"
 doc_updated_by: "CODER"
 description: "Task114: complete logical enum item values and actual enum2int helper required by Calc DocPool chart/object/drawing defaults. Reuse original SVL/CPPU/comphelper owners; no memory engine, fake document/provider or duplicate Calc enum transport. WholeCalc and changed shared raw100, targeted consumers and focused gates; full121next."
 sections:
