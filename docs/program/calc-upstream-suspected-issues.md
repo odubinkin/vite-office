@@ -1936,3 +1936,10 @@ The pinned include/editeng/frmdir.hxx declares Stacked from WritingMode2::STACKE
 Status: source-confirmed behavior; consumer-visible defect not established.
 
 In editeng/source/items/textitem.cxx, SvxCrossedOutItem QueryValue/PutValue and SvxEmphasisMarkItem QueryValue/PutValue return true for unknown member identifiers after removing CONVERT_TWIPS, without modifying the destination or stored value. Strikeout bool member uses common Any2Bool: failed bool and signed32 extraction resets the value to NONE while still succeeding; its numeric member instead fails extraction without mutation. Emphasis invalid numeric input fails, but an unknown stored style maps to NONE on query. PosBelow wins when both position flags are present. Preserve these differences and original typed Any behavior rather than adding validation or normalizing flags. Localized presentation is not exercised; no native memory probe is used. Task121 tests public value histories and reuses the actual common helper for Writer automatic first-line flags.
+
+
+## CALC-107: unknown font posture is truthy and reverse slants lose their reverse component
+
+Status: source-confirmed behavior; consumer-visible defect not established.
+
+SvxPostureItem GetBoolValue in editeng/source/items/textitem.cxx checks GetValue() >= ITALIC_OBLIQUE, so ITALIC_DONTKNOW also reports true. The former local upper bound incorrectly excluded DONTKNOW and is corrected in task122. VCL ConvertFontSlant maps reverse oblique/italic to ordinary OBLIQUE/NORMAL because the internal enum has no reverse forms; unknown initialized values fall back to DONTKNOW. QueryValue/PutValue unknown members return true with output/state untouched, while bool updates use Any2Bool fallback to NONE. Preserve these source behaviors. Native presentation/diagnostic/assertion paths are excluded; no native memory probe is used. The original SfxEnumItem equality ignoresWhich and is now shared by posture; earlier local identity-sensitive expectations are corrected from source rather than preserved as an intentional deviation.

@@ -79,3 +79,10 @@ export const ATTR_FONT_RELIEF = 124;
 export const ATTR_FONT_CROSSEDOUT = 106;
 /** Original emphasis attribute identity. */
 export const ATTR_FONT_EMPHASISMARK = 121;
+
+/** Original Latin font posture identity. */
+export const ATTR_FONT_POSTURE = 103;
+/** Original CJK font posture identity. */
+export const ATTR_CJK_FONT_POSTURE = 114;
+/** Original CTL font posture identity. */
+export const ATTR_CTL_FONT_POSTURE = 119;

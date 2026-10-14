@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/editeng/source/items/font-effects.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-posture.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -22,6 +26,10 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
           "marker": "SvxContourItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "SvxPostureItem"
         }
       ]
     },
@@ -41,11 +49,13 @@
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxFontItem, SvxWeightItem and the bounded font-family, weight, posture, and underline contract remain intentionally omitted.",
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
     ],
     "preservedResponsibilities": [
       "Reimplements bounded EditEngine font-family, weight, posture, and underline items from pinned `editeng/source/items/textitem.cxx`.",
-      "Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger."
+      "Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger.",
+      "Task122 aligns existing SvxPostureItem with actual SfxEnumItem value/factory/copy/Clone/bool/Any contract: DONTKNOW booltrue, payload-only same-type equality ignoresWhich, bool setterNORMAL/NONE, native bool/FontSlant members with common Any2Bool and exactenum/signed32 fallback. Existing browser FontItalic names are aliases/type alias to one canonical tools enum, not a second enum implementation. Checked JS constructor boundary preserves negative/fractional errors while admitting native nonnegative enum range including initialized unknown4/sentinel; invalid native abort/ABI not certified. Native VCL ConvertFontSlant both switch families use explicit erased-enum source selection for overlapping JSnumbers, not value inference; reverse slants map forward, unknown mapsDONTKNOW and sentinels preserved. Actual FontSlant enum/normal static getter uses existing CPPU, no generator execution/fake types. Original VCL tools/offapi edges and reverse application guards retained. Calc103114119NONE default real itemset copies tested. Existing Writer posture consumer tests and source-backed expected corrections retained, raw100thresholds unchanged. CALC107 records DONTKNOW bool and reverse/unknown member behavior. Existing metadata history/status retained without broad parity promotion. Other VCL helper families/native localized presentation/cache/diagnostics/memoryABI/fullDocPool/config/document/storage/UI/ODS pending/excluded. Next full only at real minimum UI+ODSread/save readiness then repairs/pause, no fixedtasknumber trigger."
     ],
     "status": "mapped",
     "upstreamPath": "editeng/source/items/textitem.cxx",
@@ -58,7 +68,8 @@
       "SvxContourItem",
       "SvxShadowedItem",
       "SvxWordLineModeItem",
-      "SvxCharReliefItem"
+      "SvxCharReliefItem",
+      "SvxPostureItem"
     ]
   },
   "legacyOrder": 6

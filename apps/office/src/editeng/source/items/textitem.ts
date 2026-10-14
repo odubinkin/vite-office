@@ -5,8 +5,15 @@
 import { SfxBoolItem, SfxEnumItem } from "../../../svl/inc/eitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { FontItalic as NativeFontItalic } from "../../../tools/inc/fontenum";
+import {
+  FontSlant,
+  cppu_detail_getUnoType_FontSlant,
+} from "../../../offapi/com/sun/star/awt/FontSlant";
+import { ConvertFontSlant } from "../../../vcl/inc/unohelp";
+import { Any2Bool } from "../../../svl/inc/poolitem";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
-import { MID_RELIEF } from "../../inc/memberids";
+import { MID_RELIEF, MID_ITALIC, MID_POSTURE } from "../../inc/memberids";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
@@ -112,13 +119,15 @@ export enum FontWeight {
   BLACK,
 }
 
-/** Matches LibreOffice FontItalic ordering from tools/fontenum.hxx. */
-export enum FontItalic {
-  NONE,
-  OBLIQUE,
-  NORMAL,
-  DONTKNOW,
-}
+/** Existing browser names are aliases to the single original tools FontItalic enum. */
+export const FontItalic = {
+  NONE: NativeFontItalic.ITALIC_NONE,
+  OBLIQUE: NativeFontItalic.ITALIC_OBLIQUE,
+  NORMAL: NativeFontItalic.ITALIC_NORMAL,
+  DONTKNOW: NativeFontItalic.ITALIC_DONTKNOW,
+} as const;
+/** Existing browser type name refers to the canonical enum. */
+export type FontItalic = NativeFontItalic;
 
 /** Matches LibreOffice FontLineStyle ordering from tools/fontenum.hxx. */
 export enum FontLineStyle {
@@ -184,44 +193,90 @@ export class SvxWeightItem extends SfxPoolItem {
   }
 }
 
-/** Pooled font-posture item with LibreOffice boolean semantics. */
-export class SvxPostureItem extends SfxPoolItem {
-  /** Creates a posture item. @param posture - Font posture. @param which - Script-specific WhichId. @returns Nothing. */
-  public constructor(
-    private readonly posture: FontItalic,
-    which: number,
-  ) {
-    super(which);
-    assertEnumValue(posture, FontItalic.NONE, FontItalic.DONTKNOW, "SvxPostureItem");
+/** Original posture enum item with native bool and FontSlant member transport. */
+export class SvxPostureItem extends SfxEnumItem<FontItalic> {
+  /** Original value/Which and implicit copy; JS scalar validation is an explicit checked host boundary over native nonnegative enum range. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: FontItalic, which: number] | [source: Readonly<SvxPostureItem>]) {
+    if (args.length === 1) super(args[0]);
+    else {
+      assertEnumValue(args[0], 0, 0x7fffffff, "SvxPostureItem");
+      super(args[1], args[0]);
+    }
   }
-
-  /** Returns the font posture. @returns FontItalic value. */
+  /** Original NONE default factory. @returns Item. */
+  public static CreateDefault(): SvxPostureItem {
+    return new SvxPostureItem(NativeFontItalic.ITALIC_NONE, 0);
+  }
+  /** Original enum getter. @returns Italic enum. */
   public GetPosture(): FontItalic {
-    return this.posture;
+    return this.GetValue();
   }
-
-  /** Reports the boolean italic interpretation. @returns True for oblique or italic values. */
-  public GetBoolValue(): boolean {
-    return this.posture >= FontItalic.OBLIQUE && this.posture <= FontItalic.NORMAL;
+  /** Original bool support. @returns True. */
+  public override HasBoolValue(): boolean {
+    return true;
   }
-
-  /** Creates an independent item. @returns Cloned posture item. */
-  public Clone(): SvxPostureItem {
-    return new SvxPostureItem(this.posture, this.Which());
+  /** Original threshold includes DONTKNOW and initialized unknown higher values. @returns Whether at least OBLIQUE. */
+  public override GetBoolValue(): boolean {
+    return this.GetValue() >= NativeFontItalic.ITALIC_OBLIQUE;
   }
-
-  /** Compares type, WhichId, and posture. @param other - Candidate item. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxPostureItem &&
-      other.Which() === this.Which() &&
-      other.posture === this.posture
-    );
+  /** Original bool setter selects NORMAL or NONE. @param value - Bool. @returns Nothing. */
+  public override SetBoolValue(value: boolean): void {
+    this.SetValue(value ? NativeFontItalic.ITALIC_NORMAL : NativeFontItalic.ITALIC_NONE);
   }
-
-  /** Serializes the item. @returns Snapshot. */
-  public override QueryValue(): FontItalic {
-    return this.posture;
+  /** Original copy Clone retains Which. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxPostureItem {
+    void pool;
+    return new SvxPostureItem(this);
+  }
+  /** Existing browser scalar enum projection. @returns Numeric enum. */
+  public override QueryValue(): FontItalic;
+  /** Original bool/FontSlant Any query. @param output - Actual Any. @param member - Native member. @returns True. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original unknown-member success leaves output unchanged. @param output - Optional Any. @param member - Native member. @returns Native success or browser scalar. */
+  public override QueryValue(output?: Any, member = 0): boolean | FontItalic {
+    if (output === undefined) return this.GetValue();
+    switch (member & 0xff & ~0x80) {
+      case MID_ITALIC:
+        output.insert([this.GetBoolValue()], "bool");
+        break;
+      case MID_POSTURE:
+        output.insert(
+          [ConvertFontSlant(this.GetValue(), "FontItalic")],
+          cppu_detail_getUnoType_FontSlant,
+        );
+        break;
+    }
+    return true;
+  }
+  /** Original bool fallback or exact enum then signed32 fallback, with unchanged native failure and unknown-member success. @param input - Actual Any or scalar. @param member - Native member. @returns Success. */
+  public override PutValue(input: unknown, member = 0): boolean {
+    switch (member & 0xff & ~0x80) {
+      case MID_ITALIC:
+        this.SetBoolValue(Any2Bool(input));
+        break;
+      case MID_POSTURE: {
+        const value: [number] = [0];
+        if (input instanceof Any) {
+          if (
+            !input.extract(value, cppu_detail_getUnoType_FontSlant) &&
+            !input.extract(value, "sal_Int32")
+          )
+            return false;
+        } else {
+          if (
+            typeof input !== "number" ||
+            !Number.isInteger(input) ||
+            input < -2147483648 ||
+            input > 2147483647
+          )
+            return false;
+          value[0] = input;
+        }
+        this.SetValue(ConvertFontSlant(value[0] as FontSlant, "FontSlant"));
+        break;
+      }
+    }
+    return true;
   }
 }
 

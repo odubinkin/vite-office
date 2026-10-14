@@ -32,3 +32,8 @@ export const MID_CROSSED_OUT = 0;
 export const MID_CROSS_OUT = 1;
 /** Original emphasis member. */
 export const MID_EMPHASIS = 0;
+
+/** Original italic boolean member. */
+export const MID_ITALIC = 0;
+/** Original posture enum member. */
+export const MID_POSTURE = 1;

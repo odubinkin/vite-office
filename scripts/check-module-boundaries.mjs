@@ -115,7 +115,7 @@ const allowedEdges = new Map([
       "xmloff",
     ]),
   ],
-  ["vcl", new Set(["svl"])],
+  ["vcl", new Set(["offapi", "svl", "tools"])],
   ["udkapi", new Set(["sal"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
   ["unotools", new Set(["sal"])],

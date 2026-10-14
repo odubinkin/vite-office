@@ -21,3 +21,12 @@ export enum FontEmphasisMark {
   PosAbove = 4096,
   PosBelow = 8192,
 }
+
+/** Original unscoped italic enum and native size sentinel. */
+export enum FontItalic {
+  ITALIC_NONE = 0,
+  ITALIC_OBLIQUE = 1,
+  ITALIC_NORMAL = 2,
+  ITALIC_DONTKNOW = 3,
+  FontItalic_FORCE_EQUAL_SIZE = 2147483647,
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/source/app/unohelp.ts",
+    "status": "mapped",
+    "upstreamPath": "vcl/source/app/unohelp.cxx",
+    "localSymbols": [
+      "ConvertFontSlant"
+    ],
+    "upstreamSymbols": [
+      "ConvertFontSlant"
+    ],
+    "preservedResponsibilities": [
+      "Task122 aligns existing SvxPostureItem with actual SfxEnumItem value/factory/copy/Clone/bool/Any contract: DONTKNOW booltrue, payload-only same-type equality ignoresWhich, bool setterNORMAL/NONE, native bool/FontSlant members with common Any2Bool and exactenum/signed32 fallback. Existing browser FontItalic names are aliases/type alias to one canonical tools enum, not a second enum implementation. Checked JS constructor boundary preserves negative/fractional errors while admitting native nonnegative enum range including initialized unknown4/sentinel; invalid native abort/ABI not certified. Native VCL ConvertFontSlant both switch families use explicit erased-enum source selection for overlapping JSnumbers, not value inference; reverse slants map forward, unknown mapsDONTKNOW and sentinels preserved. Actual FontSlant enum/normal static getter uses existing CPPU, no generator execution/fake types. Original VCL tools/offapi edges and reverse application guards retained. Calc103114119NONE default real itemset copies tested. Existing Writer posture consumer tests and source-backed expected corrections retained, raw100thresholds unchanged. CALC107 records DONTKNOW bool and reverse/unknown member behavior. Existing metadata history/status retained without broad parity promotion. Other VCL helper families/native localized presentation/cache/diagnostics/memoryABI/fullDocPool/config/document/storage/UI/ODS pending/excluded. Next full only at real minimum UI+ODSread/save readiness then repairs/pause, no fixedtasknumber trigger."
+    ],
+    "omittedResponsibilities": [
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-posture.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/app/unohelp.cxx",
+          "marker": "ConvertFontSlant"
+        }
+      ]
+    }
+  }
+}

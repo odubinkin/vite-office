@@ -116,17 +116,18 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(none.GetBoolValue()).toBe(false);
     expect(oblique.GetBoolValue()).toBe(true);
     expect(italic.GetBoolValue()).toBe(true);
-    expect(unknown.GetBoolValue()).toBe(false);
+    expect(unknown.GetBoolValue()).toBe(true);
+    expect(new SvxPostureItem(4 as FontItalic, postureWhich).GetPosture()).toBe(4);
     expect(italic.Clone()).not.toBe(italic);
     expect(italic.Clone().equals(italic)).toBe(true);
     expect(italic.equals(oblique)).toBe(false);
-    expect(italic.equals(new SvxPostureItem(FontItalic.NORMAL, postureWhich))).toBe(false);
+    expect(italic.equals(new SvxPostureItem(FontItalic.NORMAL, postureWhich))).toBe(true);
     expect(italic.equals(new SfxInt16Item(alternateWhich, FontItalic.NORMAL))).toBe(false);
     expect(encodeSfxPoolItem(italic)).toEqual({
       value: FontItalic.NORMAL,
       which: alternateWhich,
     });
-    for (const value of [-1, 4, 1.5])
+    for (const value of [-1, 1.5])
       expect(
         throwing(
           /** Creates an invalid posture item. @returns Invalid item. */

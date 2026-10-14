@@ -630,3 +630,12 @@ it("permits original metric owners and only the exact SAL64 numeric header witne
     ),
   ).toBe(false);
 });
+
+it("allows original VCL slant helper dependencies while retaining reverse application guards", /** Native unohelp.hxx consumes tools/fontenum and awt FontSlant; no browser dependency is introduced. @returns Nothing. */ () => {
+  for (const dependency of ["tools", "offapi"]) {
+    expect(isForbiddenModuleEdge("vcl", dependency)).toBe(false);
+    expect(isForbiddenModuleEdge(dependency, "vcl")).toBe(true);
+  }
+  for (const application of ["sc", "sw", "framework"])
+    expect(isForbiddenModuleEdge("vcl", application)).toBe(true);
+});

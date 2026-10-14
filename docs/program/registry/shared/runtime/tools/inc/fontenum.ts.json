@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "strikeout-emphasis-values",
     "capabilityIds": [
-      "CAP-1d1ba7ff-f169-403f-8af9-dfbba35965ea"
+      "CAP-1d1ba7ff-f169-403f-8af9-dfbba35965ea",
+      "CAP-fcfdf0f0-88af-460b-bbab-5dcbf871bdc0"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,19 +18,23 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/editeng/source/items/strikeout-emphasis.test.ts",
-        "docs/program/calc-core.md#Strikeout emphasis and shared Any2Bool values (task121)"
+        "docs/program/calc-core.md#Strikeout emphasis and shared Any2Bool values (task121)",
+        "apps/office/src/editeng/source/items/native-font-posture.test.ts",
+        "docs/program/calc-core.md#Canonical shared font posture and Calc script defaults (task122)"
       ],
-      "justification": " Task121 ports original SvxCrossedOutItem enum/bool/short member values and SvxEmphasisMarkItem unsigned16storage/9wiremappings/style/position masks using actual shared SfxEnumItem/SfxUInt16Item/Any. Factories/copy/Clone/Which and unknown-member untouchedsuccess retained. Native Any2Bool bool-then-signed32/falsefallback now lives once in original SVL header with explicit browser scalar family; existing Writer LR2sites reuse it, including actual Any transport. Original FontStrikeout/FontEmphasisMark/FontEmphasis constants and member narrowing/convertbit preserved. Calc106and121NONE defaults tested through actual shared itemset copies, no fake DocPool/document/provider. textitem.effects shard documents enforced file-size responsibility split, original headers remain canonical. CALC106 records unknown-member success, invalid bool reset and emphasis fallback/below precedence without changing native behavior. Existing metadata history/status retained; broad parity flags unchanged. Other font enums/native diagnostics/localized presentation/cache/refcounts/ABI, actual fullDocPool/config/storage/document/UI/ODS remain pending/excluded. No native compilation/generator/sanitizer/memory library. Full suite not triggered by121; only at actual minimum UI+ODSread/save readiness, then relevant repairs/pause.",
+      "justification": " Task121 ports original SvxCrossedOutItem enum/bool/short member values and SvxEmphasisMarkItem unsigned16storage/9wiremappings/style/position masks using actual shared SfxEnumItem/SfxUInt16Item/Any. Factories/copy/Clone/Which and unknown-member untouchedsuccess retained. Native Any2Bool bool-then-signed32/falsefallback now lives once in original SVL header with explicit browser scalar family; existing Writer LR2sites reuse it, including actual Any transport. Original FontStrikeout/FontEmphasisMark/FontEmphasis constants and member narrowing/convertbit preserved. Calc106and121NONE defaults tested through actual shared itemset copies, no fake DocPool/document/provider. textitem.effects shard documents enforced file-size responsibility split, original headers remain canonical. CALC106 records unknown-member success, invalid bool reset and emphasis fallback/below precedence without changing native behavior. Existing metadata history/status retained; broad parity flags unchanged. Other font enums/native diagnostics/localized presentation/cache/refcounts/ABI, actual fullDocPool/config/storage/document/UI/ODS remain pending/excluded. No native compilation/generator/sanitizer/memory library. Full suite not triggered by121; only at actual minimum UI+ODSread/save readiness, then relevant repairs/pause. Task122 aligns existing SvxPostureItem with actual SfxEnumItem value/factory/copy/Clone/bool/Any contract: DONTKNOW booltrue, payload-only same-type equality ignoresWhich, bool setterNORMAL/NONE, native bool/FontSlant members with common Any2Bool and exactenum/signed32 fallback. Existing browser FontItalic names are aliases/type alias to one canonical tools enum, not a second enum implementation. Checked JS constructor boundary preserves negative/fractional errors while admitting native nonnegative enum range including initialized unknown4/sentinel; invalid native abort/ABI not certified. Native VCL ConvertFontSlant both switch families use explicit erased-enum source selection for overlapping JSnumbers, not value inference; reverse slants map forward, unknown mapsDONTKNOW and sentinels preserved. Actual FontSlant enum/normal static getter uses existing CPPU, no generator execution/fake types. Original VCL tools/offapi edges and reverse application guards retained. Calc103114119NONE default real itemset copies tested. Existing Writer posture consumer tests and source-backed expected corrections retained, raw100thresholds unchanged. CALC107 records DONTKNOW bool and reverse/unknown member behavior. Existing metadata history/status retained without broad parity promotion. Other VCL helper families/native localized presentation/cache/diagnostics/memoryABI/fullDocPool/config/document/storage/UI/ODS pending/excluded. Next full only at real minimum UI+ODSread/save readiness then repairs/pause, no fixedtasknumber trigger.",
       "knownViolations": [],
       "localSymbols": [
         "FontStrikeout",
-        "FontEmphasisMark"
+        "FontEmphasisMark",
+        "FontItalic"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/tools/fontenum.hxx",
       "upstreamSymbols": [
         "FontStrikeout",
-        "FontEmphasisMark"
+        "FontEmphasisMark",
+        "FontItalic"
       ]
     }
   }
