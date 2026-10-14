@@ -16,8 +16,11 @@ function required<T>(value: T | null | undefined): T {
   if (value === undefined || value === null) throw Error("Missing mounted cell frame");
   return value;
 }
-/** Checks exact surviving original model format clients. @param box - Connected original cell. @returns Nothing. */
-function checkClients(box: SwTableBox): void {
+/** Checks exact surviving original model format clients. @param box - Connected original cell. @param root - Optional original layout owner for mounted content. @returns Nothing. */
+function checkClients(
+  box: SwTableBox,
+  root?: ReturnType<ReturnType<typeof createWriterDocumentSession>["view"]["GetLayout"]>,
+): void {
   const clients: unknown[] = [];
   box.GetFrameFormat().ForAllListeners(
     /** Reads actual surviving clients. @param client - Native format listener. @returns Continue flag. */ (
@@ -27,7 +30,17 @@ function checkClients(box: SwTableBox): void {
       return false;
     },
   );
-  expect(clients).toEqual([box]);
+  if (root !== undefined) {
+    const frames = clients.filter(
+      /** Reads exact native cell clients retained by mounted layout. @param client - Original object. @returns Whether cell. */
+      (client) => client instanceof SwCellFrame,
+    ) as SwCellFrame[];
+    expect(frames).toHaveLength(1);
+    expect(frames[0]?.getRootFrame()).toBe(root);
+    expect(frames[0]?.GetTabBox()).toBe(box);
+    expect(clients).toHaveLength(2);
+    expect(new Set(clients)).toEqual(new Set([box, frames[0]]));
+  } else expect(clients).toEqual([box]);
 }
 it("mounted main table renders native linked cell formats and history without box query wrappers", /** Checks actual rendering, formatting and temporary-client cleanup. @returns Nothing. */ () => {
   const session = createWriterDocumentSession(),
@@ -87,8 +100,8 @@ it("mounted main table renders native linked cell formats and history without bo
           screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),
         ),
       ).toHaveStyle({ verticalAlign: "middle" });
-      checkClients(first);
-      checkClients(second);
+      checkClients(first, session.view.GetLayout());
+      checkClients(second, session.view.GetLayout());
       act(
         /** Reverts actual native history. @returns Nothing. */ () => {
           expect(shell.Undo()).toBe(true);
@@ -107,8 +120,8 @@ it("mounted main table renders native linked cell formats and history without bo
       expect(shell.CaptureCursorState()).toEqual(before);
       expect(first.GetParagraphs()[0]).toBe(node);
       expect(node.GetText()).toBe("Native cell");
-      checkClients(first);
-      checkClients(second);
+      checkClients(first, session.view.GetLayout());
+      checkClients(second, session.view.GetLayout());
     }
     for (const query of queries) expect(query).not.toHaveBeenCalled();
   } finally {
@@ -135,7 +148,7 @@ it("main table projection failure releases original linked cell clients before a
     }
     render(<WriterWorkbench isActive view={session.view} />);
     expect(screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" })).toBeInTheDocument();
-    for (const box of boxes) checkClients(box);
+    for (const box of boxes) checkClients(box, session.view.GetLayout());
   } finally {
     cleanup();
     session.Close();

@@ -159,6 +159,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         <WriterEditableTable
           key={`${tableName}:${frame.firstRow}`}
           table={frame.table}
+          nativeFrame={frame.nativeFrame}
           printArea={frame.printArea}
           paragraphs={paragraphByNodeIndex}
           activeParagraphId={props.activeParagraphId}
@@ -407,6 +408,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                       <WriterEditableTable
                         key={`measure-${tableName}`}
                         table={table}
+                        nativeFrame={layout.tableFrames.find(
+                          /** Borrows the same original root-owned master for device measurement. @param frame - Original layout object. @returns Whether it owns this table. */
+                          (frame) => frame.GetTable() === table,
+                        )}
                         availableWidth={
                           props.pageDescriptor.width -
                           props.pageDescriptor.leftMargin -

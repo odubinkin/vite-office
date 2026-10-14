@@ -5,7 +5,7 @@ import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterEditableTable } from "./WriterEditableTable";
 import { SwTabFramePainter } from "../../source/core/layout/paintfrm";
-import { SwRowFrame, SwCellFrame } from "../../source/core/layout/tabfrm";
+import { SwRowFrame, SwCellFrame, SwTabFrame } from "../../source/core/layout/tabfrm";
 import type { SwModify } from "../../inc/calbck";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
@@ -74,6 +74,16 @@ it("mounted native table paint sees exactly one existing row and cell hierarchy"
     "Borrow",
   );
   expect(observed).toBeGreaterThan(0);
+  const frame = clients(f.table.GetFrameFormat()).find(
+    /** Reads the actual layout-owned master. @param client - Original client. @returns Whether master. */
+    (client) => client instanceof SwTabFrame,
+  ) as SwTabFrame;
+  expect(frame.getRootFrame()).toBe(f.session.view.GetLayout());
+  expect(clients(f.row.GetFrameFormat())).toEqual([f.row, frame.Lower()]);
+  cleanup();
+  expect(frame.IsInDtor()).toBe(false);
+  f.session.view.GetLayout().DestroyImpl();
+  expect(frame.IsInDtor()).toBe(true);
   expect(clients(f.row.GetFrameFormat())).toEqual([f.row]);
   for (const box of f.row.GetTabBoxes()) expect(clients(box.GetFrameFormat())).toEqual([box]);
 });

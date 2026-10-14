@@ -148,6 +148,14 @@
         {
           "path": "apps/office/e2e/writer-native-context-menu.spec.ts",
           "marker": "Writer native context menu"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-root-owned-table.test.ts",
+          "marker": "native root retains its original table hierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-root-owned-table.test.tsx",
+          "marker": "actual visible and shadow Writer table paint borrow one root-owned hierarchy"
         }
       ],
       "upstream": [
@@ -182,6 +190,14 @@
         {
           "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
           "marker": "<prop oor:name=\"PopupLabel\""
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwTabFrame* pNew = MakeFrame( pUpper );"
+        },
+        {
+          "path": "sw/source/core/layout/paintfrm.cxx",
+          "marker": ": mrTabFrame( rTabFrame )"
         }
       ]
     },
@@ -204,7 +220,8 @@
     },
     "status": "local-only",
     "browserResponsibilities": [
-      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners.",
+      "Task202610140458-3F7TV1 makes the original SwRootFrame snapshot own one represented native master per model table. Existing actual lower hierarchy is reused across reflow and original model attribute changes, replaced on structural/document change, and released by root lifetime; new frame cleanup is guarded on formatting failure. Actual row measurement, pagination and both visible/shadow browser paint borrow that same original master. Detached standalone rendering/pagination retain their own bounded fallback lifetimes. Existing mouse freshness scan is shared once as explicit temporary browser-device model admission, not an upstream operation or extra registry/manager/map. No new runtime module/controller. Physical page/body/follow/paint/hit graph and independent mouse frame ownership remain unresolved; no whole parity/status/default/classification promotion, protected IO/recovery/Space unchanged."
     ],
     "preservedResponsibilities": [
       "Iteration188: source-shaped horizontal LTR native edge selection and master/follow drag ownership; wider unsupported layout/protection/resize remains unverified.",

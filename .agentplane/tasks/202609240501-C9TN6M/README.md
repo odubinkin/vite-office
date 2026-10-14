@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 362
+revision: 363
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:51:37.672Z"
+doc_updated_at: "2026-10-14T05:49:27.060Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1582,6 +1582,8 @@ sections:
     2026-10-14: correction 202610140415-WTXZMM routes existing menubar Ctrl-F6 through original root/child ownership with existing native focus and close helpers. Root deactivation focuses document, nested child returns only to immediate parent before global Writer focus route. Seven fresh native and three actual Chromium cases; 1,641 unique accepted, whole current module 100% four metrics, 538 positive counters, 960 old test files unchanged, two canonical prefixes retained and 137 built files frozen; nine metadata gates pass after temporary Boost-header availability recovered without source/setup/test replay. Cycle 3/10. Upcoming scheduled full continues; following full pauses after repairs. Goal active.
 
     2026-10-14: correction 202610140430-6KP5DV restores original table/row/cell sibling-root propagation and core pagination/browser mouse callers. Removed browser device geometry from the second native constructor argument; standard field assignment replaces it without a new adapter/factory/manager. 14,304 unique accepted (14,265 related, 26 tooling, 13 Chromium), whole three source modules 100% four metrics and 1,806 positive original counters. Thirteen original fixture files/23 expressions preserve every original token after only geometry placement reversal; 950 other old tests byte-identical. Six canonical prefixes and 137 static files retained; all static/nine metadata gates pass. This is the native root contract prerequisite, not complete persistent table graph parity: temporary render/pagination frames, page/master/follow/paint/hit ownership remain unresolved. Cycle 4/10. Upcoming full continues; following full pauses after repairs. Goal active.
+
+    2026-10-14: correction 202610140458-3F7TV1 shares original layout-owned native table master/lower hierarchy across row measurement and actual visible/shadow rendering. No new manager/module/map/controller; private duplicated model freshness scan consolidated, table measurement moved into existing table module for size gate. Original master reused until structural/document/root lifetime ends; renderer borrows without disposal. Accepted 14,313 unique scenarios, five whole current modules 100% four metrics, 2,303 positive counters. Four source-backed lifetime observation migrations retain 52 functional assertions/238 literal tokens; 960 other old tests unchanged. Four live references follow moved function with exact before/after history; ten historical/scalar/status/default/classification prefixes retained, 137 build files frozen, all static/nine metadata gates pass. Physical page/body/follow and paint/hit graph and independent mouse ownership remain unresolved. Cycle 5/10; upcoming full continues, following full pauses after repairs. Goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -3137,3 +3139,5 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
 2026-10-14: correction 202610140415-WTXZMM routes existing menubar Ctrl-F6 through original root/child ownership with existing native focus and close helpers. Root deactivation focuses document, nested child returns only to immediate parent before global Writer focus route. Seven fresh native and three actual Chromium cases; 1,641 unique accepted, whole current module 100% four metrics, 538 positive counters, 960 old test files unchanged, two canonical prefixes retained and 137 built files frozen; nine metadata gates pass after temporary Boost-header availability recovered without source/setup/test replay. Cycle 3/10. Upcoming scheduled full continues; following full pauses after repairs. Goal active.
 
 2026-10-14: correction 202610140430-6KP5DV restores original table/row/cell sibling-root propagation and core pagination/browser mouse callers. Removed browser device geometry from the second native constructor argument; standard field assignment replaces it without a new adapter/factory/manager. 14,304 unique accepted (14,265 related, 26 tooling, 13 Chromium), whole three source modules 100% four metrics and 1,806 positive original counters. Thirteen original fixture files/23 expressions preserve every original token after only geometry placement reversal; 950 other old tests byte-identical. Six canonical prefixes and 137 static files retained; all static/nine metadata gates pass. This is the native root contract prerequisite, not complete persistent table graph parity: temporary render/pagination frames, page/master/follow/paint/hit ownership remain unresolved. Cycle 4/10. Upcoming full continues; following full pauses after repairs. Goal active.
+
+2026-10-14: correction 202610140458-3F7TV1 shares original layout-owned native table master/lower hierarchy across row measurement and actual visible/shadow rendering. No new manager/module/map/controller; private duplicated model freshness scan consolidated, table measurement moved into existing table module for size gate. Original master reused until structural/document/root lifetime ends; renderer borrows without disposal. Accepted 14,313 unique scenarios, five whole current modules 100% four metrics, 2,303 positive counters. Four source-backed lifetime observation migrations retain 52 functional assertions/238 literal tokens; 960 other old tests unchanged. Four live references follow moved function with exact before/after history; ten historical/scalar/status/default/classification prefixes retained, 137 build files frozen, all static/nine metadata gates pass. Physical page/body/follow and paint/hit graph and independent mouse ownership remain unresolved. Cycle 5/10; upcoming full continues, following full pauses after repairs. Goal active.

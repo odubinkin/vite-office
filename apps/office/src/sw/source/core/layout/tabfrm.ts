@@ -1,4 +1,6 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
+import type { SwDoc } from "../doc/doc";
+import { SwTableNode } from "../docnode/node";
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -425,4 +427,91 @@ export class SwTabFrame extends SwLayoutFrame {
     if (upperWidth - 23 < left + right) left = right = 0;
     return Object.freeze({ left, right, width: upperWidth - left - right });
   }
+}
+
+/** Temporary browser-device hierarchy freshness admission while native structural frame invalidation is unported; it borrows original links without another state map. @param frame - Existing original layout object. @param table - Current original model. @returns Whether its represented hierarchy remains current. */
+export function isSwTableFrameModelCurrent(frame: SwTabFrame, table: SwTable): boolean {
+  if (
+    frame.IsInDtor() ||
+    frame.GetTable() !== table ||
+    frame.GetRegisteredIn() !== table.GetFrameFormat()
+  )
+    return false;
+  let row = frame.Lower();
+  for (const line of table.GetTabLines()) {
+    if (line.GetTabBoxes().length === 0) continue;
+    if (
+      !(row instanceof SwRowFrame) ||
+      row.GetTabLine() !== line ||
+      row.GetRegisteredIn() !== line.GetFrameFormat()
+    )
+      return false;
+    let cell = row.Lower();
+    for (const box of line.GetTabBoxes()) {
+      if (
+        !(cell instanceof SwCellFrame) ||
+        cell.GetTabBox() !== box ||
+        cell.GetRegisteredIn() !== box.GetFrameFormat()
+      )
+        return false;
+      cell = cell.GetNext();
+    }
+    if (cell !== undefined) return false;
+    row = row.GetNext();
+  }
+  return row === undefined;
+}
+
+/** Device measured table rows; the core owns their placement. */
+export interface SwTableFrameMeasurement {
+  readonly tableName: string;
+  readonly rowHeights: readonly number[];
+}
+
+/** Canonical table and its position relative to body text nodes. */
+export interface SwTableFrameInput extends SwTableFrameMeasurement {
+  readonly nativeFrame?: SwTabFrame;
+  readonly table: SwTable;
+  readonly afterParagraphIndex: number;
+}
+
+/** Pairs measured rows with tables in the canonical body order. @param document - Writer document. @param measurements - Browser table-row measurements. @param takeFrame - Original root-owned native master resolver. @returns Ordered table inputs. */
+export function createSwTableFrameInputs(
+  document: SwDoc,
+  measurements: readonly SwTableFrameMeasurement[],
+  takeFrame: (table: SwTable) => SwTabFrame,
+): readonly SwTableFrameInput[] {
+  const byName = new Map(
+    measurements.map(
+      /** map handles this value. @param entry - Input 1. @returns The result. */ (entry) =>
+        [entry.tableName, entry] as const,
+    ),
+  );
+  const tables: SwTableFrameInput[] = [];
+  let paragraphIndex = -1;
+  for (const node of document.nodes.getBodyContent()) {
+    if (node instanceof SwTableNode) {
+      const table = node.GetTable();
+      const measured = byName.get(table.GetName());
+      const nativeFrame = takeFrame(table);
+      tables.push({
+        nativeFrame,
+        table,
+        tableName: table.GetName(),
+        afterParagraphIndex: paragraphIndex,
+        rowHeights: table.GetTabLines().map(
+          /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
+            row,
+            index,
+          ) => {
+            let frame = nativeFrame.Lower() as SwRowFrame | undefined;
+            while (frame !== undefined && frame.GetTabLine() !== row)
+              frame = frame.GetNext() as SwRowFrame | undefined;
+            return frame?.Format(measured?.rowHeights[index] ?? 240) ?? 0;
+          },
+        ),
+      });
+    } else paragraphIndex += 1;
+  }
+  return tables;
 }
