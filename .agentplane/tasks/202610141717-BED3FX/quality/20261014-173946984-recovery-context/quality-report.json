@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141717-BED3FX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T17:39:46.984Z",
+  "verdict": "pass",
+  "summary": "Native diagonal border item, real inherited structs and canonical shared conversion meet task137 scope; same-agent review is not independent.",
+  "evaluated_sha": "fde3ac9f07cfa15c7cf608ba2d2dea9b50a1158e",
+  "blueprint_digest": "610142ca68a19b67a80cb67ef89f6696a7958505040533122885a0b556938958",
+  "findings": [
+    "Source-compared optional line/default/copy/equality/metrics/Any contracts and real inherited struct metadata; static native overload selection is explicit and derived-as-base behavior is tested. Shared converter/extraction and XML value copying avoid parallel border models or class spreads.",
+    "Original source style/convert overlap and allocation before unsupported scalar failure are preserved and documented as CALC-116; no dead mutation branch or fake provider. Signed16 component correction and explicit browser projections preserve source contracts and existing normal Writer inputs.",
+    "318related/29files,177Calc/70files,12Chromium/4specs and37boundary cases pass. Sixwhole shared and33Calc owners have every raw counter positive at100. Build,12source gates,627registry/provenance records/zero violations,34intentional paths/3786hashes/14native pins verified, four reference links restored."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141717-BED3FX/README.md",
+    "output/playwright/task137-checks/verification.json",
+    "output/playwright/task137-checks/source-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full BoxItem Any/theme interfaces, native presentation/XML diagnostics, ABI/full diagonal document QA and real Calc pool/document/UI/ODS remain unverified; same-agent evaluation is not independent."
+  ]
+}

@@ -4,7 +4,7 @@ title: "Implement canonical diagonal border item and shared border struct conver
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T17:40:08.127Z"
+  updated_by: "CODER"
+  note: "Verified native diagonal border/shared struct conversion:318related cases/29files,177Calc/70files,12Chromium/4specs,37boundaries;6whole changedshared S546B405F132L490 and33Calc S4168B2731F821L3716 all raw100. Build/12source gates/627records zero violations,34exact paths/3786hashes/14native pins/four reference links/calc retained. Source quirks/static overload binding retained; fullUIODS pending, no full run; same-agent quality not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T17:39:46.984Z"
+  updated_by: "EVALUATOR"
+  note: "Native diagonal border item, real inherited structs and canonical shared conversion meet task137 scope; same-agent review is not independent."
+  evaluated_sha: "fde3ac9f07cfa15c7cf608ba2d2dea9b50a1158e"
+  blueprint_digest: "610142ca68a19b67a80cb67ef89f6696a7958505040533122885a0b556938958"
+  evidence_refs:
+    - ".agentplane/tasks/202610141717-BED3FX/README.md"
+    - ".agentplane/tasks/202610141717-BED3FX/quality/20261014-173946984-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141717-BED3FX/quality/20261014-173946984-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141717-BED3FX/quality/20261014-173946984-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141717-BED3FX/blueprint/resolved-snapshot.json"
+    - "output/playwright/task137-checks/verification.json"
+    - "output/playwright/task137-checks/source-gates.json"
+  findings:
+    - "Source-compared optional line/default/copy/equality/metrics/Any contracts and real inherited struct metadata; static native overload selection is explicit and derived-as-base behavior is tested. Shared converter/extraction and XML value copying avoid parallel border models or class spreads."
+    - "Original source style/convert overlap and allocation before unsupported scalar failure are preserved and documented as CALC-116; no dead mutation branch or fake provider. Signed16 component correction and explicit browser projections preserve source contracts and existing normal Writer inputs."
+    - "318related/29files,177Calc/70files,12Chromium/4specs and37boundary cases pass. Sixwhole shared and33Calc owners have every raw counter positive at100. Build,12source gates,627registry/provenance records/zero violations,34intentional paths/3786hashes/14native pins verified, four reference links restored."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port missing native diagonal border item using real inherited line structs and shared canonical converters; migrate actual XML/Writer boundaries under standing authorization, no duplicate line engine."
+  -
+    type: "verify"
+    at: "2026-10-14T17:40:08.127Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified native diagonal border/shared struct conversion:318related cases/29files,177Calc/70files,12Chromium/4specs,37boundaries;6whole changedshared S546B405F132L490 and33Calc S4168B2731F821L3716 all raw100. Build/12source gates/627records zero violations,34exact paths/3786hashes/14native pins/four reference links/calc retained. Source quirks/static overload binding retained; fullUIODS pending, no full run; same-agent quality not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T17:37:44.096Z"
+doc_updated_at: "2026-10-14T17:40:08.207Z"
 doc_updated_by: "CODER"
 description: "Task137: missing ScDocPool SvxLineItem dependency; native owned optional border/default/copy/equality/metrics/typed Any member contracts. Real published BorderLine/BorderLine2 generated value/type inheritance over existing CPPU; canonical shared SvxBoxItem line converters and shared extract helper, actual browser/xmloff/Writer consumers migrated without duplicate model or compatibility stubs. Calc141142 and real item ownership tests; source quirks/inventory. UI/ODS critical path, no native lifetime machinery."
 sections:
@@ -55,6 +80,39 @@ sections:
     - Evidence:1877authored JSDoc files,626runtime dependency owners/2812relative imports/92allowed edges,114required tree paths/33retired roots,627runtime/provenance records/zero semantic violations,37boundary cases. Existing doctor managed hook-shim warning and build chunk-size advisory remain outside scope. Exact34intentional paths within60approved,8runtime/provenance pairs and one bounded capability. Source fingerprint3770to3786files:18existing changes,16new,3752unchanged;14native source pins and4reference links retained. Evidence: `output/playwright/task137-checks/verification.json`, `source-gates.json` and final logs.
 
     Native MID_LINE_STYLE0x90 becomes0x10 after CONVERT_TWIPS0x80 removal; source-folded unreachable mutation preserves failed write/allocation behavior rather than a fake coverage path. C++ static overloads are bound by explicit erased argument-family literals, matching the established shared type/tag convention, not inferred from subclass identity. Existing browser record queries remain explicit six-field projections; XML imports copy native values instead of class spreads. Full BoxItem Any/theme interfaces, localized presentation/diagnostic XML, native binary ABI/full diagonal document QA and connected Calc pool/document/UI/ODS remain unverified. No full suite: human moved that checkpoint to actual minimum connected UI+ODS readiness and then requested pause. Same-agent EVALUATOR is not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T17:40:08.127Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified native diagonal border/shared struct conversion:318related cases/29files,177Calc/70files,12Chromium/4specs,37boundaries;6whole changedshared S546B405F132L490 and33Calc S4168B2731F821L3716 all raw100. Build/12source gates/627records zero violations,34exact paths/3786hashes/14native pins/four reference links/calc retained. Source quirks/static overload binding retained; fullUIODS pending, no full run; same-agent quality not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T17:37:44.096Z, excerpt_hash=sha256:66923a34484c0a724951a47864b16372d410ddfcffb118d9b4a6357f27a2c549
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141717-BED3FX/blueprint/resolved-snapshot.json
+    - old_digest: 610142ca68a19b67a80cb67ef89f6696a7958505040533122885a0b556938958
+    - current_digest: 610142ca68a19b67a80cb67ef89f6696a7958505040533122885a0b556938958
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141717-BED3FX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141717-BED3FX -m 🧩 BED3FX task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task-owned changes in a later authorized task; never reset unrelated work, merge or publish."
   Findings: |-
     Task137 closes the missing SvxLineItem dependency for Calc141142 with actual shared optional border values, source default/copy/SetLine/equality/metrics and complete supported Any paths. Actual BorderLine/BorderLine2 IDL structs reuse existing CPPU and real base metadata. Native typelib base size and cppumaker alignment are source-reviewed (base12/direct style12/width16/derived20logical layout), with no generated C++build, ABI certificate, binary buffer or allocator/lifetime engine.
@@ -94,6 +152,39 @@ Native BorderLine default/copy/value/assignment/equality, signed32color/signed16
 - Evidence:1877authored JSDoc files,626runtime dependency owners/2812relative imports/92allowed edges,114required tree paths/33retired roots,627runtime/provenance records/zero semantic violations,37boundary cases. Existing doctor managed hook-shim warning and build chunk-size advisory remain outside scope. Exact34intentional paths within60approved,8runtime/provenance pairs and one bounded capability. Source fingerprint3770to3786files:18existing changes,16new,3752unchanged;14native source pins and4reference links retained. Evidence: `output/playwright/task137-checks/verification.json`, `source-gates.json` and final logs.
 
 Native MID_LINE_STYLE0x90 becomes0x10 after CONVERT_TWIPS0x80 removal; source-folded unreachable mutation preserves failed write/allocation behavior rather than a fake coverage path. C++ static overloads are bound by explicit erased argument-family literals, matching the established shared type/tag convention, not inferred from subclass identity. Existing browser record queries remain explicit six-field projections; XML imports copy native values instead of class spreads. Full BoxItem Any/theme interfaces, localized presentation/diagnostic XML, native binary ABI/full diagonal document QA and connected Calc pool/document/UI/ODS remain unverified. No full suite: human moved that checkpoint to actual minimum connected UI+ODS readiness and then requested pause. Same-agent EVALUATOR is not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T17:40:08.127Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified native diagonal border/shared struct conversion:318related cases/29files,177Calc/70files,12Chromium/4specs,37boundaries;6whole changedshared S546B405F132L490 and33Calc S4168B2731F821L3716 all raw100. Build/12source gates/627records zero violations,34exact paths/3786hashes/14native pins/four reference links/calc retained. Source quirks/static overload binding retained; fullUIODS pending, no full run; same-agent quality not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T17:37:44.096Z, excerpt_hash=sha256:66923a34484c0a724951a47864b16372d410ddfcffb118d9b4a6357f27a2c549
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141717-BED3FX/blueprint/resolved-snapshot.json
+- old_digest: 610142ca68a19b67a80cb67ef89f6696a7958505040533122885a0b556938958
+- current_digest: 610142ca68a19b67a80cb67ef89f6696a7958505040533122885a0b556938958
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141717-BED3FX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141717-BED3FX -m 🧩 BED3FX task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
