@@ -3,8 +3,8 @@
   "artifactKind": "agentplane.blueprint.resolved_snapshot",
   "resolverInput": {
     "taskId": "202610141543-FD83RF",
-    "title": "Implement shared weak-object adapter protocol using native JavaScript GC",
-    "description": "Task134: actual OWeakObject/OWeakConnectionPoint XWeak/XAdapter protocol and integration with existing WeakReferenceHelper. Preserve interface identity, listener order/reentrancy/exceptions, use native WeakRef/FinalizationRegistry rather than C++ ownership counters. Required by real WeakImplHelper and UnoComplexColor. Standing human shared-code/JS-GC authorization.",
+    "title": "Defer unused weak-object lifecycle machinery after Calc dependency audit",
+    "description": "Task134 narrowed after human questions memory/lifetime mechanism necessity. Prove native weak helper is not currently consumed by Calc/Writer; discard only this task uncommitted weak-object additions, retain original shared sources exactly, record real UNO inherited-contract dependency as pending and resume UI/ODS core priority. No new GC adapter or runtime inventory claim.",
     "tags": [
       "code"
     ],
@@ -405,6 +405,6 @@
   ],
   "digest": {
     "algorithm": "sha256",
-    "value": "ca6920d328711a85080a48a4763be00268e0383d7d45a2b9e24c2fac3a67c94d"
+    "value": "4eb4320e86eda774b63519a36dc593d320b2a7ca45950834dbc9bc4c18f9d6d0"
   }
 }

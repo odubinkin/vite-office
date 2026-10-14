@@ -4,7 +4,7 @@ title: "Defer unused weak-object lifecycle machinery after Calc dependency audit
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-14T15:51:20.970Z"
+  updated_at: "2026-10-14T15:51:41.090Z"
   updated_by: "CODER"
-  note: "Verified docs sourcefa056df7b0a8; all1912app sourcehashes unchanged, only calc-core doc plus task artifacts. Unused uncommitted weak-object proposal removed;5nativepins/currentconsumer audit justify deferral without fake UNO parity. Docs/format/routing/doctor/diff pass; same-agent review not independent. No runtime retest claimed."
+  note: "Verified: current revised blueprint; docs-only exact sourcefa056df7b0a8,1912app files unchanged,5nativepins and real consumer audit. All focused docs/format/routing/doctor/diff pass; unused weak-object proposal removed. No new runtime tests claimed; same-agent review not independent."
   attempts: 0
 quality_review:
   state: "pass"
@@ -63,8 +63,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified docs sourcefa056df7b0a8; all1912app sourcehashes unchanged, only calc-core doc plus task artifacts. Unused uncommitted weak-object proposal removed;5nativepins/currentconsumer audit justify deferral without fake UNO parity. Docs/format/routing/doctor/diff pass; same-agent review not independent. No runtime retest claimed."
+  -
+    type: "verify"
+    at: "2026-10-14T15:51:41.090Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: current revised blueprint; docs-only exact sourcefa056df7b0a8,1912app files unchanged,5nativepins and real consumer audit. All focused docs/format/routing/doctor/diff pass; unused weak-object proposal removed. No new runtime tests claimed; same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T15:51:21.049Z"
+doc_updated_at: "2026-10-14T15:51:41.167Z"
 doc_updated_by: "CODER"
 description: "Task134 narrowed after human questions memory/lifetime mechanism necessity. Prove native weak helper is not currently consumed by Calc/Writer; discard only this task uncommitted weak-object additions, retain original shared sources exactly, record real UNO inherited-contract dependency as pending and resume UI/ODS core priority. No new GC adapter or runtime inventory claim."
 sections:
@@ -110,9 +116,44 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-14T15:51:41.090Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: current revised blueprint; docs-only exact sourcefa056df7b0a8,1912app files unchanged,5nativepins and real consumer audit. All focused docs/format/routing/doctor/diff pass; unused weak-object proposal removed. No new runtime tests claimed; same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T15:51:40.454Z, excerpt_hash=sha256:d7fd686cb208ff22f5fcff320488b2e3d82dbfa120681ee1b6cb9823e8c9c5f3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141543-FD83RF/blueprint/resolved-snapshot.json
+    - old_digest: 4eb4320e86eda774b63519a36dc593d320b2a7ca45950834dbc9bc4c18f9d6d0
+    - current_digest: 4eb4320e86eda774b63519a36dc593d320b2a7ca45950834dbc9bc4c18f9d6d0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141543-FD83RF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610141543-FD83RF --result verified-202610141543-FD83RF --commit 4fdea36934b1d3bc2995992d77687b6cec62f38d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task documentation in a later authorized task; discarded uncommitted proposal retained under ignored task evidence, never reset other work."
-  Findings: "Previous task133 is verified progress at51ab912b. Task134 initially proposed actual WeakRef/FinalizationRegistry protocol with no added refcount; human question prompted necessity audit before testing/commit. No current production caller beyond shared definitions exists. Native full UNO inheritance remains genuine required contract if/when ported; it is not required to own a color value or serialize ODS. Immediate dependency-driven priority favors deferral instead of completing unused lifecycle machinery. Do not introduce a weakened replacement helper or falsely claim complex-color UNO complete. Preserve existing weakref implementation unchanged. Runtime proposal was never committed or integrated. Scope narrows to documentation and exact rollback of authored proposal only. Same-agent evaluator not independent."
+  Findings: |-
+    Previous task133 is verified progress at51ab912b. Task134 initially proposed actual WeakRef/FinalizationRegistry protocol with no added refcount; human question prompted necessity audit before testing/commit. No current production caller beyond shared definitions exists. Native full UNO inheritance remains genuine required contract if/when ported; it is not required to own a color value or serialize ODS. Immediate dependency-driven priority favors deferral instead of completing unused lifecycle machinery. Do not introduce a weakened replacement helper or falsely claim complex-color UNO complete. Preserve existing weakref implementation unchanged. Runtime proposal was never committed or integrated. Scope narrows to documentation and exact rollback of authored proposal only. Same-agent evaluator not independent.
+
+    - Observation: Task necessity audit reduced scope and updated the task title; finish correctly rejected the old blueprint snapshot as stale.
+      Impact: No app/source or verification result changed; lifecycle artifact needed refresh after approved replan.
+      Resolution: Regenerated current task blueprint and recorded verification again before canonical finish.
 id_source: "generated"
 ---
 ## Summary
@@ -170,6 +211,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-14T15:51:41.090Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: current revised blueprint; docs-only exact sourcefa056df7b0a8,1912app files unchanged,5nativepins and real consumer audit. All focused docs/format/routing/doctor/diff pass; unused weak-object proposal removed. No new runtime tests claimed; same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T15:51:40.454Z, excerpt_hash=sha256:d7fd686cb208ff22f5fcff320488b2e3d82dbfa120681ee1b6cb9823e8c9c5f3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141543-FD83RF/blueprint/resolved-snapshot.json
+- old_digest: 4eb4320e86eda774b63519a36dc593d320b2a7ca45950834dbc9bc4c18f9d6d0
+- current_digest: 4eb4320e86eda774b63519a36dc593d320b2a7ca45950834dbc9bc4c18f9d6d0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141543-FD83RF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610141543-FD83RF --result verified-202610141543-FD83RF --commit 4fdea36934b1d3bc2995992d77687b6cec62f38d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -179,3 +250,7 @@ Revert only this task documentation in a later authorized task; discarded uncomm
 ## Findings
 
 Previous task133 is verified progress at51ab912b. Task134 initially proposed actual WeakRef/FinalizationRegistry protocol with no added refcount; human question prompted necessity audit before testing/commit. No current production caller beyond shared definitions exists. Native full UNO inheritance remains genuine required contract if/when ported; it is not required to own a color value or serialize ODS. Immediate dependency-driven priority favors deferral instead of completing unused lifecycle machinery. Do not introduce a weakened replacement helper or falsely claim complex-color UNO complete. Preserve existing weakref implementation unchanged. Runtime proposal was never committed or integrated. Scope narrows to documentation and exact rollback of authored proposal only. Same-agent evaluator not independent.
+
+- Observation: Task necessity audit reduced scope and updated the task title; finish correctly rejected the old blueprint snapshot as stale.
+  Impact: No app/source or verification result changed; lifecycle artifact needed refresh after approved replan.
+  Resolution: Regenerated current task blueprint and recorded verification again before canonical finish.
