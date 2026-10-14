@@ -24,3 +24,23 @@ it("retains101112117defaults200height100percentrelative through actual clones", 
     expect(stored.Which()).toBe(which);
   }
 });
+
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import {
+  FontHeight,
+  cppu_detail_getUnoType_FontHeight as fontHeightType,
+} from "../../../../offapi/com/sun/star/frame/status/FontHeight";
+it("queries actual default script items through the original typed FontHeight transport", /** Existing shared owner serves actual Calc defaults, no document provider. @returns Nothing. */ () => {
+  for (const which of [L, C, T]) {
+    const item = new Item(200, 100, which),
+      out = new Any(),
+      value = new FontHeight();
+    try {
+      expect(item.QueryValue(out, 128)).toBe(true);
+      expect(out.extract(value, fontHeightType)).toBe(true);
+      expect([value.Height, value.Prop, value.Diff]).toEqual([10, 100, 0]);
+    } finally {
+      out.dispose();
+    }
+  }
+});

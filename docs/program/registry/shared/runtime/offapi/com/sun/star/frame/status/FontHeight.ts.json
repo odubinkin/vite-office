@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/frame/status/FontHeight.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-height-transport",
+    "capabilityIds": [
+      "CAP-4fb628d0-f89d-4bc5-9899-44f772141581"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/frame/status/FontHeight.test.ts",
+        "docs/program/calc-core.md#Font-height Any transport with browser arithmetic (task127)"
+      ],
+      "justification": " Task127 implements original FontHeight float/short/float value semantics and normal cppumaker static_struct_type_init over actual existing CPPU. Three ordinary JS scalar cells only expose stable lvalues to that existing compound contract, no new allocator/addressmanager/refcountengine/binarybuffer. Complete SvxFontHeightItem QueryValue/PutValue members0/1/2/3 retain memberbyte/convertbit, unknownuntouchedtrue, typedstruct/scalars, unsignedproperty query, signedshortinputs and original realheightreconstruction/clamp/unsigned32arithmetic. Native struct Diff is ignored on put; height failures resetproperty, failedproperty extraction returns untouchedtrue, difference reconstruction occurs before failure and can repeat. Actual Any DOUBLEadmission containsLONG sources, both height extraction calls preserved without fake fallback-success provider; DIFF genuinely uses LONGfallback after FLOATrejectsLONG. Browser noarg complete-state projection from126 retained. Normalbrowser nonfuzz environment represented; nativefuzz-onlyperformanceguard and undefinedNaN/out-of-rangesignedcast domains notcertified, nofakeFuzzingprovider. Human explicitly prioritizes ordinaryJS rounding over library reconstruction; Math.round boundedUInt32height-to-mm100pointtenths and Math.fround scalarcasts suffice. Denominator127 excludes exacthalf, nearest halfdistance1/254 exceeds conservative1e-4 floating/correction bound for maxUInt32height; short boundary witnesses only, no RTLlibraryport/exhaustive/nativebinarytests. CALC111 records original partialmutation/differenceunsigned behavior. Calc3script defaults query through actualAny. Existing metadatahistory/status and IOrecovery deviations retained; no broadparitypromotion. Localizedpresentation, realfullDocPool/document/UI/same-modelODS pending; fullregression onlyactualminimumUI+ODS readiness then repairs/pause. No C++build/generator/sanitizer/memorylibrary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FontHeight"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/frame/status/FontHeight.idl",
+      "upstreamSymbols": [
+        "FontHeight"
+      ]
+    }
+  }
+}

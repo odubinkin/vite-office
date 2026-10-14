@@ -1972,3 +1972,14 @@ Pinned editeng/source/items/textitem.cxx:1055 and:1071 compute sal_uInt32((nNewH
 Initialized height4294967295 and prop65535 produce product modulo2^32 equal4294901761 and stored height42949017. The TypeScript value owner casts unsigned32 before integral division and asserts the literal result. Zero height is native-valid; native same-type equality compares height/property/unit and ignoresWhich, correcting the prior local expectation.
 
 The4argument overload also uses the same-direction ControlToItem helper from CALC109: height100, delta2points and coremm100 store123. Native callers may constrain these values; no full caller invariant, native binary execution, sanitizer or upstream issue report is claimed. Original defined behavior is preserved.
+
+
+## CALC-111: Font-height Any updates have different failure mutation boundaries
+
+Status: original source behavior preserved; complete consumer invariants remain unreviewed.
+
+Pinned editeng/source/items/textitem.cxx:909ff resets property/unit before checking scalar height type/range. A correctly typed FontHeight struct with invalid Height also resets property/unit, while a wrong struct type leaves them untouched. Failed signed-short property extraction returns true without mutation. Difference update reconstructs original height before extracting the new value: a failed update can change height; repeated failures can reconstruct again with old proportion still present.
+
+Initialized example: stored height200, prop125, relative unit, then an invalid bool Any for difference member with CONVERT_TWIPS. The call returns false and height160 with prop125 unchanged; a second failed call leaves height128. Struct Diff is ignored on successful put. Negative point difference stores signed-short bits in unsigned nProp, so querying Diff after putting-1 can return65535. Native real-height relative multiplication also wraps unsigned32 before division and the absolute reconstruction clamps rather than underflows.
+
+Actual Any and source-derived initialized assertions in native-font-height-transport.test.ts preserve these results. No failure is normalized into an atomic update, no fake extraction peer forces unreachable numeric fallbacks, and no native binary/ABI execution or external defect report is claimed.

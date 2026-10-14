@@ -42,3 +42,10 @@ export const MID_POSTURE = 1;
 export const MID_BOLD = 0;
 /** Original weight float member. */
 export const MID_WEIGHT = 1;
+
+/** Original font-height float member. */
+export const MID_FONTHEIGHT = 1;
+/** Original font-height property member. */
+export const MID_FONTHEIGHT_PROP = 2;
+/** Original font-height difference member. */
+export const MID_FONTHEIGHT_DIFF = 3;
