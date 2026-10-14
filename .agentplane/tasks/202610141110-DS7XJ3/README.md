@@ -4,7 +4,7 @@ title: "Share native length conversion and Calc cell margin/orientation values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T11:26:11.361Z"
+  updated_by: "CODER"
+  note: "Calc163 and related232 tests raw S/B/F/L100;28boundary tests;12focusedgates pass;40exactpaths/17nativepins. Shared Writer conversions reused; same-agent EVAL not independent. Full deferred until minimum UI and ODS readiness then repair/pause per user."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T11:26:10.296Z"
+  updated_by: "EVALUATOR"
+  note: "Original length and cell margin/orientation values reuse actual shared owners; all targeted checks pass. Same-agent evaluator, not independent review."
+  evaluated_sha: "b3db9b59addf82f426c7d0e12047ae4c52f59a72"
+  blueprint_digest: "50a76b1c561a04f3b23e07c8feb4bd5ee370a087e60c26a7e08376c0565e9a0d"
+  evidence_refs:
+    - ".agentplane/tasks/202610141110-DS7XJ3/README.md"
+    - ".agentplane/tasks/202610141110-DS7XJ3/quality/20261014-112610296-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141110-DS7XJ3/quality/20261014-112610296-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141110-DS7XJ3/quality/20261014-112610296-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141110-DS7XJ3/blueprint/resolved-snapshot.json"
+    - "output/playwright/task118-checks/exact-review.json"
+  findings:
+    - "Exactly40paths17changed23added;3539to3562committedsource hashes;17nativepins; Calc163tests and shared232tests raw100;28boundaries and12gates pass. Initial failed checks retained and corrected. UI/ODS still pending; next full only on minimum readiness then repair/pause."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved common unit values and actual margin/orientation, reuse Writer integer conversions and persist new readiness/full-run/pause rule; no fake document/provider or native memory library."
+  -
+    type: "verify"
+    at: "2026-10-14T11:26:11.361Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc163 and related232 tests raw S/B/F/L100;28boundary tests;12focusedgates pass;40exactpaths/17nativepins. Shared Writer conversions reused; same-agent EVAL not independent. Full deferred until minimum UI and ODS readiness then repair/pause per user."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:25:55.608Z"
+doc_updated_at: "2026-10-14T11:26:11.436Z"
 doc_updated_by: "CODER"
 description: "Task118: common normal20Length conversions/Tools twip wrapper and Writer LR reuse, actual SVX margin/orientation/UNO enum and Calc margin default. Primitive JS/BigInt value arithmetic, no memory library. Targeted raw100; full checkpoint only on minimum UI+ODS readiness then repair and pause, replacing121cadence."
 sections:
@@ -58,6 +80,39 @@ sections:
     Evidence: fresh3539baseline→3562committedsource hashes; exactly40intentionalpaths17changed23added and17pinnednativeSHA256sources. Same-agent separate evaluator is not independent review.
     Scope: original normal length conversion and cell margin/orientation values, actual shared Writer reuse. Saturating/status helpers, native localized presentation/cache/ABI, complete DocPool/document/config/UI/ODS pending/excluded. No C++ execution/generator/memory library. CALC104 documents native negative wrapping and exact angle mapping.
     Full suite: not run under latest user instruction. Next full regression when actual minimum UI contracts and real ODS loading/saving are ready, then repair relevant failures and pause goal. No task121trigger; goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T11:26:11.361Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc163 and related232 tests raw S/B/F/L100;28boundary tests;12focusedgates pass;40exactpaths/17nativepins. Shared Writer conversions reused; same-agent EVAL not independent. Full deferred until minimum UI and ODS readiness then repair/pause per user.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:25:55.608Z, excerpt_hash=sha256:ec7def4f9bf686e3e35b985cae33d76dedf1545ccf203456ba34b268b13c9a79
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141110-DS7XJ3/blueprint/resolved-snapshot.json
+    - old_digest: 50a76b1c561a04f3b23e07c8feb4bd5ee370a087e60c26a7e08376c0565e9a0d
+    - current_digest: 50a76b1c561a04f3b23e07c8feb4bd5ee370a087e60c26a7e08376c0565e9a0d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141110-DS7XJ3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141110-DS7XJ3 -m 🧩 DS7XJ3 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task118 source commit preserving task117/userintegration/unrelated active tasks. No reset/merge/global or outside-repo changes."
   Findings: |-
     Previous turn instruction acknowledged new checkpoint; task117finished/verifiedclean while new fullrun stop rule arrived. Current branchcalc clean, old unrelated DOINGtasks untouched. Latest user instruction: next full run when minimally ready for real UI+ODS loading/saving, not task121; after full run/relevant repairs pausegoal. This changes regression timing only; core fidelity/reuse/strict Calc and changedshared coverage retained. Writer LR already duplicates signed integer twip formulas; new common native primitive value owners replace those7sites, no new memory mechanism.
@@ -113,6 +168,39 @@ Command: python3 output/playwright/task118-checks/exact-review.py (after source 
 Evidence: fresh3539baseline→3562committedsource hashes; exactly40intentionalpaths17changed23added and17pinnednativeSHA256sources. Same-agent separate evaluator is not independent review.
 Scope: original normal length conversion and cell margin/orientation values, actual shared Writer reuse. Saturating/status helpers, native localized presentation/cache/ABI, complete DocPool/document/config/UI/ODS pending/excluded. No C++ execution/generator/memory library. CALC104 documents native negative wrapping and exact angle mapping.
 Full suite: not run under latest user instruction. Next full regression when actual minimum UI contracts and real ODS loading/saving are ready, then repair relevant failures and pause goal. No task121trigger; goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T11:26:11.361Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc163 and related232 tests raw S/B/F/L100;28boundary tests;12focusedgates pass;40exactpaths/17nativepins. Shared Writer conversions reused; same-agent EVAL not independent. Full deferred until minimum UI and ODS readiness then repair/pause per user.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:25:55.608Z, excerpt_hash=sha256:ec7def4f9bf686e3e35b985cae33d76dedf1545ccf203456ba34b268b13c9a79
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141110-DS7XJ3/blueprint/resolved-snapshot.json
+- old_digest: 50a76b1c561a04f3b23e07c8feb4bd5ee370a087e60c26a7e08376c0565e9a0d
+- current_digest: 50a76b1c561a04f3b23e07c8feb4bd5ee370a087e60c26a7e08376c0565e9a0d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141110-DS7XJ3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141110-DS7XJ3 -m 🧩 DS7XJ3 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
