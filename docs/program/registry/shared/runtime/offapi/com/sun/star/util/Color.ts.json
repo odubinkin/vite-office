@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/Color.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-color-types",
+    "capabilityIds": [
+      "CAP-9a6f5361-9046-44db-b5a0-2cea06b39932"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/native-color-interfaces.test.ts",
+        "apps/office/src/sc/source/core/data/color-uno-types.test.ts",
+        "docs/program/calc-core.md#Canonical UNO color and theme interface contracts (task132)"
+      ],
+      "justification": "Task132 supplies the actual offapi Color typedef and XTheme/XComplexColor contracts needed by native complex-color Any transport. IDL util::Color remains a compile-only number alias for signed32 UNO long and introduces no runtime TYPEDEF or pixel buffer. XTheme extends actual XInterface and returns actual OUString/Sequence<Color>; XComplexColor exposes original signed32 getType/getThemeColorType and resolveColor(Reference<XTheme>) using existing shared generic declarations. Native normal getters reuse original CPPU static_mi_interface_type_init with0explicitbases and actual borrowed type-cell view, including implicit XInterface, native incomplete reflection state and cold/warm identity. Original deprecated Reference pointer getters and static_type wrappers use existing UnoType with explicit erased template type, never a value-inferred provider. Upstream cppumaker defaultdynamic/normal mode and gbuild ordinary offapi target are the source; comprehensive-C and lightweight-L are different genuine modes and no comprehensive method table is fabricated. Existing normal FontHeight/FontSlant bindings use the same approach. Pure IDL alias provenance cites the complete published typedef long Color declaration rather than basename-only similarity. Real Any/Reference typed-null same/root/cross interface admission and signed32 Color scalar transport are exercised, with no fake component or default theme. Type-only alias has no executable coverage counters; both new executable modules are measured completely. Native component UnoComplexColor, WeakImplHelper inheritance/lifetime integration and full SvxColorItem Any/Writer color migration remain pending; tests do not certify non-null components, dynamic fullReflection, true DocPool/document/UI/same-model ODS or native ABI. No C++generator/build/probe, no new allocator/refcount/type factory or provider; existing IO/recovery deviations and readiness-gated full regression remain unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Color"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/util/Color.idl",
+      "upstreamSymbols": [
+        "Color",
+        "published typedef long Color"
+      ]
+    }
+  }
+}
