@@ -1,10 +1,11 @@
 ---
 id: "202610140500-BNVHB5"
 title: "Implement shared configuration Data storage path resolution and set templates"
-status: "DOING"
+result_summary: "Implemented complete logical Data paths/canonical/partial outputs/finalized metadata/templates/extension additions and Set template metadata/deep clones over real Node/Modifications/Additions/OUString/UNO owners. No fake provider/buffer/ICU/lifetime library;12intentionalpaths/3386exacthashes reviewed. Native debug/ABI/const/private-copy/implicit vector insertion/diagnostics/fullQA excluded or unverified. Actual Property/XML/backend/default/document/grid/ODS pending; goalactive until requested secondfull111 and relevant repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task108-checks/exact-review.json"
   findings:
     - "Reviewed source6236bf3585c343ec7272ae348f3f06ac2707efb1 against complete four pinned Data/Set declaration/body files and real UTF16/tree/output/clone/extension tests. Exact3386committedhashes12intentionalpaths; strict Calc/shared14owner raw100 and actual source-absent static/Calc0UI/link restoration verified. All16gates currentpass; isolated unchanged inventory retry passed123tests/raw100 after two first-run timeouts, preserved failure evidence/firstExitCode1, no code/limit/threshold edits. Native JS local UTF16 view/buffer work preserves actual OUString public values, no new buffer/ICU/lifetime/provider. CALC-093 early missing suffix and partial outputs preserved. Native debug/invalid pointers/ABI/const/private-copy/implicit vector insertion/diagnostics/fullQA/compiled differential excluded; actual Property/XML/backend/default/document/ODS pending. Separate same-agent role, not independent review."
-commit: null
+commit:
+  hash: "6236bf3585c343ec7272ae348f3f06ac2707efb1"
+  message: "🧩 BNVHB5 configmgr: implement Data paths and set templates"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete logical Data and SetNode configuration storage/path/template/extension contracts over actual existing shared values; native JS UTF16 temporary strings and strict affected verification under active goal approval."
+  -
+    author: "CODER"
+    body: "Verified: actual Data and SetNode logical path/template/root/extension contracts use existing shared values with exact UTF16 native JS temporary work. WholeCalc/shared raw100, source-absent static/Calc0UI,16currentgates and exact committed review pass. Unchanged isolated inventory retry resolves first timeouts; CALC-093 retained and inventory recorded."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "WholeCalc152tests raw4006S2654B787F3570L and complete shared14owners41tests raw626S345B143F574L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourrestoredlinks and16currentgates pass. Inventory isolated unchanged retry passed123tests/raw100 after two timeouts; first failure preserved, no limits/code/threshold edits. Exact3386committedhashes12intentionalpaths4originalpins; same-agent EVAL passed source6236bf3585c343ec7272ae348f3f06ac2707efb1, not independent review. CALC-093 retained; no fake provider/buffer/lifetime library. Nextfull111pause remains."
+  -
+    type: "status"
+    at: "2026-10-14T05:23:56.422Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual Data and SetNode logical path/template/root/extension contracts use existing shared values with exact UTF16 native JS temporary work. WholeCalc/shared raw100, source-absent static/Calc0UI,16currentgates and exact committed review pass. Unchanged isolated inventory retry resolves first timeouts; CALC-093 retained and inventory recorded."
 doc_version: 3
-doc_updated_at: "2026-10-14T05:23:47.478Z"
+doc_updated_at: "2026-10-14T05:23:56.427Z"
 doc_updated_by: "CODER"
 description: "Task108: complete logical configmgr Data/SetNode implementation over actual shared tree/types/modification/addition values, including path parsing/escaping/canonical resolution/finalized tracking/templates/extension lists. Native JS UTF16 local string building, no fake Data/backend or missing buffer library. WholeCalc/affected raw100, static/Calc0UI/16gates, no full office before111."
 sections:
