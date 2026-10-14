@@ -1,4 +1,5 @@
 /** @fileoverview Checks original table format inheritance and complete border-paint snapshots after the full profile. */
+import { Color } from "../../../../tools/inc/color";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwClient, type SwModify } from "../../../inc/calbck";
@@ -174,7 +175,13 @@ it("two by two native border painting releases temporary frame clients and retur
 
 /** Constructs an independent original border style. @param start - Start coordinate. @param end - End coordinate. @param color - Border color. @param width - Native width. @returns Owned interval. */
 function entry(start: number, end: number, color: number, width: number): SwLineEntry {
-  return new SwLineEntry(42, start, end, false, new Style(new SvxBorderLine(color, width)));
+  return new SwLineEntry(
+    42,
+    start,
+    end,
+    false,
+    new Style(new SvxBorderLine(new Color(color), width)),
+  );
 }
 
 it("insertion order preserves native coordinate order in both paint families", /** Checks independently ordered disjoint intervals in the represented native ordered set. @returns Nothing. */ () => {
@@ -194,7 +201,12 @@ it("insertion order preserves native coordinate order in both paint families", /
     painter.PaintLines(
       /** Reads independent source coordinate order. @param line - Paint copy. @param horizontal - Family. @returns Nothing. */
       (line, horizontal) =>
-        lines.push([horizontal, line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim()]),
+        lines.push([
+          horizontal,
+          line.mnStartPos,
+          line.mnEndPos,
+          line.maAttribute.GetColorPrim().toUInt32(),
+        ]),
     );
     expect(lines).toEqual([
       [false, 0, 3, 3],
@@ -321,7 +333,12 @@ it.each([
       painter.PaintLines(
         /** Captures complete line-family partitions. @param line - Resolved original copy. @param horizontal - Independent family. @returns Nothing. */
         (line, horizontal) =>
-          lines.push([horizontal, line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim()]),
+          lines.push([
+            horizontal,
+            line.mnStartPos,
+            line.mnEndPos,
+            line.maAttribute.GetColorPrim().toUInt32(),
+          ]),
       );
       expect(lines).toEqual(
         [false, true].flatMap(

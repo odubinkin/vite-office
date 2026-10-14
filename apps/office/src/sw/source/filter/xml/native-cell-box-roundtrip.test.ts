@@ -1,4 +1,5 @@
 /** @fileoverview Verifies independent native box ODF properties and complete primitive process/storage rehydration. */
+import { Color } from "../../../../tools/inc/color";
 import { expect, it } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -106,7 +107,7 @@ function fixture() {
   table.AddColumnWidth(4000);
   const item = new SvxBoxItem(RES_BOX);
   for (const [edge, style] of [0, 2, 3, 11].entries()) {
-    const line = new SvxBorderLine(0x112233 + edge, (edge + 1) * 20);
+    const line = new SvxBorderLine(new Color(0x112233 + edge), (edge + 1) * 20);
     line.SetBorderLineStyle(style);
     item.SetLine(line, edge);
     item.SetDistance(20 + edge * 10, edge);
@@ -132,7 +133,7 @@ it("ODT reopens four independently authored lines and distances with original te
 });
 it("structured transport retains signed distances, custom double ratios, scale, mirror and removal flag", /** Checks primitive copies restore owned native objects without prototype transport. @returns Nothing. */ () => {
   const f = fixture(),
-    custom = new SvxBorderLine(0x778899);
+    custom = new SvxBorderLine(new Color(0x778899));
   custom.GuessLinesWidths(3, 7, 13, 19);
   custom.ScaleMetrics(1.5);
   custom.SetMirrorWidths();
@@ -170,7 +171,7 @@ it("legacy scalar storage is converted once at ingress and subsequent records co
     const box = required(doc.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]);
     for (const edge of [0, 1, 2, 3]) {
       expect(box.GetBox().GetDistance(edge)).toBe(44);
-      expect(box.GetBox().GetLine(edge)?.GetColor()).toBe(0x112233);
+      expect(box.GetBox().GetLine(edge)?.GetColor().toUInt32()).toBe(0x112233);
       expect(box.GetBox().GetLine(edge)?.GetWidth()).toBe(20);
     }
     const encoded = encodeWriterDocument(doc).tables?.[0]?.rows[0]?.cells[0]?.format;
@@ -316,7 +317,7 @@ it("filter shorthand applies per-edge overrides, source style tokens and native 
     expect(
       handler.importXML(`${named} solid`, { value: SvxBoxItem.SvxLineToLine(undefined) }),
     ).toBe(true);
-  const target = { value: SvxBoxItem.SvxLineToLine(new SvxBorderLine(0, 60, 3), true) };
+  const target = { value: SvxBoxItem.SvxLineToLine(new SvxBorderLine(new Color(0), 60, 3), true) };
   expect(compound.importXML("0.035cm 0.035cm 0.035cm", target)).toBe(true);
   expect(compound.exportXML(target.value)).toBe("0.035cm 0.035cm 0.035cm");
   expect(compound.importXML("1pt 2pt", target)).toBe(false);

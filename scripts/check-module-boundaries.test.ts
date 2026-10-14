@@ -286,9 +286,10 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
   it("admits source-owned cui border pages and svx line selection with no reverse or browser edges", /** Checks the native dialog owner graph. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("sw", "cui")).toBe(false);
-    for (const module of ["editeng", "svl", "svx"])
+    for (const module of ["editeng", "svl", "svx", "tools"])
       expect(isForbiddenModuleEdge("cui", module)).toBe(false);
     expect(isForbiddenModuleEdge("svx", "editeng")).toBe(false);
+    expect(isForbiddenModuleEdge("tools", "cui")).toBe(true);
     for (const module of ["sw", "framework"])
       expect(isForbiddenModuleEdge("cui", module)).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "svx")).toBe(true);

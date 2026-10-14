@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native cell format ownership, sharing, defaults and change hints. */
+import { Color } from "../../../../tools/inc/color";
 import { expect, it, vi } from "vitest";
 import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
@@ -201,10 +202,10 @@ it("native border publication reuses shared formats only for identical changed-s
   cursor.GetMark().Assign(required(last.GetParagraphs()[0]), 0);
   const item = new SvxBoxItem(113);
   item.SetAllDistances(80);
-  for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(0x112233, 20), edge);
+  for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(new Color(0x112233), 20), edge);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
-  info.SetLine(new SvxBorderLine(0x445566, 10), 0);
-  info.SetLine(new SvxBorderLine(0x445566, 10), 1);
+  info.SetLine(new SvxBorderLine(new Color(0x445566), 10), 0);
+  info.SetLine(new SvxBorderLine(new Color(0x445566), 10), 1);
   const value = new SfxItemSet(doc.GetAttrPool(), [
     [113, 113],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],

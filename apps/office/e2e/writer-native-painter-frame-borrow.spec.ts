@@ -1,4 +1,5 @@
 /** @fileoverview Verifies original native frame border paint remains correct across browser history and editing. */
+import { Color } from "../src/tools/inc/color";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SvxBoxItem } from "../src/editeng/source/items/frmitems";
@@ -21,7 +22,7 @@ for (const width of [1280, 390])
       for (const [index, cell] of doc.nodes.AppendTableRow(table, 2).GetTabBoxes().entries()) {
         const box = new SvxBoxItem(RES_BOX);
         for (const edge of [0, 1, 2, 3] as const)
-          box.SetLine(new SvxBorderLine(index === 0 ? 0xff0000 : 0x0000ff, 20), edge);
+          box.SetLine(new SvxBorderLine(new Color(index === 0 ? 0xff0000 : 0x0000ff), 20), edge);
         cell.SetFormat({ box });
         const node = cell.GetParagraphs()[0];
         if (node === undefined) throw Error("Missing original native cell");

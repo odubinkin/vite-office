@@ -1,4 +1,5 @@
 /** @fileoverview Verifies source frame Style ordering and owned integer native components. */
+import { Color } from "../../../tools/inc/color";
 import { expect, it } from "vitest";
 import {
   SvxBorderLine,
@@ -26,7 +27,7 @@ it("native frame defaults and clones retain component ownership and source norma
     empty.Dist(),
     empty.Secn(),
     empty.GetWidth(),
-    empty.GetColorPrim(),
+    empty.GetColorPrim().toUInt32(),
     empty.Type(),
   ]).toEqual([0, 0, 0, 0, 0, Line.SOLID]);
   const cases = [
@@ -46,18 +47,18 @@ it("native frame defaults and clones retain component ownership and source norma
     copy.MirrorSelf();
     expect(copy.GetWidth()).toBe(style.GetWidth());
     expect(copy.Prim()).toBe(style.Secn() ? style.Secn() : style.Prim());
-    expect(style.GetColorPrim()).toBe(0x123456);
+    expect(style.GetColorPrim().toUInt32()).toBe(0x123456);
     expect(line.toJSON()).toEqual(before);
-    line.SetColor(0xffffff);
-    expect(copy.GetColorPrim()).toBe(0x123456);
+    line.SetColor(new Color(0xffffff));
+    expect(copy.GetColorPrim().toUInt32()).toBe(0x123456);
   }
 });
 it("native integer frame priority differs from browser dashed and color tie rules", /** Checks all source priority clauses and two-way comparisons. @returns Nothing. */ () => {
-  const thin = new Style(new SvxBorderLine(1, 10)),
-    thick = new Style(new SvxBorderLine(2, 20));
+  const thin = new Style(new SvxBorderLine(new Color(1), 10)),
+    thick = new Style(new SvxBorderLine(new Color(2), 20));
   expect(thin.lessThan(thick)).toBe(true);
   expect(thick.lessThan(thin)).toBe(false);
-  const single = new Style(new SvxBorderLine(1, 60)),
+  const single = new Style(new SvxBorderLine(new Color(1), 60)),
     double = new Style(components(20, 20, 20));
   expect(single.lessThan(double)).toBe(true);
   expect(double.lessThan(single)).toBe(false);
@@ -66,12 +67,12 @@ it("native integer frame priority differs from browser dashed and color tie rule
   expect(wideGap.lessThan(narrowGap)).toBe(true);
   expect(narrowGap.lessThan(wideGap)).toBe(false);
   for (const width of [1, 20]) {
-    const solid = new Style(new SvxBorderLine(1, width)),
-      dashed = new Style(new SvxBorderLine(2, width, Line.DASHED));
+    const solid = new Style(new SvxBorderLine(new Color(1), width)),
+      dashed = new Style(new SvxBorderLine(new Color(2), width, Line.DASHED));
     expect(dashed.lessThan(solid)).toBe(width === 1);
     expect(solid.lessThan(dashed)).toBe(false);
   }
-  const colorTie = new Style(new SvxBorderLine(0xffffff, 10));
+  const colorTie = new Style(new SvxBorderLine(new Color(0xffffff), 10));
   expect(thin.lessThan(colorTie)).toBe(false);
   expect(colorTie.lessThan(thin)).toBe(false);
   expect(double.lessThan(double.Clone())).toBe(false);
@@ -79,15 +80,19 @@ it("native integer frame priority differs from browser dashed and color tie rule
 it("native Word frame weight preserves every represented style number and the outset25 source value", /** Checks the source weight contract independently of unrepresented Word frame layout. @returns Nothing. */ () => {
   const numbers = [1, 0, 0, 3, 11, 14, 17, 12, 15, 18, 24, 25, 25, 27, 22, 3, 8, 9];
   for (const [type, number] of numbers.entries()) {
-    const style = new Style(new SvxBorderLine(0, 90, type));
+    const style = new Style(new SvxBorderLine(new Color(0), 90, type));
     expect(GetWordTableCellBorderWeight(style)).toBe(
       type === 1 || type === 2 ? 1 : number * style.GetWidth(),
     );
   }
-  expect(GetWordTableCellBorderWeight(new Style(new SvxBorderLine(0, 100, Line.NONE)))).toBe(0);
-  expect(GetWordTableCellBorderWeight(new Style(new SvxBorderLine(0, 100, 18 as Line)))).toBe(0);
-  const solid = new Style(new SvxBorderLine(0, 5)),
-    dashed = new Style(new SvxBorderLine(0, 100, Line.DASHED));
+  expect(
+    GetWordTableCellBorderWeight(new Style(new SvxBorderLine(new Color(0), 100, Line.NONE))),
+  ).toBe(0);
+  expect(
+    GetWordTableCellBorderWeight(new Style(new SvxBorderLine(new Color(0), 100, 18 as Line))),
+  ).toBe(0);
+  const solid = new Style(new SvxBorderLine(new Color(0), 5)),
+    dashed = new Style(new SvxBorderLine(new Color(0), 100, Line.DASHED));
   solid.SetWordTableCell(true);
   dashed.SetWordTableCell(true);
   expect(dashed.lessThan(solid)).toBe(true);
@@ -96,4 +101,14 @@ it("native Word frame weight preserves every represented style number and the ou
   expect(equal.lessThan(solid)).toBe(false);
   equal.SetWordTableCell(false);
   expect(equal.lessThan(solid)).toBe(false);
+});
+
+it("returns frame Color values independently of the source line and each getter result", /** Checks original frame Color-by-value reads. @returns Nothing. */ () => {
+  const line = new SvxBorderLine(new Color(0x123456), 20),
+    style = new Style(line),
+    read = style.GetColorPrim();
+  line.SetColor(new Color(0xabcdef));
+  read.SetBlue(0);
+  expect(style.GetColorPrim().toUInt32()).toBe(0x123456);
+  expect(style.Clone().GetColorPrim().toUInt32()).toBe(0x123456);
 });

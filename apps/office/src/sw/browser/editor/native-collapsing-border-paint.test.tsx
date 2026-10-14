@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native resolved border paint over original mounted cell owners and history. */
+import { Color } from "../../../tools/inc/color";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
@@ -27,9 +28,12 @@ it.each([false, true])(
       });
       for (const [c, cell] of row.GetTabBoxes().entries()) {
         const box = new SvxBoxItem(RES_BOX);
-        box.SetLine(new SvxBorderLine(c === 0 ? 0xff0000 : 0x0000ff, 20), c === 0 ? 3 : 2);
         box.SetLine(
-          new SvxBorderLine(r === 0 ? 0x00ff00 : 0xff00ff, r === 0 ? 40 : 10),
+          new SvxBorderLine(new Color(c === 0 ? 0xff0000 : 0x0000ff), 20),
+          c === 0 ? 3 : 2,
+        );
+        box.SetLine(
+          new SvxBorderLine(new Color(r === 0 ? 0x00ff00 : 0xff00ff), r === 0 ? 40 : 10),
           r === 0 ? 1 : 0,
         );
         box.SetAllDistances(28);

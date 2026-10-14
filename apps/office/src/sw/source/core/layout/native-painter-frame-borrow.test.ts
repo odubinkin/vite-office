@@ -1,4 +1,5 @@
 /** @fileoverview Verifies source table border painting borrows the original native frame hierarchy. */
+import { Color } from "../../../../tools/inc/color";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTabFrame, SwRowFrame, SwCellFrame } from "./tabfrm";
@@ -74,7 +75,7 @@ it("native painter reads the actual cell frame format rather than reconstructing
   const f = fixture(),
     format = f.doc.MakeTableBoxFormat(),
     box = f.cell.GetFormat().GetBox().Clone();
-  box.SetLine(new SvxBorderLine(0x123456, 40), 0);
+  box.SetLine(new SvxBorderLine(new Color(0x123456), 40), 0);
   format.SetFormatAttr(box);
   f.cell.RegisterToFormat(format);
   const painter = new SwTabFramePainter(f.frame),
@@ -85,7 +86,7 @@ it("native painter reads the actual cell frame format rather than reconstructing
       horizontal,
     ) => {
       if (horizontal && line.mnKey === 0 && line.mnStartPos === 0)
-        colors.push(line.maAttribute.GetColorPrim());
+        colors.push(line.maAttribute.GetColorPrim().toUInt32());
     },
   );
   expect(colors).toEqual([0x123456]);

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native item-set edge distribution and original graph/history ownership. */
+import { Color } from "../../../../tools/inc/color";
 import { expect, it } from "vitest";
 import {
   SvxBoxItem,
@@ -123,13 +124,13 @@ it("uses native default box distances while the retained ordinary cursor is outs
     for (const [i, box] of f.boxes.slice(2).entries())
       for (const edge of [0, 1, 2, 3]) {
         expect(box.GetBox().GetDistance(edge)).toBe(82 + i + edge);
-        expect(box.GetBox().GetLine(edge)?.GetColor()).toBe(0x112233);
+        expect(box.GetBox().GetLine(edge)?.GetColor().toUInt32()).toBe(0x112233);
       }
     expect(shell.Undo()).toBe(true);
     for (const [i, box] of f.boxes.entries())
       for (const edge of [0, 1, 2, 3]) {
         expect(box.GetBox().GetDistance(edge)).toBe(80 + i + edge);
-        expect(box.GetBox().GetLine(edge)?.GetColor()).toBe(0x112233);
+        expect(box.GetBox().GetLine(edge)?.GetColor().toUInt32()).toBe(0x112233);
       }
   } finally {
     f.session.Close();
@@ -142,7 +143,7 @@ it("restores native box pool values and rejects non-box snapshots and missing ta
   try {
     const box = new SvxBoxItem(RES_BOX);
     box.SetAllDistances(42);
-    box.SetLine(new SvxBorderLine(0x112233, 20), 0);
+    box.SetLine(new SvxBorderLine(new Color(0x112233), 20), 0);
     const restored = doc
       .GetAttrPool()
       .CreateItem({ which: RES_BOX, value: box.QueryValue() as SfxPoolItemValue });
@@ -180,7 +181,7 @@ function fixture() {
     for (const box of doc.nodes.AppendTableRow(table, 2).GetTabBoxes()) {
       const item = new SvxBoxItem(RES_BOX);
       for (const edge of [0, 1, 2, 3]) {
-        item.SetLine(new SvxBorderLine(0x112233, 10), edge);
+        item.SetLine(new SvxBorderLine(new Color(0x112233), 10), edge);
         item.SetDistance(80 + boxes.length + edge, edge);
       }
       box.SetFormat({ box: item });
@@ -197,12 +198,12 @@ function fixture() {
   const outer = new SvxBoxItem(RES_BOX),
     inner = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
   for (const [edge, color] of [0xff0000, 0x00ff00, 0x0000ff, 0xffff00].entries()) {
-    outer.SetLine(new SvxBorderLine(color, 20 + edge * 10), edge);
+    outer.SetLine(new SvxBorderLine(new Color(color), 20 + edge * 10), edge);
     outer.SetDistance((edge + 1) * 11, edge);
   }
   inner.SetTable(true);
-  inner.SetLine(new SvxBorderLine(0xff00ff, 60), 0);
-  inner.SetLine(new SvxBorderLine(0x00ffff, 70), 1);
+  inner.SetLine(new SvxBorderLine(new Color(0xff00ff), 60), 0);
+  inner.SetLine(new SvxBorderLine(new Color(0x00ffff), 70), 1);
   const items = new SfxItemSet(doc.GetAttrPool(), [
     [RES_BOX, RES_BOX],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
@@ -216,7 +217,7 @@ function lines(box: SvxBoxItem) {
       edge,
     ) => {
       const line = box.GetLine(edge);
-      return line === undefined ? null : [line.GetColor(), line.GetWidth()];
+      return line === undefined ? null : [line.GetColor().toUInt32(), line.GetWidth()];
     },
   );
 }
@@ -261,7 +262,7 @@ it("distributes native outer and inner lines over the endpoint union and preserv
         box.GetFormat(),
     );
     f.outer.SetAllDistances(999);
-    f.inner.GetHori()?.SetColor(0);
+    f.inner.GetHori()?.SetColor(new Color(0));
     expect(
       f.boxes.map(
         /** Reads independent applied formats. @param box - Cell. @returns Format. */ (box) =>

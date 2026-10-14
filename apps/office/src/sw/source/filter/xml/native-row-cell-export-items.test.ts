@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native direct row/cell items and exact orientation tokens through real XML and ODT packages. */
+import { Color } from "../../../../tools/inc/color";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
@@ -151,7 +152,7 @@ it("own four-edge box values serialize from the original item without scalar clo
   const f = fixture(),
     borders = new SvxBoxItem(RES_BOX);
   for (const edge of [0, 1, 2, 3]) borders.SetDistance((edge + 1) * 120, edge);
-  borders.SetLine(new SvxBorderLine(0, 20), 0);
+  borders.SetLine(new SvxBorderLine(new Color(0), 20), 0);
   f.box.GetFrameFormat().SetFormatAttr(borders);
   const projection = vi.spyOn(f.box, "GetFormat");
   try {

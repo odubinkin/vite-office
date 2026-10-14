@@ -1,4 +1,5 @@
 /** @fileoverview Checks native common table-border input, partial changes and selected-row history in Chromium. */
+import { Color } from "../src/tools/inc/color";
 import { expect, test } from "@playwright/test";
 import { selectBrowserTableRow } from "../test-support/table-mouse-e2e";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -23,7 +24,7 @@ for (const width of [1280, 390])
             box.SetDistance((row + 1) * 100 + edge * 10, edge);
             box.SetLine(
               new SvxBorderLine(
-                row === 0 ? (column === 0 ? 0x123456 : 0xabcdef) : 0x654321,
+                new Color(row === 0 ? (column === 0 ? 0x123456 : 0xabcdef) : 0x654321),
                 row === 0 ? 20 : 40,
               ),
               edge,

@@ -1,4 +1,5 @@
 /** @fileoverview Checks independent native border and distance paint in real production Chromium. */
+import { Color } from "../src/tools/inc/color";
 import { expect, test } from "@playwright/test";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { SvxBoxItem } from "../src/editeng/source/items/frmitems";
@@ -21,7 +22,7 @@ for (const width of [1280, 390])
       table.AddColumnWidth(6000);
       const item = new SvxBoxItem(RES_BOX);
       for (const [edge, style] of [0, 2, 3, 11].entries()) {
-        const line = new SvxBorderLine(0x112233 + edge, (edge + 1) * 20);
+        const line = new SvxBorderLine(new Color(0x112233 + edge), (edge + 1) * 20);
         line.SetBorderLineStyle(style);
         item.SetLine(line, edge);
         item.SetDistance((edge + 1) * 15, edge);

@@ -4,19 +4,21 @@ import {
   SvxBorderLineStyle as LineStyle,
 } from "../../../editeng/source/items/borderline";
 
+import { Color } from "../../../tools/inc/color";
+
 /** Owns the represented frame style; primitive colors/ref modes and device scaling remain separate. */
 export class Style {
   private primary = 0;
   private distance = 0;
   private secondary = 0;
-  private color = 0;
+  private readonly color = new Color();
   private type = LineStyle.SOLID;
   private wordTableCell = false;
   /** Captures native integer components without mutating the source line. @param border - Original native line. @returns Nothing. */
   public constructor(border?: SvxBorderLine) {
     if (border === undefined) return;
     this.type = border.GetBorderLineStyle();
-    this.color = border.GetColor();
+    this.color.assign(border.GetColor());
     const p = border.GetOutWidth(),
       d = border.GetDistance(),
       s = border.GetInWidth();
@@ -55,8 +57,8 @@ export class Style {
     return this.primary + this.distance + this.secondary;
   }
   /** Reads represented source color; native shading/theme colors remain unrepresented. @returns RGB. */
-  public GetColorPrim(): number {
-    return this.color;
+  public GetColorPrim(): Color {
+    return new Color(this.color);
   }
   /** Reads the original numeric line style. @returns Native style. */
   public Type(): LineStyle {
@@ -76,7 +78,7 @@ export class Style {
     copy.primary = this.primary;
     copy.distance = this.distance;
     copy.secondary = this.secondary;
-    copy.color = this.color;
+    copy.color.assign(this.color);
     copy.type = this.type;
     copy.wordTableCell = this.wordTableCell;
     return copy;

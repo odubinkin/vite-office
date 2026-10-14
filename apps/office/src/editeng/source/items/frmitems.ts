@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements bounded paragraph margin, first-line indent, and spacing items from pinned `editeng/source/items/frmitems.cxx`.
  */
+import { Color, ColorTransparency } from "../../../tools/inc/color";
 
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { SvxBorderLine, SvxBorderLineStyle, roundBorderMetric } from "./borderline";
@@ -153,7 +154,7 @@ function boxUnoLine(value: unknown, convert: boolean): SvxBorderLine | undefined
   const style = rawStyle < 0 || rawStyle > 17 ? SvxBorderLineStyle.SOLID : rawStyle;
   const line = new SvxBorderLine();
   line.SetBorderLineStyle(style);
-  line.SetColor(data.Color as number);
+  line.SetColor(new Color(ColorTransparency, data.Color as number, "ColorTransparencyTag"));
   const width = typeof data.LineWidth === "number" ? data.LineWidth : 0;
   if (width !== 0) line.SetWidth(metric(width));
   if (
@@ -297,7 +298,7 @@ export class SvxBoxItem extends SfxPoolItem {
   /** Converts a native line to its represented UNO fields. @param line - Native line. @param convert - Convert to mm100. @returns UNO line. */
   public static SvxLineToLine(line: SvxBorderLine | undefined, convert = false): BorderLine2 {
     return {
-      Color: (line?.GetColor() ?? 0) | 0,
+      Color: line?.GetColor().toInt32() ?? 0,
       InnerLineWidth: boxUnoMetric(line?.GetInWidth() ?? 0, convert) & 0xffff,
       OuterLineWidth: boxUnoMetric(line?.GetOutWidth() ?? 0, convert) & 0xffff,
       LineDistance: boxUnoMetric(line?.GetDistance() ?? 0, convert) & 0xffff,

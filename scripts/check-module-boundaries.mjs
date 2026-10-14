@@ -46,7 +46,7 @@ const allowedEdges = new Map([
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
   ["cppuhelper", new Set(["cppu", "sal"])],
-  ["cui", new Set(["editeng", "svl", "svx"])],
+  ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
   ["editeng", new Set(["cppu", "o3tl", "offapi", "svl", "svtools", "tools", "vcl"])],

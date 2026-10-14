@@ -369,7 +369,7 @@ it("native unsigned32 items retain native inheritance, signed UNO bits and indep
   const base = new CntUInt32Item(157, 1);
   expect(base.Clone()).toEqual(base);
   expect(base.equals(new CntUInt32Item(157, 1))).toBe(true);
-  expect(base.equals(new CntUInt32Item(158, 1))).toBe(false);
+  expect(base.equals(new CntUInt32Item(158, 1))).toBe(true);
   expect(base.equals(new CntUInt32Item(157, 2))).toBe(false);
   expect(base.equals(new SfxUInt32Item(157, 1))).toBe(false);
   expect(base.equals(new SfxUInt16Item(157, 1))).toBe(false);

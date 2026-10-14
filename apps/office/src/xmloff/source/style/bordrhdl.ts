@@ -52,7 +52,7 @@ function borderStyleToken(style: number): string {
 /** Formats native twip values for the existing presentation shorthand control. @param line - Native line. @returns Presentation input. */
 export function exportBorderShorthand(line: SvxBorderLine | undefined): string {
   if (line === undefined || line.isEmpty()) return "none";
-  return `${line.GetWidth() / 20}pt ${borderStyleToken(line.GetBorderLineStyle())} #${(line.GetColor() & 0xffffff).toString(16).padStart(6, "0")}`;
+  return `${line.GetWidth() / 20}pt ${borderStyleToken(line.GetBorderLineStyle())} #${(line.GetColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
 }
 
 /** Owns the native border shorthand parser at the XML boundary. */

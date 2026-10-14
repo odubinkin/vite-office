@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/boxitem.test.ts",
+          "marker": "owns canonical Color values"
         }
       ],
       "upstream": [
@@ -47,7 +51,8 @@
     ],
     "preservedResponsibilities": [
       "Owns the represented native source responsibility and explicit browser transport/filter boundary. Verification pending.",
-      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted."
+      "Iteration206 verified closure: the earlier draft pending statement is historical. Native box/info/line ownership, supported values/defaults/metrics, flat source-defined border distribution, original graph and history, complete primitive transport and four-edge ODF/browser paint passed one full upstream-absent profile with failed/new-case-only closures. Current app and inventory actual counters each reach100% lines/statements/functions/branches under complete identical-source/maps or complete contiguous mapped-region proof. All550 prior acceptance contracts are preserved by522 byte-identical files and28 exact native-representation AST migrations; six new acceptance files and two new infrastructure cases are added. Full per-edge/common-state widgets, native themes/shading/Word and RTL/vertical/follow/shared-format completeness remain unverified; no semantic status or registered I/O/recovery exception is promoted.",
+      "Task129 replaces represented primitive border colors with actual shared Tools Color values. SvxBorderLine copies optional native Color input and SetColor into its stable owned value, GetColor exposes the borrowed const value, clones own independent values and equality compares all represented Color channels. Svx frame Style reads Color by value and owns independent copies. FrameSelector GetVisibleColor restores the native bool/out-Color contract, copying only on consensus and leaving output unchanged on failure, including alpha-sensitive equality. Shared border page holds an owned Color; no numeric compatibility overload remains in the represented core. Writer callers use Color and actual JSON/UNO/XML/CSS/color-input boundaries explicitly convert signed32 or unsigned32 values; serialized schema is unchanged. Original width/style and incomplete prior responsibilities remain unchanged. Shading callbacks, ComplexColor/theme, unrepresented style APIs and full original QA remain unported, not certified. Existing provenance/history and browser IO/recovery deviations retained. Human explicitly authorizes shared and Writer fixes, ordinary JS arithmetic and Writer-only coverage exceptions. Full regression remains gated on actual UI/document plus same-model ODS readiness."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/style/bordrhdl.cxx",

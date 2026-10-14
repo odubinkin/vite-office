@@ -1,4 +1,5 @@
 /** @fileoverview Literal native column insertion over independent row positions and widths. */
+import { Color } from "../../../../tools/inc/color";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { type SwTableBox } from "./swtable";
@@ -30,7 +31,7 @@ function fixture() {
       size.SetWidth(required(row[column]));
       borders.SetAllDistances(30 + boxes.length);
       for (const edge of [0, 1, 2, 3])
-        borders.SetLine(new SvxBorderLine(0x102030 + boxes.length, 10 + edge), edge);
+        borders.SetLine(new SvxBorderLine(new Color(0x102030 + boxes.length), 10 + edge), edge);
       box.SetFormat({ frameSize: size, box: borders });
       required(box.GetParagraphs()[0]).SetText("Cell" + boxes.length);
       boxes.push(box);

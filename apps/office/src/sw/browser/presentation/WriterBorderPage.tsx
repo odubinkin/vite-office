@@ -1,4 +1,5 @@
 /** @fileoverview Presents native border-page widgets without owning their draft or item deltas. */
+import { Color } from "../../../tools/inc/color";
 import { useRef } from "react";
 import type { SvxBorderTabPage } from "../../../cui/source/tabpages/border";
 import {
@@ -88,7 +89,7 @@ export function WriterBorderPage({
 }: Readonly<{ page: SvxBorderTabPage; onChange: () => void }>): React.JSX.Element {
   const selector = page.frameSelector;
   const pointerFocus = useRef(false);
-  const color = "#" + (page.GetLineColor() & 0xffffff).toString(16).padStart(6, "0");
+  const color = "#" + (page.GetLineColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0");
   return (
     <div className="grid min-w-0 gap-3">
       <fieldset className="grid gap-2 rounded border p-3">
@@ -291,7 +292,7 @@ export function WriterBorderPage({
               /** Dispatches selected-line RGB. @param event - Color input. @returns Nothing. */ (
                 event,
               ) => {
-                page.SelColHdl_Impl(parseInt(event.target.value.slice(1), 16));
+                page.SelColHdl_Impl(new Color(parseInt(event.target.value.slice(1), 16)));
                 onChange();
               }
             }

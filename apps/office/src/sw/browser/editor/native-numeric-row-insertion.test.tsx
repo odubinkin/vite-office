@@ -1,4 +1,5 @@
 /** @fileoverview Mounted selected row menus recreate numeric native history and preserve top-border ownership. */
+import { Color } from "../../../tools/inc/color";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -34,7 +35,7 @@ for (const behind of [false, true])
             const size = box.GetFrameSize(),
               item = new SvxBoxItem(RES_BOX);
             size.SetWidth(required(authored[column]));
-            item.SetLine(new SvxBorderLine(0x102030 + row, 12), 0);
+            item.SetLine(new SvxBorderLine(new Color(0x102030 + row), 12), 0);
             box.SetFormat({ frameSize: size, box: item });
             required(box.GetParagraphs()[0]).SetText("r" + row + "c" + column);
           }

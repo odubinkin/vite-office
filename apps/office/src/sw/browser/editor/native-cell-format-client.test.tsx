@@ -1,4 +1,5 @@
 /** @fileoverview Verifies actual main UI and painter use original linked native cell frames with bounded lifetimes. */
+import { Color } from "../../../tools/inc/color";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -62,7 +63,8 @@ it("mounted main table renders native linked cell formats and history without bo
     for (const box of [first, second]) {
       const item = new SvxBoxItem(113);
       item.SetAllDistances(60);
-      for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(0x112233, 30), edge);
+      for (const edge of [0, 1, 2, 3])
+        item.SetLine(new SvxBorderLine(new Color(0x112233), 30), edge);
       box.ClaimFrameFormat().SetFormatAttr(item);
     }
     const position = new SwPosition(node, 2);

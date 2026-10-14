@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native line ownership, tristate, modifier selection and keyboard contracts. */
+import { Color, ColorTransparency } from "../../../tools/inc/color";
 import { expect, it } from "vitest";
 import {
   FrameSelector,
@@ -18,7 +19,7 @@ function fixture(dontCare = true): FrameSelector {
     Flags.Outer | Flags.InnerHorizontal | Flags.InnerVertical | (dontCare ? Flags.DontCare : 0),
   );
   selector.SetStyleToSelection(20, Style.DASHED);
-  selector.SetColorToSelection(0x123456);
+  selector.SetColorToSelection(new Color(0x123456));
   return selector;
 }
 for (const edge of [Edge.Left, Edge.Right, Edge.Top, Edge.Bottom, Edge.Horizontal, Edge.Vertical])
@@ -29,7 +30,7 @@ for (const edge of [Edge.Left, Edge.Right, Edge.Top, Edge.Bottom, Edge.Horizonta
       selector.MouseButtonDown([edge]);
       expect(selector.GetFrameBorderState(edge)).toBe(State.Show);
       expect(selector.GetFrameBorderStyle(edge)?.GetWidth()).toBe(20);
-      expect(selector.GetFrameBorderStyle(edge)?.GetColor()).toBe(0x123456);
+      expect(selector.GetFrameBorderStyle(edge)?.GetColor().toUInt32()).toBe(0x123456);
       expect(selector.IsBorderSelected(edge)).toBe(true);
       selector.MouseButtonDown([edge]);
       expect(selector.GetFrameBorderState(edge)).toBe(dontCare ? State.DontCare : State.Hide);
@@ -43,27 +44,27 @@ for (const edge of [Edge.Left, Edge.Right, Edge.Top, Edge.Bottom, Edge.Horizonta
     });
 it("native reset style copying never shares input line and distinguishes uniform width/color", /** Checks independent native values and visible-line consensus. @returns Nothing. */ () => {
   const selector = fixture(),
-    line = new SvxBorderLine(0xabcdef, 30, Style.DOUBLE);
+    line = new SvxBorderLine(new Color(0xabcdef), 30, Style.DOUBLE);
   expect(selector.GetVisibleWidth()).toBeUndefined();
-  expect(selector.GetVisibleColor()).toBeUndefined();
+  expect(visibleColor(selector)).toBeUndefined();
   selector.ShowBorder(Edge.Left, line);
   selector.ShowBorder(Edge.Right, line);
   line.SetWidth(99);
-  line.SetColor(0);
+  line.SetColor(new Color(0));
   expect(selector.GetVisibleWidth()).toEqual([30, Style.DOUBLE]);
-  expect(selector.GetVisibleColor()).toBe(0xabcdef);
-  selector.ShowBorder(Edge.Top, new SvxBorderLine(0xabcdef, 20, Style.DASHED));
+  expect(visibleColor(selector)).toBe(0xabcdef);
+  selector.ShowBorder(Edge.Top, new SvxBorderLine(new Color(0xabcdef), 20, Style.DASHED));
   expect(selector.GetVisibleWidth()).toBeUndefined();
-  selector.ShowBorder(Edge.Bottom, new SvxBorderLine(1, 30, Style.DOUBLE));
-  expect(selector.GetVisibleColor()).toBeUndefined();
+  selector.ShowBorder(Edge.Bottom, new SvxBorderLine(new Color(1), 30, Style.DOUBLE));
+  expect(visibleColor(selector)).toBeUndefined();
   selector.ShowBorder(Edge.Bottom, undefined);
   selector.ShowBorder(Edge.Bottom, new SvxBorderLine());
   expect(selector.GetFrameBorderState(Edge.Bottom)).toBe(State.Hide);
   selector.SelectAllVisibleBorders();
   selector.SetStyleToSelection(45, Style.SOLID);
-  selector.SetColorToSelection(0x234567);
+  selector.SetColorToSelection(new Color(0x234567));
   expect(selector.GetVisibleWidth()).toEqual([45, Style.SOLID]);
-  expect(selector.GetVisibleColor()).toBe(0x234567);
+  expect(visibleColor(selector)).toBe(0x234567);
   selector.HideAllBorders();
   expect(selector.IsAnyBorderVisible()).toBe(false);
 });
@@ -73,10 +74,10 @@ it("modifier click extends then cycles equal selections but replaces unequal nat
   selector.MouseButtonDown([Edge.Right], true);
   expect(selector.IsBorderSelected(Edge.Left)).toBe(true);
   expect(selector.IsBorderSelected(Edge.Right)).toBe(true);
-  selector.ShowBorder(Edge.Right, new SvxBorderLine(0, 45));
+  selector.ShowBorder(Edge.Right, new SvxBorderLine(new Color(0), 45));
   selector.MouseButtonDown([Edge.Right], true);
   expect(selector.GetVisibleWidth()).toEqual([20, Style.DASHED]);
-  expect(selector.GetVisibleColor()).toBe(0x123456);
+  expect(visibleColor(selector)).toBe(0x123456);
   selector.MouseButtonDown([Edge.Left], true);
   expect(selector.GetFrameBorderState(Edge.Left)).toBe(State.DontCare);
   expect(selector.GetFrameBorderState(Edge.Right)).toBe(State.DontCare);
@@ -145,4 +146,26 @@ it("native empty selector leaves arrows unhandled while enabled arrows use sourc
   selector.KeyInput("ArrowRight");
   expect(selector.IsBorderSelected(Edge.Right)).toBe(true);
   expect(selector.KeyInput("Escape")).toBe(false);
+});
+
+/** Observes the original out-parameter contract for literal assertions. @param selector - Actual selector. @returns Packed output on consensus. */
+function visibleColor(selector: FrameSelector): number | undefined {
+  const color = new Color(0x987654);
+  return selector.GetVisibleColor(color) ? color.toUInt32() : undefined;
+}
+
+it("leaves native color output untouched on failure and copies consensus including alpha", /** Checks actual initialized out-parameter behavior. @returns Nothing. */ () => {
+  const selector = fixture(),
+    out = new Color(0x987654),
+    color = new Color(ColorTransparency, 0x80112233, "ColorTransparencyTag");
+  expect(selector.GetVisibleColor(out)).toBe(false);
+  expect(out.toUInt32()).toBe(0x987654);
+  selector.ShowBorder(Edge.Left, new SvxBorderLine(color, 20));
+  expect(selector.GetVisibleColor(out)).toBe(true);
+  expect(out.toUInt32()).toBe(0x80112233);
+  out.SetBlue(0);
+  expect(selector.GetFrameBorderStyle(Edge.Left)?.GetColor().toUInt32()).toBe(0x80112233);
+  selector.ShowBorder(Edge.Right, new SvxBorderLine(new Color(0x112233), 20));
+  expect(selector.GetVisibleColor(out)).toBe(false);
+  expect(out.GetBlue()).toBe(0);
 });
