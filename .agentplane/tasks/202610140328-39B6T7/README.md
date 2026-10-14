@@ -1,10 +1,11 @@
 ---
 id: "202610140328-39B6T7"
 title: "Admit menubar children from original nonempty submenu resources"
-status: "DOING"
+result_summary: "Native original menubar child-resource admission;empty popups prevented,1621unique accepted/whole menu100four,inventory updated,newcycle1/10."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Pinned HighlightChanged kills a different active child before GetItemCount/nonactive admission. Port borrows original current submenu object/trigger, keyboard receives current direct original arrays and resolves only owned child; empty request clears different child then restores parent focus/highlight without creating empty popup. Same active-id child retained even after current count becomes empty. Original nonempty pointer/click/aux/keyboard/preselection behavior and protectedSpace/IO/recovery remain. No new manager/cache/mirrored resource model/low-level mechanism; full nested/timer/mnemonic/platform/native focus/core/UI parity unverified."
     - "14fresh actualWriterSession/Sfxbindings DOM cases cover empty keyboard/pointer/click/middle/right, sibling teardown/reopen/native dispatch, stale current-resource admission and existing active-child reuse.1574initialrelated/221files0fail;2new Enter/Space stale cases close1branch gap without passing replay;26tooling19Chromium allpass,1621unique accepted.958oldtestfiles byte-identical,2canonical alloldscalar/history/default/classification prefixes retained,137staticfiles and all4semantic blobs equal frozen evidence.9finalmetadata gates pass,4refs absent everyproducer/exactrestore."
     - "Entire current-original menu100L213/S239/F52/B222,513positive raw counters. Original initial/closure maps and threshold failures retained immutable; standard istanbul-lib-coverage whole same-current-source merge only after exact statementMap/fnMap/branchMap ID/location equality. No counter/location normalization/provider/threshold/exclusion changes or previous-source transfer. Source/metadata/static hashes bind reviewed commit. Initial full/scoped format/lint/TS7/docs/size/deps/build/static and final added-case lint/TS7 pass. Human resume verified active, correction1/10; pause after NEXT full+repairs."
-commit: null
+commit:
+  hash: "6941909d5ca0dca40fba560b0b842635e5348922"
+  message: "🧩 39B6T7 fix: admit menubar children from original native resources"
 comments:
   -
     author: "CODER"
     body: "Start: borrow original current menubar child resources, native empty GetItemCount gate after sibling teardown, original trigger focus/bindings and protected Space retained; whole current module100four, correction1/10 since7X3HVW."
+  -
+    author: "CODER"
+    body: "Verified: original current child-resource ownership and native empty GetItemCount/sibling teardown/parentfocus/samechildreuse match pinned source.1621unique accepted1576related26tooling19Chromium,14nativefreshcases;whole current menu100four513positive original counters via standard exact-definition same-source map merge.958oldtests identical2canonical histories137staticfiles9metadata pass,4refs absent everyproducer/exactrestore;no rawdata changes/passing replay/new manager. Exact6941909d5ca0 same-agent non-independent review passes. Goalactive correction1/10 since7X3HVW; human pause only after NEXTfull+repairs, fullnativecore/UI parity unverified."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original current child resources/empty GetItemCount/sibling teardown/trigger focus/native samechildreuse;1621unique accepted1576related26tooling19Chromium,14nativefreshcases. Whole current menu100four513positive original counters from exact-definitions standard same-source merge;958oldfiles identical2canonical histories137staticfiles9metadata pass.4refs absent/exactrestore, no raw data edits/passing replay. Goalactive1/10; pause after NEXTfull+repairs."
+  -
+    type: "status"
+    at: "2026-10-14T03:50:42.698Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original current child-resource ownership and native empty GetItemCount/sibling teardown/parentfocus/samechildreuse match pinned source.1621unique accepted1576related26tooling19Chromium,14nativefreshcases;whole current menu100four513positive original counters via standard exact-definition same-source map merge.958oldtests identical2canonical histories137staticfiles9metadata pass,4refs absent everyproducer/exactrestore;no rawdata changes/passing replay/new manager. Exact6941909d5ca0 same-agent non-independent review passes. Goalactive correction1/10 since7X3HVW; human pause only after NEXTfull+repairs, fullnativecore/UI parity unverified."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:48:36.157Z"
+doc_updated_at: "2026-10-14T03:50:42.699Z"
 doc_updated_by: "CODER"
 description: "New cycle correction1/10 after full7X3HVW: match native HighlightChanged GetItemCount gate and sibling teardown for empty menubar children. Pass original current child resource arrays into keyboard routing, use direct resource ownership without string-only invented popup/no new state manager; preserve protected Space and IO/recovery."
 sections:
@@ -114,6 +127,10 @@ sections:
     - Observation: Fresh12red had10source-empty-admission failures2pass. Final1574related cases allpass but initial coverage lacked1stale Return guard branch.
       Impact: Same original source held whole coverage gaps; no production/test behavior failures remained. Whole native nested popup/timers/mnemonics/platform/focus graph/core/UI parity remains unverified. Active child reuse counts remain source-shaped and protected Space/IO/recovery retained.
       Resolution: Add2genuine native stale Enter/Space cases only,2pass withpartial100threshold profile failure retained raw; standard entire same-current-source map merge with exact original definition/ID/location equality reaches100four/513positive counters, no raw map/counter edits/threshold changes/old-source transfer/passing replay.1621unique accepted1576related26tooling19Chromium,958oldfiles identical2canonical prefixes137staticfiles9metadata pass. Goalactive correction1/10; pause after NEXT full+repairs.
+extensions:
+  implementation_commit:
+    hash: "6941909d5ca0dca40fba560b0b842635e5348922"
+    message: "🧩 39B6T7 fix: admit menubar children from original native resources"
 id_source: "generated"
 ---
 ## Summary
