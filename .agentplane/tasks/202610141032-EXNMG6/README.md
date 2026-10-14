@@ -1,10 +1,11 @@
 ---
 id: "202610141032-EXNMG6"
 title: "Restore shared unsigned item values and Calc cell indentation"
-status: "DOING"
+result_summary: "Completed task115 unsigned item/indentation prerequisites; full document/UI/ODS pending, goalactive, nextfull121."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task115-checks/value-coverage-audit.json"
   findings:
     - "Actual shared unsigned value/Any/hash/copy/default/Clone behavior and Calc indentation preserve pinned normal contracts; retained browser scalar bounds explicit, no memory engine or fake provider."
-commit: null
+commit:
+  hash: "67cbf6c48b91c7d2c7bf3131971f374e0fe6bc73"
+  message: "🧩 EXNMG6 core: restore shared unsigned items and Calc indentation"
 comments:
   -
     author: "CODER"
     body: "Start: restore actual shared unsigned numeric value/copy/Any/hash contracts and Calc indentation under approved scope, no native memory engine or fake document."
+  -
+    author: "CODER"
+    body: "Verified: canonical shared unsigned values and actual Calc indentation;160Calc/98related/25module tests pass, complete changedowner raw100 and12gates, exact committed scope/native pins reviewed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "WholeCalc160tests and98related consumers pass; current complete Calc33/shared2owners rawS/B/F/L100 everycounterpositive. Module25tests/12focused gates and exact34paths3493hashes/native12pins pass. Same-agent evaluation not independent; native unsigned value/Any behavior preserved and browser bounds explicit. Full121next; document/UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-14T10:38:28.640Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical shared unsigned values and actual Calc indentation;160Calc/98related/25module tests pass, complete changedowner raw100 and12gates, exact committed scope/native pins reviewed."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:38:17.655Z"
+doc_updated_at: "2026-10-14T10:38:28.642Z"
 doc_updated_by: "CODER"
 description: "Task115: original CntUInt16/32 and SfxUInt16/32 logical values, actual Any and shared hash reuse, native headers and ScIndentItem default/copy/Clone on DocPool path. WholeCalc/changedshared raw100 and targeted consumers, no memory engine or full replay before121."
 sections:
