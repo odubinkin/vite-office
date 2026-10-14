@@ -22,3 +22,6 @@ export const MID_L_REL_MARGIN = 6;
 export const MID_HORJUST_HORJUST = 0;
 /** Original paragraph alignment member, also used by the vertical item. */
 export const MID_HORJUST_ADJUST = 1;
+
+/** Original font relief member. */
+export const MID_RELIEF = 0;

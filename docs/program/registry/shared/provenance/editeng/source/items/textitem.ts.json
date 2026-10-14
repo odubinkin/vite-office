@@ -8,12 +8,20 @@
         {
           "marker": "FontWeight",
           "path": "apps/office/src/editeng/source/items/textitem.ts"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/font-effects.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
         {
           "marker": "FontWeight",
           "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "SvxContourItem"
         }
       ]
     },
@@ -25,13 +33,19 @@
       "SvxFontItem",
       "SvxWeightItem",
       "SvxPostureItem",
-      "SvxUnderlineItem"
+      "SvxUnderlineItem",
+      "SvxContourItem",
+      "SvxShadowedItem",
+      "SvxWordLineModeItem",
+      "SvxCharReliefItem"
     ],
     "omittedResponsibilities": [
-      "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxFontItem, SvxWeightItem and the bounded font-family, weight, posture, and underline contract remain intentionally omitted."
+      "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxFontItem, SvxWeightItem and the bounded font-family, weight, posture, and underline contract remain intentionally omitted.",
+      "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded."
     ],
     "preservedResponsibilities": [
-      "Reimplements bounded EditEngine font-family, weight, posture, and underline items from pinned `editeng/source/items/textitem.cxx`."
+      "Reimplements bounded EditEngine font-family, weight, posture, and underline items from pinned `editeng/source/items/textitem.cxx`.",
+      "Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger."
     ],
     "status": "mapped",
     "upstreamPath": "editeng/source/items/textitem.cxx",
@@ -40,7 +54,11 @@
       "FontItalic",
       "FontLineStyle",
       "SvxFontItem",
-      "SvxWeightItem"
+      "SvxWeightItem",
+      "SvxContourItem",
+      "SvxShadowedItem",
+      "SvxWordLineModeItem",
+      "SvxCharReliefItem"
     ]
   },
   "legacyOrder": 6

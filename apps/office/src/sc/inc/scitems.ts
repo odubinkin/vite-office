@@ -65,3 +65,12 @@ export const ATTR_HANGPUNCTUATION = 127;
 export const ATTR_FORBIDDEN_RULES = 128;
 /** Original writing direction attribute. */
 export const ATTR_WRITINGDIR = 138;
+
+/** Original font contour identity. */
+export const ATTR_FONT_CONTOUR = 107;
+/** Original font shadow identity. */
+export const ATTR_FONT_SHADOWED = 108;
+/** Original font word-line identity. */
+export const ATTR_FONT_WORDLINE = 123;
+/** Original font relief identity. */
+export const ATTR_FONT_RELIEF = 124;

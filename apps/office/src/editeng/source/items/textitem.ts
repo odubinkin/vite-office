@@ -2,6 +2,11 @@
  * @fileoverview Reimplements bounded EditEngine character items from pinned `editeng/source/items/textitem.cxx`.
  */
 
+import { SfxBoolItem, SfxEnumItem } from "../../../svl/inc/eitem";
+import type { SfxItemPool } from "../../../svl/source/items/itempool";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { FontRelief } from "../../../vcl/inc/fntstyle";
+import { MID_RELIEF } from "../../inc/memberids";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
@@ -265,4 +270,104 @@ export class SvxUnderlineItem extends SfxPoolItem {
 function assertEnumValue(value: number, first: number, last: number, owner: string): void {
   if (!Number.isInteger(value) || value < first || value > last)
     throw new Error(`${owner} value is invalid.`);
+}
+
+/** Original font boolean value owner. */
+export class SvxContourItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy constructor. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxContourItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original zero-Which false factory. @returns Item. */
+  public static override CreateDefault(): SvxContourItem {
+    return new SvxContourItem(false, 0);
+  }
+  /** Original independent copy Clone. @param pool - Unused pool. @returns Item. */
+  public override Clone(pool?: SfxItemPool): SvxContourItem {
+    void pool;
+    return new SvxContourItem(this);
+  }
+}
+
+/** Original font boolean value owner. */
+export class SvxShadowedItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy constructor. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxShadowedItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original zero-Which false factory. @returns Item. */
+  public static override CreateDefault(): SvxShadowedItem {
+    return new SvxShadowedItem(false, 0);
+  }
+  /** Original independent copy Clone. @param pool - Unused pool. @returns Item. */
+  public override Clone(pool?: SfxItemPool): SvxShadowedItem {
+    void pool;
+    return new SvxShadowedItem(this);
+  }
+}
+
+/** Original font boolean value owner. */
+export class SvxWordLineModeItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy constructor. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxWordLineModeItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original zero-Which false factory. @returns Item. */
+  public static override CreateDefault(): SvxWordLineModeItem {
+    return new SvxWordLineModeItem(false, 0);
+  }
+  /** Original independent copy Clone. @param pool - Unused pool. @returns Item. */
+  public override Clone(pool?: SfxItemPool): SvxWordLineModeItem {
+    void pool;
+    return new SvxWordLineModeItem(this);
+  }
+}
+
+/** Original font relief value and signed16 Any member transport. */
+export class SvxCharReliefItem extends SfxEnumItem<FontRelief> {
+  /** Original value/Which and implicit-copy constructor. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: FontRelief, which: number] | [source: Readonly<SvxCharReliefItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original zero-Which NONE factory. @returns Item. */
+  public static CreateDefault(): SvxCharReliefItem {
+    return new SvxCharReliefItem(FontRelief.NONE, 0);
+  }
+  /** Original independent copy Clone. @param pool - Unused pool. @returns Item. */
+  public override Clone(pool?: SfxItemPool): SvxCharReliefItem {
+    void pool;
+    return new SvxCharReliefItem(this);
+  }
+  /** Existing scalar browser projection. @returns Enum payload. */
+  public override QueryValue(): number;
+  /** Original member-selected signed16 Any query. @param output - Actual destination. @param member - Member identifier. @returns Success. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original unknown-member failure leaves Any unchanged. @param output - Optional Any. @param member - Native member. @returns Success or scalar payload. */
+  public override QueryValue(output?: Any, member = 0): boolean | number {
+    if (output === undefined) return this.GetEnumValue();
+    if ((member & 0xff & ~0x80) !== MID_RELIEF) return false;
+    output.insert([(this.GetValue() << 16) >> 16], "sal_Int16");
+    return true;
+  }
+  /** Original signed16 extraction and0through2check after member selection. @param input - Actual Any or signed16 browser scalar. @param member - Native member. @returns Success. */
+  public override PutValue(input: unknown, member = 0): boolean {
+    if ((member & 0xff & ~0x80) !== MID_RELIEF) return false;
+    const value: [number] = [-1];
+    if (input instanceof Any) {
+      input.extract(value, "sal_Int16");
+    } else if (
+      typeof input === "number" &&
+      Number.isInteger(input) &&
+      input >= -32768 &&
+      input <= 32767
+    )
+      value[0] = input;
+    if (value[0] < 0 || value[0] > FontRelief.Engraved) return false;
+    this.SetValue(value[0]);
+    return true;
+  }
 }

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "formatting-model",
     "capabilityIds": [
-      "CAP-0112"
+      "CAP-0112",
+      "CAP-2e1c84e5-98c0-4dc0-ab7d-ac06969c4c9a"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,11 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/editeng/source/items/textitem.ts#FontWeight",
-        "vendor/libreoffice-reference/editeng/source/items/textitem.cxx#FontWeight"
+        "vendor/libreoffice-reference/editeng/source/items/textitem.cxx#FontWeight",
+        "apps/office/src/editeng/source/items/font-effects.test.ts",
+        "docs/program/calc-core.md#Font contour shadow word-line and relief values (task120)"
       ],
-      "justification": "Mapped provenance remains semantically unverified against editeng/source/items/textitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "justification": "Mapped provenance remains semantically unverified against editeng/source/items/textitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger.",
       "knownViolations": [],
       "localSymbols": [
         "FontWeight",
@@ -29,7 +32,11 @@
         "SvxFontHeightItem",
         "SvxWeightItem",
         "SvxPostureItem",
-        "SvxUnderlineItem"
+        "SvxUnderlineItem",
+        "SvxContourItem",
+        "SvxShadowedItem",
+        "SvxWordLineModeItem",
+        "SvxCharReliefItem"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "editeng/source/items/textitem.cxx",
@@ -39,7 +46,11 @@
         "FontLineStyle",
         "SvxFontItem",
         "SvxFontHeightItem",
-        "SvxWeightItem"
+        "SvxWeightItem",
+        "SvxContourItem",
+        "SvxShadowedItem",
+        "SvxWordLineModeItem",
+        "SvxCharReliefItem"
       ]
     }
   }
