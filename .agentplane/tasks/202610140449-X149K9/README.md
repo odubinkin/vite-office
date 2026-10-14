@@ -1,10 +1,11 @@
 ---
 id: "202610140449-X149K9"
 title: "Implement shared configuration modification paths and additions"
-status: "DOING"
+result_summary: "Implemented actual Modifications prefix dominance, subtree replacement, duplicate identity, recursive pruning and clear value body plus Additions type. Existing SortedVector/ConfigEntry/OUString reused without Boost/hash/ownership/provider libraries;11intentionalpaths/3377exacthashes reviewed. Native unordered/ABI/const/implicit vector copy and DConf backend/build-conditioned API availability excluded. Actual settings/default/document/grid/ODS remain pending; goalactive until requested secondfull111 and relevant repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task107-checks/exact-review.json"
   findings:
     - "Reviewed source2855ca97e97328a36ead9561aa7191fedd3dcee8 against complete original modification/addition scopes and actual write-consumer child sorting, four pinned hashes. Exact3377 committed source hashes/11intentionalpaths,16first-pass gates and strict Calc/shared3owner raw100, actual source-absent static/Calc0UI and restored links verified. Logical keys/copied values/stable nodes and prefix dominance/pruning preserved with existing SortedVector, no Boost/hash/lifetime/provider facade. Native unordered permutation/ABI/const/implicit vector copying and DConf backend/build-conditioned API availability excluded. CALC-092 retains recursion; native forbidden empty-remove release outcome not invented or tested. Actual settings/default/document/ODS pipeline pending. Separate same-agent evaluator, not independent review."
-commit: null
+commit:
+  hash: "2855ca97e97328a36ead9561aa7191fedd3dcee8"
+  message: "🧩 X149K9 configmgr: implement modification prefix paths and additions"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual configuration modification/addition path responsibilities using existing shared value containers, preserve recursive prefix semantics and source-backed invalid-domain documentation under active goal approval."
+  -
+    author: "CODER"
+    body: "Verified: original modification prefix-tree and addition path responsibility implemented with copied UTF16 keys and stable values over existing shared containers. WholeCalc/affectedshared raw100, actual source-absent static/Calc0UI,16firstpass gates and exact committed review pass. CALC-092 retained without inventing native invalid-domain results; inventory updated."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "WholeCalc152tests raw4006S2654B787F3570L and complete shared modifications/key/SortedVector13tests raw94S38B22F87L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourrestoredlinks and16firstpass gates pass. Exact3377committedhashes11intentionalpaths4originalpins verified; same-agent evaluator passed source2855ca97e97328a36ead9561aa7191fedd3dcee8, not independent review. CALC-092 invalid-domain recursion retained, native hash/ABI/conditional backend contracts excluded. No new lifetime/provider library. Nextfull111pause remains."
+  -
+    type: "status"
+    at: "2026-10-14T04:56:46.033Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original modification prefix-tree and addition path responsibility implemented with copied UTF16 keys and stable values over existing shared containers. WholeCalc/affectedshared raw100, actual source-absent static/Calc0UI,16firstpass gates and exact committed review pass. CALC-092 retained without inventing native invalid-domain results; inventory updated."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:56:35.897Z"
+doc_updated_at: "2026-10-14T04:56:46.035Z"
 doc_updated_by: "CODER"
 description: "Task107: implement actual configmgr Modifications prefix tree and Additions path-list type, needed by real Data settings storage. Use existing shared sorted key/value container and ordinary JS references, no Boost/ownership/hash allocator port. Preserve original add/remove prefix behavior and record last-root recursion precondition issue. Calc/affected raw100, actual static/Calc0UI/16gates, no full office before111."
 sections:
