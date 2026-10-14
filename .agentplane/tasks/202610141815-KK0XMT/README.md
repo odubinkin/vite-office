@@ -1,10 +1,11 @@
 ---
 id: "202610141815-KK0XMT"
 title: "Implement shared byte item and Calc paper-tray default"
-status: "DOING"
+result_summary: "Implement native shared byte values and Calc paper-tray default"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Original CntByteItem/SfxByteItem/SvxPaperBinItem defaults, unsigned storage, signed8 Any transport, byte-only extraction, failure atomicity, copy/clone/equality/hash and actual Calc159 item-set ownership are source-grounded; existing shared Any/hash/storage reused."
     - "29related tests,179Calc and37boundaries pass;3whole changed shared and33Calc owners every raw counter positive100. Portable build and13source gates pass. Test-only tuple inference correction is recorded; no production fallback, coverage exclusion, Writer repair or native memory machinery."
     - "29intentional paths/3811source hashes/8native pins/four restored links and original calc branch verified. Runtime/provenance633records zero violations; presentation, real document/UI/ODS remain pending and no full-run readiness claim."
-commit: null
+commit:
+  hash: "aacac433db5463343d0489c113d37b78348ca21f"
+  message: "Implement KK0XMT core: shared byte values and Calc paper-tray default"
 comments:
   -
     author: "CODER"
     body: "Start: implement original shared byte and paper-bin values for Calc159 with native Any signed8 boundary; reuse shared services and verify strict portable coverage, no localized provider or lifetime fake."
+  -
+    author: "CODER"
+    body: "Verified: original shared byte family and Calc paper-tray159 default;29related,179Calc,37boundary tests pass, shared/Calc raw100, build and source/inventory gates pass with29intentional paths and restored reference links."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native shared byte/paper-tray159 verified:29related/7files,179Calc/71files,37boundaries;3whole shared raw S160B124F56L147 and33Calc S4170B2731F821L3718 everycounterpositive100. Portable build/13source gates pass,633records zero violations,29paths/3811hashes/8pins/four restored links. Test tuple inference corrected, no production fallback/Writer repair/native memory engine. Presentation/document/UIODS pending; same-agent evaluation not independent."
+  -
+    type: "status"
+    at: "2026-10-14T18:21:22.238Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original shared byte family and Calc paper-tray159 default;29related,179Calc,37boundary tests pass, shared/Calc raw100, build and source/inventory gates pass with29intentional paths and restored reference links."
 doc_version: 3
-doc_updated_at: "2026-10-14T18:21:10.337Z"
+doc_updated_at: "2026-10-14T18:21:22.239Z"
 doc_updated_by: "CODER"
 description: "Task139 ports original CntByteItem/SfxByteItem and SvxPaperBinItem value/default/copy/hash/typed Any behavior for Calc159. Reuse shared Any and o3tl owners, no unsigned16 substitution or lifetime machinery; presentation localization remains explicitly pending."
 sections:
