@@ -1,10 +1,11 @@
 ---
 id: "202610141535-A9FY8N"
 title: "Restore native Type references in shared UNO Sequence indexing"
-status: "DOING"
+result_summary: "verified-202610141535-A9FY8N"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-14T15:39:33.569Z"
+  updated_at: "2026-10-14T15:39:54.708Z"
   updated_by: "CODER"
-  note: "Verified source0e8a2e84add8 exact6paths3731sourcehashes4nativepins; shared Sequence Type methods/liveborrowedalias native contract. Related5tests wholeowner100, Calc174tests strict100;12gates33boundaries. Same-agent EVALUATOR not independent. UI/ODS readiness still pending."
+  note: "verified-202610141535-A9FY8N"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task133-checks/boundary-tests.log"
   findings:
     - "Six scoped paths only; actual Type API, stable/shared alias, C element assignment, COW separation and explicit copy preserve native value/lifetime contracts without a new ownership engine. Original fixture streams unchanged. Entire shared Sequence and Calc strict raw100;12gates33boundaries pass."
-commit: null
+commit:
+  hash: "0e8a2e84add80accfb554a08d73ad457cf5536dd"
+  message: "🚧 A9FY8N core: restore borrowed Type elements in shared UNO Sequence"
 comments:
   -
     author: "CODER"
     body: "Start: restore shared Sequence Type index contract through existing borrowed view under explicit human canonical shared-code authorization."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610141535-A9FY8N. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified source0e8a2e84add8 exact6paths3731sourcehashes4nativepins; shared Sequence Type methods/liveborrowedalias native contract. Related5tests wholeowner100, Calc174tests strict100;12gates33boundaries. Same-agent EVALUATOR not independent. UI/ODS readiness still pending."
+  -
+    type: "verify"
+    at: "2026-10-14T15:39:54.708Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610141535-A9FY8N"
+  -
+    type: "status"
+    at: "2026-10-14T15:39:54.805Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610141535-A9FY8N. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-14T15:39:33.626Z"
+doc_updated_at: "2026-10-14T15:40:52.614Z"
 doc_updated_by: "CODER"
 description: "Task133: correct shared Sequence<Type> const index to the existing live borrowed Type view, retaining original sequence storage and consumer observations; prerequisite for real XTypeProvider/complex color transport. Standing human canonical shared/Writer authorization. No new memory library/native probes."
 sections:
@@ -107,9 +126,44 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-14T15:39:54.708Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610141535-A9FY8N
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T15:39:33.626Z, excerpt_hash=sha256:5cbb0501b5824dc3758a36a5e82d46e5a1064c80674cd68942f992e3569b1435
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141535-A9FY8N/blueprint/resolved-snapshot.json
+    - old_digest: 3db984f9a0491d2c300ad7cd4a54a7c2bc57fb7de86b8e91e3fcba096865cf91
+    - current_digest: 3db984f9a0491d2c300ad7cd4a54a7c2bc57fb7de86b8e91e3fcba096865cf91
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141535-A9FY8N
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610141535-A9FY8N --result verified-202610141535-A9FY8N --commit e68c4b638ba54cf12a186663819acf5f191c20af
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only scoped task changes in a later authorized task; never reset other work or merge branches."
-  Findings: "Clean calc preflight947b1ac6. Native Sequence.hxx const operator[] returns const E& directly from elements; returning raw Type pointer cell was a host binding discrepancy. Existing getTypeFromTypeDescriptionReference supplies a stable live view with no constructor/acquire. Source uses declared compiler Type specialization only, not runtime inferred value types. All other logical element and range-address contracts unchanged. Existing native fixture observer now reads returned Type through public getTypeLibType; original fixture bytes/counts/expected stream unchanged. Direct new Type test confirms methods, native no-acquire count, shared identity, C assignment visibility, getArray COW and independent owned Type copy. No native refcount or memory library introduced. No Writer consumer accommodation; future shared clients receive correct Type API. All5related and174Calc tests passed on first run at strict raw100,12gates33boundaries pass. Final source6paths within10approved,5existing1new3731sourceblobs4nativepins. Actual helper/component/ColorItem Any and document/UI/ODS remain next prerequisites; no readiness or full-run claim. Same-agent evaluator not independent."
+  Findings: |-
+    Clean calc preflight947b1ac6. Native Sequence.hxx const operator[] returns const E& directly from elements; returning raw Type pointer cell was a host binding discrepancy. Existing getTypeFromTypeDescriptionReference supplies a stable live view with no constructor/acquire. Source uses declared compiler Type specialization only, not runtime inferred value types. All other logical element and range-address contracts unchanged. Existing native fixture observer now reads returned Type through public getTypeLibType; original fixture bytes/counts/expected stream unchanged. Direct new Type test confirms methods, native no-acquire count, shared identity, C assignment visibility, getArray COW and independent owned Type copy. No native refcount or memory library introduced. No Writer consumer accommodation; future shared clients receive correct Type API. All5related and174Calc tests passed on first run at strict raw100,12gates33boundaries pass. Final source6paths within10approved,5existing1new3731sourceblobs4nativepins. Actual helper/component/ColorItem Any and document/UI/ODS remain next prerequisites; no readiness or full-run claim. Same-agent evaluator not independent.
+
+    - Observation: Route oracle task complete marked DONE, but generated verified-ID result made the deterministic close subject fail the generic-subject gate. Repeated explicit --close had the same failure; finish cannot re-finish DONE; --close and message cannot combine.
+      Impact: Runtime source and all passing evidence unchanged. Only canonical task artifact persistence remains; no gate or policy modified.
+      Resolution: Persist the DONE task artifact with a concrete non-generic AP commit subject and exact active-task allowlist. Retain lifecycle diagnostics in tool output and task Findings; no force flags or implementation changes.
 id_source: "generated"
 ---
 ## Summary
@@ -167,6 +221,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-14T15:39:54.708Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610141535-A9FY8N
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T15:39:33.626Z, excerpt_hash=sha256:5cbb0501b5824dc3758a36a5e82d46e5a1064c80674cd68942f992e3569b1435
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141535-A9FY8N/blueprint/resolved-snapshot.json
+- old_digest: 3db984f9a0491d2c300ad7cd4a54a7c2bc57fb7de86b8e91e3fcba096865cf91
+- current_digest: 3db984f9a0491d2c300ad7cd4a54a7c2bc57fb7de86b8e91e3fcba096865cf91
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141535-A9FY8N
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610141535-A9FY8N --result verified-202610141535-A9FY8N --commit e68c4b638ba54cf12a186663819acf5f191c20af
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -176,3 +260,7 @@ Revert only scoped task changes in a later authorized task; never reset other wo
 ## Findings
 
 Clean calc preflight947b1ac6. Native Sequence.hxx const operator[] returns const E& directly from elements; returning raw Type pointer cell was a host binding discrepancy. Existing getTypeFromTypeDescriptionReference supplies a stable live view with no constructor/acquire. Source uses declared compiler Type specialization only, not runtime inferred value types. All other logical element and range-address contracts unchanged. Existing native fixture observer now reads returned Type through public getTypeLibType; original fixture bytes/counts/expected stream unchanged. Direct new Type test confirms methods, native no-acquire count, shared identity, C assignment visibility, getArray COW and independent owned Type copy. No native refcount or memory library introduced. No Writer consumer accommodation; future shared clients receive correct Type API. All5related and174Calc tests passed on first run at strict raw100,12gates33boundaries pass. Final source6paths within10approved,5existing1new3731sourceblobs4nativepins. Actual helper/component/ColorItem Any and document/UI/ODS remain next prerequisites; no readiness or full-run claim. Same-agent evaluator not independent.
+
+- Observation: Route oracle task complete marked DONE, but generated verified-ID result made the deterministic close subject fail the generic-subject gate. Repeated explicit --close had the same failure; finish cannot re-finish DONE; --close and message cannot combine.
+  Impact: Runtime source and all passing evidence unchanged. Only canonical task artifact persistence remains; no gate or policy modified.
+  Resolution: Persist the DONE task artifact with a concrete non-generic AP commit subject and exact active-task allowlist. Retain lifecycle diagnostics in tool output and task Findings; no force flags or implementation changes.
