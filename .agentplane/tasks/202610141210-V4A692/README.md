@@ -4,7 +4,7 @@ title: "Align shared native font weight and Calc script defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T12:22:46.742Z"
+  updated_by: "CODER"
+  note: "Calc168/shared92tests rawS/B/F/L100;29boundaries12gates;32exactpaths16nativepins. Real enum/Any/VCLfloat with Math.fround and native thresholds, Writer aliases/consumers preserved, Calc3scriptNORMAL defaults andCALC108. Same-agentEVAL not independent. Goalactive; full at actual minimum UI+ODSread/save readiness then repair/pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T12:22:45.713Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical shared weight/SfxEnumItem/Any/VCL float conversion and Calc scriptNORMAL defaults; all targeted raw100 pass. Same-agent evaluator, not independent review."
+  evaluated_sha: "364db42d858ce75a10d8835ffe846877009df31b"
+  blueprint_digest: "03a4d367b030cc336db4892c9456a80e7493555a4f66a8fb9949d25bed28f18a"
+  evidence_refs:
+    - ".agentplane/tasks/202610141210-V4A692/README.md"
+    - ".agentplane/tasks/202610141210-V4A692/quality/20261014-122245713-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141210-V4A692/quality/20261014-122245713-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141210-V4A692/quality/20261014-122245713-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141210-V4A692/blueprint/resolved-snapshot.json"
+    - "output/playwright/task123-checks/exact-review.json"
+  findings:
+    - "Calc168/shared92tests,29boundaries12gates pass;32exactpaths22changed10added,3641to3651sourcehashes16nativepins. Writeralias broad enum types restored without Writer edits, source-backed equality/unknown11 corrections, nativefloat32thresholds/admissionmatrix tested. Weight invariant ID/value retained with canonical tools witness, CALC108 documented. No threshold weakening/Writer-onlyrepair/full suite; real UI+ODS readiness checkpoint pending."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: align real shared font weight enum/Any/VCL float conversion, Writeraliases and Calc3scriptNORMAL defaults; targeted100/minimum UI ODS readiness checkpoint."
+  -
+    type: "verify"
+    at: "2026-10-14T12:22:46.742Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc168/shared92tests rawS/B/F/L100;29boundaries12gates;32exactpaths16nativepins. Real enum/Any/VCLfloat with Math.fround and native thresholds, Writer aliases/consumers preserved, Calc3scriptNORMAL defaults andCALC108. Same-agentEVAL not independent. Goalactive; full at actual minimum UI+ODSread/save readiness then repair/pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:21:51.317Z"
+doc_updated_at: "2026-10-14T12:23:49.725Z"
 doc_updated_by: "CODER"
 description: "Task123: canonical SvxWeightItem/shared tools enum with preserved Writer aliases, actual VCL float conversion/native awt constants/typed Any and Calc102113118NORMAL defaults. Targeted raw100; full only at minimum actual UI+ODSread/save readiness then repair/pause."
 sections:
@@ -56,6 +78,39 @@ sections:
     Scope: canonical SvxWeightItem value/factory/copy/Clone/boldthreshold/BOLDorNORMAL setter/payload equality, actual bool/float Any query and double-then-signed32 extraction with native finalfloat cast. Original VCL11enum/float constants includingMEDIUM105, ordered thresholds/defaultDONTKNOW and Math.fround boundaries near100and200. Both overload families explicit, not inferred from numeric value. Native LONG source-type set subsetofDOUBLE proven in assign.hxx and actual numeric Any matrix, no fake fallback-success provider/private forcing. Calc102113118NORMAL defaults via actual SfxItemSetcopies. Weight invariant witness moves to actual tools enum keeping original ID/marker/value/native evidence. CALC108 recorded. Existing Which-equality expectation correctedfromsource, unknown11error expectation replaced by stored11assertion; negative/fractional browser errors retained.
     Limits: otherVCLhelpers/native presentation/diagnostics/cache/refcounts/memoryABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No native C++build/generator/sanitizer/memory library/fakeprovider. Existing metadata histories/status and broadparityflags retained; no Writer-only coverage repair.
     Full suite deferred per latest user instruction: real minimum UI contracts and same-model ODS load/save readiness, then relevant repairs and pausegoal. No fixed tasknumber trigger; goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T12:22:46.742Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc168/shared92tests rawS/B/F/L100;29boundaries12gates;32exactpaths16nativepins. Real enum/Any/VCLfloat with Math.fround and native thresholds, Writer aliases/consumers preserved, Calc3scriptNORMAL defaults andCALC108. Same-agentEVAL not independent. Goalactive; full at actual minimum UI+ODSread/save readiness then repair/pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:21:51.317Z, excerpt_hash=sha256:ba287c806e99f110dacd5eed8ccc1834e94b54618366f3d160c318109d63d452
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141210-V4A692/blueprint/resolved-snapshot.json
+    - old_digest: 03a4d367b030cc336db4892c9456a80e7493555a4f66a8fb9949d25bed28f18a
+    - current_digest: 03a4d367b030cc336db4892c9456a80e7493555a4f66a8fb9949d25bed28f18a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141210-V4A692
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141210-V4A692 -m 🧩 V4A692 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task123source commit preserving task122/userhistory; no resets/merges/externalpublication."
   Findings: |-
     Prior task122verifiedprogress, preflight cleancalc, unrelated active tasks untouched. Weight equalitycurrentlyWhich-sensitive while originalSfxEnumItem payload-only; floatconversion/typedtransportmissing. Source confirms nativelegacy int32 fallback cannot succeed afterdoubleextract failure because LONGsource set is subsetofDOUBLE; retain calls without fakeAny/privateforcing. User requested nativeJSnumeric behaviorpreferred, Math.fround mapsnativefloatcontract. Full deferred until actual minimumUI+ODSread/save readiness then repairs/pause.
@@ -63,6 +118,8 @@ sections:
     Observation: Initial/test app typechecks fail in unchanged Writer native-format-to-text test helper because a const-alias enum property inferred one literal default parameter type instead of original whole enum type.
     Impact: Type-level legacy API widening, not runtime assertion/Writer source bug.
     Resolution: Explicit readonly legacy alias record values use canonical enum type, preserving old broad enum parameter inference; apply same type-only bridge to existing FontItalic aliases. No Writer file/assertion/runtime payload changes; rerun app typecheck and actual Writer consumer tests.
+
+    User steering after verification: Writer behavior must also follow upstream. Human explicitly authorizes fixing incorrect shared implementations and related Writer owners instead of preserving compatibility workarounds. Finish this verified value task, then remove legacy TextItem enum alias bridges and move consumers to canonical Tools enum imports in a new executable task. This does not revoke the instruction to leave Writer-only coverage gaps to its branch or the readiness-driven full-run/pause checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -95,6 +152,39 @@ Scope: canonical SvxWeightItem value/factory/copy/Clone/boldthreshold/BOLDorNORM
 Limits: otherVCLhelpers/native presentation/diagnostics/cache/refcounts/memoryABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No native C++build/generator/sanitizer/memory library/fakeprovider. Existing metadata histories/status and broadparityflags retained; no Writer-only coverage repair.
 Full suite deferred per latest user instruction: real minimum UI contracts and same-model ODS load/save readiness, then relevant repairs and pausegoal. No fixed tasknumber trigger; goalactive.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T12:22:46.742Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc168/shared92tests rawS/B/F/L100;29boundaries12gates;32exactpaths16nativepins. Real enum/Any/VCLfloat with Math.fround and native thresholds, Writer aliases/consumers preserved, Calc3scriptNORMAL defaults andCALC108. Same-agentEVAL not independent. Goalactive; full at actual minimum UI+ODSread/save readiness then repair/pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:21:51.317Z, excerpt_hash=sha256:ba287c806e99f110dacd5eed8ccc1834e94b54618366f3d160c318109d63d452
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141210-V4A692/blueprint/resolved-snapshot.json
+- old_digest: 03a4d367b030cc336db4892c9456a80e7493555a4f66a8fb9949d25bed28f18a
+- current_digest: 03a4d367b030cc336db4892c9456a80e7493555a4f66a8fb9949d25bed28f18a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141210-V4A692
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141210-V4A692 -m 🧩 V4A692 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only task123source commit preserving task122/userhistory; no resets/merges/externalpublication.
@@ -106,3 +196,5 @@ Prior task122verifiedprogress, preflight cleancalc, unrelated active tasks untou
 Observation: Initial/test app typechecks fail in unchanged Writer native-format-to-text test helper because a const-alias enum property inferred one literal default parameter type instead of original whole enum type.
 Impact: Type-level legacy API widening, not runtime assertion/Writer source bug.
 Resolution: Explicit readonly legacy alias record values use canonical enum type, preserving old broad enum parameter inference; apply same type-only bridge to existing FontItalic aliases. No Writer file/assertion/runtime payload changes; rerun app typecheck and actual Writer consumer tests.
+
+User steering after verification: Writer behavior must also follow upstream. Human explicitly authorizes fixing incorrect shared implementations and related Writer owners instead of preserving compatibility workarounds. Finish this verified value task, then remove legacy TextItem enum alias bridges and move consumers to canonical Tools enum imports in a new executable task. This does not revoke the instruction to leave Writer-only coverage gaps to its branch or the readiness-driven full-run/pause checkpoint.

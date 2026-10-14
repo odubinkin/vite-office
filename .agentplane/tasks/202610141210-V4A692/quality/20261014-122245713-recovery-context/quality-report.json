@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141210-V4A692",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T12:22:45.713Z",
+  "verdict": "pass",
+  "summary": "Canonical shared weight/SfxEnumItem/Any/VCL float conversion and Calc scriptNORMAL defaults; all targeted raw100 pass. Same-agent evaluator, not independent review.",
+  "evaluated_sha": "364db42d858ce75a10d8835ffe846877009df31b",
+  "blueprint_digest": "03a4d367b030cc336db4892c9456a80e7493555a4f66a8fb9949d25bed28f18a",
+  "findings": [
+    "Calc168/shared92tests,29boundaries12gates pass;32exactpaths22changed10added,3641to3651sourcehashes16nativepins. Writeralias broad enum types restored without Writer edits, source-backed equality/unknown11 corrections, nativefloat32thresholds/admissionmatrix tested. Weight invariant ID/value retained with canonical tools witness, CALC108 documented. No threshold weakening/Writer-onlyrepair/full suite; real UI+ODS readiness checkpoint pending."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141210-V4A692/README.md",
+    "output/playwright/task123-checks/exact-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
