@@ -125,8 +125,8 @@ it("browser mouse geometry retains exactly one table hierarchy and destroys repl
       ),
     ).toHaveLength(1);
     hover();
-    expect(first.GetRegisteredIn()).toBeUndefined();
-    expect(first.Lower()).toBeUndefined();
+    expect(first.GetRegisteredIn()).toBe(table.GetFrameFormat());
+    expect(first.Lower()).toBeDefined();
     const retained = clients(row.GetFrameFormat());
     expect(retained).toHaveLength(2);
     const secondTable = doc.nodes.MakeTableNode("Broken");

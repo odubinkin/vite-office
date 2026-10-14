@@ -1,7 +1,6 @@
 /** @fileoverview Owns native collapsing-border overlap arbitration over represented flat cell frames. */
 import { Style } from "../../../../svx/source/dialog/framelink";
-import type { SwTable } from "../table/swtable";
-import { SwRowFrame, SwCellFrame } from "./tabfrm";
+import type { SwTabFrame, SwRowFrame, SwCellFrame } from "./tabfrm";
 
 /** Native overlap classification for two line intervals. */
 export enum OverlapType {
@@ -36,31 +35,34 @@ export class SwLineEntry {
 export class SwTabFramePainter {
   private readonly maVertLines = new Map<number, SwLineEntry[]>();
   private readonly maHoriLines = new Map<number, SwLineEntry[]>();
-  /** Traverses source cell ownership in row order; grid coordinates adapt existing flat frames. @param table - Original native table. @returns Nothing. */
-  public constructor(table: SwTable) {
-    for (const [r, row] of table.GetTabLines().entries()) {
-      const frame = new SwRowFrame(row);
-      try {
-        let c = 0;
-        for (let lower = frame.Lower(); lower !== undefined; lower = lower.GetNext(), c++) {
-          const cell = lower as SwCellFrame,
-            box = cell.GetFormat().GetBox(),
-            left = new Style(box.GetLeft()),
-            right = new Style(box.GetRight()),
-            top = new Style(box.GetTop()),
-            bottom = new Style(box.GetBottom());
-          right.MirrorSelf();
-          bottom.MirrorSelf();
-          this.Insert(new SwLineEntry(c, r, r + 1, c === 0, left), false);
-          this.Insert(new SwLineEntry(c + 1, r, r + 1, cell.GetNext() === undefined, right), false);
-          this.Insert(new SwLineEntry(r, c, c + 1, r === 0, top), true);
-          this.Insert(
-            new SwLineEntry(r + 1, c, c + 1, r === table.GetTabLines().length - 1, bottom),
-            true,
-          );
-        }
-      } finally {
-        frame.DestroyImpl();
+  /** Borrows the original source table frame and its linked cell formats; grid coordinates adapt represented flat frames. @param mrTabFrame - Original native table layout owner. @returns Nothing. */
+  public constructor(private readonly mrTabFrame: SwTabFrame) {
+    const table = this.mrTabFrame.GetTable();
+    for (
+      let rowFrame = this.mrTabFrame.Lower();
+      rowFrame !== undefined;
+      rowFrame = rowFrame.GetNext()
+    ) {
+      const row = rowFrame as SwRowFrame;
+      const r = table.GetTabLines().indexOf(row.GetTabLine());
+      let c = 0;
+      for (
+        let cellFrame = row.Lower();
+        cellFrame !== undefined;
+        cellFrame = cellFrame.GetNext(), c++
+      ) {
+        const cell = cellFrame as SwCellFrame,
+          box = cell.GetFormat().GetBox(),
+          left = new Style(box.GetLeft()),
+          right = new Style(box.GetRight()),
+          top = new Style(box.GetTop()),
+          bottom = new Style(box.GetBottom());
+        right.MirrorSelf();
+        bottom.MirrorSelf();
+        this.Insert(new SwLineEntry(c, r, r + 1, row.Lower() === cell, left), false);
+        this.Insert(new SwLineEntry(c + 1, r, r + 1, cell.GetNext() === undefined, right), false);
+        this.Insert(new SwLineEntry(r, c, c + 1, this.mrTabFrame.Lower() === row, top), true);
+        this.Insert(new SwLineEntry(r + 1, c, c + 1, row.GetNext() === undefined, bottom), true);
       }
     }
   }

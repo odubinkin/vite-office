@@ -48,13 +48,13 @@ it("repeated mounted render and native row history leave no temporary frame regi
           return false;
         },
       );
-      expect(
-        clients.filter(
-          /** Detects leaked physical layout clients. @param client - Native listener. @returns Whether frame. */ (
-            client,
-          ) => client instanceof SwRowFrame,
-        ),
-      ).toEqual([]);
+      const native = clients.filter(
+        /** Reads the sole original layout-owned row. @param client - Native object. @returns Whether row frame. */
+        (client) => client instanceof SwRowFrame,
+      ) as SwRowFrame[];
+      expect(native).toHaveLength(1);
+      expect(native[0]?.getRootFrame()).toBe(session.view.GetLayout());
+      expect(native[0]?.GetTabLine()).toBe(row);
       expect(clients).toContain(row);
     }
     act(
@@ -97,18 +97,37 @@ it("repeated mounted render and native row history leave no temporary frame regi
           return false;
         },
       );
-      expect(clients).toEqual([row]);
+      const native = clients.filter(
+        /** Keeps the exact current native row after history movement. @param client - Native object. @returns Whether row. */
+        (client) => client instanceof SwRowFrame,
+      ) as SwRowFrame[];
+      expect(native).toHaveLength(1);
+      expect(native[0]?.getRootFrame()).toBe(session.view.GetLayout());
+      expect(native[0]?.GetTabLine()).toBe(row);
+      expect(clients).toHaveLength(2);
+      expect(new Set(clients)).toEqual(new Set([row, native[0]]));
       expect(table.GetTabLines()[0]).toBe(row);
       expect(box.GetParagraphs()[0]).toBe(node);
       expect(node.GetText()).toBe("Original native client");
     }
     expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
+    cleanup();
+    session.view.GetLayout().DestroyImpl();
+    const clients: unknown[] = [];
+    row.GetFrameFormat().ForAllListeners(
+      /** Reads original clients after root teardown. @param client - Native object. @returns Continue. */
+      (client) => {
+        clients.push(client);
+        return false;
+      },
+    );
+    expect(clients).toEqual([row]);
   } finally {
     cleanup();
     session.Close();
   }
 });
-it("native table measurement destroys each temporary row frame while retaining its canonical row owner", /** Checks actual SwRootFrame formatting rather than a mirrored geometry helper. @returns Nothing. */ () => {
+it("native table measurement borrows original rows until its owning native root closes", /** Checks actual SwRootFrame formatting rather than a mirrored geometry helper. @returns Nothing. */ () => {
   const session = createWriterDocumentSession(),
     doc = session.docShell.GetDoc();
   try {
@@ -154,9 +173,28 @@ it("native table measurement destroys each temporary row frame while retaining i
             return false;
           },
         );
-        expect(clients).toEqual([row]);
+        const native = clients.filter(
+          /** Selects the exact original root-owned row. @param client - Native object. @returns Whether native row. */
+          (client) => client instanceof SwRowFrame,
+        ) as SwRowFrame[];
+        expect(native).toHaveLength(1);
+        expect(native[0]?.getRootFrame()).toBe(layout);
+        expect(native[0]?.GetTabLine()).toBe(row);
+        expect(clients).toEqual([row, native[0]]);
         expect(row.GetFrameFormat().IsDisposed()).toBe(false);
       }
+    }
+    layout.DestroyImpl();
+    for (const row of rows) {
+      const clients: unknown[] = [];
+      row.GetFrameFormat().ForAllListeners(
+        /** Reads original clients after native root teardown. @param client - Native object. @returns Continue. */
+        (client) => {
+          clients.push(client);
+          return false;
+        },
+      );
+      expect(clients).toEqual([row]);
     }
   } finally {
     session.Close();

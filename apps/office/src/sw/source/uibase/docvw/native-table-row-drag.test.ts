@@ -58,7 +58,7 @@ function geometryFixture(count = 3) {
       pageTop: 20,
       hasFollowFlowLine: false,
     },
-    frame = new SwTabFrame(table, geometry);
+    frame = Object.assign(new SwTabFrame(table), { mouseGeometry: geometry });
   return { doc, table, lines, start, cells, geometry, frame };
 }
 

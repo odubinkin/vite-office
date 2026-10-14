@@ -97,7 +97,15 @@ it("mounted last-row commands update fixed clipping and invalidate the original 
           return false;
         },
       );
-      expect(clients).toHaveLength(2);
+      const owned = clients.filter(
+        /** Reads the additional original root-owned row, excluding the explicit standalone fixture. @param client - Original native object. @returns Whether root-owned row. */
+        (client) => client instanceof SwRowFrame && client !== lastFrame,
+      ) as SwRowFrame[];
+      expect(owned).toHaveLength(1);
+      expect(owned[0]?.getRootFrame()).toBe(session.view.GetLayout());
+      expect(owned[0]?.GetTabLine()).toBe(last);
+      expect(clients).toHaveLength(3);
+      expect(new Set(clients)).toEqual(new Set([last, lastFrame, owned[0]]));
       expect(clients).toContain(last);
       expect(clients).toContain(lastFrame);
     }
@@ -107,6 +115,17 @@ it("mounted last-row commands update fixed clipping and invalidate the original 
       /** Reads survivors after native layout teardown. @param client - Native listener. @returns Continue flag. */ (
         client,
       ) => {
+        clients.push(client);
+        return false;
+      },
+    );
+    expect(clients).toHaveLength(2);
+    cleanup();
+    session.view.GetLayout().DestroyImpl();
+    clients.length = 0;
+    last.GetFrameFormat().ForAllListeners(
+      /** Reads original model-only baseline after original root teardown. @param client - Actual registered object. @returns Continue. */
+      (client) => {
         clients.push(client);
         return false;
       },

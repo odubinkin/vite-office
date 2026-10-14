@@ -75,9 +75,11 @@ it.each([SwFrameSize.Variable, SwFrameSize.Minimum, SwFrameSize.Fixed])(
       box = required(row.GetTabBoxes()[0]),
       node = required(box.GetParagraphs()[0]);
     node.SetText("original");
-    const frame = new SwTabFrame(table, {
-        rect: { left: 100, right: 300, top: 100, bottom: 150 },
-        cells: [{ box, rect: { left: 100, right: 300, top: 100, bottom: 150 } }],
+    const frame = Object.assign(new SwTabFrame(table), {
+        mouseGeometry: {
+          rect: { left: 100, right: 300, top: 100, bottom: 150 },
+          cells: [{ box, rect: { left: 100, right: 300, top: 100, bottom: 150 } }],
+        },
       }),
       next = new SwTabCols();
     expect(GetSwTabRows(next, frame, box)).toBe(true);

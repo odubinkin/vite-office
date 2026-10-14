@@ -56,6 +56,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
 /** Renders one visible, editable Writer table with row selection. */
 /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ export function WriterEditableTable({
   table,
+  nativeFrame,
   printArea,
   availableWidth,
   selectedBoxes,
@@ -68,6 +69,7 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   retainParagraphElement,
 }: Readonly<{
   table: SwTable;
+  nativeFrame?: SwTabFrame | undefined;
   printArea?: SwTablePrintArea;
   availableWidth?: number;
   selectedBoxes?: readonly number[] | undefined;
@@ -79,14 +81,14 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
   activeParagraphId?: string;
   retainParagraphElement?: (id: string, element: HTMLParagraphElement | null) => void;
 }>): React.JSX.Element {
-  const nativeTable = new SwTabFrame(table);
+  const nativeTable = nativeFrame ?? new SwTabFrame(table);
   try {
     const format = table.GetFormat();
     const spacing = nativeTable.GetFormat().GetULSpace();
     const collapsing = nativeTable.IsCollapsingBorders();
     const resolved = new Map<string, Style>();
     if (collapsing)
-      new SwTabFramePainter(table).PaintLines(
+      new SwTabFramePainter(nativeTable).PaintLines(
         /** Projects resolved native line ownership onto the existing flat cell paint device. @param line - Native interval. @param horizontal - Native family. @returns Nothing. */
         (line, horizontal) => {
           resolved.set(`${horizontal}:${line.mnKey}:${line.mnStartPos}`, line.maAttribute);
@@ -321,6 +323,6 @@ function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSPr
       </div>
     );
   } finally {
-    nativeTable.DestroyImpl();
+    if (nativeFrame === undefined) nativeTable.DestroyImpl();
   }
 }

@@ -37,8 +37,28 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await fileMenuButton.press("ArrowRight");
   await expect(page.getByRole("button", { exact: true, name: "Edit" })).toBeFocused();
   await page.getByRole("button", { exact: true, name: "Edit" }).press("ArrowDown");
+  const editPopup = page.getByRole("menu", { name: "Edit menu" });
+  const undoMenuItem = editPopup.getByRole("menuitem", { exact: true, name: "Undo" });
+  await expect(undoMenuItem).toBeDisabled();
+  await expect(undoMenuItem).toHaveAttribute("data-popup-highlighted", "true");
+  await expect(editPopup).toBeFocused();
+  await expect(editPopup).toHaveAttribute(
+    "aria-activedescendant",
+    (await undoMenuItem.getAttribute("id")) as string,
+  );
+  await editPopup.press("ArrowDown");
+  await expect(editPopup.getByRole("menuitem", { exact: true, name: "Redo" })).toHaveAttribute(
+    "data-popup-highlighted",
+    "true",
+  );
+  await editPopup.press("ArrowDown");
   await expect(page.getByRole("menuitem", { name: "Cut" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Cut" }).press("End");
+  const hyperlinkMenuItem = editPopup.getByRole("menuitem", { exact: true, name: "Hyperlink…" });
+  await expect(hyperlinkMenuItem).toBeDisabled();
+  await expect(hyperlinkMenuItem).toHaveAttribute("data-popup-highlighted", "true");
+  await expect(editPopup).toBeFocused();
+  await editPopup.press("ArrowUp");
   await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();

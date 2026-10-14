@@ -91,9 +91,11 @@ function fixture(widths = [1500, 1500, 1500]) {
       };
     },
   );
-  const frame = new SwTabFrame(table, {
-    rect: { left: 100, right: 100 + total, top: 100, bottom: 200 },
-    cells,
+  const frame = Object.assign(new SwTabFrame(table), {
+    mouseGeometry: {
+      rect: { left: 100, right: 100 + total, top: 100, bottom: 200 },
+      cells,
+    },
   });
   edit.SetTableMouseFrames([frame]);
   return { doc, body, table, rows, boxes, node, shell, edit, frame, cells };
@@ -166,12 +168,14 @@ it.each([true, false])(
     expect(f.table.GetColumnWidths()).toEqual(cancelled ? [1500] : [1350]);
     if (!cancelled) {
       f.edit.SetTableMouseFrames([
-        new SwTabFrame(f.table, {
-          rect: { left: 110, right: 200, top: 100, bottom: 200 },
-          cells: f.cells.map(
-            /** Refreshes the actual fixture frame after its accepted left-edge change. @param cell - Original measured cell. @returns Current device frame. */
-            (cell) => ({ ...cell, rect: { ...cell.rect, left: 110 } }),
-          ),
+        Object.assign(new SwTabFrame(f.table), {
+          mouseGeometry: {
+            rect: { left: 110, right: 200, top: 100, bottom: 200 },
+            cells: f.cells.map(
+              /** Refreshes the actual fixture frame after its accepted left-edge change. @param cell - Original measured cell. @returns Current device frame. */
+              (cell) => ({ ...cell, rect: { ...cell.rect, left: 110 } }),
+            ),
+          },
         }),
       ]);
     }

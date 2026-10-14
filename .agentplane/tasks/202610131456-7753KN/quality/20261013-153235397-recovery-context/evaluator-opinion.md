@@ -1,0 +1,27 @@
+# EVALUATOR opinion: pass
+
+Exact945a1f9943af51075e46f3c070f2add4e40c1678 same-agent non-independent review passes bounded native hierarchy reuse; whole2current-source100four and14242unique accepted assertions, explicit partial coverage failures resolved by unmodified original raw-count aggregation.
+
+## Findings
+- Reviewed original SwFEShell GetBox/WhichMouseTabCol existing layout query contracts. Actual DOM-element Map retains registered native table/row/cell clients, compares current model/format/link identities, batches device geometry before acceptance, destroys only new candidates on failed measurements and retires changed/removed clients. Primitive native frame setter cannot normally throw; no added low-level state machine, allocator or mirrored counters. Browser-only readonly geometry removal does not alter row/cell/default logic.
+- All9committed non-AP blobs equal final execution hashes; production source unchanged across related and supplementary coverage. Original instrumented statement/function/branch IDs and location maps byte-identical; installed Istanbul raw-count merge produces508lines573statements76functions422branches100 and1071positive original counters. Initial14195related assertions pass;2genuine new cases close measured gaps without repeated passing related tests or threshold/provider/exclusion/location/counter normalization.
+- 947other oldtestfiles unchanged; exact1source-backed old lifetime case only, other3cases/imports/statement bytes identical. Canonical4record historical arrays/scalars/status/default/classification prefixes preserved.19unique Chromium regression/new scenarios accepted; initial failed390fixture repaired using native scrolling, narrow retry succeeds and changed fresh desktop fixture checked once.26tooling,TS7/lint/docs/size/dependencies/build/static,9restored-onlymetadata gates pass.
+
+## Evidence
+- .agentplane/tasks/202610131456-7753KN/README.md
+- apps/office/node_modules/.cache/parity-coverage/7753KN/proof.json
+- apps/office/node_modules/.cache/parity-coverage/7753KN/coverage-merge.json
+- apps/office/node_modules/.cache/parity-coverage/7753KN/accepted-results.json
+- apps/office/node_modules/.cache/parity-coverage/7753KN/audit-results.json
+- apps/office/node_modules/.cache/parity-coverage/7753KN/execution-hashes.json
+- apps/office/node_modules/.cache/parity-coverage/7753KN/browser-retry-tests.json
+- apps/office/node_modules/.cache/parity-coverage/7753KN/browser-current-desktop-tests.json
+
+## Missing Tests
+- none recorded
+
+## Hidden Assumptions
+- none recorded
+
+## Residual Risks
+- Full native persistent root/page/master/follow/renderer and incremental row/cell structure propagation remain unverified. Same-agent role review is not independent review. Registered recovery/open/save/settings exceptions unchanged; cadence6/10, full once10 then human pause after next full and repairs. Goal not complete.

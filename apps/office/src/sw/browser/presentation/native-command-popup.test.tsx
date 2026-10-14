@@ -1,5 +1,5 @@
 /** @fileoverview Verifies popup focus, navigation and execution using original native frame bindings. */
-import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import {
@@ -86,7 +86,7 @@ function fixture(
   const mounted = render(<Host />);
   return { s, source, owner, outside, mounted };
 }
-it("standalone native popup starts unselected and navigates only enabled direct entries", /** Checks source standalone no-first-preselection and wrap/boundaries. @returns Nothing. */ () => {
+it("standalone native popup starts unselected and includes disabled entries by source default", /** Checks source standalone no-first-preselection and wrap/boundaries. @returns Nothing. */ () => {
   const f = fixture(),
     menu = screen.getByRole("menu", { name: "Original popup" }),
     a = within(menu).getByRole("menuitem", { name: "Alpha" }),
@@ -96,10 +96,20 @@ it("standalone native popup starts unselected and navigates only enabled direct 
   fireEvent.keyDown(menu, { key: "ArrowUp" });
   expect(b).toHaveFocus();
   fireEvent.keyDown(b, { key: "ArrowDown" });
+  expect(screen.getByRole("menuitem", { name: "Disabled" })).toHaveAttribute(
+    "data-popup-highlighted",
+    "true",
+  );
+  expect(menu).toHaveFocus();
+  fireEvent.keyDown(menu, { key: "ArrowDown" });
   expect(a).toHaveFocus();
   fireEvent.keyDown(a, { key: "Home" });
-  expect(a).toHaveFocus();
-  fireEvent.keyDown(a, { key: "ArrowUp" });
+  expect(screen.getByRole("menuitem", { name: "Disabled" })).toHaveAttribute(
+    "data-popup-highlighted",
+    "true",
+  );
+  expect(menu).toHaveFocus();
+  fireEvent.keyDown(menu, { key: "ArrowUp" });
   expect(b).toHaveFocus();
   fireEvent.keyDown(a, { key: "End" });
   expect(b).toHaveFocus();
@@ -163,18 +173,24 @@ it("keyboard children retain parent ownership and close one level at a time", /*
   fireEvent.keyDown(child, { key: "F6", ctrlKey: true });
   expect(f.owner).toHaveFocus();
 });
-it("pointer child opening stays unselected and sibling departure closes its descendants", /** Checks pointer policy independently of key preselection. @returns Nothing. */ () => {
+it("pointer child opens after native delay and stays while its owner is highlighted", /** Checks source timer activation and owning-child retention. @returns Completion. */ async () => {
   fixture(undefined, true);
   const child = screen.getByRole("menuitem", { name: "Localized Child" });
   fireEvent.mouseLeave(child.parentElement as HTMLElement);
   expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
   fireEvent.mouseEnter(child.parentElement as HTMLElement);
-  const menu = screen.getByRole("menu", { name: "Localized Child menu" });
-  expect(menu).toBeVisible();
+  expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
+  const menu = await screen.findByRole("menu", { name: "Localized Child menu" });
   expect(within(menu).getByRole("menuitem", { name: "Beta" })).not.toHaveFocus();
   fireEvent.mouseLeave(child.parentElement as HTMLElement);
-  expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument();
-  expect(child).toHaveFocus();
+  expect(menu).toBeVisible();
+  const root = screen.getByRole("menu", { name: "Original popup" });
+  const command = within(root).getAllByRole("menuitem", { name: "Beta" }).at(-1) as HTMLElement;
+  fireEvent.mouseEnter(command.parentElement as HTMLElement);
+  await waitFor(
+    /** Waits for the native delayed replacement. @returns Nothing. */ () =>
+      expect(screen.queryByRole("menu", { name: "Localized Child menu" })).not.toBeInTheDocument(),
+  );
 });
 it("outside pointer cancellation retains the new owner without a native command", /** Keeps external focus transfer owned by its actual target. @returns Nothing. */ () => {
   const f = fixture(),
@@ -216,13 +232,15 @@ it("unavailable saved focus does not invent a replacement owner on cancellation"
   expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   expect(f.owner).not.toHaveFocus();
 });
-it("empty child grabs popup focus without fabricating an enabled command", /** Checks child keyboard focus independently of command preselection. @returns Nothing. */ () => {
+it("empty child retains its parent entry without creating a popup window", /** Checks native GetItemCount admission before child preselection. @returns Nothing. */ () => {
   fixture([{ kind: "submenu", id: "empty", label: "Empty", items: [] }]);
   const trigger = screen.getByRole("menuitem", { name: "Empty" });
   fireEvent.keyDown(trigger, { key: "ArrowRight" });
-  const menu = screen.getByRole("menu", { name: "Empty menu" });
-  expect(menu).toHaveFocus();
-  fireEvent.keyDown(menu, { key: "ArrowLeft" });
+  expect(screen.queryByRole("menu", { name: "Empty menu" })).not.toBeInTheDocument();
+  expect(screen.getByRole("menu", { name: "Original popup" })).toHaveAttribute(
+    "aria-activedescendant",
+    trigger.id,
+  );
   expect(trigger).toHaveFocus();
 });
 it("temporarily unavailable child lookup retains popup ownership and admits cancellation", /** Checks device lookup failure while retaining original resource and commands. @returns Nothing. */ () => {

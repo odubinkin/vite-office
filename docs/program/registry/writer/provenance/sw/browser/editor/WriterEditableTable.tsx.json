@@ -232,6 +232,26 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-table-ulspace-items.test.tsx",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-painter-frame-borrow.test.ts",
+          "marker": "native painter accepts the original table frame"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-painter-frame-borrow.test.tsx",
+          "marker": "mounted native table paint sees exactly one"
+        },
+        {
+          "path": "apps/office/e2e/writer-native-painter-frame-borrow.spec.ts",
+          "marker": "Writer borrowed native border paint"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-root-owned-table.test.ts",
+          "marker": "native root retains its original table hierarchy"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-root-owned-table.test.tsx",
+          "marker": "actual visible and shadow Writer table paint borrow one root-owned hierarchy"
         }
       ],
       "upstream": [
@@ -338,6 +358,22 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx",
           "marker": "m_nRowsToRepeat( 1 )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/paintfrm.cxx",
+          "marker": "SwTabFramePainter::SwTabFramePainter( const SwTabFrame& rTabFrame )"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/paintfrm.cxx",
+          "marker": "void SwTabFramePainter::HandleFrame"
+        },
+        {
+          "path": "sw/source/core/docnode/ndtbl.cxx",
+          "marker": "SwTabFrame* pNew = MakeFrame( pUpper );"
+        },
+        {
+          "path": "sw/source/core/layout/paintfrm.cxx",
+          "marker": ": mrTabFrame( rTabFrame )"
         }
       ]
     },
@@ -385,7 +421,9 @@
       "Verified correction6JYMXQ:319 related files/3443 distinct cases/11fresh, no failures or skips. Entire eight final changed modules actual Istanbul1619lines1773statements294functions1329branches100all-four/zero-negative/current source hashes; no earlier maps/counters.616oldtestfiles byte-identical;16canonical prefixes/status/default/classification retained. Tests/build/statics run physically upstream-absent with finally restoration. Full not due5/10 after SZKQTN. Native table UL item ownership is bounded; all previously stated residual native geometry/layout/history/UNO families and overall module parity remain unverified."
     ],
     "browserResponsibilities": [
-      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners."
+      "Iteration188: device rectangles and mouse events are supplied by the browser; actual table/box/cursor selection belongs to native shell owners.",
+      "Task202610131634-4VSZVA uses the same original SwTabFrame hierarchy for table geometry, row/cell formatting and native collapsing-border paint. SwTabFramePainter receives nativeTable rather than reconstructing a duplicate client graph from SwTable. Existing native owned-frame try/finally releases original clients after ordinary JSX render, missing paragraph projection or paint construction failure. Browser remains the device for CSS and rectangles; no new cache/state manager/command or model adapter. Existing flat border outputs/history/editing/defaults are retained; full physical/root/master/follow/rowspan/nested/RTL/vertical formatting and whole core/UI parity remain unverified. All historical statuses/defaults/classes and registered IO/recovery/browser Space deviations preserved.",
+      "Task202610140458-3F7TV1 makes the original SwRootFrame snapshot own one represented native master per model table. Existing actual lower hierarchy is reused across reflow and original model attribute changes, replaced on structural/document change, and released by root lifetime; new frame cleanup is guarded on formatting failure. Actual row measurement, pagination and both visible/shadow browser paint borrow that same original master. Detached standalone rendering/pagination retain their own bounded fallback lifetimes. Existing mouse freshness scan is shared once as explicit temporary browser-device model admission, not an upstream operation or extra registry/manager/map. No new runtime module/controller. Physical page/body/follow/paint/hit graph and independent mouse frame ownership remain unresolved; no whole parity/status/default/classification promotion, protected IO/recovery/Space unchanged."
     ]
   },
   "legacyOrder": 78

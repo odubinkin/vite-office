@@ -1,0 +1,237 @@
+---
+id: "202610131200-TWGN0F"
+title: "Restore native disabled-item popup navigation"
+result_summary: "Native disabled popup entries remain keyboard-highlightable and non-executable; current child cancellation preserved;1451pass, source100allfour, cadence1."
+status: "DONE"
+priority: "high"
+owner: "CODER"
+revision: 22
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-13T12:08:43.936Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-13T12:27:19.180Z"
+  updated_by: "CODER"
+  note: "1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-13T12:28:19.651Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent exact semantic SHA review d54c1d5f4917, explicitly not independent. Source-backed native default disabled navigation, independent highlighted item and current-popup cancellation satisfy approved atomic scope; complete source/related/static/browser evidence passes."
+  evaluated_sha: "d54c1d5f4917baa598136234dbd85bc309c9cfd4"
+  blueprint_digest: "f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b"
+  evidence_refs:
+    - ".agentplane/tasks/202610131200-TWGN0F/README.md"
+    - ".agentplane/tasks/202610131200-TWGN0F/quality/20261013-122819651-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610131200-TWGN0F/quality/20261013-122819651-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610131200-TWGN0F/quality/20261013-122819651-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610131200-TWGN0F/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/TWGN0F/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/TWGN0F/accepted-summary.json"
+    - "apps/office/node_modules/.cache/parity-coverage/TWGN0F/audit-results.json"
+  findings:
+    - "Reviewed actual native settings.cxx false default, ImplIsSelectable, ImplCursorUpDown, KEY_RETURN StopExecute, PopupMenu::Run and ClosePopup. UI preserves genuine disabled state and original bindings execution; per-popup highlight independent of DOM focus, source order and disabled child preselection; disabled/unselected child Return cancels only child and root remains. No simulated kernel/command ownership or new setting APIs."
+    - "Whole original source100allfour:96lines106statements22functions80branches,208 positive original counters with current IDs/locations/hashes; no provider/exclusion or counter normalization. Related1418/206files, tooling26/4 plus seven unique actual Chromium cases=1451pass, no accepted fail/skip/retry. All6 current/committed non-Agentplane bytes match accepted execution hashes, canonical prefixes and exact pin unchanged."
+    - "Only approved first enabled-only case migrated; all other12 bodies and remaining file bytes identical,938 other acceptance files unchanged. Static/build137 and nine metadata gates pass; all runtime/static producers hide3refs then restore exact targets. Initial Cut premise, stable callback dependency and Page Style end-order fixture failures recorded honestly and corrected; no full replay. Review phase uses same agent and does not claim independence."
+commit:
+  hash: "d54c1d5f4917baa598136234dbd85bc309c9cfd4"
+  message: "🧩 TWGN0F fix: restore native disabled popup highlight and navigation"
+comments:
+  -
+    author: "CODER"
+    body: "Start: source-backed native default disabled popup navigation with independent highlighted owner, original bindings and a single exact source-contradicting old assertion migration; first correction after latest full, no full replay."
+  -
+    author: "CODER"
+    body: "Start: confirmed actual native Undo/Redo and non-hyperlinked Edit/Remove disabled fixtures; unchanged keyboard-default deliverable, single production scope and strict100four criteria."
+  -
+    author: "CODER"
+    body: "Verified: native SkipDisabledInMenus=false, per-popup highlight independent from disabled DOM focus/current enabled state, source-order navigation/child preselection and current-popup Return cancellation; original bindings own state and execution.1451 unique related/tooling/Chromium cases pass, whole original source100allfour with208 positive raw counters.938 other old test files and12 untouched case bodies preserved, one exact source-backed migration. Canonical history/default/status/class/pin preserved; three refs absent for runtime/static/restoredfinally; nine source metadata gates pass. Exact semanticd54c1d5f reviewed same-agent/not independent; no full replay. Goal stays active, first correction after latest full."
+events:
+  -
+    type: "status"
+    at: "2026-10-13T12:01:23.318Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: source-backed native default disabled popup navigation with independent highlighted owner, original bindings and a single exact source-contradicting old assertion migration; first correction after latest full, no full replay."
+  -
+    type: "status"
+    at: "2026-10-13T12:08:45.172Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start: confirmed actual native Undo/Redo and non-hyperlinked Edit/Remove disabled fixtures; unchanged keyboard-default deliverable, single production scope and strict100four criteria."
+  -
+    type: "status"
+    at: "2026-10-13T12:27:18.321Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+  -
+    type: "verify"
+    at: "2026-10-13T12:27:19.180Z"
+    author: "CODER"
+    state: "ok"
+    note: "1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim."
+  -
+    type: "status"
+    at: "2026-10-13T12:29:12.413Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native SkipDisabledInMenus=false, per-popup highlight independent from disabled DOM focus/current enabled state, source-order navigation/child preselection and current-popup Return cancellation; original bindings own state and execution.1451 unique related/tooling/Chromium cases pass, whole original source100allfour with208 positive raw counters.938 other old test files and12 untouched case bodies preserved, one exact source-backed migration. Canonical history/default/status/class/pin preserved; three refs absent for runtime/static/restoredfinally; nine source metadata gates pass. Exact semanticd54c1d5f reviewed same-agent/not independent; no full replay. Goal stays active, first correction after latest full."
+doc_version: 3
+doc_updated_at: "2026-10-13T12:29:12.415Z"
+doc_updated_by: "CODER"
+description: "Use pinned VCL default SkipDisabledInMenus=false and independent highlighted-item ownership for standalone Writer popup navigation. Disabled entries remain non-executable and preserve native popup focus. Correct the single source-contradicting enabled-only assertion sequence, add native/mounted/Chromium evidence and append canonical records. First correction after accepted full campaign; no full replay or registered IO/recovery changes."
+sections:
+  Summary: "Restore native standalone popup navigation over disabled selectable entries without executing them."
+  Scope: "Production: apps/office/src/framework/browser/presentation/CommandPopupMenu.tsx only. Append its shared runtime/provenance canonical records. Fresh Writer-owned native-disabled-popup.test.tsx and Chromium writer-native-disabled-popup.spec.ts. Source-backed migration limited to the single enabled-only navigation case in sw/browser/presentation/native-command-popup.test.tsx; retain other twelve case bodies and all other acceptance bytes. Task/parent evidence. No menu resource, command/bindings/core setting APIs, schema/provider/exclusion changes, IO/recovery changes or debug exports."
+  Plan: "Keep approved single popup-native disabled default deliverable, production scope and100allfour criteria. Correct only fixture command premise: actual initial disabled Undo/Redo and plain-body disabled Edit/RemoveHyperlink, confirmed through existing native bindings. Independent per-popup highlight; disabled Return cancels, source resource order and submenu preselection. No old acceptance modifications outside exact first enabled-only case. Fresh/related only; no full replay."
+  Verify Steps: "1. Reproduce actual native disabled first-entry navigation in fresh mounted UI with original Writer frame/bindings, no production mock commands or upstream runtime calls. Confirm pinned native default=false and Return-disabled StopExecute. 2. Fresh cases: unselected root, forward/reverse/wrap/Home/End over disabled items, native enabled execution and original focus/history, disabled Return no dispatch, child first disabled highlight/root focus, sibling/parent selection ownership and dynamic native enable/disable. Real Chromium plain body Edit/RemoveHyperlink remain disabled but keyboard-highlightable and Enter cancels without altering document. Native mounted fixtures use genuine initial disabled Undo/Redo slots rather than asserting unsupported Cut/Copy state. 3. Whole CommandPopupMenu.tsx100 lines/statements/functions/branches with original raw positive counters/current hashes/locations. Related tests, all fresh/migrated cases, TS7/format/lint/docs/size/dependencies/fresh build/static plus Chromium pass. All runtime/static producers physically hide LO/mdds/ICU refs and restorefinally exact targets; no source/test/reference mutations while producers live. 4. Preserve all original acceptance bytes except the exact approved source-contradicting navigation case; compare other twelve bodies byte-for-byte. Canonical old history/status/default/class/capabilities preserved. Final metadata-only source-tree/provenance/registry/resource-generator --check/invariants/parity/routing/doctor/diff audits after terminal/restored; no raw source/helper/Python/maps in Agentplane. 5. Recorded attempts/residual source gaps, exact current semantic SHA review explicitly same-agent/not independent, scoped commits and clean tracked/untracked state."
+  Verification: |-
+    Command: exact argv manifests in ignored cache/TWGN0F plus audit manifest. Result: pass after recorded fixture premise, hook dependency and fresh browser order corrections. Evidence: original raw reports/maps/source hashes, proof.json and accepted-summary.json. Scope: one complete native default popup presentation module and original Writer bindings.
+
+    1418 related assertions/206 files; 26 tooling assertions/4 files; seven unique Chromium cases from five unchanged passing regressions plus two corrected fresh viewport cases on identical production/build bytes. Fresh21 are included in related profile, not double-counted. Total unique 1451.0failure/skip/retry in accepted cases.
+
+    Whole original CommandPopupMenu.tsx100:96lines106statements22functions80branches;208 positive original counters,227 installed-remapper unbounded end-column null locations and15 actual no-else branch locations validated without map/counter edits.938 old test files unchanged; only approved first navigation case migrated and all other12 case bodies/file bytes identical. Canonical historical fields/defaults/statuses/classes/pin preserved.
+
+    TS7, scoped formatter, lint, JSDoc, file-size, dependencies, fresh build137 and static checks pass; all runtime/static producers physically hide three pinned references and restore exact targetsfinally. Final nine source-tree/provenance/registry/resources/invariants/parity/routing/doctor/diff audits pass after terminal/restored only.
+
+    Native default=false and per-popup selection include disabled entries, child preselection and native current-popup Return cancellation; execution/state remain original binding-owned. Native settings override API, NOSELECT/header resources, pointer/timer/mnemonic/full platform layout and complete upstream parity remain unverified; IO/recovery deviations preserved. Exact semantic SHA same-agent review required, not independent. First correction after newest full, no full replay.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-13T12:27:19.180Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T12:27:18.321Z, excerpt_hash=sha256:f9ed3b60da3547ababff97b620d7185d49ceb71216b498ba93949eeafe22c5ad
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131200-TWGN0F/blueprint/resolved-snapshot.json
+    - old_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+    - current_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610131200-TWGN0F
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610131200-TWGN0F
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only scoped semantic commit when necessary, preserving human work and prior history. Restore exact three reference targets in finally. No history rewrite or external publication."
+  Findings: |-
+    Standing user upstream goal and authoritative active resumption approve safe local source-backed corrections and internal plan lifecycle. Previous goal turn made verified source/test/state progress and ended paused after full; goal is now active, writer branch clean after human Calc integration. Only parentC9TN6M remains overarching; obsolete X6VV8G is not a live producer. Pinned LO9bc445578031fecf56086729d8e4940c77e14d65. Source first disabled navigation contradicts current enabled filter and DOM-focus-as-selection; native default false and disabled Return cancellation require explicit selection ownership. Do not claim native StyleSettings override API or complete menu parity; preserve registered IO/recovery exceptions.
+
+    - Observation: Initial fresh fixture incorrectly assumed native Cut disabled; original Writer bindings enable it. Corrected fixture uses actual initial disabled Undo/Redo slots. Corrected genuine red fails first disabled highlight because current enabled-only filter selects Bold instead.
+      Impact: First fixture failure is not product evidence. Corrected source-shaped red reproduces the confirmed native default gap; no upstream execution or mocked command/bindings.
+      Resolution: Independent native highlight plus disabled default navigation implemented only in original shared popup presentation. Exact first old navigation case migrated; other cases unchanged. Use non-hyperlinked actual Edit/RemoveHyperlink disabled state for Chromium rather than making unsupported Cut state assumptions.
+
+    - Observation: Expanded fresh21/21 and related coverage100allfour pass; lint first required stable highlight callback dependency, fixed with stable callbacks and actual menu IDs. Browser5 existing pass/2new fixture failures: End correctly selects native final Page Style command, after Edit/Remove Hyperlink in pinned generated text graph.
+      Impact: No remaining production coverage or old behavior failure; new Chromium assumption of final Remove Hyperlink was wrong. Preserve original failed raw reports and accepted unchanged production profile.
+      Resolution: Correct fresh browser case to assert native final Page Style focus, then ArrowUp selects disabled Remove and another ArrowUp selects disabled Edit; Enter cancels without document mutation. Re-run only current corrected new/browser checks plus appropriate static typing/docs, keeping runtime refs absent. No implementation, old acceptance, resource composition or threshold change.
+extensions:
+  implementation_commit:
+    hash: "d54c1d5f4917baa598136234dbd85bc309c9cfd4"
+    message: "🧩 TWGN0F fix: restore native disabled popup highlight and navigation"
+id_source: "generated"
+---
+## Summary
+
+Restore native standalone popup navigation over disabled selectable entries without executing them.
+
+## Scope
+
+Production: apps/office/src/framework/browser/presentation/CommandPopupMenu.tsx only. Append its shared runtime/provenance canonical records. Fresh Writer-owned native-disabled-popup.test.tsx and Chromium writer-native-disabled-popup.spec.ts. Source-backed migration limited to the single enabled-only navigation case in sw/browser/presentation/native-command-popup.test.tsx; retain other twelve case bodies and all other acceptance bytes. Task/parent evidence. No menu resource, command/bindings/core setting APIs, schema/provider/exclusion changes, IO/recovery changes or debug exports.
+
+## Plan
+
+Keep approved single popup-native disabled default deliverable, production scope and100allfour criteria. Correct only fixture command premise: actual initial disabled Undo/Redo and plain-body disabled Edit/RemoveHyperlink, confirmed through existing native bindings. Independent per-popup highlight; disabled Return cancels, source resource order and submenu preselection. No old acceptance modifications outside exact first enabled-only case. Fresh/related only; no full replay.
+
+## Verify Steps
+
+1. Reproduce actual native disabled first-entry navigation in fresh mounted UI with original Writer frame/bindings, no production mock commands or upstream runtime calls. Confirm pinned native default=false and Return-disabled StopExecute. 2. Fresh cases: unselected root, forward/reverse/wrap/Home/End over disabled items, native enabled execution and original focus/history, disabled Return no dispatch, child first disabled highlight/root focus, sibling/parent selection ownership and dynamic native enable/disable. Real Chromium plain body Edit/RemoveHyperlink remain disabled but keyboard-highlightable and Enter cancels without altering document. Native mounted fixtures use genuine initial disabled Undo/Redo slots rather than asserting unsupported Cut/Copy state. 3. Whole CommandPopupMenu.tsx100 lines/statements/functions/branches with original raw positive counters/current hashes/locations. Related tests, all fresh/migrated cases, TS7/format/lint/docs/size/dependencies/fresh build/static plus Chromium pass. All runtime/static producers physically hide LO/mdds/ICU refs and restorefinally exact targets; no source/test/reference mutations while producers live. 4. Preserve all original acceptance bytes except the exact approved source-contradicting navigation case; compare other twelve bodies byte-for-byte. Canonical old history/status/default/class/capabilities preserved. Final metadata-only source-tree/provenance/registry/resource-generator --check/invariants/parity/routing/doctor/diff audits after terminal/restored; no raw source/helper/Python/maps in Agentplane. 5. Recorded attempts/residual source gaps, exact current semantic SHA review explicitly same-agent/not independent, scoped commits and clean tracked/untracked state.
+
+## Verification
+
+Command: exact argv manifests in ignored cache/TWGN0F plus audit manifest. Result: pass after recorded fixture premise, hook dependency and fresh browser order corrections. Evidence: original raw reports/maps/source hashes, proof.json and accepted-summary.json. Scope: one complete native default popup presentation module and original Writer bindings.
+
+1418 related assertions/206 files; 26 tooling assertions/4 files; seven unique Chromium cases from five unchanged passing regressions plus two corrected fresh viewport cases on identical production/build bytes. Fresh21 are included in related profile, not double-counted. Total unique 1451.0failure/skip/retry in accepted cases.
+
+Whole original CommandPopupMenu.tsx100:96lines106statements22functions80branches;208 positive original counters,227 installed-remapper unbounded end-column null locations and15 actual no-else branch locations validated without map/counter edits.938 old test files unchanged; only approved first navigation case migrated and all other12 case bodies/file bytes identical. Canonical historical fields/defaults/statuses/classes/pin preserved.
+
+TS7, scoped formatter, lint, JSDoc, file-size, dependencies, fresh build137 and static checks pass; all runtime/static producers physically hide three pinned references and restore exact targetsfinally. Final nine source-tree/provenance/registry/resources/invariants/parity/routing/doctor/diff audits pass after terminal/restored only.
+
+Native default=false and per-popup selection include disabled entries, child preselection and native current-popup Return cancellation; execution/state remain original binding-owned. Native settings override API, NOSELECT/header resources, pointer/timer/mnemonic/full platform layout and complete upstream parity remain unverified; IO/recovery deviations preserved. Exact semantic SHA same-agent review required, not independent. First correction after newest full, no full replay.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-13T12:27:19.180Z — VERIFY — ok
+
+By: CODER
+
+Note: 1451 unique pass: related1418/206files+tooling26/4+Chromium7, no accepted failure/skip/retry; whole CommandPopupMenu100allfour 96lines106statements22functions80branches,208positive raw counters/current locations/hashes.938 old test files unchanged; only first source-contradicting navigation case migrated, other12/entire remaining file byte-identical. Canonical two records preserve old history/status/default/class, pin. Static/build137/metadata9 pass,3refs absent for runtime/static restoredfinally. Source-profile/fresh fixture/lint/browser attempts retained and honestly repaired. Exact semantic SHA review then clean closure; no full replay or global parity claim.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-13T12:27:18.321Z, excerpt_hash=sha256:f9ed3b60da3547ababff97b620d7185d49ceb71216b498ba93949eeafe22c5ad
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610131200-TWGN0F/blueprint/resolved-snapshot.json
+- old_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+- current_digest: f63ce6c9d1be695b48c526de8a26bbc5c58cdeca852e55c1eb26ea7339a3076b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610131200-TWGN0F
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610131200-TWGN0F
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only scoped semantic commit when necessary, preserving human work and prior history. Restore exact three reference targets in finally. No history rewrite or external publication.
+
+## Findings
+
+Standing user upstream goal and authoritative active resumption approve safe local source-backed corrections and internal plan lifecycle. Previous goal turn made verified source/test/state progress and ended paused after full; goal is now active, writer branch clean after human Calc integration. Only parentC9TN6M remains overarching; obsolete X6VV8G is not a live producer. Pinned LO9bc445578031fecf56086729d8e4940c77e14d65. Source first disabled navigation contradicts current enabled filter and DOM-focus-as-selection; native default false and disabled Return cancellation require explicit selection ownership. Do not claim native StyleSettings override API or complete menu parity; preserve registered IO/recovery exceptions.
+
+- Observation: Initial fresh fixture incorrectly assumed native Cut disabled; original Writer bindings enable it. Corrected fixture uses actual initial disabled Undo/Redo slots. Corrected genuine red fails first disabled highlight because current enabled-only filter selects Bold instead.
+  Impact: First fixture failure is not product evidence. Corrected source-shaped red reproduces the confirmed native default gap; no upstream execution or mocked command/bindings.
+  Resolution: Independent native highlight plus disabled default navigation implemented only in original shared popup presentation. Exact first old navigation case migrated; other cases unchanged. Use non-hyperlinked actual Edit/RemoveHyperlink disabled state for Chromium rather than making unsupported Cut state assumptions.
+
+- Observation: Expanded fresh21/21 and related coverage100allfour pass; lint first required stable highlight callback dependency, fixed with stable callbacks and actual menu IDs. Browser5 existing pass/2new fixture failures: End correctly selects native final Page Style command, after Edit/Remove Hyperlink in pinned generated text graph.
+  Impact: No remaining production coverage or old behavior failure; new Chromium assumption of final Remove Hyperlink was wrong. Preserve original failed raw reports and accepted unchanged production profile.
+  Resolution: Correct fresh browser case to assert native final Page Style focus, then ArrowUp selects disabled Remove and another ArrowUp selects disabled Edit; Enter cancels without document mutation. Re-run only current corrected new/browser checks plus appropriate static typing/docs, keeping runtime refs absent. No implementation, old acceptance, resource composition or threshold change.

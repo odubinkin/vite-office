@@ -47,29 +47,31 @@ function fixture() {
     shell = view.GetWrtShell();
   views.push(view);
   edit.SetTableMouseFrames([
-    new SwTabFrame(table, {
-      rect: { left: 100, right: 400, top: 100, bottom: 250 },
-      pageTop: 20,
-      cells: lines.flatMap(
-        /** Measures actual original row owners. @param line - Native row. @param row - Independent device index. @returns Device cell rectangles. */ (
-          line,
-          row,
-        ) =>
-          line.GetTabBoxes().map(
-            /** Measures actual original box owners. @param box - Native box. @param column - Independent device index. @returns Borrowed device geometry. */ (
-              box,
-              column,
-            ) => ({
-              box,
-              rect: {
-                left: 100 + 100 * column,
-                right: 200 + 100 * column,
-                top: 100 + 50 * row,
-                bottom: 150 + 50 * row,
-              },
-            }),
-          ),
-      ),
+    Object.assign(new SwTabFrame(table), {
+      mouseGeometry: {
+        rect: { left: 100, right: 400, top: 100, bottom: 250 },
+        pageTop: 20,
+        cells: lines.flatMap(
+          /** Measures actual original row owners. @param line - Native row. @param row - Independent device index. @returns Device cell rectangles. */ (
+            line,
+            row,
+          ) =>
+            line.GetTabBoxes().map(
+              /** Measures actual original box owners. @param box - Native box. @param column - Independent device index. @returns Borrowed device geometry. */ (
+                box,
+                column,
+              ) => ({
+                box,
+                rect: {
+                  left: 100 + 100 * column,
+                  right: 200 + 100 * column,
+                  top: 100 + 50 * row,
+                  bottom: 150 + 50 * row,
+                },
+              }),
+            ),
+        ),
+      },
     }),
   ]);
   return { doc, table, lines, view, edit, shell };

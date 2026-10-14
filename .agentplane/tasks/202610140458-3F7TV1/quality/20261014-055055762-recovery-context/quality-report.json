@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140458-3F7TV1",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T05:50:55.762Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review: semantic 5b0476cc4d97 shares actual root-owned native table master across row measurement and both actual browser paint surfaces; declared gates pass.",
+  "evaluated_sha": "5b0476cc4d9735d7ac17ae84b4e48f751c358221",
+  "blueprint_digest": "12467d54e5001f9e03567789aae3f57ba67ad50a5f690c77b8c33d7a6ec54f1c",
+  "findings": [
+    "Original master/lower identity reused until structural/document/root replacement, with exception cleanup. No duplicate measurement hierarchy or actual per-render owner disposal; no new manager/module/map/controller. Four lifetime observation migrations retain 52 functional assertions/238 original literals; 960 other tests unchanged. Four exact live source pointers follow moved predicate; all historical/status/default/classification prefixes retained."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140458-3F7TV1/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/3F7TV1/proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/3F7TV1/accepted-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/3F7TV1/audit-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/3F7TV1/live-reference-moves.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Represented native master ownership only: physical page/body/follow and paint/hit geometry graph, independent mouse frame ownership, temporary model freshness admission and detached fallback removal remain unresolved. Cycle 5/10; upcoming full continues, following full pauses after repairs."
+  ]
+}

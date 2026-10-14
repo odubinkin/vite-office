@@ -1,9 +1,24 @@
 /** @fileoverview Verifies native overlap splitting and tie arbitration without upstream runtime access. */
-import { expect, it } from "vitest";
+import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { Style } from "../../../../svx/source/dialog/framelink";
 import { OverlapType, SwLineEntry, SwTabFramePainter } from "./paintfrm";
+import { SwTabFrame } from "./tabfrm";
+
+const ownedFrames: SwTabFrame[] = [];
+afterEach(
+  /** Releases original caller-owned painter frames after each native case. @returns Nothing. */ () => {
+    for (const frame of ownedFrames.splice(0)) frame.DestroyImpl();
+  },
+);
+/** Creates the actual original frame required by the source painter API. @param table - Original native model. @returns Caller-owned layout frame. */
+function ownedFrame(table: ReturnType<SwDoc["nodes"]["MakeTableNode"]>): SwTabFrame {
+  const frame = new SwTabFrame(table);
+  ownedFrames.push(frame);
+  return frame;
+}
+
 /** Creates an independently owned source entry. @param start - Interval start. @param end - Interval end. @param color - Original color. @param width - Native width. @returns Entry. */
 function entry(start: number, end: number, color = 1, width = 20): SwLineEntry {
   return new SwLineEntry(4, start, end, false, new Style(new SvxBorderLine(color, width)));
@@ -14,7 +29,7 @@ it("paints all four outer boundaries of an original single cell", /** Checks the
   table.AddColumnWidth(3000);
   doc.nodes.AppendTableRow(table, 1);
   const lines: (boolean | number)[][] = [];
-  new SwTabFramePainter(table).PaintLines(
+  new SwTabFramePainter(ownedFrame(table)).PaintLines(
     /** Captures original grid coordinates and outer-boundary flags. @param line - Painted border. @param horizontal - Border family. @returns Nothing. */ (
       line,
       horizontal,
@@ -30,7 +45,9 @@ it("paints all four outer boundaries of an original single cell", /** Checks the
   ]);
 });
 it("omits a zero-length first border and retains a later visible interval", /** Checks empty border admission independently of populated table geometry. @returns Nothing. */ () => {
-  const painter = new SwTabFramePainter(new SwDoc().nodes.MakeTableNode("Empty borders"));
+  const painter = new SwTabFramePainter(
+    ownedFrame(new SwDoc().nodes.MakeTableNode("Empty borders")),
+  );
   painter.Insert(entry(3, 3), true);
   const lines: number[][] = [];
   painter.PaintLines(
@@ -76,7 +93,9 @@ it.each([false, true])(
   ) => {
     const doc = new SwDoc();
     try {
-      const painter = new SwTabFramePainter(doc.nodes.MakeTableNode("Consumed borders"));
+      const painter = new SwTabFramePainter(
+        ownedFrame(doc.nodes.MakeTableNode("Consumed borders")),
+      );
       painter.Insert(entry(0, 10, 1, 20), horizontal);
       painter.Insert(entry(0, 10, 2, 40), horizontal);
       painter.Insert(entry(0, 10, 3, 10), horizontal);
@@ -105,7 +124,7 @@ it.each([false, true])(
     horizontal,
   ) => {
     const table = new SwDoc().nodes.MakeTableNode("Intervals"),
-      painter = new SwTabFramePainter(table);
+      painter = new SwTabFramePainter(ownedFrame(table));
     painter.Insert(entry(0, 10), horizontal);
     painter.Insert(entry(15, 20), horizontal);
     painter.Insert(entry(5, 18, 2, 40), horizontal);

@@ -45,7 +45,7 @@ function fixture(count = 3) {
       pageTop: 20,
       hasFollowFlowLine: false,
     },
-    frame = new SwTabFrame(table, geometry);
+    frame = Object.assign(new SwTabFrame(table), { mouseGeometry: geometry });
   return { doc, table, lines, start, cells, geometry, frame };
 }
 it("native row carrier retains literal page origin, minima and following-row boundaries", /** Checks independent source carrier values. @returns Nothing. */ () => {
@@ -164,13 +164,15 @@ it("native missing content and unchanged authored height create no attribute his
 it("native tiny device rows coalesce both outer boundaries with omitted page origin", /** Checks source25twip equivalence for a transient small physical frame. @returns Nothing. */ () => {
   const f = fixture(1),
     rows = new SwTabCols(),
-    frame = new SwTabFrame(f.table, {
-      rect: { left: 100, right: 300, top: 100, bottom: 101 },
-      cells: f.cells.map(
-        /** Supplies actual tiny original cell frames. @param cell - Actual cell. @returns Physical frame. */ (
-          cell,
-        ) => ({ ...cell, rect: { ...cell.rect, bottom: 101 } }),
-      ),
+    frame = Object.assign(new SwTabFrame(f.table), {
+      mouseGeometry: {
+        rect: { left: 100, right: 300, top: 100, bottom: 101 },
+        cells: f.cells.map(
+          /** Supplies actual tiny original cell frames. @param cell - Actual cell. @returns Physical frame. */ (
+            cell,
+          ) => ({ ...cell, rect: { ...cell.rect, bottom: 101 } }),
+        ),
+      },
     });
   expect(SwDoc.GetTabRows(rows, frame, f.start)).toBe(true);
   expect(rows.Count()).toBe(0);

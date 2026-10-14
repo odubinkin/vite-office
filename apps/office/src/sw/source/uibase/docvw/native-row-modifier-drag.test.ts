@@ -63,7 +63,7 @@ function fixture(heights: readonly number[] = [50, 50, 50]) {
     edit = view.GetEditWin(),
     shell = view.GetWrtShell();
   views.push(view);
-  edit.SetTableMouseFrames([new SwTabFrame(table, geometry)]);
+  edit.SetTableMouseFrames([Object.assign(new SwTabFrame(table), { mouseGeometry: geometry })]);
   return { doc, table, lines, geometry, view, edit, shell };
 }
 /** Reads authored native heights without a layout projection. @param f - Original fixture. @returns Current authored heights. */

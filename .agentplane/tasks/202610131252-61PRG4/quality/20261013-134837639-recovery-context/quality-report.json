@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610131252-61PRG4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-13T13:48:37.639Z",
+  "verdict": "pass",
+  "summary": "Same-agent final exact semantic5a2c9806d1fe49148edb279eccf329dca2386c78 review supersedes provisional pass and rework; approved bounded native timer deliverable passes, not independent/global parity certification.",
+  "evaluated_sha": "5a2c9806d1fe49148edb279eccf329dca2386c78",
+  "blueprint_digest": "0f1b5c0c702a7d9a57e3177095b7e60086a28b5d3124aa313d7ee6709cda7726",
+  "findings": [
+    "Corrected independent-depth fixture uses nonselecting Space, consistent with native source; native descendant selection rehighlights parent remains a separate explicit gap. Default150ms, immediate keyboard/direct admission, owning-child leave retention and lifecycle cancellation verified without command mocks.",
+    "1438current related assertions/208files include41mounted cases with15new; unchanged-production26tooling and9Chromium retained=1473unique. Whole current original target100four135lines147statements32functions99branches,278positive raw counters with original IDs/locations/hash proof, no normalization/provider/exclusion changes.",
+    "Eight current committed source/test/registry blobs match frozen hashes;137built static files unchanged.939other oldtests unchanged, exact4oldcase statements and waitFor imports only, canonical2history prefixes intact,9restored-onlymetadata gatespass. Attempts honestly retained in ignored cache, no upstream/helper source copies in Agentplane."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610131252-61PRG4/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/61PRG4/proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/61PRG4/accepted-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/61PRG4/audit-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/61PRG4/semantic-sha.txt"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native ancestor-highlight propagation, first-move/synthetic/scroll/NOSELECT/mnemonic/native settings override and global parity remain unverified. Registered IO/recovery preserved. Full campaign not due cadence3/10; human stop after next accepted full plus repairs."
+  ]
+}

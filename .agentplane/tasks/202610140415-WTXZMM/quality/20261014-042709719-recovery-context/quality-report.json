@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140415-WTXZMM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T04:27:09.719Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review: semantic 383664b6aa23 aligns native Ctrl-F6 ownership through existing keydown/close/focus; declared gates pass.",
+  "evaluated_sha": "383664b6aa238f83a65f7e6cb901fd9981d601a4",
+  "blueprint_digest": "306778169064d3da9b43e4483af9f0c8daf98e853ad89574da1e0b89de1d6961",
+  "findings": [
+    "Source MenuFloatingWindow nearest parent cancellation and MenuBarWindow document-focus override match root/child behavior. Seven original-bindings cases and three actual Writer Chromium cases exercise both global focus interaction and fresh F10 cycle. No new input machinery or old acceptance edits."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140415-WTXZMM/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/WTXZMM/proof.json",
+    "apps/office/node_modules/.cache/parity-coverage/WTXZMM/accepted-results.json",
+    "apps/office/node_modules/.cache/parity-coverage/WTXZMM/audit-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Bounded existing Ctrl-F6 correction only; full native timings/platform/mnemonics/core/UI parity unverified. Source metadata recovered from transient original Boost-header absence without source/test/setup changes. Cadence 3/10; upcoming full continues, following full pauses after repairs."
+  ]
+}

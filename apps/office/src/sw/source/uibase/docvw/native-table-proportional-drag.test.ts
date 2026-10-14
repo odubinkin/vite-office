@@ -92,9 +92,11 @@ function fixture(widths = [1500, 1500, 1500]) {
       };
     },
   );
-  const frame = new SwTabFrame(table, {
-    rect: { left: 100, right: 100 + total, top: 100, bottom: 200 },
-    cells,
+  const frame = Object.assign(new SwTabFrame(table), {
+    mouseGeometry: {
+      rect: { left: 100, right: 100 + total, top: 100, bottom: 200 },
+      cells,
+    },
   });
   edit.SetTableMouseFrames([frame]);
   return { doc, body, table, rows, boxes, node, shell, edit, frame, cells };

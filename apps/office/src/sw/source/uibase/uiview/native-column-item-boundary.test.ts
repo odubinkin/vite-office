@@ -100,17 +100,19 @@ it("document column drag consumes native view item visibility and limits over or
   views.push(view);
   const edit = view.GetEditWin(),
     shell = view.GetWrtShell(),
-    frame = new SwTabFrame(table, {
-      rect: { left: 100, right: 400, top: 100, bottom: 150 },
-      cells: boxes.map(
-        /** Measures original cell owners. @param box - Native box. @param index - Column. @returns Device cell. */ (
-          box,
-          index,
-        ) => ({
-          box,
-          rect: { left: 100 + index * 100, right: 200 + index * 100, top: 100, bottom: 150 },
-        }),
-      ),
+    frame = Object.assign(new SwTabFrame(table), {
+      mouseGeometry: {
+        rect: { left: 100, right: 400, top: 100, bottom: 150 },
+        cells: boxes.map(
+          /** Measures original cell owners. @param box - Native box. @param index - Column. @returns Device cell. */ (
+            box,
+            index,
+          ) => ({
+            box,
+            rect: { left: 100 + index * 100, right: 200 + index * 100, top: 100, bottom: 150 },
+          }),
+        ),
+      },
     });
   edit.SetTableMouseFrames([frame]);
   const convert = view.GetTableRulerColumnItem.bind(view),

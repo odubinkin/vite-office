@@ -8,9 +8,16 @@ import {
   resolveSwListFirstLineIndent,
 } from "../txtnode/ndtxt-list-indent";
 import type { SwDoc } from "../doc/doc";
-import { SwTableNode } from "../docnode/node";
 import type { SwTable } from "../table/swtable";
-import { SwTabFrame, SwRowFrame, type SwTablePrintArea } from "./tabfrm";
+import {
+  SwTabFrame,
+  createSwTableFrameInputs,
+  type SwTableFrameMeasurement,
+  type SwTableFrameInput,
+  isSwTableFrameModelCurrent,
+  type SwTablePrintArea,
+} from "./tabfrm";
+export type { SwTableFrameMeasurement } from "./tabfrm";
 import { SwFrame, SwFrameType, SwLayoutFrame } from "./wsfrm";
 import { SwFrameFormat } from "./atrfrm";
 import {
@@ -38,24 +45,13 @@ export interface SwPageFrame {
 
 /** One table fragment placed in document flow on a physical page. */
 export interface SwTableFrame {
+  readonly nativeFrame?: SwTabFrame;
   readonly table: SwTable;
   readonly printArea: SwTablePrintArea;
   readonly firstRow: number;
   readonly lastRow: number;
   readonly afterParagraphIndex: number;
   readonly repeatedHeaderRows?: number;
-}
-
-/** Device measured table rows; the core owns their placement. */
-export interface SwTableFrameMeasurement {
-  readonly tableName: string;
-  readonly rowHeights: readonly number[];
-}
-
-/** Canonical table and its position relative to body text nodes. */
-interface SwTableFrameInput extends SwTableFrameMeasurement {
-  readonly table: SwTable;
-  readonly afterParagraphIndex: number;
 }
 
 /** Writer text-frame print bounds relative to the page body's left edge, in twips. */
@@ -94,6 +90,7 @@ export interface SwPageDescriptorLayout {
 
 /** Immutable result of one core formatting pass. */
 export interface SwRootFrameSnapshot {
+  readonly tableFrames: readonly SwTabFrame[];
   readonly revision: number;
   readonly pages: readonly SwPageFrame[];
   readonly lineNumbers: readonly (readonly (readonly SwLineNumberMark[])[])[];
@@ -215,6 +212,7 @@ export class SwRootFrame extends SwLayoutFrame {
       for (const frame of page.textFrames) frames.add(frame);
     for (const frame of frames) if (!frame.IsInDtor()) SwFrame.DestroyFrame(frame);
     this.cursorFrames.clear();
+    for (const frame of this.snapshot?.tableFrames ?? []) SwFrame.DestroyFrame(frame);
     this.snapshot = undefined;
     this.lastInputs = [];
     this.lastDocument = undefined;
@@ -303,136 +301,164 @@ export class SwRootFrame extends SwLayoutFrame {
     )
       return this.snapshot;
     const paragraphs = createSwTextFrameInputs(document, measurements);
-    const tableInputs = createSwTableFrameInputs(document, tableMeasurements);
-    const previous = this.snapshot?.pages ?? [];
-    const previousInputs = this.lastInputs;
-    const firstInputChange = paragraphs.findIndex(
-      /** Locates the first changed model or device input. @param paragraph - Current input. @param index - Document order. @returns Whether changed. */ (
-        paragraph,
-        index,
-      ) => !textFrameInputEqual(paragraph, previousInputs[index]),
-    );
-    const affectedFrom = Math.min(
-      this.dirtyFrom,
-      firstInputChange < 0 ? paragraphs.length : firstInputChange,
-    );
-    const unchanged = new Set(
-      paragraphs
-        .filter(
-          /** Keeps nodes whose measured and model layout values match. @param paragraph - Current input. @param index - Document order. @returns Whether unchanged. */ (
-            paragraph,
-            index,
-          ) => index < affectedFrom || textFrameInputEqual(paragraph, previousInputs[index]),
-        )
-        .map(
-          /** Returns stable node identity. @param paragraph - Current input. @returns Device key. */ (
-            paragraph,
-          ) => paragraph.id,
-        ),
-    );
-    const layoutGeometryUnchanged = sameDescriptor && sameSettings;
-    const created = createSwPageFrames(paragraphs, descriptor, settings, tableInputs, this);
-    const pages = Object.freeze(
-      created.map(
-        /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
-        (page, index) => {
-          const oldPage = previous[index];
-          const textFrames = Object.freeze(
-            page.textFrames.map(
-              /** Reuses a matching source fragment at the same page position. @param frame - New fragment. @param frameIndex - Position in page. @returns Persistent fragment. */ (
-                frame,
-                frameIndex,
-              ) => {
-                const oldFrame = oldPage?.textFrames[frameIndex];
-                return layoutGeometryUnchanged &&
-                  unchanged.has(frame.nodeId) &&
-                  textFrameEqual(frame, oldFrame) &&
-                  oldPage !== undefined &&
-                  pageDescriptorEqual(page.descriptor, oldPage.descriptor)
-                  ? (oldFrame as SwTextFrame)
-                  : frame;
-              },
-            ),
+    const previousTables = this.snapshot?.tableFrames ?? [];
+    const tableFrames: SwTabFrame[] = [];
+    try {
+      const tableInputs = createSwTableFrameInputs(
+        document,
+        tableMeasurements,
+        /** Borrows the original current master or allocates one replacement owned by this root. @param table - Current model table. @returns Original native frame. */
+        (table) => {
+          const previous = previousTables.find(
+            /** Matches an original owned hierarchy without a mirrored table registry. @param frame - Original master. @returns Whether it remains current. */
+            (frame) => isSwTableFrameModelCurrent(frame, table),
           );
+          const frame = previous ?? new SwTabFrame(table, this);
+          tableFrames.push(frame);
+          return frame;
+        },
+      );
+      const previous = this.snapshot?.pages ?? [];
+      const previousInputs = this.lastInputs;
+      const firstInputChange = paragraphs.findIndex(
+        /** Locates the first changed model or device input. @param paragraph - Current input. @param index - Document order. @returns Whether changed. */ (
+          paragraph,
+          index,
+        ) => !textFrameInputEqual(paragraph, previousInputs[index]),
+      );
+      const affectedFrom = Math.min(
+        this.dirtyFrom,
+        firstInputChange < 0 ? paragraphs.length : firstInputChange,
+      );
+      const unchanged = new Set(
+        paragraphs
+          .filter(
+            /** Keeps nodes whose measured and model layout values match. @param paragraph - Current input. @param index - Document order. @returns Whether unchanged. */ (
+              paragraph,
+              index,
+            ) => index < affectedFrom || textFrameInputEqual(paragraph, previousInputs[index]),
+          )
+          .map(
+            /** Returns stable node identity. @param paragraph - Current input. @returns Device key. */ (
+              paragraph,
+            ) => paragraph.id,
+          ),
+      );
+      const layoutGeometryUnchanged = sameDescriptor && sameSettings;
+      const created = createSwPageFrames(paragraphs, descriptor, settings, tableInputs, this);
+      const pages = Object.freeze(
+        created.map(
+          /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
+          (page, index) => {
+            const oldPage = previous[index];
+            const textFrames = Object.freeze(
+              page.textFrames.map(
+                /** Reuses a matching source fragment at the same page position. @param frame - New fragment. @param frameIndex - Position in page. @returns Persistent fragment. */ (
+                  frame,
+                  frameIndex,
+                ) => {
+                  const oldFrame = oldPage?.textFrames[frameIndex];
+                  return layoutGeometryUnchanged &&
+                    unchanged.has(frame.nodeId) &&
+                    textFrameEqual(frame, oldFrame) &&
+                    oldPage !== undefined &&
+                    pageDescriptorEqual(page.descriptor, oldPage.descriptor)
+                    ? (oldFrame as SwTextFrame)
+                    : frame;
+                },
+              ),
+            );
+            if (
+              oldPage !== undefined &&
+              pageDescriptorEqual(oldPage.descriptor, page.descriptor) &&
+              tableFramesEqual(oldPage.tableFrames, page.tableFrames) &&
+              oldPage.textFrames.length === textFrames.length &&
+              textFrames.every(
+                /** Tests unchanged frame identity. @param frame - Current frame. @param frameIndex - Position. @returns Whether stable. */
+                (frame, frameIndex) => frame === oldPage.textFrames[frameIndex],
+              )
+            )
+              return oldPage;
+            return Object.freeze({ ...page, textFrames });
+          },
+        ),
+      );
+      const retained = new Set(
+        pages.flatMap(
+          /** Collects original retained frame identities. @param page - Reconciled page. @returns Original fragments. */
+          (page) => page.textFrames,
+        ),
+      );
+      for (const page of [...created, ...previous])
+        for (const frame of page.textFrames) if (!retained.has(frame)) SwFrame.DestroyFrame(frame);
+      const formattedNodes = new Set(
+        [...retained].map(
+          /** Reads the actual retained content owner. @param frame - Original formatter client. @returns Native node. */
+          (frame) => frame.GetTextNodeFirst(),
+        ),
+      );
+      for (const [node, measured] of this.cursorFrames)
+        if (formattedNodes.has(node)) {
+          for (const frame of measured.frames)
+            if (!retained.has(frame) && !frame.IsInDtor()) SwFrame.DestroyFrame(frame);
           if (
-            oldPage !== undefined &&
-            pageDescriptorEqual(oldPage.descriptor, page.descriptor) &&
-            tableFramesEqual(oldPage.tableFrames, page.tableFrames) &&
-            oldPage.textFrames.length === textFrames.length &&
-            textFrames.every(
-              /** Tests unchanged frame identity. @param frame - Current frame. @param frameIndex - Position. @returns Whether stable. */
-              (frame, frameIndex) => frame === oldPage.textFrames[frameIndex],
+            measured.frames.some(
+              /** Drops an obsolete measured lease after native body formatting replaced its original clients. @param frame - Previous measured client. @returns Whether no longer retained. */
+              (frame) => !retained.has(frame),
             )
           )
-            return oldPage;
-          return Object.freeze({ ...page, textFrames });
-        },
-      ),
-    );
-    const retained = new Set(
-      pages.flatMap(
-        /** Collects original retained frame identities. @param page - Reconciled page. @returns Original fragments. */
-        (page) => page.textFrames,
-      ),
-    );
-    for (const page of [...created, ...previous])
-      for (const frame of page.textFrames) if (!retained.has(frame)) SwFrame.DestroyFrame(frame);
-    const formattedNodes = new Set(
-      [...retained].map(
-        /** Reads the actual retained content owner. @param frame - Original formatter client. @returns Native node. */
-        (frame) => frame.GetTextNodeFirst(),
-      ),
-    );
-    for (const [node, measured] of this.cursorFrames)
-      if (formattedNodes.has(node)) {
-        for (const frame of measured.frames)
-          if (!retained.has(frame) && !frame.IsInDtor()) SwFrame.DestroyFrame(frame);
-        if (
-          measured.frames.some(
-            /** Drops an obsolete measured lease after native body formatting replaced its original clients. @param frame - Previous measured client. @returns Whether no longer retained. */
-            (frame) => !retained.has(frame),
-          )
-        )
-          this.cursorFrames.delete(node);
-      }
-    linkTextFrameFollows(
-      pages.map(
-        /** Reads retained original fragments. @param page - Physical page. @returns Native frames. */ (
-          page,
-        ) => page.textFrames,
-      ),
-    );
-    const lineNumbers = Object.freeze(
-      projectSwLineNumbers(pages, paragraphs, lineInfo).map(
-        /** Freezes marks on one page. @param page - Page marks. @returns Immutable marks. */
-        (page) =>
-          Object.freeze(
-            page.map(
-              /** Freezes marks on one text fragment. @param frame - Fragment marks. @returns Immutable marks. */
-              (frame) =>
-                Object.freeze(
-                  frame.map(
-                    /** Freezes one mark. @param mark - Line-number mark. @returns Immutable mark. */
-                    (mark) => Object.freeze(mark),
+            this.cursorFrames.delete(node);
+        }
+      linkTextFrameFollows(
+        pages.map(
+          /** Reads retained original fragments. @param page - Physical page. @returns Native frames. */ (
+            page,
+          ) => page.textFrames,
+        ),
+      );
+      const lineNumbers = Object.freeze(
+        projectSwLineNumbers(pages, paragraphs, lineInfo).map(
+          /** Freezes marks on one page. @param page - Page marks. @returns Immutable marks. */
+          (page) =>
+            Object.freeze(
+              page.map(
+                /** Freezes marks on one text fragment. @param frame - Fragment marks. @returns Immutable marks. */
+                (frame) =>
+                  Object.freeze(
+                    frame.map(
+                      /** Freezes one mark. @param mark - Line-number mark. @returns Immutable mark. */
+                      (mark) => Object.freeze(mark),
+                    ),
                   ),
-                ),
+              ),
             ),
-          ),
-      ),
-    );
-    this.revision += 1;
-    this.lastDocument = document;
-    this.lastModelRevision = modelRevision;
-    this.lastMeasurementRevision = measurementRevision;
-    this.lastDescriptor = descriptor;
-    this.lastSettings = settings;
-    this.lastLineInfo = lineInfo;
-    this.lastInputs = paragraphs;
-    this.lastTableMeasurements = tableMeasurements;
-    this.dirty = false;
-    this.dirtyFrom = Number.POSITIVE_INFINITY;
-    this.snapshot = Object.freeze({ revision: this.revision, pages, lineNumbers });
-    return this.snapshot;
+        ),
+      );
+      this.revision += 1;
+      this.lastDocument = document;
+      this.lastModelRevision = modelRevision;
+      this.lastMeasurementRevision = measurementRevision;
+      this.lastDescriptor = descriptor;
+      this.lastSettings = settings;
+      this.lastLineInfo = lineInfo;
+      this.lastInputs = paragraphs;
+      this.lastTableMeasurements = tableMeasurements;
+      this.dirty = false;
+      this.dirtyFrom = Number.POSITIVE_INFINITY;
+      for (const frame of previousTables)
+        if (!tableFrames.includes(frame)) SwFrame.DestroyFrame(frame);
+      this.snapshot = Object.freeze({
+        revision: this.revision,
+        pages,
+        lineNumbers,
+        tableFrames: Object.freeze(tableFrames),
+      });
+      return this.snapshot;
+    } catch (error) {
+      for (const frame of tableFrames)
+        if (!previousTables.includes(frame)) SwFrame.DestroyFrame(frame);
+      throw error;
+    }
   }
 }
 
@@ -600,46 +626,6 @@ function textFrameEqual(left: SwTextFrame, right: SwTextFrame | undefined): bool
   );
 }
 
-/** Pairs measured rows with tables in the canonical body order. @param document - Writer document. @param measurements - Browser table-row measurements. @returns Ordered table inputs. */
-function createSwTableFrameInputs(
-  document: SwDoc,
-  measurements: readonly SwTableFrameMeasurement[],
-): readonly SwTableFrameInput[] {
-  const byName = new Map(
-    measurements.map(
-      /** map handles this value. @param entry - Input 1. @returns The result. */ (entry) =>
-        [entry.tableName, entry] as const,
-    ),
-  );
-  const tables: SwTableFrameInput[] = [];
-  let paragraphIndex = -1;
-  for (const node of document.nodes.getBodyContent()) {
-    if (node instanceof SwTableNode) {
-      const table = node.GetTable();
-      const measured = byName.get(table.GetName());
-      tables.push({
-        table,
-        tableName: table.GetName(),
-        afterParagraphIndex: paragraphIndex,
-        rowHeights: table.GetTabLines().map(
-          /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
-            row,
-            index,
-          ) => {
-            const frame = new SwRowFrame(row);
-            try {
-              return frame.Format(measured?.rowHeights[index] ?? 240);
-            } finally {
-              frame.DestroyImpl();
-            }
-          },
-        ),
-      });
-    } else paragraphIndex += 1;
-  }
-  return tables;
-}
-
 /** Compares device row measurements across formatting passes. @param left - Previous measurements. @param right - Current measurements. @returns Whether the measurements match. */
 function tableMeasurementsEqual(
   left: readonly SwTableFrameMeasurement[],
@@ -674,6 +660,7 @@ function tableFramesEqual(left: readonly SwTableFrame[], right: readonly SwTable
         index,
       ) =>
         frame.table === right[index]?.table &&
+        frame.nativeFrame === right[index]?.nativeFrame &&
         frame.printArea.left === right[index]?.printArea.left &&
         frame.printArea.right === right[index]?.printArea.right &&
         frame.firstRow === right[index]?.firstRow &&
@@ -737,7 +724,7 @@ export function createSwPageFrames(
     for (const input of tables) {
       if (input.afterParagraphIndex !== afterParagraphIndex) continue;
       const spacingItem = input.table.GetFrameFormat().GetULSpace();
-      const nativeFrame = new SwTabFrame(input.table);
+      const nativeFrame = input.nativeFrame ?? new SwTabFrame(input.table, sibling);
       try {
         if (!nativeFrame.IsLayoutSplitAllowed() && input.rowHeights.length > 0 && hasContent()) {
           const bodyHeight =
@@ -820,6 +807,7 @@ export function createSwPageFrames(
           else
             frames.push({
               table: input.table,
+              ...(input.nativeFrame === undefined ? {} : { nativeFrame }),
               printArea: nativeFrame.Format(
                 activeDescriptor.value.width -
                   activeDescriptor.value.leftMargin -
@@ -834,7 +822,7 @@ export function createSwPageFrames(
         }
         used += spacingItem.GetLower();
       } finally {
-        nativeFrame.DestroyImpl();
+        if (input.nativeFrame === undefined) nativeFrame.DestroyImpl();
       }
     }
   }

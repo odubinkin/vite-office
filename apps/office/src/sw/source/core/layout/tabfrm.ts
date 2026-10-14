@@ -1,8 +1,11 @@
 /** @fileoverview Formats represented horizontal table print areas from native SwTabFrame::Format. */
+import type { SwDoc } from "../doc/doc";
+import { SwTableNode } from "../docnode/node";
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
+import { SwFlowFrame } from "./flowfrm";
 import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
@@ -49,13 +52,16 @@ function lcl_InvalidateAllLowersPrt(frame: SwLayoutFrame): void {
 
 /** Owns represented flat-row height over its original native line. */
 export class SwRowFrame extends SwLayoutFrame {
-  /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
-  public constructor(private readonly line: SwTableLine) {
-    super(line.GetFrameFormat());
+  /** Binds the actual row owner and original root-bearing sibling. @param line - Original native line. @param sibling - Existing native layout frame. @returns Nothing. */
+  public constructor(
+    private readonly line: SwTableLine,
+    sibling?: SwFrame,
+  ) {
+    super(line.GetFrameFormat(), sibling);
     this.mnFrameType = SwFrameType.Row;
     let previous: SwCellFrame | undefined;
     for (const box of line.GetTabBoxes()) {
-      const frame = new SwCellFrame(box);
+      const frame = new SwCellFrame(box, this);
       frame.InsertBehind(this, previous);
       previous = frame;
     }
@@ -126,9 +132,12 @@ export class SwRowFrame extends SwLayoutFrame {
 
 /** Native cell frame retains and registers its original model box. */
 export class SwCellFrame extends SwLayoutFrame {
-  /** Registers at the original native box format. @param box - Original cell model. @returns Nothing. */
-  public constructor(private readonly box: SwTableBox) {
-    super(box.GetFrameFormat());
+  /** Registers at the original native box format with its root-bearing sibling. @param box - Original cell model. @param sibling - Existing native layout frame. @returns Nothing. */
+  public constructor(
+    private readonly box: SwTableBox,
+    sibling?: SwFrame,
+  ) {
+    super(box.GetFrameFormat(), sibling);
     this.mnFrameType = SwFrameType.Cell;
   }
   /** Reads the original cell identity. @returns Native box. */
@@ -237,21 +246,86 @@ export interface SwTableMouseGeometry {
 
 /** Owns horizontal print geometry over the actual canonical table. */
 export class SwTabFrame extends SwLayoutFrame {
-  /** Binds this layout frame to its original table. @param table - Canonical table. @param mouseGeometry - Optional live device frames. @returns Nothing. */
-  public constructor(
-    private readonly table: SwTable,
-    public readonly mouseGeometry?: SwTableMouseGeometry,
-  ) {
-    super(table.GetFrameFormat());
+  /** Optional browser device geometry, supplied independently of the native constructor. */
+  public mouseGeometry: SwTableMouseGeometry | undefined;
+  private readonly table: SwTable;
+  private readonly flow: SwFlowFrame;
+  /** Binds an original table master or inserts an original native follow without lower copying. @param table - Model table or original table frame. @param sibling - Root-bearing original frame for master construction. @returns Nothing. */
+  public constructor(table: SwTable | SwTabFrame, sibling?: SwFrame) {
+    super(
+      table instanceof SwTabFrame ? table.GetFormat() : table.GetFrameFormat(),
+      table instanceof SwTabFrame ? table : sibling,
+    );
+    this.table = table instanceof SwTabFrame ? table.GetTable() : table;
+    this.flow = new SwFlowFrame(this);
     this.mnFrameType = SwFrameType.Tab;
-    let previous: SwRowFrame | undefined;
-    for (const line of table.GetTabLines()) {
-      const row = new SwRowFrame(line);
-      if (row.Lower()) {
-        row.InsertBehind(this, previous);
-        previous = row;
-      } else SwFrame.DestroyFrame(row);
+    if (table instanceof SwTabFrame) {
+      this.SetFollow(table.GetFollow());
+      table.SetFollow(this);
+    } else {
+      let previous: SwRowFrame | undefined;
+      for (const line of table.GetTabLines()) {
+        const row = new SwRowFrame(line, this);
+        if (row.Lower()) {
+          row.InsertBehind(this, previous);
+          previous = row;
+        } else SwFrame.DestroyFrame(row);
+      }
     }
+  }
+  /** Reads the next original native table flow frame. @returns Original follow or absent. */
+  public GetFollow(): SwTabFrame | undefined {
+    return this.flow.GetFollow()?.m_rThis as SwTabFrame | undefined;
+  }
+  /** Reads the original native predecessor. @returns Original preceding table frame or absent. */
+  public GetPrecede(): SwTabFrame | undefined {
+    return this.flow.GetPrecede()?.m_rThis as SwTabFrame | undefined;
+  }
+  /** Tests original native follow ownership. @returns Whether a follow exists. */
+  public HasFollow(): boolean {
+    return this.flow.HasFollow();
+  }
+  /** Classifies original native predecessor ownership. @returns Whether this is a follow. */
+  public IsFollow(): boolean {
+    return this.flow.IsFollow();
+  }
+  /** Re-chains original table frames through the existing native flow component. @param follow - Original next table flow frame. @returns Nothing. */
+  public SetFollow(follow: SwTabFrame | undefined): void {
+    this.flow.SetFollow(follow?.flow);
+  }
+  /** Finds the original registered table predecessor or the first native master in its actual chain. @param firstMaster - Follow source first-master mode instead of immediate predecessor. @returns Original master or lost link. */
+  public FindMaster(firstMaster = false): SwTabFrame | undefined {
+    let result: SwTabFrame | undefined;
+    this.table.GetFrameFormat().ForAllListeners(
+      /** Scans only original registered table frame clients, in source order. @param client - Original native format client. @returns Whether the source search found its owner. */
+      (client) => {
+        if (!(client instanceof SwTabFrame)) return false;
+        if (firstMaster) {
+          if (!client.IsFollow()) {
+            for (
+              let next: SwTabFrame | undefined = client;
+              next !== undefined;
+              next = next.GetFollow()
+            ) {
+              if (next.GetFollow() === this) {
+                result = client;
+                return true;
+              }
+            }
+          }
+        } else if (client.GetFollow() === this) {
+          result = client;
+          return true;
+        }
+        return false;
+      },
+    );
+    return result;
+  }
+  /** Releases original lowers and registration, then detaches flow neighbors without stitching. @returns Nothing. */
+  public override DestroyImpl(): void {
+    super.DestroyImpl();
+    this.flow.DestroyImpl();
   }
   /** Releases the complete native table lower hierarchy. @returns Nothing. */
   public override Dispose(): void {
@@ -306,8 +380,7 @@ export class SwTabFrame extends SwLayoutFrame {
         flags |= SwTabFrameInvFlags.InvalidatePos | SwTabFrameInvFlags.InvalidateNextPos;
         break;
       case RES_LAYOUT_SPLIT:
-        // Represented table frames are masters; native follow identity remains unrepresented.
-        flags |= SwTabFrameInvFlags.InvalidatePos;
+        if (!this.IsFollow()) flags |= SwTabFrameInvFlags.InvalidatePos;
         break;
       case RES_COLLAPSING_BORDERS:
         flags |= SwTabFrameInvFlags.InvalidatePrt;
@@ -417,4 +490,91 @@ export class SwTabFrame extends SwLayoutFrame {
     if (upperWidth - 23 < left + right) left = right = 0;
     return Object.freeze({ left, right, width: upperWidth - left - right });
   }
+}
+
+/** Temporary browser-device hierarchy freshness admission while native structural frame invalidation is unported; it borrows original links without another state map. @param frame - Existing original layout object. @param table - Current original model. @returns Whether its represented hierarchy remains current. */
+export function isSwTableFrameModelCurrent(frame: SwTabFrame, table: SwTable): boolean {
+  if (
+    frame.IsInDtor() ||
+    frame.GetTable() !== table ||
+    frame.GetRegisteredIn() !== table.GetFrameFormat()
+  )
+    return false;
+  let row = frame.Lower();
+  for (const line of table.GetTabLines()) {
+    if (line.GetTabBoxes().length === 0) continue;
+    if (
+      !(row instanceof SwRowFrame) ||
+      row.GetTabLine() !== line ||
+      row.GetRegisteredIn() !== line.GetFrameFormat()
+    )
+      return false;
+    let cell = row.Lower();
+    for (const box of line.GetTabBoxes()) {
+      if (
+        !(cell instanceof SwCellFrame) ||
+        cell.GetTabBox() !== box ||
+        cell.GetRegisteredIn() !== box.GetFrameFormat()
+      )
+        return false;
+      cell = cell.GetNext();
+    }
+    if (cell !== undefined) return false;
+    row = row.GetNext();
+  }
+  return row === undefined;
+}
+
+/** Device measured table rows; the core owns their placement. */
+export interface SwTableFrameMeasurement {
+  readonly tableName: string;
+  readonly rowHeights: readonly number[];
+}
+
+/** Canonical table and its position relative to body text nodes. */
+export interface SwTableFrameInput extends SwTableFrameMeasurement {
+  readonly nativeFrame?: SwTabFrame;
+  readonly table: SwTable;
+  readonly afterParagraphIndex: number;
+}
+
+/** Pairs measured rows with tables in the canonical body order. @param document - Writer document. @param measurements - Browser table-row measurements. @param takeFrame - Original root-owned native master resolver. @returns Ordered table inputs. */
+export function createSwTableFrameInputs(
+  document: SwDoc,
+  measurements: readonly SwTableFrameMeasurement[],
+  takeFrame: (table: SwTable) => SwTabFrame,
+): readonly SwTableFrameInput[] {
+  const byName = new Map(
+    measurements.map(
+      /** map handles this value. @param entry - Input 1. @returns The result. */ (entry) =>
+        [entry.tableName, entry] as const,
+    ),
+  );
+  const tables: SwTableFrameInput[] = [];
+  let paragraphIndex = -1;
+  for (const node of document.nodes.getBodyContent()) {
+    if (node instanceof SwTableNode) {
+      const table = node.GetTable();
+      const measured = byName.get(table.GetName());
+      const nativeFrame = takeFrame(table);
+      tables.push({
+        nativeFrame,
+        table,
+        tableName: table.GetName(),
+        afterParagraphIndex: paragraphIndex,
+        rowHeights: table.GetTabLines().map(
+          /** map handles this value. @param row - Input 1. @param index - Input 2. @returns The result. */ (
+            row,
+            index,
+          ) => {
+            let frame = nativeFrame.Lower() as SwRowFrame | undefined;
+            while (frame !== undefined && frame.GetTabLine() !== row)
+              frame = frame.GetNext() as SwRowFrame | undefined;
+            return frame?.Format(measured?.rowHeights[index] ?? 240) ?? 0;
+          },
+        ),
+      });
+    } else paragraphIndex += 1;
+  }
+  return tables;
 }

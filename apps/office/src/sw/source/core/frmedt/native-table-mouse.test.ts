@@ -57,7 +57,7 @@ function fixture() {
       }),
     ),
   };
-  const frame = new SwTabFrame(table, geometry);
+  const frame = Object.assign(new SwTabFrame(table), { mouseGeometry: geometry });
   edit.SetTableMouseFrames([frame]);
   return { doc, body, table, boxes, shell, edit, invalidate, geometry, frame };
 }
@@ -71,15 +71,17 @@ function selected(f: ReturnType<typeof fixture>): number[] {
 
 it("keeps the nearer master when a farther frame follows it during row drag", /** Checks that later frame candidates cannot replace a closer projection. @returns Nothing. */ () => {
   const f = fixture();
-  const farther = new SwTabFrame(f.table, {
-    rect: { left: 600, right: 900, top: 100, bottom: 250 },
-    cells: f.geometry.cells.map(
-      /** Moves the same owned boxes to a farther physical frame. @param cell - Source cell. @returns Independent geometry. */
-      (cell) => ({
-        box: cell.box,
-        rect: { ...cell.rect, left: cell.rect.left + 500, right: cell.rect.right + 500 },
-      }),
-    ),
+  const farther = Object.assign(new SwTabFrame(f.table), {
+    mouseGeometry: {
+      rect: { left: 600, right: 900, top: 100, bottom: 250 },
+      cells: f.geometry.cells.map(
+        /** Moves the same owned boxes to a farther physical frame. @param cell - Source cell. @returns Independent geometry. */
+        (cell) => ({
+          box: cell.box,
+          rect: { ...cell.rect, left: cell.rect.left + 500, right: cell.rect.right + 500 },
+        }),
+      ),
+    },
   });
   f.edit.SetTableMouseFrames([f.frame, farther]);
   expect(f.edit.MouseButtonDown({ x: 93, y: 125 })).toBe(true);
@@ -154,24 +156,28 @@ it.each([true, false])(
 
 it("projects row drag onto the closest original follow frame and preserves native edit history" /** Checks real master/follow selection and subsequent selected-cell deletion. @returns Nothing. */, () => {
   const f = fixture();
-  const master = new SwTabFrame(f.table, {
-    rect: { left: 100, right: 400, top: 100, bottom: 150 },
-    cells: f.geometry.cells.slice(0, 3),
+  const master = Object.assign(new SwTabFrame(f.table), {
+    mouseGeometry: {
+      rect: { left: 100, right: 400, top: 100, bottom: 150 },
+      cells: f.geometry.cells.slice(0, 3),
+    },
   });
-  const follow = new SwTabFrame(f.table, {
-    rect: { left: 500, right: 800, top: 500, bottom: 600 },
-    cells: f.geometry.cells.slice(3).map(
-      /** Moves original follow cells to the second physical page. @param cell - Native owner measurement. @returns Follow measurement. */
-      (cell) => ({
-        box: cell.box,
-        rect: {
-          left: cell.rect.left + 400,
-          right: cell.rect.right + 400,
-          top: cell.rect.top + 350,
-          bottom: cell.rect.bottom + 350,
-        },
-      }),
-    ),
+  const follow = Object.assign(new SwTabFrame(f.table), {
+    mouseGeometry: {
+      rect: { left: 500, right: 800, top: 500, bottom: 600 },
+      cells: f.geometry.cells.slice(3).map(
+        /** Moves original follow cells to the second physical page. @param cell - Native owner measurement. @returns Follow measurement. */
+        (cell) => ({
+          box: cell.box,
+          rect: {
+            left: cell.rect.left + 400,
+            right: cell.rect.right + 400,
+            top: cell.rect.top + 350,
+            bottom: cell.rect.bottom + 350,
+          },
+        }),
+      ),
+    },
   });
   f.edit.SetTableMouseFrames([master, follow, new SwTabFrame(f.doc.nodes.MakeTableNode("Other"))]);
   expect(f.edit.MouseButtonDown({ x: 93, y: 125 })).toBe(true);
@@ -194,9 +200,11 @@ it("projects row drag onto the closest original follow frame and preserves nativ
 it("admits top selection only when the previous frame does not occupy the outer half of the hot spot" /** Checks source previous-frame overlap and strict half threshold. @returns Nothing. */, () => {
   const f = fixture();
   f.edit.SetTableMouseFrames([
-    new SwTabFrame(f.table, {
-      ...f.geometry,
-      previous: { left: 100, right: 400, top: 70, bottom: 99 },
+    Object.assign(new SwTabFrame(f.table), {
+      mouseGeometry: {
+        ...f.geometry,
+        previous: { left: 100, right: 400, top: 70, bottom: 99 },
+      },
     }),
   ]);
   expect(f.edit.WhichMouseTabCol({ x: 250, y: 93 })).toBe(SwTab.COL_NONE);
@@ -210,22 +218,26 @@ it("rejects stale, foreign, empty, repeated and absent device frames without cre
   for (const frame of [
     foreign.frame,
     new SwTabFrame(f.table),
-    new SwTabFrame(f.table, { ...f.geometry, cells: [] }),
-    new SwTabFrame(f.table, {
-      ...f.geometry,
-      cells: [{ ...required(f.geometry.cells[0]), box: required(foreign.boxes[0]) }],
+    Object.assign(new SwTabFrame(f.table), { mouseGeometry: { ...f.geometry, cells: [] } }),
+    Object.assign(new SwTabFrame(f.table), {
+      mouseGeometry: {
+        ...f.geometry,
+        cells: [{ ...required(f.geometry.cells[0]), box: required(foreign.boxes[0]) }],
+      },
     }),
   ]) {
     f.edit.SetTableMouseFrames([frame]);
     expect(f.edit.MouseButtonDown({ x: 93, y: 125 })).toBe(false);
   }
   f.edit.SetTableMouseFrames([
-    new SwTabFrame(f.table, {
-      ...f.geometry,
-      cells: f.geometry.cells.map(
-        /** Marks a follow headline frame without replacing original cells. @param cell - Actual measurement. @returns Repeated headline measurement. */
-        (cell) => ({ ...cell, repeatedHeadline: true }),
-      ),
+    Object.assign(new SwTabFrame(f.table), {
+      mouseGeometry: {
+        ...f.geometry,
+        cells: f.geometry.cells.map(
+          /** Marks a follow headline frame without replacing original cells. @param cell - Actual measurement. @returns Repeated headline measurement. */
+          (cell) => ({ ...cell, repeatedHeadline: true }),
+        ),
+      },
     }),
   ]);
   expect(f.edit.MouseButtonDown({ x: 93, y: 125 })).toBe(false);
@@ -242,17 +254,19 @@ it("keeps the original selection when dragged follow geometry has no admitted co
   for (const repeated of [false, true]) {
     f.edit.SetTableMouseFrames([
       f.frame,
-      new SwTabFrame(f.table, {
-        rect: { left: 500, right: 800, top: 500, bottom: 550 },
-        cells: repeated
-          ? [
-              {
-                box: required(f.boxes[3]),
-                rect: { left: 500, right: 600, top: 500, bottom: 550 },
-                repeatedHeadline: true,
-              },
-            ]
-          : [],
+      Object.assign(new SwTabFrame(f.table), {
+        mouseGeometry: {
+          rect: { left: 500, right: 800, top: 500, bottom: 550 },
+          cells: repeated
+            ? [
+                {
+                  box: required(f.boxes[3]),
+                  rect: { left: 500, right: 600, top: 500, bottom: 550 },
+                  repeatedHeadline: true,
+                },
+              ]
+            : [],
+        },
       }),
     ]);
     expect(f.edit.MouseMove({ x: 500, y: 525 })).toBe(false);
