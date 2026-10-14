@@ -1,10 +1,11 @@
 ---
 id: "202610141052-ZWCGK6"
 title: "Implement shared cell alignment values and Calc formatting defaults"
-status: "DOING"
+result_summary: "Completed task117 shared cell alignment value prerequisites; fullDocPool/document/UI/ODS remain pending, goalactive, nextfull121."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task117-checks/gates-results.json"
   findings:
     - "Actual shared cell alignment/rotate-mode and5IDL owners preserve enum/short/long transport, copy/default/member and failure quirks; native normal enum getter uses genuine CPPU, no generator/fake provider. Source-backed module edge migration preserves reverse/browser guards."
-commit: null
+commit:
+  hash: "e45ed009bd458c8a46060977c99cd31163793957"
+  message: "🧩 ZWCGK6 core: share cell alignment values and Calc defaults"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved real shared alignment/rotation-mode value chains and UNO types, five Calc defaults; preserve source quirks, no generator or fake provider."
+  -
+    author: "CODER"
+    body: "Verified: actual shared alignment and rotate-mode values/UNO types and five Calc defaults;162Calc/18related/27module tests pass, complete raw100/12gates and exact46paths/18nativepins."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "WholeCalc162tests and18related tests pass; current complete Calc33/shared10owners rawS/B/F/L100 everycounterpositive. Module27tests/12focused gates and exact46paths3539hashes/18nativepins pass. Real shared enum metadata and original failure/default semantics preserved; same-agent EVAL not independent. Full121next; actual document/UI/ODS remain pending."
+  -
+    type: "status"
+    at: "2026-10-14T11:03:11.904Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared alignment and rotate-mode values/UNO types and five Calc defaults;162Calc/18related/27module tests pass, complete raw100/12gates and exact46paths/18nativepins."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:02:40.281Z"
+doc_updated_at: "2026-10-14T11:03:11.906Z"
 doc_updated_by: "CODER"
 description: "Task117: native EditEng justify item trio, SVX rotate-mode, real UNO enum/constant owners, five Calc DocPool attribute identities. Reuse SVL/CPPU, preserve source conversion/default quirks; source-absent Calc/shared raw100 and focused checks, full121next."
 sections:
