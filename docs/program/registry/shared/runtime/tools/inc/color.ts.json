@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/inc/color.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "color",
+    "capabilityIds": [
+      "CAP-177468b1-69ef-4767-a72a-85fd0ef30b45"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/inc/color.test.ts",
+        "docs/program/calc-core.md#Canonical shared Color values for Calc attributes (task128)"
+      ],
+      "justification": "Task128 implements the shared Tools Color logical value, default/copy/opaque/RGB/transparency/alpha constructors, channels, comparisons, signed and unsigned casts, original 25 constants, merge/invert/error, luminance and contrast, and actual existing CPPU Any transport. Native tag enums both retain numeric0; an explicit trailing erased native tag family selects their otherwise indistinguishable JS overloads. One ordinary unsigned32 JS number stores the logical value, without binary buffers, endian simulation, allocation or reference counting. Original source method bodies use type-only header imports and header wrappers rather than prototype mutation. Bounded native contrast rounding uses ordinary Math.round and WCAG conversion uses Math.trunc, without another numeric library. All constants are immutable values and copies remain mutable. CALC-112 preserves the original full-packed-value shape-color exception. Advanced BColor, HSB/HSL, tint, string/logging and ComplexColor APIs remain unported without stubs. Calc default sentinel tests are actual value-copy and Any witnesses, not a fabricated attribute pool. Existing numeric SvxBorderLine and its Writer consumers will be migrated to Color separately under explicit human authorization; this foundation alone does not certify border parity. Full DocPool/document/UI/same-model ODS remain pending. No C++ execution, binary format simulation or full regression before actual UI/ODS readiness.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Color",
+        "ColorChannelMerge",
+        "COL_AUTO"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/tools/color.hxx",
+      "upstreamSymbols": [
+        "Color",
+        "ColorChannelMerge",
+        "COL_AUTO"
+      ]
+    }
+  }
+}

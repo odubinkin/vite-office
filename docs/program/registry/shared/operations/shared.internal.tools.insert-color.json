@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.tools.insert-color",
+    "modulePath": "apps/office/src/tools/inc/color.ts",
+    "symbol": "insertColor",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-177468b1-69ef-4767-a72a-85fd0ef30b45",
+    "description": "Original Tools Any insertion operator writes the signed32 logical Color through the existing actual CPPU Any API."
+  }
+}

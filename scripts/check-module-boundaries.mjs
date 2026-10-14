@@ -121,7 +121,8 @@ const allowedEdges = new Map([
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
   ["unotools", new Set(["sal"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
-  ["tools", new Set(["o3tl"])],
+  // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
+  ["tools", new Set(["o3tl", "cppu"])],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],

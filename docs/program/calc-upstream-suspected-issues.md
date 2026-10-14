@@ -1983,3 +1983,12 @@ Pinned editeng/source/items/textitem.cxx:909ff resets property/unit before check
 Initialized example: stored height200, prop125, relative unit, then an invalid bool Any for difference member with CONVERT_TWIPS. The call returns false and height160 with prop125 unchanged; a second failed call leaves height128. Struct Diff is ignored on successful put. Negative point difference stores signed-short bits in unsigned nProp, so querying Diff after putting-1 can return65535. Native real-height relative multiplication also wraps unsigned32 before division and the absolute reconstruction clamps rather than underflows.
 
 Actual Any and source-derived initialized assertions in native-font-height-transport.test.ts preserve these results. No failure is normalized into an atomic update, no fake extraction peer forces unreachable numeric fallbacks, and no native binary/ABI execution or external defect report is claimed.
+
+
+## CALC-112: Dark-color exception compares the full packed value
+
+Status: source behavior preserved; the explicit exception may be intentional, no confirmed defect.
+
+Pinned tools/source/generic/color.cxx IsDark compares the complete stored value with 0x729fcf. This opaque default shape color takes the integer luminance threshold62: its luminance151 therefore returns false. The same RGB channels with transparency1 bypass that exception and use WCAG luminance83 against threshold87, returning true. Transparency thus changes this brightness predicate even though both luminance methods themselves depend only on RGB.
+
+The initialized color.test.ts assertions retain both cases. No RGB-only normalization or upstream fix is applied. Automatic and transparent constants sharing 0xffffffff are preserved as deliberate role aliases, not classified as an error.

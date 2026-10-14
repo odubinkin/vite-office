@@ -652,3 +652,14 @@ it("permits original SVTools scalar metric dependencies while preserving reverse
     /presentation package/u,
   );
 });
+
+it("admits original Tools Color Any operators while retaining reverse and application guards", /** Header owns the original specialization, no CPPU to Tools dependency. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("tools", "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("cppu", "tools")).toBe(true);
+  for (const target of ["sc", "sw", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("tools", target)).toBe(true);
+  expect(getRuntimeOwnershipLayer("tools/inc/color.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("tools/inc/color.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
