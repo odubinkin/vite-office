@@ -4,7 +4,7 @@ title: "Implement signed item values and Calc cell rotation attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T10:48:53.421Z"
+  updated_by: "CODER"
+  note: "Current wholeCalc161tests/85related tests pass, complete Calc33/shared4owners rawS/B/F/L100 everycounterpositive. Module26tests/12focused gates and exact47paths3507hashes15nativepins pass. Primitive Degree100 erasure/no strong_int or memory library, signed32/Any/hash and native copy/Clone preserved. Same-agent EVAL not independent; full121next, document/UI/ODS pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T10:48:46.273Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent source-bound review passed47intentional paths/15native pins,161Calc/85related/26module tests with current complete raw100 and12gates. Not independent review."
+  evaluated_sha: "67ea47926772b3e3f713410a5e6a37bcecbe6def"
+  blueprint_digest: "ec86e1359c97e444c0e5352327a80022bb0f4825d6c7498760490bd39eb0a880"
+  evidence_refs:
+    - ".agentplane/tasks/202610141040-7VT65J/README.md"
+    - ".agentplane/tasks/202610141040-7VT65J/quality/20261014-104846273-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141040-7VT65J/quality/20261014-104846273-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141040-7VT65J/quality/20261014-104846273-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141040-7VT65J/blueprint/resolved-snapshot.json"
+    - "output/playwright/task116-checks/exact-review.json"
+    - "output/playwright/task116-checks/value-coverage-audit.json"
+    - "output/playwright/task116-checks/gates-results.json"
+  findings:
+    - "Shared signed32/angle/primitive Degree100 and Calc rotation preserve normal value/Any/hash/copy/Clone contracts; no angle normalization or memory wrapper. Signed native zero and negative-key modular binding tested."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved signed/angle value chain and Calc rotation with primitive Degree100 unit binding, actual shared Any/hash, no generic memory/strong-int library."
+  -
+    type: "verify"
+    at: "2026-10-14T10:48:53.421Z"
+    author: "CODER"
+    state: "ok"
+    note: "Current wholeCalc161tests/85related tests pass, complete Calc33/shared4owners rawS/B/F/L100 everycounterpositive. Module26tests/12focused gates and exact47paths3507hashes15nativepins pass. Primitive Degree100 erasure/no strong_int or memory library, signed32/Any/hash and native copy/Clone preserved. Same-agent EVAL not independent; full121next, document/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:47:38.947Z"
+doc_updated_at: "2026-10-14T10:48:53.497Z"
 doc_updated_by: "CODER"
 description: "Task116: actual shared signed32/SdrAngle item values and original ScRotateValueItem for DocPool. Primitive Degree100 unit alias erases native strong_int, existing Any/hash reused; no native memory library. WholeCalc/changedshared raw100 and scoped checks, full121next."
 sections:
@@ -55,6 +79,39 @@ sections:
     Command: node output/playwright/task116-checks/gates.mjs
     Result: final12focused gates and current-source maps/hash audit recorded before final APverify. Exact47intentionalpaths, fresh3493Gitbaseline/current3507hashes and15nativepins checked. Same-agent EVAL not independent review.
     Full office/browser/static scheduled121 per user cadence; no Writer-only coverage repair or native compilation.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T10:48:53.421Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Current wholeCalc161tests/85related tests pass, complete Calc33/shared4owners rawS/B/F/L100 everycounterpositive. Module26tests/12focused gates and exact47paths3507hashes15nativepins pass. Primitive Degree100 erasure/no strong_int or memory library, signed32/Any/hash and native copy/Clone preserved. Same-agent EVAL not independent; full121next, document/UI/ODS pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T10:47:38.947Z, excerpt_hash=sha256:2ccca68cdd6f34bd4e0f23c2096bb71d4238131e24cbd04aa313b9d1d6ce4544
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141040-7VT65J/blueprint/resolved-snapshot.json
+    - old_digest: ec86e1359c97e444c0e5352327a80022bb0f4825d6c7498760490bd39eb0a880
+    - current_digest: ec86e1359c97e444c0e5352327a80022bb0f4825d6c7498760490bd39eb0a880
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141040-7VT65J
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141040-7VT65J -m 🧩 7VT65J task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task116 source commit preserving tasks113-115 and user merges. No reset/branchintegration, unrelated task mutation or outside-repo artifacts."
   Findings: "Initial161Calc/85related tests and26module tests and12gates passed firsttime strict raw100. Final source review found generated signed-method comments still said unsigned; corrected comments/file overviews. Refined actual signed32 primitive binding so JS -0 becomes native integer0 in SetValue/PutValue, with new real signed and Calc angle assertions; no angle normalization or valid integer-range change. Final wholeCalc/related profiles rerun against these exact sources and focused gates refreshed. Existing hash arithmetic unchanged; signed32 key contract and independent unsigned32/64 modular reference cases added. Degree100 is deliberately an erased number unit alias, preserving hundredths and signed32 boundaries without a strong_int library/wrapper. Original SdrAngle GetValue/SetValue/Clone contracts and Calc copy/Clone Which histories retained. CALC102records source-only signed-minimum presentation negation suspicion; no invented native outcome, native probe or correction. Existing numeric/pool/Writer/Any assertions preserved. Native presentation/locale/diagnostics/caches/invalid domains/ABI/full document/UI/ODS pending/excluded; no fake provider/document or memory engine. Same-agent evaluator not independent. Goalactive, full121next."
 id_source: "generated"
@@ -86,6 +143,39 @@ Result: pass26tests for exact SVX→tools/header ownership and existing reverse/
 Command: node output/playwright/task116-checks/gates.mjs
 Result: final12focused gates and current-source maps/hash audit recorded before final APverify. Exact47intentionalpaths, fresh3493Gitbaseline/current3507hashes and15nativepins checked. Same-agent EVAL not independent review.
 Full office/browser/static scheduled121 per user cadence; no Writer-only coverage repair or native compilation.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T10:48:53.421Z — VERIFY — ok
+
+By: CODER
+
+Note: Current wholeCalc161tests/85related tests pass, complete Calc33/shared4owners rawS/B/F/L100 everycounterpositive. Module26tests/12focused gates and exact47paths3507hashes15nativepins pass. Primitive Degree100 erasure/no strong_int or memory library, signed32/Any/hash and native copy/Clone preserved. Same-agent EVAL not independent; full121next, document/UI/ODS pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T10:47:38.947Z, excerpt_hash=sha256:2ccca68cdd6f34bd4e0f23c2096bb71d4238131e24cbd04aa313b9d1d6ce4544
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141040-7VT65J/blueprint/resolved-snapshot.json
+- old_digest: ec86e1359c97e444c0e5352327a80022bb0f4825d6c7498760490bd39eb0a880
+- current_digest: ec86e1359c97e444c0e5352327a80022bb0f4825d6c7498760490bd39eb0a880
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141040-7VT65J
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141040-7VT65J -m 🧩 7VT65J task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
