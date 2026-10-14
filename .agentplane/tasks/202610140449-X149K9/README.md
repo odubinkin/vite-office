@@ -4,7 +4,7 @@ title: "Implement shared configuration modification paths and additions"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T04:56:35.835Z"
+  updated_by: "CODER"
+  note: "WholeCalc152tests raw4006S2654B787F3570L and complete shared modifications/key/SortedVector13tests raw94S38B22F87L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourrestoredlinks and16firstpass gates pass. Exact3377committedhashes11intentionalpaths4originalpins verified; same-agent evaluator passed source2855ca97e97328a36ead9561aa7191fedd3dcee8, not independent review. CALC-092 invalid-domain recursion retained, native hash/ABI/conditional backend contracts excluded. No new lifetime/provider library. Nextfull111pause remains."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T04:56:14.268Z"
+  updated_by: "EVALUATOR"
+  note: "Original shared modification prefix-path semantics and additions responsibility implemented over reused shared value containers; all current required checks pass."
+  evaluated_sha: "2855ca97e97328a36ead9561aa7191fedd3dcee8"
+  blueprint_digest: "78525539e75b146fcda8711e16e6b536538791b81e4672f7f60874975207d49e"
+  evidence_refs:
+    - ".agentplane/tasks/202610140449-X149K9/README.md"
+    - ".agentplane/tasks/202610140449-X149K9/quality/20261014-045614268-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140449-X149K9/quality/20261014-045614268-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140449-X149K9/quality/20261014-045614268-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140449-X149K9/blueprint/resolved-snapshot.json"
+    - "output/playwright/task107-checks/exact-review.json"
+  findings:
+    - "Reviewed source2855ca97e97328a36ead9561aa7191fedd3dcee8 against complete original modification/addition scopes and actual write-consumer child sorting, four pinned hashes. Exact3377 committed source hashes/11intentionalpaths,16first-pass gates and strict Calc/shared3owner raw100, actual source-absent static/Calc0UI and restored links verified. Logical keys/copied values/stable nodes and prefix dominance/pruning preserved with existing SortedVector, no Boost/hash/lifetime/provider facade. Native unordered permutation/ABI/const/implicit vector copying and DConf backend/build-conditioned API availability excluded. CALC-092 retains recursion; native forbidden empty-remove release outcome not invented or tested. Actual settings/default/document/ODS pipeline pending. Separate same-agent evaluator, not independent review."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement actual configuration modification/addition path responsibilities using existing shared value containers, preserve recursive prefix semantics and source-backed invalid-domain documentation under active goal approval."
+  -
+    type: "verify"
+    at: "2026-10-14T04:56:35.835Z"
+    author: "CODER"
+    state: "ok"
+    note: "WholeCalc152tests raw4006S2654B787F3570L and complete shared modifications/key/SortedVector13tests raw94S38B22F87L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourrestoredlinks and16firstpass gates pass. Exact3377committedhashes11intentionalpaths4originalpins verified; same-agent evaluator passed source2855ca97e97328a36ead9561aa7191fedd3dcee8, not independent review. CALC-092 invalid-domain recursion retained, native hash/ABI/conditional backend contracts excluded. No new lifetime/provider library. Nextfull111pause remains."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:54:24.013Z"
+doc_updated_at: "2026-10-14T04:56:35.897Z"
 doc_updated_by: "CODER"
 description: "Task107: implement actual configmgr Modifications prefix tree and Additions path-list type, needed by real Data settings storage. Use existing shared sorted key/value container and ordinary JS references, no Boost/ownership/hash allocator port. Preserve original add/remove prefix behavior and record last-root recursion precondition issue. Calc/affected raw100, actual static/Calc0UI/16gates, no full office before111."
 sections:
@@ -48,7 +70,54 @@ sections:
     2. Whole source-absent Calc coverage and complete new modifications plus reused SortedVector/config_map profile using new tests and existing sorted/tree tests, rawS/B/F/L100/everyrawcounterpositive. Additions pure type has no executable counters. Actual source-absent static/Calc0UI and four exact link restoration. No Writer-only coverage repair or full office before111.
     3. All16 existing repo gates and current intentional formatting, truthful runtime/provenance/capability/GC/suspected issue records. No source/threshold weakening, fake backend/library, memory experiment or private-state counter forcing. Retain failures before bounded corrections.
     4. Exact3369baseline/current/committed non-task hashes and only11intentionalpaths; source/gate/coverage manifests bound to sourceSHA. Separate same-agent evaluator not independent review; APverify/DONE/clean branchcalc. Goalactive and secondfull111 pause after relevant repairs remains.
-  Verification: "Pending implementation and actual current checks."
+  Verification: |-
+    Command: node output/playwright/task107-checks/portable.mjs.
+    Result: pass first attempt.
+    Evidence: whole Calc152tests/52files/32owners rawS4006/B2654/F787/L3570; complete actual modifications/key-comparison/SortedVector13tests/3files/3executableowners rawS94/B38/F22/L87. Every raw counter positive, S/B/F/L100. Additions is a pure type with no executable counters. Actual static build and Calc browser inventory0 pass with all four reference links absent and restored to their exact targets.
+    Scope: original initialized valid prefix histories, copied UTF16 keys/stable aliases, broader-leaf dominance/subtree replacement/recursive prune with a remaining root sibling and empty-add/clear value behavior. Native empty-remove invalid release/debug outcome not tested/certified; original recursive control flow retained as CALC-092. No fake producer/private-state forcing/counter suppression or new memory/Boost/provider library.
+
+    Command: node output/playwright/task107-checks/gates.mjs --early; node output/playwright/task107-checks/gates-late.mjs --late.
+    Result: all16gates pass first attempt.
+    Evidence: format/lint/typecheck/docs/size/dependencies/Writer resources/source tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory coverage. Provenance535modules; inventory rawS1734/B1292/F436/L1668 is100. No threshold or source-routing weakening, full office run or Writer-only coverage repair.
+    Scope: current11intentional implementation/tests/records/docs paths, original nested Node and native const syntax explicitly adapted; unordered traversal permutation/ABI and implicit vector copies not certified. Original clear value body does not provide a DConf backend or claim feature-conditioned API availability parity.
+
+    Command: python3 output/playwright/task107-checks/exact-review.py.
+    Result: pass.
+    Evidence: 2855ca97e97328a36ead9561aa7191fedd3dcee8,3369baseline/3377exactcurrent committed hashes;3changed+8added paths. Four original files match pin; complete header/core/additions plus actual write consumer sorting reviewed, no compiled native/fullQA/memory experiment. Actual coverage/gate/source-absence manifests and four exact reference-link targets verified. Separate same-agent evaluator is not independent review.
+    Scope: actual Data/Set/Property/XML/backend/settings/default/document/grid/ODS integration remains pending. Firstfull101 passed; requested secondfull111 pause after relevant repairs remains, goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T04:56:35.835Z — VERIFY — ok
+
+    By: CODER
+
+    Note: WholeCalc152tests raw4006S2654B787F3570L and complete shared modifications/key/SortedVector13tests raw94S38B22F87L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourrestoredlinks and16firstpass gates pass. Exact3377committedhashes11intentionalpaths4originalpins verified; same-agent evaluator passed source2855ca97e97328a36ead9561aa7191fedd3dcee8, not independent review. CALC-092 invalid-domain recursion retained, native hash/ABI/conditional backend contracts excluded. No new lifetime/provider library. Nextfull111pause remains.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T04:56:13.717Z, excerpt_hash=sha256:14745ab362158fd836c8214a9f8386334f1fd125227b7ae129082bfa57f8c9e0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140449-X149K9/blueprint/resolved-snapshot.json
+    - old_digest: 78525539e75b146fcda8711e16e6b536538791b81e4672f7f60874975207d49e
+    - current_digest: 78525539e75b146fcda8711e16e6b536538791b81e4672f7f60874975207d49e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610140449-X149K9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610140449-X149K9 -m 🧩 X149K9 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Finally restore four exact source links on all test exits. Revert only intentional task changes via a new task if needed; no branch merge/history rewrite/unrelated task changes."
   Findings: |-
     Command: source review of complete pinned configmgr/source/modifications.hxx/cxx and additions.hxx, plus actual writemodfile child sorting scope.
@@ -80,7 +149,53 @@ Port original Modifications add/remove/empty/getRoot and inline conditional clea
 
 ## Verification
 
-Pending implementation and actual current checks.
+Command: node output/playwright/task107-checks/portable.mjs.
+Result: pass first attempt.
+Evidence: whole Calc152tests/52files/32owners rawS4006/B2654/F787/L3570; complete actual modifications/key-comparison/SortedVector13tests/3files/3executableowners rawS94/B38/F22/L87. Every raw counter positive, S/B/F/L100. Additions is a pure type with no executable counters. Actual static build and Calc browser inventory0 pass with all four reference links absent and restored to their exact targets.
+Scope: original initialized valid prefix histories, copied UTF16 keys/stable aliases, broader-leaf dominance/subtree replacement/recursive prune with a remaining root sibling and empty-add/clear value behavior. Native empty-remove invalid release/debug outcome not tested/certified; original recursive control flow retained as CALC-092. No fake producer/private-state forcing/counter suppression or new memory/Boost/provider library.
+
+Command: node output/playwright/task107-checks/gates.mjs --early; node output/playwright/task107-checks/gates-late.mjs --late.
+Result: all16gates pass first attempt.
+Evidence: format/lint/typecheck/docs/size/dependencies/Writer resources/source tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory coverage. Provenance535modules; inventory rawS1734/B1292/F436/L1668 is100. No threshold or source-routing weakening, full office run or Writer-only coverage repair.
+Scope: current11intentional implementation/tests/records/docs paths, original nested Node and native const syntax explicitly adapted; unordered traversal permutation/ABI and implicit vector copies not certified. Original clear value body does not provide a DConf backend or claim feature-conditioned API availability parity.
+
+Command: python3 output/playwright/task107-checks/exact-review.py.
+Result: pass.
+Evidence: 2855ca97e97328a36ead9561aa7191fedd3dcee8,3369baseline/3377exactcurrent committed hashes;3changed+8added paths. Four original files match pin; complete header/core/additions plus actual write consumer sorting reviewed, no compiled native/fullQA/memory experiment. Actual coverage/gate/source-absence manifests and four exact reference-link targets verified. Separate same-agent evaluator is not independent review.
+Scope: actual Data/Set/Property/XML/backend/settings/default/document/grid/ODS integration remains pending. Firstfull101 passed; requested secondfull111 pause after relevant repairs remains, goalactive.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T04:56:35.835Z — VERIFY — ok
+
+By: CODER
+
+Note: WholeCalc152tests raw4006S2654B787F3570L and complete shared modifications/key/SortedVector13tests raw94S38B22F87L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourrestoredlinks and16firstpass gates pass. Exact3377committedhashes11intentionalpaths4originalpins verified; same-agent evaluator passed source2855ca97e97328a36ead9561aa7191fedd3dcee8, not independent review. CALC-092 invalid-domain recursion retained, native hash/ABI/conditional backend contracts excluded. No new lifetime/provider library. Nextfull111pause remains.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T04:56:13.717Z, excerpt_hash=sha256:14745ab362158fd836c8214a9f8386334f1fd125227b7ae129082bfa57f8c9e0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140449-X149K9/blueprint/resolved-snapshot.json
+- old_digest: 78525539e75b146fcda8711e16e6b536538791b81e4672f7f60874975207d49e
+- current_digest: 78525539e75b146fcda8711e16e6b536538791b81e4672f7f60874975207d49e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610140449-X149K9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610140449-X149K9 -m 🧩 X149K9 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
