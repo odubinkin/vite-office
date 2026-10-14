@@ -12,6 +12,27 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("keeps XML reader byte values below application and browser owners", /** Admits only original shared value dependencies and header/source ownership. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "sal"])
+    expect(isForbiddenModuleEdge("xmlreader", dependency)).toBe(false);
+  for (const dependency of ["sc", "sw", "configmgr", "sax", "o3tl", "framework"])
+    expect(isForbiddenModuleEdge("xmlreader", dependency)).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "xmlreader")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "xmlreader")).toBe(true);
+  for (const source of [
+    "xmlreader/inc/span.ts",
+    "xmlreader/inc/pad.ts",
+    "xmlreader/source/span.ts",
+    "xmlreader/source/pad.ts",
+  ]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+    expect(
+      getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list"),
+    ).toMatch(/browser adapters/u);
+  }
+});
+
 it("keeps shared configuration nodes below application and browser owners", /** Verifies the exact new owner edges and existing reverse/browser restrictions. @returns Nothing. */ () => {
   for (const dependency of ["cppu", "o3tl", "sal", "udkapi"])
     expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(false);

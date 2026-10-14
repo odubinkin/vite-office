@@ -34,6 +34,7 @@ const moduleNames = [
   "unotools",
   "vcl",
   "xmloff",
+  "xmlreader",
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
@@ -108,6 +109,8 @@ const allowedEdges = new Map([
   ["unotools", new Set(["sal"])],
   ["tools", new Set()],
   ["xmloff", new Set(["editeng", "sax", "unotools"])],
+  // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
+  ["xmlreader", new Set(["cppu", "sal"])],
 ]);
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
@@ -145,6 +148,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmlreader/inc/span.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "xmlreader-values",
+    "capabilityIds": [
+      "CAP-eb78b56d-5670-4ad7-b6fb-bc37b52cc934"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmlreader/inc/span.ts#Span",
+        "apps/office/src/xmlreader/source/span-pad.test.ts#matches all two-byte accept-reject classifications and preserves BOM and bounded input",
+        "docs/program/calc-core.md#XML reader spans and text accumulation (task109)"
+      ],
+      "justification": "Task109 implements actual xmlreader Span/Pad header/core byte-view and text-accumulation values needed by configmgr readers, distinct from existing shared SAX responsibilities. Span default/raw/literal/copy/clear/is/signed32 length/unsigned byte comparisons and strict UTF8 conversion reuse actual OUString/RuntimeException values. Native TextDecoder fatal/ignoreBOMtrue preserves BOM like original strict RTL UTF8 flags without GLOBAL_SIGNATURE; source-backed verification covers all1112064validUnicode scalars across17planes, all65536two-byte classifications and representative malformed/truncated/overlong/surrogate/out-of-range/5-6byte sequences. This is not compiled native/fullQA proof or exhaustive longer-byte-string enumeration. No converter/ICU/type/provider/memory library added. Span field copies share actual borrowed byte views; clear only nulls begin and retains length. Pad first stable input borrows, later nonzero append flushes, ephemeral input copies, zero input is ignored and get returns span values over current borrowed/empty/owned terminated bytes. Owned bytes use ordinary native arrays, not OStringBuffer capacity/allocator/refcount machinery; native capacity256/allocation/reallocation/address/ABI/postmutation borrow behavior excluded. Native char pointer and literal syntax erase to byte-indexed views/complete arrays; invalid native ranges/debug assertions are not emulated or tested. Exact header/source ownership and xmlreader cppu/sal dependencies retain reverse/app/browser restrictions. Original configuration QA is unexecuted integration context only. Actual XML reader/configuration schema/backend/Calc defaults/document/grid/ODS remain pending. Nextfull111 requestedpause after relevant repairs; no Writer-only repair.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/xmlreader/span.hxx",
+      "upstreamSymbols": [
+        "Span",
+        "convertFromUtf8",
+        "length"
+      ]
+    }
+  }
+}
