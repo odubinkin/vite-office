@@ -1,10 +1,11 @@
 ---
 id: "202610140430-6KP5DV"
 title: "Restore native table frame sibling root constructor contracts"
-status: "DOING"
+result_summary: "Native table sibling-root ownership verified; device geometry constructor adapter removed."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/node_modules/.cache/parity-coverage/6KP5DV/audit-results.json"
   findings:
     - "Pinned native constructor propagation matches original superclass and lower roots. Actual browser mouse allocation and paginator borrow their existing native owners; device geometry uses ordinary field assignment. Thirteen fixture migrations/23 expressions preserve all original tokens after only argument-placement reversal, 950 other old tests byte-identical, six canonical prefixes retained."
-commit: null
+commit:
+  hash: "59b735f9106d14416e239e86a558daf1bd966001"
+  message: "🧩 6KP5DV fix: restore native table sibling-root constructors"
 comments:
   -
     author: "CODER"
     body: "Start: restore native table/row/cell sibling-root contract and core/browser callers; remove geometry constructor adapter with token-preserving caller migrations. One ownership correction 4/10, three whole source modules 100% coverage."
+  -
+    author: "CODER"
+    body: "Verified: native sibling root flows through table/row/cell constructors and actual paginator/mouse callers; geometry no longer occupies native constructor. 14,304 unique accepted; three whole current modules 100% four metrics and 1,806 positive counters, six canonical prefixes and all original fixture tokens retained. All static/nine metadata gates pass; same-agent non-independent quality pass. Cycle 4/10, goal active; upcoming full continues and following full pauses after repairs."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "14,304 unique accepted; three entire current production modules 100% four metrics and 1,806 positive raw counters. Thirteen caller fixtures preserve all original tokens; 950 other tests unchanged, six canonical prefixes/137 build files retained. All static and nine metadata gates pass. Evidence apps/office/node_modules/.cache/parity-coverage/6KP5DV/proof.json and accepted-results.json. Cycle 4/10; upcoming full continues, following full pauses."
+  -
+    type: "status"
+    at: "2026-10-14T04:52:44.517Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native sibling root flows through table/row/cell constructors and actual paginator/mouse callers; geometry no longer occupies native constructor. 14,304 unique accepted; three whole current modules 100% four metrics and 1,806 positive counters, six canonical prefixes and all original fixture tokens retained. All static/nine metadata gates pass; same-agent non-independent quality pass. Cycle 4/10, goal active; upcoming full continues and following full pauses after repairs."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:51:38.324Z"
+doc_updated_at: "2026-10-14T04:52:44.519Z"
 doc_updated_by: "CODER"
 description: "Correction 4/10: remove browser geometry from SwTabFrame constructor, restore native sibling root propagation through table/row/cell constructors and actual core pagination and browser mouse callers. Ordinary JS property assignment for device geometry. Source-backed caller-only old test migrations preserve all assertions/data. No persistent-layout parity claim or new adapter/manager."
 sections:
@@ -108,6 +121,10 @@ sections:
     Writer clean at 062ce5b992d8 after correction 3/10. Pin 9bc445578031fecf56086729d8e4940c77e14d65. Original native constructors borrow a sibling into SwLayoutFrame to preserve actual root, passing table to its rows and row to its cells. Current table second argument is device geometry and lower constructors omit sibling, so actual table/lower frames have no root despite existing root-bearing SwFrame constructor. This is a source-backed prerequisite to native shared layout/UI frame ownership. Temporary per-render table frames and full persistent page/master/follow/paint/hit graph remain unresolved, not replaced by a parity claim. No suspicious core source logic observed; protected IO/recovery/Space unchanged.
 
     Completed native sibling-root ownership correction in three original modules. Table supplies itself to original rows and rows to cells; existing core paginator and actual mouse allocator borrow their original native root-bearing sibling. Removed second-argument device geometry contract; ordinary JS field assignment retains exact original measured objects without a new layer or factory. Required shared test-support caller identified by TS7 is included in the same contract migration. New pre-change tests show five genuine root identity failures, one detached-default pass, plus two initial new fixture errors (page descriptor input and width expectation); errors corrected without changing production behavior. Initial non-null assertions/JSDoc receiver count and page descriptor API corrected in fresh tests; final TS7/fresh lint/format pass. Related first final-code run has one fresh width expectation failure: full-aligned single current native column occupies 6,000 twips, not 3,000; only that failed case rerun. All original old acceptance semantics retained. Same-agent EVALUATOR phase is explicitly non-independent. Native headers require the sibling argument; represented absent sibling models the existing detached/null browser/test construction, not a claim of complete native constructor/default API parity. Native insert-content/follow constructors and full persistent page/master/follow/paint/hit graph remain unverified; temporary render/pagination frames remain unresolved. No suspicious source core logic observed. Cycle 4/10; upcoming full continues, following full pauses after repairs.
+extensions:
+  implementation_commit:
+    hash: "59b735f9106d14416e239e86a558daf1bd966001"
+    message: "🧩 6KP5DV fix: restore native table sibling-root constructors"
 id_source: "generated"
 ---
 ## Summary
