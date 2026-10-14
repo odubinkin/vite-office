@@ -1,10 +1,11 @@
 ---
 id: "202610141747-T25H9Z"
 title: "Implement canonical shared page attribute and native numbering declarations"
-status: "DOING"
+result_summary: "Implement canonical page values and original shared numbering declarations"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "Source-compared Arabic/portrait/All/name defaults, copy/equality omission, all Any members/unknown behavior, fixed signed16 numbering and actual Any2Bool/layout enum fallback. Browser noarg projection is explicitly separate; no fake native getter, formatter, localization provider or lifetime engine."
     - "Source audit compares all76actual constant and73alias runtime values to pinned IDL/header. One enum-scoped style exception preserves original direct shared aliases; global lint configuration unchanged, no duplicated numeric definitions. CALC-117/118 retain source observations without a confirmed-bug or native-crash claim."
     - "19related/5files,178Calc/71files,37boundaries pass;5whole changed shared and33Calc owners every raw counterpositive100. Build,12source gates,631records zero violations,27intentional paths/3802hashes/8native pins/four restored links verified."
-commit: null
+commit:
+  hash: "b47d718022b3edd3837e3fc79e3349c1ec2daed1"
+  message: "Implement T25H9Z core: native page values and shared numbering declarations"
 comments:
   -
     author: "CODER"
     body: "Start: port actual shared page value/Any and native numbering declarations for Calc158; retain source name-copy behavior and reuse Any2Bool, no formatting-service or lifetime stubs."
+  -
+    author: "CODER"
+    body: "Verified: original page default/value/Any and shared numbering declarations;19related,178Calc and37boundary cases pass, all shared/Calc raw100,76constants/73aliases match source, build and source gates pass,27intentional paths/native pins retained."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native page/default/Any and original numbering declarations:19related/5files,178Calc/71files,37boundaries;5whole shared S268B34F22L266 and33Calc S4169B2731F821L3717 raw100 every counterpositive. All76constants/73aliases match pinned source, build and12source gates pass,631records zero violations,27paths/3802hashes/8pins/four links/calc retained. Local style alias exception documented, presentation/services/SetItem/UIODS pending, same-agent quality not independent."
+  -
+    type: "status"
+    at: "2026-10-14T18:12:03.330Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original page default/value/Any and shared numbering declarations;19related,178Calc and37boundary cases pass, all shared/Calc raw100,76constants/73aliases match source, build and source gates pass,27intentional paths/native pins retained."
 doc_version: 3
-doc_updated_at: "2026-10-14T18:11:12.761Z"
+doc_updated_at: "2026-10-14T18:12:03.332Z"
 doc_updated_by: "CODER"
 description: "Task138: missing ScDocPool SvxPageItem default dependency. Native page value/default/copy/clone/setters/equality and full typed Any query/put through actual PageStyleLayout enum, existing Any2Bool and real NumberingType declarations/SvxNumType aliases. Original descriptor-name copy omission retained, source quirks recorded. Calc158 real item-set defaults. Existing browser noarg value projection, no new Getter/provider or localization/numbering service fake; no memory machinery."
 sections:
