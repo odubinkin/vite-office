@@ -4,7 +4,7 @@ title: "Align shared native font posture and Calc script defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T12:07:20.817Z"
+  updated_by: "CODER"
+  note: "Calc167/shared34tests rawS/B/F/L100;29boundaries12gates;34exactpaths16nativepins. Actual SfxEnumItem/Any/VCL conversion used, Writer aliases/consumers preserved, source-backed expectation migrations andCALC107. Same-agent EVAL not independent. Goalactive; full at minimum UI+ODSread/save readiness then repair/pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T12:07:19.740Z"
+  updated_by: "EVALUATOR"
+  note: "Shared canonical posture/native VCL slant and Calc3script defaults reuse real enum/Any owners; source-backed expectation corrections and all targeted raw100 pass. Same-agent evaluator, not independent review."
+  evaluated_sha: "9abdae6e1b2969d58defecb53f3de48fd3221716"
+  blueprint_digest: "0df40a80eaee19e9b2e29cea3b7214c79a235237af15a8d5a3ea67b0c3005864"
+  evidence_refs:
+    - ".agentplane/tasks/202610141156-717H84/README.md"
+    - ".agentplane/tasks/202610141156-717H84/quality/20261014-120719740-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141156-717H84/quality/20261014-120719740-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141156-717H84/quality/20261014-120719740-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141156-717H84/blueprint/resolved-snapshot.json"
+    - "output/playwright/task122-checks/exact-review.json"
+  findings:
+    - "Calc167/shared34tests,29boundaries12gates pass;34exactpaths18changed16added,3625to3641sourcehashes16nativepins. DONTKNOWtrue/Which-independent equality/nativeunknown4 corrected; invariant witness moved to actual tools enum keeping ID/value/evidence. CALC107 records native oddities. No Writer-only repair/threshold weakening/full suite; UI+ODS readiness checkpoint still pending."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: align real shared posture enum Any and VCL slant conversion, preserve existing Writer aliases, source-backed expectations and Calc3script defaults; targeted100."
+  -
+    type: "verify"
+    at: "2026-10-14T12:07:20.817Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc167/shared34tests rawS/B/F/L100;29boundaries12gates;34exactpaths16nativepins. Actual SfxEnumItem/Any/VCL conversion used, Writer aliases/consumers preserved, source-backed expectation migrations andCALC107. Same-agent EVAL not independent. Goalactive; full at minimum UI+ODSread/save readiness then repair/pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:06:47.367Z"
+doc_updated_at: "2026-10-14T12:07:20.897Z"
 doc_updated_by: "CODER"
 description: "Task122: canonical existing SvxPostureItem over real SfxEnumItem with native FontItalic/VCL ConvertFontSlant/real UNO FontSlant enum; preserve browser aliases once, source-backed expectation migration and Calc103114119NONE defaults. Targeted raw100; full only at minimum UI+ODS readiness then repair/pause."
 sections:
@@ -56,6 +78,39 @@ sections:
     Scope: original posture SfxEnumItem/factory/copy/Clone/boolthreshold/SetBool/payload equality and actualFontSlant typed query/enum-int fallback/member/error behavior. Existing Writer FontItalic import names alias single tools enum. Both VCL slant families use explicit erased source selector, reverse/default/sentinel behavior preserved. Checked browser constructor retains negative/fractional/out-of-enum-range validation but accepts native initialized unknown4/sentinel. Calc103114119NONE real itemset copies. Existing expected DONTKNOW bool and Which-independent equality corrected from source; old unknown4-rejection replaced by stored4assertion, other negative/fractional guards preserved. CALC107 records native oddities, no normalization invented.
     Limits: other VCL helpers/native localized presentation/cache/diagnostics/refcounts/ABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No fake provider/native build/C++generator/sanitizer/memory library. Existing inventory history/status/broad parity flags retained.
     Full suite deferred per user: actual minimum UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause goal. No fixedtasknumber/full121trigger. Goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T12:07:20.817Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc167/shared34tests rawS/B/F/L100;29boundaries12gates;34exactpaths16nativepins. Actual SfxEnumItem/Any/VCL conversion used, Writer aliases/consumers preserved, source-backed expectation migrations andCALC107. Same-agent EVAL not independent. Goalactive; full at minimum UI+ODSread/save readiness then repair/pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:06:47.367Z, excerpt_hash=sha256:d042412cf829a31e74f9abd8f9bc2f04414fb13325570c2c3cd93ba7fc2af687
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141156-717H84/blueprint/resolved-snapshot.json
+    - old_digest: 0df40a80eaee19e9b2e29cea3b7214c79a235237af15a8d5a3ea67b0c3005864
+    - current_digest: 0df40a80eaee19e9b2e29cea3b7214c79a235237af15a8d5a3ea67b0c3005864
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141156-717H84
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141156-717H84 -m 🧩 717H84 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task122source commit preserving task121/userhistory; no reset/merge/externalpublication."
   Findings: |-
     Previous goal turn task121verifiedprogress. Preflight cleancalc, unrelated active tasks untouched. Native posture mismatches discovered: DONTKNOW booltrue andpayload equality ignoresWhich; host constructorunknown4 rejection narrower than native enum value domain. User fidelity authorization covers correction with source-backed tests. Next full only real minimum UI+ODSread/save readiness then repair/pause; no fixedtasknumbertrigger.
@@ -94,6 +149,39 @@ Evidence: fresh3625baseline/current3641committedsource hashes;34exactpaths18chan
 Scope: original posture SfxEnumItem/factory/copy/Clone/boolthreshold/SetBool/payload equality and actualFontSlant typed query/enum-int fallback/member/error behavior. Existing Writer FontItalic import names alias single tools enum. Both VCL slant families use explicit erased source selector, reverse/default/sentinel behavior preserved. Checked browser constructor retains negative/fractional/out-of-enum-range validation but accepts native initialized unknown4/sentinel. Calc103114119NONE real itemset copies. Existing expected DONTKNOW bool and Which-independent equality corrected from source; old unknown4-rejection replaced by stored4assertion, other negative/fractional guards preserved. CALC107 records native oddities, no normalization invented.
 Limits: other VCL helpers/native localized presentation/cache/diagnostics/refcounts/ABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No fake provider/native build/C++generator/sanitizer/memory library. Existing inventory history/status/broad parity flags retained.
 Full suite deferred per user: actual minimum UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause goal. No fixedtasknumber/full121trigger. Goalactive.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T12:07:20.817Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc167/shared34tests rawS/B/F/L100;29boundaries12gates;34exactpaths16nativepins. Actual SfxEnumItem/Any/VCL conversion used, Writer aliases/consumers preserved, source-backed expectation migrations andCALC107. Same-agent EVAL not independent. Goalactive; full at minimum UI+ODSread/save readiness then repair/pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:06:47.367Z, excerpt_hash=sha256:d042412cf829a31e74f9abd8f9bc2f04414fb13325570c2c3cd93ba7fc2af687
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141156-717H84/blueprint/resolved-snapshot.json
+- old_digest: 0df40a80eaee19e9b2e29cea3b7214c79a235237af15a8d5a3ea67b0c3005864
+- current_digest: 0df40a80eaee19e9b2e29cea3b7214c79a235237af15a8d5a3ea67b0c3005864
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141156-717H84
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141156-717H84 -m 🧩 717H84 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
