@@ -1,10 +1,11 @@
 ---
 id: "202610141401-Z7JFPS"
 title: "Implement shared complex-color value ownership for Calc attributes"
-status: "DOING"
+result_summary: "Actual shared complex-color values ready for native attribute ownership; no fake resolver or extra numeric/memory library. Full DocPool/document/UI/ODS readiness remains pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Exact18paths5existing13new,3709sourcehashes11nativepins; current15relatedtests5files6wholeowners and172Calc tests raw100. Twelve focused gates and32boundaries pass, no linter/coverage rule relaxation."
     - "Original state/copy/ordered transformation/theme tables and hash-field mismatch preserved. JS extrema exactly compute consumed native HSL luminance; existing browser logical hash binding explicit, no ABI binary claim or unnecessary vector library."
-commit: null
+commit:
+  hash: "9dfed0c3612854b8172e1cb0d3c65df8c0fe5773"
+  message: "🚧 Z7JFPS core: implement shared complex-color value ownership"
 comments:
   -
     author: "CODER"
     body: "Start: actual ComplexColor value owner required by native font/border items, using existing shared Color and browser logical scalar hashes."
+  -
+    author: "CODER"
+    body: "Verified: original shared ComplexColor state, ownership, theme/effect tables and hash-field behavior; strict related and Calc100, inventory and focused gates."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source9dfed0c36128 exact18paths3709hashes11nativepins. Related15tests6wholeowners and Calc172tests strict raw100;12gates32boundaries; same-agent review not independent. Real shared ComplexColor values only, transform/UNO/DocPool/document/UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-14T14:17:31.130Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original shared ComplexColor state, ownership, theme/effect tables and hash-field behavior; strict related and Calc100, inventory and focused gates."
 doc_version: 3
-doc_updated_at: "2026-10-14T14:17:00.827Z"
+doc_updated_at: "2026-10-14T14:17:31.132Z"
 doc_updated_by: "CODER"
 description: "Task130: native docmodel ComplexColor value state, theme and transformation contracts required by actual SvxColorItem and border attributes. Reuse existing Tools Color and o3tl hashes with explicit browser logical hash binding; preserve suspicious original equality/hash fields, document. Real transform application and HSL numeric helpers remain absent until actual native Color prerequisites, no fake identity implementation. No substitute pool or provider."
 sections:
