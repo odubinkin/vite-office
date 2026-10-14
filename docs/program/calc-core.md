@@ -3704,3 +3704,15 @@ Task132 supplies the actual offapi Color typedef and XTheme/XComplexColor contra
 Task132 corrects only getLength host overload selection: actual Uint8Array/Uint16Array from another JS context must use native terminated-pointer length, not rtl_uString class length. Constructor instanceof failed across realms, including jsdom TextEncoder output and new normal UNO interface names. Standard ArrayBuffer.isView preserves the native element-kind distinction independent of realm; original first-zero loop and real string-record length branch stay unchanged. A real vm-created typed-array test plus existing related SAL fixtures verify the whole owner. No constructor/factory workaround, string trimming, extra tag/library, new C++/memory probes or lifecycle change; repeated human authorization covers shared/Writer canonical corrections.
 
 The same shared strtmpl owner also used realm-dependent instanceof for the native Copy byte/Unicode overload. Use the standard BYTES_PER_ELEMENT1 discriminator under the existing typed-array domain, preserving native ASCII guard and known-length embedded zeros for both real foreign byte/Unicode inputs. Current focused JS-context test covers public C literal/Unicode constructors, with no new native binary/memory probe. Add existing integer-format/o3tl string-view/CPPU typelib unit selections to cover the complete shared owner numeric and compare methods; initial24tests8files already passed, and only coverage lacked those unchanged parts. Both interface owners already had all raw counters covered.
+
+## Shared Type element references (task133)
+
+Shared `Sequence<Type>` const indexing now exposes the actual existing borrowed
+`Type` view of the element cell, as required by the native `const E&` contract.
+Indexing preserves storage, type counts and shared identity; real C assignment
+is visible through the same view, while actual sequence COW separates cells.
+The original complete Sequence observation streams remain unchanged after the
+caller observes Type through its public method. This corrects host type erasure,
+not upstream behavior. No new memory/lifetime engine or binary layout is added.
+Actual XTypeProvider/helper/component color transport and DocPool/document/UI/ODS
+remain pending; this prerequisite alone does not trigger the full-run checkpoint.

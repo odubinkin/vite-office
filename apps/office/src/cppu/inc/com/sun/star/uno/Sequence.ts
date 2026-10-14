@@ -12,7 +12,7 @@ import { osl_atomic_increment, osl_atomic_decrement } from "../../../../../../sa
 import { uno_type_equalData } from "../../../../uno/data";
 import { cpp_acquire, cpp_release, cpp_queryInterface } from "./genfunc";
 import { getSequenceTypeFavourUnsigned } from "./Sequence-type";
-import { unoTypeArgumentIdentity } from "../../../../unotype";
+import { getTypeFromTypeDescriptionReference, unoTypeArgumentIdentity } from "../../../../unotype";
 import type { UnoTypeArgument } from "../../../../unotype";
 import type { typelib_TypeDescriptionReference as R } from "../../../../typelib/typedescription";
 import { SAL_NO_ACQUIRE_ARGUMENT } from "../../../../../../sal/inc/types";
@@ -137,12 +137,18 @@ export abstract class Sequence<E = unknown> {
       this.getLength() * (this.constructor as SequenceConstructor<E>).ElementSize,
     ];
   }
-  /** Original asserted const E reference at the actual byte-offset cell, never a copied value or default producer. @param index - Native signed32 index. @returns Original logical element address. */
+  /** Original asserted const E reference. The erased Type specialization uses its existing borrowed view over the actual cell; other element bindings retain logical addresses. No value copy, acquire or COW occurs. @param index - Native signed32 index. @returns Original borrowed element reference. */
   operatorIndex(index: number): E {
     if (!(index >= 0 && index >>> 0 < this.getLength() >>> 0))
       throw new Error("Sequence index assertion");
-    return ((this.get() as uno_Sequence).elements as SequenceElements).get(
-      index * (this.constructor as SequenceConstructor<E>).ElementSize,
+    const binding = this.constructor as SequenceConstructor<E>,
+      element = ((this.get() as uno_Sequence).elements as SequenceElements).get(
+        index * binding.ElementSize,
+      );
+    return (
+      binding.ElementType === "Type"
+        ? getTypeFromTypeDescriptionReference(element as [R | null])
+        : element
     ) as E;
   }
   /** Original equal handle/count fast paths, then actual C equality with real C++ query/release callbacks. @param other - Same declared template. @returns Original equality. */

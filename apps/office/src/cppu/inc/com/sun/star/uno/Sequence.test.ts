@@ -3,6 +3,7 @@ import { expect, it } from "vitest";
 import fixture from "./native-public-sequence-cases.json";
 import { createPublicSequenceInputs } from "../../../../../../test/uno-sequence-cpp-values";
 import type { Sequence } from "./Sequence";
+import type { Type } from "./Type";
 import type { UnoNativeCppWitness as W } from "../../../../../../test/uno-native-cpp-values";
 import type { typelib_TypeDescriptionReference as R } from "../../../../typelib/typedescription";
 import { typelib_TypeClass as C } from "../../../../typelib/typeclass";
@@ -39,7 +40,10 @@ function state(
   x.ref(r);
   const er = x.unotype.getTypeFavourUnsigned(arg).getTypeLibType() as R;
   x.ref(er);
-  for (let i = 0; i < s.getLength(); i++) x.value(s.operatorIndex(i), er);
+  for (let i = 0; i < s.getLength(); i++) {
+    const element = s.operatorIndex(i);
+    x.value(er.eTypeClass === C.TYPE ? [(element as Type).getTypeLibType()] : element, er);
+  }
   x.emit(w.count, root.count);
 }
 it("matches full original public Sequence lifecycle COW arrays and move-as-copy contracts", /** Replays actual typed inputs, old aliases, initialization, COW/write/equality, swap/realloc/range and reverse owner destruction. @returns Whole original parity. */ async () => {
