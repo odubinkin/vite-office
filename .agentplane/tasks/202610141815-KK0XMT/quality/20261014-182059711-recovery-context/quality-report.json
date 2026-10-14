@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141815-KK0XMT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T18:20:59.711Z",
+  "verdict": "pass",
+  "summary": "Native shared byte values and Calc paper-tray default meet task139 scope; same-agent review is not independent.",
+  "evaluated_sha": "aacac433db5463343d0489c113d37b78348ca21f",
+  "blueprint_digest": "829483b37495f606af3f2f284cbe1c0a94b05aa7b713c73f68ccb1f3315066b4",
+  "findings": [
+    "Original CntByteItem/SfxByteItem/SvxPaperBinItem defaults, unsigned storage, signed8 Any transport, byte-only extraction, failure atomicity, copy/clone/equality/hash and actual Calc159 item-set ownership are source-grounded; existing shared Any/hash/storage reused.",
+    "29related tests,179Calc and37boundaries pass;3whole changed shared and33Calc owners every raw counter positive100. Portable build and13source gates pass. Test-only tuple inference correction is recorded; no production fallback, coverage exclusion, Writer repair or native memory machinery.",
+    "29intentional paths/3811source hashes/8native pins/four restored links and original calc branch verified. Runtime/provenance633records zero violations; presentation, real document/UI/ODS remain pending and no full-run readiness claim."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141815-KK0XMT/README.md",
+    "output/playwright/task139-checks/verification.json",
+    "output/playwright/task139-checks/source-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
