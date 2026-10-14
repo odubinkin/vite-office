@@ -7,7 +7,7 @@
     "kind": "enum",
     "local": {
       "marker": "export enum FontWeight {",
-      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "path": "apps/office/src/tools/inc/fontenum.ts",
       "value": "DONTKNOW,THIN,ULTRALIGHT,LIGHT,SEMILIGHT,NORMAL,MEDIUM,SEMIBOLD,BOLD,ULTRABOLD,BLACK"
     },
     "upstream": {

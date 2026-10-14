@@ -86,3 +86,10 @@ export const ATTR_FONT_POSTURE = 103;
 export const ATTR_CJK_FONT_POSTURE = 114;
 /** Original CTL font posture identity. */
 export const ATTR_CTL_FONT_POSTURE = 119;
+
+/** Original Latin weight identity. */
+export const ATTR_FONT_WEIGHT = 102;
+/** Original CJK weight identity. */
+export const ATTR_CJK_FONT_WEIGHT = 113;
+/** Original CTL weight identity. */
+export const ATTR_CTL_FONT_WEIGHT = 118;

@@ -37,3 +37,8 @@ export const MID_EMPHASIS = 0;
 export const MID_ITALIC = 0;
 /** Original posture enum member. */
 export const MID_POSTURE = 1;
+
+/** Original bold bool member. */
+export const MID_BOLD = 0;
+/** Original weight float member. */
+export const MID_WEIGHT = 1;

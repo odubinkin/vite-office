@@ -76,6 +76,7 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(FontWeight.NORMAL).toBe(5);
     expect(FontWeight.BOLD).toBe(8);
     expect(FontWeight.BLACK).toBe(10);
+    expect(new SvxWeightItem(11 as FontWeight, weightWhich).GetWeight()).toBe(11);
     const normal = new SvxWeightItem(FontWeight.NORMAL, weightWhich);
     const bold = new SvxWeightItem(FontWeight.BOLD, weightWhich);
     const black = new SvxWeightItem(FontWeight.BLACK, alternateWhich);
@@ -87,13 +88,13 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(bold.Clone()).not.toBe(bold);
     expect(bold.Clone().equals(bold)).toBe(true);
     expect(bold.equals(normal)).toBe(false);
-    expect(bold.equals(new SvxWeightItem(FontWeight.BOLD, alternateWhich))).toBe(false);
+    expect(bold.equals(new SvxWeightItem(FontWeight.BOLD, alternateWhich))).toBe(true);
     expect(bold.equals(new SfxInt16Item(weightWhich, FontWeight.BOLD))).toBe(false);
     expect(encodeSfxPoolItem(black)).toEqual({
       value: FontWeight.BLACK,
       which: alternateWhich,
     });
-    for (const value of [-1, 11, 1.5])
+    for (const value of [-1, 1.5])
       expect(
         throwing(
           /** Creates an invalid weight item. @returns Invalid item. */

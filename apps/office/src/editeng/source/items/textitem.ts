@@ -5,15 +5,16 @@
 import { SfxBoolItem, SfxEnumItem } from "../../../svl/inc/eitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { FontWeight as NativeFontWeight } from "../../../tools/inc/fontenum";
 import { FontItalic as NativeFontItalic } from "../../../tools/inc/fontenum";
 import {
   FontSlant,
   cppu_detail_getUnoType_FontSlant,
 } from "../../../offapi/com/sun/star/awt/FontSlant";
-import { ConvertFontSlant } from "../../../vcl/inc/unohelp";
+import { ConvertFontSlant, ConvertFontWeight } from "../../../vcl/inc/unohelp";
 import { Any2Bool } from "../../../svl/inc/poolitem";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
-import { MID_RELIEF, MID_ITALIC, MID_POSTURE } from "../../inc/memberids";
+import { MID_RELIEF, MID_ITALIC, MID_POSTURE, MID_BOLD, MID_WEIGHT } from "../../inc/memberids";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
@@ -104,23 +105,42 @@ export class SvxFontHeightItem extends SfxPoolItem {
   }
 }
 
-/** Matches LibreOffice FontWeight ordering from tools/fontenum.hxx. */
-export enum FontWeight {
-  DONTKNOW,
-  THIN,
-  ULTRALIGHT,
-  LIGHT,
-  SEMILIGHT,
-  NORMAL,
-  MEDIUM,
-  SEMIBOLD,
-  BOLD,
-  ULTRABOLD,
-  BLACK,
-}
+/** Existing browser weight names alias the single original tools enum. */
+export const FontWeight: Readonly<
+  Record<
+    | "DONTKNOW"
+    | "THIN"
+    | "ULTRALIGHT"
+    | "LIGHT"
+    | "SEMILIGHT"
+    | "NORMAL"
+    | "MEDIUM"
+    | "SEMIBOLD"
+    | "BOLD"
+    | "ULTRABOLD"
+    | "BLACK",
+    NativeFontWeight
+  >
+> = {
+  DONTKNOW: NativeFontWeight.WEIGHT_DONTKNOW,
+  THIN: NativeFontWeight.WEIGHT_THIN,
+  ULTRALIGHT: NativeFontWeight.WEIGHT_ULTRALIGHT,
+  LIGHT: NativeFontWeight.WEIGHT_LIGHT,
+  SEMILIGHT: NativeFontWeight.WEIGHT_SEMILIGHT,
+  NORMAL: NativeFontWeight.WEIGHT_NORMAL,
+  MEDIUM: NativeFontWeight.WEIGHT_MEDIUM,
+  SEMIBOLD: NativeFontWeight.WEIGHT_SEMIBOLD,
+  BOLD: NativeFontWeight.WEIGHT_BOLD,
+  ULTRABOLD: NativeFontWeight.WEIGHT_ULTRABOLD,
+  BLACK: NativeFontWeight.WEIGHT_BLACK,
+} as const;
+/** Existing browser type name refers to the canonical enum. */
+export type FontWeight = NativeFontWeight;
 
 /** Existing browser names are aliases to the single original tools FontItalic enum. */
-export const FontItalic = {
+export const FontItalic: Readonly<
+  Record<"NONE" | "OBLIQUE" | "NORMAL" | "DONTKNOW", NativeFontItalic>
+> = {
   NONE: NativeFontItalic.ITALIC_NONE,
   OBLIQUE: NativeFontItalic.ITALIC_OBLIQUE,
   NORMAL: NativeFontItalic.ITALIC_NORMAL,
@@ -152,44 +172,77 @@ export enum FontLineStyle {
   BOLDWAVE,
 }
 
-/** Pooled font-weight item with LibreOffice boolean threshold semantics. */
-export class SvxWeightItem extends SfxPoolItem {
-  /** Creates a weight item. @param weight - Font weight. @param which - Script-specific WhichId. @returns Nothing. */
-  public constructor(
-    private readonly weight: FontWeight,
-    which: number,
-  ) {
-    super(which);
-    assertEnumValue(weight, FontWeight.DONTKNOW, FontWeight.BLACK, "SvxWeightItem");
+/** Original native weight enum and bool/float Any member transport. */
+export class SvxWeightItem extends SfxEnumItem<FontWeight> {
+  /** Original value/Which and copy forms; existing JS scalar validation is an explicit host boundary over native enum range. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: FontWeight, which: number] | [source: Readonly<SvxWeightItem>]) {
+    if (args.length === 1) super(args[0]);
+    else {
+      assertEnumValue(args[0], 0, 0x7fffffff, "SvxWeightItem");
+      super(args[1], args[0]);
+    }
   }
-
-  /** Returns the font weight. @returns FontWeight value. */
+  /** Original NORMAL default factory. @returns Item. */
+  public static CreateDefault(): SvxWeightItem {
+    return new SvxWeightItem(NativeFontWeight.WEIGHT_NORMAL, 0);
+  }
+  /** Original enum getter. @returns Weight. */
   public GetWeight(): FontWeight {
-    return this.weight;
+    return this.GetValue();
   }
-
-  /** Reports the boolean bold interpretation used by Writer commands. @returns True at WEIGHT_BOLD or heavier. */
-  public GetBoolValue(): boolean {
-    return this.weight >= FontWeight.BOLD;
+  /** Original bool support. @returns True. */
+  public override HasBoolValue(): boolean {
+    return true;
   }
-
-  /** Creates an independent item. @returns Cloned weight item. */
-  public Clone(): SvxWeightItem {
-    return new SvxWeightItem(this.weight, this.Which());
+  /** Original bold threshold. @returns At least BOLD. */
+  public override GetBoolValue(): boolean {
+    return this.GetValue() >= NativeFontWeight.WEIGHT_BOLD;
   }
-
-  /** Compares type, WhichId, and weight. @param other - Candidate item. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxWeightItem &&
-      other.Which() === this.Which() &&
-      other.weight === this.weight
-    );
+  /** Original bool setter selects BOLD or NORMAL. @param value - Bool. @returns Nothing. */
+  public override SetBoolValue(value: boolean): void {
+    this.SetValue(value ? NativeFontWeight.WEIGHT_BOLD : NativeFontWeight.WEIGHT_NORMAL);
   }
-
-  /** Serializes the item. @returns Snapshot. */
-  public override QueryValue(): FontWeight {
-    return this.weight;
+  /** Original copy Clone retains Which. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxWeightItem {
+    void pool;
+    return new SvxWeightItem(this);
+  }
+  /** Existing browser scalar enum projection. @returns Stored enum. */
+  public override QueryValue(): FontWeight;
+  /** Original bool/float Any query. @param output - Actual destination. @param member - Native member. @returns True. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original unknown-member untouched success. @param output - Optional Any. @param member - Native member. @returns Success or browser enum. */
+  public override QueryValue(output?: Any, member = 0): boolean | FontWeight {
+    if (output === undefined) return this.GetValue();
+    switch (member & 0xff & ~0x80) {
+      case MID_BOLD:
+        output.insert([this.GetBoolValue()], "bool");
+        break;
+      case MID_WEIGHT:
+        output.insert([ConvertFontWeight(this.GetValue(), "FontWeight")], "float");
+        break;
+    }
+    return true;
+  }
+  /** Original double then signed32 fallback followed by float cast; actual LONG source types are a subset of DOUBLE, without forcing an impossible fallback-success peer. @param input - Actual Any or browser floating scalar. @param member - Native member. @returns Success. */
+  public override PutValue(input: unknown, member = 0): boolean {
+    switch (member & 0xff & ~0x80) {
+      case MID_BOLD:
+        this.SetBoolValue(Any2Bool(input));
+        break;
+      case MID_WEIGHT: {
+        const value: [number] = [0];
+        if (input instanceof Any) {
+          if (!input.extract(value, "double") && !input.extract(value, "sal_Int32")) return false;
+        } else {
+          if (typeof input !== "number") return false;
+          value[0] = input;
+        }
+        this.SetValue(ConvertFontWeight(value[0], "float"));
+        break;
+      }
+    }
+    return true;
   }
 }
 
