@@ -1895,3 +1895,12 @@ Status: explicit upstream compatibility, not identified as a defect.
 CntUInt16Item::PutValue first attempts sal_uInt16 extraction, then deliberately accepts sal_Int32 for old callers. It emits warnings for negative or overflowing values but still static_casts to unsigned16, so signed32 65537 becomes1 and -1 becomes65535. CntUInt32Item projects unsigned bits through signed32 Any, accepting the corresponding signed32 extraction. Preserve these paths through actual shared CPPU, without adding a range rejection to typed Any input. Existing checked JS scalar constructor bounds remain a separately documented browser domain.
 
 Unsigned16/32 same-type equality also ignores Which after the original base assertion, while their o3tl hash fold includes Which. This parallels CALC-100; keep the source contracts and inspect native pool key partitioning before declaring a defect. ScIndentItem implicit copy retains Which, but its value-based Clone restores131. Task115 checks these real shared/Calc histories; no compiled native or full-document certification.
+
+
+## CALC-102: angle values accept signed32 minimum while presentation negates negative signed32
+
+Status: source-level suspicious arithmetic; native runtime consequences unexecuted.
+
+Degree100 is a signed32 hundredths-of-degree value. SdrAngleItem stores that payload without normalization. In svx/source/svdraw/svdattr.cxx GetPresentation copies it into sal_Int32 nValue and performs nValue = -nValue when negative. For INT32_MIN the positive mathematical result does not fit signed32, so this expression appears to enter C++ signed-overflow undefined behavior. No sanitizer/native experiment or invented expected text is added. Preserve valid full-width stored angle values and do not add normalization or a minimum-value rejection. Localized presentation remains pending; resolve its defined-domain adaptation with the real locale/presentation owners.
+
+ScRotateValueItem implicit copy retains Which, while its GetValue-based Clone restores135; SdrAngleItem Clone explicitly retains Which. Task116 tests actual shared/Calc copy histories and degree values, not the suspicious native presentation path.

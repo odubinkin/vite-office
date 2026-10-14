@@ -1,4 +1,6 @@
 /** @fileoverview Original conditional-index and page-scale attribute value families from attrib.hxx/cxx; localization/diagnostics remain separate pending scopes. */
+import { SdrAngleItem, type Degree100 } from "../../../../svx/inc/sdangitm";
+import { ATTR_ROTATE_VALUE } from "../../../inc/scitems";
 import { SfxUInt16Item } from "../../../../svl/inc/intitem";
 import { ATTR_INDENT } from "../../../inc/scitems";
 import { SfxEnumItem } from "../../../../svl/inc/eitem";
@@ -225,5 +227,19 @@ export class ScIndentItem extends SfxUInt16Item {
   public override Clone(pool?: SfxItemPool): ScIndentItem {
     void pool;
     return new ScIndentItem(this.GetValue());
+  }
+}
+
+/** Original Calc rotation item, requiring an explicit angle; DocPool separately supplies zero. */
+export class ScRotateValueItem extends SdrAngleItem {
+  /** Original angle or implicit-copy constructor. @param value - Signed hundredths or actual const source. @returns Item. */
+  constructor(value: Degree100 | Readonly<ScRotateValueItem>) {
+    if (typeof value === "number") super(ATTR_ROTATE_VALUE, value);
+    else super(value);
+  }
+  /** Original value-based Clone restores Which135. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScRotateValueItem {
+    void pool;
+    return new ScRotateValueItem(this.GetValue());
   }
 }

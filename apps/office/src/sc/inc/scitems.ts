@@ -35,3 +35,6 @@ export const ATTR_PAGE_DRAWINGS = 172;
 
 /** Original cell indentation item identity. */
 export const ATTR_INDENT = 131;
+
+/** Original cell text rotation item identity. */
+export const ATTR_ROTATE_VALUE = 135;

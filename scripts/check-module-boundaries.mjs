@@ -91,7 +91,8 @@ const allowedEdges = new Map([
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   ["svl", new Set(["comphelper", "cppu", "o3tl", "sal"])],
   ["svtools", new Set()],
-  ["svx", new Set(["editeng", "svl", "svtools", "vcl"])],
+  // Original sdangitm.hxx includes tools/degree.hxx.
+  ["svx", new Set(["editeng", "svl", "svtools", "tools", "vcl"])],
   [
     "sw",
     new Set([
@@ -157,6 +158,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
     return "upstream-mechanism";
+  if (portablePath.startsWith("svx/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";

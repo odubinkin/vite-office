@@ -1,7 +1,7 @@
-/** @fileoverview Implements SfxInt16Item from pinned svl/source/items/intitem.cxx. */
+/** @fileoverview Shared integer item value families from pinned svl/source/items/intitem.cxx. */
 
 import { SfxPoolItem } from "./poolitem";
-import { CntUInt16Item, CntUInt32Item } from "./cintitem";
+import { CntInt32Item, CntUInt16Item, CntUInt32Item } from "./cintitem";
 
 import type { SfxItemPool } from "./itempool";
 /** Original unsigned32 subclass with default factory and implicit copying. */
@@ -70,5 +70,23 @@ export class SfxInt16Item extends SfxPoolItem {
   /** Returns the integer value through the generic item contract. @returns Integer value. */
   public override QueryValue(): number {
     return this.value;
+  }
+}
+
+/** Original signed32 subclass with default factory and implicit copying. */
+export class SfxInt32Item extends CntInt32Item {
+  /** Original zero/default/value and copy forms. @param source - Which or actual const source. @param value - Signed payload. @returns Item. */
+  constructor(source: number | Readonly<SfxInt32Item> = 0, value = 0) {
+    if (typeof source === "number") super(source, value);
+    else super(source);
+  }
+  /** Original zero-Which/zero-value factory. @returns Default item. */
+  public static CreateDefault(): SfxInt32Item {
+    return new SfxInt32Item();
+  }
+  /** Original copy-based Clone retains concrete type and Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SfxInt32Item {
+    void pool;
+    return new SfxInt32Item(this);
   }
 }

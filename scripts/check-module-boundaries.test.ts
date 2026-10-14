@@ -584,3 +584,12 @@ it("permits the original shared integer hash dependency while retaining reverse 
   for (const source of ["svl/inc/cintitem.ts", "svl/inc/intitem.ts"])
     expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
 });
+
+it("keeps original SVX angle units below Calc and browser responsibilities", /** Checks exact native header dependency and reverse restrictions. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svx", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "svx")).toBe(true);
+  for (const source of ["svx/inc/sdangitm.ts", "tools/inc/degree.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+  }
+});
