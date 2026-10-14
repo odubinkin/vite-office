@@ -4,7 +4,7 @@ title: "Route native Ctrl-F6 through owning menubar popups"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "1,641 unique accepted; whole current production module 100% four metrics, 538 positive original counters; all static and nine metadata gates pass, 960 old test files unchanged. Evidence apps/office/node_modules/.cache/parity-coverage/WTXZMM/proof.json, accepted-results.json and audit-results.json. Cycle 3/10; upcoming full continues, following full pauses after repairs."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T04:27:09.719Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review: semantic 383664b6aa23 aligns native Ctrl-F6 ownership through existing keydown/close/focus; declared gates pass."
+  evaluated_sha: "383664b6aa238f83a65f7e6cb901fd9981d601a4"
+  blueprint_digest: "306778169064d3da9b43e4483af9f0c8daf98e853ad89574da1e0b89de1d6961"
+  evidence_refs:
+    - ".agentplane/tasks/202610140415-WTXZMM/README.md"
+    - ".agentplane/tasks/202610140415-WTXZMM/quality/20261014-042709719-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140415-WTXZMM/quality/20261014-042709719-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140415-WTXZMM/quality/20261014-042709719-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140415-WTXZMM/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/WTXZMM/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/WTXZMM/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/WTXZMM/audit-results.json"
+  findings:
+    - "Source MenuFloatingWindow nearest parent cancellation and MenuBarWindow document-focus override match root/child behavior. Seven original-bindings cases and three actual Writer Chromium cases exercise both global focus interaction and fresh F10 cycle. No new input machinery or old acceptance edits."
 commit: null
 comments:
   -
