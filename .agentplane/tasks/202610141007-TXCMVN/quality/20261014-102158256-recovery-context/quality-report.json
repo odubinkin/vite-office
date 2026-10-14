@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141007-TXCMVN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T10:21:58.256Z",
+  "verdict": "pass",
+  "summary": "Same-agent source-bound review passed28intentional paths, wholeCalc158tests and changed shared owners raw100; not independent review.",
+  "evaluated_sha": "2fe041285719cbf3e0169e3d037bb014b8fcaefe",
+  "blueprint_digest": "44bc9569063193b06d8be9599825d51bfe0cd74e12ff77e87585faa22acb828d",
+  "findings": [
+    "Original vector duplicate preservation, item copy/Clone Which histories and real typed Any conversion retained. Complete native presentation/diagnostics/ABI/document/UI/ODS remain pending."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141007-TXCMVN/README.md",
+    "output/playwright/task113-checks/exact-review.json",
+    "output/playwright/task113-checks/gates-results.json",
+    "output/playwright/task113-checks/value-coverage-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Source-backed integer identity hash specialization does not certify native stdlib/binary hashes; full original QA and full office replay deferred to121."
+  ]
+}

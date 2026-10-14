@@ -4,7 +4,7 @@ title: "Implement Calc conditional-format index and page-scale value attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T10:22:12.962Z"
+  updated_by: "CODER"
+  note: "WholeCalc158tests and actual shared10tests pass; complete Calc33/shared2owners rawS/B/F/L100 everycounterpositive. Checker23tests and12focused gates pass. Exact committed28paths and3469hashes verified;9native source pins, same-agent evaluation not independent. Initial failures retained and corrected within scope. Full121next; document/UI/ODS integration remains pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T10:21:58.256Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent source-bound review passed28intentional paths, wholeCalc158tests and changed shared owners raw100; not independent review."
+  evaluated_sha: "2fe041285719cbf3e0169e3d037bb014b8fcaefe"
+  blueprint_digest: "44bc9569063193b06d8be9599825d51bfe0cd74e12ff77e87585faa22acb828d"
+  evidence_refs:
+    - ".agentplane/tasks/202610141007-TXCMVN/README.md"
+    - ".agentplane/tasks/202610141007-TXCMVN/quality/20261014-102158256-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141007-TXCMVN/quality/20261014-102158256-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141007-TXCMVN/quality/20261014-102158256-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141007-TXCMVN/blueprint/resolved-snapshot.json"
+    - "output/playwright/task113-checks/exact-review.json"
+    - "output/playwright/task113-checks/gates-results.json"
+    - "output/playwright/task113-checks/value-coverage-audit.json"
+  findings:
+    - "Original vector duplicate preservation, item copy/Clone Which histories and real typed Any conversion retained. Complete native presentation/diagnostics/ABI/document/UI/ODS remain pending."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port native condition-index/page-scale values over real SortedVector and Any, preserving initializer duplicates and shared value moves without lifetime machinery."
+  -
+    type: "verify"
+    at: "2026-10-14T10:22:12.962Z"
+    author: "CODER"
+    state: "ok"
+    note: "WholeCalc158tests and actual shared10tests pass; complete Calc33/shared2owners rawS/B/F/L100 everycounterpositive. Checker23tests and12focused gates pass. Exact committed28paths and3469hashes verified;9native source pins, same-agent evaluation not independent. Initial failures retained and corrected within scope. Full121next; document/UI/ODS integration remains pending."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:21:22.656Z"
+doc_updated_at: "2026-10-14T10:22:13.039Z"
 doc_updated_by: "CODER"
 description: "Task113 prepares native document pool and ODS style values: complete logical ScCondFormatItem sorted index/copy/move/Clone/equality/hash contracts and ScPageScaleToItem size/validity/copy/Clone/member query/update contracts. Reuse existing SortedVector/Any/pool owners, add only native unsigned integer hash-combine arithmetic and exact Calc-to-CPPU dependency evidence. No memory manager or fake document/provider; raw100 Calc/affected owners and focused checks, full121."
 sections:
@@ -56,6 +80,39 @@ sections:
     Command: node output/playwright/task113-checks/gates.mjs
     Result: final focused12gate run recorded in gates-results.json after metadata corrections; exact source review and committed hashes recorded before final verification. Scope: intentional28paths only. Native source contracts reviewed, no native compilation.
     Full office/browser/static: next scheduled full121 under user once-per10tasks cadence; no Writer-only coverage work.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T10:22:12.962Z — VERIFY — ok
+
+    By: CODER
+
+    Note: WholeCalc158tests and actual shared10tests pass; complete Calc33/shared2owners rawS/B/F/L100 everycounterpositive. Checker23tests and12focused gates pass. Exact committed28paths and3469hashes verified;9native source pins, same-agent evaluation not independent. Initial failures retained and corrected within scope. Full121next; document/UI/ODS integration remains pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T10:21:22.656Z, excerpt_hash=sha256:d4d9abc86fb85e8d050f0792256066ea367823531f048dcaaf03c7b7a9d46c1d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141007-TXCMVN/blueprint/resolved-snapshot.json
+    - old_digest: 44bc9569063193b06d8be9599825d51bfe0cd74e12ff77e87585faa22acb828d
+    - current_digest: 44bc9569063193b06d8be9599825d51bfe0cd74e12ff77e87585faa22acb828d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141007-TXCMVN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141007-TXCMVN -m 🧩 TXCMVN task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task113 intentional implementation/tests/metadata/docs. Preserve integrated Writer/main changes and unrelated tasks. Restore all4reference symlinks exactly in finally, no upstream tree edits/network/worktrees/merges/history reset."
   Findings: "Initial Calc157pass/1fail: new test incorrectly expected typed signed16 -1 rejection. Existing CPPU and original assign.hxx correctly reinterpret the16bits asunsigned65535. Test corrected to source behavior, retaining unchanged-output and invalid-type assertions; implementation unchanged. Initial lint rejected redundant overloads; merged erased seed signature without arithmetic change. Initial provenance and registry failed new metadata: hash needed original nSeed symbol evidence beyond basename; canonical attribute reexports are not runtime declarations. Corrected metadata, retaining prior history/status. CALC098duplicate initializer and CALC099typed signed dimension conversion documented; upstream behavior preserved. All initial logs retained. Same-agent evaluator is not independent review. Logical hash specialization makes no external stdlib/native ABI/binary parity claim. Whole document storage/configuration/UI/ODS filters and localized presentation remain pending. No fake document/provider or new memory ownership engine. Goal active; task121nextfull."
 id_source: "generated"
@@ -88,6 +145,39 @@ Result: pass23tests. Exact sc→cppu allowed, reverse and browser dependencies r
 Command: node output/playwright/task113-checks/gates.mjs
 Result: final focused12gate run recorded in gates-results.json after metadata corrections; exact source review and committed hashes recorded before final verification. Scope: intentional28paths only. Native source contracts reviewed, no native compilation.
 Full office/browser/static: next scheduled full121 under user once-per10tasks cadence; no Writer-only coverage work.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T10:22:12.962Z — VERIFY — ok
+
+By: CODER
+
+Note: WholeCalc158tests and actual shared10tests pass; complete Calc33/shared2owners rawS/B/F/L100 everycounterpositive. Checker23tests and12focused gates pass. Exact committed28paths and3469hashes verified;9native source pins, same-agent evaluation not independent. Initial failures retained and corrected within scope. Full121next; document/UI/ODS integration remains pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T10:21:22.656Z, excerpt_hash=sha256:d4d9abc86fb85e8d050f0792256066ea367823531f048dcaaf03c7b7a9d46c1d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141007-TXCMVN/blueprint/resolved-snapshot.json
+- old_digest: 44bc9569063193b06d8be9599825d51bfe0cd74e12ff77e87585faa22acb828d
+- current_digest: 44bc9569063193b06d8be9599825d51bfe0cd74e12ff77e87585faa22acb828d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141007-TXCMVN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141007-TXCMVN -m 🧩 TXCMVN task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
