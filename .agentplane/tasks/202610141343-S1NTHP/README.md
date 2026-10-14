@@ -1,10 +1,11 @@
 ---
 id: "202610141343-S1NTHP"
 title: "Migrate shared border Color ownership and Writer consumers"
-status: "DOING"
+result_summary: "Canonical Color contracts replace represented numeric border state; Writer consumers migrated, inventory updated, all focused checks pass. Full Calc UI/ODS readiness still pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Exact58paths57existing1new,3696hashes12nativepins; shared6wholeowners raw100, Calc171tests raw100, related299tests24files and18Chromiumcases pass. Twelve focused gates31boundaries. Original Color copy/value/out contracts; IO schemas retained."
     - "Writer-only coverage gaps reported under explicit exception. Stale Writer Which equality acceptance corrected against native source; implementation unchanged. Opening JSDoc relocation retains byte-identical runtime body and statement locations."
-commit: null
+commit:
+  hash: "38ab159e2225e771b0b0d3e3fb7553734afd8b6e"
+  message: "🚧 S1NTHP core: use shared Color for border owners and Writer consumers"
 comments:
   -
     author: "CODER"
     body: "Start: explicit human authorization for shared canonical Color contracts and all Writer consumers, no numeric compatibility core."
+  -
+    author: "CODER"
+    body: "Verified: shared border Color ownership, native copy/out semantics and all Writer consumer migrations; strict shared/Calc100 and related/browser checks."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual source38ab159e2225,58paths3696hashes12nativepins. Canonical Color ownership and all Writer consumers; shared6owners raw100, Calc171tests raw100, related299tests and18Chromiumcases pass.12gates31boundaries. Writer gaps exempt; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-14T13:58:01.825Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared border Color ownership, native copy/out semantics and all Writer consumer migrations; strict shared/Calc100 and related/browser checks."
 doc_version: 3
-doc_updated_at: "2026-10-14T13:57:42.530Z"
+doc_updated_at: "2026-10-14T13:58:01.828Z"
 doc_updated_by: "CODER"
 description: "Task129: replace represented numeric color ownership in SvxBorderLine and connected shared selector/frame/page contracts with actual Tools Color, migrate all Writer callers and browser serialization boundaries, no legacy numeric core overloads. Explicit repeated human authorization to fix shared and Writer contracts. Preserve all existing metric/style semantics; advanced theme and shading remain separately unported."
 sections:
