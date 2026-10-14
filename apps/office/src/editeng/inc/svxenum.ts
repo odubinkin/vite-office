@@ -6,3 +6,28 @@ export enum SvxNumType {
   SVX_NUM_CHAR_SPECIAL = 6,
   SVX_NUM_BITMAP = 8,
 }
+
+/** Original fixed-int cell alignment enum. */
+export enum SvxCellHorJustify {
+  Standard = 0,
+  Left = 1,
+  Center = 2,
+  Right = 3,
+  Block = 4,
+  Repeat = 5,
+}
+
+/** Original fixed-int cell alignment enum. */
+export enum SvxCellVerJustify {
+  Standard = 0,
+  Top = 1,
+  Center = 2,
+  Bottom = 3,
+  Block = 4,
+}
+
+/** Original fixed-int cell alignment enum. */
+export enum SvxCellJustifyMethod {
+  Auto = 0,
+  Distribute = 1,
+}

@@ -17,3 +17,8 @@ export const MID_FIRST_AUTO = 10;
 export const MID_TXT_LMARGIN = 11;
 /** Paragraph proportional left margin. */
 export const MID_L_REL_MARGIN = 6;
+
+/** Original cell alignment member. */
+export const MID_HORJUST_HORJUST = 0;
+/** Original paragraph alignment member, also used by the vertical item. */
+export const MID_HORJUST_ADJUST = 1;

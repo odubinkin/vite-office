@@ -38,3 +38,18 @@ export const ATTR_INDENT = 131;
 
 /** Original cell text rotation item identity. */
 export const ATTR_ROTATE_VALUE = 135;
+
+/** Original cell alignment item identity. */
+export const ATTR_HOR_JUSTIFY = 129;
+
+/** Original cell alignment item identity. */
+export const ATTR_HOR_JUSTIFY_METHOD = 130;
+
+/** Original cell alignment item identity. */
+export const ATTR_VER_JUSTIFY = 132;
+
+/** Original cell alignment item identity. */
+export const ATTR_VER_JUSTIFY_METHOD = 133;
+
+/** Original cell alignment item identity. */
+export const ATTR_ROTATE_MODE = 136;

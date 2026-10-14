@@ -4,7 +4,7 @@ title: "Implement shared cell alignment values and Calc formatting defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved real shared alignment/rotation-mode value chains and UNO types, five Calc defaults; preserve source quirks, no generator or fake provider."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:53:28.229Z"
+doc_updated_at: "2026-10-14T11:01:50.540Z"
 doc_updated_by: "CODER"
 description: "Task117: native EditEng justify item trio, SVX rotate-mode, real UNO enum/constant owners, five Calc DocPool attribute identities. Reuse SVL/CPPU, preserve source conversion/default quirks; source-absent Calc/shared raw100 and focused checks, full121next."
 sections:
@@ -47,9 +47,16 @@ sections:
     1. Review complete native justifyitem.hxx/cxx, rotmodit.hxx/cxx, internal enums/memberids and5IDL declarations, actual codemaker normal enum getter, actual Any/type/assign contracts and Calc DocPool/scitems defaults. Test all public value/copy/default/Clone/member/mapping/typedAny/failure/output histories, real static enum types cold/warm and cross-type rejection. Preserve quirks; no fake provider/private forcing/compilednative or general native QA claim.
     2. WholeCalc and complete changedshared runtime owners strict rawS/B/F/L100/everycounterpositive, all4reference links absent/restoredfinally. Related shared enum/Any/existing numbering tests and exact module checker tests; retain assertions/thresholds/failurelogs. No Writer-only coverage repairs or full replay before121.
     3. Focused format/lint/typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff; exact committed/current paths/hashes from fresh3507Gitbaseline and nativepins. Normal initialized enum/const/value scope only, presentation/cache/ABI/fullDocPool/document/UI/ODS pending. Same-agent EVAL not independent, cleanAPfinish oncalc, goalactive.
-  Verification: "Pending implementation and source-bound checks."
+  Verification: |-
+    Command: node output/playwright/task117-checks/portable.mjs
+    Result: pass wholeCalc162tests58files33owners rawS4141/B2731/F821/L3689; related18tests5files10changed sharedruntime owners rawS293/B142/F31/L279. All S/B/F/L100/everyrawcounterpositive. All4source links absent/restoredfinally. Actual enum/Any/numbering consumers pass; enum outputs use real static metadata cold/warm.
+    Command: npx vitest run scripts/check-module-boundaries.test.ts
+    Result: pass27tests after one source-backed prior OffAPI→CPPU expectation migration; reverse/app/browser restrictions retained.
+    Command: node output/playwright/task117-checks/gates.mjs
+    Result: pass12focused gates format/lint/app typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff. Exact46intentionalpaths, fresh3507Gitbaseline/current3539hashes and18nativepins reviewed before final verification. Same-agent EVAL not independent.
+    Full-office/browser/static nextscheduled121 per user cadence; no Writer-only coverage repairs or native C++ generator/build.
   Rollback Plan: "Revert only task117 source commit if needed, preserve tasks113-116/userintegration/otheractive tasks. No reset/merge/outside-repo/global edits."
-  Findings: "Previous turn made verified progress: task116DONE,161Calc/85related/26module tests currentraw100/12gates/cleanclose. Current branchcalc clean; old unrelatedDOING untouched. Full111complete,121next. Source-confirmed vertical/rotate invalid-extraction success resets and horizontal unknown-member untouchedsuccess will be preserved and documented. Actual UNO generated enum getter source template is read locally only; no C++ generator/build."
+  Findings: "WholeCalc162tests and18related tests passed firsttime strict raw100 including complete new alignment/UNO enum type owners. Initial27module tests26pass/1fail: historical locale-only OffAPI→CPPU forbidden assertion no longer matches actual original generated enum getter responsibility. Pinned EnumType::dumpNormalGetCppuType emits CPPU static enum initialization and borrowed Typecell; approved exact graph edge requires changing that assertion toallowed with source comment. All other assertions, reverse/app/browser restrictions and thresholds retained; final27pass and12gates pass. CALC103documents original horizontal unknown-member untouchedsuccess, vertical default failed-extraction reset-success, rotate-mode reset-success and lossy VerticalAlignment member, without correcting source behavior. Actual CPPU metadata/extraction/insertion and shared SfxEnumItem reused; normal generated getters modeled directly from pinned template, no generator executed/fake provider/source fixture/private forcing. Scoped fixed-int unknown-value switch defaults distinct from invalid native enum/presentation/assertion/ABI domains. Header/core ownership and5IDL values retained, no memory/refcount engine. Complete DocPool/document/configuration/storage/UI/ODS and localized presentation/diagnostics/native caches/comprehensive generated helpers remain pending/excluded. Same-agent EVAL not independent. Goalactive, full121next."
 id_source: "generated"
 ---
 ## Summary
@@ -72,7 +79,13 @@ Port native SvxHorJustifyItem/SvxVerJustifyItem/SvxJustifyMethodItem constructor
 
 ## Verification
 
-Pending implementation and source-bound checks.
+Command: node output/playwright/task117-checks/portable.mjs
+Result: pass wholeCalc162tests58files33owners rawS4141/B2731/F821/L3689; related18tests5files10changed sharedruntime owners rawS293/B142/F31/L279. All S/B/F/L100/everyrawcounterpositive. All4source links absent/restoredfinally. Actual enum/Any/numbering consumers pass; enum outputs use real static metadata cold/warm.
+Command: npx vitest run scripts/check-module-boundaries.test.ts
+Result: pass27tests after one source-backed prior OffAPI→CPPU expectation migration; reverse/app/browser restrictions retained.
+Command: node output/playwright/task117-checks/gates.mjs
+Result: pass12focused gates format/lint/app typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff. Exact46intentionalpaths, fresh3507Gitbaseline/current3539hashes and18nativepins reviewed before final verification. Same-agent EVAL not independent.
+Full-office/browser/static nextscheduled121 per user cadence; no Writer-only coverage repairs or native C++ generator/build.
 
 ## Rollback Plan
 
@@ -80,4 +93,4 @@ Revert only task117 source commit if needed, preserve tasks113-116/userintegrati
 
 ## Findings
 
-Previous turn made verified progress: task116DONE,161Calc/85related/26module tests currentraw100/12gates/cleanclose. Current branchcalc clean; old unrelatedDOING untouched. Full111complete,121next. Source-confirmed vertical/rotate invalid-extraction success resets and horizontal unknown-member untouchedsuccess will be preserved and documented. Actual UNO generated enum getter source template is read locally only; no C++ generator/build.
+WholeCalc162tests and18related tests passed firsttime strict raw100 including complete new alignment/UNO enum type owners. Initial27module tests26pass/1fail: historical locale-only OffAPI→CPPU forbidden assertion no longer matches actual original generated enum getter responsibility. Pinned EnumType::dumpNormalGetCppuType emits CPPU static enum initialization and borrowed Typecell; approved exact graph edge requires changing that assertion toallowed with source comment. All other assertions, reverse/app/browser restrictions and thresholds retained; final27pass and12gates pass. CALC103documents original horizontal unknown-member untouchedsuccess, vertical default failed-extraction reset-success, rotate-mode reset-success and lossy VerticalAlignment member, without correcting source behavior. Actual CPPU metadata/extraction/insertion and shared SfxEnumItem reused; normal generated getters modeled directly from pinned template, no generator executed/fake provider/source fixture/private forcing. Scoped fixed-int unknown-value switch defaults distinct from invalid native enum/presentation/assertion/ABI domains. Header/core ownership and5IDL values retained, no memory/refcount engine. Complete DocPool/document/configuration/storage/UI/ODS and localized presentation/diagnostics/native caches/comprehensive generated helpers remain pending/excluded. Same-agent EVAL not independent. Goalactive, full121next.

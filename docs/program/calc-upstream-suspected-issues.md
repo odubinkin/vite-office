@@ -1904,3 +1904,12 @@ Status: source-level suspicious arithmetic; native runtime consequences unexecut
 Degree100 is a signed32 hundredths-of-degree value. SdrAngleItem stores that payload without normalization. In svx/source/svdraw/svdattr.cxx GetPresentation copies it into sal_Int32 nValue and performs nValue = -nValue when negative. For INT32_MIN the positive mathematical result does not fit signed32, so this expression appears to enter C++ signed-overflow undefined behavior. No sanitizer/native experiment or invented expected text is added. Preserve valid full-width stored angle values and do not add normalization or a minimum-value rejection. Localized presentation remains pending; resolve its defined-domain adaptation with the real locale/presentation owners.
 
 ScRotateValueItem implicit copy retains Which, while its GetValue-based Clone restores135; SdrAngleItem Clone explicitly retains Which. Task116 tests actual shared/Calc copy histories and degree values, not the suspicious native presentation path.
+
+
+## CALC-103: alignment setters can return success after failed extraction or ignored member
+
+Status: source-confirmed behavior; consumer-visible impact remains unverified.
+
+SvxVerJustifyItem::PutValue ignores the result of extracting the default long member. Failure leaves the initialized STANDARD value, resets the stored mode to Standard and returns true. Its typed VerticalAlignment member instead returns false without mutation on extraction failure. SvxRotateModeItem also replaces failed long extraction with STANDARD, stores Standard and returns true. SvxHorJustifyItem unknown members succeed without changing state; QueryValue likewise succeeds while leaving the output Any untouched. Preserve all these differences rather than adding uniform rejection.
+
+Vertical querying through MID_HORJUST_ADJUST maps both Standard and Block to VerticalAlignment_TOP, so that member cannot round-trip those modes. The default member uses CellVertJustify2 long values and preserves all five normal modes. These member/type distinctions are tested with actual shared items/Any and generated normal enum types. No full document/native QA or defect certification.

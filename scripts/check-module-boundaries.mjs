@@ -47,7 +47,8 @@ const allowedEdges = new Map([
   // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
   ["cppuhelper", new Set(["cppu", "sal"])],
   ["cui", new Set(["editeng", "svl", "svx"])],
-  ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
+  // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
+  ["editeng", new Set(["cppu", "offapi", "svl", "svtools", "vcl"])],
   ["external", new Set()],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
@@ -56,7 +57,8 @@ const allowedEdges = new Map([
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
-  ["offapi", new Set(["sal"])],
+  // Original generated enum getters use actual CPPU static enum metadata.
+  ["offapi", new Set(["cppu", "sal"])],
   ["package", new Set()],
   ["sal", new Set(["o3tl"])],
   ["sax", new Set()],
@@ -92,7 +94,8 @@ const allowedEdges = new Map([
   ["svl", new Set(["comphelper", "cppu", "o3tl", "sal"])],
   ["svtools", new Set()],
   // Original sdangitm.hxx includes tools/degree.hxx.
-  ["svx", new Set(["editeng", "svl", "svtools", "tools", "vcl"])],
+  // Original rotmodit.cxx exposes Any and CellVertJustify2.
+  ["svx", new Set(["cppu", "editeng", "offapi", "svl", "svtools", "tools", "vcl"])],
   [
     "sw",
     new Set([
@@ -158,6 +161,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
   if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
     return "upstream-mechanism";
+  if (portablePath.startsWith("editeng/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("svx/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";

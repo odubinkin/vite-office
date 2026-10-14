@@ -203,7 +203,8 @@ it("owns original locale and case-mapping dependencies without browser or revers
   // Original transliteration.hxx consumes the generated IDL enum, whose hdl includes SAL types/sentinel.
   expect(isForbiddenModuleEdge("offapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "offapi")).toBe(true);
-  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(true);
+  // Original cppumaker normal enum getters use CPPU static type initialization.
+  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(false);
   for (const owner of ["udkapi", "i18nutil", "offapi"])
     for (const dependency of ["sc", "sw", "framework", "vcl"])
       expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
@@ -592,4 +593,16 @@ it("keeps original SVX angle units below Calc and browser responsibilities", /**
     expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
     expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
   }
+});
+
+it("permits actual generated alignment enum dependencies without reverse or browser ownership", /** Checks source includes and generated type responsibility. @returns Nothing. */ () => {
+  for (const source of ["editeng", "offapi", "svx"])
+    expect(isForbiddenModuleEdge(source, "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("svx", "offapi")).toBe(false);
+  for (const target of ["editeng", "offapi", "svx"])
+    expect(isForbiddenModuleEdge("cppu", target)).toBe(true);
+  expect(getRuntimeOwnershipLayer("editeng/inc/justifyitem.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("editeng/inc/justifyitem.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
 });
