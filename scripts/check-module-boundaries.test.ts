@@ -12,6 +12,21 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 
+it("keeps shared configuration nodes below application and browser owners", /** Verifies the exact new owner edges and existing reverse/browser restrictions. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "o3tl", "sal"])
+    expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(false);
+  for (const dependency of ["sc", "sw", "vcl", "framework", "offapi"])
+    expect(isForbiddenModuleEdge("configmgr", dependency)).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "configmgr")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "configmgr")).toBe(true);
+  const source = "configmgr/source/node.ts";
+  expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+  expect(getRuntimeOwnershipViolation(source, "vcl/browser/font-list.ts", "../font-list")).toMatch(
+    /browser adapters/u,
+  );
+});
+
 it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);

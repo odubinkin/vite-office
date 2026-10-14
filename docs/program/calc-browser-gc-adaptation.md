@@ -127,3 +127,7 @@ ScMergeAttr uses the existing shared SfxPoolItem. Scalar copies/assignment and s
 ## Cell protection and shared IDL values
 
 Actual shared CellProtection owns four ordinary boolean fields; copies and output values are independent objects, no new memory/count/type-provider library. ScProtectionAttr uses the existing shared SfxPoolItem and existing browser QueryValue/PutValue unwrapped value convention. This is not a native Any/status/ABI binding and does not install a counterfeit UNO type provider. The original common unsupported PutValue false default is restored; descendant overrides remain runtime-identical. Original localized presentation/diagnostics/document/ODS integration stays pending.
+
+## Configuration node lifetimes
+
+Task105 configmgr nodes use ordinary JS references. Native SimpleReferenceObject inheritance, CreateStaticizedNodes, setStaticizedFlag, staticize and reference-count lifetime machinery are omitted under the user instruction to trust GC. NodeMap keeps actual mutable node aliases and deep clones through real node methods. Existing shared OUString/RuntimeException/Reference/SAL values are reused unchanged; this task does not add or certify their legacy lifetime internals. SortedVector supplies key order without a new STL allocator/tree engine. Native iterator/operator syntax is represented by stable first/second entries, undefined end and getOrInsert; no pointer/ABI/staticization/private-copy accessibility claim. Description omission in copies is observable logic and remains preserved.

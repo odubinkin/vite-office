@@ -1784,3 +1784,13 @@ Evidence: complete original declarations and bodies in sc/inc/attrib.hxx, sc/sou
 Decision: preserve fixed-id copying, payload-only assignment and same-type Which-independent equality. Do not normalize equality or copy the base id in ScMergeAttr; audit real document callers later.
 
 Task104 source follow-up for CALC-089: ScProtectionAttr also explicitly initializes its fixed ATTR_PROTECTION149 in the copy constructor, copies only payload in assignment and ignores Which in same-type equality. Preserve the same pattern; intended fixed-id caller constraints remain unverified.
+
+## CALC-090: configuration node copying drops description
+
+Status: source-confirmed omission; intended schema/consumer semantics and user-visible impact are unverified.
+
+Node copy construction initializes only layer and finalized metadata. Its OUString description member is default-constructed empty. GroupNode clone invokes that base copy constructor, so both clone modes lose the group description; cloned child groups lose their descriptions too, although child templates are retained through clone(true). This may intentionally strip schema metadata.
+
+Evidence: pinned configmgr/source/node.hxx and node.cxx plus groupnode.cxx, reviewed in task105. Source-backed tests use real initialized GroupNode trees and verify empty cloned descriptions while originals retain theirs. No compiled-native differential or complete configuration-service QA claim.
+
+Decision: preserve omission without silently copying descriptions. Audit real schema/configuration consumers before calling it a defect.
