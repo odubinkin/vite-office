@@ -1,4 +1,5 @@
 /** @fileoverview Checks real native section/document boundaries and table cursor selection without executing upstream. */
+import { FontWeight } from "../../../../tools/inc/fontenum";
 import { describe, expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
@@ -8,7 +9,7 @@ import { SwDocShell } from "../app/docsh";
 import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { SwView } from "../uiview/view";
 /** Requires an existing native test owner. @param value - Optional member. @returns Actual owner. */
@@ -266,7 +267,7 @@ describe("native section navigation", /** Registers actual cursor contracts. @re
   it("refreshes pending attributes, emits one hint and separates typing history", /** Checks cursor movement and real later insert undo. @returns Nothing. */ () => {
     const f = fixture(),
       cell = required(f.cells[1]);
-    cell.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+    cell.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     place(f, f.tail, 2);
     expect(f.shell.Insert("X")).toBe(true);
     const notify = vi.fn(),

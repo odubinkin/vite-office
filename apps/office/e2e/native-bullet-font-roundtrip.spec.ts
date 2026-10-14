@@ -1,12 +1,11 @@
 /** @fileoverview Checks real custom bullet-face ODT persistence, Chromium fonts and body/cell glyph separation. */
+import { FontItalic, FontWeight } from "../src/tools/inc/fontenum";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { applyWriterParagraphList } from "../src/sw/source/core/doc/list";
 import { createWriterNumFormat } from "../src/sw/source/core/doc/number";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import {
-  FontItalic,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -62,8 +61,8 @@ for (const width of [1280, 390])
         ] as const) {
           node.SetAttr(new SvxFontItem("Liberation Serif", family));
           node.SetAttr(new SvxFontHeightItem(480, height));
-          node.SetAttr(new SvxWeightItem(FontWeight.BOLD, weight));
-          node.SetAttr(new SvxPostureItem(FontItalic.NORMAL, posture));
+          node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, weight));
+          node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, posture));
         }
         applyWriterParagraphList(node, {
           kind,

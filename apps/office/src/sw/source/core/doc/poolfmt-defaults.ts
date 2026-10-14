@@ -2,6 +2,7 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 
 import {
   SvxAdjust,
@@ -17,8 +18,6 @@ import {
 } from "../../../../editeng/inc/lrspitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
-  FontWeight,
   SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
@@ -246,10 +245,10 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
   for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
     if (defaults.bold !== undefined)
-      collection.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, which));
+      collection.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));
   for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
     if (defaults.italic !== undefined)
-      collection.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, which));
+      collection.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, which));
   for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
     if (defaults.fontSizeTwips !== undefined)
       collection.SetFormatAttr(new SvxFontHeightItem(defaults.fontSizeTwips, which));

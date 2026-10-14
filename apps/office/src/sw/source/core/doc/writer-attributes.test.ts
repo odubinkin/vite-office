@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createWriterNumFormat, getWriterNumFormatKind, SwNumRule } from "./number";
 
@@ -24,9 +25,7 @@ import {
 } from "../../../../editeng/source/items/paraitem";
 import { SvxTextLeftMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
@@ -427,8 +426,8 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const style = writer.GetDfltTextFormatColl();
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
-    style.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-    style.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
+    style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    style.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
     style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
     expect(style.GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetPosture().GetBoolValue()).toBe(true);

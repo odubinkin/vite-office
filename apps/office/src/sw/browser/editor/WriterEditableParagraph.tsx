@@ -1,9 +1,10 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
+import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 
 import { Fragment, useLayoutEffect, useRef } from "react";
 import { resolveSwNumberingTabPosition } from "../../source/core/text/txttab";
 import { browserFontFamily } from "./writer-font-family";
-import { FontItalic, FontLineStyle, FontWeight } from "../../../editeng/source/items/textitem";
+import { FontLineStyle } from "../../../editeng/source/items/textitem";
 
 import type {
   WriterParagraphProjection as WriterParagraph,
@@ -168,15 +169,15 @@ export function WriterEditableParagraph({
               fontStyle:
                 markerFont === undefined
                   ? paragraph.computedStyle.fontStyle
-                  : markerFont.posture === FontItalic.OBLIQUE
+                  : markerFont.posture === FontItalic.ITALIC_OBLIQUE
                     ? "oblique"
-                    : markerFont.posture === FontItalic.NORMAL
+                    : markerFont.posture === FontItalic.ITALIC_NORMAL
                       ? "italic"
                       : "normal",
               fontWeight:
                 markerFont === undefined
                   ? paragraph.computedStyle.fontWeight
-                  : markerFont.weight >= FontWeight.BOLD
+                  : markerFont.weight >= FontWeight.WEIGHT_BOLD
                     ? 700
                     : 400,
               textDecorationLine:

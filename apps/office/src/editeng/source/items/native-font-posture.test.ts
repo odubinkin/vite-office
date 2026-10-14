@@ -1,7 +1,6 @@
 /** @fileoverview Native posture and VCL slant mappings using actual common enum/Any owners. */
 import { expect, it } from "vitest";
 import { SvxPostureItem as Item } from "../../inc/postitem";
-import { FontItalic as Legacy } from "./textitem";
 import { FontItalic as I } from "../../../tools/inc/fontenum";
 import {
   FontSlant as S,
@@ -43,16 +42,10 @@ it("selects both original enum overload families without inferring type from the
     BOOL,
     POSTURE,
   ]).toEqual([0, 1, 2, 3, 2147483647, 0, 1]);
-  expect([Legacy.NONE, Legacy.OBLIQUE, Legacy.NORMAL, Legacy.DONTKNOW]).toEqual([
-    I.ITALIC_NONE,
-    I.ITALIC_OBLIQUE,
-    I.ITALIC_NORMAL,
-    I.ITALIC_DONTKNOW,
-  ]);
   for (const [from, to] of forward) expect(convert(from, "FontItalic")).toBe(to);
   for (const [from, to] of reverse) expect(convert(from, "FontSlant")).toBe(to);
 });
-it("uses real enum base copy Clone factory and original inclusive bool threshold", /** Existing browser aliases refer to the same underlying native enum. @returns Nothing. */ () => {
+it("uses real enum base copy Clone factory and original inclusive bool threshold", /** Uses the single original Tools enum. @returns Nothing. */ () => {
   const factory = Item.CreateDefault(),
     item = new Item(I.ITALIC_DONTKNOW, 103),
     copy = new Item(item),

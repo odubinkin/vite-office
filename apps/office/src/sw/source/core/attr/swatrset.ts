@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 
 import {
   SvxAdjust,
@@ -22,9 +23,7 @@ import {
   SvxProtectItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
@@ -207,13 +206,13 @@ export class SwAttrPool extends SfxItemPool {
       );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(
-        new SvxPostureItem(FontItalic.NONE, which),
+        new SvxPostureItem(FontItalic.ITALIC_NONE, which),
         /** Restores a posture item. @param value - Persisted enum value. @returns Concrete posture item. */
         (value) => new SvxPostureItem(Number(value) as FontItalic, which),
       );
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       this.RegisterDefaultItem(
-        new SvxWeightItem(FontWeight.NORMAL, which),
+        new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which),
         /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
       );

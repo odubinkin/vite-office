@@ -1,4 +1,5 @@
 /** @fileoverview Verifies represented native Number/Bullet font construction without upstream execution. */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
@@ -6,9 +7,7 @@ import { createWriterNumFormat, SvxNumType } from "../doc/number";
 import { Font } from "../../../../vcl/source/font/font";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -45,8 +44,8 @@ for (const preserve of [false, true])
         new SvxFontItem("Liberation Serif", RES_CHRATR_FONT, "Liberation Serif", "roman"),
       );
       node.SetAttr(new SvxFontHeightItem(400, RES_CHRATR_FONTSIZE));
-      node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-      node.SetAttr(new SvxPostureItem(FontItalic.OBLIQUE, RES_CHRATR_POSTURE));
+      node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+      node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, RES_CHRATR_POSTURE));
       node.SetAttr(new SvxUnderlineItem(FontLineStyle.DOUBLE, RES_CHRATR_UNDERLINE));
       node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
       applyWriterParagraphList(node, { kind: "bullet", level: 0, ruleName: "Font rule" });
@@ -57,8 +56,8 @@ for (const preserve of [false, true])
       expect(initial).toEqual({
         familyName: "OpenSymbol",
         heightTwips: 400,
-        weight: preserve ? FontWeight.BOLD : FontWeight.NORMAL,
-        posture: preserve ? FontItalic.OBLIQUE : FontItalic.NONE,
+        weight: preserve ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
+        posture: preserve ? FontItalic.ITALIC_OBLIQUE : FontItalic.ITALIC_NONE,
         underline: preserve ? FontLineStyle.DOUBLE : FontLineStyle.NONE,
         color: "#336699",
       });
@@ -86,8 +85,8 @@ for (const preserve of [false, true])
         familyName: "Liberation Serif",
         genericFamily: "roman",
         heightTwips: 400,
-        weight: FontWeight.BOLD,
-        posture: FontItalic.OBLIQUE,
+        weight: FontWeight.WEIGHT_BOLD,
+        posture: FontItalic.ITALIC_OBLIQUE,
         underline: preserve ? FontLineStyle.DOUBLE : FontLineStyle.NONE,
         color: "#336699",
       });
@@ -97,7 +96,9 @@ for (const preserve of [false, true])
       node.SetCountedInList(false);
       expect(resolveSwNumberPortionFont(node)).toBeUndefined();
       expect(node.GetText()).toBe("Paragraph text");
-      expect((node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(FontWeight.BOLD);
+      expect((node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(
+        FontWeight.WEIGHT_BOLD,
+      );
       expect(doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     } finally {
       doc.Dispose();

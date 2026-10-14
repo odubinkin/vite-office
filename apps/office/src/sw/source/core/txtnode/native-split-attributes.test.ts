@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native full-span hint movement and split/read history without pinned upstream access. */
+import { FontWeight } from "../../../../tools/inc/fontenum";
 import { selectTableRow } from "../../../../../test-support/table-mouse";
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
@@ -20,7 +21,7 @@ import {
   createWriterCollapsedCursorState,
   type SwUndoRedoContext,
 } from "../undo/undobj";
-import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import { readWriterAsciiParagraphs, prepareWriterAsciiParagraphs } from "../../filter/ascii/parasc";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -68,13 +69,13 @@ function format(node: SwTextNode, offset = 0) {
 
 it("native moved boundary preserves sparse direct items ranged overrides and independent legacy snapshots", /** Checks mixed native moved and historical snapshot ownership without a copy-mode adapter. @returns Nothing. */ () => {
   const { doc, node } = fixture();
-  node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+  node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
   const overrideItems = createWriterCharacterItemSet(doc.GetAttrPool(), {
     bold: false,
     italic: true,
     underline: false,
   }).Clone();
-  overrideItems.Put(new SvxWeightItem(FontWeight.NORMAL, RES_CHRATR_WEIGHT));
+  overrideItems.Put(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
   const hint = node.InsertItem(
       new SwFormatAutoFormat(overrideItems),
       1,
@@ -106,7 +107,7 @@ it("native moved boundary preserves sparse direct items ranged overrides and ind
     expect(boundary.GetText()).toBe("BCD");
     expect(boundary.GetpSwAttrSet()?.Count()).toBe(1);
     expect((boundary.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(
-      FontWeight.BOLD,
+      FontWeight.WEIGHT_BOLD,
     );
     expect(required(boundary.GetpSwpHints()).Get(0)).toBe(hint);
     expect(node.GetText()).toBe("A");

@@ -1,4 +1,5 @@
 /** @fileoverview Checks native direct-item conversion and join history with literal owners,without upstream execution. */
+import { FontWeight, FontItalic } from "../../../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTextNode } from "./ndtxt";
@@ -9,12 +10,7 @@ import { ConvertTextNodeItemsToHints, MakeTextAttr } from "./thints";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import {
-  FontWeight,
-  SvxWeightItem,
-  FontItalic,
-  SvxPostureItem,
-} from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
 import { SwTextFormatColl } from "../doc/fmtcol";
 import {
   SwHistory,
@@ -47,7 +43,7 @@ function weightSet(doc: SwDoc, weight: FontWeight, which = 15) {
   return set;
 }
 /** Inserts one actual AUTO portion. @param node - Actual owner. @param start - Inclusive start. @param end - Exclusive end. @param weight - Literal weight. @returns Owned hint. */
-function auto(node: SwTextNode, start: number, end: number, weight = FontWeight.BOLD) {
+function auto(node: SwTextNode, start: number, end: number, weight = FontWeight.WEIGHT_BOLD) {
   return node.InsertItem(
     new SwFormatAutoFormat(weightSet(node.GetDoc(), weight)),
     start,
@@ -83,15 +79,15 @@ describe("native paragraph character conversion", /** Registers five-pair and re
   it("coalesces converted direct weight across adjacent pooled italic spans", /** Checks a real conversion boundary whose existing spans carry another property. @returns Nothing. */ () => {
     const { doc, first } = fixture();
     const italic = new SfxItemSet(doc.GetAttrPool(), [[1, 48]]);
-    italic.Put(new SvxPostureItem(FontItalic.NORMAL, 11));
+    italic.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
     const a = MakeTextAttr(doc, italic, 0, 2),
       b = MakeTextAttr(doc, italic, 2, 4);
     first.GetOrCreateSwpHints().Insert(a);
     first.GetOrCreateSwpHints().Insert(b);
-    first.SetAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+    first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
     first.FormatToTextAttr(first);
-    expect(spans(first)).toEqual([[0, 4, FontWeight.BOLD]]);
-    expect(spans(first, 11)).toEqual([[0, 4, FontItalic.NORMAL]]);
+    expect(spans(first)).toEqual([[0, 4, FontWeight.WEIGHT_BOLD]]);
+    expect(spans(first, 11)).toEqual([[0, 4, FontItalic.ITALIC_NORMAL]]);
     const map = required(first.GetpSwpHints()),
       merged = map.Get(0);
     expect(map.Count()).toBe(1);
@@ -112,10 +108,13 @@ describe("native paragraph character conversion", /** Registers five-pair and re
           const { doc, first, second } = fixture(length === 0 ? "" : "abcd");
           second.SetText(length === 0 ? "" : "efgh");
           if (pair === "source" || pair === "equal" || pair === "different")
-            second.SetAttr(new SvxWeightItem(FontWeight.BOLD, which));
+            second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));
           if (pair === "main" || pair === "equal" || pair === "different")
             first.SetAttr(
-              new SvxWeightItem(pair === "different" ? FontWeight.NORMAL : FontWeight.BOLD, which),
+              new SvxWeightItem(
+                pair === "different" ? FontWeight.WEIGHT_NORMAL : FontWeight.WEIGHT_BOLD,
+                which,
+              ),
             );
           first.SetAttr(new SfxUInt16Item(80, 0));
           second.SetAttr(new SfxUInt16Item(80, 0));
@@ -123,16 +122,18 @@ describe("native paragraph character conversion", /** Registers five-pair and re
           expect(direct(second, which)).toBeUndefined();
           expect(direct(first, which)).toBe(
             pair === "equal"
-              ? FontWeight.BOLD
+              ? FontWeight.WEIGHT_BOLD
               : pair === "different"
-                ? FontWeight.NORMAL
+                ? FontWeight.WEIGHT_NORMAL
                 : undefined,
           );
           expect(spans(second, which)).toEqual(
-            length && (pair === "source" || pair === "different") ? [[0, 4, FontWeight.BOLD]] : [],
+            length && (pair === "source" || pair === "different")
+              ? [[0, 4, FontWeight.WEIGHT_BOLD]]
+              : [],
           );
           expect(spans(first, which)).toEqual(
-            length && pair === "main" ? [[0, 4, FontWeight.BOLD]] : [],
+            length && pair === "main" ? [[0, 4, FontWeight.WEIGHT_BOLD]] : [],
           );
           expect(direct(first, 80)).toBe(0);
           expect(direct(second, 80)).toBe(0);
@@ -148,40 +149,40 @@ describe("native paragraph character conversion", /** Registers five-pair and re
     ) => {
       const { doc, first } = fixture(length ? "abcd" : "");
       const style = doc.GetTextFormatColl("text-body");
-      style.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, 11));
+      style.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
       first.ChgFormatColl(style);
-      first.SetAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+      first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
       first.FormatToTextAttr(first);
       expect(direct(first)).toBeUndefined();
-      expect(spans(first)).toEqual(length ? [[0, 4, FontWeight.BOLD]] : []);
+      expect(spans(first)).toEqual(length ? [[0, 4, FontWeight.WEIGHT_BOLD]] : []);
       expect(spans(first, 11)).toEqual(length ? [[0, 4, undefined]] : []);
       expect(first.GetTextFormatColl()).toBe(style);
       first.FormatToTextAttr(first);
-      expect(spans(first)).toEqual(length ? [[0, 4, FontWeight.BOLD]] : []);
+      expect(spans(first)).toEqual(length ? [[0, 4, FontWeight.WEIGHT_BOLD]] : []);
     },
   );
   it("fills gaps while ranged items override converted direct items and INET ownership survives", /** Checks native span collection without BuildPortions. @returns Nothing. */ () => {
     const { doc, first } = fixture("abcdefgh");
-    const old = auto(first, 2, 6, FontWeight.NORMAL);
+    const old = auto(first, 2, 6, FontWeight.WEIGHT_NORMAL);
     const inet = first.InsertItem(
       new SwFormatINetFormat("url", "target"),
       1,
       7,
       SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
     );
-    const items = weightSet(doc, FontWeight.BOLD);
-    items.Put(new SvxPostureItem(FontItalic.NORMAL, 11));
+    const items = weightSet(doc, FontWeight.WEIGHT_BOLD);
+    items.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
     first.SetAttr(items);
     first.FormatToTextAttr(first);
     expect(spans(first)).toEqual([
-      [0, 2, FontWeight.BOLD],
-      [2, 6, FontWeight.NORMAL],
-      [6, 8, FontWeight.BOLD],
+      [0, 2, FontWeight.WEIGHT_BOLD],
+      [2, 6, FontWeight.WEIGHT_NORMAL],
+      [6, 8, FontWeight.WEIGHT_BOLD],
     ]);
     expect(spans(first, 11)).toEqual([
-      [0, 2, FontItalic.NORMAL],
-      [2, 6, FontItalic.NORMAL],
-      [6, 8, FontItalic.NORMAL],
+      [0, 2, FontItalic.ITALIC_NORMAL],
+      [2, 6, FontItalic.ITALIC_NORMAL],
+      [6, 8, FontItalic.ITALIC_NORMAL],
     ]);
     expect(old.m_pHints).toBeUndefined();
     const map = required(first.GetpSwpHints());
@@ -194,13 +195,13 @@ describe("native paragraph character conversion", /** Registers five-pair and re
   });
   it("preserves an existing covering AUTO owner when every converted Which is already present", /** Exercises native RemovePresentAttrs no-replacement branch. @returns Nothing. */ () => {
     const { first } = fixture();
-    const old = auto(first, 0, 4, FontWeight.NORMAL);
+    const old = auto(first, 0, 4, FontWeight.WEIGHT_NORMAL);
     old.SetFormatIgnoreStart(true);
     old.SetFormatIgnoreEnd(true);
-    first.SetAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+    first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
     first.FormatToTextAttr(first);
     expect(required(first.GetpSwpHints()).Get(0)).toBe(old);
-    expect(spans(first)).toEqual([[0, 4, FontWeight.NORMAL]]);
+    expect(spans(first)).toEqual([[0, 4, FontWeight.WEIGHT_NORMAL]]);
     expect([old.IsFormatIgnoreStart(), old.IsFormatIgnoreEnd()]).toEqual([false, false]);
   });
   it("merges equal adjacent AUTO portions,skips zero and INET,normalizes nonzero flags", /** Verifies actual owner retention and all sorted maps. @returns Nothing. */ () => {
@@ -208,7 +209,7 @@ describe("native paragraph character conversion", /** Registers five-pair and re
     const a = auto(first, 0, 2),
       b = first.InsertItem(a.format, 2, 4, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
       zero = auto(first, 2, 2),
-      c = auto(first, 4, 6, FontWeight.NORMAL);
+      c = auto(first, 4, 6, FontWeight.WEIGHT_NORMAL);
     const inet = first.InsertItem(
       new SwFormatINetFormat("url"),
       1,
@@ -222,9 +223,9 @@ describe("native paragraph character conversion", /** Registers five-pair and re
     const map = required(first.GetpSwpHints());
     expect(map.MergePortions(first)).toBe(true);
     expect(spans(first)).toEqual([
-      [0, 4, FontWeight.BOLD],
-      [2, 2, FontWeight.BOLD],
-      [4, 6, FontWeight.NORMAL],
+      [0, 4, FontWeight.WEIGHT_BOLD],
+      [2, 2, FontWeight.WEIGHT_BOLD],
+      [4, 6, FontWeight.WEIGHT_NORMAL],
     ]);
     expect(map.entries()).toContain(a);
     expect(map.entries()).not.toContain(b);
@@ -248,8 +249,8 @@ describe("native paragraph character conversion", /** Registers five-pair and re
     auto(first, 3, 4);
     expect(required(first.GetpSwpHints()).MergePortions(first)).toBe(false);
     expect(spans(first)).toEqual([
-      [0, 1, FontWeight.BOLD],
-      [3, 4, FontWeight.BOLD],
+      [0, 1, FontWeight.WEIGHT_BOLD],
+      [3, 4, FontWeight.WEIGHT_BOLD],
     ]);
   });
 });
@@ -261,27 +262,27 @@ describe("native direct format and collection history", /** Registers native his
       tmp,
     ) => {
       const { first, doc } = fixture();
-      const value = new SvxWeightItem(FontWeight.BOLD, 15),
+      const value = new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15),
         entry = new SwHistorySetFormat(value, first.GetIndex());
       expect(entry.Which()).toBe(HISTORY_HINT.HSTRY_SETFMTHNT);
       expect(entry.GetDescription()).toBe("");
       const clone = Object.getOwnPropertyDescriptor(entry, "m_pAttr")?.value;
       expect(clone).not.toBe(value);
       entry.SetInDoc(doc, tmp);
-      expect(direct(first)).toBe(FontWeight.BOLD);
+      expect(direct(first)).toBe(FontWeight.WEIGHT_BOLD);
       expect(Object.getOwnPropertyDescriptor(entry, "m_pAttr")?.value).toBe(
         tmp ? clone : undefined,
       );
       if (tmp) {
         first.ResetAllAttr();
         entry.SetInDoc(doc, false);
-        expect(direct(first)).toBe(FontWeight.BOLD);
+        expect(direct(first)).toBe(FontWeight.WEIGHT_BOLD);
       }
     },
   );
   it("does not apply direct format to a structural sentinel", /** Checks actual noncontent node branch. @returns Nothing. */ () => {
     const { doc } = fixture();
-    const entry = new SwHistorySetFormat(new SvxWeightItem(FontWeight.BOLD, 15), 0);
+    const entry = new SwHistorySetFormat(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15), 0);
     entry.SetInDoc(doc, false);
     expect(Object.getOwnPropertyDescriptor(entry, "m_pAttr")?.value).toBeUndefined();
   });
@@ -312,8 +313,8 @@ describe("native direct format and collection history", /** Registers native his
   );
   it("copies explicit format items and collection into forward temporary history", /** Checks count,order,partial rollback and repeated restoration. @returns Nothing. */ () => {
     const { doc, first } = fixture();
-    const items = weightSet(doc, FontWeight.BOLD);
-    items.Put(new SvxPostureItem(FontItalic.NORMAL, 11));
+    const items = weightSet(doc, FontWeight.WEIGHT_BOLD);
+    items.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
     const history = new SwHistory(),
       original = first.GetTextFormatColl();
     history.CopyFormatAttr(new SfxItemSet(doc.GetAttrPool(), [[1, 48]]), first.GetIndex());
@@ -325,13 +326,13 @@ describe("native direct format and collection history", /** Registers native his
     expect(history.at(2)).toBeInstanceOf(SwHistoryChangeFormatColl);
     first.ChgFormatColl(doc.GetTextFormatColl("heading-1"));
     expect(history.TmpRollback(doc, 1, false)).toBe(true);
-    expect(direct(first)).toBe(FontWeight.BOLD);
+    expect(direct(first)).toBe(FontWeight.WEIGHT_BOLD);
     expect(direct(first, 11)).toBeUndefined();
     expect(first.GetTextFormatColl()).toBe(original);
     history.SetTmpEnd(history.Count());
     first.ResetAllAttr();
     expect(history.TmpRollback(doc, 0, false)).toBe(true);
-    expect(direct(first, 11)).toBe(FontItalic.NORMAL);
+    expect(direct(first, 11)).toBe(FontItalic.ITALIC_NORMAL);
     history.SetTmpEnd(history.Count());
     expect(history.Rollback(doc)).toBe(true);
     expect(history.Count()).toBe(0);
@@ -346,10 +347,13 @@ describe("native paragraph join preparation and history", /** Registers actual s
     ) => {
       const { doc, first, second } = fixture();
       if (pair === "source" || pair === "equal" || pair === "different")
-        second.SetAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+        second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
       if (pair === "main" || pair === "equal" || pair === "different")
         first.SetAttr(
-          new SvxWeightItem(pair === "different" ? FontWeight.NORMAL : FontWeight.BOLD, 15),
+          new SvxWeightItem(
+            pair === "different" ? FontWeight.WEIGHT_NORMAL : FontWeight.WEIGHT_BOLD,
+            15,
+          ),
         );
       const firstValue = direct(first),
         secondValue = direct(second);
@@ -378,13 +382,17 @@ describe("native paragraph join preparation and history", /** Registers actual s
       expect(doc.paragraphs).toEqual([first]);
       expect(first.GetText()).toBe("abcdefgh");
       expect(direct(first)).toBe(
-        pair === "equal" ? FontWeight.BOLD : pair === "different" ? FontWeight.NORMAL : undefined,
+        pair === "equal"
+          ? FontWeight.WEIGHT_BOLD
+          : pair === "different"
+            ? FontWeight.WEIGHT_NORMAL
+            : undefined,
       );
       expect(spans(first)).toEqual(
         pair === "source" || pair === "different"
-          ? [[4, 8, FontWeight.BOLD]]
+          ? [[4, 8, FontWeight.WEIGHT_BOLD]]
           : pair === "main"
-            ? [[0, 4, FontWeight.BOLD]]
+            ? [[0, 4, FontWeight.WEIGHT_BOLD]]
             : [],
       );
       for (let cycle = 0; cycle < 2; cycle++) {
@@ -420,16 +428,18 @@ describe("native paragraph join preparation and history", /** Registers actual s
       hasDirect,
     ) => {
       const { doc, first, second } = fixture("");
-      first.SetAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+      first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
       first.SetAttr(new SfxUInt16Item(80, 0));
-      if (hasDirect) second.SetAttr(new SvxPostureItem(FontItalic.NORMAL, 11));
+      if (hasDirect) second.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
       second.ChgFormatColl(doc.GetTextFormatColl("heading-1"));
-      doc.GetTextFormatColl("heading-1").SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+      doc
+        .GetTextFormatColl("heading-1")
+        .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
       const original = first.GetTextFormatColl();
       expect(doc.GetDocumentContentOperationsManager().JoinTextNodes(first, second)).toBe(0);
       expect(first.GetText()).toBe("efgh");
       expect(direct(first)).toBeUndefined();
-      expect(direct(first, 11)).toBe(hasDirect ? FontItalic.NORMAL : undefined);
+      expect(direct(first, 11)).toBe(hasDirect ? FontItalic.ITALIC_NORMAL : undefined);
       expect(direct(first, 80)).toBe(0);
       expect(first.GetTextFormatColl()).toBe(original);
       expect(spans(first)).toEqual([]);

@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f26f2195-8599-404b-a90c-118b5ce6a015",
+    "capabilityId": "CAP-f26f2195-8599-404b-a90c-118b5ce6a015",
+    "suite": "shared",
+    "subsystem": "font-enum-ownership",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Font weight and posture consumers use the original Tools enum owner and native member names without TextItem alias exports.",
+      "Existing literal enum values and actual Svx item behavior are preserved across formatting, import and presentation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task124 removes the temporary TextItem FontWeight and FontItalic const/type compatibility bridges. TextItem and all existing Writer defaults, attributes, text hints, numbering fonts, ODT import and paragraph painting consumers use the single original tools enums and native WEIGHT_/ITALIC_ member names directly. Literal numeric values, Svx item behavior and existing document contracts are unchanged. Only two obsolete bridge-consistency assertions are removed; native value, conversion and Writer behavioral assertions remain. This supersedes earlier task122/123 alias notes without rewriting history. The user explicitly authorizes canonical shared and Writer corrections without compatibility workarounds. Existing semantic states, provenance classifications, mapped/local-only status and conscious save/open/recovery deviations remain unchanged; this owner/import cleanup is not broad native parity certification. Complete document/UI and same-model ODS load/save remain pending. Whole Calc and complete changed shared owners require raw S/B/F/L100; Writer-only coverage gaps remain exempt by user instruction. No full regression until minimum actual UI+ODS readiness, then relevant repairs and goal pause."
+    },
+    "capability": "Direct canonical Tools font enum consumers",
+    "gaps": [
+      "Complete native font/document/UI and ODS parity are not certified by this owner/import migration.",
+      "Writer-only coverage gaps are explicitly exempt; shared and Calc raw coverage remain mandatory100."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.ts",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "apps/office/src/tools/inc/fontenum.ts",
+          "marker": "FontWeight"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-posture.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-weight.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Direct canonical Tools font enum consumers (task124)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "include/tools/fontenum.hxx",
+          "marker": "FontStrikeout"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-canonical-font-enum-consumption",
+    "scopeLimitations": [
+      "Task124 removes the temporary TextItem FontWeight and FontItalic const/type compatibility bridges. TextItem and all existing Writer defaults, attributes, text hints, numbering fonts, ODT import and paragraph painting consumers use the single original tools enums and native WEIGHT_/ITALIC_ member names directly. Literal numeric values, Svx item behavior and existing document contracts are unchanged. Only two obsolete bridge-consistency assertions are removed; native value, conversion and Writer behavioral assertions remain. This supersedes earlier task122/123 alias notes without rewriting history. The user explicitly authorizes canonical shared and Writer corrections without compatibility workarounds. Existing semantic states, provenance classifications, mapped/local-only status and conscious save/open/recovery deviations remain unchanged; this owner/import cleanup is not broad native parity certification. Complete document/UI and same-model ODS load/save remain pending. Whole Calc and complete changed shared owners require raw S/B/F/L100; Writer-only coverage gaps remain exempt by user instruction. No full regression until minimum actual UI+ODS readiness, then relevant repairs and goal pause."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

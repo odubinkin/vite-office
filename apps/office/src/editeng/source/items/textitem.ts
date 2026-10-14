@@ -5,8 +5,8 @@
 import { SfxBoolItem, SfxEnumItem } from "../../../svl/inc/eitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
-import { FontWeight as NativeFontWeight } from "../../../tools/inc/fontenum";
-import { FontItalic as NativeFontItalic } from "../../../tools/inc/fontenum";
+import { FontWeight } from "../../../tools/inc/fontenum";
+import { FontItalic } from "../../../tools/inc/fontenum";
 import {
   FontSlant,
   cppu_detail_getUnoType_FontSlant,
@@ -105,50 +105,6 @@ export class SvxFontHeightItem extends SfxPoolItem {
   }
 }
 
-/** Existing browser weight names alias the single original tools enum. */
-export const FontWeight: Readonly<
-  Record<
-    | "DONTKNOW"
-    | "THIN"
-    | "ULTRALIGHT"
-    | "LIGHT"
-    | "SEMILIGHT"
-    | "NORMAL"
-    | "MEDIUM"
-    | "SEMIBOLD"
-    | "BOLD"
-    | "ULTRABOLD"
-    | "BLACK",
-    NativeFontWeight
-  >
-> = {
-  DONTKNOW: NativeFontWeight.WEIGHT_DONTKNOW,
-  THIN: NativeFontWeight.WEIGHT_THIN,
-  ULTRALIGHT: NativeFontWeight.WEIGHT_ULTRALIGHT,
-  LIGHT: NativeFontWeight.WEIGHT_LIGHT,
-  SEMILIGHT: NativeFontWeight.WEIGHT_SEMILIGHT,
-  NORMAL: NativeFontWeight.WEIGHT_NORMAL,
-  MEDIUM: NativeFontWeight.WEIGHT_MEDIUM,
-  SEMIBOLD: NativeFontWeight.WEIGHT_SEMIBOLD,
-  BOLD: NativeFontWeight.WEIGHT_BOLD,
-  ULTRABOLD: NativeFontWeight.WEIGHT_ULTRABOLD,
-  BLACK: NativeFontWeight.WEIGHT_BLACK,
-} as const;
-/** Existing browser type name refers to the canonical enum. */
-export type FontWeight = NativeFontWeight;
-
-/** Existing browser names are aliases to the single original tools FontItalic enum. */
-export const FontItalic: Readonly<
-  Record<"NONE" | "OBLIQUE" | "NORMAL" | "DONTKNOW", NativeFontItalic>
-> = {
-  NONE: NativeFontItalic.ITALIC_NONE,
-  OBLIQUE: NativeFontItalic.ITALIC_OBLIQUE,
-  NORMAL: NativeFontItalic.ITALIC_NORMAL,
-  DONTKNOW: NativeFontItalic.ITALIC_DONTKNOW,
-} as const;
-/** Existing browser type name refers to the canonical enum. */
-export type FontItalic = NativeFontItalic;
-
 /** Matches LibreOffice FontLineStyle ordering from tools/fontenum.hxx. */
 export enum FontLineStyle {
   NONE,
@@ -184,7 +140,7 @@ export class SvxWeightItem extends SfxEnumItem<FontWeight> {
   }
   /** Original NORMAL default factory. @returns Item. */
   public static CreateDefault(): SvxWeightItem {
-    return new SvxWeightItem(NativeFontWeight.WEIGHT_NORMAL, 0);
+    return new SvxWeightItem(FontWeight.WEIGHT_NORMAL, 0);
   }
   /** Original enum getter. @returns Weight. */
   public GetWeight(): FontWeight {
@@ -196,11 +152,11 @@ export class SvxWeightItem extends SfxEnumItem<FontWeight> {
   }
   /** Original bold threshold. @returns At least BOLD. */
   public override GetBoolValue(): boolean {
-    return this.GetValue() >= NativeFontWeight.WEIGHT_BOLD;
+    return this.GetValue() >= FontWeight.WEIGHT_BOLD;
   }
   /** Original bool setter selects BOLD or NORMAL. @param value - Bool. @returns Nothing. */
   public override SetBoolValue(value: boolean): void {
-    this.SetValue(value ? NativeFontWeight.WEIGHT_BOLD : NativeFontWeight.WEIGHT_NORMAL);
+    this.SetValue(value ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL);
   }
   /** Original copy Clone retains Which. @param pool - Unused pool. @returns Independent item. */
   public override Clone(pool?: SfxItemPool): SvxWeightItem {
@@ -258,7 +214,7 @@ export class SvxPostureItem extends SfxEnumItem<FontItalic> {
   }
   /** Original NONE default factory. @returns Item. */
   public static CreateDefault(): SvxPostureItem {
-    return new SvxPostureItem(NativeFontItalic.ITALIC_NONE, 0);
+    return new SvxPostureItem(FontItalic.ITALIC_NONE, 0);
   }
   /** Original enum getter. @returns Italic enum. */
   public GetPosture(): FontItalic {
@@ -270,11 +226,11 @@ export class SvxPostureItem extends SfxEnumItem<FontItalic> {
   }
   /** Original threshold includes DONTKNOW and initialized unknown higher values. @returns Whether at least OBLIQUE. */
   public override GetBoolValue(): boolean {
-    return this.GetValue() >= NativeFontItalic.ITALIC_OBLIQUE;
+    return this.GetValue() >= FontItalic.ITALIC_OBLIQUE;
   }
   /** Original bool setter selects NORMAL or NONE. @param value - Bool. @returns Nothing. */
   public override SetBoolValue(value: boolean): void {
-    this.SetValue(value ? NativeFontItalic.ITALIC_NORMAL : NativeFontItalic.ITALIC_NONE);
+    this.SetValue(value ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE);
   }
   /** Original copy Clone retains Which. @param pool - Unused pool. @returns Independent item. */
   public override Clone(pool?: SfxItemPool): SvxPostureItem {

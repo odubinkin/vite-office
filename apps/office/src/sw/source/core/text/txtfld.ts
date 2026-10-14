@@ -1,8 +1,7 @@
 /** @fileoverview Resolves represented NewNumberPortion font values from original paragraph and numbering owners. */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -57,11 +56,11 @@ export function resolveSwNumberPortionFont(
     heightTwips: (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight(),
     weight:
       bullet && reset
-        ? FontWeight.NORMAL
+        ? FontWeight.WEIGHT_NORMAL
         : (node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight(),
     posture:
       bullet && reset
-        ? FontItalic.NONE
+        ? FontItalic.ITALIC_NONE
         : (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
     underline: reset
       ? FontLineStyle.NONE

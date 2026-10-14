@@ -1,15 +1,14 @@
 /**
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatBullet } from "../../core/doc/number";
 
 import { describe, expect, it, vi } from "vitest";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
@@ -222,22 +221,22 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CJK_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CTL_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_CTL_WEIGHT));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
+      .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CJK_POSTURE));
+      .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_CJK_POSTURE));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CTL_POSTURE));
+      .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE));
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
@@ -245,7 +244,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       writer
         .GetTextFormatColl("heading-1")
-        .SetFormatAttr(new SvxWeightItem(FontWeight.NORMAL, which));
+        .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
     const first = writer.paragraphs[0];
     first?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     first?.SetParagraphAlignment("right");
@@ -266,9 +265,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const second = writer.nodes.MakeTextNode();
     second.SetParagraphAlignment("justify");
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      second.SetAttr(new SvxWeightItem(FontWeight.NORMAL, which));
+      second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      second.SetAttr(new SvxPostureItem(FontItalic.NONE, which));
+      second.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NONE, which));
     second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
     const third = writer.nodes.MakeTextNode();
     third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));

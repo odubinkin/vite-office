@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the LibreOffice-shaped Writer node graph, model positions, selections, hints, and content-operation ownership. */
+import { FontWeight } from "../../../../tools/inc/fontenum";
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
@@ -11,7 +12,7 @@ import {
   encodeWriterDocument as serializeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 
-import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
@@ -523,7 +524,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     const inheritedWriter = createModelFixture("hint-inherited");
     inheritedWriter
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     const inheritedPool = inheritedWriter.GetAttrPool();
     const redundant = new SwpHints(inheritedPool, [
       new SwTextAttrEnd(createSwFormatAutoFormat(inheritedPool, bold), 1, 2),

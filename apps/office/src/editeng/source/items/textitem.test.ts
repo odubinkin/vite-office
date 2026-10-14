@@ -1,4 +1,5 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
+import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 
 import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
@@ -12,9 +13,7 @@ import { RES_CHRATR_FONT } from "../../../sw/inc/hintids";
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SvxLineSpacingItem } from "./paraitem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxPostureItem,
   SvxFontHeightItem,
@@ -72,26 +71,26 @@ describe("EditEngine character items" /** Groups pooled character item contracts
   });
 
   it("preserves FontWeight ordering, boolean threshold, identity, and snapshots" /** Verifies SvxWeightItem. @returns Nothing. */, () => {
-    expect(FontWeight.DONTKNOW).toBe(0);
-    expect(FontWeight.NORMAL).toBe(5);
-    expect(FontWeight.BOLD).toBe(8);
-    expect(FontWeight.BLACK).toBe(10);
+    expect(FontWeight.WEIGHT_DONTKNOW).toBe(0);
+    expect(FontWeight.WEIGHT_NORMAL).toBe(5);
+    expect(FontWeight.WEIGHT_BOLD).toBe(8);
+    expect(FontWeight.WEIGHT_BLACK).toBe(10);
     expect(new SvxWeightItem(11 as FontWeight, weightWhich).GetWeight()).toBe(11);
-    const normal = new SvxWeightItem(FontWeight.NORMAL, weightWhich);
-    const bold = new SvxWeightItem(FontWeight.BOLD, weightWhich);
-    const black = new SvxWeightItem(FontWeight.BLACK, alternateWhich);
+    const normal = new SvxWeightItem(FontWeight.WEIGHT_NORMAL, weightWhich);
+    const bold = new SvxWeightItem(FontWeight.WEIGHT_BOLD, weightWhich);
+    const black = new SvxWeightItem(FontWeight.WEIGHT_BLACK, alternateWhich);
     expect(normal.Which()).toBe(weightWhich);
-    expect(normal.GetWeight()).toBe(FontWeight.NORMAL);
+    expect(normal.GetWeight()).toBe(FontWeight.WEIGHT_NORMAL);
     expect(normal.GetBoolValue()).toBe(false);
     expect(bold.GetBoolValue()).toBe(true);
     expect(black.GetBoolValue()).toBe(true);
     expect(bold.Clone()).not.toBe(bold);
     expect(bold.Clone().equals(bold)).toBe(true);
     expect(bold.equals(normal)).toBe(false);
-    expect(bold.equals(new SvxWeightItem(FontWeight.BOLD, alternateWhich))).toBe(true);
-    expect(bold.equals(new SfxInt16Item(weightWhich, FontWeight.BOLD))).toBe(false);
+    expect(bold.equals(new SvxWeightItem(FontWeight.WEIGHT_BOLD, alternateWhich))).toBe(true);
+    expect(bold.equals(new SfxInt16Item(weightWhich, FontWeight.WEIGHT_BOLD))).toBe(false);
     expect(encodeSfxPoolItem(black)).toEqual({
-      value: FontWeight.BLACK,
+      value: FontWeight.WEIGHT_BLACK,
       which: alternateWhich,
     });
     for (const value of [-1, 1.5])
@@ -104,16 +103,16 @@ describe("EditEngine character items" /** Groups pooled character item contracts
   });
 
   it("preserves FontItalic ordering and boolean posture semantics" /** Verifies SvxPostureItem. @returns Nothing. */, () => {
-    expect(FontItalic.NONE).toBe(0);
-    expect(FontItalic.OBLIQUE).toBe(1);
-    expect(FontItalic.NORMAL).toBe(2);
-    expect(FontItalic.DONTKNOW).toBe(3);
-    const none = new SvxPostureItem(FontItalic.NONE, postureWhich);
-    const oblique = new SvxPostureItem(FontItalic.OBLIQUE, postureWhich);
-    const italic = new SvxPostureItem(FontItalic.NORMAL, alternateWhich);
-    const unknown = new SvxPostureItem(FontItalic.DONTKNOW, postureWhich);
+    expect(FontItalic.ITALIC_NONE).toBe(0);
+    expect(FontItalic.ITALIC_OBLIQUE).toBe(1);
+    expect(FontItalic.ITALIC_NORMAL).toBe(2);
+    expect(FontItalic.ITALIC_DONTKNOW).toBe(3);
+    const none = new SvxPostureItem(FontItalic.ITALIC_NONE, postureWhich);
+    const oblique = new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, postureWhich);
+    const italic = new SvxPostureItem(FontItalic.ITALIC_NORMAL, alternateWhich);
+    const unknown = new SvxPostureItem(FontItalic.ITALIC_DONTKNOW, postureWhich);
     expect(none.Which()).toBe(postureWhich);
-    expect(none.GetPosture()).toBe(FontItalic.NONE);
+    expect(none.GetPosture()).toBe(FontItalic.ITALIC_NONE);
     expect(none.GetBoolValue()).toBe(false);
     expect(oblique.GetBoolValue()).toBe(true);
     expect(italic.GetBoolValue()).toBe(true);
@@ -122,10 +121,10 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(italic.Clone()).not.toBe(italic);
     expect(italic.Clone().equals(italic)).toBe(true);
     expect(italic.equals(oblique)).toBe(false);
-    expect(italic.equals(new SvxPostureItem(FontItalic.NORMAL, postureWhich))).toBe(true);
-    expect(italic.equals(new SfxInt16Item(alternateWhich, FontItalic.NORMAL))).toBe(false);
+    expect(italic.equals(new SvxPostureItem(FontItalic.ITALIC_NORMAL, postureWhich))).toBe(true);
+    expect(italic.equals(new SfxInt16Item(alternateWhich, FontItalic.ITALIC_NORMAL))).toBe(false);
     expect(encodeSfxPoolItem(italic)).toEqual({
-      value: FontItalic.NORMAL,
+      value: FontItalic.ITALIC_NORMAL,
       which: alternateWhich,
     });
     for (const value of [-1, 1.5])

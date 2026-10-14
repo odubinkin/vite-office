@@ -1,11 +1,10 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -419,10 +418,20 @@ export function createSwFormatAutoFormat(
     items.Put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, attributes.highlight));
   if (attributes.bold !== inherited.bold)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      items.Put(new SvxWeightItem(attributes.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
+      items.Put(
+        new SvxWeightItem(
+          attributes.bold ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
+          which,
+        ),
+      );
   if (attributes.italic !== inherited.italic)
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      items.Put(new SvxPostureItem(attributes.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
+      items.Put(
+        new SvxPostureItem(
+          attributes.italic ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,
+          which,
+        ),
+      );
   if (attributes.underline !== inherited.underline)
     items.Put(
       new SvxUnderlineItem(

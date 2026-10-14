@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
+import { FontItalic, FontWeight } from "../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 import { SfxStringItem } from "../../svl/source/items/stritem";
@@ -12,8 +13,6 @@ import {
 import { createWriterDocument } from "../source/core/doc/doc";
 import { getWriterParagraphStyleDefaults } from "../source/core/doc/poolfmt-defaults";
 import {
-  FontItalic,
-  FontWeight,
   SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
@@ -315,9 +314,9 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
 
     const heading4 = document.GetTextFormatColl("heading-4").GetAttrSet();
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      expect((heading4.Get(which) as SvxWeightItem).GetWeight()).toBe(FontWeight.BOLD);
+      expect((heading4.Get(which) as SvxWeightItem).GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      expect((heading4.Get(which) as SvxPostureItem).GetPosture()).toBe(FontItalic.NORMAL);
+      expect((heading4.Get(which) as SvxPostureItem).GetPosture()).toBe(FontItalic.ITALIC_NORMAL);
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       expect((heading4.Get(which) as SvxFontHeightItem).GetHeight()).toBe(13 * 20);
 
@@ -327,7 +326,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     const caption = document.GetTextFormatColl("caption").GetAttrSet();
     expect(ulValues(caption.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([120, 120]);
     expect((caption.Get(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture()).toBe(
-      FontItalic.NORMAL,
+      FontItalic.ITALIC_NORMAL,
     );
 
     const comment = document.GetTextFormatColl("comment").GetAttrSet();

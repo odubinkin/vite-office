@@ -1,8 +1,9 @@
 /** @fileoverview Verifies that the ODT filter rejects unsupported canonical Writer state. */
+import { FontWeight } from "../../../../tools/inc/fontenum";
 
 import { describe, expect, it } from "vitest";
 
-import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
@@ -56,7 +57,7 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
     const scriptSpecificCharacter = createWriterDocument();
     scriptSpecificCharacter
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     expect(
       /** Exports an unsupported script-specific default. @returns Styles XML when validation unexpectedly succeeds. */ () =>
         exportStylesXml(scriptSpecificCharacter),

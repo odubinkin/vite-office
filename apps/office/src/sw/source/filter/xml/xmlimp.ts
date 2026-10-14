@@ -1,4 +1,5 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import {
   SvxIndentValue,
@@ -17,9 +18,7 @@ import {
 } from "../../../../editeng/source/items/paraitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -802,10 +801,20 @@ function putCharacterProperties(
     put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, properties.highlight));
   if (properties.bold !== undefined)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      put(new SvxWeightItem(properties.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
+      put(
+        new SvxWeightItem(
+          properties.bold ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
+          which,
+        ),
+      );
   if (properties.italic !== undefined)
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      put(new SvxPostureItem(properties.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
+      put(
+        new SvxPostureItem(
+          properties.italic ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,
+          which,
+        ),
+      );
   if (properties.underline !== undefined)
     put(
       new SvxUnderlineItem(

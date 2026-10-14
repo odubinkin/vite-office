@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sw/source/core/text/native-numbering-font.test.ts",
           "marker": "native number font"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-weight.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -33,7 +37,8 @@
       "Full SwFont/SwTextFormatter/portion graph, CJK/CTL script selection and all bullet Font metadata beyond family; numbering character styles, paragraph-mark autoformat, redlines, graphics, VCL shaping and native decoration/color/theme/device variants remain unrepresented. Immutable policy values are an explicit browser paint-device projection, not a duplicate font owner."
     ],
     "preservedResponsibilities": [
-      "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved."
+      "Iteration220 represented native numbering-font policy: txtfld NewNumberPortion starts from the original paragraph attr owner, optional bullet font overrides face, false-default DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT resets bullet weight/posture and both labels underline; number weight/posture and inherited height/color remain native. Frozen values feed shared body/cell marker device, existing width/minimum distance/background retained. Older graph records missing only new flag defaultfalse, prior fields remain strict. Full SwFont hierarchy/scripts/face metadata/character-style/paragraph-mark/redline/graphics/device shaping and ink/theme/decoration variants remain unverified; all prior statuses/defaults/registered I/O/recovery exceptions preserved.",
+      "Task124 removes the temporary TextItem FontWeight and FontItalic const/type compatibility bridges. TextItem and all existing Writer defaults, attributes, text hints, numbering fonts, ODT import and paragraph painting consumers use the single original tools enums and native WEIGHT_/ITALIC_ member names directly. Literal numeric values, Svx item behavior and existing document contracts are unchanged. Only two obsolete bridge-consistency assertions are removed; native value, conversion and Writer behavioral assertions remain. This supersedes earlier task122/123 alias notes without rewriting history. The user explicitly authorizes canonical shared and Writer corrections without compatibility workarounds. Existing semantic states, provenance classifications, mapped/local-only status and conscious save/open/recovery deviations remain unchanged; this owner/import cleanup is not broad native parity certification. Complete document/UI and same-model ODS load/save remain pending. Whole Calc and complete changed shared owners require raw S/B/F/L100; Writer-only coverage gaps remain exempt by user instruction. No full regression until minimum actual UI+ODS readiness, then relevant repairs and goal pause."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/text/txtfld.cxx",

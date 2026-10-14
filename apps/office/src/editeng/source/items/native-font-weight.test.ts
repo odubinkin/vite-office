@@ -1,7 +1,6 @@
 /** @fileoverview Original weight float conversion and actual shared item/Any contracts. */
 import { expect, it } from "vitest";
 import { SvxWeightItem as Item } from "../../inc/wghtitem";
-import { FontWeight as Legacy } from "./textitem";
 import { FontWeight as I } from "../../../tools/inc/fontenum";
 import { FontWeight as W } from "../../../offapi/com/sun/star/awt/FontWeight";
 import { ConvertFontWeight as convert } from "../../../vcl/inc/unohelp";
@@ -22,7 +21,6 @@ it("preserves11enum and float overload mappings including ordered thresholds and
     WEIGHT,
   ]).toEqual([0, 5, 8, 10, 2147483647, 0, 1]);
   expect(Object.values(W)).toEqual(values);
-  expect([Legacy.DONTKNOW, Legacy.NORMAL, Legacy.BOLD, Legacy.BLACK]).toEqual([0, 5, 8, 10]);
   for (const [index, wire] of values.entries()) {
     expect(convert(index as I, "FontWeight")).toBe(wire);
     expect(convert(wire, "float")).toBe(index);
