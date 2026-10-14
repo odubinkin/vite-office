@@ -1,10 +1,11 @@
 ---
 id: "202610140416-Y5Q3Y4"
 title: "Implement shared configuration group tree and layered member lookup for Calc settings"
-status: "DOING"
+result_summary: "Implemented source-shaped shared Node/GroupNode/RootNode/NodeMap/config_map metadata, UTF16 ordering, stable member aliases, layer lookup/cache and deep-clone contracts. Existing SortedVector/OUString/RuntimeException/SAL reused without new lifetime/provider libraries;22intentionalpaths reviewed. Goal remains active until requested second full111 plus relevant repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task105-checks/exact-review.json"
   findings:
     - "Reviewed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40 against ten original declarations/bodies and real Root/Group histories. Exact3357 committed hashes,22 intentional paths,16 passing gates and strict raw100 Calc/shared profiles verified. Two necessary boundary integration paths retain reverse/application/browser restrictions. No new lifetime mechanism or fake configuration provider. Full native ABI/private access/assertions/QA and actual configuration/default/document/ODS integration remain excluded. This is a separate role of the same agent, not independent review."
-commit: null
+commit:
+  hash: "b964fd65ffce3ed8a4f83ced4a495527ffcd3c40"
+  message: "🧩 Y5Q3Y4 configmgr: implement shared layered configuration tree"
 comments:
   -
     author: "CODER"
     body: "Start: actual sharedconfig group/root/member tree andlayerlookup over existingSortedVector/SAL, plainJSrefs,no fakeData/settings or newmemorylibrary;source-backedstrictchecks/nextfull111pause."
+  -
+    author: "CODER"
+    body: "Verified: shared configuration tree uses real shared value owners and ordinary JS references; complete Calc and affected shared raw coverage100, source-absent static/Calc0UI,16gates and exact committed review pass. CALC-090 preserved and inventory recorded; configuration/default/document/ODS services remain pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Whole Calc152 tests/raw4006S2654B787F3570L and complete shared tree plus reused SortedVector9 tests/raw141S48B52F136L are100 with every raw counter positive. Source-absent static/Calc0UI and16currentgates pass. Exact3357 committed hashes/22intentionalpaths/10originalsourcepins and four restored links verified. Separate same-agent evaluator passed source b964fd65ffce3ed8a4f83ced4a495527ffcd3c40; not independent review. No memory/provider shortcut, CALC-090 preserved, nextfull111pause."
+  -
+    type: "status"
+    at: "2026-10-14T04:33:20.051Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared configuration tree uses real shared value owners and ordinary JS references; complete Calc and affected shared raw coverage100, source-absent static/Calc0UI,16gates and exact committed review pass. CALC-090 preserved and inventory recorded; configuration/default/document/ODS services remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:33:12.080Z"
+doc_updated_at: "2026-10-14T04:33:20.052Z"
 doc_updated_by: "CODER"
 description: "Task105: genuine configmgr Node/GroupNode/RootNode/NodeMap and config_map length-contents comparator/type responsibility over existing SortedVector, OUString, RuntimeException and SAL_MAX_INT32. Full represented logical layer/finalized/mandatory/description/template/deepclone/cache/ordered entry contracts; ordinaryJSrefs, no new SAL/refcount/staticize/allocator/provider or fake Data/settings. Preserve Node copy description omission, document suspectedcase. No property/XML/backend/locale/defaultConfig stubs; targetedCalc/complete sharedraw100/inventory/gates, nextfull111pause."
 sections:
