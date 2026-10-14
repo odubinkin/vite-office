@@ -16,32 +16,50 @@
         {
           "path": "apps/office/src/sw/browser/presentation/native-collapsing-table-borders.test.tsx",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-bool-item.test.ts",
+          "marker": "compares same native item types by payload independently of Which"
         }
       ],
       "upstream": [
         {
           "marker": "SfxBoolItem::Clone",
           "path": "vendor/libreoffice-reference/svl/source/items/cenumitm.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/eitem.hxx",
+          "marker": "class SVL_DLLPUBLIC SfxBoolItem"
         }
       ]
     },
     "localPath": "apps/office/src/svl/source/items/cenumitm.ts",
     "localSymbols": [
-      "SfxBoolItem"
+      "SfxBoolItem",
+      "CreateDefault",
+      "SetValue",
+      "PutValue",
+      "GetValueTextByVal"
     ],
     "omittedResponsibilities": [
-      "Native pooling, UNO mutation and presentation paths outside the bounded SfxBoolItem value contract remain unimplemented."
+      "Native pooling, UNO mutation and presentation paths outside the bounded SfxBoolItem value contract remain unimplemented.",
+      "Task112 covers value operations only; localization/presentation/diagnostics/native caches/debug/ABI/invalid-type outcomes/full document and ODS integration remain excluded or unverified."
     ],
     "preservedResponsibilities": [
       "Implements bounded SfxBoolItem construction, value, equality and clone behavior at the pinned svl/source/items/cenumitm.cxx owner.",
       "Iteration209 restores the existing table collapsing/separating model: native RES_COLLAPSING_BORDERS132 false pool default, mutable owned SfxBoolItem, saved tri-state SvxBorderTabPage Reset/FillItemSet and mapped table-only checkbox. Shell captures original format into native items and applies changed table attributes through existing grouped history without requesting cell-border writes for table-only items. Browser paints actual borderModel with source false default and zero gap. Verification pending; full native competing-line pixel arbitration, shadow/diagonal/theme and complete Sfx/layout/core/UI parity remain unverified. Prior semantic statuses/defaults/evidence prefixes and registered save/open/recovery exceptions are preserved.",
-      "Iteration209 verified closure: earlier pending prose is historical. Source RES_COLLAPSING_BORDERS132 pooled false, owned native boolean Reset/FillItemSet clone/changed-only/indeterminate/missing-original behavior, original SET/DEFAULT/INVALID/DISABLED/parent input authority and UNKNOWN-only legacy admission now drive the Writer Merge adjacent line styles control. Native table attributes apply separately from cell-box deltas in one history action; browser reads existing collapsing/separating format with contiguous zero spacing. One full upstream-absent profile and original-failure/genuinely-new-case-only closures establish actual13465 app110inventory14infrastructure266Chromium cases, no passing replay; actual100 app/inventory source-bound counters use whole identical source/maps or complete contiguous declaration/body/enclosing branch/all mapped locations. One unchanged browser menu timeout passed its failure-only closure; two new coupled border/merge drafts corrected baseline capture to wait for actual imported text and passed failure-only closure. All563 prior acceptance files are byte-identical; three new acceptance files. All289 prior metadata records, fields, prefixes, statuses, defaults and registered save/open/recovery deviations are preserved. Full native competing-line pixel arbitration, widget units, shadow/diagonal/theme/SfxTabPage orchestration, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified."
+      "Iteration209 verified closure: earlier pending prose is historical. Source RES_COLLAPSING_BORDERS132 pooled false, owned native boolean Reset/FillItemSet clone/changed-only/indeterminate/missing-original behavior, original SET/DEFAULT/INVALID/DISABLED/parent input authority and UNKNOWN-only legacy admission now drive the Writer Merge adjacent line styles control. Native table attributes apply separately from cell-box deltas in one history action; browser reads existing collapsing/separating format with contiguous zero spacing. One full upstream-absent profile and original-failure/genuinely-new-case-only closures establish actual13465 app110inventory14infrastructure266Chromium cases, no passing replay; actual100 app/inventory source-bound counters use whole identical source/maps or complete contiguous declaration/body/enclosing branch/all mapped locations. One unchanged browser menu timeout passed its failure-only closure; two new coupled border/merge drafts corrected baseline capture to wait for actual imported text and passed failure-only closure. All563 prior acceptance files are byte-identical; three new acceptance files. All289 prior metadata records, fields, prefixes, statuses, defaults and registered save/open/recovery deviations are preserved. Full native competing-line pixel arbitration, widget units, shadow/diagonal/theme/SfxTabPage orchestration, RTL/vertical/follow/shared-format and whole kernel/browser parity remain unverified.",
+      "Task112 implements the four false-default Calc bool cell attributes with IDs140/134/139/125 over the actual shared SfxBoolItem. Implicit copies retain sourceWhich, while Clone reconstructs fixedWhich from payload. Shared bool default factory/copy/Clone/unchanged SetValue/payload-only same-type equality/bool-only PutValue/uppercase parameter-driven OUString text follow original value scopes. Existing browser scalar QueryValue/PutValue transport is retained, without another UNO wrapper. Same-type bool equality ignoresWhich; item-set key identity remains separate. Host cross-type comparisons returnfalse outside the native asserted domain. Native bool instance/refcount/address cache is not ported under the requested GC adaptation. Existing legacy statuses/evidence/history remain, not new whole-module/native certification. Presentation/localization/XML diagnostics/native caches/debug/invalid downcasts/ABI and complete DocPool/document/configuration/UI/ODS integration remain excluded or pending. Actual Calc155tests/raw100 and affected Bool67tests/8files/raw100 pass after a new fixture range correction and one existing related shared equality expectation migration. No fake document/provider, native compilation, sanitizer or new ownership engine. Goal resumed active; next scheduled full121."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/cenumitm.cxx",
     "upstreamSymbols": [
       "SfxBoolItem",
-      "SfxBoolItem::Clone"
+      "SfxBoolItem::Clone",
+      "SfxBoolItem::CreateDefault",
+      "SfxBoolItem::SetValue",
+      "SfxBoolItem::PutValue",
+      "SfxBoolItem::GetValueTextByVal"
     ]
   },
   "legacyOrder": 54

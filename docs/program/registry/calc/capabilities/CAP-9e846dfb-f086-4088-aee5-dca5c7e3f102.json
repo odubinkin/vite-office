@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9e846dfb-f086-4088-aee5-dca5c7e3f102",
+    "capabilityId": "CAP-9e846dfb-f086-4088-aee5-dca5c7e3f102",
+    "suite": "calc",
+    "subsystem": "cell-boolean-attributes",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original false/default/copy/Clone/value behavior uses actual shared item/string/pool owners.",
+      "Native same-type bool equality depends on payload, with item-set identity checked separately.",
+      "No native instance/refcount/address cache or duplicate Calc bool engine."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task112 implements the four false-default Calc bool cell attributes with IDs140/134/139/125 over the actual shared SfxBoolItem. Implicit copies retain sourceWhich, while Clone reconstructs fixedWhich from payload. Shared bool default factory/copy/Clone/unchanged SetValue/payload-only same-type equality/bool-only PutValue/uppercase parameter-driven OUString text follow original value scopes. Existing browser scalar QueryValue/PutValue transport is retained, without another UNO wrapper. Same-type bool equality ignoresWhich; item-set key identity remains separate. Host cross-type comparisons returnfalse outside the native asserted domain. Native bool instance/refcount/address cache is not ported under the requested GC adaptation. Existing legacy statuses/evidence/history remain, not new whole-module/native certification. Presentation/localization/XML diagnostics/native caches/debug/invalid downcasts/ABI and complete DocPool/document/configuration/UI/ODS integration remain excluded or pending. Actual Calc155tests/raw100 and affected Bool67tests/8files/raw100 pass after a new fixture range correction and one existing related shared equality expectation migration. No fake document/provider, native compilation, sanitizer or new ownership engine. Goal resumed active; next scheduled full121."
+    },
+    "capability": "Native Calc boolean cell-format values",
+    "gaps": [
+      "Localization/presentation/XML diagnostics/native caches/debug/ABI/invalid downcasts/full document/UI/ODS integration excluded or pending.",
+      "Browser scalar transport retained; compiled native differential and complete native QA unexecuted."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScShrinkToFitCell"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScVerticalStackCell"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScLineBreakCell"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScHyphenateCell"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/boolean-cellattr.test.ts",
+          "marker": "retains Which on implicit copies but resets Clone to the original attribute identity"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Boolean cell-format defaults on the document-pool path (task112)"
+        },
+        {
+          "path": "docs/program/calc-browser-gc-adaptation.md",
+          "marker": "Boolean cell-format values and shared bool items"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/data/attrib.cxx",
+          "marker": "ScLineBreakCell::Clone"
+        },
+        {
+          "path": "sc/source/core/data/docpool.cxx",
+          "marker": "ATTR_SHRINKTOFIT"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Calc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "calc-bool-cell-format-values",
+    "scopeLimitations": [
+      "Task112 implements the four false-default Calc bool cell attributes with IDs140/134/139/125 over the actual shared SfxBoolItem. Implicit copies retain sourceWhich, while Clone reconstructs fixedWhich from payload. Shared bool default factory/copy/Clone/unchanged SetValue/payload-only same-type equality/bool-only PutValue/uppercase parameter-driven OUString text follow original value scopes. Existing browser scalar QueryValue/PutValue transport is retained, without another UNO wrapper. Same-type bool equality ignoresWhich; item-set key identity remains separate. Host cross-type comparisons returnfalse outside the native asserted domain. Native bool instance/refcount/address cache is not ported under the requested GC adaptation. Existing legacy statuses/evidence/history remain, not new whole-module/native certification. Presentation/localization/XML diagnostics/native caches/debug/invalid downcasts/ABI and complete DocPool/document/configuration/UI/ODS integration remain excluded or pending. Actual Calc155tests/raw100 and affected Bool67tests/8files/raw100 pass after a new fixture range correction and one existing related shared equality expectation migration. No fake document/provider, native compilation, sanitizer or new ownership engine. Goal resumed active; next scheduled full121."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

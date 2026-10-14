@@ -1,4 +1,4 @@
-/** @fileoverview Original merge spans and ScMF/ScMergeFlagAttr predicates over actual shared pool/integer items; XML diagnostic hooks remain unported. */
+/** @fileoverview Original Calc merge, protection and boolean cell-format values over actual shared pool items; localization and XML diagnostic hooks remain unported. */
 
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -271,5 +271,69 @@ export class ScMergeFlagAttr extends SfxInt16Item {
   /** Original multi-field popup arrow test. @returns Whether set. */
   public HasPivotMultiFieldPopupButton(): boolean {
     return Boolean(this.GetValue() & ScMF.ButtonPopup2);
+  }
+}
+
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import {
+  ATTR_SHRINKTOFIT,
+  ATTR_STACKED,
+  ATTR_LINEBREAK,
+  ATTR_HYPHENATE,
+} from "../../../inc/scitems";
+
+/** Original boolean cell format item; implicit copy retains Which while Clone reconstructs the native fixed identity. */
+export class ScShrinkToFitCell extends SfxBoolItem {
+  /** Original default/scalar or implicit copy construction. @param value - Flag or actual source. @returns Item. */
+  constructor(value: boolean | Readonly<ScShrinkToFitCell> = false) {
+    if (typeof value === "boolean") super(ATTR_SHRINKTOFIT, value);
+    else super(value);
+  }
+  /** Original payload-based Clone reconstructs its fixed Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScShrinkToFitCell {
+    void pool;
+    return new ScShrinkToFitCell(this.GetValue());
+  }
+}
+
+/** Original boolean cell format item; implicit copy retains Which while Clone reconstructs the native fixed identity. */
+export class ScVerticalStackCell extends SfxBoolItem {
+  /** Original default/scalar or implicit copy construction. @param value - Flag or actual source. @returns Item. */
+  constructor(value: boolean | Readonly<ScVerticalStackCell> = false) {
+    if (typeof value === "boolean") super(ATTR_STACKED, value);
+    else super(value);
+  }
+  /** Original payload-based Clone reconstructs its fixed Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScVerticalStackCell {
+    void pool;
+    return new ScVerticalStackCell(this.GetValue());
+  }
+}
+
+/** Original boolean cell format item; implicit copy retains Which while Clone reconstructs the native fixed identity. */
+export class ScLineBreakCell extends SfxBoolItem {
+  /** Original default/scalar or implicit copy construction. @param value - Flag or actual source. @returns Item. */
+  constructor(value: boolean | Readonly<ScLineBreakCell> = false) {
+    if (typeof value === "boolean") super(ATTR_LINEBREAK, value);
+    else super(value);
+  }
+  /** Original payload-based Clone reconstructs its fixed Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScLineBreakCell {
+    void pool;
+    return new ScLineBreakCell(this.GetValue());
+  }
+}
+
+/** Original boolean cell format item; implicit copy retains Which while Clone reconstructs the native fixed identity. */
+export class ScHyphenateCell extends SfxBoolItem {
+  /** Original default/scalar or implicit copy construction. @param value - Flag or actual source. @returns Item. */
+  constructor(value: boolean | Readonly<ScHyphenateCell> = false) {
+    if (typeof value === "boolean") super(ATTR_HYPHENATE, value);
+    else super(value);
+  }
+  /** Original payload-based Clone reconstructs its fixed Which. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScHyphenateCell {
+    void pool;
+    return new ScHyphenateCell(this.GetValue());
   }
 }

@@ -1855,3 +1855,14 @@ The non-collapsing handleAttributeValue CR branch advances the local pointer but
 Evidence: pinned XmlReader::handleAttributeValue and header peek; task110 actual public reader inputs and attribute queries. No invalid native execution, sanitizer, memory experiment or compiled differential claim.
 
 Decision: preserve global-peek behavior on defined inputs. Browser invalid input offsets retain native DataView RangeError; this is a host boundary, not native undefined-behavior emulation. Audit schema/configuration consumers later.
+
+
+## CALC-097: boolean cell-attribute Clone resets Which while implicit copy retains it
+
+Status: source-confirmed construction difference; normal pool callers and user-visible consequences remain unverified.
+
+ScShrinkToFitCell, ScVerticalStackCell, ScLineBreakCell and ScHyphenateCell have implicit copy constructors that copy the SfxBoolItem base and retain a changed source Which. Their Clone implementations instead construct a new concrete item from GetValue, restoring that class's fixed attribute identity. Same-type SfxBoolItem equality compares only the payload after the base item-type assertion, so differing Which values do not make otherwise equal bool items unequal.
+
+Evidence: complete pinned attrib.hxx/cxx, scitems.hxx, include/svl/eitem.hxx, cenumitm.cxx and SfxPoolItem::operator== scopes; task112 actual owned-item copy/Clone/equality histories and real shared pool/item-set consumers. No fake provider, native invalid downcast execution, compiled differential, native instance-cache or full document QA claim.
+
+Decision: preserve implicit-copy identity, fixed-id Clone and payload-only same-type equality. Correct shared bool behavior and its previous Which-sensitive test rather than duplicate a Calc-specific workaround. Audit normal document/pool callers before calling this a defect.

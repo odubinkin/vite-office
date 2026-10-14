@@ -4,7 +4,7 @@ title: "Implement Calc boolean cell-format items using canonical shared boolean 
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement real Calc bool attributes and canonical shared bool value operations for native DocPool/UI/ODS dependencies."
 doc_version: 3
-doc_updated_at: "2026-10-14T09:42:27.869Z"
+doc_updated_at: "2026-10-14T09:49:31.312Z"
 doc_updated_by: "CODER"
 description: "Task112 prepares actual ScDocumentPool dependencies for UI and ODS: ScShrinkToFitCell, ScVerticalStackCell, ScLineBreakCell and ScHyphenateCell default/copy/Clone contracts over reused shared SfxBoolItem. Align shared bool default/copy/value/equality/PutValue/value-text behavior with pinned native source, retain existing browser scalar UNO boundary and GC, no duplicate Calc bool engine or fake document/config service. Record inventory, source quirks and actual dependency-driven next steps; targeted Calc/affected raw100 and repository gates, no full before121."
 sections:
@@ -50,7 +50,16 @@ sections:
     4. Baseline3426current tracked non-task hashes and exact committed snapshot prove only19intentionalpaths changed (subject to bounded real fixes), source-bound full actual raw100 evidence and metadata trace. Separate same-agent evaluator not independent, APverify/close, cleanbranchcalc; goal remains active toward real document/UI/ODS.
   Verification: "Pending current-source implementation and declared focused verification."
   Rollback Plan: "Revert only intentional task112 code/tests/metadata/docs if necessary. Keep user and unrelated task changes untouched. Restore all4original symlink targets in finally; do not touch source trees or merge branches. No branch creation, history reset or network action."
-  Findings: "Prior cycle111 DONE:15801unit/123inventory/38tooling/316browser,497ownersraw100,3426source hashes, cleancalc. User explicitly resumed preparation for UI and ODS. Native ScDocument ctor immediately uses options/global config/shared strings/attribute pool, ScTable allocates columns, and column storage requires genuine cell peers. Native ScDocumentPool unconditionally creates these four boolean cell attributes. Existing shared Bool had Which-sensitive equality and lacked native bool PutValue/copy/default factory/value text; fix shared behavior rather than duplicate it in Calc. Partial/dummy ScDocument or scalar-only fake CellStore is rejected. Next full is121, no new automatic pause requested."
+  Findings: |-
+    Prior cycle111 DONE:15801unit/123inventory/38tooling/316browser,497ownersraw100,3426source hashes, cleancalc. User explicitly resumed preparation for UI and ODS. Native ScDocument ctor immediately uses options/global config/shared strings/attribute pool, ScTable allocates columns, and column storage requires genuine cell peers. Native ScDocumentPool unconditionally creates these four boolean cell attributes. Existing shared Bool had Which-sensitive equality and lacked native bool PutValue/copy/default factory/value text; fix shared behavior rather than duplicate it in Calc. Partial/dummy ScDocument or scalar-only fake CellStore is rejected. Next full is121, no new automatic pause requested.
+
+    - Observation: First Calc run154pass/1fail: new real-itemset fixture omitted required WhichRangesContainer argument; source production behavior did not fail. Logs and manifest retained under first-value-calc files. A task verify-show head pipe also caused harmless EPIPE; redirected complete outputs and recomputed route.
+      Impact: Current wholeCalc raw100 evidence was not yet established; no pass claimed.
+      Resolution: Supply actual native item range [[id,id]] in the real SfxItemSet fixture, retain assertions and thresholds, re-run current Calc/affected profiles. Avoid piping ap output to an early-closing head.
+
+    - Observation: Current Calc155tests/raw100 passed. First shared profile66pass/1fail: existing itemset.test.ts expected same-type SfxBoolItem values with differentWhich to compare false. Complete pinned SfxBoolItem::operator== plus SfxPoolItem::operator== prove equality ignoresWhich for valid sameItemType.
+      Impact: One existing related shared-value assertion must migrate to the corrected native contract; this is a shared behavior test, not a Writer-only coverage gap. Intentional scope gains one existing related test path (20total), production scope unchanged.
+      Resolution: Change that exact expectation to true with source comment, preserve all other assertions, thresholds and source gates, retain first log and rerun complete8file affected Bool profile only; actual Calc source remains unchanged since its passing profile.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +92,11 @@ Revert only intentional task112 code/tests/metadata/docs if necessary. Keep user
 ## Findings
 
 Prior cycle111 DONE:15801unit/123inventory/38tooling/316browser,497ownersraw100,3426source hashes, cleancalc. User explicitly resumed preparation for UI and ODS. Native ScDocument ctor immediately uses options/global config/shared strings/attribute pool, ScTable allocates columns, and column storage requires genuine cell peers. Native ScDocumentPool unconditionally creates these four boolean cell attributes. Existing shared Bool had Which-sensitive equality and lacked native bool PutValue/copy/default factory/value text; fix shared behavior rather than duplicate it in Calc. Partial/dummy ScDocument or scalar-only fake CellStore is rejected. Next full is121, no new automatic pause requested.
+
+- Observation: First Calc run154pass/1fail: new real-itemset fixture omitted required WhichRangesContainer argument; source production behavior did not fail. Logs and manifest retained under first-value-calc files. A task verify-show head pipe also caused harmless EPIPE; redirected complete outputs and recomputed route.
+  Impact: Current wholeCalc raw100 evidence was not yet established; no pass claimed.
+  Resolution: Supply actual native item range [[id,id]] in the real SfxItemSet fixture, retain assertions and thresholds, re-run current Calc/affected profiles. Avoid piping ap output to an early-closing head.
+
+- Observation: Current Calc155tests/raw100 passed. First shared profile66pass/1fail: existing itemset.test.ts expected same-type SfxBoolItem values with differentWhich to compare false. Complete pinned SfxBoolItem::operator== plus SfxPoolItem::operator== prove equality ignoresWhich for valid sameItemType.
+  Impact: One existing related shared-value assertion must migrate to the corrected native contract; this is a shared behavior test, not a Writer-only coverage gap. Intentional scope gains one existing related test path (20total), production scope unchanged.
+  Resolution: Change that exact expectation to true with source comment, preserve all other assertions, thresholds and source gates, retain first log and rerun complete8file affected Bool profile only; actual Calc source remains unchanged since its passing profile.

@@ -161,7 +161,8 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     expect(item.Clone()).not.toBe(item);
     expect(item.Clone().equals(item)).toBe(true);
     expect(item.equals(new SfxBoolItem(3, false))).toBe(false);
-    expect(item.equals(new SfxBoolItem(4, true))).toBe(false);
+    // Native same-type bool equality ignores Which (SfxPoolItem::operator==).
+    expect(item.equals(new SfxBoolItem(4, true))).toBe(true);
     expect(item.equals(new SfxStringItem(3, "true"))).toBe(false);
   });
 
