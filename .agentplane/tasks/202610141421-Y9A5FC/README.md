@@ -1,10 +1,11 @@
 ---
 id: "202610141421-Y9A5FC"
 title: "Implement native shared font-color attribute ownership for Calc"
-status: "DOING"
+result_summary: "Native ColorItem value ownership ready for actual Calc attribute pool; original Any/UNO interface transport and full document/UI/ODS integration remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Exact15paths7existing8new,3717hashes8nativepins;19relatedtests6files8wholeowners and173Calc tests strict raw100.12focusedgates33boundaries pass first run; actual Tools/Docmodel/SVL peers reused, no fake pool or scalar compatibility constructor."
     - "Which-only/default black0, Auto109/defaultUnusedComplex, all4forms, stable borrowed references/deepclone and native equality/hash field sequence. Value-only source shard justified by complete original responsibility, actual current489combined lines acknowledged."
-commit: null
+commit:
+  hash: "5fcc451af67c8c4b0d41c232c9494e30f1eb235a"
+  message: "🚧 Y9A5FC core: implement native font-color attribute values"
 comments:
   -
     author: "CODER"
     body: "Start: original shared ColorItem value prerequisites and actual Calc font-color109 ownership, no fake UNO or DocPool/provider."
+  -
+    author: "CODER"
+    body: "Verified: actual shared font-color item value contracts, Calc109 Auto/defaultUnusedComplex itemset copies, all focused checks and raw100 coverage."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source5fcc451af67c exact15paths3717hashes8nativepins; actual ColorItem value defaults/copy/access/hash and Calc109 itemsets. Related19tests8wholeowners and Calc173tests raw100,12gates33boundaries. Same-agent review not independent. Native Any/UI/ODS still pending."
+  -
+    type: "status"
+    at: "2026-10-14T14:31:58.871Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared font-color item value contracts, Calc109 Auto/defaultUnusedComplex itemset copies, all focused checks and raw100 coverage."
 doc_version: 3
-doc_updated_at: "2026-10-14T14:30:44.203Z"
+doc_updated_at: "2026-10-14T14:31:58.873Z"
 doc_updated_by: "CODER"
 description: "Task131: actual SvxColorItem value ownership, canonical colritem header, original defaults/constructors/copy/clone/color and ComplexColor access/equality/hash. Use real shared Color/ComplexColor and actual item sets, no fake DocPool. Native Any interface transport/presentation/Writer string migration remain a later phase once actual shared UNO helper exists, no scalar compatibility proxy."
 sections:
