@@ -1,4 +1,6 @@
 /** @fileoverview Original conditional-index and page-scale attribute value families from attrib.hxx/cxx; localization/diagnostics remain separate pending scopes. */
+import { SfxEnumItem } from "../../../../svl/inc/eitem";
+import { ScVObjMode } from "../../../inc/global";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SortedVector } from "../../../../o3tl/inc/sorted_vector";
@@ -190,5 +192,22 @@ export class ScPageScaleToItem extends SfxPoolItem {
     if (id === SC_MID_PAGE_SCALETO_WIDTH) this.mnWidth = result[0];
     else this.mnHeight = result[0];
     return true;
+  }
+}
+
+/** Original page object-output mode item using the actual shared enum template. */
+export class ScViewObjectModeItem extends SfxEnumItem<ScVObjMode> {
+  /** Original Which/default-show, explicit mode and implicit copy forms. @param source - Which or const source. @param mode - Explicit output mode. @returns Item. */
+  constructor(
+    source: number | Readonly<ScViewObjectModeItem>,
+    mode: ScVObjMode = ScVObjMode.VOBJ_MODE_SHOW,
+  ) {
+    if (typeof source === "number") super(source, mode);
+    else super(source);
+  }
+  /** Original copy-based Clone retains Which and mode. @param pool - Unused native pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): ScViewObjectModeItem {
+    void pool;
+    return new ScViewObjectModeItem(this);
   }
 }

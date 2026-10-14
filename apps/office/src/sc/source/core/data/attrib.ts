@@ -339,6 +339,7 @@ export class ScHyphenateCell extends SfxBoolItem {
 }
 
 export {
+  ScViewObjectModeItem,
   ScCondFormatItem,
   ScCondFormatIndexes,
   ScPageScaleToItem,

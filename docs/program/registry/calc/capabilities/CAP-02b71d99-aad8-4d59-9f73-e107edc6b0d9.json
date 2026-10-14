@@ -1,0 +1,107 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-02b71d99-aad8-4d59-9f73-e107edc6b0d9",
+    "capabilityId": "CAP-02b71d99-aad8-4d59-9f73-e107edc6b0d9",
+    "suite": "calc",
+    "subsystem": "page-object-modes",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original logical enum interface/template values and actual Any transport are shared owners.",
+      "Calc object-output defaults and copy/Clone retain original Which and mode."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next."
+    },
+    "capability": "Calc page object display mode values",
+    "gaps": [
+      "Localized presentation/diagnostics/native caches/ABI/invalid enum domains and full document/UI/ODS pending or excluded.",
+      "Source-backed logical validation only; compiled native and whole original QA not executed."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.values.ts",
+          "marker": "ScViewObjectModeItem"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScViewObjectModeItem"
+        },
+        {
+          "path": "apps/office/src/sc/inc/attrib.ts",
+          "marker": "ScViewObjectModeItem"
+        },
+        {
+          "path": "apps/office/src/sc/inc/global.ts",
+          "marker": "ScVObjMode"
+        },
+        {
+          "path": "apps/office/src/sc/inc/scitems.ts",
+          "marker": "ATTR_PAGE_CHARTS"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/viewobjectmode.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared enum items and page object display modes (task114)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/data/attrib.cxx",
+          "marker": "ScViewObjectModeItem"
+        },
+        {
+          "path": "sc/source/core/data/attrib.cxx",
+          "marker": "ScViewObjectModeItem"
+        },
+        {
+          "path": "sc/inc/attrib.hxx",
+          "marker": "ScViewObjectModeItem"
+        },
+        {
+          "path": "sc/inc/global.hxx",
+          "marker": "ScVObjMode"
+        },
+        {
+          "path": "sc/inc/scitems.hxx",
+          "marker": "ATTR_PAGE_CHARTS"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Calc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "calc-page-object-display-modes",
+    "scopeLimitations": [
+      "Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

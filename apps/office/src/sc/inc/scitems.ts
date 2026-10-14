@@ -25,3 +25,10 @@ export const ATTR_HYPHENATE = 125;
 export const ATTR_CONDITIONAL = 154;
 /** Original page-scale-to item identity. */
 export const ATTR_PAGE_SCALETO = 187;
+
+/** Original page chart visibility item identity. */
+export const ATTR_PAGE_CHARTS = 170;
+/** Original page embedded-object visibility item identity. */
+export const ATTR_PAGE_OBJECTS = 171;
+/** Original page drawing visibility item identity. */
+export const ATTR_PAGE_DRAWINGS = 172;

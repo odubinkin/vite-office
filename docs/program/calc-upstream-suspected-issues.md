@@ -1879,3 +1879,10 @@ The original include/o3tl/sorted_vector.hxx initializer-list constructor copies 
 Status: source-confirmed typed conversion, not identified as a defect.
 
 ScPageScaleToItem::PutValue extracts sal_uInt16 from an actual Any. Original cppu/source/uno/assign.hxx accepts SHORT and UNSIGNED_SHORT at equal width by reading their bits as unsigned16. Thus a typed signed16 -1 becomes65535, while a LONG is rejected even when its value would fit. Preserve actual shared Any conversion; do not add a value-range policy to the native typed path. The explicit browser scalar transport only accepts unsigned16 numbers. Task113 uses the existing actual CPPU owners; no duplicate conversion engine.
+
+
+## CALC-100: enum-item equality ignores Which while its hash includes Which
+
+Status: source-confirmed asymmetry; valid pooled-caller impact remains unverified.
+
+SfxEnumItemInterface compares GetEnumValue after the native base type assertion, without comparing Which. SfxEnumItem additionally compares full EnumT payload. Its hashCode returns Which xor GetEnumValue. Consequently same-type equal enum items with different Which values can have different hashes. Calc ScViewObjectModeItem reuses the template for three page-output identities. Keep equality and hashing as written; audit native item-manager key partitioning before identifying a defect. Task114 checks actual shared generic values and Calc copies. No full document/native runtime certification.

@@ -1,6 +1,8 @@
 /** @fileoverview Original SfxBoolItem logical value contract; native instance/refcount caches remain outside the GC binding. */
 import { SfxPoolItem } from "./poolitem";
 import type { SfxItemPool } from "./itempool";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { enum2int } from "../../../comphelper/inc/extract";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 
 /** Shared native bool item used by Writer and Calc; the existing browser UNO transport exposes plain scalar values. */
@@ -54,5 +56,67 @@ export class SfxBoolItem extends SfxPoolItem {
     return new OUString(
       value ? new Uint8Array([84, 82, 85, 69, 0]) : new Uint8Array([70, 65, 76, 83, 69, 0]),
     );
+  }
+}
+
+/** Original enum-item virtual interface; actual value representation remains in its concrete template owner. */
+export abstract class SfxEnumItemInterface extends SfxPoolItem {
+  /** Original Which or implicit base-copy constructor. @param source - Identity or const source. @returns Interface base. */
+  protected constructor(source: number | Readonly<SfxEnumItemInterface>) {
+    super(typeof source === "number" ? source : source.Which());
+  }
+  /** Original unsigned16 enum query. @returns Enum value. */
+  public abstract GetEnumValue(): number;
+  /** Original unsigned16 enum write. @param value - Enum value. @returns Nothing. */
+  public abstract SetEnumValue(value: number): void;
+  /** Original same-type enum-value comparison; foreign host types return false outside native asserted inputs. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SfxEnumItemInterface &&
+      other.constructor === this.constructor &&
+      this.GetEnumValue() === other.GetEnumValue()
+    );
+  }
+  /** Existing browser unwrapped scalar query. @returns Unsigned enum value. */
+  public override QueryValue(): number;
+  /** Original native Any output form. @param output - Actual destination Any. @param member - Ignored member identifier. @returns True. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original unconditional unsigned16 payload query. @param output - Optional native destination. @param member - Ignored original member. @returns Native success or scalar browser value. */
+  public override QueryValue(output?: Any, member = 0): boolean | number {
+    void member;
+    if (output === undefined) return this.GetEnumValue();
+    output.insert([this.GetEnumValue()], "sal_uInt16");
+    return true;
+  }
+  /** Original enum2int then unsigned16 assignment, with explicit signed32 scalar browser transport. @param value - Actual Any or browser signed32. @param member - Ignored native member. @returns Success. */
+  public override PutValue(value: unknown, member: number): boolean {
+    void member;
+    const result: [number] = [0];
+    if (value instanceof Any) {
+      if (!enum2int(result, value)) return false;
+    } else {
+      if (
+        typeof value !== "number" ||
+        !Number.isInteger(value) ||
+        value < -2147483648 ||
+        value > 2147483647
+      )
+        return false;
+      result[0] = value;
+    }
+    this.SetEnumValue(result[0] & 0xffff);
+    return true;
+  }
+  /** Original enum interface does not expose bool semantics. @returns False. */
+  public HasBoolValue(): boolean {
+    return false;
+  }
+  /** Original bool query default. @returns False. */
+  public GetBoolValue(): boolean {
+    return false;
+  }
+  /** Original bool assignment does nothing. @param value - Ignored bool. @returns Nothing. */
+  public SetBoolValue(value: boolean): void {
+    void value;
   }
 }

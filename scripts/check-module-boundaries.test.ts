@@ -556,3 +556,24 @@ it("permits Calc attribute Any transport while protecting reverse and browser bo
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("keeps original enum extraction below SVL and Calc without reverse or browser edges", /** Checks exact native helper dependencies. @returns Nothing. */ () => {
+  for (const target of ["comphelper", "cppu"])
+    expect(isForbiddenModuleEdge("svl", target)).toBe(false);
+  for (const target of ["cppu", "udkapi"])
+    expect(isForbiddenModuleEdge("comphelper", target)).toBe(false);
+  for (const target of ["sc", "sw", "svl", "framework"])
+    expect(isForbiddenModuleEdge("comphelper", target)).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "comphelper")).toBe(true);
+  for (const source of ["comphelper/inc/extract.ts", "svl/inc/eitem.ts", "svl/inc/cenumitm.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+  }
+  expect(
+    getRuntimeOwnershipViolation(
+      "comphelper/inc/extract.ts",
+      "vcl/browser/font-list.ts",
+      "../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});

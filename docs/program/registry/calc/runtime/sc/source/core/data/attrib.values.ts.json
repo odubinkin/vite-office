@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "cell-attributes",
     "capabilityIds": [
-      "CAP-fd1bf5a2-5205-4986-a1d3-9373bd064942"
+      "CAP-fd1bf5a2-5205-4986-a1d3-9373bd064942",
+      "CAP-02b71d99-aad8-4d59-9f73-e107edc6b0d9"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,19 +18,23 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/data/attrib.values.test.ts",
-        "docs/program/calc-core.md#Conditional-format indices and page-scale values (task113)"
+        "docs/program/calc-core.md#Conditional-format indices and page-scale values (task113)",
+        "apps/office/src/sc/source/core/data/viewobjectmode.test.ts",
+        "docs/program/calc-core.md#Shared enum items and page object display modes (task114)"
       ],
-      "justification": " Task113 adds ScCondFormatItem index/default/copy/move/equality/Clone/hash values and ScPageScaleToItem width/height/default/copy/Clone/validity/member transport. Actual shared SortedVector primitive initializer lists sort without deduplicating, primitive copies preserve all entries, and moves transfer ordinary JS array references. The scalar unsigned32-key o3tl hash helper binds identity hashing with 32/64 seed arithmetic; general std::hash and binary hash parity are not claimed. Actual shared UNO Any handles native output and extraction, including signed16 -1 reinterpretation as unsigned65535. Plain browser unsigned16 scalar transport remains explicit. Public page-scale default0,0 differs from actual DocPool explicit1,1. Conditional implicit copy retainsWhich while Clone restores154; page-scale copy and Clone retainWhich187 or changed source identity. Localization/presentation/XML diagnostics/native caches/debug/ABI/invalid casts/general class-value vector copying/full document/UI/ODS integration remain pending or excluded. No C++ generator, sanitizer or memory management engine. Existing shared owners are reused; source responsibility split only addresses the enforced file-size limit.",
+      "justification": " Task113 adds ScCondFormatItem index/default/copy/move/equality/Clone/hash values and ScPageScaleToItem width/height/default/copy/Clone/validity/member transport. Actual shared SortedVector primitive initializer lists sort without deduplicating, primitive copies preserve all entries, and moves transfer ordinary JS array references. The scalar unsigned32-key o3tl hash helper binds identity hashing with 32/64 seed arithmetic; general std::hash and binary hash parity are not claimed. Actual shared UNO Any handles native output and extraction, including signed16 -1 reinterpretation as unsigned65535. Plain browser unsigned16 scalar transport remains explicit. Public page-scale default0,0 differs from actual DocPool explicit1,1. Conditional implicit copy retainsWhich while Clone restores154; page-scale copy and Clone retainWhich187 or changed source identity. Localization/presentation/XML diagnostics/native caches/debug/ABI/invalid casts/general class-value vector copying/full document/UI/ODS integration remain pending or excluded. No C++ generator, sanitizer or memory management engine. Existing shared owners are reused; source responsibility split only addresses the enforced file-size limit. Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next.",
       "knownViolations": [],
       "localSymbols": [
         "ScCondFormatItem",
-        "ScPageScaleToItem"
+        "ScPageScaleToItem",
+        "ScViewObjectModeItem"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/attrib.cxx",
       "upstreamSymbols": [
         "ScCondFormatItem",
-        "ScPageScaleToItem"
+        "ScPageScaleToItem",
+        "ScViewObjectModeItem"
       ]
     }
   }

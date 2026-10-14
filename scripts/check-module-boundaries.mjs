@@ -9,6 +9,7 @@ import ts from "typescript";
 
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
+  "comphelper",
   "configmgr",
   "cppu",
   "cppuhelper",
@@ -38,6 +39,8 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
+  // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
+  ["comphelper", new Set(["cppu", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
@@ -84,7 +87,8 @@ const allowedEdges = new Map([
     ]),
   ],
   ["sfx2", new Set(["svl"])],
-  ["svl", new Set(["sal"])],
+  // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
+  ["svl", new Set(["comphelper", "cppu", "sal"])],
   ["svtools", new Set()],
   ["svx", new Set(["editeng", "svl", "svtools", "vcl"])],
   [
@@ -150,6 +154,8 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
+    return "upstream-mechanism";
   if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
