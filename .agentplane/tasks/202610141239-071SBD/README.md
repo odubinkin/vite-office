@@ -1,10 +1,11 @@
 ---
 id: "202610141239-071SBD"
 title: "Port original shared map and field unit conversions for Calc font metrics"
-status: "DOING"
+result_summary: "Added canonical shared metric owners required by font-height defaults, reused actual o3tl conversions and recorded CALC109.7relatedtests2files4ownersraw100;168Calc64files33ownersraw100;30boundaries12gatespass. No native builds/memory mechanisms/full readiness claim. Continue canonical font-height and actual document/UI/ODS preparation; full regression then pause at actual readiness."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task125-checks/gates-results.json"
   findings:
     - "Exact18paths4changed14new and3653to3667current source hashes;10native pins. New literal independent matrix covers all unit maps, defaults, pixel overrides, signed ties, float32casting and same-direction ControlToItem. Shared4completeowners152S70B18F143L raw100, Calc168/64files33ownersraw100,7relatedtests2files,30boundaries12gates pass. Inventory/provenance foundation statuses and no duplicate header declaration ownership. CALC109 records suspicious behavior without changing source semantics. No native compilation/generator/memory ownership mechanisms."
-commit: null
+commit:
+  hash: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557"
+  message: "🚧 071SBD core: port original shared map and field metric conversions"
 comments:
   -
     author: "CODER"
     body: "Start: implement original shared metric units and scalar helpers for canonical Calc font height dependency."
+  -
+    author: "CODER"
+    body: "Verified: original map/field units and5SVTools scalar helpers; native direction and rounding preserved with complete shared/Calc raw100."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet."
+  -
+    type: "status"
+    at: "2026-10-14T12:48:25.592Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original map/field units and5SVTools scalar helpers; native direction and rounding preserved with complete shared/Calc raw100."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:48:13.566Z"
+doc_updated_at: "2026-10-14T12:48:25.594Z"
 doc_updated_by: "CODER"
 description: "Complete native MapUnit/FieldUnit owners and five scalar SVTools unit helpers required by shared font-height item; reuse existing o3tl integer/floating conversions, preserve suspicious ControlToItem direction, no document stubs or memory mechanisms."
 sections:
