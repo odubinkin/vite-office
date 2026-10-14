@@ -4,7 +4,7 @@ title: "Run Calc full test cycle11 and pause goal after relevant repairs"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T07:41:44.905Z"
+  updated_by: "CODER"
+  note: "All5full stages pass: office15801, inventory123/raw100, tooling38, browser316, static; every raw counter positive across497owners. All14remaining gates and exact3426hashes pass; only2docs changed. Close then requestedpause; app remains incomplete."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T07:41:42.430Z"
+  updated_by: "EVALUATOR"
+  note: "Cycle11 source45a9a97d8d8d satisfies second requested full-run pause checkpoint; all5full stages and14remaining gates pass."
+  evaluated_sha: "45a9a97d8d8d6e23191f9a28dfe9a96faa0fbfe0"
+  blueprint_digest: "79a9d4e09993995c7d71d94515aba8d061001101e7bae6674ea6aa3efdc3f4e6"
+  evidence_refs:
+    - ".agentplane/tasks/202610140644-DXESQV/README.md"
+    - ".agentplane/tasks/202610140644-DXESQV/quality/20261014-074142430-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140644-DXESQV/quality/20261014-074142430-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140644-DXESQV/quality/20261014-074142430-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140644-DXESQV/blueprint/resolved-snapshot.json"
+    - "output/playwright/task111-checks/exact-review.json"
+    - "output/playwright/task111-checks/office-coverage-audit.json"
+    - "output/playwright/task111-checks/task111-full-results.json"
+  findings:
+    - "Actual office15801tests/792files, inventory123/38, tooling38/10, browser316 Writer314/shared2/Calc0 and static pass first run. All497owners have raw S/B/F positive and100S/B/F/L independently grouped Calc32/shared252/Writer213. No Writer-only gap or runtime/test/configuration/threshold repair. Four reference links absent through all5stages and exact targets restored. Exact3426current/committed hashes versus3425baseline prove only core checkpoint and new cycle11 report changed. Same-agent separate evaluator is not independent review. Missing Calc config/default/document/grid/ODS owners remain explicitly pending; close clean then pause active goal, never mark entire app complete."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute second requested full cycle111 with all original links absent, audit relevant coverage and pause goal after closure."
+  -
+    type: "verify"
+    at: "2026-10-14T07:41:44.905Z"
+    author: "CODER"
+    state: "ok"
+    note: "All5full stages pass: office15801, inventory123/raw100, tooling38, browser316, static; every raw counter positive across497owners. All14remaining gates and exact3426hashes pass; only2docs changed. Close then requestedpause; app remains incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-14T06:46:05.851Z"
+doc_updated_at: "2026-10-14T07:41:45.071Z"
 doc_updated_by: "CODER"
 description: "Task111 is the second full run requested by the user: run complete office unit coverage, inventory coverage, tooling, all Writer/shared/Calc browser projects and static checks with all4original-source links absent and restored. Audit raw coverage by app/shared owner; fix only relevant Calc/shared regressions if any, defer Writer-only coverage gaps. Record full-cycle11 report/core evidence, exact source hashes and gates, close clean on calc, then pause the active goal."
 sections:
@@ -48,9 +72,43 @@ sections:
     2. python3 output/playwright/task111-checks/office-audit.py inspects every raw counter by actual coverage owner and links runtime records. Calc/shared100 required, Writer-only gaps deferred as instructed without repair. Browser count by actual project, Calc0 not UI proof.
     3. Report/core trace actual stage counts/results/raw ownership/remaining integration limits and no native experiment. python3 output/playwright/task111-checks/full-gates.py runs fourteen remaining gates serial after last report edit; combined inventory/tooling full stages provide sixteen total. Routing/doctor/canonical links pass.
     4. Exact3425baseline/current/committed hashes prove only two planned report/core paths changed absent actual approved repair; source SHA-bound review, same-agent separate EVAL not independent. APverify/close and clean branchcalc; then update_goal paused and stop. No full-goal completion claim.
-  Verification: "Pending full cycle11 execution and actual raw/ownership/source audit."
+  Verification: |-
+    Command: python3 output/playwright/task111-checks/full-run.py; python3 output/playwright/task111-checks/office-audit.py; python3 output/playwright/task111-checks/full-gates.py; python3 output/playwright/task111-checks/exact-review.py. Result: pass. Evidence: all5fullstages pass first attempt, office15801/792, inventory123/38/raw100, tooling38/10, browser316 (Writer314/shared2/Calc0), static smoke pass. All497office owners raw100 everycounterpositive: Calc32/shared252/Writer213. All14remaining gates pass; together with fullinventory/tooling16required checks pass. Exact3426current/committed source hashes match source45a9a97d8d8d6e23191f9a28dfe9a96faa0fbfe0; only approved2docs changed from3425baseline. Four source links absent during all5fullstages and restored exactly. Scope: full current application checkpoint only, no CalcUI/ODS or missing-owner native parity certification. Links: docs/program/calc-full-test-cycle-11.md, docs/program/calc-core.md and taskREADME canonical links resolve. Same-agent evaluator is not independent review. Pause goal immediately after clean closure as explicitly requested.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T07:41:44.905Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All5full stages pass: office15801, inventory123/raw100, tooling38, browser316, static; every raw counter positive across497owners. All14remaining gates and exact3426hashes pass; only2docs changed. Close then requestedpause; app remains incomplete.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T07:41:43.911Z, excerpt_hash=sha256:ea0dfc3ce198ac6b0467c8ff6c0ebbb073e82d7daf5be36795d311eb6e5be0c4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140644-DXESQV/blueprint/resolved-snapshot.json
+    - old_digest: 79a9d4e09993995c7d71d94515aba8d061001101e7bae6674ea6aa3efdc3f4e6
+    - current_digest: 79a9d4e09993995c7d71d94515aba8d061001101e7bae6674ea6aa3efdc3f4e6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610140644-DXESQV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610140644-DXESQV -m 🧩 DXESQV task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the two intentional cycle11 report/core changes if needed; preserve full-run evidence and other tasks. Reference links restore exact original targets in finally; do not delete or replace their upstream trees. Never reset user changes or merge branches."
-  Findings: "Task110 DONE source2693bff00e45, close0cecc21cbde4,3425non-task hashes unchanged and clean calc. Its actual Calc152tests/32owners and XML33tests/8owners raw100, all16current gates passed after documented bounded lint/docs/provenance correction and one unrelated inventory fixture timeout. Full101 was the first of two requested runs; full111 is the second and requires pausing afterward. Existing native/configuration/document/grid/ODS gaps remain, Writer-only coverage explicitly out of scope."
+  Findings: "Command: full-run.py, office-audit.py, full-gates.py and exact-review.py under output/playwright/task111-checks. Result: pass; no failed/retried full stage or repository gate in cycle11. Evidence: office unit2398.46s, inventory49.13s, tooling7.66s, browser394.55s and static28.78s. Quiet live office process was polled through terminalSession69741 and never restarted; all497actual executable owners have zero uncovered raw counters and allmetrics100. Browser counts independently verified from completed project log: Writer314/shared2/Calc0. No Writer-only coverage gaps occurred and none were repaired. Four reference symlinks absent through5stages and restored in finally before source-sensitive14gates. No native compilation/network/Cppgenerator/sanitizer/memory-management experiment. Runtime/tests/fixtures/configuration/coverage thresholds remain byte-for-byte unchanged. Only report and core checkpoint differ from3425baseline; source45a9a97d8d8d6e23191f9a28dfe9a96faa0fbfe0 matches3426current/committed hashes. Same-agent separate EVALUATOR phase passed; this is not independent review. Calc configuration schema/backend/locale/color/default services, actual formula/document/storage owners, editable UI and ODS remain incomplete; original goal is not achieved. This is the second requested upcoming full run after task101, so close task111 clean and pause goal as instructed; do not start task112. Unrelated DOING tasks untouched. Links: full cycle11 report, core checkpoint and canonical taskREADME resolve."
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +132,40 @@ Snapshot all3425tracked non-task source hashes. Run complete office coverage wit
 
 ## Verification
 
-Pending full cycle11 execution and actual raw/ownership/source audit.
+Command: python3 output/playwright/task111-checks/full-run.py; python3 output/playwright/task111-checks/office-audit.py; python3 output/playwright/task111-checks/full-gates.py; python3 output/playwright/task111-checks/exact-review.py. Result: pass. Evidence: all5fullstages pass first attempt, office15801/792, inventory123/38/raw100, tooling38/10, browser316 (Writer314/shared2/Calc0), static smoke pass. All497office owners raw100 everycounterpositive: Calc32/shared252/Writer213. All14remaining gates pass; together with fullinventory/tooling16required checks pass. Exact3426current/committed source hashes match source45a9a97d8d8d6e23191f9a28dfe9a96faa0fbfe0; only approved2docs changed from3425baseline. Four source links absent during all5fullstages and restored exactly. Scope: full current application checkpoint only, no CalcUI/ODS or missing-owner native parity certification. Links: docs/program/calc-full-test-cycle-11.md, docs/program/calc-core.md and taskREADME canonical links resolve. Same-agent evaluator is not independent review. Pause goal immediately after clean closure as explicitly requested.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T07:41:44.905Z — VERIFY — ok
+
+By: CODER
+
+Note: All5full stages pass: office15801, inventory123/raw100, tooling38, browser316, static; every raw counter positive across497owners. All14remaining gates and exact3426hashes pass; only2docs changed. Close then requestedpause; app remains incomplete.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T07:41:43.911Z, excerpt_hash=sha256:ea0dfc3ce198ac6b0467c8ff6c0ebbb073e82d7daf5be36795d311eb6e5be0c4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610140644-DXESQV/blueprint/resolved-snapshot.json
+- old_digest: 79a9d4e09993995c7d71d94515aba8d061001101e7bae6674ea6aa3efdc3f4e6
+- current_digest: 79a9d4e09993995c7d71d94515aba8d061001101e7bae6674ea6aa3efdc3f4e6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610140644-DXESQV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610140644-DXESQV -m 🧩 DXESQV task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -82,4 +173,4 @@ Revert only the two intentional cycle11 report/core changes if needed; preserve 
 
 ## Findings
 
-Task110 DONE source2693bff00e45, close0cecc21cbde4,3425non-task hashes unchanged and clean calc. Its actual Calc152tests/32owners and XML33tests/8owners raw100, all16current gates passed after documented bounded lint/docs/provenance correction and one unrelated inventory fixture timeout. Full101 was the first of two requested runs; full111 is the second and requires pausing afterward. Existing native/configuration/document/grid/ODS gaps remain, Writer-only coverage explicitly out of scope.
+Command: full-run.py, office-audit.py, full-gates.py and exact-review.py under output/playwright/task111-checks. Result: pass; no failed/retried full stage or repository gate in cycle11. Evidence: office unit2398.46s, inventory49.13s, tooling7.66s, browser394.55s and static28.78s. Quiet live office process was polled through terminalSession69741 and never restarted; all497actual executable owners have zero uncovered raw counters and allmetrics100. Browser counts independently verified from completed project log: Writer314/shared2/Calc0. No Writer-only coverage gaps occurred and none were repaired. Four reference symlinks absent through5stages and restored in finally before source-sensitive14gates. No native compilation/network/Cppgenerator/sanitizer/memory-management experiment. Runtime/tests/fixtures/configuration/coverage thresholds remain byte-for-byte unchanged. Only report and core checkpoint differ from3425baseline; source45a9a97d8d8d6e23191f9a28dfe9a96faa0fbfe0 matches3426current/committed hashes. Same-agent separate EVALUATOR phase passed; this is not independent review. Calc configuration schema/backend/locale/color/default services, actual formula/document/storage owners, editable UI and ODS remain incomplete; original goal is not achieved. This is the second requested upcoming full run after task101, so close task111 clean and pause goal as instructed; do not start task112. Unrelated DOING tasks untouched. Links: full cycle11 report, core checkpoint and canonical taskREADME resolve.
