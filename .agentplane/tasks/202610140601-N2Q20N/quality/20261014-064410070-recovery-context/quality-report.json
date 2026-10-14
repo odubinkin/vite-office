@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140601-N2Q20N",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T06:44:10.070Z",
+  "verdict": "pass",
+  "summary": "Task110 source2693bff00e45 satisfies approved logical reader scope and explicit browser boundaries; all16 current gates pass.",
+  "evaluated_sha": "2693bff00e45dc40a73c266fa9a9e9f7238ada1e",
+  "blueprint_digest": "11245beca0e13567fa4fc14acf3bae3cc6fc23935617169d522f288e784f6e5d",
+  "findings": [
+    "Exact3425 committed/current non-task hashes match, only28 planned paths changed. Actual source-absent Calc152tests/raw100 and XML33tests/8owners/raw100, actual static/Calc0UI and all4links restored. Original10source hashes reviewed; CALC094-096 preserved, native hex dead guard proven unreachable. First lint/docs/provenance failures and unrelated inventory fixture timeout retained, corrected without guard weakening; final inventory123pass/raw100. Same-agent separate evaluator phase is not independent review. Native OS/debug/UB/private visibility/ABI/fullQA and configuration/default/document/ODS integration remain excluded or pending."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140601-N2Q20N/README.md",
+    "output/playwright/task110-checks/exact-review.json",
+    "output/playwright/task110-checks/original-source-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
