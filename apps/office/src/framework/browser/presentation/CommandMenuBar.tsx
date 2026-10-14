@@ -252,7 +252,11 @@ export function CommandMenuBar({
       event.preventDefault();
       if (openMenuIndex === index) closeMenu(true);
       else openMenu(index, true);
-    } else if (event.key === "Escape") closeMenu(true, openMenuIndex === undefined);
+    } else if (event.key === "Escape" || (event.key === "F6" && event.ctrlKey)) {
+      event.preventDefault();
+      closeMenu(true, openMenuIndex === undefined);
+      if (event.key === "F6") focusDocument?.();
+    }
   }
 
   /** Applies popup keyboard navigation over its original resources. @param event - Menu event. @param menuIndex - Owning menu index. @param items - Current direct native placements. @returns Nothing. */
@@ -297,9 +301,10 @@ export function CommandMenuBar({
               : "last",
         target,
       );
-    } else if (event.key === "Escape") {
+    } else if (event.key === "Escape" || (event.key === "F6" && event.ctrlKey)) {
       event.preventDefault();
       closePopup(menu);
+      if (event.key === "F6" && menu.dataset.submenu === undefined) focusDocument?.();
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {

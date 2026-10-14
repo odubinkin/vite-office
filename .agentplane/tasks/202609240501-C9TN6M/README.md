@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 360
+revision: 361
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:13:11.186Z"
+doc_updated_at: "2026-10-14T04:26:36.633Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1578,6 +1578,8 @@ sections:
       Resolution: 1621unique accepted1576related/26tooling/19Chromium,14new native bindings cases,whole current menu100L213/S239/F52/B222 and513positive original counters via exact-map standard same-source merge;958oldtests byte-identical,2canonical prefixes/137staticfiles/9metadata pass.4refs absent everyproducer/exactfinallyrestore, no pinned runtime/source artifacts or passing replay. Full once10atomic corrections; latesthuman requests pause after NEXT full and necessary repairs, not previous checkpoint. Cadence1/10.
 
     2026-10-14: correction 202610140354-5VA8Q8 retains existing recursive menubar parent windows and nearest-parent focus through original child depths. One active path and one-shot request replace global child scalar/boolean; no new resource commands or runtime manager. Accepted 1,631 unique scenarios, whole current source 100% four metrics, 521 positive raw counters, 959 old test files unchanged, two canonical history prefixes retained, 137 static files frozen; nine metadata gates pass. Current cycle 2/10. Latest human instruction: upcoming full does not pause; pause after the following full and repairs. Goal active.
+
+    2026-10-14: correction 202610140415-WTXZMM routes existing menubar Ctrl-F6 through original root/child ownership with existing native focus and close helpers. Root deactivation focuses document, nested child returns only to immediate parent before global Writer focus route. Seven fresh native and three actual Chromium cases; 1,641 unique accepted, whole current module 100% four metrics, 538 positive counters, 960 old test files unchanged, two canonical prefixes retained and 137 built files frozen; nine metadata gates pass after temporary Boost-header availability recovered without source/setup/test replay. Cycle 3/10. Upcoming scheduled full continues; following full pauses after repairs. Goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -3129,3 +3131,5 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
   Resolution: 1621unique accepted1576related/26tooling/19Chromium,14new native bindings cases,whole current menu100L213/S239/F52/B222 and513positive original counters via exact-map standard same-source merge;958oldtests byte-identical,2canonical prefixes/137staticfiles/9metadata pass.4refs absent everyproducer/exactfinallyrestore, no pinned runtime/source artifacts or passing replay. Full once10atomic corrections; latesthuman requests pause after NEXT full and necessary repairs, not previous checkpoint. Cadence1/10.
 
 2026-10-14: correction 202610140354-5VA8Q8 retains existing recursive menubar parent windows and nearest-parent focus through original child depths. One active path and one-shot request replace global child scalar/boolean; no new resource commands or runtime manager. Accepted 1,631 unique scenarios, whole current source 100% four metrics, 521 positive raw counters, 959 old test files unchanged, two canonical history prefixes retained, 137 static files frozen; nine metadata gates pass. Current cycle 2/10. Latest human instruction: upcoming full does not pause; pause after the following full and repairs. Goal active.
+
+2026-10-14: correction 202610140415-WTXZMM routes existing menubar Ctrl-F6 through original root/child ownership with existing native focus and close helpers. Root deactivation focuses document, nested child returns only to immediate parent before global Writer focus route. Seven fresh native and three actual Chromium cases; 1,641 unique accepted, whole current module 100% four metrics, 538 positive counters, 960 old test files unchanged, two canonical prefixes retained and 137 built files frozen; nine metadata gates pass after temporary Boost-header availability recovered without source/setup/test replay. Cycle 3/10. Upcoming scheduled full continues; following full pauses after repairs. Goal active.
