@@ -4,7 +4,7 @@ title: "Align shared font-height value state and Writer consumers with native co
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T13:05:27.250Z"
+  updated_by: "CODER"
+  note: "41faf20662d8c5ff9f1f724e9bf6a7f6690f680a: exact51paths3667to3679hashes14nativepins. Calc169tests65files33ownersraw100; shared3owners191S112B60F174L raw100; related147/19,18Chromiumcases6specs,12gates30boundariesbuildpass.40constructors migrated, native0/Which/arithmetic corrected, completeWriterhistory/snapshotstate retained. NativeAny/presentation and fullDocPool/UI/ODS remainpending; same-agent evaluator notindependent. Full onlyactualreadiness thenrepairs/pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T13:05:24.769Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical font-height value state and actual Writer consumers pass declared checks at41faf20662d8c5ff9f1f724e9bf6a7f6690f680a; same-agent phase, not independent."
+  evaluated_sha: "41faf20662d8c5ff9f1f724e9bf6a7f6690f680a"
+  blueprint_digest: "9bf7541c48c56b84c4b00597f9b135cadee5e398d5d0fe714696d5a79d2c234c"
+  evidence_refs:
+    - ".agentplane/tasks/202610141251-HAT4GM/README.md"
+    - ".agentplane/tasks/202610141251-HAT4GM/quality/20261014-130524769-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141251-HAT4GM/quality/20261014-130524769-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141251-HAT4GM/quality/20261014-130524769-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141251-HAT4GM/blueprint/resolved-snapshot.json"
+    - "output/playwright/task126-checks/exact-review.json"
+    - "output/playwright/task126-checks/value-coverage-audit.json"
+    - "output/playwright/task126-checks/constructor-audit.json"
+    - "output/playwright/task126-checks/browser-manifest.json"
+  findings:
+    - "Exact51paths39changed12new,3667to3679sourcehashes14nativepins. Original height/property/unit, native3arg/copy/factory/SetHeightoverloads/metrics/hash retain defined arithmetic including unsigned32product and signed16delta.40calls24files migrate without2argbridge. ActualWriterhistory+graph snapshots preserve full state; old scalar-height payloads rejected without lossyfallback. Shared3completeowners191S112B60F174L raw100, Calc169/65files33ownersraw100, related147/19files,18Chromiumcases6specs,12gates30boundariesbuild pass. Inventory/provenance retains historical statuses, registered source-shard necessity and IO/recovery exceptions; CALC110 preserves native oddity. No native builds/generators/memory engine."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port original height proportion metric state and migrate actual Writer consumers and complete state persistence."
+  -
+    type: "verify"
+    at: "2026-10-14T13:05:27.250Z"
+    author: "CODER"
+    state: "ok"
+    note: "41faf20662d8c5ff9f1f724e9bf6a7f6690f680a: exact51paths3667to3679hashes14nativepins. Calc169tests65files33ownersraw100; shared3owners191S112B60F174L raw100; related147/19,18Chromiumcases6specs,12gates30boundariesbuildpass.40constructors migrated, native0/Which/arithmetic corrected, completeWriterhistory/snapshotstate retained. NativeAny/presentation and fullDocPool/UI/ODS remainpending; same-agent evaluator notindependent. Full onlyactualreadiness thenrepairs/pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T13:04:40.670Z"
+doc_updated_at: "2026-10-14T13:05:27.331Z"
 doc_updated_by: "CODER"
 description: "Port real height/prop/unit value contract, factory/copy/hash/metrics/SetHeight overloads; migrate consumers to original3argument constructor and preserve complete state in existing Writer snapshot boundary. Native Any transport/presentation remain explicitly pending, no stubs. Calc3script default values tested through real items."
 sections:
@@ -50,6 +75,39 @@ sections:
     Command: node output/playwright/task126-checks/gates.mjs; npx vitest run scripts/check-module-boundaries.test.ts; npm run build; AST constructor audit. Result: pass. Evidence: all12gates,30boundarytests,productionbuild,40originalconstructor calls across24files all3args. InitialTypeScriptreadonlyarray narrowing failure retained/repaired by explicitfields checks; no scalarfallback. Scope: exact51paths39changed12new,3667baseline blobs,14nativeSHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Source-shard reexports oneowner with registered500line necessity, nativevalue0/Which equality corrections and CALC110 recorded.
 
     Skipped: full application regression. Reason: human explicitly moved next full checkpoint to realminimumUI+same-modelODSread/save readiness, not reached by this value contract. Risk: broad native/applicationparity not recertified. Approval: human readiness/pause instruction. No native builds/generators/sanitizers/memory libraries. Same-agent evaluator phase is not independent; exact source commit and clean calc state recorded at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T13:05:27.250Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 41faf20662d8c5ff9f1f724e9bf6a7f6690f680a: exact51paths3667to3679hashes14nativepins. Calc169tests65files33ownersraw100; shared3owners191S112B60F174L raw100; related147/19,18Chromiumcases6specs,12gates30boundariesbuildpass.40constructors migrated, native0/Which/arithmetic corrected, completeWriterhistory/snapshotstate retained. NativeAny/presentation and fullDocPool/UI/ODS remainpending; same-agent evaluator notindependent. Full onlyactualreadiness thenrepairs/pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T13:04:40.670Z, excerpt_hash=sha256:897691282b8904a2bd472afcf9fd11125af39e24c322eae8caa884b8163c9dac
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141251-HAT4GM/blueprint/resolved-snapshot.json
+    - old_digest: 9bf7541c48c56b84c4b00597f9b135cadee5e398d5d0fe714696d5a79d2c234c
+    - current_digest: 9bf7541c48c56b84c4b00597f9b135cadee5e398d5d0fe714696d5a79d2c234c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141251-HAT4GM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141251-HAT4GM -m 🧩 HAT4GM task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task source commit and traceable task artifacts if required, preserve user/unrelated changes and previous canonical shared owners."
   Findings: |-
     Current preflight clean calc. Native height includes prop/unit and constructor(nSz,nPropHeight,nId); existing local2arg ctor/scalar height snapshot cannot represent it. Human expressly authorizes shared+Writer correction withoutcompatibilityworkarounds. Canonical value slice includes complete state persistence, nativeTypedAny/presentation are explicit followups, no invented overloads. Native0heightvalid and equality ignoresWhich; originalvalid-scalar expect corrections planned. Original nativeunsigned32product wraps before /100 and4argSetHeight calls original suspiciousControlToItem same-direction helper preserved CALC109. No native memory/library/generator/probes. Fullregression atactualminimalUI+ODSread/save then repairs/pause, not tasknumber.
@@ -80,6 +138,39 @@ Command: node output/playwright/task126-checks/portable.mjs --units-only; then -
 Command: node output/playwright/task126-checks/gates.mjs; npx vitest run scripts/check-module-boundaries.test.ts; npm run build; AST constructor audit. Result: pass. Evidence: all12gates,30boundarytests,productionbuild,40originalconstructor calls across24files all3args. InitialTypeScriptreadonlyarray narrowing failure retained/repaired by explicitfields checks; no scalarfallback. Scope: exact51paths39changed12new,3667baseline blobs,14nativeSHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Source-shard reexports oneowner with registered500line necessity, nativevalue0/Which equality corrections and CALC110 recorded.
 
 Skipped: full application regression. Reason: human explicitly moved next full checkpoint to realminimumUI+same-modelODSread/save readiness, not reached by this value contract. Risk: broad native/applicationparity not recertified. Approval: human readiness/pause instruction. No native builds/generators/sanitizers/memory libraries. Same-agent evaluator phase is not independent; exact source commit and clean calc state recorded at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T13:05:27.250Z — VERIFY — ok
+
+By: CODER
+
+Note: 41faf20662d8c5ff9f1f724e9bf6a7f6690f680a: exact51paths3667to3679hashes14nativepins. Calc169tests65files33ownersraw100; shared3owners191S112B60F174L raw100; related147/19,18Chromiumcases6specs,12gates30boundariesbuildpass.40constructors migrated, native0/Which/arithmetic corrected, completeWriterhistory/snapshotstate retained. NativeAny/presentation and fullDocPool/UI/ODS remainpending; same-agent evaluator notindependent. Full onlyactualreadiness thenrepairs/pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T13:04:40.670Z, excerpt_hash=sha256:897691282b8904a2bd472afcf9fd11125af39e24c322eae8caa884b8163c9dac
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141251-HAT4GM/blueprint/resolved-snapshot.json
+- old_digest: 9bf7541c48c56b84c4b00597f9b135cadee5e398d5d0fe714696d5a79d2c234c
+- current_digest: 9bf7541c48c56b84c4b00597f9b135cadee5e398d5d0fe714696d5a79d2c234c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141251-HAT4GM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141251-HAT4GM -m 🧩 HAT4GM task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
