@@ -58,14 +58,16 @@ export function CommandMenuBar({
   resolveArguments,
 }: CommandMenuBarProps): React.JSX.Element {
   const [openMenuIndex, setOpenMenuIndex] = useState<number>();
-  const [openSubmenuId, setOpenSubmenuId] = useState<string>();
+  const [openSubmenuPath, setOpenSubmenuPath] = useState<readonly string[]>([]);
   const [activeTriggerIndex, setActiveTriggerIndex] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const typeahead = useRef("");
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const pendingMenuPreselection = useRef<boolean | undefined>(undefined);
-  const preselectSubmenuFirst = useRef(false);
+  const pendingSubmenuFocus = useRef<Readonly<{ id: string; preSelectFirst: boolean }> | undefined>(
+    undefined,
+  );
   const savedFocus = useRef<HTMLElement | undefined>(undefined);
   const menuActive = useRef(false);
 
@@ -88,7 +90,8 @@ export function CommandMenuBar({
     savedFocus.current = undefined;
     menuActive.current = false;
     pendingMenuPreselection.current = undefined;
-    setOpenSubmenuId(undefined);
+    pendingSubmenuFocus.current = undefined;
+    setOpenSubmenuPath([]);
     setOpenMenuIndex(undefined);
     if (restoreFocus) {
       if (previousFocus?.isConnected === true) previousFocus.focus();
@@ -97,22 +100,28 @@ export function CommandMenuBar({
     }
   }
 
-  /** Borrows an original nonempty child resource with origin-specific preselection. @param item - Current native placement. @param preSelectFirst - Whether keyboard opening requests its first item. @param trigger - Original parent entry. @returns Nothing. */
+  /** Borrows an original nonempty child resource at its owning popup depth. @param item - Current native placement. @param preSelectFirst - Whether keyboard opening requests its first item. @param trigger - Original parent entry. @param depth - Owning parent popup depth. @returns Nothing. */
   function openSubmenu(
     item: Extract<CommandMenuItemPlacement, { kind: "submenu" }>,
     preSelectFirst: boolean,
     trigger: HTMLElement,
+    depth: number,
   ): void {
-    if (openSubmenuId === item.id) return;
-    preselectSubmenuFirst.current = preSelectFirst;
-    setOpenSubmenuId(item.items.length === 0 ? undefined : item.id);
+    if (openSubmenuPath[depth] === item.id) return;
+    pendingSubmenuFocus.current =
+      item.items.length === 0 ? undefined : { id: item.id, preSelectFirst };
+    setOpenSubmenuPath([
+      ...openSubmenuPath.slice(0, depth),
+      ...(item.items.length === 0 ? [] : [item.id]),
+    ]);
     if (item.items.length === 0) trigger.focus();
   }
 
   /** Closes the current popup and restores its parent focus. @param menu - Current popup. @returns Nothing. */
   function closePopup(menu: HTMLElement): void {
     if (menu.dataset.submenu !== undefined) {
-      setOpenSubmenuId(undefined);
+      pendingSubmenuFocus.current = undefined;
+      setOpenSubmenuPath(openSubmenuPath.slice(0, Number(menu.dataset.menuDepth) - 1));
       menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
     } else closeMenu(true);
   }
@@ -123,7 +132,8 @@ export function CommandMenuBar({
     saveFocus(document.activeElement);
     menuActive.current = true;
     setActiveTriggerIndex(index);
-    setOpenSubmenuId(undefined);
+    pendingSubmenuFocus.current = undefined;
+    setOpenSubmenuPath([]);
     pendingMenuPreselection.current = preSelectFirst;
     setOpenMenuIndex(index);
   }
@@ -156,16 +166,16 @@ export function CommandMenuBar({
   useEffect(
     /** Focuses a mounted popup and preselects its first item only for keyboard opening. @returns Nothing. */
     function focusOpenedSubmenu(): void {
-      if (openSubmenuId === undefined) return;
-      const submenu = rootRef.current?.querySelector<HTMLElement>(
-        `[data-submenu="${openSubmenuId}"]`,
-      );
+      const request = pendingSubmenuFocus.current;
+      if (request === undefined) return;
+      pendingSubmenuFocus.current = undefined;
+      const submenu = rootRef.current?.querySelector<HTMLElement>(`[data-submenu="${request.id}"]`);
       if (submenu != null) {
-        if (preselectSubmenuFirst.current) focusMenuItem(submenu, "first");
+        if (request.preSelectFirst) focusMenuItem(submenu, "first");
         else submenu.focus();
       }
     },
-    [openSubmenuId],
+    [openSubmenuPath],
   );
 
   useEffect(
@@ -267,7 +277,7 @@ export function CommandMenuBar({
       if (target === menu || (event.key === "Enter" && target.hasAttribute("disabled")))
         closePopup(menu);
       else if (target.getAttribute("aria-haspopup") === "menu") {
-        if (child !== undefined) openSubmenu(child, true, target);
+        if (child !== undefined) openSubmenu(child, true, target, Number(menu.dataset.menuDepth));
       } else target.click();
     } else if (
       event.key === "ArrowDown" ||
@@ -293,7 +303,7 @@ export function CommandMenuBar({
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {
-        if (child !== undefined) openSubmenu(child, true, target);
+        if (child !== undefined) openSubmenu(child, true, target, Number(menu.dataset.menuDepth));
       } else openMenu((menuIndex + 1) % menus.length, true);
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
@@ -322,10 +332,11 @@ export function CommandMenuBar({
     }
   }
 
-  /** Renders resource items recursively. @param items - Resource items. @param menuIndex - Owning menu index. @returns Rendered items. */
+  /** Renders resource items recursively in their original owning popup. @param items - Resource items. @param menuIndex - Owning menu index. @param depth - Current parent popup depth. @returns Rendered items. */
   function renderItems(
     items: readonly CommandMenuItemPlacement[],
     menuIndex: number,
+    depth = 0,
   ): React.ReactNode {
     return items.map(
       /** Renders one recursive menu resource item. @param item - Resource item. @param index - Stable resource index. @returns Menu element or null. */ (
@@ -341,7 +352,7 @@ export function CommandMenuBar({
             />
           );
         if (item.kind === "submenu") {
-          const isOpen = openSubmenuId === item.id;
+          const isOpen = openSubmenuPath[depth] === item.id;
           const label = getMenuLabel(item.id, item.label);
           return (
             <div
@@ -350,14 +361,19 @@ export function CommandMenuBar({
               onMouseEnter={
                 /** Borrows the current child and original parent entry for pointer admission. @param event - Original trigger region event. @returns Nothing. */ (
                   event,
-                ) => openSubmenu(item, false, event.currentTarget.firstElementChild as HTMLElement)
+                ) =>
+                  openSubmenu(
+                    item,
+                    false,
+                    event.currentTarget.firstElementChild as HTMLElement,
+                    depth,
+                  )
               }
               onMouseLeave={
                 /** Closes this submenu and restores parent focus after the pointer leaves. @param event - Submenu region event. @returns Nothing. */ (
                   event,
                 ) => {
-                  if (openSubmenuId === item.id)
-                    closePopup(event.currentTarget.lastElementChild as HTMLElement);
+                  if (isOpen) closePopup(event.currentTarget.lastElementChild as HTMLElement);
                 }
               }
             >
@@ -369,7 +385,7 @@ export function CommandMenuBar({
                 onClick={
                   /** Opens the current original child on native browser activation. @param event - Original button activation. @returns Nothing. */ (
                     event,
-                  ) => openSubmenu(item, false, event.currentTarget)
+                  ) => openSubmenu(item, false, event.currentTarget, depth)
                 }
                 role="menuitem"
                 tabIndex={-1}
@@ -385,6 +401,7 @@ export function CommandMenuBar({
                 <CommandMenuPopup
                   aria-label={`${label} menu`}
                   data-submenu={item.id}
+                  data-menu-depth={depth + 1}
                   id={`${idPrefix}-${item.id}-menu`}
                   onKeyDown={
                     /** Routes submenu keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
@@ -394,7 +411,7 @@ export function CommandMenuBar({
                   role="menu"
                   submenu
                 >
-                  {renderItems(item.items, menuIndex)}
+                  {renderItems(item.items, menuIndex, depth + 1)}
                 </CommandMenuPopup>
               ) : null}
             </div>
@@ -498,6 +515,7 @@ export function CommandMenuBar({
               {openMenuIndex === index ? (
                 <CommandMenuPopup
                   aria-label={`${label} menu`}
+                  data-menu-depth={0}
                   id={`${idPrefix}-${menu.id}-menu`}
                   onKeyDown={
                     /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (

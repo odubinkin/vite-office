@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 359
+revision: 360
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:48:34.985Z"
+doc_updated_at: "2026-10-14T04:13:11.186Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1576,6 +1576,8 @@ sections:
     - Observation: Human revoked pause after7X3HVW and explicitly resumed goal; authoritative active goal and cleanwriter0639eb77200f. New cycle correction1/10 task39B6T7 aligns menubar empty-child admission with native HighlightChanged using original current resource ownership instead of string-only requests.
       Impact: Current direct native child resource arrays route keyboard input, shared empty GetItemCount gate follows sibling teardown and parent focus, alreadyactive identical child retained. No new manager/cache/model adapter/low-level machinery; protectedSpace/IO/recovery/history/defaults remain. Whole core/UI and nested/timer/mnemonic/platform/focus parity unverified.
       Resolution: 1621unique accepted1576related/26tooling/19Chromium,14new native bindings cases,whole current menu100L213/S239/F52/B222 and513positive original counters via exact-map standard same-source merge;958oldtests byte-identical,2canonical prefixes/137staticfiles/9metadata pass.4refs absent everyproducer/exactfinallyrestore, no pinned runtime/source artifacts or passing replay. Full once10atomic corrections; latesthuman requests pause after NEXT full and necessary repairs, not previous checkpoint. Cadence1/10.
+
+    2026-10-14: correction 202610140354-5VA8Q8 retains existing recursive menubar parent windows and nearest-parent focus through original child depths. One active path and one-shot request replace global child scalar/boolean; no new resource commands or runtime manager. Accepted 1,631 unique scenarios, whole current source 100% four metrics, 521 positive raw counters, 959 old test files unchanged, two canonical history prefixes retained, 137 static files frozen; nine metadata gates pass. Current cycle 2/10. Latest human instruction: upcoming full does not pause; pause after the following full and repairs. Goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -3125,3 +3127,5 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
 - Observation: Human revoked pause after7X3HVW and explicitly resumed goal; authoritative active goal and cleanwriter0639eb77200f. New cycle correction1/10 task39B6T7 aligns menubar empty-child admission with native HighlightChanged using original current resource ownership instead of string-only requests.
   Impact: Current direct native child resource arrays route keyboard input, shared empty GetItemCount gate follows sibling teardown and parent focus, alreadyactive identical child retained. No new manager/cache/model adapter/low-level machinery; protectedSpace/IO/recovery/history/defaults remain. Whole core/UI and nested/timer/mnemonic/platform/focus parity unverified.
   Resolution: 1621unique accepted1576related/26tooling/19Chromium,14new native bindings cases,whole current menu100L213/S239/F52/B222 and513positive original counters via exact-map standard same-source merge;958oldtests byte-identical,2canonical prefixes/137staticfiles/9metadata pass.4refs absent everyproducer/exactfinallyrestore, no pinned runtime/source artifacts or passing replay. Full once10atomic corrections; latesthuman requests pause after NEXT full and necessary repairs, not previous checkpoint. Cadence1/10.
+
+2026-10-14: correction 202610140354-5VA8Q8 retains existing recursive menubar parent windows and nearest-parent focus through original child depths. One active path and one-shot request replace global child scalar/boolean; no new resource commands or runtime manager. Accepted 1,631 unique scenarios, whole current source 100% four metrics, 521 positive raw counters, 959 old test files unchanged, two canonical history prefixes retained, 137 static files frozen; nine metadata gates pass. Current cycle 2/10. Latest human instruction: upcoming full does not pause; pause after the following full and repairs. Goal active.

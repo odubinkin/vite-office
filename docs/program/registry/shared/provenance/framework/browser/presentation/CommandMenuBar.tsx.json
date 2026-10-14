@@ -180,6 +180,10 @@
         {
           "path": "apps/office/src/sw/browser/presentation/native-empty-menubar.test.tsx",
           "marker": "native empty menubar keyboard request"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-menubar-chain.test.tsx",
+          "marker": "native recursive menubar preserves actual parent popups"
         }
       ],
       "upstream": [
@@ -238,6 +242,14 @@
         {
           "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
           "marker": "pItemData->pSubMenu->GetItemCount()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "pMenu->pStartedFrom->IsMenuBar()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/window/menufloatingwindow.cxx",
+          "marker": "pFloat->KillActivePopup();"
         }
       ]
     },
@@ -272,7 +284,8 @@
       "Task202610131541-J4GV99 applies source SkipDisabledInMenus=false to represented menubar popup preselection and arrow/Home/End/wrap traversal. Original bindings determine enabled state; the original HTML disabled button is never made focusable or enabled. Actual direct resource nodes own data-popup-highlighted and aria-activedescendant selection, independently of browser menu focus. Later keys use that selected node; native Return cancels only the current disabled popup without execution. Existing JS DOM queries/attributes/focus/click callbacks suffice, with no separate mirrored map/state manager/new adapter module. The previously registered browser Space activation adapter remains intact, including existing enabled root/submenu activation and HTML disabled-click protection. Source-confirmed obsolete enabled-only first/last assumptions migrate in precisely7old cases (guarded shared templates retain original End/ArrowLeft assertion semantics). Full native pointer timers/mnemonics/shared popup controller/root focus graph/platform parity remain unverified; all historical statuses/defaults/classifications and registered IO/recovery deviations preserved.",
       "Task202610131721-W6QHFR uses browser-native auxclick completion and original button.click for middle/right menubar/root/popup commands. Existing bindings and HTML disabled admission own dispatch; original synchronous teardown/focus/history remain. Submenu button activation calls existing openSubmenu, and the owned menu suppresses browser context surface. No press-release engine, new mirrored state, command adapter or runtime module added. Original primary keyboard/Space and registered IO/recovery exceptions remain. Full native pointer timers/mnemonics/platform/focus graph/whole parity remain unverified.",
       "Task202610131733-7X3HVW scheduled full checkpoint repairs one stale foundation browser traversal fixture after native SkipDisabledInMenus=false. The original comprehensive launcher/menu/toolbar/editor/accessibility scenario now asserts disabled Undo/Redo highlight and actual menu focus, takes two ArrowDown steps to its unchanged Cut assertion, and validates disabled final Hyperlink on End before ArrowUp reaches its unchanged SelectAll assertion. Every original acceptance statement/declaration/literal remains in order. Production behavior and complete original coverage inputs remain unchanged; only the failed Chromium scenario is rerun. All old canonical fields/status/defaults/classes/history and registered IO/recovery/Space deviations remain. Full native menu/core/UI parity is not inferred from full green tests.",
-      "Task202610140328-39B6T7 aligns menubar child admission with original MenuFloatingWindow::HighlightChanged. Current direct resource arrays accompany keyboard input; only their original selected submenu object may open a child, replacing string-only popup requests. Shared original helper clears a different active sibling before raw empty GetItemCount rejection, restores original parent focus/highlight, and creates no empty window. An already-active identical child is retained even if its current resource count becomes empty, as native active-pointer reuse precedes new-window admission. Original pointer/click/aux/keyboard routes and nonempty origin preselection/bindings/history remain; no new manager/cache/mirrored resource registry/low-level mechanism. Protected browser Space/IO/recovery unchanged, whole nested/timer/mnemonic/platform/native focus graph/core/UI parity remains unverified."
+      "Task202610140328-39B6T7 aligns menubar child admission with original MenuFloatingWindow::HighlightChanged. Current direct resource arrays accompany keyboard input; only their original selected submenu object may open a child, replacing string-only popup requests. Shared original helper clears a different active sibling before raw empty GetItemCount rejection, restores original parent focus/highlight, and creates no empty window. An already-active identical child is retained even if its current resource count becomes empty, as native active-pointer reuse precedes new-window admission. Original pointer/click/aux/keyboard routes and nonempty origin preselection/bindings/history remain; no new manager/cache/mirrored resource registry/low-level mechanism. Protected browser Space/IO/recovery unchanged, whole nested/timer/mnemonic/platform/native focus graph/core/UI parity remains unverified.",
+      "Task202610140354-5VA8Q8 replaces the single global menubar child-id shortcut with one active child path indexed by owning popup depth. The existing recursive renderer preserves actual parent popup DOM while opening original children, truncates only the owning sibling subtree, and closes the current child to its immediate parent trigger. A one-shot child focus request replaces the reusable global preselection boolean, preventing close/reprojection from reselecting an ancestor. Top-level close/root switch/command teardown still release the whole owned chain; original direct resources, empty count gate, active-child reuse, disabled/native bindings and protected Space/IO/recovery remain. This repairs the existing recursive placement API; no new visible Writer commands/resources, runtime manager/module/adapter/state cache or low-level engine. Current generated supported Writer menus have one child level; full native timers/mnemonics/platform/focus/accessibility/core/UI parity remains unverified."
     ]
   },
   "legacyOrder": 18
