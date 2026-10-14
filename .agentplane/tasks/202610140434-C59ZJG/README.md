@@ -1,10 +1,11 @@
 ---
 id: "202610140434-C59ZJG"
 title: "Implement shared configuration types and localized setting nodes"
-status: "DOING"
+result_summary: "Implemented actual configmgr Type, LocalizedPropertyNode and LocalizedValueNode without fake providers or new lifetime libraries. Reused actual shared Any/UnoType/Node/NodeMap;17intentionalpaths reviewed with3369exactcommittedhashes and9originalpins. Native qualifier/private-access/ABI/assertions/fullQA and actual configuration/default/document/ODS integration remain pending. Goal active until requested secondfull111 plus relevant repairs."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task106-checks/exact-review.json"
   findings:
     - "Reviewed source b04dd931fb59ca688b32ebdc8ca274d0955bc10e against nine pinned original declaration/body/Any/typelib scopes and real owner tests. Exact3369 committed hashes/17intentionalpaths and16passing gates; Calc/shared11owner raw100, actual source-absent static/Calc0UI and restored links verified. Unsigned has choices retain actual calls and boolean-indexed alternatives; original compatibility makes false alternatives unreachable for initialized primitives, explicitly source-only CALC-091 evidence rather than fabricated producer/coverage proof. Independent Any copies/stable member and modified/clone rules verified. No added lifetime/provider library or threshold weakening. Native const/private access/ABI/assertions/compiled differential/fullQA and real configuration/default/document/ODS remain excluded. Separate same-agent role, not independent review."
-commit: null
+commit:
+  hash: "b04dd931fb59ca688b32ebdc8ca274d0955bc10e"
+  message: "🧩 C59ZJG configmgr: implement types and localized configuration values"
 comments:
   -
     author: "CODER"
     body: "Start: implement original shared configuration type and localized-node contracts over actual Any/UnoType/Node owners, with source-backed tests and strict affected coverage; goal approval applies."
+  -
+    author: "CODER"
+    body: "Verified: original shared configuration type mapping and localized property/value metadata, Any copying, stable value pointer and modified/clone behavior implemented over existing shared owners. Whole Calc and affected shared raw coverage100, actual source-absent static/Calc0UI,16gates and exact source review pass. CALC-091 preserved and inventory recorded."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Whole Calc152tests raw4006S2654B787F3570L and complete shared11owners30tests raw407S221B108F385L are100/everycounterpositive. Actual source-absent static/Calc0UI/fourlinksrestored and16gates pass. Exact3369committedhashes17intentionalpaths9originalpins reviewed; same-agent evaluator pass bound b04dd931fb59ca688b32ebdc8ca274d0955bc10e is not independent review. CALC-091 source-only unsigned compatibility recorded, no fake has/producer or added lifetime/provider library. Full111 requestedpause remains."
+  -
+    type: "status"
+    at: "2026-10-14T04:46:01.970Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original shared configuration type mapping and localized property/value metadata, Any copying, stable value pointer and modified/clone behavior implemented over existing shared owners. Whole Calc and affected shared raw coverage100, actual source-absent static/Calc0UI,16gates and exact source review pass. CALC-091 preserved and inventory recorded."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:45:52.683Z"
+doc_updated_at: "2026-10-14T04:46:01.973Z"
 doc_updated_by: "CODER"
 description: "Task106: unblock real Calc configuration loading by implementing original configmgr type classification/mapping plus LocalizedPropertyNode and LocalizedValueNode, reusing actual existing CPPU Any/UnoType and Node/NodeMap. No fake type/configuration provider or lifetime library. Source-backed tests, complete affected owner raw100, Calc/static/Calc0UI and16gates; no full office before111."
 sections:
