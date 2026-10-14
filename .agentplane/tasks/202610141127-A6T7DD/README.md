@@ -4,7 +4,7 @@ title: "Share native frame direction and Calc Asian text attribute values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T11:35:46.558Z"
+  updated_by: "CODER"
+  note: "Calc164/shared38tests rawS/B/F/L100;28boundaries;12focusedgates;36exactpaths15nativepins. Actual shared bool/enum/Any reused, CALC105 recorded. Same-agent EVAL not independent. No full suite now; minimum UI+ODS checkpoint then repair/pause."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T11:35:45.454Z"
+  updated_by: "EVALUATOR"
+  note: "Original frame direction and3Asian bool values use actual common items/Any; targeted raw100 passes. Same-agent evaluator, not independent review."
+  evaluated_sha: "8a7dbde40fa54765864ebace21ceabfa6fe80597"
+  blueprint_digest: "2e09c866db0c63fcb222be70ec66a003db351566984251883b233f3ca20aef43"
+  evidence_refs:
+    - ".agentplane/tasks/202610141127-A6T7DD/README.md"
+    - ".agentplane/tasks/202610141127-A6T7DD/quality/20261014-113545454-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141127-A6T7DD/quality/20261014-113545454-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141127-A6T7DD/quality/20261014-113545454-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141127-A6T7DD/blueprint/resolved-snapshot.json"
+    - "output/playwright/task119-checks/exact-review.json"
+  findings:
+    - "Calc164tests/shared38tests/28boundarytests and12gates pass; exactly36paths11changed25added,3562to3587sourcehashes,15nativepins. Initial import/lint/selection/metadata failures corrected without weakening assertions. CALC105 documented. Complete document/UI/ODS pending; goalactive until readiness then full/repair/pause."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement native frame direction and Asian text values using actual shared bool/enum/Any; targeted raw100 and minimum UI ODS readiness checkpoint."
+  -
+    type: "verify"
+    at: "2026-10-14T11:35:46.558Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc164/shared38tests rawS/B/F/L100;28boundaries;12focusedgates;36exactpaths15nativepins. Actual shared bool/enum/Any reused, CALC105 recorded. Same-agent EVAL not independent. No full suite now; minimum UI+ODS checkpoint then repair/pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:35:29.694Z"
+doc_updated_at: "2026-10-14T11:35:46.634Z"
 doc_updated_by: "CODER"
 description: "Task119: actual EditEng frame direction and3Asian bool values with shared item/Any reuse, native headers/constants and Calc126127128138 defaults. Targeted raw100; full only on real minimum UI+ODS readiness then repair/pause."
 sections:
@@ -55,6 +77,39 @@ sections:
     Evidence: fresh3562base hashes; exact36paths11changed25added;3587currentcommittedhashes;15pinnednative source SHA256 values. Same-agent evaluator is not independent review.
     Scope: original frame direction8mappings/signed16 Any, copy/Clone and failed unchanged writes/outputs,3Asian bool values, shared native bool Any transport alongside browser scalars and actual Calc126127128false/138Environment itemset copies. CALC105 recorded. Localized presentation/cache/ABI/document/config/UI/ODS pending/excluded. No fake provider, C++ build/generator/sanitizer/memory library.
     Full suite deferred under latest user instruction until actual minimum UI contracts and same-model ODS load/save readiness, then relevant repairs and pause goal. No task121trigger; goalactive.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T11:35:46.558Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc164/shared38tests rawS/B/F/L100;28boundaries;12focusedgates;36exactpaths15nativepins. Actual shared bool/enum/Any reused, CALC105 recorded. Same-agent EVAL not independent. No full suite now; minimum UI+ODS checkpoint then repair/pause.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:35:29.694Z, excerpt_hash=sha256:45b90ba96e36219f0c8ae5c1b33b3b91183c99ac3ea69a2a95a2585672aaceee
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141127-A6T7DD/blueprint/resolved-snapshot.json
+    - old_digest: 2e09c866db0c63fcb222be70ec66a003db351566984251883b233f3ca20aef43
+    - current_digest: 2e09c866db0c63fcb222be70ec66a003db351566984251883b233f3ca20aef43
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141127-A6T7DD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141127-A6T7DD -m 🧩 A6T7DD task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task119 implementation commit, preserving task118 and user changes. No merges/resets."
   Findings: |-
     Fresh preflight clean oncalc; two unrelated active tasks untouched. Previous goal turn made verified progress. Latest full-suite checkpoint remains real minimum UI contracts and same-model ODS roundtrip readiness, then full regression/repairs/pause; task121not a trigger.
@@ -96,6 +151,39 @@ Command: python3 output/playwright/task119-checks/exact-review.py after successf
 Evidence: fresh3562base hashes; exact36paths11changed25added;3587currentcommittedhashes;15pinnednative source SHA256 values. Same-agent evaluator is not independent review.
 Scope: original frame direction8mappings/signed16 Any, copy/Clone and failed unchanged writes/outputs,3Asian bool values, shared native bool Any transport alongside browser scalars and actual Calc126127128false/138Environment itemset copies. CALC105 recorded. Localized presentation/cache/ABI/document/config/UI/ODS pending/excluded. No fake provider, C++ build/generator/sanitizer/memory library.
 Full suite deferred under latest user instruction until actual minimum UI contracts and same-model ODS load/save readiness, then relevant repairs and pause goal. No task121trigger; goalactive.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T11:35:46.558Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc164/shared38tests rawS/B/F/L100;28boundaries;12focusedgates;36exactpaths15nativepins. Actual shared bool/enum/Any reused, CALC105 recorded. Same-agent EVAL not independent. No full suite now; minimum UI+ODS checkpoint then repair/pause.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:35:29.694Z, excerpt_hash=sha256:45b90ba96e36219f0c8ae5c1b33b3b91183c99ac3ea69a2a95a2585672aaceee
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141127-A6T7DD/blueprint/resolved-snapshot.json
+- old_digest: 2e09c866db0c63fcb222be70ec66a003db351566984251883b233f3ca20aef43
+- current_digest: 2e09c866db0c63fcb222be70ec66a003db351566984251883b233f3ca20aef43
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141127-A6T7DD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141127-A6T7DD -m 🧩 A6T7DD task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
