@@ -4,7 +4,7 @@ title: "Port original shared map and field unit conversions for Calc font metric
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T12:48:13.493Z"
+  updated_by: "CODER"
+  note: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T12:48:11.158Z"
+  updated_by: "EVALUATOR"
+  note: "Original shared map/field metric owners and5scalar helpers satisfy approved task at002a4ccfab7f296f6d71e2cb6e603f849dbc3557; same-agent phase, not independent."
+  evaluated_sha: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557"
+  blueprint_digest: "6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621"
+  evidence_refs:
+    - ".agentplane/tasks/202610141239-071SBD/README.md"
+    - ".agentplane/tasks/202610141239-071SBD/quality/20261014-124811158-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141239-071SBD/quality/20261014-124811158-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141239-071SBD/quality/20261014-124811158-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141239-071SBD/blueprint/resolved-snapshot.json"
+    - "output/playwright/task125-checks/exact-review.json"
+    - "output/playwright/task125-checks/value-coverage-audit.json"
+    - "output/playwright/task125-checks/gates-results.json"
+  findings:
+    - "Exact18paths4changed14new and3653to3667current source hashes;10native pins. New literal independent matrix covers all unit maps, defaults, pixel overrides, signed ties, float32casting and same-direction ControlToItem. Shared4completeowners152S70B18F143L raw100, Calc168/64files33ownersraw100,7relatedtests2files,30boundaries12gates pass. Inventory/provenance foundation statuses and no duplicate header declaration ownership. CALC109 records suspicious behavior without changing source semantics. No native compilation/generator/memory ownership mechanisms."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement original shared metric units and scalar helpers for canonical Calc font height dependency."
+  -
+    type: "verify"
+    at: "2026-10-14T12:48:13.493Z"
+    author: "CODER"
+    state: "ok"
+    note: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet."
 doc_version: 3
-doc_updated_at: "2026-10-14T12:47:42.730Z"
+doc_updated_at: "2026-10-14T12:48:13.566Z"
 doc_updated_by: "CODER"
 description: "Complete native MapUnit/FieldUnit owners and five scalar SVTools unit helpers required by shared font-height item; reuse existing o3tl integer/floating conversions, preserve suspicious ControlToItem direction, no document stubs or memory mechanisms."
 sections:
@@ -50,6 +74,39 @@ sections:
     Command: node output/playwright/task125-checks/gates.mjs plus exact metadata-only npm run inventory:parity repair recheck; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence: all12gates final pass;30boundarytests pass. Initial lint/docs/registry failures and narrow repairs retained Findings/logs. Scope: exact18paths4existing14new,3653baseline source blobs,10native source/docs/QA SHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Header borrows source declarations; no duplicate declaration ownership. Native QA evidence only reused o3tl rational rounding, helpers have independent source-derived literal matrices, not a full native certificate.
 
     Skipped: full application regression and browser suites. Reason: no browser/Writer runtime changed; user moved next full to actualminimumUI+same-modelODS readiness, not reached by this prerequisite. Risk: complete application/native parity not recertified. Approval: explicit human readiness/pause and related-test instructions. Same-agent evaluator phase is not independent. Exact source commit and clean calc checkout recorded at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T12:48:13.493Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:47:42.730Z, excerpt_hash=sha256:952b76bf1850d1f12961bcebd9a3a65b682b37fd3c80f74815f1060bc2386539
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141239-071SBD/blueprint/resolved-snapshot.json
+    - old_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+    - current_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141239-071SBD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141239-071SBD -m 🧩 071SBD task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task source commit and traceable task records if needed; preserve user/unrelated changes and previous canonical shared owners."
   Findings: |-
     Previous goal turn completed task124 with clean calc state and strict shared/Calc plus related Writer/Chromium checks: progress. This turn preflight clean on calc; original full docpool/font-height sources show metric helpers are actual prerequisites. ControlToItem delegates to ItemToControl without swapping unit semantics; preserve and document CALC109. Native source-level evidence only, no native executable/ABI certificate. Native TransformMetric uses a different checked-overflow o3tl overload not yet implemented, so it remains unexported pending real implementation rather than inventing a substitute. User permits correcting shared/Writer native mismatches without compatibility workarounds; Writer-only coverage exception remains.
@@ -82,6 +139,39 @@ Command: node output/playwright/task125-checks/portable.mjs. Result: pass. Evide
 Command: node output/playwright/task125-checks/gates.mjs plus exact metadata-only npm run inventory:parity repair recheck; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence: all12gates final pass;30boundarytests pass. Initial lint/docs/registry failures and narrow repairs retained Findings/logs. Scope: exact18paths4existing14new,3653baseline source blobs,10native source/docs/QA SHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Header borrows source declarations; no duplicate declaration ownership. Native QA evidence only reused o3tl rational rounding, helpers have independent source-derived literal matrices, not a full native certificate.
 
 Skipped: full application regression and browser suites. Reason: no browser/Writer runtime changed; user moved next full to actualminimumUI+same-modelODS readiness, not reached by this prerequisite. Risk: complete application/native parity not recertified. Approval: explicit human readiness/pause and related-test instructions. Same-agent evaluator phase is not independent. Exact source commit and clean calc checkout recorded at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T12:48:13.493Z — VERIFY — ok
+
+By: CODER
+
+Note: 002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:47:42.730Z, excerpt_hash=sha256:952b76bf1850d1f12961bcebd9a3a65b682b37fd3c80f74815f1060bc2386539
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141239-071SBD/blueprint/resolved-snapshot.json
+- old_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+- current_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141239-071SBD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141239-071SBD -m 🧩 071SBD task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
