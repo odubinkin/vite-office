@@ -1,10 +1,11 @@
 ---
 id: "202610141007-TXCMVN"
 title: "Implement Calc conditional-format index and page-scale value attributes"
-status: "DOING"
+result_summary: "Completed task113 prerequisites; document storage, UI and ODS filters remain pending. Goal active, nextfull121."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task113-checks/value-coverage-audit.json"
   findings:
     - "Original vector duplicate preservation, item copy/Clone Which histories and real typed Any conversion retained. Complete native presentation/diagnostics/ABI/document/UI/ODS remain pending."
-commit: null
+commit:
+  hash: "2fe041285719cbf3e0169e3d037bb014b8fcaefe"
+  message: "🧩 TXCMVN core: preserve native conditional-index and page-scale values"
 comments:
   -
     author: "CODER"
     body: "Start: port native condition-index/page-scale values over real SortedVector and Any, preserving initializer duplicates and shared value moves without lifetime machinery."
+  -
+    author: "CODER"
+    body: "Verified: native conditional-index and page-scale value scope with actual shared vector/hash/Any reuse; wholeCalc158tests, related10tests, checker23tests, strict raw100 and12focused gates pass."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "WholeCalc158tests and actual shared10tests pass; complete Calc33/shared2owners rawS/B/F/L100 everycounterpositive. Checker23tests and12focused gates pass. Exact committed28paths and3469hashes verified;9native source pins, same-agent evaluation not independent. Initial failures retained and corrected within scope. Full121next; document/UI/ODS integration remains pending."
+  -
+    type: "status"
+    at: "2026-10-14T10:22:28.183Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native conditional-index and page-scale value scope with actual shared vector/hash/Any reuse; wholeCalc158tests, related10tests, checker23tests, strict raw100 and12focused gates pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T10:22:13.039Z"
+doc_updated_at: "2026-10-14T10:22:28.185Z"
 doc_updated_by: "CODER"
 description: "Task113 prepares native document pool and ODS style values: complete logical ScCondFormatItem sorted index/copy/move/Clone/equality/hash contracts and ScPageScaleToItem size/validity/copy/Clone/member query/update contracts. Reuse existing SortedVector/Any/pool owners, add only native unsigned integer hash-combine arithmetic and exact Calc-to-CPPU dependency evidence. No memory manager or fake document/provider; raw100 Calc/affected owners and focused checks, full121."
 sections:
