@@ -4,7 +4,7 @@ title: "Restore native table frame sibling root constructor contracts"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "14,304 unique accepted; three entire current production modules 100% four metrics and 1,806 positive raw counters. Thirteen caller fixtures preserve all original tokens; 950 other tests unchanged, six canonical prefixes/137 build files retained. All static and nine metadata gates pass. Evidence apps/office/node_modules/.cache/parity-coverage/6KP5DV/proof.json and accepted-results.json. Cycle 4/10; upcoming full continues, following full pauses."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T04:52:17.260Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review: semantic 59b735f9106d restores represented native sibling-root table/row/cell contracts and removes geometry constructor adapter; declared gates pass."
+  evaluated_sha: "59b735f9106d14416e239e86a558daf1bd966001"
+  blueprint_digest: "507291a8ae3393f1b092622e200355fe02246ccfbdadd1c6616f06412274edb0"
+  evidence_refs:
+    - ".agentplane/tasks/202610140430-6KP5DV/README.md"
+    - ".agentplane/tasks/202610140430-6KP5DV/quality/20261014-045217260-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610140430-6KP5DV/quality/20261014-045217260-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610140430-6KP5DV/quality/20261014-045217260-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610140430-6KP5DV/blueprint/resolved-snapshot.json"
+    - "apps/office/node_modules/.cache/parity-coverage/6KP5DV/proof.json"
+    - "apps/office/node_modules/.cache/parity-coverage/6KP5DV/accepted-results.json"
+    - "apps/office/node_modules/.cache/parity-coverage/6KP5DV/audit-results.json"
+  findings:
+    - "Pinned native constructor propagation matches original superclass and lower roots. Actual browser mouse allocation and paginator borrow their existing native owners; device geometry uses ordinary field assignment. Thirteen fixture migrations/23 expressions preserve all original tokens after only argument-placement reversal, 950 other old tests byte-identical, six canonical prefixes retained."
 commit: null
 comments:
   -
