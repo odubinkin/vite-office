@@ -85,6 +85,8 @@ it("uses shared unsupported query default and independent itemset span transport
   const set = new SfxItemSet(pool, [[ATTR_MERGE, ATTR_MERGE]]),
     source = new ScMergeAttr(3, 2);
   expect(source.QueryValue()).toBeUndefined();
+  expect(source.PutValue(true, 0)).toBe(false);
+  expect(observe(source)).toEqual([3, 2, true]);
   expect(new SfxBoolItem(1, true).QueryValue()).toBe(true);
   set.Put(source);
   const stored = set.GetItemIfSet(ATTR_MERGE) as ScMergeAttr;

@@ -4,7 +4,7 @@ title: "Implement Calc cell protection values over shared UNO struct and pool it
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: actual protectionattr/membervalues withsharedIDL/pool protocols, foreseeable11PutValueoverridequalifiers includedinplan; sourcebackedraw100 andtruthfulinventory, nextfull111pause."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:45:19.087Z"
+doc_updated_at: "2026-10-14T03:59:11.536Z"
 doc_updated_by: "CODER"
 description: "Task104: actual ScProtectionAttr149 defaults/copy/Clone/assignment/equality/getters/setters/CreateDefault and all0..4 member query/update semantics; shared actual CellProtection IDL value, svl poolitem.hxx CONVERT_TWIPS and sc mid.h constants. Restore native shared unsupported PutValue default and foreseeable11 descendant override qualifiers in5files, emittedJS equivalence. Existing browser generic-value boundary reused, no fake Any/provider/ICU/memorylib; original localized presentation/XMLdiagnostics/document/ODS integration pending. Targetedraw100/gates/inventory, nextfull111pause."
 sections:
@@ -48,9 +48,23 @@ sections:
     2. Whole source-absent npm run test:coverage:calc and complete affected sharedpool/int/cint plusactualnewsharedIDL/header owners relevant oldshared/Writer/newCalc consumers allrawS/B/F/L100/everycounterpositive. Actualstatic andCalc0UI manifests;4exactlinksrestored. Retainfailuresbeforeboundedcorrection, noWriter-onlyrepair orfullofficebefore111.
     3. All16existingrepo gates, currentfinalintentionalpathsformat/type/lint/docs/provenance afterlastedit. Actualownedheader/core/IDL/MID/constant records, fullgapsnotcertified. Before/after qualifier-only11methods5files andall5emittedJSidentical, no implementation changes inlegacydescendants.
     4. Exact baseline/current/committed hashes only approvedscope; sourcecommit-boundsameagentseparateEVALUATOR(notindependent), APverify/DONE/cleanbranchcalc. Goalactive, firstfull101done; pause aftersecondfull111/repairs.
-  Verification: "Pending implementation and actual checks."
+  Verification: |-
+    Command: original source review and focused Calc/shared value tests. Result: pass. Evidence:8 complete original declaration/body/IDL/codemaker source files match pin9bc445578031fecf56086729d8e4940c77e14d65; focusedCalc10cases/2files andsharedIDL2cases/1file. Scope: source-backed attribute/default/copy/member/actualsharedvalue responsibilities; no newC++generator orcompilednative/Anyoutstatus/typeprovider/ABI/fullQA claim.
+
+    Command: node output/playwright/task104-checks/portable.mjs. Result: pass. Evidence: wholeCalc152tests/52files/32execowners rawS4006/B2654/F787/L3570; related117tests/11files/5completeaffectedsharedowners rawS79/B58/F42/L79. Everyrawcounterpositive andallS/B/F/L100. Actualstatic/Calc0UI manifests exit0, originals4linksabsent/restoredexact. Scope: completecurrentCalc/sharedpool/int/cint/IDL/header owners and realselectedshared/Writer/Calc consumers, not wholeoffice before111. NoWriter-onlycoverage repair.
+
+    Command: qualifier byte audit and localTypeScript transpileModule before/after comparison. Result: pass. Evidence:11existingPutValue methods in5existingfiles have onlyoverride qualifiersadded, emittedJSidentical (override-javascript-equivalence.json). Scope: descendant implementations unchanged; actualshared unsupportedPutValue defaultfalse(requiredmember) and actualprotectionoverride are new functionality, separate from qualifier-only changes.
+
+    Command: node output/playwright/task104-checks/gates.mjs --early; node output/playwright/task104-checks/gates-late.mjs --late. Result: pass. Evidence: all16currentgates terminal0 afterlastcode/metadataedit. Scope: wholeformat/lint/type/docs/size/deps/resources/tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory,33intentionalpaths andtruthfulfoundation/unverified records. No compiler/sourcechecker/threshold relaxation.
+
+    Command: python3 output/playwright/task104-checks/exact-review.py aftersourcecommit. Result: pendingcommittedreview. Scope:3328baselinehashes,33intentionalpaths21changed/12added,expected3340exactcommittednon-taskhashes, source/coverage/gate/qualifier evidence bound toactualcommit; same-agent separateEVALUATOR notindependent, canonicalDONE/cleanbranchcalc. Goalactive; nextfull111requestedpause.
   Rollback Plan: "Restoreall4exactreference links in finally. Revert intentionaltaskchanges throughnewtask, no merge/historyrewrite/unrelatedtaskmutation. PreserveWriter/globalunsupporteddefaultsandstrictgates."
-  Findings: "OriginalScProtectionAttr nativeBool query/update supportsstructmember0 andindividual1..4, masksCONVERT_TWIPS afterUInt8narrowing; invalidmember/type doesnotmutatepayload. ExistingbrowservalueQueryValue convention reused, not native outputAny/status API or physicalformat. IDLstructall4booldefaultfalse differsattributeprotectedtrue. NativebasePutValue requiresmemberargument(no default), all existing11descendantmethods returnbool; no dynamicpresenceguards found. Sourcecopyreset149/payloadassignpreserveWhich/equalityignoreWhich parallelsCALC-089. Actualcolumnstyle/import/ODS QA iscontextunexecuted. Sheetprotection itself andeditingvalidationremainpending; flagsalone donotblockediting on unprotectedsheets."
+  Findings: |-
+    OriginalScProtectionAttr nativeBool query/update supportsstructmember0 andindividual1..4, masksCONVERT_TWIPS afterUInt8narrowing; invalidmember/type doesnotmutatepayload. ExistingbrowservalueQueryValue convention reused, not native outputAny/status API or physicalformat. IDLstructall4booldefaultfalse differsattributeprotectedtrue. NativebasePutValue requiresmemberargument(no default), all existing11descendantmethods returnbool; no dynamicpresenceguards found. Sourcecopyreset149/payloadassignpreserveWhich/equalityignoreWhich parallelsCALC-089. Actualcolumnstyle/import/ODS QA iscontextunexecuted. Sheetprotection itself andeditingvalidationremainpending; flagsalone donotblockediting on unprotectedsheets.
+
+    - Observation: Whole152Calc/117related tests pass first portable run; all16repo gates pass first run, allrawcounterspositive/100.11foreseeablePutValueoverride qualifiers5existingfiles yield identicalJS and preservedbodies. Source-backed member0..255across16boolpatterns; copied actualIDL outputs/typefailures preservestate.
+      Impact: Actualprotectionvalues/commonunsupportedupdate and newsharedIDL/header owners verified within existing browser unwrappedvalue boundary; no fakeAny/typeprovider/nativeABI/presentation/fullQA claim. No compiler/routing/threshold change or Writer-onlyrepair.
+      Resolution: Bind only33intentionalpaths and currentmanifest/sourcehash evidence tosourcecommit, same-agent separateevaluator(notindependent), verifyandfinishclean. Actualdocument/sheetprotection/editing/grid/ODSpipeline pending; nextfull111requestedpause.
 id_source: "generated"
 ---
 ## Summary
@@ -74,7 +88,15 @@ Implement actual ScProtectionAttr149 protectedtrue/3hiddenfalse defaults, bool/c
 
 ## Verification
 
-Pending implementation and actual checks.
+Command: original source review and focused Calc/shared value tests. Result: pass. Evidence:8 complete original declaration/body/IDL/codemaker source files match pin9bc445578031fecf56086729d8e4940c77e14d65; focusedCalc10cases/2files andsharedIDL2cases/1file. Scope: source-backed attribute/default/copy/member/actualsharedvalue responsibilities; no newC++generator orcompilednative/Anyoutstatus/typeprovider/ABI/fullQA claim.
+
+Command: node output/playwright/task104-checks/portable.mjs. Result: pass. Evidence: wholeCalc152tests/52files/32execowners rawS4006/B2654/F787/L3570; related117tests/11files/5completeaffectedsharedowners rawS79/B58/F42/L79. Everyrawcounterpositive andallS/B/F/L100. Actualstatic/Calc0UI manifests exit0, originals4linksabsent/restoredexact. Scope: completecurrentCalc/sharedpool/int/cint/IDL/header owners and realselectedshared/Writer/Calc consumers, not wholeoffice before111. NoWriter-onlycoverage repair.
+
+Command: qualifier byte audit and localTypeScript transpileModule before/after comparison. Result: pass. Evidence:11existingPutValue methods in5existingfiles have onlyoverride qualifiersadded, emittedJSidentical (override-javascript-equivalence.json). Scope: descendant implementations unchanged; actualshared unsupportedPutValue defaultfalse(requiredmember) and actualprotectionoverride are new functionality, separate from qualifier-only changes.
+
+Command: node output/playwright/task104-checks/gates.mjs --early; node output/playwright/task104-checks/gates-late.mjs --late. Result: pass. Evidence: all16currentgates terminal0 afterlastcode/metadataedit. Scope: wholeformat/lint/type/docs/size/deps/resources/tree/provenance/registry/invariants/routing/doctor/diff/tooling/inventory,33intentionalpaths andtruthfulfoundation/unverified records. No compiler/sourcechecker/threshold relaxation.
+
+Command: python3 output/playwright/task104-checks/exact-review.py aftersourcecommit. Result: pendingcommittedreview. Scope:3328baselinehashes,33intentionalpaths21changed/12added,expected3340exactcommittednon-taskhashes, source/coverage/gate/qualifier evidence bound toactualcommit; same-agent separateEVALUATOR notindependent, canonicalDONE/cleanbranchcalc. Goalactive; nextfull111requestedpause.
 
 ## Rollback Plan
 
@@ -83,3 +105,7 @@ Restoreall4exactreference links in finally. Revert intentionaltaskchanges throug
 ## Findings
 
 OriginalScProtectionAttr nativeBool query/update supportsstructmember0 andindividual1..4, masksCONVERT_TWIPS afterUInt8narrowing; invalidmember/type doesnotmutatepayload. ExistingbrowservalueQueryValue convention reused, not native outputAny/status API or physicalformat. IDLstructall4booldefaultfalse differsattributeprotectedtrue. NativebasePutValue requiresmemberargument(no default), all existing11descendantmethods returnbool; no dynamicpresenceguards found. Sourcecopyreset149/payloadassignpreserveWhich/equalityignoreWhich parallelsCALC-089. Actualcolumnstyle/import/ODS QA iscontextunexecuted. Sheetprotection itself andeditingvalidationremainpending; flagsalone donotblockediting on unprotectedsheets.
+
+- Observation: Whole152Calc/117related tests pass first portable run; all16repo gates pass first run, allrawcounterspositive/100.11foreseeablePutValueoverride qualifiers5existingfiles yield identicalJS and preservedbodies. Source-backed member0..255across16boolpatterns; copied actualIDL outputs/typefailures preservestate.
+  Impact: Actualprotectionvalues/commonunsupportedupdate and newsharedIDL/header owners verified within existing browser unwrappedvalue boundary; no fakeAny/typeprovider/nativeABI/presentation/fullQA claim. No compiler/routing/threshold change or Writer-onlyrepair.
+  Resolution: Bind only33intentionalpaths and currentmanifest/sourcehash evidence tosourcecommit, same-agent separateevaluator(notindependent), verifyandfinishclean. Actualdocument/sheetprotection/editing/grid/ODSpipeline pending; nextfull111requestedpause.

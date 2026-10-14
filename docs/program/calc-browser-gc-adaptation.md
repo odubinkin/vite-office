@@ -123,3 +123,7 @@ Task102 reuses the Writer/shared SfxInt16Item and SfxPoolItem directly for ScMer
 ## Merge span attribute values
 
 ScMergeAttr uses the existing shared SfxPoolItem. Scalar copies/assignment and signed coordinate widths use ordinary objects/native JS bits; no count/pool/allocator library is added. The shared unsupported query default returnsundefined within the existing browser generic-value boundary; concrete overrides remain unchanged. This does not serialize merge spans or certify native Any/status/ABI; real ODS must use original filter/model span responsibilities. Original diagnosticXML remains unported.
+
+## Cell protection and shared IDL values
+
+Actual shared CellProtection owns four ordinary boolean fields; copies and output values are independent objects, no new memory/count/type-provider library. ScProtectionAttr uses the existing shared SfxPoolItem and existing browser QueryValue/PutValue unwrapped value convention. This is not a native Any/status/ABI binding and does not install a counterfeit UNO type provider. The original common unsupported PutValue false default is restored; descendant overrides remain runtime-identical. Original localized presentation/diagnostics/document/ODS integration stays pending.

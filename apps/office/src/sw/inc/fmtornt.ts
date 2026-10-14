@@ -67,7 +67,7 @@ export class SwFormatVertOrient extends SfxPoolItem {
     }
   }
   /** Updates native members, retaining native extraction defaults and optional position conversion. @param value - UNO scalar input. @param memberId - Native member and conversion flag. @returns Whether member is supported. */
-  public PutValue(value: unknown, memberId: number): boolean {
+  public override PutValue(value: unknown, memberId: number): boolean {
     const numeric = typeof value === "number" && Number.isInteger(value) ? value : 0;
     switch (memberId & ~0x80) {
       case 0:
@@ -166,7 +166,7 @@ export class SwFormatHoriOrient extends SfxPoolItem {
     }
   }
   /** Applies native member extraction/defaults and optional position conversion. @param value - UNO scalar. @param memberId - Native member and flag. @returns Extraction support. */
-  public PutValue(value: unknown, memberId: number): boolean {
+  public override PutValue(value: unknown, memberId: number): boolean {
     switch (memberId & ~0x80) {
       case 0:
         this.orientation =

@@ -60,6 +60,12 @@ export abstract class SfxPoolItem {
   public QueryValue(): unknown {
     return undefined;
   }
+  /** Original unsupported value update; member is required as in the native declaration. @param value - Generic browser value payload. @param member - Native member identifier. @returns False without mutation. */
+  public PutValue(value: unknown, member: number): boolean {
+    void value;
+    void member;
+    return false;
+  }
 }
 
 /** Static invalid-state item owned by the pinned poolitem.cxx module. */

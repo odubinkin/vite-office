@@ -118,7 +118,7 @@ export class SvxULSpaceItem extends SfxPoolItem {
     }
   }
   /** Applies native UNO values including the pinned ScaleLower-to-nPropUpper aggregate write quirk. @param value - UNO payload. @param member - Native member and conversion flag. @returns Whether admitted and applied. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     const integer =

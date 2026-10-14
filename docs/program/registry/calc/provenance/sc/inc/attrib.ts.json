@@ -9,20 +9,24 @@
     "localSymbols": [
       "ScMF",
       "ScMergeFlagAttr",
-      "ScMergeAttr"
+      "ScMergeAttr",
+      "ScProtectionAttr"
     ],
     "upstreamSymbols": [
       "ScMF",
       "ScMergeFlagAttr",
-      "ScMergeAttr"
+      "ScMergeAttr",
+      "ScProtectionAttr"
     ],
     "preservedResponsibilities": [
       "Original attribute header/core boundary and actual scalar flag owner; reuses shared SfxInt16Item.",
-      "Original ScMergeAttr explicit copy/default/Clone/payload assignment/equality and span widths in original header/core responsibility."
+      "Original ScMergeAttr explicit copy/default/Clone/payload assignment/equality and span widths in original header/core responsibility.",
+      "Original protection attribute/Which/header/core values, source member read/write and actual shared IDL value boundary."
     ],
     "omittedResponsibilities": [
       "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
-      "Task103 adds actual ScMergeAttr zero0/0 defaults, signed16 columns/signed32 rows, value queries, either-axis>1 predicate, explicit copy/Clone and payload-only assignment/equality over existing shared SfxPoolItem. Copy/Clone reset Which144; assignment retains recipient Which; same-type equality ignores Which as original base only asserts ItemType then returns true (CALC-089). Browser foreign-type guard is not a native invalid-type assertion claim. Clone accepts and ignores actual optional shared SfxItemPool. Original unsupported SfxPoolItem QueryValue is restored in shared existing no-payload browser representation asundefined; native false/status and untouchedAny/UNO ABI are not certified, existing concrete overrides unchanged. Header/core/Which responsibility remains separate, signed widths use native JS bits, ordinary refs no new allocator/refcount/Boost/library. Seven pinned original source files reviewed; fixed source-backed shape/copy/identity/width cases and actual existing shared itemset transport, no C++ generator/compiled differential/full original QA. XMLdiagnostics, real ScPatternAttr/column/table/document/merged grid/config/view/ODS integrations remain pending; existing package/ZIP/manifest/SAX/xmloff must be reused. WholeCalc/completeaffected shared strict raw100 and current gates required; firstfull101passed, nextfull111pause."
+      "Task103 adds actual ScMergeAttr zero0/0 defaults, signed16 columns/signed32 rows, value queries, either-axis>1 predicate, explicit copy/Clone and payload-only assignment/equality over existing shared SfxPoolItem. Copy/Clone reset Which144; assignment retains recipient Which; same-type equality ignores Which as original base only asserts ItemType then returns true (CALC-089). Browser foreign-type guard is not a native invalid-type assertion claim. Clone accepts and ignores actual optional shared SfxItemPool. Original unsupported SfxPoolItem QueryValue is restored in shared existing no-payload browser representation asundefined; native false/status and untouchedAny/UNO ABI are not certified, existing concrete overrides unchanged. Header/core/Which responsibility remains separate, signed widths use native JS bits, ordinary refs no new allocator/refcount/Boost/library. Seven pinned original source files reviewed; fixed source-backed shape/copy/identity/width cases and actual existing shared itemset transport, no C++ generator/compiled differential/full original QA. XMLdiagnostics, real ScPatternAttr/column/table/document/merged grid/config/view/ODS integrations remain pending; existing package/ZIP/manifest/SAX/xmloff must be reused. WholeCalc/completeaffected shared strict raw100 and current gates required; firstfull101passed, nextfull111pause.",
+      "Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause."
     ],
     "evidence": {
       "local": [
@@ -41,6 +45,14 @@
         {
           "path": "apps/office/src/sc/source/core/data/mergeattr.test.ts",
           "marker": "retains original signed coordinate-width conversions without span normalization"
+        },
+        {
+          "path": "apps/office/src/sc/inc/attrib.ts",
+          "marker": "ScProtectionAttr"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/protectionattr.test.ts",
+          "marker": "reads and writes every native member with conversion-bit aliases and copied struct output"
         }
       ],
       "upstream": [

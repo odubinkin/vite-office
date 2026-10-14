@@ -40,7 +40,7 @@ export class CntUInt32Item extends SfxPoolItem {
     return this.value | 0;
   }
   /** Accepts a signed32 UNO scalar and preserves its unsigned bits. @param value - UNO scalar. @returns Whether accepted. */
-  public PutValue(value: unknown): boolean {
+  public override PutValue(value: unknown): boolean {
     if (
       typeof value !== "number" ||
       !Number.isInteger(value) ||

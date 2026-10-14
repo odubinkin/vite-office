@@ -1782,3 +1782,5 @@ ScMergeAttr explicit copy construction initializes SfxPoolItem with fixed ATTR_M
 Evidence: complete original declarations and bodies in sc/inc/attrib.hxx, sc/source/core/data/attrib.cxx and svl/source/items/poolitem.cxx at the repository pin; task103 source-backed copy/Clone/assignment/equality tests over real shared items. No compiled-native differential, invalid-type assertion or complete document QA claim. Normal Calc callers may always retain the fixed attribute id, making this a deliberate type-specific contract rather than a defect.
 
 Decision: preserve fixed-id copying, payload-only assignment and same-type Which-independent equality. Do not normalize equality or copy the base id in ScMergeAttr; audit real document callers later.
+
+Task104 source follow-up for CALC-089: ScProtectionAttr also explicitly initializes its fixed ATTR_PROTECTION149 in the copy constructor, copies only payload in assignment and ignores Which in same-type equality. Preserve the same pattern; intended fixed-id caller constraints remain unverified.

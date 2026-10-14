@@ -71,7 +71,7 @@ export class SvxProtectItem extends SfxPoolItem {
     }
   }
   /** Changes one native member flag. @param value - New flag. @param member - Native member identity. @returns Whether recognized. */
-  public PutValue(value: boolean, member: number): boolean {
+  public override PutValue(value: boolean, member: number): boolean {
     switch (member & ~0x80) {
       case 0:
         this.bCntnt = value;
@@ -333,7 +333,7 @@ export class SvxBoxItem extends SfxPoolItem {
     return SvxBoxItem.SvxLineToLine(this.GetLine(edge ?? -1), convert);
   }
   /** Applies represented native sequence or border/distance members. @param value - UNO payload. @param member - Native member plus optional CONVERT_TWIPS. @returns Whether admitted. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0;
     member &= 0x7f;
     if (member === 0) {
@@ -541,7 +541,7 @@ export class SvxBoxInfoItem extends SfxPoolItem {
     return undefined;
   }
   /** Applies represented native sequence or member values. @param value - UNO payload. @param member - Native member plus optional CONVERT_TWIPS. @returns Native admission result. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0;
     member &= 0x7f;
     if (member === 0) {

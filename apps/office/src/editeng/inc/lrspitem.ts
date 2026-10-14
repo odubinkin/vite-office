@@ -363,7 +363,7 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     }
   }
   /** Applies represented native UNO values with source ordering and unsigned proportion storage. @param value - UNO member payload. @param member - Native member and conversion flag. @returns Whether admitted and applied. */
-  public PutValue(value: unknown, member = 0): boolean {
+  public override PutValue(value: unknown, member = 0): boolean {
     const convert = (member & 0x80) !== 0;
     const id = member & ~0x80;
     const integer =
@@ -576,7 +576,7 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
     }
   }
   /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
-  public PutValue(value: unknown, member: number): boolean {
+  public override PutValue(value: unknown, member: number): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_L_UNIT_MARGIN) {
@@ -723,7 +723,7 @@ export class SvxRightMarginItem extends SfxPoolItem {
     }
   }
   /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
-  public PutValue(value: unknown, member: number): boolean {
+  public override PutValue(value: unknown, member: number): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_R_UNIT_MARGIN) {
@@ -865,7 +865,7 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     }
   }
   /** Applies exact represented native Any domains with original setter and percentage ordering. @param value - Native payload. @param member - Native member plus conversion. @returns Admission result. */
-  public PutValue(value: unknown, member: number): boolean {
+  public override PutValue(value: unknown, member: number): boolean {
     const convert = (member & 0x80) !== 0,
       id = member & ~0x80;
     if (id === MID_FIRST_AUTO) {
