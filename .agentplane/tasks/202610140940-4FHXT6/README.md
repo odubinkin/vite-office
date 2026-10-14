@@ -1,10 +1,11 @@
 ---
 id: "202610140940-4FHXT6"
 title: "Implement Calc boolean cell-format items using canonical shared boolean values"
-status: "DOING"
+result_summary: "Added four real cell-format value items and canonical shared bool operations with source-backed tests/inventory; UI/ODS preparation continues, next full121."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task112-checks/baseline-correction.json"
   findings:
     - "WholeCalc155tests/53files/32owners S4030 B2666 F795 L3590 allrawpositive100; related shared67tests/8files Boolowner S19 B17 F9 L16 allrawpositive100. Existing request/dispatch/itemset/Writer consumers pass after one native Which-independent shared equality expectation migration; no Writer-only coverage repair. Actual3455Git-start hashes versus3459current/committed prove only20intentionalpaths changed; prior Writer/main integration preserved. Initial stale cycle111 snapshot audit failed and was corrected from actual task-start Git blobs, without code/test replay or guard weakening. All4source links absent for tests/restored,10native-source hashes reviewed, no Cpp/native memory experiment. Same-agent separate EVAL is not independent review. Native localization/presentation/caches/debug/ABI/invalid downcasts/fullDocPool/document/UI/ODS remain excluded or pending; goal active, next full121."
-commit: null
+commit:
+  hash: "8aa7354e9574b30cac8f5c0960a926f100ab0760"
+  message: "🧩 4FHXT6 calc: add shared boolean cell-format values"
 comments:
   -
     author: "CODER"
     body: "Start: implement real Calc bool attributes and canonical shared bool value operations for native DocPool/UI/ODS dependencies."
+  -
+    author: "CODER"
+    body: "Verified: four Calc bool cell-format items use corrected shared Bool value contracts, true defaults/copy/Clone/equality/PutValue preserved. Calc155/related67 raw100,12focused gates and exact3459source hashes pass; imported integration untouched. Native/fullDocPool/UI/ODS limits explicit, goal continues."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed Calc155/raw100 and related67/fullBoolraw100,12focused gates,10native hashes,3459exactsource hashes from actual3455Git-start baseline,20intentionalpaths. Initial failures retained; no native memory engine or Writer-only coverage repair. Same-agent EVAL not independent."
+  -
+    type: "status"
+    at: "2026-10-14T09:57:37.294Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: four Calc bool cell-format items use corrected shared Bool value contracts, true defaults/copy/Clone/equality/PutValue preserved. Calc155/related67 raw100,12focused gates and exact3459source hashes pass; imported integration untouched. Native/fullDocPool/UI/ODS limits explicit, goal continues."
 doc_version: 3
-doc_updated_at: "2026-10-14T09:57:35.299Z"
+doc_updated_at: "2026-10-14T09:57:37.296Z"
 doc_updated_by: "CODER"
 description: "Task112 prepares actual ScDocumentPool dependencies for UI and ODS: ScShrinkToFitCell, ScVerticalStackCell, ScLineBreakCell and ScHyphenateCell default/copy/Clone contracts over reused shared SfxBoolItem. Align shared bool default/copy/value/equality/PutValue/value-text behavior with pinned native source, retain existing browser scalar UNO boundary and GC, no duplicate Calc bool engine or fake document/config service. Record inventory, source quirks and actual dependency-driven next steps; targeted Calc/affected raw100 and repository gates, no full before121."
 sections:
