@@ -4,7 +4,7 @@ title: "Implement canonical UNO complex-color and theme interface contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T15:11:39.966Z"
+  updated_by: "CODER"
+  note: "Source3676cb94264c exact17paths3730hashes12nativepins; native normal color interfaces and shared SAL getLength/Copy realm-independent selection. Related34tests3wholeexecutableowners and Calc174tests strict raw100;12gates33boundaries. Same-agent review not independent; concrete components/full ColorItemAny/UI/ODS pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T15:10:16.730Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: canonical normal UNO color contracts and shared SAL realm correction verified"
+  evaluated_sha: "3676cb94264cb3e372ff1e93194f719c0db5c343"
+  blueprint_digest: "7b8b66801b3eb7579d37f106b3e8c5496324309065b23f964aa81fc802324149"
+  evidence_refs:
+    - ".agentplane/tasks/202610141439-YHP1GV/README.md"
+    - ".agentplane/tasks/202610141439-YHP1GV/quality/20261014-151016730-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141439-YHP1GV/quality/20261014-151016730-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141439-YHP1GV/quality/20261014-151016730-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141439-YHP1GV/blueprint/resolved-snapshot.json"
+    - "output/playwright/task132-checks/exact-review.json"
+    - "output/playwright/task132-checks/value-coverage-audit.json"
+  findings:
+    - "Source3676cb94264c exact17paths4existing13new,3730hashes12nativepins;34relatedtests11files3complete executableowners and174Calc tests raw100. Color alias is compile-only, not a false executable coverage owner.12gates33boundaries pass."
+    - "Actual normal offapi build route, real shared CPPU factories/Any/Reference/Sequence contracts. New metadata test exposed foreign-realm typed array dispatch; getLength and Copy fixed in their common SAL owner with standard JS predicates, public constructor tests, existing related cases and registry updates. No workaround/type provider/new native or memory probe."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: original offapi normal color/theme type contracts over existing CPPU; actual typed-null interfaces, no component/default provider or memory engine."
+  -
+    type: "verify"
+    at: "2026-10-14T15:11:39.966Z"
+    author: "CODER"
+    state: "ok"
+    note: "Source3676cb94264c exact17paths3730hashes12nativepins; native normal color interfaces and shared SAL getLength/Copy realm-independent selection. Related34tests3wholeexecutableowners and Calc174tests strict raw100;12gates33boundaries. Same-agent review not independent; concrete components/full ColorItemAny/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-14T15:06:40.954Z"
+doc_updated_at: "2026-10-14T15:11:40.017Z"
 doc_updated_by: "CODER"
 description: "Task132: actual offapi Color typedef, XTheme/XComplexColor structural interfaces and original cppumaker-normal static type getters using existing CPPU. Normal offapi build route confirmed from upstream gbuild/cppumaker, no comprehensive method metadata substitute or new memory engine. Actual Any/Reference typed-null and scalar alias integration for Calc; component implementations and full ColorItem Any remain later."
 sections:
@@ -49,7 +73,45 @@ sections:
     Confirm native sal/rtl/strtmpl.hxx terminated char_traits length overload and class length accessor. Real vm-created Uint8Array/Uint16Array from a separate JS context must stop before first zero through actual getLength and createFromAscii, preserving same-realm and real rtl_uString cases. Existing6related SAL TypeScript test files may replay their existing fixtures; no C++ generators/compilers/binaries or new memory-management probes.
 
     The same strtmpl Copy native byte/Unicode overload must use element kind (BYTES_PER_ELEMENT), not realm constructors; real cross-context public known-length constructors retain embedded zeros and checked ASCII guard. Existing integer-format/o3tl string-view/CPPU typelib cases supplement the earlier SAL selection for complete shared-owner coverage.
-  Verification: "Pending implementation and declared checks."
+  Verification: |-
+    Command: node output/playwright/task132-checks/portable.mjs. Result: pass. Evidence: final34tests11files3complete executable shared owners261S180B40F191L100; wholeCalc174tests67files33owners4162S2731B821F3710L100, everyrawcounterpositive. Color alias is compile-only and has no runtime counters.4native reference links absent during all runtime checks/restoredfinally. Actual Any/Reference null same/cross/root interfaces, LONG Color scalar, correct names/auto-root/normal incomplete fields/cold-warm identity, exact declared generic APIs and real vm typed-array C string/known-length constructor cases pass. No type provider or component mock. Existing related SAL/integer/compare fixtures reused; no native compiler/generator/sanitizer or new memory-management probes. Initial metadata failure and incomplete shared coverage selection retained; no threshold changes or counter-map merging.
+
+    Command: node output/playwright/task132-checks/gates.mjs; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence:12final focused gates and33unchangedboundarytests pass. Scope:17paths4existing13new,3717to3730sourceblobs,12nativeSHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Actual native normal offapi generation route confirmed from cppumaker constructor/default/options and gbuild; udkapi comprehensive and lightweight are separate configurations. Native pointer-overload classification uses standard JS realm-independent ArrayBuffer.isView and byte element width in the existing shared SAL owner, with both registry records updated under standing explicit human authorization for shared/Writer corrections. Normal interface declarations share real CPPU owners, not duplicated string/type factories. Same-agent evaluator not independent.
+
+    Skipped: full application/browser suites. Reason: no UI/Writer runtime component was modified; human full-run checkpoint requires actual minimum Calc UI/document and same-model ODS readiness, still pending. Risk: concrete UnoComplexColor/helper inherited interfaces/lifetimes/fullReflection/non-null component and complete ColorItemAny/Writer migration/DocPool/document/UI/ODS not certified. Approval: human focused-test/readiness/pause and shared canonical correction instructions. Native ABI/memory formats are not claimed. Other SAL constructor overloads have not been certified across realms by this task.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T15:11:39.966Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Source3676cb94264c exact17paths3730hashes12nativepins; native normal color interfaces and shared SAL getLength/Copy realm-independent selection. Related34tests3wholeexecutableowners and Calc174tests strict raw100;12gates33boundaries. Same-agent review not independent; concrete components/full ColorItemAny/UI/ODS pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T15:11:30.448Z, excerpt_hash=sha256:e7ac0ca215aeb31ab5f84614dc7715fad901eade8e6bc82f848d153f9f0a50d9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141439-YHP1GV/blueprint/resolved-snapshot.json
+    - old_digest: 7b8b66801b3eb7579d37f106b3e8c5496324309065b23f964aa81fc802324149
+    - current_digest: 7b8b66801b3eb7579d37f106b3e8c5496324309065b23f964aa81fc802324149
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141439-YHP1GV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141439-YHP1GV -m 🧩 YHP1GV task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task source/metadata with a later authorized task. Never reset unrelated tasks, merge or publish."
   Findings: |-
     Previous goal turn made authoritative progress: real shared ColorItem values and actual Calc109 clone defaults completed. Preflight clean calc. Native normal offapi getters are canonical and reuse existing static_mi initializer; full comprehensive metadata used by some existing udkapi interfaces is a separate native build mode, not necessary to imitate here. Normal type info has incomplete reflection fields by source design; this does not substitute a fake interface/provider. Native util::Color is typedef long, not an XColor interface; no such XColor IDL exists in this dependency path. Reference<T> and Sequence<E> already generic in shared CPPU, reuse exactly. Real UnoComplexColor resolveColor ignores theme and returns stored final color; actual wrapper/helpers remain pending. Color alias evidence must cite complete published typedef long Color declaration beyond basename-only name. No network or low-level memory implementation.
@@ -83,7 +145,44 @@ The same strtmpl Copy native byte/Unicode overload must use element kind (BYTES_
 
 ## Verification
 
-Pending implementation and declared checks.
+Command: node output/playwright/task132-checks/portable.mjs. Result: pass. Evidence: final34tests11files3complete executable shared owners261S180B40F191L100; wholeCalc174tests67files33owners4162S2731B821F3710L100, everyrawcounterpositive. Color alias is compile-only and has no runtime counters.4native reference links absent during all runtime checks/restoredfinally. Actual Any/Reference null same/cross/root interfaces, LONG Color scalar, correct names/auto-root/normal incomplete fields/cold-warm identity, exact declared generic APIs and real vm typed-array C string/known-length constructor cases pass. No type provider or component mock. Existing related SAL/integer/compare fixtures reused; no native compiler/generator/sanitizer or new memory-management probes. Initial metadata failure and incomplete shared coverage selection retained; no threshold changes or counter-map merging.
+
+Command: node output/playwright/task132-checks/gates.mjs; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence:12final focused gates and33unchangedboundarytests pass. Scope:17paths4existing13new,3717to3730sourceblobs,12nativeSHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Actual native normal offapi generation route confirmed from cppumaker constructor/default/options and gbuild; udkapi comprehensive and lightweight are separate configurations. Native pointer-overload classification uses standard JS realm-independent ArrayBuffer.isView and byte element width in the existing shared SAL owner, with both registry records updated under standing explicit human authorization for shared/Writer corrections. Normal interface declarations share real CPPU owners, not duplicated string/type factories. Same-agent evaluator not independent.
+
+Skipped: full application/browser suites. Reason: no UI/Writer runtime component was modified; human full-run checkpoint requires actual minimum Calc UI/document and same-model ODS readiness, still pending. Risk: concrete UnoComplexColor/helper inherited interfaces/lifetimes/fullReflection/non-null component and complete ColorItemAny/Writer migration/DocPool/document/UI/ODS not certified. Approval: human focused-test/readiness/pause and shared canonical correction instructions. Native ABI/memory formats are not claimed. Other SAL constructor overloads have not been certified across realms by this task.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T15:11:39.966Z — VERIFY — ok
+
+By: CODER
+
+Note: Source3676cb94264c exact17paths3730hashes12nativepins; native normal color interfaces and shared SAL getLength/Copy realm-independent selection. Related34tests3wholeexecutableowners and Calc174tests strict raw100;12gates33boundaries. Same-agent review not independent; concrete components/full ColorItemAny/UI/ODS pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T15:11:30.448Z, excerpt_hash=sha256:e7ac0ca215aeb31ab5f84614dc7715fad901eade8e6bc82f848d153f9f0a50d9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141439-YHP1GV/blueprint/resolved-snapshot.json
+- old_digest: 7b8b66801b3eb7579d37f106b3e8c5496324309065b23f964aa81fc802324149
+- current_digest: 7b8b66801b3eb7579d37f106b3e8c5496324309065b23f964aa81fc802324149
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141439-YHP1GV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141439-YHP1GV -m 🧩 YHP1GV task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
