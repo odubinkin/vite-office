@@ -4,7 +4,7 @@ title: "Close implemented runtime parity audit"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 361
+revision: 362
 origin:
   system: "manual"
 depends_on:
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: audit the complete implemented runtime against pinned source and close only on operation-level evidence."
 doc_version: 3
-doc_updated_at: "2026-10-14T04:26:36.633Z"
+doc_updated_at: "2026-10-14T04:51:37.672Z"
 doc_updated_by: "CODER"
 description: "Stage 8: run full checks and operation-level review of implemented browser-relevant runtime; record evidence and remaining explicit exceptions"
 sections:
@@ -1580,6 +1580,8 @@ sections:
     2026-10-14: correction 202610140354-5VA8Q8 retains existing recursive menubar parent windows and nearest-parent focus through original child depths. One active path and one-shot request replace global child scalar/boolean; no new resource commands or runtime manager. Accepted 1,631 unique scenarios, whole current source 100% four metrics, 521 positive raw counters, 959 old test files unchanged, two canonical history prefixes retained, 137 static files frozen; nine metadata gates pass. Current cycle 2/10. Latest human instruction: upcoming full does not pause; pause after the following full and repairs. Goal active.
 
     2026-10-14: correction 202610140415-WTXZMM routes existing menubar Ctrl-F6 through original root/child ownership with existing native focus and close helpers. Root deactivation focuses document, nested child returns only to immediate parent before global Writer focus route. Seven fresh native and three actual Chromium cases; 1,641 unique accepted, whole current module 100% four metrics, 538 positive counters, 960 old test files unchanged, two canonical prefixes retained and 137 built files frozen; nine metadata gates pass after temporary Boost-header availability recovered without source/setup/test replay. Cycle 3/10. Upcoming scheduled full continues; following full pauses after repairs. Goal active.
+
+    2026-10-14: correction 202610140430-6KP5DV restores original table/row/cell sibling-root propagation and core pagination/browser mouse callers. Removed browser device geometry from the second native constructor argument; standard field assignment replaces it without a new adapter/factory/manager. 14,304 unique accepted (14,265 related, 26 tooling, 13 Chromium), whole three source modules 100% four metrics and 1,806 positive original counters. Thirteen original fixture files/23 expressions preserve every original token after only geometry placement reversal; 950 other old tests byte-identical. Six canonical prefixes and 137 static files retained; all static/nine metadata gates pass. This is the native root contract prerequisite, not complete persistent table graph parity: temporary render/pagination frames, page/master/follow/paint/hit ownership remain unresolved. Cycle 4/10. Upcoming full continues; following full pauses after repairs. Goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -3133,3 +3135,5 @@ Exact semantic commit e58737786be9018a9aeaee46717d19e0b43ca759 accepted in same-
 2026-10-14: correction 202610140354-5VA8Q8 retains existing recursive menubar parent windows and nearest-parent focus through original child depths. One active path and one-shot request replace global child scalar/boolean; no new resource commands or runtime manager. Accepted 1,631 unique scenarios, whole current source 100% four metrics, 521 positive raw counters, 959 old test files unchanged, two canonical history prefixes retained, 137 static files frozen; nine metadata gates pass. Current cycle 2/10. Latest human instruction: upcoming full does not pause; pause after the following full and repairs. Goal active.
 
 2026-10-14: correction 202610140415-WTXZMM routes existing menubar Ctrl-F6 through original root/child ownership with existing native focus and close helpers. Root deactivation focuses document, nested child returns only to immediate parent before global Writer focus route. Seven fresh native and three actual Chromium cases; 1,641 unique accepted, whole current module 100% four metrics, 538 positive counters, 960 old test files unchanged, two canonical prefixes retained and 137 built files frozen; nine metadata gates pass after temporary Boost-header availability recovered without source/setup/test replay. Cycle 3/10. Upcoming scheduled full continues; following full pauses after repairs. Goal active.
+
+2026-10-14: correction 202610140430-6KP5DV restores original table/row/cell sibling-root propagation and core pagination/browser mouse callers. Removed browser device geometry from the second native constructor argument; standard field assignment replaces it without a new adapter/factory/manager. 14,304 unique accepted (14,265 related, 26 tooling, 13 Chromium), whole three source modules 100% four metrics and 1,806 positive original counters. Thirteen original fixture files/23 expressions preserve every original token after only geometry placement reversal; 950 other old tests byte-identical. Six canonical prefixes and 137 static files retained; all static/nine metadata gates pass. This is the native root contract prerequisite, not complete persistent table graph parity: temporary render/pagination frames, page/master/follow/paint/hit ownership remain unresolved. Cycle 4/10. Upcoming full continues; following full pauses after repairs. Goal active.

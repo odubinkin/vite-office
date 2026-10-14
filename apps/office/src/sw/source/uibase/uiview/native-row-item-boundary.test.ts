@@ -142,7 +142,7 @@ function fixture(count = 3, columns = 2) {
       pageTop: 20,
       hasFollowFlowLine: false,
     },
-    frame = new SwTabFrame(table, geometry),
+    frame = Object.assign(new SwTabFrame(table), { mouseGeometry: geometry }),
     edit = view.GetEditWin();
   views.push(view);
   edit.SetTableMouseFrames([frame]);

@@ -218,17 +218,19 @@ it.each([SwFrameSize.Minimum, SwFrameSize.Fixed])(
       node.SetText("Original sized row");
       shell.FocusNode(node);
       row.SetFormat({ frameSize: new SwFormatFrameSize(mode, 0, 600) });
-      frame = new SwTabFrame(table, {
-        rect: { left: 100, right: 300, top: 100, bottom: 150 },
-        cells: row.GetTabBoxes().map(
-          /** Supplies independent native physical cell bounds. @param cell - Original owner. @param index - Column. @returns Physical cell. */ (
-            cell,
-            index,
-          ) => ({
-            box: cell,
-            rect: { left: 100 + index * 100, right: 200 + index * 100, top: 100, bottom: 150 },
-          }),
-        ),
+      frame = Object.assign(new SwTabFrame(table), {
+        mouseGeometry: {
+          rect: { left: 100, right: 300, top: 100, bottom: 150 },
+          cells: row.GetTabBoxes().map(
+            /** Supplies independent native physical cell bounds. @param cell - Original owner. @param index - Column. @returns Physical cell. */ (
+              cell,
+              index,
+            ) => ({
+              box: cell,
+              rect: { left: 100 + index * 100, right: 200 + index * 100, top: 100, bottom: 150 },
+            }),
+          ),
+        },
       });
       const next = new SwTabCols();
       expect(SwDoc.GetTabRows(next, frame, box)).toBe(true);

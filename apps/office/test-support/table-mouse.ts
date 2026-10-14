@@ -31,14 +31,16 @@ export function selectTableRow(edit: SwEditWin, nodeIndex: number): boolean {
       }
     if (matched)
       frames.push(
-        new SwTabFrame(table, {
-          rect: {
-            left: 100,
-            right: 100 + table.GetColumnWidths().length * 100,
-            top: 100,
-            bottom: 100 + rows.length * 50,
+        Object.assign(new SwTabFrame(table), {
+          mouseGeometry: {
+            rect: {
+              left: 100,
+              right: 100 + table.GetColumnWidths().length * 100,
+              top: 100,
+              bottom: 100 + rows.length * 50,
+            },
+            cells,
           },
-          cells,
         }),
       );
   }

@@ -595,7 +595,7 @@ export class BrowserWriterEditWindow {
           };
           let frame = this.tableFrames.get(element);
           if (frame === undefined || !this.IsCurrentTableFrame(frame, table)) {
-            frame = new SwTabFrame(table);
+            frame = new SwTabFrame(table, this.editWindow.GetView().GetWrtShell().GetLayout());
             created.push(frame);
           }
           frames.set(element, frame);

@@ -49,13 +49,16 @@ function lcl_InvalidateAllLowersPrt(frame: SwLayoutFrame): void {
 
 /** Owns represented flat-row height over its original native line. */
 export class SwRowFrame extends SwLayoutFrame {
-  /** Binds the actual row owner. @param line - Original native line. @returns Nothing. */
-  public constructor(private readonly line: SwTableLine) {
-    super(line.GetFrameFormat());
+  /** Binds the actual row owner and original root-bearing sibling. @param line - Original native line. @param sibling - Existing native layout frame. @returns Nothing. */
+  public constructor(
+    private readonly line: SwTableLine,
+    sibling?: SwFrame,
+  ) {
+    super(line.GetFrameFormat(), sibling);
     this.mnFrameType = SwFrameType.Row;
     let previous: SwCellFrame | undefined;
     for (const box of line.GetTabBoxes()) {
-      const frame = new SwCellFrame(box);
+      const frame = new SwCellFrame(box, this);
       frame.InsertBehind(this, previous);
       previous = frame;
     }
@@ -126,9 +129,12 @@ export class SwRowFrame extends SwLayoutFrame {
 
 /** Native cell frame retains and registers its original model box. */
 export class SwCellFrame extends SwLayoutFrame {
-  /** Registers at the original native box format. @param box - Original cell model. @returns Nothing. */
-  public constructor(private readonly box: SwTableBox) {
-    super(box.GetFrameFormat());
+  /** Registers at the original native box format with its root-bearing sibling. @param box - Original cell model. @param sibling - Existing native layout frame. @returns Nothing. */
+  public constructor(
+    private readonly box: SwTableBox,
+    sibling?: SwFrame,
+  ) {
+    super(box.GetFrameFormat(), sibling);
     this.mnFrameType = SwFrameType.Cell;
   }
   /** Reads the original cell identity. @returns Native box. */
@@ -237,16 +243,18 @@ export interface SwTableMouseGeometry {
 
 /** Owns horizontal print geometry over the actual canonical table. */
 export class SwTabFrame extends SwLayoutFrame {
-  /** Binds this layout frame to its original table. @param table - Canonical table. @param mouseGeometry - Optional live device frames. @returns Nothing. */
+  /** Optional browser device geometry, supplied independently of the native constructor. */
+  public mouseGeometry: SwTableMouseGeometry | undefined;
+  /** Binds this layout frame to its original table and root-bearing sibling. @param table - Canonical table. @param sibling - Existing original native layout frame. @returns Nothing. */
   public constructor(
     private readonly table: SwTable,
-    public mouseGeometry?: SwTableMouseGeometry,
+    sibling?: SwFrame,
   ) {
-    super(table.GetFrameFormat());
+    super(table.GetFrameFormat(), sibling);
     this.mnFrameType = SwFrameType.Tab;
     let previous: SwRowFrame | undefined;
     for (const line of table.GetTabLines()) {
-      const row = new SwRowFrame(line);
+      const row = new SwRowFrame(line, this);
       if (row.Lower()) {
         row.InsertBehind(this, previous);
         previous = row;

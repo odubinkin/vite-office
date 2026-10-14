@@ -737,7 +737,7 @@ export function createSwPageFrames(
     for (const input of tables) {
       if (input.afterParagraphIndex !== afterParagraphIndex) continue;
       const spacingItem = input.table.GetFrameFormat().GetULSpace();
-      const nativeFrame = new SwTabFrame(input.table);
+      const nativeFrame = new SwTabFrame(input.table, sibling);
       try {
         if (!nativeFrame.IsLayoutSplitAllowed() && input.rowHeights.length > 0 && hasContent()) {
           const bodyHeight =
