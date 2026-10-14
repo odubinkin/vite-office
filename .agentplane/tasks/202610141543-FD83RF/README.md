@@ -1,10 +1,11 @@
 ---
 id: "202610141543-FD83RF"
 title: "Defer unused weak-object lifecycle machinery after Calc dependency audit"
-status: "DOING"
+result_summary: "Defer unused weak-object lifecycle machinery and preserve native UNO dependency as pending"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "output/playwright/task134-checks/doctor.log"
   findings:
     - "Only calc-core documentation changes; app source hashes equal task base, new weak header/test absent, existing registry untouched. Source-derived UNO inheritance and lack of app consumers documented without fake replacement or parity claims. Docs/format/routing/doctor/diff pass."
-commit: null
+commit:
+  hash: "fa056df7b0a8cb90b51a08cad794aff42e7c14f1"
+  message: "📝 FD83RF docs: defer unused weak-object lifecycle work for Calc"
 comments:
   -
     author: "CODER"
     body: "Start: implement shared native weak-object/adapter protocol with user-requested JS GC lifetime; preserve interface and listener behavior without new memory management."
+  -
+    author: "CODER"
+    body: "Verified: audited current weak-protocol consumers, discarded unused task-authored weak-object proposal, retained all1912app source hashes exactly and documented pending native UNO inheritance. Docs/format/routing/doctor/diff pass; same-agent evaluator not independent."
 events:
   -
     type: "status"
@@ -69,8 +75,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: current revised blueprint; docs-only exact sourcefa056df7b0a8,1912app files unchanged,5nativepins and real consumer audit. All focused docs/format/routing/doctor/diff pass; unused weak-object proposal removed. No new runtime tests claimed; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-14T15:51:50.566Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: audited current weak-protocol consumers, discarded unused task-authored weak-object proposal, retained all1912app source hashes exactly and documented pending native UNO inheritance. Docs/format/routing/doctor/diff pass; same-agent evaluator not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T15:51:41.167Z"
+doc_updated_at: "2026-10-14T15:51:50.568Z"
 doc_updated_by: "CODER"
 description: "Task134 narrowed after human questions memory/lifetime mechanism necessity. Prove native weak helper is not currently consumed by Calc/Writer; discard only this task uncommitted weak-object additions, retain original shared sources exactly, record real UNO inherited-contract dependency as pending and resume UI/ODS core priority. No new GC adapter or runtime inventory claim."
 sections:
