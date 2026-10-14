@@ -1,10 +1,11 @@
 ---
 id: "202610141145-D5SQ7C"
 title: "Share native strikeout emphasis and Any2Bool values for Calc"
-status: "DOING"
+result_summary: "Native strikeout and9emphasis mappings/factories/copies/Clone, common Any2Bool reused in2WriterLRsites, Calc106121NONE defaults andCALC106. Calc166/shared227tests raw100,28boundaries12gates,33exactpaths17nativepins. Same-agent review not independent. Goalactive; no full121trigger, full when actual minimum UI+ODSread/save ready then repair/pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task121-checks/exact-review.json"
   findings:
     - "Calc166/shared227tests,28boundaries12gates pass;33exactpaths14changed19added,3606to3625sourcehashes17nativepins and originalGitHEAD9bc4455. Source behaviors/fallbacks/native unknown success preserved asCALC106. Initial type/branch/metadata errors retained and corrected; no threshold/assertion weakening. UI/ODS pending; no full at121."
-commit: null
+commit:
+  hash: "7649a5211bb6eebc106919f39a569fce62ea4810"
+  message: "🚧 D5SQ7C core: share native strikeout emphasis and Any2Bool"
 comments:
   -
     author: "CODER"
     body: "Start: implement original strikeout emphasis and common Any2Bool with existing Writer reuse; complete targeted raw100, no full until UI ODS readiness."
+  -
+    author: "CODER"
+    body: "Verified: original strikeout emphasis and shared Any2Bool contracts, actual Writer reuse and Calc defaults; all targeted raw100/source checks pass."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc166/shared227tests rawS/B/F/L100;28boundaries12gates;33exactpaths17nativepins. Shared Any2Bool reused by Writer2sites, native strikeout/emphasis/Calc defaults andCALC106. Same-agent EVAL not independent. Goalactive; full at actual minimum UI+ODS readiness then repair/pause."
+  -
+    type: "status"
+    at: "2026-10-14T11:54:22.210Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original strikeout emphasis and shared Any2Bool contracts, actual Writer reuse and Calc defaults; all targeted raw100/source checks pass."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:54:04.183Z"
+doc_updated_at: "2026-10-14T11:54:22.213Z"
 doc_updated_by: "CODER"
 description: "Task121: real EditEng strikeout/emphasis, tools enums/OffAPI constants, common SVL Any2Bool reused by existing Writer LR2sites, Calc106121defaults. Targeted raw100; full only at minimum actual UI+ODS readiness then repair/pause."
 sections:
