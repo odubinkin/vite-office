@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141657-MED75Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T17:13:08.352Z",
+  "verdict": "pass",
+  "summary": "Canonical shared shadow value and actual typed transport meet task136 acceptance; same-agent evaluation is not independent.",
+  "evaluated_sha": "e832f32a524513627b248ee9446afc5b653140ed",
+  "blueprint_digest": "1e6b61cfc017732180cc75b08b5f0f22c9aacbab4d115eb0905fc4830be9468f",
+  "findings": [
+    "Compared native gray100NONE/default/copy/Color ownership/equality/hash/metrics/side-space and complete Any member switches with11pinned native sources. Uses existing Color/CPPU/o3tl and ordinary JS cells with no custom lifetime machinery.",
+    "Actual enum/struct metadata and Any tests preserve memberbyte conversion, short width narrowing, enum/short fallback, ignored IsTransparent/extraction failures and transparency overflow. Native final Query0 redundant true conjunct is folded with both real calls retained; no fake coverage failure path.",
+    "321related cases/29files,176Calc cases/69files,7shared and33Calc owners have every raw counter positive at100; build without references,12source gates,36boundary cases and exact33paths/3770hashes pass. Nine runtime/provenance pairs and bounded capability preserve old statuses;623records have zero semantic violations."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141657-MED75Z/README.md",
+    "output/playwright/task136-checks/verification.json",
+    "output/playwright/task136-checks/inventory-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full shadow presentation/diagnostic XML, noncanonical raw boolean bytes/ABI and real Calc pool/document/UI/ODS remain unverified; no whole-module readiness claim. Same-agent review is not independent."
+  ]
+}

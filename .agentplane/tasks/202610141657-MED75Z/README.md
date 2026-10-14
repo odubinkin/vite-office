@@ -4,7 +4,7 @@ title: "Implement canonical shared shadow attribute and Calc pool defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T17:13:24.545Z"
+  updated_by: "CODER"
+  note: "Verified original shared shadow values and typed Any:321related/29files,176Calc/69files;7shared S502B350F123L468 and33Calc S4166B2731F821L3714 all raw counters positive100. Build and12source gates/36boundaries pass,33intentional paths/3770source hashes/11native pins/four links/calc branch retained. Native presentation/diagnostics/noncanonical bool bytes/ABI/fullCalcUIODS remain pending; same-agent quality is not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T17:13:08.352Z"
+  updated_by: "EVALUATOR"
+  note: "Canonical shared shadow value and actual typed transport meet task136 acceptance; same-agent evaluation is not independent."
+  evaluated_sha: "e832f32a524513627b248ee9446afc5b653140ed"
+  blueprint_digest: "1e6b61cfc017732180cc75b08b5f0f22c9aacbab4d115eb0905fc4830be9468f"
+  evidence_refs:
+    - ".agentplane/tasks/202610141657-MED75Z/README.md"
+    - ".agentplane/tasks/202610141657-MED75Z/quality/20261014-171308352-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141657-MED75Z/quality/20261014-171308352-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141657-MED75Z/quality/20261014-171308352-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141657-MED75Z/blueprint/resolved-snapshot.json"
+    - "output/playwright/task136-checks/verification.json"
+    - "output/playwright/task136-checks/inventory-final.log"
+  findings:
+    - "Compared native gray100NONE/default/copy/Color ownership/equality/hash/metrics/side-space and complete Any member switches with11pinned native sources. Uses existing Color/CPPU/o3tl and ordinary JS cells with no custom lifetime machinery."
+    - "Actual enum/struct metadata and Any tests preserve memberbyte conversion, short width narrowing, enum/short fallback, ignored IsTransparent/extraction failures and transparency overflow. Native final Query0 redundant true conjunct is folded with both real calls retained; no fake coverage failure path."
+    - "321related cases/29files,176Calc cases/69files,7shared and33Calc owners have every raw counter positive at100; build without references,12source gates,36boundary cases and exact33paths/3770hashes pass. Nine runtime/provenance pairs and bounded capability preserve old statuses;623records have zero semantic violations."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement source-faithful shared shadow attribute and actual Any contracts for missing Calc default dependency; reuse existing shared Color/CPPU, no lifetime engine."
+  -
+    type: "verify"
+    at: "2026-10-14T17:13:24.545Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified original shared shadow values and typed Any:321related/29files,176Calc/69files;7shared S502B350F123L468 and33Calc S4166B2731F821L3714 all raw counters positive100. Build and12source gates/36boundaries pass,33intentional paths/3770source hashes/11native pins/four links/calc branch retained. Native presentation/diagnostics/noncanonical bool bytes/ABI/fullCalcUIODS remain pending; same-agent quality is not independent."
 doc_version: 3
-doc_updated_at: "2026-10-14T17:12:00.360Z"
+doc_updated_at: "2026-10-14T17:13:24.595Z"
 doc_updated_by: "CODER"
 description: "Task136: missing real ScDocumentPool dependency SvxShadowItem. Port native color/width/location value/default/copy/setters/equality/hash/metrics/space and complete typed QueryValue/PutValue over actual CPPU ShadowFormat/ShadowLocation generated declarations, reusing Color/o3tl. Calc ATTR_SHADOW and real owned-item tests; precise inventory/provenance and source quirks. No native memory machinery, full presentation/DocPool/UI/ODS not claimed."
 sections:
@@ -55,6 +80,39 @@ sections:
     - Evidence:1870authored JSDoc files;622runtime dependency owners/2789relative imports/91allowed edges;114required tree paths/33retired roots;623runtime/provenance records and zero semantic violations;36boundary cases. Existing doctor hook-shim warning and build chunk-size advisory remain outside scope. Exact33paths within40approved,9runtime/provenance pairs and one new bounded capability. Source fingerprint3751to3770:14existing changes,19new,3737unchanged;11native source pins and4reference links restored. Evidence: `output/playwright/task136-checks/verification.json` and final logs.
 
     Native localized presentation/XML diagnostics, noncanonical raw boolean bytes, ABI and complete ScDocumentPool/ScPatternAttr/ScColumn/ScTable/ScDocument/UI/ODS remain unverified. Current final-class Query0 always succeeds, so redundant left success conjunct is source-folded while both real query/extract operations execute; no fake failure path was added for coverage. Native logical IDL booleans use JS booleans through existing CPPU bool extraction, while sal_Bool numeric observations remain in the shared library. No full suite/browser UI run is required by this non-UI task; human moved the full checkpoint to actual minimal connected UI+ODS readiness. Same-agent EVALUATOR is not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T17:13:24.545Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified original shared shadow values and typed Any:321related/29files,176Calc/69files;7shared S502B350F123L468 and33Calc S4166B2731F821L3714 all raw counters positive100. Build and12source gates/36boundaries pass,33intentional paths/3770source hashes/11native pins/four links/calc branch retained. Native presentation/diagnostics/noncanonical bool bytes/ABI/fullCalcUIODS remain pending; same-agent quality is not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T17:12:00.360Z, excerpt_hash=sha256:519dbfc115a670dedc94b226257d4aefca4c534b7dc91eb2bd10d9744d4294ca
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141657-MED75Z/blueprint/resolved-snapshot.json
+    - old_digest: 1e6b61cfc017732180cc75b08b5f0f22c9aacbab4d115eb0905fc4830be9468f
+    - current_digest: 1e6b61cfc017732180cc75b08b5f0f22c9aacbab4d115eb0905fc4830be9468f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141657-MED75Z
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141657-MED75Z -m 🧩 MED75Z task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task changes through a later authorized task; never reset unrelated work, merge or publish."
   Findings: |-
     Task136 removes the missing real SvxShadowItem dependency of Calc default pool. One shared native value owner/header and original generated ShadowFormat/ShadowLocation values reuse Color, Any/type metadata, hash and unit conversion. Ordinary JS GC owns state; no allocator, refcount, weak helper, binary address manager, generator or C++build/probe. Original gray100NONE defaults and Calc152 are source-confirmed. Full presentation/diagnostic XML and full Calc document/UI/ODS remain pending.
@@ -94,6 +152,39 @@ Source-faithful SvxShadowItem Which/default/full/copy/clone/color value ownershi
 - Evidence:1870authored JSDoc files;622runtime dependency owners/2789relative imports/91allowed edges;114required tree paths/33retired roots;623runtime/provenance records and zero semantic violations;36boundary cases. Existing doctor hook-shim warning and build chunk-size advisory remain outside scope. Exact33paths within40approved,9runtime/provenance pairs and one new bounded capability. Source fingerprint3751to3770:14existing changes,19new,3737unchanged;11native source pins and4reference links restored. Evidence: `output/playwright/task136-checks/verification.json` and final logs.
 
 Native localized presentation/XML diagnostics, noncanonical raw boolean bytes, ABI and complete ScDocumentPool/ScPatternAttr/ScColumn/ScTable/ScDocument/UI/ODS remain unverified. Current final-class Query0 always succeeds, so redundant left success conjunct is source-folded while both real query/extract operations execute; no fake failure path was added for coverage. Native logical IDL booleans use JS booleans through existing CPPU bool extraction, while sal_Bool numeric observations remain in the shared library. No full suite/browser UI run is required by this non-UI task; human moved the full checkpoint to actual minimal connected UI+ODS readiness. Same-agent EVALUATOR is not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T17:13:24.545Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified original shared shadow values and typed Any:321related/29files,176Calc/69files;7shared S502B350F123L468 and33Calc S4166B2731F821L3714 all raw counters positive100. Build and12source gates/36boundaries pass,33intentional paths/3770source hashes/11native pins/four links/calc branch retained. Native presentation/diagnostics/noncanonical bool bytes/ABI/fullCalcUIODS remain pending; same-agent quality is not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T17:12:00.360Z, excerpt_hash=sha256:519dbfc115a670dedc94b226257d4aefca4c534b7dc91eb2bd10d9744d4294ca
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141657-MED75Z/blueprint/resolved-snapshot.json
+- old_digest: 1e6b61cfc017732180cc75b08b5f0f22c9aacbab4d115eb0905fc4830be9468f
+- current_digest: 1e6b61cfc017732180cc75b08b5f0f22c9aacbab4d115eb0905fc4830be9468f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141657-MED75Z
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141657-MED75Z -m 🧩 MED75Z task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
