@@ -1,10 +1,11 @@
 ---
 id: "202610132120-TSGXG3"
 title: "Implement Calc merge spans using shared pool item fallback contract"
-status: "DOING"
+result_summary: "Implemented actual ScMergeAttr values/copy/assignment/equality and common unsupported QueryValue default with34approved override annotations preserving existing descendantJS; truthfulinventory/CALC-089, all targetedchecks pass, goalactive untilnextfull111pause."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +42,9 @@ quality_review:
     - "output/playwright/task103-checks/value-coverage-audit.json"
   findings:
     - "3328exactcommittednon-taskhashes cover approved35paths33changed/2added. All19descendant emittedJSidentical after34approvedoverride annotations; actualsource-absent Calc/shared/static/Calc0UI manifests pass and4linksrestored.7pinned original files reviewed, no fake native base or duplicated shared owner."
-commit: null
+commit:
+  hash: "0f37b0befa05360334bfa91c6bc7fd94a34f5c8a"
+  message: "🧩 TSGXG3 code: implement merge spans and shared query default"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: user approved exact34override/19file mechanical expansion, resume ScMergeAttr/shareddefault task and complete all targeted checks; nextfull111pause preserved."
+  -
+    author: "CODER"
+    body: "Verified: merge-span andsharedquerydefault source-backed contracts,147Calc/110relatedraw100,16gates8finalchecks actualstatic/Calc0UI4linksrestored,19identicalJS and3328exactsourcehashes pass; approvedscope only."
 events:
   -
     type: "status"
@@ -80,8 +86,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original ScMergeAttr/sharedquerydefault plusapproved34override annotations complete:147Calc/110relatedraw100/allpositive,16gates8currentchecks actualstatic/Calc0UI4linksrestored,3328exacthashes and19identicalJS outputs pass; no broadnative/UI/ODS claims."
+  -
+    type: "status"
+    at: "2026-10-14T03:36:10.995Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: merge-span andsharedquerydefault source-backed contracts,147Calc/110relatedraw100,16gates8finalchecks actualstatic/Calc0UI4linksrestored,19identicalJS and3328exactsourcehashes pass; approvedscope only."
 doc_version: 3
-doc_updated_at: "2026-10-14T03:36:08.831Z"
+doc_updated_at: "2026-10-14T03:36:10.996Z"
 doc_updated_by: "CODER"
 description: "Task103: original ScMergeAttr default0/0, signed16col/signed32row, copy/Clone identity reset, payload-only assignment/equality and IsMerged over existing shared SfxPoolItem. Restore genuine base unsupported QueryValue in existing shared browser representation, no Calc-only stub. Whole Calc/complete affected shared raw100, truthful inventory/source evidence and suspected behavior note; diagnostic/document/UI/ODS remain pending, nextfull111pause."
 sections:
