@@ -221,6 +221,7 @@ export enum XMLToken {
   STYLE_BORDER_LINE_WIDTH_BOTTOM,
   STYLE_BORDER_LINE_WIDTH_LEFT,
   STYLE_BORDER_LINE_WIDTH_RIGHT,
+  STYLE_FONT_ADORNMENTS,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -265,6 +266,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "class", XMLToken.STYLE_CLASS],
   [ODF_NAMESPACES.style, "default-outline-level", XMLToken.STYLE_DEFAULT_OUTLINE_LEVEL],
   [ODF_NAMESPACES.style, "font-family-generic", XMLToken.STYLE_FONT_FAMILY_GENERIC],
+  [ODF_NAMESPACES.style, "font-adornments", XMLToken.STYLE_FONT_ADORNMENTS],
   [ODF_NAMESPACES.style, "font-pitch", XMLToken.STYLE_FONT_PITCH],
   [ODF_NAMESPACES.style, "font-charset", XMLToken.STYLE_FONT_CHARSET],
   [ODF_NAMESPACES.style, "next-style-name", XMLToken.STYLE_NEXT_STYLE_NAME],

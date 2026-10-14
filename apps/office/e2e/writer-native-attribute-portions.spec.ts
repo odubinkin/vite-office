@@ -10,7 +10,6 @@ import { SvxWeightItem, SvxPostureItem, SvxFontItem } from "../src/editeng/sourc
 import { SwFormatINetFormat } from "../src/sw/source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat } from "../src/sw/source/core/txtnode/txatbase";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
-
 /** Requires an actual native fixture owner. @param value - Native owner. @returns Owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error("Missing native portion fixture");
@@ -33,7 +32,7 @@ for (const width of [1280, 390])
     neighbor.SetText("Neighbor");
     for (const node of [body, cell]) {
       node.SetText("abcdef");
-      node.SetAttr(new SvxFontItem("Liberation Serif", 7, "Liberation Serif", "roman"));
+      node.SetAttr(new SvxFontItem(3, "Liberation Serif", "", 0, 0, 7));
       const bold = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
       bold.Put(new SvxWeightItem(8, 15));
       const both = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);

@@ -18,7 +18,8 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../sw/browser/filter/xml/writer-document-codec";
-
+import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 it("matches the complete native224slot StarBats and StarMath observable output census and alias boundaries", /** Checks frozen source-derived output digests, all aliases/holes and native unsigned arithmetic independently from any upstream runtime. @returns Nothing. */ () => {
   for (const [family, digest, holes] of [
     ["StarBats", "b38a0e2c74c5a58d7f1eaf8c11d6feb5eb3e8954945290006fa44042cdbb7e77", 29],
@@ -138,7 +139,16 @@ it("preserves converted native glyph and family through common automatic body ce
   common.Set(0, createWriterNumFormat("bullet", "[", { bulletFont: "StarBats" }));
   const style = source.MakeTextFormatColl("LegacyStyle");
   style.SetFormatAttr(new SwNumRuleItem("CommonLegacy"));
-  style.SetFormatAttr(new SvxFontItem("StarBats", RES_CHRATR_FONT));
+  style.SetFormatAttr(
+    new SvxFontItem(
+      FontFamily.FAMILY_DONTKNOW,
+      "StarBats",
+      "",
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+      RES_CHRATR_FONT,
+    ),
+  );
   let imported: SwDoc | undefined, reopened: SwDoc | undefined, transferred: SwDoc | undefined;
   try {
     imported = (

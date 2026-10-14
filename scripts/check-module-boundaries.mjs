@@ -1,12 +1,10 @@
 /**
  * @fileoverview Enforces the approved LibreOffice-shaped runtime module dependency graph for Vite Office.
  */
-
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import ts from "typescript";
-
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "comphelper",
@@ -51,7 +49,10 @@ const allowedEdges = new Map([
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
   ["docmodel", new Set(["tools", "o3tl"])],
-  ["editeng", new Set(["docmodel", "cppu", "o3tl", "offapi", "svl", "svtools", "tools", "vcl"])],
+  [
+    "editeng",
+    new Set(["docmodel", "cppu", "o3tl", "offapi", "sal", "svl", "svtools", "tools", "vcl"]),
+  ],
   ["external", new Set()],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
@@ -109,6 +110,8 @@ const allowedEdges = new Map([
       "o3tl",
       "offapi",
       "package",
+      // Native Writer font attributes and XML import use rtl/textenc.h identifiers.
+      "sal",
       "sfx2",
       "svl",
       "svx",
@@ -125,7 +128,7 @@ const allowedEdges = new Map([
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   ["tools", new Set(["o3tl", "cppu"])],
-  ["xmloff", new Set(["editeng", "sax", "unotools"])],
+  ["xmloff", new Set(["editeng", "o3tl", "sal", "sax", "tools", "unotools"])],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
 ]);

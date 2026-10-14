@@ -1,7 +1,15 @@
 /** @fileoverview Implements LibreOffice-shaped office:font-face-decls import contexts. */
-
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_SYMBOL, type rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import { getFontPitchFromGeneric } from "./fonthdl";
+/** Native font-face style/pitch/encoding values accompanying the existing imported family fields. */
+export interface OdfFontFaceMetadata {
+  readonly styleName: string;
+  readonly pitch: FontPitch;
+  readonly charSet: rtl_TextEncoding;
+}
 /** Neutral package font reference emitted by the xmloff font-face contexts. */
 export interface OdfEmbeddedFont {
   readonly faceName: string;
@@ -14,14 +22,22 @@ export interface OdfEmbeddedFont {
 
 /** Consumer of imported font-face declarations. */
 export interface XMLFontStylesImportTarget {
-  registerFontFace(name: string, familyName: string, generic: string | undefined): void;
+  registerFontFace(
+    name: string,
+    familyName: string,
+    generic: string | undefined,
+    metadata?: OdfFontFaceMetadata,
+  ): void;
   registerEmbeddedFont(font: OdfEmbeddedFont): void;
 }
 
 /** Imports style:font-face children. */
 export class XMLFontStylesContext extends SvXMLImportContext {
-  /** Creates the declaration container. @param target - Font declaration consumer. @returns Context. */
-  public constructor(private readonly target: XMLFontStylesImportTarget) {
+  /** Creates the declaration container. @param target - Font declaration consumer. @param defaultEncoding - Caller platform encoding. @returns Context. */
+  public constructor(
+    private readonly target: XMLFontStylesImportTarget,
+    private readonly defaultEncoding: rtl_TextEncoding,
+  ) {
     super();
   }
 
@@ -31,7 +47,7 @@ export class XMLFontStylesContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     return element === XMLToken.STYLE_FONT_FACE
-      ? new XMLFontStyleContextFontFace(this.target, attributes)
+      ? new XMLFontStyleContextFontFace(this.target, attributes, this.defaultEncoding)
       : null;
   }
 }
@@ -40,10 +56,11 @@ export class XMLFontStylesContext extends SvXMLImportContext {
 class XMLFontStyleContextFontFace extends SvXMLImportContext {
   private readonly name: string;
   private readonly family: string;
-  /** Reads and publishes a declaration. @param target - Consumer. @param attributes - Face attributes. @returns Context. */
+  /** Reads and publishes a declaration. @param target - Consumer. @param attributes - Face attributes. @param defaultEncoding - Caller platform encoding. @returns Context. */
   public constructor(
     private readonly target: XMLFontStylesImportTarget,
     attributes: FastAttributeList,
+    defaultEncoding: rtl_TextEncoding,
   ) {
     super();
     attributes.assertOnly(
@@ -53,6 +70,7 @@ class XMLFontStyleContextFontFace extends SvXMLImportContext {
         XMLToken.STYLE_FONT_FAMILY_GENERIC,
         XMLToken.STYLE_FONT_PITCH,
         XMLToken.STYLE_FONT_CHARSET,
+        XMLToken.STYLE_FONT_ADORNMENTS,
       ],
       "font face",
     );
@@ -65,6 +83,14 @@ class XMLFontStyleContextFontFace extends SvXMLImportContext {
       name,
       family,
       attributes.get(XMLToken.STYLE_FONT_FAMILY_GENERIC) ?? undefined,
+      {
+        styleName: attributes.get(XMLToken.STYLE_FONT_ADORNMENTS) ?? "",
+        pitch: getFontPitchFromGeneric(attributes.get(XMLToken.STYLE_FONT_PITCH) ?? undefined),
+        charSet:
+          attributes.get(XMLToken.STYLE_FONT_CHARSET) === "x-symbol"
+            ? RTL_TEXTENCODING_SYMBOL
+            : defaultEncoding & 0xffff,
+      },
     );
   }
   /** Creates the upstream font-face-src context. @param element - Child token. @param attributes - Attributes. @returns Source context or null. */

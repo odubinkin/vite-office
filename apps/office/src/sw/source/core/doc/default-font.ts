@@ -53,7 +53,7 @@ export function getDefaultFont(
   language: string,
   script: WriterFontScript,
 ): string {
-  return getDefaultFontSelection(device, type, language, script).requestedFamily;
+  return getDefaultFontSelection(device, type, language, script).resolvedFamily;
 }
 
 /** Maps an IETF language tag to Writer's three script default slots. @param language - IETF language tag. @returns Writer script slot. */

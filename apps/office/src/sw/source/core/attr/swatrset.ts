@@ -2,7 +2,6 @@
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-
 import {
   SvxAdjust,
   SvxAdjustItem,
@@ -90,7 +89,8 @@ import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwTableBoxNumFormat, SwTableBoxFormula, SwTableBoxValue } from "./cellatr";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
@@ -181,21 +181,50 @@ export class SwAttrPool extends SfxItemPool {
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       this.RegisterDefaultItem(
         new SvxFontItem(
-          defaults.get(which)?.requestedFamily as string,
-          which,
+          FontFamily.FAMILY_DONTKNOW,
           defaults.get(which)?.resolvedFamily as string,
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          which,
         ),
-        /** Restores a font item. @param value - Persisted family and optional ODF attributes. @returns Font item. */ (
+        /** Restores every native font value field; UI family-name inputs select an unknown metadata family. @param value - Complete snapshot or UI name. @returns Font item. */ (
           value,
-        ) =>
-          typeof value === "object" && value !== null && !Array.isArray(value)
-            ? new SvxFontItem(
-                String((value as Record<string, unknown>).familyName),
-                which,
-                String((value as Record<string, unknown>).resolvedFamilyName),
-                String((value as Record<string, unknown>).genericFamily),
-              )
-            : new SvxFontItem(String(value), which),
+        ) => {
+          if (typeof value === "string")
+            return new SvxFontItem(
+              FontFamily.FAMILY_DONTKNOW,
+              value,
+              "",
+              FontPitch.PITCH_DONTKNOW,
+              RTL_TEXTENCODING_DONTKNOW,
+              which,
+            );
+          if (
+            typeof value !== "object" ||
+            value === null ||
+            Array.isArray(value) ||
+            !("familyName" in value) ||
+            typeof value.familyName !== "string" ||
+            !("styleName" in value) ||
+            typeof value.styleName !== "string" ||
+            !("family" in value) ||
+            typeof value.family !== "number" ||
+            !("pitch" in value) ||
+            typeof value.pitch !== "number" ||
+            !("charSet" in value) ||
+            typeof value.charSet !== "number"
+          )
+            throw new Error("Invalid font item state.");
+          return new SvxFontItem(
+            value.family,
+            value.familyName,
+            value.styleName,
+            value.pitch,
+            value.charSet,
+            which,
+          );
+        },
       );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       this.RegisterDefaultItem(

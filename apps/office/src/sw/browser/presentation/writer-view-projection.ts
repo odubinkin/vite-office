@@ -10,7 +10,6 @@ import {
   resolveSwListTextLeftMargin,
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
-
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
@@ -71,7 +70,7 @@ import {
   type SwNumberPortionFont,
 } from "../../source/core/text/txtfld";
 import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
-
+import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
@@ -282,7 +281,7 @@ export class WriterViewProjection {
         const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
-        const fontFamilyGeneric = font.GetGenericFamily();
+        const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           rulerTabSettings: Object.freeze({
@@ -298,7 +297,7 @@ export class WriterViewProjection {
             contextualSpacing: spacing.GetContext(),
             firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
             resolvedFirstLineIndentPt: node.GetParagraphFirstLineIndent() / 20,
-            fontFamily: font.GetResolvedFamilyName(),
+            fontFamily: font.GetFamilyName(),
             ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
               ? "italic"
@@ -614,7 +613,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       font = handler.ReadItem(RES_CHRATR_FONT) as SvxFontItem;
     const inet = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default)?.GetAttr();
     const link = inet instanceof SwFormatINetFormat ? inet.GetHyperlink() : undefined;
-    const generic = font.GetGenericFamily();
+    const generic = getFontFamilyGeneric(font.GetFamily());
     portions.push(
       Object.freeze({
         startOffset: start,
@@ -631,7 +630,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             : {}),
           ...(authored(RES_CHRATR_FONT)
             ? {
-                fontFamily: font.GetResolvedFamilyName(),
+                fontFamily: font.GetFamilyName(),
                 ...(generic === undefined ? {} : { fontFamilyGeneric: generic }),
               }
             : {}),

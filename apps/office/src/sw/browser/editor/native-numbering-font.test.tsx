@@ -25,6 +25,8 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_COLOR,
 } from "../../inc/hintids";
+import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Unmounts before original owner disposal. @returns Nothing. */ () => {
@@ -48,7 +50,14 @@ for (const cell of [false, true])
       if (node === undefined) throw Error("Missing member");
       node.SetText("Owned label font");
       node.SetAttr(
-        new SvxFontItem("Liberation Serif", RES_CHRATR_FONT, "Liberation Serif", "roman"),
+        new SvxFontItem(
+          FontFamily.FAMILY_ROMAN,
+          "Liberation Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
       );
       node.SetAttr(new SvxFontHeightItem(320, 100, RES_CHRATR_FONTSIZE));
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));

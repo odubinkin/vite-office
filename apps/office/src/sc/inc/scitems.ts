@@ -103,3 +103,10 @@ export const ATTR_CTL_FONT_HEIGHT = 117;
 
 /** Original typed font-color item identity from scitems.hxx. */
 export const ATTR_FONT_COLOR = 109;
+
+/** Original Latin font-family attribute. */
+export const ATTR_FONT = 100;
+/** Original CJK font-family attribute. */
+export const ATTR_CJK_FONT = 111;
+/** Original complex-script font-family attribute. */
+export const ATTR_CTL_FONT = 116;

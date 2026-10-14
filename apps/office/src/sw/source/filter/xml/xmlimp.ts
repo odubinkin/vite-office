@@ -6,10 +6,8 @@ import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
-
 import {
   SvxLineSpacingItem,
   SvxTabAdjust,
@@ -49,6 +47,7 @@ import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
   XMLFontStylesContext,
   type XMLFontStylesImportTarget,
+  type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
@@ -105,7 +104,9 @@ import {
   RES_LINENUMBER,
 } from "../../../inc/hintids";
 import { getWriterStyleIdFromOdfName } from "../../../inc/poolfmt";
-
+import { FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW, RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 const ignoredDocumentChildren = new Set([XMLToken.OFFICE_SETTINGS, XMLToken.OFFICE_SCRIPTS]);
 
 const ignoredMetadataChildren = new Set([
@@ -205,6 +206,7 @@ class SwXMLImport
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
   private readonly fontFaceGenerics = new Map<string, string>();
+  private readonly fontFaceMetadata = new Map<string, OdfFontFaceMetadata>();
   private readonly masterPages = new Map<
     string,
     Readonly<{ followName?: string; pageLayoutName: string }>
@@ -289,13 +291,24 @@ class SwXMLImport
     return this.fontFaceGenerics.get(name);
   }
 
-  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @param generic - ODF generic family. @returns Nothing. */
-  public registerFontFace(name: string, familyName: string, generic?: string): void {
+  /** Resolves original font-face style/pitch/encoding values. @param name - Declared face name. @returns Stored native metadata. */
+  public getFontFaceProperties(name: string): OdfFontFaceMetadata | undefined {
+    return this.fontFaceMetadata.get(name);
+  }
+
+  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @param generic - ODF generic family. @param metadata - Native style, pitch and encoding. @returns Nothing. */
+  public registerFontFace(
+    name: string,
+    familyName: string,
+    generic?: string,
+    metadata?: OdfFontFaceMetadata,
+  ): void {
     const existing = this.fontFaces.get(name);
     if (existing !== undefined && existing !== familyName)
       throw new Error(`Conflicting ODF font face: ${name}`);
     this.fontFaces.set(name, familyName);
     if (generic !== undefined) this.fontFaceGenerics.set(name, generic);
+    if (metadata !== undefined) this.fontFaceMetadata.set(name, metadata);
   }
 
   /** Retains one package-backed font declaration for ZIP resolution after XML import. @param font - ODF face URI. @returns Nothing. */
@@ -643,7 +656,7 @@ class SwXMLDocContext extends SvXMLImportContext {
         this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
     ) {
       attributes.assertOnly([], "font face declarations");
-      return new XMLFontStylesContext(this.xmlImport);
+      return new XMLFontStylesContext(this.xmlImport, RTL_TEXTENCODING_UTF8);
     }
     if (
       element === XMLToken.OFFICE_MASTER_STYLES &&
@@ -784,16 +797,38 @@ function putCharacterProperties(
   if (properties.fontFamily !== undefined)
     put(
       new SvxFontItem(
+        getFontFamilyFromGeneric(properties.fontFamilyGeneric),
         properties.fontFamily,
+        properties.fontStyleName ?? "",
+        properties.fontPitch ?? FontPitch.PITCH_DONTKNOW,
+        properties.fontCharSet ?? RTL_TEXTENCODING_DONTKNOW,
         RES_CHRATR_FONT,
-        properties.fontFamily,
-        properties.fontFamilyGeneric,
       ),
     );
   const asianFamily = properties.fontFamilyAsian ?? properties.fontFamily;
-  if (asianFamily !== undefined) put(new SvxFontItem(asianFamily, RES_CHRATR_CJK_FONT));
+  if (asianFamily !== undefined)
+    put(
+      new SvxFontItem(
+        getFontFamilyFromGeneric(properties.fontFamilyGenericAsian),
+        asianFamily,
+        properties.fontStyleNameAsian ?? "",
+        properties.fontPitchAsian ?? FontPitch.PITCH_DONTKNOW,
+        properties.fontCharSetAsian ?? RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_CJK_FONT,
+      ),
+    );
   const complexFamily = properties.fontFamilyComplex ?? properties.fontFamily;
-  if (complexFamily !== undefined) put(new SvxFontItem(complexFamily, RES_CHRATR_CTL_FONT));
+  if (complexFamily !== undefined)
+    put(
+      new SvxFontItem(
+        getFontFamilyFromGeneric(properties.fontFamilyGenericComplex),
+        complexFamily,
+        properties.fontStyleNameComplex ?? "",
+        properties.fontPitchComplex ?? FontPitch.PITCH_DONTKNOW,
+        properties.fontCharSetComplex ?? RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_CTL_FONT,
+      ),
+    );
   if (properties.fontSizeTwips !== undefined)
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       put(new SvxFontHeightItem(properties.fontSizeTwips, 100, which));

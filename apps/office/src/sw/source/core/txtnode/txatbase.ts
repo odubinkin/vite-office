@@ -2,7 +2,6 @@
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-
 import {
   FontLineStyle,
   SvxFontItem,
@@ -38,7 +37,8 @@ import type { SwAttrPool } from "../attr/swatrset";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SwFormatINetFormat } from "./fmtatr2";
 import type { SwpHints } from "./ndhints";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
@@ -407,7 +407,16 @@ export function createSwFormatAutoFormat(
     items.Put(new SfxStringItem(RES_CHRATR_COLOR, attributes.color));
   if (attributes.fontFamily !== inherited.fontFamily && attributes.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      items.Put(new SvxFontItem(attributes.fontFamily, which));
+      items.Put(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          attributes.fontFamily,
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          which,
+        ),
+      );
   if (
     attributes.fontSizeTwips !== inherited.fontSizeTwips &&
     attributes.fontSizeTwips !== undefined

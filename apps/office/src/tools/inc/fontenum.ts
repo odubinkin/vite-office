@@ -46,3 +46,22 @@ export enum FontWeight {
   WEIGHT_BLACK = 10,
   FontWeight_FORCE_EQUAL_SIZE = 2147483647,
 }
+
+/** Original family enumerators from fontenum.hxx, including its native enum-size sentinel. */
+export enum FontFamily {
+  FAMILY_DONTKNOW,
+  FAMILY_DECORATIVE,
+  FAMILY_MODERN,
+  FAMILY_ROMAN,
+  FAMILY_SCRIPT,
+  FAMILY_SWISS,
+  FAMILY_SYSTEM,
+  FontFamily_FORCE_EQUAL_SIZE = 2147483647,
+}
+/** Original pitch enumerators and native enum-size sentinel. */
+export enum FontPitch {
+  PITCH_DONTKNOW,
+  PITCH_FIXED,
+  PITCH_VARIABLE,
+  FontPitch_FORCE_EQUAL_SIZE = 2147483647,
+}

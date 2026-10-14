@@ -1,6 +1,5 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
-
 import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 import {
@@ -9,7 +8,6 @@ import {
 } from "../../../sw/browser/filter/xml/writer-document-codec";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { RES_CHRATR_FONT } from "../../../sw/inc/hintids";
-
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SvxLineSpacingItem } from "./paraitem";
 import {
@@ -20,7 +18,8 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "./textitem";
-
+import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 /** Test-owned WhichId for font-weight items. */
 const weightWhich = 101;
 /** Test-owned WhichId for font-posture items. */
@@ -36,29 +35,65 @@ function throwing(operation: () => unknown): () => unknown {
 }
 
 describe("EditEngine character items" /** Groups pooled character item contracts. @returns Nothing. */, () => {
-  it("separates serialized and device-resolved font families", /** Verifies runtime resolution does not alter the document value. @returns Nothing. */ () => {
-    const font = new SvxFontItem("Liberation Serif", weightWhich, "Noto Serif");
-    expect(font.GetFamilyName()).toBe("Liberation Serif");
-    expect(font.GetResolvedFamilyName()).toBe("Noto Serif");
-    expect(font.QueryValue()).toBe("Liberation Serif");
-    expect(font.Clone().GetResolvedFamilyName()).toBe("Noto Serif");
+  it("owns the native family value without a second resolved name", /** Native item values admit blank names and retain every state field. @returns Nothing. */ () => {
+    const font = new SvxFontItem(
+      FontFamily.FAMILY_DONTKNOW,
+      "Noto Serif",
+      "Regular",
+      FontPitch.PITCH_VARIABLE,
+      RTL_TEXTENCODING_DONTKNOW,
+      weightWhich,
+    );
+    expect(font.GetFamilyName()).toBe("Noto Serif");
+    expect(font.QueryValue()).toEqual({
+      familyName: "Noto Serif",
+      styleName: "Regular",
+      family: FontFamily.FAMILY_DONTKNOW,
+      pitch: FontPitch.PITCH_VARIABLE,
+      charSet: RTL_TEXTENCODING_DONTKNOW,
+    });
+    expect(font.Clone().GetFamilyName()).toBe("Noto Serif");
     expect(
-      throwing(
-        /** Creates an item with an invalid runtime family. @returns Invalid item. */ () =>
-          new SvxFontItem("Liberation Serif", weightWhich, " "),
-      ),
-    ).toThrow("resolved family name is invalid");
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        " ",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        weightWhich,
+      ).GetFamilyName(),
+    ).toBe(" ");
   });
 
   it("retains the ODF generic family through the browser document transfer", /** callback handles this value. @returns The result. */ () => {
-    const font = new SvxFontItem("Overpass Light", RES_CHRATR_FONT, "Overpass Light", "roman");
-    expect(font.GetGenericFamily()).toBe("roman");
-    expect(font.Clone().GetGenericFamily()).toBe("roman");
-    expect(font.equals(new SvxFontItem("Overpass Light", RES_CHRATR_FONT))).toBe(false);
+    const font = new SvxFontItem(
+      FontFamily.FAMILY_ROMAN,
+      "Overpass Light",
+      "",
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+      RES_CHRATR_FONT,
+    );
+    expect(font.GetFamily()).toBe(FontFamily.FAMILY_ROMAN);
+    expect(font.Clone().GetFamily()).toBe(FontFamily.FAMILY_ROMAN);
+    expect(
+      font.equals(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Overpass Light",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
+      ),
+    ).toBe(false);
     expect(encodeSfxPoolItem(font).value).toEqual({
       familyName: "Overpass Light",
-      resolvedFamilyName: "Overpass Light",
-      genericFamily: "roman",
+      styleName: "",
+      family: FontFamily.FAMILY_ROMAN,
+      pitch: FontPitch.PITCH_DONTKNOW,
+      charSet: RTL_TEXTENCODING_DONTKNOW,
     });
     const document = createWriterDocument();
     document.GetDfltTextFormatColl().SetFormatAttr(font);
@@ -66,8 +101,8 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(
       (
         restored.GetDfltTextFormatColl().GetAttrSet().Get(RES_CHRATR_FONT) as SvxFontItem
-      ).GetGenericFamily(),
-    ).toBe("roman");
+      ).GetFamily(),
+    ).toBe(FontFamily.FAMILY_ROMAN);
   });
 
   it("preserves FontWeight ordering, boolean threshold, identity, and snapshots" /** Verifies SvxWeightItem. @returns Nothing. */, () => {

@@ -1,7 +1,5 @@
 /** @fileoverview Verifies Writer document-shell lifecycle and persistence failures. */
-
 import { describe, expect, it, vi } from "vitest";
-
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
@@ -12,7 +10,6 @@ import {
   type OdtFilterService,
 } from "../../filter/xml/odt-filter-service";
 import { SwDocShell } from "./docsh";
-
 /** Runs the makeShell test helper. @returns Test callback result. */ function makeShell() {
   return new SwDocShell(
     createWriterDocument(),
@@ -81,7 +78,7 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
     expect(
       (
         fresh.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
-      ).GetResolvedFamilyName(),
+      ).GetFamilyName(),
     ).toBe("Source Han Sans");
     shell.Close();
   });
@@ -107,9 +104,7 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
       expect(fresh.GetLocale()).toBe(locale);
       expect(fresh.GetPageDesc().GetValue().paperFormat).toBe(paper);
       expect(
-        (
-          fresh.GetAttrPool().GetUserOrPoolDefaultItem(fontWhich) as SvxFontItem
-        ).GetResolvedFamilyName(),
+        (fresh.GetAttrPool().GetUserOrPoolDefaultItem(fontWhich) as SvxFontItem).GetFamilyName(),
       ).toBe("Device family");
       shell.Close();
     },

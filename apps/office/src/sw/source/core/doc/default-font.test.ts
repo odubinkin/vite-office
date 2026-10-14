@@ -1,5 +1,4 @@
 /** @fileoverview Verifies Writer script/language default-font selection. */
-
 import { describe, expect, it } from "vitest";
 import {
   getDefaultFont,
@@ -11,7 +10,6 @@ import {
 import { SwDoc } from "./doc";
 import { RES_CHRATR_CJK_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
-
 describe("Writer default-font policy", /** Registers default-font tests. @returns Nothing. */ () => {
   it("classifies representative Western, CJK, and CTL languages", /** Verifies language-to-script mapping. @returns Nothing. */ () => {
     expect(getWriterFontScript("en-US")).toBe("western");
@@ -51,11 +49,11 @@ describe("Writer default-font policy", /** Registers default-font tests. @return
       (
         document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
       ).GetFamilyName(),
-    ).toBe("Noto Sans CJK");
+    ).toBe("Source Han Sans");
     expect(
       (
         document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
-      ).GetResolvedFamilyName(),
+      ).GetFamilyName(),
     ).toBe("Source Han Sans");
   });
 });

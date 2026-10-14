@@ -1,7 +1,6 @@
 /**
  * @fileoverview Reimplements bounded EditEngine character items from pinned `editeng/source/items/textitem.cxx`.
  */
-
 import { SfxBoolItem, SfxEnumItem } from "../../../svl/inc/eitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
@@ -16,57 +15,7 @@ import { Any2Bool } from "../../../svl/inc/poolitem";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
 import { MID_RELIEF, MID_ITALIC, MID_POSTURE, MID_BOLD, MID_WEIGHT } from "../../inc/memberids";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
-
-/** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
-export class SvxFontItem extends SfxPoolItem {
-  /** Creates a font-family item. @param familyName - Serialized CSS/LibreOffice family name. @param which - Script-specific WhichId. @param resolvedFamilyName - Device-resolved presentation family. @param genericFamily - ODF generic family. @returns Nothing. */
-  public constructor(
-    private readonly familyName: string,
-    which: number,
-    private readonly resolvedFamilyName = familyName,
-    private readonly genericFamily?: string,
-  ) {
-    super(which);
-    if (familyName.trim().length === 0) throw new Error("SvxFontItem family name is invalid.");
-    if (resolvedFamilyName.trim().length === 0)
-      throw new Error("SvxFontItem resolved family name is invalid.");
-  }
-
-  /** Returns the family name. @returns Font family. */
-  public GetFamilyName(): string {
-    return this.familyName;
-  }
-  /** Returns the device-resolved family used only for presentation. @returns Resolved family name. */
-  public GetResolvedFamilyName(): string {
-    return this.resolvedFamilyName;
-  }
-  /** Returns the ODF generic family used by VCL when the named face is unavailable. @returns Generic family. */
-  public GetGenericFamily(): string | undefined {
-    return this.genericFamily;
-  }
-  /** Creates an independent item. @returns Cloned item. */
-  public Clone(): SvxFontItem {
-    return new SvxFontItem(
-      this.familyName,
-      this.Which(),
-      this.resolvedFamilyName,
-      this.genericFamily,
-    );
-  }
-  /** Compares item identity and value. @param other - Candidate item. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxFontItem &&
-      other.Which() === this.Which() &&
-      other.familyName === this.familyName &&
-      other.genericFamily === this.genericFamily
-    );
-  }
-  /** Serializes the item. @returns Snapshot. */
-  public override QueryValue(): string {
-    return this.familyName;
-  }
-}
+export { SvxFontItem } from "./textitem.font";
 
 export { SvxFontHeightItem } from "./textitem.height";
 

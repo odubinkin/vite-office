@@ -1,7 +1,5 @@
 /** @fileoverview Verifies application and shared runtime responsibility boundaries independently of repository paths. */
-
 import { describe, expect, it } from "vitest";
-
 import {
   findUnapprovedModuleCycle,
   isOriginalSalO3tlImport,
@@ -11,7 +9,6 @@ import {
   getRuntimeOwnershipLayer,
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
-
 it("keeps XML reader byte values below application and browser owners", /** Admits only original shared value dependencies and header/source ownership. @returns Nothing. */ () => {
   for (const dependency of ["cppu", "sal"])
     expect(isForbiddenModuleEdge("xmlreader", dependency)).toBe(false);
@@ -686,4 +683,31 @@ it("admits the original color-item dependency on docmodel without reverse item o
   expect(
     getRuntimeOwnershipViolation("editeng/source/items/textitem.color.ts", "", "react"),
   ).toMatch(/browser presentation package/u);
+});
+
+it("admits native font-item SAL encoding and Unicode hash owners without app or browser edges", /** Checks fontitem.hxx RTL text declarations and source string hash ownership. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sc")).toBe(true);
+  expect(getRuntimeOwnershipLayer("editeng/inc/fontitem.ts")).toBe("upstream-mechanism");
+  expect(
+    getRuntimeOwnershipViolation("editeng/source/items/textitem.font.ts", "", "react"),
+  ).toMatch(/browser presentation package/u);
+});
+
+it("admits original ODF font handlers using Tools enums and SAL encoding declarations", /** Preserves font-only shared dependencies without app or reverse edges. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("xmloff", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("xmloff", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "sc")).toBe(true);
+});
+
+it("admits native Writer charset declarations without granting shared reverse dependencies", /** Protects font-value enum ownership. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sw", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "sw")).toBe(true);
 });

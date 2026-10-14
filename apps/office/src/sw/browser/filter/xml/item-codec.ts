@@ -2,7 +2,6 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
-
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
@@ -13,7 +12,6 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import { MeasureUnit } from "../../../../offapi/com/sun/star/util/MeasureUnit";
-import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import {
   normalizeWriterHyperlink,
@@ -22,7 +20,6 @@ import {
 } from "../../../source/core/txtnode/fmtatr2";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
-
 /** Browser-owned internet value record; omitted native IDs retain the existing ZERO contract. */
 export interface WriterInternetFormatRecord extends WriterHyperlink {
   readonly inetFormatId?: number;
@@ -83,13 +80,7 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
             ? encodeLegacyFirstLineValue(item)
             : item instanceof SwFormatINetFormat
               ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-              : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
-                ? {
-                    familyName: item.GetFamilyName(),
-                    resolvedFamilyName: item.GetResolvedFamilyName(),
-                    genericFamily: item.GetGenericFamily() as string,
-                  }
-                : item.QueryValue();
+              : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,

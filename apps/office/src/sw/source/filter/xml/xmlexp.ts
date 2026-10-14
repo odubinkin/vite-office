@@ -2,13 +2,10 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 import { SwXMLTableLines } from "./xmltble";
-
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
-
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-
 import {
   SvxAdjust,
   SvxAdjustItem,
@@ -111,10 +108,12 @@ import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
-import { createWriterFontAutoStylePool } from "./xmlfonte";
+import { createWriterFontAutoStylePool, registerWriterFontFace } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
-
+import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
@@ -123,10 +122,18 @@ export function exportStylesXml(document: SwDoc): string {
   const inheritedStyles = exportWriterText(
     document,
     /** Never cancels named style serialization. @returns False. */ () => false,
-    /** Registers a font used by an inherited list base. @param family - Font family. @param generic - Generic family. @returns Face name. */
-    (family, generic) => fonts.Add(family, generic),
+    /** Registers a font used by an inherited list base. @param family - Font family. @param generic - Generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */
+    (family, generic, styleName, pitch, charSet) =>
+      registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
     /** Borrows the existing pool without registering a bullet font. @param family - Family. @returns Existing face. */
-    (family) => fonts.Find(family),
+    (family) =>
+      fonts.Find(
+        family,
+        "",
+        FontFamily.FAMILY_DONTKNOW,
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+      ) || undefined,
   ).namedStyles;
   const namedRules = new Map<string, SwNumRule>();
   const styles = document.GetTextFormatColls().map(
@@ -191,10 +198,13 @@ export function exportStylesXml(document: SwDoc): string {
           ? ""
           : `<style:text-properties${exportCharacterAttributes(
               characterProperties,
-              /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */ (
+              /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */ (
                 family,
                 generic,
-              ) => fonts.Add(family, generic),
+                styleName,
+                pitch,
+                charSet,
+              ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
             )}/>`;
       const nextName = getWriterOdfStyleName(collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
@@ -222,7 +232,14 @@ export function exportStylesXml(document: SwDoc): string {
   const exporter = new SvxXMLNumRuleExport(
     escapeXml,
     /** Borrows existing declarations. @param family - Family. @returns Existing face. */
-    (family) => fonts.Find(family),
+    (family) =>
+      fonts.Find(
+        family,
+        "",
+        FontFamily.FAMILY_DONTKNOW,
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+      ) || undefined,
   );
   const numberingStyles = [...namedRules.values()]
     .map(
@@ -260,10 +277,18 @@ export function exportContentXml(
   const exported = exportWriterText(
     document,
     isCancelled,
-    /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @returns Face name. */
-    (family, generic) => fonts.Add(family, generic),
+    /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */
+    (family, generic, styleName, pitch, charSet) =>
+      registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
     /** Borrows the existing pool without registering a bullet font. @param family - Family. @returns Existing face. */
-    (family) => fonts.Find(family),
+    (family) =>
+      fonts.Find(
+        family,
+        "",
+        FontFamily.FAMILY_DONTKNOW,
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+      ) || undefined,
   );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
@@ -272,7 +297,13 @@ export function exportContentXml(
 function exportWriterText(
   document: SwDoc,
   isCancelled: () => boolean,
-  fontFaceName: (family: string, generic?: string) => string,
+  fontFaceName: (
+    family: string,
+    generic?: string,
+    styleName?: string,
+    pitch?: FontPitch,
+    charSet?: number,
+  ) => string,
   existingFontFaceName: (family: string) => string | undefined,
 ): OdfTextExport {
   return exportTextParagraphs(
@@ -666,18 +697,42 @@ function getCharacterProperties(
     fontSize.GetHeight() !== complexFontSize.GetHeight()
   )
     throw new Error("ODT export does not support script-specific character formatting.");
-  const fontFamilyGeneric = font instanceof SvxFontItem ? font.GetGenericFamily() : undefined;
+  const fontFamilyGeneric =
+      font instanceof SvxFontItem ? getFontFamilyGeneric(font.GetFamily()) : undefined,
+    asianGeneric =
+      asianFont instanceof SvxFontItem ? getFontFamilyGeneric(asianFont.GetFamily()) : undefined,
+    complexGeneric =
+      complexFont instanceof SvxFontItem
+        ? getFontFamilyGeneric(complexFont.GetFamily())
+        : undefined;
   return {
     ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem
       ? {
           fontFamily: font.GetFamilyName(),
+          fontStyleName: font.GetStyleName(),
+          fontPitch: font.GetPitch(),
+          fontCharSet: font.GetCharSet(),
           ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
         }
       : {}),
-    ...(asianFont instanceof SvxFontItem ? { fontFamilyAsian: asianFont.GetFamilyName() } : {}),
+    ...(asianFont instanceof SvxFontItem
+      ? {
+          fontFamilyAsian: asianFont.GetFamilyName(),
+          fontStyleNameAsian: asianFont.GetStyleName(),
+          fontPitchAsian: asianFont.GetPitch(),
+          fontCharSetAsian: asianFont.GetCharSet(),
+          ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
+        }
+      : {}),
     ...(complexFont instanceof SvxFontItem
-      ? { fontFamilyComplex: complexFont.GetFamilyName() }
+      ? {
+          fontFamilyComplex: complexFont.GetFamilyName(),
+          fontStyleNameComplex: complexFont.GetStyleName(),
+          fontPitchComplex: complexFont.GetPitch(),
+          fontCharSetComplex: complexFont.GetCharSet(),
+          ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
+        }
       : {}),
     ...(explicitFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),

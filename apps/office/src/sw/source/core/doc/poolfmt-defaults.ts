@@ -3,7 +3,6 @@
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-
 import {
   SvxAdjust,
   SvxAdjustItem,
@@ -55,7 +54,8 @@ import {
 } from "../../../inc/hintids";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
 import type { SwTextFormatColl } from "./fmtcol";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Direct item values created by one upstream pool-style switch branch. */
 export interface WriterParagraphStyleDefaults {
   readonly adjust?: SvxAdjust;
@@ -271,7 +271,14 @@ function applyScriptFonts(collection: SwTextFormatColl, role: "fixed" | "heading
       script,
     );
     collection.SetFormatAttr(
-      new SvxFontItem(selection.requestedFamily, which, selection.resolvedFamily),
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        selection.resolvedFamily,
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        which,
+      ),
     );
   }
 }

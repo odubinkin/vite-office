@@ -17,9 +17,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/core/doc/default-font.ts#getDefaultFont",
-        "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#lcl_SetDfltFont"
+        "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#lcl_SetDfltFont",
+        "docs/program/calc-core.md#Canonical font-family values and ODF metadata (task135)"
       ],
-      "justification": "Ports the supported Writer script/language default-font decision and keeps output-device resolution behind an injected contract.",
+      "justification": "Ports the supported Writer script/language default-font decision and keeps output-device resolution behind an injected contract. Task135: Stores the selected device adapter family in the actual font value, matching native OutputDevice OnlyOne selection responsibility; complete device service remains unported. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
       "knownViolations": [],
       "localSymbols": [
         "WriterFontScript",

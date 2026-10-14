@@ -1,7 +1,5 @@
 /** @fileoverview Verifies complete Writer style and font ODT round-trip compatibility. */
-
 import { describe, expect, it, vi } from "vitest";
-
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -21,7 +19,9 @@ import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 /** Rebuilds an ODT after transforming its named-style stream. @param bytes - Source package. @param transform - styles.xml transform. @returns Rebuilt package. */
 async function rewriteStylesXml(
   bytes: Uint8Array,
@@ -43,9 +43,36 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
   it("keeps Latin, Asian and complex-script family identities separate", /** Mirrors Writer's three SvxFontItem slots in named styles. @returns Completion. */ async () => {
     const writer = createWriterDocument();
     const style = writer.GetTextFormatColl("text-body");
-    style.SetFormatAttr(new SvxFontItem("Latin Serif", RES_CHRATR_FONT));
-    style.SetFormatAttr(new SvxFontItem("Asian Serif", RES_CHRATR_CJK_FONT));
-    style.SetFormatAttr(new SvxFontItem("Complex Serif", RES_CHRATR_CTL_FONT));
+    style.SetFormatAttr(
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        "Latin Serif",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_FONT,
+      ),
+    );
+    style.SetFormatAttr(
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        "Asian Serif",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_CJK_FONT,
+      ),
+    );
+    style.SetFormatAttr(
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        "Complex Serif",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_CTL_FONT,
+      ),
+    );
     const metadata = { title: "Script families" };
     const saved = writeOdtDocument(writer, metadata);
     const stylesXml = await new ZipFile(saved).readTextEntry("styles.xml");
@@ -212,10 +239,12 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       textBody.SetFormatAttr(
         new SvxFontItem(
+          getFontFamilyFromGeneric(which === RES_CHRATR_FONT ? "roman" : undefined),
           "Source Serif 4",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
           which,
-          "Source Serif 4",
-          which === RES_CHRATR_FONT ? "roman" : undefined,
         ),
       );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
@@ -223,7 +252,16 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     const paragraph = writer.paragraphs[0];
     paragraph?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      paragraph?.SetAttr(new SvxFontItem("Paragraph Serif", which));
+      paragraph?.SetAttr(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Paragraph Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          which,
+        ),
+      );
     paragraph?.ReplaceRange(
       0,
       0,
@@ -307,8 +345,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
           .GetTextFormatColl("text-body")
           .GetAttrSet()
           .GetItemIfSet(RES_CHRATR_FONT, false) as SvxFontItem
-      ).GetGenericFamily(),
-    ).toBe("roman");
+      ).GetFamily(),
+    ).toBe(FontFamily.FAMILY_ROMAN);
     expect(
       (
         opened.document
@@ -351,4 +389,36 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
       projectWriterTextRuns(reopened.document.paragraphs[0]).at(0)?.attributes.fontFamily,
     ).toBe("Noto Sans");
   });
+});
+
+it("retains every supported native font value through ODT declarations for all three script slots", /** Actual writer export/import shares the full font pool and native enum mappings. @returns Completion. */ async () => {
+  const writer = createWriterDocument(),
+    collection = writer.GetTextFormatColl("text-body"),
+    slots = [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT] as const;
+  for (let i = 0; i < slots.length; ++i)
+    collection.SetFormatAttr(
+      new SvxFontItem(
+        FontFamily.FAMILY_ROMAN,
+        "Shared Face",
+        "Style" + i,
+        i === 1 ? FontPitch.PITCH_VARIABLE : FontPitch.PITCH_FIXED,
+        10,
+        slots[i] as number,
+      ),
+    );
+  const metadata = { title: "Native font fields" },
+    bytes = writeOdtDocument(writer, metadata),
+    styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+  expect(styles).toContain('style:font-adornments="Style0"');
+  expect(styles).toContain('style:font-adornments="Style1"');
+  expect(styles).toContain('style:font-adornments="Style2"');
+  expect(styles).toContain('style:font-charset="x-symbol"');
+  const reopened = await readOdtDocument(bytes, metadata),
+    restored = reopened.document.GetTextFormatColl("text-body").GetAttrSet();
+  for (const which of slots)
+    expect((restored.Get(which, true) as SvxFontItem).QueryValue()).toEqual(
+      (collection.GetAttrSet().Get(which, true) as SvxFontItem).QueryValue(),
+    );
+  reopened.document.Dispose();
+  writer.Dispose();
 });

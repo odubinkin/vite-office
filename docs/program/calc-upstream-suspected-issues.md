@@ -2003,3 +2003,22 @@ Pinned docmodel/source/color/ComplexColor.cxx operator== compares representation
 Two initialized RGB values with identical components and transformations compare equal after only one final Color is changed, while their field-based hashes can differ. This may conflict with equal-key hash requirements if such states enter the same hashed container. Different theme indices can compare unequal while sharing a hash; that collision alone is valid.
 
 ComplexColor.test.ts preserves these cases, including usage-only equality/hash stability. No fields are added to equality or removed from hashing. Browser logical hashes deliberately reuse the existing scalar binding and do not certify binary std::hash<double>/size_t results; the source field mismatch exists independently of that language adaptation. Native theme/UNO consumers still require further integration review.
+
+## CALC-114: XMLFontAutoStylePool Add returns empty for a new entry
+
+Status: original return behavior retained; no upstream defect claim.
+
+Pinned `xmloff/source/style/XMLFontAutoStylePool.cxx` initializes `sPoolName` to
+empty in `XMLFontAutoStylePool::Add`. The existing-entry branch assigns the
+stored name. The new-entry branch allocates and registers `sName`, but does not
+assign it to `sPoolName` before the final return. Consequently the first Add
+returns empty, the next identical Add returns the stored name, and Find can
+read that name immediately after insertion. This looks surprising for an API
+returning the assigned name, although callers that ignore Add and use Find
+are unaffected. Preserve the source behavior and exercise both paths; the
+browser property boundary registers then looks up the actual entry.
+
+The same pool deliberately compares symbol encoding separately from all
+non-symbol encodings. Full style/family/pitch values participate in its key,
+while different non-symbol encodings compare equivalent. Preserve this source
+rule and the source encoding export, which writes only `x-symbol`.

@@ -2,7 +2,6 @@
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createWriterNumFormat, getWriterNumFormatKind, SwNumRule } from "./number";
-
 import { describe, expect, it } from "vitest";
 import { encodeSfxItemSet, encodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
 import {
@@ -14,7 +13,6 @@ import {
 import { projectWriterTextRuns } from "../txtnode/ndtxt";
 import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
-
 import {
   SvxAdjust,
   SvxAdjustItem,
@@ -65,7 +63,8 @@ import { createWriterNumRule } from "./DocumentListsManager";
 import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwpHints } from "../txtnode/ndhints";
 import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Creates one canonical Writer fixture. @param id - Document identity. @returns Writer graph. */
 function createFixture(id = "writer-attrs"): WriterDocument {
   void id;
@@ -94,13 +93,42 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
   it("owns pool defaults and resolves collection inheritance through lazy node deltas" /** Verifies the canonical SwDoc → style → content-node item path. @returns Nothing; assertions inspect ownership and state. */, function resolvesWriterAttributes(): void {
     const writer = createFixture();
     const pool = writer.GetAttrPool();
-    const font = new SvxFontItem("Noto Serif", RES_CHRATR_FONT);
+    const font = new SvxFontItem(
+      FontFamily.FAMILY_DONTKNOW,
+      "Noto Serif",
+      "",
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+      RES_CHRATR_FONT,
+    );
     expect(font.GetFamilyName()).toBe("Noto Serif");
     expect(font.Clone()).toEqual(font);
-    expect(font.equals(new SvxFontItem("Noto Serif", RES_CHRATR_FONT))).toBe(true);
-    expect(font.equals(new SvxFontItem("Noto Sans", RES_CHRATR_FONT))).toBe(false);
+    expect(
+      font.equals(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Noto Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      font.equals(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Noto Sans",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
+      ),
+    ).toBe(false);
     expect(encodeSfxPoolItem(font)).toEqual({
-      value: "Noto Serif",
+      value: font.QueryValue(),
       which: RES_CHRATR_FONT,
     });
     expect(pool.CreateItem(encodeSfxPoolItem(font))).toEqual(font);
@@ -114,8 +142,15 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false),
     );
     expect(
-      /** Rejects a blank font. @returns Invalid item. */ () => new SvxFontItem(" ", 1),
-    ).toThrow("invalid");
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        " ",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        1,
+      ).GetFamilyName(),
+    ).toBe(" ");
     const defaultStyle = writer.GetDfltTextFormatColl();
     const heading = writer.GetTextFormatColl("heading-1");
     const headingBase = writer.GetTextFormatColl("heading");

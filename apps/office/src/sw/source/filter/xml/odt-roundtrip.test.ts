@@ -3,9 +3,7 @@
  */
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatBullet } from "../../core/doc/number";
-
 import { describe, expect, it, vi } from "vitest";
-
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
   FontLineStyle,
@@ -40,7 +38,8 @@ import { importWriterXml, parseOdfXml } from "./xmlimp";
 import { SwXMLWriter, writeOdtDocument } from "./wrtxml";
 import type { SwDoc } from "../../core/doc/doc";
 import type { OdtExportControl } from "./wrtxml";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Creates complete metadata used at the import boundary. @param title - Title. @returns Metadata. */
 function metadata(title = "Imported") {
   return createDocument({ id: "odt-1", suiteId: "writer", title });
@@ -215,7 +214,18 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const writer = createWriterDocument();
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      writer.GetDfltTextFormatColl().SetFormatAttr(new SvxFontItem("Noto Serif", which));
+      writer
+        .GetDfltTextFormatColl()
+        .SetFormatAttr(
+          new SvxFontItem(
+            FontFamily.FAMILY_DONTKNOW,
+            "Noto Serif",
+            "",
+            FontPitch.PITCH_DONTKNOW,
+            RTL_TEXTENCODING_DONTKNOW,
+            which,
+          ),
+        );
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));

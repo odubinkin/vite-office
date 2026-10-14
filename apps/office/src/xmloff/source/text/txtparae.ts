@@ -1,27 +1,13 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
-
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
-
-export { ODF_NAMESPACES } from "../core/xmltoken";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
+import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
+export { ODF_NAMESPACES } from "../core/xmltoken";
 
-/** Direct character properties supported by the bounded text exporter. */
-export interface OdfCharacterProperties {
-  readonly color?: string;
-  readonly fontFamily?: string;
-  readonly fontFamilyGeneric?: string;
-  readonly fontFamilyAsian?: string;
-  readonly fontFamilyComplex?: string;
-  /** Absolute font height in twips. */
-  readonly fontSizeTwips?: number;
-  readonly highlight?: string;
-  readonly bold: boolean;
-  readonly italic: boolean;
-  readonly underline: boolean;
-}
+export type { OdfCharacterProperties } from "./txtparae.types";
 
 /** Hyperlink metadata supported by the bounded text importer and exporter. */
 export interface OdfHyperlink {
@@ -161,7 +147,7 @@ export class XMLTextParagraphExport {
   public constructor(
     private readonly source: XMLTextExportSource,
     private readonly isCancelled: () => boolean,
-    private readonly fontFaceName?: (familyName: string, generic?: string) => string,
+    private readonly fontFaceName?: FontFaceNameResolver,
     private readonly existingFontFaceName?: (familyName: string) => string | undefined,
   ) {}
 
@@ -333,7 +319,7 @@ export class XMLTextParagraphExport {
 export function exportTextParagraphs(
   source: XMLTextExportSource,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
-  fontFaceName?: (familyName: string, generic?: string) => string,
+  fontFaceName?: FontFaceNameResolver,
   existingFontFaceName?: (familyName: string) => string | undefined,
 ): OdfTextExport {
   return new XMLTextParagraphExport(
@@ -931,7 +917,7 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
 /** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
 export function exportCharacterAttributes(
   properties: Partial<OdfCharacterProperties>,
-  fontFaceName?: (familyName: string, generic?: string) => string,
+  fontFaceName?: FontFaceNameResolver,
 ): string {
   assertOdfColor(properties.color, "auto", "font color");
   assertOdfColor(properties.highlight, "transparent", "highlight color");
@@ -945,16 +931,16 @@ export function exportCharacterAttributes(
       ? ""
       : fontFaceName === undefined
         ? ` fo:font-family="${escapeXml(properties.fontFamily)}"`
-        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily, properties.fontFamilyGeneric))}" style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian ?? properties.fontFamily))}" style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex ?? properties.fontFamily))}"`,
+        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily, properties.fontFamilyGeneric, properties.fontStyleName, properties.fontPitch, properties.fontCharSet))}" style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian ?? properties.fontFamily, properties.fontFamilyGenericAsian, properties.fontStyleNameAsian, properties.fontPitchAsian, properties.fontCharSetAsian))}" style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex ?? properties.fontFamily, properties.fontFamilyGenericComplex, properties.fontStyleNameComplex, properties.fontPitchComplex, properties.fontCharSetComplex))}"`,
     properties.fontFamily === undefined &&
     properties.fontFamilyAsian !== undefined &&
     fontFaceName !== undefined
-      ? ` style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian))}"`
+      ? ` style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian, properties.fontFamilyGenericAsian, properties.fontStyleNameAsian, properties.fontPitchAsian, properties.fontCharSetAsian))}"`
       : "",
     properties.fontFamily === undefined &&
     properties.fontFamilyComplex !== undefined &&
     fontFaceName !== undefined
-      ? ` style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex))}"`
+      ? ` style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex, properties.fontFamilyGenericComplex, properties.fontStyleNameComplex, properties.fontPitchComplex, properties.fontCharSetComplex))}"`
       : "",
     properties.fontSizeTwips === undefined
       ? ""

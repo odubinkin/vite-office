@@ -27,7 +27,8 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 for (const preserve of [false, true])
   it(`native number font uses paragraph attr ownership and source reset preserve=${preserve}`, /** Checks native enums, independent optional font copies and no history/model mutation while resolving. @returns Nothing. */ () => {
     const doc = new SwDoc(),
@@ -41,7 +42,14 @@ for (const preserve of [false, true])
       doc.GetDocumentSettingManager().set("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT", preserve);
       node.SetText("Paragraph text");
       node.SetAttr(
-        new SvxFontItem("Liberation Serif", RES_CHRATR_FONT, "Liberation Serif", "roman"),
+        new SvxFontItem(
+          FontFamily.FAMILY_ROMAN,
+          "Liberation Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
       );
       node.SetAttr(new SvxFontHeightItem(400, 100, RES_CHRATR_FONTSIZE));
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));

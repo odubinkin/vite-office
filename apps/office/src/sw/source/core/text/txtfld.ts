@@ -20,7 +20,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwNumRule } from "../doc/number";
-
+import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
 /** Immutable represented Latin font values for a numbering paint device, not a replacement SwFont owner. */
 export interface SwNumberPortionFont {
   readonly familyName: string;
@@ -48,10 +48,9 @@ export function resolveSwNumberPortionFont(
     .get("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT");
   const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
   const bulletFont = bullet ? format.GetBulletFont() : undefined;
-  const generic = bulletFont === undefined ? font.GetGenericFamily() : undefined;
+  const generic = bulletFont === undefined ? getFontFamilyGeneric(font.GetFamily()) : undefined;
   return Object.freeze({
-    familyName:
-      bulletFont === undefined ? font.GetResolvedFamilyName() : bulletFont.GetFamilyName(),
+    familyName: bulletFont === undefined ? font.GetFamilyName() : bulletFont.GetFamilyName(),
     ...(generic === undefined ? {} : { genericFamily: generic }),
     heightTwips: (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight(),
     weight:
