@@ -93,7 +93,8 @@ const allowedEdges = new Map([
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   ["svl", new Set(["comphelper", "cppu", "o3tl", "sal"])],
-  ["svtools", new Set()],
+  // Original svtools/source/misc/unitconv.cxx uses Tools map/field units and o3tl conversions.
+  ["svtools", new Set(["tools", "o3tl"])],
   // Original sdangitm.hxx includes tools/degree.hxx.
   // Original rotmodit.cxx exposes Any and CellVertJustify2.
   ["svx", new Set(["cppu", "editeng", "o3tl", "offapi", "svl", "svtools", "tools", "vcl"])],

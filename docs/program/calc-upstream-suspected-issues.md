@@ -1950,3 +1950,14 @@ SvxPostureItem GetBoolValue in editeng/source/items/textitem.cxx checks GetValue
 Status: source-confirmed behavior; consumer-visible defect not established.
 
 VCL ConvertFontWeight maps each input float to the first greater-or-equal weight constant. Values above BLACK200 and NaN fall back to WEIGHT_DONTKNOW, rather than clamping to BLACK; native float32 casts affect values just above100or200. The pinned MEDIUM wire weight is105. SvxWeightItem bool failure through Any2Bool resets to NORMAL, while numeric extraction failure leaves state unchanged; unknown members report untouched success. Its legacy signed32 extraction after failed double extraction cannot succeed for actual Any: cppu/source/uno/assign.hxx accepts BYTE/SHORT/UNSIGNED_SHORT/LONG/UNSIGNED_LONG for LONG, and all of those plus FLOAT/DOUBLE for DOUBLE. Both original extraction calls are retained without constructing a fake peer to force an impossible success path. Original threshold/cast/failure ordering is preserved, without adding clamps or native memory probes. Task123 also corrects earlier local Which-sensitive weight equality to the original shared payload comparison.
+
+
+## CALC-109: ControlToItem delegates in the item-to-control direction
+
+Status: suspicious source direction; original behavior preserved.
+
+Pinned `svtools/source/misc/unitconv.cxx:138` implements `ControlToItem(nIn, eCtrl, eItem)` by returning `ItemToControl(nIn, eItem, eCtrl)`. The called function maps the item unit to the field unit. It does not invert that conversion even though the public function name suggests the opposite direction.
+
+Initialized examples: `ControlToItem(200, FieldUnit::POINT, MapUnit::MapTwip)` gives10, as does `ItemToControl(200, MapUnit::MapTwip, FieldUnit::POINT)`. Converting200points into twips would instead give4000. Native `SvxFontHeightItem::SetHeight` with four arguments also calls this helper; its caller invariants and intended historical behavior have not been established.
+
+The shared implementation retains the exact same-direction delegation. Literal initialized assertions in `apps/office/src/svtools/source/misc/native-unitconv.test.ts` distinguish it from a plausible inverse. Source inspection and ordinary TypeScript tests provide the evidence; no native build, sanitizer, binary/ABI certification or upstream issue publication occurred. An upstream correction would require separate evidence and user direction; this record does not authorize changing behavior.

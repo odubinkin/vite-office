@@ -639,3 +639,16 @@ it("allows original VCL slant helper dependencies while retaining reverse applic
   for (const application of ["sc", "sw", "framework"])
     expect(isForbiddenModuleEdge("vcl", application)).toBe(true);
 });
+
+it("permits original SVTools scalar metric dependencies while preserving reverse application and browser guards", /** Original unitconv consumes Tools and o3tl, without presentation owners. @returns Nothing. */ () => {
+  for (const target of ["tools", "o3tl"]) {
+    expect(isForbiddenModuleEdge("svtools", target)).toBe(false);
+    expect(isForbiddenModuleEdge(target, "svtools")).toBe(true);
+  }
+  for (const target of ["sc", "sw", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("svtools", target)).toBe(true);
+  expect(getRuntimeOwnershipLayer("svtools/source/misc/unitconv.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("svtools/source/misc/unitconv.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
