@@ -4,7 +4,7 @@ title: "Implement native font-height Any transport with browser arithmetic"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T13:21:15.601Z"
+  updated_by: "CODER"
+  note: "2ca441c99b98f3d49b82173eb4e42599855b9292 exact15paths3679to3685hashes12nativepins. Shared4owners163S94B29F152L raw100; related13/4files, Calc170/65files33ownersraw100;12gates30boundaries pass. NativeAny partialmutations/type binding preserved, JSrounding used, CALC111 recorded. No newmemoryengine/nativebuild/RTLport. Nativepresentation and fullDocPool/UI/ODS stillpending, nextfullactualreadiness thenrepairs/pause; same-agent evaluator notindependent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T13:21:13.268Z"
+  updated_by: "EVALUATOR"
+  note: "Original font-height Any transport and actual FontHeight value/type binding pass declared checks at2ca441c99b98f3d49b82173eb4e42599855b9292; same-agent phase, not independent."
+  evaluated_sha: "2ca441c99b98f3d49b82173eb4e42599855b9292"
+  blueprint_digest: "9c5f20b340a417c641811e626971edfc6bad7f102b2ad7eb3a5c3ea1c635da13"
+  evidence_refs:
+    - ".agentplane/tasks/202610141310-EK4H2E/README.md"
+    - ".agentplane/tasks/202610141310-EK4H2E/quality/20261014-132113268-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141310-EK4H2E/quality/20261014-132113268-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141310-EK4H2E/quality/20261014-132113268-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141310-EK4H2E/blueprint/resolved-snapshot.json"
+    - "output/playwright/task127-checks/exact-review.json"
+    - "output/playwright/task127-checks/value-coverage-audit.json"
+    - "output/playwright/task127-checks/gates-results.json"
+  findings:
+    - "Exact15paths9changed6new,3679to3685sourcehashes12nativepins. Real existing CPPU static_struct binding and3ordinaryscalarcells, no new allocator/memorymanager. Complete normalbrowser Any members preserve signed/unsigned fields, admission, original partialmutations/reconstruction/defaultsuccess; CALC111 records source oddities. JSrounding with short meaningful integer-rational witnesses, no RTLround library. Changedshared4owners163S94B29F152L raw100; related13tests4files, Calc170/65files33ownersraw100;12gates30boundaries pass. Metadata basename-only evidence repaired with actualIDL fields, history/statuses intact."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: complete original font-height Any members with real shared type binding and bounded JS arithmetic."
+  -
+    type: "verify"
+    at: "2026-10-14T13:21:15.601Z"
+    author: "CODER"
+    state: "ok"
+    note: "2ca441c99b98f3d49b82173eb4e42599855b9292 exact15paths3679to3685hashes12nativepins. Shared4owners163S94B29F152L raw100; related13/4files, Calc170/65files33ownersraw100;12gates30boundaries pass. NativeAny partialmutations/type binding preserved, JSrounding used, CALC111 recorded. No newmemoryengine/nativebuild/RTLport. Nativepresentation and fullDocPool/UI/ODS stillpending, nextfullactualreadiness thenrepairs/pause; same-agent evaluator notindependent."
 doc_version: 3
-doc_updated_at: "2026-10-14T13:20:27.031Z"
+doc_updated_at: "2026-10-14T13:21:15.676Z"
 doc_updated_by: "CODER"
 description: "Complete actual FontHeight IDL value/type binding and all SvxFontHeightItem Any members, preserving partial mutations/default success and native numeric domains with JS arithmetic. Reuse existing CPPU, no new allocator or memory engine, no rounding library port."
 sections:
@@ -50,6 +74,39 @@ sections:
     Command: node output/playwright/task127-checks/gates.mjs plus metadata-only provenance/registry rechecks; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence:12finalgates30boundarytests pass. Initial10/12staticgates failed only basename-only native evidence; exactIDL fields/declaration markers corrected and2actual commands rerun, diagnostics retained. Scope: exact15paths9changed6new,3679baselineblobs12nativeSHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. OrdinaryJSrounding and bounded rational witnesses, no RTLmathlibrary/exhaustive/nativebinarysuite. ActualsharedCPPUtypeinit reused;3ordinaryscalarcells onlyadapt existing Any lvalues, no newallocator/addressmanager/memorylibrary.
 
     Skipped: full application/browser suites. Reason: noUI/Writer runtimechanged; human nextfull checkpoint is actualminimumUI+same-modelODSread/save readiness, not reached. Risk: broad application/nativepresentation/fuzz/undefinedcast domains notrecertified. Approval: human related-test/readiness/pause and JSrounding instructions. Same-agent evaluator phase notindependent. Exact source commit and finalclean calc checkout recorded atclosure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T13:21:15.601Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 2ca441c99b98f3d49b82173eb4e42599855b9292 exact15paths3679to3685hashes12nativepins. Shared4owners163S94B29F152L raw100; related13/4files, Calc170/65files33ownersraw100;12gates30boundaries pass. NativeAny partialmutations/type binding preserved, JSrounding used, CALC111 recorded. No newmemoryengine/nativebuild/RTLport. Nativepresentation and fullDocPool/UI/ODS stillpending, nextfullactualreadiness thenrepairs/pause; same-agent evaluator notindependent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T13:20:27.031Z, excerpt_hash=sha256:3f1dfd883b9a630b5c41646043db1ac3ae1ababa40314d667a62377460d5896f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141310-EK4H2E/blueprint/resolved-snapshot.json
+    - old_digest: 9c5f20b340a417c641811e626971edfc6bad7f102b2ad7eb3a5c3ea1c635da13
+    - current_digest: 9c5f20b340a417c641811e626971edfc6bad7f102b2ad7eb3a5c3ea1c635da13
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141310-EK4H2E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141310-EK4H2E -m 🧩 EK4H2E task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task source commit/task artifacts if required; preserve user/unrelated changes and priorcanonicalowners."
   Findings: |-
     Preflight clean calc. Latest human clarifies tiny roundingdifferences are visuallynegligible: use JS and bounded meaningfulchecks; no RTLround library port. Source confirms unsigned32height query has denominator127 and safedistance fromhalf; use ordinaryMath. ActualCPPUnormalstruct init alreadyimplemented, reuse withoutnativegenerator. Three scalarfieldcells are onlylvaluebridges foractualAny, not a binarydata/memoryengine. Native PutValue differs bymember inmutationtiming/failurebool; preserve and recordCALC111. Fuzz-onlyenvironment notbrowsernormalconfiguration, no fake config provider. All futuretask/fullcheckpoint constraints retained.
@@ -80,6 +137,39 @@ Command: node output/playwright/task127-checks/portable.mjs. Result: pass. Evide
 Command: node output/playwright/task127-checks/gates.mjs plus metadata-only provenance/registry rechecks; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence:12finalgates30boundarytests pass. Initial10/12staticgates failed only basename-only native evidence; exactIDL fields/declaration markers corrected and2actual commands rerun, diagnostics retained. Scope: exact15paths9changed6new,3679baselineblobs12nativeSHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. OrdinaryJSrounding and bounded rational witnesses, no RTLmathlibrary/exhaustive/nativebinarysuite. ActualsharedCPPUtypeinit reused;3ordinaryscalarcells onlyadapt existing Any lvalues, no newallocator/addressmanager/memorylibrary.
 
 Skipped: full application/browser suites. Reason: noUI/Writer runtimechanged; human nextfull checkpoint is actualminimumUI+same-modelODSread/save readiness, not reached. Risk: broad application/nativepresentation/fuzz/undefinedcast domains notrecertified. Approval: human related-test/readiness/pause and JSrounding instructions. Same-agent evaluator phase notindependent. Exact source commit and finalclean calc checkout recorded atclosure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T13:21:15.601Z — VERIFY — ok
+
+By: CODER
+
+Note: 2ca441c99b98f3d49b82173eb4e42599855b9292 exact15paths3679to3685hashes12nativepins. Shared4owners163S94B29F152L raw100; related13/4files, Calc170/65files33ownersraw100;12gates30boundaries pass. NativeAny partialmutations/type binding preserved, JSrounding used, CALC111 recorded. No newmemoryengine/nativebuild/RTLport. Nativepresentation and fullDocPool/UI/ODS stillpending, nextfullactualreadiness thenrepairs/pause; same-agent evaluator notindependent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T13:20:27.031Z, excerpt_hash=sha256:3f1dfd883b9a630b5c41646043db1ac3ae1ababa40314d667a62377460d5896f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141310-EK4H2E/blueprint/resolved-snapshot.json
+- old_digest: 9c5f20b340a417c641811e626971edfc6bad7f102b2ad7eb3a5c3ea1c635da13
+- current_digest: 9c5f20b340a417c641811e626971edfc6bad7f102b2ad7eb3a5c3ea1c635da13
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141310-EK4H2E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141310-EK4H2E -m 🧩 EK4H2E task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
