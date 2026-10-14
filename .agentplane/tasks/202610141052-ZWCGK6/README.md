@@ -4,7 +4,7 @@ title: "Implement shared cell alignment values and Calc formatting defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-14T11:02:40.195Z"
+  updated_by: "CODER"
+  note: "WholeCalc162tests and18related tests pass; current complete Calc33/shared10owners rawS/B/F/L100 everycounterpositive. Module27tests/12focused gates and exact46paths3539hashes/18nativepins pass. Real shared enum metadata and original failure/default semantics preserved; same-agent EVAL not independent. Full121next; actual document/UI/ODS remain pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T11:02:31.007Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent source-bound review passed46paths/18native pins,162Calc/18related/27module tests, complete changedowner raw100 and12focused gates. Not independent review."
+  evaluated_sha: "e45ed009bd458c8a46060977c99cd31163793957"
+  blueprint_digest: "a990d65479b9adf4a824a61fbaca837f597a0fcefbd15571e948ce2f81fb384e"
+  evidence_refs:
+    - ".agentplane/tasks/202610141052-ZWCGK6/README.md"
+    - ".agentplane/tasks/202610141052-ZWCGK6/quality/20261014-110231007-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141052-ZWCGK6/quality/20261014-110231007-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141052-ZWCGK6/quality/20261014-110231007-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141052-ZWCGK6/blueprint/resolved-snapshot.json"
+    - "output/playwright/task117-checks/exact-review.json"
+    - "output/playwright/task117-checks/value-coverage-audit.json"
+    - "output/playwright/task117-checks/gates-results.json"
+  findings:
+    - "Actual shared cell alignment/rotate-mode and5IDL owners preserve enum/short/long transport, copy/default/member and failure quirks; native normal enum getter uses genuine CPPU, no generator/fake provider. Source-backed module edge migration preserves reverse/browser guards."
 commit: null
 comments:
   -
@@ -35,8 +53,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved real shared alignment/rotation-mode value chains and UNO types, five Calc defaults; preserve source quirks, no generator or fake provider."
+  -
+    type: "verify"
+    at: "2026-10-14T11:02:40.195Z"
+    author: "CODER"
+    state: "ok"
+    note: "WholeCalc162tests and18related tests pass; current complete Calc33/shared10owners rawS/B/F/L100 everycounterpositive. Module27tests/12focused gates and exact46paths3539hashes/18nativepins pass. Real shared enum metadata and original failure/default semantics preserved; same-agent EVAL not independent. Full121next; actual document/UI/ODS remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-14T11:01:50.540Z"
+doc_updated_at: "2026-10-14T11:02:40.281Z"
 doc_updated_by: "CODER"
 description: "Task117: native EditEng justify item trio, SVX rotate-mode, real UNO enum/constant owners, five Calc DocPool attribute identities. Reuse SVL/CPPU, preserve source conversion/default quirks; source-absent Calc/shared raw100 and focused checks, full121next."
 sections:
@@ -55,6 +79,39 @@ sections:
     Command: node output/playwright/task117-checks/gates.mjs
     Result: pass12focused gates format/lint/app typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff. Exact46intentionalpaths, fresh3507Gitbaseline/current3539hashes and18nativepins reviewed before final verification. Same-agent EVAL not independent.
     Full-office/browser/static nextscheduled121 per user cadence; no Writer-only coverage repairs or native C++ generator/build.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T11:02:40.195Z — VERIFY — ok
+
+    By: CODER
+
+    Note: WholeCalc162tests and18related tests pass; current complete Calc33/shared10owners rawS/B/F/L100 everycounterpositive. Module27tests/12focused gates and exact46paths3539hashes/18nativepins pass. Real shared enum metadata and original failure/default semantics preserved; same-agent EVAL not independent. Full121next; actual document/UI/ODS remain pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:01:50.540Z, excerpt_hash=sha256:099354f3743c6d1ba7b1b196bedb7c67c556b24642f99038ceb07d70a2d0741e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141052-ZWCGK6/blueprint/resolved-snapshot.json
+    - old_digest: a990d65479b9adf4a824a61fbaca837f597a0fcefbd15571e948ce2f81fb384e
+    - current_digest: a990d65479b9adf4a824a61fbaca837f597a0fcefbd15571e948ce2f81fb384e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141052-ZWCGK6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141052-ZWCGK6 -m 🧩 ZWCGK6 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task117 source commit if needed, preserve tasks113-116/userintegration/otheractive tasks. No reset/merge/outside-repo/global edits."
   Findings: "WholeCalc162tests and18related tests passed firsttime strict raw100 including complete new alignment/UNO enum type owners. Initial27module tests26pass/1fail: historical locale-only OffAPI→CPPU forbidden assertion no longer matches actual original generated enum getter responsibility. Pinned EnumType::dumpNormalGetCppuType emits CPPU static enum initialization and borrowed Typecell; approved exact graph edge requires changing that assertion toallowed with source comment. All other assertions, reverse/app/browser restrictions and thresholds retained; final27pass and12gates pass. CALC103documents original horizontal unknown-member untouchedsuccess, vertical default failed-extraction reset-success, rotate-mode reset-success and lossy VerticalAlignment member, without correcting source behavior. Actual CPPU metadata/extraction/insertion and shared SfxEnumItem reused; normal generated getters modeled directly from pinned template, no generator executed/fake provider/source fixture/private forcing. Scoped fixed-int unknown-value switch defaults distinct from invalid native enum/presentation/assertion/ABI domains. Header/core ownership and5IDL values retained, no memory/refcount engine. Complete DocPool/document/configuration/storage/UI/ODS and localized presentation/diagnostics/native caches/comprehensive generated helpers remain pending/excluded. Same-agent EVAL not independent. Goalactive, full121next."
 id_source: "generated"
@@ -86,6 +143,39 @@ Result: pass27tests after one source-backed prior OffAPI→CPPU expectation migr
 Command: node output/playwright/task117-checks/gates.mjs
 Result: pass12focused gates format/lint/app typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff. Exact46intentionalpaths, fresh3507Gitbaseline/current3539hashes and18nativepins reviewed before final verification. Same-agent EVAL not independent.
 Full-office/browser/static nextscheduled121 per user cadence; no Writer-only coverage repairs or native C++ generator/build.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T11:02:40.195Z — VERIFY — ok
+
+By: CODER
+
+Note: WholeCalc162tests and18related tests pass; current complete Calc33/shared10owners rawS/B/F/L100 everycounterpositive. Module27tests/12focused gates and exact46paths3539hashes/18nativepins pass. Real shared enum metadata and original failure/default semantics preserved; same-agent EVAL not independent. Full121next; actual document/UI/ODS remain pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T11:01:50.540Z, excerpt_hash=sha256:099354f3743c6d1ba7b1b196bedb7c67c556b24642f99038ceb07d70a2d0741e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141052-ZWCGK6/blueprint/resolved-snapshot.json
+- old_digest: a990d65479b9adf4a824a61fbaca837f597a0fcefbd15571e948ce2f81fb384e
+- current_digest: a990d65479b9adf4a824a61fbaca837f597a0fcefbd15571e948ce2f81fb384e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141052-ZWCGK6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141052-ZWCGK6 -m 🧩 ZWCGK6 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
