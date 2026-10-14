@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140634-X9GQHZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T07:34:24.162Z",
+  "verdict": "pass",
+  "summary": "Same-agent non-independent review of semantic commit 795cbf3b3330: full upstream-absent checkpoint complete with one source-backed browser fixture repair and exact metadata link restoration.",
+  "evaluated_sha": "795cbf3b33307ecf4f46c59450be2703088ad2dc",
+  "blueprint_digest": "bba1efdff1926427c21f36fb39efae722de06763d92f1b02ca660920b7359d0e",
+  "findings": [
+    "Original child Ctrl-F6 assertion contradicted pinned vcl popup-parent behavior; added explicit parent-focus and second-key checks while preserving every original assertion byte.",
+    "One full app/tooling/inventory/browser run retained; only the failed Chromium case reran after fixture correction, with no source or provider changes."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140634-X9GQHZ/README.md",
+    "apps/office/node_modules/.cache/parity-coverage/X9GQHZ/proof.json: 16355 accepted, 100% four metrics on 508 modules, 67031 positive original counters, 9 metadata gates",
+    "apps/office/node_modules/.cache/parity-coverage/X9GQHZ/browser-fixture-proof.json: exact original browser acceptance retained"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Physical table follow allocation and separate pointer ownership remain pending future parity work; paused by latest human instruction after this full checkpoint."
+  ]
+}
