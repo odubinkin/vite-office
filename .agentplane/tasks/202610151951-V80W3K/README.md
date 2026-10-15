@@ -1,10 +1,11 @@
 ---
 id: "202610151951-V80W3K"
 title: "Implement original shared string pool interning and purge"
-status: "DOING"
+result_summary: "Added actual shared string pool using existing shared values and bounded actual uppercase receiver contract without a new lifetime engine."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Reviewed original initial insertion, uppercase equality/existing-key/new-key paths and purge order over real shared values. JS UTF16 Map/Set is a documented value-equality binding; no new native hash/lifetime engine or fake full CharClass provider."
     - "67 related tests,187Calc,production build,Chromium pool scenario and13 gates pass. Raw100 exact owner sets,8 native pins,unchanged StringWithHash/hash declarations and30 guard bodies verified."
-commit: null
+commit:
+  hash: "3465ba9f6f34c886a1f69a8ee0ca2dbb0bab13a1"
+  message: "🧩 V80W3K task: record verified shared string pool acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual original string-pool map and two-pass purge using existing string values and a bounded borrowed uppercase contract without new lifetime machinery."
+  -
+    author: "CODER"
+    body: "Verified: original SharedStringPool identity mappings,two-pass purge and counts pass4 native QA scenarios;67 related,187Calc,Chromium,build and13 gates pass with exact shared/Calc raw100."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: node output/playwright/task167-checks/portable.mjs:67 related tests/6files,187Calc/76files; exact1 shared pool owner raw S83/B18/F16/L77 and33Calc S4179/B2731/F821/L3727 all positive100. All4 original pool QA scenarios, aliases/static/empty/locale/nul/surrogates/collisions/caller survival/exception ordering covered. native-audit.mjs pins8 blobs and unchanged key tokens; guard-proof.mjs30 unchanged function bodies. source-gates.mjs all13,including43 boundary tests, pass. build-browser-portable.mjs production build and1 actual Chromium pool scenario pass. Four reference links absent during runtime, restored exactly. final-verification.json retained; no full-suite/UI+ODS milestone or independent review claim."
+  -
+    type: "status"
+    at: "2026-10-15T19:58:51.269Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original SharedStringPool identity mappings,two-pass purge and counts pass4 native QA scenarios;67 related,187Calc,Chromium,build and13 gates pass with exact shared/Calc raw100."
 doc_version: 3
-doc_updated_at: "2026-10-15T19:58:42.036Z"
+doc_updated_at: "2026-10-15T19:58:51.271Z"
 doc_updated_by: "CODER"
 description: "Task167: implement actual SharedStringPool with original uppercase mapping identity and two-pass purge through existing OUString/SharedString owners; borrowed uppercase receiver contract, no fake full CharClass/UNO or new lifetime engine."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Observation: Related67/6files and Calc187/76files pass; exact pool owner raw S83/B18/F16/L77 and33Calc S4179/B2731/F821/L3727 all positive100. Source dependency gate requires original svl->unotools edge, witnessed by SharedStringPool include and Library_svl utl linkage. Native source audit initially named an inline constructor in sharedstring.cxx; the actual cxx marker is SharedString::getEmptyString.
       Impact: Only genuine source edge registration and evidence-marker correction were needed; no runtime production defect or new lifetime mechanism found.
       Resolution: Register the single source-backed edge, retain guard algorithms, rerun failed/pending source checks, then production build and actual Chromium pool acceptance. Native audit pins8 original blobs and preserves both existing key declaration token hashes.
+extensions:
+  implementation_commit:
+    hash: "d334f72d208d105b6a13488a3c18e6ceea14b8d4"
+    message: "🔧 V80W3K core: implement original shared string pool mapping and purge"
 id_source: "generated"
 ---
 ## Summary
