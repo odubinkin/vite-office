@@ -1,10 +1,11 @@
 ---
 id: "202610152225-XQYDC8"
 title: "Implement native named item-pool construction and copy for Calc document pools"
-status: "DOING"
+result_summary: "Implemented native pool construction/copy base needed by ScDocumentPool;actual virtual Clone regression preserves temporary MapCM and all-metadata staging. Full document/UI/ODS remains pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/task176-checks/native-audit.json"
   findings:
     - "Actual source and regression evidence preserve staging all metadata before item Clone,temporary MapCM before source metric,and virtual secondary Clone after local copies. Seven native blobs pinned and37existing method bodies unchanged. Exact raw coverage ownership and four restored refs checked."
-commit: null
+commit:
+  hash: "9a9e5636b46ae7dc7a27cfcbe37e975362fed608"
+  message: "📝 XQYDC8 core: record item pool construction quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved native named/copy item-pool base required by Calc document pools; preserve original value-category and shutdown notification semantics under GC."
+  -
+    author: "CODER"
+    body: "Verified: actual named/copy pools preserve native metadata staging,Clone categories,secondary links,metrics and once-only shutdown;217related and187Calc tests,strict raw100,13gates,build and shared/Writer Chromium pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: native-audit.mjs,portable.mjs shared-only/calc-only,source-gates.mjs,build-browser-portable.mjs,final-audit.mjs in output/playwright/task176-checks. Result:pass. Evidence:217related/21files,187Calc/76files;exact2measured shared owners S428/B304/F87/L347 and33Calc S4179/B2731/F821/L3727 all raw counters positive100;13gates;production build,pool-copy Chromium,Writer startup/load/edit. Seven pinned originals,37unchanged method bodies and actual constructor-time Clone query prove native metadata staging/MapCM order. Scope:named/copy pool,Clone,metrics,BC,shutdown gate/cache timing and secondary links. Four refs absent at runtime/restored. Native pool destruction/presentation,ScDocumentPool/document/UI/ODS remain pending;no full all-app run."
+  -
+    type: "status"
+    at: "2026-10-15T22:33:36.905Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual named/copy pools preserve native metadata staging,Clone categories,secondary links,metrics and once-only shutdown;217related and187Calc tests,strict raw100,13gates,build and shared/Writer Chromium pass."
 doc_version: 3
-doc_updated_at: "2026-10-15T22:33:12.867Z"
+doc_updated_at: "2026-10-15T22:33:36.907Z"
 doc_updated_by: "CODER"
 description: "Task176: actual SfxItemPool name,metric,copy/Clone and shutdown notification contracts required by ScDocumentPool. Reuse actual OUString,SfxBroadcaster and native metadata; GC owns physical lifetimes. No fabricated Calc pool or surrogate/lifetime framework."
 sections:
@@ -117,6 +130,10 @@ sections:
     - Observation: Review of native initializer and body ordering shows all metadata vectors/maps are copied before virtual item Clone calls,and eDefMetric remains MapCM until the copy loop completes.
       Impact: Incrementally pushing cloned entries and initializing MapTwip would expose different state to legitimate virtual Clone implementations that query the destination pool.
       Resolution: Match native staging exactly:copy current and saved metadata first,then transform their entries;initialize MapCM and set MapTwip only in the ordinary constructor branch;add a concrete dynamic Clone observer for later entries,saved originals and constructor-time metrics.
+extensions:
+  implementation_commit:
+    hash: "0a92a1ae83bcf733c884cb65155b35fdeef3d95a"
+    message: "🔧 XQYDC8 core: implement native named and copied item pools"
 id_source: "generated"
 ---
 ## Summary
