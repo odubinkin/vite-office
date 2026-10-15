@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610150526-ZX1WHA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T05:37:05.500Z",
+  "verdict": "pass",
+  "summary": "Same-agent review, not independent: source-owned XML attribute value hierarchy implemented as a Calc pool prerequisite with real shared map/base reuse and explicit missing UNO transport.",
+  "evaluated_sha": "68e1b7599d7fd5d8f4a5b8d3063a9710a73c2051",
+  "blueprint_digest": "847fa9ebdc26e94a3a358f52db6862c522f142e8f9d0939a41525004ce9a8e48",
+  "findings": [
+    "Actual four native class/header pairs and Calc ATTR_USERDEF122 default are reflected in value/copy/overload/index/presentation contracts. Native memory management erased under JS GC; no fake UNO provider or document pool.",
+    "20 related and183 whole Calc cases pass; every raw counter in all4 new shared owners and33 Calc owners is positive100. Assertions distinguish original Add4/Set4 conflict behavior, aliases/history, copy independence and uint16 item count/index narrowing.",
+    "All13 source gates and portable production build pass;38 boundary tests enforce native editeng-to-xmloff and reject reverse, while AST audit proves all3 cycle-rejection functions unchanged. Initial test/JSDoc/metadata failures retained and corrected in scope without relaxing gates.",
+    "29intentional paths/3865source hashes/12native pins/4restored links audited; inventory zero semantic violations, no parity promotion, CALC124/125 record suspicious source behavior unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610150526-ZX1WHA/README.md",
+    "output/playwright/task144-checks/verification.json",
+    "output/playwright/task144-checks/source-gates.json",
+    "output/playwright/task144-checks/boundary-source-audit.json",
+    "output/playwright/task144-checks/build-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent review is not independent. Real UNO XNameContainer and typed transport, complete Calc pool/document/UI/ODS remain unimplemented and are explicitly recorded."
+  ]
+}

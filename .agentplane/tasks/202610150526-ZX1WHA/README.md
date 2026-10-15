@@ -4,7 +4,7 @@ title: "Implement native XML attribute value containers for Calc pool"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T05:37:06.619Z"
+  updated_by: "CODER"
+  note: "Verified20 related,183Calc,38boundary tests; four new shared owners and wholeCalc raw100, all13source gates/build/inventory pass,29paths/3865hashes/12pins/4links audited. Typed UNO transport/document remain explicit gaps; evaluation same-agent, not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T05:37:05.500Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: source-owned XML attribute value hierarchy implemented as a Calc pool prerequisite with real shared map/base reuse and explicit missing UNO transport."
+  evaluated_sha: "68e1b7599d7fd5d8f4a5b8d3063a9710a73c2051"
+  blueprint_digest: "847fa9ebdc26e94a3a358f52db6862c522f142e8f9d0939a41525004ce9a8e48"
+  evidence_refs:
+    - ".agentplane/tasks/202610150526-ZX1WHA/README.md"
+    - ".agentplane/tasks/202610150526-ZX1WHA/quality/20261015-053705500-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150526-ZX1WHA/quality/20261015-053705500-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150526-ZX1WHA/quality/20261015-053705500-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150526-ZX1WHA/blueprint/resolved-snapshot.json"
+    - "output/playwright/task144-checks/verification.json"
+    - "output/playwright/task144-checks/source-gates.json"
+    - "output/playwright/task144-checks/boundary-source-audit.json"
+    - "output/playwright/task144-checks/build-manifest.json"
+  findings:
+    - "Actual four native class/header pairs and Calc ATTR_USERDEF122 default are reflected in value/copy/overload/index/presentation contracts. Native memory management erased under JS GC; no fake UNO provider or document pool."
+    - "20 related and183 whole Calc cases pass; every raw counter in all4 new shared owners and33 Calc owners is positive100. Assertions distinguish original Add4/Set4 conflict behavior, aliases/history, copy independence and uint16 item count/index narrowing."
+    - "All13 source gates and portable production build pass;38 boundary tests enforce native editeng-to-xmloff and reject reverse, while AST audit proves all3 cycle-rejection functions unchanged. Initial test/JSDoc/metadata failures retained and corrected in scope without relaxing gates."
+    - "29intentional paths/3865source hashes/12native pins/4restored links audited; inventory zero semantic violations, no parity promotion, CALC124/125 record suspicious source behavior unchanged."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement original XML attribute value/container/item prerequisites with shared namespace map and GC ownership; preserve source quirks and explicitly leave unsupported actual UNO transport."
+  -
+    type: "verify"
+    at: "2026-10-15T05:37:06.619Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified20 related,183Calc,38boundary tests; four new shared owners and wholeCalc raw100, all13source gates/build/inventory pass,29paths/3865hashes/12pins/4links audited. Typed UNO transport/document remain explicit gaps; evaluation same-agent, not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T05:36:42.513Z"
+doc_updated_at: "2026-10-15T05:37:06.705Z"
 doc_updated_by: "CODER"
 description: "Task144 ports actual SvXMLAttr, SvXMLAttrCollection, SvXMLAttrContainerData and SvXMLAttrContainerItem value/copy/accessor/presentation contracts using existing shared SvXMLNamespaceMap and SfxPoolItem. Original UNO XNameContainer/Any transport remains an explicit missing dependency, not a fake provider; preserve GC lifetime and native observable namespace behavior."
 sections:
@@ -61,6 +89,39 @@ sections:
       Result: pass.
       Evidence: all3 cycle-rejection functions AST-identical; native12pins remain at9bc445578031fecf56086729d8e4940c77e14d65;4reference targets restored;3865source hashes (3843baseline,7changed existing,22new,3836unchanged),29intentional paths. Detailed verification.json, final-source-hashes.json and intentional-paths.json retained. CALC-124/125 preserve suspicious native behavior. Runtime/provenance/capability records are mapped/unverified/divergent foundation, with accurate method witnesses and explicit omitted responsibilities.
       Scope: value hierarchy needed by Calc pool; native XNameContainer/Any transport, complete Calc pool/document/connected UI/ODS remain pending. Native Java CellProperties QA is a broader transport reference, explicitly not claimed ported. No native compiler/probe/memory manager. Same-agent EVALUATOR is not independent. Clean calc and post-commit hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T05:37:06.619Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified20 related,183Calc,38boundary tests; four new shared owners and wholeCalc raw100, all13source gates/build/inventory pass,29paths/3865hashes/12pins/4links audited. Typed UNO transport/document remain explicit gaps; evaluation same-agent, not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T05:36:42.513Z, excerpt_hash=sha256:7af8f973f3a980714f8dccdac4e0683dc3038db3f7e488b8d707f3853497361f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150526-ZX1WHA/blueprint/resolved-snapshot.json
+    - old_digest: 847fa9ebdc26e94a3a358f52db6862c522f142e8f9d0939a41525004ce9a8e48
+    - current_digest: 847fa9ebdc26e94a3a358f52db6862c522f142e8f9d0939a41525004ce9a8e48
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150526-ZX1WHA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150526-ZX1WHA -m 🧩 ZX1WHA task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task changes in a later authorized task; no reset, merge or publication."
   Findings: |-
     Source behavior is authoritative even where AddAttr4 appends UNKNOWN while SetAt4 rejects it, or namespace history survives removal and affects equality. Record suspicious cases in Calc-only source notes without correcting upstream behavior. Native typed UNO transport requires actual SvUnoAttributeContainer/XNameContainer; it is not fabricated for value prerequisites. Same-agent evaluator is not independent.
@@ -116,6 +177,39 @@ Source compare four native class/header pairs and actual Calc docpool ATTR_USERD
   Result: pass.
   Evidence: all3 cycle-rejection functions AST-identical; native12pins remain at9bc445578031fecf56086729d8e4940c77e14d65;4reference targets restored;3865source hashes (3843baseline,7changed existing,22new,3836unchanged),29intentional paths. Detailed verification.json, final-source-hashes.json and intentional-paths.json retained. CALC-124/125 preserve suspicious native behavior. Runtime/provenance/capability records are mapped/unverified/divergent foundation, with accurate method witnesses and explicit omitted responsibilities.
   Scope: value hierarchy needed by Calc pool; native XNameContainer/Any transport, complete Calc pool/document/connected UI/ODS remain pending. Native Java CellProperties QA is a broader transport reference, explicitly not claimed ported. No native compiler/probe/memory manager. Same-agent EVALUATOR is not independent. Clean calc and post-commit hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T05:37:06.619Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified20 related,183Calc,38boundary tests; four new shared owners and wholeCalc raw100, all13source gates/build/inventory pass,29paths/3865hashes/12pins/4links audited. Typed UNO transport/document remain explicit gaps; evaluation same-agent, not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T05:36:42.513Z, excerpt_hash=sha256:7af8f973f3a980714f8dccdac4e0683dc3038db3f7e488b8d707f3853497361f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150526-ZX1WHA/blueprint/resolved-snapshot.json
+- old_digest: 847fa9ebdc26e94a3a358f52db6862c522f142e8f9d0939a41525004ce9a8e48
+- current_digest: 847fa9ebdc26e94a3a358f52db6862c522f142e8f9d0939a41525004ce9a8e48
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150526-ZX1WHA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150526-ZX1WHA -m 🧩 ZX1WHA task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
