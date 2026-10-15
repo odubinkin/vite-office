@@ -1,10 +1,11 @@
 ---
 id: "202610152310-PWD2VY"
 title: "Implement native shared plain manifest import and migrate Writer package reading"
-status: "DOING"
+result_summary: "Implemented source-shaped plain ManifestImport,reader and package metadata with thin existing SAL parser wrappers;Writer reuses shared owners and actual document defaults. Retired duplicate validator,updated truthful inventory and preserved CALC162..164. Full spreadsheet document/UI/ODS remain pending;no all-app run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Native plain importer uses actual PropertyValue/Any,namespace scopes and shared integer parser;Writer consumes actual package metadata and real missing-stream document defaults. Duplicated Writer-only validator and Standard-definition rejection are removed without compatibility aliases."
     - "Exact owner-set audit confirms8shared and33Calc raw S/B/F/L100 with every counter positive;163related and187Calc scenarios pass. Writer-only gaps are explicitly exempt. All13source gates,build,Chromium/DOM-free Worker and Writer startup/load/edit pass;all4refs restored."
     - "Sixteen original blobs and17slot constants pinned;73existing algorithm bodies unchanged and original parser/dependency guard byte-identical.52non-task paths fit approved80. CALC162..164 retain suspicious upstream behavior."
-commit: null
+commit:
+  hash: "adf5ce196e13cf63b671f10a0735dbebc72c3eeb"
+  message: "🔧 PWD2VY quality: record shared manifest verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved shared plain manifest reading stack and thin native SAL entry points;replace Writer-only shared parsing and preserve original package/optional-stream behavior with source-backed tests."
+  -
+    author: "CODER"
+    body: "Verified: shared native plain manifest reading and Writer reuse pass163related/187Calc,exact shared/Calc raw100,13source gates,production build and actual Chromium/Worker/Writer checks;four refs restored. Same-agent quality review passes;Calc UI/ODS model goal remains active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Portable163related/187Calc pass;exact8shared and33Calc executable owners raw S/B/F/L100 with all counters positive;two Writer-only gaps exempt. All13source gates,16native pins/17slots/73old algorithm identities,production build,actual Chromium/DOM-free Worker and Writer startup/load/edit pass. Four refs restored;plain metadata only,Calc document/UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-15T23:50:26.193Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared native plain manifest reading and Writer reuse pass163related/187Calc,exact shared/Calc raw100,13source gates,production build and actual Chromium/Worker/Writer checks;four refs restored. Same-agent quality review passes;Calc UI/ODS model goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-15T23:49:34.140Z"
+doc_updated_at: "2026-10-15T23:50:26.195Z"
 doc_updated_by: "CODER"
 description: "Task178: actual plain ManifestImport/ManifestReader over PropertyValue and namespace stack;reuse SAL integer parser through missing native OUString/C terminated wrappers;remove duplicated Writer-only shared parser and migrate Writer with native missing-stream behavior and source-backed package metadata policy. ODS kernel/document remains pending."
 sections:
@@ -131,6 +144,10 @@ sections:
     - Observation: Final browser fixture initially needed an explicit singleton bigint tuple for strict TS indexing;the source fingerprint helper initially matched getters and setters only by name and assumed native constants used equals syntax.
       Impact: These validation harness defects did not change production algorithms or acceptance thresholds. The source-gate wrapper also refused an early launch while portable references were absent,as designed.
       Resolution: Use a bigint tuple,match AST member kind as well as name,and compare native define constants. Rerun typecheck and source audit after all portable references are restored;all pass. Retain exact source hashes and functional/browser results.
+extensions:
+  implementation_commit:
+    hash: "df6747e107692aa9e7ca3adc62f121ee4808e818"
+    message: "🔧 PWD2VY core: share native plain ODF manifest reading"
 id_source: "generated"
 ---
 ## Summary
