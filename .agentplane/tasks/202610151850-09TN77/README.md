@@ -1,10 +1,11 @@
 ---
 id: "202610151850-09TN77"
 title: "Connect configured font candidates to browser faces"
-status: "DOING"
+result_summary: "Connected shared configured font roles/Locale to real registered browser faces and asynchronous preparation before Writer document construction; Calc uses the same generic boundary. Full physical/default-font services and Calc document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/main.test.ts"
   findings:
     - "Same-agent review, not independent.39 related/187 Calc cases pass; exact4 related owners include main entrypoint explicitly and2 Writer owners. Shared+main/Calc raw100; Writer-only composition gaps exempt.13 gates/43 boundary cases, build,19 Writer and1 shared real-Chromium case pass.6 pinned blobs/7 roles audited;30 guard bodies unchanged and only source-backed dependency edges added. Real bundled fonts verify actual alias normalization, loaded-state synchronization, CSS family serialization, deletion and error/next candidate. Full physical best-match/substitution, remaining native Font/config services, Writer legacy fallback and Calc model/UI/ODS are explicit gaps; no full-goal promotion."
-commit: null
+commit:
+  hash: "f464b10dcee2b843267d2e9db0f882ad9f018e78"
+  message: "🧩 09TN77 task: record browser configured font review"
 comments:
   -
     author: "CODER"
     body: "Start: connect genuine configured candidate lists and normalization to browser FontFace preparation/matching before Writer document construction, preserving explicit native service gaps."
+  -
+    author: "CODER"
+    body: "Verified:39 related/187 Calc tests, shared+entrypoint/Calc raw100,13 gates/43 boundary tests, build and20 browser cases pass; native source edges audited and4 references restored."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS:39 related/187 Calc tests, exact shared+main and Calc raw100,13 gates/43 boundary tests, build and20 browser cases.6 pinned blobs/7 roles audited,30 guard bodies unchanged, references restored; no full native device or UI/ODS readiness claim."
+  -
+    type: "status"
+    at: "2026-10-15T19:14:34.386Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:39 related/187 Calc tests, shared+entrypoint/Calc raw100,13 gates/43 boundary tests, build and20 browser cases pass; native source edges audited and4 references restored."
 doc_version: 3
-doc_updated_at: "2026-10-15T19:13:23.041Z"
+doc_updated_at: "2026-10-15T19:14:34.387Z"
 doc_updated_by: "CODER"
 description: "Task165: replace Writer-specific hardcoded CSS check adapter with shared DefaultFontType/Locale matching against registered browser faces; prepare candidate fonts before real Writer document construction, reuse native normalization/query/token owners, and expose the same generic boundary for Calc."
 sections:
@@ -128,6 +141,10 @@ sections:
     - Observation: Actual Chromium FontFaceSet.check accepts a nonexistent family; registered FontFace family descriptors are CSS serialized and require decoding before native search-key normalization. Actual bundled-font browser acceptance now validates this platform boundary.
       Impact: The previous hardcoded/unused-language adapter could report nonexistent fonts and could not be reused by Calc native roles.
       Resolution: Generic configured-role/prepared-Locale API now uses loaded registered faces and awaited preparation before main mounts document factories. Writer owns role mapping. Missing best-match/substitution/system enumeration/user configuration/full Font and legacy Writer requested-family policy remain explicit gaps, with no invented fallback or fake physical collection.
+extensions:
+  implementation_commit:
+    hash: "be822b78226a692b6d4b30c899b198a17a1e8a5d"
+    message: "🔧 09TN77 core: match configured fonts with registered browser faces"
 id_source: "generated"
 ---
 ## Summary
