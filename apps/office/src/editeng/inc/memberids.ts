@@ -85,3 +85,39 @@ export const MID_TL_COMPLEX_COLOR = 4;
 export const MID_LANG_INT = 0;
 /** Original language Locale API member. */
 export const MID_LANG_LOCALE = 1;
+
+/** Original brush member MID_BACK_COLOR. */
+export const MID_BACK_COLOR = 0;
+
+/** Original brush member MID_GRAPHIC_POSITION. */
+export const MID_GRAPHIC_POSITION = 1;
+
+/** Original brush member MID_GRAPHIC. */
+export const MID_GRAPHIC = 2;
+
+/** Original brush member MID_GRAPHIC_TRANSPARENT. */
+export const MID_GRAPHIC_TRANSPARENT = 3;
+
+/** Original brush member MID_GRAPHIC_URL. */
+export const MID_GRAPHIC_URL = 4;
+
+/** Original brush member MID_GRAPHIC_FILTER. */
+export const MID_GRAPHIC_FILTER = 5;
+
+/** Original brush member MID_GRAPHIC_REPEAT. */
+export const MID_GRAPHIC_REPEAT = 6;
+
+/** Original brush member MID_GRAPHIC_TRANSPARENCY. */
+export const MID_GRAPHIC_TRANSPARENCY = 7;
+
+/** Original brush member MID_BACK_COLOR_R_G_B. */
+export const MID_BACK_COLOR_R_G_B = 8;
+
+/** Original brush member MID_BACK_COLOR_TRANSPARENCY. */
+export const MID_BACK_COLOR_TRANSPARENCY = 9;
+
+/** Original brush member MID_SHADING_VALUE. */
+export const MID_SHADING_VALUE = 10;
+
+/** Original brush member MID_BACKGROUND_COMPLEX_COLOR. */
+export const MID_BACKGROUND_COMPLEX_COLOR = 11;

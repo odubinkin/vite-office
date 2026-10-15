@@ -144,3 +144,6 @@ export const ATTR_FONT_LANGUAGE = 110;
 export const ATTR_CJK_FONT_LANGUAGE = 115;
 /** Original CTL font language identity. */
 export const ATTR_CTL_FONT_LANGUAGE = 120;
+
+/** Original Calc background brush identity. */
+export const ATTR_BACKGROUND = 148;

@@ -2100,3 +2100,17 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: Remove erases only the ordered attribute vector. Namespace-map entries remain, and equality compares that map as well as attributes. Removing all qualified attributes therefore leaves a count-zero collection unequal to a fresh empty one. Adding a same-URI prefix alias also changes the canonical prefix reported for earlier attributes through their stored key.
 - Status: observable historical state, possibly deliberate; not a confirmed defect. Preserve unpruned namespace tables, alias semantics and source equality.
 - Local evidence: `apps/office/src/xmloff/source/core/xmlcnimp.test.ts`, retained-history/copy and alias witnesses.
+
+## CALC-126: brush100percent transparency retains alpha1
+
+- Upstream: pinned `editeng/source/items/frmitems.cxx`, lcl_PercentToTransparency, TransparencyToPercent and SvxBrushItem color-transparency members.
+- Observation: the helper deliberately uses0xfe and documents that0xff must not be returned. Writing100percent produces alpha1, so the fully-transparent member remains false and the non-graphic isUsed test remains true, while reading the percentage returns100.
+- Status: surprising reserved-marker behavior, not a confirmed defect. Preserve integer truncation, signed8 conversion and Color alpha assignment rather than changing the scale to255 or rounding differently.
+- Local evidence: `apps/office/src/editeng/source/items/native-brush-color.test.ts`, percentage/flag witnesses; no native compiler or memory probe.
+
+## CALC-127: a const brush getter can change hash while equality stays true
+
+- Upstream: pinned `include/editeng/brushitem.hxx` getComplexColor updates final color from GetColor; `editeng/source/items/frmitems.cxx` brush hash includes ComplexColor. See CALC-113 for native ComplexColor equality/hash field differences.
+- Observation: two copied color brushes initially compare equal and have identical field hashes. Calling getComplexColor on only one can change its ComplexColor final color and hash, while equality remains true because final color is omitted from that comparison. Calling the getter on both synchronizes their final-color states.
+- Status: source-level const/getter/hash invariant concern, not a confirmed upstream defect or claim of portable native binary hash values. Preserve the side effect and original field folds; do not alter shared ComplexColor equality/hash or make copy construction invoke the getter.
+- Local evidence: explicit getter/hash regression in `apps/office/src/editeng/source/items/native-brush-color.test.ts`; only logical JS values and source field rules are checked.

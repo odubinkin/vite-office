@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/frmitems.brush.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "background-brush-values",
+    "capabilityIds": [
+      "CAP-8958d287-291f-4f9d-82f4-fff24b515bfe"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/frmitems.brush.ts",
+        "apps/office/src/editeng/source/items/native-brush-color.test.ts",
+        "docs/program/calc-core.md#Native brush color values for Calc background defaults (task147)"
+      ],
+      "justification": "Task147 ports original SvxBrushItem Which/Color/Color+ComplexColor/copy constructor family for reachable non-graphic GPOS_NONE values, actual transparent Calc ATTR_BACKGROUND148 default, full color/filter/complex/shading/graphic-percent value state, isUsed, copy/clone/equality/logical hash and supported typed scalar Any methods. Reuse shared Color/ComplexColor/Any/hash primitives; no native memory/move/instance manager. Mutable color borrowing, side-effecting complex getter, original0xfe percent scale, byte casts, RGB alpha preservation and failed graphic-percent extraction default0 are preserved. Full original ShadingPattern long constants and brush position/version declarations are represented without pretending they provide graphics. Real Graphic/GraphicObject constructors/positions/links/URL/filter loaders, XGraphic and XComplexColor transport remain unported; their known provider selectors explicitly returnfalse. No fake image/provider/security path or browser snapshot projection is introduced; inherited no-argument query remains undefined. UI-localized presentation is deferred per user direction. Broader native graphic behavior and complete Calc pool/document/connected UI/ODS remain pending, with deliberate I/O/recovery deviations retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxBrushItem",
+        "SvxGraphicPosition",
+        "BRUSH_GRAPHIC_VERSION",
+        "lcl_PercentToTransparency"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "editeng/source/items/frmitems.cxx",
+      "upstreamSymbols": [
+        "SvxBrushItem::QueryValue",
+        "SvxBrushItem::TransparencyToPercent",
+        "lcl_PercentToTransparency"
+      ]
+    }
+  }
+}
