@@ -4,7 +4,7 @@ title: "Connect native locale uppercase for Calc string interning"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the required source-backed uppercase field operation at original module boundaries, reuse actual shared mappings and verify whole-string JS counterexamples without a new ICU/service facade."
 doc_version: 3
-doc_updated_at: "2026-10-15T19:22:49.115Z"
+doc_updated_at: "2026-10-15T19:35:56.581Z"
 doc_updated_by: "CODER"
 description: "Task166: implement source-aligned locale uppercase operation across original unotools/i18npool boundaries using actual shared Locale/OUString and existing i18nutil mappings. Verify native JS equivalence and retain source behavior where counterexamples exist; no fake CharClass/UNO service or new ICU/memory library."
 sections:
@@ -48,7 +48,10 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task source/test/evidence/registry/docs commit together; existing scalar mappings and all previous tasks stay intact. No document state, browser entrypoint or string pool lifecycle is migrated by this task."
-  Findings: ""
+  Findings: |-
+    - Observation: Initial related run:20 existing cases passed; new uppercase suite failed during module evaluation with Class extends value undefined at RuntimeException extends Exception. Direct import of Exception reaches Reference -> Any -> genfunc -> RuntimeException before the base class is initialized.
+      Impact: No new uppercase assertions executed. This is an existing shared CPPU entry-order defect exposed by the genuine base-exception catch boundary; it must not be hidden by consumer import ordering.
+      Resolution: Persist the approved uppercase work as an unverified checkpoint, open a separate source-scoped CPPU initialization correction, preserve public exception class identity/member bodies/type factory and test independent public entry orders. Resume this task after the dependency fix; no goal/full-suite milestone change.
 id_source: "generated"
 ---
 ## Summary
@@ -77,3 +80,7 @@ Audit pinned unotools charclass header/source, cclass_unicode, transliteration_b
 Revert the task source/test/evidence/registry/docs commit together; existing scalar mappings and all previous tasks stay intact. No document state, browser entrypoint or string pool lifecycle is migrated by this task.
 
 ## Findings
+
+- Observation: Initial related run:20 existing cases passed; new uppercase suite failed during module evaluation with Class extends value undefined at RuntimeException extends Exception. Direct import of Exception reaches Reference -> Any -> genfunc -> RuntimeException before the base class is initialized.
+  Impact: No new uppercase assertions executed. This is an existing shared CPPU entry-order defect exposed by the genuine base-exception catch boundary; it must not be hidden by consumer import ordering.
+  Resolution: Persist the approved uppercase work as an unverified checkpoint, open a separate source-scoped CPPU initialization correction, preserve public exception class identity/member bodies/type factory and test independent public entry orders. Resume this task after the dependency fix; no goal/full-suite milestone change.

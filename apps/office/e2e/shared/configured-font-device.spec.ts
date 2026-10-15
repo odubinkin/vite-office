@@ -1,62 +1,19 @@
 /** @fileoverview Runs the production generic configured-font binding against actual Chromium FontFaceSet/FontFace and bundled font bytes. */
 import { expect, test } from "@playwright/test";
-import { build } from "vite";
-import { resolve } from "node:path";
+import { installKernelFixture } from "./kernel-fixture";
 
 test("prepares Writer fonts before mount and shares native candidate matching with Calc roles", /** Verifies real platform availability, serialization, loading and live deletion without a fake physical-font service. @param fixtures - Browser fixture. @returns Completion. */ async ({
   page,
 }) => {
   await page.goto("/writer");
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeVisible();
-  const id = "configured-font-native-fixture",
-    root = resolve(import.meta.dirname, "../..");
-  const result = await build({
-    configFile: false,
-    root,
-    logLevel: "silent",
-    define: { "process.env.NODE_ENV": JSON.stringify("production") },
-    plugins: [
-      {
-        name: id,
-        /** Resolves the test-only production module bundle. @param value - Module ID. @returns Virtual ID. */
-        resolveId(value) {
-          return value === id || value === resolve(root, id) ? "\0" + id : undefined;
-        },
-        /** Exposes actual runtime exports only inside this browser test. @param value - Module ID. @returns Source. */
-        load(value) {
-          return value === "\0" + id
-            ? 'export {createBrowserDefaultFontDevice,createDefaultFontLocale} from "' +
-                resolve(root, "src/vcl/browser/default-font-device.ts") +
-                '";export {DefaultFontType} from "' +
-                resolve(root, "src/unotools/inc/fontdefs.ts") +
-                '";'
-            : undefined;
-        },
-      },
-    ],
-    build: {
-      write: false,
-      minify: false,
-      lib: { entry: id, name: "OfficeConfiguredFontFixture", formats: ["iife"] },
+  await installKernelFixture(page, "OfficeConfiguredFontFixture", [
+    {
+      module: "src/vcl/browser/default-font-device.ts",
+      names: ["createBrowserDefaultFontDevice", "createDefaultFontLocale"],
     },
-  });
-  const outputs = Array.isArray(result)
-    ? result.flatMap(
-        /** Collects Rollup outputs. @param value - Build result. @returns Outputs. */ (value) =>
-          value.output,
-      )
-    : "output" in result
-      ? result.output
-      : [];
-  const chunk = outputs.find(
-    /** Selects actual JavaScript. @param value - Output. @returns Chunk flag. */ (value) =>
-      value.type === "chunk",
-  );
-  if (chunk === undefined || chunk.type !== "chunk")
-    throw Error("Missing configured-font fixture bundle");
-  await page.addScriptTag({
-    content: chunk.code + "\n;globalThis.OfficeConfiguredFontFixture=OfficeConfiguredFontFixture;",
-  });
+    { module: "src/unotools/inc/fontdefs.ts", names: ["DefaultFontType"] },
+  ]);
   const evidence = await page.evaluate(
     /** Exercises the actual browser font backend and shared Calc role. @returns Observable platform/owner results. */ async () => {
       const native = Reflect.get(window, "OfficeConfiguredFontFixture");
