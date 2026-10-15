@@ -1,10 +1,11 @@
 ---
 id: "202610150556-ERB0RG"
 title: "Implement native language item values for Calc font defaults"
-status: "DOING"
+result_summary: "Implemented primitive LanguageType and native SvxLanguageItem value/int Any prerequisites, German factory versus Calc unknown defaults, canonical header/owner boundaries and honest pending Locale/presentation services without memory/compiler emulation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "6related,185Calc,39boundary cases pass. Every raw counter of3changedsharedowners and33Calcowners positive100; all13source gates and portable build pass, inventory zero semantic violations."
     - "Native audit proves6language IDs/mask/uint16,2members,3Calc defaults and3cycle functions unchanged. New core owner classified for strict browser isolation, native editeng edge admitted without cycle exception."
     - "21intentional paths/3883source hashes/9native pins/4restored links audited. Language source split is required by500line limit; explicit locale unsupported and pending presentation services remain unverified rather than guessed or falsely promoted."
-commit: null
+commit:
+  hash: "60dec58b2b941bddb5f7c38145c3dd6d67901f8c"
+  message: "Implement ERB0RG core: native language item values"
 comments:
   -
     author: "CODER"
     body: "Start: native language identity/item prerequisites for Calc font defaults, reusing existing shared owners and primitive GC values; no fake Locale services or compiler/memory layer."
+  -
+    author: "CODER"
+    body: "Verified: native unsigned16 language item values and Calc script defaults;6related,185Calc,39boundary tests pass with shared/Calc raw100, all source/inventory/build gates and native/hash audit."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified6related,185Calc,39boundary cases; changed shared/Calc raw100, all13source gates/inventory/build pass;21paths/3883hashes/9pins/4links audited. Real Locale/presentation providers remain explicit gaps; same-agent evaluation not independent."
+  -
+    type: "status"
+    at: "2026-10-15T06:05:27.941Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native unsigned16 language item values and Calc script defaults;6related,185Calc,39boundary tests pass with shared/Calc raw100, all source/inventory/build gates and native/hash audit."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:05:08.336Z"
+doc_updated_at: "2026-10-15T06:05:27.943Z"
 doc_updated_by: "CODER"
 description: "Task146 adds primitive unsigned16 LanguageType identities/primary mask and original SvxLanguageItem value/copy/default/int Any contracts for Calc font language defaults. Reuse existing SfxEnumItem/Any and existing Locale owner; do not fake LanguageTag/locale translation or localized language-table providers. Native strong_int/MSVC/cache machinery is erased under JS primitives/GC."
 sections:
