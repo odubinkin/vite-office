@@ -122,7 +122,8 @@ const allowedEdges = new Map([
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.
-  ["svl", new Set(["comphelper", "cppu", "o3tl", "sal", "tools"])],
+  // Native grabbagitem.cxx consumes generated UDK beans PropertyValue.hpp.
+  ["svl", new Set(["comphelper", "cppu", "o3tl", "sal", "tools", "udkapi"])],
   // Original svtools/source/misc/unitconv.cxx uses Tools map/field units and o3tl conversions.
   ["svtools", new Set(["tools", "o3tl"])],
   // Original sdangitm.hxx includes tools/degree.hxx.
@@ -152,7 +153,8 @@ const allowedEdges = new Map([
     ]),
   ],
   ["vcl", new Set(["offapi", "svl", "tools"])],
-  ["udkapi", new Set(["sal"])],
+  // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
+  ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
   // Original LocaleDataWrapper constructs LocaleData2; i18npool.component binds its actual producer.
   // The browser field binding uses that producer and the original generated Locale triplet directly.
@@ -502,6 +504,51 @@ export function findUnapprovedModuleCycle(graph, imports) {
   return findCycle(projection);
 }
 
+/** Collects value-capable module imports, excluding fully erased import/export type clauses. Named type-only specifiers are conservatively retained because verbatim-module emit can preserve their empty side-effect import. Owner allowlisting still inspects all declarations. @param source - Authored TypeScript source. @returns Potential runtime module specifiers. */
+export function getRuntimeImportSpecifiers(source) {
+  const result = new Set();
+  const parsed = ts.createSourceFile(
+    "source.ts",
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  /** Selects value-capable imports/exports, side effects and dynamic imports; full type declarations/queries emit no module load. @param node - Current syntax node. @returns Nothing. */
+  function visitRuntimeImport(node) {
+    if (ts.isImportDeclaration(node) && ts.isStringLiteralLike(node.moduleSpecifier)) {
+      if (node.importClause === undefined || !node.importClause.isTypeOnly)
+        result.add(node.moduleSpecifier.text);
+    } else if (
+      ts.isExportDeclaration(node) &&
+      node.moduleSpecifier !== undefined &&
+      ts.isStringLiteralLike(node.moduleSpecifier) &&
+      !node.isTypeOnly
+    ) {
+      result.add(node.moduleSpecifier.text);
+    } else if (
+      ts.isImportEqualsDeclaration(node) &&
+      !node.isTypeOnly &&
+      ts.isExternalModuleReference(node.moduleReference) &&
+      node.moduleReference.expression !== undefined &&
+      ts.isStringLiteralLike(node.moduleReference.expression)
+    ) {
+      result.add(node.moduleReference.expression.text);
+    } else if (
+      ts.isCallExpression(node) &&
+      (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+        (ts.isIdentifier(node.expression) && node.expression.text === "require")) &&
+      node.arguments.length > 0 &&
+      ts.isStringLiteralLike(node.arguments[0])
+    ) {
+      result.add(node.arguments[0].text);
+    }
+    ts.forEachChild(node, visitRuntimeImport);
+  }
+  visitRuntimeImport(parsed);
+  return result;
+}
+
 const failures = [];
 const graph = new Map(
   moduleNames.map(
@@ -521,6 +568,7 @@ for (const sourceFile of runtimeSources) {
     continue;
   }
   const sourceText = fs.readFileSync(sourceFile, "utf8");
+  const runtimeImports = getRuntimeImportSpecifiers(sourceText);
   if (upstreamMechanismLayers.has(getRuntimeOwnershipLayer(relativeSource))) {
     for (const browserProjectionSymbol of [
       "WriterPresentationProjection",
@@ -575,7 +623,7 @@ for (const sourceFile of runtimeSources) {
     }
     if (sourceModule === undefined || targetModule === undefined || sourceModule === targetModule)
       continue;
-    addGraphEdge(graph, sourceModule, targetModule);
+    if (runtimeImports.has(imported.fileName)) addGraphEdge(graph, sourceModule, targetModule);
     if (
       (sourceModule === "sal" && targetModule === "o3tl") ||
       (sourceModule === "o3tl" && targetModule === "sal")

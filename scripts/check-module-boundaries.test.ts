@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import {
   findUnapprovedModuleCycle,
+  getRuntimeImportSpecifiers,
   isOriginalSalO3tlImport,
   isForbiddenModuleEdge,
   getProtectedBrowserGlobalReferences,
@@ -46,12 +47,13 @@ it("keeps shared configuration nodes below application and browser owners", /** 
   );
 });
 
-it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
+it("owns genuine CPPU type metadata and SAL comparison without browser dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);
   // Original include/com/sun/star/uno/Type.h includes the generated TypeClass enum.
   expect(isForbiddenModuleEdge("cppu", "udkapi")).toBe(false);
-  expect(isForbiddenModuleEdge("udkapi", "cppu")).toBe(true);
+  // Original generated .hpp bindings require CPPU; CPPU TypeClass back-references are type-only.
+  expect(isForbiddenModuleEdge("udkapi", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("o3tl", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("sal", "cppu")).toBe(true);
   for (const source of [
@@ -791,4 +793,50 @@ it("admits original paragraph property clients without admitting reverse applica
   expect(isForbiddenModuleEdge("cppu", "sw")).toBe(true);
   expect(isForbiddenModuleEdge("cppu", "editeng")).toBe(true);
   expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+});
+
+it("distinguishes emitted imports from erased type syntax before runtime cycle detection", /** Owner allowlisting still applies to both kinds of import. @returns Nothing. */ () => {
+  const source = `import type { TypeClass } from "type-only";
+ import { type A, type B as C } from "named-types";
+ import { A, type B } from "mixed";
+ import Foo from "default";
+ import * as ns from "namespace";
+ import "side-effect";
+ import {} from "empty";
+ export type { X } from "export-type";
+ export { type X } from "export-named-type";
+ export { type X, Y } from "export-mixed";
+ export * from "export-star";
+ export * as alias from "export-namespace";
+ export {} from "export-empty";
+ type Query=typeof import("type-query");
+ type Module=import("import-type").A;
+ import Legacy=require("equals");
+ import type LegacyType=require("equals-type");
+ const load=()=>import("dynamic");
+ const required=require("require");`;
+  expect([...getRuntimeImportSpecifiers(source)].sort()).toEqual(
+    [
+      "default",
+      "dynamic",
+      "empty",
+      "equals",
+      "export-empty",
+      "export-mixed",
+      "export-named-type",
+      "export-namespace",
+      "export-star",
+      "mixed",
+      "named-types",
+      "namespace",
+      "require",
+      "side-effect",
+    ].sort(),
+  );
+  expect([...getRuntimeImportSpecifiers("const value=1;")]).toEqual([]);
+  expect(isForbiddenModuleEdge("svl", "udkapi")).toBe(false);
+  for (const module of ["sc", "sw", "vcl", "framework"]) {
+    expect(isForbiddenModuleEdge("udkapi", module)).toBe(true);
+    expect(isForbiddenModuleEdge("cppu", module)).toBe(true);
+  }
 });

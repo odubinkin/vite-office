@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/inc/grabbagitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "grab-bag-properties",
+    "capabilityIds": [
+      "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svl/inc/grabbagitem.ts",
+        "apps/office/src/svl/source/items/native-grab-bag.test.ts",
+        "docs/program/calc-core.md#Native grab-bag property values (task159)"
+      ],
+      "justification": "Task159 adds genuine SfxGrabBagItem ordered property metadata and actual UDK PropertyValue/PropertyState values with normal generated CPPU enum/struct binding. Existing Unicode/Any/Sequence/type/SAL hash/o3tl combine owners are reused. Native std::map OUString keys bind to primitive UTF16 Map value keys, including case, embedded nul and surrogate units; native ordering is preserved without locale normalization. Const map/Any views borrow stable real values; copy/Clone/property projection retain independent Any values. Query emits sorted Sequence<PropertyValue> with original generated Handle0/StateDIRECT_VALUE. Put accepts exact typed sequence, leaves failures unchanged, clears on successful empty input and keeps last duplicates while ignoring Handle/State/member selector. Keys-only hash omits values exactly as source. No core JSON, new lifetime/refcount/cache/memory library, native compiler/probe, fake engine/pool/provider or UI localization. This fills a real EditEngine default/ODS-metadata dependency; full engine/pool/Calc document/connected UI/same-model ODS remain pending. Bounded acceptance passes65related tests/7files,187Calc tests/76files, production build and19related Writer browser scenarios. Exact3new shared owners raw S106/B46/F29/L98 and all33Calc owners S4179/B2731/F821/L3727 have every counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0. Native evidence pins20files; all28original guard function bodies remain unchanged, with a separately tested type-import classification helper and no new cycle exception. All4source references are absent during execution and restored exactly finally. Full engine/pool/Calc document/connected UI/same-model ODS readiness is not claimed.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/svl/grabbagitem.hxx",
+      "upstreamSymbols": [
+        "SfxGrabBagItem"
+      ]
+    }
+  }
+}
