@@ -4,7 +4,7 @@ title: "Restore native shared Sfx notification contracts for Calc styles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T20:52:38.969Z"
+  updated_by: "CODER"
+  note: "Command: node output/playwright/task170-checks/native-audit.mjs; node output/playwright/task170-checks/portable.mjs; node output/playwright/task170-checks/source-gates.mjs with recorded changed-check reruns; node output/playwright/task170-checks/build-browser-portable.mjs; node output/playwright/task170-checks/final-audit.mjs. Result: pass. Evidence: final-verification.json records54 related cases/9files,187Calc/76files, exact5 shared raw S399/B104/F57/L370 plus33Calc raw S4179/B2731/F821/L3727 all100,13source gates,production build and1Chromium. Six native pinned blobs,186IDs,5native QA contracts and3runtime identity proofs. Scope: shared Sfx graph, erased browser payload separation, related Writer functions; Writer-only coverage exempt. Full all-app run and UI/ODS milestone remain pending; same-agent review is not independent."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved native shared notification contracts in calc checkout with source-derived tests and portable verification."
+  -
+    type: "verify"
+    at: "2026-10-15T20:52:38.969Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: node output/playwright/task170-checks/native-audit.mjs; node output/playwright/task170-checks/portable.mjs; node output/playwright/task170-checks/source-gates.mjs with recorded changed-check reruns; node output/playwright/task170-checks/build-browser-portable.mjs; node output/playwright/task170-checks/final-audit.mjs. Result: pass. Evidence: final-verification.json records54 related cases/9files,187Calc/76files, exact5 shared raw S399/B104/F57/L370 plus33Calc raw S4179/B2731/F821/L3727 all100,13source gates,production build and1Chromium. Six native pinned blobs,186IDs,5native QA contracts and3runtime identity proofs. Scope: shared Sfx graph, erased browser payload separation, related Writer functions; Writer-only coverage exempt. Full all-app run and UI/ODS milestone remain pending; same-agent review is not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T20:44:21.899Z"
+doc_updated_at: "2026-10-15T20:52:39.030Z"
 doc_updated_by: "CODER"
 description: "Task170: replace bounded generic Sfx notification APIs with pinned native SfxHint, SfxBroadcaster and SfxListener contracts; detach browser payload typing; native QA, strict shared and Calc coverage, related Writer checks, inventory and portable browser evidence."
 sections:
@@ -46,9 +52,62 @@ sections:
   Verify Steps: "Run node output/playwright/task170-checks/native-audit.mjs against pinned sources and five upstream SfxBroadcaster QA fixtures. Run node output/playwright/task170-checks/portable.mjs: all Calc and changed shared owners exact-set raw S/B/F/L100, related Writer functional tests with Writer-only coverage exempt. Run node output/playwright/task170-checks/source-gates.mjs: format, lint, TS7 typecheck, docs, size, dependencies, tree, provenance, inventory, routing, doctor, diff and boundary tests. Run node output/playwright/task170-checks/build-browser-portable.mjs with production build and actual Sfx browser scenario. Keep all reference links absent during runtime verification and restored afterward. Record source pins, raw owner counts, native preconditions and remaining readiness gaps. Full all-app run deferred by user until minimum UI plus ODS milestone."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T20:52:38.969Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: node output/playwright/task170-checks/native-audit.mjs; node output/playwright/task170-checks/portable.mjs; node output/playwright/task170-checks/source-gates.mjs with recorded changed-check reruns; node output/playwright/task170-checks/build-browser-portable.mjs; node output/playwright/task170-checks/final-audit.mjs. Result: pass. Evidence: final-verification.json records54 related cases/9files,187Calc/76files, exact5 shared raw S399/B104/F57/L370 plus33Calc raw S4179/B2731/F821/L3727 all100,13source gates,production build and1Chromium. Six native pinned blobs,186IDs,5native QA contracts and3runtime identity proofs. Scope: shared Sfx graph, erased browser payload separation, related Writer functions; Writer-only coverage exempt. Full all-app run and UI/ODS milestone remain pending; same-agent review is not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T20:52:38.290Z, excerpt_hash=sha256:da51c61ed911ae2afd7488c0e8150f272a241a489b4f30b688d029e4ce3699a9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610152044-R2GWB4/blueprint/resolved-snapshot.json
+    - old_digest: 93e32ca729d9de63954ece6387e61f7926c4093d2a8708e27844dcb5458be8c6
+    - current_digest: 93e32ca729d9de63954ece6387e61f7926c4093d2a8708e27844dcb5458be8c6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610152044-R2GWB4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610152044-R2GWB4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task170 source and inventory commits; preserve unrelated tasks, user work, calc branch and shared reference links. No branch merges or history rewriting."
-  Findings: ""
+  Findings: |-
+    - Observation: Inventory preparation used an assumed CAP-0111 filename; the broad capability is stored under a descriptive filename, so the script stopped before creating its new capability. No source verification result is inferred from this preparation.
+      Impact: New native hint registration is incomplete until corrected; existing source edits remain intact.
+      Resolution: Locate the actual capability path and resume the approved registration, then run all source gates.
+
+    - Observation: First source-gate pass stopped at lint: native base Notify intentionally ignores its hint, and five test accesses used forbidden non-null assertions.
+      Impact: Lint failed; functional related coverage had already passed but source acceptance was not complete.
+      Resolution: Use explicit void for the ignored native parameter and typed array element casts in fixtures; rerun changed checks and affected coverage.
+
+    - Observation: TS7 typecheck rejects unused private methods reached only through native friend-style bracket access, and the test action optional field rejects assigning undefined.
+      Impact: Typecheck failed; runtime algorithms are unaffected.
+      Resolution: Expose AddListener/RemoveListener as documented native friend-only host operations, matching the existing Svt adaptation; remove optional test action with delete. Preserve native encapsulation intent in provenance without adding a runtime friend bridge.
+
+    - Observation: Documentation gate requires @returns even on constructors; three new native constructors lacked that tag.
+      Impact: Docs gate failed while typecheck passed; no runtime failure.
+      Resolution: Add the required constructor documentation and resume source gates; preserve first failed logs before reruns.
+
+    - Observation: Inventory rejected a descriptive parity record ID; UUID capability records require id equal to capabilityId.
+      Impact: Inventory gate stopped before acceptance; other completed static gates passed.
+      Resolution: Use the existing UUID record convention without changing validators, then rerun inventory and remaining gates.
+
+    - Observation: Final evidence assembly encountered an empty path between tracked and untracked git output lists. All production tests, coverage, build, browser and source gates had passed.
+      Impact: The final JSON evidence manifest was not emitted on the first assembly attempt; no application failure.
+      Resolution: Filter the empty separator from the ignored evidence script and regenerate exact-set/source-hash manifest without repeating unchanged application checks.
 id_source: "generated"
 ---
 ## Summary
@@ -70,6 +129,36 @@ Run node output/playwright/task170-checks/native-audit.mjs against pinned source
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T20:52:38.969Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: node output/playwright/task170-checks/native-audit.mjs; node output/playwright/task170-checks/portable.mjs; node output/playwright/task170-checks/source-gates.mjs with recorded changed-check reruns; node output/playwright/task170-checks/build-browser-portable.mjs; node output/playwright/task170-checks/final-audit.mjs. Result: pass. Evidence: final-verification.json records54 related cases/9files,187Calc/76files, exact5 shared raw S399/B104/F57/L370 plus33Calc raw S4179/B2731/F821/L3727 all100,13source gates,production build and1Chromium. Six native pinned blobs,186IDs,5native QA contracts and3runtime identity proofs. Scope: shared Sfx graph, erased browser payload separation, related Writer functions; Writer-only coverage exempt. Full all-app run and UI/ODS milestone remain pending; same-agent review is not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T20:52:38.290Z, excerpt_hash=sha256:da51c61ed911ae2afd7488c0e8150f272a241a489b4f30b688d029e4ce3699a9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610152044-R2GWB4/blueprint/resolved-snapshot.json
+- old_digest: 93e32ca729d9de63954ece6387e61f7926c4093d2a8708e27844dcb5458be8c6
+- current_digest: 93e32ca729d9de63954ece6387e61f7926c4093d2a8708e27844dcb5458be8c6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610152044-R2GWB4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610152044-R2GWB4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -77,3 +166,27 @@ Run node output/playwright/task170-checks/native-audit.mjs against pinned source
 Revert only task170 source and inventory commits; preserve unrelated tasks, user work, calc branch and shared reference links. No branch merges or history rewriting.
 
 ## Findings
+
+- Observation: Inventory preparation used an assumed CAP-0111 filename; the broad capability is stored under a descriptive filename, so the script stopped before creating its new capability. No source verification result is inferred from this preparation.
+  Impact: New native hint registration is incomplete until corrected; existing source edits remain intact.
+  Resolution: Locate the actual capability path and resume the approved registration, then run all source gates.
+
+- Observation: First source-gate pass stopped at lint: native base Notify intentionally ignores its hint, and five test accesses used forbidden non-null assertions.
+  Impact: Lint failed; functional related coverage had already passed but source acceptance was not complete.
+  Resolution: Use explicit void for the ignored native parameter and typed array element casts in fixtures; rerun changed checks and affected coverage.
+
+- Observation: TS7 typecheck rejects unused private methods reached only through native friend-style bracket access, and the test action optional field rejects assigning undefined.
+  Impact: Typecheck failed; runtime algorithms are unaffected.
+  Resolution: Expose AddListener/RemoveListener as documented native friend-only host operations, matching the existing Svt adaptation; remove optional test action with delete. Preserve native encapsulation intent in provenance without adding a runtime friend bridge.
+
+- Observation: Documentation gate requires @returns even on constructors; three new native constructors lacked that tag.
+  Impact: Docs gate failed while typecheck passed; no runtime failure.
+  Resolution: Add the required constructor documentation and resume source gates; preserve first failed logs before reruns.
+
+- Observation: Inventory rejected a descriptive parity record ID; UUID capability records require id equal to capabilityId.
+  Impact: Inventory gate stopped before acceptance; other completed static gates passed.
+  Resolution: Use the existing UUID record convention without changing validators, then rerun inventory and remaining gates.
+
+- Observation: Final evidence assembly encountered an empty path between tracked and untracked git output lists. All production tests, coverage, build, browser and source gates had passed.
+  Impact: The final JSON evidence manifest was not emitted on the first assembly attempt; no application failure.
+  Resolution: Filter the empty separator from the ignored evidence script and regenerate exact-set/source-hash manifest without repeating unchanged application checks.

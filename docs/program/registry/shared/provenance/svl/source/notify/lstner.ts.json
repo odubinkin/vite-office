@@ -6,26 +6,42 @@
     "evidence": {
       "local": [
         {
-          "marker": "SfxListener",
-          "path": "apps/office/src/svl/source/notify/lstner.ts"
+          "path": "apps/office/src/svl/source/notify/lstner.ts",
+          "marker": "SfxListener"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/native-sfx-notifications.test.ts",
+          "marker": "ports AddingListenersIncreasesCount"
         }
       ],
       "upstream": [
         {
-          "marker": "SfxListener::StartListening",
-          "path": "vendor/libreoffice-reference/svl/source/notify/lstner.cxx"
+          "path": "svl/source/notify/lstner.cxx",
+          "marker": "SfxListener::StartListening"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "AddingListenersIncreasesCount"
+        },
+        {
+          "path": "include/svl/lstner.hxx",
+          "marker": "DuplicateHandling"
         }
       ]
     },
     "localPath": "apps/office/src/svl/source/notify/lstner.ts",
     "localSymbols": [
+      "DuplicateHandling",
       "SfxListener"
     ],
     "omittedResponsibilities": [
-      "Native copy-construction helpers and untyped hint families remain outside the bounded listener implementation."
+      "Native ABI, mutex concurrency, debug backtraces, undefined invalid indices/pointers and use after native destruction are outside the browser contract.",
+      "The native ostream diagnostic hint-ID formatter is not implemented; native consumers use GetId.",
+      "Full stylesheet pools, Calc document/UI and same-model ODS are not implemented by this task."
     ],
     "preservedResponsibilities": [
-      "Preserves M:N reciprocal registration, explicit unregistration, and broadcaster-destruction detachment."
+      "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion.",
+      "Native friend-only subscription operations are exposed as public host methods for TypeScript cross-class access, with no additional runtime dispatch machinery."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/notify/lstner.cxx",

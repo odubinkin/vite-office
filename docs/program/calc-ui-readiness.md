@@ -217,3 +217,11 @@ batch and explicit disposal boundaries remain bounded local adapters; native
 hint filters execute on individual native hints. Full multi-listener/unwrapping
 and actual canonical shared Sfx notifier remain pending, alongside named
 style/pool/document/UI/ODS construction. No full-suite milestone is reached.
+
+## Native shared notification graph (task170)
+
+Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion.
+
+The former generic SfxHint/target interface and idempotent/disposed Sfx broadcaster APIs are removed. Existing Writer browser kind payloads use BrowserNotificationPayload on their existing Svt channel; Writer keeps its native client list. The shared graph is now usable by native style-pool owners, which remain the next construction dependency.
+
+Task170 bounded acceptance:54 related scenarios/9files,187 Calc scenarios/76files, production build and1 actual Chromium Sfx graph scenario pass with all four reference links absent. Exact5 changed shared executable owners raw S399/B104/F57/L370 and all33Calc S4179/B2731/F821/L3727 have every counter positive100. Writer-only hints.ts coverage gaps remain exempt. Six pinned native blobs, all186 hint IDs, all5 original broadcaster QA contracts and3 emitted-runtime token identity proofs for Svt/Writer type-only changes are checked. TS7 plus all13 source gates pass. Full all-app run remains deferred until the minimum connected UI and ODS milestone, which is not reached.

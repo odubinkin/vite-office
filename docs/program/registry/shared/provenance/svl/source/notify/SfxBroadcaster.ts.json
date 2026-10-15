@@ -6,49 +6,45 @@
     "evidence": {
       "local": [
         {
-          "marker": "SfxBroadcaster",
-          "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts"
+          "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+          "marker": "SfxBroadcaster"
         },
         {
-          "path": "apps/office/src/sw/source/core/table/native-row-frame-format.test.ts",
-          "marker": "@fileoverview"
-        },
-        {
-          "path": "apps/office/src/sw/source/core/undo/native-row-frame-format-history.test.ts",
-          "marker": "@fileoverview"
-        },
-        {
-          "path": "apps/office/src/sw/browser/presentation/native-row-frame-format.test.tsx",
-          "marker": "@fileoverview"
+          "path": "apps/office/src/svl/source/notify/native-sfx-notifications.test.ts",
+          "marker": "ports AddingListenersIncreasesCount"
         }
       ],
       "upstream": [
         {
-          "marker": "SfxBroadcaster::Broadcast",
-          "path": "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx"
+          "path": "svl/source/notify/SfxBroadcaster.cxx",
+          "marker": "SfxBroadcaster::Broadcast"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "AddingListenersIncreasesCount"
         }
       ]
     },
     "localPath": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
     "localSymbols": [
-      "SfxHint",
-      "SfxListenerTarget",
       "SfxBroadcaster"
     ],
     "omittedResponsibilities": [
-      "Native duplicate listener slots, broadcaster copying, forwarding, and style-sheet type probes remain outside the bounded TypeScript implementation."
+      "Native ABI, mutex concurrency, debug backtraces, undefined invalid indices/pointers and use after native destruction are outside the browser contract.",
+      "The native ostream diagnostic hint-ID formatter is not implemented; native consumers use GetId.",
+      "Full stylesheet pools, Calc document/UI and same-model ODS are not implemented by this task."
     ],
     "preservedResponsibilities": [
-      "Preserves synchronous typed broadcast, mutation-safe iteration, reciprocal destruction notification, and idempotent registration.",
-      "Iteration241 replaces per-row canonical value records with native document-owned SwTableLineFormat item sets and original SwClient registration. ClaimFrameFormat clones shared native owners before mutation; operation-local old-to-new reuse keeps selected peers sharing and unselected peers intact. Row insertion shares the source format; SaveTable retains unique direct native item sets and indexed row topology and reconstructs owners for history, matching represented flat-grid source semantics. Value records remain explicit construction/transport boundaries only. Full row frame client movement/destruction, native modify hint types, pooling, merged/nested tables, full frame attributes and UNO remain unverified. Targeted verification pending; last full237,next247; all prior states/defaults/classifications and registered I/O/recovery deviations preserved.",
-      "Iteration241 verified closure:12 fresh literal native registration/claim/sharing, complete item-set history and mounted direct UI cases plus related modules produced297 unique app passes and11 Chromium passes. Four initial fresh fixture failures were resolved in a failed-only four-case closure with the passing insertion test skipped. No passing replay or full suite; cadence last237,next247. All-four100% app and inventory coverage uses actual targeted counters and prior240 only with entire source/maps equality or complete declaration/body/enclosing branch/location proofs. Original rows/boxes/text/cursors survive repeated attribute history while shared formats are reconstructed. Full row layout client movement/destruction, native modify hints/pooling/merged/nested/UNO and whole core/browser parity remain unverified. No prior status/default/classification promotion."
+      "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion.",
+      "Native friend-only subscription operations are exposed as public host methods for TypeScript cross-class access, with no additional runtime dispatch machinery."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/notify/SfxBroadcaster.cxx",
     "upstreamSymbols": [
+      "SfxBroadcaster::Broadcast",
       "SfxBroadcaster::AddListener",
       "SfxBroadcaster::RemoveListener",
-      "SfxBroadcaster::Broadcast",
+      "SfxBroadcaster::Forward",
       "SfxBroadcaster::~SfxBroadcaster"
     ]
   },

@@ -2,21 +2,21 @@
 
 import type { LegacyModifyHint, ModifyChangedHint, SwModify } from "./calbck";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
-import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
+import type { BrowserNotificationPayload } from "../../svl/source/notify/broadcast";
 import type { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwFormat } from "../source/core/attr/format";
 import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
 import type { SwTableLine, SwTableBox } from "../source/core/table/swtable";
 
 /** Native Writer death notification borrows the original dying modify. */
-export class ObjectDyingHint implements SfxHint {
+export class ObjectDyingHint implements BrowserNotificationPayload {
   public readonly kind = "object-dying";
   /** Borrows the dying native owner. @param m_pDying - Original modify being destroyed. @returns Nothing. */
   public constructor(public readonly m_pDying: SwModify) {}
 }
 
 /** Native inheritance notification borrows exact old and new format owners. */
-export class SwFormatChangeHint implements SfxHint {
+export class SwFormatChangeHint implements BrowserNotificationPayload {
   public readonly kind = "format-change";
   /** Borrows original native format pointers. @param m_pOldFormat - Previous owner or absent. @param m_pNewFormat - New owner or absent. @returns Nothing. */
   public constructor(
@@ -26,7 +26,7 @@ export class SwFormatChangeHint implements SfxHint {
 }
 
 /** Native history hint moves the original line frame clients to a reconstructed owner. */
-export class MoveTableLineHint implements SfxHint {
+export class MoveTableLineHint implements BrowserNotificationPayload {
   public readonly kind = "move-table-line";
   /** Borrows exact native owner and line references. @param m_rNewFormat - Restored frame format. @param m_rTableLine - Original row. @returns Nothing. */
   public constructor(
@@ -36,7 +36,7 @@ export class MoveTableLineHint implements SfxHint {
 }
 
 /** Native row format change identifies precisely which original row frame clients move. */
-export class TableLineFormatChanged implements SfxHint {
+export class TableLineFormatChanged implements BrowserNotificationPayload {
   public readonly kind = "table-line-format-changed";
   /** Borrows exact changed owner and original line references. @param m_rNewFormat - Replacement row format. @param m_rTabLine - Original row. @returns Nothing. */
   public constructor(
@@ -46,7 +46,7 @@ export class TableLineFormatChanged implements SfxHint {
 }
 
 /** Native history notification borrows the original cell and reconstructed owner. */
-export class MoveTableBoxHint implements SfxHint {
+export class MoveTableBoxHint implements BrowserNotificationPayload {
   public readonly kind = "move-table-box";
   /** Borrows original native references. @param m_rNewFormat - Restored owner. @param m_rTableBox - Original box. @returns Nothing. */
   public constructor(
@@ -55,7 +55,7 @@ export class MoveTableBoxHint implements SfxHint {
   ) {}
 }
 /** Native cell change identifies the original owner and box. */
-export class TableBoxFormatChanged implements SfxHint {
+export class TableBoxFormatChanged implements BrowserNotificationPayload {
   public readonly kind = "table-box-format-changed";
   /** Borrows original native references. @param m_rNewFormat - New box format. @param m_rTableBox - Original box. @returns Nothing. */
   public constructor(
@@ -64,7 +64,7 @@ export class TableBoxFormatChanged implements SfxHint {
   ) {}
 }
 /** Native table headline change carries no copied table or attribute payload. */
-export class TableHeadingChange implements SfxHint {
+export class TableHeadingChange implements BrowserNotificationPayload {
   public readonly kind = "table-heading-change";
 }
 /** Atomic Writer notifications emitted by model and shell boundaries. */
@@ -106,7 +106,7 @@ export type SwAtomicModelHint =
   | Readonly<{ kind: "medium-operation-changed" }>;
 
 /** One bounded notification transaction, possibly containing several atomic model hints. */
-export interface SwModelTransactionHint extends SfxHint {
+export interface SwModelTransactionHint extends BrowserNotificationPayload {
   readonly hints: readonly SwAtomicModelHint[];
   readonly kind: "model-transaction";
 }
@@ -163,7 +163,7 @@ export class SwAttrSetChg {
   }
 }
 /** Native attribute change borrows old and new change descriptors. */
-export class AttrSetChangeHint implements SfxHint {
+export class AttrSetChangeHint implements BrowserNotificationPayload {
   public readonly kind = "attr-set-change";
   /** Borrows exact old/new deltas. @param m_pOld - Previous change or absent. @param m_pNew - Accepted change or absent. @returns Nothing. */
   public constructor(

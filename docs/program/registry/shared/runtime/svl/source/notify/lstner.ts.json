@@ -6,22 +6,25 @@
     "classification": "upstream-mechanism",
     "state": "active",
     "suite": "shared",
-    "subsystem": "document-model",
+    "subsystem": "notify",
     "capabilityIds": [
-      "CAP-0111"
+      "CAP-0111",
+      "CAP-755d2902-36d6-4dd7-aa0b-c7b82b23affd"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/svl/source/notify/lstner.ts#SfxListener",
-        "vendor/libreoffice-reference/svl/source/notify/lstner.cxx#SfxListener::StartListening"
+        "apps/office/src/svl/source/notify/native-sfx-notifications.test.ts#ports AddingListenersIncreasesCount",
+        "svl/source/notify/lstner.cxx#SfxListener::StartListening"
       ],
-      "justification": "Mapped provenance remains semantically unverified against svl/source/notify/lstner.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "justification": "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion.",
       "knownViolations": [],
       "localSymbols": [
+        "DuplicateHandling",
         "SfxListener"
       ],
       "sourceResponsibility": "unverified",

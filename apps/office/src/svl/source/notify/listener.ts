@@ -1,5 +1,5 @@
 /** @fileoverview Ports SvtListener reciprocal registrations from pinned `svl/source/notify/listener.cxx`. */
-import type { SfxHint } from "./SfxBroadcaster";
+import type { BrowserNotificationPayload } from "./broadcast";
 import type { SvtBroadcaster } from "./broadcast";
 
 let nextListenerIdentity = 0;
@@ -20,7 +20,7 @@ export class SvtQueryBase {
 }
 
 /** M:N listener. Stable allocation identity represents native pointer ordering in the browser. */
-export class SvtListener<Hint extends SfxHint = SfxHint> {
+export class SvtListener<Hint extends BrowserNotificationPayload = BrowserNotificationPayload> {
   public readonly allocationIdentity = ++nextListenerIdentity;
   private readonly broadcasters: Set<SvtBroadcaster<Hint>>;
 
