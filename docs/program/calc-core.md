@@ -1,5 +1,10 @@
 # Calc coordinate foundation
 
+Current document/UI/ODS dependency audit and implementation order:
+[calc-ui-readiness.md](calc-ui-readiness.md). Historical task entries below
+retain their original evidence; they do not establish current UI readiness
+or override the user's later full-run and pause instructions.
+
 ## UI prerequisite priority
 
 The user resumed the goal after task31's full run and requires the missing
