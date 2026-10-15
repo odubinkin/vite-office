@@ -2,6 +2,10 @@
  * @fileoverview Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.
  */
 
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { MapUnit } from "../../../tools/inc/mapunit";
+import { SfxBroadcaster } from "../notify/SfxBroadcaster";
+import { SfxHint, SfxHintId } from "../../inc/hint";
 import { MergeRange, implCreateItemEntry } from "./itemset";
 import type { WhichRangesContainer } from "../../inc/whichranges";
 
@@ -12,6 +16,67 @@ export type SfxPoolItemFactory = (value: SfxPoolItemValue) => SfxPoolItem;
 
 /** Owns defaults and factories for the bounded WhichId space. */
 export class SfxItemPool {
+  private readonly aBC = new SfxBroadcaster();
+  private readonly aName: OUString;
+  private eDefMetric = MapUnit.MapCM;
+  private mbShutdownHintSent = false;
+  /** Original named/copy constructors; omitted name preserves the existing browser empty-name boundary. Native runtime registries are physical bookkeeping erased under GC. @param source - Native name or actual pool copy. @returns Pool. */
+  public constructor(source?: OUStringConstReference | SfxItemPool) {
+    if (source instanceof SfxItemPool) {
+      this.aName = new OUString(source.aName);
+      this.mnStart = source.mnStart;
+      this.mnEnd = source.mnEnd;
+      this.mpSlotIDToWhichIDMap = source.mpSlotIDToWhichIDMap;
+      this.maItemInfos.push(...source.maItemInfos);
+      for (const [which, info] of source.maUserItemInfos) this.maUserItemInfos.set(which, info);
+      for (let index = 0; index < this.maItemInfos.length; ++index)
+        this.maItemInfos[index] = this.impCheckItemInfoForClone(
+          this.maItemInfos[index] as ItemInfo,
+        );
+      for (const [which, info] of this.maUserItemInfos)
+        this.maUserItemInfos.set(which, this.impCheckItemInfoForClone(info));
+      this.eDefMetric = source.eDefMetric;
+      if (source.mpSecondary) this.SetSecondaryPool(source.mpSecondary.Clone());
+    } else {
+      this.aName = source === undefined ? new OUString() : new OUString(source);
+      this.eDefMetric = MapUnit.MapTwip;
+    }
+  }
+  /** Original metadata-copy category dispatch; static defaults remain shared, dynamic defaults target the new owner. @param info - Actual source metadata. @returns Destination metadata. */
+  protected impCheckItemInfoForClone(info: ItemInfo): ItemInfo {
+    const item = info.getItem() as SfxPoolItem;
+    if (item.isStaticDefault()) return info;
+    if (item.isDynamicDefault()) return new ItemInfoDynamic(info, item.Clone(this));
+    return new ItemInfoUser(info, this, item);
+  }
+  /** Original pool-copy factory; derived native factories may deliberately slice. @returns Independent pool. */
+  public Clone(): SfxItemPool {
+    return new SfxItemPool(this);
+  }
+  /** Original borrowed identifying name. @returns Stable name. */
+  public GetName(): OUStringConstReference {
+    return this.aName;
+  }
+  /** Original metric ignores WhichId. @param which - Native item identity. @returns Pool metric. */
+  public GetMetric(which: number): MapUnit {
+    void which;
+    return this.eDefMetric;
+  }
+  /** Original mutable default metric. @param metric - New metric. @returns Nothing. */
+  public SetDefaultMetric(metric: MapUnit): void {
+    this.eDefMetric = metric;
+  }
+  /** Original notification owner, independently initialized on pool copy. @returns Actual broadcaster. */
+  public BC(): SfxBroadcaster {
+    return this.aBC;
+  }
+  /** Original once gate is set before synchronous delivery; merged ranges reset after delivery. GC controls physical reclamation. @returns Nothing. */
+  public sendShutdownHint(): void {
+    if (this.mbShutdownHintSent) return;
+    this.mbShutdownHintSent = true;
+    this.aBC.Broadcast(new SfxHint(SfxHintId.Dying));
+    this.maPoolRanges = [];
+  }
   private mpMaster: SfxItemPool = this;
   private mpSecondary: SfxItemPool | null = null;
   private maPoolRanges: WhichRangesContainer = [];

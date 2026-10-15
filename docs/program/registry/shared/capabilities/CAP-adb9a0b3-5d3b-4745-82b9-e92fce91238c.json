@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-adb9a0b3-5d3b-4745-82b9-e92fce91238c",
+    "capabilityId": "CAP-adb9a0b3-5d3b-4745-82b9-e92fce91238c",
+    "suite": "shared",
+    "subsystem": "item-pool-construction-copy",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native metadata categories preserve original/effective values and pool-dependent copy targets.",
+      "Pool names,metrics,virtual secondary copies and once-only shutdown use real shared owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task176 implements actual named/copy SfxItemPool constructors,metadata category copy,Clone,GetName,GetMetric/SetDefaultMetric,BC and once-only sendShutdownHint. Static defaults share original metadata;dynamic defaults clone into the new owner;effective user entries and saved originals are processed independently before virtual secondary Clone linkage. All current/saved metadata is staged before virtual item Clone;MapCM remains observable during copy until the source metric is assigned. New pools start with empty broadcasters and merged-range caches,copy metrics and names,and independently gate Dying before synchronous delivery with range reset afterward. Reuse actual OUString,MapUnit,SfxBroadcaster/items/sets. Omitted browser name maps to empty native name;browser-only snapshot registry is not promoted into native metadata or copied packages. Physical refcount/cache/surrogate registries,cleanup/destructor allocation timing and post-destruction access are erased or unimplemented under GC. Presentation,full pool destruction,ScDocumentPool/Sc styles/document/connected UI/same-model ODS remain pending;whole-class parity is not claimed."
+    },
+    "capability": "Native named and copied item pools",
+    "gaps": [
+      "Pool presentation,full destruction and native physical registries remain unimplemented or erased under GC.",
+      "Sc document/styles/UI and same-model ODS remain pending.",
+      "Existing empty-name browser construction is retained;browser snapshot registry is separate from native metadata.",
+      "Native SfxBroadcaster listener-count QA is supporting dependency context only;pool copy/shutdown fixtures are source-derived,not a claimed native pool QA suite port."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/itempool.ts",
+          "marker": "impCheckItemInfoForClone"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-pool-copy.test.ts",
+          "marker": "copies static metadata"
+        },
+        {
+          "path": "apps/office/e2e/shared/pool-copy.spec.ts",
+          "marker": "copies native pool metadata"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native named and copied pools (task176)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "SfxItemPool::SfxItemPool(const SfxItemPool&"
+        },
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "SfxItemPool::sendShutdownHint"
+        },
+        {
+          "path": "sc/source/core/data/docpool.cxx",
+          "marker": "ScDocumentPool::Clone"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "SfxBroadcasterTest::AddingListenersIncreasesCount"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/itempool.hxx",
+          "marker": "GetName()"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-item-pool-construction-copy",
+    "scopeLimitations": [
+      "Task176 implements actual named/copy SfxItemPool constructors,metadata category copy,Clone,GetName,GetMetric/SetDefaultMetric,BC and once-only sendShutdownHint. Static defaults share original metadata;dynamic defaults clone into the new owner;effective user entries and saved originals are processed independently before virtual secondary Clone linkage. All current/saved metadata is staged before virtual item Clone;MapCM remains observable during copy until the source metric is assigned. New pools start with empty broadcasters and merged-range caches,copy metrics and names,and independently gate Dying before synchronous delivery with range reset afterward. Reuse actual OUString,MapUnit,SfxBroadcaster/items/sets. Omitted browser name maps to empty native name;browser-only snapshot registry is not promoted into native metadata or copied packages. Physical refcount/cache/surrogate registries,cleanup/destructor allocation timing and post-destruction access are erased or unimplemented under GC. Presentation,full pool destruction,ScDocumentPool/Sc styles/document/connected UI/same-model ODS remain pending;whole-class parity is not claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
