@@ -305,7 +305,8 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
-    expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(false);
+    expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(true);
+    expect(isForbiddenModuleEdge("xmloff", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("svtools", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("svtools", "sw")).toBe(true);
     expect(getRuntimeOwnershipLayer("svtools/source/control/ctrlbox.ts")).toBe(

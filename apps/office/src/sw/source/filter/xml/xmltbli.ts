@@ -3,7 +3,7 @@ import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "./xmlimpit";
 import { RES_BOX, RES_UL_SPACE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";

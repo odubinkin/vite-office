@@ -10,13 +10,9 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
-import {
-  XMLBorderHdl,
-  XMLBorderWidthHdl,
-  importBoxProperties,
-  exportBoxProperties,
-  exportBorderShorthand,
-} from "../../../../xmloff/source/style/bordrhdl";
+import { XMLBorderHdl, XMLBorderWidthHdl } from "../../../../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "./xmlimpit";
+import { exportBoxProperties, exportBorderShorthand } from "./xmlexpit";
 import { writeOdtDocument } from "./wrtxml";
 import { readOdtDocument } from "./swxml";
 import { exportTableBlocks } from "../../../../xmloff/source/table/XMLTableExport";

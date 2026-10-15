@@ -38,7 +38,7 @@ import {
 import { SwPtrItem } from "../utlui/uiitems";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "../../filter/xml/xmlimpit";
 
 /** Represented table-property inputs in native twips; original model owners remain in the shell. */
 export interface SwTableProperties {

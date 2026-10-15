@@ -6,7 +6,7 @@ import {
   FrameBorderType as Edge,
   FrameBorderState as State,
 } from "../../../svx/source/dialog/frmsel";
-import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
+import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
 import { SvxBorderLineStyle as Style } from "../../../editeng/source/items/borderline";
 
 /** Native source line-style names in numeric identity order. */

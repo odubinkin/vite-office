@@ -16,7 +16,8 @@ import type { SwDoc } from "../sw/source/core/doc/doc";
 import { SwCursor } from "../sw/source/core/crsr/swcrsr";
 import { SwPosition } from "../sw/source/core/crsr/pam";
 import { SwTableBoxStartNode, SwTableNode } from "../sw/source/core/docnode/node";
-import { importBoxProperties, exportBorderShorthand } from "../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "../sw/source/filter/xml/xmlimpit";
+import { exportBorderShorthand } from "../sw/source/filter/xml/xmlexpit";
 
 /** Historical fixture input, accepted only by test helpers. */
 interface ScalarBoxFixture {

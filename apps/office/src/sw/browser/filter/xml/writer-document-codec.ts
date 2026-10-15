@@ -3,7 +3,7 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
-import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "../../../source/filter/xml/xmlimpit";
 
 import {
   SvxNumType,

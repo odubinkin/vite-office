@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlimpit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "xml-item-property-boundary",
+    "capabilityIds": [
+      "CAP-b3d6ebc6-e2c7-4358-be0a-bae5a60758bc"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlimpit.ts",
+        "docs/program/calc-core.md#Canonical shared border handler and Writer item-mapping ownership (task143)"
+      ],
+      "justification": "Task143 corrects the reversed XML attribute-container prerequisite instead of adding a cycle exception. Native xmloff border handlers use published UNO BorderLine2/BorderLineStyle; existing Writer importBoxProperties/exportBoxProperties/exportBorderShorthand adapters move to Writer xmlimpit/xmlexpit responsibility boundaries. All10actual consumers migrate with no old-path compatibility reexports. Three moved function bodies are unchanged; shared handler/token bodies differ only by the equivalent published enum owner. Shared pure token spelling is exposed once to avoid duplicating the source style map or inventing a native class method. The xmloff-to-editeng edge is removed and rejected; SAL/o3tl and all cycle-rejection functions stay unchanged. Native editeng-to-xmloff dependency is not added until actual XML attribute implementation. Current browser-shaped item mapping remains explicit and not certified as the full native Any/item mapper, and is not frozen as a deliberate I/O deviation. Existing statuses/classification/history and deliberate save/open/recovery exceptions retained; no broad parity promotion or native memory engine. Native counterpart responsibilities are mapped as an unverified divergent foundation; no full mapper class/method signature/Any or wider property parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importBoxProperties"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sw/source/filter/xml/xmlimpit.cxx",
+      "upstreamSymbols": [
+        "SvXMLImportItemMapper::PutXMLValue"
+      ]
+    }
+  }
+}

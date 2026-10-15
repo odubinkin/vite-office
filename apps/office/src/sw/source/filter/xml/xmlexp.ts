@@ -3,7 +3,7 @@
  */
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { exportBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
+import { exportBoxProperties } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import {

@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b3d6ebc6-e2c7-4358-be0a-bae5a60758bc",
+    "capabilityId": "CAP-b3d6ebc6-e2c7-4358-be0a-bae5a60758bc",
+    "suite": "shared",
+    "subsystem": "xml-item-property-boundary",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Shared XML border handlers do not import Editeng items; application item mapping is owned by Writer.",
+      "Existing helper behavior and consumers are preserved without old-path reexports or cycle exceptions."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task143 corrects the reversed XML attribute-container prerequisite instead of adding a cycle exception. Native xmloff border handlers use published UNO BorderLine2/BorderLineStyle; existing Writer importBoxProperties/exportBoxProperties/exportBorderShorthand adapters move to Writer xmlimpit/xmlexpit responsibility boundaries. All10actual consumers migrate with no old-path compatibility reexports. Three moved function bodies are unchanged; shared handler/token bodies differ only by the equivalent published enum owner. Shared pure token spelling is exposed once to avoid duplicating the source style map or inventing a native class method. The xmloff-to-editeng edge is removed and rejected; SAL/o3tl and all cycle-rejection functions stay unchanged. Native editeng-to-xmloff dependency is not added until actual XML attribute implementation. Current browser-shaped item mapping remains explicit and not certified as the full native Any/item mapper, and is not frozen as a deliberate I/O deviation. Existing statuses/classification/history and deliberate save/open/recovery exceptions retained; no broad parity promotion or native memory engine."
+    },
+    "capability": "Canonical shared border handler and Writer item-mapping ownership",
+    "gaps": [
+      "Current Writer adapter is not full native Any/item mapper parity.",
+      "XML attribute classes, complete Calc pool/document/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/xmloff/source/style/bordrhdl.ts",
+          "marker": "XMLBorderHdl"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimpit.ts",
+          "marker": "importBoxProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexpit.ts",
+          "marker": "exportBoxProperties"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+          "marker": "XMLBorderHdl"
+        },
+        {
+          "path": "scripts/check-module-boundaries.test.ts",
+          "marker": "xmloff"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical shared border handler and Writer item-mapping ownership (task143)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "xmloff/source/style/bordrhdl.cxx",
+          "marker": "XMLBorderHdl::importXML"
+        },
+        {
+          "path": "sw/source/filter/xml/xmlimpit.cxx",
+          "marker": "SvXMLImportItemMapper::PutXMLValue"
+        },
+        {
+          "path": "sw/source/filter/xml/xmlexpit.cxx",
+          "marker": "SvXMLExportItemMapper::QueryXMLValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "testDiagonalBorders"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "canonical-border-handler-item-mapper-boundary",
+    "scopeLimitations": [
+      "Task143 corrects the reversed XML attribute-container prerequisite instead of adding a cycle exception. Native xmloff border handlers use published UNO BorderLine2/BorderLineStyle; existing Writer importBoxProperties/exportBoxProperties/exportBorderShorthand adapters move to Writer xmlimpit/xmlexpit responsibility boundaries. All10actual consumers migrate with no old-path compatibility reexports. Three moved function bodies are unchanged; shared handler/token bodies differ only by the equivalent published enum owner. Shared pure token spelling is exposed once to avoid duplicating the source style map or inventing a native class method. The xmloff-to-editeng edge is removed and rejected; SAL/o3tl and all cycle-rejection functions stay unchanged. Native editeng-to-xmloff dependency is not added until actual XML attribute implementation. Current browser-shaped item mapping remains explicit and not certified as the full native Any/item mapper, and is not frozen as a deliberate I/O deviation. Existing statuses/classification/history and deliberate save/open/recovery exceptions retained; no broad parity promotion or native memory engine.",
+      "Native test reference concerns actual border attributes, not a claim of full Calc/filter/mapper QA."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

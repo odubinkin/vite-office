@@ -16,7 +16,7 @@ import { RES_BOX } from "../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { TableParamToItemSet } from "../../source/uibase/shells/tabsh";
-import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
+import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
