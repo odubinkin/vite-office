@@ -1,10 +1,11 @@
 ---
 id: "202610151740-J5D94Q"
 title: "Port native text-field values and polymorphic field items"
-status: "DOING"
+result_summary: "Implemented native field values/FieldItem, all17field IDs and nonempty shared text copies without native ownership machinery; URL Name equality/hash omission preserved and recorded as CALC142. Full text engine/pool/Calc model/UI/same-model ODS remain pending; goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Genuine FieldData/FieldItem/URL/page/title/time/table values reuse shared Unicode/items/hash/holder/ContentInfo. Independent polymorphic clones, original adopt/null/copy modes, exact field type gates, stable views, full URL copy/assignment and Name omission are tested, including real item-set no-change behavior and target-pool copies."
     - "Exact2new shared and33Calc owners are raw-positive100;53related/187Calc/19browser cases,43boundary tests/build/13gates/inventory0 and13native pins/17field IDs pass. Both complete guard files are unchanged. No fake factory/provider, core JSON, UI localization, ownership/type registry or native compiler/probe."
-commit: null
+commit:
+  hash: "2ecb29b6019cea1e4c5bafa0a6c308ea83d42eb0"
+  message: "🚧 J5D94Q core: port native polymorphic text-field values"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual polymorphic text-field values and pooled field item over shared Unicode/items, with explicit GC overload binding and source-backed tests."
+  -
+    author: "CODER"
+    body: "Verified: actual polymorphic text-field/URL/page/table values and native pooled copies pass53related/187Calc/19browser cases,43boundary tests, raw100coverage,13gates and exact source/native hashes."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified2ecb29b6019c:53related/187Calc/19browser cases,43boundary tests, build/all13gates/inventory0 pass. Exact2new shared/33Calc owners raw100/every counter positive;13native pins/17IDs/13paths/4084hashes/4links restored. Real polymorphic field copies/URL Name omission preserved, opaque type hash adaptation explicit, no native ownership engine. Full text-engine/Calc model/UI/ODS pending; goal active."
+  -
+    type: "status"
+    at: "2026-10-15T17:59:03.257Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual polymorphic text-field/URL/page/table values and native pooled copies pass53related/187Calc/19browser cases,43boundary tests, raw100coverage,13gates and exact source/native hashes."
 doc_version: 3
-doc_updated_at: "2026-10-15T17:58:43.295Z"
+doc_updated_at: "2026-10-15T17:59:03.258Z"
 doc_updated_by: "CODER"
 description: "Task160: actual SvxFieldData/SvxFieldItem plus URL/page/pages/page-title/time/document-title/table value contracts over existing shared Unicode/items. Preserve dynamic clone/adoption/null/equality/hash relationships and field IDs for upcoming EditTextObject/ODS, without fake factory/provider or native ownership machinery."
 sections:
