@@ -1,10 +1,11 @@
 ---
 id: "202610151815-3Q0R95"
 title: "Extend shared Font metadata for Calc document defaults"
-status: "DOING"
+result_summary: "Extended shared Font stored metadata required by Calc defaults and preserved it through Writer numbering copies/Worker transport; actual default-font configuration/device provider and Calc document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/sw/browser/filter/xml/native-font-metadata.test.ts"
   findings:
     - "Same-agent review, not independent. Source audit6 pinned blobs/18 anchors;42 related and187 Calc tests pass with strict shared/Calc raw100 and exact measured owner sets. All13 gates, build and19 browser cases pass; only native vcl-to-sal edge added, no cycle algorithm changes. No full Font/default-device or UI/ODS readiness claim; inventory limitations preserved."
-commit: null
+commit:
+  hash: "74b7ca8af2264f8835fcbad567e5abdc7c66b4ec"
+  message: "🧩 3Q0R95 task: record Font metadata verification review"
 comments:
   -
     author: "CODER"
     body: "Start: implement shared native stored Font metadata for real Calc document defaults and preserve it across existing Writer value and transport consumers."
+  -
+    author: "CODER"
+    body: "Verified:42 related tests,187 Calc cases with shared/Calc raw100,13 source gates/43 boundary tests, production build and19 browser cases pass; inventory updated and four upstream links restored."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS:42 related tests,187 Calc tests, strict shared Font and all33 Calc owners raw100 with exact owner sets;13 source gates/43 boundary tests; production build and19 browser cases upstream-absent. Inventory updated without parity promotion;6 pinned blobs/18 anchors; no native probe or full-suite run."
+  -
+    type: "status"
+    at: "2026-10-15T18:22:13.628Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:42 related tests,187 Calc cases with shared/Calc raw100,13 source gates/43 boundary tests, production build and19 browser cases pass; inventory updated and four upstream links restored."
 doc_version: 3
-doc_updated_at: "2026-10-15T18:21:55.668Z"
+doc_updated_at: "2026-10-15T18:22:13.629Z"
 doc_updated_by: "CODER"
 description: "Task162: implement native stored Font style/family/pitch/charset values required by ScDocumentPool in the existing VCL owner, with copy/equality and const contracts; preserve them through real Writer numbering copies and Worker transport. Configuration lookup/default-font resolution remains a subsequent actual provider, never a fake MaybeAskConfig implementation."
 sections:
@@ -120,6 +133,10 @@ sections:
     - Observation: Native stored font metadata is now represented and retained through real numbering copies and Worker graph. ConstFont excludes every represented setter. Legacy Worker records without metadata preserve empty/unknown native defaults; malformed typed metadata is rejected.
       Impact: Calc can reuse the same richer Font value owner when default-font resolution and ScDocumentPool are implemented. Previously family-only copies/transport would lose these fields.
       Resolution: Keep MaybeAskConfig, native default-font configuration/device selection and other rendering attributes explicitly pending. No fabricated provider, C++/ABI or new lifetime engine. Reuse and correct this shared owner in subsequent actual font-provider work.
+extensions:
+  implementation_commit:
+    hash: "4491fd725093182a2a211d2aa7a27abf03a27a00"
+    message: "🔧 3Q0R95 core: preserve shared Font metadata and Writer transport"
 id_source: "generated"
 ---
 ## Summary
