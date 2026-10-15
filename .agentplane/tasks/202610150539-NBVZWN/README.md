@@ -1,10 +1,11 @@
 ---
 id: "202610150539-NBVZWN"
 title: "Restore native shared text-line item hierarchy for Calc overline"
-status: "DOING"
+result_summary: "Replaced scalar-only shared underline with native text-line color/complex/enum values and overline specialization in canonical textitem.ts; migrated enum consumers and invariant, preserved original member semantics with explicit pending native interface/presentation services."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Source audit verifies20enum declarations/5memberIDs/2CalcWhichIds and9Writer files unchanged except canonical enum references. Stable invariant follows Tools; actual runtime/provenance/capability records remain honest unverified foundation."
     - "102related,184Calc,38boundary and3existingChromium cases pass. Entire3changedsharedowners and33Calcowners raw100;4Writer-only gap owners measured/left. All13source gates and portable build pass, zero inventory semantic violations."
     - "40intentional paths/3871source hashes/10native pins/4restored links audited. Earlier assertion/selection/metadata/typecheck failures retained and corrected without relaxing gates or changing native behavior."
-commit: null
+commit:
+  hash: "aa0e749e7a1b7a23e48e540433cd1aa408f75276"
+  message: "Implement NBVZWN core: native shared text-line hierarchy"
 comments:
   -
     author: "CODER"
     body: "Start: replace incorrect scalar underline with original shared text-line hierarchy, reuse Tools/ComplexColor/Any values and migrate Writer enum users; record missing interface/presentation services explicitly."
+  -
+    author: "CODER"
+    body: "Verified: original text-line hierarchy and canonical Tools enum with Writer consumers;102related,184Calc,38boundary,3Chromium tests, strict shared/Calc raw100, all source/inventory/build gates and exact source/native audit pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified102related,184Calc,38boundary,3Chromium cases; entire changed shared/Calc raw100; all13gates/build/inventory pass;40paths/3871hashes/10pins/4links audited. Four Writer-only gaps left, actual complex interface/presentation pending, same-agent evaluator not independent."
+  -
+    type: "status"
+    at: "2026-10-15T05:54:03.183Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original text-line hierarchy and canonical Tools enum with Writer consumers;102related,184Calc,38boundary,3Chromium tests, strict shared/Calc raw100, all source/inventory/build gates and exact source/native audit pass."
 doc_version: 3
-doc_updated_at: "2026-10-15T05:53:40.966Z"
+doc_updated_at: "2026-10-15T05:54:03.184Z"
 doc_updated_by: "CODER"
 description: "Task145 replaces scalar-only shared underline with original SvxTextLineItem enum/color/complex value base and actual underline/overline derivatives; canonical Tools FontLineStyle declarations and consumer migration, source defaults and bool/scalar Any semantics. Missing native localized resource and actual XComplexColor interface transport explicitly recorded, never replaced by fake services or memory mechanisms."
 sections:
