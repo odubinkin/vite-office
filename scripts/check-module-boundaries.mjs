@@ -152,7 +152,8 @@ const allowedEdges = new Map([
       "xmloff",
     ]),
   ],
-  ["vcl", new Set(["offapi", "svl", "tools"])],
+  // Native vcl/Library_vcl.mk links SAL; font.hxx includes sal/types.h.
+  ["vcl", new Set(["offapi", "sal", "svl", "tools"])],
   // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
   ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.

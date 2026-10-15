@@ -3918,3 +3918,11 @@ Task160 ports actual SvxFieldData/SvxFieldItem and complete locale-independent U
 Bounded acceptance passes53related tests/7files and187Calc tests/76files, production build and19related Writer browser scenarios. Exact2new shared executable owners raw S123/B37/F52/L117 and all33Calc owners S4179/B2731/F821/L3727 have every raw counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0, plus43boundary tests with both complete guard files unchanged. Native evidence pins13files and all17field IDs. All4source references are absent during tests/build/browser and restored exactly finally. Full engine/pool/document/connected UI/same-model ODS readiness and native type-index numeric ABI are not claimed.
 
 Native type-index hash is an opaque per-executable hash contract, represented through JS dynamic-class reflection and existing SAL hashing without a type registry. It is neither persisted document data nor a claim of matching C++ RTTI/ABI hash bits. Base release equality remains always true; SvxFieldItem separately guards exact field dynamic types before invoking payload equality. Native page-field CLASS_ID remains inherited UNSPECIFIED while its virtual GetClassId returns PAGE; no nonnative static override is added. URL Name omission is preserved through the actual item-set no-change gate (CALC-142).
+
+## Shared stored Font metadata (task162)
+
+Task162 extends existing shared Font metadata with native empty style, FAMILY_DONTKNOW, PITCH_DONTKNOW and RTL_TEXTENCODING_DONTKNOW; stored GetStyleName/GetFamilyType/GetFontFamily/GetPitch/GetCharSet, guarded setters, independent immutable-value copies, IsSameInstance and equality for represented fields. Actual Writer numbering copies and Worker graph preserve all represented metadata; legacy records retain defaults and invalid metadata is rejected. No MaybeAskConfig/default-font provider is invented. Native remaining render/size/language/configuration attributes, full Font equality and spreadsheet device defaults remain pending. No native probe/compiler or new lifetime manager.
+
+The represented native values are prerequisites of ScDocumentPool font items,
+not a completed OutputDevice or spreadsheet default-font provider. Whole-Calc
+and related shared/Writer verification results are retained in the task README.

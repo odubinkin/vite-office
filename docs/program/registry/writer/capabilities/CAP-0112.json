@@ -157,7 +157,8 @@
     "atomicOperation": "Resolve one WhichId through the pooled item hierarchy",
     "scopeLimitations": [
       "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL font family, weight and posture, common underline, the complete 126-entry built-in paragraph-style metadata catalog, and source-derived item defaults for the 26 materializable paragraph styles are implemented. Font size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
-      "The current version-five browser snapshot preserves the implemented ownership graph and lazy built-in style materialization; obsolete snapshots from preceding non-canonical models are deliberately rejected. ODT numbering, fonts, and named paragraph styles are mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
+      "The current version-five browser snapshot preserves the implemented ownership graph and lazy built-in style materialization; obsolete snapshots from preceding non-canonical models are deliberately rejected. ODT numbering, fonts, and named paragraph styles are mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented.",
+      "Task162 extends existing shared Font metadata with native empty style, FAMILY_DONTKNOW, PITCH_DONTKNOW and RTL_TEXTENCODING_DONTKNOW; stored GetStyleName/GetFamilyType/GetFontFamily/GetPitch/GetCharSet, guarded setters, independent immutable-value copies, IsSameInstance and equality for represented fields. Actual Writer numbering copies and Worker graph preserve all represented metadata; legacy records retain defaults and invalid metadata is rejected. No MaybeAskConfig/default-font provider is invented. Native remaining render/size/language/configuration attributes, full Font equality and spreadsheet device defaults remain pending. No native probe/compiler or new lifetime manager."
     ],
     "implemented": true,
     "contractParity": true,
@@ -290,6 +291,18 @@
           "upstream": {
             "marker": "SfxItemSet::Put",
             "path": "svl/source/items/itemset.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Task162 extends existing shared Font metadata with native empty style, FAMILY_DONTKNOW, PITCH_DONTKNOW and RTL_TEXTENCODING_DONTKNOW; stored GetStyleName/GetFamilyType/GetFontFamily/GetPitch/GetCharSet, guarded setters, independent immutable-value copies, IsSameInstance and equality for represented fields. Actual Writer numbering copies and Worker graph preserve all represented metadata; legacy records retain defaults and invalid metadata is rejected. No MaybeAskConfig/default-font provider is invented. Native remaining render/size/language/configuration attributes, full Font equality and spreadsheet device defaults remain pending. No native probe/compiler or new lifetime manager.",
+          "local": {
+            "path": "apps/office/src/vcl/source/font/font.ts",
+            "marker": "export class Font"
+          },
+          "upstream": {
+            "path": "vcl/source/font/font.cxx",
+            "marker": "ImplFont::ImplFont"
           }
         }
       ]
