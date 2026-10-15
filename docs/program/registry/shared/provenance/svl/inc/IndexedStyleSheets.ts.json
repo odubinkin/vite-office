@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/IndexedStyleSheets.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/IndexedStyleSheets.hxx",
+    "localSymbols": [
+      "IndexedStyleSheets",
+      "SearchBehavior",
+      "StyleSheetPredicate",
+      "StyleSheetDisposer",
+      "StyleSheetCallback"
+    ],
+    "upstreamSymbols": [
+      "IndexedStyleSheets",
+      "SearchBehavior",
+      "StyleSheetPredicate",
+      "StyleSheetDisposer",
+      "StyleSheetCallback"
+    ],
+    "preservedResponsibilities": [
+      "Task168 implements the actual IndexedStyleSheets dependency created eagerly by SfxStyleSheetBasePool_Impl. Preserve vector identity/position order, name multimap indices, six family vectors, duplicate pointer guard, rebuild/name-change, predicates/count/nth search, callbacks and Clear ordering. Native OUString name equality binds to native JS logical UTF16 Map multivalue keys; no normalization or custom hash buckets. Duplicate-name range order is unspecified by the native unordered_multimap contract; ReturnFirst preserves cardinality and predicate selection without claiming a cross-stdlib particular duplicate. Native rtl::Reference/virtual callback boundaries use JS object references and erased borrowed name/family/callback contracts; no fake SfxStyleSheetBase/Pool or memory/refcount/weak/allocator engine is introduced. Native std::out_of_range and failed family assertions bind to host errors for these defined failure/precondition boundaries; invalid start iterators and dangling native pointers are not assigned invented results. Preserve source Clear omission of family-vector clearing (CALC146); explicit Reindex repairs indices only because upstream does so. Full styles/pool/document/connected UI/ODS remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full SfxStyleSheetBase/Pool construction, native ABI/concurrency/invalid iterator/dangling-pointer outcomes and actual Calc document/UI/ODS remain unimplemented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/IndexedStyleSheets.ts",
+          "marker": "IndexedStyleSheets"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts",
+          "marker": "ports InstantiationWorks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svl/IndexedStyleSheets.hxx",
+          "marker": "IndexedStyleSheets"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "InstantiationWorks"
+        }
+      ]
+    }
+  }
+}

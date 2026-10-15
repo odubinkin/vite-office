@@ -2240,3 +2240,11 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: literal keys `hg正楷書体-pro` -> `hgseikaishotaipro` and `hg丸ｺﾞｼｯｸ-pro` -> `hgmarugothicmpro` contain ASCII hyphens, which are removed before lookup. Their normalized forms have no dictionary entry, so these inputs return `hg正楷書体pro` and `hg丸ｺﾞｼｯｸpro` instead of the apparent intended English aliases.
 - Status: potentially unreachable source entries, not a confirmed defect. Preserve both raw keys and the original preprocessing order. Do not normalize dictionary keys, add aliases or special-case the two inputs.
 - Local evidence: complete dictionary/source audit and `unotools/source/misc/native-font-names.test.ts`. No native compiler/probe and no full physical font resolution claim.
+
+
+## CALC-146: style-index Clear retains the family vectors
+
+- Upstream: pinned `svl/source/items/IndexedStyleSheets.cxx`, IndexedStyleSheets::Clear, Reindex and GetStyleSheetsByFamily; declarations in `include/svl/IndexedStyleSheets.hxx`.
+- Observation: Clear invokes the cleanup callback and clears each primary vector slot in insertion order, then clears the primary vector and name map. It does not clear any of the six family vectors. GetNumberOfStyleSheets can therefore return0 while a previously borrowed family vector still contains earlier pointers; adding a new style appends to that stale family vector. Explicit Reindex clears and rebuilds all family vectors.
+- Status: suspicious omitted index reset, not a confirmed defect. Preserve the exact omission and explicit rebuild behavior. Observe only styles retained externally, so those native pointers remain valid; do not invent results for dereferencing dangling pointers after actual destruction. JS object references/GC do not recreate native deletion.
+- Local evidence: `apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts` and `apps/office/e2e/shared/indexed-style-sheets.spec.ts`, including partial null-slot visibility during callbacks, retained family views and later explicit Reindex. No native compiler/probe or memory-management experiment.

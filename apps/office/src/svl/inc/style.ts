@@ -11,3 +11,12 @@ export enum SfxStyleFamily {
   Cell = 0x40,
   All = 0x7fff,
 }
+
+import type { OUStringConstReference } from "../../sal/inc/rtl/ustring";
+/** Erased borrowed SfxStyleSheetBase name/family operations consumed by IndexedStyleSheets. This neither constructs nor substitutes a stylesheet/pool owner. */
+export interface SfxStyleSheetNameReference {
+  /** Original stable const name view. @returns Name. */
+  GetName(): OUStringConstReference;
+  /** Original style family. @returns Family. */
+  GetFamily(): SfxStyleFamily;
+}

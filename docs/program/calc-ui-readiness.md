@@ -1,6 +1,6 @@
 # Calc UI and ODS implementation critical path
 
-Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165; required prepared-locale uppercase by task166 and actual shared string pool by task167.
+Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165; required prepared-locale uppercase by task166 and actual shared string pool by task167 and the eager shared named-style index by task168.
 Reference: local LibreOffice commit
 `9bc445578031fecf56086729d8e4940c77e14d65`.
 This is the current priority map; historical task notes in
@@ -180,3 +180,22 @@ acceptance. A borrowed erased uppercase contract matches precisely the receiver
 operation consumed by the source constructor. Full CharClass/LanguageTag/system
 locale construction and the actual Calc document/sheet/column chain remain
 required before the UI and same-model ODS milestone.
+
+
+## Indexed named styles (task168)
+
+The actual shared IndexedStyleSheets owner now implements vector positions,
+name multimap lookup, all six original family indices, explicit reindex and
+name-change updates, predicate/nth queries and callback/Clear ordering. It is
+created eagerly by the original SfxStyleSheetBasePool_Impl. Native reference
+containers bind to JS objects and exact UTF16 Map keys; there is no new
+ownership library or fabricated stylesheet/pool implementation.
+
+All nine original index QA contracts are ported using the same narrow caller
+responsibility as the native MockedStyleSheet fixture. The unchanged existing
+style-family enum gains only an erased borrowed GetName/GetFamily contract.
+Native unordered duplicate-range order is not promoted into a cross-platform
+ordering guarantee. CALC146 records that Clear leaves family vectors populated;
+the implementation preserves that omission and the source's explicit Reindex
+behavior. Full named stylesheet/base pool and Calc pool ownership remain
+required; this index alone is not a spreadsheet document or ODS importer.

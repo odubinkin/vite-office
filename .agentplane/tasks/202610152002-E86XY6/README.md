@@ -4,7 +4,7 @@ title: "Implement shared indexed style-sheet collection for Calc pool"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the actual native style index dependency, all9 original QA scenarios and reindex/Clear contracts using JS object references without a fake pool or lifetime engine."
 doc_version: 3
-doc_updated_at: "2026-10-15T20:02:39.236Z"
+doc_updated_at: "2026-10-15T20:09:02.589Z"
 doc_updated_by: "CODER"
 description: "Task168: implement source IndexedStyleSheets complete collection/index/predicate/callback contract as the eager dependency of real SfxStyleSheetBasePool. Preserve original observable stale-family Clear behavior; use JS references and exact UTF16 keys without a lifetime engine or fake stylesheet/pool classes."
 sections:
@@ -46,7 +46,10 @@ sections:
   Verify Steps: "Audit pinned include/svl/IndexedStyleSheets.hxx, svl/source/items/IndexedStyleSheets.cxx, include/svl/style.hxx, svl/source/items/style.cxx and svl/qa/unit/items/test_IndexedStyleSheets.cxx. Directly port all9 native fixture contracts. Test duplicate identities/names, every valid family, index snapshots/live family views, explicit reindex/name-change, predicate defaults/ReturnFirst, nth starting position/miss/negative n, exact missing-position error, native negative bounds failure, callback order and partial null slot visibility during Clear. Preserve family index omission; observe only externally held valid caller objects, not native dangling references. Tests/build/Chromium with4native reference links absent/restored, exact1shared owner raw positive S/B/F/L100 and33Calc raw100; related Writer regression. All13source gates incl inventory/provenance/routing/43boundaries. No native compilation or new ownership mechanism; record same-agent evaluator review and clean final state."
   Verification: "Pending implementation and acceptance."
   Rollback Plan: "Revert only task168 intentional source/tests/registry/docs changes via follow-up task; preserve shared string pool and unrelated task histories. No merges or history reset."
-  Findings: ""
+  Findings: |-
+    - Observation: All48 related tests/5files and187Calc/76files pass,including9 original index QA contracts. Raw1shared S106/B43/F21/L90 and33Calc S4179/B2731/F821/L3727 all positive100; production build,Chromium scenario and13 source gates pass. Source Clear omits family vector clearing while Reindex clears it;CALC146 records this exact behavior.
+      Impact: The eager shared index dependency is implemented; it does not create real styles/base pool/Calc document or satisfy UI/ODS readiness. Native unordered duplicate order is not a cross-platform particular first-item guarantee.
+      Resolution: Preserve source omission and callback slot ordering,observe only externally held valid objects,keep full parity flags false and record native7blob audit plus unchanged emitted enum proof. No new memory management or native compiler/probe.
 id_source: "generated"
 ---
 ## Summary
@@ -74,3 +77,7 @@ Pending implementation and acceptance.
 Revert only task168 intentional source/tests/registry/docs changes via follow-up task; preserve shared string pool and unrelated task histories. No merges or history reset.
 
 ## Findings
+
+- Observation: All48 related tests/5files and187Calc/76files pass,including9 original index QA contracts. Raw1shared S106/B43/F21/L90 and33Calc S4179/B2731/F821/L3727 all positive100; production build,Chromium scenario and13 source gates pass. Source Clear omits family vector clearing while Reindex clears it;CALC146 records this exact behavior.
+  Impact: The eager shared index dependency is implemented; it does not create real styles/base pool/Calc document or satisfy UI/ODS readiness. Native unordered duplicate order is not a cross-platform particular first-item guarantee.
+  Resolution: Preserve source omission and callback slot ordering,observe only externally held valid objects,keep full parity flags false and record native7blob audit plus unchanged emitted enum proof. No new memory management or native compiler/probe.
