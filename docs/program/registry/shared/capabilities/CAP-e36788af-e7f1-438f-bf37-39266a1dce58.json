@@ -1,0 +1,162 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e36788af-e7f1-438f-bf37-39266a1dce58",
+    "capabilityId": "CAP-e36788af-e7f1-438f-bf37-39266a1dce58",
+    "suite": "shared",
+    "subsystem": "text-object-content-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual paragraph content and character values retain text/style/family/formatting and destination-pool copy contracts.",
+      "Spelling equality remains independent of content payload equality.",
+      "Actual WrongList stored-state transformations retain source unsigned arithmetic and original insertion loop bound.",
+      "Set copies effective values in declared-range intersections; nested set Clone receives the destination pool."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task158 implements original ContentInfo and XEditAttribute paragraph text/style/family/paragraph-set/ordered-character/spell-state values, destination-pool copies, payload equality and separate spelling equality. Native EE Which declarations (4021..4081, paragraph justification4037) and SfxStyleFamily values are canonical. Actual WrongList stored state, constructors/copy/queries and non-ContentNode insertion/deletion transformations preserve unsigned64 arithmetic and the original captured insertion loop bound. SfxItemSet.Set clears first and deep-copies effective SET-only declared-range intersections; Put supplies the real target pool to item Clone. SfxPoolItemHolder is only a logical pool/value association under JS GC; static/own dynamic defaults, request values, shareability and foreign nested-set copies retain their value contracts. Native allocation/refcount/cache/surrogate machinery and physical interned-pointer identity are deliberately erased. Existing OUString/SharedString/items/sets/pools are reused. NormalizeString awaits a real SharedStringPool/CharClass; ClearWrongs awaits real ContentNode; no fake provider, engine pool, text-object factory, UI localization, native compiler or memory probes. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. Bounded task acceptance passes194related tests/18files and187Calc tests/76files. Exact8changed/new shared executable owners (raw S543/B362/F118/L471) and all33Calc owners (S4179/B2731/F821/L3727) have every raw counter positive and S/B/F/L100. Type-only base Clone signature has identical emitted runtime proof. Production build and19related Writer browser scenarios pass with all4source references absent during execution/restored finally. Source gates and inventory are accepted separately from broad parity;19native source pins and all70evaluated EE declarations are retained. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. No new native memory manager, pointer interning or UI localization."
+    },
+    "capability": "Native paragraph content values",
+    "gaps": [
+      "NormalizeString, ContentNode-dependent ClearWrongs, full EditTextObject/EditEngine/pool/Calc document/connected UI/same-model ODS pending.",
+      "Native memory/cache/refcount/surrogate and physical interned-pointer identity are deliberately erased under JS GC."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/editobj.ts",
+          "marker": "ContentInfo"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/editobj2.ts",
+          "marker": "ContentInfo"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/edtspell.ts",
+          "marker": "WrongList"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/edtspell.ts",
+          "marker": "WrongList"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/misspellrange.ts",
+          "marker": "MisspellRange"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/misspellrange.ts",
+          "marker": "MisspellRange"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/eeitem.ts",
+          "marker": "EE_ITEMS_START"
+        },
+        {
+          "path": "apps/office/src/svl/inc/solar.ts",
+          "marker": "OWN_ATTR_VALUE_START"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleFamily"
+        },
+        {
+          "path": "apps/office/src/svl/inc/itemset.ts",
+          "marker": "SfxItemSet"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-content-values.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/native-wrong-list.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-itemset-set-holder.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native paragraph content values (task158)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/editeng/editobj.cxx",
+          "marker": "ContentInfo"
+        },
+        {
+          "path": "editeng/source/editeng/editobj2.hxx",
+          "marker": "ContentInfo"
+        },
+        {
+          "path": "editeng/source/editeng/edtspell.cxx",
+          "marker": "WrongList"
+        },
+        {
+          "path": "editeng/inc/edtspell.hxx",
+          "marker": "WrongList"
+        },
+        {
+          "path": "editeng/source/editeng/misspellrange.cxx",
+          "marker": "MisspellRange"
+        },
+        {
+          "path": "include/editeng/misspellrange.hxx",
+          "marker": "MisspellRange"
+        },
+        {
+          "path": "include/editeng/eeitem.hxx",
+          "marker": "EE_ITEMS_START"
+        },
+        {
+          "path": "include/svl/solar.hrc",
+          "marker": "OWN_ATTR_VALUE_START"
+        },
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleFamily"
+        },
+        {
+          "path": "include/svl/itemset.hxx",
+          "marker": "SfxItemSet"
+        }
+      ],
+      "tests": [
+        {
+          "path": "editeng/qa/unit/core-test.cxx",
+          "marker": "testBoldItalicCopyPaste"
+        },
+        {
+          "path": "editeng/qa/unit/core-test.cxx",
+          "marker": "testUnderlineCopyPaste"
+        }
+      ],
+      "docs": [
+        {
+          "path": "editeng/README.md",
+          "marker": "Edit Engine"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-paragraph-content-values",
+    "scopeLimitations": [
+      "Task158 implements original ContentInfo and XEditAttribute paragraph text/style/family/paragraph-set/ordered-character/spell-state values, destination-pool copies, payload equality and separate spelling equality. Native EE Which declarations (4021..4081, paragraph justification4037) and SfxStyleFamily values are canonical. Actual WrongList stored state, constructors/copy/queries and non-ContentNode insertion/deletion transformations preserve unsigned64 arithmetic and the original captured insertion loop bound. SfxItemSet.Set clears first and deep-copies effective SET-only declared-range intersections; Put supplies the real target pool to item Clone. SfxPoolItemHolder is only a logical pool/value association under JS GC; static/own dynamic defaults, request values, shareability and foreign nested-set copies retain their value contracts. Native allocation/refcount/cache/surrogate machinery and physical interned-pointer identity are deliberately erased. Existing OUString/SharedString/items/sets/pools are reused. NormalizeString awaits a real SharedStringPool/CharClass; ClearWrongs awaits real ContentNode; no fake provider, engine pool, text-object factory, UI localization, native compiler or memory probes. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. Bounded task acceptance passes194related tests/18files and187Calc tests/76files. Exact8changed/new shared executable owners (raw S543/B362/F118/L471) and all33Calc owners (S4179/B2731/F821/L3727) have every raw counter positive and S/B/F/L100. Type-only base Clone signature has identical emitted runtime proof. Production build and19related Writer browser scenarios pass with all4source references absent during execution/restored finally. Source gates and inventory are accepted separately from broad parity;19native source pins and all70evaluated EE declarations are retained. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. No new native memory manager, pointer interning or UI localization.",
+      "Referenced upstream copy/paste tests establish the parent text/attribute responsibilities; they are not claimed ported or passing here. Local tests exercise actual internal ContentInfo/XEditAttribute values and pool-targeted copies; complete EditEngine sections/copy-paste require the absent higher-level engine."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

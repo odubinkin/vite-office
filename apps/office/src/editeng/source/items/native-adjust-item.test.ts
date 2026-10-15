@@ -1,5 +1,6 @@
 /** @fileoverview Native paragraph adjustment bit/default/value/Any contracts and actual Writer persistence. */
 import { describe, expect, it } from "vitest";
+import { EE_PARA_JUST } from "../../inc/eeitem";
 import { SvxAdjust, SvxAdjustItem } from "../../inc/adjustitem";
 import {
   MID_PARA_ADJUST,
@@ -84,7 +85,7 @@ describe("native paragraph adjustment", /** Groups original complete item value 
       [7, 0],
       [99, 0],
     ] as const) {
-      const item = new SvxAdjustItem(argument as SvxAdjust, 4016);
+      const item = new SvxAdjustItem(argument as SvxAdjust, EE_PARA_JUST);
       expect(item.GetAdjust()).toBe(want);
       item.SetAdjust(SvxAdjust.Center);
       item.SetAdjust(argument as SvxAdjust);

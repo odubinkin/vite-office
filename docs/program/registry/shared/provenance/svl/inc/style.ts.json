@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/style.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/style.hxx",
+    "localSymbols": [
+      "SfxStyleFamily"
+    ],
+    "upstreamSymbols": [
+      "SfxStyleFamily"
+    ],
+    "preservedResponsibilities": [
+      "Task158 implements original ContentInfo and XEditAttribute paragraph text/style/family/paragraph-set/ordered-character/spell-state values, destination-pool copies, payload equality and separate spelling equality. Native EE Which declarations (4021..4081, paragraph justification4037) and SfxStyleFamily values are canonical. Actual WrongList stored state, constructors/copy/queries and non-ContentNode insertion/deletion transformations preserve unsigned64 arithmetic and the original captured insertion loop bound. SfxItemSet.Set clears first and deep-copies effective SET-only declared-range intersections; Put supplies the real target pool to item Clone. SfxPoolItemHolder is only a logical pool/value association under JS GC; static/own dynamic defaults, request values, shareability and foreign nested-set copies retain their value contracts. Native allocation/refcount/cache/surrogate machinery and physical interned-pointer identity are deliberately erased. Existing OUString/SharedString/items/sets/pools are reused. NormalizeString awaits a real SharedStringPool/CharClass; ClearWrongs awaits real ContentNode; no fake provider, engine pool, text-object factory, UI localization, native compiler or memory probes. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. Bounded task acceptance passes194related tests/18files and187Calc tests/76files. Exact8changed/new shared executable owners (raw S543/B362/F118/L471) and all33Calc owners (S4179/B2731/F821/L3727) have every raw counter positive and S/B/F/L100. Type-only base Clone signature has identical emitted runtime proof. Production build and19related Writer browser scenarios pass with all4source references absent during execution/restored finally. Source gates and inventory are accepted separately from broad parity;19native source pins and all70evaluated EE declarations are retained. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. No new native memory manager, pointer interning or UI localization."
+    ],
+    "omittedResponsibilities": [
+      "Actual full EditTextObject/engine/pool/model/UI/ODS and ContentNode-dependent ClearWrongs/SharedStringPool normalization remain pending. Native memory/cache/refcount mechanisms and physical pointer interning identity are erased under JS GC."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleFamily"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/style.hxx",
+          "marker": "SfxStyleFamily"
+        }
+      ]
+    }
+  }
+}

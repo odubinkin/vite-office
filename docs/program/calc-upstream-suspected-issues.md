@@ -2191,3 +2191,24 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: every spacing branch initializes a signed short to-1 and ignores the extraction result before calling the setter. A boolean/empty Any therefore returns true while storing65535in unsigned word-spacing fields, or-1in signed letter-spacing/glyph-scaling fields. Query of unsigned word65535 is signed short-1. There is no property range check.
 - Status: surprising failed-extraction mutation, not a confirmed defect. Preserve initialization, cast order and successful return rather than reject or keep prior values. Direct setters retain declared-width conversions.
 - Local evidence: `apps/office/src/editeng/source/items/native-adjust-item.test.ts`, actual typed Any failures and all seven numeric members.
+
+## CALC-139: default spelling invalid-end marker wraps on insertion
+
+- Upstream: pinned `editeng/source/editeng/edtspell.cxx`, WrongList constructor and TextInserted.
+- Observation: default invalid interval is [0, size_t max]. Inserting one unit at position1 follows invalid-end >= position and adds the length without a sentinel check, producing unsigned64 zero for invalid-end while retaining invalid-start0. There are no spelling ranges in this example.
+- Status: surprising unsigned sentinel arithmetic, not a confirmed defect. Preserve the original branch and unsigned arithmetic; do not clamp or reinterpret the marker.
+- Local evidence: `apps/office/src/editeng/source/editeng/native-wrong-list.test.ts`; source-derived literal assertions without native compiler/probe.
+
+## CALC-140: spelling-range split retains the original insertion loop limit
+
+- Upstream: pinned `editeng/source/editeng/edtspell.cxx`, WrongList::TextInserted.
+- Observation: the loop captures the original vector size. Splitting a range inserts before it and increments the index inside the branch as well as at loop end. With [1,7] and [10,12], insertion of3separator units at5 yields [1,5], [6,10], [10,12]; the original trailing range is not shifted because its new index reaches the captured limit. The second split start is position+1, independently of inserted length.
+- Status: suspicious captured-bound/split behavior, not a confirmed defect. Preserve both the limit and increments and record the result rather than repairing upstream semantics.
+- Local evidence: `apps/office/src/editeng/source/editeng/native-wrong-list.test.ts`.
+
+## CALC-141: replacing an item set from itself clears its direct values
+
+- Upstream: pinned `svl/source/items/itemset.cxx`, SfxItemSet::Set.
+- Observation: Set clears the destination before examining the source. When both references identify the same set, its direct values disappear and the operation may return false. The returned flag describes subsequent insertions rather than the initial clear. Inherited SET values may still be copied by the deep path when a parent exists.
+- Status: surprising self-assignment and return behavior, not a confirmed defect. Preserve the ordering; do not add a self-assignment shortcut.
+- Local evidence: `apps/office/src/svl/source/items/native-itemset-set-holder.test.ts`.

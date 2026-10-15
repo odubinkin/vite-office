@@ -82,6 +82,11 @@ export class SfxItemPool {
     if (factory !== undefined) this.factories.set(item.Which(), factory);
   }
 
+  /** Original pool-default lookup on the current single-pool owner, where user overrides are not yet represented. @param which - Known declared identity. @returns Actual static/dynamic default. */
+  public GetPoolDefaultItem(which: number): SfxPoolItem {
+    return this.GetUserOrPoolDefaultItem(which);
+  }
+
   /** Returns the immutable default for one WhichId. @param which - Registered item identity. @returns Pool default item. */
   public GetUserOrPoolDefaultItem(which: number): SfxPoolItem {
     const item =

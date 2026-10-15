@@ -92,8 +92,8 @@ export abstract class SfxPoolItem {
     this.which = which;
   }
 
-  /** Creates an independent item with the same type and value. @returns Cloned item, or null for a static state sentinel. */
-  public abstract Clone(): SfxPoolItem | null;
+  /** Creates an independent item with the same type and value. @param pool - Optional destination pool for concrete pool-bound values. @returns Cloned item, or null for a static state sentinel. */
+  public abstract Clone(pool?: import("./itempool").SfxItemPool): SfxPoolItem | null;
 
   /** Compares the concrete payload under the subclass contract; areSame additionally checks WhichId and exact type. @param other - Candidate item. @returns True for equal items. */
   public abstract equals(other: SfxPoolItem): boolean;
