@@ -4,7 +4,7 @@ title: "Restore canonical XML border handler ownership before Calc attribute con
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T05:25:34.066Z"
+  updated_by: "CODER"
+  note: "Verified canonical border responsibility migration:312 related,182 Calc,38 boundary and12 Chromium tests; raw shared/Calc100; all13 source gates/build/inventory pass;35paths/3843hashes/8pins/4links audited. Writer-only coverage gaps left; evaluator same-agent, not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T05:25:33.303Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: canonical XML handler versus Writer mapper ownership restored without border algorithm or cycle-rejection changes."
+  evaluated_sha: "91a3deaa14c1d0f8084ab7204f321a2f97231150"
+  blueprint_digest: "100d521f6d8f8166c9b8e2fd66be50ce87fef1aa10641e9670c0986c6b2c8bbd"
+  evidence_refs:
+    - ".agentplane/tasks/202610150501-FNSEP3/README.md"
+    - ".agentplane/tasks/202610150501-FNSEP3/quality/20261015-052533303-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150501-FNSEP3/quality/20261015-052533303-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150501-FNSEP3/quality/20261015-052533303-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150501-FNSEP3/blueprint/resolved-snapshot.json"
+    - "output/playwright/task143-checks/verification.json"
+    - "output/playwright/task143-checks/mapping-source-audit.json"
+    - "output/playwright/task143-checks/source-gates.json"
+    - "output/playwright/task143-checks/build-browser-manifest.json"
+  findings:
+    - "Native xmloff bordrhdl operates on published UNO types; Writer xmlimpit/xmlexpit own concrete item mapping. Reverse xmloff-to-editeng edge removed and rejected by tests; no cycle exception introduced."
+    - "AST audit proves all3 moved function bodies unchanged and every actual consumer migrated. Shared handler bodies differ only by published enum owner; all3 cycle rejection functions unchanged."
+    - "312 related tests,182 whole Calc tests,38 boundary tests and12 targeted existing Chromium scenarios pass. Strict shared and whole Calc raw counters100; six Writer-only gap owners measured and left as authorized."
+    - "35 intentional paths,3843 final source hashes,8 native pins,4 restored reference links; all13 source gates and production build pass; inventory semantic violations zero. New full UNO mapper parity remains explicitly unverified."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: correct the real XML attribute-container prerequisite by restoring shared UNO handler vs Writer item mapping ownership. Remove reverse edge, migrate all users, preserve algorithms and reject cycle exceptions."
+  -
+    type: "verify"
+    at: "2026-10-15T05:25:34.066Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified canonical border responsibility migration:312 related,182 Calc,38 boundary and12 Chromium tests; raw shared/Calc100; all13 source gates/build/inventory pass;35paths/3843hashes/8pins/4links audited. Writer-only coverage gaps left; evaluator same-agent, not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T05:25:18.475Z"
+doc_updated_at: "2026-10-15T05:25:34.123Z"
 doc_updated_by: "CODER"
 description: "Task143 resolves the real prerequisite discovered before XML attribute value implementation: xmloff border handlers wrongly import Editeng items through Writer browser mapping helpers. Move item mapping to native Writer xmlimpit/xmlexpit responsibility boundaries, keep shared handlers on published UNO types, remove reverse dependency and migrate actual consumers without compatibility reexports. Do not add a cycle exception or change border algorithms. Attribute collection/item implementation follows after this canonical boundary correction."
 sections:
@@ -61,6 +89,39 @@ sections:
       Result: pass.
       Evidence:3 moved helper bodies identical; shared bodies identical except actual published enum owner; NONE unchanged; all10 named-import consumers migrated; no shared item import/compatibility export. All3 cycle-rejection functions unchanged.35paths within45 approved bound;3843 source hashes (3836baseline,28changed existing,7new,3808unchanged);8 native pins at9bc445578031fecf56086729d8e4940c77e14d65 and4 exact reference targets restored. Detailed `verification.json`, hash/intentional-path and mapping audits retained in ignored evidence directory.
       Scope: canonical ownership prerequisite only. XML attribute classes, full native UNO item mapper/Any pipeline, ScDocumentPool/model and connected Calc UI/ODS remain pending. Same-agent EVALUATOR review is not independent. Full all-app suite remains deferred until minimum connected UI plus same-model ODS readiness; repair applicable failures then pause as user requested.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T05:25:34.066Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified canonical border responsibility migration:312 related,182 Calc,38 boundary and12 Chromium tests; raw shared/Calc100; all13 source gates/build/inventory pass;35paths/3843hashes/8pins/4links audited. Writer-only coverage gaps left; evaluator same-agent, not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T05:25:18.475Z, excerpt_hash=sha256:2c9d5f15cfa6fee39d9056a1a1858ea966657e77522b98096c3d7b79106b259a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150501-FNSEP3/blueprint/resolved-snapshot.json
+    - old_digest: 100d521f6d8f8166c9b8e2fd66be50ce87fef1aa10641e9670c0986c6b2c8bbd
+    - current_digest: 100d521f6d8f8166c9b8e2fd66be50ce87fef1aa10641e9670c0986c6b2c8bbd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150501-FNSEP3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150501-FNSEP3 -m 🧩 FNSEP3 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task changes through a later authorized task; no reset, merge or publication."
   Findings: |-
     Initial exploration suggested an import-cycle exception for the original editeng XML item dependency, but actual source evidence rejects that workaround: native editeng links xo, while native xmloff bordrhdl uses published UNO structs rather than Editeng objects. Existing reverse import is a misplaced Writer adapter. Correct the ownership instead of creating a cycle exception. Native Writer xmlimpit/xmlexpit handle item-property mapping; current browser-shaped adapter behavior remains bounded/unverified rather than falsely declared a full native mapper. Same-agent evaluation is not independent.
@@ -104,6 +165,39 @@ No production xmloff-to-editeng import remains; shared border handlers use actua
   Result: pass.
   Evidence:3 moved helper bodies identical; shared bodies identical except actual published enum owner; NONE unchanged; all10 named-import consumers migrated; no shared item import/compatibility export. All3 cycle-rejection functions unchanged.35paths within45 approved bound;3843 source hashes (3836baseline,28changed existing,7new,3808unchanged);8 native pins at9bc445578031fecf56086729d8e4940c77e14d65 and4 exact reference targets restored. Detailed `verification.json`, hash/intentional-path and mapping audits retained in ignored evidence directory.
   Scope: canonical ownership prerequisite only. XML attribute classes, full native UNO item mapper/Any pipeline, ScDocumentPool/model and connected Calc UI/ODS remain pending. Same-agent EVALUATOR review is not independent. Full all-app suite remains deferred until minimum connected UI plus same-model ODS readiness; repair applicable failures then pause as user requested.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T05:25:34.066Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified canonical border responsibility migration:312 related,182 Calc,38 boundary and12 Chromium tests; raw shared/Calc100; all13 source gates/build/inventory pass;35paths/3843hashes/8pins/4links audited. Writer-only coverage gaps left; evaluator same-agent, not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T05:25:18.475Z, excerpt_hash=sha256:2c9d5f15cfa6fee39d9056a1a1858ea966657e77522b98096c3d7b79106b259a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150501-FNSEP3/blueprint/resolved-snapshot.json
+- old_digest: 100d521f6d8f8166c9b8e2fd66be50ce87fef1aa10641e9670c0986c6b2c8bbd
+- current_digest: 100d521f6d8f8166c9b8e2fd66be50ce87fef1aa10641e9670c0986c6b2c8bbd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150501-FNSEP3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150501-FNSEP3 -m 🧩 FNSEP3 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
