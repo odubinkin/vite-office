@@ -1,10 +1,11 @@
 ---
 id: "202610150627-F1YKQP"
 title: "Use native pooled item comparisons for rich text dependencies"
-status: "DOING"
+result_summary: "Restored native identity/null/Which/type/value comparison in shared owners used by Writer and upcoming Calc rich text; no ownership manager or UI localization."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Original per-derived-class ItemType identity is represented by exact JS concrete-class identity; native numeric ABI and ownership managers are unnecessary. Both actual native overloads and callsites source-audited."
     - "137related,186Calc,39boundary tests and all13source gates/build pass; whole2shared and33Calc executable owners raw100. Existing Writer comparison and notification consumers tested."
     - "9intentional paths/3897source hashes/5native pins/4restored links audited, inventory zero violations and existing parity statuses preserved. Initial selection/style errors corrected and retained in task findings."
-commit: null
+commit:
+  hash: "791653ddb9f59cd5e0ceefe7df77ae81821c82d5"
+  message: "Implement F1YKQP core: native pooled item comparisons"
 comments:
   -
     author: "CODER"
     body: "Start: restore native pooled-item identity/type/value comparison and real shared item-set integration for rich text dependencies, with scoped raw100 validation and no localization or lifetime manager."
+  -
+    author: "CODER"
+    body: "Verified: native pooled-item comparison and real item-set Equals/Put integration;137related,186Calc,39boundary tests pass, shared/Calc raw100, all gates/build/inventory and exact source audit."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified137related,186Calc,39boundary tests; whole2shared/33Calc raw100, all13source gates/build/inventory pass.9paths/3897hashes/5pins/4links audited. Native comparison order/type checks retained, actual rich text/pool/model/UI/ODS pending; same-agent evaluation not independent."
+  -
+    type: "status"
+    at: "2026-10-15T06:34:00.736Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native pooled-item comparison and real item-set Equals/Put integration;137related,186Calc,39boundary tests pass, shared/Calc raw100, all gates/build/inventory and exact source audit."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:33:58.022Z"
+doc_updated_at: "2026-10-15T06:34:00.738Z"
 doc_updated_by: "CODER"
 description: "Task148 ports SfxPoolItem.areSame identity/null/Which/type/value ordering and adopts it in shared SfxItemSet equality and Put as original upstream requires. This is a real shared dependency for future EditTextObject paragraph/character comparisons; no fake rich text facade, ownership manager or localization."
 sections:
