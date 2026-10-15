@@ -1,10 +1,11 @@
 ---
 id: "202610150708-E543MZ"
 title: "Implement native text spacing and width attributes for EditEngine"
-status: "DOING"
+result_summary: "Implemented3native shared text spacing/width items using existing bool/numeric/unit owners and JS scaling; restored metric base defaults, preserved source short overflow in CALC129, localized presentation deferred."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Actual default ids/values, constructors/Clone/factories and bool/short/unsigned width transport source-audited. Kerning uses existing integral units and source short narrowing; double scale is only llround expressed with established JS Math/BigInt intrinsics, no native BigInt library port."
     - "309related,187Calc,39boundary tests pass; whole2changed shared executable owners and33Calc owners raw100. Five other owners/18override modifiers compile to identical JS. All13source gates/build/inventory pass with zero semantic violations."
     - "24intentional paths/3929source hashes/13native pins/4restored links audited. CALC129 preserves converted short overflow; initial arithmetic test literal fixed without production change. Derived localized presentation and actual EditEngine/Calc model/UI/ODS remain pending."
-commit: null
+commit:
+  hash: "4f7fea455e63e6509f07b4811ed2374dd4f41dce"
+  message: "Implement E543MZ core: native text spacing and width attributes"
 comments:
   -
     author: "CODER"
     body: "Start: actual shared text kerning/width values and native base metric defaults; existing5metric owners receive erased override declarations only, no BigInt library facade or localization."
+  -
+    author: "CODER"
+    body: "Verified: native auto/manual kerning and character width values, base metric defaults and erased-only18overrides;309related,187Calc,39boundary tests pass, raw100, all gates/build/inventory/source audit."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified309related,187Calc,39boundary tests; whole2changed shared/33Calc owners raw100,5annotation-only owners identical JS. All13gates/build/inventory pass,24paths/3929hashes/13pins/4links audited. Native metrics/narrowing retained, no BigInt facade/localization; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T12:15:20.733Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native auto/manual kerning and character width values, base metric defaults and erased-only18overrides;309related,187Calc,39boundary tests pass, raw100, all gates/build/inventory/source audit."
 doc_version: 3
-doc_updated_at: "2026-10-15T12:15:17.265Z"
+doc_updated_at: "2026-10-15T12:15:20.737Z"
 doc_updated_by: "CODER"
 description: "Task152 ports actual shared SvxAutoKernItem/SvxKerningItem/SvxCharScaleWidthItem on existing numeric/bool/units owners, plus original poolitem metric defaults and erased override declarations. Native JS rounding reused, no BigInt library facade or localized presentation."
 sections:
