@@ -4,7 +4,7 @@ title: "Implement native text spacing and width attributes for EditEngine"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T12:15:17.175Z"
+  updated_by: "CODER"
+  note: "Verified309related,187Calc,39boundary tests; whole2changed shared/33Calc owners raw100,5annotation-only owners identical JS. All13gates/build/inventory pass,24paths/3929hashes/13pins/4links audited. Native metrics/narrowing retained, no BigInt facade/localization; same-agent review not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T12:15:15.765Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: native3text spacing/width attributes and original base metric defaults implemented on shared owners;5existing metric owners changed only by erased declarations."
+  evaluated_sha: "4f7fea455e63e6509f07b4811ed2374dd4f41dce"
+  blueprint_digest: "f17010523c48215fd476cfaf1d530af1a18cdded5f6cd0e1c7071ee53968891a"
+  evidence_refs:
+    - ".agentplane/tasks/202610150708-E543MZ/README.md"
+    - ".agentplane/tasks/202610150708-E543MZ/quality/20261015-121515765-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150708-E543MZ/quality/20261015-121515765-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150708-E543MZ/quality/20261015-121515765-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150708-E543MZ/blueprint/resolved-snapshot.json"
+    - "output/playwright/task152-checks/verification.json"
+    - "output/playwright/task152-checks/native-source-audit.json"
+    - "output/playwright/task152-checks/annotation-audit.json"
+    - "output/playwright/task152-checks/source-gates.json"
+    - "output/playwright/task152-checks/build-manifest.json"
+  findings:
+    - "Actual default ids/values, constructors/Clone/factories and bool/short/unsigned width transport source-audited. Kerning uses existing integral units and source short narrowing; double scale is only llround expressed with established JS Math/BigInt intrinsics, no native BigInt library port."
+    - "309related,187Calc,39boundary tests pass; whole2changed shared executable owners and33Calc owners raw100. Five other owners/18override modifiers compile to identical JS. All13source gates/build/inventory pass with zero semantic violations."
+    - "24intentional paths/3929source hashes/13native pins/4restored links audited. CALC129 preserves converted short overflow; initial arithmetic test literal fixed without production change. Derived localized presentation and actual EditEngine/Calc model/UI/ODS remain pending."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual shared text kerning/width values and native base metric defaults; existing5metric owners receive erased override declarations only, no BigInt library facade or localization."
+  -
+    type: "verify"
+    at: "2026-10-15T12:15:17.175Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified309related,187Calc,39boundary tests; whole2changed shared/33Calc owners raw100,5annotation-only owners identical JS. All13gates/build/inventory pass,24paths/3929hashes/13pins/4links audited. Native metrics/narrowing retained, no BigInt facade/localization; same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T12:14:41.927Z"
+doc_updated_at: "2026-10-15T12:15:17.265Z"
 doc_updated_by: "CODER"
 description: "Task152 ports actual shared SvxAutoKernItem/SvxKerningItem/SvxCharScaleWidthItem on existing numeric/bool/units owners, plus original poolitem metric defaults and erased override declarations. Native JS rounding reused, no BigInt library facade or localized presentation."
 sections:
@@ -57,6 +85,39 @@ sections:
       Result: pass.
       Evidence: original3default identities/values, constructors/Clone/factories, typed short/width conversion rules, pool-item metric defaults and llround-only BigInt double overload audited; existing integral common helpers reused.13native pins at9bc445578031fecf56086729d8e4940c77e14d65,3929source hashes (3915baseline,10changed existing,14new,3905unchanged),24intentional paths/4restored links audited. CALC129 preserves converted signed16 overflow (32767twips queries-7739mm100) without saturation/widening. Initial test arithmetic literal corrected from-18578to-18577 using exact quotient2359296=18577*127+17; production helper unchanged and failed evidence retained.
       Scope: native defined finite signed64 floating scaling domain only, not invalid/overflow llround cases; JS Math/BigInt intrinsics replace the single double-scale expression without porting an arbitrary-precision object/library. Native CharacterProperties generic QA is broader unported source context only, no native compilation/probe/execution. Same-agent review is not independent. Actual EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS and UI localization remain pending. Final clean calc/hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T12:15:17.175Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified309related,187Calc,39boundary tests; whole2changed shared/33Calc owners raw100,5annotation-only owners identical JS. All13gates/build/inventory pass,24paths/3929hashes/13pins/4links audited. Native metrics/narrowing retained, no BigInt facade/localization; same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T12:14:41.927Z, excerpt_hash=sha256:8435adf7aa31749aeed97bb6491b61330ca80b3bbd32f972f34cf2dce493bd63
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150708-E543MZ/blueprint/resolved-snapshot.json
+    - old_digest: f17010523c48215fd476cfaf1d530af1a18cdded5f6cd0e1c7071ee53968891a
+    - current_digest: f17010523c48215fd476cfaf1d530af1a18cdded5f6cd0e1c7071ee53968891a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150708-E543MZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150708-E543MZ -m 🧩 E543MZ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional paths in a later authorized task; no reset/merge/publication."
   Findings: |-
     Native BigInt::Scale(double) is only std::llround and can use the same JS Math.round sign correction already present for font height. Floating invalid/out-of-signed64 cases remain outside original defined producer domain. Do not implement arbitrary-precision object/lifetime library. Original width transports signed16 over unsigned16 storage and kerning conversion narrows signed16; preserve source behavior. Localized presentation and actual EditEngine/EditTextObject/Calc pool/model/UI/ODS remain pending; same-agent evaluation is not independent.
@@ -96,6 +157,39 @@ Compare native3headers/textitem.cxx/eerdll/eeitem/solar and poolitem no-op/false
   Result: pass.
   Evidence: original3default identities/values, constructors/Clone/factories, typed short/width conversion rules, pool-item metric defaults and llround-only BigInt double overload audited; existing integral common helpers reused.13native pins at9bc445578031fecf56086729d8e4940c77e14d65,3929source hashes (3915baseline,10changed existing,14new,3905unchanged),24intentional paths/4restored links audited. CALC129 preserves converted signed16 overflow (32767twips queries-7739mm100) without saturation/widening. Initial test arithmetic literal corrected from-18578to-18577 using exact quotient2359296=18577*127+17; production helper unchanged and failed evidence retained.
   Scope: native defined finite signed64 floating scaling domain only, not invalid/overflow llround cases; JS Math/BigInt intrinsics replace the single double-scale expression without porting an arbitrary-precision object/library. Native CharacterProperties generic QA is broader unported source context only, no native compilation/probe/execution. Same-agent review is not independent. Actual EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS and UI localization remain pending. Final clean calc/hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T12:15:17.175Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified309related,187Calc,39boundary tests; whole2changed shared/33Calc owners raw100,5annotation-only owners identical JS. All13gates/build/inventory pass,24paths/3929hashes/13pins/4links audited. Native metrics/narrowing retained, no BigInt facade/localization; same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T12:14:41.927Z, excerpt_hash=sha256:8435adf7aa31749aeed97bb6491b61330ca80b3bbd32f972f34cf2dce493bd63
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150708-E543MZ/blueprint/resolved-snapshot.json
+- old_digest: f17010523c48215fd476cfaf1d530af1a18cdded5f6cd0e1c7071ee53968891a
+- current_digest: f17010523c48215fd476cfaf1d530af1a18cdded5f6cd0e1c7071ee53968891a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150708-E543MZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150708-E543MZ -m 🧩 E543MZ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
