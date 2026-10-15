@@ -1,10 +1,11 @@
 ---
 id: "202610151836-PB31Q1"
 title: "Port native shared font search names and token operations"
-status: "DOING"
+result_summary: "Ported shared native font search names, script suffix stripping, raw token append and first-token symbol recognition; CALC143-145 documented without changing upstream data. Physical/default-device and document/UI/ODS work remains pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "docs/program/calc-upstream-suspected-issues.md"
   findings:
     - "Same-agent review, not independent.5 complete pinned blobs/all155 literal dictionary rows/10 unchanged native QA cases audited.58 related and187 Calc tests pass; exact2 shared/33 Calc owners raw100 with every counter positive; all13 gates/43 boundary tests pass. Full65536-unit test includes literal one-unit aliases. Source parser body and prior journal prefix unchanged. Conflicting duplicate keys use documented sequential unique insertion with no cross-standard-library guarantee; unreachable keys/IPAex spelling preserved and CALC143-145 documented. No physical/default-device or UI/ODS readiness claim."
-commit: null
+commit:
+  hash: "957304958b657125c18b085a19ae9a390bfe977d"
+  message: "🧩 PB31Q1 task: record native font search review"
 comments:
   -
     author: "CODER"
     body: "Start: port actual shared font search-name rules/dictionary and direct native QA, maintaining suspicious source mappings and original token contracts."
+  -
+    author: "CODER"
+    body: "Verified:58 related tests,187 Calc scenarios, exact shared/Calc raw100,13 gates/43 boundary tests;155 dictionary rows/10 direct native QA cases audited, anomalies preserved and references restored."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS:58 related and187 Calc tests, exact2 shared/33 Calc owners raw100,13 gates/43 boundary tests;5 pinned blobs/all155 rows/10 direct QA cases audited. CALC143-145 preserved; refs restored. No full native container or UI/ODS parity promotion."
+  -
+    type: "status"
+    at: "2026-10-15T18:45:48.122Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:58 related tests,187 Calc scenarios, exact shared/Calc raw100,13 gates/43 boundary tests;155 dictionary rows/10 direct native QA cases audited, anomalies preserved and references restored."
 doc_version: 3
-doc_updated_at: "2026-10-15T18:45:07.117Z"
+doc_updated_at: "2026-10-15T18:45:48.123Z"
 doc_updated_by: "CODER"
 description: "Task164: complete source-backed font name normalization/dictionary, script suffix stripping, raw token append and symbol recognition in existing shared fontdefs owner needed by default-font physical matching; port direct native QA and record IPAex mapping suspicion without correcting upstream."
 sections:
@@ -112,6 +125,10 @@ sections:
     - Observation: Initial related run:56 pass,2 fixture failures. Dictionary input hg正楷書体-pro is normalized to hg正楷書体pro before lookup, so its literal hyphenated entry is unreachable. Exhaustive scalar expectations also omitted two actual one-unit dictionary aliases.
       Impact: Normalizing dictionary keys or ignoring those two aliases would change upstream behavior. The implementation returned the source-derived results correctly.
       Resolution: Keep raw dictionary keys, add unreachable-entry source evidence/journal, and make expected dictionary queries account for native preprocessing. Include the two literal one-unit aliases in the exhaustive expected results. Preserve failed log; rerun focused shared/Calc coverage.
+extensions:
+  implementation_commit:
+    hash: "f36ec9f87db29a04c9181a6a0c6d7b5d2c58b477"
+    message: "🔧 PB31Q1 core: port native font search names and list operations"
 id_source: "generated"
 ---
 ## Summary
