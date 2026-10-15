@@ -4,7 +4,7 @@ title: "Port native text-field values and polymorphic field items"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T17:58:43.245Z"
+  updated_by: "CODER"
+  note: "Verified2ecb29b6019c:53related/187Calc/19browser cases,43boundary tests, build/all13gates/inventory0 pass. Exact2new shared/33Calc owners raw100/every counter positive;13native pins/17IDs/13paths/4084hashes/4links restored. Real polymorphic field copies/URL Name omission preserved, opaque type hash adaptation explicit, no native ownership engine. Full text-engine/Calc model/UI/ODS pending; goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T17:58:36.485Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of2ecb29b6019cea1e4c5bafa0a6c308ea83d42eb0: actual stored text-field contracts satisfy bounded approved scope."
+  evaluated_sha: "2ecb29b6019cea1e4c5bafa0a6c308ea83d42eb0"
+  blueprint_digest: "dbfa706f6a397b2c56c119f62227181caf322418d00b3603114f36123e6c86fe"
+  evidence_refs:
+    - ".agentplane/tasks/202610151740-J5D94Q/README.md"
+    - ".agentplane/tasks/202610151740-J5D94Q/quality/20261015-175836485-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151740-J5D94Q/quality/20261015-175836485-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151740-J5D94Q/quality/20261015-175836485-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151740-J5D94Q/blueprint/resolved-snapshot.json"
+    - "output/playwright/task160-checks/final-verification.json"
+    - "output/playwright/task160-checks/native-audit.json"
+    - "output/playwright/task160-checks/type-narrowing-runtime-proof.json"
+  findings:
+    - "Genuine FieldData/FieldItem/URL/page/title/time/table values reuse shared Unicode/items/hash/holder/ContentInfo. Independent polymorphic clones, original adopt/null/copy modes, exact field type gates, stable views, full URL copy/assignment and Name omission are tested, including real item-set no-change behavior and target-pool copies."
+    - "Exact2new shared and33Calc owners are raw-positive100;53related/187Calc/19browser cases,43boundary tests/build/13gates/inventory0 and13native pins/17field IDs pass. Both complete guard files are unchanged. No fake factory/provider, core JSON, UI localization, ownership/type registry or native compiler/probe."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement actual polymorphic text-field values and pooled field item over shared Unicode/items, with explicit GC overload binding and source-backed tests."
+  -
+    type: "verify"
+    at: "2026-10-15T17:58:43.245Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified2ecb29b6019c:53related/187Calc/19browser cases,43boundary tests, build/all13gates/inventory0 pass. Exact2new shared/33Calc owners raw100/every counter positive;13native pins/17IDs/13paths/4084hashes/4links restored. Real polymorphic field copies/URL Name omission preserved, opaque type hash adaptation explicit, no native ownership engine. Full text-engine/Calc model/UI/ODS pending; goal active."
 doc_version: 3
-doc_updated_at: "2026-10-15T17:57:48.406Z"
+doc_updated_at: "2026-10-15T17:58:43.295Z"
 doc_updated_by: "CODER"
 description: "Task160: actual SvxFieldData/SvxFieldItem plus URL/page/pages/page-title/time/document-title/table value contracts over existing shared Unicode/items. Preserve dynamic clone/adoption/null/equality/hash relationships and field IDs for upcoming EditTextObject/ODS, without fake factory/provider or native ownership machinery."
 sections:
@@ -54,6 +79,39 @@ sections:
     Command: python3 output/playwright/task160-checks/audit-final.py. Result: pass. Evidence:4084current source hashes against4073baseline,13intentional non-agent paths (2existing/11new) within100approved,13native pins at9bc445578031fecf56086729d8e4940c77e14d65, exact17field IDs, raw-positive owner sets,13gates/43boundary/19browser/build and4original links restored on calc. CALC142 documents actual Name-only URL replacement remaining unchanged through native item-set equality. Existing registry semantic status/history is not promoted to broad parity.
 
     Limits: opaque native std::type_index numeric hash is process/compiler-specific; JS dynamic class reflection plus existing SAL hash supplies the type-hash contract without any identity/ownership registry, and numeric ABI equality is not claimed. URL payload hash combine order remains literal source behavior. Native GC storage replaces unique_ptr lifetime; adopt=true only selects the erased original overload. UNO field factory/property services and actual date/time/file formatting/other field families/diagnostics remain absent, not no-op providers. Full EditTextObject/EditEngine/default pool/Calc document/connected UI/same-model ODS still pending. Native parent hyperlink copy/paste test supplies responsibility context; full Outliner/engine workflow is not claimed ported. No core JSON/UI localization/native compiler/probe/generator/sanitizer. Full all-app run remains deferred until genuine minimum connected UI+same-model ODS readiness, followed by applicable repairs and requested pause. Goal active; quality review same-agent, not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T17:58:43.245Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified2ecb29b6019c:53related/187Calc/19browser cases,43boundary tests, build/all13gates/inventory0 pass. Exact2new shared/33Calc owners raw100/every counter positive;13native pins/17IDs/13paths/4084hashes/4links restored. Real polymorphic field copies/URL Name omission preserved, opaque type hash adaptation explicit, no native ownership engine. Full text-engine/Calc model/UI/ODS pending; goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:57:48.406Z, excerpt_hash=sha256:37d7984e349efe70cb5700c33c839318946700f6085c85394924bf35db605f31
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151740-J5D94Q/blueprint/resolved-snapshot.json
+    - old_digest: dbfa706f6a397b2c56c119f62227181caf322418d00b3603114f36123e6c86fe
+    - current_digest: dbfa706f6a397b2c56c119f62227181caf322418d00b3603114f36123e6c86fe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151740-J5D94Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151740-J5D94Q -m 🧩 J5D94Q task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task-owned intentional implementation/lifecycle files; preserve user merges, unrelated tasks and original reference links. No destructive history changes."
   Findings: |-
     Preflight clean calc at6bbafc4b86d6829ec6212f1fd3af2465609ff887. Actual native EE_FEATURE_FIELD4081 default is SvxFieldItem(SvxFieldData(),which); no such owner existed. Reuse genuine ContentInfo/XEditAttribute/item/holder/Unicode/hash modules. Writer hyperlinks belong to a different native item and are not replaced by EditEngine field values. A guessed bulitem.hxx path missed actual bulletitem.hxx; native font/default-font/graphics dependencies remain separate work.
@@ -94,6 +152,39 @@ Command: node output/playwright/task160-checks/build-browser-portable.mjs. Resul
 Command: python3 output/playwright/task160-checks/audit-final.py. Result: pass. Evidence:4084current source hashes against4073baseline,13intentional non-agent paths (2existing/11new) within100approved,13native pins at9bc445578031fecf56086729d8e4940c77e14d65, exact17field IDs, raw-positive owner sets,13gates/43boundary/19browser/build and4original links restored on calc. CALC142 documents actual Name-only URL replacement remaining unchanged through native item-set equality. Existing registry semantic status/history is not promoted to broad parity.
 
 Limits: opaque native std::type_index numeric hash is process/compiler-specific; JS dynamic class reflection plus existing SAL hash supplies the type-hash contract without any identity/ownership registry, and numeric ABI equality is not claimed. URL payload hash combine order remains literal source behavior. Native GC storage replaces unique_ptr lifetime; adopt=true only selects the erased original overload. UNO field factory/property services and actual date/time/file formatting/other field families/diagnostics remain absent, not no-op providers. Full EditTextObject/EditEngine/default pool/Calc document/connected UI/same-model ODS still pending. Native parent hyperlink copy/paste test supplies responsibility context; full Outliner/engine workflow is not claimed ported. No core JSON/UI localization/native compiler/probe/generator/sanitizer. Full all-app run remains deferred until genuine minimum connected UI+same-model ODS readiness, followed by applicable repairs and requested pause. Goal active; quality review same-agent, not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T17:58:43.245Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified2ecb29b6019c:53related/187Calc/19browser cases,43boundary tests, build/all13gates/inventory0 pass. Exact2new shared/33Calc owners raw100/every counter positive;13native pins/17IDs/13paths/4084hashes/4links restored. Real polymorphic field copies/URL Name omission preserved, opaque type hash adaptation explicit, no native ownership engine. Full text-engine/Calc model/UI/ODS pending; goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:57:48.406Z, excerpt_hash=sha256:37d7984e349efe70cb5700c33c839318946700f6085c85394924bf35db605f31
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151740-J5D94Q/blueprint/resolved-snapshot.json
+- old_digest: dbfa706f6a397b2c56c119f62227181caf322418d00b3603114f36123e6c86fe
+- current_digest: dbfa706f6a397b2c56c119f62227181caf322418d00b3603114f36123e6c86fe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151740-J5D94Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151740-J5D94Q -m 🧩 J5D94Q task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
