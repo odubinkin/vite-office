@@ -4,7 +4,7 @@ title: "Port native grab-bag property values for text attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T17:36:19.760Z"
+  updated_by: "CODER"
+  note: "Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T17:36:07.652Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of02195a75a75f478a1224cf6eaf92495a0bcbd383: bounded native grab-bag property values satisfy approved scope."
+  evaluated_sha: "02195a75a75f478a1224cf6eaf92495a0bcbd383"
+  blueprint_digest: "c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876"
+  evidence_refs:
+    - ".agentplane/tasks/202610151714-B4RVN2/README.md"
+    - ".agentplane/tasks/202610151714-B4RVN2/quality/20261015-173607652-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151714-B4RVN2/quality/20261015-173607652-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151714-B4RVN2/quality/20261015-173607652-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151714-B4RVN2/blueprint/resolved-snapshot.json"
+    - "output/playwright/task159-checks/final-verification.json"
+    - "output/playwright/task159-checks/boundary-algorithm-proof.json"
+    - "output/playwright/task159-checks/erased-type-import-proof.json"
+    - "output/playwright/task159-checks/const-view-runtime-proof.json"
+    - "output/playwright/task159-checks/native-audit.json"
+  findings:
+    - "Actual SfxGrabBagItem and UDK PropertyValue/PropertyState reuse existing Unicode/Any/Sequence/type owners; nonempty and nested typed transport, exact failure behavior, Unicode key order, last duplicates, generated defaults and independent shared set/paragraph copies pass. Exact3new shared and33Calc profiles have every raw counter positive100."
+    - "Source-proven generated API graph edges are declared. No cycle exception is added; all28original guard function bodies remain unchanged. Full type clauses are erased from runtime graph, owner allowlisting still covers every declaration, and43tests plus actual compiler output for9CPPu files in two modes validate classification."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement genuine shared grab-bag property values and UDK dependencies over existing transport; preserve source behavior and GC adaptation within approved scope."
+  -
+    type: "verify"
+    at: "2026-10-15T17:36:19.760Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active."
 doc_version: 3
-doc_updated_at: "2026-10-15T17:35:33.951Z"
+doc_updated_at: "2026-10-15T17:36:19.812Z"
 doc_updated_by: "CODER"
 description: "Task159: implement genuine shared SfxGrabBagItem and required UDK PropertyValue/PropertyState typed values over existing Any/Sequence/Unicode owners; preserve sorted UTF16 key/value semantics, duplicate replacement, copy/equality/hash/property transport and native failure behavior. Required missing EditEngine/ODS metadata dependency, not a fake text-engine/pool facade."
 sections:
@@ -54,6 +81,39 @@ sections:
     Command: python3 output/playwright/task159-checks/audit-final.py. Result: pass. Evidence:4073current source hashes against4059baseline,17intentional non-agent paths (3existing/14new) within110approved,20pinned native files at9bc445578031fecf56086729d8e4940c77e14d65, exact raw-positive profiles,13source gates,43boundary tests,19browser cases and4original symlink targets restored on calc. Canonical inventory retains unverified broad parity statuses and explicitly distinguishes native value contracts from parent document/engine fixture context.
 
     Limits: JS primitive UTF16 keys replace native OUString map key representation with exact code-unit equality/order; actual Any values reuse existing shared transport and independent copy contracts. No native memory/cache/refcount/physical pointer/iterator ABI manager, fake provider/pool, core JSON, localization or C++ generator/compiler/probe/sanitizer. Full EditTextObject/EditEngine/default fonts/pool/Calc document/connected UI/same-model ODS remain pending. Referenced upstream DOCX fixture supplies responsibility context; its full export workflow is not claimed ported. Full all-app regression remains deferred until genuine minimum connected UI+same-model ODS readiness, then applicable repairs and requested pause. Goal active; quality review same-agent, not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T17:36:19.760Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:35:33.951Z, excerpt_hash=sha256:9a7a7ba3785e8a210cb54df2aa95f4f71d68daa82b2c946f935ccc42191482a1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151714-B4RVN2/blueprint/resolved-snapshot.json
+    - old_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+    - current_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151714-B4RVN2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151714-B4RVN2 -m 🧩 B4RVN2 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task implementation and lifecycle artifacts; preserve user merges, unrelated tasks and native reference links. No history destruction."
   Findings: |-
     Preflight clean calc at a7f22a3658e2db9b06e270c8c02d4a80ca3ba83b. Actual native61EditEngine defaults require SfxGrabBagItem; no prior implementation exists. Optical sizing already exists and was reused rather than duplicated. Genuine UDK PropertyValue/PropertyState values and normal static type bindings reuse real Any/Sequence/Unicode/typelib owners. Existing Writer pipelines are related regressions; full document metadata import/export is not newly claimed.
@@ -97,6 +157,39 @@ Command: node output/playwright/task159-checks/build-browser-portable.mjs. Resul
 Command: python3 output/playwright/task159-checks/audit-final.py. Result: pass. Evidence:4073current source hashes against4059baseline,17intentional non-agent paths (3existing/14new) within110approved,20pinned native files at9bc445578031fecf56086729d8e4940c77e14d65, exact raw-positive profiles,13source gates,43boundary tests,19browser cases and4original symlink targets restored on calc. Canonical inventory retains unverified broad parity statuses and explicitly distinguishes native value contracts from parent document/engine fixture context.
 
 Limits: JS primitive UTF16 keys replace native OUString map key representation with exact code-unit equality/order; actual Any values reuse existing shared transport and independent copy contracts. No native memory/cache/refcount/physical pointer/iterator ABI manager, fake provider/pool, core JSON, localization or C++ generator/compiler/probe/sanitizer. Full EditTextObject/EditEngine/default fonts/pool/Calc document/connected UI/same-model ODS remain pending. Referenced upstream DOCX fixture supplies responsibility context; its full export workflow is not claimed ported. Full all-app regression remains deferred until genuine minimum connected UI+same-model ODS readiness, then applicable repairs and requested pause. Goal active; quality review same-agent, not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T17:36:19.760Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:35:33.951Z, excerpt_hash=sha256:9a7a7ba3785e8a210cb54df2aa95f4f71d68daa82b2c946f935ccc42191482a1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151714-B4RVN2/blueprint/resolved-snapshot.json
+- old_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+- current_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151714-B4RVN2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151714-B4RVN2 -m 🧩 B4RVN2 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
