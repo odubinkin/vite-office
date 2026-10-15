@@ -1,10 +1,11 @@
 ---
 id: "202610151810-GWCMX9"
 title: "Map Calc document UI and ODS critical path"
-status: "DOING"
+result_summary: "Documented actual Calc UI/ODS critical path, preserving lazy upstream boundaries and identifying shared font/pool/string and ODS manifest gaps. Next owner: VCL spreadsheet font defaults required by ScDocumentPool."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "docs/program/calc-ui-readiness.md"
   findings:
     - "Review performed by the same agent, not independently. Verified29 local links and26 native anchors at pinned source,11 absent owner definitions and actual Writer spreadsheet exclusion; no runtime readiness or numeric delivery estimate inferred."
-commit: null
+commit:
+  hash: "d5af51070de508d51be19ccdc1151826ccdef932"
+  message: "🧩 GWCMX9 task: record dependency audit review"
 comments:
   -
     author: "CODER"
     body: "Start: audit pinned document/cell/filter contracts and current shared implementations to establish the direct UI/ODS critical path under the standing approved Calc goal."
+  -
+    author: "CODER"
+    body: "Verified: committed source audit with29 valid local links,26 native anchors and explicit missing owner checks; docs/routing checks pass and doctor OK. Runtime and full-run readiness remain incomplete."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Documentation-only audit passed: 29 valid local links,26 native anchors at pinned HEAD,11 absent real owner definitions and Writer spreadsheet-ignore confirmation; routing/diff checks pass, doctor OK with existing warning. No runtime mappings or coverage changed."
+  -
+    type: "status"
+    at: "2026-10-15T18:14:34.488Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: committed source audit with29 valid local links,26 native anchors and explicit missing owner checks; docs/routing checks pass and doctor OK. Runtime and full-run readiness remain incomplete."
 doc_version: 3
-doc_updated_at: "2026-10-15T18:14:16.445Z"
+doc_updated_at: "2026-10-15T18:14:34.489Z"
 doc_updated_by: "CODER"
 description: "Task161: replace speculative UI readiness estimates with a source-audited dependency and implementation order for the actual ScDocument cell-edit and ODS round-trip path, reusing shared Writer owners. No implementation stubs or full-suite milestone claim."
 sections:
@@ -108,6 +121,10 @@ sections:
     - Observation: Evaluator rejected recording while the audited documentation was still uncommitted; no quality_review was recorded by that attempt.
       Impact: Quality review requires a clean implementation tree tied to a commit.
       Resolution: Persist the two documentation files and task evidence first, then rerun the same evaluator review on the committed tree before closure.
+extensions:
+  implementation_commit:
+    hash: "aa777b3a01102180a1343e63e8d7f5b1d9cd8773"
+    message: "📝 GWCMX9 docs: audit Calc UI and ODS dependency path"
 id_source: "generated"
 ---
 ## Summary
