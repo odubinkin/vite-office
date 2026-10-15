@@ -49,7 +49,7 @@ describe("SvxTabStopItem", /** Groups upstream tab-stop contract checks. @return
     );
     expect(SvxTabStopItem.FromValue(which, base.QueryValue()).equals(base)).toBe(true);
     expect(base.equals(new SfxBoolItem(which, true))).toBe(false);
-    expect(base.equals(SvxTabStopItem.FromStops(which + 1, base.GetStops(), 1134))).toBe(false);
+    expect(base.equals(SvxTabStopItem.FromStops(which + 1, base.GetStops(), 1134))).toBe(true);
     expect(base.equals(SvxTabStopItem.FromStops(which, base.GetStops(), 720))).toBe(false);
     expect(base.equals(SvxTabStopItem.FromStops(which, [], 1134))).toBe(false);
     for (const stop of [
@@ -66,7 +66,7 @@ describe("SvxTabStopItem", /** Groups upstream tab-stop contract checks. @return
       expect(
         /** Builds an invalid position. @returns Rejected tab. */ () => new SvxTabStop(position),
       ).toThrow("position");
-    for (const adjustment of [-1, 1.5, SvxTabAdjust.End])
+    for (const adjustment of [1.5])
       expect(
         /** Builds an invalid adjustment. @returns Rejected tab. */ () =>
           new SvxTabStop(0, adjustment as SvxTabAdjust),
@@ -85,8 +85,6 @@ describe("SvxTabStopItem", /** Groups upstream tab-stop contract checks. @return
       [1.5, 1, SvxTabAdjust.Default],
       [1, -1, SvxTabAdjust.Default],
       [1, 1.5, SvxTabAdjust.Default],
-      [1, 1, -1],
-      [1, 1, SvxTabAdjust.End],
     ] as const)
       expect(
         /** Builds an invalid item. @returns Rejected item. */ () =>

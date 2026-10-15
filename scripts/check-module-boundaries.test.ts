@@ -762,3 +762,23 @@ it("admits original Editeng script-hint values without reverse or browser depend
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("keeps native numeric locale resources below tab items and application/browser owners", /** Allows the source-backed locale client/producer edges while blocking reverse and application dependencies. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "unotools")).toBe(false);
+  expect(isForbiddenModuleEdge("unotools", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("unotools", "i18npool")).toBe(false);
+  for (const owner of ["i18npool", "unotools"])
+    for (const app of ["sc", "sw", "framework"])
+      expect(isForbiddenModuleEdge(owner, app)).toBe(true);
+  for (const owner of ["i18nlangtag", "udkapi"])
+    expect(isForbiddenModuleEdge("i18npool", owner)).toBe(false);
+  expect(isForbiddenModuleEdge("i18npool", "unotools")).toBe(true);
+  expect(isForbiddenModuleEdge("i18nlangtag", "i18npool")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "i18npool/source/localedata/localedata.ts",
+      "sw/browser/presentation/WriterView.tsx",
+      "../../sw/browser/presentation/WriterView",
+    ),
+  ).toMatch(/browser adapters/u);
+});

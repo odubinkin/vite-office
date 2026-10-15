@@ -2156,3 +2156,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: LEADING converts the signed short distance. FIX/MINIMUM first assign the same short into unsigned16 line height and then convert. A descriptor height-1mm100 remains-1twip in LEADING but converts wrapped65535mm100 to37154twips in FIX.
 - Status: surprising source cast-order consequence, not a confirmed defect. Preserve signed versus unsigned conversion order and short storage rather than rejecting or saturating negative input.
 - Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, real typed descriptor conversion witnesses; no native compiler or memory probe.
+
+## CALC-134: non-ISO Kurdish fallback conditions spell the language krm
+
+- Upstream: pinned `i18nlangtag/source/languagetag/languagetag.cxx`, non-ISO LanguageTag::getFallbackStrings branch.
+- Observation: Latin-script legacy ku fallbacks test the language string krm, while the ISO branch and language tables use kmr for Northern Kurdish. Thus these particular extra ku candidates are added for krm-Latn and are absent for the corresponding kmr-Latn input. Other language/country fallbacks still apply.
+- Status: suspected transposition, not a confirmed defect. Preserve the source spelling and order instead of silently changing it to kmr.
+- Local evidence: `apps/office/src/editeng/source/items/native-tab-values.test.ts`, literal fallback sequences over decomposed source fields; no native compiler or ICU implementation.

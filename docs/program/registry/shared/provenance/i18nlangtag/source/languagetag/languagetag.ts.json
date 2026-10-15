@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "LanguageTagFallbackFields",
+      "getFallbackStrings"
+    ],
+    "upstreamSymbols": [
+      "LanguageTag::getFallbackStrings"
+    ],
+    "preservedResponsibilities": [
+      "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine."
+    ],
+    "omittedResponsibilities": [
+      "General system-locale configuration/UNO locale services and complete LanguageTag canonicalization/parser are not implemented by this field-specific browser binding. Original full tab item and Writer I/O migration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.ts",
+          "marker": "getFallbackStrings"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag::getFallbackStrings"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "void SvxTabStop::fillDecimal()"
+        }
+      ]
+    }
+  }
+}

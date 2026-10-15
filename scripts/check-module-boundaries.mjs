@@ -18,6 +18,7 @@ const moduleNames = [
   "formula",
   "framework",
   "i18nlangtag",
+  "i18npool",
   "i18nutil",
   "o3tl",
   "offapi",
@@ -60,6 +61,8 @@ const allowedEdges = new Map([
       "i18nlangtag",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.
       "i18nutil",
+      // Original paraitem.cxx includes unotools/syslocale.hxx for numeric decimal defaults.
+      "unotools",
       "o3tl",
       "offapi",
       "sal",
@@ -77,6 +80,8 @@ const allowedEdges = new Map([
   ["framework", new Set(["sfx2", "svl"])],
   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
   ["i18nlangtag", new Set()],
+  // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
+  ["i18npool", new Set(["i18nlangtag", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
@@ -145,7 +150,9 @@ const allowedEdges = new Map([
   ["vcl", new Set(["offapi", "svl", "tools"])],
   ["udkapi", new Set(["sal"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
-  ["unotools", new Set(["sal"])],
+  // Original LocaleDataWrapper constructs LocaleData2; i18npool.component binds its actual producer.
+  // The browser field binding uses that producer and the original generated Locale triplet directly.
+  ["unotools", new Set(["sal", "udkapi", "i18npool"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   ["tools", new Set(["o3tl", "cppu"])],

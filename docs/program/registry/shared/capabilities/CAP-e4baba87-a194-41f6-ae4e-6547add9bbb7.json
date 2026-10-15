@@ -10,15 +10,17 @@
     "maturity": "implemented",
     "assertions": [
       "Original TabStop and TabAlign declarations use real shared typed transport.",
-      "Initialized Sequence object address binding shares the original pointer cell without a new lifetime engine."
+      "Initialized Sequence object address binding shares the original pointer cell without a new lifetime engine.",
+      "Native tab values resolve constructor decimal defaults from source resources, preserve independent field copies/references and reuse SortedVector."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Task156 is in progress. Actual TabStop long/enum/char/char and TabAlign five-value declarations plus generated enum sentinel now use existing shared CPPU static type/Any/Sequence owners. UTF16 chars are numeric units, generated default chars remain zero, native value copies and typed compound transport are independent. Sequence getAddress only erases the original C++ address-of an initialized Sequence object into its existing sole pointer cell; no new owner, allocation, counter algorithm or binary document representation is added. Full SvxTabStop/SvxTabStopItem, actual numeric-locale decimal resolution and Writer consumer migration remain pending within this same task. Read-only comparison found230same/55different decimal separators across285upstream locale resources versus current Intl, so unconditional Intl substitution is rejected. UI localization and ICU implementation are outside this work. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged; this partial type work does not certify pool/model/UI/ODS readiness."
+      "rationale": "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine."
     },
     "capability": "Canonical tab-stop boundary work",
     "gaps": [
-      "In progress: full native tab item, required numeric-locale provider and Writer consumers remain pending."
+      "Task156 remains in progress: complete native SvxTabStopItem copy/merge/hash/typed Any and migrate existing browser JSON constructors/projection to Writer.",
+      "Real engine/pool/Calc model/connected UI/same-model ODS and translated presentation remain pending."
     ],
     "local": {
       "implementation": [
@@ -29,11 +31,39 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/style/TabAlign.ts",
           "marker": "cppu_detail_getUnoType_TabAlign"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.ts",
+          "marker": "getFallbackStrings"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+          "marker": "getLocaleDecimalSeparator"
+        },
+        {
+          "path": "apps/office/src/unotools/source/misc/syslocale.ts",
+          "marker": "unicode"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.ts",
+          "marker": "SvxTabStop"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/localedata/data/decimal-separators.json",
+          "marker": "\"fr_CH\""
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/locale-fallbacks.json",
+          "marker": "\"pt\""
         }
       ],
       "tests": [
         {
           "path": "apps/office/src/editeng/source/items/native-tab-transport.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-tab-values.test.ts",
           "marker": "it("
         }
       ],
@@ -53,6 +83,30 @@
         {
           "path": "offapi/com/sun/star/style/TabAlign.idl",
           "marker": "TabAlign"
+        },
+        {
+          "path": "i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag::getFallbackStrings"
+        },
+        {
+          "path": "i18npool/source/localedata/localedata.cxx",
+          "marker": "LocaleDataImpl::getLocaleItem2"
+        },
+        {
+          "path": "unotools/source/misc/syslocale.cxx",
+          "marker": "SvtSysLocale::SvtSysLocale"
+        },
+        {
+          "path": "include/editeng/tstpitem.hxx",
+          "marker": "SvxTabStop"
+        },
+        {
+          "path": "i18npool/source/localedata/data/fr_CH.xml",
+          "marker": "DecimalSeparator"
+        },
+        {
+          "path": "i18nlangtag/source/isolang/isolang.cxx",
+          "marker": "lookupFallbackLocale"
         }
       ],
       "tests": [
@@ -71,7 +125,8 @@
     "aspect": "model-operation",
     "atomicOperation": "canonical-tab-stop-boundary",
     "scopeLimitations": [
-      "Task156 is in progress. Actual TabStop long/enum/char/char and TabAlign five-value declarations plus generated enum sentinel now use existing shared CPPU static type/Any/Sequence owners. UTF16 chars are numeric units, generated default chars remain zero, native value copies and typed compound transport are independent. Sequence getAddress only erases the original C++ address-of an initialized Sequence object into its existing sole pointer cell; no new owner, allocation, counter algorithm or binary document representation is added. Full SvxTabStop/SvxTabStopItem, actual numeric-locale decimal resolution and Writer consumer migration remain pending within this same task. Read-only comparison found230same/55different decimal separators across285upstream locale resources versus current Intl, so unconditional Intl substitution is rejected. UI localization and ICU implementation are outside this work. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged; this partial type work does not certify pool/model/UI/ODS readiness."
+      "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine.",
+      "Prepared locale field binding and raw browser host locale are supported; general locale-service interfaces and full LanguageTag construction/canonicalization are not implemented."
     ],
     "implemented": true,
     "contractParity": false,
