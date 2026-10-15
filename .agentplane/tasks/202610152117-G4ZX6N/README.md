@@ -1,10 +1,11 @@
 ---
 id: "202610152117-G4ZX6N"
 title: "Implement native style base and indexed pool model owners"
-status: "DOING"
+result_summary: "Constructed actual core SfxStyleSheetBase/SfxStyleSheetBasePool and native hints using existing shared dependencies, preserving native defaults,graph/index/value/notification semantics and source quirks. Full derived styles/Calc document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Actual core pool eagerly owns actual index and creates actual styles;47represented native methods/hints/defaults/control flows are source-mapped. Name/parent/follow/copy/item sets/index/cache/notifications use original dependencies,with GC physical ownership and no fake provider."
     - "249related,187Calc,13source gates,production build,1core Chromium and1Writer startup/load/edit pass; exact4shared/33Calc raw S/B/F/L sets100. Canonical style header exports real owners; responsibility split427+166lines exceeds500 without sharding classes."
     - "CALC146/150 and152..155 are preserved. Nonempty CALC150 callback is tested only through factory exception before invalidated traversal advances. Core Clear covers actual non-UNO classes;presentation/XML/UNO/XComponent/derived styles remain explicitly absent. Broad parity flags remain false."
-commit: null
+commit:
+  hash: "87d284b585cdc4dd4a9532a8dcf7b22adba461a0"
+  message: "✅ G4ZX6N task: record actual core style owner acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved actual core style base/pool owners with reused shared dependencies and source-faithful notifications and edge cases."
+  -
+    author: "CODER"
+    body: "Verified: actual core style/pool owners pass249related/187Calc,strict shared/Calc100,13source gates,production build and core plus Writer Chromium; inventory and CALC152..155 recorded with explicit missing presentation/UNO/derived scope."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded provenance/inventory reruns, build-browser-portable.mjs, final-audit.mjs under output/playwright/task173-checks. Result: pass. Evidence:249related/23files,187Calc/76files; exact4measured shared raw S369/B174/F92/L331 and33Calc S4179/B2731/F821/L3727 every counter positive100;13source gates,production build,1actual style/pool Chromium and1Writer startup/load/edit. Eight pinned original files,47represented methods;actual core owners427lines plus iterator166 justify responsibility split. Scope: actual core style/pool/hint ownership,name/parent/follow/attributes/index/cache/notifications; preserve CALC146/150 and152..155, no fake owners or normal invalidated iterator result. Presentation/XML/UNO/XComponent/derived styles/Calc document/UI/ODS and full all-app run remain pending; GC owns physical lifetime."
+  -
+    type: "status"
+    at: "2026-10-15T21:31:56.387Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual core style/pool owners pass249related/187Calc,strict shared/Calc100,13source gates,production build and core plus Writer Chromium; inventory and CALC152..155 recorded with explicit missing presentation/UNO/derived scope."
 doc_version: 3
-doc_updated_at: "2026-10-15T21:31:38.207Z"
+doc_updated_at: "2026-10-15T21:31:56.389Z"
 doc_updated_by: "CODER"
 description: "Task173: construct actual SfxStyleSheetBase and SfxStyleSheetBasePool core model owners, native hints and name/parent/follow/index/item-set contracts using existing Sfx graph, iterator, index and pool ranges. Explicitly leave presentation/UNO/derived SfxStyleSheet responsibilities pending rather than fake services; preserve source edge cases and GC ownership."
 sections:
@@ -109,6 +122,10 @@ sections:
     - Observation: Initial source gates reached provenance before the new style-model runtime/provenance records were written; discovery correctly reported the new implementation as missing.
       Impact: Provenance gate stopped; typecheck/lint/docs/size/dependency/tree gates passed and initial related functional/raw coverage was100.
       Resolution: Complete the approved real-owner registry records with responsibility-split rationale and rerun provenance/inventory; no discovery bypass or broad parity promotion.
+extensions:
+  implementation_commit:
+    hash: "559a1885d0d4419a47d1dd0a24d77d22ff19f5b4"
+    message: "🔧 G4ZX6N core: implement native core style base and pool owners"
 id_source: "generated"
 ---
 ## Summary
