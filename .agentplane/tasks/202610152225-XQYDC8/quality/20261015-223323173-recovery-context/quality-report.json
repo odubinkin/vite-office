@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610152225-XQYDC8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T22:33:23.173Z",
+  "verdict": "pass",
+  "summary": "Same-agent review,not independent: named/copy item-pool contracts preserve metadata categories,virtual Clone construction ordering,metrics,independent BC and once-only shutdown;bounded acceptance passes.",
+  "evaluated_sha": "0a92a1ae83bcf733c884cb65155b35fdeef3d95a",
+  "blueprint_digest": "a62486181486a75f7613a5c440552c594aebe3ba8d8d31df256f467fb15790f0",
+  "findings": [
+    "Actual source and regression evidence preserve staging all metadata before item Clone,temporary MapCM before source metric,and virtual secondary Clone after local copies. Seven native blobs pinned and37existing method bodies unchanged. Exact raw coverage ownership and four restored refs checked."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610152225-XQYDC8/README.md",
+    "output/playwright/task176-checks/final-verification.json",
+    "output/playwright/task176-checks/native-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Physical native registries/lifetime are erased under GC;full pool destruction/presentation,ScDocumentPool/Sc styles/document/UI/ODS remain pending. Browser snapshot registry remains separate from native metadata. No broad parity or native pool QA suite claim."
+  ]
+}

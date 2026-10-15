@@ -4,7 +4,7 @@ title: "Implement native named item-pool construction and copy for Calc document
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Command: native-audit.mjs,portable.mjs shared-only/calc-only,source-gates.mjs,build-browser-portable.mjs,final-audit.mjs in output/playwright/task176-checks. Result:pass. Evidence:217related/21files,187Calc/76files;exact2measured shared owners S428/B304/F87/L347 and33Calc S4179/B2731/F821/L3727 all raw counters positive100;13gates;production build,pool-copy Chromium,Writer startup/load/edit. Seven pinned originals,37unchanged method bodies and actual constructor-time Clone query prove native metadata staging/MapCM order. Scope:named/copy pool,Clone,metrics,BC,shutdown gate/cache timing and secondary links. Four refs absent at runtime/restored. Native pool destruction/presentation,ScDocumentPool/document/UI/ODS remain pending;no full all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T22:33:23.173Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review,not independent: named/copy item-pool contracts preserve metadata categories,virtual Clone construction ordering,metrics,independent BC and once-only shutdown;bounded acceptance passes."
+  evaluated_sha: "0a92a1ae83bcf733c884cb65155b35fdeef3d95a"
+  blueprint_digest: "a62486181486a75f7613a5c440552c594aebe3ba8d8d31df256f467fb15790f0"
+  evidence_refs:
+    - ".agentplane/tasks/202610152225-XQYDC8/README.md"
+    - ".agentplane/tasks/202610152225-XQYDC8/quality/20261015-223323173-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152225-XQYDC8/quality/20261015-223323173-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152225-XQYDC8/quality/20261015-223323173-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152225-XQYDC8/blueprint/resolved-snapshot.json"
+    - "output/playwright/task176-checks/final-verification.json"
+    - "output/playwright/task176-checks/native-audit.json"
+  findings:
+    - "Actual source and regression evidence preserve staging all metadata before item Clone,temporary MapCM before source metric,and virtual secondary Clone after local copies. Seven native blobs pinned and37existing method bodies unchanged. Exact raw coverage ownership and four restored refs checked."
 commit: null
 comments:
   -
