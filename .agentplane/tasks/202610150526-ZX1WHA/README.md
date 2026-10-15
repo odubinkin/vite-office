@@ -1,10 +1,11 @@
 ---
 id: "202610150526-ZX1WHA"
 title: "Implement native XML attribute value containers for Calc pool"
-status: "DOING"
+result_summary: "Implemented shared source-owned XML attribute values, collection, data and pooled item with canonical copy/overload/namespace behavior, GC ownership and explicit pending UNO transport; preserved source quirks and native module direction."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "20 related and183 whole Calc cases pass; every raw counter in all4 new shared owners and33 Calc owners is positive100. Assertions distinguish original Add4/Set4 conflict behavior, aliases/history, copy independence and uint16 item count/index narrowing."
     - "All13 source gates and portable production build pass;38 boundary tests enforce native editeng-to-xmloff and reject reverse, while AST audit proves all3 cycle-rejection functions unchanged. Initial test/JSDoc/metadata failures retained and corrected in scope without relaxing gates."
     - "29intentional paths/3865source hashes/12native pins/4restored links audited; inventory zero semantic violations, no parity promotion, CALC124/125 record suspicious source behavior unchanged."
-commit: null
+commit:
+  hash: "68e1b7599d7fd5d8f4a5b8d3063a9710a73c2051"
+  message: "Implement ZX1WHA core: native XML attribute containers"
 comments:
   -
     author: "CODER"
     body: "Start: implement original XML attribute value/container/item prerequisites with shared namespace map and GC ownership; preserve source quirks and explicitly leave unsupported actual UNO transport."
+  -
+    author: "CODER"
+    body: "Verified: four original XML attribute value classes and Calc ATTR_USERDEF122 witness;20related,183Calc,38boundary tests and portable build pass; shared/Calc raw100 and complete source/inventory evidence recorded."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified20 related,183Calc,38boundary tests; four new shared owners and wholeCalc raw100, all13source gates/build/inventory pass,29paths/3865hashes/12pins/4links audited. Typed UNO transport/document remain explicit gaps; evaluation same-agent, not independent."
+  -
+    type: "status"
+    at: "2026-10-15T05:37:13.960Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: four original XML attribute value classes and Calc ATTR_USERDEF122 witness;20related,183Calc,38boundary tests and portable build pass; shared/Calc raw100 and complete source/inventory evidence recorded."
 doc_version: 3
-doc_updated_at: "2026-10-15T05:37:06.705Z"
+doc_updated_at: "2026-10-15T05:37:13.962Z"
 doc_updated_by: "CODER"
 description: "Task144 ports actual SvXMLAttr, SvXMLAttrCollection, SvXMLAttrContainerData and SvXMLAttrContainerItem value/copy/accessor/presentation contracts using existing shared SvXMLNamespaceMap and SfxPoolItem. Original UNO XNameContainer/Any transport remains an explicit missing dependency, not a fake provider; preserve GC lifetime and native observable namespace behavior."
 sections:
