@@ -1,10 +1,11 @@
 ---
 id: "202610141838-426QVV"
 title: "Implement shared native item-info packages and pool registration"
-status: "DOING"
+result_summary: "Implement native item-info packages and single-pool default registration"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "Actual metadata/default identity and static/dynamic classification, protected/private native friend calls, package EMPTY/nonzero-slot cache and single-pool registration/default/slot paths are source-grounded. Ordinary JS Maps/references/GC own data; no refcount/delete/weak manager or public setter is introduced."
     - "46related cases/6files,181Calc/71files and38boundaries pass;2complete changed shared owners and33Calc owners every raw counter positive100. Existing Writer browser default/factory consumers pass unchanged. Portable build and13source gates pass,636records zero violations."
     - "14intentional paths/3824source hashes/6native pins/four restored links verified. CALC-120 retains source empty-cache rescans without a bug claim. Real Calc183/184 pool-dependent set-item package witnesses do not claim full Calc SID/default package, chains/user defaults or document/UI/ODS readiness."
-commit: null
+commit:
+  hash: "dc5cf6e4846bc005356547d7bfe2b354137ef3f9"
+  message: "Implement 426QVV core: native item-info packages and single-pool registration"
 comments:
   -
     author: "CODER"
     body: "Start: port native ItemInfo packages and single-pool registration/defaults for Calc; reuse actual set items, ordinary GC storage and logical default tags without refcount/lifetime machinery."
+  -
+    author: "CODER"
+    body: "Verified: actual shared item-info packages and single-pool registration/default/slot paths;46related,181Calc,38boundaries pass, shared/Calc raw100, portable build/source/inventory gates pass with14intentional paths and GC-only lifetime."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native metadata/package registration verified:46related/6files,181Calc/71files,38boundaries;2shared raw S133B71F46L116 and33Calc S4172B2731F821L3720 everycounterpositive100. Portable build/13source gates/636records zero violations,14paths/3824hashes/6pins/four restored links. CALC-120 retained empty-map rescan, GC lifetime/no refcount machinery. Single-pool/fixture scope explicit; full Calc package/document/UIODS pending. Same-agent evaluation not independent."
+  -
+    type: "status"
+    at: "2026-10-15T04:35:27.501Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared item-info packages and single-pool registration/default/slot paths;46related,181Calc,38boundaries pass, shared/Calc raw100, portable build/source/inventory gates pass with14intentional paths and GC-only lifetime."
 doc_version: 3
-doc_updated_at: "2026-10-15T04:35:07.803Z"
+doc_updated_at: "2026-10-15T04:35:27.503Z"
 doc_updated_by: "CODER"
 description: "Task141 ports actual ItemInfo/Static/Dynamic/Package and single-pool package registration/default lookup/slot mapping in existing SfxItemPool. Reuse shared set items for actual Calc-style dynamic witnesses. Ordinary JS fields/Maps/GC replace ownership storage; no reference counts, weak managers or native memory machinery. Native pool chains/user defaults/full Calc DocPool remain unported."
 sections:
