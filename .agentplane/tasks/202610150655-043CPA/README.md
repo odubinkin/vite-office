@@ -4,7 +4,7 @@ title: "Restore native signed16 pooled item contracts for text metrics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T07:04:35.046Z"
+  updated_by: "CODER"
+  note: "Verified146related,187Calc,39boundary tests, complete changed shared/33Calc raw100, all13source gates/build/inventory pass.13paths/3915hashes/6pins/4links audited. Native signed16 contracts/actual Calc inheritance restored without Writer shim; same-agent review not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T07:04:21.958Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: existing shared signed16 value owner canonically corrected for mutation/copy/payload/Any/hash/plain presentation, actual Calc inheritance and related Writer consumers verified."
+  evaluated_sha: "dc202f38a9dde05e55f7c70ed9c1315df5f9ebe2"
+  blueprint_digest: "caa31170e7d4a032aceaacbdbb88b5627d4cd9400942dd0c743684163bacc8be"
+  evidence_refs:
+    - ".agentplane/tasks/202610150655-043CPA/README.md"
+    - ".agentplane/tasks/202610150655-043CPA/quality/20261015-070421958-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150655-043CPA/quality/20261015-070421958-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150655-043CPA/quality/20261015-070421958-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150655-043CPA/blueprint/resolved-snapshot.json"
+    - "output/playwright/task151-checks/verification.json"
+    - "output/playwright/task151-checks/native-source-audit.json"
+    - "output/playwright/task151-checks/source-gates.json"
+    - "output/playwright/task151-checks/build-manifest.json"
+  findings:
+    - "Original native SfxInt16Item contracts and ScMergeFlagAttr inheritance source-audited. Direct equality excludes Which; areSame/set retain identity/type guards. Checked JS scalar boundary and no-argument query remain explicit, no compatibility shim."
+    - "146related,187Calc,39boundary tests pass with complete changed shared and33Calc owners raw100. All13source gates/build/inventory pass,657runtime sources/2894imports/95edges, no graph or gate exceptions."
+    - "13intentional paths/3915source hashes/6native pins/4restored links audited. Initial new test omitted native string nul and was corrected without production change. Native diagnostics/Boost serializer deferred, no memory manager or localized resources."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: correct original shared signed16 item contracts and real Calc inherited flag behavior, no compatibility shim or duplicate metric primitive; scoped strict coverage and portable source audit."
+  -
+    type: "verify"
+    at: "2026-10-15T07:04:35.046Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified146related,187Calc,39boundary tests, complete changed shared/33Calc raw100, all13source gates/build/inventory pass.13paths/3915hashes/6pins/4links audited. Native signed16 contracts/actual Calc inheritance restored without Writer shim; same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T07:03:56.456Z"
+doc_updated_at: "2026-10-15T07:04:35.697Z"
 doc_updated_by: "CODER"
 description: "Task151 corrects shared SfxInt16Item mutation/copy/payload equality/typed Any/hash/numeric presentation, with actual Calc ScMergeFlagAttr inherited behavior and related Writer tests. Real prerequisite for future SvxKerningItem; no duplicate wrapper, no UI localization or memory manager."
 sections:
@@ -57,6 +84,39 @@ sections:
       Result: pass.
       Evidence: original default/copy/SetValue/Clone/payload equality/hash/numeric presentation/short Any definitions and actual Calc derived type/areSame Which guards source-audited.6native pins at9bc445578031fecf56086729d8e4940c77e14d65;3915source hashes (3913baseline,11changed existing,2new,3902unchanged),13intentional paths/4restored links audited. Initial test incorrectly omitted the existing native nul terminator, corrected only the expected code units; failed evidence retained in Findings.
       Scope: existing checked host scalar domain/no-argument query explicitly retained; no claim of unchecked C++ caller-conversion or binary document layout parity. Logical hash uses repository unsigned64 convention and is not persisted. Native property-tree/base diagnostic serializer remains unported, no Boost/lifetime manager. Native Writer frame QA is broader unported source context only; no native compiler/probe/execution. Same-agent review is not independent. Actual text-metric subclasses/EditEngine/EditTextObject/Calc pool/model/UI/ODS remain pending; UI localization deferred. Final clean calc/hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T07:04:35.046Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified146related,187Calc,39boundary tests, complete changed shared/33Calc raw100, all13source gates/build/inventory pass.13paths/3915hashes/6pins/4links audited. Native signed16 contracts/actual Calc inheritance restored without Writer shim; same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T07:03:56.456Z, excerpt_hash=sha256:af01d4f810503d06c52f3f474e355602e23a929ca57364b1c7a368e763be169a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150655-043CPA/blueprint/resolved-snapshot.json
+    - old_digest: caa31170e7d4a032aceaacbdbb88b5627d4cd9400942dd0c743684163bacc8be
+    - current_digest: caa31170e7d4a032aceaacbdbb88b5627d4cd9400942dd0c743684163bacc8be
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150655-043CPA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150655-043CPA -m 🧩 043CPA task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional task paths in later authorized task; no reset/merge/publication."
   Findings: |-
     The immutable/no-setter/Which-in-payload behavior is a local divergence, not a suspected native defect. Correct shared owner without a Writer compatibility shim; task148 areSame retains original Which/type comparison at caller sites. Native diagnostic property-tree JSON/base serializer remains unported, no fake Boost owner. UI localization stays deferred. Actual EditEngine/EditTextObject/Calc pool/model/UI/ODS remain pending; same-agent evaluation is not independent.
@@ -96,6 +156,39 @@ Compare original svl/intitem.hxx and intitem.cxx constructors/value/copy/Clone/e
   Result: pass.
   Evidence: original default/copy/SetValue/Clone/payload equality/hash/numeric presentation/short Any definitions and actual Calc derived type/areSame Which guards source-audited.6native pins at9bc445578031fecf56086729d8e4940c77e14d65;3915source hashes (3913baseline,11changed existing,2new,3902unchanged),13intentional paths/4restored links audited. Initial test incorrectly omitted the existing native nul terminator, corrected only the expected code units; failed evidence retained in Findings.
   Scope: existing checked host scalar domain/no-argument query explicitly retained; no claim of unchecked C++ caller-conversion or binary document layout parity. Logical hash uses repository unsigned64 convention and is not persisted. Native property-tree/base diagnostic serializer remains unported, no Boost/lifetime manager. Native Writer frame QA is broader unported source context only; no native compiler/probe/execution. Same-agent review is not independent. Actual text-metric subclasses/EditEngine/EditTextObject/Calc pool/model/UI/ODS remain pending; UI localization deferred. Final clean calc/hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T07:04:35.046Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified146related,187Calc,39boundary tests, complete changed shared/33Calc raw100, all13source gates/build/inventory pass.13paths/3915hashes/6pins/4links audited. Native signed16 contracts/actual Calc inheritance restored without Writer shim; same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T07:03:56.456Z, excerpt_hash=sha256:af01d4f810503d06c52f3f474e355602e23a929ca57364b1c7a368e763be169a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150655-043CPA/blueprint/resolved-snapshot.json
+- old_digest: caa31170e7d4a032aceaacbdbb88b5627d4cd9400942dd0c743684163bacc8be
+- current_digest: caa31170e7d4a032aceaacbdbb88b5627d4cd9400942dd0c743684163bacc8be
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150655-043CPA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150655-043CPA -m 🧩 043CPA task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
