@@ -4,7 +4,7 @@ title: "Implement native shared plain manifest import and migrate Writer package
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "Portable163related/187Calc pass;exact8shared and33Calc executable owners raw S/B/F/L100 with all counters positive;two Writer-only gaps exempt. All13source gates,16native pins/17slots/73old algorithm identities,production build,actual Chromium/DOM-free Worker and Writer startup/load/edit pass. Four refs restored;plain metadata only,Calc document/UI/ODS pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T23:50:07.763Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase reviews committed df6747e10769 against approved plain manifest scope;all required bounded evidence passes. This is not independent review or Calc UI/ODS model certification."
+  evaluated_sha: "df6747e107692aa9e7ca3adc62f121ee4808e818"
+  blueprint_digest: "acc5c71ee958eed47a6d77cabe1184a99043b08531cc2fa44956ccdb617e5ca8"
+  evidence_refs:
+    - ".agentplane/tasks/202610152310-PWD2VY/README.md"
+    - ".agentplane/tasks/202610152310-PWD2VY/quality/20261015-235007763-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152310-PWD2VY/quality/20261015-235007763-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152310-PWD2VY/quality/20261015-235007763-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152310-PWD2VY/blueprint/resolved-snapshot.json"
+    - "output/playwright/task178-checks/final-verification.json"
+    - "output/playwright/task178-checks/native-audit.json"
+    - "output/playwright/task178-checks/source-gates.json"
+    - "ap doctor:OK;existing managed-hook warning only;policy routing OK"
+  findings:
+    - "Native plain importer uses actual PropertyValue/Any,namespace scopes and shared integer parser;Writer consumes actual package metadata and real missing-stream document defaults. Duplicated Writer-only validator and Standard-definition rejection are removed without compatibility aliases."
+    - "Exact owner-set audit confirms8shared and33Calc raw S/B/F/L100 with every counter positive;163related and187Calc scenarios pass. Writer-only gaps are explicitly exempt. All13source gates,build,Chromium/DOM-free Worker and Writer startup/load/edit pass;all4refs restored."
+    - "Sixteen original blobs and17slot constants pinned;73existing algorithm bodies unchanged and original parser/dependency guard byte-identical.52non-task paths fit approved80. CALC162..164 retain suspicious upstream behavior."
 commit: null
 comments:
   -
