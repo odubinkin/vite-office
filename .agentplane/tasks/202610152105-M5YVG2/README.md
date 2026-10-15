@@ -4,7 +4,7 @@ title: "Restore native pool-chain ranges and pool-only item-set construction"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded changed/inventory reruns, build-browser-portable.mjs plus --writer-only, final-audit.mjs under output/playwright/task172-checks. Result: pass. Evidence:199related/19files,187Calc/76files; exact2changed shared raw S342/B263/F71/L277 and33Calc S4179/B2731/F821/L3727 every raw counter positive100;13source gates,production build,1shared Chromium and1targeted Writer startup/load/edit. Seven pinned original blobs and15675sorted-pair observations with native predicate proof;4reference links absent during runtime/restored finally. Scope: native pool links/metadata ranges,chain default/slot resolution,pool-only item sets,CALC151 preservation,truthful inventory. Full named/copy/shutdown/user-default pools,styles/document/UI/ODS and all-app milestone remain pending; no native memory/probe machinery."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T21:15:33.420Z"
+  updated_by: "EVALUATOR"
+  note: "Approved actual pool-chain/range constructor dependency is implemented and verified on current source commit; same-agent review, not independent evaluation."
+  evaluated_sha: "122e497b9d85c4c14c0492d76c14c08529b8b00b"
+  blueprint_digest: "de48147e7b3551be3e771a255adf45f0f9265036c3606102c2df38c341696d05"
+  evidence_refs:
+    - ".agentplane/tasks/202610152105-M5YVG2/README.md"
+    - ".agentplane/tasks/202610152105-M5YVG2/quality/20261015-211533420-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152105-M5YVG2/quality/20261015-211533420-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152105-M5YVG2/quality/20261015-211533420-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152105-M5YVG2/blueprint/resolved-snapshot.json"
+    - "output/playwright/task172-checks/final-verification.json"
+    - "output/playwright/task172-checks/native-audit.json"
+    - "output/playwright/task172-checks/source-gates.json"
+    - "output/playwright/task172-checks/build-browser-manifest.json"
+  findings:
+    - "Native master/secondary reassignment,metadata range merge/cache,chain default/slot resolution and pool-only SfxItemSet constructor reuse existing shared items and JS range values. CALC151 original cache retention is preserved; no new memory/lifetime machinery or invented native metadata from browser snapshots."
+    - "199related,187Calc,13source gates,production build,1shared Chromium and1Writer startup/load/edit pass; exact2changed shared and33Calc raw S/B/F/L counter sets100. Seven native blobs and15675valid sorted pair observations with mathematical predicate proof are recorded."
+    - "Canonical erased range declarations move to whichranges header,old public reexports remain; runtime inventory ownership is corrected without validator bypass. Broad parity flags remain false; full named/copy/shutdown/user-default pool contracts,styles/document/UI/ODS remain pending."
 commit: null
 comments:
   -
