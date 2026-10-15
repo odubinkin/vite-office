@@ -1,10 +1,11 @@
 ---
 id: "202610152236-5C73DD"
 title: "Implement shared ODF manifest export for Writer and Calc packages"
-status: "DOING"
+result_summary: "Implemented reusable plain ODF manifest export for ODT/ODS,actual shared SAX attributes and source-owned JS output composition. Inventory/source cases updated;generic ManifestImport and actual Calc document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/task177-checks/native-audit.json"
   findings:
     - "Reviewed16pinned native blobs,16MIME literals,actual extracted ODS manifest metadata,78related/187Calc cases,exact5shared/33Calc raw100 and unchanged guard algorithm outside native dependency metadata.40existing bodies match after only the declared Writer manifest call substitution. Actual Chromium and dedicated DOM-free Worker produce identical XML;Writer startup/load/edit passes."
-commit: null
+commit:
+  hash: "b2f31a5a3bf93517bff874aaab679c48a005760f"
+  message: "📝 5C73DD core: record shared manifest export quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved shared plain-ODF manifest exporter and actual SAX attribute values,then migrate Writer and verify ODS manifest streams without a fabricated spreadsheet model."
+  -
+    author: "CODER"
+    body: "Verified: shared plain OASIS manifest export uses actual PropertyValue/Any and AttributeList;Writer migrates to same exporter;78related/187Calc,strict5shared/33Calc100,13gates,build and Chromium/DOM-free Worker plus Writer startup pass."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command:native-audit.mjs,portable.mjs,source-gates.mjs,build-browser-portable.mjs,final-audit.mjs under output/playwright/task177-checks. Result:pass. Evidence:78related/11files,187Calc/76files;exact5shared raw S252/B90/F45/L224 and33Calc S4179/B2731/F821/L3727 every counter positive100;one Writer-only docsh coverage gap exempt.13gates,build,actual shared Chromium plus dedicated DOM-free Worker identical XML,and Writer startup/load/edit.16pinned original blobs,16MIME literals,40existing algorithms unchanged except declared Writer call,66436source-derived native-JS UTF16 cases;guard algorithm unchanged outside original edge metadata. Scope:plain OASIS PropertyValue-sequence export,AttributeList,JS SAX payload/composition and Writer migration.4refs absent at runtime/restored;51paths within55. CALC161 preserved. No full all-app run;generic ManifestImport,Calc document/UI/same-model ODS remain pending."
+  -
+    type: "status"
+    at: "2026-10-15T23:03:18.475Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared plain OASIS manifest export uses actual PropertyValue/Any and AttributeList;Writer migrates to same exporter;78related/187Calc,strict5shared/33Calc100,13gates,build and Chromium/DOM-free Worker plus Writer startup pass."
 doc_version: 3
-doc_updated_at: "2026-10-15T23:02:25.152Z"
+doc_updated_at: "2026-10-15T23:03:18.476Z"
 doc_updated_by: "CODER"
 description: "Task177: replace Writer-specific manifest serialization with native PropertyValue sequence ManifestExport using shared SAX attributes and browser document handler. Reuse for Writer ODT and verify ODS MIME/entries without a fake Calc document; encrypted and legacy package branches remain explicitly outside this plain ODF scope."
 sections:
@@ -133,6 +146,10 @@ sections:
     - Observation: Inventory correctly flags browser-adaptation classification under upstream source paths. The moved modules implement platform-neutral XML payload serialization/composition roles,with JS string carriers replacing native output buffers,not browser services.
       Impact: Their provenance must map the represented source responsibilities rather than declare browser ownership under a native path or suppress a structural violation.
       Resolution: Map only ManifestWriter::writeManifestSequence payload composition and SAXWriter::startElement/SaxWriterHelper::convertToXML payload callbacks as unverified upstream mechanisms with explicit JS carrier divergence. Keep full Writer/UNO/service/stream APIs omitted,no fabricated native service class or browser ownership exception. No checker changes or known-violation suppression.
+extensions:
+  implementation_commit:
+    hash: "8aad582a161fe805ed0de51819aabb9771c503f2"
+    message: "🔧 5C73DD core: share native plain ODF manifest export across Writer and Calc"
 id_source: "generated"
 ---
 ## Summary
