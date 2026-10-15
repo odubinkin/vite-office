@@ -4,7 +4,7 @@ title: "Port shared configured default-font candidates"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "PASS:30 related and187 Calc tests, exact5 shared/33 Calc owners raw100, all13 gates/43 boundary tests; complete33-locale/256-property resource and23 IDs source-audited against5 pinned blobs.22 paths; refs restored. No browser consumer mutation or full-suite milestone claim."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T18:33:50.635Z"
+  updated_by: "EVALUATOR"
+  note: "Source-derived configured default-font candidates and native UTF16 token parsing are implemented in shared owners with complete pinned resource data and explicit service limits."
+  evaluated_sha: "bddbcdcf610f61391600c4d0d5c66d717c63f5bb"
+  blueprint_digest: "a796508a9b5ca1c626b08823dbffbce25f41b5bd5670419d315aeef4da8a492a"
+  evidence_refs:
+    - ".agentplane/tasks/202610151824-YQBEK0/README.md"
+    - ".agentplane/tasks/202610151824-YQBEK0/quality/20261015-183350635-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151824-YQBEK0/quality/20261015-183350635-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151824-YQBEK0/quality/20261015-183350635-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151824-YQBEK0/blueprint/resolved-snapshot.json"
+    - "output/playwright/task163-checks/final-verification.json"
+    - "apps/office/src/unotools/source/config/native-default-fonts.test.ts"
+    - "apps/office/src/unotools/source/misc/native-font-token.test.ts"
+  findings:
+    - "Same-agent review, not independent. Exact33 locales/256 properties/23 IDs audited against5 pinned source blobs;30 related tests and187 Calc tests with strict5 shared/33 Calc raw100 and all13 gates/43 boundary cases pass. The Verify Steps production/browser phrase is scoped by the approved plan to no existing browser-consumer migration; intended shared production code changes and pure numeric-locale projection extraction are explicit in Scope and checked. Parent upstream token-name test is context only, not claimed ported equivalent. Original unotools-to-i18nlangtag edge added; no cycle exception or algorithm change. Full configuration/system/device and UI/ODS remain pending."
 commit: null
 comments:
   -
