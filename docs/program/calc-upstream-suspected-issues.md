@@ -2346,3 +2346,9 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: impCreateUserDefault inserts the original ItemInfo into maUserItemInfos before allocating/constructing ItemInfoUser. If the value clone/construction throws, maItemInfos still contains the original entry while override bookkeeping already exists. The replacement path instead constructs a new entry before assigning it and deleting the previous user entry.
 - Status: potential first-insertion exception-safety issue, not a confirmed defect. Preserve statement ordering; do not add a rollback absent from upstream. No normal post-first-failure cleanup/lifetime outcome is claimed.
 - Local evidence: pinned source audit. `apps/office/src/svl/source/items/native-user-defaults.test.ts` tests the defined replacement-clone failure path, where the previous user metadata/value remains intact; it does not claim a native first-failure cleanup test or run a compiler/memory probe.
+
+## CALC-161 — Duplicate SAX attributes are retained during manifest property export
+
+- Source: `comphelper/source/xml/attributelist.cxx` (`AttributeList::AddAttribute`) and `package/source/manifest/ManifestExport.cxx` (root property scan and file-entry loop), pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: duplicate-name assertion is commented out with an upstream TODO noting test failures. Root scanning stops after a complete path/media/version triplet,but file-entry emission traverses every property. Repeated Version properties can therefore retain the initial document version while emitting duplicate version attributes in the entry.
+- Status: suspicious source case,not a confirmed defect for valid native package producers. Preserve original ordered list/events and do not deduplicate or rewrite values. Literal PropertyValue/AttributeList regressions cover this represented behavior;no native compiler or memory probe is used.

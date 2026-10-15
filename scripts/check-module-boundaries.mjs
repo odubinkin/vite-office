@@ -41,7 +41,8 @@ const moduleNames = [
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
   // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
-  ["comphelper", new Set(["cppu", "udkapi"])],
+  // Original attributelist.hxx/cxx also owns actual OUString values.
+  ["comphelper", new Set(["cppu", "sal", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
@@ -90,9 +91,11 @@ const allowedEdges = new Map([
   ["o3tl", new Set(["sal"])],
   // Original generated enum getters use actual CPPU static enum metadata.
   ["offapi", new Set(["cppu", "sal"])],
-  ["package", new Set()],
+  // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
+  ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
-  ["sax", new Set()],
+  // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
+  ["sax", new Set(["sal", "udkapi"])],
   [
     "sc",
     new Set([
@@ -135,6 +138,9 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // Native Writer package/filter composition uses shared MIME constants and beans::PropertyValue (Library_sw/sdk_api).
+      "comphelper",
+      "udkapi",
       // Original Library_sw links cppu; native property transport uses real Any values.
       "cppu",
       "cui",

@@ -2,10 +2,8 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
-import {
-  validateOdtManifestXml,
-  ODT_MIMETYPE,
-} from "../../../../package/source/manifest/ManifestExport";
+import { validateOdtManifestXml } from "../../../../package/source/manifest/ManifestExport";
+import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";

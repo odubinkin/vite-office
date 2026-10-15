@@ -2,10 +2,10 @@
  * @fileoverview Reimplements the bounded SwXMLWriter package orchestration from pinned LibreOffice `sw/source/filter/xml/wrtxml.cxx`.
  */
 
-import {
-  createOdtManifestXml,
-  ODT_MIMETYPE,
-} from "../../../../package/source/manifest/ManifestExport";
+import { createManifestXml } from "../../../../package/source/manifest/ManifestWriter";
+import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import type { SwDoc } from "../../core/doc/doc";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
@@ -41,7 +41,7 @@ export class SwXMLWriter {
     output.putNextEntry(
       "META-INF/manifest.xml",
       encoder.encode(
-        createOdtManifestXml(
+        createWriterManifestXml(
           fonts.map(
             /** Projects a font path. @param font - Document font. @returns Package path. */ (
               font,
@@ -88,4 +88,55 @@ export function writeOdtDocument(
 function checkpoint(control: OdtExportControl, stage: OdtExportProgressStage): void {
   if (control.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
   control.onProgress?.(stage);
+}
+
+/** Writer-owned stream policy feeds the shared native manifest sequence exporter. @param fonts - Embedded font entry paths. @returns XML. */
+function createWriterManifestXml(fonts: readonly string[]): string {
+  const entries: readonly (readonly [string, string])[] = [
+    ["/", ODT_MIMETYPE],
+    ["content.xml", "text/xml"],
+    ["styles.xml", "text/xml"],
+    ["meta.xml", "text/xml"],
+    ...fonts.map(
+      /** Writer font media type. @param path - Path. @returns Entry. */ (path) =>
+        [path, "application/x-font-ttf"] as const,
+    ),
+  ];
+  const manifest = entries.map(
+    /** Creates actual package properties. @param entry - Path and media type. @returns Native sequence. */ ([
+      path,
+      media,
+    ]) => {
+      const sequence = [property("FullPath", path), property("MediaType", media)];
+      if (path === "/") sequence.push(property("Version", "1.3"));
+      return sequence;
+    },
+  );
+  return createManifestXml(manifest);
+}
+/** Builds an actual string-valued PropertyValue without a parallel package DTO model. @param name - Property name. @param value - Native value content. @returns Property. */
+function property(name: string, value: string): PropertyValue {
+  const result = new PropertyValue(),
+    key = new OUString(
+      Uint16Array.from(
+        name,
+        /** ASCII name unit. @param c - Character. @returns Unit. */ (c) => c.charCodeAt(0),
+      ),
+      name.length,
+    ),
+    data = new OUString(
+      Uint16Array.from(
+        value.split(""),
+        /** UTF16 content unit. @param c - Unit. @returns Code. */ (c) => c.charCodeAt(0),
+      ),
+      value.length,
+    );
+  try {
+    result.Name = key;
+    result.Value.insert([data.pData], "OUString");
+    return result;
+  } finally {
+    key.dispose();
+    data.dispose();
+  }
 }

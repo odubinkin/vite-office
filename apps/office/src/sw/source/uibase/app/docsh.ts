@@ -18,7 +18,7 @@ import {
   type SfxMediumOperation,
 } from "../../../../sfx2/source/doc/docfile";
 import { type SfxUndoAction, type SfxUndoSavePosition } from "../../../../svl/source/undo/undo";
-import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport";
+import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";

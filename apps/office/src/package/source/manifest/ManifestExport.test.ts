@@ -2,11 +2,14 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createOdtManifestXml, ODT_MIMETYPE, validateOdtManifestXml } from "./ManifestExport";
+import { validateOdtManifestXml } from "./ManifestExport";
+import { createManifestXml } from "./ManifestWriter";
+import { sequence } from "../../../test/fixtures/manifest";
+import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../comphelper/inc/documentconstants";
 
 describe("ODF manifest" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
   it("exports and accepts the mandatory Writer streams" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const xml = createOdtManifestXml();
+    const xml = createManifestXml(sequence());
     expect(xml).toContain(`manifest:media-type="${ODT_MIMETYPE}"`);
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
@@ -15,7 +18,7 @@ describe("ODF manifest" /** Executes the enclosing deterministic test or transfo
   });
 
   it("rejects declarations, malformed roots, invalid entries, and missing streams" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const valid = createOdtManifestXml();
+    const valid = createManifestXml(sequence());
     for (const xml of [
       `<!DOCTYPE manifest>${valid}`,
       "<broken",
@@ -26,7 +29,7 @@ describe("ODF manifest" /** Executes the enclosing deterministic test or transfo
       valid.replace("content.xml", "styles.xml"),
       valid.replace(ODT_MIMETYPE, "application/invalid"),
       valid.replace(
-        '<manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>',
+        '<manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"> </manifest:file-entry>',
         "",
       ),
     ])

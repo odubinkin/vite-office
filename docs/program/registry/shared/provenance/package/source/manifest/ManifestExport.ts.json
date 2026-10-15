@@ -6,8 +6,8 @@
     "evidence": {
       "local": [
         {
-          "marker": "ODT_MIMETYPE",
-          "path": "apps/office/src/package/source/manifest/ManifestExport.ts"
+          "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+          "marker": "ManifestExport"
         }
       ],
       "upstream": [
@@ -19,15 +19,15 @@
     },
     "localPath": "apps/office/src/package/source/manifest/ManifestExport.ts",
     "localSymbols": [
-      "ODT_MIMETYPE",
-      "createOdtManifestXml",
+      "ManifestExport",
       "validateOdtManifestXml"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside ManifestExport::ManifestExport, Base64::encode, OUString::number, uno::RuntimeException and the bounded ODT_MIMETYPE, createOdtManifestXml, validateOdtManifestXml contract remain intentionally omitted."
     ],
     "preservedResponsibilities": [
-      "Reimplements the bounded ODF package manifest exporter from pinned LibreOffice `package/source/manifest/ManifestExport.cxx`."
+      "Reimplements the bounded ODF package manifest exporter from pinned LibreOffice `package/source/manifest/ManifestExport.cxx`.",
+      "Task177 implements actual plain OASIS ManifestExport over reused PropertyValue/Any/OUString and native comphelper AttributeList plus erased SAX method contracts. Preserve root scan early completion,16OASIS MIME choices,lexical version thresholds,source property/attribute/event order,nonempty entry versions,int64 Size,failed Any extraction destinations,duplicates and retained list values. Worker-safe browser SAX composition serializes exact attribute character values without DOM or a fabricated native Writer service. Writer supplies its own stream/font policy to the same exporter;the removed Writer-only shared export helper has no compatibility alias. Existing Writer import validation stays explicitly bounded pending native ManifestImport;full generic import,encrypted/legacy export,UNO ABI/services and complete ODS document/model/UI remain pending. Immutable native MIME literal contents use JS strings at browser/package boundaries;GC owns physical AttributeList objects and existing OUString/Any value semantics are reused without a new lifetime framework. Extracted actual ODS fixture manifest metadata is checked separately from its ZIP64 package and is not a document round trip or claimed native QA suite port. Whole-class/module parity stays unverified."
     ],
     "status": "mapped",
     "upstreamPath": "package/source/manifest/ManifestExport.cxx",

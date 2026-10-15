@@ -1,0 +1,8 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": "package/qa/cppunit/data/tdf163341.ods",
+  "sourceSha256": "576284324ca7c41f9b2047121ca578cbb704696e3519dd2cf6d360b88e66901d",
+  "manifestSha256": "90678b7b06b089a2845a107b1bc1e6c585cc66ff2fdd45ca21954a8d34aaa406",
+  "manifestXml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.2\"><manifest:file-entry manifest:full-path=\"/\" manifest:version=\"1.2\" manifest:media-type=\"application/vnd.oasis.opendocument.spreadsheet\"/><manifest:file-entry manifest:full-path=\"styles.xml\" manifest:media-type=\"text/xml\"/><manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/></manifest:manifest>",
+  "claim": "Manifest entry metadata only;native ZIP64 package QA is context,not a claimed native package QA port or ODS document round trip."
+}

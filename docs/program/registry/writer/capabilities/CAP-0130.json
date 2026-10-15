@@ -113,7 +113,7 @@
         },
         {
           "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
-          "marker": "createOdtManifestXml"
+          "marker": "ManifestExport"
         },
         {
           "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
