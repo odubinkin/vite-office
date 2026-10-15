@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610152200-ACZW08",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T22:23:57.940Z",
+  "verdict": "pass",
+  "summary": "Same-agent review,not independent: native user-default metadata and original/effective separation reuse one canonical entry operation; secondary clones use master and Put preserves native defaults. Bounded verification passes.",
+  "evaluated_sha": "9d10bb2a0f5d0a3630a1a357cedad14268cda67f",
+  "blueprint_digest": "7f47ab250735f711573e022ba93f6c51511395de67fb3f1a24035741a39e8e5c",
+  "findings": [
+    "Reviewed eight pinned native source blobs and current implementation; existing binder tokens differ only in master operands,Put only changes its clone call,and ordinary holder delegates without changing borrowed arguments. Existing other method bodies retain emitted tokens."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610152200-ACZW08/README.md",
+    "output/playwright/task175-checks/final-verification.json",
+    "output/playwright/task175-checks/native-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Sc document/style consumers,connected UI and same-model ODS remain unimplemented; broad parity is not claimed. No native lifetime/cache/allocator outcomes or first-create failure cleanup are simulated."
+  ]
+}
