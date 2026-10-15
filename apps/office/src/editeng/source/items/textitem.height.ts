@@ -94,14 +94,14 @@ export class SvxFontHeightItem extends SfxPoolItem {
     return seed[0];
   }
   /** Original BigInt::Scale delegates to llround(height*scale); JS math preserves defined finite signed64 cases and unsigned32 assignment. @param scale - Native double factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     const scaled = this.nHeight * scale;
     this.nHeight = Number(
       BigInt.asUintN(32, BigInt(scaled < 0 ? -Math.round(-scaled) : Math.round(scaled))),
     );
   }
   /** Original metric support. @returns True. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
   /** Browser complete-state projection retained from126. @returns Logical state. */

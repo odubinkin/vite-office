@@ -297,14 +297,14 @@ export class SvxBoxItem extends SfxPoolItem {
     );
   }
   /** Scales native distances and line metrics. @param scale - Scale factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     for (const edge of [0, 1, 2, 3]) {
       this.lines[edge]?.ScaleMetrics(scale);
       this.SetDistance(roundBorderMetric(this.GetDistance(edge, true), scale), edge);
     }
   }
   /** Reports native metric support. @returns True. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
   /** Original native line-to-struct conversion with signed16 component assignment. @param line - Optional native border. @param convert - Convert to mm100. @returns Actual published struct. */
@@ -590,12 +590,12 @@ export class SvxBoxInfoItem extends SfxPoolItem {
     );
   }
   /** Scales represented native metrics. @param scale - Scale factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     for (const line of this.lines) line?.ScaleMetrics(scale);
     this.SetDefDist(roundBorderMetric(this.defaultDistance, scale));
   }
   /** Reports native metric support. @returns True. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
   /** Reads the native five-field sequence or represented member. @param member - Member plus optional CONVERT_TWIPS. @returns UNO payload. */

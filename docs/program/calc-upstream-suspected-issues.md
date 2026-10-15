@@ -2121,3 +2121,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: enabling automatic mode uses the current offset sign (zero becomes positive) without changing proportional height. Disabling automatic mode changes±14000to±13999 by one unit, preserving height and sign. It does not restore the ordinary33/-8 offset or the mode-setter height58. Non-marker offsets remain unchanged.
 - Status: surprising distinction between mode setter and automatic property transition, not a confirmed upstream defect. Preserve source behavior and shared Any2Bool failure fallback; do not substitute font metrics, ordinary script percentages or off0/100 values.
 - Local evidence: `apps/office/src/editeng/source/items/native-escapement.test.ts`, automatic/manual transition witness with literal source values; no native compiler or memory probe.
+
+## CALC-129: kerning unit query narrows converted distance back to signed16
+
+- Upstream: pinned `editeng/source/items/textitem.cxx`, SvxKerningItem::QueryValue; original common integral twip-to-mm100 conversion.
+- Observation: the stored signed16 twip value is converted to mm100, then explicitly cast back to signed16 before Any insertion. A valid stored32767twips becomes57797mm100 before narrowing, yielding queried-7739; stored-32768twips yields queried7737. Query does not mutate storage, clamp/saturate or widen to a32bit Any. Practical formatting ranges may avoid the boundary.
+- Status: surprising source transport overflow, not a confirmed upstream defect. Preserve integral rounding, explicit short narrowing and original16bit transport; do not fix the source by saturating or widening the property.
+- Local evidence: `apps/office/src/editeng/source/items/native-text-spacing.test.ts`, literal original boundary/half-rounding queries; no native compiler or memory probe.

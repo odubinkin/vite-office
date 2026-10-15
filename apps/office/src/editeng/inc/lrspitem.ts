@@ -452,13 +452,13 @@ export class SvxLRSpaceItem extends SfxPoolItem {
     return true;
   }
   /** Scales original measures without rescaling proportions, context or gutters. @param scale - Factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     this.m_stFirstLineOffset.ScaleMetrics(scale);
     this.m_stLeftMargin.ScaleMetrics(scale);
     this.m_stRightMargin.ScaleMetrics(scale);
   }
   /** Reports native metric support. @returns Always true. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
 }
@@ -615,11 +615,11 @@ export class SvxTextLeftMarginItem extends SfxPoolItem {
     return false;
   }
   /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     this.m_stTextLeftMargin.ScaleMetrics(scale);
   }
   /** Reports original metric support. @returns True. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
 }
@@ -760,11 +760,11 @@ export class SvxRightMarginItem extends SfxPoolItem {
     return false;
   }
   /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     this.m_stRightMargin.ScaleMetrics(scale);
   }
   /** Reports original metric support. @returns True. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
 }
@@ -906,11 +906,11 @@ export class SvxFirstLineIndentItem extends SfxPoolItem {
     return false;
   }
   /** Scales the native stored measure without changing units or percentage. @param scale - Factor. @returns Nothing. */
-  public ScaleMetrics(scale: number): void {
+  public override ScaleMetrics(scale: number): void {
     this.m_stFirstLineOffset.ScaleMetrics(scale);
   }
   /** Reports original metric support. @returns True. */
-  public HasMetrics(): boolean {
+  public override HasMetrics(): boolean {
     return true;
   }
 }

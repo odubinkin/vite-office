@@ -138,12 +138,12 @@ export class SvxShadowItem extends SfxPoolItem {
     }
   }
   /** Original BigInt::Scale llround then unsigned16 assignment on defined finite numeric inputs. @param scale - Factor. @returns Nothing. */
-  ScaleMetrics(scale: number): void {
+  override ScaleMetrics(scale: number): void {
     const value = this.nWidth * scale;
     this.nWidth = (value < 0 ? -Math.round(-value) : Math.round(value)) & 0xffff;
   }
   /** Original metric support. @returns True. */
-  HasMetrics(): boolean {
+  override HasMetrics(): boolean {
     return true;
   }
   /** Original Any query; absent output retains the existing failed base browser projection. @param output - Native output. @param member - Unsigned8 member and convert flag. @returns Success or absent base projection. */

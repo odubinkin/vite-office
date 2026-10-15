@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/charscaleitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-spacing-width-values",
+    "capabilityIds": [
+      "CAP-3969abca-9097-42ef-8810-4101b7569343"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/inc/charscaleitem.ts",
+        "apps/office/src/editeng/source/items/native-text-spacing.test.ts",
+        "docs/program/calc-core.md#Native text spacing and width values for EditEngine defaults (task152)"
+      ],
+      "justification": "Task152 implements actual SvxAutoKernItem/SvxKerningItem/SvxCharScaleWidthItem native value/copy/factory/concrete Clone families on existing shared bool/signed16/unsigned16 owners. Actual EditEngine defaults are false4053,0twips4054 and100percent4045 from original eerdll/eeitem/solar; no dummy pool is introduced. Automatic pair kerning reuses real bool Any; manual spacing reuses signed16 state and typed short Any with integral common twip/mm100 helpers and original final signed16 narrowing. Only the twips flag matters; other selector bits are ignored. Width keeps unsigned16 state with signed16 Any transport and no invented percent bound: short-1 stores65535. Existing inherited scalar queries and checked host scalar constructor/setter domains remain explicit. Kerning ScaleMetrics uses the same sign-corrected JS Math.round and native BigInt narrowing pattern already used for font height, representing only the defined finite signed64 llround domain. Native BigInt::Scale(double) is just std::llround; no native BigInt class/library/lifetime facade is ported. Original poolitem no-op ScaleMetrics and false HasMetrics are restored, kerning overrides to true;5existing metric owners gain18override declarations with identical emitted JS, not new executable behavior. Existing451line textitem owner cannot fit this complete family under500lines; canonical3headers reexport the necessary source responsibility split. Original derived localized GetPresentation remains unported; inherited generic base presentation is not certified as derived UI presentation. UI localization is deferred, actual EditEngine/EditTextObject/ScPageHFItem/Calc pool/model/connected UI/same-model ODS pending. Original conversion narrowing and signed width transport preserved, statuses and I/O/recovery deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/editeng/charscaleitem.hxx",
+      "upstreamSymbols": [
+        "SvxCharScaleWidthItem",
+        "PutValue"
+      ]
+    }
+  }
+}

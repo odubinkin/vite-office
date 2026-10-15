@@ -98,6 +98,15 @@ export abstract class SfxPoolItem {
   /** Compares the concrete payload under the subclass contract; areSame additionally checks WhichId and exact type. @param other - Candidate item. @returns True for equal items. */
   public abstract equals(other: SfxPoolItem): boolean;
 
+  /** Original no-op metric scaling for non-metric items. @param scale - Unused factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    void scale;
+  }
+  /** Original default for items without dimensional metrics. @returns False. */
+  public HasMetrics(): boolean {
+    return false;
+  }
+
   /** Original unsupported query default, represented by the existing browser no-payload boundary. Concrete item overrides retain their values. @returns No value. */
   public QueryValue(): unknown {
     return undefined;

@@ -45,11 +45,11 @@ export class SvxLineItem extends SfxPoolItem {
     );
   }
   /** Original delegation changes border scale only when present. @param scale - New metric scale. @returns Nothing. */
-  ScaleMetrics(scale: number): void {
+  override ScaleMetrics(scale: number): void {
     if (this.pLine !== null) this.pLine.ScaleMetrics(scale);
   }
   /** Original metric support. @returns True. */
-  HasMetrics(): boolean {
+  override HasMetrics(): boolean {
     return true;
   }
   /** Original query, including absent-line success with unchanged output for any nonzero member. Missing output retains the base unsupported browser projection. @param output - Actual Any. @param member - Unsigned8 member/convert flag. @returns Native result or absent base projection. */
