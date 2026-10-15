@@ -1,10 +1,11 @@
 ---
 id: "202610151219-AM5NR2"
 title: "Implement native case script hint and optical sizing attributes"
-status: "DOING"
+result_summary: "Implemented3native shared document format attributes and actual enum/IDL declarations; source-backed header dependency retains reverse/browser isolation, CALC130 recorded, localized UI/services deferred."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Original constructors/copies/Clone/defaults, case5mapping/unknown fallback and write rejection, fixed unsigned16 hint transport/arbitrary-value admission and inherited optical bool behavior verified through real enum/Any owners. No absent native factories, scanner/ICU/type-provider or localized-label facade invented."
     - "23related,187Calc,40boundary tests pass; whole6new/changed executable shared and33Calc owners raw100. All13source gates/build/inventory pass;13existing dependency/cycle function bodies identical, reverse/browser guards tested."
     - "33intentional paths/3952source hashes/14native pins/4restored links audited; necessary451line source responsibility split documented. CALC130 preserves arbitrary hint admission and records source-only label-table mismatch. Actual engine/pool/model/UI/ODS pending."
-commit: null
+commit:
+  hash: "96ef34733821e0dfeacd638d91c707d359e1ecaf"
+  message: "Implement AM5NR2 core: native case script and optical attributes"
 comments:
   -
     author: "CODER"
     body: "Start: native case/script/optical format value attributes and actual declaration boundaries; source-backed library edge only, no localized labels, scanner/ICU or fake type provider."
+  -
+    author: "CODER"
+    body: "Verified: native case/script/optical values and actual declaration/default contracts;23related,187Calc,40boundary tests pass, raw100, all source/build/inventory gates and exact native/dependency audits."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified23related,187Calc,40boundary tests;6whole changed/new shared and33Calc owners raw100, all13gates/build/inventory pass.33paths/3952hashes/14pins/4links audited,13dependency/cycle bodies unchanged. Native values/declarations only, localization/services pending; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T12:29:26.855Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native case/script/optical values and actual declaration/default contracts;23related,187Calc,40boundary tests pass, raw100, all source/build/inventory gates and exact native/dependency audits."
 doc_version: 3
-doc_updated_at: "2026-10-15T12:29:24.176Z"
+doc_updated_at: "2026-10-15T12:29:26.857Z"
 doc_updated_by: "CODER"
 description: "Task153 ports3actual shared EditEngine value attributes on existing enum/bool/Any owners, exact native/IDL declarations and original defaults. Admit original Editeng-to-I18nutil header dependency with reverse/browser guards. No case conversion engine, script scanner, ICU or UI localization facade."
 sections:
