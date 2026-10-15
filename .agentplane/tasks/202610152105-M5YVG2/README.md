@@ -1,10 +1,11 @@
 ---
 id: "202610152105-M5YVG2"
 title: "Restore native pool-chain ranges and pool-only item-set construction"
-status: "DOING"
+result_summary: "Restored shared native pool links,merged metadata ranges,default/slot chain routing and pool-only SfxItemSet construction without native memory machinery; full styles/pools/document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Native master/secondary reassignment,metadata range merge/cache,chain default/slot resolution and pool-only SfxItemSet constructor reuse existing shared items and JS range values. CALC151 original cache retention is preserved; no new memory/lifetime machinery or invented native metadata from browser snapshots."
     - "199related,187Calc,13source gates,production build,1shared Chromium and1Writer startup/load/edit pass; exact2changed shared and33Calc raw S/B/F/L counter sets100. Seven native blobs and15675valid sorted pair observations with mathematical predicate proof are recorded."
     - "Canonical erased range declarations move to whichranges header,old public reexports remain; runtime inventory ownership is corrected without validator bypass. Broad parity flags remain false; full named/copy/shutdown/user-default pool contracts,styles/document/UI/ODS remain pending."
-commit: null
+commit:
+  hash: "9b4f65de36ca88c1bdcba901e56b721d8da9d438"
+  message: "✅ M5YVG2 task: record pool-chain verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: restore approved native shared pool-chain/range constructor dependency and portable strict coverage, preserving source cache semantics."
+  -
+    author: "CODER"
+    body: "Verified: actual pool-chain/range constructor dependency passes199related/187Calc cases,strict shared/Calc100,13gates,production build and shared plus Writer Chromium; inventory and CALC151 recorded."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded changed/inventory reruns, build-browser-portable.mjs plus --writer-only, final-audit.mjs under output/playwright/task172-checks. Result: pass. Evidence:199related/19files,187Calc/76files; exact2changed shared raw S342/B263/F71/L277 and33Calc S4179/B2731/F821/L3727 every raw counter positive100;13source gates,production build,1shared Chromium and1targeted Writer startup/load/edit. Seven pinned original blobs and15675sorted-pair observations with native predicate proof;4reference links absent during runtime/restored finally. Scope: native pool links/metadata ranges,chain default/slot resolution,pool-only item sets,CALC151 preservation,truthful inventory. Full named/copy/shutdown/user-default pools,styles/document/UI/ODS and all-app milestone remain pending; no native memory/probe machinery."
+  -
+    type: "status"
+    at: "2026-10-15T21:15:45.738Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual pool-chain/range constructor dependency passes199related/187Calc cases,strict shared/Calc100,13gates,production build and shared plus Writer Chromium; inventory and CALC151 recorded."
 doc_version: 3
-doc_updated_at: "2026-10-15T21:15:31.772Z"
+doc_updated_at: "2026-10-15T21:15:45.739Z"
 doc_updated_by: "CODER"
 description: "Task172: implement real SfxItemPool master/secondary links, merged ranges and chain resolution plus native pool-only SfxItemSet constructor, reusing JS range values and existing item metadata. Required for native style base GetItemSet; no memory/refcount library or fabricated Calc pool."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Observation: Inventory still attributes WhichRange/WhichRangesContainer definitions to itemset.ts after their deliberate move into canonical whichranges.ts; itemset now reexports them.
       Impact: Inventory gate failed; source/typecheck/provenance and related100coverage passed.
       Resolution: Remove those erased declarations from the old runtime localSymbols owner and retain their public reexport provenance plus new whichranges declaration record; no validator exception or fabricated missing-symbol entry.
+extensions:
+  implementation_commit:
+    hash: "122e497b9d85c4c14c0492d76c14c08529b8b00b"
+    message: "🔧 M5YVG2 core: restore native pool-chain item-set ranges"
 id_source: "generated"
 ---
 ## Summary
