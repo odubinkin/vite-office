@@ -1,10 +1,11 @@
 ---
 id: "202610150635-PCJKV5"
 title: "Implement native edit-engine text positions and selections"
-status: "DOING"
+result_summary: "Implemented original EditEngine positions and selections with native defaults, ordering, normalization, collapse and independent value copies; localization deferred and genuine text engine/document integration pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Exact native zero/max markers, constructors/copies, paragraph/index order and strict adjusted interval order, stable borrowed value fields, normalization/collapse and diagnostic text verified from original headers. Native debug-only assertion is documented precondition, no invented release exception."
     - "6direct and186Calc tests plus39boundary tests pass; both whole new shared owners and33Calc owners raw100. All13source gates, build and inventory pass; initial metadata and erased test-type errors corrected, retained in Findings."
     - "9intentional paths/3905source hashes/3native pins/4restored links verified; no Writer-specific selection duplication, localization, ownership manager or fake document/text engine. Actual rich-text/pool/model/connected UI/ODS pending."
-commit: null
+commit:
+  hash: "6beb153d53645b900c0e0ae7f4e508ad2f1fd52d"
+  message: "Implement PCJKV5 core: edit-engine text positions and selections"
 comments:
   -
     author: "CODER"
     body: "Start: shared original edit-engine position and selection values, copied struct fields and native interval order; no document facade, localization or lifetime machinery."
+  -
+    author: "CODER"
+    body: "Verified: native EPaM/ESelection shared positions/ranges and value copies;6direct,186Calc,39boundary tests pass, raw100 new shared/Calc owners, all gates/build/inventory and exact source audit."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified6direct,186Calc,39boundary tests;2whole new shared and33Calc executable owners raw100, all13source gates/build/inventory pass.9paths/3905hashes/3pins/4links audited. Native position/selection value semantics retained, UI/ODS integration pending; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T06:42:31.366Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native EPaM/ESelection shared positions/ranges and value copies;6direct,186Calc,39boundary tests pass, raw100 new shared/Calc owners, all gates/build/inventory and exact source audit."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:42:28.679Z"
+doc_updated_at: "2026-10-15T06:42:31.368Z"
 doc_updated_by: "CODER"
 description: "Task149 implements complete shared EPaM/ESelection value contracts from original public headers for Calc text editing and future genuine EditTextObject use. Original defaults/sentinels/order/adjust/collapse and value-copy semantics, no UI localization or fake document adapter."
 sections:
