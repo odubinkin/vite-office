@@ -4,7 +4,7 @@ title: "Restore native Writer client-list ownership before shared notifier corre
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T20:40:00.598Z"
+  updated_by: "CODER"
+  note: "PASS: node output/playwright/task169-checks/portable.mjs final270functional scenarios/47files and187Calc/76files. Exact33Calc raw S4179/B2731/F821/L3727 every counter positive100; only Writer executable coverage is exempt per user,no shared production owner changed. source-gates.mjs all13 incl43boundary tests pass. Production build and19Writer browser scenarios pass with4source references absent/restored. native-audit.mjs pins7blobs,checks actual SwModify/SwClient inheritance and no dropped fixture scenarios;9fresh source-derived cases. Current formatted source hashes and53file emitted-token proof verified. Final evidence output/playwright/task169-checks/final-verification.json. Full shared-Sfx/style/pool/document/UI/ODS readiness and independent review are not claimed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T20:40:02.174Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review: native Writer client ownership and mutation-aware exact iteration are restored,removing incorrect Sfx inheritance before Calc shared notifier correction."
+  evaluated_sha: "97a7eca9b55ee93d5d748151ebf886a20e6e31e1"
+  blueprint_digest: "d01bd345e4c5b8efa5b23df94941fd5e24414b49ae978e6ce23056b4fd93b5a2"
+  evidence_refs:
+    - ".agentplane/tasks/202610152014-A70XRF/README.md"
+    - ".agentplane/tasks/202610152014-A70XRF/quality/20261015-204002174-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152014-A70XRF/quality/20261015-204002174-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152014-A70XRF/quality/20261015-204002174-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152014-A70XRF/blueprint/resolved-snapshot.json"
+    - "output/playwright/task169-checks/final-verification.json"
+    - "output/playwright/task169-checks/native-audit.json"
+    - "output/playwright/task169-checks/gate-inventory-final.log"
+  findings:
+    - "Reviewed SwModify extends SwClient,WriterListener links,anchor-right Add,Remove cursor repair,death reparenting and migrated native iteration consumers. Existing browser callback/batch boundaries are explicit;native hint filtering and absent-registration detach are corrected without removed Sfx API aliases."
+    - "270related,187Calc,19Writer browser scenarios,production build and13gates pass. Exact33Calc raw100;Writer coverage gaps exempt. Seven native blobs and source hashes verified;native attribute QA is context only,not a claimed complete port."
 commit: null
 comments:
   -
@@ -35,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore real Writer client-list ownership and iteration so shared Sfx notification can be corrected for Calc without a Writer compatibility shim."
+  -
+    type: "verify"
+    at: "2026-10-15T20:40:00.598Z"
+    author: "CODER"
+    state: "ok"
+    note: "PASS: node output/playwright/task169-checks/portable.mjs final270functional scenarios/47files and187Calc/76files. Exact33Calc raw S4179/B2731/F821/L3727 every counter positive100; only Writer executable coverage is exempt per user,no shared production owner changed. source-gates.mjs all13 incl43boundary tests pass. Production build and19Writer browser scenarios pass with4source references absent/restored. native-audit.mjs pins7blobs,checks actual SwModify/SwClient inheritance and no dropped fixture scenarios;9fresh source-derived cases. Current formatted source hashes and53file emitted-token proof verified. Final evidence output/playwright/task169-checks/final-verification.json. Full shared-Sfx/style/pool/document/UI/ODS readiness and independent review are not claimed."
 doc_version: 3
-doc_updated_at: "2026-10-15T20:38:47.692Z"
+doc_updated_at: "2026-10-15T20:40:00.662Z"
 doc_updated_by: "CODER"
 description: "Task169: remove incorrect SfxBroadcaster/SfxListener inheritance from SwModify/SwClient, restore original WriterListener links/Add/Remove/iteration repair and migrate required consumers. This unblocks canonical shared notifier reuse by Calc without preserving wrong shared contracts for Writer."
 sections:
@@ -44,7 +69,41 @@ sections:
   Scope: "sw/inc/calbck.ts and calbck.iterator.ts, actual Writer-list regression tests, all direct removed-Sfx-API consumers and tests discovered by exact TypeScript diagnostics (including Writer browser/editor and history fixtures), small test-only protected notification hook spy if needed; source-scoped shared/Writer runtime/provenance/capability records and Calc readiness/suspected-issues docs. Read-only discovery found more fixture call sites than the initial40path estimate: allowance now up to65non-task paths for this same necessary canonical correction, under the user's explicit standing authorization to fix shared contracts and required Writer consumers. No new product scope, save/recovery change, memory/refcount/weak library or native compiler/probe. Existing browser callback/transaction boundaries remain explicit local adapters; no removed Sfx lifecycle compatibility aliases. Actual shared SfxBroadcaster/SfxListener correction follows detachment."
   Plan: "1. Restore native WriterListener left/right fields, SwClient single registration and SwModify extends SwClient. Port source Add insertion immediately right of anchor, Remove updates and active iterator repair, head/first semantics and source death reparenting. Use JS references for relationships; per-owner active iterator tracking erases native intrusive iterator ring, not its observable repair behavior. 2. Implement native exact SwIterator/WriterListenerIterator responsibilities and JS iterable binding for safe source iteration scope cleanup; no fake generic Sfx forwarding/duplicate rules remain in Writer. Full WriterMultiListener/UnwrapMulti is outside represented scope and not fabricated. 3. Migrate direct old broadcaster-shaped calls to genuine Writer iteration/registration hooks; retain existing explicitly bounded browser transactions/callbacks, not old Sfx lifecycle aliases. 4. Add source-derived list/order/removal/nested iterator/registration/death tests; adjust old expectations only with native evidence. Run related Writer functional tests and shared regressions,allCalc strict raw100,13source gates and related19Writer browser acceptance. Writer-only coverage gaps exempt by user. 5. Record truthful architecture boundaries,source pins,exact checks and source commit/evaluator. Persist safe implementation checkpoints if dependency work spans turns; task remainsDOING until required verification complete."
   Verify Steps: "Audit pinned sw/inc/calbck.hxx and sw/source/core/attr/calbck.cxx plus original consumers GetFrameOfModify/table owner iterations. Verify SwModify actual inheritance, Add/Remove order, anchor changes, live iterator current/position repair and nested scopes; no SfxBroadcaster/SfxListener imports/aliases remain in calbck. Tests cover held client identity, single registration,self/reparent/death,callback order and actual native lookup/claim-frame consumers. Run selected affected Writer/shared Vitest (Writer coverage gaps exempt),npm run test:coverage:calc exact33 raw positive S/B/F/L100 with4source links absent/restored. Run13source gates plus build/19relatedWriter browser scenarios. Record unsupported multi-listener and remaining actual shared notifier/Calc styles/pools/UI/ODS explicitly; no full-suite milestone or goal pause. Source commit plus same-agent evaluator review and clean intentional state beforefinish."
-  Verification: "Pending implementation and related functional acceptance. Shared SfxBroadcaster correction is a subsequent dependency stage, not a completed claim."
+  Verification: |-
+    Pending implementation and related functional acceptance. Shared SfxBroadcaster correction is a subsequent dependency stage, not a completed claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T20:40:00.598Z — VERIFY — ok
+
+    By: CODER
+
+    Note: PASS: node output/playwright/task169-checks/portable.mjs final270functional scenarios/47files and187Calc/76files. Exact33Calc raw S4179/B2731/F821/L3727 every counter positive100; only Writer executable coverage is exempt per user,no shared production owner changed. source-gates.mjs all13 incl43boundary tests pass. Production build and19Writer browser scenarios pass with4source references absent/restored. native-audit.mjs pins7blobs,checks actual SwModify/SwClient inheritance and no dropped fixture scenarios;9fresh source-derived cases. Current formatted source hashes and53file emitted-token proof verified. Final evidence output/playwright/task169-checks/final-verification.json. Full shared-Sfx/style/pool/document/UI/ODS readiness and independent review are not claimed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T20:38:47.692Z, excerpt_hash=sha256:2add7e3d260b2c729aa38e9dd61a502c34d145a6a2e01c90df8e2eb79088fd8a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610152014-A70XRF/blueprint/resolved-snapshot.json
+    - old_digest: d01bd345e4c5b8efa5b23df94941fd5e24414b49ae978e6ce23056b4fd93b5a2
+    - current_digest: d01bd345e4c5b8efa5b23df94941fd5e24414b49ae978e6ce23056b4fd93b5a2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610152014-A70XRF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610152014-A70XRF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task169 intentional Writer-list/consumer/test/metadata changes through follow-up task; no git reset/merge or changes to unrelated goals/tasks. Preserve task168 style index and string pool."
   Findings: |-
     - Observation: Initial typecheck after restoring Writer inheritance fails at the expected old ForAllListeners consumers and DocumentStateManager.Dispose override. No fallback aliases were added to the new Writer ownership.
@@ -83,6 +142,39 @@ Audit pinned sw/inc/calbck.hxx and sw/source/core/attr/calbck.cxx plus original 
 ## Verification
 
 Pending implementation and related functional acceptance. Shared SfxBroadcaster correction is a subsequent dependency stage, not a completed claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T20:40:00.598Z — VERIFY — ok
+
+By: CODER
+
+Note: PASS: node output/playwright/task169-checks/portable.mjs final270functional scenarios/47files and187Calc/76files. Exact33Calc raw S4179/B2731/F821/L3727 every counter positive100; only Writer executable coverage is exempt per user,no shared production owner changed. source-gates.mjs all13 incl43boundary tests pass. Production build and19Writer browser scenarios pass with4source references absent/restored. native-audit.mjs pins7blobs,checks actual SwModify/SwClient inheritance and no dropped fixture scenarios;9fresh source-derived cases. Current formatted source hashes and53file emitted-token proof verified. Final evidence output/playwright/task169-checks/final-verification.json. Full shared-Sfx/style/pool/document/UI/ODS readiness and independent review are not claimed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T20:38:47.692Z, excerpt_hash=sha256:2add7e3d260b2c729aa38e9dd61a502c34d145a6a2e01c90df8e2eb79088fd8a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610152014-A70XRF/blueprint/resolved-snapshot.json
+- old_digest: d01bd345e4c5b8efa5b23df94941fd5e24414b49ae978e6ce23056b4fd93b5a2
+- current_digest: d01bd345e4c5b8efa5b23df94941fd5e24414b49ae978e6ce23056b4fd93b5a2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610152014-A70XRF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610152014-A70XRF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
