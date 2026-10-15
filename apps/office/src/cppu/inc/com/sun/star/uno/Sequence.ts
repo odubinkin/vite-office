@@ -77,6 +77,10 @@ export abstract class Sequence<E = unknown> {
       }
     }
   }
+  /** Erases the original C++ address-of a Sequence value used by Any assignment. Returns its existing sole field cell, with no allocation, copy, acquire or new lifetime owner; it is not a document byte representation. @returns Original initialized object address. */
+  getAddress(): [uno_Sequence | null] {
+    return this.pointer;
+  }
   /** Original repeated favourUnsigned lookup of this compile-time Sequence<E>; real member-static type cells remain in Sequence-type. @returns Borrowed original type reference. */
   private type(): R {
     return getSequenceTypeFavourUnsigned(

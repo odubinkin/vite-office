@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e4baba87-a194-41f6-ae4e-6547add9bbb7",
+    "capabilityId": "CAP-e4baba87-a194-41f6-ae4e-6547add9bbb7",
+    "suite": "shared",
+    "subsystem": "canonical-tab-stops",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original TabStop and TabAlign declarations use real shared typed transport.",
+      "Initialized Sequence object address binding shares the original pointer cell without a new lifetime engine."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task156 is in progress. Actual TabStop long/enum/char/char and TabAlign five-value declarations plus generated enum sentinel now use existing shared CPPU static type/Any/Sequence owners. UTF16 chars are numeric units, generated default chars remain zero, native value copies and typed compound transport are independent. Sequence getAddress only erases the original C++ address-of an initialized Sequence object into its existing sole pointer cell; no new owner, allocation, counter algorithm or binary document representation is added. Full SvxTabStop/SvxTabStopItem, actual numeric-locale decimal resolution and Writer consumer migration remain pending within this same task. Read-only comparison found230same/55different decimal separators across285upstream locale resources versus current Intl, so unconditional Intl substitution is rejected. UI localization and ICU implementation are outside this work. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged; this partial type work does not certify pool/model/UI/ODS readiness."
+    },
+    "capability": "Canonical tab-stop boundary work",
+    "gaps": [
+      "In progress: full native tab item, required numeric-locale provider and Writer consumers remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/TabStop.ts",
+          "marker": "TabStop"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/TabAlign.ts",
+          "marker": "cppu_detail_getUnoType_TabAlign"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-tab-transport.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical tab-stop boundary work (task156)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/style/TabStop.idl",
+          "marker": "TabStop"
+        },
+        {
+          "path": "offapi/com/sun/star/style/TabAlign.idl",
+          "marker": "TabAlign"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_ParagraphProperties.java",
+          "marker": "ParaTabStops"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "canonical-tab-stop-boundary",
+    "scopeLimitations": [
+      "Task156 is in progress. Actual TabStop long/enum/char/char and TabAlign five-value declarations plus generated enum sentinel now use existing shared CPPU static type/Any/Sequence owners. UTF16 chars are numeric units, generated default chars remain zero, native value copies and typed compound transport are independent. Sequence getAddress only erases the original C++ address-of an initialized Sequence object into its existing sole pointer cell; no new owner, allocation, counter algorithm or binary document representation is added. Full SvxTabStop/SvxTabStopItem, actual numeric-locale decimal resolution and Writer consumer migration remain pending within this same task. Read-only comparison found230same/55different decimal separators across285upstream locale resources versus current Intl, so unconditional Intl substitution is rejected. UI localization and ICU implementation are outside this work. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged; this partial type work does not certify pool/model/UI/ODS readiness."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
