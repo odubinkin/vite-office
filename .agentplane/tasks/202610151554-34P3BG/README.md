@@ -1,10 +1,11 @@
 ---
 id: "202610151554-34P3BG"
 title: "Restore native paragraph adjustment values for EditEngine"
-status: "DOING"
+result_summary: "Native paragraph adjustment and Writer migration complete;120related/187Calc/19browser tests, strict100coverage and all source gates pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/task157-checks/build-browser-manifest.json"
   findings:
     - "Mapped native fields/defaults/copy/setters/equality/hash and all11Any members to16pinned native files. Checked4025exact tracked hashes/46intentional paths, full4shared/33Calc owner sets at raw100 with every counter positive,120related/187Calc/19browser tests, production build and all13source gates. Two source-proven graph edges preserve all28original function bodies and reverse application guards. Core JSON facade is removed; existing Writer I/O retains all reachable flags/numeric state. Review is same-agent, not independent."
-commit: null
+commit:
+  hash: "579c240f210e924c0e258b2e05e63b504f2ec14e"
+  message: "✅ 34P3BG verify: record paragraph adjustment acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: native paragraph adjustment state and actual typed properties with canonical Writer consumers; retain source defaults and GC, no pool facade or localization."
+  -
+    author: "CODER"
+    body: "Verified: original paragraph adjustment fields/defaults/copy/setters/equality/hash and11typed Any properties with canonical Writer consumers/JSON I/O pass120related/187Calc/19browser tests, whole4shared/33Calc raw100, all13source gates/build/inventory and16native source pins. All28boundary function bodies unchanged;46paths/4025exact source hashes checked and4references restored. No full model/UI/ODS or independent-review claim; goal stays active."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original complete paragraph adjustment values and all11typed properties plus Writer migration verified ata4ead78b8b44:120related/187Calc/19browser tests, raw100 on exact4shared/33Calc owners, all13source gates/build/inventory,16source pins,46paths/4025hashes and28unchanged boundary bodies. All4references restored. Same-agent quality pass; full engine/model/UI/ODS and full regression remain pending under the user readiness condition."
+  -
+    type: "status"
+    at: "2026-10-15T16:21:31.613Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original paragraph adjustment fields/defaults/copy/setters/equality/hash and11typed Any properties with canonical Writer consumers/JSON I/O pass120related/187Calc/19browser tests, whole4shared/33Calc raw100, all13source gates/build/inventory and16native source pins. All28boundary function bodies unchanged;46paths/4025exact source hashes checked and4references restored. No full model/UI/ODS or independent-review claim; goal stays active."
 doc_version: 3
-doc_updated_at: "2026-10-15T16:21:05.456Z"
+doc_updated_at: "2026-10-15T16:21:31.615Z"
 doc_updated_by: "CODER"
 description: "Task157 restores full SvxAdjustItem native fields/defaults/copy/setters/equality/hash/typed Any and migrates necessary Writer consumers/JSON I/O. Actual ScDocumentPool/ScPageHFItem audit confirms native EditTextObject and full EditEngine pool remain absent; canonical paragraph adjustment is an existing incomplete shared dependency of that real text model. No fake pool/text-object facade, UI localization, native compiler or new memory manager."
 sections:
@@ -144,6 +157,10 @@ sections:
     - Observation: Final120related/187Calc/19browser scenarios, build, all13source gates,16native pins and all28unchanged boundary function bodies pass. Exact4shared/33Calc owners have all raw counters positive; source audit46paths/4025hashes passes. Every reachable adjustment field survives Writer JSON roundtrip, including independent raw flags and numeric extrema. New native value owner remains under original source and header boundaries; no lifetime manager or localized UI resource added.
       Impact: Native paragraph adjustment dependency is complete in the approved bounded scope. Full EditEngine/text objects/Calc document/UI/ODS and additional Writer file-filter/layout families remain pending.
       Resolution: Same-agent quality review, intentional source/task commits and canonical finish. Continue actual text-object/pool/model dependencies; no full all-app run or goal pause is warranted before the user readiness condition.
+extensions:
+  implementation_commit:
+    hash: "a4ead78b8b44403f44e62c7809ce90c63f74603a"
+    message: "🚧 34P3BG core: restore native paragraph adjustment values"
 id_source: "generated"
 ---
 ## Summary
