@@ -1,10 +1,11 @@
 ---
 id: "202610151314-G0840M"
 title: "Canonicalize shared line spacing and Writer consumers"
-status: "DOING"
+result_summary: "Restored native shared line-spacing contracts and Writer defaults/filter/persistence/layout/dialog consumers; native quirks documented and preserved, actual engine/Calc model/UI/ODS work remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "252related,187Calc,40boundary and9existing Writer browser scenarios pass; whole7shared and33Calc owners every raw S/B/F/L counter positive100, Writer-only gaps exempt. All13source gates, portable build and inventory pass."
     - "Original defaults/rules/casts/copy/active equality/all-field hash/unknown-member normalization audited; CALC131132133 preserved, real CPPU reused under JS GC. Writer all-field persistence and ODF/filter/dialog ownership corrected."
     - "73intentional paths/3989source hashes/11native pins/4restored links audited. Translated presentation, canonical tab stops and actual engine/pool/Calc model/connected UI/ODS remain pending; full suite remains deferred to actual readiness then fixes/pause."
-commit: null
+commit:
+  hash: "13bb59d8fbac9f08b25880cb3eb1be912c59f7b3"
+  message: "Implement G0840M core: canonical shared line spacing and Writer consumers"
 comments:
   -
     author: "CODER"
     body: "Start: canonical shared five-field line spacing, real typed Any transport and all Writer model/filter/persistence/layout/dialog consumers; source-backed native quirks retained."
+  -
+    author: "CODER"
+    body: "Verified: canonical five-field spacing and all Writer consumers;252related,187Calc,40boundary,9browser tests pass, strict shared/Calc raw100, all13gates/build/inventory and native/hash audits complete."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified252related,187Calc,40boundary,9Writer browser tests;7whole changed shared and33Calc owners raw100. All13gates/build/inventory pass;73paths/3989hashes/11pins/4links audited. Native spacing state and every Writer consumer canonicalized; localized presentation and actual engine/model/UI/ODS remain pending. Same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T13:31:49.300Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical five-field spacing and all Writer consumers;252related,187Calc,40boundary,9browser tests pass, strict shared/Calc raw100, all13gates/build/inventory and native/hash audits complete."
 doc_version: 3
-doc_updated_at: "2026-10-15T13:31:26.851Z"
+doc_updated_at: "2026-10-15T13:31:49.302Z"
 doc_updated_by: "CODER"
 description: "Task155 restores the native five-field SvxLineSpacingItem and real LineSpacing UNO value, migrates Writer model/filter/persistence/layout/UI consumers, removes wrongly-owned font-independent paragraph state, and verifies scoped portable fidelity without localization or native probes."
 sections:
