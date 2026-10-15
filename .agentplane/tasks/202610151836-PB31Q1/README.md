@@ -4,7 +4,7 @@ title: "Port native shared font search names and token operations"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "PASS:58 related and187 Calc tests, exact2 shared/33 Calc owners raw100,13 gates/43 boundary tests;5 pinned blobs/all155 rows/10 direct QA cases audited. CALC143-145 preserved; refs restored. No full native container or UI/ODS parity promotion."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T18:45:41.281Z"
+  updated_by: "EVALUATOR"
+  note: "Shared font name normalization and independent list/script/symbol operations preserve pinned rules and dictionary evidence, with direct native QA and explicit ambiguity boundaries."
+  evaluated_sha: "f36ec9f87db29a04c9181a6a0c6d7b5d2c58b477"
+  blueprint_digest: "ea01721bf1960a971e71449f3056ad63edefbb6b082e9ac05132686d9784058d"
+  evidence_refs:
+    - ".agentplane/tasks/202610151836-PB31Q1/README.md"
+    - ".agentplane/tasks/202610151836-PB31Q1/quality/20261015-184541281-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151836-PB31Q1/quality/20261015-184541281-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151836-PB31Q1/quality/20261015-184541281-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151836-PB31Q1/blueprint/resolved-snapshot.json"
+    - "output/playwright/task164-checks/final-verification.json"
+    - "apps/office/src/unotools/source/misc/native-font-names.test.ts"
+    - "docs/program/calc-upstream-suspected-issues.md"
+  findings:
+    - "Same-agent review, not independent.5 complete pinned blobs/all155 literal dictionary rows/10 unchanged native QA cases audited.58 related and187 Calc tests pass; exact2 shared/33 Calc owners raw100 with every counter positive; all13 gates/43 boundary tests pass. Full65536-unit test includes literal one-unit aliases. Source parser body and prior journal prefix unchanged. Conflicting duplicate keys use documented sequential unique insertion with no cross-standard-library guarantee; unreachable keys/IPAex spelling preserved and CALC143-145 documented. No physical/default-device or UI/ODS readiness claim."
 commit: null
 comments:
   -
