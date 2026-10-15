@@ -4,7 +4,7 @@ title: "Implement native ruby autodirection and empty text feature values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T12:57:15.641Z"
+  updated_by: "CODER"
+  note: "Verified129related,187Calc,40boundary tests;6whole changed/new shared and33Calc owners raw100. All13gates/build/inventory pass;30paths/3975hashes/15pins/4links audited. Original ruby/void/direction values restored; canonical line-spacing/tab-stop follow-up priority, same-agent review not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T12:57:09.460Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: genuine ruby/automatic-direction/empty-feature value families ported on actual shared string/bool/item owners, full current runtime-owner coverage verified."
+  evaluated_sha: "0bb432ae89a8fd622e5604f9d12636947028911a"
+  blueprint_digest: "c8df53b969f0fdbafdf1ae0e16c6ecc03ace10c2d7a69ad265fde3f187dfd5a0"
+  evidence_refs:
+    - ".agentplane/tasks/202610151237-FB9217/README.md"
+    - ".agentplane/tasks/202610151237-FB9217/quality/20261015-125709460-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151237-FB9217/quality/20261015-125709460-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151237-FB9217/quality/20261015-125709460-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151237-FB9217/blueprint/resolved-snapshot.json"
+    - "output/playwright/task154-checks/verification.json"
+    - "output/playwright/task154-checks/native-source-audit.json"
+    - "output/playwright/task154-checks/source-gates.json"
+    - "output/playwright/task154-checks/build-manifest.json"
+  findings:
+    - "Original ruby text/copy/const borrowing/typed Any/property bounds/content presentation and Void real empty clone/literal presentation/defaults audited; automatic direction fits existing paraitem owner. Native declarations/generated enum sentinel verified without type-provider/lifetime/move facade."
+    - "129related,187Calc,40boundary tests pass; whole6new/changed shared executable and33Calc owners raw100. Initial selection gap closed using existing neighboring tests, passed Calc not replayed. All13source gates/build/inventory pass, provenance676modules."
+    - "30intentional paths/3975source hashes/15native pins/4restored links audited. Existing bounded line-spacing/tab-stop interfaces remain explicit priority canonicalization work before a real pool/engine/model/UI/ODS can be certified; no broad parity promotion."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual ruby text/adjustment/position, automatic paragraph direction and empty tab/line-break values; reuse shared strings/Any/item contracts with no extra lifetime provider or localization."
+  -
+    type: "verify"
+    at: "2026-10-15T12:57:15.641Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified129related,187Calc,40boundary tests;6whole changed/new shared and33Calc owners raw100. All13gates/build/inventory pass;30paths/3975hashes/15pins/4links audited. Original ruby/void/direction values restored; canonical line-spacing/tab-stop follow-up priority, same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T12:55:49.073Z"
+doc_updated_at: "2026-10-15T12:57:15.876Z"
 doc_updated_by: "CODER"
 description: "Task154 ports actual SvxRubyItem, SvxAutoFrameDirectionItem and SfxVoidItem default dependencies on existing OUString/bool/pool owners. Full ruby text/numeric Any and native literal presentations, original declarations/defaults, no localization/provider/lifetime facade."
 sections:
@@ -57,6 +84,39 @@ sections:
       Result: pass.
       Evidence: original3value families, ruby string/numeric/property-range rules and literal/content presentations,5IDL adjustment entries/generated size sentinel/3position constants/5selector declarations and4actual default ids source-audited.15native pins at9bc445578031fecf56086729d8e4940c77e14d65;3975source hashes (3952baseline,7changed existing,23new,3945unchanged),30intentional paths/4restored links audited.
       Scope: real shared OUString/const-reference/pData Any and bool/item bases reused, no caller ownership transfer/reset or fabricated default engine. Original generic CharacterProperties RubyText QA is broader unported source context, not native execution/full filter parity; no compiler/probe/Boost/type-provider facade. Diagnostic XML and localized direction/resource/type-provider services unported. Existing bounded shared line-spacing/tab-stop interfaces require canonicalization next before a genuine EditEngine pool can be certified. Same-agent review is not independent; actual full engine/EditTextObject/Calc pool/model/connected UI/same-model ODS and UI localization remain pending. Final clean calc/hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T12:57:15.641Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified129related,187Calc,40boundary tests;6whole changed/new shared and33Calc owners raw100. All13gates/build/inventory pass;30paths/3975hashes/15pins/4links audited. Original ruby/void/direction values restored; canonical line-spacing/tab-stop follow-up priority, same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T12:55:49.073Z, excerpt_hash=sha256:8e41a1b79b5b69f39e586e87b89191813d32d6a9b0d16c7368a3c0caf95d4e84
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151237-FB9217/blueprint/resolved-snapshot.json
+    - old_digest: c8df53b969f0fdbafdf1ae0e16c6ecc03ace10c2d7a69ad265fde3f187dfd5a0
+    - current_digest: c8df53b969f0fdbafdf1ae0e16c6ecc03ace10c2d7a69ad265fde3f187dfd5a0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151237-FB9217
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151237-FB9217 -m 🧩 FB9217 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional paths through later authorized task; no reset/merge/publication."
   Findings: |-
     Ruby labels are actual document content, not localized language/interface names. Use existing shared strings and actual numeric Any; do not duplicate them. The automatic direction addition fits existing paraitem375lines and must not introduce an unnecessary source split. Native diagnostic XML/generated enum type-provider and translated direction labels are unported, no lifetime/destructor/debug/move emulation. Actual EditEngine/EditTextObject/Calc pool/model/UI/ODS pending; same-agent review is not independent.
@@ -96,6 +156,39 @@ Read native rubyitem.hxx/cxx, voiditem.hxx/cxx, autodiritem.hxx/paraitem.cxx and
   Result: pass.
   Evidence: original3value families, ruby string/numeric/property-range rules and literal/content presentations,5IDL adjustment entries/generated size sentinel/3position constants/5selector declarations and4actual default ids source-audited.15native pins at9bc445578031fecf56086729d8e4940c77e14d65;3975source hashes (3952baseline,7changed existing,23new,3945unchanged),30intentional paths/4restored links audited.
   Scope: real shared OUString/const-reference/pData Any and bool/item bases reused, no caller ownership transfer/reset or fabricated default engine. Original generic CharacterProperties RubyText QA is broader unported source context, not native execution/full filter parity; no compiler/probe/Boost/type-provider facade. Diagnostic XML and localized direction/resource/type-provider services unported. Existing bounded shared line-spacing/tab-stop interfaces require canonicalization next before a genuine EditEngine pool can be certified. Same-agent review is not independent; actual full engine/EditTextObject/Calc pool/model/connected UI/same-model ODS and UI localization remain pending. Final clean calc/hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T12:57:15.641Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified129related,187Calc,40boundary tests;6whole changed/new shared and33Calc owners raw100. All13gates/build/inventory pass;30paths/3975hashes/15pins/4links audited. Original ruby/void/direction values restored; canonical line-spacing/tab-stop follow-up priority, same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T12:55:49.073Z, excerpt_hash=sha256:8e41a1b79b5b69f39e586e87b89191813d32d6a9b0d16c7368a3c0caf95d4e84
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151237-FB9217/blueprint/resolved-snapshot.json
+- old_digest: c8df53b969f0fdbafdf1ae0e16c6ecc03ace10c2d7a69ad265fde3f187dfd5a0
+- current_digest: c8df53b969f0fdbafdf1ae0e16c6ecc03ace10c2d7a69ad265fde3f187dfd5a0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151237-FB9217
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151237-FB9217 -m 🧩 FB9217 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
