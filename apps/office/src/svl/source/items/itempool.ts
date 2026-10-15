@@ -2,6 +2,9 @@
  * @fileoverview Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.
  */
 
+import { MergeRange } from "./itemset";
+import type { WhichRangesContainer } from "../../inc/whichranges";
+
 import type { SfxPoolItem, SfxPoolItemSnapshot, SfxPoolItemValue } from "./poolitem";
 
 /** Restores a concrete pooled item from its persisted primitive value. */
@@ -9,6 +12,49 @@ export type SfxPoolItemFactory = (value: SfxPoolItemValue) => SfxPoolItem;
 
 /** Owns defaults and factories for the bounded WhichId space. */
 export class SfxItemPool {
+  private mpMaster: SfxItemPool = this;
+  private mpSecondary: SfxItemPool | null = null;
+  private maPoolRanges: WhichRangesContainer = [];
+  /** Original master query. @returns Master pool. */
+  public GetMasterPool(): SfxItemPool {
+    return this.mpMaster;
+  }
+  /** Original secondary query. @returns Secondary or null. */
+  public GetSecondaryPool(): SfxItemPool | null {
+    return this.mpSecondary;
+  }
+  /** Original chain reassignment; cache invalidation is deliberately absent in upstream. Cyclic/two-master graphs violate native preconditions. @param pool - New secondary or null. @returns Nothing. */
+  public SetSecondaryPool(pool: SfxItemPool | null): void {
+    if (this.mpSecondary) {
+      this.mpSecondary.mpMaster = this.mpSecondary;
+      for (let p = this.mpSecondary.mpSecondary; p; p = p.mpSecondary)
+        p.mpMaster = this.mpSecondary;
+    }
+    if (pool && pool.mpMaster !== pool) throw new Error("Secondary is present in two Pools");
+    const master = this.GetMasterPool();
+    for (let p = pool; p; p = p.mpSecondary) p.mpMaster = master;
+    this.mpSecondary = pool;
+  }
+  /** Original terminal pool traversal. @returns Last pool. */
+  public GetLastPoolInChain(): SfxItemPool {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- Original mutable pool-chain traversal cursor, not a captured callback context.
+    let last: SfxItemPool = this;
+    while (last.GetSecondaryPool()) last = last.GetSecondaryPool() as SfxItemPool;
+    return last;
+  }
+  /** Original lazy range union across actual registered pool metadata. Browser snapshot defaults do not invent native range metadata. @returns Cached logical value. */
+  public GetMergedIdRanges(): WhichRangesContainer {
+    if (this.maPoolRanges.length === 0)
+      // eslint-disable-next-line @typescript-eslint/no-this-alias -- Original chain traversal starts at this pool and advances to each secondary.
+      for (let p: SfxItemPool | null = this; p; p = p.mpSecondary)
+        this.maPoolRanges = MergeRange(this.maPoolRanges, p.mnStart, p.mnEnd);
+    return this.maPoolRanges;
+  }
+  /** Original local-first WhichId owner lookup. @param which - Native identity. @returns Owner or null. */
+  private getTargetPool(which: number): SfxItemPool | null {
+    if (this.IsInRange(which)) return this;
+    return this.mpSecondary?.getTargetPool(which) ?? null;
+  }
   private readonly defaults = new Map<number, SfxPoolItem>();
   private readonly factories = new Map<number, SfxPoolItemFactory>();
   private readonly maItemInfos: ItemInfo[] = [];
@@ -60,16 +106,19 @@ export class SfxItemPool {
   public static IsSlot(id: number): boolean {
     return id !== 0 && id > 4999;
   }
-  /** Original slot-map lookup and identity fallback for the currently represented single pool. No secondary pool is fabricated. @param slot - Candidate slot. @param deep - Native chain-search flag, without a chain in this binding. @returns Which or the unchanged input. */
+  /** Original slot-map lookup and identity fallback through the original secondary chain. @param slot - Candidate slot. @param deep - Native secondary-chain search flag. @returns Which or the unchanged input. */
   public GetWhichIDFromSlotID(slot: number, deep = true): number {
-    void deep;
     if (!SfxItemPool.IsSlot(slot)) return slot;
-    return this.mpSlotIDToWhichIDMap?.get(slot) ?? slot;
+    const which = this.mpSlotIDToWhichIDMap?.get(slot);
+    if (which !== undefined) return which;
+    if (this.mpSecondary && deep) return this.mpSecondary.GetWhichIDFromSlotID(slot);
+    return slot;
   }
-  /** Original local Which-to-slot conversion and identity fallback. @param which - Native identity. @returns Registered nonzero slot or unchanged identity. */
+  /** Original chain-aware Which-to-slot conversion and identity fallback. @param which - Native identity. @returns Registered nonzero slot or unchanged identity. */
   public GetSlotId(which: number): number {
     if (!SfxItemPool.IsWhich(which)) return which;
-    const info = this.maItemInfos[which - this.mnStart];
+    const target = this.getTargetPool(which);
+    const info = target?.maItemInfos[which - target.mnStart];
     if (info === undefined) throw new Error("Unknown WhichId for slot lookup.");
     const slot = info.getSlotID();
     return slot !== 0 ? slot : which;
@@ -82,7 +131,7 @@ export class SfxItemPool {
     if (factory !== undefined) this.factories.set(item.Which(), factory);
   }
 
-  /** Original pool-default lookup on the current single-pool owner, where user overrides are not yet represented. @param which - Known declared identity. @returns Actual static/dynamic default. */
+  /** Original pool-default lookup through the actual secondary chain, where user overrides are not yet represented. @param which - Known declared identity. @returns Actual static/dynamic default. */
   public GetPoolDefaultItem(which: number): SfxPoolItem {
     return this.GetUserOrPoolDefaultItem(which);
   }
@@ -93,6 +142,8 @@ export class SfxItemPool {
       this.maItemInfos.length === 0
         ? this.defaults.get(which)
         : (this.maItemInfos[which - this.mnStart]?.getItem() ?? undefined);
+    if (item === undefined && this.mpSecondary)
+      return this.mpSecondary.GetUserOrPoolDefaultItem(which);
     if (item === undefined) throw new Error(`Unknown pool default: ${which}`);
     return item;
   }

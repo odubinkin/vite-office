@@ -20,11 +20,8 @@ export enum SfxItemState {
   SET = 0x0040,
 }
 
-/** Inclusive WhichId range accepted by an item set. */
-export type WhichRange = readonly [first: number, last: number];
-
-/** Ordered collection of inclusive WhichId ranges. */
-export type WhichRangesContainer = readonly WhichRange[];
+import type { WhichRangesContainer } from "../../inc/whichranges";
+export type { WhichRange, WhichRangesContainer } from "../../inc/whichranges";
 
 /** Original pool/item association represented by real JS references and value copies; native cache/refcount/surrogate lifetime registration is deliberately erased. */
 export class SfxPoolItemHolder {
@@ -108,11 +105,12 @@ export class SfxItemSet {
 
   private readonly pool: SfxItemPool;
   private readonly ranges: WhichRangesContainer;
-  /** Original pool/ranges constructor and base copy constructor. Copying slices derived source sets, without invoking virtual Clone. @param args - Pool/ranges/optional browser parent or actual const source. @returns Item set. */
+  /** Original pool-only, explicit pool/ranges and base copy constructors. Copying slices derived source sets, without invoking virtual Clone. @param args - Pool/ranges/optional browser parent or actual const source. @returns Item set. */
   public constructor(
     ...args:
       | [pool: SfxItemPool, ranges: WhichRangesContainer, parent?: SfxItemSet | undefined]
       | [source: SfxItemSet]
+      | [pool: SfxItemPool]
   ) {
     const source = args[0];
     if (source instanceof SfxItemSet) {
@@ -122,7 +120,8 @@ export class SfxItemSet {
       if (this.ranges.length !== 0) source.CopyItemsTo(this);
     } else {
       this.pool = source;
-      this.ranges = args[1] as WhichRangesContainer;
+      this.ranges =
+        args.length === 1 ? source.GetMergedIdRanges() : (args[1] as WhichRangesContainer);
       validateRanges(this.ranges);
       this.SetParent(args[2]);
     }
@@ -367,4 +366,37 @@ function validateRanges(ranges: WhichRangesContainer): void {
       previousEnd = range[1];
     },
   );
+}
+
+/** Native WhichRangesContainer::MergeRange value operation. Sorted range tuples replace native owning pair storage. The first native needMerge conjunct is always true for sorted valid pairs, so only its second conjunct is evaluated. @param ranges - Original sorted value. @param from - Native uint16 lower bound. @param to - Native uint16 upper bound. @returns Independent merged value. */
+export function MergeRange(
+  ranges: WhichRangesContainer,
+  from: number,
+  to: number,
+): WhichRangesContainer {
+  from &= 0xffff;
+  to &= 0xffff;
+  if (from === 0 || from > to)
+    throw new Error("WhichRangesContainer requires a valid nonzero range");
+  if (ranges.length === 0) return [[from, to]];
+  const result: [number, number][] = [];
+  let added = false;
+  for (const pair of ranges) {
+    if (!added && pair[0] >= from) {
+      result.push([from, to]);
+      added = true;
+    }
+    result.push([pair[0], pair[1]]);
+  }
+  if (!added) result.push([from, to]);
+  let i = 0;
+  while (i + 1 < result.length) {
+    const current = result[i] as [number, number],
+      next = result[i + 1] as [number, number];
+    if (next[0] - 1 <= current[1]) {
+      current[1] = Math.max(current[1], next[1]);
+      result.splice(i + 1, 1);
+    } else i++;
+  }
+  return result;
 }
