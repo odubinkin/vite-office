@@ -1,10 +1,11 @@
 ---
 id: "202610152135-N3TYD3"
 title: "Implement native SfxStyleSheet inheritance and shared style pool factory"
-status: "DOING"
+result_summary: "Implemented native SfxStyleSheet/SfxStyleSheetPool and StyleSheetUser using exact shared notification role bodies, corrected independent module initialization through original declaration ownership, preserved CALC156..159. Full Sc styles/document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "All preexisting notifier fields/methods and extracted copy constructor bodies retain exact emitted JS tokens; root constructors add only native role initialization. Actual style identity serves both roles without proxies,backpointer registries,RTTI spoof or duplicate algorithms. Native parent/copy/forward/usage/type/destructor order and inherited copy slicing are preserved."
     - "260related,187Calc,13source gates,production build,1derived Chromium and1Writer startup/load/edit pass. Exact7executable shared/33Calc raw S/B/F/L sets100; public style facade is statically verified reexport-only with no raw counters removed. Eight native blobs pinned and original flag enum emitted tokens unchanged."
     - "Fresh core-first test found an initialization defect in the class facade cycle. Actual declaration ownership fixes it without lazy/global/caller-order workaround; both core-first and derived-first fixtures pass.34paths fit same-svl35budget refinement. CALC156..159 preserved; broad parity flags stay false."
-commit: null
+commit:
+  hash: "41f72f4707cdba5f6cbfb74504fc2de40a42b49b"
+  message: "✅ N3TYD3 task: record derived style role acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved derived native styles using shared identity-preserving role mixins, retaining existing algorithms and source-backed tests."
+  -
+    author: "CODER"
+    body: "Verified: actual derived styles reuse identity-preserving shared roles;260related/187Calc,strict shared/Calc100,13source gates,production build,derived and Writer Chromium plus independent entry tests pass; inventory/source quirks recorded."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded reruns, build-browser-portable.mjs, final-audit.mjs under output/playwright/task174-checks. Result: pass. Evidence:260related/26files,187Calc/76files; exact7shared executable raw S487/B230/F128/L430 and33Calc S4179/B2731/F821/L3727 every raw counter positive100; pure style facade has only reexports,no counters filtered;13source gates,production build,1derived Chromium and1Writer startup/load/edit. Eight pinned originals,all existing notifier fields/method/copy bodies exact emitted tokens,original enum tokens unchanged. Fresh core-first initialization failed then passes after correct declaration ownership; independent derived-first also passes. Scope34paths within refined35same-svl budget; no proxies,RTTI spoof,duplicate algorithms,heap/refcount framework or import-order workaround. CALC156..159 preserved. Full Sc styles/document/UI/ODS and all-app milestone remain pending; review same-agent."
+  -
+    type: "status"
+    at: "2026-10-15T21:57:35.042Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual derived styles reuse identity-preserving shared roles;260related/187Calc,strict shared/Calc100,13source gates,production build,derived and Writer Chromium plus independent entry tests pass; inventory/source quirks recorded."
 doc_version: 3
-doc_updated_at: "2026-10-15T21:57:20.703Z"
+doc_updated_at: "2026-10-15T21:57:35.043Z"
 doc_updated_by: "CODER"
 description: "Task174: implement SfxStyleSheet/SfxStyleSheetPool and StyleSheetUser through identity-preserving TypeScript role mixins reusing the existing SfxListener/SfxBroadcaster algorithms/state. Preserve native parent notification/copy/destructor order and inherited copy factory slicing; no proxy owners or memory manager."
 sections:
@@ -117,6 +130,10 @@ sections:
     - Observation: A fresh implementation-first source-absent probe fails before test collection: style-model -> public style facade -> derived style tries extending the not-yet-initialized base. Header-first suites had passed, so import-order independence needed separate evidence.
       Impact: Actual JS module initialization bug in the new value facade graph; final acceptance is not granted despite passing behavior suites.
       Resolution: Move the original enum/borrowed declarations unchanged to style-values.ts, make style.ts a canonical public reexport facade, and bind implementation modules to the declaration owner. Keep the fresh core-first fixture in final coverage; no lazy loader, initialization registry, class rebinding or caller import-order workaround. This remains inside approved svl header/source scope and30-path budget.
+extensions:
+  implementation_commit:
+    hash: "3efdf39ec628a0b558f800670fefde69130834a1"
+    message: "🔧 N3TYD3 core: implement native derived styles with shared notification roles"
 id_source: "generated"
 ---
 ## Summary
