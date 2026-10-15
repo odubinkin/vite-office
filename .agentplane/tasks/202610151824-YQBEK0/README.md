@@ -1,10 +1,11 @@
 ---
 id: "202610151824-YQBEK0"
 title: "Port shared configured default-font candidates"
-status: "DOING"
+result_summary: "Ported shared configured default-font candidate resource lookup and original UTF16 font-token parsing; reused canonical-tag decomposition in numeric locale data and recorded explicit remaining configuration/device/UI/ODS gaps."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/unotools/source/misc/native-font-token.test.ts"
   findings:
     - "Same-agent review, not independent. Exact33 locales/256 properties/23 IDs audited against5 pinned source blobs;30 related tests and187 Calc tests with strict5 shared/33 Calc raw100 and all13 gates/43 boundary cases pass. The Verify Steps production/browser phrase is scoped by the approved plan to no existing browser-consumer migration; intended shared production code changes and pure numeric-locale projection extraction are explicit in Scope and checked. Parent upstream token-name test is context only, not claimed ported equivalent. Original unotools-to-i18nlangtag edge added; no cycle exception or algorithm change. Full configuration/system/device and UI/ODS remain pending."
-commit: null
+commit:
+  hash: "61d4b761c0401bc4f0b07ab36826a76038b2806d"
+  message: "🧩 YQBEK0 task: record configured font candidates review"
 comments:
   -
     author: "CODER"
     body: "Start: implement pinned shared font configuration resource lookup and native UTF16 token parsing with actual Locale input and explicit provider limits."
+  -
+    author: "CODER"
+    body: "Verified:30 related tests,187 Calc scenarios, exact shared/Calc raw100,13 gates/43 boundary tests,33 source locales/256 properties/23 IDs audited; native references restored and no full-suite readiness claim."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS:30 related and187 Calc tests, exact5 shared/33 Calc owners raw100, all13 gates/43 boundary tests; complete33-locale/256-property resource and23 IDs source-audited against5 pinned blobs.22 paths; refs restored. No browser consumer mutation or full-suite milestone claim."
+  -
+    type: "status"
+    at: "2026-10-15T18:33:58.255Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:30 related tests,187 Calc scenarios, exact shared/Calc raw100,13 gates/43 boundary tests,33 source locales/256 properties/23 IDs audited; native references restored and no full-suite readiness claim."
 doc_version: 3
-doc_updated_at: "2026-10-15T18:33:11.957Z"
+doc_updated_at: "2026-10-15T18:33:58.256Z"
 doc_updated_by: "CODER"
 description: "Task163: port original DefaultFontType values, complete pinned VCL DefaultFonts resource and source fallback query over actual shared Locale, plus native font token parsing needed by OutputDevice selection. Field-specific browser resource binding, no fake configuration/LanguageTag/OutputDevice service."
 sections:
@@ -124,6 +137,10 @@ sections:
     - Observation: Completed field-specific configured-font candidate query and original token parser. Shared canonical BCP47 field decomposition replaces the duplicated numeric-locale projection; no new canonicalization algorithm or LanguageTag class is claimed.
       Impact: Calc defaults can consume complete original configured candidate lists rather than hardcoded font choices. Actual physical-font/device selection is still missing and UI/ODS readiness is not established.
       Resolution: Reuse this shared resource/query and token owner in the real default-font selection path. Keep native configuration overrides/system resolution, UI-font special fallback, physical matching/substitution and unrelated font normalization explicitly pending. No full parity flags promoted and no native compiler/memory/ICU engine added.
+extensions:
+  implementation_commit:
+    hash: "bddbcdcf610f61391600c4d0d5c66d717c63f5bb"
+    message: "🔧 YQBEK0 core: port configured font candidates and UTF16 tokens"
 id_source: "generated"
 ---
 ## Summary
