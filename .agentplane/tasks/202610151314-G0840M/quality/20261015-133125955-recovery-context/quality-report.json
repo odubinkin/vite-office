@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610151314-G0840M",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T13:31:25.955Z",
+  "verdict": "pass",
+  "summary": "Same-agent review, not independent: restored original shared five-field line spacing and typed Any state; migrated all Writer consumers without a core compatibility facade.",
+  "evaluated_sha": "13bb59d8fbac9f08b25880cb3eb1be912c59f7b3",
+  "blueprint_digest": "4d03acc802440b0a6acefd4ac05d8fb36c974bbcdde6ae29334c7f8c02750cdc",
+  "findings": [
+    "252related,187Calc,40boundary and9existing Writer browser scenarios pass; whole7shared and33Calc owners every raw S/B/F/L counter positive100, Writer-only gaps exempt. All13source gates, portable build and inventory pass.",
+    "Original defaults/rules/casts/copy/active equality/all-field hash/unknown-member normalization audited; CALC131132133 preserved, real CPPU reused under JS GC. Writer all-field persistence and ODF/filter/dialog ownership corrected.",
+    "73intentional paths/3989source hashes/11native pins/4restored links audited. Translated presentation, canonical tab stops and actual engine/pool/Calc model/connected UI/ODS remain pending; full suite remains deferred to actual readiness then fixes/pause."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610151314-G0840M/README.md",
+    "output/playwright/task155-checks/verification.json",
+    "output/playwright/task155-checks/native-source-audit.json",
+    "output/playwright/task155-checks/source-gates.json",
+    "output/playwright/task155-checks/build-browser-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

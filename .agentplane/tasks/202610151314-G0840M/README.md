@@ -4,7 +4,7 @@ title: "Canonicalize shared line spacing and Writer consumers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T13:31:26.792Z"
+  updated_by: "CODER"
+  note: "Verified252related,187Calc,40boundary,9Writer browser tests;7whole changed shared and33Calc owners raw100. All13gates/build/inventory pass;73paths/3989hashes/11pins/4links audited. Native spacing state and every Writer consumer canonicalized; localized presentation and actual engine/model/UI/ODS remain pending. Same-agent review not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T13:31:25.955Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: restored original shared five-field line spacing and typed Any state; migrated all Writer consumers without a core compatibility facade."
+  evaluated_sha: "13bb59d8fbac9f08b25880cb3eb1be912c59f7b3"
+  blueprint_digest: "4d03acc802440b0a6acefd4ac05d8fb36c974bbcdde6ae29334c7f8c02750cdc"
+  evidence_refs:
+    - ".agentplane/tasks/202610151314-G0840M/README.md"
+    - ".agentplane/tasks/202610151314-G0840M/quality/20261015-133125955-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151314-G0840M/quality/20261015-133125955-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151314-G0840M/quality/20261015-133125955-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151314-G0840M/blueprint/resolved-snapshot.json"
+    - "output/playwright/task155-checks/verification.json"
+    - "output/playwright/task155-checks/native-source-audit.json"
+    - "output/playwright/task155-checks/source-gates.json"
+    - "output/playwright/task155-checks/build-browser-manifest.json"
+  findings:
+    - "252related,187Calc,40boundary and9existing Writer browser scenarios pass; whole7shared and33Calc owners every raw S/B/F/L counter positive100, Writer-only gaps exempt. All13source gates, portable build and inventory pass."
+    - "Original defaults/rules/casts/copy/active equality/all-field hash/unknown-member normalization audited; CALC131132133 preserved, real CPPU reused under JS GC. Writer all-field persistence and ODF/filter/dialog ownership corrected."
+    - "73intentional paths/3989source hashes/11native pins/4restored links audited. Translated presentation, canonical tab stops and actual engine/pool/Calc model/connected UI/ODS remain pending; full suite remains deferred to actual readiness then fixes/pause."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: canonical shared five-field line spacing, real typed Any transport and all Writer model/filter/persistence/layout/dialog consumers; source-backed native quirks retained."
+  -
+    type: "verify"
+    at: "2026-10-15T13:31:26.792Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified252related,187Calc,40boundary,9Writer browser tests;7whole changed shared and33Calc owners raw100. All13gates/build/inventory pass;73paths/3989hashes/11pins/4links audited. Native spacing state and every Writer consumer canonicalized; localized presentation and actual engine/model/UI/ODS remain pending. Same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T13:30:54.039Z"
+doc_updated_at: "2026-10-15T13:31:26.851Z"
 doc_updated_by: "CODER"
 description: "Task155 restores the native five-field SvxLineSpacingItem and real LineSpacing UNO value, migrates Writer model/filter/persistence/layout/UI consumers, removes wrongly-owned font-independent paragraph state, and verifies scoped portable fidelity without localization or native probes."
 sections:
@@ -52,6 +79,39 @@ sections:
     Command: node output/playwright/task155-checks/build-browser-portable.mjs. Result: pass. Evidence:portable production build and9existing Writer browser scenarios across automatic first-line layout, cell paragraph formatting/history/ODT reopen and native paragraph text surface. Exact argv/source absence/restored links in build-browser-manifest.json. Scope:actual body/cell/browser consumers of changed shared state; no Calc UI implementation claim.
 
     Command: python3 output/playwright/task155-checks/audit-native.py; python3 output/playwright/task155-checks/audit-final.py. Result: pass. Evidence:11pinned original files at9bc445578031fecf56086729d8e4940c77e14d65; five fields, enums, IDL shorts/selectors, original casts/hash/normalization/default200 and Drawing ownership verified.73intentional paths/3989exact source hashes (3975baseline,59changed existing,14new,3916unchanged),4restored links. Scope:CALC131132133 surprising native behavior preserved; no native compilation/memory probe, localization or broad parity promotion. Actual text engine/pool/Calc model/connected UI/same-model ODS remain pending. Same-agent evaluation is not independent. Full all-app suite deferred until actual minimum UI+ODS readiness then applicable fixes/pause, as instructed. Final clean calc and source-commit/hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T13:31:26.792Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified252related,187Calc,40boundary,9Writer browser tests;7whole changed shared and33Calc owners raw100. All13gates/build/inventory pass;73paths/3989hashes/11pins/4links audited. Native spacing state and every Writer consumer canonicalized; localized presentation and actual engine/model/UI/ODS remain pending. Same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T13:30:54.039Z, excerpt_hash=sha256:670a7be10c49bcc56075a8aaeafeb04f617f05b7e46f3986e9d298124897c669
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151314-G0840M/blueprint/resolved-snapshot.json
+    - old_digest: 4d03acc802440b0a6acefd4ac05d8fb36c974bbcdde6ae29334c7f8c02750cdc
+    - current_digest: 4d03acc802440b0a6acefd4ac05d8fb36c974bbcdde6ae29334c7f8c02750cdc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151314-G0840M
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151314-G0840M -m 🧩 G0840M task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task intentional source commit and lifecycle artifacts; preserve unrelated tasks and user merges. No destructive history changes."
   Findings: |-
     User explicitly authorizes canonical shared and Writer corrections; localization is deferred. Existing five-field item was reduced to a browser value/mode/font flag and must be replaced without a core compatibility facade. Prior turn established native source ownership; authoritative state revalidated clean calc at12789879e97f353f7d1dc829a9108970901d328e.
@@ -102,6 +162,39 @@ Command: all13 exact argv in output/playwright/task155-checks/source-gates.json.
 Command: node output/playwright/task155-checks/build-browser-portable.mjs. Result: pass. Evidence:portable production build and9existing Writer browser scenarios across automatic first-line layout, cell paragraph formatting/history/ODT reopen and native paragraph text surface. Exact argv/source absence/restored links in build-browser-manifest.json. Scope:actual body/cell/browser consumers of changed shared state; no Calc UI implementation claim.
 
 Command: python3 output/playwright/task155-checks/audit-native.py; python3 output/playwright/task155-checks/audit-final.py. Result: pass. Evidence:11pinned original files at9bc445578031fecf56086729d8e4940c77e14d65; five fields, enums, IDL shorts/selectors, original casts/hash/normalization/default200 and Drawing ownership verified.73intentional paths/3989exact source hashes (3975baseline,59changed existing,14new,3916unchanged),4restored links. Scope:CALC131132133 surprising native behavior preserved; no native compilation/memory probe, localization or broad parity promotion. Actual text engine/pool/Calc model/connected UI/same-model ODS remain pending. Same-agent evaluation is not independent. Full all-app suite deferred until actual minimum UI+ODS readiness then applicable fixes/pause, as instructed. Final clean calc and source-commit/hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T13:31:26.792Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified252related,187Calc,40boundary,9Writer browser tests;7whole changed shared and33Calc owners raw100. All13gates/build/inventory pass;73paths/3989hashes/11pins/4links audited. Native spacing state and every Writer consumer canonicalized; localized presentation and actual engine/model/UI/ODS remain pending. Same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T13:30:54.039Z, excerpt_hash=sha256:670a7be10c49bcc56075a8aaeafeb04f617f05b7e46f3986e9d298124897c669
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151314-G0840M/blueprint/resolved-snapshot.json
+- old_digest: 4d03acc802440b0a6acefd4ac05d8fb36c974bbcdde6ae29334c7f8c02750cdc
+- current_digest: 4d03acc802440b0a6acefd4ac05d8fb36c974bbcdde6ae29334c7f8c02750cdc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151314-G0840M
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151314-G0840M -m 🧩 G0840M task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
