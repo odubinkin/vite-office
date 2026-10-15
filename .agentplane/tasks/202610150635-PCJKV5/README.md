@@ -4,7 +4,7 @@ title: "Implement native edit-engine text positions and selections"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T06:42:28.595Z"
+  updated_by: "CODER"
+  note: "Verified6direct,186Calc,39boundary tests;2whole new shared and33Calc executable owners raw100, all13source gates/build/inventory pass.9paths/3905hashes/3pins/4links audited. Native position/selection value semantics retained, UI/ODS integration pending; same-agent review not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T06:42:27.473Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: actual complete EPaM/ESelection public value contracts ported with independent range/value-copy regressions, canonical shared boundaries and honest pending model/UI/ODS scope."
+  evaluated_sha: "6beb153d53645b900c0e0ae7f4e508ad2f1fd52d"
+  blueprint_digest: "bf6329017bc6cd4e3f2d1d5d58cd52f4a3820032bae3bbd32f10460955915d2d"
+  evidence_refs:
+    - ".agentplane/tasks/202610150635-PCJKV5/README.md"
+    - ".agentplane/tasks/202610150635-PCJKV5/quality/20261015-064227473-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150635-PCJKV5/quality/20261015-064227473-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150635-PCJKV5/quality/20261015-064227473-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150635-PCJKV5/blueprint/resolved-snapshot.json"
+    - "output/playwright/task149-checks/verification.json"
+    - "output/playwright/task149-checks/native-source-audit.json"
+    - "output/playwright/task149-checks/source-gates.json"
+    - "output/playwright/task149-checks/build-manifest.json"
+  findings:
+    - "Exact native zero/max markers, constructors/copies, paragraph/index order and strict adjusted interval order, stable borrowed value fields, normalization/collapse and diagnostic text verified from original headers. Native debug-only assertion is documented precondition, no invented release exception."
+    - "6direct and186Calc tests plus39boundary tests pass; both whole new shared owners and33Calc owners raw100. All13source gates, build and inventory pass; initial metadata and erased test-type errors corrected, retained in Findings."
+    - "9intentional paths/3905source hashes/3native pins/4restored links verified; no Writer-specific selection duplication, localization, ownership manager or fake document/text engine. Actual rich-text/pool/model/connected UI/ODS pending."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: shared original edit-engine position and selection values, copied struct fields and native interval order; no document facade, localization or lifetime machinery."
+  -
+    type: "verify"
+    at: "2026-10-15T06:42:28.595Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified6direct,186Calc,39boundary tests;2whole new shared and33Calc executable owners raw100, all13source gates/build/inventory pass.9paths/3905hashes/3pins/4links audited. Native position/selection value semantics retained, UI/ODS integration pending; same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:42:06.379Z"
+doc_updated_at: "2026-10-15T06:42:28.679Z"
 doc_updated_by: "CODER"
 description: "Task149 implements complete shared EPaM/ESelection value contracts from original public headers for Calc text editing and future genuine EditTextObject use. Original defaults/sentinels/order/adjust/collapse and value-copy semantics, no UI localization or fake document adapter."
 sections:
@@ -57,6 +84,39 @@ sections:
       Result: pass.
       Evidence: exact native max/default/ordering/constructor/normalization/collapse/equality/HasRange/stream-content source audit,3native pins at9bc445578031fecf56086729d8e4940c77e14d65,3905source hashes (3897baseline,1changed existing,8new,3896unchanged),9intentional paths and4restored links. Original EditEngine core-test ESelection use is unported broader source context only, not native execution.
       Scope: native operator and ostream contracts map to equals/lessThan/greaterThan/toString. Debug-only adjusted-input assertion is a documented precondition; no fabricated release exception or numeric ABI. Public field writes and copies preserve native struct value semantics using ordinary objects/GC. Same-agent evaluation is not independent. Actual EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending; UI localization deferred. Final clean calc/hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T06:42:28.595Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified6direct,186Calc,39boundary tests;2whole new shared and33Calc executable owners raw100, all13source gates/build/inventory pass.9paths/3905hashes/3pins/4links audited. Native position/selection value semantics retained, UI/ODS integration pending; same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:42:06.379Z, excerpt_hash=sha256:40484671223550b4591e8290e4635fe169621322195ad6499f940cfe0eaf2279
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150635-PCJKV5/blueprint/resolved-snapshot.json
+    - old_digest: bf6329017bc6cd4e3f2d1d5d58cd52f4a3820032bae3bbd32f10460955915d2d
+    - current_digest: bf6329017bc6cd4e3f2d1d5d58cd52f4a3820032bae3bbd32f10460955915d2d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150635-PCJKV5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150635-PCJKV5 -m 🧩 PCJKV5 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional paths through a later authorized task; no reset, merge or publication."
   Findings: |-
     Native value structs have copy semantics; ordinary aliasing assignment would be a porting bug. Use JS object identity only for storage/borrowing, not as position or range value equality. No existing Writer-specific document selection is duplicated or replaced; these are actual shared EditEngine public types. Actual EditTextObject/ScPageHFItem/pool/model/connected UI/ODS remain pending, localization deferred. Same-agent evaluation is not independent.
@@ -100,6 +160,39 @@ Compare original include/editeng/EPaM.hxx and ESelection.hxx, exact int32 max se
   Result: pass.
   Evidence: exact native max/default/ordering/constructor/normalization/collapse/equality/HasRange/stream-content source audit,3native pins at9bc445578031fecf56086729d8e4940c77e14d65,3905source hashes (3897baseline,1changed existing,8new,3896unchanged),9intentional paths and4restored links. Original EditEngine core-test ESelection use is unported broader source context only, not native execution.
   Scope: native operator and ostream contracts map to equals/lessThan/greaterThan/toString. Debug-only adjusted-input assertion is a documented precondition; no fabricated release exception or numeric ABI. Public field writes and copies preserve native struct value semantics using ordinary objects/GC. Same-agent evaluation is not independent. Actual EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending; UI localization deferred. Final clean calc/hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T06:42:28.595Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified6direct,186Calc,39boundary tests;2whole new shared and33Calc executable owners raw100, all13source gates/build/inventory pass.9paths/3905hashes/3pins/4links audited. Native position/selection value semantics retained, UI/ODS integration pending; same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:42:06.379Z, excerpt_hash=sha256:40484671223550b4591e8290e4635fe169621322195ad6499f940cfe0eaf2279
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150635-PCJKV5/blueprint/resolved-snapshot.json
+- old_digest: bf6329017bc6cd4e3f2d1d5d58cd52f4a3820032bae3bbd32f10460955915d2d
+- current_digest: bf6329017bc6cd4e3f2d1d5d58cd52f4a3820032bae3bbd32f10460955915d2d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150635-PCJKV5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150635-PCJKV5 -m 🧩 PCJKV5 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
