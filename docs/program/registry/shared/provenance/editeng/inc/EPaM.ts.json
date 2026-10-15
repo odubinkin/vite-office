@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/inc/EPaM.ts",
+    "status": "mapped",
+    "upstreamPath": "include/editeng/EPaM.hxx",
+    "localSymbols": [
+      "EE_PARA_MAX",
+      "EE_TEXTPOS_MAX",
+      "EPaM"
+    ],
+    "upstreamSymbols": [
+      "EE_PARA_MAX",
+      "EE_TEXTPOS_MAX",
+      "EPaM"
+    ],
+    "preservedResponsibilities": [
+      "Task149 implements original shared EPaM and ESelection public header value contracts: zero defaults, exact signed32 maximal NotFound/All/AtEnd markers, native default/coordinate/position/copy constructors and implicit memberwise assignment, coordinate and endpoint equality, paragraph/index order, adjustedness/value swapping, collapse to either endpoint, HasRange and original diagnostic stream content. Native operator spellings map to equals/lessThan/greaterThan and ostream insertion to toString. Selection order requires adjusted inputs as asserted only in native debug builds: it means strictly disjoint end-before-start intervals, not lexicographic endpoint order; touching or overlapping selections are unordered. Public start/end getters borrow stable mutable position objects; their setters, constructors, Adjust and collapses copy native value fields without introducing JS aliasing. Valid coordinate inputs inhabit signed32 domain; no fabricated clamp/range exception, numeric ABI or native memory handling is introduced. JS GC owns storage. Existing Writer-specific document selection is not duplicated or replaced; these are missing genuine shared EditEngine types for future Calc cell/header-footer text editing. Actual EditTextObject/ScPageHFItem/full pool/model/connected UI/same-model ODS remain pending; localized UI is deferred and no fake text engine is created."
+    ],
+    "omittedResponsibilities": [
+      "Native compile-time constexpr/ostream templates/debug assertion and numeric ABI are represented by ordinary JS values, equivalent text and documented adjusted-input precondition. Actual text engine/model/UI/ODS not yet connected."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/ESelection.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/EPaM.hxx",
+          "marker": "EPaM"
+        }
+      ]
+    }
+  }
+}
