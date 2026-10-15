@@ -4,7 +4,7 @@ title: "Restore native shared Sfx notification contracts for Calc styles"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "Command: node output/playwright/task170-checks/native-audit.mjs; node output/playwright/task170-checks/portable.mjs; node output/playwright/task170-checks/source-gates.mjs with recorded changed-check reruns; node output/playwright/task170-checks/build-browser-portable.mjs; node output/playwright/task170-checks/final-audit.mjs. Result: pass. Evidence: final-verification.json records54 related cases/9files,187Calc/76files, exact5 shared raw S399/B104/F57/L370 plus33Calc raw S4179/B2731/F821/L3727 all100,13source gates,production build and1Chromium. Six native pinned blobs,186IDs,5native QA contracts and3runtime identity proofs. Scope: shared Sfx graph, erased browser payload separation, related Writer functions; Writer-only coverage exempt. Full all-app run and UI/ODS milestone remain pending; same-agent review is not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T20:53:03.579Z"
+  updated_by: "EVALUATOR"
+  note: "Task170 approved shared notification scope is implemented and reproducibly verified on source commit dcb71fac4c30; review performed by the same agent, not independent."
+  evaluated_sha: "dcb71fac4c30de667d7bc7818c3b80c05a383807"
+  blueprint_digest: "93e32ca729d9de63954ece6387e61f7926c4093d2a8708e27844dcb5458be8c6"
+  evidence_refs:
+    - ".agentplane/tasks/202610152044-R2GWB4/README.md"
+    - ".agentplane/tasks/202610152044-R2GWB4/quality/20261015-205303579-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152044-R2GWB4/quality/20261015-205303579-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152044-R2GWB4/quality/20261015-205303579-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152044-R2GWB4/blueprint/resolved-snapshot.json"
+    - "output/playwright/task170-checks/final-verification.json"
+    - "output/playwright/task170-checks/native-audit.json"
+    - "output/playwright/task170-checks/source-gates.json"
+    - "output/playwright/task170-checks/build-browser-manifest.json"
+  findings:
+    - "Six pinned native source blobs and186 ID order entries match; five native broadcaster QA contracts plus source-derived copies, duplicates, live mutation, destruction and uint16 count boundaries are exercised."
+    - "Exact5 changed shared owners and33Calc owners have every raw S/B/F/L counter positive;54 related cases,187Calc,production build,1Chromium and13source gates pass. Three erased payload migrations have exact emitted-runtime token equality."
+    - "Broad parity flags remain false and full Calc construction/UI/ODS are explicitly pending. Native invalid-precondition errors and public host friend operations are documented adaptations, without memory-manager machinery."
 commit: null
 comments:
   -
