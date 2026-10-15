@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/inc/itempool.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "item-info-packages",
+    "capabilityIds": [
+      "CAP-53cd25b7-67e5-44dc-9ada-6f22358091b9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/inc/itempool.ts",
+        "apps/office/src/svl/source/items/iteminfo.test.ts",
+        "docs/program/calc-core.md#Native shared item-info packages and single-pool registration (task141)"
+      ],
+      "justification": "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/svl/itempool.hxx",
+      "upstreamSymbols": [
+        "ItemInfo",
+        "ItemInfoStatic",
+        "ItemInfoDynamic",
+        "ItemInfoPackage",
+        "SFX_ITEMINFOFLAG_NONE",
+        "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE"
+      ]
+    }
+  }
+}

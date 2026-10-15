@@ -32,6 +32,10 @@
         {
           "path": "apps/office/src/svl/source/items/poolitem.ts",
           "marker": "isSetItem"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/poolitem.ts",
+          "marker": "isStaticDefault"
         }
       ],
       "upstream": [
@@ -66,6 +70,14 @@
         {
           "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx",
           "marker": "isSetItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx",
+          "marker": "SfxPoolItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/poolitem.hxx",
+          "marker": "setStaticDefault"
         }
       ]
     },
@@ -80,13 +92,18 @@
       "IsInvalidItem",
       "PutValue",
       "isSetItem",
-      "setIsSetItem"
+      "setIsSetItem",
+      "isStaticDefault",
+      "isDynamicDefault",
+      "setStaticDefault",
+      "setDynamicDefault"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted.",
       "Native output Any/status, diagnostics/assertions/ABI and complete item service contracts remain unverified.",
       "Task104 adds actual ScProtectionAttr149/defaulttrue,false,false,false, CreateDefault, scalar/copy/Clone/assignment/equality/getters/setters and all0..4 member read/write behavior. QueryValue/PutValue reuse existing browser unwrapped-value contract, not native outputAny/status API; CellProtection is the actual shared4bool IDL value owner with zero/false defaults, copied output and independent scalar copying. Member narrowing toUInt8 and ignoredCONVERT_TWIPS bit, invalidmember/type failure without mutation retained. Shared poolitem unsupported PutValue false default is restored with requiredmemberargument asoriginal; existing11 descendant methods in5files gain only override qualifiers and identical emittedJS. Header/Which/MID/IDL owners reused or created in original boundaries; no fakeAny/typeprovider/genericmemorylibrary/nativebinary/ICU/newCppgenerator. Localized GetValueText/GetPresentation, diagnosticXML/generatedUNOtype-description binding, nativeABI/assertions/wholeoriginalQA and actual ScPatternAttr/column/table/document/grid/ODS integration remain pending. Actual original column-style/protection import QA is unexecuted context only. Seven relevant original scopes plus original codemaker source hash pin provide source-backed evidence, not compiled differential. Sheetprotection/editingvalidation separate, defaultcellprotected does not lock an unprotected sheet. Existing copy-resetWhich/payloadassignment/equalityignoreWhich parallelsCALC-089. WholeCalc/completeaffectedshared raw100/currentgates required; nextfull111requestedpause.",
-      "Task140 does not port native lifetime/registration/ABI or full item-pool/type/presentation services, ItemInfoDynamic, Calc document/UI/ODS."
+      "Task140 does not port native lifetime/registration/ABI or full item-pool/type/presentation services, ItemInfoDynamic, Calc document/UI/ODS.",
+      "Task141 does not port ItemInfoUser, pool chains/user defaults/surrogates/full pool copying, native lifetime/cache/debug/ABI machinery or complete Calc package/document/UI/ODS."
     ],
     "preservedResponsibilities": [
       "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx.",
@@ -96,7 +113,8 @@
       "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
       "Task103 restores original shared unsupported QueryValue default using existing browser no-payload representation; concrete Writer/shared overrides unchanged.",
       "Task104 restores native common unsupported PutValue default false with required member; existing override bodies unchanged.",
-      "Task140 ports actual shared SfxSetItem/SvxSetItem with independent contained base sets, original Which/copy(pool)/Clone and concrete nested Equals(true). Original SfxItemSet base copy slices derived inputs, retains same-pool parent and direct SET/INVALID/DISABLED; base-only CloneAsValue uses existing pool/state clone behavior and guards invalid derived base calls. Existing SwAttrSet native own value overload is unchanged except required TS override annotation. Native set-item classification flag is ordinary boolean state, not lifetime management. Both native initial-set overloads copy, including the rvalue overload whose initializer uses named lvalue pS; no move/reset is invented. Original presentation enum Nameless0/Complete1 is shared; SfxSetItem presentation returns false/untouched and SvxSetItem returns false/cleared via actual OUString. Unused IntlWrapper is an erased opaque argument, not a provider implementation. Source-backed MapUnit/OUString dependency edges are registered without reverse edges. Real Calc183/184 source ranges are tested directly; ItemInfoDynamic and complete DocPool/document/UI/ODS remain unported. Native refcount/cache/registration/allocator/ABI/debug machinery is not recreated; JS GC owns lifetime. Existing metadata history/classification/status and deliberate I/O/recovery differences remain without broad parity promotion."
+      "Task140 ports actual shared SfxSetItem/SvxSetItem with independent contained base sets, original Which/copy(pool)/Clone and concrete nested Equals(true). Original SfxItemSet base copy slices derived inputs, retains same-pool parent and direct SET/INVALID/DISABLED; base-only CloneAsValue uses existing pool/state clone behavior and guards invalid derived base calls. Existing SwAttrSet native own value overload is unchanged except required TS override annotation. Native set-item classification flag is ordinary boolean state, not lifetime management. Both native initial-set overloads copy, including the rvalue overload whose initializer uses named lvalue pS; no move/reset is invented. Original presentation enum Nameless0/Complete1 is shared; SfxSetItem presentation returns false/untouched and SvxSetItem returns false/cleared via actual OUString. Unused IntlWrapper is an erased opaque argument, not a provider implementation. Source-backed MapUnit/OUString dependency edges are registered without reverse edges. Real Calc183/184 source ranges are tested directly; ItemInfoDynamic and complete DocPool/document/UI/ODS remain unported. Native refcount/cache/registration/allocator/ABI/debug machinery is not recreated; JS GC owns lifetime. Existing metadata history/classification/status and deliberate I/O/recovery differences remain without broad parity promotion.",
+      "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/poolitem.cxx",

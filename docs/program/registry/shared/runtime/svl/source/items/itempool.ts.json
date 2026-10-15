@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "formatting-model",
     "capabilityIds": [
-      "CAP-0112"
+      "CAP-0112",
+      "CAP-53cd25b7-67e5-44dc-9ada-6f22358091b9"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,13 +19,29 @@
       "evidence": [
         "apps/office/src/svl/source/items/itempool.ts#SfxPoolItemFactory",
         "vendor/libreoffice-reference/svl/source/items/itempool.cxx#SfxItemPool",
-        "apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts#matches unchanged native handle owners over300 sequences and1815 states"
+        "apps/office/src/sw/source/core/docnode/node-attribute-handle.test.ts#matches unchanged native handle owners over300 sequences and1815 states",
+        "apps/office/src/svl/source/items/itempool.ts",
+        "apps/office/src/svl/source/items/iteminfo.test.ts",
+        "docs/program/calc-core.md#Native shared item-info packages and single-pool registration (task141)"
       ],
-      "justification": "Mapped provenance remains semantically unverified against svl/source/items/itempool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged.",
+      "justification": "Mapped provenance remains semantically unverified against svl/source/items/itempool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged. Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion.",
       "knownViolations": [],
       "localSymbols": [
         "SfxPoolItemFactory",
-        "SfxItemPool"
+        "SfxItemPool",
+        "ItemInfo",
+        "ItemInfoStatic",
+        "ItemInfoDynamic",
+        "ItemInfoPackage",
+        "SFX_ITEMINFOFLAG_NONE",
+        "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE",
+        "registerItemInfoPackage",
+        "GetFirstWhich",
+        "GetLastWhich",
+        "IsInRange",
+        "IsSlot",
+        "GetWhichIDFromSlotID",
+        "GetSlotId"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "svl/source/items/itempool.cxx",
@@ -32,7 +49,10 @@
         "SfxItemPool",
         "ScDocument::UpdateFontCharSet",
         "ScDocument::GetDocColors",
-        "SwDoc::GetDocColors"
+        "SwDoc::GetDocColors",
+        "ItemInfoPackage::getSlotIDToWhichIDMap",
+        "SfxItemPool::registerItemInfoPackage",
+        "SfxItemPool::GetWhichIDFromSlotID"
       ]
     }
   }

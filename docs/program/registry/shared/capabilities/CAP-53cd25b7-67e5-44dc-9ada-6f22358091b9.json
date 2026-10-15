@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-53cd25b7-67e5-44dc-9ada-6f22358091b9",
+    "capabilityId": "CAP-53cd25b7-67e5-44dc-9ada-6f22358091b9",
+    "suite": "shared",
+    "subsystem": "item-info-packages",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original static/dynamic defaults and metadata retain actual identity under JS GC.",
+      "Actual single-pool package registration and slot lookup reuse the existing shared pool and exact source cache condition."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion."
+    },
+    "capability": "Native shared item-info packages and single-pool registration",
+    "gaps": [
+      "Native chains/user defaults/ItemInfoUser/surrogate registration and full pool copying remain pending.",
+      "Complete Calc package/SID table/document/UI/ODS remain pending; fixture scope is explicit."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/itempool.ts",
+          "marker": "ItemInfoPackage"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/poolitem.ts",
+          "marker": "isStaticDefault"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/iteminfo.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/pageattr.test.ts",
+          "marker": "registers independently pool-dependent"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native shared item-info packages and single-pool registration (task141)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/svl/itempool.hxx",
+          "marker": "class SVL_DLLPUBLIC ItemInfo"
+        },
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "SfxItemPool::registerItemInfoPackage"
+        },
+        {
+          "path": "include/svl/poolitem.hxx",
+          "marker": "setStaticDefault"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-item-info-package-registration",
+    "scopeLimitations": [
+      "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion.",
+      "Native QA reference concerns general item-set ownership, not full pool/package/document QA."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

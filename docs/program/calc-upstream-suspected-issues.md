@@ -2058,3 +2058,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: the Svx wrapper forwards `std::move(_pSet)`, but the base initializes `maSet(pS)`. A named rvalue-reference parameter is an lvalue expression, so this selects the `SfxItemSet` copy constructor; it does not move or reset the original set. This looks surprising for the rvalue overload and may be intentional or an overlooked copy optimization.
 - Status: source-level ownership/copy observation, not a confirmed defect or memory failure. Preserve the actual copy behavior. Both erased argument categories share the same ordinary JS copy path; do not infer a move operation from the signature, port native reference counting, or add a memory manager.
 - Local evidence: `apps/office/src/svl/source/items/sitem.ts`, `apps/office/src/svl/source/items/sitem.test.ts`, `apps/office/src/sc/source/core/data/pageattr.test.ts` verify independent copies with retained input pool/parent/states and unchanged source. No native compiler or memory probe is used.
+
+## CALC-120: an all-zero slot package rescans its empty map on every access
+
+- Upstream: `svl/source/items/itempool.cxx`, `ItemInfoPackage::getSlotIDToWhichIDMap`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the implementation fills its cache whenever `maSlotIDToWhichIDMap.empty()`, inserting only entries with nonzero SlotID. If every slot is zero, the map remains empty and each later call scans the metadata again. The comment says it will be filled only once, but no separate initialized marker exists. The returned map identity and lookup results remain stable.
+- Status: source-level possible redundant-work/cache concern, not a confirmed defect. Preserve repeated reads and the same empty map; do not introduce an initialized flag or change package semantics.
+- Local evidence: `apps/office/src/svl/source/items/iteminfo.test.ts` counts actual static-entry reads across empty/nonempty cache calls; `apps/office/src/svl/source/items/itempool.ts` follows the source empty-map condition. No native performance, compiler or memory probe is used.

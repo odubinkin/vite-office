@@ -22,6 +22,25 @@ export interface SfxPoolItemSnapshot {
 export abstract class SfxPoolItem {
   private shareable = true;
   private m_bIsSetItem = false;
+  private m_bStaticDefault = false;
+  private m_bDynamicDefault = false;
+  /** Original logical static-default classification, without lifetime handling. @returns Whether a package-owned static default. */
+  public isStaticDefault(): boolean {
+    return this.m_bStaticDefault;
+  }
+  /** Original logical pool-dependent default classification. @returns Whether a dynamic default. */
+  public isDynamicDefault(): boolean {
+    return this.m_bDynamicDefault;
+  }
+  /** Original friend-only classification assignment; ordinary JS GC owns lifetime. @returns Nothing. */
+  protected setStaticDefault(): void {
+    this.m_bStaticDefault = true;
+  }
+  /** Original friend-only classification assignment; no refcount or disposal action. @returns Nothing. */
+  protected setDynamicDefault(): void {
+    this.m_bDynamicDefault = true;
+  }
+
   /** Original classification flag for items containing an SfxItemSet. @returns Whether a set item. */
   public isSetItem(): boolean {
     return this.m_bIsSetItem;

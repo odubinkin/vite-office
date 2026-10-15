@@ -8,27 +8,54 @@
         {
           "marker": "SfxPoolItemFactory",
           "path": "apps/office/src/svl/source/items/itempool.ts"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itempool.ts",
+          "marker": "ItemInfo"
         }
       ],
       "upstream": [
         {
           "marker": "SfxItemPool",
           "path": "vendor/libreoffice-reference/svl/source/items/itempool.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/items/itempool.cxx",
+          "marker": "ItemInfoPackage::getSlotIDToWhichIDMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/itempool.hxx",
+          "marker": "class SVL_DLLPUBLIC ItemInfo"
         }
       ]
     },
     "localPath": "apps/office/src/svl/source/items/itempool.ts",
     "localSymbols": [
       "SfxPoolItemFactory",
-      "SfxItemPool"
+      "SfxItemPool",
+      "ItemInfo",
+      "ItemInfoStatic",
+      "ItemInfoDynamic",
+      "ItemInfoPackage",
+      "SFX_ITEMINFOFLAG_NONE",
+      "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE",
+      "registerItemInfoPackage",
+      "GetFirstWhich",
+      "GetLastWhich",
+      "IsInRange",
+      "IsSlot",
+      "GetWhichIDFromSlotID",
+      "GetSlotId"
     ],
     "omittedResponsibilities": [
-      "Upstream obligations outside SfxItemPool, ScDocument::UpdateFontCharSet, ScDocument::GetDocColors, SwDoc::GetDocColors and the bounded SfxPoolItemFactory, SfxItemPool contract remain intentionally omitted."
+      "Upstream obligations outside SfxItemPool, ScDocument::UpdateFontCharSet, ScDocument::GetDocColors, SwDoc::GetDocColors and the bounded SfxPoolItemFactory, SfxItemPool contract remain intentionally omitted.",
+      "Task141 does not port ItemInfoUser, pool chains/user defaults/surrogates/full pool copying, native lifetime/cache/debug/ABI machinery or complete Calc package/document/UI/ODS."
     ],
     "preservedResponsibilities": [
       "Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.",
       "Iteration39 restores registered-item handle copy/commit and Changed broadcast deltas before storage mutation. Unchanged complete native owners/helpers/storage bodies (24 definitions,300 sequences,1815 states) compare actual SwDoc/SwTextNode base-owner calls,retained handles,return counts and observer delta counts. Independent literal tests assert inherited/pool-default delta values,slot/sentinel exclusions,no-op overload retention and nested set/reset notifications. Full native IStyleAccess pooling/dedup,modify locks,cache,refcount,surrogates,conditional/RES_AUTO_STYLE items and client lifetime remain unimplemented or unverified. This fresh-handle/unlocked browser observer profile does not establish whole-module or native defaults parity. A destructive callback deleting the final handle crashed the unchanged native raw observer adapter;the trace is preserved as unresolved client-lifetime evidence and is not assigned fabricated parity expectations.",
-      "Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged."
+      "Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged.",
+      "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/itempool.cxx",
@@ -36,7 +63,10 @@
       "SfxItemPool",
       "ScDocument::UpdateFontCharSet",
       "ScDocument::GetDocColors",
-      "SwDoc::GetDocColors"
+      "SwDoc::GetDocColors",
+      "ItemInfoPackage::getSlotIDToWhichIDMap",
+      "SfxItemPool::registerItemInfoPackage",
+      "SfxItemPool::GetWhichIDFromSlotID"
     ]
   },
   "legacyOrder": 57
