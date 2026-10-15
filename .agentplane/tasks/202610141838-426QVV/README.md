@@ -4,7 +4,7 @@ title: "Implement shared native item-info packages and pool registration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T04:35:07.707Z"
+  updated_by: "CODER"
+  note: "Native metadata/package registration verified:46related/6files,181Calc/71files,38boundaries;2shared raw S133B71F46L116 and33Calc S4172B2731F821L3720 everycounterpositive100. Portable build/13source gates/636records zero violations,14paths/3824hashes/6pins/four restored links. CALC-120 retained empty-map rescan, GC lifetime/no refcount machinery. Single-pool/fixture scope explicit; full Calc package/document/UIODS pending. Same-agent evaluation not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T04:34:34.638Z"
+  updated_by: "EVALUATOR"
+  note: "Native shared ItemInfo packages and single-pool registration meet task141 scope; same-agent review is not independent."
+  evaluated_sha: "dc5cf6e4846bc005356547d7bfe2b354137ef3f9"
+  blueprint_digest: "cb974d59c0a085eda739695de6f1519dd0877afc0e217364fa9c1b2f95dfa735"
+  evidence_refs:
+    - ".agentplane/tasks/202610141838-426QVV/README.md"
+    - ".agentplane/tasks/202610141838-426QVV/quality/20261015-043434638-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141838-426QVV/quality/20261015-043434638-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141838-426QVV/quality/20261015-043434638-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141838-426QVV/blueprint/resolved-snapshot.json"
+    - "output/playwright/task141-checks/verification.json"
+    - "output/playwright/task141-checks/source-gates.json"
+    - "output/playwright/task141-checks/source-contract-audit.json"
+  findings:
+    - "Actual metadata/default identity and static/dynamic classification, protected/private native friend calls, package EMPTY/nonzero-slot cache and single-pool registration/default/slot paths are source-grounded. Ordinary JS Maps/references/GC own data; no refcount/delete/weak manager or public setter is introduced."
+    - "46related cases/6files,181Calc/71files and38boundaries pass;2complete changed shared owners and33Calc owners every raw counter positive100. Existing Writer browser default/factory consumers pass unchanged. Portable build and13source gates pass,636records zero violations."
+    - "14intentional paths/3824source hashes/6native pins/four restored links verified. CALC-120 retains source empty-cache rescans without a bug claim. Real Calc183/184 pool-dependent set-item package witnesses do not claim full Calc SID/default package, chains/user defaults or document/UI/ODS readiness."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port native ItemInfo packages and single-pool registration/defaults for Calc; reuse actual set items, ordinary GC storage and logical default tags without refcount/lifetime machinery."
+  -
+    type: "verify"
+    at: "2026-10-15T04:35:07.707Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native metadata/package registration verified:46related/6files,181Calc/71files,38boundaries;2shared raw S133B71F46L116 and33Calc S4172B2731F821L3720 everycounterpositive100. Portable build/13source gates/636records zero violations,14paths/3824hashes/6pins/four restored links. CALC-120 retained empty-map rescan, GC lifetime/no refcount machinery. Single-pool/fixture scope explicit; full Calc package/document/UIODS pending. Same-agent evaluation not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T04:10:58.412Z"
+doc_updated_at: "2026-10-15T04:35:07.803Z"
 doc_updated_by: "CODER"
 description: "Task141 ports actual ItemInfo/Static/Dynamic/Package and single-pool package registration/default lookup/slot mapping in existing SfxItemPool. Reuse shared set items for actual Calc-style dynamic witnesses. Ordinary JS fields/Maps/GC replace ownership storage; no reference counts, weak managers or native memory machinery. Native pool chains/user defaults/full Calc DocPool remain unported."
 sections:
@@ -61,6 +87,39 @@ sections:
     - Scope:14intentional paths within35approved;3runtime/provenance pairs and one bounded capability.3819to3824non-agent source hashes,9existing changes/5new/3810unchanged,6native source pins/original native HEAD/four restored links/calc branch. Source audit directly checks original three fields, actual native friends/boolean classifications, shared EMPTY, empty-map/skipzero conditions, actual requesting-pool registration/dynamic constructor and first/last range. Evidence: `output/playwright/task141-checks/verification.json`, `source-gates.json`, `source-contract-audit.json` and retained logs. This is source comparison, not generated/compiled C++/ABI/native memory evidence. Same-agent evaluator is not independent.
 
     CALC-120 records the all-zero slot-map rescan as a possible redundant-work concern, not a confirmed bug; the source condition is preserved. Static/dynamic classification is value metadata only, object lifetime remains JS GC. No reference counting, weak/deletion/disposal manager, pool/user/secondary-chain or surrogate registration engine was added. Existing flat browser factory/default API is explicitly separate and retained for pools without native packages; complete native Writer/Calc pool architecture is not certified. ItemInfoUser/chains/full pool copying, complete ScDocumentPool and real document/UI/ODS remain pending. Human full-suite/pause checkpoint remains actual minimum connected UI+ODS readiness and is not yet reached.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T04:35:07.707Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native metadata/package registration verified:46related/6files,181Calc/71files,38boundaries;2shared raw S133B71F46L116 and33Calc S4172B2731F821L3720 everycounterpositive100. Portable build/13source gates/636records zero violations,14paths/3824hashes/6pins/four restored links. CALC-120 retained empty-map rescan, GC lifetime/no refcount machinery. Single-pool/fixture scope explicit; full Calc package/document/UIODS pending. Same-agent evaluation not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T04:10:58.412Z, excerpt_hash=sha256:eb9673b245a43dd244c527737e540592a6611f7b20f26c5bfae6f4e36ac134a0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141838-426QVV/blueprint/resolved-snapshot.json
+    - old_digest: cb974d59c0a085eda739695de6f1519dd0877afc0e217364fa9c1b2f95dfa735
+    - current_digest: cb974d59c0a085eda739695de6f1519dd0877afc0e217364fa9c1b2f95dfa735
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141838-426QVV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141838-426QVV -m 🧩 426QVV task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task changes through a subsequent authorized task; no reset, merge or publication."
   Findings: |-
     ItemInfo owns attribute metadata/default references, not an object memory manager. Logical static/dynamic flags preserve source classification only; all lifetime uses JS GC. Native ItemInfoStatic/Dynamic and Package are explicit friends of private/protected setters: TS compiler-only structural casts bridge that access without widening public APIs or adding runtime machinery. Single-pool registration is a real original path; secondary pools/user defaults and complete Calc item package remain pending. Source map cache is checked for actual empty-map behavior, not inferred from its comment. Same-agent quality review is not independent.
@@ -104,6 +163,39 @@ ItemInfo native3field/copy values and unsigned16 narrowing. Static/Dynamic getIt
 - Scope:14intentional paths within35approved;3runtime/provenance pairs and one bounded capability.3819to3824non-agent source hashes,9existing changes/5new/3810unchanged,6native source pins/original native HEAD/four restored links/calc branch. Source audit directly checks original three fields, actual native friends/boolean classifications, shared EMPTY, empty-map/skipzero conditions, actual requesting-pool registration/dynamic constructor and first/last range. Evidence: `output/playwright/task141-checks/verification.json`, `source-gates.json`, `source-contract-audit.json` and retained logs. This is source comparison, not generated/compiled C++/ABI/native memory evidence. Same-agent evaluator is not independent.
 
 CALC-120 records the all-zero slot-map rescan as a possible redundant-work concern, not a confirmed bug; the source condition is preserved. Static/dynamic classification is value metadata only, object lifetime remains JS GC. No reference counting, weak/deletion/disposal manager, pool/user/secondary-chain or surrogate registration engine was added. Existing flat browser factory/default API is explicitly separate and retained for pools without native packages; complete native Writer/Calc pool architecture is not certified. ItemInfoUser/chains/full pool copying, complete ScDocumentPool and real document/UI/ODS remain pending. Human full-suite/pause checkpoint remains actual minimum connected UI+ODS readiness and is not yet reached.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T04:35:07.707Z — VERIFY — ok
+
+By: CODER
+
+Note: Native metadata/package registration verified:46related/6files,181Calc/71files,38boundaries;2shared raw S133B71F46L116 and33Calc S4172B2731F821L3720 everycounterpositive100. Portable build/13source gates/636records zero violations,14paths/3824hashes/6pins/four restored links. CALC-120 retained empty-map rescan, GC lifetime/no refcount machinery. Single-pool/fixture scope explicit; full Calc package/document/UIODS pending. Same-agent evaluation not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T04:10:58.412Z, excerpt_hash=sha256:eb9673b245a43dd244c527737e540592a6611f7b20f26c5bfae6f4e36ac134a0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141838-426QVV/blueprint/resolved-snapshot.json
+- old_digest: cb974d59c0a085eda739695de6f1519dd0877afc0e217364fa9c1b2f95dfa735
+- current_digest: cb974d59c0a085eda739695de6f1519dd0877afc0e217364fa9c1b2f95dfa735
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141838-426QVV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141838-426QVV -m 🧩 426QVV task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
