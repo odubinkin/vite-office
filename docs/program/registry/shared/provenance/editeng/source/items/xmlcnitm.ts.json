@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/xmlcnitm.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/xmlcnitm.cxx",
+    "localSymbols": [
+      "SvXMLAttrContainerItem"
+    ],
+    "upstreamSymbols": [
+      "SvXMLAttrContainerItem::AddAttr"
+    ],
+    "preservedResponsibilities": [
+      "Task144 implements original SvXMLAttr, SvXMLAttrCollection, SvXMLAttrContainerData and SvXMLAttrContainerItem value/default/copy/assignment/accessor contracts using existing shared SvXMLNamespaceMap and SfxPoolItem. Native vector/unique_ptr/OUString value storage is represented by JS arrays, immutable UTF16 strings and GC, without refcounts, destruction or move-lifetime emulation. Original overload acceptance, colon assertion boundaries, conflicting-prefix Add4 versus Set4 result, alias canonical-prefix changes, unpruned namespace history/order-sensitive attribute equality and item unsigned16 count/index narrowing are preserved. Actual Calc ATTR_USERDEF122 is a source-backed value witness, not a fabricated document pool. Presentation returns false without changing actual OUString; unused IntlWrapper is erased. Typed UNO QueryValue/PutValue and real SvUnoAttributeContainer/XNameContainer transport remain unported; inherited unsupported base operations are not advertised as native UNO parity. No cycle exception: actual editeng-to-xmloff dependency replaces the erroneous reverse removed in task143. Complete ScDocumentPool/ScPatternAttr/document/UI/ODS remain pending; existing deliberate I/O/recovery deviations retained."
+    ],
+    "omittedResponsibilities": [
+      "Native memory management/binary layout and real UNO container/Any transport, full Calc pool/document/connected UI/ODS remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/xmlcnitm.ts",
+          "marker": "SvXMLAttrContainerItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/xmlcnitm.cxx",
+          "marker": "SvXMLAttrContainerItem::AddAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/xmlcnitm.hxx",
+          "marker": "SvXMLAttrContainerItem"
+        }
+      ]
+    }
+  }
+}

@@ -2086,3 +2086,17 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: automatic allocation starts at0x8000 and increments an unsigned16 key until a free reverse-map key is found. It does not skip XMLNS65533/NONE65534/UNKNOWN65535 marker values. Explicit Add rejects NONE, yet auto allocation can produce it.
 - Status: source-level capacity/identity concern, not a native memory failure or confirmed defect. Preserve the logical key rule. A bounded JS fixture fills explicit keys0x8000through65533 once, then checks the single automatic scan reaches NONE and subsequent name resolution follows the defined release fallbacks. This checks identifiers, not native allocation or memory management. Full key-space exhaustion and its nonterminating source search are not executed or simulated.
 - Local evidence: `apps/office/src/xmloff/source/core/namespacemap.test.ts`; no native compiler, sanitizer, hash-table implementation or memory probe.
+
+## CALC-124: attribute Add4 accepts an unresolved namespace while Set4 rejects it
+
+- Upstream: `xmloff/source/core/SvXMLAttrCollection.cxx` at pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, four-string AddAttr and SetAt overloads, with namespace-map Add semantics from CALC-122.
+- Observation: an existing prefix bound to a different URI can make Add return UNKNOWN. AddAttr still appends an attribute with this key and returns true, so namespace/prefix queries return empty. SetAt explicitly returns false on that same key and preserves the previous attribute.
+- Status: surprising source-level asymmetry, not a confirmed upstream defect. Preserve both behaviors; do not silently reject Add or repair/rebind the namespace.
+- Local evidence: `apps/office/src/xmloff/source/core/xmlcnimp.test.ts`, conflict and nonmutation witnesses.
+
+## CALC-125: removed XML attributes leave namespace history affecting equality
+
+- Upstream: the same pinned collection file, Remove and operator==.
+- Observation: Remove erases only the ordered attribute vector. Namespace-map entries remain, and equality compares that map as well as attributes. Removing all qualified attributes therefore leaves a count-zero collection unequal to a fresh empty one. Adding a same-URI prefix alias also changes the canonical prefix reported for earlier attributes through their stored key.
+- Status: observable historical state, possibly deliberate; not a confirmed defect. Preserve unpruned namespace tables, alias semantics and source equality.
+- Local evidence: `apps/office/src/xmloff/source/core/xmlcnimp.test.ts`, retained-history/copy and alias witnesses.

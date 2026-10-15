@@ -129,3 +129,6 @@ export const ATTR_PAGE_PAPERBIN = 159;
 export const ATTR_PAGE_HEADERSET = 183;
 /** Original dynamic footer set item identity. */
 export const ATTR_PAGE_FOOTERSET = 184;
+
+/** Original XML user-defined attribute container identity used by ScDocumentPool. */
+export const ATTR_USERDEF = 122;

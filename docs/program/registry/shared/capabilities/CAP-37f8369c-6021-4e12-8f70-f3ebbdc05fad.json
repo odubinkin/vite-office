@@ -1,0 +1,120 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-37f8369c-6021-4e12-8f70-f3ebbdc05fad",
+    "capabilityId": "CAP-37f8369c-6021-4e12-8f70-f3ebbdc05fad",
+    "suite": "shared",
+    "subsystem": "xml-attribute-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original attribute value/copy/overload and namespace history behavior is preserved.",
+      "Calc ATTR_USERDEF122 default/copy and unsigned16 pooled item contracts are source-grounded."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task144 implements original SvXMLAttr, SvXMLAttrCollection, SvXMLAttrContainerData and SvXMLAttrContainerItem value/default/copy/assignment/accessor contracts using existing shared SvXMLNamespaceMap and SfxPoolItem. Native vector/unique_ptr/OUString value storage is represented by JS arrays, immutable UTF16 strings and GC, without refcounts, destruction or move-lifetime emulation. Original overload acceptance, colon assertion boundaries, conflicting-prefix Add4 versus Set4 result, alias canonical-prefix changes, unpruned namespace history/order-sensitive attribute equality and item unsigned16 count/index narrowing are preserved. Actual Calc ATTR_USERDEF122 is a source-backed value witness, not a fabricated document pool. Presentation returns false without changing actual OUString; unused IntlWrapper is erased. Typed UNO QueryValue/PutValue and real SvUnoAttributeContainer/XNameContainer transport remain unported; inherited unsupported base operations are not advertised as native UNO parity. No cycle exception: actual editeng-to-xmloff dependency replaces the erroneous reverse removed in task143. Complete ScDocumentPool/ScPatternAttr/document/UI/ODS remain pending; existing deliberate I/O/recovery deviations retained."
+    },
+    "capability": "Native XML attribute values for Calc user attributes",
+    "gaps": [
+      "Actual UNO container and typed Any transport remain unported.",
+      "Full Calc pool/document/connected UI and same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/xmloff/source/core/SvXMLAttr.ts",
+          "marker": "SvXMLAttr"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/SvXMLAttrCollection.ts",
+          "marker": "SvXMLAttrCollection"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/xmlcnimp.ts",
+          "marker": "SvXMLAttrContainerData"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/xmlcnitm.ts",
+          "marker": "SvXMLAttrContainerItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/xmloff/source/core/xmlcnimp.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/xmlcnitm.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/xml-attributes.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native XML attribute values for Calc user attributes (task144)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "xmloff/source/core/SvXMLAttr.cxx",
+          "marker": "SvXMLAttr"
+        },
+        {
+          "path": "xmloff/source/core/SvXMLAttrCollection.cxx",
+          "marker": "SvXMLAttrCollection"
+        },
+        {
+          "path": "xmloff/source/core/xmlcnimp.cxx",
+          "marker": "SvXMLAttrContainerData"
+        },
+        {
+          "path": "include/xmloff/xmlcnimp.hxx",
+          "marker": "SvXMLAttrContainerData"
+        },
+        {
+          "path": "editeng/source/items/xmlcnitm.cxx",
+          "marker": "SvXMLAttrContainerItem"
+        },
+        {
+          "path": "include/editeng/xmlcnitm.hxx",
+          "marker": "SvXMLAttrContainerItem"
+        },
+        {
+          "path": "sc/source/core/data/docpool.cxx",
+          "marker": "ATTR_USERDEF"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/table/_CellProperties.java",
+          "marker": "_UserDefinedAttributes"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "xml-attribute-value-container-item",
+    "scopeLimitations": [
+      "Task144 implements original SvXMLAttr, SvXMLAttrCollection, SvXMLAttrContainerData and SvXMLAttrContainerItem value/default/copy/assignment/accessor contracts using existing shared SvXMLNamespaceMap and SfxPoolItem. Native vector/unique_ptr/OUString value storage is represented by JS arrays, immutable UTF16 strings and GC, without refcounts, destruction or move-lifetime emulation. Original overload acceptance, colon assertion boundaries, conflicting-prefix Add4 versus Set4 result, alias canonical-prefix changes, unpruned namespace history/order-sensitive attribute equality and item unsigned16 count/index narrowing are preserved. Actual Calc ATTR_USERDEF122 is a source-backed value witness, not a fabricated document pool. Presentation returns false without changing actual OUString; unused IntlWrapper is erased. Typed UNO QueryValue/PutValue and real SvUnoAttributeContainer/XNameContainer transport remain unported; inherited unsupported base operations are not advertised as native UNO parity. No cycle exception: actual editeng-to-xmloff dependency replaces the erroneous reverse removed in task143. Complete ScDocumentPool/ScPatternAttr/document/UI/ODS remain pending; existing deliberate I/O/recovery deviations retained.",
+      "The referenced native Java CellProperties QA exercises the wider real UNO XNameContainer transport, which is explicitly not ported here. Local tests cover its underlying attribute values and the actual Calc pool default; no full QA or filter parity is claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

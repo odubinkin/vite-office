@@ -306,6 +306,7 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
     expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(true);
+    expect(isForbiddenModuleEdge("editeng", "xmloff")).toBe(false);
     expect(isForbiddenModuleEdge("xmloff", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("svtools", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("svtools", "sw")).toBe(true);
