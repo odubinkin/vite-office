@@ -2,10 +2,10 @@
  * @fileoverview Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.
  */
 
-import { MergeRange } from "./itemset";
+import { MergeRange, implCreateItemEntry } from "./itemset";
 import type { WhichRangesContainer } from "../../inc/whichranges";
 
-import type { SfxPoolItem, SfxPoolItemSnapshot, SfxPoolItemValue } from "./poolitem";
+import { SfxPoolItem, type SfxPoolItemSnapshot, type SfxPoolItemValue } from "./poolitem";
 
 /** Restores a concrete pooled item from its persisted primitive value. */
 export type SfxPoolItemFactory = (value: SfxPoolItemValue) => SfxPoolItem;
@@ -58,6 +58,7 @@ export class SfxItemPool {
   private readonly defaults = new Map<number, SfxPoolItem>();
   private readonly factories = new Map<number, SfxPoolItemFactory>();
   private readonly maItemInfos: ItemInfo[] = [];
+  private readonly maUserItemInfos = new Map<number, ItemInfo>();
   private mnStart = 0;
   private mnEnd = 0;
   private mpSlotIDToWhichIDMap: ReadonlyMap<number, number> | undefined;
@@ -131,12 +132,63 @@ export class SfxItemPool {
     if (factory !== undefined) this.factories.set(item.Which(), factory);
   }
 
-  /** Original pool-default lookup through the actual secondary chain, where user overrides are not yet represented. @param which - Known declared identity. @returns Actual static/dynamic default. */
+  /** Original pool default ignores any current user override and returns the saved static/dynamic metadata value. @param which - Known identity. @returns Original pool item. */
   public GetPoolDefaultItem(which: number): SfxPoolItem {
-    return this.GetUserOrPoolDefaultItem(which);
+    const saved = this.maUserItemInfos.get(which);
+    if (saved !== undefined) return saved.getItem() as SfxPoolItem;
+    const item =
+      this.maItemInfos.length === 0
+        ? this.defaults.get(which)
+        : (this.maItemInfos[which - this.mnStart]?.getItem() ?? undefined);
+    if (item === undefined && this.mpSecondary) return this.mpSecondary.GetPoolDefaultItem(which);
+    if (item === undefined) throw new Error(`Unknown pool default: ${which}`);
+    return item;
+  }
+  /** Original first override retains the actual previous metadata before constructing the new user entry. @param item - New default. @returns Nothing. */
+  private impCreateUserDefault(item: SfxPoolItem): void {
+    const which = item.Which(),
+      index = which - this.mnStart,
+      info = this.maItemInfos[index];
+    if (info === undefined) throw new Error("Missing original ItemInfo for user default");
+    this.maUserItemInfos.set(which, info);
+    this.maItemInfos[index] = new ItemInfoUser(info, this, item);
+  }
+  /** Original restore operation; native end-iterator/no-default is an ordinary absent Map entry. GC owns replaced entries. @param which - Original identity. @returns Nothing. */
+  private impClearUserDefault(which: number): void {
+    const saved = this.maUserItemInfos.get(which);
+    if (saved === undefined) return;
+    this.maItemInfos[which - this.mnStart] = saved;
+  }
+  /** Original native user-default create/equal-noop/replace behavior in the target pool. @param item - Actual caller value. @returns Nothing. */
+  public SetUserDefaultItem(item: SfxPoolItem): void {
+    const target = this.getTargetPool(item.Which());
+    if (target === null) throw new Error("Unknown WhichId for user default");
+    const which = item.Which();
+    if (!target.maUserItemInfos.has(which)) {
+      target.impCreateUserDefault(item);
+      return;
+    }
+    const index = which - target.mnStart,
+      info = target.maItemInfos[index] as ItemInfo;
+    if (SfxPoolItem.areSame(info.getItem(), item)) return;
+    target.maItemInfos[index] = new ItemInfoUser(info, target, item);
+  }
+  /** Original optional current override lookup, independent of the saved original pool item. @param which - Known native identity. @returns Override or null. */
+  public GetUserDefaultItem(which: number): SfxPoolItem | null {
+    const target = this.getTargetPool(which);
+    if (target === null) throw new Error("Unknown WhichId for user default");
+    if (!target.maUserItemInfos.has(which)) return null;
+    return (target.maItemInfos[which - target.mnStart] as ItemInfo).getItem();
+  }
+  /** Original restore/remove semantics; repeated reset is a no-op. Native redundant iterator guards fold into one Map lookup. @param which - Known identity. @returns Nothing. */
+  public ResetUserDefaultItem(which: number): void {
+    const target = this.getTargetPool(which);
+    if (target === null) throw new Error("Unknown WhichId for user default");
+    target.impClearUserDefault(which);
+    target.maUserItemInfos.delete(which);
   }
 
-  /** Returns the immutable default for one WhichId. @param which - Registered item identity. @returns Pool default item. */
+  /** Returns the effective current user or pool default for one WhichId. @param which - Registered item identity. @returns Pool default item. */
   public GetUserOrPoolDefaultItem(which: number): SfxPoolItem {
     const item =
       this.maItemInfos.length === 0
@@ -235,6 +287,24 @@ export class ItemInfoDynamic extends ItemInfo {
     if (item !== null) (item as unknown as DefaultItemFriend).setDynamicDefault();
   }
   /** Original borrowed pool-dependent default. @returns Actual item or null. */
+  public override getItem(): SfxPoolItem | null {
+    return this.m_pItem;
+  }
+}
+/** Original user metadata binds an ordinary logical item through the same shared entry operation as native holders. No ownership counter or deletion engine is introduced. */
+export class ItemInfoUser extends ItemInfo {
+  private readonly m_pItem: SfxPoolItem | null;
+  /** Original metadata/pool/item/adoption constructor. @param info - Original metadata. @param pool - Actual target. @param item - Borrowed value. @param passingOwnership - Native adoption argument. @returns Entry. */
+  constructor(
+    info: Readonly<ItemInfo>,
+    pool: SfxItemPool,
+    item: SfxPoolItem,
+    passingOwnership = false,
+  ) {
+    super(info);
+    this.m_pItem = implCreateItemEntry(pool, item, passingOwnership);
+  }
+  /** Original borrowed user-default value. @returns Item or null. */
   public override getItem(): SfxPoolItem | null {
     return this.m_pItem;
   }

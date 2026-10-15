@@ -4,6 +4,7 @@ export {
   ItemInfo,
   ItemInfoStatic,
   ItemInfoDynamic,
+  ItemInfoUser,
   ItemInfoPackage,
   SFX_ITEMINFOFLAG_NONE,
   SFX_ITEMINFOFLAG_SUPPORT_SURROGATE,

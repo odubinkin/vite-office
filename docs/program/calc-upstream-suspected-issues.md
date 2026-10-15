@@ -2339,3 +2339,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: a pool listener can Clear the index during that Modified callback while external references keep all styles alive. The base has already stored the new parent name, but both derived lookups can then fail: the old subscription remains and no new subscription is created. No cached parent pointers bridge the callback.
 - Status: potentially surprising reentrant ordering, not a confirmed defect. Preserve the broadcast-before-lookups order and both null guards. Do not infer outcomes for invalid cyclic graphs or dead style pointers.
 - Local evidence: actual pool Clear callback with retained owners in `apps/office/src/svl/source/items/native-style-sheet.test.ts`; this is a source-derived scenario, not a native memory or sanitizer experiment.
+
+## CALC-160: first user-default construction saves metadata before creating the entry
+
+- Upstream: pinned `svl/source/items/itempool.cxx`, impCreateUserDefault, ItemInfoUser constructor and SetUserDefaultItem.
+- Observation: impCreateUserDefault inserts the original ItemInfo into maUserItemInfos before allocating/constructing ItemInfoUser. If the value clone/construction throws, maItemInfos still contains the original entry while override bookkeeping already exists. The replacement path instead constructs a new entry before assigning it and deleting the previous user entry.
+- Status: potential first-insertion exception-safety issue, not a confirmed defect. Preserve statement ordering; do not add a rollback absent from upstream. No normal post-first-failure cleanup/lifetime outcome is claimed.
+- Local evidence: pinned source audit. `apps/office/src/svl/source/items/native-user-defaults.test.ts` tests the defined replacement-clone failure path, where the previous user metadata/value remains intact; it does not claim a native first-failure cleanup test or run a compiler/memory probe.

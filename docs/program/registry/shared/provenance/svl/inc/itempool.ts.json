@@ -13,7 +13,8 @@
       "ItemInfoDynamic",
       "ItemInfoPackage",
       "SFX_ITEMINFOFLAG_NONE",
-      "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE"
+      "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE",
+      "ItemInfoUser"
     ],
     "upstreamSymbols": [
       "ItemInfo",
@@ -21,10 +22,12 @@
       "ItemInfoDynamic",
       "ItemInfoPackage",
       "SFX_ITEMINFOFLAG_NONE",
-      "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE"
+      "SFX_ITEMINFOFLAG_SUPPORT_SURROGATE",
+      "ItemInfoUser"
     ],
     "preservedResponsibilities": [
-      "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion."
+      "Task141 ports actual ItemInfo three-field/copy metadata, Static/Dynamic default entries and ItemInfoPackage with original protected replacement, shared EMPTY and nonzero SlotID cache. Existing SfxItemPool gains the actual package registration/default lookup/first-last range and single-pool slot conversion paths, preserving supplied default identity and constructing only required dynamic entries through real callbacks. Original debug/invalid preconditions receive host errors without fabricated default values. Existing flat browser default/factory API remains distinct and unchanged when no native package is registered; no complete native pool, chains or user-default claim. Native static/dynamic default tags are plain boolean classification, not memory management. Original protected/default/private setters retain their API visibility: two narrow erased native-friend casts and one exact typed constant-member friend access replace C++ friendship, without a runtime adapter or public setter. Native inline header values are co-located in the existing shared source owner and canonically reexported once. All object references/Maps use JS GC; no refcount, delete/dispose/weak lifetime engine or native probes. Real Calc183/184 set-item package witnesses use exact source ranges and independent requesting pools; zero test fixture slots do not claim the unported Calc SID catalog. Complete Calc DocPool/document/UI/ODS remain pending. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without broad parity promotion.",
+      "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. Native refcount/cache/allocator/deletion machinery is erased under GC without a new counter/lifetime framework. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
     ],
     "omittedResponsibilities": [
       "Task141 does not port ItemInfoUser, pool chains/user defaults/surrogates/full pool copying, native lifetime/cache/debug/ABI machinery or complete Calc package/document/UI/ODS."
@@ -34,12 +37,20 @@
         {
           "path": "apps/office/src/svl/inc/itempool.ts",
           "marker": "SfxItemPool"
+        },
+        {
+          "path": "apps/office/src/svl/inc/itempool.ts",
+          "marker": "ItemInfoUser"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/include/svl/itempool.hxx",
           "marker": "ItemInfo"
+        },
+        {
+          "path": "include/svl/itempool.hxx",
+          "marker": "ItemInfoUser"
         }
       ]
     }
