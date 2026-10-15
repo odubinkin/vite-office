@@ -4,7 +4,7 @@ title: "Restore native shared text-line item hierarchy for Calc overline"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T05:53:40.891Z"
+  updated_by: "CODER"
+  note: "Verified102related,184Calc,38boundary,3Chromium cases; entire changed shared/Calc raw100; all13gates/build/inventory pass;40paths/3871hashes/10pins/4links audited. Four Writer-only gaps left, actual complex interface/presentation pending, same-agent evaluator not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T05:53:39.714Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: original text-line value hierarchy and actual Tools enum replace incorrect scalar underline; shared/Calc raw100 and Writer integration verified with honest service gaps."
+  evaluated_sha: "aa0e749e7a1b7a23e48e540433cd1aa408f75276"
+  blueprint_digest: "b27d14cbdce4e2b6e405871ed2164405372d9be522a3c1111b1558066b1e6349"
+  evidence_refs:
+    - ".agentplane/tasks/202610150539-NBVZWN/README.md"
+    - ".agentplane/tasks/202610150539-NBVZWN/quality/20261015-055339714-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150539-NBVZWN/quality/20261015-055339714-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150539-NBVZWN/quality/20261015-055339714-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150539-NBVZWN/blueprint/resolved-snapshot.json"
+    - "output/playwright/task145-checks/verification.json"
+    - "output/playwright/task145-checks/native-source-audit.json"
+    - "output/playwright/task145-checks/source-gates.json"
+    - "output/playwright/task145-checks/build-browser-manifest.json"
+  findings:
+    - "Canonical textitem.ts451lines owns original base and underline/overline classes without a filename exception. Shared Color/ComplexColor/SfxEnumItem/Any reused; original copied fields, Which-independent equality, bool/scalar member behavior and alpha preservation exercised; no memory manager or fake interface/resource provider."
+    - "Source audit verifies20enum declarations/5memberIDs/2CalcWhichIds and9Writer files unchanged except canonical enum references. Stable invariant follows Tools; actual runtime/provenance/capability records remain honest unverified foundation."
+    - "102related,184Calc,38boundary and3existingChromium cases pass. Entire3changedsharedowners and33Calcowners raw100;4Writer-only gap owners measured/left. All13source gates and portable build pass, zero inventory semantic violations."
+    - "40intentional paths/3871source hashes/10native pins/4restored links audited. Earlier assertion/selection/metadata/typecheck failures retained and corrected without relaxing gates or changing native behavior."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: replace incorrect scalar underline with original shared text-line hierarchy, reuse Tools/ComplexColor/Any values and migrate Writer enum users; record missing interface/presentation services explicitly."
+  -
+    type: "verify"
+    at: "2026-10-15T05:53:40.891Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified102related,184Calc,38boundary,3Chromium cases; entire changed shared/Calc raw100; all13gates/build/inventory pass;40paths/3871hashes/10pins/4links audited. Four Writer-only gaps left, actual complex interface/presentation pending, same-agent evaluator not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T05:53:21.502Z"
+doc_updated_at: "2026-10-15T05:53:40.966Z"
 doc_updated_by: "CODER"
 description: "Task145 replaces scalar-only shared underline with original SvxTextLineItem enum/color/complex value base and actual underline/overline derivatives; canonical Tools FontLineStyle declarations and consumer migration, source defaults and bool/scalar Any semantics. Missing native localized resource and actual XComplexColor interface transport explicitly recorded, never replaced by fake services or memory mechanisms."
 sections:
@@ -61,6 +89,39 @@ sections:
       Result: pass.
       Evidence:20 native enum declarations (19styles plus size sentinel),5 actual member IDs and2Calc WhichIds match;9 Writer source/test bodies AST-identical except canonical enum names.10native pins at9bc445578031fecf56086729d8e4940c77e14d65,4exact reference targets restored,3871source hashes (3865baseline,34changed existing,6new,3831unchanged),40intentional paths. Detailed verification.json, native-source-audit.json, hash/intentional-path files retained. Canonical textitem.ts owns all3line classes; no duplicate enum/class/storage or fake resource provider.
       Scope: shared core value prerequisite only. Actual XComplexColor transport is explicitly unsupportedfalse and localized EditResId/GetColorString presentation remains unported; these are honest missing native services, not parity claims. Existing no-argument browser style projection is bounded and documented. Full Calc pool/document/UI/ODS remains pending. Native CharacterProperties Java QA reference is its real generic CharUnderline declaration, not an invented method or a claimed executed native suite. Same-agent evaluator is not independent; clean calc/post-commit hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T05:53:40.891Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified102related,184Calc,38boundary,3Chromium cases; entire changed shared/Calc raw100; all13gates/build/inventory pass;40paths/3871hashes/10pins/4links audited. Four Writer-only gaps left, actual complex interface/presentation pending, same-agent evaluator not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T05:53:21.502Z, excerpt_hash=sha256:479feb4701d975ca7d863d07b569aaab6296420358c6644feef5b15eab8eda8e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150539-NBVZWN/blueprint/resolved-snapshot.json
+    - old_digest: b27d14cbdce4e2b6e405871ed2164405372d9be522a3c1111b1558066b1e6349
+    - current_digest: b27d14cbdce4e2b6e405871ed2164405372d9be522a3c1111b1558066b1e6349
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150539-NBVZWN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150539-NBVZWN -m 🧩 NBVZWN task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert intentional task paths through a later authorized task; no reset, merge or publication."
   Findings: |-
     Current underline incorrectly compares Which and lacks the native shared value base/color fields. Correct shared code and canonical enum consumers rather than preserving the bad implementation. Existing browser scalar transport is an explicit established adaptation; real missing complex interface/localized resources remain unverified, not fabricated. Same-agent evaluation is not independent.
@@ -120,6 +181,39 @@ Compare native udlnitem.hxx/textitem.cxx/fontenum.hxx/memberids.h and actual Cal
   Result: pass.
   Evidence:20 native enum declarations (19styles plus size sentinel),5 actual member IDs and2Calc WhichIds match;9 Writer source/test bodies AST-identical except canonical enum names.10native pins at9bc445578031fecf56086729d8e4940c77e14d65,4exact reference targets restored,3871source hashes (3865baseline,34changed existing,6new,3831unchanged),40intentional paths. Detailed verification.json, native-source-audit.json, hash/intentional-path files retained. Canonical textitem.ts owns all3line classes; no duplicate enum/class/storage or fake resource provider.
   Scope: shared core value prerequisite only. Actual XComplexColor transport is explicitly unsupportedfalse and localized EditResId/GetColorString presentation remains unported; these are honest missing native services, not parity claims. Existing no-argument browser style projection is bounded and documented. Full Calc pool/document/UI/ODS remains pending. Native CharacterProperties Java QA reference is its real generic CharUnderline declaration, not an invented method or a claimed executed native suite. Same-agent evaluator is not independent; clean calc/post-commit hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T05:53:40.891Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified102related,184Calc,38boundary,3Chromium cases; entire changed shared/Calc raw100; all13gates/build/inventory pass;40paths/3871hashes/10pins/4links audited. Four Writer-only gaps left, actual complex interface/presentation pending, same-agent evaluator not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T05:53:21.502Z, excerpt_hash=sha256:479feb4701d975ca7d863d07b569aaab6296420358c6644feef5b15eab8eda8e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150539-NBVZWN/blueprint/resolved-snapshot.json
+- old_digest: b27d14cbdce4e2b6e405871ed2164405372d9be522a3c1111b1558066b1e6349
+- current_digest: b27d14cbdce4e2b6e405871ed2164405372d9be522a3c1111b1558066b1e6349
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150539-NBVZWN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150539-NBVZWN -m 🧩 NBVZWN task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
