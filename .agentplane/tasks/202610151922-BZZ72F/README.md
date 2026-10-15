@@ -1,10 +1,11 @@
 ---
 id: "202610151922-BZZ72F"
 title: "Connect native locale uppercase for Calc string interning"
-status: "DOING"
+result_summary: "Connected required source whole/range uppercase operation for Calc interning, confirmed native-JS differences, reused shared mappings and fixed the shared CPPU initialization dependency."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Original clamp and ToUpper no-offset mapping use genuine OUString/Locale and existing i18nutil; Chromium confirms six JS divergences. No new ICU or fake complete CharClass/UNO/memory provider."
     - "48 related,187Calc,production build,2 Chromium shared scenarios and13 source gates pass; exact raw100 owner sets and9 native source pins verified. Final bounded capability acceptance recorded in current source commit."
-commit: null
+commit:
+  hash: "b446a569b89a863a20a9c37245027f34481c5189"
+  message: "🧩 BZZ72F task: record locale uppercase quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement the required source-backed uppercase field operation at original module boundaries, reuse actual shared mappings and verify whole-string JS counterexamples without a new ICU/service facade."
+  -
+    author: "CODER"
+    body: "Verified: source locale uppercase operation preserves original range, mapping and UNO exception contracts;48 related,187Calc,2 Chromium shared scenarios,production build and13 gates pass with strict raw100."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: node output/playwright/task166-checks/portable.mjs yields48 related tests/4files and187 Calc/76files; exact3 shared owners S20/B8/F3/L16 and33Calc S4179/B2731/F821/L3727 raw100. build-browser-portable.mjs:production build and2 actual Chromium shared scenarios pass with4 native source links absent/restored. native-audit.mjs pins9 source blobs,19 uppercase assertions/7native QA fixtures,6 JS difference witnesses and14 top-level guard function bodies unchanged. source-gates.mjs all13 pass,including43 boundary tests and inventory. Final evidence output/playwright/task166-checks/final-verification.json. No new ICU/memory/provider or Calc document/UI/ODS readiness claim; full run deferred to user milestone."
+  -
+    type: "status"
+    at: "2026-10-15T19:49:34.644Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source locale uppercase operation preserves original range, mapping and UNO exception contracts;48 related,187Calc,2 Chromium shared scenarios,production build and13 gates pass with strict raw100."
 doc_version: 3
-doc_updated_at: "2026-10-15T19:48:53.334Z"
+doc_updated_at: "2026-10-15T19:49:34.646Z"
 doc_updated_by: "CODER"
 description: "Task166: implement source-aligned locale uppercase operation across original unotools/i18npool boundaries using actual shared Locale/OUString and existing i18nutil mappings. Verify native JS equivalence and retain source behavior where counterexamples exist; no fake CharClass/UNO service or new ICU/memory library."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: Evaluator pass rejected with evaluated_sha_missing after task166a close moved HEAD onto another task-only closure commit. No implementation or test failure occurred.
       Impact: Task166 quality review must be attached to a committed task166 result rather than the unrelated closure tail.
       Resolution: Persist the bounded completed acceptance evidence in this task capability record and commit its exact scope with task artifacts, then evaluate that concrete current commit; do not force finish.
+extensions:
+  implementation_commit:
+    hash: "670570562024594d21a73e4f426d309b96b08f0d"
+    message: "🔧 BZZ72F core: persist bounded locale uppercase acceptance evidence"
 id_source: "generated"
 ---
 ## Summary
