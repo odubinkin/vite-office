@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610150627-F1YKQP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T06:33:47.233Z",
+  "verdict": "pass",
+  "summary": "Same-agent review, not independent: native pooled-item identity/null/Which/concrete-type/value ordering restored at shared item-set sites; rich text/model readiness remains honestly pending.",
+  "evaluated_sha": "791653ddb9f59cd5e0ceefe7df77ae81821c82d5",
+  "blueprint_digest": "92073e542291c4e9fcdd990dbd34fe6227cdb48421b0c10239fee44b53936d04",
+  "findings": [
+    "Original per-derived-class ItemType identity is represented by exact JS concrete-class identity; native numeric ABI and ownership managers are unnecessary. Both actual native overloads and callsites source-audited.",
+    "137related,186Calc,39boundary tests and all13source gates/build pass; whole2shared and33Calc executable owners raw100. Existing Writer comparison and notification consumers tested.",
+    "9intentional paths/3897source hashes/5native pins/4restored links audited, inventory zero violations and existing parity statuses preserved. Initial selection/style errors corrected and retained in task findings."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610150627-F1YKQP/README.md",
+    "output/playwright/task148-checks/verification.json",
+    "output/playwright/task148-checks/native-source-audit.json",
+    "output/playwright/task148-checks/source-gates.json",
+    "output/playwright/task148-checks/build-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

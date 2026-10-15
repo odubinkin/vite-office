@@ -4,7 +4,7 @@ title: "Use native pooled item comparisons for rich text dependencies"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,32 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T06:33:57.940Z"
+  updated_by: "CODER"
+  note: "Verified137related,186Calc,39boundary tests; whole2shared/33Calc raw100, all13source gates/build/inventory pass.9paths/3897hashes/5pins/4links audited. Native comparison order/type checks retained, actual rich text/pool/model/UI/ODS pending; same-agent evaluation not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T06:33:47.233Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: native pooled-item identity/null/Which/concrete-type/value ordering restored at shared item-set sites; rich text/model readiness remains honestly pending."
+  evaluated_sha: "791653ddb9f59cd5e0ceefe7df77ae81821c82d5"
+  blueprint_digest: "92073e542291c4e9fcdd990dbd34fe6227cdb48421b0c10239fee44b53936d04"
+  evidence_refs:
+    - ".agentplane/tasks/202610150627-F1YKQP/README.md"
+    - ".agentplane/tasks/202610150627-F1YKQP/quality/20261015-063347233-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150627-F1YKQP/quality/20261015-063347233-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150627-F1YKQP/quality/20261015-063347233-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150627-F1YKQP/blueprint/resolved-snapshot.json"
+    - "output/playwright/task148-checks/verification.json"
+    - "output/playwright/task148-checks/native-source-audit.json"
+    - "output/playwright/task148-checks/source-gates.json"
+    - "output/playwright/task148-checks/build-manifest.json"
+  findings:
+    - "Original per-derived-class ItemType identity is represented by exact JS concrete-class identity; native numeric ABI and ownership managers are unnecessary. Both actual native overloads and callsites source-audited."
+    - "137related,186Calc,39boundary tests and all13source gates/build pass; whole2shared and33Calc executable owners raw100. Existing Writer comparison and notification consumers tested."
+    - "9intentional paths/3897source hashes/5native pins/4restored links audited, inventory zero violations and existing parity statuses preserved. Initial selection/style errors corrected and retained in task findings."
 commit: null
 comments:
   -
@@ -35,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore native pooled-item identity/type/value comparison and real shared item-set integration for rich text dependencies, with scoped raw100 validation and no localization or lifetime manager."
+  -
+    type: "verify"
+    at: "2026-10-15T06:33:57.940Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified137related,186Calc,39boundary tests; whole2shared/33Calc raw100, all13source gates/build/inventory pass.9paths/3897hashes/5pins/4links audited. Native comparison order/type checks retained, actual rich text/pool/model/UI/ODS pending; same-agent evaluation not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:33:32.190Z"
+doc_updated_at: "2026-10-15T06:33:58.022Z"
 doc_updated_by: "CODER"
 description: "Task148 ports SfxPoolItem.areSame identity/null/Which/type/value ordering and adopts it in shared SfxItemSet equality and Put as original upstream requires. This is a real shared dependency for future EditTextObject paragraph/character comparisons; no fake rich text facade, ownership manager or localization."
 sections:
@@ -57,6 +84,39 @@ sections:
       Result: pass.
       Evidence: both native areSame overloads/order, native per-derived-class ItemType contract, real Equals/PutImpl callsites and sentinel null-output behavior inspected.5native source pins at9bc445578031fecf56086729d8e4940c77e14d65;3897source hashes,9intentional paths and4restored links audited. Native Writer frame attribute QA is source context only, not claimed executed or ported.
       Scope: concrete JS class identity substitutes numeric native ItemType identity without ABI enum implementation; actual comparison order retained, no lifetime/interner/weak/holder manager or fake EditTextObject. Shared Writer reuses corrected modules. Same-agent evaluator is not independent. Actual EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending; UI localization deferred. Final clean calc/source-hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T06:33:57.940Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified137related,186Calc,39boundary tests; whole2shared/33Calc raw100, all13source gates/build/inventory pass.9paths/3897hashes/5pins/4links audited. Native comparison order/type checks retained, actual rich text/pool/model/UI/ODS pending; same-agent evaluation not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:33:32.190Z, excerpt_hash=sha256:8b403e056066144d03980d76e5ac438649bfbe6871f7047429f52e8354246b84
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150627-F1YKQP/blueprint/resolved-snapshot.json
+    - old_digest: 92073e542291c4e9fcdd990dbd34fe6227cdb48421b0c10239fee44b53936d04
+    - current_digest: 92073e542291c4e9fcdd990dbd34fe6227cdb48421b0c10239fee44b53936d04
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150627-F1YKQP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150627-F1YKQP -m 🧩 F1YKQP task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task paths through a later authorized task; no reset, merge or publication."
   Findings: |-
     Previous shared direct equals calls omitted native concrete-type guards. This is a local implementation discrepancy, not a suspected upstream issue. JS GC owns lifetime. Same-agent evaluation is not independent.
@@ -100,6 +160,39 @@ Read native poolitem.cxx areSame pointer/reference overloads, poolitem.hxx ItemT
   Result: pass.
   Evidence: both native areSame overloads/order, native per-derived-class ItemType contract, real Equals/PutImpl callsites and sentinel null-output behavior inspected.5native source pins at9bc445578031fecf56086729d8e4940c77e14d65;3897source hashes,9intentional paths and4restored links audited. Native Writer frame attribute QA is source context only, not claimed executed or ported.
   Scope: concrete JS class identity substitutes numeric native ItemType identity without ABI enum implementation; actual comparison order retained, no lifetime/interner/weak/holder manager or fake EditTextObject. Shared Writer reuses corrected modules. Same-agent evaluator is not independent. Actual EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending; UI localization deferred. Final clean calc/source-hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T06:33:57.940Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified137related,186Calc,39boundary tests; whole2shared/33Calc raw100, all13source gates/build/inventory pass.9paths/3897hashes/5pins/4links audited. Native comparison order/type checks retained, actual rich text/pool/model/UI/ODS pending; same-agent evaluation not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:33:32.190Z, excerpt_hash=sha256:8b403e056066144d03980d76e5ac438649bfbe6871f7047429f52e8354246b84
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150627-F1YKQP/blueprint/resolved-snapshot.json
+- old_digest: 92073e542291c4e9fcdd990dbd34fe6227cdb48421b0c10239fee44b53936d04
+- current_digest: 92073e542291c4e9fcdd990dbd34fe6227cdb48421b0c10239fee44b53936d04
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150627-F1YKQP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150627-F1YKQP -m 🧩 F1YKQP task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
