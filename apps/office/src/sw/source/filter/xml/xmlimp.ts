@@ -151,8 +151,8 @@ export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number
 
 /** Imports all package XML into one temporary canonical document. @param stylesXml - Named styles stream. @param contentXml - Content stream. @param metadata - Shell metadata. @param metaXml - Optional metadata stream. @param options - Parser controls. @returns Imported document candidate. */
 export function importWriterXml(
-  stylesXml: string,
-  contentXml: string,
+  stylesXml: string | undefined,
+  contentXml: string | undefined,
   metadata: Readonly<{ title: string; locale?: string }>,
   metaXml?: string,
   options: OdfXmlParseOptions & { readonly defaultFontDevice?: DefaultFontDevice } = {},
@@ -165,7 +165,7 @@ export function importWriterXml(
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
-      createInitialTextNode: false,
+      createInitialTextNode: contentXml === undefined,
       locale,
       ...(options.defaultFontDevice === undefined
         ? {}
@@ -174,10 +174,14 @@ export function importWriterXml(
   );
   xmlImport.document.SetInReading(true);
   try {
-    xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
-    xmlImport.finishNamedStyles();
-    xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
-    xmlImport.finishContent();
+    if (stylesXml !== undefined) {
+      xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
+      xmlImport.finishNamedStyles();
+    }
+    if (contentXml !== undefined) {
+      xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
+      xmlImport.finishContent();
+    }
     if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
     return {
       document: xmlImport.document,

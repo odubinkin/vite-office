@@ -9,6 +9,7 @@ import {
   rtl_uString_newFromStr_WithLength,
   rtl_uString_release,
   rtl_ustr_compare_WithLength,
+  rtl_ustr_toInt64,
   rtl_ustr_reverseCompare_WithLength,
   rtl_ustr_hashCode_WithLength,
   rtl_ustr_asciil_reverseEquals_WithLength,
@@ -58,6 +59,7 @@ export class OUStringLiteral {
 export type OUStringConstReference = Readonly<
   Pick<
     OUString,
+    | "toInt64"
     | "getLength"
     | "getStr"
     | "isEmpty"
@@ -81,6 +83,10 @@ export type OUStringConstReference = Readonly<
 
 /** Original OUString value owner; explicit move factories and dispose adapt C++ rvalues and destructor invocation. */
 export class OUString {
+  /** Original const NUL-terminated integer conversion;embedded zeros end parsing even when logical length continues. @param radix - Original default decimal radix. @returns Exact signed64 or zero on overflow. */
+  public toInt64(radix = 10): bigint {
+    return rtl_ustr_toInt64((this.pData as rtl_uString).buffer, radix);
+  }
   private static readonly empty = new OUStringLiteral(new Uint16Array([0]));
   private static readonly references = new WeakMap<rtl_uStringSlot, OUStringConstReference>();
   private slot: rtl_uStringSlot;

@@ -2352,3 +2352,21 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source: `comphelper/source/xml/attributelist.cxx` (`AttributeList::AddAttribute`) and `package/source/manifest/ManifestExport.cxx` (root property scan and file-entry loop), pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Observation: duplicate-name assertion is commented out with an upstream TODO noting test failures. Root scanning stops after a complete path/media/version triplet,but file-entry emission traverses every property. Repeated Version properties can therefore retain the initial document version while emitting duplicate version attributes in the entry.
 - Status: suspicious source case,not a confirmed defect for valid native package producers. Preserve original ordered list/events and do not deduplicate or rewrite values. Literal PropertyValue/AttributeList regressions cover this represented behavior;no native compiler or memory probe is used.
+
+## CALC-162 — Level-two manifest entries do not check root validity
+
+- Source: `package/source/manifest/ManifestImport.cxx`, `ManifestImport::startElement` level1/level2 dispatch, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: an unrecognized root marks its scope invalid,but the level-two file-entry branch calls `doFileEntry` without checking the parent validity. A recognized manifest file entry below a different root can still enter the result vector.
+- Status: suspicious source behavior,not a confirmed defect for valid package producers. Preserve the original dispatch and test actual PropertyValue output;do not propagate root invalidity as an invented fix. Native reader parse failures and package admission are separate responsibilities.
+
+## CALC-163 — Manifest namespace conversion searches past an unknown inner binding
+
+- Source: `package/source/manifest/ManifestImport.cxx`, `PushNameAndNamespaces`, `ConvertNameWithNamespace` and `ConvertName`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: a namespace alias bound to an unrecognized URI in an inner scope returns an empty conversion,so lookup continues to a recognized outer binding instead of stopping at the shadowing declaration. The same conversion also applies a recognized default namespace to unprefixed attribute names. Raw original names remain the final fallback.
+- Status: compatibility leniency is plausible;the source explicitly mentions accepting inconsistent older documents. Preserve these cases rather than replacing them with standard namespace-resolution behavior. Literal XML/SAX cases exercise the shared importer;no native compiler or memory probe is used.
+
+## CALC-164 — Recursive package-folder consistency assignment can replace an earlier true flag
+
+- Source: `package/source/zippackage/ZipPackageFolder.cxx`, `ZipPackageFolder::LookForUnexpectedODF12Streams`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: ordinary child folders assign their recursive result directly to `bHasUnexpected` instead of OR-ing it with the current flag. An earlier unexpected stream can therefore cease to affect the final result if a subsequently visited folder has no unexpected entries.
+- Status: suspicious source logic,preserved literally. Native contents use unordered-map traversal,whose bucket order is not a contract to reproduce as binary data. JS Map supplies logical catalog traversal;tests state their order explicitly and do not claim native compiler/hash-layout ordering or broad package parity. No invented monotonic correction or native memory/compiler probe is used.

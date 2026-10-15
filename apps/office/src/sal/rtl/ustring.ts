@@ -249,6 +249,11 @@ export function internRelease(data: rtl_uString): void {
   }
 }
 
+/** Original NUL-terminated signed64 C conversion. The existing getLength view supplies the same valid terminated range to the shared parser;no numeric coercion or second parser is introduced. @param data - Native terminated UTF16. @param radix - Native admitted radix. @returns Exact signed64 or overflow-to-zero. */
+export function rtl_ustr_toInt64(data: Uint16Array | null, radix: number): bigint {
+  return str.toInt(data, str.getLength(data), radix);
+}
+
 /** Original known-length signed64 C conversion: with_length checks precede the template radix assertion. @param pStr - Borrowed UTF16 input, nullable for zero length. @param nRadix - Original signed16 radix. @param nStrLength - Original signed32 known length. @returns Exact signed64 value or overflow-to-zero. */
 export function rtl_ustr_toInt64_WithLength(
   pStr: Uint16Array | null,

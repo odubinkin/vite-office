@@ -1,0 +1,125 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3678aa65-4d47-43cc-b07f-deb755e87470",
+    "capabilityId": "CAP-3678aa65-4d47-43cc-b07f-deb755e87470",
+    "suite": "shared",
+    "subsystem": "odf-manifest-import",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native namespace/validity stack and actual typed property slots drive application-neutral manifest reading.",
+      "Writer reuses actual package metadata and document defaults when XML streams or Standard declarations are absent."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified."
+    },
+    "capability": "Native shared plain manifest import and package metadata",
+    "gaps": [
+      "Full encryption/UNO/parser/stream/writable-storage services remain unimplemented.",
+      "ZIP32,declaration/depth/XML-byte bounds remain explicit browser admission limits.",
+      "Source-derived catalog traversal does not claim native unordered-map binary bucket ordering or broad package parity.",
+      "ScDocumentPool/Calc document/connected UI/same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestImport.ts",
+          "marker": "class ManifestImport"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestReader.ts",
+          "marker": "readManifestSequence"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.ts",
+          "marker": "applyPlainManifestMetadata"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "public toInt64"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/manifest/native-manifest-import.test.ts",
+          "marker": "reads the actual ODS fixture metadata"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/native-plain-manifest.test.ts",
+          "marker": "normal mimetype fallback"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-optional-streams.test.ts",
+          "marker": "real default document body"
+        },
+        {
+          "path": "apps/office/e2e/shared/manifest-import.spec.ts",
+          "marker": "reads the same typed ODS manifest in Chromium and a DOM-free Worker"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Shared plain manifest import (task178)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-164"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/manifest/ManifestImport.cxx",
+          "marker": "ManifestImport::doFileEntry"
+        },
+        {
+          "path": "package/source/manifest/ManifestReader.cxx",
+          "marker": "ManifestReader::readManifestSequence"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::parseManifest"
+        },
+        {
+          "path": "sw/source/filter/xml/swxml.cxx",
+          "marker": "if (!bContainsStream )"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "sal_Int64 toInt64("
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/cppunit/test_zippackage.cxx",
+          "marker": "testTdf163341"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/PackageConstants.hxx",
+          "marker": "PKG_MNFST_UCOMPSIZE"
+        },
+        {
+          "path": "package/source/manifest/ManifestImport.hxx",
+          "marker": "ManifestScopeEntry"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-plain-odf-manifest-import",
+    "scopeLimitations": [
+      "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

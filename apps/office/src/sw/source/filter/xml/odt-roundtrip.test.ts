@@ -576,13 +576,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     await expect(readOdtDocument(compressedType, metadata())).rejects.toThrow(
       "mimetype must be stored without compression",
     );
-    for (const name of [
-      "mimetype",
-      "META-INF/manifest.xml",
-      "styles.xml",
-      "content.xml",
-      "meta.xml",
-    ])
+    for (const name of ["mimetype", "META-INF/manifest.xml"])
       await expect(
         readOdtDocument(await rewritePackage(bytes, { [name]: null }), metadata()),
       ).rejects.toThrow(name === "mimetype" ? "mimetype must be the first" : "Missing ZIP entry");
@@ -683,10 +677,11 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
       "",
     );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */ () =>
-        importWriterXml(withoutStandard, content, metadata(), meta),
-    ).toThrow("ODF");
+    const defaulted = importWriterXml(withoutStandard, content, metadata(), meta);
+    expect(defaulted.document.paragraphs[0]?.GetText()).toBe(writer.paragraphs[0]?.GetText());
+    expect(defaulted.document.GetTextFormatColl("default").GetName()).toBe(
+      writer.GetTextFormatColl("default").GetName(),
+    );
     const withoutHeading = importWriterXml(
       styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),
       content,
@@ -827,13 +822,18 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const standardStyle = styles.match(
       /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
     )?.[0] as string;
+    const separateFamily = importWriterXml(
+      styles.replace('style:family="paragraph"', 'style:family="table"'),
+      content,
+      metadata(),
+      meta,
+    );
+    expect(separateFamily.document.GetTextFormatColl("default").GetName()).toBe(
+      writer.GetTextFormatColl("default").GetName(),
+    );
     const mutations = [
       [styles.replace(' style:name="Standard"', ""), "style name is missing"],
       [styles.replace(' style:family="paragraph"', ""), "style family is missing"],
-      [
-        styles.replace('style:family="paragraph"', 'style:family="table"'),
-        "Standard paragraph style",
-      ],
       [
         styles.replace("</office:styles>", standardStyle + "</office:styles>"),
         "Duplicate ODF style",

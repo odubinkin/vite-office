@@ -215,7 +215,7 @@
         },
         {
           "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts",
-          "marker": "bounded ODF 1.3 manifest"
+          "marker": "exports and reads the Writer caller's streams through actual shared property values"
         },
         {
           "path": "apps/office/src/xmloff/source/text/txtpara.test.ts",

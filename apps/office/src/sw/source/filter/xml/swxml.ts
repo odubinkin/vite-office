@@ -2,7 +2,7 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
-import { validateOdtManifestXml } from "../../../../package/source/manifest/ManifestExport";
+import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
@@ -47,12 +47,15 @@ export class SwXMLReader {
       throw new Error("ODT mimetype must be stored without compression.");
     const mimetype = await readXmlEntry(packageFile, "mimetype", control, "package");
     if (mimetype !== ODT_MIMETYPE) throw new Error("ODT mimetype entry is invalid.");
-    const manifest = validateOdtManifestXml(
+    const packageMetadata = readPlainPackageManifest(
+      packageFile,
       await readXmlEntry(packageFile, "META-INF/manifest.xml", control, "manifest"),
+      mimetype,
     );
-    const stylesXml = await readXmlEntry(packageFile, "styles.xml", control, "styles");
-    const contentXml = await readXmlEntry(packageFile, "content.xml", control, "content");
-    const metaXml = await readXmlEntry(packageFile, "meta.xml", control, "metadata");
+    const manifest = packageMetadata.streamMediaTypes;
+    const stylesXml = await readOptionalXmlEntry(packageFile, "styles.xml", control, "styles");
+    const contentXml = await readOptionalXmlEntry(packageFile, "content.xml", control, "content");
+    const metaXml = await readOptionalXmlEntry(packageFile, "meta.xml", control, "metadata");
     checkpoint(control, "mapping");
     const imported = importWriterXml(stylesXml, contentXml, metadata, metaXml, {
       ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
@@ -69,13 +72,13 @@ export class SwXMLReader {
         font.path.startsWith("Fonts//")
       )
         throw new Error(`ODF embedded font path is invalid: ${font.path}`);
+      if (!names.includes(font.path))
+        throw new Error(`ODF embedded font package entry is missing: ${font.path}`);
       if (
         manifest.get(font.path) !== "application/x-font-ttf" &&
         manifest.get(font.path) !== "application/vnd.ms-opentype"
       )
         throw new Error(`ODF embedded font manifest entry is invalid: ${font.path}`);
-      if (!names.includes(font.path))
-        throw new Error(`ODF embedded font package entry is missing: ${font.path}`);
       const fontBytes = await packageFile.readEntry(font.path);
       totalFontBytes += fontBytes.length;
       if (fontBytes.length > 4 * 1024 * 1024 || totalFontBytes > 16 * 1024 * 1024)
@@ -140,4 +143,18 @@ async function readXmlEntry(
 function checkpoint(control: OdtImportControl, stage: OdtImportProgressStage): void {
   if (control.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
   control.onProgress?.(stage);
+}
+
+/** Native ReadThroughComponent returns success when a stream does not exist;preserve actual document defaults instead of synthesizing XML. @param archive - Real ZIP. @param name - Stream. @param control - Existing controls. @param stage - Existing stage. @returns XML or native absent-stream selection. */
+async function readOptionalXmlEntry(
+  archive: ZipFile,
+  name: string,
+  control: OdtImportControl,
+  stage: OdtImportProgressStage,
+): Promise<string | undefined> {
+  if (!archive.getEntryNames().includes(name)) {
+    checkpoint(control, stage);
+    return undefined;
+  }
+  return readXmlEntry(archive, name, control, stage);
 }
