@@ -131,3 +131,14 @@ export const MID_AUTO_ESC = 2;
 
 /** Original script-hint value selector. */
 export const MID_SCRIPTHINT = 0;
+
+/** Original ruby text selector. */
+export const MID_RUBY_TEXT = 0;
+/** Original ruby adjustment selector. */
+export const MID_RUBY_ADJUST = 1;
+/** Original legacy ruby character-style selector, not handled by SvxRubyItem. */
+export const MID_RUBY_CHARSTYLE = 2;
+/** Original legacy ruby-above selector, not handled by SvxRubyItem. */
+export const MID_RUBY_ABOVE = 3;
+/** Original ruby position selector. */
+export const MID_RUBY_POSITION = 4;

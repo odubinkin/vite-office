@@ -373,3 +373,19 @@ export class SvxForbiddenRuleItem extends SfxBoolItem {
     return new SvxForbiddenRuleItem(this);
   }
 }
+
+/** Original automatic paragraph writing-direction bool attribute. */
+export class SvxAutoFrameDirectionItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy constructors. @param args - Original arguments. @returns Item. */
+  public constructor(
+    ...args: [enabled: boolean, which: number] | [source: Readonly<SvxAutoFrameDirectionItem>]
+  ) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original independent concrete copy clone. @param pool - Unused pool. @returns Item. */
+  public override Clone(pool?: SfxItemPool): SvxAutoFrameDirectionItem {
+    void pool;
+    return new SvxAutoFrameDirectionItem(this);
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4f526700-eb1e-4fda-a6c0-31b12d8fcbe7",
+    "capabilityId": "CAP-4f526700-eb1e-4fda-a6c0-31b12d8fcbe7",
+    "suite": "shared",
+    "subsystem": "ruby-direction-feature-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original ruby content/value/copy/typed Any and locale-independent presentation preserve actual shared string semantics.",
+      "Actual automatic direction bool and empty tab/line-break value classes reuse shared owners without state-sentinel or pool facades."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task154 ports actual SvxRubyItem complete core text/alignment/position constructor/copy/get/set/Clone/payload equality/typed Any/locale-independent content presentation, actual SvxAutoFrameDirectionItem bool/copy/Clone in the existing paraitem owner, and genuine SfxVoidItem constructor/factory/copy/Clone/empty payload/literal Void presentation. Real EditEngine defaults are ruby4074empty/LEFT/ABOVE, automatic direction4041true and tab/line-break4078/4079empty features; no pool facade. Ruby reuses existing OUString const-reference/assignment/number-independent Unicode data and original Any pData-address/extraction bindings. Borrowed text identity stays stable, input/output copies remain independent, embedded nul/surrogate units are preserved. Native by-value/rvalue syntax is erased without resetting/moving caller objects or adding a lifetime manager. Direct adjustment/position setters retain native32/16bit argument conversion; property adjustment permits only LEFT..INDENT_BLOCK while position accepts every signed short. Only3native selectors are handled, legacy charstyle/above and unknown selectors fail unchanged; base no-argument query remains unsupported. Actual RubyAdjust5IDL enum values plus generated native size sentinel and3RubyPosition short constants are represented without a fabricated UNO type provider. Void is a real empty value distinct from invalid/disabled markers, payload comparison omits Which while areSame keeps type/Which, Clone returns a real copied object and inherited unsupported Any/metric defaults remain. Direction bool uses the existing shared base; no absent native factory is invented. Ruby content and literal Void presentation use no translated UI resources/provider; translated direction labels/diagnostics/type-provider bindings are unported. Auto-direction addition fits existing375line paraitem owner so no unnecessary split is introduced. Existing bounded line-spacing/tab-stop browser projections still require canonical native interface work before real EditEngine pool registration; these are priority follow-ups, not certified by this task. Actual full EditEngine/EditTextObject/Calc pool/model/UI/same-model ODS and UI localization remain pending; statuses and deliberate I/O/recovery deviations unchanged."
+    },
+    "capability": "Native ruby direction and empty text feature values",
+    "gaps": [
+      "Translated direction presentation, diagnostic/type-provider services unported.",
+      "Canonical existing line-spacing/tab-stop interfaces and real EditEngine/Calc pool/model/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/rubyitem.ts",
+          "marker": "SvxRubyItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/rubyitem.ts",
+          "marker": "SvxRubyItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/autodiritem.ts",
+          "marker": "SvxAutoFrameDirectionItem"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/voiditem.ts",
+          "marker": "SfxVoidItem"
+        },
+        {
+          "path": "apps/office/src/svl/inc/voiditem.ts",
+          "marker": "SfxVoidItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/RubyAdjust.ts",
+          "marker": "RubyAdjust"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/RubyPosition.ts",
+          "marker": "ABOVE"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.ts",
+          "marker": "SvxAutoFrameDirectionItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-ruby-feature-values.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native ruby direction and empty text feature values (task154)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/rubyitem.cxx",
+          "marker": "SvxRubyItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/rubyitem.hxx",
+          "marker": "SvxRubyItem"
+        },
+        {
+          "path": "include/editeng/autodiritem.hxx",
+          "marker": "SvxAutoFrameDirectionItem"
+        },
+        {
+          "path": "svl/source/items/voiditem.cxx",
+          "marker": "SfxVoidItem::CreateDefault"
+        },
+        {
+          "path": "include/svl/voiditem.hxx",
+          "marker": "SfxVoidItem"
+        },
+        {
+          "path": "offapi/com/sun/star/text/RubyAdjust.idl",
+          "marker": "LEFT"
+        },
+        {
+          "path": "offapi/com/sun/star/text/RubyPosition.idl",
+          "marker": "ABOVE"
+        },
+        {
+          "path": "editeng/source/items/paraitem.cxx",
+          "marker": "SvxAutoFrameDirectionItem::Clone"
+        },
+        {
+          "path": "editeng/source/editeng/eerdll.cxx",
+          "marker": "EE_CHAR_RUBY"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_CharacterProperties.java",
+          "marker": "RubyText"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-ruby-direction-empty-feature-values",
+    "scopeLimitations": [
+      "Task154 ports actual SvxRubyItem complete core text/alignment/position constructor/copy/get/set/Clone/payload equality/typed Any/locale-independent content presentation, actual SvxAutoFrameDirectionItem bool/copy/Clone in the existing paraitem owner, and genuine SfxVoidItem constructor/factory/copy/Clone/empty payload/literal Void presentation. Real EditEngine defaults are ruby4074empty/LEFT/ABOVE, automatic direction4041true and tab/line-break4078/4079empty features; no pool facade. Ruby reuses existing OUString const-reference/assignment/number-independent Unicode data and original Any pData-address/extraction bindings. Borrowed text identity stays stable, input/output copies remain independent, embedded nul/surrogate units are preserved. Native by-value/rvalue syntax is erased without resetting/moving caller objects or adding a lifetime manager. Direct adjustment/position setters retain native32/16bit argument conversion; property adjustment permits only LEFT..INDENT_BLOCK while position accepts every signed short. Only3native selectors are handled, legacy charstyle/above and unknown selectors fail unchanged; base no-argument query remains unsupported. Actual RubyAdjust5IDL enum values plus generated native size sentinel and3RubyPosition short constants are represented without a fabricated UNO type provider. Void is a real empty value distinct from invalid/disabled markers, payload comparison omits Which while areSame keeps type/Which, Clone returns a real copied object and inherited unsupported Any/metric defaults remain. Direction bool uses the existing shared base; no absent native factory is invented. Ruby content and literal Void presentation use no translated UI resources/provider; translated direction labels/diagnostics/type-provider bindings are unported. Auto-direction addition fits existing375line paraitem owner so no unnecessary split is introduced. Existing bounded line-spacing/tab-stop browser projections still require canonical native interface work before real EditEngine pool registration; these are priority follow-ups, not certified by this task. Actual full EditEngine/EditTextObject/Calc pool/model/UI/same-model ODS and UI localization remain pending; statuses and deliberate I/O/recovery deviations unchanged.",
+      "Native CharacterProperties generic RubyText/RubyAdjust QA is broader unported source context only, not native execution or full property/filter parity."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
