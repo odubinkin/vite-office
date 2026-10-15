@@ -1,10 +1,11 @@
 ---
 id: "202610152054-0XNC6K"
 title: "Implement native shared style-sheet iterator for Calc style pools"
-status: "DOING"
+result_summary: "Implemented complete native SfxStyleSheetIterator and16search flags over reused IndexedStyleSheets with erased borrowed contracts; CALC147..149 preserved and tested, CALC150 future pool suspicion documented. Full style/pool/document/UI/ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "The original nine iterator methods/indexed operation and predicate preserve all three paths,16flags,Used/Hidden expressions,exact names,cursor transitions and fast-path narrowing; original family enum unchanged. Five native blobs and4096valid complement combinations are audited."
     - "48related,187Calc,13source gates,production build and1real Chromium pass; exact3shared and33Calc raw counter sets100. Borrowed caller witnesses neither instantiate nor replace a full native stylesheet/pool; broad parity flags stay false."
     - "CALC147..149 are preserved and tested with literal source-derived cases,including65536actual indexed styles. CALC150 is clearly source-only future pool analysis. No native QA iterator port or native runtime/memory-manager claim."
-commit: null
+commit:
+  hash: "9c134ebcd58652050f568316a8e7d174693e3395"
+  message: "✅ 0XNC6K task: record native style iterator acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native style iterator dependency, preserve source search edge cases, verify related and Calc coverage without native runtime references."
+  -
+    author: "CODER"
+    body: "Verified: complete native style iterator dependency,48related/187Calc cases,strict shared/Calc100,13source gates,production build and Chromium; inventory and preserved upstream suspicions recorded."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node output/playwright/task171-checks/native-audit.mjs; node output/playwright/task171-checks/portable.mjs; node output/playwright/task171-checks/source-gates.mjs with recorded inventory/format reruns; node output/playwright/task171-checks/build-browser-portable.mjs; node output/playwright/task171-checks/final-audit.mjs. Result: pass. Evidence:48related/4files,187Calc/76files; exact3shared raw S204/B92/F35/L183 and33Calc S4179/B2731/F821/L3727 every raw counter positive100;13source gates,production build,1Chromium. Five pinned original blobs,16flags,4096valid complement combinations,original family enum unchanged. Scope: complete native iterator with borrowed original operations and reused index, source-derived CALC147..149 cases and source-only future pool suspicion CALC150. Full pool/document/UI/ODS and all-app run remain pending; no native compiler/memory experiments or broad parity promotion."
+  -
+    type: "status"
+    at: "2026-10-15T21:02:57.459Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete native style iterator dependency,48related/187Calc cases,strict shared/Calc100,13source gates,production build and Chromium; inventory and preserved upstream suspicions recorded."
 doc_version: 3
-doc_updated_at: "2026-10-15T21:02:38.429Z"
+doc_updated_at: "2026-10-15T21:02:57.461Z"
 doc_updated_by: "CODER"
 description: "Task171: port the complete SfxStyleSheetIterator and exact search flags/predicate from pinned style.hxx/style.cxx, reusing IndexedStyleSheets through erased borrowed native pool/style operation contracts. Preserve and document suspicious visibility and Find/Next indexing behavior; no substitute style/pool owner."
 sections:
@@ -109,6 +122,10 @@ sections:
     - Observation: Lint flags the intentional equal native enum values ScStandard=1 and SwText=1 as a duplicate.
       Impact: Lint gate failed; changing either value would violate the pinned Calc/Writer contract.
       Resolution: Add a single-line ESLint annotation explaining the exact native alias; retain both literal values and rerun lint without changing global validators.
+extensions:
+  implementation_commit:
+    hash: "972f4be75f835871e5a0549186ec18d7e565e6e3"
+    message: "🔧 0XNC6K core: implement native shared style-sheet iterator"
 id_source: "generated"
 ---
 ## Summary
