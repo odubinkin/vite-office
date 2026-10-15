@@ -15,9 +15,10 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "A",
       "evidence": [
-        "apps/office/src/main.tsx#Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter."
+        "apps/office/src/main.tsx#Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter.",
+        "apps/office/src/main.test.ts"
       ],
-      "justification": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "justification": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping. Task165 replaces hardcoded Writer role-family lists and permissive CSS check presence tests with a generic DefaultFontType/prepared Locale browser binding. Existing source-configured lists, UTF16 tokens and search-name normalization match actual registered FontFace families; synchronous queries require loaded faces and async preparation loads all faces of candidate families in order, continuing after failures. Writer owns its native text/heading/FIXED role mapping; main awaits font preparation before mounting document factories. CSS descriptor decoding preserves registered family names. Browser/system fonts outside the registered FontFaceSet are not guessed or permission-enumerated. Full physical best-match/substitution, user configuration overrides, remaining Font attributes and Writer legacy requested-family fallback policy are not represented by this bounded device; Calc document/UI/ODS remain pending. No fake PhysicalFontCollection, native compiler/probe or lifetime manager.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "browser-owned",

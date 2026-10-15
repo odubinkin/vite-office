@@ -132,6 +132,14 @@
         {
           "path": "apps/office/e2e/writer-character-formatting.spec.ts",
           "marker": "Writer direct character formatting"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/default-font-device.test.ts",
+          "marker": "uses configured candidate order"
+        },
+        {
+          "path": "apps/office/e2e/shared/configured-font-device.spec.ts",
+          "marker": "prepares Writer fonts before mount"
         }
       ],
       "docs": [
@@ -157,7 +165,8 @@
     "atomicOperation": "Toggle one direct character attribute over one text range",
     "scopeLimitations": [
       "The browser supports one native non-empty same-paragraph range and collapsed-caret pending attributes only; cross-paragraph, table, multi-range, character-style, and full IME behavior remain unmapped.",
-      "Font size, colour, double underline, strikeout, overline, rich-text Paste beyond the safe HTML subset, RTF, and DOCX interchange remain separate capabilities; font-family selection and bounded ODT character-format interchange are implemented."
+      "Font size, colour, double underline, strikeout, overline, rich-text Paste beyond the safe HTML subset, RTF, and DOCX interchange remain separate capabilities; font-family selection and bounded ODT character-format interchange are implemented.",
+      "Task165 replaces hardcoded Writer role-family lists and permissive CSS check presence tests with a generic DefaultFontType/prepared Locale browser binding. Existing source-configured lists, UTF16 tokens and search-name normalization match actual registered FontFace families; synchronous queries require loaded faces and async preparation loads all faces of candidate families in order, continuing after failures. Writer owns its native text/heading/FIXED role mapping; main awaits font preparation before mounting document factories. CSS descriptor decoding preserves registered family names. Browser/system fonts outside the registered FontFaceSet are not guessed or permission-enumerated. Full physical best-match/substitution, user configuration overrides, remaining Font attributes and Writer legacy requested-family fallback policy are not represented by this bounded device; Calc document/UI/ODS remain pending. No fake PhysicalFontCollection, native compiler/probe or lifetime manager."
     ],
     "implemented": true,
     "contractParity": true,
@@ -290,6 +299,18 @@
           "upstream": {
             "marker": "SwTextShell::ExecCharAttr",
             "path": "sw/source/uibase/shells/txtattr.cxx"
+          }
+        },
+        {
+          "classification": "X",
+          "description": "Task165 replaces hardcoded Writer role-family lists and permissive CSS check presence tests with a generic DefaultFontType/prepared Locale browser binding. Existing source-configured lists, UTF16 tokens and search-name normalization match actual registered FontFace families; synchronous queries require loaded faces and async preparation loads all faces of candidate families in order, continuing after failures. Writer owns its native text/heading/FIXED role mapping; main awaits font preparation before mounting document factories. CSS descriptor decoding preserves registered family names. Browser/system fonts outside the registered FontFaceSet are not guessed or permission-enumerated. Full physical best-match/substitution, user configuration overrides, remaining Font attributes and Writer legacy requested-family fallback policy are not represented by this bounded device; Calc document/UI/ODS remain pending. No fake PhysicalFontCollection, native compiler/probe or lifetime manager.",
+          "local": {
+            "path": "apps/office/src/vcl/browser/default-font-device.ts",
+            "marker": "createBrowserDefaultFontDevice"
+          },
+          "upstream": {
+            "path": "vcl/source/outdev/font.cxx",
+            "marker": "OutputDevice::GetDefaultFont"
           }
         }
       ]

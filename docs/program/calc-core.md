@@ -3945,3 +3945,15 @@ The dictionary resource preserves native literal order and duplicate rows,
 with MPL-2.0/Apache-2.0 attribution from unotools/source/misc/fontdefs.cxx.
 The two conflicting aliases have bounded sequential-insertion acceptance;
 this is not a claim of one portable native constructor outcome.
+
+## Registered browser font matching and preparation (task165)
+
+Task165 replaces hardcoded Writer role-family lists and permissive CSS check presence tests with a generic DefaultFontType/prepared Locale browser binding. Existing source-configured lists, UTF16 tokens and search-name normalization match actual registered FontFace families; synchronous queries require loaded faces and async preparation loads all faces of candidate families in order, continuing after failures. Writer owns its native text/heading/FIXED role mapping; main awaits font preparation before mounting document factories. CSS descriptor decoding preserves registered family names. Browser/system fonts outside the registered FontFaceSet are not guessed or permission-enumerated. Full physical best-match/substitution, user configuration overrides, remaining Font attributes and Writer legacy requested-family fallback policy are not represented by this bounded device; Calc document/UI/ODS remain pending. No fake PhysicalFontCollection, native compiler/probe or lifetime manager.
+
+A browser-only probe confirms FontFaceSet.check returns true for a nonexistent
+family; it therefore cannot establish installed-family identity. Native
+OutputDevice matched-family order and Writer role IDs remain the source of
+policy; FontFaceSet/FontFace supply the concrete browser backend. Initial
+coverage collection excluded main.tsx under the existing global config. The
+task profile removes only that exclusion, retaining exact source ownership and
+strict raw shared100 checks; no repository coverage thresholds are weakened.

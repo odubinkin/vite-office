@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   getDefaultFont,
   getDefaultFontSelection,
+  getWriterDefaultFontType,
   getWriterDefaultFontLanguage,
   getWriterFontScript,
   type DefaultFontDevice,
@@ -56,4 +57,16 @@ describe("Writer default-font policy", /** Registers default-font tests. @return
       ).GetFamilyName(),
     ).toBe("Source Han Sans");
   });
+});
+
+it("maps original Writer text/heading/fixed roles to native default-font IDs", /** Checks all script slots against DocumentStylePoolManager. @returns Nothing. */ () => {
+  for (const [script, text, heading] of [
+    ["western", 2000, 2003],
+    ["cjk", 3000, 3003],
+    ["ctl", 4000, 4003],
+  ] as const) {
+    expect(getWriterDefaultFontType("text", script)).toBe(text);
+    expect(getWriterDefaultFontType("heading", script)).toBe(heading);
+    expect(getWriterDefaultFontType("fixed", script)).toBe(4);
+  }
 });

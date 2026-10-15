@@ -148,12 +148,15 @@ const allowedEdges = new Map([
       "svx",
       "svtools",
       "tools",
+      // Native DocumentStylePoolManager includes shared fontdefs; Library_sw links utl.
+      "unotools",
       "vcl",
       "xmloff",
     ]),
   ],
   // Native vcl/Library_vcl.mk links SAL; font.hxx includes sal/types.h.
-  ["vcl", new Set(["offapi", "sal", "svl", "tools"])],
+  // Native Library_vcl.mk links utl and uses SDK API; GetDefaultFont consumes configured locale data.
+  ["vcl", new Set(["offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
   // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
   ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.

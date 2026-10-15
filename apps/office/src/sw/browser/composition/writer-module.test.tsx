@@ -3,7 +3,11 @@
 import { render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { createWriterDocumentSession, createWriterModuleFactory } from "./writer-module";
+import {
+  createWriterDocumentSession,
+  createWriterModuleFactory,
+  prepareWriterBrowserFonts,
+} from "./writer-module";
 
 afterEach(
   /** Runs the test callback. @returns Test callback result. */ () => vi.unstubAllGlobals(),
@@ -30,4 +34,8 @@ describe("Writer browser composition", /** Groups Writer browser composition. @r
     expect(view.getByRole("region", { name: "Writer workspace" })).toBeInTheDocument();
     view.unmount();
   });
+});
+
+it("prepares configured role requests without inventing fonts when the host has no font collection", /** Verifies the real composition preparation entry point in a non-font host. @returns Completion. */ async () => {
+  await expect(prepareWriterBrowserFonts(document, "en-US")).resolves.toBeUndefined();
 });

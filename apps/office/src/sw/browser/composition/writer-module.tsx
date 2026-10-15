@@ -17,7 +17,10 @@ import {
   createDownloadFilename,
 } from "../../../vcl/browser/browser-download";
 import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
-import { createBrowserDefaultFontDevice } from "../../../vcl/browser/default-font-device";
+import {
+  createBrowserDefaultFontDevice,
+  createDefaultFontLocale,
+} from "../../../vcl/browser/default-font-device";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import { WriterAutosaveController } from "../workflows/writer-autosave";
 import { WriterFileDialogController } from "../workflows/writer-file-dialog-controller";
@@ -35,6 +38,38 @@ import {
 import { SwView } from "../../source/uibase/uiview/view";
 import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
+
+import {
+  getWriterDefaultFontType,
+  getWriterDefaultFontLanguage,
+} from "../../source/core/doc/default-font";
+
+/** Prepares original text/heading/fixed role families before constructing browser documents. @param document - Host. @param language - Canonical host locale. @returns Preparation completion. */
+export async function prepareWriterBrowserFonts(
+  document: Document,
+  language: string,
+): Promise<void> {
+  const device = createBrowserDefaultFontDevice(document);
+  await Promise.all(
+    (["western", "cjk", "ctl"] as const).flatMap(
+      /** Builds the native role requests for one script slot. @param script - Slot. @returns Pending preparations. */ (
+        script,
+      ) =>
+        (["text", "heading", "fixed"] as const).map(
+          /** Prepares one native role. @param type - Writer role. @returns Completion. */ async (
+            type,
+          ) => {
+            const locale = createDefaultFontLocale(getWriterDefaultFontLanguage(language, script));
+            try {
+              await device.prepareDefaultFont(getWriterDefaultFontType(type, script), locale);
+            } finally {
+              locale.dispose();
+            }
+          },
+        ),
+    ),
+  );
+}
 
 /** Persistent ownership chain created once per Writer module factory. */
 export interface WriterDocumentSession {
@@ -70,6 +105,7 @@ export function createWriterDocumentSession(
   services: WriterSessionServices = createWriterBrowserSessionServices(),
   odtFilter: OdtFilterService = createInlineOdtFilterService(),
 ): WriterDocumentSession {
+  const fontDevice = createBrowserDefaultFontDevice(globalThis.document);
   const documentState = createDocument({
     id: "writer-workbench",
     suiteId: "writer",
@@ -77,7 +113,17 @@ export function createWriterDocumentSession(
   });
   const docShell = new SwDocShell(
     createWriterWorkbenchDocument({
-      defaultFontDevice: createBrowserDefaultFontDevice(globalThis.document),
+      defaultFontDevice: {
+        /** Maps original Writer roles to the shared native browser font boundary. @param type - Role. @param language - Canonical tag. @param script - Slot. @returns Loaded registered family or absence. */
+        getDefaultFont(type, language, script) {
+          const locale = createDefaultFontLocale(language);
+          try {
+            return fontDevice.getDefaultFont(getWriterDefaultFontType(type, script), locale);
+          } finally {
+            locale.dispose();
+          }
+        },
+      },
       locale: globalThis.navigator?.language ?? "en-US",
     }),
     documentState,
