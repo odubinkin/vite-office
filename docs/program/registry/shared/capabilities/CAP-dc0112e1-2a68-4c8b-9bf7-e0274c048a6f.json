@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-dc0112e1-2a68-4c8b-9bf7-e0274c048a6f",
+    "capabilityId": "CAP-dc0112e1-2a68-4c8b-9bf7-e0274c048a6f",
+    "suite": "shared",
+    "subsystem": "pooled-item-comparison",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Comparison preserves native identity, absent-pointer, WhichId, concrete type and virtual payload order.",
+      "Wrong-type payload comparators cannot hide item-set inequality or suppress actual replacement."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task148 restores SfxPoolItem.areSame identity/absent-pointer/WhichId/exact-concrete-type/payload comparison order and adopts it in original SfxItemSet Equals and Put sites. Concrete JS class identity represents the native per-derived-class ItemType identity; numeric C++ enum/ABI values are not materialized. Both host null and undefined represent absent pointers. Direct payload equals retains its subclass contract; the shared helper owns the extra identity and type guards. Real value/sentinel and item-set replacement regressions use permissive comparison spies to prove that wrong-type payload equality is never invoked. Shared Writer consumers use the same corrected owners. JS GC owns lifetime; no native interning/refcount/weak/holder manager, type-number ABI or fake EditTextObject is introduced. This is a prerequisite for actual rich-text paragraph/character attribute comparison; EditTextObject/ScPageHFItem and full Calc pool/document/connected UI/same-model ODS remain pending. UI localization stays deferred. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged."
+    },
+    "capability": "Native shared pooled-item comparison and item-set integration",
+    "gaps": [
+      "Actual rich-text/Calc document pool/model/connected UI and same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/poolitem.ts",
+          "marker": "SfxPoolItem"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "marker": "SfxItemSet"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/poolitem-comparison.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset-equality.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native shared pooled-item comparisons for rich text (task148)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/poolitem.cxx",
+          "marker": "SfxPoolItem::areSame"
+        },
+        {
+          "path": "include/svl/poolitem.hxx",
+          "marker": "ItemType()"
+        },
+        {
+          "path": "svl/source/items/itemset.cxx",
+          "marker": "SfxItemSet::Equals"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "pooled-item-comparison",
+    "scopeLimitations": [
+      "Task148 restores SfxPoolItem.areSame identity/absent-pointer/WhichId/exact-concrete-type/payload comparison order and adopts it in original SfxItemSet Equals and Put sites. Concrete JS class identity represents the native per-derived-class ItemType identity; numeric C++ enum/ABI values are not materialized. Both host null and undefined represent absent pointers. Direct payload equals retains its subclass contract; the shared helper owns the extra identity and type guards. Real value/sentinel and item-set replacement regressions use permissive comparison spies to prove that wrong-type payload equality is never invoked. Shared Writer consumers use the same corrected owners. JS GC owns lifetime; no native interning/refcount/weak/holder manager, type-number ABI or fake EditTextObject is introduced. This is a prerequisite for actual rich-text paragraph/character attribute comparison; EditTextObject/ScPageHFItem and full Calc pool/document/connected UI/same-model ODS remain pending. UI localization stays deferred. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged.",
+      "Native original item-set unit tests are source context; no native execution or full QA parity claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

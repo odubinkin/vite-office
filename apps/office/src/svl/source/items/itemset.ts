@@ -8,7 +8,7 @@ import {
   INVALID_POOL_ITEM,
   IsDisabledItem,
   IsInvalidItem,
-  type SfxPoolItem,
+  SfxPoolItem,
 } from "./poolitem";
 
 /** Matches LibreOffice's externally significant SfxItemState numeric values. */
@@ -85,13 +85,10 @@ export class SfxItemSet {
     if (comparePool && this.pool !== other.pool) return false;
     if (this.Count() !== other.Count()) return false;
     if (this.Count() === 0) return true;
-    for (const [which, item] of this.poolItemMap) {
+    for (const which of this.poolItemMap.keys()) {
       const state = this.GetItemState(which, false);
       if (state !== other.GetItemState(which, false)) return false;
-      if (
-        state === SfxItemState.SET &&
-        !item.equals(other.GetItemIfSet(which, false) as SfxPoolItem)
-      )
+      if (!SfxPoolItem.areSame(this.GetItemIfSet(which, false), other.GetItemIfSet(which, false)))
         return false;
     }
     return true;
@@ -139,13 +136,7 @@ export class SfxItemSet {
     if (IsDisabledItem(item)) return undefined;
     if (!this.containsWhich(item.Which())) return undefined;
     const current = this.poolItemMap.get(item.Which());
-    if (
-      current !== undefined &&
-      !IsInvalidItem(current) &&
-      !IsDisabledItem(current) &&
-      current.equals(item)
-    )
-      return undefined;
+    if (SfxPoolItem.areSame(current, item)) return undefined;
     const stored = item.Clone() as SfxPoolItem;
     this.Changed(current, stored);
     this.poolItemMap.set(stored.Which(), stored);
