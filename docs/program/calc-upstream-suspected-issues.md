@@ -2065,3 +2065,24 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: the implementation fills its cache whenever `maSlotIDToWhichIDMap.empty()`, inserting only entries with nonzero SlotID. If every slot is zero, the map remains empty and each later call scans the metadata again. The comment says it will be filled only once, but no separate initialized marker exists. The returned map identity and lookup results remain stable.
 - Status: source-level possible redundant-work/cache concern, not a confirmed defect. Preserve repeated reads and the same empty map; do not introduce an initialized flag or change package semantics.
 - Local evidence: `apps/office/src/svl/source/items/iteminfo.test.ts` counts actual static-entry reads across empty/nonempty cache calls; `apps/office/src/svl/source/items/itempool.ts` follows the source empty-map condition. No native performance, compiler or memory probe is used.
+
+## CALC-121: namespace QName caches survive table changes and cold/hot unknown outputs differ
+
+- Upstream: `xmloff/source/core/namespacemap.cxx`, assignment/Add/AddIfKnown and GetKeyByQName/GetQNameByKey, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: assignment replaces namespace tables but leaves destination QName caches; Add/AddIfKnown also do not invalidate them. A cached generated QName can retain an old prefix after a new alias becomes canonical. A cached parsed name can retain its old key while its URI output is read from the replacement reverse table. New copy construction starts with empty caches. For an unknown/nonnamespace/xmlns prefix, a cold parsed name leaves a provided URI output untouched; a cache hit assigns the key lookup result, commonly an empty string.
+- Status: possibly intentional cache-lifetime assumptions or surprising output contracts, not a confirmed defect. Preserve exact lookup/cache/write paths; do not add invalidation or normalize cold outputs.
+- Local evidence: `apps/office/src/xmloff/source/core/namespacemap.test.ts` exercises stale assignment/alias cache values and independent cold/hot output witnesses.
+
+## CALC-122: Add returns requested URI resolution when an existing prefix blocks insertion
+
+- Upstream: same file/commit, `SvXMLNamespaceMap::Add`.
+- Observation: the method resolves the requested URI key before testing prefix existence. If the prefix already exists, it leaves that prefix mapping unchanged but returns the resolved key for the requested URI, including UNKNOWN for a new URI; that can differ from GetKeyByPrefix on the same prefix.
+- Status: source-level surprising return contract, not a confirmed bug. Preserve the returned key and unchanged tables; do not turn Add into replacement or return the existing-prefix key.
+- Local evidence: the shared namespace-map test uses independent existing/new URI witnesses.
+
+## CALC-123: automatic namespace keys can reach reserved marker values
+
+- Upstream: same file/commit, `SvXMLNamespaceMap::Add_`, plus reserved markers in `include/xmloff/namespacemap.hxx`.
+- Observation: automatic allocation starts at0x8000 and increments an unsigned16 key until a free reverse-map key is found. It does not skip XMLNS65533/NONE65534/UNKNOWN65535 marker values. Explicit Add rejects NONE, yet auto allocation can produce it.
+- Status: source-level capacity/identity concern, not a native memory failure or confirmed defect. Preserve the logical key rule. A bounded JS fixture fills explicit keys0x8000through65533 once, then checks the single automatic scan reaches NONE and subsequent name resolution follows the defined release fallbacks. This checks identifiers, not native allocation or memory management. Full key-space exhaustion and its nonterminating source search are not executed or simulated.
+- Local evidence: `apps/office/src/xmloff/source/core/namespacemap.test.ts`; no native compiler, sanitizer, hash-table implementation or memory probe.

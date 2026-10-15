@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7405aed6-198a-4330-9689-97c1df86f948",
+    "capabilityId": "CAP-7405aed6-198a-4330-9689-97c1df86f948",
+    "suite": "shared",
+    "subsystem": "odf-namespace-map",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original namespace key/prefix/alias and QName cache/output rules are preserved using JS native containers.",
+      "Original normalization and all92namespace identifier declarations are source-grounded, without replacement validators or corrected cache semantics."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task142 ports initialized SvXMLNamespaceMap value entries, independent copy/assignment, complete key/prefix/URI operations, aliases/all-entries, QName generation/parsing/cache modes, deprecated key/index APIs and original OASIS/W3 normalization. Native JS Maps/immutable UTF16 strings/output cells adapt unordered-map values and OUString pointer arguments without native bucket/hash/allocator or string lifetime machinery. Nested Maps represent logical QName pair keys. Unspecified native unordered traversal order is not a binary-format promise; membership and complete alias traversal are preserved. Copy construction starts empty caches, assignment/Add retain original stale caches, cold/hot unknown QName writes differ, and existing-prefix Add retains its original resolved-key return. A bounded ordinary JS32k explicit-key fixture checks source automatic allocation into reserved NONE without native memory/exhaustion probes. All92namespace declarations retain native values/aliases; required15resolved XML literal token spellings are source-audited without a fabricated global native token enum/provider. Existing shared ODF_NAMESPACES supplies common URI spellings unchanged. Calc witness targets actual ScSheetSaveData GetAllEntries alias preservation only, not a fabricated sheetdata/filter/document. XML attribute collection/data/item/UNO transport and full Calc pool/document/UI/ODS remain pending. Existing deliberate I/O/recovery differences retained, no broad parity promotion."
+    },
+    "capability": "Shared native namespace maps for ODF attribute preservation",
+    "gaps": [
+      "Native unordered storage/binary iteration/hash layout and full XML numeric token provider are not ported.",
+      "XML attribute collection/item/UNO adapter and complete Calc document/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/xmloff/source/core/namespacemap.ts",
+          "marker": "SvXMLNamespaceMap"
+        },
+        {
+          "path": "apps/office/src/xmloff/inc/xmlnamespace.ts",
+          "marker": "XML_NAMESPACE_XML"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/xmloff/source/core/namespacemap.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/namespace-map.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared native namespace maps for ODF attribute preservation (task142)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "xmloff/source/core/namespacemap.cxx",
+          "marker": "SvXMLNamespaceMap::GetKeyByQName"
+        },
+        {
+          "path": "include/xmloff/namespacemap.hxx",
+          "marker": "class NameSpaceEntry"
+        },
+        {
+          "path": "sc/source/filter/xml/sheetdata.cxx",
+          "marker": "ScSheetSaveData::StoreLoadedNamespaces"
+        }
+      ],
+      "tests": [
+        {
+          "path": "xmloff/qa/unit/style.cxx",
+          "marker": "testWritingModeBTLR_ODFVER_013"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-namespace-map-and-normalization",
+    "scopeLimitations": [
+      "Task142 ports initialized SvXMLNamespaceMap value entries, independent copy/assignment, complete key/prefix/URI operations, aliases/all-entries, QName generation/parsing/cache modes, deprecated key/index APIs and original OASIS/W3 normalization. Native JS Maps/immutable UTF16 strings/output cells adapt unordered-map values and OUString pointer arguments without native bucket/hash/allocator or string lifetime machinery. Nested Maps represent logical QName pair keys. Unspecified native unordered traversal order is not a binary-format promise; membership and complete alias traversal are preserved. Copy construction starts empty caches, assignment/Add retain original stale caches, cold/hot unknown QName writes differ, and existing-prefix Add retains its original resolved-key return. A bounded ordinary JS32k explicit-key fixture checks source automatic allocation into reserved NONE without native memory/exhaustion probes. All92namespace declarations retain native values/aliases; required15resolved XML literal token spellings are source-audited without a fabricated global native token enum/provider. Existing shared ODF_NAMESPACES supplies common URI spellings unchanged. Calc witness targets actual ScSheetSaveData GetAllEntries alias preservation only, not a fabricated sheetdata/filter/document. XML attribute collection/data/item/UNO transport and full Calc pool/document/UI/ODS remain pending. Existing deliberate I/O/recovery differences retained, no broad parity promotion.",
+      "Native QA reference is the broader ODF writing-mode regression explicitly mentioning SvXMLNamespaceMap::GetQNameByKey; its full filter scenario is not claimed ported. Direct Calc consumer evidence is ScSheetSaveData::StoreLoadedNamespaces."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

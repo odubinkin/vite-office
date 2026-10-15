@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/namespacemap.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-namespace-map",
+    "capabilityIds": [
+      "CAP-7405aed6-198a-4330-9689-97c1df86f948"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/namespacemap.ts",
+        "apps/office/src/xmloff/source/core/namespacemap.test.ts",
+        "docs/program/calc-core.md#Shared native namespace maps for ODF attribute preservation (task142)"
+      ],
+      "justification": "Task142 ports initialized SvXMLNamespaceMap value entries, independent copy/assignment, complete key/prefix/URI operations, aliases/all-entries, QName generation/parsing/cache modes, deprecated key/index APIs and original OASIS/W3 normalization. Native JS Maps/immutable UTF16 strings/output cells adapt unordered-map values and OUString pointer arguments without native bucket/hash/allocator or string lifetime machinery. Nested Maps represent logical QName pair keys. Unspecified native unordered traversal order is not a binary-format promise; membership and complete alias traversal are preserved. Copy construction starts empty caches, assignment/Add retain original stale caches, cold/hot unknown QName writes differ, and existing-prefix Add retains its original resolved-key return. A bounded ordinary JS32k explicit-key fixture checks source automatic allocation into reserved NONE without native memory/exhaustion probes. All92namespace declarations retain native values/aliases; required15resolved XML literal token spellings are source-audited without a fabricated global native token enum/provider. Existing shared ODF_NAMESPACES supplies common URI spellings unchanged. Calc witness targets actual ScSheetSaveData GetAllEntries alias preservation only, not a fabricated sheetdata/filter/document. XML attribute collection/data/item/UNO transport and full Calc pool/document/UI/ODS remain pending. Existing deliberate I/O/recovery differences retained, no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvXMLNamespaceMap",
+        "NameSpaceEntry",
+        "KeyToNameSpaceMapEntry",
+        "QNameMode",
+        "NamespaceStringCell",
+        "XML_NAMESPACE_XMLNS",
+        "XML_NAMESPACE_NONE",
+        "XML_NAMESPACE_UNKNOWN",
+        "XML_NAMESPACE_UNKNOWN_FLAG"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "xmloff/source/core/namespacemap.cxx",
+      "upstreamSymbols": [
+        "SvXMLNamespaceMap::GetKeyByQName",
+        "SvXMLNamespaceMap::NormalizeOasisURN",
+        "SvXMLNamespaceMap::Add"
+      ]
+    }
+  }
+}
