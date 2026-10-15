@@ -743,3 +743,22 @@ it("keeps primitive language identities below Editeng and browser owners", /** O
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("admits original Editeng script-hint values without reverse or browser dependencies", /** Native public header and library link own this dependency, not UI localization. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "i18nutil")).toBe(false);
+  for (const owner of ["editeng", "sc", "sw", "framework", "vcl", "tools", "svl"])
+    expect(isForbiddenModuleEdge("i18nutil", owner)).toBe(true);
+  expect(getRuntimeOwnershipLayer("i18nutil/inc/scriptchangescanner.ts")).toBe(
+    "upstream-mechanism",
+  );
+  expect(getRuntimeOwnershipViolation("i18nutil/inc/scriptchangescanner.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "i18nutil/inc/scriptchangescanner.ts",
+      "vcl/browser/font-list.ts",
+      "../font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});

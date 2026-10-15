@@ -128,3 +128,6 @@ export const MID_ESC = 0;
 export const MID_ESC_HEIGHT = 1;
 /** Original automatic baseline displacement selector. */
 export const MID_AUTO_ESC = 2;
+
+/** Original script-hint value selector. */
+export const MID_SCRIPTHINT = 0;

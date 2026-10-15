@@ -2128,3 +2128,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: the stored signed16 twip value is converted to mm100, then explicitly cast back to signed16 before Any insertion. A valid stored32767twips becomes57797mm100 before narrowing, yielding queried-7739; stored-32768twips yields queried7737. Query does not mutate storage, clamp/saturate or widen to a32bit Any. Practical formatting ranges may avoid the boundary.
 - Status: surprising source transport overflow, not a confirmed upstream defect. Preserve integral rounding, explicit short narrowing and original16bit transport; do not fix the source by saturating or widening the property.
 - Local evidence: `apps/office/src/editeng/source/items/native-text-spacing.test.ts`, literal original boundary/half-rounding queries; no native compiler or memory probe.
+
+## CALC-130: script-hint property accepts values outside its localized label table
+
+- Upstream: pinned `editeng/source/items/textitem.cxx`, SvxScriptHintItem::PutValue/QueryValue/GetValueText; native ScriptHintType has5declared values0..4.
+- Observation: the property setter extracts any unsigned16 value and constructs the enum without a0..4range check. For example5or65535is accepted and queried unchanged. GetValueText later indexes a5entry translated-label array with `.at(static_cast<size_t>(eValue))`, so such stored values would reach an out-of-range checked lookup if localized presentation is requested.
+- Status: source-level admission/presentation mismatch, not a confirmed upstream defect. Preserve numeric value acceptance and transport; do not silently clamp/reject based on the label table or introduce a fake label fallback. Localized presentation itself is deferred.
+- Local evidence: `apps/office/src/editeng/source/items/native-text-modes.test.ts`, arbitrary unsigned16 hint round trip; the native presentation consequence is inspected in source only, not compiled/executed.

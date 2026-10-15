@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/cmapitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-format-modes",
+    "capabilityIds": [
+      "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/inc/cmapitem.ts",
+        "apps/office/src/editeng/source/items/native-text-modes.test.ts",
+        "docs/program/calc-core.md#Native case script and optical values for EditEngine defaults (task153)"
+      ],
+      "justification": "Task153 implements actual SvxCaseMapItem/SvxScriptHintItem/SvxOpticalSizingItem constructor/copy/concrete Clone/value/typed member contracts on existing shared enum/bool/Any owners. Case mapping has exact6native declarations and actual5IDL short constants: queries map4modes explicitly and otherwise NONE, while unsigned16 property writes accept only5published values, ignoring member. Script hint uses the actual5fixed-unsigned16 native aliases over real5IDL constants and MID_SCRIPTHINT0, with original byte/twips selector mask, unknown untouched success and unsigned16 extraction without declared-enum range validation. Native argument narrowing is explicit through JS bit operations; no wrapper identity or type-provider facade. Optical sizing reuses real bool transport and no factory absent from native declarations is invented. Existing inherited scalar queries remain explicit browser bindings. Actual EditEngine defaults4071NotMapped/4075Automatic/4076false are source-backed witnesses, not a dummy pool. Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx and Library_editeng links i18nutil; only this native dependency edge is admitted, reverse/browser guards retained and all existing dependency/cycle function bodies unchanged. Original451line textitem owner cannot fit this full value family under500, so canonical3headers reexport a necessary source responsibility split. ScriptHintType declaration is not a script scanner, case-mode storage is not a casing engine, optical bool is not a font-axis provider; no ICU/native ownership manager is added. Localized GetPresentation/GetValueText/resources and diagnostics/instance caches remain unported. Source accepts out-of-enum hints; do not silently clamp them. UI localization and actual EditEngine/EditTextObject/ScPageHFItem/Calc pool/model/connected UI/same-model ODS remain pending; statuses and deliberate I/O/recovery deviations unchanged.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/editeng/cmapitem.hxx",
+      "upstreamSymbols": [
+        "SvxCaseMapItem",
+        "GetCaseMap"
+      ]
+    }
+  }
+}

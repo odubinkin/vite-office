@@ -1,4 +1,4 @@
-/** @fileoverview Declares the currently represented native numbering types from pinned include/editeng/svxenum.hxx and NumberingType.idl. */
+/** @fileoverview Declares represented native formatting enums from pinned include/editeng/svxenum.hxx and NumberingType.idl. */
 import * as NumberingType from "../../offapi/com/sun/star/style/NumberingType";
 /* eslint-disable @typescript-eslint/prefer-literal-enum-member -- Original SvxNumType aliases the shared IDL constants, avoiding duplicated literal definitions. */
 /** All original SvxNumType aliases retain declared sal_Int16 values; formatting/service support is separate. */
@@ -127,5 +127,15 @@ export enum SvxEscapement {
   Off,
   Superscript,
   Subscript,
+  End,
+}
+
+/** Original case-related formatting modes and declaration-end marker. */
+export enum SvxCaseMap {
+  NotMapped,
+  Uppercase,
+  Lowercase,
+  Capitalize,
+  SmallCaps,
   End,
 }
