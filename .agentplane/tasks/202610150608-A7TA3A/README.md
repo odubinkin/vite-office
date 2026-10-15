@@ -1,10 +1,11 @@
 ---
 id: "202610150608-A7TA3A"
 title: "Implement native brush color values for Calc background defaults"
-status: "DOING"
+result_summary: "Implemented shared brush color values and native scalar transparency/shading contracts, preserved source getter/hash and reserved transparency behavior, added actual published declarations and honest missing graphic/interface boundaries; UI localization deferred."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Source-backed regression preserves alpha1 at100percent and getter-induced hash change without equality change (CALC126/127 with CALC113 linkage). Initial test assumption was corrected, not native code altered."
     - "20related,186Calc,39boundary tests pass; every raw counter in3changedsharedowners and33Calcowners positive100. All13source gates/build/inventory pass, zero semantic violations."
     - "Native audit63shading declarations/12positions/version/12members/Calc148;20intentional paths/3895source hashes/10native pins/4restored links. Necessary native source responsibility split documented; no full parity promotion."
-commit: null
+commit:
+  hash: "5baebf61e7c4f5e64ccb22ac8bd688cf23bb0ffd"
+  message: "Implement A7TA3A core: native brush color values"
 comments:
   -
     author: "CODER"
     body: "Start: actual non-graphic brush color/default/copy/member behavior for Calc background; shared values reused and missing real graphic/complex providers explicit, localization deferred."
+  -
+    author: "CODER"
+    body: "Verified: native non-graphic brush color family and Calc148default;20related,186Calc,39boundary tests pass with shared/Calc raw100, all source/inventory/build gates and exact native/hash audit."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified20related,186Calc,39boundary tests, strict shared/Calc raw100; all13source gates/build/inventory pass;20paths/3895hashes/10pins/4links audited. Native quirks preserved, graphics/interface services pending, localization deferred; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T06:20:19.217Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native non-graphic brush color family and Calc148default;20related,186Calc,39boundary tests pass with shared/Calc raw100, all source/inventory/build gates and exact native/hash audit."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:19:41.875Z"
+doc_updated_at: "2026-10-15T06:20:19.219Z"
 doc_updated_by: "CODER"
 description: "Task147 ports original SvxBrushItem non-graphic color/copy/hash/scalar Any contracts and ShadingPattern declarations for actual Calc ATTR_BACKGROUND148. Reuse shared Color/ComplexColor/Any/hash primitives. Real graphic constructors/loaders/interfaces and complex-interface transport remain explicit missing providers; no fake Graphic object or localized presentation work."
 sections:
