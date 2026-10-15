@@ -4,7 +4,7 @@ title: "Connect native locale uppercase for Calc string interning"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "PASS: node output/playwright/task166-checks/portable.mjs yields48 related tests/4files and187 Calc/76files; exact3 shared owners S20/B8/F3/L16 and33Calc S4179/B2731/F821/L3727 raw100. build-browser-portable.mjs:production build and2 actual Chromium shared scenarios pass with4 native source links absent/restored. native-audit.mjs pins9 source blobs,19 uppercase assertions/7native QA fixtures,6 JS difference witnesses and14 top-level guard function bodies unchanged. source-gates.mjs all13 pass,including43 boundary tests and inventory. Final evidence output/playwright/task166-checks/final-verification.json. No new ICU/memory/provider or Calc document/UI/ODS readiness claim; full run deferred to user milestone."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T19:49:25.649Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review: source whole/range uppercase operation and genuine CPPU catch boundary pass bounded conformance."
+  evaluated_sha: "670570562024594d21a73e4f426d309b96b08f0d"
+  blueprint_digest: "9612e3e548938a106574786e4e1c628ff3df7991337e9f01f6fce793b0da81d9"
+  evidence_refs:
+    - ".agentplane/tasks/202610151922-BZZ72F/README.md"
+    - ".agentplane/tasks/202610151922-BZZ72F/quality/20261015-194925649-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151922-BZZ72F/quality/20261015-194925649-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151922-BZZ72F/quality/20261015-194925649-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151922-BZZ72F/blueprint/resolved-snapshot.json"
+    - "output/playwright/task166-checks/final-verification.json"
+    - "output/playwright/task166-checks/native-audit.json"
+    - "output/playwright/task166-checks/gate-inventory-final.log"
+  findings:
+    - "Original clamp and ToUpper no-offset mapping use genuine OUString/Locale and existing i18nutil; Chromium confirms six JS divergences. No new ICU or fake complete CharClass/UNO/memory provider."
+    - "48 related,187Calc,production build,2 Chromium shared scenarios and13 source gates pass; exact raw100 owner sets and9 native source pins verified. Final bounded capability acceptance recorded in current source commit."
 commit: null
 comments:
   -
