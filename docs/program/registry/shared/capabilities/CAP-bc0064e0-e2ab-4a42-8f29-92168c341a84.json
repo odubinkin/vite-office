@@ -1,0 +1,129 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84",
+    "capabilityId": "CAP-bc0064e0-e2ab-4a42-8f29-92168c341a84",
+    "suite": "shared",
+    "subsystem": "locale-uppercase",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original CharClass full/range uppercase and UNO-only failure fallback use real shared string and exception values.",
+      "Original classifier clamp and no-offset ToUpper mapping preserve expansions, original neighbor context and supplementary pairs.",
+      "Nineteen uppercase assertions from seven native QA fixtures and six whole-string JS divergence witnesses bound this operation; full native QA fixture scenarios are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending."
+    },
+    "capability": "Native prepared-locale whole/range uppercase",
+    "gaps": [
+      "Full CharClass/UNO/Transliteration construction and remaining operations are not implemented.",
+      "Actual SharedStringPool, document owners, connected Calc UI and same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/unotools/inc/charclass.ts",
+          "marker": "uppercase"
+        },
+        {
+          "path": "apps/office/src/unotools/source/i18n/charclass.ts",
+          "marker": "uppercase"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/characterclassification/cclass_unicode.ts",
+          "marker": "toUpper"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/transliteration/transliteration_body.ts",
+          "marker": "transliterateUppercase"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unotools/source/i18n/native-uppercase.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/e2e/shared/locale-uppercase.spec.ts",
+          "marker": "test("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Locale uppercase operation (task166)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/unotools/charclass.hxx",
+          "marker": "uppercase"
+        },
+        {
+          "path": "unotools/source/i18n/charclass.cxx",
+          "marker": "uppercase"
+        },
+        {
+          "path": "i18npool/source/characterclassification/cclass_unicode.cxx",
+          "marker": "toUpper"
+        },
+        {
+          "path": "i18npool/source/transliteration/transliteration_body.cxx",
+          "marker": "transliterateImpl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTitleCase"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testSigma"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTdf96343"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTdf134766"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testTdf97152"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testSurrogatePairs"
+        },
+        {
+          "path": "i18npool/qa/cppunit/test_characterclassification.cxx",
+          "marker": "testAdlam"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/unotools/charclass.hxx",
+          "marker": "uppercase"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-prepared-locale-uppercase",
+    "scopeLimitations": [
+      "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending.",
+      "Native QA coverage ports uppercase assertions only; lowercase/titlecase and full UNO service QA are not claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

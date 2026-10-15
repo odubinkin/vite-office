@@ -83,7 +83,8 @@ const allowedEdges = new Map([
   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
   ["i18nlangtag", new Set()],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
-  ["i18npool", new Set(["i18nlangtag", "udkapi"])],
+  // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
+  ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
@@ -163,7 +164,8 @@ const allowedEdges = new Map([
   // Original LocaleDataWrapper constructs LocaleData2; i18npool.component binds its actual producer.
   // The browser field binding uses that producer and the original generated Locale triplet directly.
   // Original Library_utl.mk links i18nlangtag; fontcfg.hxx uses LanguageTag.
-  ["unotools", new Set(["sal", "udkapi", "i18npool", "i18nlangtag"])],
+  // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
+  ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   ["tools", new Set(["o3tl", "cppu"])],

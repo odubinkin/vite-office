@@ -72,10 +72,8 @@ test("preserves native uppercase QA and locale differences in actual Chromium", 
     expect(observed.witnesses[i]?.js).toBe(cases.nativeJsWitnesses[i]?.[3]);
     expect(observed.witnesses[i]?.js).not.toBe(observed.witnesses[i]?.mapped);
   }
-  await test
-    .info()
-    .attach("actual-browser-uppercase-observations", {
-      body: JSON.stringify(observed, null, 2),
-      contentType: "application/json",
-    });
+  await test.info().attach("actual-browser-uppercase-observations", {
+    body: JSON.stringify(observed, null, 2),
+    contentType: "application/json",
+  });
 });

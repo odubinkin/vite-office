@@ -1,6 +1,6 @@
 # Calc UI and ODS implementation critical path
 
-Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165.
+Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165; required prepared-locale uppercase by task166.
 Reference: local LibreOffice commit
 `9bc445578031fecf56086729d8e4940c77e14d65`.
 This is the current priority map; historical task notes in
@@ -76,7 +76,7 @@ and document release paths remain missing.
 | Existing TypeScript owner | Verified scope | Work needed for this path |
 | --- | --- | --- |
 | [SharedStringPool source](../../apps/office/src/svl/source/misc/sharedstringpool.ts) | StringWithHash helper and hash function only; no SharedStringPool class. | Implement actual interning/case mapping and its real CharClass dependency with existing shared strings. Do not add a second memory engine. |
-| [Unicode conformance evidence](calc-native-unicode-conformance.json) | Explicitly limited to scalar casing; excludes whole-string/locale CharClass correspondence. | Verify the required whole-string operation against source and native JS before choosing toLocaleUpperCase; this evidence does not already prove it. |
+| [Unicode conformance evidence](calc-native-unicode-conformance.json) | Explicitly limited to scalar casing; excludes whole-string/locale CharClass correspondence. | Task166 adds bounded whole/range uppercase source and browser evidence separately. Six confirmed differences reject a wholesale toLocaleUpperCase substitution; see the section below. |
 | [VCL Font](../../apps/office/src/vcl/source/font/font.ts) | Family/style names, family type, pitch and charset with native defaults and independent immutable-value copies (task162). | Configured candidate resource lookup is available separately (task163). Search-name normalization and raw list/symbol/suffix operations are shared (task164). Actual configuration services and device/default-font selection remain missing; other rendering attributes remain unrepresented. |
 | [Browser default-font device](../../apps/office/src/vcl/browser/default-font-device.ts) | Generic native role/prepared Locale matching over registered loaded FontFace values, with async preparation; Writer maps roles in its own module (task165). | The same API accepts spreadsheet roles. Full physical substitution/best match, system font enumeration and remaining Font/configuration services are still missing. |
 | [ZIP reader](../../apps/office/src/package/source/zipapi/ZipFile.ts) | Bounded ZIP32 STORE/DEFLATE reader with CRC and entry validation; rejects ZIP64/encryption. | Reuse; record and address any required unsupported package contract explicitly. |
@@ -143,3 +143,21 @@ whole-Calc coverage at 100% and run affected shared/Writer tests for code
 changes. This documentation audit changes no runtime owners, coverage
 mappings or inventory implementation statuses and therefore needs no code
 suite replay. It neither reaches the full-run milestone nor pauses the goal.
+
+
+## Locale uppercase operation (task166)
+
+The required prepared-locale uppercase operation now follows the original
+CharClass -> cclass_Unicode -> no-offset transliteration_body ToUpper path.
+It reuses actual OUString/Locale values and the existing i18nutil mappings;
+it does not introduce a complete CharClass, UNO service or ICU library.
+Whole-string native JavaScript casing is insufficient: source/JS witnesses
+include capital sharp S, Lithuanian combining dots and Greek accents. ASCII
+agreement is bounded evidence, not proof for arbitrary Unicode strings.
+
+Tests port 19 uppercase assertions from seven original character-classification
+fixtures and exercise range/clamp, expansions, embedded nul, supplementary
+pairs, original neighbor context and actual UNO-only failure fallback.
+The existing scalar ICU adaptation is reused. Native stack/heap allocation
+selection is erased into GC-managed typed arrays. Actual string interning,
+locale/service ownership and the document/sheet/column chain remain pending.
