@@ -2219,3 +2219,24 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: copy/Clone preserves m_Name (documented as alternative text), but equality compares only format, URL, representation and target frame. Hash uses the same four values. Two fields differing only in Name remain equal; inserting their SvxFieldItem values into the real SfxItemSet can therefore return unchanged and retain the previous Name.
 - Status: potentially surprising omitted state, not a confirmed defect. Preserve all copied strings and the literal equality/hash omission; do not add Name to comparison/hash to repair upstream.
 - Local evidence: `apps/office/src/editeng/source/items/native-field-values.test.ts`, including independent copies and an actual item-set change-gate assertion. No native compiler/probe or memory test.
+
+## CALC-143: IPAex Mincho search alias is spelled ipaexmimcho
+
+- Upstream: pinned `unotools/source/misc/fontdefs.cxx`, GetEnglishSearchFontName dictionary entry `ipaex\u660E\u671D` maps to `ipaexmimcho`.
+- Observation: the English alias differs from the apparent Mincho spelling used by related entries. Native normalization of IPAex明朝 reaches this exact value; correcting the apparent typo would change physical font lookup.
+- Status: suspicious spelling, not a confirmed defect. Preserve `ipaexmimcho` exactly; do not change it to a guessed English family.
+- Local evidence: complete source dictionary projection and `unotools/source/misc/native-font-names.test.ts`. No native compiler/probe.
+
+## CALC-144: font search dictionary contains conflicting duplicate Chinese keys
+
+- Upstream: pinned `unotools/source/misc/fontdefs.cxx`, static FontNameDictionary initializer in GetEnglishSearchFontName. The literal contains155 rows but153 unique keys.
+- Observation: 方正黑体 appears with `fzhei` and later `fzheiti`; 方正楷体 appears with `fzkai` and later `fzkaiti`. A unique-key unordered_map cannot retain both aliases for one search key. Direct native testSingleElement does not cover these conflicts.
+- Status: suspicious conflicting initialization, not a confirmed defect. Preserve all literal rows/order in the resource. The browser binding performs sequential unique insertion and retains first values `fzhei`/`fzkai`, without overwriting with later entries or claiming a cross-standard-library constructor-selection guarantee. Other native platform outcomes are not verified; no compiler/probe is introduced to investigate container internals.
+- Local evidence: exact source-row audit and `unotools/source/misc/native-font-names.test.ts`, which checks the documented first-insertion choice separately from ordinary dictionary pairs. These two ambiguous mappings do not justify full native-library parity promotion.
+
+## CALC-145: hyphenated font dictionary keys are unreachable after normalization
+
+- Upstream: pinned `unotools/source/misc/fontdefs.cxx`, GetEnglishSearchFontName strips ASCII punctuation except semicolon/parentheses before querying its literal dictionary.
+- Observation: literal keys `hg正楷書体-pro` -> `hgseikaishotaipro` and `hg丸ｺﾞｼｯｸ-pro` -> `hgmarugothicmpro` contain ASCII hyphens, which are removed before lookup. Their normalized forms have no dictionary entry, so these inputs return `hg正楷書体pro` and `hg丸ｺﾞｼｯｸpro` instead of the apparent intended English aliases.
+- Status: potentially unreachable source entries, not a confirmed defect. Preserve both raw keys and the original preprocessing order. Do not normalize dictionary keys, add aliases or special-case the two inputs.
+- Local evidence: complete dictionary/source audit and `unotools/source/misc/native-font-names.test.ts`. No native compiler/probe and no full physical font resolution claim.

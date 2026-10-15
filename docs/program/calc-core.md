@@ -3936,3 +3936,12 @@ The complete resource projection is stored at
 with original MPL-2.0/Apache-2.0 source attribution in pinned VCL.xcu. Its locale
 keys preserve LanguageTag country casing. Verification audits the complete
 resource rather than only fonts installed on this development machine.
+
+## Shared native font search names (task164)
+
+Task164 extends existing shared fontdefs with complete GetEnglishSearchFontName, StripScriptFromName, AddTokenFontName and IsOpenSymbol; actual OUString/UTF16 views and original token parser are reused. All155 literal dictionary rows are retained (153 unique keys); sequential unique insertion retains first aliases for two conflicting Chinese keys, without claiming cross-standard-library duplicate-constructor selection proof. IPAex明朝 -> ipaexmimcho is intentionally preserved (CALC-143), conflicting duplicates recorded in CALC-144. Direct native testSingleElement expectations are ported unchanged. Native configuration-driven substitution, physical font collection/default-device selection and Calc document/UI/ODS remain pending. No Unicode case folding/ICU/buffer or native memory engine, compiler/probe or browser consumer migration.
+
+The dictionary resource preserves native literal order and duplicate rows,
+with MPL-2.0/Apache-2.0 attribution from unotools/source/misc/fontdefs.cxx.
+The two conflicting aliases have bounded sequential-insertion acceptance;
+this is not a claim of one portable native constructor outcome.

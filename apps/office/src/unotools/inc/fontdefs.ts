@@ -25,4 +25,10 @@ export enum DefaultFontType {
   CTL_HEADING = 4003,
   CTL_DISPLAY = 4004,
 }
-export { GetNextFontToken } from "../source/misc/fontdefs";
+export {
+  GetNextFontToken,
+  GetEnglishSearchFontName,
+  StripScriptFromName,
+  AddTokenFontName,
+  IsOpenSymbol,
+} from "../source/misc/fontdefs";
