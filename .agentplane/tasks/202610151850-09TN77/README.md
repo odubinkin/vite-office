@@ -4,7 +4,7 @@ title: "Connect configured font candidates to browser faces"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "PASS:39 related/187 Calc tests, exact shared+main and Calc raw100,13 gates/43 boundary tests, build and20 browser cases.6 pinned blobs/7 roles audited,30 guard bodies unchanged, references restored; no full native device or UI/ODS readiness claim."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T19:14:26.262Z"
+  updated_by: "EVALUATOR"
+  note: "Generic configured native-role/Locale font matching now uses actual registered loaded browser faces, with preparation awaited before Writer document factories mount."
+  evaluated_sha: "be822b78226a692b6d4b30c899b198a17a1e8a5d"
+  blueprint_digest: "de5016982f07993c247168092b23186466b428e957aa061826688dacafe0b498"
+  evidence_refs:
+    - ".agentplane/tasks/202610151850-09TN77/README.md"
+    - ".agentplane/tasks/202610151850-09TN77/quality/20261015-191426262-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151850-09TN77/quality/20261015-191426262-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151850-09TN77/quality/20261015-191426262-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151850-09TN77/blueprint/resolved-snapshot.json"
+    - "output/playwright/task165-checks/final-verification.json"
+    - "apps/office/e2e/shared/configured-font-device.spec.ts"
+    - "apps/office/src/main.test.ts"
+  findings:
+    - "Same-agent review, not independent.39 related/187 Calc cases pass; exact4 related owners include main entrypoint explicitly and2 Writer owners. Shared+main/Calc raw100; Writer-only composition gaps exempt.13 gates/43 boundary cases, build,19 Writer and1 shared real-Chromium case pass.6 pinned blobs/7 roles audited;30 guard bodies unchanged and only source-backed dependency edges added. Real bundled fonts verify actual alias normalization, loaded-state synchronization, CSS family serialization, deletion and error/next candidate. Full physical best-match/substitution, remaining native Font/config services, Writer legacy fallback and Calc model/UI/ODS are explicit gaps; no full-goal promotion."
 commit: null
 comments:
   -
