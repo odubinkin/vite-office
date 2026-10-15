@@ -1,10 +1,11 @@
 ---
 id: "202610151714-B4RVN2"
 title: "Port native grab-bag property values for text attributes"
-status: "DOING"
+result_summary: "Implemented real shared ordered grab-bag values and typed UDK property transport; corrected runtime graph classification of erased type imports without a cycle exception. Inventory updated. Full text engine/Calc model/UI/same-model ODS still pending; goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Actual SfxGrabBagItem and UDK PropertyValue/PropertyState reuse existing Unicode/Any/Sequence/type owners; nonempty and nested typed transport, exact failure behavior, Unicode key order, last duplicates, generated defaults and independent shared set/paragraph copies pass. Exact3new shared and33Calc profiles have every raw counter positive100."
     - "Source-proven generated API graph edges are declared. No cycle exception is added; all28original guard function bodies remain unchanged. Full type clauses are erased from runtime graph, owner allowlisting still covers every declaration, and43tests plus actual compiler output for9CPPu files in two modes validate classification."
-commit: null
+commit:
+  hash: "02195a75a75f478a1224cf6eaf92495a0bcbd383"
+  message: "🚧 B4RVN2 core: port native grab-bag property values"
 comments:
   -
     author: "CODER"
     body: "Start: implement genuine shared grab-bag property values and UDK dependencies over existing transport; preserve source behavior and GC adaptation within approved scope."
+  -
+    author: "CODER"
+    body: "Verified: native grab-bag/PropertyValue/PropertyState contracts pass65related/187Calc/19browser cases and43boundary tests, raw100coverage,13source gates and exact source/native hashes."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active."
+  -
+    type: "status"
+    at: "2026-10-15T17:36:34.432Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native grab-bag/PropertyValue/PropertyState contracts pass65related/187Calc/19browser cases and43boundary tests, raw100coverage,13source gates and exact source/native hashes."
 doc_version: 3
-doc_updated_at: "2026-10-15T17:36:19.812Z"
+doc_updated_at: "2026-10-15T17:36:34.433Z"
 doc_updated_by: "CODER"
 description: "Task159: implement genuine shared SfxGrabBagItem and required UDK PropertyValue/PropertyState typed values over existing Any/Sequence/Unicode owners; preserve sorted UTF16 key/value semantics, duplicate replacement, copy/equality/hash/property transport and native failure behavior. Required missing EditEngine/ODS metadata dependency, not a fake text-engine/pool facade."
 sections:
