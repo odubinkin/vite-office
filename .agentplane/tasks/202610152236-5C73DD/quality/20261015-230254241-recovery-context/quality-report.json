@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610152236-5C73DD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T23:02:54.241Z",
+  "verdict": "pass",
+  "summary": "Same-agent review,not independent: actual plain OASIS PropertyValue-sequence ManifestExport and AttributeList preserve source contracts;source-owned JS SAX payload roles avoid browser dependencies and Writer uses the same exporter. Bounded evidence passes.",
+  "evaluated_sha": "8aad582a161fe805ed0de51819aabb9771c503f2",
+  "blueprint_digest": "e43ecc02a47f63b1cc996b8d921e7c6a7a362cb1d40dc7cbce9523fb270916c0",
+  "findings": [
+    "Reviewed16pinned native blobs,16MIME literals,actual extracted ODS manifest metadata,78related/187Calc cases,exact5shared/33Calc raw100 and unchanged guard algorithm outside native dependency metadata.40existing bodies match after only the declared Writer manifest call substitution. Actual Chromium and dedicated DOM-free Worker produce identical XML;Writer startup/load/edit passes."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610152236-5C73DD/README.md",
+    "output/playwright/task177-checks/final-verification.json",
+    "output/playwright/task177-checks/native-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Generic ManifestImport,encrypted/legacy export,full native SAX/ManifestWriter service/stream/UNO interfaces and actual Calc model/UI/ODS document round trips remain unimplemented. ZIP64 fixture contributes manifest metadata only;one Writer-only docsh coverage gap is exempt. No broad parity promotion or native lifetime framework."
+  ]
+}
