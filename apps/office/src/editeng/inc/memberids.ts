@@ -69,3 +69,14 @@ export const MID_INNER_WIDTH = 0x35;
 export const MID_DISTANCE = 0x29;
 /** Original style member overlaps CONVERT_TWIPS; stripping preserves the native unreachable case. */
 export const MID_LINE_STYLE = 0x90;
+
+/** Original text-line member MID_TEXTLINED. */
+export const MID_TEXTLINED = 0;
+/** Original text-line member MID_TL_STYLE. */
+export const MID_TL_STYLE = 1;
+/** Original text-line member MID_TL_COLOR. */
+export const MID_TL_COLOR = 2;
+/** Original text-line member MID_TL_HASCOLOR. */
+export const MID_TL_HASCOLOR = 3;
+/** Original text-line member MID_TL_COMPLEX_COLOR. */
+export const MID_TL_COMPLEX_COLOR = 4;

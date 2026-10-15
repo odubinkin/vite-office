@@ -181,7 +181,7 @@ export function WriterEditableParagraph({
                     ? 700
                     : 400,
               textDecorationLine:
-                markerFont === undefined || markerFont.underline === FontLineStyle.NONE
+                markerFont === undefined || markerFont.underline === FontLineStyle.LINESTYLE_NONE
                   ? undefined
                   : "underline",
               color:

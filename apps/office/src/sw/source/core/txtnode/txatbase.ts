@@ -444,7 +444,7 @@ export function createSwFormatAutoFormat(
   if (attributes.underline !== inherited.underline)
     items.Put(
       new SvxUnderlineItem(
-        attributes.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE,
+        attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
         RES_CHRATR_UNDERLINE,
       ),
     );

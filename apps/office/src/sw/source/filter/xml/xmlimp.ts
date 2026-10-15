@@ -853,7 +853,7 @@ function putCharacterProperties(
   if (properties.underline !== undefined)
     put(
       new SvxUnderlineItem(
-        properties.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE,
+        properties.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
         RES_CHRATR_UNDERLINE,
       ),
     );

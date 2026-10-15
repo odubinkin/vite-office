@@ -172,31 +172,30 @@ describe("EditEngine character items" /** Groups pooled character item contracts
   });
 
   it("preserves FontLineStyle ordering and underline identity" /** Verifies SvxUnderlineItem. @returns Nothing. */, () => {
-    expect(FontLineStyle.NONE).toBe(0);
-    expect(FontLineStyle.SINGLE).toBe(1);
-    expect(FontLineStyle.BOLDWAVE).toBe(18);
-    const none = new SvxUnderlineItem(FontLineStyle.NONE, underlineWhich);
-    const single = new SvxUnderlineItem(FontLineStyle.SINGLE, underlineWhich);
+    expect(FontLineStyle.LINESTYLE_NONE).toBe(0);
+    expect(FontLineStyle.LINESTYLE_SINGLE).toBe(1);
+    expect(FontLineStyle.LINESTYLE_BOLDWAVE).toBe(18);
+    const none = new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, underlineWhich);
+    const single = new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, underlineWhich);
     expect(none.Which()).toBe(underlineWhich);
-    expect(none.GetLineStyle()).toBe(FontLineStyle.NONE);
+    expect(none.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_NONE);
     expect(none.GetBoolValue()).toBe(false);
     expect(single.GetBoolValue()).toBe(true);
     expect(single.Clone()).not.toBe(single);
     expect(single.Clone().equals(single)).toBe(true);
     expect(single.equals(none)).toBe(false);
-    expect(single.equals(new SvxUnderlineItem(FontLineStyle.SINGLE, alternateWhich))).toBe(false);
+    expect(
+      single.equals(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, alternateWhich)),
+    ).toBe(true);
     expect(single.equals(new SfxInt16Item(underlineWhich, 1))).toBe(false);
     expect(encodeSfxPoolItem(single)).toEqual({
-      value: FontLineStyle.SINGLE,
+      value: FontLineStyle.LINESTYLE_SINGLE,
       which: underlineWhich,
     });
-    for (const value of [-1, 19, 1.5])
-      expect(
-        throwing(
-          /** Creates an invalid underline item. @returns Invalid item. */
-          () => new SvxUnderlineItem(value as FontLineStyle, underlineWhich),
-        ),
-      ).toThrow("SvxUnderlineItem value is invalid");
+    for (const value of [-1, 19, 2147483647])
+      expect(new SvxUnderlineItem(value as FontLineStyle, underlineWhich).GetLineStyle()).toBe(
+        value,
+      );
   });
 
   it("preserves source-derived font-height and paragraph metric items", /** Covers validation, cloning, equality, and persistence for the style-default item subset. @returns Nothing. */ () => {

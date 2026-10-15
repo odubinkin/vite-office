@@ -7,7 +7,7 @@
     "kind": "enum",
     "local": {
       "marker": "export enum FontLineStyle {",
-      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "path": "apps/office/src/tools/inc/fontenum.ts",
       "value": "NONE,SINGLE,DOUBLE,DOTTED,DONTKNOW,DASH,LONGDASH,DASHDOT,DASHDOTDOT,SMALLWAVE,WAVE,DOUBLEWAVE,BOLD,BOLDDOTTED,BOLDDASH,BOLDLONGDASH,BOLDDASHDOT,BOLDDASHDOTDOT,BOLDWAVE"
     },
     "upstream": {

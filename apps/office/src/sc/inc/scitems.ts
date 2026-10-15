@@ -132,3 +132,8 @@ export const ATTR_PAGE_FOOTERSET = 184;
 
 /** Original XML user-defined attribute container identity used by ScDocumentPool. */
 export const ATTR_USERDEF = 122;
+
+/** Original Calc underline identity. */
+export const ATTR_FONT_UNDERLINE = 104;
+/** Original Calc overline identity. */
+export const ATTR_FONT_OVERLINE = 105;

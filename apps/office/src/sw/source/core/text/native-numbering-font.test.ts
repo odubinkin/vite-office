@@ -54,7 +54,7 @@ for (const preserve of [false, true])
       node.SetAttr(new SvxFontHeightItem(400, 100, RES_CHRATR_FONTSIZE));
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
       node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, RES_CHRATR_POSTURE));
-      node.SetAttr(new SvxUnderlineItem(FontLineStyle.DOUBLE, RES_CHRATR_UNDERLINE));
+      node.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE));
       node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
       applyWriterParagraphList(node, { kind: "bullet", level: 0, ruleName: "Font rule" });
       const rule = node.GetNumRule();
@@ -66,7 +66,7 @@ for (const preserve of [false, true])
         heightTwips: 400,
         weight: preserve ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
         posture: preserve ? FontItalic.ITALIC_OBLIQUE : FontItalic.ITALIC_NONE,
-        underline: preserve ? FontLineStyle.DOUBLE : FontLineStyle.NONE,
+        underline: preserve ? FontLineStyle.LINESTYLE_DOUBLE : FontLineStyle.LINESTYLE_NONE,
         color: "#336699",
       });
       expect(Object.isFrozen(initial)).toBe(true);
@@ -95,7 +95,7 @@ for (const preserve of [false, true])
         heightTwips: 400,
         weight: FontWeight.WEIGHT_BOLD,
         posture: FontItalic.ITALIC_OBLIQUE,
-        underline: preserve ? FontLineStyle.DOUBLE : FontLineStyle.NONE,
+        underline: preserve ? FontLineStyle.LINESTYLE_DOUBLE : FontLineStyle.LINESTYLE_NONE,
         color: "#336699",
       });
       format.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);

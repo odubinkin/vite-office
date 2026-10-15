@@ -62,7 +62,7 @@ export function resolveSwNumberPortionFont(
         ? FontItalic.ITALIC_NONE
         : (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
     underline: reset
-      ? FontLineStyle.NONE
+      ? FontLineStyle.LINESTYLE_NONE
       : (node.GetAttr(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetLineStyle(),
     color: (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue(),
   });

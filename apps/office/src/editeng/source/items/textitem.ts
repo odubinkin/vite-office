@@ -14,33 +14,23 @@ import { ConvertFontSlant, ConvertFontWeight } from "../../../vcl/inc/unohelp";
 import { Any2Bool } from "../../../svl/inc/poolitem";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
 import { MID_RELIEF, MID_ITALIC, MID_POSTURE, MID_BOLD, MID_WEIGHT } from "../../inc/memberids";
-import { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { Color, COL_TRANSPARENT, insertColor, extractColor } from "../../../tools/inc/color";
+import { FontLineStyle as F } from "../../../tools/inc/fontenum";
+import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
+import {
+  MID_TEXTLINED,
+  MID_TL_STYLE,
+  MID_TL_COLOR,
+  MID_TL_HASCOLOR,
+  MID_TL_COMPLEX_COLOR,
+} from "../../inc/memberids";
+
 export { SvxFontItem } from "./textitem.font";
 
 export { SvxFontHeightItem } from "./textitem.height";
 
-/** Matches LibreOffice FontLineStyle ordering from tools/fontenum.hxx. */
-export enum FontLineStyle {
-  NONE,
-  SINGLE,
-  DOUBLE,
-  DOTTED,
-  DONTKNOW,
-  DASH,
-  LONGDASH,
-  DASHDOT,
-  DASHDOTDOT,
-  SMALLWAVE,
-  WAVE,
-  DOUBLEWAVE,
-  BOLD,
-  BOLDDOTTED,
-  BOLDDASH,
-  BOLDLONGDASH,
-  BOLDDASHDOT,
-  BOLDDASHDOTDOT,
-  BOLDWAVE,
-}
+export { FontLineStyle } from "../../../tools/inc/fontenum";
 
 /** Original native weight enum and bool/float Any member transport. */
 export class SvxWeightItem extends SfxEnumItem<FontWeight> {
@@ -203,47 +193,6 @@ export class SvxPostureItem extends SfxEnumItem<FontItalic> {
   }
 }
 
-/** Pooled underline item with LibreOffice line-style semantics. */
-export class SvxUnderlineItem extends SfxPoolItem {
-  /** Creates an underline item. @param style - Line style. @param which - Underline WhichId. @returns Nothing. */
-  public constructor(
-    private readonly style: FontLineStyle,
-    which: number,
-  ) {
-    super(which);
-    assertEnumValue(style, FontLineStyle.NONE, FontLineStyle.BOLDWAVE, "SvxUnderlineItem");
-  }
-
-  /** Returns the line style. @returns FontLineStyle value. */
-  public GetLineStyle(): FontLineStyle {
-    return this.style;
-  }
-
-  /** Reports whether any underline is active. @returns True for non-NONE styles. */
-  public GetBoolValue(): boolean {
-    return this.style !== FontLineStyle.NONE;
-  }
-
-  /** Creates an independent item. @returns Cloned underline item. */
-  public Clone(): SvxUnderlineItem {
-    return new SvxUnderlineItem(this.style, this.Which());
-  }
-
-  /** Compares type, WhichId, and line style. @param other - Candidate item. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxUnderlineItem &&
-      other.Which() === this.Which() &&
-      other.style === this.style
-    );
-  }
-
-  /** Serializes the item. @returns Snapshot. */
-  public override QueryValue(): FontLineStyle {
-    return this.style;
-  }
-}
-
 /** Validates a finite contiguous enum value. @param value - Candidate. @param first - First value. @param last - Last value. @param owner - Error owner. @returns Nothing. */
 function assertEnumValue(value: number, first: number, last: number, owner: string): void {
   if (!Number.isInteger(value) || value < first || value > last)
@@ -347,5 +296,156 @@ export class SvxCharReliefItem extends SfxEnumItem<FontRelief> {
     if (value[0] < 0 || value[0] > FontRelief.Engraved) return false;
     this.SetValue(value[0]);
     return true;
+  }
+}
+
+/** Original common underline/overline value base. */
+export class SvxTextLineItem extends SfxEnumItem<F> {
+  private readonly maColor = new Color(COL_TRANSPARENT);
+  private readonly maComplexColor = new ComplexColor();
+  /** Original value/Which and implicit-copy forms. @param args - Native selected form. @returns Item. */
+  constructor(...args: [style: F, which: number] | [source: Readonly<SvxTextLineItem>]) {
+    if (args.length === 1) {
+      super(args[0]);
+      this.maColor.assign(args[0].GetColor());
+      this.maComplexColor.assign(args[0].getComplexColor());
+    } else super(args[1], args[0]);
+  }
+  /** Original complete concrete-type/value/color/complex comparison. @param other - Candidate. @returns Payload equality, omitting Which. */
+  public override equals(other: SfxPoolItem): boolean {
+    return (
+      super.equals(other) &&
+      this.maColor.equals((other as SvxTextLineItem).maColor) &&
+      this.maComplexColor.equals((other as SvxTextLineItem).maComplexColor)
+    );
+  }
+  /** Original copy clone retaining every value. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxTextLineItem {
+    void pool;
+    return new SvxTextLineItem(this);
+  }
+  /** Original enum cast getter. @returns Style. */
+  public GetLineStyle(): F {
+    return this.GetValue();
+  }
+  /** Original style setter. @param style - Native enum. @returns Nothing. */
+  public SetLineStyle(style: F): void {
+    this.SetValue(style);
+  }
+  /** Original bool support. @returns True. */
+  public override HasBoolValue(): boolean {
+    return true;
+  }
+  /** Original non-NONE projection. @returns Active state. */
+  public override GetBoolValue(): boolean {
+    return this.GetValue() !== F.LINESTYLE_NONE;
+  }
+  /** Original boolean assignment chooses only SINGLE/NONE. @param value - Active state. @returns Nothing. */
+  public override SetBoolValue(value: boolean): void {
+    this.SetValue(value ? F.LINESTYLE_SINGLE : F.LINESTYLE_NONE);
+  }
+  /** Original borrowed const color. @returns Owned value. */
+  public GetColor(): Readonly<Color> {
+    return this.maColor;
+  }
+  /** Original color assignment, including alpha. @param color - Source. @returns Nothing. */
+  public SetColor(color: Readonly<Color>): void {
+    this.maColor.assign(color);
+  }
+  /** Original borrowed const complex color. @returns Owned value. */
+  public getComplexColor(): Readonly<ComplexColor> {
+    return this.maComplexColor;
+  }
+  /** Original complex value assignment. @param color - Source. @returns Nothing. */
+  public setComplexColor(color: Readonly<ComplexColor>): void {
+    this.maComplexColor.assign(color);
+  }
+  /** Existing browser scalar style projection. @returns Style. */
+  public override QueryValue(): F;
+  /** Original supported member Any queries. Actual complex interface transport is explicitly unsupported. @param output - Actual Any. @param member - Native unsigned8 selector. @returns Success. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original selector normalization and unknown-member untouched success. @param output - Optional Any. @param member - Native selector. @returns Success or browser scalar. */
+  public override QueryValue(output?: Any, member = 0): boolean | F {
+    if (output === undefined) return this.GetLineStyle();
+    switch (member & 0xff & ~0x80) {
+      case MID_TEXTLINED:
+        output.insert([this.GetBoolValue()], "bool");
+        break;
+      case MID_TL_STYLE:
+        output.insert([(this.GetValue() << 16) >> 16], "sal_Int16");
+        break;
+      case MID_TL_COLOR:
+        insertColor(output, this.maColor);
+        break;
+      case MID_TL_HASCOLOR:
+        output.insert([this.maColor.GetAlpha() === 255], "bool");
+        break;
+      case MID_TL_COMPLEX_COLOR:
+        return false;
+    }
+    return true;
+  }
+  /** Original supported member writes; color writes preserve the stored alpha. Actual complex-interface input remains unsupported, never interpreted as a fake plain object. @param input - Actual Any or established scalar browser binding. @param member - Native selector. @returns Success. */
+  public override PutValue(input: unknown, member: number): boolean {
+    switch (member & 0xff & ~0x80) {
+      case MID_TEXTLINED:
+        this.SetBoolValue(Any2Bool(input));
+        break;
+      case MID_TL_STYLE: {
+        const value: [number] = [0];
+        if (input instanceof Any) {
+          if (!input.extract(value, "sal_Int32")) return false;
+        } else {
+          if (
+            typeof input !== "number" ||
+            !Number.isInteger(input) ||
+            input < -2147483648 ||
+            input > 2147483647
+          )
+            return false;
+          value[0] = input;
+        }
+        this.SetValue(value[0] as F);
+        break;
+      }
+      case MID_TL_COLOR: {
+        const color = new Color();
+        if (!(input instanceof Any) || !extractColor(input, color)) return false;
+        const alpha = this.maColor.GetAlpha();
+        this.maColor.assign(color);
+        this.maColor.SetAlpha(alpha);
+        break;
+      }
+      case MID_TL_HASCOLOR:
+        this.maColor.SetAlpha(Any2Bool(input) ? 255 : 0);
+        break;
+      case MID_TL_COMPLEX_COLOR:
+        return false;
+    }
+    return true;
+  }
+}
+/** Original underline specialization. */
+export class SvxUnderlineItem extends SvxTextLineItem {
+  /** Original zero-Which NONE default. @returns Item. */
+  public static CreateDefault(): SvxUnderlineItem {
+    return new SvxUnderlineItem(F.LINESTYLE_NONE, 0);
+  }
+  /** Original concrete copy clone. @param pool - Unused pool. @returns Independent underline. */
+  public override Clone(pool?: SfxItemPool): SvxUnderlineItem {
+    void pool;
+    return new SvxUnderlineItem(this);
+  }
+}
+/** Original overline specialization. */
+export class SvxOverlineItem extends SvxTextLineItem {
+  /** Original zero-Which NONE default. @returns Item. */
+  public static CreateDefault(): SvxOverlineItem {
+    return new SvxOverlineItem(F.LINESTYLE_NONE, 0);
+  }
+  /** Original concrete copy clone. @param pool - Unused pool. @returns Independent overline. */
+  public override Clone(pool?: SfxItemPool): SvxOverlineItem {
+    void pool;
+    return new SvxOverlineItem(this);
   }
 }

@@ -261,7 +261,7 @@ export class SwAttrPool extends SfxItemPool {
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
       );
     this.RegisterDefaultItem(
-      new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE),
+      new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
     );

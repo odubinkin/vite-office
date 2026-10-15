@@ -463,7 +463,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     if (node === undefined) throw new Error("Writer fixture has no text node.");
     style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     style.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
-    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
+    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
     expect(style.GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);

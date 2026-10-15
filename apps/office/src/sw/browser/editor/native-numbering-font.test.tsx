@@ -62,7 +62,7 @@ for (const cell of [false, true])
       node.SetAttr(new SvxFontHeightItem(320, 100, RES_CHRATR_FONTSIZE));
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
       node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
-      node.SetAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
+      node.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
       node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
       applyWriterParagraphList(node, { kind, level: 0, ruleName: "LabelFont" });
       const rule = node.GetNumRule();
@@ -114,7 +114,9 @@ for (const cell of [false, true])
         expect(retained.activeParagraph.listMarkerFont?.weight).toBe(
           kind === "bullet" ? FontWeight.WEIGHT_NORMAL : FontWeight.WEIGHT_BOLD,
         );
-        expect(retained.activeParagraph.listMarkerFont?.underline).toBe(FontLineStyle.NONE);
+        expect(retained.activeParagraph.listMarkerFont?.underline).toBe(
+          FontLineStyle.LINESTYLE_NONE,
+        );
         act(
           /** Admits native label affinity while retaining the selected source font. @returns Nothing. */ () => {
             session.view.GetEditWin().SetSelection({

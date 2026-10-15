@@ -249,7 +249,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
+      .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
     writer.GetTextFormatColl("heading-1").SetFormatName("Heading & one");
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       writer
@@ -278,9 +278,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       second.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NONE, which));
-    second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
+    second.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     const third = writer.nodes.MakeTextNode();
-    third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
+    third.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     if (first !== undefined) applyWriterParagraphList(first, { kind: "numbered", level: 0 });
     applyWriterParagraphList(second, { kind: "numbered", level: 1 });
     applyWriterParagraphList(third, { kind: "bullet", level: 0 });
