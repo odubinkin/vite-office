@@ -726,3 +726,20 @@ it("admits original set-item MapUnit and page-item OUString dependencies without
   expect(isForbiddenModuleEdge("svx", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "svx")).toBe(true);
 });
+
+it("keeps primitive language identities below Editeng and browser owners", /** Only original langitem language dependency is admitted. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "i18nlangtag")).toBe(false);
+  for (const owner of ["editeng", "sc", "sw", "framework", "vcl", "sal"])
+    expect(isForbiddenModuleEdge("i18nlangtag", owner)).toBe(true);
+  expect(getRuntimeOwnershipLayer("i18nlangtag/inc/lang.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("i18nlangtag/inc/lang.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "i18nlangtag/inc/lang.ts",
+      "vcl/browser/font-list.ts",
+      "../font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});

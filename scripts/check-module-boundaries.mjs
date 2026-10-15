@@ -17,6 +17,7 @@ const moduleNames = [
   "external",
   "formula",
   "framework",
+  "i18nlangtag",
   "i18nutil",
   "o3tl",
   "offapi",
@@ -55,6 +56,8 @@ const allowedEdges = new Map([
     new Set([
       "docmodel",
       "cppu",
+      // Original langitem.hxx uses i18nlangtag/lang.h language values.
+      "i18nlangtag",
       "o3tl",
       "offapi",
       "sal",
@@ -70,6 +73,8 @@ const allowedEdges = new Map([
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
   ["formula", new Set(["offapi", "sal", "svl"])],
   ["framework", new Set(["sfx2", "svl"])],
+  // Original lang.h strong_int/sal tags are erased into primitive numeric values.
+  ["i18nlangtag", new Set()],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
@@ -196,6 +201,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("cppuhelper/inc/") || portablePath.startsWith("cppuhelper/source/"))
     return "upstream-mechanism";
   if (
+    portablePath.startsWith("i18nlangtag/inc/") ||
     portablePath.startsWith("i18nutil/inc/") ||
     portablePath.startsWith("udkapi/") ||
     portablePath.startsWith("offapi/com/")

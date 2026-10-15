@@ -80,3 +80,8 @@ export const MID_TL_COLOR = 2;
 export const MID_TL_HASCOLOR = 3;
 /** Original text-line member MID_TL_COMPLEX_COLOR. */
 export const MID_TL_COMPLEX_COLOR = 4;
+
+/** Original language numeric API member. */
+export const MID_LANG_INT = 0;
+/** Original language Locale API member. */
+export const MID_LANG_LOCALE = 1;

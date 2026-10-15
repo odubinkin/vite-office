@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7d2fec82-b1ea-403d-ab79-a9ec5d9ef8ff",
+    "capabilityId": "CAP-7d2fec82-b1ea-403d-ab79-a9ec5d9ef8ff",
+    "suite": "shared",
+    "subsystem": "font-language-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original unsigned16 language/default and signed16-query/int32-extraction contracts use shared primitive values.",
+      "Actual Calc script defaults are unknown1023 while the item factory selects German1031."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained."
+    },
+    "capability": "Native language item values for Calc font defaults",
+    "gaps": [
+      "Real LanguageTag Locale conversion, broader language IDs and localized presentation remain unported.",
+      "Complete Calc pool/document/UI/ODS remains pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/i18nlangtag/inc/lang.ts",
+          "marker": "LanguageType"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.language.ts",
+          "marker": "SvxLanguageItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/langitem.ts",
+          "marker": "SvxLanguageItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-language-item.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/language-item.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native language item values for Calc font defaults (task146)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/i18nlangtag/lang.h",
+          "marker": "LanguageType"
+        },
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxLanguageItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/langitem.hxx",
+          "marker": "SvxLanguageItem"
+        },
+        {
+          "path": "sc/source/core/data/docpool.cxx",
+          "marker": "ATTR_FONT_LANGUAGE"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_CharacterProperties.java",
+          "marker": "CharLocale"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-language-item-value-contract",
+    "scopeLimitations": [
+      "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
+      "The native CharacterProperties generic CharLocale QA is a broader property witness; real Locale conversion and that full scenario are explicitly not claimed ported or executed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

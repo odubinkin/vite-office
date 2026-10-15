@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/textitem.language.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-language-values",
+    "capabilityIds": [
+      "CAP-7d2fec82-b1ea-403d-ab79-a9ec5d9ef8ff"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/textitem.language.ts",
+        "apps/office/src/editeng/source/items/native-language-item.test.ts",
+        "docs/program/calc-core.md#Native language item values for Calc font defaults (task146)"
+      ],
+      "justification": "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxLanguageItem"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "editeng/source/items/textitem.cxx",
+      "upstreamSymbols": [
+        "SvxLanguageItem::QueryValue",
+        "SvxLanguageItem::PutValue"
+      ]
+    }
+  }
+}

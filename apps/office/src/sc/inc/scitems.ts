@@ -137,3 +137,10 @@ export const ATTR_USERDEF = 122;
 export const ATTR_FONT_UNDERLINE = 104;
 /** Original Calc overline identity. */
 export const ATTR_FONT_OVERLINE = 105;
+
+/** Original Latin font language identity. */
+export const ATTR_FONT_LANGUAGE = 110;
+/** Original CJK font language identity. */
+export const ATTR_CJK_FONT_LANGUAGE = 115;
+/** Original CTL font language identity. */
+export const ATTR_CTL_FONT_LANGUAGE = 120;
