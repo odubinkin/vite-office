@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/style-model.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "style-sheet-core-model",
+    "capabilityIds": [
+      "CAP-eb73d4bf-f21c-499d-a0e5-f8de7ba85d32"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/items/style-model.ts#SfxStyleSheetBasePool",
+        "apps/office/src/svl/source/items/native-style-model.test.ts#constructs actual native styles",
+        "svl/source/items/style.cxx#SfxStyleSheetBasePool::Make"
+      ],
+      "justification": "Task173 creates actual core SfxStyleSheetBase/SfxStyleSheetBasePool owners and native style hints, reusing SfxBroadcaster/Listener, IndexedStyleSheets, SfxStyleSheetIterator, registered SfxItemPool ranges and actual SfxItemSet. Preserve original field defaults, stable OUString members, name/parent/follow validation, nonvirtual child rename, optional reindex, mask/hidden/help/usage fields, owned versus borrowed set copy and by-value preview. Pool factories/search/cache/insertion/removal/reparent/copy/assignment/clear and derived/base Dying order follow the represented source. Native lifetime/WeakImplHelper allocation is erased under JS GC; bMySet remains solely for set-copy semantics and explicit destructor boundary, not a refcount manager. Core classes implement no UNO XComponent; component query/dispose extension, presentation/XML and derived SfxStyleSheet/ScStyleSheet remain absent rather than stubbed. Preserve CALC146/150 and core copy owner/creation/replacement quirks CALC152..154. Full document/connected UI/same-model ODS and whole-class/module parity are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SfxStyleSheetHint",
+        "SfxStyleSheetModifiedHint",
+        "SfxStyleSheetPoolHint",
+        "SfxStyleSheetBase",
+        "SfxStyleSheetBasePool_Impl",
+        "StyleSheetDisposerFunctor",
+        "SfxStyleSheetBasePool"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/style.cxx",
+      "upstreamSymbols": [
+        "SfxStyleSheetBase::SfxStyleSheetBase",
+        "SfxStyleSheetBase::SetName",
+        "SfxStyleSheetBase::SetParent",
+        "SfxStyleSheetBase::SetFollow",
+        "SfxStyleSheetBase::GetItemSet",
+        "SfxStyleSheetBasePool::Make",
+        "SfxStyleSheetBasePool::Remove",
+        "SfxStyleSheetBasePool::Add",
+        "SfxStyleSheetBasePool::Clear",
+        "SfxStyleSheetHint::SfxStyleSheetHint"
+      ]
+    }
+  }
+}

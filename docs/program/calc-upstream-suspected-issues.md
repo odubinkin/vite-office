@@ -2275,7 +2275,7 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::operator+=, AddStyleSheetCallback and the pool copy constructor.
 - Observation: operator+= checks that argument r differs from this, but invokes ApplyToAllStyleSheets on this->pImpl->mxIndexedStyleSheets rather than r's collection. Its callback calls this->Add. A newly constructed empty destination therefore visits no styles even when r is nonempty; the copy constructor creates an empty index and delegates to this operation. For a nonempty destination the callback can modify the same collection being traversed, so no defined mutation result is assumed here.
 - Status: suspicious source-side destination/argument mismatch, not a confirmed defect. Preserve it when implementing the pool; do not silently change traversal to r or assign a result to invalidated native iterators.
-- Local evidence: task171 pinned source audit of `svl/source/items/style.cxx`. Pool construction/addition remains unimplemented locally; this entry is source analysis, not a native runtime probe or a completed pool test claim.
+- Local evidence: task171 first recorded the pinned source analysis. Task173 implements actual core pool owners and checks empty-destination copy/assignment in `apps/office/src/svl/source/items/native-style-model.test.ts`. A throwing native virtual copy factory is also checked: the exception exits before an invalidated traversal advances. No normal nonempty-destination iterator result, complete UNO pool implementation or native runtime probe is claimed.
 
 ## CALC-151: merged pool ranges remain cached after replacing the secondary chain
 
@@ -2283,3 +2283,31 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: GetMergedIdRanges computes only while maPoolRanges is empty. SetSecondaryPool changes master/secondary links without clearing this cache. After first computing ranges for pools [10..12]+[1..2], replacing the secondary with [20..22] leaves GetMergedIdRanges and subsequently constructed pool-only item sets at [1..2,10..12]. Default/slot lookup follows the new live chain and can resolve20..22 despite those old ranges.
 - Status: potentially surprising cache lifetime/precondition, not a confirmed defect; callers may be expected to freeze chain topology before constructing sets. Preserve the absence of invalidation and ordinary copied range-value semantics. Do not add an automatic cache reset or infer native metadata from browser snapshot defaults.
 - Local evidence: `apps/office/src/svl/source/items/native-pool-chain.test.ts` and `apps/office/e2e/shared/pool-chain.spec.ts`, real registered metadata packages, shared pools and item sets. Source-derived cases; no native compiler/probe or new memory manager.
+
+## CALC-152: base style copy retains the source pool pointer when added to another pool
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBase copy constructor, SfxStyleSheetBasePool::Create(const SfxStyleSheetBase&) and Add.
+- Observation: the base copy constructor retains r.m_pPool, and the default copy factory simply constructs that base copy. Add stores the copy in the destination index without rebinding its pool pointer. With actual base pools A/B, B.Add(aStyleFromA) therefore stores a different style whose GetPool still returns A. Subsequent style operations use A for parent/name validation, notifications and lazy item-set creation.
+- Status: suspicious cross-pool ownership contract, not a confirmed defect; derived factories may intentionally override it. Preserve the original pointer and default factory rather than silently rebinding to the index owner.
+- Local evidence: actual core owners in `apps/office/src/svl/source/items/native-style-model.test.ts`. Full derived style/UNO pool behavior remains unimplemented; no native probe.
+
+## CALC-153: base Make stores a new style without a creation notification
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::Make and StoreStyleSheet; descriptive comment in `include/svl/style.hxx`.
+- Observation: the header comment promises a StyleSheetCreated notification from Make, but the actual implementation only calls Create and StoreStyleSheet, and StoreStyleSheet only adds to the index. There is no current StyleSheetCreated enum member in hint.hxx. Successful rename does emit StyleSheetModifiedExtended.
+- Status: likely stale explanatory comment or intentional silent creation, not a confirmed defect. Preserve silent Make/Insert storage; do not invent a creation hint or substitute another ID.
+- Local evidence: actual listener over actual pool creation/rename in `apps/office/src/svl/source/items/native-style-model.test.ts` and `apps/office/e2e/shared/style-model.spec.ts`.
+
+## CALC-154: Add reparents existing children away from the replaced style
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::Add, Remove and ChangeParent.
+- Observation: Add's comment describes recreating a style and reconnecting its children, but Add first calls Remove. Remove immediately changes matching children's parent to the old style's parent before broadcasting Erased. Add then inserts the replacement and broadcasts Changed without restoring those child links. Replacing a root style therefore leaves its former children with an empty parent, rather than the replacement's name.
+- Status: suspicious replacement/description mismatch, not a confirmed defect or a claim about overriding derived factories. Preserve child Modified then old Erased then new Changed order and the resulting core parent values.
+- Local evidence: actual target/source core style pools in `apps/office/src/svl/source/items/native-style-model.test.ts`; no fake provider or native runtime experiment.
+
+## CALC-155: style-pool destruction emits Dying before and after clearing
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool destructor, and `svl/source/notify/SfxBroadcaster.cxx`, SfxBroadcaster destructor.
+- Observation: the pool destructor first broadcasts Dying and quietly clears its index. The inherited broadcaster destructor then broadcasts another Dying before detaching listeners. A retained listener therefore sees the same pool with populated primary index on the first notification and empty primary index on the second.
+- Status: potentially surprising duplicate lifecycle notification, not a confirmed defect; derived/base destruction phases may intentionally differ. Preserve both notifications and their index-state order, without adding an idempotent disposed flag or collapsing them.
+- Local evidence: actual core pool/listener in `apps/office/src/svl/source/items/native-style-model.test.ts` and `apps/office/e2e/shared/style-model.spec.ts`. Explicit Dispose binds native destructor execution; JS GC owns physical storage and no reference-count lifetime engine is recreated.

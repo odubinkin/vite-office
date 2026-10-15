@@ -57,3 +57,12 @@ export interface SfxStyleSheetBasePoolIndexReference {
   /** Original protected pool index view. @returns Actual indexed collection. */
   GetIndexedStyleSheets(): IndexedStyleSheets;
 }
+
+export {
+  SfxStyleSheetBase,
+  SfxStyleSheetBasePool,
+  SfxStyleSheetHint,
+  SfxStyleSheetModifiedHint,
+  SfxStyleSheetPoolHint,
+} from "../source/items/style-model";
+export { SfxStyleSheetIterator } from "../source/items/style";
