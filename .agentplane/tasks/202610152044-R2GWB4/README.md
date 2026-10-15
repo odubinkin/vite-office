@@ -1,10 +1,11 @@
 ---
 id: "202610152044-R2GWB4"
 title: "Restore native shared Sfx notification contracts for Calc styles"
-status: "DOING"
+result_summary: "Restored native SfxHint IDs/value, SfxBroadcaster and SfxListener duplicate/copy/mutation/destruction contracts for Calc style dependencies; erased Svt/Writer payload typing preserves emitted runtime; source dcb71fac4c30 verified with explicit browser preconditions and remaining UI/ODS gaps."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Six pinned native source blobs and186 ID order entries match; five native broadcaster QA contracts plus source-derived copies, duplicates, live mutation, destruction and uint16 count boundaries are exercised."
     - "Exact5 changed shared owners and33Calc owners have every raw S/B/F/L counter positive;54 related cases,187Calc,production build,1Chromium and13source gates pass. Three erased payload migrations have exact emitted-runtime token equality."
     - "Broad parity flags remain false and full Calc construction/UI/ODS are explicitly pending. Native invalid-precondition errors and public host friend operations are documented adaptations, without memory-manager machinery."
-commit: null
+commit:
+  hash: "ac02c07318f2773923bd90b81d54add94ca7472c"
+  message: "✅ R2GWB4 task: record shared notification quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native shared notification contracts in calc checkout with source-derived tests and portable verification."
+  -
+    author: "CODER"
+    body: "Verified: native shared Sfx graph restored;54 related and187Calc tests, strict shared/Calc100,13source gates,production build and Chromium pass; inventory recorded and full UI/ODS milestone remains pending."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node output/playwright/task170-checks/native-audit.mjs; node output/playwright/task170-checks/portable.mjs; node output/playwright/task170-checks/source-gates.mjs with recorded changed-check reruns; node output/playwright/task170-checks/build-browser-portable.mjs; node output/playwright/task170-checks/final-audit.mjs. Result: pass. Evidence: final-verification.json records54 related cases/9files,187Calc/76files, exact5 shared raw S399/B104/F57/L370 plus33Calc raw S4179/B2731/F821/L3727 all100,13source gates,production build and1Chromium. Six native pinned blobs,186IDs,5native QA contracts and3runtime identity proofs. Scope: shared Sfx graph, erased browser payload separation, related Writer functions; Writer-only coverage exempt. Full all-app run and UI/ODS milestone remain pending; same-agent review is not independent."
+  -
+    type: "status"
+    at: "2026-10-15T20:53:10.733Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native shared Sfx graph restored;54 related and187Calc tests, strict shared/Calc100,13source gates,production build and Chromium pass; inventory recorded and full UI/ODS milestone remains pending."
 doc_version: 3
-doc_updated_at: "2026-10-15T20:52:39.030Z"
+doc_updated_at: "2026-10-15T20:53:10.734Z"
 doc_updated_by: "CODER"
 description: "Task170: replace bounded generic Sfx notification APIs with pinned native SfxHint, SfxBroadcaster and SfxListener contracts; detach browser payload typing; native QA, strict shared and Calc coverage, related Writer checks, inventory and portable browser evidence."
 sections:
@@ -129,6 +142,10 @@ sections:
     - Observation: Final evidence assembly encountered an empty path between tracked and untracked git output lists. All production tests, coverage, build, browser and source gates had passed.
       Impact: The final JSON evidence manifest was not emitted on the first assembly attempt; no application failure.
       Resolution: Filter the empty separator from the ignored evidence script and regenerate exact-set/source-hash manifest without repeating unchanged application checks.
+extensions:
+  implementation_commit:
+    hash: "dcb71fac4c30de667d7bc7818c3b80c05a383807"
+    message: "🔧 R2GWB4 core: restore native shared Sfx notification graph"
 id_source: "generated"
 ---
 ## Summary
