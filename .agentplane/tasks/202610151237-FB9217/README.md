@@ -1,10 +1,11 @@
 ---
 id: "202610151237-FB9217"
 title: "Implement native ruby autodirection and empty text feature values"
-status: "DOING"
+result_summary: "Implemented actual ruby, automatic paragraph direction and empty tab/line-break values; shared strings/bool/items reused without new lifetime machinery, canonical line-spacing/tab-stop follow-up prioritized."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Original ruby text/copy/const borrowing/typed Any/property bounds/content presentation and Void real empty clone/literal presentation/defaults audited; automatic direction fits existing paraitem owner. Native declarations/generated enum sentinel verified without type-provider/lifetime/move facade."
     - "129related,187Calc,40boundary tests pass; whole6new/changed shared executable and33Calc owners raw100. Initial selection gap closed using existing neighboring tests, passed Calc not replayed. All13source gates/build/inventory pass, provenance676modules."
     - "30intentional paths/3975source hashes/15native pins/4restored links audited. Existing bounded line-spacing/tab-stop interfaces remain explicit priority canonicalization work before a real pool/engine/model/UI/ODS can be certified; no broad parity promotion."
-commit: null
+commit:
+  hash: "0bb432ae89a8fd622e5604f9d12636947028911a"
+  message: "Implement FB9217 core: ruby direction and empty text feature values"
 comments:
   -
     author: "CODER"
     body: "Start: actual ruby text/adjustment/position, automatic paragraph direction and empty tab/line-break values; reuse shared strings/Any/item contracts with no extra lifetime provider or localization."
+  -
+    author: "CODER"
+    body: "Verified: native ruby/direction/empty-feature default values and real shared Unicode/Any/copy contracts;129related,187Calc,40boundary tests pass, raw100 and all source/build/inventory/native audits."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified129related,187Calc,40boundary tests;6whole changed/new shared and33Calc owners raw100. All13gates/build/inventory pass;30paths/3975hashes/15pins/4links audited. Original ruby/void/direction values restored; canonical line-spacing/tab-stop follow-up priority, same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T12:57:24.668Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native ruby/direction/empty-feature default values and real shared Unicode/Any/copy contracts;129related,187Calc,40boundary tests pass, raw100 and all source/build/inventory/native audits."
 doc_version: 3
-doc_updated_at: "2026-10-15T12:57:15.876Z"
+doc_updated_at: "2026-10-15T12:57:24.672Z"
 doc_updated_by: "CODER"
 description: "Task154 ports actual SvxRubyItem, SvxAutoFrameDirectionItem and SfxVoidItem default dependencies on existing OUString/bool/pool owners. Full ruby text/numeric Any and native literal presentations, original declarations/defaults, no localization/provider/lifetime facade."
 sections:
