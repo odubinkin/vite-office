@@ -4,7 +4,7 @@ title: "Restore native paragraph adjustment values for EditEngine"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T16:21:05.358Z"
+  updated_by: "CODER"
+  note: "Original complete paragraph adjustment values and all11typed properties plus Writer migration verified ata4ead78b8b44:120related/187Calc/19browser tests, raw100 on exact4shared/33Calc owners, all13source gates/build/inventory,16source pins,46paths/4025hashes and28unchanged boundary bodies. All4references restored. Same-agent quality pass; full engine/model/UI/ODS and full regression remain pending under the user readiness condition."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T16:21:00.284Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review of commita4ead78b8b44: original paragraph adjustment value/typed property contracts and necessary Writer migration pass the approved bounded acceptance."
+  evaluated_sha: "a4ead78b8b44403f44e62c7809ce90c63f74603a"
+  blueprint_digest: "db5bf7874d0dea1ba167027df67321944722a681121de8601fd819d5a68e033f"
+  evidence_refs:
+    - ".agentplane/tasks/202610151554-34P3BG/README.md"
+    - ".agentplane/tasks/202610151554-34P3BG/quality/20261015-162100284-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151554-34P3BG/quality/20261015-162100284-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151554-34P3BG/quality/20261015-162100284-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151554-34P3BG/blueprint/resolved-snapshot.json"
+    - "output/playwright/task157-checks/final-verification.json"
+    - "output/playwright/task157-checks/final-source-hashes.json"
+    - "output/playwright/task157-checks/native-audit.json"
+    - "output/playwright/task157-checks/boundary-algorithm-proof.json"
+    - "output/playwright/task157-checks/build-browser-manifest.json"
+  findings:
+    - "Mapped native fields/defaults/copy/setters/equality/hash and all11Any members to16pinned native files. Checked4025exact tracked hashes/46intentional paths, full4shared/33Calc owner sets at raw100 with every counter positive,120related/187Calc/19browser tests, production build and all13source gates. Two source-proven graph edges preserve all28original function bodies and reverse application guards. Core JSON facade is removed; existing Writer I/O retains all reachable flags/numeric state. Review is same-agent, not independent."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: native paragraph adjustment state and actual typed properties with canonical Writer consumers; retain source defaults and GC, no pool facade or localization."
+  -
+    type: "verify"
+    at: "2026-10-15T16:21:05.358Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original complete paragraph adjustment values and all11typed properties plus Writer migration verified ata4ead78b8b44:120related/187Calc/19browser tests, raw100 on exact4shared/33Calc owners, all13source gates/build/inventory,16source pins,46paths/4025hashes and28unchanged boundary bodies. All4references restored. Same-agent quality pass; full engine/model/UI/ODS and full regression remain pending under the user readiness condition."
 doc_version: 3
-doc_updated_at: "2026-10-15T16:20:30.000Z"
+doc_updated_at: "2026-10-15T16:21:05.456Z"
 doc_updated_by: "CODER"
 description: "Task157 restores full SvxAdjustItem native fields/defaults/copy/setters/equality/hash/typed Any and migrates necessary Writer consumers/JSON I/O. Actual ScDocumentPool/ScPageHFItem audit confirms native EditTextObject and full EditEngine pool remain absent; canonical paragraph adjustment is an existing incomplete shared dependency of that real text model. No fake pool/text-object facade, UI localization, native compiler or new memory manager."
 sections:
@@ -54,6 +80,39 @@ sections:
     Command: python3 output/playwright/task157-checks/audit-final.py. Result: pass. Evidence:4025exact source hashes against4017baseline,46intentional non-agent paths (38existing/8new) within approved120, all16native pins at9bc445578031fecf56086729d8e4940c77e14d65, exact positive raw owner sets, all13gates/build/browser, branchcalc and4original links restored. Original paraitem would exceed500 at520formatted lines; canonical adjustitem.hxx reexport keeps cohesive adjust334/remaining188 original-owner split. CALC-137/138 document source fallback/failed-extraction concerns without changing behavior. Final commit/clean proof follows source commit.
 
     Limits: localized GetPresentation/GetValueTextByPos deferred, native item-instance/cache/lifetime machinery deliberately erased under JS GC. Broader Writer ODF justification mappings/layout, actual EditEngine/EditTextObject, Calc pool/document/connected UI/same-model ODS remain pending; this bounded value boundary does not certify them. Existing semantic statuses and deliberate I/O/recovery deviations retained. Full all-app regression deferred until genuine minimum connected UI+same-model ODS readiness, then repairs/pause per user. Goal remains active. Quality review is same-agent, not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T16:21:05.358Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original complete paragraph adjustment values and all11typed properties plus Writer migration verified ata4ead78b8b44:120related/187Calc/19browser tests, raw100 on exact4shared/33Calc owners, all13source gates/build/inventory,16source pins,46paths/4025hashes and28unchanged boundary bodies. All4references restored. Same-agent quality pass; full engine/model/UI/ODS and full regression remain pending under the user readiness condition.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T16:20:30.000Z, excerpt_hash=sha256:17d8ee7289f6622e2b65306e989d4c51ea3e712c8e1ab988ca4638e2cffdd0e6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151554-34P3BG/blueprint/resolved-snapshot.json
+    - old_digest: db5bf7874d0dea1ba167027df67321944722a681121de8601fd819d5a68e033f
+    - current_digest: db5bf7874d0dea1ba167027df67321944722a681121de8601fd819d5a68e033f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151554-34P3BG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151554-34P3BG -m 🧩 34P3BG task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task intentional source and lifecycle artifacts, preserving user merges/unrelated tasks and history."
   Findings: |-
     Preflight clean calc at a04fbf9e0ea79aba21ff67fcb7535a51c33b5e2b. Actual ScDocumentPool registers six ScPageHFItem values, whose copy/set/equality require genuine EditTextObject; nonempty/empty fallback also requires EditEngine::CreatePool. Full EditEngine table additionally uses SvxAdjustItem ParaStart at EE_PARA_JUST4016, and existing item stores only one enum with Which-sensitive equality and scalar JSON QueryValue. Native adjust has six primary bits, independent flags and seven numeric fields plus composer. Existing comphelper enum2int/Any2Bool are already available. Genuine text-object/pool/column/table/document/UI/ODS remain absent; do not introduce null-only facades. Initial read-only path guesses for editdoc.hxx/itemset.ts/itemholder.ts and wrong-list globs missed actual owners; bounded rg --files located editeng/inc/editdoc.hxx, editeng/source/editeng/editobj2.hxx, edtspell and native SfxPoolItemHolder in svl/itemset.hxx. No source mutation or outside access resulted.
@@ -114,6 +173,39 @@ Command: node output/playwright/task157-checks/build-browser-portable.mjs. Resul
 Command: python3 output/playwright/task157-checks/audit-final.py. Result: pass. Evidence:4025exact source hashes against4017baseline,46intentional non-agent paths (38existing/8new) within approved120, all16native pins at9bc445578031fecf56086729d8e4940c77e14d65, exact positive raw owner sets, all13gates/build/browser, branchcalc and4original links restored. Original paraitem would exceed500 at520formatted lines; canonical adjustitem.hxx reexport keeps cohesive adjust334/remaining188 original-owner split. CALC-137/138 document source fallback/failed-extraction concerns without changing behavior. Final commit/clean proof follows source commit.
 
 Limits: localized GetPresentation/GetValueTextByPos deferred, native item-instance/cache/lifetime machinery deliberately erased under JS GC. Broader Writer ODF justification mappings/layout, actual EditEngine/EditTextObject, Calc pool/document/connected UI/same-model ODS remain pending; this bounded value boundary does not certify them. Existing semantic statuses and deliberate I/O/recovery deviations retained. Full all-app regression deferred until genuine minimum connected UI+same-model ODS readiness, then repairs/pause per user. Goal remains active. Quality review is same-agent, not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T16:21:05.358Z — VERIFY — ok
+
+By: CODER
+
+Note: Original complete paragraph adjustment values and all11typed properties plus Writer migration verified ata4ead78b8b44:120related/187Calc/19browser tests, raw100 on exact4shared/33Calc owners, all13source gates/build/inventory,16source pins,46paths/4025hashes and28unchanged boundary bodies. All4references restored. Same-agent quality pass; full engine/model/UI/ODS and full regression remain pending under the user readiness condition.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T16:20:30.000Z, excerpt_hash=sha256:17d8ee7289f6622e2b65306e989d4c51ea3e712c8e1ab988ca4638e2cffdd0e6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151554-34P3BG/blueprint/resolved-snapshot.json
+- old_digest: db5bf7874d0dea1ba167027df67321944722a681121de8601fd819d5a68e033f
+- current_digest: db5bf7874d0dea1ba167027df67321944722a681121de8601fd819d5a68e033f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151554-34P3BG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151554-34P3BG -m 🧩 34P3BG task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
