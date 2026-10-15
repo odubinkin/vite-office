@@ -8,12 +8,8 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { exportBoxProperties } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxTabAdjust,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
@@ -802,7 +798,16 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
       : {}),
     ...(tabStop instanceof SvxTabStopItem
       ? {
-          tabStopDetails: tabStop.GetStops().map(
+          tabStopDetails: Array.from(
+            { length: tabStop.Count() },
+            /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+              unused,
+              index,
+            ) => {
+              void unused;
+              return tabStop.At(index);
+            },
+          ).map(
             /** Projects one Writer tab to ODF properties. @param stop - Writer tab stop. @returns ODF tab. */
             (stop) => ({
               position: stop.GetTabPos(),

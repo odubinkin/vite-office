@@ -1,11 +1,12 @@
 /** @fileoverview Measures native next-tab separation after occupied bullet glyphs in real production body/cell lists. */
+import { createTabs } from "../test/tab-item-fixtures";
 import { expect, test } from "@playwright/test";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { createWriterNumFormat } from "../src/sw/source/core/doc/number";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SvxFontHeightItem } from "../src/editeng/source/items/textitem";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../src/editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabAdjust } from "../src/editeng/inc/tstpitem";
 import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CJK_FONTSIZE,
@@ -41,9 +42,7 @@ for (const width of [1280, 390])
         for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
           node.SetAttr(new SvxFontHeightItem(profile.font * 20, 100, which));
         if (profile.explicit)
-          node.SetAttr(
-            SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360, SvxTabAdjust.Left)]),
-          );
+          node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360, SvxTabAdjust.Left)]));
         const rule = doc.EnsureNumRule(profile.name, "bullet");
         rule.Set(
           0,

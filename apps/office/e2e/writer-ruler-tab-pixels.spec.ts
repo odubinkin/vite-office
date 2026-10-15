@@ -1,6 +1,7 @@
 /** @fileoverview Checks rounded native tab anchors and typed hit ownership in Chromium. */
+import { createTabs } from "../test/tab-item-fixtures";
 import { expect, test } from "@playwright/test";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../src/editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabAdjust } from "../src/editeng/inc/tstpitem";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { RES_PARATR_TABSTOP } from "../src/sw/inc/hintids";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
@@ -21,7 +22,7 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(writerDocument, metadata));
     shell.Insert("RulerTabPixelsProof");
     shell.SetParagraphItem(
-      SvxTabStopItem.FromStops(
+      createTabs(
         RES_PARATR_TABSTOP,
         [
           new SvxTabStop(1207, SvxTabAdjust.Left, ",", "_"),

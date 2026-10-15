@@ -10,11 +10,7 @@ import {
 } from "../../../../editeng/inc/lrspitem";
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
-import {
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -912,31 +908,28 @@ function putParagraphProperties(
     }
     put(item);
   }
-  if (properties.tabStopDetails !== undefined)
-    put(
-      SvxTabStopItem.FromStops(
-        RES_PARATR_TABSTOP,
-        properties.tabStopDetails.map(
-          /** Builds an upstream Writer tab from ODF properties. @param stop - ODF tab. @returns Writer tab. */
-          (stop) =>
-            new SvxTabStop(
-              // Pinned SvxTabStopItem::PutValue uses o3tl::toTwips on the integer MM100 property.
-              Math.trunc((stop.position * 72 + (stop.position >= 0 ? 63 : -63)) / 127),
-              stop.alignment === "right"
-                ? SvxTabAdjust.Right
-                : stop.alignment === "center"
-                  ? SvxTabAdjust.Center
-                  : stop.alignment === "char"
-                    ? SvxTabAdjust.Decimal
-                    : stop.alignment === "default"
-                      ? SvxTabAdjust.Default
-                      : SvxTabAdjust.Left,
-              stop.decimal,
-              stop.fill,
-            ),
+  if (properties.tabStopDetails !== undefined) {
+    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    for (const stop of properties.tabStopDetails)
+      item.Insert(
+        new SvxTabStop(
+          // Pinned SvxTabStopItem::PutValue uses o3tl::toTwips on the integer MM100 property.
+          Math.trunc((stop.position * 72 + (stop.position >= 0 ? 63 : -63)) / 127),
+          stop.alignment === "right"
+            ? SvxTabAdjust.Right
+            : stop.alignment === "center"
+              ? SvxTabAdjust.Center
+              : stop.alignment === "char"
+                ? SvxTabAdjust.Decimal
+                : stop.alignment === "default"
+                  ? SvxTabAdjust.Default
+                  : SvxTabAdjust.Left,
+          stop.decimal,
+          stop.fill,
         ),
-      ),
-    );
+      );
+    put(item);
+  }
   if (properties.keepWithNext !== undefined)
     put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
   if (properties.keepTogether !== undefined)

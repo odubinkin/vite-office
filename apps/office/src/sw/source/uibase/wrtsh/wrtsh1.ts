@@ -33,7 +33,7 @@ import { SwListShell } from "../shells/listsh";
 import type { WriterListLevelCommand } from "../../core/edit/ednumber";
 import { SwFEShell } from "../../core/frmedt/fetab";
 import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh1";
-import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import type { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import {

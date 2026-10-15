@@ -1,4 +1,6 @@
 /** @fileoverview Verifies the canonical SwWrtShell cursor and browser-input intent boundary. */
+import { tabStops } from "../../../../../test/tab-item-fixtures";
+import { createTabs } from "../../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { describe, expect, it } from "vitest";
@@ -10,7 +12,7 @@ import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -79,7 +81,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetParagraphItem(new SvxULSpaceItem(120, 240, RES_UL_SPACE, true))).toBe(true);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
+        createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
       ),
     ).toBe(true);
     expect(shell.SetParagraphItem(new SfxBoolItem(RES_KEEP, true))).toBe(true);
@@ -88,7 +90,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(false);
     expect(shell.Redo()).toBe(true);
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
+      tabStops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).map(
         /** Projects a tab position. @param stop - Tab stop. @returns Twips. */
         (stop) => stop.GetTabPos(),
       ),

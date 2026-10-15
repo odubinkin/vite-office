@@ -1,4 +1,6 @@
 /** @fileoverview Checks paragraph ruler item metadata, direct inheritance and real Writer history. */
+import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it } from "vitest";
@@ -8,7 +10,7 @@ import {
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../editeng/source/items/frmitems";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { SwPosition } from "../../source/core/crsr/pam";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import {
@@ -53,11 +55,7 @@ function fixture(automatic = true, inherited = false) {
     new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     new SvxULSpaceItem(120, 60, RES_UL_SPACE),
-    SvxTabStopItem.FromStops(
-      RES_PARATR_TABSTOP,
-      [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")],
-      7,
-    ),
+    createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")], 7),
   ];
   if (inherited)
     for (const item of items) session.docShell.GetDoc().GetDfltTextFormatColl().SetFormatAttr(item);
@@ -82,20 +80,24 @@ function state(node: SwTextNode) {
       (id) =>
         id === RES_MARGIN_FIRSTLINE
           ? firstValues(node.GetAttr(id))
-          : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
-              id === RES_MARGIN_TEXTLEFT ? 11 : id === RES_MARGIN_RIGHT ? 5 : 0,
-            ),
+          : id === RES_PARATR_TABSTOP
+            ? encodeSfxPoolItem(node.GetAttr(id) as SvxTabStopItem).value
+            : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
+                id === RES_MARGIN_TEXTLEFT ? 11 : id === RES_MARGIN_RIGHT ? 5 : 0,
+              ),
     ),
     direct: which.map(
       /** Distinguishes direct items from inherited defaults. @param id - Attribute identity. @returns Direct value or absence. */
       (id) =>
         id === RES_MARGIN_FIRSTLINE
           ? (firstValues(node.GetpSwAttrSet()?.GetItemIfSet(id, false)) ?? null)
-          : ((
-              node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
-                { QueryValue(member?: number): unknown } | undefined
-            )?.QueryValue(id === RES_MARGIN_TEXTLEFT ? 11 : id === RES_MARGIN_RIGHT ? 5 : 0) ??
-            null),
+          : id === RES_PARATR_TABSTOP
+            ? directTabValue(node)
+            : ((
+                node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
+                  { QueryValue(member?: number): unknown } | undefined
+              )?.QueryValue(id === RES_MARGIN_TEXTLEFT ? 11 : id === RES_MARGIN_RIGHT ? 5 : 0) ??
+              null),
     ),
     defaultTabDistance: (node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetDefaultDistance(),
     text: node.GetText(),
@@ -261,4 +263,10 @@ function firstValues(item: { QueryValue(member?: number): unknown } | undefined)
   if (item === undefined) return undefined;
   const value = item.QueryValue(8);
   return item.QueryValue(10) === true ? [value, 1] : value;
+}
+
+/** Reads direct tab JSON at its actual browser boundary. @param node - Native paragraph. @returns Record or absent direct value. */
+function directTabValue(node: SwTextNode) {
+  const item = node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_TABSTOP, false);
+  return item === undefined ? null : encodeSfxPoolItem(item as SvxTabStopItem).value;
 }

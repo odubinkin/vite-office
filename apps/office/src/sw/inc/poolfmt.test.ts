@@ -1,4 +1,6 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
+import { encodeSfxPoolItem } from "../browser/filter/xml/item-codec";
+import { createTabs } from "../../../test/tab-item-fixtures";
 import { FontItalic, FontWeight } from "../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
@@ -18,12 +20,8 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../editeng/source/items/textitem";
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
@@ -365,11 +363,14 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: "transparent" }),
     ).toEqual(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
     expect(
-      document.GetAttrPool().CreateItem({
-        which: RES_PARATR_TABSTOP,
-        value: SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(0)]).QueryValue(),
-      }),
-    ).toEqual(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(0)]));
+      document
+        .GetAttrPool()
+        .CreateItem({
+          which: RES_PARATR_TABSTOP,
+          value: encodeSfxPoolItem(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(0)])).value,
+        })
+        .equals(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(0)])),
+    ).toBe(true);
   });
 
   it("materializes the pinned HTML-mode text and heading branches", /** Verifies HTML paragraph spacing, heading sizes, font role, and posture rules from DocumentStylePoolManager.cxx. @returns Nothing. */ () => {

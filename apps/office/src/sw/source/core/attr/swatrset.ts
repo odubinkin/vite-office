@@ -4,12 +4,8 @@
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxTabAdjust,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,
@@ -286,7 +282,38 @@ export class SwAttrPool extends SfxItemPool {
     this.RegisterDefaultItem(
       new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP),
       /** Restores Writer tab stops. @param value - Persisted stop record. @returns Tab-stop item. */
-      (value) => SvxTabStopItem.FromValue(RES_PARATR_TABSTOP, value),
+      (value) => {
+        if (typeof value !== "object" || value === null || Array.isArray(value))
+          throw new Error("SvxTabStopItem value is invalid.");
+        const record = value as Record<string, unknown>;
+        if (!Array.isArray(record.stops) || !Number.isInteger(record.defaultDistance))
+          throw new Error("SvxTabStopItem value is invalid.");
+        const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+        item.SetDefaultDistance(record.defaultDistance as number);
+        for (const entry of record.stops) {
+          if (typeof entry !== "object" || entry === null || Array.isArray(entry))
+            throw new Error("SvxTabStopItem tab value is invalid.");
+          const tab = entry as Record<string, unknown>;
+          if (
+            typeof tab.position !== "number" ||
+            typeof tab.adjustment !== "number" ||
+            typeof tab.decimal !== "string" ||
+            typeof tab.fill !== "string"
+          )
+            throw new Error("SvxTabStopItem tab value is invalid.");
+          const stop = new SvxTabStop(
+            tab.position,
+            tab.adjustment as SvxTabAdjust,
+            tab.decimal,
+            tab.fill,
+          );
+          // Stored state can contain a nul written after construction; restore the field,
+          // rather than reapplying the constructor's system-decimal resolution.
+          stop.GetDecimal(true)[0] = tab.decimal;
+          item.Insert(stop);
+        }
+        return item;
+      },
     );
     this.RegisterDefaultItem(
       new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),

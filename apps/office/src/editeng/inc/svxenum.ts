@@ -152,3 +152,13 @@ export enum SvxInterLineSpaceRule {
   Prop,
   Fix,
 }
+
+/** Pinned `SvxTabAdjust` order from `include/editeng/svxenum.hxx`. */
+export enum SvxTabAdjust {
+  Left,
+  Right,
+  Decimal,
+  Center,
+  Default,
+  End,
+}

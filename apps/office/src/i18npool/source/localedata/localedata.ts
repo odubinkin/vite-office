@@ -1,6 +1,6 @@
 /** @fileoverview Browser resource binding for the actual LocaleDataImpl numeric decimal field, preserving source first-name/language/default fallback and qlt fallback order. No UNO service facade is fabricated. */
-import separators from "./data/decimal-separators.json";
-import languageFallbacks from "../../../i18nlangtag/source/isolang/locale-fallbacks.json";
+import separators from "./data/decimal-separators.json" with { type: "json" };
+import languageFallbacks from "../../../i18nlangtag/source/isolang/locale-fallbacks.json" with { type: "json" };
 import { getFallbackStrings } from "../../../i18nlangtag/source/languagetag/languagetag";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 /** Actual embedded source resource values; no current Intl decimal data is substituted. */

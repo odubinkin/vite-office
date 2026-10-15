@@ -1,4 +1,6 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
+import { tabStops } from "../../../../test/tab-item-fixtures";
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
 
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
@@ -12,7 +14,7 @@ import {
   projectWriterLineHeight,
   projectWriterLineHeightItem,
 } from "../../source/core/text/itrform2";
-import { SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxFirstLineIndentItem, SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
@@ -502,7 +504,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       ).GetPropLineSpace(),
     ).toBe(150);
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
+      tabStops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).map(
         /** Projects a tab position. @param stop - Tab stop. @returns Twips. */
         (stop) => stop.GetTabPos(),
       ),
@@ -548,7 +550,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.pointerDown(rulerSurface, { clientX: 240 });
     fireEvent.pointerUp(window, { clientX: 240 });
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops(),
+      tabStops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem),
     ).toHaveLength(3);
     openParagraphDialog();
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
@@ -609,9 +611,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const node = document.paragraphs[0]!;
     node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
     node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
-    node.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
-    );
+    node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]));
     const cursor = new SwPaM(new SwPosition(node, 0));
     const projected = new WriterViewProjection().Project(
       document,
@@ -624,7 +624,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       highlight: "#fedcba",
       tabStopsPt: [36, 72],
     });
-    node.SetAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(960)]));
+    node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(960)]));
     expect(
       new WriterViewProjection().Project(
         document,

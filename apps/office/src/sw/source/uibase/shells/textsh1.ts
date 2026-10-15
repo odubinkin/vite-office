@@ -10,11 +10,7 @@ import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
-import {
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
@@ -599,8 +595,16 @@ export class SwTextShell {
       contextual: spacing.GetContext(),
       lineMode: projectWriterLineSpacing(lineSpacing).mode,
       lineValue: projectWriterLineSpacing(lineSpacing).value,
-      tabStopsPt: tabStops
-        .GetStops()
+      tabStopsPt: Array.from(
+        { length: tabStops.Count() },
+        /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+          unused,
+          index,
+        ) => {
+          void unused;
+          return tabStops.At(index);
+        },
+      )
         .filter(
           /** Keeps authored stops. @param stop - Candidate tab. @returns Whether explicit. */ (
             stop,
@@ -663,18 +667,15 @@ export class SwTextShell {
     paragraph = this.target.GetActiveParagraph(),
   ): SvxTabStopItem {
     const current = paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-    return SvxTabStopItem.FromStops(
-      RES_PARATR_TABSTOP,
-      positions.map(
-        /** Retains metadata at unchanged positions. @param position - Twips. @returns Tab stop. */ (
-          position,
-        ) =>
-          current.GetPos(position) !== 65535
-            ? current.At(current.GetPos(position))
-            : new SvxTabStop(position),
-      ),
-      current.GetDefaultDistance(),
-    );
+    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    item.SetDefaultDistance(current.GetDefaultDistance());
+    for (const position of positions)
+      item.Insert(
+        current.GetPos(position) !== 65535
+          ? current.At(current.GetPos(position))
+          : new SvxTabStop(position),
+      );
+    return item;
   }
 
   /** Applies paragraph dialog attributes in one history entry. @param items - Paragraph attributes. @returns Whether a paragraph changed. */

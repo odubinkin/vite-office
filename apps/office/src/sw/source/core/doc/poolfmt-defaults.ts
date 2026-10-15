@@ -3,12 +3,8 @@
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,

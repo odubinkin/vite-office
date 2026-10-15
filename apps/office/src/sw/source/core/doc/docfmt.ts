@@ -7,7 +7,7 @@ import {
 } from "../../../../editeng/inc/lrspitem";
 import { ListLevelIndents } from "../para/paratr";
 import { SwRegHistory, type SwHistory } from "../undo/rolbck";
-import { SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import {
   RES_PARATR_TABSTOP,
   RES_MARGIN_TEXTLEFT,

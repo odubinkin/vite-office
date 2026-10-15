@@ -10,7 +10,7 @@ import {
   type Ref,
 } from "react";
 import { createPortal } from "react-dom";
-import { SvxTabAdjust } from "../../../editeng/source/items/paraitem";
+import { SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import type { WriterParagraphProjection } from "./writer-view-projection";

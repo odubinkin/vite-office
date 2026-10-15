@@ -11,16 +11,17 @@
     "assertions": [
       "Original TabStop and TabAlign declarations use real shared typed transport.",
       "Initialized Sequence object address binding shares the original pointer cell without a new lifetime engine.",
-      "Native tab values resolve constructor decimal defaults from source resources, preserve independent field copies/references and reuse SortedVector."
+      "Native tab values resolve constructor decimal defaults from source resources, preserve independent field copies/references and reuse SortedVector.",
+      "Original tab item typed properties, copy/merge/hash and explicit Writer JSON boundary pass focused core and real browser regressions."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine."
+      "rationale": "Original tab value/container/typed UNO contracts reuse existing SortedVector/CPPU and ordinary JS fields. Explicit Sequence object-address/member bindings erase C++ syntax without a new lifetime engine or binary document format. Source numeric decimal resources and source fallback order are embedded behind a specific browser locale-field binding; general native locale services and LanguageTag construction are not fabricated. Original paraitem responsibility is split only because238+322lines exceed500, retaining canonical tstpitem.hxx and original enum/member headers. Writer JSON encoding/restoration stays at its existing I/O boundaries and preserves explicit saved nul fields."
     },
     "capability": "Canonical tab-stop boundary work",
     "gaps": [
-      "Task156 remains in progress: complete native SvxTabStopItem copy/merge/hash/typed Any and migrate existing browser JSON constructors/projection to Writer.",
-      "Real engine/pool/Calc model/connected UI/same-model ODS and translated presentation remain pending."
+      "Translated presentation and diagnostic XML, general locale-service/LanguageTag construction and wider native service contracts remain unported.",
+      "Real engine/pool/Calc model/connected UI/same-model ODS remain pending."
     ],
     "local": {
       "implementation": [
@@ -55,6 +56,14 @@
         {
           "path": "apps/office/src/i18nlangtag/source/isolang/locale-fallbacks.json",
           "marker": "\"pt\""
+        },
+        {
+          "path": "apps/office/src/editeng/inc/tstpitem.ts",
+          "marker": "SvxTabStopItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.tabs.ts",
+          "marker": "SvxTabStopItem"
         }
       ],
       "tests": [
@@ -64,6 +73,10 @@
         },
         {
           "path": "apps/office/src/editeng/source/items/native-tab-values.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-tab-item.test.ts",
           "marker": "it("
         }
       ],
@@ -125,8 +138,9 @@
     "aspect": "model-operation",
     "atomicOperation": "canonical-tab-stop-boundary",
     "scopeLimitations": [
-      "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine.",
-      "Prepared locale field binding and raw browser host locale are supported; general locale-service interfaces and full LanguageTag construction/canonicalization are not implemented."
+      "Original value/container and typed property contracts are implemented and validated by348related/187Calc/19browser tests; this bounded acceptance does not certify translated presentation, diagnostic XML or all native service contracts.",
+      "Prepared Locale numeric field and raw browser host locale binding are implemented. General SvtSysLocale/LocaleDataWrapper/LanguageTag interfaces and language-tag construction/canonicalization remain unported.",
+      "Full EditEngine/EditTextObject and Calc pool/document/connected UI/same-model ODS remain pending. Native binary ABI, new lifetime/refcount managers and C++ probes are outside this work. Existing deliberate browser I/O/recovery deviations remain."
     ],
     "implemented": true,
     "contractParity": false,

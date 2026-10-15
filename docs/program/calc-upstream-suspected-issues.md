@@ -2163,3 +2163,17 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: Latin-script legacy ku fallbacks test the language string krm, while the ISO branch and language tables use kmr for Northern Kurdish. Thus these particular extra ku candidates are added for krm-Latn and are absent for the corresponding kmr-Latn input. Other language/country fallbacks still apply.
 - Status: suspected transposition, not a confirmed defect. Preserve the source spelling and order instead of silently changing it to kmr.
 - Local evidence: `apps/office/src/editeng/source/items/native-tab-values.test.ts`, literal fallback sequences over decomposed source fields; no native compiler or ICU implementation.
+
+## CALC-135: inserting a tab item into itself removes alternating entries
+
+- Upstream: pinned `editeng/source/items/paraitem.cxx`, SvxTabStopItem::Insert(const SvxTabStopItem*).
+- Observation: the first pass removes matching target positions while its index and Count both refer to the live source. If source and target are the same item, removing a tab shifts the next tab before the incremented index. Self-insertion of positions1,2,3,4 therefore retains2,4; the second pass cannot restore the erased entries.
+- Status: source aliasing concern, not a confirmed defect. Preserve both live passes; do not silently clone the input or turn self-insertion into a no-op.
+- Local evidence: `apps/office/src/editeng/source/items/native-tab-item.test.ts`, literal self-merge witness; no native compiler or memory probe.
+
+## CALC-136: tab count narrowing can hide values from equality but retain them in hashing
+
+- Upstream: pinned `include/editeng/tstpitem.hxx` Count and GetPos return unsigned16; `editeng/source/items/paraitem.cxx` equality loops over Count while hashCode iterates the complete vector.
+- Observation:65536stored tabs narrow to Count0 and can compare equal to an empty item with the same default distance, while hashes differ. Index65535 also collides with SVX_TAB_NOTFOUND: insertion at that existing position cannot remove it first, so the position-only vector rejects the replacement. Copy construction still copies every stored entry.
+- Status: source width/invariant concern, not a confirmed defect or portable binary hash claim. Preserve the original narrowing, sentinel and loop domains instead of clamping size or changing equality.
+- Local evidence: `apps/office/src/editeng/source/items/native-tab-item.test.ts`, initialized65536entry vector and actual typed query; no undefined index access, native compiler or memory probe.

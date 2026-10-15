@@ -1,4 +1,5 @@
 /** @fileoverview Checks rounded paragraph ruler coordinates preserve precise Writer items and history. */
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -7,7 +8,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../editeng/source/items/frmitems";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import {
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -41,11 +42,7 @@ function fixture(left = 487, firstLine = 367, right = 6503) {
     new SvxTextLeftMarginItem(SvxIndentValue.twips(left), RES_MARGIN_TEXTLEFT),
     new SvxFirstLineIndentItem(SvxIndentValue.twips(firstLine), RES_MARGIN_FIRSTLINE),
     new SvxRightMarginItem(SvxIndentValue.twips(right), RES_MARGIN_RIGHT),
-    SvxTabStopItem.FromStops(
-      RES_PARATR_TABSTOP,
-      [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")],
-      7,
-    ),
+    createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")], 7),
   ]);
   const store = new WriterViewStore(session.view);
   stores.push(store);

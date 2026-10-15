@@ -10,7 +10,7 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import { MeasureUnit as U } from "../../../../offapi/com/sun/star/util/MeasureUnit";
-import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import {
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_TEXTLEFT,

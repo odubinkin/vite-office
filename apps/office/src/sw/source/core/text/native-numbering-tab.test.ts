@@ -1,6 +1,6 @@
 /** @fileoverview Checks native strict-after-label tab vectors without upstream execution. */
 import { expect, it } from "vitest";
-import { SvxTabAdjust } from "../../../../editeng/source/items/paraitem";
+import { SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { resolveSwNumberingTabPosition, type SwNumberingTabSettings } from "./txttab";
 const base: SwNumberingTabSettings = {
   defaultDistance: 1134,

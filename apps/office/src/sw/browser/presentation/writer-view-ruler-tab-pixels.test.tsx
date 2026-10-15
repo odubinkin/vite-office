@@ -1,9 +1,11 @@
 /** @fileoverview Checks native integer tab anchors without rounding logical Writer items. */
+import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxTextLeftMarginItem } from "../../../editeng/source/items/frmitems";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { RES_MARGIN_TEXTLEFT, RES_PARATR_TABSTOP } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterRulers } from "./WriterRulers";
@@ -28,7 +30,7 @@ function fixture(position: number, adjustment = SvxTabAdjust.Right, left = 0, re
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerTabPixelsProof");
   shell.SetParagraphItem(
-    SvxTabStopItem.FromStops(
+    createTabs(
       RES_PARATR_TABSTOP,
       [
         new SvxTabStop(360, SvxTabAdjust.Default, ";", "~"),
@@ -48,7 +50,8 @@ function fixture(position: number, adjustment = SvxTabAdjust.Right, left = 0, re
 
 /** Reads all stored tab fields, including hidden defaults. @param shell - Editing owner. @returns Item value. */
 function value(shell: ReturnType<typeof fixture>["shell"]) {
-  return (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue();
+  return encodeSfxPoolItem(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem)
+    .value;
 }
 
 /** Mounts actual immutable projected data without laying out extreme logical offsets. @param owner - Real Writer fixture. @returns Ruler DOM. */

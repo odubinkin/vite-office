@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer shell paragraph dialog and ruler command boundaries. */
+import { createTabs } from "../../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { describe, expect, it } from "vitest";
@@ -6,11 +7,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import {
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -49,21 +46,13 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     setTestCursor(shell, "p-1", 0);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(
-          RES_PARATR_TABSTOP,
-          [new SvxTabStop(720, SvxTabAdjust.Right, ".", "_")],
-          1134,
-        ),
+        createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720, SvxTabAdjust.Right, ".", "_")], 1134),
       ),
     ).toBe(true);
     setTestCursor(shell, secondId, 0);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(
-          RES_PARATR_TABSTOP,
-          [new SvxTabStop(720, SvxTabAdjust.Decimal, ",", ".")],
-          1134,
-        ),
+        createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720, SvxTabAdjust.Decimal, ",", ".")], 1134),
       ),
     ).toBe(true);
     setTestSelection(shell, {
@@ -123,7 +112,7 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     expect(shell.SetParagraphItems([lineSpacingFixture(150, RES_PARATR_LINESPACING)])).toBe(true);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(
+        createTabs(
           RES_PARATR_TABSTOP,
           [new SvxTabStop(720, SvxTabAdjust.Right, ".", "_"), new SvxTabStop(1440)],
           1134,

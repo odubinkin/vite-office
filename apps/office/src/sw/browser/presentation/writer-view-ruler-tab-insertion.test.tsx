@@ -1,7 +1,9 @@
 /** @fileoverview Checks fresh ruler tab insertion through Writer items, immutable projection, DOM and undo. */
+import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -22,13 +24,14 @@ function fixture(stops: readonly SvxTabStop[]) {
   sessions.push(session);
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerTabInsertionProof");
-  shell.SetParagraphItem(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, stops, 720));
+  shell.SetParagraphItem(createTabs(RES_PARATR_TABSTOP, stops, 720));
   return { session, shell };
 }
 
 /** Reads all raw fields, including hidden default stops. @param shell - Editing owner. @returns Primitive item. */
 function itemValue(shell: ReturnType<typeof fixture>["shell"]) {
-  return (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue();
+  return encodeSfxPoolItem(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem)
+    .value;
 }
 
 describe("Writer fresh ruler tab insertion", /** Groups item replacement and browser command ownership. @returns Nothing. */ () => {
@@ -51,7 +54,7 @@ describe("Writer fresh ruler tab insertion", /** Groups item replacement and bro
         ...before,
         stops: [
           before.stops[0],
-          { position: 1134, adjustment: SvxTabAdjust.Left, decimal: "\0", fill: " " },
+          { position: 1134, adjustment: SvxTabAdjust.Left, decimal: ".", fill: " " },
           before.stops[2],
         ],
       };
@@ -76,7 +79,7 @@ describe("Writer fresh ruler tab insertion", /** Groups item replacement and bro
       stops: [
         before.stops[0],
         before.stops[1],
-        { position: 1200, adjustment: SvxTabAdjust.Left, decimal: "\0", fill: " " },
+        { position: 1200, adjustment: SvxTabAdjust.Left, decimal: ".", fill: " " },
         before.stops[2],
       ],
     });
@@ -84,7 +87,7 @@ describe("Writer fresh ruler tab insertion", /** Groups item replacement and bro
     expect(itemValue(shell).stops[3]).toEqual({
       position: 32767,
       adjustment: SvxTabAdjust.Left,
-      decimal: "\0",
+      decimal: ".",
       fill: " ",
     });
     expect(itemValue(shell).stops[4]).toEqual(before.stops[2]);
@@ -112,7 +115,7 @@ describe("Writer fresh ruler tab insertion", /** Groups item replacement and bro
     expect(itemValue(shell).stops[0]).toEqual({
       position: 1200,
       adjustment: SvxTabAdjust.Left,
-      decimal: "\0",
+      decimal: ".",
       fill: " ",
     });
   });
@@ -146,7 +149,7 @@ describe("Writer fresh ruler tab insertion", /** Groups item replacement and bro
       fireEvent.pointerUp(window, { pointerId: 7, clientX: 195.6 });
       expect(itemValue(shell)).toEqual({
         defaultDistance: 720,
-        stops: [{ position: 1134, adjustment: SvxTabAdjust.Left, decimal: "\0", fill: " " }],
+        stops: [{ position: 1134, adjustment: SvxTabAdjust.Left, decimal: ".", fill: " " }],
       });
       const next = store.GetSnapshot().activeParagraph;
       expect(next.rulerTabStops).toEqual([

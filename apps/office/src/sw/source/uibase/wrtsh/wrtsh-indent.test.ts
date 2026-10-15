@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
-import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP, RES_LR_SPACE } from "../../../inc/hintids";
 import { SvxLRSpaceItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SwDocShell } from "../app/docsh";

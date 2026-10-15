@@ -2,6 +2,7 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -67,30 +68,65 @@ function decodeInternetStyleId(candidate: unknown): SwPoolFormatId {
   return candidate as SwPoolFormatId;
 }
 
+/** Browser snapshot of the explicit native tab fields, distinct from UNO transport. */
+export type TabStopItemSnapshot = Omit<SfxPoolItemSnapshot, "value"> & {
+  readonly value: {
+    readonly defaultDistance: number;
+    readonly stops: readonly {
+      readonly position: number;
+      readonly adjustment: number;
+      readonly decimal: string;
+      readonly fill: string;
+    }[];
+  };
+};
+/** Encodes concrete tab values at the browser boundary. @param item - Tab item. @returns Typed browser record. */
+export function encodeSfxPoolItem(item: SvxTabStopItem): TabStopItemSnapshot;
+/** Encodes any supported pooled item at the browser boundary. @param item - Core item. @returns Browser record. */
+export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
+
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
   const value =
-    item instanceof SvxLineSpacingItem
+    item instanceof SvxTabStopItem
       ? {
-          nInterLineSpace: item.GetInterLineSpace(),
-          nLineHeight: item.GetLineHeight(),
-          nPropLineSpace: item.GetPropLineSpace(),
-          eLineSpaceRule: item.GetLineSpaceRule(),
-          eInterLineSpaceRule: item.GetInterLineSpaceRule(),
+          defaultDistance: item.GetDefaultDistance(),
+          stops: Array.from(
+            { length: item.Count() },
+            /** Encodes the native scalar fields only at this browser boundary. @param unused - Empty array slot. @param index - Native index. @returns Cloneable record. */
+            (unused, index) => {
+              void unused;
+              const stop = item.At(index);
+              return {
+                position: stop.GetTabPos(),
+                adjustment: stop.GetAdjustment(),
+                decimal: stop.GetDecimal(),
+                fill: stop.GetFill(),
+              };
+            },
+          ),
         }
-      : item instanceof SvxULSpaceItem
-        ? encodeULSpaceValue(item)
-        : item instanceof SvxTextLeftMarginItem
-          ? encodeLegacyTextLeftMarginValue(item)
-          : item instanceof SvxRightMarginItem
-            ? encodeLegacyRightMarginValue(item)
-            : item instanceof SvxFirstLineIndentItem
-              ? encodeLegacyFirstLineValue(item)
-              : item instanceof SwFormatINetFormat
-                ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-                : item.QueryValue();
+      : item instanceof SvxLineSpacingItem
+        ? {
+            nInterLineSpace: item.GetInterLineSpace(),
+            nLineHeight: item.GetLineHeight(),
+            nPropLineSpace: item.GetPropLineSpace(),
+            eLineSpaceRule: item.GetLineSpaceRule(),
+            eInterLineSpaceRule: item.GetInterLineSpaceRule(),
+          }
+        : item instanceof SvxULSpaceItem
+          ? encodeULSpaceValue(item)
+          : item instanceof SvxTextLeftMarginItem
+            ? encodeLegacyTextLeftMarginValue(item)
+            : item instanceof SvxRightMarginItem
+              ? encodeLegacyRightMarginValue(item)
+              : item instanceof SvxFirstLineIndentItem
+                ? encodeLegacyFirstLineValue(item)
+                : item instanceof SwFormatINetFormat
+                  ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+                  : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,

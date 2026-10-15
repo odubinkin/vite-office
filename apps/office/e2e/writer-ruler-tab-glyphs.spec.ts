@@ -1,6 +1,7 @@
 /** @fileoverview Checks four typed ruler glyphs, anchored hit targets and fresh insertion in Chromium. */
+import { createTabs } from "../test/tab-item-fixtures";
 import { expect, test } from "@playwright/test";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../src/editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabAdjust } from "../src/editeng/inc/tstpitem";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { RES_PARATR_TABSTOP } from "../src/sw/inc/hintids";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
@@ -65,7 +66,7 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(document, metadata));
     shell.Insert("RulerTabGlyphProof");
     shell.SetParagraphItem(
-      SvxTabStopItem.FromStops(
+      createTabs(
         RES_PARATR_TABSTOP,
         cases.map(
           /** Builds an owned explicit tab fixture. @param item - Typed case. @returns Model stop. */ (

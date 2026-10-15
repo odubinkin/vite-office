@@ -8,7 +8,7 @@ import {
   SvxLRSpaceItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { RES_LR_SPACE, RES_MARGIN_TEXTLEFT, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { isMoveLeftMargin } from "./edattr";

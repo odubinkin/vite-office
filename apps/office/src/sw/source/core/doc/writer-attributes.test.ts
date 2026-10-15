@@ -1,4 +1,5 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { createTabs } from "../../../../../test/tab-item-fixtures";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
@@ -15,13 +16,8 @@ import {
 import { projectWriterTextRuns } from "../txtnode/ndtxt";
 import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxTextLeftMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -675,7 +671,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     authoredSpacing.SetPropLineSpace(175);
     node.SetAttr(authoredSpacing);
     node.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      createTabs(RES_PARATR_TABSTOP, [
         new SvxTabStop(720, SvxTabAdjust.Right),
         new SvxTabStop(1440, SvxTabAdjust.Decimal, ".", "."),
       ]),
@@ -689,13 +685,15 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(spacing.GetPropLineSpace()).toBe(175);
     expect(spacing.GetInterLineSpace()).toBe(72);
     expect(spacing.GetInterLineSpaceRule()).toBe(authoredSpacing.GetInterLineSpaceRule());
-    expect((restored.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue()).toEqual({
-      defaultDistance: 0,
-      stops: [
-        { position: 720, adjustment: SvxTabAdjust.Right, decimal: "\0", fill: " " },
-        { position: 1440, adjustment: SvxTabAdjust.Decimal, decimal: ".", fill: "." },
-      ],
-    });
+    expect(encodeSfxPoolItem(restored.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).value).toEqual(
+      {
+        defaultDistance: 0,
+        stops: [
+          { position: 720, adjustment: SvxTabAdjust.Right, decimal: ".", fill: " " },
+          { position: 1440, adjustment: SvxTabAdjust.Decimal, decimal: ".", fill: "." },
+        ],
+      },
+    );
     const pool = writer.GetAttrPool();
     expect(
       (pool.CreateItem({ which: RES_UL_SPACE, value: [240, 120] }) as SvxULSpaceItem).GetContext(),

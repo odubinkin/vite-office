@@ -26,7 +26,7 @@ import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
 import { moveLeftMargin } from "../doc/docfmt";
-import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP, RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 

@@ -29,7 +29,7 @@ import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
 import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 import type { SwView } from "../../source/uibase/uiview/view";
-import { SvxTabAdjust, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
@@ -255,7 +255,16 @@ export class WriterViewProjection {
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
         const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-        const explicitTabStops = tabItem.GetStops().flatMap(
+        const explicitTabStops = Array.from(
+          { length: tabItem.Count() },
+          /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+            unused,
+            index,
+          ) => {
+            void unused;
+            return tabItem.At(index);
+          },
+        ).flatMap(
           /** Excludes default hit targets while retaining each explicit tab's item index. @param stop - Writer tab stop. @param index - Raw item index. @returns Immutable ruler identity. */
           (stop, index) =>
             stop.GetAdjustment() === SvxTabAdjust.Default
@@ -339,7 +348,16 @@ export class WriterViewProjection {
                           .GetDocumentSettingManager()
                           .get("TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"),
                         stops: Object.freeze(
-                          tabItem.GetStops().map(
+                          Array.from(
+                            { length: tabItem.Count() },
+                            /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+                              unused,
+                              index,
+                            ) => {
+                              void unused;
+                              return tabItem.At(index);
+                            },
+                          ).map(
                             /** Copies original native tabs without filtering zero/default entries. @param stop - Original tab. @returns Immutable native inputs. */
                             (stop) =>
                               Object.freeze({

@@ -145,3 +145,10 @@ export const MID_RUBY_POSITION = 4;
 
 /** Original line-spacing mode member. */
 export const MID_LINESPACE = 59;
+
+/** Original tab sequence member. */
+export const MID_TABSTOPS = 0;
+/** Original first-tab position member. */
+export const MID_STD_TAB = 1;
+/** Original independent default-distance member. */
+export const MID_TABSTOP_DEFAULT_DISTANCE = 2;

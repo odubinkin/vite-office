@@ -1,6 +1,7 @@
 /** @fileoverview Native tab value/default/copy/order regressions and original numeric-locale field witnesses. */
+import { createTabs, tabStops } from "../../../../test/tab-item-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SvxTabStop, SvxTabStopItem, SvxTabAdjust } from "./paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../inc/tstpitem";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { getLocaleDecimalSeparator } from "../../../i18npool/source/localedata/localedata";
@@ -90,18 +91,18 @@ describe("source tab values", /** Groups original tab contracts. @returns Nothin
     expect(copy.equals(source)).toBe(true);
     expect(copy.notEquals(source)).toBe(false);
     expect(copy.lessThan(source)).toBe(false);
-    expect(SvxTabStopItem.FromStops(42, [source]).At(0).GetTabPos()).toBe(20);
+    expect(createTabs(42, [source]).At(0).GetTabPos()).toBe(20);
   });
   it("value-copies insertions, snapshots and clones using the existing sorted owner", /** Checks native unique ordering and copy behavior. @returns Nothing. */ () => {
     const a = new SvxTabStop(20, SvxTabAdjust.Right, ".", "_"),
-      item = SvxTabStopItem.FromStops(42, [a]);
+      item = createTabs(42, [a]);
     a.GetTabPos(true)[0] = 10;
     expect(item.At(0).GetTabPos()).toBe(20);
-    const snapshot = item.GetStops();
+    const snapshot = tabStops(item);
     snapshot[0]?.GetFill(true).splice(0, 1, ".");
     expect(item.At(0).GetFill()).toBe("_");
     expect(item.Clone().equals(item)).toBe(true);
-    expect(SvxTabStopItem.FromStops(43, item.GetStops()).equals(item)).toBe(true);
+    expect(createTabs(43, tabStops(item)).equals(item)).toBe(true);
     expect(new SvxTabStopItem(3, 0, SvxTabAdjust.Default, 42).Count()).toBe(1);
   });
   it("uses source numeric separators rather than current Intl decimal data", /** Checks original resources and native language fallback results. @returns Nothing. */ () => {
