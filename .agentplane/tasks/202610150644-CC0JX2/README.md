@@ -1,10 +1,11 @@
 ---
 id: "202610150644-CC0JX2"
 title: "Implement native text escapement values for EditEngine pool"
-status: "DOING"
+result_summary: "Implemented native SvxEscapementItem on shared values with original constants/modes/typed members and source automatic/manual transition behavior; CALC128 recorded, localized UI deferred."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Original constructors/copies/clone/payload equality, short/byte fields, all4mode declarations/6constants/3members and typed queries/property numeric bounds source-audited. Real SfxPoolItem/Any/Any2Bool reused without a fake provider or lifetime manager."
     - "15related,186Calc,39boundary tests pass; whole3shared and33Calc executable owners raw100. All13source gates/build/inventory pass, no semantic violations, graph or gate exceptions."
     - "16intentional paths/3913source hashes/9native pins/4restored links verified; necessary451+152line source split documented. CALC128 preserves auto-off near-marker offsets and unchanged proportional height. Actual pool/model/UI/ODS remains pending."
-commit: null
+commit:
+  hash: "42ab2bb6042ca4efd843785734e080495301dc2f"
+  message: "Implement CC0JX2 core: native text escapement values"
 comments:
   -
     author: "CODER"
     body: "Start: native shared escapement constructor/value/Any family for actual EditEngine text defaults; preserve auto/manual quirks and reuse shared primitives, localization deferred."
+  -
+    author: "CODER"
+    body: "Verified: native shared escapement constructor/value/typed member family and EditEngine0/100default;15related,186Calc,39boundary tests pass, shared/Calc raw100, all gates/build/inventory and exact source audit."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified15related,186Calc,39boundary tests;3whole changed/new shared and33Calc owners raw100, all13source gates/build/inventory pass.16paths/3913hashes/9pins/4links audited. Native escapement/default/member quirks retained, localization deferred, pool/model/UI/ODS pending; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T06:52:07.484Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native shared escapement constructor/value/typed member family and EditEngine0/100default;15related,186Calc,39boundary tests pass, shared/Calc raw100, all gates/build/inventory and exact source audit."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:52:04.820Z"
+doc_updated_at: "2026-10-15T06:52:07.486Z"
 doc_updated_by: "CODER"
 description: "Task150 ports original shared SvxEscapementItem, its constants/enum/member contracts and actual EditEngine0/100default witness. This is a missing real rich-text pool dependency; reuse shared SfxPoolItem/Any/Any2Bool, no fake engine/document or localized presentation."
 sections:
