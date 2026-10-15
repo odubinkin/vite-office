@@ -152,3 +152,26 @@ export const MID_TABSTOPS = 0;
 export const MID_STD_TAB = 1;
 /** Original independent default-distance member. */
 export const MID_TABSTOP_DEFAULT_DISTANCE = 2;
+
+/** Original paragraph adjustment selector. */
+export const MID_PARA_ADJUST = 0;
+/** Original paragraph adjustment selector. */
+export const MID_LAST_LINE_ADJUST = 1;
+/** Original paragraph adjustment selector. */
+export const MID_EXPAND_SINGLE = 2;
+/** Original paragraph adjustment selector. */
+export const MID_WORD_SPACING = 3;
+/** Original paragraph adjustment selector. */
+export const MID_WORD_SPACING_MIN = 4;
+/** Original paragraph adjustment selector. */
+export const MID_WORD_SPACING_MAX = 5;
+/** Original paragraph adjustment selector. */
+export const MID_LETTER_SPACING_MIN = 6;
+/** Original paragraph adjustment selector. */
+export const MID_LETTER_SPACING_MAX = 7;
+/** Original paragraph adjustment selector. */
+export const MID_SCALE_WIDTH_MIN = 8;
+/** Original paragraph adjustment selector. */
+export const MID_SCALE_WIDTH_MAX = 9;
+/** Original paragraph adjustment selector. */
+export const MID_PARAGRAPH_COMPOSER = 10;

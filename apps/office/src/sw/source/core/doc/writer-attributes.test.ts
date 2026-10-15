@@ -16,7 +16,7 @@ import {
 import { projectWriterTextRuns } from "../txtnode/ndtxt";
 import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxTextLeftMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";

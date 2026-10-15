@@ -4,7 +4,7 @@
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem, SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
@@ -276,7 +276,37 @@ export class SwAttrPool extends SfxItemPool {
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
       function restoreAdjust(value): SvxAdjustItem {
-        return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
+        if (typeof value === "number")
+          return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
+        if (typeof value !== "object" || value === null || Array.isArray(value))
+          throw new Error("SvxAdjustItem value is invalid.");
+        const record = value as Record<string, unknown>;
+        if (
+          !Number.isInteger(record.adjust) ||
+          !Number.isInteger(record.lastLine) ||
+          typeof record.expandSingle !== "boolean" ||
+          typeof record.paragraphComposer !== "boolean" ||
+          !Number.isInteger(record.wordSpacing) ||
+          !Number.isInteger(record.wordSpacingMinimum) ||
+          !Number.isInteger(record.wordSpacingMaximum) ||
+          !Number.isInteger(record.letterSpacingMinimum) ||
+          !Number.isInteger(record.letterSpacingMaximum) ||
+          !Number.isInteger(record.scaleWidthMinimum) ||
+          !Number.isInteger(record.scaleWidthMaximum)
+        )
+          throw new Error("SvxAdjustItem value is invalid.");
+        const item = new SvxAdjustItem(record.adjust as SvxAdjust, RES_PARATR_ADJUST);
+        item.SetLastBlock(record.lastLine as SvxAdjust);
+        item.SetOneWord(record.expandSingle ? SvxAdjust.Block : SvxAdjust.Left);
+        item.SetParagraphComposer(record.paragraphComposer);
+        item.SetPropWordSpacing(record.wordSpacing as number);
+        item.SetPropWordSpacingMinimum(record.wordSpacingMinimum as number);
+        item.SetPropWordSpacingMaximum(record.wordSpacingMaximum as number);
+        item.SetPropLetterSpacingMinimum(record.letterSpacingMinimum as number);
+        item.SetPropLetterSpacingMaximum(record.letterSpacingMaximum as number);
+        item.SetPropScaleWidthMinimum(record.scaleWidthMinimum as number);
+        item.SetPropScaleWidthMaximum(record.scaleWidthMaximum as number);
+        return item;
       },
     );
     this.RegisterDefaultItem(

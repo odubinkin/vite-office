@@ -8,7 +8,7 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { exportBoxProperties } from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
@@ -876,7 +876,7 @@ function getDirectAlignment(item: unknown): OdfParagraphAlignment | undefined {
   if (value === SvxAdjust.Left || value === SvxAdjust.ParaStart) return "left";
   if (value === SvxAdjust.Right || value === SvxAdjust.ParaEnd) return "right";
   if (value === SvxAdjust.Center) return "center";
-  if (value === SvxAdjust.Block || value === SvxAdjust.BlockLine) return "justify";
+  if (value === SvxAdjust.Block) return "justify";
   throw new Error("ODT paragraph adjustment value is unsupported.");
 }
 

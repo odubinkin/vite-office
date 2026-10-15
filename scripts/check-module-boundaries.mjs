@@ -55,6 +55,8 @@ const allowedEdges = new Map([
   [
     "editeng",
     new Set([
+      // Original paraitem.cxx includes comphelper/extract.hxx; Library_editeng links comphelper.
+      "comphelper",
       "docmodel",
       "cppu",
       // Original langitem.hxx uses i18nlangtag/lang.h language values.
@@ -130,6 +132,8 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // Original Library_sw links cppu; native property transport uses real Any values.
+      "cppu",
       "cui",
       "editeng",
       "framework",

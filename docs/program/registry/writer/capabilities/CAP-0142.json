@@ -47,7 +47,7 @@
       "tests": [
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         }
       ],
       "docs": [
@@ -72,7 +72,7 @@
         "assertion": "Local tests exercise the bounded operation: Map fo:text-align values and Writer defaults without presentation CSS.",
         "local": {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         },
         "upstream": {
           "path": "sw/qa/extras/odfimport/odffeatures.cxx",
@@ -116,7 +116,7 @@
       "behavior": {
         "local": {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         },
         "method": "unit-test",
         "rationale": "The mapped local assertion exercises the same bounded ODF operation as the pinned upstream assertion.",
@@ -129,7 +129,7 @@
       "defaults": {
         "local": {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         },
         "method": "source-derived-golden",
         "rationale": "The local pre-user-setting expectation is derived from the mapped pinned upstream ODF assertion.",
@@ -142,7 +142,7 @@
       "serialization": {
         "local": {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         },
         "method": "pinned-fixture",
         "rationale": "The bounded package/XML operation is exercised across serialization with checked-in pinned LibreOffice fixtures or an atomic format test.",
@@ -155,7 +155,7 @@
       "operationCycle": {
         "local": {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         },
         "method": "pinned-fixture",
         "rationale": "The applicable import, export, and reopen stages are exercised by the mapped bounded ODF test.",
@@ -168,7 +168,7 @@
       "differential": {
         "local": {
           "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
-          "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          "marker": "maps native primary modes and preserves Left fallback for unrepresented adjustment flags"
         },
         "method": "pinned-fixture",
         "rationale": "The local result is compared through checked-in pinned LibreOffice fixtures or a golden derived from the exact upstream assertion.",

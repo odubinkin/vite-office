@@ -2177,3 +2177,17 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation:65536stored tabs narrow to Count0 and can compare equal to an empty item with the same default distance, while hashes differ. Index65535 also collides with SVX_TAB_NOTFOUND: insertion at that existing position cannot remove it first, so the position-only vector rejects the replacement. Copy construction still copies every stored entry.
 - Status: source width/invariant concern, not a confirmed defect or portable binary hash claim. Preserve the original narrowing, sentinel and loop domains instead of clamping size or changing equality.
 - Local evidence: `apps/office/src/editeng/source/items/native-tab-item.test.ts`, initialized65536entry vector and actual typed query; no undefined index access, native compiler or memory probe.
+
+## CALC-137: BlockLine paragraph adjustment falls back to Left
+
+- Upstream: pinned `include/editeng/adjustitem.hxx` SetAdjust/GetAdjust and `editeng/source/items/paraitem.cxx` constructor/PutValue.
+- Observation: SvxAdjust declares BlockLine4, but SetAdjust assigns six primary bits only for Left,Right,Block,Center,ParaStart,ParaEnd. BlockLine therefore leaves all six false and GetAdjust returns Left. The property setter admits0..6, so4succeeds and queries0. End/other initialized int values also have the direct-setter Left fallback.
+- Status: surprising declaration/storage mapping, not a confirmed defect. Preserve source flags/fallback rather than retain a browser-only BlockLine-to-justify implementation.
+- Local evidence: `apps/office/src/editeng/source/items/native-adjust-item.test.ts` and real Writer ODT alignment regression, no native compiler/probe.
+
+## CALC-138: failed paragraph spacing property extraction writes minus one successfully
+
+- Upstream: pinned `editeng/source/items/paraitem.cxx`, SvxAdjustItem::PutValue numeric spacing members.
+- Observation: every spacing branch initializes a signed short to-1 and ignores the extraction result before calling the setter. A boolean/empty Any therefore returns true while storing65535in unsigned word-spacing fields, or-1in signed letter-spacing/glyph-scaling fields. Query of unsigned word65535 is signed short-1. There is no property range check.
+- Status: surprising failed-extraction mutation, not a confirmed defect. Preserve initialization, cast order and successful return rather than reject or keep prior values. Direct setters retain declared-width conversions.
+- Local evidence: `apps/office/src/editeng/source/items/native-adjust-item.test.ts`, actual typed Any failures and all seven numeric members.

@@ -4,7 +4,7 @@
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatBullet } from "../../core/doc/number";
 import { describe, expect, it, vi } from "vitest";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   FontLineStyle,
   SvxFontItem,
@@ -534,7 +534,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     ).toThrow("Conflicting ODF list rule");
   });
 
-  it("maps every supported SvxAdjust variant and rejects invalid adjustment items" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("maps native primary modes and preserves Left fallback for unrepresented adjustment flags" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     for (const [adjust, expected] of [
       [SvxAdjust.Left, "start"],
       [SvxAdjust.ParaStart, "start"],
@@ -542,35 +542,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.ParaEnd, "end"],
       [SvxAdjust.Center, "center"],
       [SvxAdjust.Block, "justify"],
-      [SvxAdjust.BlockLine, "justify"],
+      [SvxAdjust.BlockLine, "start"],
+      [SvxAdjust.End, "start"],
+      [99 as SvxAdjust, "start"],
     ] as const) {
       const writer = createWriterDocument();
       writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
       expect(exportStylesXml(writer)).toContain(`fo:text-align="${expected}"`);
     }
-    const invalidItem = createWriterDocument();
-    const invalidSet = invalidItem.GetDfltTextFormatColl().GetAttrSet() as unknown as {
-      poolItemMap: Map<number, unknown>;
-    };
-    invalidSet.poolItemMap.set(65, {
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      Which: () => 65,
-    });
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(invalidItem),
-    ).toThrow("adjustment item is invalid");
-    const invalidValue = createWriterDocument();
-    const item = new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST);
-    (item as unknown as { adjust: number }).adjust = SvxAdjust.End;
-    const valueSet = invalidValue.GetDfltTextFormatColl().GetAttrSet() as unknown as {
-      poolItemMap: Map<number, unknown>;
-    };
-    valueSet.poolItemMap.set(65, item);
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(invalidValue),
-    ).toThrow("adjustment value is unsupported");
   });
 
   it("validates package order, media type, required streams, and explicit limits" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {

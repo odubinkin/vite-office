@@ -1,6 +1,6 @@
 /** @fileoverview Applies named paragraph collections with the native common-style creation/finish ownership from prstylei.cxx and txtstyli.cxx. */
 import { SvxTextLeftMarginItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type {
   OdfStyleDefinition,

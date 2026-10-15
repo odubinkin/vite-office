@@ -782,3 +782,13 @@ it("keeps native numeric locale resources below tab items and application/browse
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("admits original paragraph property clients without admitting reverse application dependencies", /** Keeps the actual native link edges and existing layer/cycle guards. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "comphelper")).toBe(false);
+  expect(isForbiddenModuleEdge("sw", "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("comphelper", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("comphelper", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+});

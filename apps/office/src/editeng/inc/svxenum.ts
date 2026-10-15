@@ -162,3 +162,16 @@ export enum SvxTabAdjust {
   Default,
   End,
 }
+
+/** Matches the pinned SvxAdjust enumeration order. */
+export enum SvxAdjust {
+  Left,
+  Right,
+  Block,
+  Center,
+  BlockLine,
+  ParaStart,
+  ParaEnd,
+  End,
+  LAST = 7,
+}

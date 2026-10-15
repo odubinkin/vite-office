@@ -7,7 +7,7 @@ import {
   encodeSfxPoolItem,
 } from "../../../sw/browser/filter/xml/item-codec";
 
-import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../editeng/inc/adjustitem";
 import { SfxItemPool } from "./itempool";
 import { DISABLED_POOL_ITEM, INVALID_POOL_ITEM, IsDisabledItem, IsInvalidItem } from "./poolitem";
 import { SfxItemSet, SfxItemState } from "./itemset";
@@ -172,23 +172,13 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     expect(item.Clone()).not.toBe(item);
     expect(item.Clone().equals(item)).toBe(true);
     expect(item.equals(new SvxAdjustItem(SvxAdjust.Right, 65))).toBe(false);
-    expect(item.equals(new SvxAdjustItem(SvxAdjust.Center, 66))).toBe(false);
+    expect(item.equals(new SvxAdjustItem(SvxAdjust.Center, 66))).toBe(true);
     expect(item.equals(new SfxInt16Item(65, SvxAdjust.Center))).toBe(false);
     expect(encodeSfxPoolItem(item)).toMatchObject({
-      value: SvxAdjust.Center,
+      value: { adjust: SvxAdjust.Center },
     });
-    expect(
-      throwing(
-        /** Creates an invalid enum value. @returns Invalid item. */ () =>
-          new SvxAdjustItem(-1 as SvxAdjust, 65),
-      ),
-    ).toThrow("invalid");
-    expect(
-      throwing(
-        /** Creates a terminal enum value. @returns Invalid item. */ () =>
-          new SvxAdjustItem(SvxAdjust.End, 65),
-      ),
-    ).toThrow("invalid");
+    expect(new SvxAdjustItem(-1 as SvxAdjust, 65).GetAdjust()).toBe(SvxAdjust.Left);
+    expect(new SvxAdjustItem(SvxAdjust.End, 65).GetAdjust()).toBe(SvxAdjust.Left);
     expect(
       throwing(
         /** Creates a fractional enum value. @returns Invalid item. */ () =>
