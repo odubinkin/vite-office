@@ -1,10 +1,11 @@
 ---
 id: "202610152014-A70XRF"
 title: "Restore native Writer client-list ownership before shared notifier correction"
-status: "DOING"
+result_summary: "Detached Writer client ownership from incorrect shared Sfx contracts,unblocking canonical notifier correction for Calc style-pool construction."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Reviewed SwModify extends SwClient,WriterListener links,anchor-right Add,Remove cursor repair,death reparenting and migrated native iteration consumers. Existing browser callback/batch boundaries are explicit;native hint filtering and absent-registration detach are corrected without removed Sfx API aliases."
     - "270related,187Calc,19Writer browser scenarios,production build and13gates pass. Exact33Calc raw100;Writer coverage gaps exempt. Seven native blobs and source hashes verified;native attribute QA is context only,not a claimed complete port."
-commit: null
+commit:
+  hash: "0ac7679689a54d0ec0f81300239ac179b63f12fc"
+  message: "🧩 A70XRF task: record verified native Writer client detachment"
 comments:
   -
     author: "CODER"
     body: "Start: restore real Writer client-list ownership and iteration so shared Sfx notification can be corrected for Calc without a Writer compatibility shim."
+  -
+    author: "CODER"
+    body: "Verified: native Writer client-list ownership and exact iterator consumers restored;270related,187Calc,19Writer browser cases,build and13gates pass. Calc raw100;Writer-only coverage gaps exempt."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: node output/playwright/task169-checks/portable.mjs final270functional scenarios/47files and187Calc/76files. Exact33Calc raw S4179/B2731/F821/L3727 every counter positive100; only Writer executable coverage is exempt per user,no shared production owner changed. source-gates.mjs all13 incl43boundary tests pass. Production build and19Writer browser scenarios pass with4source references absent/restored. native-audit.mjs pins7blobs,checks actual SwModify/SwClient inheritance and no dropped fixture scenarios;9fresh source-derived cases. Current formatted source hashes and53file emitted-token proof verified. Final evidence output/playwright/task169-checks/final-verification.json. Full shared-Sfx/style/pool/document/UI/ODS readiness and independent review are not claimed."
+  -
+    type: "status"
+    at: "2026-10-15T20:40:11.310Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer client-list ownership and exact iterator consumers restored;270related,187Calc,19Writer browser cases,build and13gates pass. Calc raw100;Writer-only coverage gaps exempt."
 doc_version: 3
-doc_updated_at: "2026-10-15T20:40:00.662Z"
+doc_updated_at: "2026-10-15T20:40:11.311Z"
 doc_updated_by: "CODER"
 description: "Task169: remove incorrect SfxBroadcaster/SfxListener inheritance from SwModify/SwClient, restore original WriterListener links/Add/Remove/iteration repair and migrate required consumers. This unblocks canonical shared notifier reuse by Calc without preserving wrong shared contracts for Writer."
 sections:
@@ -121,6 +134,10 @@ sections:
     - Observation: Final formatted source passes270related functional scenarios/47files,187Calc/76files,production build and19Writer browser scenarios. All13source gates pass. Added represented SwLegacyModify native filter and corrected StartListeningToSameModifyAs absent-source path to EndListeningAll,not derived Dispose. Writer-only coverage gap is exempt,unchanged in acceptance criteria.
       Impact: Writer no longer depends on incorrect shared Sfx listener/broadcaster contracts. Canonical shared Sfx correction for Calc is the next dependency; no full style/pool/document/UI/ODS readiness or full-suite milestone is claimed.
       Resolution: Native7blob audit and nine source-derived client cases validate ownership/order/removal/iteration. Final53file formatting proof compares emitted JS tokens; raw formatting-byte checks were overstrict for pretty-print changes,so final acceptance uses fresh runtime tests and source hashes. A premature native-audit attempt failed because the still-running portable wrapper had intentionally removed reference links;waited for that exact process to finish and reran audit after confirmed restoration,without restarting tests. Keep no new native memory/weak/intrusive library or Sfx compatibility aliases.
+extensions:
+  implementation_commit:
+    hash: "97a7eca9b55ee93d5d748151ebf886a20e6e31e1"
+    message: "🔧 A70XRF core: restore original Writer client ownership and iteration"
 id_source: "generated"
 ---
 ## Summary
