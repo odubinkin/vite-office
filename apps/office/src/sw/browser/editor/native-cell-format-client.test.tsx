@@ -1,4 +1,6 @@
 /** @fileoverview Verifies actual main UI and painter use original linked native cell frames with bounded lifetimes. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { Color } from "../../../tools/inc/color";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
@@ -23,14 +25,10 @@ function checkClients(
   root?: ReturnType<ReturnType<typeof createWriterDocumentSession>["view"]["GetLayout"]>,
 ): void {
   const clients: unknown[] = [];
-  box.GetFrameFormat().ForAllListeners(
-    /** Reads actual surviving clients. @param client - Native format listener. @returns Continue flag. */ (
-      client,
-    ) => {
-      clients.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
+    clients.push(client);
+    continue;
+  }
   if (root !== undefined) {
     const frames = clients.filter(
       /** Reads exact native cell clients retained by mounted layout. @param client - Original object. @returns Whether cell. */

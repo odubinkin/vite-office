@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native parent destruction and original cell owners through real attribute history. */
+import { spyOnWriterClient } from "../../../../test/writer-client-values";
+
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwPosition } from "../crsr/pam";
@@ -21,7 +23,7 @@ it("original cell frames consume parent death and remain attached through repeat
     const format = box.GetFrameFormat(),
       parent = doc.MakeTableBoxFormat(),
       frame = new SwCellFrame(box),
-      notify = vi.spyOn(frame, "Notify"),
+      notify = spyOnWriterClient(frame),
       model = vi.spyOn(doc, "NotifyModelChange");
     parent.SetFormatAttr(new SwFormatVertOrient(720, 2, 7));
     model.mockClear();

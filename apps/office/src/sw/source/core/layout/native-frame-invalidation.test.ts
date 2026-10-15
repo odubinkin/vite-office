@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native detached frame validity and original table replacement/history transitions. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTableLine } from "../table/swtable";
@@ -319,14 +321,10 @@ it("actual row-height undo and redo invalidate original physical geometry and pr
 /** Collects actual native registered clients. @param format - Original owner. @returns Original client identities. */
 function listeners(format: SwFrameFormat): unknown[] {
   const clients: unknown[] = [];
-  format.ForAllListeners(
-    /** Visits each original client. @param client - Native registration. @returns Continue iteration. */ (
-      client,
-    ) => {
-      clients.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, format)) {
+    clients.push(client);
+    continue writerClients0;
+  }
   return clients;
 }
 it("native reinitialization follows empty and populated natural rows while retaining fixed and cell geometry", /** Exercises current source with original empty rows and separately validated linked lowers. @returns Nothing. */ () => {

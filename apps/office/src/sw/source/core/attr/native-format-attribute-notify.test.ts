@@ -1,10 +1,13 @@
 /** @fileoverview Verifies native original format attribute changes, locking and inherited delta filtering without upstream runtime. */
+import { spyOnWriterClient } from "../../../../test/writer-client-values";
+
 import { expect, it, vi } from "vitest";
 import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
 import { SwDoc } from "../doc/doc";
 import { SwAttrSet } from "./swatrset";
 import { SwClient, SwModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import {
+  ObjectDyingHint,
   SwFormatChangeHint,
   AttrSetChangeHint,
   SwAttrSetChg,
@@ -331,8 +334,8 @@ it("actual linked row and cell frame clients receive precise native format item 
     frame = new SwRowFrame(row),
     cell = required(frame.Lower()) as SwCellFrame,
     box = required(row.GetTabBoxes()[0]);
-  const rowNotify = vi.spyOn(frame, "Notify"),
-    cellNotify = vi.spyOn(cell, "Notify"),
+  const rowNotify = spyOnWriterClient(frame),
+    cellNotify = spyOnWriterClient(cell),
     rowFormat = row.GetFrameFormat(),
     cellFormat = box.GetFrameFormat();
   expect(Object.hasOwn(Object.getPrototypeOf(rowFormat), "NotifyAttributeSet")).toBe(false);
@@ -548,27 +551,25 @@ it("native parent rejection and delegated clear no-op keep original storage and 
   );
   o.client.Dispose();
 });
-it("native modify forwarding preserves non-native atomic and transaction identities and rejects foreign sources", /** Checks original transaction boundary behavior alongside the new native filter. @returns Nothing. */ () => {
+it("native SwModify ignores unrelated browser hints while forwarding native death values", /** Original SwModify::SwClientNotify filters by native hint identity rather than acting as generic Sfx forwarding. @returns Nothing. */ () => {
   const parent = new SwModify(),
     child = new SwModify(),
     foreign = new SwModify(),
     o = observe(child);
   child.RegisterToModify(parent);
   const atomic = { kind: "document-state-changed" } as const;
-  child.Notify(foreign, atomic);
-  expect(o.hints).toEqual([]);
-  child.Notify(parent, atomic);
-  expect(o.hints).toEqual([atomic]);
-  const batch = { kind: "model-transaction", hints: [atomic] } as const;
-  child.Notify(parent, batch);
-  expect(o.hints[1]).toBe(batch);
-  child.RunNotificationTransaction(
-    /** Forwards an original nested transaction while a child batch is open. @returns Nothing. */ () => {
-      child.Notify(parent, batch);
-    },
+  parent.CallSwClientNotify(atomic);
+  parent.RunNotificationTransaction(
+    /** Queues the existing browser batch at its source. @returns Nothing. */ () =>
+      parent.CallSwClientNotify(atomic),
   );
-  expect(o.hints[2]).toEqual(batch);
-  expect(o.hints[2]).not.toBe(batch);
+  expect(o.hints).toEqual([]);
+  const native = new ObjectDyingHint(foreign);
+  parent.CallSwClientNotify(native);
+  expect(o.hints).toEqual([native]);
   o.client.Dispose();
-  child.EndListening();
+  child.EndListeningAll();
+  child.DisposeModify();
+  parent.DisposeModify();
+  foreign.DisposeModify();
 });

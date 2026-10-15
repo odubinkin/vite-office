@@ -1,4 +1,6 @@
 /** @fileoverview Verifies original native format change clients through real table attribute history. */
+import { spyOnWriterClient } from "../../../../test/writer-client-values";
+
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwPosition } from "../crsr/pam";
@@ -34,7 +36,7 @@ it("real cell attribute history retains original frame clients and exact native 
       a = required(frame.Lower()) as SwCellFrame,
       b = required(a.GetNext()) as SwCellFrame,
       repeat = new SwCellFrame(first),
-      notify = vi.spyOn(a, "Notify");
+      notify = spyOnWriterClient(a);
     doc.GetUndoManager().Clear();
     expect(doc.SetBoxAttr(shell.GetCursor(), new SwFormatVertOrient(720, 2, 7))).toBe(true);
     const changes = notify.mock.calls.filter(
@@ -89,7 +91,7 @@ it("real row height native deltas and history preserve complete original frame i
     position.Dispose();
     const frame = new SwRowFrame(row),
       cell = required(frame.Lower()),
-      notify = vi.spyOn(frame, "Notify"),
+      notify = spyOnWriterClient(frame),
       before = shell.CaptureCursorState(),
       size = new SwFormatFrameSize(SwFrameSize.Fixed, 240, 720);
     size.SetWidthPercent(25);

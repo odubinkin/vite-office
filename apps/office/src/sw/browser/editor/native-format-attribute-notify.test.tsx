@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native original format changes reach actual mounted Writer UI without row/cell generic client shims. */
+import { spyOnWriterClient } from "../../../test/writer-client-values";
+
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -31,7 +33,7 @@ it("direct native format item writes refresh the main UI through original docume
     node.SetText("Native updates");
     const original = first.GetFrameFormat(),
       frame = new SwCellFrame(first),
-      notify = vi.spyOn(frame, "Notify");
+      notify = spyOnWriterClient(frame);
     render(<WriterWorkbench isActive view={session.view} />);
     const cell = required(
       screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }).closest(":is(td,th)"),

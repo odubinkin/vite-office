@@ -2,7 +2,7 @@
 import { Color } from "../../../../tools/inc/color";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
-import { SwClient, type SwModify } from "../../../inc/calbck";
+import { SwClient, type SwModify, SwIterator } from "../../../inc/calbck";
 import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -26,13 +26,10 @@ function ownedFrame(table: ReturnType<SwDoc["nodes"]["MakeTableNode"]>): SwTabFr
 /** Reads original client registrations. @param owner - Native broadcaster. @returns Borrowed client identities. */
 function clients(owner: SwModify): unknown[] {
   const result: unknown[] = [];
-  owner.ForAllListeners(
-    /** Borrows a registered client. @param client - Actual client. @returns Continue flag. */
-    (client) => {
-      result.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, owner)) {
+    result.push(client);
+    continue writerClients0;
+  }
   return result;
 }
 

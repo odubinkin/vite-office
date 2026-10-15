@@ -1,4 +1,6 @@
 /** @fileoverview Owns Writer row frame item sets from swtblfmt.hxx and aTableLineSetRange. */
+import { SwClient, SwIterator } from "./calbck";
+
 import { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwAttrPool } from "../source/core/attr/swatrset";
 import { SwTableBox } from "../source/core/table/swtable";
@@ -68,17 +70,13 @@ export class SwTableBoxFormat extends SwFrameFormat {
   /** Reads the first original box client as the native iterator does. @returns Original box or absent. */
   public GetTableBox(): SwTableBox | undefined {
     let box: SwTableBox | undefined;
-    this.ForAllListeners(
-      /** Finds original box clients. @param client - Native listener. @returns Whether found. */ (
-        client,
-      ) => {
-        if (client instanceof SwTableBox) {
-          box = client;
-          return true;
-        }
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, this)) {
+      if (client instanceof SwTableBox) {
+        box = client;
+        break;
+      }
+      continue;
+    }
     return box;
   }
   /** Publishes native inheritance changes to registered clients. @returns Nothing. */

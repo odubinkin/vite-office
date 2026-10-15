@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native table hierarchy, layout inheritance, original linked ownership and deterministic destruction. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTableLine } from "../table/swtable";
@@ -22,14 +24,10 @@ function required<T>(value: T | undefined): T {
 /** Reads original registered clients without modifying their registration. @param format - Native broadcaster. @returns Original clients. */
 function clients(format: SwModify): unknown[] {
   const result: unknown[] = [];
-  format.ForAllListeners(
-    /** Records native identity. @param client - Registered client. @returns Continue flag. */ (
-      client,
-    ) => {
-      result.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, format)) {
+    result.push(client);
+    continue writerClients0;
+  }
   return result;
 }
 /** Builds the actual native table graph. @returns Original table, rows, boxes and document. */

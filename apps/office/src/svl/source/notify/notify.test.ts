@@ -134,7 +134,7 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
     ]);
     source.DisposeModify();
     expect(client.GetRegisteredIn()).toBeUndefined();
-    expect(source.HasListeners()).toBe(false);
+    expect(source.HasWriterListeners()).toBe(false);
   });
 
   it("propagates SwModify parent hints and safely rebinds clients", /** Covers atomic and transactional parent propagation plus defensive identities. @returns Nothing. */ () => {
@@ -164,13 +164,8 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
             first.CallSwClientNotify({ kind: "attribute-set-changed", nodeId: "p-1" }),
         ),
     );
-    child.Notify(second, { kind: "document-state-changed" });
-    client.Notify(second, { kind: "document-state-changed" });
-    const unrelated = new SfxBroadcaster<SwModelHint>();
-    child.BroadcasterDying(unrelated);
-    client.BroadcasterDying(unrelated);
-    child.BroadcasterDying(second);
-    client.BroadcasterDying(second);
+    child.CheckRegistration(new ObjectDyingHint(second));
+    client.CheckRegistration(new ObjectDyingHint(second));
     child.RegisterToModify(second);
     first.DisposeModify();
     second.DisposeModify();
@@ -180,8 +175,8 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
           hint,
         ) => hint.kind,
       ),
-    ).toEqual(["node-content-changed", "model-transaction", "model-transaction", "object-dying"]);
-    expect(hints[3]).toEqual(new ObjectDyingHint(second));
+    ).toEqual(["object-dying"]);
+    expect(hints[0]).toEqual(new ObjectDyingHint(second));
     child.DisposeModify();
     expect(client.GetRegisteredIn()).toBeUndefined();
     client.Dispose();

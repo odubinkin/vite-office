@@ -24,7 +24,7 @@ export class DocumentStateManager extends SwModify {
   }
 
   /** Publishes destruction and detaches all listeners. @returns Nothing. */
-  public Dispose(): void {
+  public override Dispose(): void {
     this.CallSwClientNotify({ kind: "document-disposed" });
     this.DisposeModify();
   }

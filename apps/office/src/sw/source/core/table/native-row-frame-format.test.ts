@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTableLine } from "./swtable";
 import { SwTableLineFormat } from "../../../inc/swtblfmt";
-import { SwClient } from "../../../inc/calbck";
+import { SwClient, SwIterator } from "../../../inc/calbck";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SwFormat } from "../attr/format";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
@@ -119,22 +119,14 @@ it("shared row claim clones all attributes while moving only the claiming origin
   expect(second.GetRegisteredIn()).toBe(format);
   const oldClients: unknown[] = [],
     newClients: unknown[] = [];
-  format.ForAllListeners(
-    /** Collects old registrations. @param client - Original listener. @returns Continue flag. */ (
-      client,
-    ) => {
-      oldClients.push(client);
-      return false;
-    },
-  );
-  copy.ForAllListeners(
-    /** Collects new registrations. @param client - Moved listener. @returns Continue flag. */ (
-      client,
-    ) => {
-      newClients.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, format)) {
+    oldClients.push(client);
+    continue writerClients0;
+  }
+  writerClients1: for (const client of new SwIterator(SwClient, copy)) {
+    newClients.push(client);
+    continue writerClients1;
+  }
   expect(oldClients).toEqual([second]);
   expect(newClients).toEqual([first]);
   copy.SetFormatAttr(new SwFormatRowSplit(true));
@@ -150,7 +142,7 @@ it("shared row claim clones all attributes while moving only the claiming origin
   first.Dispose();
   second.Dispose();
 });
-it("native listener enumeration skips removed slots, visits appended clients and stops on true", /** Checks original live slot iteration rather than a snapshot. @returns Nothing. */ () => {
+it("native Writer iteration skips removed clients and preserves anchor insertion and early exit", /** Checks original live slot iteration rather than a snapshot. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     format = doc.MakeTableLineFormat(),
     a = new SwClient(),
@@ -162,40 +154,28 @@ it("native listener enumeration skips removed slots, visits appended clients and
   c.RegisterToModify(format);
   b.Dispose();
   const visits: unknown[] = [];
-  format.ForAllListeners(
-    /** Collects live clients and appends a new final slot. @param client - Live listener. @returns Continue flag. */ (
-      client,
-    ) => {
-      visits.push(client);
-      if (client === c) d.RegisterToModify(format);
-      return false;
-    },
-  );
-  // Vacant slot reuse occurs behind the cursor; a second enumeration sees it.
+  writerClients2: for (const client of new SwIterator(SwClient, format)) {
+    visits.push(client);
+    continue writerClients2;
+  }
   expect(visits).toEqual([a, c]);
+  d.RegisterToModify(format);
   const second: unknown[] = [];
-  format.ForAllListeners(
-    /** Stops at the reused live slot. @param client - Live listener. @returns Stop flag. */ (
-      client,
-    ) => {
-      second.push(client);
-      return client === d;
-    },
-  );
+  writerClients3: for (const client of new SwIterator(SwClient, format)) {
+    second.push(client);
+    if (client === d) break writerClients3;
+    continue writerClients3;
+  }
   expect(second).toEqual([a, d]);
   b.RegisterToModify(format);
   const appended = new SwClient(),
     third: unknown[] = [];
-  format.ForAllListeners(
-    /** Appends beyond the initial listener count. @param client - Live listener. @returns Continue flag. */ (
-      client,
-    ) => {
-      third.push(client);
-      if (client === b) appended.RegisterToModify(format);
-      return false;
-    },
-  );
-  expect(third).toEqual([a, d, c, b, appended]);
+  appended.RegisterToModify(format);
+  writerClients4: for (const client of new SwIterator(SwClient, format)) {
+    third.push(client);
+    continue writerClients4;
+  }
+  expect(third).toEqual([a, appended, b, d, c]);
   for (const client of [a, b, c, d, appended]) client.Dispose();
 });
 it.each([false, true])(

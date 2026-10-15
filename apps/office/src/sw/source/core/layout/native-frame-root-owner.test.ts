@@ -1,4 +1,6 @@
 /** @fileoverview Checks original native root registration, constructor root pointers and derived-format lifetime. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwFrame, SwFrameType, SwLayoutFrame } from "./wsfrm";
@@ -35,14 +37,10 @@ afterEach(
     for (const root of roots.splice(0)) SwFrame.DestroyFrame(root);
     for (const doc of docs.splice(0)) {
       for (const node of doc.nodes.entries())
-        node.ForAllListeners(
-          /** Releases detached native clients. @param client - Original model listener. @returns Continue. */ (
-            client,
-          ) => {
-            if (client instanceof SwFrame) SwFrame.DestroyFrame(client);
-            return false;
-          },
-        );
+        writerClients0: for (const client of new SwIterator(SwClient, node)) {
+          if (client instanceof SwFrame) SwFrame.DestroyFrame(client);
+          continue writerClients0;
+        }
       doc.Dispose();
     }
   },
@@ -204,14 +202,10 @@ it("partial pagination failure releases original root-bearing clients", /** Chec
       ),
   ).toThrow("Writer layout follow page descriptor is missing.");
   const clients: SwFrame[] = [];
-  node.ForAllListeners(
-    /** Reads remaining native frame clients. @param client - Original listener. @returns Continue. */ (
-      client,
-    ) => {
-      if (client instanceof SwFrame) clients.push(client);
-      return false;
-    },
-  );
+  writerClients1: for (const client of new SwIterator(SwClient, node)) {
+    if (client instanceof SwFrame) clients.push(client);
+    continue writerClients1;
+  }
   expect(clients).toEqual([]);
   expect(root.GetFormat().IsDisposed()).toBe(false);
 });

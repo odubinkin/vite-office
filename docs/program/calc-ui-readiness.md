@@ -199,3 +199,21 @@ ordering guarantee. CALC146 records that Clear leaves family vectors populated;
 the implementation preserves that omission and the source's explicit Reindex
 behavior. Full named stylesheet/base pool and Calc pool ownership remain
 required; this index alone is not a spreadsheet document or ODS importer.
+
+
+## Writer client ownership prerequisite (task169)
+
+Audit of the shared Sfx notification dependency exposed incorrect reuse in
+Writer: SwClient inherited SfxListener and SwModify inherited SfxBroadcaster.
+The original Writer types instead own a separate WriterListener chain, with
+SwModify deriving from SwClient. Task169 restores that relationship, native
+anchor-right insertion/removal and active exact-iterator repair; required
+layout/table/history consumers migrate to actual Writer iteration.
+
+This detaches Writer from wrong shared Sfx contracts before those contracts
+are corrected for Calc's style-pool base. JS references and per-owner active
+cursors erase native intrusive allocation machinery. Existing browser callback,
+batch and explicit disposal boundaries remain bounded local adapters; native
+hint filters execute on individual native hints. Full multi-listener/unwrapping
+and actual canonical shared Sfx notifier remain pending, alongside named
+style/pool/document/UI/ODS construction. No full-suite milestone is reached.

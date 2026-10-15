@@ -1,4 +1,6 @@
 /** @fileoverview Checks original frame-owned paragraph lines behind mounted Writer Home End and history. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -33,14 +35,10 @@ it("mounted Writer uses original paragraph chain for shell margins and edits", /
   const root = session.view.GetLayout(),
     shell = session.view.GetWrtShell(),
     registered: SwTextFrame[] = [];
-  node.ForAllListeners(
-    /** Collects original text clients. @param client - Native listener. @returns Continue. */ (
-      client,
-    ) => {
-      if (client instanceof SwTextFrame) registered.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, node)) {
+    if (client instanceof SwTextFrame) registered.push(client);
+    continue;
+  }
   expect(registered.length).toBeGreaterThan(0);
   for (const frame of registered) expect(frame.GetPara()).toBeInstanceOf(SwParaPortion);
   root.SetCursorTextFrames(node, [

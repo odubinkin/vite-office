@@ -1,4 +1,6 @@
 /** @fileoverview Checks actual Writer render and borrowed native table painter lifetime over the owning root. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -16,14 +18,10 @@ afterEach(
 /** Reads original native clients. @param owner - Actual format. @returns Original objects. */
 function clients(owner: SwModify): unknown[] {
   const out: unknown[] = [];
-  owner.ForAllListeners(
-    /** Captures actual registered objects. @param client - Original object. @returns Continue. */ (
-      client,
-    ) => {
-      out.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, owner)) {
+    out.push(client);
+    continue;
+  }
   return out;
 }
 /** Allocates native document with a represented collapsing-border table. @returns Actual owners. */

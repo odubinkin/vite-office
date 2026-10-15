@@ -1,4 +1,6 @@
 /** @fileoverview Verifies real React Home/End borrows the native body formatter graph and refreshes its paragraph cache without duplicate clients. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { act, cleanup, fireEvent, render, waitFor } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -10,14 +12,10 @@ const previousRects = Object.getOwnPropertyDescriptor(Range.prototype, "getClien
 /** Borrows actual native registrations behind the mounted editor. @param node - Original content owner. @returns Original clients. */
 function clients(node: SwTextNode): SwTextFrame[] {
   const result: SwTextFrame[] = [];
-  node.ForAllListeners(
-    /** Collects an original text client. @param client - Actual listener. @returns Continue. */ (
-      client,
-    ) => {
-      if (client instanceof SwTextFrame) result.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, node)) {
+    if (client instanceof SwTextFrame) result.push(client);
+    continue;
+  }
   return result;
 }
 afterEach(

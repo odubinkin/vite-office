@@ -35,12 +35,12 @@ it("registered native row frame borrows its exact format and reads native comple
     expect(row.ClaimFrameFormat()).toBe(format);
     row.Dispose();
     expect(row.GetRegisteredIn()).toBeUndefined();
-    expect(format.HasListeners()).toBe(true);
+    expect(format.HasWriterListeners()).toBe(true);
     expect(format.IsDisposed()).toBe(false);
     expect(frame.Format(900)).toBe(660);
     frame.DestroyImpl();
     expect(frame.GetRegisteredIn()).toBeUndefined();
-    expect(format.HasListeners()).toBe(false);
+    expect(format.HasWriterListeners()).toBe(false);
     expect(format.IsDisposed()).toBe(true);
     frame.DestroyImpl();
     frame.Dispose();
@@ -68,7 +68,7 @@ it("native claim retargets all physical clients of the claiming line and leaves 
     expect(f.b.HasFixSize()).toBe(false);
     expect(f.b.Format(500)).toBe(800);
     f.a.DestroyImpl();
-    expect(copy.HasListeners()).toBe(true);
+    expect(copy.HasWriterListeners()).toBe(true);
     f.first.Dispose();
     expect(copy.IsDisposed()).toBe(false);
     f.repeated.DestroyImpl();
@@ -148,7 +148,7 @@ it("typed history movement and queued hints follow exact line references without
     expect(f.second.GetFrameFormat()).toBe(f.format);
     f.first.RegisterToModify(next);
     f.second.RegisterToModify(third);
-    expect(f.format.HasListeners()).toBe(false);
+    expect(f.format.HasWriterListeners()).toBe(false);
     f.format.DisposeModify();
     expect(f.format.IsDisposed()).toBe(true);
   } finally {
@@ -168,7 +168,7 @@ it("changing a final row owner deletes its old format after matching frame clien
   row.ChgFrameFormat(next);
   expect(frame.GetFormat()).toBe(next);
   expect(row.GetFrameFormat()).toBe(next);
-  expect(old.HasListeners()).toBe(false);
+  expect(old.HasWriterListeners()).toBe(false);
   expect(old.IsDisposed()).toBe(true);
   frame.Dispose();
   expect(next.IsDisposed()).toBe(false);

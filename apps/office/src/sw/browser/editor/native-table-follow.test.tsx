@@ -1,4 +1,6 @@
 /** @fileoverview Checks original table follow construction and native row transfer beside actual layout-owned Writer rendering. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -30,14 +32,10 @@ function fixture() {
   row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("Original transferred row");
   render(<WriterWorkbench isActive view={session.view} />);
   let master: SwTabFrame | undefined;
-  table.GetFrameFormat().ForAllListeners(
-    /** Reads original native registered master. @param c - Actual client. @returns Continue. */ (
-      c,
-    ) => {
-      if (c instanceof SwTabFrame) master = c;
-      return false;
-    },
-  );
+  for (const c of new SwIterator(SwClient, table.GetFrameFormat())) {
+    if (c instanceof SwTabFrame) master = c;
+    continue;
+  }
   if (master === undefined) throw Error("Missing actual layout master");
   const next = new SwTabFrame(master);
   follows.push(next);

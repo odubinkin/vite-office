@@ -1,4 +1,6 @@
 /** @fileoverview Checks original body formatter/client and paragraph-cache ownership through browser line publication without duplicate native frames. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwRootFrame } from "./newfrm";
@@ -14,14 +16,10 @@ const docs: SwDoc[] = [],
 /** Reads actual registered clients, without a second projected frame index. @param node - Original content owner. @returns Original clients. */
 function clients(node: SwTextNode): SwTextFrame[] {
   const result: SwTextFrame[] = [];
-  node.ForAllListeners(
-    /** Collects actual native text registrations. @param client - Original listener. @returns Continue. */ (
-      client,
-    ) => {
-      if (client instanceof SwTextFrame) result.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, node)) {
+    if (client instanceof SwTextFrame) result.push(client);
+    continue writerClients0;
+  }
   return result;
 }
 /** Creates real model/layout owners and literal two-page device inputs. @returns Actual native fixture. */
@@ -160,10 +158,12 @@ it("body formatting releases formerly standalone cursor clients before any next 
   expect(old?.IsInDtor()).toBe(true);
   expect(f.root.GetCursorTextFrame(f.node)).toBeUndefined();
   expect(clients(f.node)).toEqual(
-    snapshot.pages.flatMap(
-      /** Reads original fragments. @param page - Actual page. @returns Clients. */ (page) =>
-        page.textFrames,
-    ),
+    snapshot.pages
+      .flatMap(
+        /** Reads original fragments. @param page - Actual page. @returns Clients. */ (page) =>
+          page.textFrames,
+      )
+      .reverse(),
   );
   f.root.SetCursorTextFrames(f.node, f.fragments);
   expect(f.root.GetCursorTextFrame(f.node)).toBe(snapshot.pages[0]?.textFrames[0]);

@@ -1,4 +1,6 @@
 /** @fileoverview Verifies actual UI and measurement row frame clients have bounded native lifetimes. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -40,14 +42,10 @@ it("repeated mounted render and native row history leave no temporary frame regi
     for (let cycle = 0; cycle < 4; cycle++) {
       mounted.rerender(<WriterWorkbench isActive view={session.view} />);
       const clients: unknown[] = [];
-      row.GetFrameFormat().ForAllListeners(
-        /** Lists actual native listeners after JSX construction. @param client - Registered listener. @returns Continue flag. */ (
-          client,
-        ) => {
-          clients.push(client);
-          return false;
-        },
-      );
+      for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+        clients.push(client);
+        continue;
+      }
       const native = clients.filter(
         /** Reads the sole original layout-owned row. @param client - Native object. @returns Whether row frame. */
         (client) => client instanceof SwRowFrame,
@@ -89,14 +87,10 @@ it("repeated mounted render and native row history leave no temporary frame regi
         ),
       ).toHaveStyle({ height: "60px" });
       const clients: unknown[] = [];
-      row.GetFrameFormat().ForAllListeners(
-        /** Lists current native frame registrations. @param client - Actual listener. @returns Continue flag. */ (
-          client,
-        ) => {
-          clients.push(client);
-          return false;
-        },
-      );
+      for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+        clients.push(client);
+        continue;
+      }
       const native = clients.filter(
         /** Keeps the exact current native row after history movement. @param client - Native object. @returns Whether row. */
         (client) => client instanceof SwRowFrame,
@@ -114,13 +108,10 @@ it("repeated mounted render and native row history leave no temporary frame regi
     cleanup();
     session.view.GetLayout().DestroyImpl();
     const clients: unknown[] = [];
-    row.GetFrameFormat().ForAllListeners(
-      /** Reads original clients after root teardown. @param client - Native object. @returns Continue. */
-      (client) => {
-        clients.push(client);
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+      clients.push(client);
+      continue;
+    }
     expect(clients).toEqual([row]);
   } finally {
     cleanup();
@@ -165,14 +156,10 @@ it("native table measurement borrows original rows until its owning native root 
       ).not.toHaveLength(0);
       for (const row of rows) {
         const clients: unknown[] = [];
-        row.GetFrameFormat().ForAllListeners(
-          /** Lists actual listeners after measurement. @param client - Native client. @returns Continue flag. */ (
-            client,
-          ) => {
-            clients.push(client);
-            return false;
-          },
-        );
+        for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+          clients.push(client);
+          continue;
+        }
         const native = clients.filter(
           /** Selects the exact original root-owned row. @param client - Native object. @returns Whether native row. */
           (client) => client instanceof SwRowFrame,
@@ -187,13 +174,10 @@ it("native table measurement borrows original rows until its owning native root 
     layout.DestroyImpl();
     for (const row of rows) {
       const clients: unknown[] = [];
-      row.GetFrameFormat().ForAllListeners(
-        /** Reads original clients after native root teardown. @param client - Native object. @returns Continue. */
-        (client) => {
-          clients.push(client);
-          return false;
-        },
-      );
+      for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+        clients.push(client);
+        continue;
+      }
       expect(clients).toEqual([row]);
     }
   } finally {
@@ -214,14 +198,10 @@ it("render failure releases native temporary row clients before preserving the o
         WriterEditableTable({ table, paragraphs: new Map() }),
     ).toThrow("no connected paragraph projection");
     const clients: unknown[] = [];
-    format.ForAllListeners(
-      /** Reads actual surviving native clients after failure. @param client - Listener. @returns Continue flag. */ (
-        client,
-      ) => {
-        clients.push(client);
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, format)) {
+      clients.push(client);
+      continue;
+    }
     expect(clients).toEqual([row]);
     expect(format.IsDisposed()).toBe(false);
     expect(table.GetTabLines()).toEqual([row]);

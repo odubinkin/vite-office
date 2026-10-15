@@ -1,4 +1,6 @@
 /** @fileoverview Verifies original native table frame identities survive actual browser geometry resampling. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
@@ -17,14 +19,10 @@ afterEach(
 /** Reads registered actual native clients. @param format - Original format. @returns Client objects. */
 function clients(format: SwModify): unknown[] {
   const values: unknown[] = [];
-  format.ForAllListeners(
-    /** Visits original listeners without replacing notification state. @param client - Native client. @returns Continue. */ (
-      client,
-    ) => {
-      values.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, format)) {
+    values.push(client);
+    continue;
+  }
   return values;
 }
 /** Mounts the actual native pointer boundary over a measurable table device. @returns Native owners and measurement controls. */
@@ -199,7 +197,8 @@ it("mounted fragments of one original table retain independent frame identities"
       ) => frame !== first,
     );
   f.hover();
-  expect(f.frames()).toEqual([first, second]);
+  // The table is the anchor; each new frame is inserted immediately to its right.
+  expect(f.frames()).toEqual([second, first]);
   fragment.remove();
   f.hover();
   expect(f.frames()).toEqual([first]);

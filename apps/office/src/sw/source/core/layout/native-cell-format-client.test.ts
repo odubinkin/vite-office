@@ -60,7 +60,7 @@ it("row creates original linked native cell children through shared frame bases"
     expect(child.GetRegisteredIn()).toBeUndefined();
   }
   expect(f.first.GetFrameFormat()).toBe(f.format);
-  expect(f.format.HasListeners()).toBe(true);
+  expect(f.format.HasWriterListeners()).toBe(true);
   f.frame.Dispose();
 });
 it("native sibling insertion and removal maintain first middle and final original links", /** Checks native pointer mechanics without a parallel children array. @returns Nothing. */ () => {
@@ -124,8 +124,8 @@ it("native shared box claim moves matching cell clients before model registratio
   const copy = f.first.ClaimFrameFormat();
   expect(copy).not.toBe(f.format);
   expect(events).toEqual([
-    [f.a, f.format, copy],
     [repeat, f.format, copy],
+    [f.a, f.format, copy],
   ]);
   expect(change).toEqual([]);
   expect(f.a.GetFormat()).toBe(copy);
@@ -184,7 +184,7 @@ it("actual cell frame destruction deletes a format only after its last registere
   expect(format.IsDisposed()).toBe(false);
   f.first.Dispose();
   expect(format.IsDisposed()).toBe(false);
-  expect(format.HasListeners()).toBe(true);
+  expect(format.HasWriterListeners()).toBe(true);
   const disposed = vi.spyOn(format, "DisposeModify");
   isolated.Dispose();
   expect(disposed).toHaveBeenCalledOnce();

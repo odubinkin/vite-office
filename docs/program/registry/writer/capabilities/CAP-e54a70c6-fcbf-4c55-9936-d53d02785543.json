@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e54a70c6-fcbf-4c55-9936-d53d02785543",
+    "capabilityId": "CAP-e54a70c6-fcbf-4c55-9936-d53d02785543",
+    "suite": "writer",
+    "subsystem": "writer-client-list",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "SwModify derives from SwClient and native anchor-right registration is independent of Sfx notification.",
+      "Native unlink and active cursor repair preserve callback and reparenting order under removals.",
+      "Actual lookup/table/layout/history consumers use native exact Writer iterators rather than generic Sfx listener slots."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task169 removes incorrect shared SfxBroadcaster/SfxListener inheritance from Writer clients: SwModify now derives from SwClient and owns the original WriterListener left/right relationships. Add preserves native anchor-right insertion; Remove repairs every active cursor current/position relation before clearing links/registration. Native WriterListenerIterator and exact SwIterator use actual JS constructor identity; JS iteration/finally binds loop scope, while a per-owner Set replaces the native global intrusive iterator ring and root filter without a refcount/lifetime library. No removed ForAllListeners/HasListeners/Notify/BroadcasterDying aliases remain on Writer owners; actual consumers use Writer iteration/registration/hook APIs. Native death/format-death callback order and reparenting are preserved. Existing browser optional callback,transaction batching and idempotent explicit disposal remain bounded local adaptations; batches are unpacked before the original native virtual hint filter and unrelated browser hints do not gain native propagation. No new shared notifier,allocator,weak manager or native compiler/probe. Actual shared Sfx notification correction remains a subsequent Calc pool prerequisite. Full WriterMultiListener/ListenerEntry/UnwrapMulti,native debug/global lifetime and full Writer/Calc document/UI/ODS parity remain unverified."
+    },
+    "capability": "Native Writer client-list ownership and exact iteration",
+    "gaps": [
+      "Full WriterMultiListener/ListenerEntry/UnwrapMulti and original debug/global lifetime are not claimed.",
+      "Existing browser callback/batch/idempotent disposal adapters remain explicitly bounded.",
+      "Actual canonical shared Sfx notifier and Calc styles/pools/document/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/inc/calbck.ts",
+          "marker": "class WriterListener"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/frmtool.ts",
+          "marker": "SwIterator"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable-boxline.ts",
+          "marker": "SwIterator"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-writer-client-list.test.ts",
+          "marker": "uses original SwModify inheritance"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-object-dying.test.ts",
+          "marker": "native CheckRegistration"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Writer client ownership prerequisite (task169)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/inc/calbck.hxx",
+          "marker": "class SW_DLLPUBLIC SwModify: public SwClient"
+        },
+        {
+          "path": "sw/source/core/attr/calbck.cxx",
+          "marker": "SwModify::CallSwClientNotify"
+        },
+        {
+          "path": "sw/source/core/layout/frmtool.cxx",
+          "marker": "GetFrameOfModify"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/inc/calbck.hxx",
+          "marker": "Each SwClient can be registered at only one SwModify object"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-writer-client-list",
+    "scopeLimitations": [
+      "Task169 removes incorrect shared SfxBroadcaster/SfxListener inheritance from Writer clients: SwModify now derives from SwClient and owns the original WriterListener left/right relationships. Add preserves native anchor-right insertion; Remove repairs every active cursor current/position relation before clearing links/registration. Native WriterListenerIterator and exact SwIterator use actual JS constructor identity; JS iteration/finally binds loop scope, while a per-owner Set replaces the native global intrusive iterator ring and root filter without a refcount/lifetime library. No removed ForAllListeners/HasListeners/Notify/BroadcasterDying aliases remain on Writer owners; actual consumers use Writer iteration/registration/hook APIs. Native death/format-death callback order and reparenting are preserved. Existing browser optional callback,transaction batching and idempotent explicit disposal remain bounded local adaptations; batches are unpacked before the original native virtual hint filter and unrelated browser hints do not gain native propagation. No new shared notifier,allocator,weak manager or native compiler/probe. Actual shared Sfx notification correction remains a subsequent Calc pool prerequisite. Full WriterMultiListener/ListenerEntry/UnwrapMulti,native debug/global lifetime and full Writer/Calc document/UI/ODS parity remain unverified.",
+      "Native sw/qa/core/attr/attr.cxx is related attribute-regression context, not a direct WriterListener QA suite claimed ported. Nine fresh list/iteration cases are source-derived from calbck.hxx/cxx. Bounded acceptance passes270 related functional scenarios/47files and187Calc/76files; all33Calc raw S4179/B2731/F821/L3727 counters are positive100. Writer-only coverage gaps remain explicitly exempt and are not repaired or promoted. Seven native blobs are pinned; existing browser callbacks/transactions are bounded adaptations. No full shared-Sfx or Calc style/pool/document/UI/ODS readiness claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

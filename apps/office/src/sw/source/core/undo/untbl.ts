@@ -1,4 +1,6 @@
 /** @fileoverview Owns numeric native table insertion history through Writer's SwUndoTableNdsChg from untbl.cxx. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import type { SwTable, SwTableLine, SwTableBox, SwTableBoxFormat } from "../table/swtable";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type {
@@ -193,16 +195,13 @@ class SaveTable {
     const tableFormat = table.GetFrameFormat();
     tableFormat.GetAttrSet().ClearItem();
     tableFormat.GetAttrSet().PutSet(this.tableSet);
-    tableFormat.ForAllListeners(
-      /** Invalidates each original table frame after native direct-item restoration. @param client - Original format client. @returns Continue flag. */
-      (client) => {
-        if (client instanceof SwTabFrame && client.GetTable() === table) {
-          client.InvalidateAll();
-          client.SetCompletePaint();
-        }
-        return false;
-      },
-    );
+    writerClients0: for (const client of new SwIterator(SwClient, tableFormat)) {
+      if (client instanceof SwTabFrame && client.GetTable() === table) {
+        client.InvalidateAll();
+        client.SetCompletePaint();
+      }
+      continue writerClients0;
+    }
     const formats = this.rowFormats.map(
       /** Recreates one native owner for each saved item set. @param saved - Independent direct items. @returns New shared format. */
       (saved) => {

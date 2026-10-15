@@ -1,4 +1,6 @@
 /** @fileoverview Verifies original format ObjectDying inheritance and real cell attribute undo-redo clients. */
+import { spyOnWriterClient } from "../../../../test/writer-client-values";
+
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwFrameFormat } from "../layout/atrfrm";
@@ -29,7 +31,7 @@ it("native root death clears original cell inheritance before real undo-redo and
     frame.setFramePrintAreaValid(true);
     frame.setFrameAreaPositionValid(true);
     frame.ResetCompletePaint();
-    const notify = vi.spyOn(frame, "Notify"),
+    const notify = spyOnWriterClient(frame),
       model = vi.spyOn(doc, "NotifyModelChange");
     root.DisposeModify();
     expect(notify).toHaveBeenCalledOnce();
