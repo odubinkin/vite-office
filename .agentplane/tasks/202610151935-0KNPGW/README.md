@@ -4,7 +4,7 @@ title: "Fix generated UNO exception module initialization order"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: isolate shared generated exception evaluation order without changing native class member semantics or hiding failures in consumers."
 doc_version: 3
-doc_updated_at: "2026-10-15T19:39:57.747Z"
+doc_updated_at: "2026-10-15T19:42:40.432Z"
 doc_updated_by: "CODER"
 description: "Task166a: correct the shared CPPU base/derived exception evaluation cycle exposed by direct Exception import. Keep public module exports, actual class identity, generated fields/member bodies and type factory unchanged; no consumer import-order workaround, prototype/type registry or memory manager."
 sections:
@@ -46,7 +46,10 @@ sections:
   Verify Steps: "Run isolated entry-order regression tests and related CPPU/Writer tests through Vitest with native reference symlinks absent/restored. Require raw positive S/B/F/L 100% for changed executable shared owners (RuntimeException and exception-values) and exact measured owner set; Writer-only coverage gaps exempt. Run npm run test:coverage:calc and compare exact 33-owner set. Run task-local source-gates.mjs (format, lint, typecheck, docs, size, dependencies, tree, provenance, parity, routing, doctor, diff, boundary tests). Audit pinned native declarations and unchanged original class/factory bodies. Record source commit, verification and same-agent evaluator evidence; no full all-app test run."
   Verification: "Pending implementation and checks; no passed behavior claim."
   Rollback Plan: "Revert only task166a intentional source/registry/documentation changes through a follow-up task; preserve task166 checkpoint and unrelated tasks. No branch reset or merge."
-  Findings: ""
+  Findings: |-
+    - Observation: Related36 tests and Calc187 pass with raw100 exact shared owners. Source gates format/lint/typecheck/docs/size pass; repository dependency gate exposes five missing module edges in checkpointed task166 uppercase files, outside this exception correction. Semantic audit reached only a retained-evidence schema lookup error after confirming unchanged class/factory token hashes and native pins.
+      Impact: Do not claim complete repository gate acceptance until task166 boundary/provenance work is complete. No CPPU cycle exception or guard relaxation is necessary.
+      Resolution: Keep task166a DOING; complete the already-approved task166 metadata/boundary registration and rerun failed/pending gates. Correct ignored evidence lookup to use the retained profile key.
 id_source: "generated"
 ---
 ## Summary
@@ -74,3 +77,7 @@ Pending implementation and checks; no passed behavior claim.
 Revert only task166a intentional source/registry/documentation changes through a follow-up task; preserve task166 checkpoint and unrelated tasks. No branch reset or merge.
 
 ## Findings
+
+- Observation: Related36 tests and Calc187 pass with raw100 exact shared owners. Source gates format/lint/typecheck/docs/size pass; repository dependency gate exposes five missing module edges in checkpointed task166 uppercase files, outside this exception correction. Semantic audit reached only a retained-evidence schema lookup error after confirming unchanged class/factory token hashes and native pins.
+  Impact: Do not claim complete repository gate acceptance until task166 boundary/provenance work is complete. No CPPU cycle exception or guard relaxation is necessary.
+  Resolution: Keep task166a DOING; complete the already-approved task166 metadata/boundary registration and rerun failed/pending gates. Correct ignored evidence lookup to use the retained profile key.

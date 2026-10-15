@@ -1,7 +1,5 @@
 /** @fileoverview Actual RuntimeException.idl generated class and original cppumaker cached type initializer retain Exception inheritance and real shared typelib registration; normal internal debug0 configuration. */
-import { Exception } from "./Exception";
-import { OUString, type OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
-import { Reference } from "./Reference";
+import { OUString } from "../../../../../../sal/inc/rtl/ustring";
 import { Type } from "./Type";
 import { getTypeFromTypeClass } from "../../../../unotype";
 import { typelib_TypeClass as C } from "../../../../typelib/typeclass";
@@ -43,19 +41,4 @@ export function cppu_detail_getUnoType(): Type {
   }
   return runtimeType;
 }
-/** Actual generated RuntimeException value derives from the actual Exception owner. */
-export class RuntimeException extends Exception {
-  /** Original explicit constructors initialize the RuntimeException type; implicit copy construction copies the base without this call. @param args - Original arguments. @returns Actual exception value. */
-  constructor(
-    ...args: [] | [source: RuntimeException] | [Message: OUStringConstReference, Context: Reference]
-  ) {
-    if (args.length === 0) super();
-    else if (args.length === 1) super(args[0]);
-    else super(args[0], args[1]);
-    if (args.length !== 1) cppu_detail_getUnoType();
-  }
-  /** Original implicit move construction delegates to base/member moves without registering again. @param source - Actual rvalue. @returns Transferred RuntimeException. */
-  static override move(source: RuntimeException): RuntimeException {
-    return super.move(source) as RuntimeException;
-  }
-}
+export { RuntimeException } from "./exception-values";

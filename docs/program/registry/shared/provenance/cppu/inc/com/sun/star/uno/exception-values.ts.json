@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+    "status": "mapped",
+    "upstreamPath": "codemaker/source/cppumaker/cpputype.cxx",
+    "localSymbols": [
+      "Exception",
+      "RuntimeException"
+    ],
+    "upstreamSymbols": [
+      "ExceptionType::dumpHppFile",
+      "ExceptionType::dumpDeclaration"
+    ],
+    "preservedResponsibilities": [
+      "Task166a: the original generated base and derived exception values now share one base-first JavaScript initialization unit. Public Exception/RuntimeException paths reexport the same actual classes; unchanged value/member bodies and the original cached type factory preserve the existing contracts. This resolves the actual Exception -> Reference -> Any/genfunc -> RuntimeException eager heritage cycle, without consumer import-order workarounds, new registry, prototype installer or lifetime mechanism. C++ header/declaration ordering and ESM value evaluation are distinct language responsibilities. No full parity claim follows."
+    ],
+    "omittedResponsibilities": [
+      "Reference query/throwing/Any/identity comparisons and remaining C++ Any consumers; physical multiple-inheritance pointer adjustment/ABI, debug source-location append, native threads/shutdown/full QA; case/service/pool/document/edit/view/UI unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+          "marker": "class Exception"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+          "marker": "class RuntimeException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-initialization.test.ts",
+          "marker": "initializes actual generated exception values"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/uno/Exception.idl",
+          "marker": "exception Exception"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "void ExceptionType::dumpHppFile"
+        },
+        {
+          "path": "udkapi/com/sun/star/uno/RuntimeException.idl",
+          "marker": "exception RuntimeException"
+        }
+      ]
+    }
+  }
+}

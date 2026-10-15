@@ -3957,3 +3957,20 @@ policy; FontFaceSet/FontFace supply the concrete browser backend. Initial
 coverage collection excluded main.tsx under the existing global config. The
 task profile removes only that exclusion, retaining exact source ownership and
 strict raw shared100 checks; no repository coverage thresholds are weakened.
+
+
+## Generated exception initialization order (task166a)
+
+Directly importing the shared Exception declaration exposed a JavaScript module
+evaluation failure: Reference reaches Any/genfunc and RuntimeException before
+the base class value is initialized. The actual generated Exception and
+RuntimeException definitions now share one base-first initialization unit. Their
+public module paths reexport the same class objects; class/member bodies and
+the cached type factory are unchanged. No consumer import-order workaround,
+prototype installation or additional memory/type registry was introduced.
+
+The regression exercises Exception, RuntimeException, Reference, Any and
+genfunc as independent first imports, actual inherited values, copy/move and
+cached type identity. Existing Reference/query/genfunc/DisposedException and
+related Writer tests cover the shared consumers. This is a language module
+binding correction, not a new full CPPU parity claim or a Calc document owner.
