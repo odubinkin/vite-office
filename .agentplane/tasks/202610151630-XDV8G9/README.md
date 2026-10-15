@@ -4,7 +4,7 @@ title: "Port native text-object paragraph content values"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T17:10:49.427Z"
+  updated_by: "CODER"
+  note: "Verified source 9f9f85dfc950:194 related and187Calc tests plus19browser cases and build pass; exact8shared/33Calc owners raw S/B/F/L100/every counter positive; all13gates/inventory0,19native pins/70EE declarations,46paths/4059hashes and4reference links restored. Base Clone runtime unchanged; same-agent quality pass. Full engine/Calc model/UI/ODS remain pending, goal active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T17:10:41.595Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of 9f9f85dfc950b0da4a75d10dcf1ba880c1679b14: bounded native paragraph content values and target-pool copy contracts satisfy approved scope."
+  evaluated_sha: "9f9f85dfc950b0da4a75d10dcf1ba880c1679b14"
+  blueprint_digest: "aba64c86c1a417361085b80776b96fb02778c6683d4fbef6fbb5a3cd07147d80"
+  evidence_refs:
+    - ".agentplane/tasks/202610151630-XDV8G9/README.md"
+    - ".agentplane/tasks/202610151630-XDV8G9/quality/20261015-171041595-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151630-XDV8G9/quality/20261015-171041595-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151630-XDV8G9/quality/20261015-171041595-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151630-XDV8G9/blueprint/resolved-snapshot.json"
+    - "output/playwright/task158-checks/final-verification.json"
+    - "output/playwright/task158-checks/native-audit.json"
+    - "output/playwright/task158-checks/base-clone-type-proof.json"
+    - "output/playwright/task158-checks/source-gates.json"
+  findings:
+    - "Actual ContentInfo/XEditAttribute/WrongList values reuse real shared string/item/pool owners; complete measured shared and Calc raw counters are positive, with exact owner sets. Original slot/default/request/nonshareable cases, clear-first/self Set, parent ranges, separate spelling equality and source quirks have direct tests."
+    - "No native ownership manager, refcount/cache/physical pointer interning, fake engine/provider, UI localization or guard algorithm change. Base Clone emitted runtime is identical; both complete boundary guard files match baseline. Native references are restored and final source hashes match the reviewed commit."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: real native paragraph content and character/spell-state values, canonical item-set copies and GC value bindings; no high-level pool/text-engine facade."
+  -
+    type: "verify"
+    at: "2026-10-15T17:10:49.427Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified source 9f9f85dfc950:194 related and187Calc tests plus19browser cases and build pass; exact8shared/33Calc owners raw S/B/F/L100/every counter positive; all13gates/inventory0,19native pins/70EE declarations,46paths/4059hashes and4reference links restored. Base Clone runtime unchanged; same-agent quality pass. Full engine/Calc model/UI/ODS remain pending, goal active."
 doc_version: 3
-doc_updated_at: "2026-10-15T17:10:15.083Z"
+doc_updated_at: "2026-10-15T17:10:49.478Z"
 doc_updated_by: "CODER"
 description: "Task158 implements original ContentInfo and XEditAttribute text/style/paragraph/character value storage and pool-aware copies from editobj.cxx/editobj2.hxx, genuine WrongList range/value transformations required by copied spell state, original EE Which declarations and SfxStyleFamily, and required SfxItemSet.Set plus GC-owned item-holder value binding. Reuse OUString/SharedString and existing pools/items. Full actual EditTextObject/EditEngine pool, normalization provider and ContentNode-dependent spell operation remain subsequent owners, with no fake factories or memory manager."
 sections:
@@ -54,6 +80,39 @@ sections:
     Command: python3 output/playwright/task158-checks/audit-final.py. Result: pass. Evidence:4059exact non-agent source hashes against4025baseline,46intentional changed paths (12existing/34new) within approved140,19native pins at9bc445578031fecf56086729d8e4940c77e14d65, exact positive coverage owner sets,13source gates, build/browser and original4links restored on calc. CALC139..141 preserve/report source sentinel wrap, captured split-loop bound and self-Set clear-first behavior. Task157 mistaken4016constructor identity is corrected through real EE_PARA_JUST4037 declaration without editing closed task history.
 
     Limits: real SharedStringPool/CharClass normalization and ContentNode-dependent ClearWrongs remain absent rather than fake success methods. Full EditTextObject/EditEngine/default-font pool/Calc document/connected UI/same-model ODS are still pending. Native allocation/refcount/cache/surrogate/physical pointer interning and iterator ABI are deliberately erased under user JS-GC direction. Existing native string/item APIs are reused; no new lifetime manager/compiler/probe/sanitizer or UI localization. Source-derived parent engine copy/paste tests are context references, not claimed implemented scenarios. Writer-only coverage gaps exempt; none were repaired. Full all-app run remains deferred until genuine minimum connected UI+same-model ODS readiness, followed by applicable repairs and requested pause. Goal remains active. Quality review is same-agent, not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T17:10:49.427Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified source 9f9f85dfc950:194 related and187Calc tests plus19browser cases and build pass; exact8shared/33Calc owners raw S/B/F/L100/every counter positive; all13gates/inventory0,19native pins/70EE declarations,46paths/4059hashes and4reference links restored. Base Clone runtime unchanged; same-agent quality pass. Full engine/Calc model/UI/ODS remain pending, goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:10:15.083Z, excerpt_hash=sha256:b20e83e8efe804c3bbf649e8a1c5499dcfe8a8438a97b6d8cf5580257d5eb99f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151630-XDV8G9/blueprint/resolved-snapshot.json
+    - old_digest: aba64c86c1a417361085b80776b96fb02778c6683d4fbef6fbb5a3cd07147d80
+    - current_digest: aba64c86c1a417361085b80776b96fb02778c6683d4fbef6fbb5a3cd07147d80
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151630-XDV8G9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151630-XDV8G9 -m 🧩 XDV8G9 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task intentional source and lifecycle artifacts. Preserve user merges and unrelated tasks; no destructive history operations."
   Findings: |-
     Preflight clean calc at266c0fcf76a838e5639513fb964370befa696f29. Actual getEditEngineItemPool uses dynamic_cast EditEngineItemPool across real secondary pools, then actual EditEngine.CreatePool. SfxItemPool has no full secondary-pool/font/default-engine producer yet; do not fabricate a named generic pool. Actual ContentInfo and XEditAttribute are absent; SharedString exists but SharedStringPool implementation currently only has StringWithHash, so NormalizeString cannot be faked. WrongList.ClearWrongs needs actual ContentNode.Len/GetChar/IsFeature; leave this absent until its owner exists. Native OWN_ATTR_VALUE_END4020 means EE_ITEMS_START4021 and PARA_JUST4037; task157 used arbitrary4016 in a constructor test but incorrectly described it as the actual EE identity. Correct via canonical constants; runtime pool/document was not implemented and unaffected. Earlier bounded read searches found no full field/bullet/font-variation/grab-bag defaults, so complete engine factory remains subsequent work. Native item-holder memory registration/refcounts/caches are deliberately erased under user JS-GC instruction; preserve logical value/pool/copy contracts without a memory-management library.
@@ -97,6 +156,39 @@ Command: node output/playwright/task158-checks/build-browser-portable.mjs. Resul
 Command: python3 output/playwright/task158-checks/audit-final.py. Result: pass. Evidence:4059exact non-agent source hashes against4025baseline,46intentional changed paths (12existing/34new) within approved140,19native pins at9bc445578031fecf56086729d8e4940c77e14d65, exact positive coverage owner sets,13source gates, build/browser and original4links restored on calc. CALC139..141 preserve/report source sentinel wrap, captured split-loop bound and self-Set clear-first behavior. Task157 mistaken4016constructor identity is corrected through real EE_PARA_JUST4037 declaration without editing closed task history.
 
 Limits: real SharedStringPool/CharClass normalization and ContentNode-dependent ClearWrongs remain absent rather than fake success methods. Full EditTextObject/EditEngine/default-font pool/Calc document/connected UI/same-model ODS are still pending. Native allocation/refcount/cache/surrogate/physical pointer interning and iterator ABI are deliberately erased under user JS-GC direction. Existing native string/item APIs are reused; no new lifetime manager/compiler/probe/sanitizer or UI localization. Source-derived parent engine copy/paste tests are context references, not claimed implemented scenarios. Writer-only coverage gaps exempt; none were repaired. Full all-app run remains deferred until genuine minimum connected UI+same-model ODS readiness, followed by applicable repairs and requested pause. Goal remains active. Quality review is same-agent, not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T17:10:49.427Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified source 9f9f85dfc950:194 related and187Calc tests plus19browser cases and build pass; exact8shared/33Calc owners raw S/B/F/L100/every counter positive; all13gates/inventory0,19native pins/70EE declarations,46paths/4059hashes and4reference links restored. Base Clone runtime unchanged; same-agent quality pass. Full engine/Calc model/UI/ODS remain pending, goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:10:15.083Z, excerpt_hash=sha256:b20e83e8efe804c3bbf649e8a1c5499dcfe8a8438a97b6d8cf5580257d5eb99f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151630-XDV8G9/blueprint/resolved-snapshot.json
+- old_digest: aba64c86c1a417361085b80776b96fb02778c6683d4fbef6fbb5a3cd07147d80
+- current_digest: aba64c86c1a417361085b80776b96fb02778c6683d4fbef6fbb5a3cd07147d80
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151630-XDV8G9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151630-XDV8G9 -m 🧩 XDV8G9 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
