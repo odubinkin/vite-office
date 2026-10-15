@@ -1,10 +1,11 @@
 ---
 id: "202610151335-83QB3Y"
 title: "Canonicalize tab-stop values transport and Writer consumers"
-status: "DOING"
+result_summary: "Canonical tab core and Writer I/O migration complete;348related/187Calc/19browser tests, strict100coverage and all source gates pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "output/playwright/task156-checks/build-browser-manifest.json"
   findings:
     - "Compared the102cumulative task paths and4017exact tracked hashes with the pre-task baseline; reviewed actual native property/collection bodies and302pinned source files. All13source gates,348related tests,187Calc tests, raw positive counters for exact10shared/33Calc owners, production build and19browser scenarios pass. No independent review or full application parity is claimed."
-commit: null
+commit:
+  hash: "40fa58378e1c3aeaac601e53fb774f5f9d29147c"
+  message: "✅ 83QB3Y verify: record native tab boundary checks"
 comments:
   -
     author: "CODER"
     body: "Start: native tab-stop values, sorted item state and real UNO transport; source numeric-locale behavior and every Writer I/O consumer canonicalized without localization or an ownership manager."
+  -
+    author: "CODER"
+    body: "Verified: canonical tab value/container/typed UNO contracts and migrated Writer adapters pass348related,187Calc and19browser tests, strict raw100 coverage for10shared/33Calc owners,13source gates/build/inventory and302native source pins. Exact4017source hashes and102cumulative paths verified; all4references restored. Same-agent quality review recorded. Actual Calc document/UI/ODS remain pending; goal stays active."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native tab values/container/typed Any and Writer I/O migration verified at07554c5e7521.348related/187Calc/19browser pass; exact10shared/33Calc owners raw100 with every counter positive,13source gates/build/inventory and302native pins pass; all4references restored. Source audit4017hashes/102cumulative paths. Same-agent quality pass; no whole-module/UI/ODS or full-regression claim."
+  -
+    type: "status"
+    at: "2026-10-15T15:48:39.421Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical tab value/container/typed UNO contracts and migrated Writer adapters pass348related,187Calc and19browser tests, strict raw100 coverage for10shared/33Calc owners,13source gates/build/inventory and302native source pins. Exact4017source hashes and102cumulative paths verified; all4references restored. Same-agent quality review recorded. Actual Calc document/UI/ODS remain pending; goal stays active."
 doc_version: 3
-doc_updated_at: "2026-10-15T15:47:50.090Z"
+doc_updated_at: "2026-10-15T15:48:39.426Z"
 doc_updated_by: "CODER"
 description: "Task156 restores native SvxTabStop and SvxTabStopItem value/container/typed Any contracts, real TabStop/TabAlign IDL bindings and required numeric-locale decimal behavior; reuses SortedVector/CPPU and migrates Writer I/O consumers without retaining a browser persistence facade in shared core."
 sections:
@@ -160,6 +173,10 @@ sections:
     - Observation: Initial implementation commit was rejected by the installed subject validator after staging81intentional paths; the gateway generic example does not satisfy the enforced emoji/task-suffix/scope format. No commit or source change occurred.
       Impact: Verification evidence and reviewed source hashes remain unchanged. Staged paths are the intended80source files plus this task README.
       Resolution: Reuse the same scoped index, record this finding through CLI, and retry with the enforced83QB3Ysubject format. No force, bypass, unstage-other or broad staging operation.
+extensions:
+  implementation_commit:
+    hash: "07554c5e7521c16834a7ed89af66b25cad5d4c13"
+    message: "🚧 83QB3Y calc: canonicalize tab item transport and Writer adapters"
 id_source: "generated"
 ---
 ## Summary
