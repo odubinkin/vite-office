@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202610151335-83QB3Y",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T15:47:44.460Z",
+  "verdict": "pass",
+  "summary": "Same-agent review of commit07554c5e7521: native tab core and Writer migration satisfy the approved bounded contract.",
+  "evaluated_sha": "07554c5e7521c16834a7ed89af66b25cad5d4c13",
+  "blueprint_digest": "b762e2cf24b5dd138d9e1a2923a423feaa0cfe8885f2a5cfc75aeb23dd0b0587",
+  "findings": [
+    "Compared the102cumulative task paths and4017exact tracked hashes with the pre-task baseline; reviewed actual native property/collection bodies and302pinned source files. All13source gates,348related tests,187Calc tests, raw positive counters for exact10shared/33Calc owners, production build and19browser scenarios pass. No independent review or full application parity is claimed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610151335-83QB3Y/README.md",
+    "output/playwright/task156-checks/item-stage-verification.json",
+    "output/playwright/task156-checks/item-stage-source-hashes.json",
+    "output/playwright/task156-checks/item-native-audit.json",
+    "output/playwright/task156-checks/item-post-source-gates.json",
+    "output/playwright/task156-checks/build-browser-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Translated presentation/diagnostic XML and general locale-service/LanguageTag construction remain unported. Full EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. Preserved upstream self-merge and count-width quirks are documented. User defers full all-app regression until genuine UI/ODS minimum readiness, then repairs and pause."
+  ]
+}

@@ -4,7 +4,7 @@ title: "Canonicalize tab-stop values transport and Writer consumers"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,31 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T15:47:49.926Z"
+  updated_by: "CODER"
+  note: "Native tab values/container/typed Any and Writer I/O migration verified at07554c5e7521.348related/187Calc/19browser pass; exact10shared/33Calc owners raw100 with every counter positive,13source gates/build/inventory and302native pins pass; all4references restored. Source audit4017hashes/102cumulative paths. Same-agent quality pass; no whole-module/UI/ODS or full-regression claim."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T15:47:44.460Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review of commit07554c5e7521: native tab core and Writer migration satisfy the approved bounded contract."
+  evaluated_sha: "07554c5e7521c16834a7ed89af66b25cad5d4c13"
+  blueprint_digest: "b762e2cf24b5dd138d9e1a2923a423feaa0cfe8885f2a5cfc75aeb23dd0b0587"
+  evidence_refs:
+    - ".agentplane/tasks/202610151335-83QB3Y/README.md"
+    - ".agentplane/tasks/202610151335-83QB3Y/quality/20261015-154744460-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151335-83QB3Y/quality/20261015-154744460-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151335-83QB3Y/quality/20261015-154744460-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151335-83QB3Y/blueprint/resolved-snapshot.json"
+    - "output/playwright/task156-checks/item-stage-verification.json"
+    - "output/playwright/task156-checks/item-stage-source-hashes.json"
+    - "output/playwright/task156-checks/item-native-audit.json"
+    - "output/playwright/task156-checks/item-post-source-gates.json"
+    - "output/playwright/task156-checks/build-browser-manifest.json"
+  findings:
+    - "Compared the102cumulative task paths and4017exact tracked hashes with the pre-task baseline; reviewed actual native property/collection bodies and302pinned source files. All13source gates,348related tests,187Calc tests, raw positive counters for exact10shared/33Calc owners, production build and19browser scenarios pass. No independent review or full application parity is claimed."
 commit: null
 comments:
   -
@@ -35,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: native tab-stop values, sorted item state and real UNO transport; source numeric-locale behavior and every Writer I/O consumer canonicalized without localization or an ownership manager."
+  -
+    type: "verify"
+    at: "2026-10-15T15:47:49.926Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native tab values/container/typed Any and Writer I/O migration verified at07554c5e7521.348related/187Calc/19browser pass; exact10shared/33Calc owners raw100 with every counter positive,13source gates/build/inventory and302native pins pass; all4references restored. Source audit4017hashes/102cumulative paths. Same-agent quality pass; no whole-module/UI/ODS or full-regression claim."
 doc_version: 3
-doc_updated_at: "2026-10-15T15:47:05.697Z"
+doc_updated_at: "2026-10-15T15:47:50.090Z"
 doc_updated_by: "CODER"
 description: "Task156 restores native SvxTabStop and SvxTabStopItem value/container/typed Any contracts, real TabStop/TabAlign IDL bindings and required numeric-locale decimal behavior; reuses SortedVector/CPPU and migrates Writer I/O consumers without retaining a browser persistence facade in shared core."
 sections:
@@ -54,6 +80,39 @@ sections:
     Command: python3 output/playwright/task156-checks/audit-item.py. Result: pass. Evidence:4017exact non-agent source hashes against3989pre-task baseline,102cumulative intentional paths (74existing/28new), all302native pins at9bc445578031fecf56086729d8e4940c77e14d65, raw positive counters and exact owner sets, all13gates/build/browser, all4original reference links restored and branchcalc. Ignored evidence is under output/playwright/task156-checks; implementation and direct regression tests are tracked. CALC-134/135/136 preserve source typo/self-alias/count-width concerns. Final commit/clean-state proof follows source commit.
 
     Boundaries: full original tab core value/container/typed transport and migrated Writer boundary acceptance complete. Translated item presentation/diagnostic XML, general locale-service/LanguageTag construction, full EditEngine/EditTextObject and real Calc pool/document/connected UI/same-model ODS remain pending. Deliberate browser I/O/recovery deviations retained. Full all-app regression remains deferred until genuine minimum connected UI+same-model ODS readiness, then relevant repairs and goal pause per user. This task does not complete or pause the goal. Quality review is same-agent, not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T15:47:49.926Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native tab values/container/typed Any and Writer I/O migration verified at07554c5e7521.348related/187Calc/19browser pass; exact10shared/33Calc owners raw100 with every counter positive,13source gates/build/inventory and302native pins pass; all4references restored. Source audit4017hashes/102cumulative paths. Same-agent quality pass; no whole-module/UI/ODS or full-regression claim.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T15:47:05.697Z, excerpt_hash=sha256:b204767b0d0da9c299ff8123844e429d8ff97b56a9e220f7cd971a2a7bad9310
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151335-83QB3Y/blueprint/resolved-snapshot.json
+    - old_digest: b762e2cf24b5dd138d9e1a2923a423feaa0cfe8885f2a5cfc75aeb23dd0b0587
+    - current_digest: b762e2cf24b5dd138d9e1a2923a423feaa0cfe8885f2a5cfc75aeb23dd0b0587
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151335-83QB3Y
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151335-83QB3Y -m 🧩 83QB3Y task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task intentional changes and lifecycle artifacts, preserve unrelated tasks/user merges; no destructive history operations."
   Findings: |-
     Preflight clean calc at38822fdd9e9074dca7daf5a717bb26537f073d13. Existing tab values retain unresolved nul decimal, readonly fields, caller aliases and Which-sensitive equality; shared JSON constructors/projection mix browser persistence with native core. Native requires genuine SortedVector reuse and value copies, typed sequence transport, decimal resolution and distinct direct/UNO distance constraints. Read-only comparison resolved all285LC_CTYPE source decimal values including aliases;230matched current Node Intl and55differed, including fr-CH native dot versus Intl comma, lo-LA native dot versus Intl comma, ar-OM native dot versus Intl Arabic separator. Some requested locales fell back to en-US in Intl, distinct from support detection. This does not justify implementing ICU or interface localization; source numeric data and native locale fallback must be honored at the provider boundary. Existing Sequence/Any are available and must be reused without introducing another memory manager. One CODER task owns the complete coherent boundary; do not close after adding IDL declarations alone.
@@ -130,6 +189,39 @@ Command: node output/playwright/task156-checks/build-browser-portable.mjs. Resul
 Command: python3 output/playwright/task156-checks/audit-item.py. Result: pass. Evidence:4017exact non-agent source hashes against3989pre-task baseline,102cumulative intentional paths (74existing/28new), all302native pins at9bc445578031fecf56086729d8e4940c77e14d65, raw positive counters and exact owner sets, all13gates/build/browser, all4original reference links restored and branchcalc. Ignored evidence is under output/playwright/task156-checks; implementation and direct regression tests are tracked. CALC-134/135/136 preserve source typo/self-alias/count-width concerns. Final commit/clean-state proof follows source commit.
 
 Boundaries: full original tab core value/container/typed transport and migrated Writer boundary acceptance complete. Translated item presentation/diagnostic XML, general locale-service/LanguageTag construction, full EditEngine/EditTextObject and real Calc pool/document/connected UI/same-model ODS remain pending. Deliberate browser I/O/recovery deviations retained. Full all-app regression remains deferred until genuine minimum connected UI+same-model ODS readiness, then relevant repairs and goal pause per user. This task does not complete or pause the goal. Quality review is same-agent, not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T15:47:49.926Z — VERIFY — ok
+
+By: CODER
+
+Note: Native tab values/container/typed Any and Writer I/O migration verified at07554c5e7521.348related/187Calc/19browser pass; exact10shared/33Calc owners raw100 with every counter positive,13source gates/build/inventory and302native pins pass; all4references restored. Source audit4017hashes/102cumulative paths. Same-agent quality pass; no whole-module/UI/ODS or full-regression claim.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T15:47:05.697Z, excerpt_hash=sha256:b204767b0d0da9c299ff8123844e429d8ff97b56a9e220f7cd971a2a7bad9310
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151335-83QB3Y/blueprint/resolved-snapshot.json
+- old_digest: b762e2cf24b5dd138d9e1a2923a423feaa0cfe8885f2a5cfc75aeb23dd0b0587
+- current_digest: b762e2cf24b5dd138d9e1a2923a423feaa0cfe8885f2a5cfc75aeb23dd0b0587
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151335-83QB3Y
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151335-83QB3Y -m 🧩 83QB3Y task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
