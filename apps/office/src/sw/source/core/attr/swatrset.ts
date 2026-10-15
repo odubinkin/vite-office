@@ -1,14 +1,16 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxLineSpacingItem,
   SvxTabAdjust,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,
   SvxFirstLineIndentItem,
@@ -349,22 +351,45 @@ export class SwAttrPool extends SfxItemPool {
       },
     );
     this.RegisterDefaultItem(
-      new SvxLineSpacingItem(100, RES_PARATR_LINESPACING),
-      /** Restores Writer line spacing. @param value - Persisted percent or rule tuple. @returns Line-spacing item. */ (
-        value,
-      ) => {
-        if (Array.isArray(value)) {
-          const [modeCode, amount, fontIndependent] = value as [number, number, number?];
-          const mode = (["proportional", "fixed", "minimum", "leading"] as const)[modeCode];
-          if (mode === undefined) throw new Error("Stored Writer line-spacing mode is invalid.");
-          return new SvxLineSpacingItem(
-            Number(amount),
-            RES_PARATR_LINESPACING,
-            mode,
-            fontIndependent === 1,
-          );
+      new SvxLineSpacingItem(200, RES_PARATR_LINESPACING),
+      /** Restores original five-field browser records and prior scalar/tuple inputs at the existing pool I/O boundary. @param value - Persisted value. @returns Native item. */
+      (value) => {
+        const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+        if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+          const record = value as Record<string, unknown>;
+          for (const name of [
+            "nInterLineSpace",
+            "nLineHeight",
+            "nPropLineSpace",
+            "eLineSpaceRule",
+            "eInterLineSpaceRule",
+          ]) {
+            if (typeof record[name] !== "number" || !Number.isInteger(record[name]))
+              throw new Error("Stored Writer line-spacing field is invalid.");
+          }
+          item.SetInterLineSpace(record.nInterLineSpace as number);
+          item.SetLineHeight(record.nLineHeight as number);
+          item.SetPropLineSpace(record.nPropLineSpace as number);
+          item.SetLineSpaceRule(record.eLineSpaceRule as SvxLineSpaceRule);
+          item.SetInterLineSpaceRule(record.eInterLineSpaceRule as SvxInterLineSpaceRule);
+        } else {
+          const mode = Array.isArray(value) ? value[0] : 0;
+          const amount = Number(Array.isArray(value) ? value[1] : value);
+          if (
+            !Number.isInteger(amount) ||
+            amount < 0 ||
+            amount > 65535 ||
+            ![0, 1, 2, 3].includes(Number(mode))
+          )
+            throw new Error("Stored Writer line-spacing mode or value is invalid.");
+          if (mode === 0) item.SetPropLineSpace(amount);
+          else if (mode === 3) item.SetInterLineSpace(amount);
+          else {
+            item.SetLineHeight(amount);
+            if (mode === 1) item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+          }
         }
-        return new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING);
+        return item;
       },
     );
     for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])

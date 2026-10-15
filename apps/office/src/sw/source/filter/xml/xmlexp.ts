@@ -1,6 +1,8 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { exportBoxProperties } from "./xmlexpit";
@@ -9,10 +11,10 @@ import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxLineSpacingItem,
   SvxTabAdjust,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -789,14 +791,13 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
       : {}),
     ...(lineSpacing instanceof SvxLineSpacingItem
       ? {
-          ...(lineSpacing.GetMode() === "proportional"
-            ? { lineHeightPercent: lineSpacing.GetValue() }
-            : lineSpacing.GetMode() === "fixed"
-              ? { lineHeightTwips: lineSpacing.GetValue() }
-              : lineSpacing.GetMode() === "minimum"
-                ? { lineHeightAtLeastTwips: lineSpacing.GetValue() }
-                : { lineSpacingTwips: lineSpacing.GetValue() }),
-          fontIndependentLineSpacing: lineSpacing.IsFontIndependent(),
+          ...(projectWriterLineSpacing(lineSpacing).mode === "proportional"
+            ? { lineHeightPercent: projectWriterLineSpacing(lineSpacing).value }
+            : projectWriterLineSpacing(lineSpacing).mode === "fixed"
+              ? { lineHeightTwips: projectWriterLineSpacing(lineSpacing).value }
+              : projectWriterLineSpacing(lineSpacing).mode === "minimum"
+                ? { lineHeightAtLeastTwips: projectWriterLineSpacing(lineSpacing).value }
+                : { lineSpacingTwips: projectWriterLineSpacing(lineSpacing).value }),
         }
       : {}),
     ...(tabStop instanceof SvxTabStopItem

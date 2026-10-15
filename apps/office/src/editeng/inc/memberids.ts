@@ -142,3 +142,6 @@ export const MID_RUBY_CHARSTYLE = 2;
 export const MID_RUBY_ABOVE = 3;
 /** Original ruby position selector. */
 export const MID_RUBY_POSITION = 4;
+
+/** Original line-spacing mode member. */
+export const MID_LINESPACE = 59;

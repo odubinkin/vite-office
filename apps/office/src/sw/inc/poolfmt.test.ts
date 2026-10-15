@@ -21,10 +21,10 @@ import {
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxLineSpacingItem,
   SvxTabStop,
   SvxTabStopItem,
 } from "../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,

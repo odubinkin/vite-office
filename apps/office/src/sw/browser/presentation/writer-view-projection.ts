@@ -1,4 +1,6 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
+
 import { WriterNativeFormatObserver } from "./writer-native-format-observer";
 import {
   populateStyleToolbox,
@@ -27,11 +29,8 @@ import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
 import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 import type { SwView } from "../../source/uibase/uiview/view";
-import {
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStopItem,
-} from "../../../editeng/source/items/paraitem";
+import { SvxTabAdjust, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -153,7 +152,6 @@ export interface WriterParagraphComputedStyle {
   readonly lineHeight: number;
   readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
   readonly lineSpacingValue?: number;
-  readonly fontIndependentLineSpacing?: boolean;
   readonly tabStopPositionPt?: number | undefined;
   readonly tabStopsPt?: readonly number[] | undefined;
   readonly keepWithNext?: boolean;
@@ -311,9 +309,8 @@ export class WriterViewProjection {
               lineSpacing,
               (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
             ),
-            lineSpacingMode: lineSpacing.GetMode(),
-            lineSpacingValue: lineSpacing.GetValue(),
-            fontIndependentLineSpacing: lineSpacing.IsFontIndependent(),
+            lineSpacingMode: projectWriterLineSpacing(lineSpacing).mode,
+            lineSpacingValue: projectWriterLineSpacing(lineSpacing).value,
             tabStopPositionPt: tabStopsPt[0],
             tabStopsPt,
             keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),

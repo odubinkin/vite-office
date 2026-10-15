@@ -272,64 +272,6 @@ export class SvxAdjustItem extends SfxPoolItem {
   }
 }
 
-/** Writer line-spacing modes corresponding to proportional, fixed, minimum, and extra leading. */
-export type SvxLineSpacingMode = "proportional" | "fixed" | "minimum" | "leading";
-
-/** Stores the Writer paragraph line-spacing rule in twips or percent. */
-export class SvxLineSpacingItem extends SfxPoolItem {
-  /** Creates line spacing. @param value - Percent or twips according to mode. @param which - Item identity. @param mode - Writer line-spacing rule. @param fontIndependent - ODF compatibility flag. @returns Nothing. */
-  public constructor(
-    private readonly value: number,
-    which: number,
-    private readonly mode: SvxLineSpacingMode = "proportional",
-    private readonly fontIndependent = false,
-  ) {
-    super(which);
-    if (!Number.isInteger(value) || value < 0)
-      throw new Error("SvxLineSpacingItem value is invalid.");
-  }
-  /** Returns the Writer rule. @returns Line-spacing mode. */
-  public GetMode(): SvxLineSpacingMode {
-    return this.mode;
-  }
-  /** Returns proportional line height. @returns Percent. */
-  public GetPropLineSpace(): number {
-    return this.mode === "proportional" ? this.value : 0;
-  }
-  /** Returns the rule's raw percent or twip value. @returns Stored value. */
-  public GetValue(): number {
-    return this.value;
-  }
-  /** Reports the imported font-independent setting. @returns ODF compatibility flag. */
-  public IsFontIndependent(): boolean {
-    return this.fontIndependent;
-  }
-  /** Creates an independent item. @returns Clone. */
-  public Clone(): SvxLineSpacingItem {
-    return new SvxLineSpacingItem(this.value, this.Which(), this.mode, this.fontIndependent);
-  }
-  /** Compares identity and value. @param other - Candidate. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxLineSpacingItem &&
-      other.Which() === this.Which() &&
-      other.value === this.value &&
-      other.mode === this.mode &&
-      other.fontIndependent === this.fontIndependent
-    );
-  }
-  /** Serializes line spacing compatibly with existing percentage records. @returns Percent or rule tuple. */
-  public override QueryValue(): number | readonly [number, number, number] {
-    return this.mode === "proportional" && !this.fontIndependent
-      ? this.value
-      : [
-          ["proportional", "fixed", "minimum", "leading"].indexOf(this.mode),
-          this.value,
-          Number(this.fontIndependent),
-        ];
-  }
-}
-
 /** Original Asian paragraph boolean value owner. */
 export class SvxScriptSpaceItem extends SfxBoolItem {
   /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */

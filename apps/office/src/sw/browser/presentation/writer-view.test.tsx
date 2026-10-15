@@ -1,4 +1,6 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
+import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
+
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
 
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
@@ -10,11 +12,8 @@ import {
   projectWriterLineHeight,
   projectWriterLineHeightItem,
 } from "../../source/core/text/itrform2";
-import {
-  SvxLineSpacingItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxFirstLineIndentItem, SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -498,7 +497,9 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       120,
     );
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetValue(),
+      (
+        shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
+      ).GetPropLineSpace(),
     ).toBe(150);
     expect(
       (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
@@ -585,32 +586,23 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
   });
   it("projects fixed, minimum, and extra Writer line spacing", /** Covers the imported ODF spacing rules. @returns Nothing. */ () => {
     expect(
-      projectWriterLineHeightItem(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed"), 12),
+      projectWriterLineHeightItem(lineSpacingFixture(360, RES_PARATR_LINESPACING, "fixed"), 12),
     ).toBe(1.5);
     expect(
-      projectWriterLineHeightItem(new SvxLineSpacingItem(1, RES_PARATR_LINESPACING, "fixed"), 12),
+      projectWriterLineHeightItem(lineSpacingFixture(1, RES_PARATR_LINESPACING, "fixed"), 12),
     ).toBe(0.05);
     expect(
-      projectWriterLineHeightItem(
-        new SvxLineSpacingItem(200, RES_PARATR_LINESPACING, "minimum"),
-        12,
-      ),
+      projectWriterLineHeightItem(lineSpacingFixture(200, RES_PARATR_LINESPACING, "minimum"), 12),
     ).toBe(1.15);
     expect(
-      projectWriterLineHeightItem(
-        new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "minimum"),
-        12,
-      ),
+      projectWriterLineHeightItem(lineSpacingFixture(360, RES_PARATR_LINESPACING, "minimum"), 12),
     ).toBe(1.5);
     expect(
-      projectWriterLineHeightItem(
-        new SvxLineSpacingItem(60, RES_PARATR_LINESPACING, "leading"),
-        12,
-      ),
+      projectWriterLineHeightItem(lineSpacingFixture(60, RES_PARATR_LINESPACING, "leading"), 12),
     ).toBe(1.4);
-    expect(
-      projectWriterLineHeightItem(new SvxLineSpacingItem(115, RES_PARATR_LINESPACING), 12),
-    ).toBe(1.3);
+    expect(projectWriterLineHeightItem(lineSpacingFixture(115, RES_PARATR_LINESPACING), 12)).toBe(
+      1.3,
+    );
   });
   it("projects explicit paragraph colors without altering native text attributes", /** Checks projects explicit paragraph colors without altering native text attributes. @returns Test callback result. */ () => {
     const document = createWriterDocument();
@@ -958,3 +950,19 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(true).toBe(true);
   });
 });
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
+}

@@ -1,4 +1,6 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import {
@@ -9,11 +11,11 @@ import {
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
 import {
-  SvxLineSpacingItem,
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   FontLineStyle,
@@ -900,16 +902,16 @@ function putParagraphProperties(
     properties.lineHeightAtLeastTwips ??
     properties.lineSpacingTwips ??
     properties.lineHeightPercent;
-  if (lineValue !== undefined)
-    put(
-      new SvxLineSpacingItem(
-        lineValue,
-        RES_PARATR_LINESPACING,
-        lineMode,
-        properties.fontIndependentLineSpacing ??
-          (inherited(RES_PARATR_LINESPACING) as SvxLineSpacingItem).IsFontIndependent(),
-      ),
-    );
+  if (lineValue !== undefined) {
+    const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    if (lineMode === "proportional") item.SetPropLineSpace(lineValue);
+    else if (lineMode === "leading") item.SetInterLineSpace(lineValue);
+    else {
+      item.SetLineHeight(lineValue);
+      if (lineMode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+    }
+    put(item);
+  }
   if (properties.tabStopDetails !== undefined)
     put(
       SvxTabStopItem.FromStops(

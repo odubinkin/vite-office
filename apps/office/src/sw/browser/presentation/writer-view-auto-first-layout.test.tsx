@@ -1,4 +1,6 @@
 /** @fileoverview Checks authored first-line items and resolved automatic layout across the real Writer boundary. */
+import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
+
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it } from "vitest";
@@ -7,10 +9,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../editeng/source/items/frmitems";
-import {
-  SvxLineSpacingItem,
-  type SvxLineSpacingMode,
-} from "../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxFontHeightItem } from "../../../editeng/source/items/textitem";
 import {
   RES_CHRATR_FONTSIZE,
@@ -37,7 +36,7 @@ afterEach(
 /** Creates actual direct or inherited automatic paragraph items. @param disregard - Existing line-space compatibility flag. @param mode - Supported spacing mode. @param value - Raw spacing rule. @param inherited - Put all items in the style. @returns Model and frozen presentation owners. */
 function fixture(
   disregard = true,
-  mode: SvxLineSpacingMode = "proportional",
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
   value = 100,
   inherited = false,
 ) {
@@ -60,7 +59,7 @@ function fixture(
     new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(240), RES_MARGIN_RIGHT),
     new SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE),
-    new SvxLineSpacingItem(value, RES_PARATR_LINESPACING, mode),
+    lineSpacingFixture(value, RES_PARATR_LINESPACING, mode),
   ];
   if (inherited)
     for (const item of items) session.docShell.GetDoc().GetDfltTextFormatColl().SetFormatAttr(item);
@@ -85,11 +84,7 @@ function state(owner: ReturnType<typeof fixture>) {
       /** Queries the complete effective item. @param id - Which identity. @returns Value. */ (
         id,
       ) =>
-        id === RES_MARGIN_FIRSTLINE
-          ? firstValues(node.GetAttr(id))
-          : (node.GetAttr(id) as { QueryValue(member?: number): unknown }).QueryValue(
-              id === RES_MARGIN_TEXTLEFT ? 11 : 0,
-            ),
+        id === RES_MARGIN_FIRSTLINE ? firstValues(node.GetAttr(id)) : node.GetAttr(id).QueryValue(),
     ),
     direct: which.map(
       /** Distinguishes direct items from inheritance. @param id - Which identity. @returns Direct value or absence. */ (
@@ -97,10 +92,7 @@ function state(owner: ReturnType<typeof fixture>) {
       ) =>
         (id === RES_MARGIN_FIRSTLINE
           ? firstValues(node.GetpSwAttrSet()?.GetItemIfSet(id, false))
-          : (
-              node.GetpSwAttrSet()?.GetItemIfSet(id, false) as
-                { QueryValue(member?: number): unknown } | undefined
-            )?.QueryValue(id === RES_MARGIN_TEXTLEFT ? 11 : 0)) ?? null,
+          : node.GetpSwAttrSet()?.GetItemIfSet(id, false)?.QueryValue()) ?? null,
     ),
     text: node.GetText(),
   };
@@ -292,4 +284,20 @@ function firstValues(item: { QueryValue(member?: number): unknown } | undefined)
   if (item === undefined) return undefined;
   const value = item.QueryValue(8);
   return item.QueryValue(10) === true ? [value, 1] : value;
+}
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
 }

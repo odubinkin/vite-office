@@ -1,4 +1,7 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+
 import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
@@ -8,11 +11,11 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
-  SvxLineSpacingItem,
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -108,7 +111,6 @@ export interface WriterParagraphFormatValue {
   readonly contextual: boolean;
   readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
   readonly lineValue: number;
-  readonly fontIndependent: boolean;
   readonly tabStopsPt: readonly number[];
   readonly keepWithNext: boolean;
   readonly keepTogether?: boolean;
@@ -523,6 +525,13 @@ export class SwTextShell {
       RES_MARGIN_FIRSTLINE,
     );
     first.SetAutoFirst(value.autoTextIndent === true);
+    const lineSpacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    if (value.lineMode === "proportional") lineSpacing.SetPropLineSpace(value.lineValue);
+    else if (value.lineMode === "leading") lineSpacing.SetInterLineSpace(value.lineValue);
+    else {
+      lineSpacing.SetLineHeight(value.lineValue);
+      if (value.lineMode === "fixed") lineSpacing.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+    }
     return this.ApplyParagraphItems(
       /** Builds each selected paragraph's items. @param paragraph - Selected paragraph. @returns Pooled items. */ (
         paragraph,
@@ -533,12 +542,7 @@ export class SwTextShell {
           RES_UL_SPACE,
           value.contextual,
         ),
-        new SvxLineSpacingItem(
-          value.lineValue,
-          RES_PARATR_LINESPACING,
-          value.lineMode,
-          value.fontIndependent,
-        ),
+        lineSpacing,
         this.CreateTabStops(positions, paragraph),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new SfxBoolItem(RES_PARATR_SPLIT, !(value.keepTogether ?? false)),
@@ -575,7 +579,9 @@ export class SwTextShell {
   /** Applies the toolbar's proportional line-spacing value. @param percent - Percent. @returns Whether changed. */
   public SetLineSpacingPercent(percent: number): boolean {
     if (!Number.isInteger(percent) || percent < 0) return false;
-    return this.SetParagraphItem(new SvxLineSpacingItem(percent, RES_PARATR_LINESPACING));
+    const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    item.SetPropLineSpace(percent);
+    return this.SetParagraphItem(item);
   }
 
   /** Reads paragraph-dialog values from the active pooled items. @returns Primitive current paragraph format. */
@@ -591,9 +597,8 @@ export class SwTextShell {
       upperPt: spacing.GetUpper() / 20,
       lowerPt: spacing.GetLower() / 20,
       contextual: spacing.GetContext(),
-      lineMode: lineSpacing.GetMode(),
-      lineValue: lineSpacing.GetValue(),
-      fontIndependent: lineSpacing.IsFontIndependent(),
+      lineMode: projectWriterLineSpacing(lineSpacing).mode,
+      lineValue: projectWriterLineSpacing(lineSpacing).value,
       tabStopsPt: tabStops
         .GetStops()
         .filter(

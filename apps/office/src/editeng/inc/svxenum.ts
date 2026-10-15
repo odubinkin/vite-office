@@ -139,3 +139,16 @@ export enum SvxCaseMap {
   SmallCaps,
   End,
 }
+
+/** Original paragraph absolute height rule. */
+export enum SvxLineSpaceRule {
+  Auto,
+  Fix,
+  Min,
+}
+/** Original additional line spacing rule. */
+export enum SvxInterLineSpaceRule {
+  Off,
+  Prop,
+  Fix,
+}

@@ -2135,3 +2135,24 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: the property setter extracts any unsigned16 value and constructs the enum without a0..4range check. For example5or65535is accepted and queried unchanged. GetValueText later indexes a5entry translated-label array with `.at(static_cast<size_t>(eValue))`, so such stored values would reach an out-of-range checked lookup if localized presentation is requested.
 - Status: source-level admission/presentation mismatch, not a confirmed upstream defect. Preserve numeric value acceptance and transport; do not silently clamp/reject based on the label table or introduce a fake label fallback. Localized presentation itself is deferred.
 - Local evidence: `apps/office/src/editeng/source/items/native-text-modes.test.ts`, arbitrary unsigned16 hint round trip; the native presentation consequence is inspected in source only, not compiled/executed.
+
+## CALC-131: equal line-spacing items can hash differently due to inactive fields
+
+- Upstream: pinned `editeng/source/items/paraitem.cxx`, SvxLineSpacingItem::operator== and hashCode.
+- Observation: equality ignores absolute height when the absolute rule is Auto, and ignores inactive proportional/additive values. Hashing folds all five stored fields. Default-height200 and default-height0 items therefore compare equal in Auto/Off state while their logical field hashes differ.
+- Status: source equality/hash invariant concern, not a confirmed defect or portable binary hash claim. Preserve active-field comparison and all-field hashing.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, independent default heights and complete copied-state witnesses.
+
+## CALC-132: unknown line-spacing property members can normalize state successfully
+
+- Upstream: the same pinned file, SvxLineSpacingItem::QueryValue and PutValue default member branches.
+- Observation: an unknown query member reports a diagnostic but returns true without changing its output. PutValue first projects current state to the two-short descriptor; an unknown member retains successful extraction and applies that descriptor. For example Auto/Off with stored height777 becomes stored height100, even though the input Any was not used.
+- Status: surprising successful normalization, not a confirmed defect. Preserve return values, ignored input and state changes; do not replace the native diagnostic branch with false.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, unknown-member query preservation and write normalization.
+
+## CALC-133: negative line-spacing heights convert differently by mode
+
+- Upstream: the same pinned file, SvxLineSpacingItem::PutValue LEADING versus FIX/MINIMUM conversion order.
+- Observation: LEADING converts the signed short distance. FIX/MINIMUM first assign the same short into unsigned16 line height and then convert. A descriptor height-1mm100 remains-1twip in LEADING but converts wrapped65535mm100 to37154twips in FIX.
+- Status: surprising source cast-order consequence, not a confirmed defect. Preserve signed versus unsigned conversion order and short storage rather than rejecting or saturating negative input.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, real typed descriptor conversion witnesses; no native compiler or memory probe.

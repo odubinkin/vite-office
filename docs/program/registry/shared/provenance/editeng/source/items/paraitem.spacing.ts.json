@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/paraitem.spacing.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/paraitem.cxx",
+    "localSymbols": [
+      "LINE_SPACE_DEFAULT_HEIGHT",
+      "SvxLineSpacingItem"
+    ],
+    "upstreamSymbols": [
+      "SvxLineSpacingItem::QueryValue",
+      "SvxLineSpacingItem::PutValue"
+    ],
+    "preservedResponsibilities": [
+      "Task155 replaces the reduced mode/value/font-independent item with original five-field SvxLineSpacingItem state, native rule enums, default/copy/setter/Clone/equality/hash and typed Any contracts. Actual LineSpacing two-short struct uses shared CPPU metadata and ordinary JS scalar cells, not binary persistence or lifetime machinery. Writer height200 defaults, commands, layout and ODF consume actual fields; browser persistence stores all five fields and decodes old scalar/tuple inputs only at its existing I/O boundary. Font-independent line spacing belongs to Drawing text-object properties and is removed from Writer paragraph model/filter/dialog; generic shared XML support remains. Native inactive-field equality versus all-field hashing and unknown-member successful normalization are preserved and documented. Translated presentation, tab-stop canonicalization, real full engine/pool/Calc model/connected UI and same-model ODS remain pending. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Translated line-spacing presentation and diagnostics remain unported; real engine/pool/model/UI/ODS pending. Native lifetime syntax erased under JS GC."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.spacing.ts",
+          "marker": "SvxLineSpacingItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxLineSpacingItem::QueryValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/paraitem.spacing.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The complete five-field spacing implementation and existing paragraph/tab/Asian/direction implementations exceed the500line source budget together; separate spacing keeps its own native contract cohesive without changing the upstream owner or public lspcitem boundary."
+    }
+  }
+}

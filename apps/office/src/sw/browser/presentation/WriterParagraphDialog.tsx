@@ -205,18 +205,6 @@ export function WriterParagraphDialog({
                         })
                     }
                   />
-                  <label className="sm:col-span-2 flex items-center gap-2">
-                    <input
-                      checked={draft.fontIndependent}
-                      onChange={
-                        /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
-                          event,
-                        ) => setDraft({ ...draft, fontIndependent: event.target.checked })
-                      }
-                      type="checkbox"
-                    />
-                    Font-independent line spacing
-                  </label>
                 </>
               ) : null}
               {activeTab === "tabs" ? (

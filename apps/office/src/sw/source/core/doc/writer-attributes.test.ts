@@ -1,4 +1,6 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createWriterNumFormat, getWriterNumFormatKind, SwNumRule } from "./number";
@@ -16,11 +18,11 @@ import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxLineSpacingItem,
   SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxTextLeftMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   FontLineStyle,
@@ -668,7 +670,10 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const writer = createWriterDocument();
     const node = writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>;
     node.SetAttr(new SvxULSpaceItem(240, 120, RES_UL_SPACE, true));
-    node.SetAttr(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed", true));
+    const authoredSpacing = lineSpacingFixture(360, RES_PARATR_LINESPACING, "fixed");
+    authoredSpacing.SetInterLineSpace(72);
+    authoredSpacing.SetPropLineSpace(175);
+    node.SetAttr(authoredSpacing);
     node.SetAttr(
       SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
         new SvxTabStop(720, SvxTabAdjust.Right),
@@ -678,9 +683,12 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const restored = decodeWriterDocument(encodeWriterDocument(writer))
       .paragraphs[0] as typeof node;
     expect(ulValues(restored.GetAttr(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([240, 120, 1]);
-    expect((restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).QueryValue()).toEqual([
-      1, 360, 1,
-    ]);
+    const spacing = restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+    expect(spacing.GetLineSpaceRule()).toBe(SvxLineSpaceRule.Fix);
+    expect(spacing.GetLineHeight()).toBe(360);
+    expect(spacing.GetPropLineSpace()).toBe(175);
+    expect(spacing.GetInterLineSpace()).toBe(72);
+    expect(spacing.GetInterLineSpaceRule()).toBe(authoredSpacing.GetInterLineSpaceRule());
     expect((restored.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue()).toEqual({
       defaultDistance: 0,
       stops: [
@@ -700,7 +708,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(
       /** Rejects an invalid stored line mode. @returns Invalid item. */ () =>
         pool.CreateItem({ which: RES_PARATR_LINESPACING, value: [9, 100, 0] }),
-    ).toThrow("Stored Writer line-spacing mode is invalid");
+    ).toThrow("Stored Writer line-spacing mode or value is invalid");
   });
 
   it("round-trips page descriptor identities, follow links, and document settings", /** Verifies the current canonical document schema. @returns Nothing. */ () => {
@@ -761,4 +769,20 @@ function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefi
   if (item === undefined) return undefined;
   const values = [item.QueryValue(3), item.QueryValue(4)];
   return item.QueryValue(7) === true ? [...values, 1] : values;
+}
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
 }

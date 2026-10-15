@@ -2,6 +2,8 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
@@ -70,17 +72,25 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
   const value =
-    item instanceof SvxULSpaceItem
-      ? encodeULSpaceValue(item)
-      : item instanceof SvxTextLeftMarginItem
-        ? encodeLegacyTextLeftMarginValue(item)
-        : item instanceof SvxRightMarginItem
-          ? encodeLegacyRightMarginValue(item)
-          : item instanceof SvxFirstLineIndentItem
-            ? encodeLegacyFirstLineValue(item)
-            : item instanceof SwFormatINetFormat
-              ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-              : item.QueryValue();
+    item instanceof SvxLineSpacingItem
+      ? {
+          nInterLineSpace: item.GetInterLineSpace(),
+          nLineHeight: item.GetLineHeight(),
+          nPropLineSpace: item.GetPropLineSpace(),
+          eLineSpaceRule: item.GetLineSpaceRule(),
+          eInterLineSpaceRule: item.GetInterLineSpaceRule(),
+        }
+      : item instanceof SvxULSpaceItem
+        ? encodeULSpaceValue(item)
+        : item instanceof SvxTextLeftMarginItem
+          ? encodeLegacyTextLeftMarginValue(item)
+          : item instanceof SvxRightMarginItem
+            ? encodeLegacyRightMarginValue(item)
+            : item instanceof SvxFirstLineIndentItem
+              ? encodeLegacyFirstLineValue(item)
+              : item instanceof SwFormatINetFormat
+                ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+                : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,

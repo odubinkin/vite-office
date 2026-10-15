@@ -6,10 +6,10 @@ import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
   SvxAdjust,
   SvxAdjustItem,
-  SvxLineSpacingItem,
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,
   SvxFirstLineIndentItem,
@@ -222,10 +222,11 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
         RES_UL_SPACE,
       ),
     );
-  if (defaults.lineHeightPercent !== undefined)
-    collection.SetFormatAttr(
-      new SvxLineSpacingItem(defaults.lineHeightPercent, RES_PARATR_LINESPACING),
-    );
+  if (defaults.lineHeightPercent !== undefined) {
+    const lineSpacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    lineSpacing.SetPropLineSpace(defaults.lineHeightPercent);
+    collection.SetFormatAttr(lineSpacing);
+  }
   if (defaults.tabStopTwips !== undefined) {
     const tabs = new SvxTabStopItem(RES_PARATR_TABSTOP);
     tabs.Insert(new SvxTabStop(defaults.tabStopTwips));

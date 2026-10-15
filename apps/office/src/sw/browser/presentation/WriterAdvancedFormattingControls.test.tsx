@@ -101,7 +101,6 @@ function WriterAdvancedFormattingControls({
                 contextual: style.contextualSpacing ?? false,
                 lineMode: style.lineSpacingMode ?? "proportional",
                 lineValue: style.lineSpacingValue ?? 100,
-                fontIndependent: style.fontIndependentLineSpacing ?? false,
                 tabStopsPt:
                   style.tabStopsPt ??
                   (style.tabStopPositionPt === undefined ? [] : [style.tabStopPositionPt]),
@@ -325,7 +324,7 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByLabelText("Do not add space between paragraphs of the same style"));
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "minimum" } });
     fireEvent.change(screen.getByLabelText("Value (pt)"), { target: { value: "16" } });
-    fireEvent.click(screen.getByLabelText("Font-independent line spacing"));
+    expect(screen.queryByLabelText("Font-independent line spacing")).toBeNull();
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
     fireEvent.click(screen.getByLabelText("Include this paragraph in line numbering"));
     fireEvent.click(screen.getByText("Cancel"));
