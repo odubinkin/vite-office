@@ -159,7 +159,8 @@ const allowedEdges = new Map([
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
   // Original LocaleDataWrapper constructs LocaleData2; i18npool.component binds its actual producer.
   // The browser field binding uses that producer and the original generated Locale triplet directly.
-  ["unotools", new Set(["sal", "udkapi", "i18npool"])],
+  // Original Library_utl.mk links i18nlangtag; fontcfg.hxx uses LanguageTag.
+  ["unotools", new Set(["sal", "udkapi", "i18npool", "i18nlangtag"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   ["tools", new Set(["o3tl", "cppu"])],

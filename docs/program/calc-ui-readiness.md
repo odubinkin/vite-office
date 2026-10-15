@@ -1,6 +1,6 @@
 # Calc UI and ODS implementation critical path
 
-Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162.
+Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163.
 Reference: local LibreOffice commit
 `9bc445578031fecf56086729d8e4940c77e14d65`.
 This is the current priority map; historical task notes in
@@ -77,7 +77,7 @@ and document release paths remain missing.
 | --- | --- | --- |
 | [SharedStringPool source](../../apps/office/src/svl/source/misc/sharedstringpool.ts) | StringWithHash helper and hash function only; no SharedStringPool class. | Implement actual interning/case mapping and its real CharClass dependency with existing shared strings. Do not add a second memory engine. |
 | [Unicode conformance evidence](calc-native-unicode-conformance.json) | Explicitly limited to scalar casing; excludes whole-string/locale CharClass correspondence. | Verify the required whole-string operation against source and native JS before choosing toLocaleUpperCase; this evidence does not already prove it. |
-| [VCL Font](../../apps/office/src/vcl/source/font/font.ts) | Family/style names, family type, pitch and charset with native defaults and independent immutable-value copies (task162). | Native configuration lookup and actual device/default-font selection remain missing; other rendering attributes remain unrepresented. |
+| [VCL Font](../../apps/office/src/vcl/source/font/font.ts) | Family/style names, family type, pitch and charset with native defaults and independent immutable-value copies (task162). | Configured candidate resource lookup is available separately (task163). Actual configuration services and device/default-font selection remain missing; other rendering attributes remain unrepresented. |
 | [Browser default-font device](../../apps/office/src/vcl/browser/default-font-device.ts) | Writer fixed/heading/text roles, hardcoded families, unused language parameter. | It is not the native spreadsheet default-font provider. Reuse and correct shared ownership; audit native configuration and actual browser font availability rather than adding another hardcoded adapter. |
 | [ZIP reader](../../apps/office/src/package/source/zipapi/ZipFile.ts) | Bounded ZIP32 STORE/DEFLATE reader with CRC and entry validation; rejects ZIP64/encryption. | Reuse; record and address any required unsupported package contract explicitly. |
 | [ZIP writer](../../apps/office/src/package/source/zipapi/ZipOutputStream.ts) | Deterministic STORE-only ZIP32 writer. | Reuse; file-format validity alone does not prove native compression/default behavior. |

@@ -1,0 +1,324 @@
+{
+  "en": {
+    "LATIN_DISPLAY": "Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "CJK_DISPLAY": "MS Gothic;Gothic;AR PL ShanHeiSun Uni;MS PGothic;Arial Unicode MS;Lucida Sans Unicode;Tahoma",
+    "LATIN_HEADING": "Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "LATIN_FIXED": "Liberation Mono;Cumberland AMT;Cumberland;Courier New;Cousine;Nimbus Mono L;DejaVu Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "LATIN_PRESENTATION": "Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "LATIN_SPREADSHEET": "Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "LATIN_TEXT": "Liberation Serif;Thorndale AMT;Thorndale;Times New Roman;Tinos;Nimbus Roman No9 L;DejaVu Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif",
+    "CJK_HEADING": "MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma",
+    "CJK_PRESENTATION": "MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma",
+    "CJK_SPREADSHEET": "MS Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Arial Unicode MS;Lucida Sans Unicode;Tahoma",
+    "CTL_DISPLAY": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "SANS": "Liberation Sans;Albany AMT;Albany;Arial;Arimo;Nimbus Sans L;DejaVu Sans;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "SANS_UNICODE": "Arial Unicode MS;DejaVu Sans;Lucida Sans Unicode;Tahoma;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif",
+    "SERIF": "Liberation Serif;Thorndale AMT;Thorndale;Times New Roman;Tinos;DejaVu Serif;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif",
+    "SYMBOL": "StarSymbol;OpenSymbol;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol",
+    "UI_FIXED": "Liberation Mono;Cumberland AMT;Cumberland;Courier New;Cousine;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "FIXED": "Liberation Mono;Cumberland AMT;Cumberland;Courier New;Cousine;Nimbus Mono L;DejaVu Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "UI_SANS": "Segoe UI;Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;Geneva;Dialog;Lucida;Helvetica;Helmet;Interface System;Sans Serif"
+  },
+  "am": {
+    "UI_SANS": "Nyala;Abyssinica SIL",
+    "SANS_UNICODE": "Nyala;Abyssinica SIL",
+    "CTL_DISPLAY": "Nyala;Abyssinica SIL",
+    "CTL_HEADING": "Nyala;Abyssinica SIL",
+    "CTL_PRESENTATION": "Nyala;Abyssinica SIL",
+    "CTL_SPREADSHEET": "Nyala;Abyssinica SIL",
+    "CTL_TEXT": "Nyala;Abyssinica SIL"
+  },
+  "ar": {
+    "UI_SANS": "Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;Geneva;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif",
+    "SANS_UNICODE": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif",
+    "CTL_DISPLAY": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "he": {
+    "UI_SANS": "Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;Geneva;Tahoma;Dialog;Lucida;Helvetica;Helmet;Interface System;Sans Serif",
+    "CTL_DISPLAY": "Nachlieli CLM;Alef;Noto Sans Hebrew;Liberation Sans;Arial;Arial Hebrew;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS",
+    "CTL_HEADING": "Nachlieli CLM;Alef;Noto Sans Hebrew;Liberation Sans;Arial;Arial Hebrew;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS",
+    "CTL_PRESENTATION": "Nachlieli CLM;Alef;Noto Sans Hebrew;Liberation Sans;Arial;Arial Hebrew;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Liberation Sans;Arial;Arial Hebrew;Noto Sans Hebrew;Nachlieli CLM;Lucida Sans Unicode;Alef;Arial Unicode MS;Lucida Grande",
+    "CTL_TEXT": "David CLM;David Libre;Frank Ruehl CLM;Liberation Serif;David;Raanana;Lucida Sans Unicode;Lucida Grande;Arial Unicode MS"
+  },
+  "th": {
+    "UI_SANS": "Tahoma;Arial Unicode MS;Waree;Loma;Thonburi;Lucidasans;Lucida Sans;clearlyU",
+    "CTL_DISPLAY": "Tahoma;Arial Unicode MS;Waree;Loma;Thonburi;Lucidasans;Lucida Sans;Angsana New",
+    "CTL_HEADING": "Cordia New;CordiaUPC;Browallia New;BrowalliaUPC;Bromlila;Corada;Umpush;Thonburi;TH SarabunPSK;TH Sarabun New;Angsana New;AngsanaUPC;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans",
+    "CTL_PRESENTATION": "Cordia New;CordiaUPC;Browallia New;BrowalliaUPC;Bromlila;Corada;Umpush;Thonburi;TH SarabunPSK;TH Sarabun New;Angsana New;AngsanaUPC;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans",
+    "CTL_SPREADSHEET": "Tahoma;Arial Unicode MS;Waree;Loma;Thonburi;TH SarabunPSK;TH Sarabun New;Angsana New;AngsanaUPC;Lucidasans;Lucida Sans",
+    "CTL_TEXT": "Angsana New;AngsanaUPC;Angsima;Kinnari;Norasi;Thonburi;TH SarabunPSK;TH Sarabun New;Tahoma;Arial Unicode MS;Lucidasans;Lucida Sans"
+  },
+  "ja": {
+    "LATIN_DISPLAY": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPA Pゴシック;IPAゴシック;ＭＳ Ｐゴシック;ＭＳ ゴシック;Osaka;Gothic;SansSerif",
+    "CJK_DISPLAY": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPA Pゴシック;IPAゴシック;ＭＳ Ｐゴシック;ＭＳ ゴシック;Osaka;Gothic;SansSerif",
+    "LATIN_HEADING": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPAゴシック;ＭＳ ゴシック;IPA Pゴシック;ＭＳ Ｐゴシック;Osaka;Gothic;SansSerif",
+    "LATIN_PRESENTATION": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPAゴシック;ＭＳ ゴシック;IPA Pゴシック;ＭＳ Ｐゴシック;Osaka;Gothic;SansSerif",
+    "LATIN_SPREADSHEET": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPA Pゴシック;IPAゴシック;ＭＳ Ｐゴシック;ＭＳ ゴシック;Osaka;Gothic;SansSerif",
+    "LATIN_TEXT": "Noto Serif CJK JP;Noto Serif JP;源ノ明朝;源ノ明朝 JP;Source Han Serif;Source Han Serif JP;游明朝;游明朝体;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;IPAmj明朝;IPAex明朝;IPA明朝;IPA P明朝;ＭＳ 明朝;ＭＳ Ｐ明朝;Mincho;Serif",
+    "CJK_HEADING": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPAゴシック;ＭＳ ゴシック;IPA Pゴシック;ＭＳ Ｐゴシック;Osaka;Gothic;SansSerif",
+    "CJK_PRESENTATION": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPAゴシック;ＭＳ ゴシック;IPA Pゴシック;ＭＳ Ｐゴシック;Osaka;Gothic;SansSerif",
+    "CJK_SPREADSHEET": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPA Pゴシック;IPAゴシック;ＭＳ Ｐゴシック;ＭＳ ゴシック;Osaka;Gothic;SansSerif",
+    "CJK_TEXT": "Noto Serif CJK JP;Noto Serif JP;源ノ明朝;源ノ明朝 JP;Source Han Serif;Source Han Serif JP;游明朝;游明朝体;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;IPAmj明朝;IPAex明朝;IPA明朝;IPA P明朝;ＭＳ 明朝;ＭＳ Ｐ明朝;Mincho;Serif",
+    "SANS": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;メイリオ;IPAexゴシック;IPAゴシック;IPA Pゴシック;ＭＳ ゴシック;ＭＳ Ｐゴシック;Osaka;Gothic;SansSerif",
+    "SERIF": "Noto Serif CJK JP;Noto Serif JP;源ノ明朝;源ノ明朝 JP;Source Han Serif;Source Han Serif JP;游明朝;游明朝体;ヒラギノ明朝 ProN;ヒラギノ明朝 Pro;IPAmj明朝;IPAex明朝;IPA明朝;IPA P明朝;ＭＳ 明朝;ＭＳ Ｐ明朝;Mincho;Serif",
+    "UI_FIXED": "Noto Sans Mono CJK JP;Noto Sans Mono JP;源ノ角ゴシック HW;Source Han Sans HW;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;Yu Gothic UI;游ゴシック;游ゴシック体;Meiryo UI;メイリオ;MS UI Gothic;ＭＳ ゴシック;Osaka;Monospaced",
+    "FIXED": "Noto Sans Mono CJK JP;Noto Sans Mono JP;源ノ角ゴシック HW;Source Han Sans HW;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;IPAゴシック;ＭＳ ゴシック;Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;游ゴシック;游ゴシック体;メイリオ;Osaka;Monospaced",
+    "UI_SANS": "Noto Sans CJK JP;Noto Sans JP;源ノ角ゴシック;源ノ角ゴシック JP;Source Han Sans;Source Han Sans JP;Yu Gothic UI;游ゴシック;游ゴシック体;ヒラギノ角ゴシック;ヒラギノ角ゴ StdN;ヒラギノ角ゴ ProN;ヒラギノ角ゴ Pro;Meiryo UI;メイリオ;IPAexゴシック;IPA Pゴシック;IPAゴシック;MS UI Gothic;ＭＳ Ｐゴシック;ＭＳ ゴシック;Osaka;Gothic;SansSerif"
+  },
+  "zh-CN": {
+    "LATIN_FIXED": "思源黑体 HW;Source Han Sans HW SC;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced",
+    "CJK_DISPLAY": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_HEADING": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_PRESENTATION": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_SPREADSHEET": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_TEXT": "思源宋体;Source Han Serif SC;思源宋体 CN;Source Han Serif CN;Noto Serif SC;Noto Serif CJK SC;新宋体;NSimSun;宋体;SimSun;华文宋体;Songti SC;STSong;Arial Unicode MS;Tahoma",
+    "UI_FIXED": "思源黑体 HW;Source Han Sans HW SC;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced",
+    "FIXED": "思源黑体 HW;Source Han Sans HW SC;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced",
+    "UI_SANS": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;宋体;SimSun;萍方-简;PingFang SC;华文细黑;STXihei;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif"
+  },
+  "zh-TW": {
+    "LATIN_FIXED": "思源黑體 HW;Source Han Sans HW TC;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "CJK_DISPLAY": "思源黑體;Source Han Sans TC;Noto Sans TC;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_HEADING": "思源黑體;Source Han Sans TC;Noto Sans TC;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_PRESENTATION": "思源黑體;Source Han Sans TC;Noto Sans TC;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_SPREADSHEET": "思源黑體;Source Han Sans TC;Noto Sans TC;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_TEXT": "思源宋體;Source Han Serif TC;Noto Serif TC;Noto Serif CJK TC;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "UI_FIXED": "思源黑體 HW;Source Han Sans HW TC;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "FIXED": "思源黑體 HW;Source Han Sans HW TC;Noto Sans Mono CJK TC;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "UI_SANS": "思源黑體;Source Han Sans TC;Noto Sans TC;Noto Sans CJK TC;蘋方-繁;PingFang TC;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif"
+  },
+  "zh-MO": {
+    "LATIN_FIXED": "思源黑體 香港 HW;Source Han Sans HW HC;Noto Sans Mono CJK HK;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "CJK_DISPLAY": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_HEADING": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_PRESENTATION": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_SPREADSHEET": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_TEXT": "思源宋體;Source Han Serif TC;Noto Serif TC;Noto Serif CJK TC;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "UI_FIXED": "思源黑體 香港 HW;Source Han Sans HW HC;Noto Sans Mono CJK HK;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "FIXED": "思源黑體 香港 HW;Source Han Sans HW HC;Noto Sans Mono CJK HK;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "UI_SANS": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif"
+  },
+  "zh-HK": {
+    "LATIN_FIXED": "思源黑體 香港 HW;Source Han Sans HW HC;Noto Sans Mono CJK HK;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "CJK_DISPLAY": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_HEADING": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_PRESENTATION": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_SPREADSHEET": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "CJK_TEXT": "思源宋體;Source Han Serif TC;Noto Serif TC;Noto Serif CJK TC;宋體-繁;Songti TC;儷宋 Pro;LiSong Pro;新細明體;PMingLiU;Arial Unicode MS;Tahoma",
+    "UI_FIXED": "思源黑體 香港 HW;Source Han Sans HW HC;Noto Sans Mono CJK HK;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "FIXED": "思源黑體 香港 HW;Source Han Sans HW HC;Noto Sans Mono CJK HK;細明體;MingLiU;Liberation Mono;Menlo;Courier New;Monospaced",
+    "UI_SANS": "思源黑體 香港;Source Han Sans HC;Noto Sans HK;Noto Sans CJK HK;蘋方-港;PingFang HK;儷黑 Pro;LiHei Pro;微軟正黑體;Microsoft JhengHei;新細明體;PMingLiU;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif"
+  },
+  "zh-SG": {
+    "LATIN_FIXED": "思源黑体 HW;Source Han Sans HW SC;思源黑体 CN;Source Han Sans CN;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced",
+    "CJK_DISPLAY": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_HEADING": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_PRESENTATION": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_SPREADSHEET": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;萍方-简;PingFang SC;华文细黑;STXihei;Arial Unicode MS;Tahoma",
+    "CJK_TEXT": "思源宋体;Source Han Serif SC;思源宋体 CN;Source Han Serif CN;Noto Serif SC;Noto Serif CJK SC;新宋体;NSimSun;宋体;SimSun;华文宋体;Songti SC;STSong;Arial Unicode MS;Tahoma",
+    "UI_FIXED": "思源黑体 HW;Source Han Sans HW SC;思源黑体 CN;Source Han Sans CN;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced",
+    "FIXED": "思源黑体 HW;Source Han Sans HW SC;思源黑体 CN;Source Han Sans CN;Noto Sans Mono CJK SC;新宋体;NSimSun;Liberation Mono;Menlo;Courier New;Monospaced",
+    "UI_SANS": "思源黑体;Source Han Sans SC;思源黑体 CN;Source Han Sans CN;Noto Sans SC;Noto Sans CJK SC;微软雅黑;Microsoft Yahei;新宋体;NSimSun;宋体;SimSun;萍方-简;PingFang SC;华文细黑;STXihei;Segoe UI;Tahoma;San Francisco;Lucida Grande;Sans Serif"
+  },
+  "ko-KR": {
+    "LATIN_FIXED": "Noto Sans Mono CJK KR;Source Han Mono KR;Source Han Mono;D2 Coding;Nanum Gothic Coding;Noto Sans CJK KR;Noto Sans KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "LATIN_DISPLAY": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "LATIN_HEADING": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "LATIN_PRESENTATION": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Arial Unicode MS;Lucida Sans Unicode;Tahoma",
+    "LATIN_SPREADSHEET": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;바탕;Batang;바탕체;BatangChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim",
+    "LATIN_TEXT": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Arial Unicode MS;Lucida Sans Unicode;Tahoma",
+    "SANS": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;Arial Unicode MS;Lucida Sans Unicode;Tahoma;SansSerif",
+    "SANS_UNICODE": "Noto Sans CJK KR;Source Han Sans CJK KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;Baekmuk Gulim;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;Baekmuk Batang;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif",
+    "SERIF": "Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;나눔명조 옛한글;NanumMyeongjo YetHangul;Noto Serif KR;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif",
+    "CJK_DISPLAY": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS",
+    "CJK_HEADING": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode",
+    "CJK_PRESENTATION": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode",
+    "CJK_SPREADSHEET": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode",
+    "CJK_TEXT": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;NanumMyeongjo YetHangul;나눔고딕;NanumGothic;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;돋움;Dotum;굴림;Gulim;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;Arial Unicode MS;Lucida Sans Unicode",
+    "UI_FIXED": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "UI_SANS": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode;AndaleSansUI;GNU-Unifont",
+    "FIXED": "Noto Sans Mono CJK KR;Source Han Mono KR;Source Han Mono;D2 Coding;Nanum Gothic Coding;Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced"
+  },
+  "bn": {
+    "UI_SANS": "Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;Geneva;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif",
+    "CTL_DISPLAY": "Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "bo": {
+    "UI_SANS": "Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_DISPLAY": "Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_HEADING": "Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_PRESENTATION": "Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_SPREADSHEET": "Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_TEXT": "Tibetan Machine Uni;Kailasa;Microsoft Himalaya"
+  },
+  "dz": {
+    "UI_SANS": "Wangdi;Dzongkha Machine Uni;Tibetan Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Kailasa;Microsoft Himalaya",
+    "CTL_DISPLAY": "Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_HEADING": "Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_PRESENTATION": "Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_SPREADSHEET": "Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya",
+    "CTL_TEXT": "Wangdi;Dzongkha Machine Uni;Wangdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni;Kailasa;Microsoft Himalaya"
+  },
+  "km": {
+    "UI_SANS": "Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer",
+    "CTL_DISPLAY": "Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer",
+    "CTL_HEADING": "Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer",
+    "CTL_PRESENTATION": "Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer",
+    "CTL_SPREADSHEET": "Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer",
+    "CTL_TEXT": "Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer"
+  },
+  "lo": {
+    "UI_SANS": "Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao",
+    "CTL_DISPLAY": "Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao",
+    "CTL_HEADING": "Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Laog",
+    "CTL_PRESENTATION": "Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao",
+    "CTL_SPREADSHEET": "Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao",
+    "CTL_TEXT": "Phetsarath OT;Arial Unicode MS;Dok Champa;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao"
+  },
+  "my": {
+    "UI_SANS": "Padauk;Myanmar3;MyMyanmar Unicode;Parabaik",
+    "CTL_DISPLAY": "Padauk;Myanmar3;MyMyanmar Unicode;Parabaik",
+    "CTL_HEADING": "Padauk;Myanmar3;MyMyanmar Unicode;Parabaik",
+    "CTL_PRESENTATION": "Padauk;Myanmar3;MyMyanmar Unicode;Parabaik",
+    "CTL_SPREADSHEET": "Padauk;Myanmar3;MyMyanmar Unicode;Parabaik",
+    "CTL_TEXT": "Padauk;Myanmar3;MyMyanmar Unicode;Parabaik"
+  },
+  "ne": {
+    "UI_SANS": "Lohit Nepali;Kalimati;Samanata;Sans",
+    "CTL_DISPLAY": "Lohit Nepali;Kalimati;Samanata;Sans",
+    "CTL_HEADING": "Lohit Nepali;Kalimati;Samanata;Sans",
+    "CTL_PRESENTATION": "Lohit Nepali;Kalimati;Samanata;Sans",
+    "CTL_SPREADSHEET": "Lohit Nepali;Kalimati;Samanata;Sans",
+    "CTL_TEXT": "Lohit Nepali;Kalimati;Samanata;Sans"
+  },
+  "as": {
+    "UI_SANS": "Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Assamese;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "hi": {
+    "UI_SANS": "Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Hindi;Mangal;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "gu": {
+    "UI_SANS": "Lohit Gujarati;Shruti;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Gujarati;Shruti;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Gujarati;Shruti;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Gujarati;Shruti;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Gujarati;Shruti;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Gujarati;Shruti;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "kn": {
+    "UI_SANS": "Lohit Kannada;Tunga;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Kannada;Tunga;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Kannada;Tunga;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Kannada;Tunga;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Kannada;Tunga;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Kannada;Tunga;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "mai": {
+    "UI_SANS": "Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "ml": {
+    "UI_SANS": "AnjaliOldLipi;Lohit Malayalam;Meera;Tahoma;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "AnjaliOldLipi;Lohit Malayalam;Meera;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "AnjaliOldLipi;Lohit Malayalam;Meera;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "AnjaliOldLipi;Lohit Malayalam;Meera;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "AnjaliOldLipi;Lohit Malayalam;Meera;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "AnjaliOldLipi;Lohit Malayalam;Meera;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "mr": {
+    "UI_SANS": "Lohit Marathi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Marathi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Marathi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Marathi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Marathi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Marathi;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "or": {
+    "UI_SANS": "utkal;Kalinga;Lohit Oriya;Samyak Oriya;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "pa-IN": {
+    "UI_SANS": "Raavi;Lohit Punjabi;Saab;Gurmukhi MT;Tahoma",
+    "CTL_DISPLAY": "Raavi;Lohit Punjabi;Saab;Gurmukhi MT;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Raavi;Lohit Punjabi;Saab;Gurmukhi MT;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Raavi;Lohit Punjabi;Saab;Gurmukhi MT;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Raavi;Lohit Punjabi;Saab;Gurmukhi MT;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Raavi;Lohit Punjabi;Saab;Gurmukhi MT;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "ta": {
+    "UI_SANS": "Lohit Tamil;Latha;Sans Serif",
+    "CTL_DISPLAY": "Lohit Tamil;Latha;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Tamil;Latha;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Tamil;Latha;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Tamil;Latha;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Tamil;Latha;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "te": {
+    "UI_SANS": "Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS",
+    "CTL_HEADING": "Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS",
+    "CTL_PRESENTATION": "Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS",
+    "CTL_TEXT": "Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS"
+  },
+  "ur": {
+    "UI_SANS": "PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  },
+  "ak-GH": {
+    "LATIN_DISPLAY": "Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Tahoma;SansSerif",
+    "LATIN_HEADING": "Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif",
+    "LATIN_FIXED": "FreeMono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "LATIN_PRESENTATION": "Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Tahoma;SansSerif",
+    "LATIN_SPREADSHEET": "Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif",
+    "LATIN_TEXT": "Aboriginal Serif;FreeSerif;Luxi Serif;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Serif",
+    "SANS": "Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif",
+    "SERIF": " Aboriginal Serif;FreeSerif;Luxi Serif;Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;Times;Lucida Serif;Lucida Bright;Serif",
+    "UI_FIXED": "FreeMono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "FIXED": "FreeMono;Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Luxi Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced",
+    "UI_SANS": "Arial Unicode MS;Lucida Sans Unicode;Aboriginal Sans;FreeSans;Albany AMT;Albany;Arial;Nimbus Sans L;Luxi Sans;Helvetica;Lucida;Geneva;Helmet;Tahoma;SansSerif"
+  },
+  "si": {
+    "UI_SANS": "LKLUG;Iskoola Pota;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU",
+    "CTL_DISPLAY": "Iskoola Pota;LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_HEADING": "Iskoola Pota;LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_PRESENTATION": "Iskoola Pota;LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_SPREADSHEET": "Iskoola Pota;LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS",
+    "CTL_TEXT": "Iskoola Pota;LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS"
+  }
+}

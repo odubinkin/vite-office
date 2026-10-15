@@ -1,4 +1,4 @@
-/** @fileoverview Original non-ISO LanguageTag::getFallbackStrings order over already decomposed language-tag values; canonicalization and parsing remain separate responsibilities. */
+/** @fileoverview Original non-ISO LanguageTag::getFallbackStrings order over already decomposed language-tag values; canonicalization remains separate; shared canonical-tag field projection is an explicit browser boundary. */
 /** Original field values read by the fallback algorithm, after language-tag parsing. */
 export interface LanguageTagFallbackFields {
   readonly tag: string;
@@ -61,4 +61,19 @@ export function getFallbackStrings(fields: LanguageTagFallbackFields): string[] 
   if (country && language === "sr" && country === "CS") result.push("sr-YU");
   if (language && language !== tag) result.push(language);
   return result;
+}
+
+/** Decomposes an already canonical BCP47 value for the existing fallback algorithm. This field projection does not implement LanguageTag validation/canonicalization or a replacement language service. @param tag - Canonical value from a native qlt Locale variant. @returns Fields consumed by getFallbackStrings. */
+export function decomposeCanonicalLanguageTag(tag: string): LanguageTagFallbackFields {
+  const parts = tag.split("-"),
+    language = parts.shift() as string;
+  const script = /^[A-Za-z]{4}$/.test(parts[0] ?? "") ? (parts.shift() as string) : "";
+  const country =
+    parts[0] && /^(?:[A-Z]{2}|[0-9]{3})$/.test(parts[0]) ? (parts.shift() as string) : "";
+  const extension = parts.findIndex(
+    /** Locates extension singleton. @param part - Subtag. @returns Extension start. */ (part) =>
+      part.length === 1,
+  );
+  const variants = (extension < 0 ? parts : parts.slice(0, extension)).join("-");
+  return { tag, language, country, script, variants };
 }

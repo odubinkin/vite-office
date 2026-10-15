@@ -3926,3 +3926,13 @@ Task162 extends existing shared Font metadata with native empty style, FAMILY_DO
 The represented native values are prerequisites of ScDocumentPool font items,
 not a completed OutputDevice or spreadsheet default-font provider. Whole-Calc
 and related shared/Writer verification results are retained in the task README.
+
+## Configured default-font candidates (task163)
+
+Task163 ports all23 DefaultFontType IDs, all33 locales/256 configured DefaultFonts properties from pinned VCL.xcu, source exact/language/non-ISO/en lookup order and GetNextFontToken UTF16 borrowed-view/index behavior. getConfiguredDefaultFont is a field-specific resource binding on actual prepared Locale/OUString values, not a fabricated DefaultFontConfiguration/LanguageTag/UNO/OutputDevice service. Canonical-tag decomposition is shared with existing numeric locale data; native fallback algorithm is reused. Native system-locale parsing, configuration overrides/provider APIs, UI-font special fallback, physical font matching/substitution, font search-name normalization and other fontdefs operations remain pending. No C++ compilation/probe, new lifetime engine or UI localization.
+
+The complete resource projection is stored at
+`unotools/source/config/data/default-fonts.json` under the shared source root,
+with original MPL-2.0/Apache-2.0 source attribution in pinned VCL.xcu. Its locale
+keys preserve LanguageTag country casing. Verification audits the complete
+resource rather than only fonts installed on this development machine.

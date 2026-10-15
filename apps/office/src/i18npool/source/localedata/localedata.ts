@@ -1,7 +1,10 @@
 /** @fileoverview Browser resource binding for the actual LocaleDataImpl numeric decimal field, preserving source first-name/language/default fallback and qlt fallback order. No UNO service facade is fabricated. */
 import separators from "./data/decimal-separators.json" with { type: "json" };
 import languageFallbacks from "../../../i18nlangtag/source/isolang/locale-fallbacks.json" with { type: "json" };
-import { getFallbackStrings } from "../../../i18nlangtag/source/languagetag/languagetag";
+import {
+  getFallbackStrings,
+  decomposeCanonicalLanguageTag,
+} from "../../../i18nlangtag/source/languagetag/languagetag";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 /** Actual embedded source resource values; no current Intl decimal data is substituted. */
 const resources = new Map<string, string>(Object.entries(separators));
@@ -39,24 +42,7 @@ export function getLocaleDecimalSeparator(locale: LocaleConstReference): string 
   const direct = lookup(first);
   if (direct !== undefined) return direct;
   if (language === "qlt") {
-    const parts = variant.split("-"),
-      lang = parts.shift() as string;
-    const script = /^[A-Za-z]{4}$/.test(parts[0] ?? "") ? (parts.shift() as string) : "";
-    const region =
-      parts[0] && /^(?:[A-Z]{2}|[0-9]{3})$/.test(parts[0]) ? (parts.shift() as string) : "";
-    const extension = parts.findIndex(
-      /** Original extension boundary after variants. @param part - Subtag. @returns Singleton flag. */ (
-        part,
-      ) => part.length === 1,
-    );
-    const variants = (extension < 0 ? parts : parts.slice(0, extension)).join("-");
-    for (const candidate of getFallbackStrings({
-      tag: variant,
-      language: lang,
-      country: region,
-      script,
-      variants,
-    })) {
+    for (const candidate of getFallbackStrings(decomposeCanonicalLanguageTag(variant))) {
       const value = lookup(candidate.replaceAll("-", "_"));
       if (value !== undefined) return value;
     }

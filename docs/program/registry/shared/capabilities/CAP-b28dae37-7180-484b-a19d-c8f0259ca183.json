@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b28dae37-7180-484b-a19d-c8f0259ca183",
+    "capabilityId": "CAP-b28dae37-7180-484b-a19d-c8f0259ca183",
+    "suite": "shared",
+    "subsystem": "configured-default-fonts",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original default-font roles select complete pinned resource values.",
+      "Prepared locale lookup preserves exact/language/non-ISO/en order, with unknown roles returning empty.",
+      "Token parsing preserves commas/semicolons, empty tokens, spaces, UTF16 units and signed index termination."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task163 ports all23 DefaultFontType IDs, all33 locales/256 configured DefaultFonts properties from pinned VCL.xcu, source exact/language/non-ISO/en lookup order and GetNextFontToken UTF16 borrowed-view/index behavior. getConfiguredDefaultFont is a field-specific resource binding on actual prepared Locale/OUString values, not a fabricated DefaultFontConfiguration/LanguageTag/UNO/OutputDevice service. Canonical-tag decomposition is shared with existing numeric locale data; native fallback algorithm is reused. Native system-locale parsing, configuration overrides/provider APIs, UI-font special fallback, physical font matching/substitution, font search-name normalization and other fontdefs operations remain pending. No C++ compilation/probe, new lifetime engine or UI localization."
+    },
+    "capability": "Configured default-font candidates and native UTF16 tokens",
+    "gaps": [
+      "Actual configuration/system locale/default-font device/physical matching/substitution remain pending; Calc document/UI/ODS are not ready."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/unotools/inc/fontdefs.ts",
+          "marker": "DefaultFontType"
+        },
+        {
+          "path": "apps/office/src/unotools/source/misc/fontdefs.ts",
+          "marker": "GetNextFontToken"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/fontcfg.ts",
+          "marker": "getConfiguredDefaultFont"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/data/default-fonts.json",
+          "marker": "LATIN_SPREADSHEET"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unotools/source/config/native-default-fonts.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/unotools/source/misc/native-font-token.test.ts",
+          "marker": "it.each("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Configured default-font candidates (task163)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/unotools/fontdefs.hxx",
+          "marker": "DefaultFontType"
+        },
+        {
+          "path": "unotools/source/misc/fontdefs.cxx",
+          "marker": "GetNextFontToken"
+        },
+        {
+          "path": "unotools/source/config/fontcfg.cxx",
+          "marker": "DefaultFontConfiguration::getDefaultFont"
+        },
+        {
+          "path": "officecfg/registry/data/org/openoffice/VCL.xcu",
+          "marker": "DefaultFonts"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vcl/qa/cppunit/physicalfontcollection.cxx",
+          "marker": "testShouldFindFontFamilyByTokenNames"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/unotools/fontdefs.hxx",
+          "marker": "DefaultFontType"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "configured-default-font-candidates",
+    "scopeLimitations": [
+      "Task163 ports all23 DefaultFontType IDs, all33 locales/256 configured DefaultFonts properties from pinned VCL.xcu, source exact/language/non-ISO/en lookup order and GetNextFontToken UTF16 borrowed-view/index behavior. getConfiguredDefaultFont is a field-specific resource binding on actual prepared Locale/OUString values, not a fabricated DefaultFontConfiguration/LanguageTag/UNO/OutputDevice service. Canonical-tag decomposition is shared with existing numeric locale data; native fallback algorithm is reused. Native system-locale parsing, configuration overrides/provider APIs, UI-font special fallback, physical font matching/substitution, font search-name normalization and other fontdefs operations remain pending. No C++ compilation/probe, new lifetime engine or UI localization.",
+      "The native physical-font token-name test is a parent consumer reference only, not a ported equivalent or proof of physical collection/device selection. Direct configuration/token QA was not found by targeted and broader test searches; current acceptance is source/resource-derived."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
