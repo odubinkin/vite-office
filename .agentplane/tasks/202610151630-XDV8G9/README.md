@@ -1,10 +1,11 @@
 ---
 id: "202610151630-XDV8G9"
 title: "Port native text-object paragraph content values"
-status: "DOING"
+result_summary: "Implemented native ContentInfo/XEditAttribute/WrongList values, canonical EE/style declarations and shared Set/holder pool-copy contracts without native lifetime machinery; inventory and source quirks recorded. Higher-level text engine/Calc document/UI/ODS remain pending; goal active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Actual ContentInfo/XEditAttribute/WrongList values reuse real shared string/item/pool owners; complete measured shared and Calc raw counters are positive, with exact owner sets. Original slot/default/request/nonshareable cases, clear-first/self Set, parent ranges, separate spelling equality and source quirks have direct tests."
     - "No native ownership manager, refcount/cache/physical pointer interning, fake engine/provider, UI localization or guard algorithm change. Base Clone emitted runtime is identical; both complete boundary guard files match baseline. Native references are restored and final source hashes match the reviewed commit."
-commit: null
+commit:
+  hash: "9f9f85dfc950b0da4a75d10dcf1ba880c1679b14"
+  message: "🚧 XDV8G9 core: port paragraph content values and pool-targeted copies"
 comments:
   -
     author: "CODER"
     body: "Start: real native paragraph content and character/spell-state values, canonical item-set copies and GC value bindings; no high-level pool/text-engine facade."
+  -
+    author: "CODER"
+    body: "Verified: native paragraph content and attribute values, target-pool copies and stored spelling ranges match the bounded source contracts;194related/187Calc/19browser tests, strict100coverage,13gates and exact hashes pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified source 9f9f85dfc950:194 related and187Calc tests plus19browser cases and build pass; exact8shared/33Calc owners raw S/B/F/L100/every counter positive; all13gates/inventory0,19native pins/70EE declarations,46paths/4059hashes and4reference links restored. Base Clone runtime unchanged; same-agent quality pass. Full engine/Calc model/UI/ODS remain pending, goal active."
+  -
+    type: "status"
+    at: "2026-10-15T17:11:08.170Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native paragraph content and attribute values, target-pool copies and stored spelling ranges match the bounded source contracts;194related/187Calc/19browser tests, strict100coverage,13gates and exact hashes pass."
 doc_version: 3
-doc_updated_at: "2026-10-15T17:10:49.478Z"
+doc_updated_at: "2026-10-15T17:11:08.171Z"
 doc_updated_by: "CODER"
 description: "Task158 implements original ContentInfo and XEditAttribute text/style/paragraph/character value storage and pool-aware copies from editobj.cxx/editobj2.hxx, genuine WrongList range/value transformations required by copied spell state, original EE Which declarations and SfxStyleFamily, and required SfxItemSet.Set plus GC-owned item-holder value binding. Reuse OUString/SharedString and existing pools/items. Full actual EditTextObject/EditEngine pool, normalization provider and ContentNode-dependent spell operation remain subsequent owners, with no fake factories or memory manager."
 sections:
