@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610152117-G4ZX6N",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T21:31:39.830Z",
+  "verdict": "pass",
+  "summary": "Approved actual core style base/pool owner scope is implemented with reused shared dependencies and complete bounded evidence; same-agent evaluation, not independent review.",
+  "evaluated_sha": "559a1885d0d4419a47d1dd0a24d77d22ff19f5b4",
+  "blueprint_digest": "bcb2c32d99aace9264709f677b611319bff7fe598fb9e81b03e224114106dce7",
+  "findings": [
+    "Actual core pool eagerly owns actual index and creates actual styles;47represented native methods/hints/defaults/control flows are source-mapped. Name/parent/follow/copy/item sets/index/cache/notifications use original dependencies,with GC physical ownership and no fake provider.",
+    "249related,187Calc,13source gates,production build,1core Chromium and1Writer startup/load/edit pass; exact4shared/33Calc raw S/B/F/L sets100. Canonical style header exports real owners; responsibility split427+166lines exceeds500 without sharding classes.",
+    "CALC146/150 and152..155 are preserved. Nonempty CALC150 callback is tested only through factory exception before invalidated traversal advances. Core Clear covers actual non-UNO classes;presentation/XML/UNO/XComponent/derived styles remain explicitly absent. Broad parity flags remain false."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610152117-G4ZX6N/README.md",
+    "output/playwright/task173-checks/final-verification.json",
+    "output/playwright/task173-checks/native-audit.json",
+    "output/playwright/task173-checks/source-gates.json",
+    "output/playwright/task173-checks/build-browser-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Same-agent review is not independent. Full style/UNO/Calc document/connected UI/same-model ODS and all-app milestone remain pending; native invalid pointer/lifetime/ABI outcomes are not claimed."
+  ]
+}
