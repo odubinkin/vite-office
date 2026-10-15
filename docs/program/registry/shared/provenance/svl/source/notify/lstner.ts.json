@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/svl/source/notify/native-sfx-notifications.test.ts",
           "marker": "ports AddingListenersIncreasesCount"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-style-sheet.test.ts",
+          "marker": "constructs the actual shared factory"
         }
       ],
       "upstream": [
@@ -32,7 +36,9 @@
     "localPath": "apps/office/src/svl/source/notify/lstner.ts",
     "localSymbols": [
       "DuplicateHandling",
-      "SfxListener"
+      "SfxListener",
+      "withSfxListener",
+      "SfxListenerBase"
     ],
     "omittedResponsibilities": [
       "Native ABI, mutex concurrency, debug backtraces, undefined invalid indices/pointers and use after native destruction are outside the browser contract.",
@@ -41,7 +47,8 @@
     ],
     "preservedResponsibilities": [
       "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion.",
-      "Native friend-only subscription operations are exposed as public host methods for TypeScript cross-class access, with no additional runtime dispatch machinery."
+      "Native friend-only subscription operations are exposed as public host methods for TypeScript cross-class access, with no additional runtime dispatch machinery.",
+      "Task174 implements actual SfxStyleSheet/SfxStyleSheetPool and erased StyleSheetUser. TypeScript generic role mixins translate native SfxStyleSheetBase+SfxListener+SfxBroadcaster multiple inheritance: the original listener/broadcaster fields and every method/copy body are reused once on the actual style this, with exact emitted-token proof. Standalone native classes retain original constructor signatures and all operations; no owner proxy/backpointer,RTTI spoof,duplicate algorithm,WeakMap or lifetime/refcount framework is added. Derived parent validation/broadcast/rebind order, original-source forwarding, copy subobject order, usage/type flags and derived/broadcaster/listener/base destruction follow source. The pool overrides only name construction and preserves inherited base-copy slicing CALC156, removed-parent links CALC157, constructor-parent non-subscription CALC158 and reentrant lookup CALC159. JS instanceof single prototype chains are not a native dynamic_cast contract; original flags/static protocols provide represented role queries. Presentation/XML/UNO/XComponent/Sc styles/document/connected UI/ODS remain pending, with broad parity unverified."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/notify/lstner.cxx",

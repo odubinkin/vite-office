@@ -1,5 +1,5 @@
 /** @fileoverview Original IndexedStyleSheets vector/name/family index and callback contracts. JS references own values; exact UTF16 Map keys replace native unordered buckets without a lifetime library. */
-import { SfxStyleFamily, type SfxStyleSheetNameReference } from "../../inc/style";
+import { SfxStyleFamily, type SfxStyleSheetNameReference } from "../../inc/style-values";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type {
   StyleSheetPredicate,

@@ -1,6 +1,6 @@
 /** @fileoverview Actual native style base/pool core owners and hints from style.cxx. Presentation/XML/UNO and derived SfxStyleSheet remain unimplemented; JS GC replaces physical native ownership, without a weak/refcount framework. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import { SfxStyleFamily, SfxStyleSearchBits } from "../../inc/style";
+import { SfxStyleFamily, SfxStyleSearchBits } from "../../inc/style-values";
 import { SfxHint, SfxHintId } from "../../inc/hint";
 import { SfxBroadcaster } from "../notify/SfxBroadcaster";
 import { IndexedStyleSheets } from "./IndexedStyleSheets";

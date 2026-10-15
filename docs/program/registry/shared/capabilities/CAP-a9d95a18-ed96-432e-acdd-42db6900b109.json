@@ -1,0 +1,115 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a9d95a18-ed96-432e-acdd-42db6900b109",
+    "capabilityId": "CAP-a9d95a18-ed96-432e-acdd-42db6900b109",
+    "suite": "shared",
+    "subsystem": "derived-style-sheet",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual style identity carries original listener/broadcaster algorithms through TypeScript role inheritance without duplicate logic or proxy owners.",
+      "Native parent/copy/forward/destruction order,usage/type queries and shared field factory are preserved with source quirks."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task174 implements actual SfxStyleSheet/SfxStyleSheetPool and erased StyleSheetUser. TypeScript generic role mixins translate native SfxStyleSheetBase+SfxListener+SfxBroadcaster multiple inheritance: the original listener/broadcaster fields and every method/copy body are reused once on the actual style this, with exact emitted-token proof. Standalone native classes retain original constructor signatures and all operations; no owner proxy/backpointer,RTTI spoof,duplicate algorithm,WeakMap or lifetime/refcount framework is added. Derived parent validation/broadcast/rebind order, original-source forwarding, copy subobject order, usage/type flags and derived/broadcaster/listener/base destruction follow source. The pool overrides only name construction and preserves inherited base-copy slicing CALC156, removed-parent links CALC157, constructor-parent non-subscription CALC158 and reentrant lookup CALC159. JS instanceof single prototype chains are not a native dynamic_cast contract; original flags/static protocols provide represented role queries. Presentation/XML/UNO/XComponent/Sc styles/document/connected UI/ODS remain pending, with broad parity unverified."
+    },
+    "capability": "Native derived style-sheet roles and factory",
+    "gaps": [
+      "Native multiple-inheritance RTTI/pointer adjustment and physical allocation/lifetime are not simulated. Native role identity is actual this with shared methods and original flags/static protocols.",
+      "Invalid static parent casts after base-copy slicing and cyclic notification graphs have no invented supported result.",
+      "Presentation/XML/UNO/XComponent,ScStyleSheet/ScStyleSheetPool and Calc document/connected UI/ODS remain pending.",
+      "Notifier QA is retained native dependency evidence; derived style tests are source-derived, not claimed native QA suite ports."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/style-sheet.ts",
+          "marker": "SfxStyleSheet"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+          "marker": "withSfxBroadcaster"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/lstner.ts",
+          "marker": "withSfxListener"
+        },
+        {
+          "path": "apps/office/src/svl/inc/stylesheetuser.ts",
+          "marker": "StyleSheetUser"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style-values.ts",
+          "marker": "SfxStyleSearchBits"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-style-sheet.test.ts",
+          "marker": "constructs the actual shared factory"
+        },
+        {
+          "path": "apps/office/e2e/shared/style-sheet.spec.ts",
+          "marker": "preserves actual style role identity"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-style-first-import.test.ts",
+          "marker": "initializes actual core owners"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native derived styles (task174)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-156"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/style.cxx",
+          "marker": "SfxStyleSheet::SetParent"
+        },
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "public svl::StyleSheetUser"
+        },
+        {
+          "path": "include/svl/stylesheetuser.hxx",
+          "marker": "StyleSheetUser"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "AddingListenersIncreasesCount"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleSheetPool"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-derived-style-sheet",
+    "scopeLimitations": [
+      "Task174 implements actual SfxStyleSheet/SfxStyleSheetPool and erased StyleSheetUser. TypeScript generic role mixins translate native SfxStyleSheetBase+SfxListener+SfxBroadcaster multiple inheritance: the original listener/broadcaster fields and every method/copy body are reused once on the actual style this, with exact emitted-token proof. Standalone native classes retain original constructor signatures and all operations; no owner proxy/backpointer,RTTI spoof,duplicate algorithm,WeakMap or lifetime/refcount framework is added. Derived parent validation/broadcast/rebind order, original-source forwarding, copy subobject order, usage/type flags and derived/broadcaster/listener/base destruction follow source. The pool overrides only name construction and preserves inherited base-copy slicing CALC156, removed-parent links CALC157, constructor-parent non-subscription CALC158 and reentrant lookup CALC159. JS instanceof single prototype chains are not a native dynamic_cast contract; original flags/static protocols provide represented role queries. Presentation/XML/UNO/XComponent/Sc styles/document/connected UI/ODS remain pending, with broad parity unverified.",
+      "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements.",
+      "Task174 acceptance:260related scenarios/26files,187Calc/76files,production build,1actual derived style Chromium scenario and1Writer startup/load/edit pass. Exact7executable shared owners raw S487/B230/F128/L430 and all33Calc S4179/B2731/F821/L3727 have every raw counter positive100. The public style facade is requested for coverage but contains only reexport declarations and contributes no executable counters; no raw counters are filtered. All13source gates pass. Eight original native blobs are pinned; every existing notifier field/method and moved constructor-copy body retains exact emitted JS tokens, with no extra role state/root behavior. Original flag enums retain exact emitted tokens in their declaration owner. Fresh core-first initialization first failed then passed after correct declaration ownership; independent derived-first entry is also verified without caller ordering/lazy loader/registry workaround. All4source links are absent during execution/restored afterward.34non-task paths fit the refined35-path same-svl scope. Preserve CALC156..159; presentation/XML/UNO/XComponent/Sc styles/document/UI/ODS and full all-app milestone remain pending. Same-agent review is not independent and broad parity flags stay false."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

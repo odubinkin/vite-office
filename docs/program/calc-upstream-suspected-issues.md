@@ -2311,3 +2311,31 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: the pool destructor first broadcasts Dying and quietly clears its index. The inherited broadcaster destructor then broadcasts another Dying before detaching listeners. A retained listener therefore sees the same pool with populated primary index on the first notification and empty primary index on the second.
 - Status: potentially surprising duplicate lifecycle notification, not a confirmed defect; derived/base destruction phases may intentionally differ. Preserve both notifications and their index-state order, without adding an idempotent disposed flag or collapsing them.
 - Local evidence: actual core pool/listener in `apps/office/src/svl/source/items/native-style-model.test.ts` and `apps/office/e2e/shared/style-model.spec.ts`. Explicit Dispose binds native destructor execution; JS GC owns physical storage and no reference-count lifetime engine is recreated.
+
+## CALC-156: shared style-pool copy factory slices to the base style
+
+- Upstream: pinned `include/svl/style.hxx`, SfxStyleSheetPool uses the base Create overloads and overrides only the field factory; `svl/source/items/style.cxx`, base copy factory and Add.
+- Observation: Make on SfxStyleSheetPool creates SfxStyleSheet, but Add uses the inherited Create(const SfxStyleSheetBase&) and constructs SfxStyleSheetBase. The stored replacement therefore lacks listener/broadcaster roles despite living in a derived pool. Explicit SfxStyleSheet copy construction separately copies all three native bases.
+- Status: suspicious inherited factory asymmetry, not a confirmed defect; derived consumers may avoid this path or override it. Preserve slicing, and do not assign a supported result to later invalid static parent casts involving the sliced object.
+- Local evidence: actual shared pools and styles in `apps/office/src/svl/source/items/native-style-sheet.test.ts`; no fake provider or native probe.
+
+## CALC-157: removing a retained parent can leave the child subscribed to it
+
+- Upstream: pinned `svl/source/items/style.cxx`, base-pool Remove/ChangeParent and SfxStyleSheet::SetParent.
+- Observation: Remove erases the parent from the index before calling ChangeParent. The child changes its stored parent through SetParent, but the derived old-parent lookup now finds no object and skips EndListening. If the removed parent is held alive externally, its broadcasts still reach the child despite the cleared parent name. Final parent destruction detaches the remaining subscription.
+- Status: potentially surprising retained-parent notification link, not a confirmed defect. Preserve removal/reparent/lookup ordering and the missing-parent guard rather than retaining an invented old lookup pointer.
+- Local evidence: actual externally held parent/child owners and forwarded hints in `apps/office/src/svl/source/items/native-style-sheet.test.ts`.
+
+## CALC-158: constructor parent name does not create a subscription
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheet field constructor and SetParent.
+- Observation: construction passes the parent name only into the base style fields. It does not StartListening to that parent. A later SetParent with the same name returns early and also does not attach. Changing to another value and back does establish the ordinary notification chain.
+- Status: potentially caller-dependent initialization behavior, not a confirmed defect or claim about later Calc overrides. Preserve stored name versus subscription state; do not silently subscribe during construction.
+- Local evidence: actual shared factory/parent/style instances in `apps/office/src/svl/source/items/native-style-sheet.test.ts`.
+
+## CALC-159: reentrant pool clearing can precede parent subscription rebinding
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheet::SetParent invokes base SetParent before its old/new parent lookups; the base broadcasts Modified synchronously.
+- Observation: a pool listener can Clear the index during that Modified callback while external references keep all styles alive. The base has already stored the new parent name, but both derived lookups can then fail: the old subscription remains and no new subscription is created. No cached parent pointers bridge the callback.
+- Status: potentially surprising reentrant ordering, not a confirmed defect. Preserve the broadcast-before-lookups order and both null guards. Do not infer outcomes for invalid cyclic graphs or dead style pointers.
+- Local evidence: actual pool Clear callback with retained owners in `apps/office/src/svl/source/items/native-style-sheet.test.ts`; this is a source-derived scenario, not a native memory or sanitizer experiment.

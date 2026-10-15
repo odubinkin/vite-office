@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/items/style-sheet.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/style.cxx",
+    "localSymbols": [
+      "SfxStyleSheet",
+      "SfxStyleSheetPool"
+    ],
+    "upstreamSymbols": [
+      "SfxStyleSheet::SfxStyleSheet",
+      "SfxStyleSheet::SetParent",
+      "SfxStyleSheet::Notify",
+      "SfxStyleSheet::isUsedByModel",
+      "SfxStyleSheet::IsSfxStyleSheet",
+      "SfxStyleSheetPool::Create"
+    ],
+    "preservedResponsibilities": [
+      "Task174 implements actual SfxStyleSheet/SfxStyleSheetPool and erased StyleSheetUser. TypeScript generic role mixins translate native SfxStyleSheetBase+SfxListener+SfxBroadcaster multiple inheritance: the original listener/broadcaster fields and every method/copy body are reused once on the actual style this, with exact emitted-token proof. Standalone native classes retain original constructor signatures and all operations; no owner proxy/backpointer,RTTI spoof,duplicate algorithm,WeakMap or lifetime/refcount framework is added. Derived parent validation/broadcast/rebind order, original-source forwarding, copy subobject order, usage/type flags and derived/broadcaster/listener/base destruction follow source. The pool overrides only name construction and preserves inherited base-copy slicing CALC156, removed-parent links CALC157, constructor-parent non-subscription CALC158 and reentrant lookup CALC159. JS instanceof single prototype chains are not a native dynamic_cast contract; original flags/static protocols provide represented role queries. Presentation/XML/UNO/XComponent/Sc styles/document/connected UI/ODS remain pending, with broad parity unverified."
+    ],
+    "omittedResponsibilities": [
+      "Native multiple-inheritance RTTI/pointer adjustment and physical allocation/lifetime are not simulated. Native role identity is actual this with shared methods and original flags/static protocols.",
+      "Invalid static parent casts after base-copy slicing and cyclic notification graphs have no invented supported result.",
+      "Presentation/XML/UNO/XComponent,ScStyleSheet/ScStyleSheetPool and Calc document/connected UI/ODS remain pending.",
+      "Notifier QA is retained native dependency evidence; derived style tests are source-derived, not claimed native QA suite ports."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/items/style-sheet.ts",
+          "marker": "SfxStyleSheet"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-style-sheet.test.ts",
+          "marker": "constructs the actual shared factory"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/items/style.cxx",
+          "marker": "SfxStyleSheet::SetParent"
+        },
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "public svl::StyleSheetUser"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/items/style-sheet.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Actual derived listener/broadcaster style responsibility is separate from the427-line core base/pool owner and166-line iterator, which together with this implementation exceed the500-line TypeScript budget. All derived style/factory methods remain together; role algorithms stay in their original notification modules without sharding classes or constructing proxy owners."
+    }
+  }
+}

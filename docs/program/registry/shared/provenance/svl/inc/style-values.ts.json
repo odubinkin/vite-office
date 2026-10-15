@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/style-values.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/style.hxx",
+    "localSymbols": [
+      "SfxStyleFamily",
+      "SfxStyleSearchBits",
+      "SfxStyleSheetNameReference",
+      "SfxStyleSheetSearchReference",
+      "SfxStyleSheetBasePoolIndexReference"
+    ],
+    "upstreamSymbols": [
+      "SfxStyleFamily",
+      "SfxStyleSearchBits",
+      "SfxStyleSheetBase",
+      "SfxStyleSheetBasePool"
+    ],
+    "preservedResponsibilities": [
+      "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements."
+    ],
+    "omittedResponsibilities": [
+      "Actual full EditTextObject/engine/pool/model/UI/ODS and ContentNode-dependent ClearWrongs/SharedStringPool normalization remain pending. Native memory/cache/refcount mechanisms and physical pointer interning identity are erased under JS GC."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/style-values.ts",
+          "marker": "SfxStyleSearchBits"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleSearchBits"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/inc/style-values.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements."
+    }
+  }
+}

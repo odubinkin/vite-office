@@ -5,7 +5,7 @@ import {
   type SfxStyleSheetBasePoolIndexReference,
   type SfxStyleSheetSearchReference,
   type SfxStyleSheetNameReference,
-} from "../../inc/style";
+} from "../../inc/style-values";
 import { SearchBehavior } from "./IndexedStyleSheets";
 import type { StyleSheetPredicate } from "../../inc/IndexedStyleSheets";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
