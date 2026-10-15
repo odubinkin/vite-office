@@ -1,10 +1,11 @@
 ---
 id: "202610152200-ACZW08"
 title: "Implement native user defaults in shared item pools for Calc page styles"
-status: "DOING"
+result_summary: "Implemented actual user-default metadata and APIs,canonical shared entry binding and secondary master clone targets;211related and187Calc tests pass with strict100. Connected UI and ODS remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/task175-checks/native-audit.json"
   findings:
     - "Reviewed eight pinned native source blobs and current implementation; existing binder tokens differ only in master operands,Put only changes its clone call,and ordinary holder delegates without changing borrowed arguments. Existing other method bodies retain emitted tokens."
-commit: null
+commit:
+  hash: "1ecf5ff95a5180b425c5f3365379ba50e8060184"
+  message: "📝 ACZW08 core: record native user defaults quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native user-default metadata and actual pool operations using the unchanged shared logical item binder and portable source-backed verification."
+  -
+    author: "CODER"
+    body: "Verified: native user defaults and original/effective pool values preserve pinned contracts; master-target entry binding and Put reuse pass related and Calc strict100,13gates,build and Chromium plus Writer startup."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs, build-browser-portable.mjs and final-audit.mjs in output/playwright/task175-checks. Result: pass. Evidence:211related/20files,187Calc/76files; exact2shared S390/B292/F79/L315 and33Calc S4179/B2731/F821/L3727 every raw counter positive100;13gates;build,shared Chromium,Writer startup/load/edit. Eight pinned originals and master-normalized binder/33method token proofs. Scope: native user defaults,original/effective getters,canonical Put/holder entry,master clone targets. Four refs absent at runtime/restored. No full all-app run; minimum UI/ODS milestone remains pending."
+  -
+    type: "status"
+    at: "2026-10-15T22:24:12.715Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native user defaults and original/effective pool values preserve pinned contracts; master-target entry binding and Put reuse pass related and Calc strict100,13gates,build and Chromium plus Writer startup."
 doc_version: 3
-doc_updated_at: "2026-10-15T22:23:45.261Z"
+doc_updated_at: "2026-10-15T22:24:12.716Z"
 doc_updated_by: "CODER"
 description: "Task175: implement actual ItemInfoUser and SfxItemPool Set/Get/ResetUserDefaultItem, original-versus-effective default lookup and shared logical item binding reused with SfxPoolItemHolder. Required by ScStyleSheet page defaults; no custom refcount/cache lifetime engine or fabricated Calc style."
 sections:
@@ -109,6 +122,10 @@ sections:
     - Observation: Full native helper definition is in globalpool.cxx: slot and ordinary/nested value clones target rPool.GetMasterPool(), but the existing logical binder still uses the supplied pool. This was equivalent for its earlier single-pool scope and became incorrect once actual secondary chains were implemented.
       Impact: Canonical shared value binding needs a narrow master-pool correction; unchanged-whole-binder evidence alone would preserve a different end state. Previously passing profiles do not prove chained clone targets.
       Resolution: Under standing user approval to correct shared modules, update the approved native evidence contract: change only master target operands, add actual chained scalar/slot/nested/held-copy cases and token-prove every other operation unchanged. Pin globalpool.cxx as the real helper definition; no memory/cache policy is added.
+extensions:
+  implementation_commit:
+    hash: "9d10bb2a0f5d0a3630a1a357cedad14268cda67f"
+    message: "🔧 ACZW08 core: implement native pool user defaults and master entry binding"
 id_source: "generated"
 ---
 ## Summary
