@@ -2212,3 +2212,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: Set clears the destination before examining the source. When both references identify the same set, its direct values disappear and the operation may return false. The returned flag describes subsequent insertions rather than the initial clear. Inherited SET values may still be copied by the deep path when a parent exists.
 - Status: surprising self-assignment and return behavior, not a confirmed defect. Preserve the ordering; do not add a self-assignment shortcut.
 - Local evidence: `apps/office/src/svl/source/items/native-itemset-set-holder.test.ts`.
+
+## CALC-142: URL field Name is copied but excluded from equality and hashing
+
+- Upstream: pinned `include/editeng/flditem.hxx` SvxURLField m_Name/GetName/SetName and `editeng/source/items/flditem.cxx` SvxURLField::operator==/hashCode.
+- Observation: copy/Clone preserves m_Name (documented as alternative text), but equality compares only format, URL, representation and target frame. Hash uses the same four values. Two fields differing only in Name remain equal; inserting their SvxFieldItem values into the real SfxItemSet can therefore return unchanged and retain the previous Name.
+- Status: potentially surprising omitted state, not a confirmed defect. Preserve all copied strings and the literal equality/hash omission; do not add Name to comparison/hash to repair upstream.
+- Local evidence: `apps/office/src/editeng/source/items/native-field-values.test.ts`, including independent copies and an actual item-set change-gate assertion. No native compiler/probe or memory test.
