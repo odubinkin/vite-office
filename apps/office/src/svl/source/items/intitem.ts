@@ -4,6 +4,10 @@ import { SfxPoolItem } from "./poolitem";
 import { CntByteItem, CntInt32Item, CntUInt16Item, CntUInt32Item } from "./cintitem";
 
 import type { SfxItemPool } from "./itempool";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import type { SfxItemPresentation } from "../../inc/poolitem";
+import type { MapUnit } from "../../../tools/inc/mapunit";
 /** Original unsigned32 subclass with default factory and implicit copying. */
 export class SfxUInt32Item extends CntUInt32Item {
   /** Original zero/default/value and copy forms. @param source - Which or actual const source. @param value - Unsigned payload. @returns Item. */
@@ -38,38 +42,83 @@ export class SfxUInt16Item extends CntUInt16Item {
     return new SfxUInt16Item(this);
   }
 }
-/** Signed-16-bit SfxPoolItem counterpart used by Writer list levels. */
+/** Original signed16 pooled value with explicit checked JS scalar inputs. */
 export class SfxInt16Item extends SfxPoolItem {
-  /** Creates a signed-16-bit item. @param which - Item identity. @param value - Signed-16-bit value. @returns Nothing. */
-  public constructor(
-    which = 0,
-    private readonly value = 0,
-  ) {
-    super(which);
-    if (!Number.isInteger(value) || value < -32768 || value > 32767)
-      throw new Error("SfxInt16Item value is outside the signed 16-bit range.");
+  private value: number;
+  /** Original default/value/implicit-copy forms over the existing checked host scalar domain. @param source - Which or copied value. @param value - Signed16 scalar. @returns Item. */
+  public constructor(source: number | Readonly<SfxInt16Item> = 0, value = 0) {
+    super(typeof source === "number" ? source : source.Which());
+    this.value = typeof source === "number" ? value : source.GetValue();
+    this.SetValue(this.value);
   }
-
-  /** Returns the stored integer. @returns Signed-16-bit item value. */
+  /** Original zero-Which/zero-value factory. @returns Default item. */
+  public static CreateDefault(): SfxInt16Item {
+    return new SfxInt16Item();
+  }
+  /** Original signed16 value query. @returns Stored payload. */
   public GetValue(): number {
     return this.value;
   }
-
-  /** Creates an independent integer item. @returns Cloned item. */
-  public Clone(): SfxInt16Item {
-    return new SfxInt16Item(this.Which(), this.value);
+  /** Original value assignment over the established checked JS signed16 input domain. @param value - Signed16 scalar. @returns Nothing. */
+  public SetValue(value: number): void {
+    if (!Number.isInteger(value) || value < -32768 || value > 32767)
+      throw new Error("SfxInt16Item value is outside the signed 16-bit range.");
+    this.value = value;
   }
-
-  /** Compares integer item identity and value. @param other - Candidate item. @returns True for an equal integer item. */
+  /** Original independent copy clone. @param pool - Unused native pool. @returns Copied item. */
+  public Clone(pool?: SfxItemPool): SfxInt16Item {
+    void pool;
+    return new SfxInt16Item(this);
+  }
+  /** Original same-concrete-type payload equality; Which comparison belongs to areSame. @param other - Candidate item. @returns Whether stored values equal. */
   public equals(other: SfxPoolItem): boolean {
     return (
-      other instanceof SfxInt16Item && other.Which() === this.Which() && other.value === this.value
+      other instanceof SfxInt16Item &&
+      other.constructor === this.constructor &&
+      other.value === this.value
     );
   }
-
-  /** Returns the integer value through the generic item contract. @returns Integer value. */
-  public override QueryValue(): number {
-    return this.value;
+  /** Original final hash-support flag. @returns True. */
+  public supportsHashCode(): boolean {
+    return true;
+  }
+  /** Original value-only size_t hash using the existing unsigned64 logical hash convention, never persisted as document data. @returns Value hash. */
+  public hashCode(): bigint {
+    return BigInt.asUintN(64, BigInt(this.value));
+  }
+  /** Existing browser scalar projection. @returns Signed16 value. */
+  public override QueryValue(): number;
+  /** Original short Any query ignoring the member selector. @param output - Actual output. @param member - Ignored member. @returns True. */
+  public override QueryValue(output: Any, member?: number): boolean;
+  /** Original typed query alongside the existing browser scalar boundary. @param output - Optional actual Any. @param member - Ignored native selector. @returns Native success or scalar. */
+  public override QueryValue(output?: Any, member = 0): number | boolean {
+    void member;
+    if (output === undefined) return this.value;
+    output.insert([this.value], "sal_Int16");
+    return true;
+  }
+  /** Original short extraction, preserving the value on failure. @param input - Actual Any. @param member - Ignored selector. @returns Extraction success. */
+  public override PutValue(input: unknown, member: number): boolean {
+    void member;
+    const value: [number] = [0];
+    if (!(input instanceof Any) || !input.extract(value, "sal_Int16")) return false;
+    this.value = value[0];
+    return true;
+  }
+  /** Original locale-independent OUString number presentation; no resources or locale service are used. @param presentation - Ignored degree. @param coreMetric - Ignored unit. @param presentationMetric - Ignored unit. @param text - Actual mutable output string. @param intl - Unused native provider parameter. @returns True. */
+  public GetPresentation(
+    presentation: SfxItemPresentation,
+    coreMetric: MapUnit,
+    presentationMetric: MapUnit,
+    text: OUString,
+    intl: unknown,
+  ): boolean {
+    void presentation;
+    void coreMetric;
+    void presentationMetric;
+    void intl;
+    text.assign(new OUString(OUString.number(this.value)));
+    return true;
   }
 }
 

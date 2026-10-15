@@ -1,6 +1,8 @@
 /** @fileoverview Source-backed original merge/filter/pivot flag meanings and shared item transport; original full document QA remains unexecuted. */
 
 import { expect, it } from "vitest";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { ScMF, ScMergeFlagAttr } from "../../../inc/attrib";
 import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -105,4 +107,31 @@ it("transports the concrete flag owner through the existing shared item set" /**
   expect(stored.IsHorOverlapped()).toBe(true);
   expect(stored.HasAutoFilter()).toBe(true);
   expect(stored.Clone(pool).equals(stored)).toBe(true);
+});
+
+it("inherits native signed16 mutation and typed transport while preserving merge flag meanings", /** Actual derived owner reuses corrected shared base without a Calc compatibility branch. @returns Nothing. */ () => {
+  const item = new ScMergeFlagAttr();
+  item.SetValue(ScMF.Hor | ScMF.Ver | ScMF.Auto);
+  expect(item.IsOverlapped()).toBe(true);
+  expect(item.HasAutoFilter()).toBe(true);
+  const copy = item.Clone(),
+    output = new Any(),
+    value: [number] = [0];
+  expect(item.QueryValue(output, 255)).toBe(true);
+  expect(output.extract(value, "sal_Int16")).toBe(true);
+  expect(value[0]).toBe(7);
+  expect(item.PutValue(new Any([ScMF.Button], "sal_Int16"), 128)).toBe(true);
+  expect(item.HasPivotButton()).toBe(true);
+  expect(item.IsOverlapped()).toBe(false);
+  expect(item.HasAutoFilter()).toBe(false);
+  expect(copy.GetValue()).toBe(7);
+  const otherWhich = item.Clone();
+  otherWhich.SetWhich(149);
+  expect(item.equals(otherWhich)).toBe(true);
+  expect(SfxPoolItem.areSame(item, otherWhich)).toBe(false);
+  const base = new SfxInt16Item(item.Which(), item.GetValue());
+  expect(base.equals(item)).toBe(false);
+  expect(item.equals(base)).toBe(false);
+  expect(item.supportsHashCode()).toBe(true);
+  expect(item.hashCode()).toBe(BigInt(ScMF.Button));
 });

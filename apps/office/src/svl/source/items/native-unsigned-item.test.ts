@@ -118,12 +118,12 @@ it("preserves unsigned32 Any signed projection and original signed32 input class
   expect(item.PutValue(-1)).toBe(true);
   expect(item.GetValue()).toBe(4294967295);
 });
-it("retains unchanged existing signed16 browser contracts while measuring the complete shared source owner", /** Covers existing sibling methods without a native parity claim. @returns Nothing. */ () => {
+it("retains checked signed16 browser scalar inputs with canonical payload equality", /** Covers existing sibling scalar input boundaries and source-corrected Which-independent payload equality. @returns Nothing. */ () => {
   const item = new SfxInt16Item(80, 7);
   expect(item.GetValue()).toBe(7);
   expect(item.QueryValue()).toBe(7);
   expect(item.equals(item.Clone())).toBe(true);
-  expect(item.equals(new SfxInt16Item(81, 7))).toBe(false);
+  expect(item.equals(new SfxInt16Item(81, 7))).toBe(true);
   expect(item.equals(new SfxInt16Item(80, 8))).toBe(false);
   expect(item.equals(new SfxUInt16Item())).toBe(false);
   for (const value of [-32769, 32768, 0.5])

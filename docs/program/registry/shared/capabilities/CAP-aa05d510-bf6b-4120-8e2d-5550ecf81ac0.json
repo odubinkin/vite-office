@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-aa05d510-bf6b-4120-8e2d-5550ecf81ac0",
+    "capabilityId": "CAP-aa05d510-bf6b-4120-8e2d-5550ecf81ac0",
+    "suite": "shared",
+    "subsystem": "signed16-pooled-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Existing signed16 item now preserves native copy/mutation/typed Any/value equality/hash/plain-number presentation contracts.",
+      "Actual Calc merge flags reuse corrected shared behavior; areSame/itemset retain Which identity independently of payload equality."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task151 corrects the existing shared SfxInt16Item instead of creating a parallel text-metric wrapper. Original default/value/implicit-copy/factory/independent Clone and mutable SetValue are represented; direct payload equality now requires the same concrete native type and value while excluding WhichId. Original SfxPoolItem.areSame and item-set callsites retain Which/type guards, so different item identities remain distinct. Typed Any short QueryValue/PutValue ignore member selectors and preserve value on failed extraction, while the existing no-argument browser scalar projection and checked JS signed16 input domain remain explicit host boundaries, as for sibling numeric items. Original supportsHashCode/value-only size_t hash uses the existing unsigned64 logical hash convention, never persisted document bytes. Locale-independent GetPresentation uses real shared OUString.number without translated UI resources or an Intl provider. Actual ScMergeFlagAttr inherits corrected mutation/typed transport/hash and keeps original flag meanings and independent Clone, with no Calc/Writer compatibility branch. Two obsolete local direct-equality expectations are corrected to native Which-independent payload semantics; related Writer automatic/style/table/notification consumers are exercised. Native property-tree diagnostics/base serializer remain unported, no Boost or lifetime manager is added. Real text-metric subclasses/EditEngine/EditTextObject/Calc pool/model/connected UI/same-model ODS remain pending; UI localization is deferred. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged."
+    },
+    "capability": "Native shared signed16 pooled value contracts for text metrics",
+    "gaps": [
+      "Native diagnostic property-tree serializer/base remains unported; no Boost facade.",
+      "Actual text metric subclasses, full EditEngine/Calc pool/model/UI/ODS remain pending; UI localization deferred."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/intitem.ts",
+          "marker": "SfxInt16Item"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attrib.ts",
+          "marker": "ScMergeFlagAttr"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-int16-item.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/mergeflag.test.ts",
+          "marker": "inherits native signed16 mutation"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native signed16 pooled values for text metric dependencies (task151)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/intitem.cxx",
+          "marker": "SfxInt16Item::PutValue"
+        },
+        {
+          "path": "include/svl/intitem.hxx",
+          "marker": "SetValue"
+        },
+        {
+          "path": "sc/inc/attrib.hxx",
+          "marker": "ScMergeFlagAttr"
+        },
+        {
+          "path": "svl/source/items/poolitem.cxx",
+          "marker": "SfxPoolItem::areSame"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testFormatFlySplit"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-signed16-pooled-values",
+    "scopeLimitations": [
+      "Task151 corrects the existing shared SfxInt16Item instead of creating a parallel text-metric wrapper. Original default/value/implicit-copy/factory/independent Clone and mutable SetValue are represented; direct payload equality now requires the same concrete native type and value while excluding WhichId. Original SfxPoolItem.areSame and item-set callsites retain Which/type guards, so different item identities remain distinct. Typed Any short QueryValue/PutValue ignore member selectors and preserve value on failed extraction, while the existing no-argument browser scalar projection and checked JS signed16 input domain remain explicit host boundaries, as for sibling numeric items. Original supportsHashCode/value-only size_t hash uses the existing unsigned64 logical hash convention, never persisted document bytes. Locale-independent GetPresentation uses real shared OUString.number without translated UI resources or an Intl provider. Actual ScMergeFlagAttr inherits corrected mutation/typed transport/hash and keeps original flag meanings and independent Clone, with no Calc/Writer compatibility branch. Two obsolete local direct-equality expectations are corrected to native Which-independent payload semantics; related Writer automatic/style/table/notification consumers are exercised. Native property-tree diagnostics/base serializer remain unported, no Boost or lifetime manager is added. Real text-metric subclasses/EditEngine/EditTextObject/Calc pool/model/connected UI/same-model ODS remain pending; UI localization is deferred. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged.",
+      "Native Writer frame-attribute QA is broader unported source context only, not native QA execution or full editor/property parity."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

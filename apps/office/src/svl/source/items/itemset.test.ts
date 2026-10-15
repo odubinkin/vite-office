@@ -60,7 +60,7 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     expect(integerItem.Clone()).not.toBe(integerItem);
     expect(integerItem.Clone().equals(integerItem)).toBe(true);
     expect(integerItem.equals(new SfxInt16Item(2, 13))).toBe(false);
-    expect(integerItem.equals(new SfxInt16Item(3, 12))).toBe(false);
+    expect(integerItem.equals(new SfxInt16Item(3, 12))).toBe(true);
     expect(integerItem.equals(stringItem)).toBe(false);
     expect(encodeSfxPoolItem(integerItem)).toEqual({
       value: 12,
