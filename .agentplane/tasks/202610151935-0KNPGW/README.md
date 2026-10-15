@@ -1,10 +1,11 @@
 ---
 id: "202610151935-0KNPGW"
 title: "Fix generated UNO exception module initialization order"
-status: "DOING"
+result_summary: "Preserved shared generated exception semantics and public identity while fixing eager ESM heritage initialization; task166 unblocked."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Reviewed base-first shared declaration unit and public reexports; original class/factory token hashes match checkpoint. No new memory manager, type registry or guard cycle exception."
     - "Related36,Calc187,raw100 exact owners,all13 gates and actual browser integration pass. QA pins are source evidence; no new native compilation."
-commit: null
+commit:
+  hash: "cb340d138921f4b84e1819d61e3e0e33accfecb0"
+  message: "🧩 0KNPGW task: record verified exception initialization correction"
 comments:
   -
     author: "CODER"
     body: "Start: isolate shared generated exception evaluation order without changing native class member semantics or hiding failures in consumers."
+  -
+    author: "CODER"
+    body: "Verified: generated exception classes initialize through all five public entry paths with unchanged class/factory bodies; related36,Calc187,strict raw100,13 source gates and Chromium integration pass."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: node output/playwright/task166a-checks/portable.mjs:36 related tests/7files and187 Calc/76files with4 native links absent/restored. Exact2 shared owners S40/B12/F13/L36 and33Calc S4179/B2731/F821/L3727 all raw100. semantic-audit.mjs proves original class/factory token identity and4 native pins. source-gates.mjs initial plus --resume:all13 pass after task166 registered genuine edges. Final evidence output/playwright/task166a-checks/final-verification.json; actual Chromium shared integration also passes. No full-suite milestone or independent review claim."
+  -
+    type: "status"
+    at: "2026-10-15T19:48:16.193Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: generated exception classes initialize through all five public entry paths with unchanged class/factory bodies; related36,Calc187,strict raw100,13 source gates and Chromium integration pass."
 doc_version: 3
-doc_updated_at: "2026-10-15T19:47:54.629Z"
+doc_updated_at: "2026-10-15T19:48:16.194Z"
 doc_updated_by: "CODER"
 description: "Task166a: correct the shared CPPU base/derived exception evaluation cycle exposed by direct Exception import. Keep public module exports, actual class identity, generated fields/member bodies and type factory unchanged; no consumer import-order workaround, prototype/type registry or memory manager."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Observation: Repository provenance gate requires a nonempty declaration symbol list even for a pure public reexport. The Exception provenance entry had been emptied together with its executable runtime owner list.
       Impact: This is metadata schema rejection; source tests, unchanged class bodies and public identity remain valid.
       Resolution: Keep pure facade runtime localSymbols empty, but restore provenance public declaration names. Apply the same declaration-versus-runtime distinction to task166 charclass header.
+extensions:
+  implementation_commit:
+    hash: "f7a078342db3af57d4d19ad861d72b1589575585"
+    message: "🔧 BZZ72F core: register source locale uppercase and browser conformance"
 id_source: "generated"
 ---
 ## Summary
