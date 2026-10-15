@@ -4,7 +4,7 @@ title: "Implement native brush color values for Calc background defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T06:19:41.798Z"
+  updated_by: "CODER"
+  note: "Verified20related,186Calc,39boundary tests, strict shared/Calc raw100; all13source gates/build/inventory pass;20paths/3895hashes/10pins/4links audited. Native quirks preserved, graphics/interface services pending, localization deferred; same-agent review not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T06:19:40.728Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: original non-graphic brush color/default/member family is source-grounded, with explicit unported real graphics/interface providers and deferred UI localization."
+  evaluated_sha: "5baebf61e7c4f5e64ccb22ac8bd688cf23bb0ffd"
+  blueprint_digest: "fcbe6b407bf1139fa404c02e569e78698773f06a4c8b2d6caa90caa72f5cb2ff"
+  evidence_refs:
+    - ".agentplane/tasks/202610150608-A7TA3A/README.md"
+    - ".agentplane/tasks/202610150608-A7TA3A/quality/20261015-061940728-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150608-A7TA3A/quality/20261015-061940728-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150608-A7TA3A/quality/20261015-061940728-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150608-A7TA3A/blueprint/resolved-snapshot.json"
+    - "output/playwright/task147-checks/verification.json"
+    - "output/playwright/task147-checks/native-source-audit.json"
+    - "output/playwright/task147-checks/source-gates.json"
+    - "output/playwright/task147-checks/build-manifest.json"
+  findings:
+    - "Shared Color/ComplexColor/Any/hash reused; actual color constructors/clone/equality/non-graphic hash/borrowed values/scalar member rules preserve native semantics. No fake Graphic object, security/load code, browser projection or memory manager."
+    - "Source-backed regression preserves alpha1 at100percent and getter-induced hash change without equality change (CALC126/127 with CALC113 linkage). Initial test assumption was corrected, not native code altered."
+    - "20related,186Calc,39boundary tests pass; every raw counter in3changedsharedowners and33Calcowners positive100. All13source gates/build/inventory pass, zero semantic violations."
+    - "Native audit63shading declarations/12positions/version/12members/Calc148;20intentional paths/3895source hashes/10native pins/4restored links. Necessary native source responsibility split documented; no full parity promotion."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: actual non-graphic brush color/default/copy/member behavior for Calc background; shared values reused and missing real graphic/complex providers explicit, localization deferred."
+  -
+    type: "verify"
+    at: "2026-10-15T06:19:41.798Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified20related,186Calc,39boundary tests, strict shared/Calc raw100; all13source gates/build/inventory pass;20paths/3895hashes/10pins/4links audited. Native quirks preserved, graphics/interface services pending, localization deferred; same-agent review not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:19:06.378Z"
+doc_updated_at: "2026-10-15T06:19:41.875Z"
 doc_updated_by: "CODER"
 description: "Task147 ports original SvxBrushItem non-graphic color/copy/hash/scalar Any contracts and ShadingPattern declarations for actual Calc ATTR_BACKGROUND148. Reuse shared Color/ComplexColor/Any/hash primitives. Real graphic constructors/loaders/interfaces and complex-interface transport remain explicit missing providers; no fake Graphic object or localized presentation work."
 sections:
@@ -61,6 +89,39 @@ sections:
       Result: pass.
       Evidence:63published shading values,12graphic-position declarations/version,12native member IDs, actual Calc148default and source percent/getter rules match.10native pins at9bc445578031fecf56086729d8e4940c77e14d65,4exact reference targets restored;3895source hashes (3883baseline,8changed existing,12new,3875unchanged),20intentional paths; detailed verification.json/native-source-audit.json/hashes retained. Native100percent -> alpha1 and getter-induced equal-value/different-hash behavior preserved, linked to existing CALC113.
       Scope: actual non-graphic constructor family only; real Graphic/GraphicObject/XGraphic/loading/position/link/filter and XComplexColor interfaces remain unported with known provider selectors explicitly unsupportedfalse. No dummy object, security/load implementation, new browser snapshot projection, native binary-hash claim, compiler or memory probe. Native generic CellProperties CellBackColor QA is a broader unported property witness, not a claimed native execution. Same-agent evaluator is not independent. Full Calc pool/model/UI/ODS remains pending; final clean calc/hash proof required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T06:19:41.798Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified20related,186Calc,39boundary tests, strict shared/Calc raw100; all13source gates/build/inventory pass;20paths/3895hashes/10pins/4links audited. Native quirks preserved, graphics/interface services pending, localization deferred; same-agent review not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:19:06.378Z, excerpt_hash=sha256:9f5f18d8f95803b8e6ad3b38419035642e4519e8a643fa39c684c28fd3897585
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150608-A7TA3A/blueprint/resolved-snapshot.json
+    - old_digest: fcbe6b407bf1139fa404c02e569e78698773f06a4c8b2d6caa90caa72f5cb2ff
+    - current_digest: fcbe6b407bf1139fa404c02e569e78698773f06a4c8b2d6caa90caa72f5cb2ff
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150608-A7TA3A
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150608-A7TA3A -m 🧩 A7TA3A task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task paths in a later authorized task; no reset, merge or publication."
   Findings: |-
     Source reserves0xff transparency:100percent color transparency produces alpha1, so fully-transparent bool/isUsed differ from intuitive100percent expectations. Complex-color const getter writes its final color. Preserve/record these source cases without calling them confirmed bugs. Port actual non-graphic constructor/method behavior while explicitly leaving real graphic/interface services pending; do not fabricate unreachable graphic states to satisfy coverage. Same-agent evaluator is not independent.
@@ -104,6 +165,39 @@ Source compare brushitem.hxx/frmitems.cxx/memberids.h/ShadingPattern.idl/docpool
   Result: pass.
   Evidence:63published shading values,12graphic-position declarations/version,12native member IDs, actual Calc148default and source percent/getter rules match.10native pins at9bc445578031fecf56086729d8e4940c77e14d65,4exact reference targets restored;3895source hashes (3883baseline,8changed existing,12new,3875unchanged),20intentional paths; detailed verification.json/native-source-audit.json/hashes retained. Native100percent -> alpha1 and getter-induced equal-value/different-hash behavior preserved, linked to existing CALC113.
   Scope: actual non-graphic constructor family only; real Graphic/GraphicObject/XGraphic/loading/position/link/filter and XComplexColor interfaces remain unported with known provider selectors explicitly unsupportedfalse. No dummy object, security/load implementation, new browser snapshot projection, native binary-hash claim, compiler or memory probe. Native generic CellProperties CellBackColor QA is a broader unported property witness, not a claimed native execution. Same-agent evaluator is not independent. Full Calc pool/model/UI/ODS remains pending; final clean calc/hash proof required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T06:19:41.798Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified20related,186Calc,39boundary tests, strict shared/Calc raw100; all13source gates/build/inventory pass;20paths/3895hashes/10pins/4links audited. Native quirks preserved, graphics/interface services pending, localization deferred; same-agent review not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:19:06.378Z, excerpt_hash=sha256:9f5f18d8f95803b8e6ad3b38419035642e4519e8a643fa39c684c28fd3897585
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150608-A7TA3A/blueprint/resolved-snapshot.json
+- old_digest: fcbe6b407bf1139fa404c02e569e78698773f06a4c8b2d6caa90caa72f5cb2ff
+- current_digest: fcbe6b407bf1139fa404c02e569e78698773f06a4c8b2d6caa90caa72f5cb2ff
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150608-A7TA3A
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150608-A7TA3A -m 🧩 A7TA3A task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
