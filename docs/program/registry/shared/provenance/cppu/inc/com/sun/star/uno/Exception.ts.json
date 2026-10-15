@@ -6,7 +6,10 @@
     "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/Exception.ts",
     "status": "mapped",
     "upstreamPath": "udkapi/com/sun/star/uno/Exception.idl",
-    "localSymbols": [],
+    "localSymbols": [
+      "Exception",
+      "ExceptionConstReference"
+    ],
     "upstreamSymbols": [
       "Exception",
       "Message",

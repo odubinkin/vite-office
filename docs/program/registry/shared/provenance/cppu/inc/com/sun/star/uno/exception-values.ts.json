@@ -49,6 +49,11 @@
           "marker": "exception RuntimeException"
         }
       ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "JavaScript ESM heritage evaluates class values eagerly, unlike native generated C++ header declarations. The mutually dependent Exception/Reference/Any/RuntimeException chain requires the actual base and derived value declarations to initialize together, in base-first order. Public generated IDL paths remain exact reexport boundaries; the original member bodies and cached type factory are preserved."
     }
   }
 }
