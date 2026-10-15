@@ -1,10 +1,11 @@
 ---
 id: "202610150439-ZH9HYF"
 title: "Implement canonical shared XML namespace map for ODF attributes"
-status: "DOING"
+result_summary: "Implement canonical shared XML namespace map for ODF attribute preservation"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "Actual lookups/aliases/copy/assignment/QName cache and output modes/deprecated APIs/URI normalization retain source behavior through JS Maps/strings/cells. No C++ hash/bucket/allocator layout or native string lifetime engine. CALC-121/122/123 document concerns without fixes or confirmed-defect claims."
     - "28related cases plus8additional actual SAX cases give36unique related tests/5files;182Calc/72files and38boundaries pass.2complete shared owners and33Calc owners every raw counter positive100. Missing token-test filter is recorded, only the actual SAX fallback file ran additionally, no passing tests replayed for selection correction."
     - "All92namespace declarations/4sentinels/15literal token results source-audited. Portable build and13source gates pass,639records zero violations,14intentional paths/3836source hashes/8pins/four restored links. Native broader QName regression and actual sheetdata alias consumer evidence are explicit; full XML attribute container/document/UI/ODS remain pending."
-commit: null
+commit:
+  hash: "05d4ccdd9e1add6f034d8ad1fbdb772b0f1ac047"
+  message: "Implement ZH9HYF core: native XML namespace map and declarations"
 comments:
   -
     author: "CODER"
     body: "Start: implement original namespace-map values, keys, QName caches and URI normalization for shared ODF/Calc attribute dependencies; preserve source quirks using native JS Map/strings without container or memory engines."
+  -
+    author: "CODER"
+    body: "Verified: original shared XML namespace map and92declarations;36related,182Calc,38boundaries pass, shared/Calc raw100,15native token values audited, portable build/source/inventory gates pass with14intentional paths and source quirks preserved."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Namespace map verified:36unique related/5files (28main+8actual SAX fallback),182Calc/72files,38boundaries;2shared raw S282B144F36L246 and33Calc S4172B2731F821L3720 everycounterpositive100.92IDs/4sentinels/15token results source-audited. Portable build/13gates/639records zero violations,14paths/3836hashes/8pins/four links. CALC-121-123 preserved, no native container/memory engine. Full attribute container/document/UIODS pending; same-agent quality not independent."
+  -
+    type: "status"
+    at: "2026-10-15T04:57:50.919Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original shared XML namespace map and92declarations;36related,182Calc,38boundaries pass, shared/Calc raw100,15native token values audited, portable build/source/inventory gates pass with14intentional paths and source quirks preserved."
 doc_version: 3
-doc_updated_at: "2026-10-15T04:56:38.997Z"
+doc_updated_at: "2026-10-15T04:57:50.921Z"
 doc_updated_by: "CODER"
 description: "Task142 ports actual SvXMLNamespaceMap keys/prefix aliases/QName caches/URI normalization and complete native namespace-id declarations as the missing shared XML attribute-container dependency for Calc/ODS. Use native JS Maps/immutable strings and out cells; no generic C++ hash containers, string ownership or memory engine. Retain source cache quirks and unspecified unordered iteration contract."
 sections:
