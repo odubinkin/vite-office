@@ -4,7 +4,7 @@ title: "Implement native language item values for Calc font defaults"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-15T06:05:08.242Z"
+  updated_by: "CODER"
+  note: "Verified6related,185Calc,39boundary cases; changed shared/Calc raw100, all13source gates/inventory/build pass;21paths/3883hashes/9pins/4links audited. Real Locale/presentation providers remain explicit gaps; same-agent evaluation not independent."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T06:05:06.991Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review, not independent: original primitive language identity and language pooled-value/int Any prerequisites implemented with actual Calc script defaults and honest missing provider boundaries."
+  evaluated_sha: "60dec58b2b941bddb5f7c38145c3dd6d67901f8c"
+  blueprint_digest: "a35e0691eae42f2d1026b9e372641bc840201e9f4eef912ca4479d40ff64a25e"
+  evidence_refs:
+    - ".agentplane/tasks/202610150556-ERB0RG/README.md"
+    - ".agentplane/tasks/202610150556-ERB0RG/quality/20261015-060506991-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610150556-ERB0RG/quality/20261015-060506991-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610150556-ERB0RG/quality/20261015-060506991-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610150556-ERB0RG/blueprint/resolved-snapshot.json"
+    - "output/playwright/task146-checks/verification.json"
+    - "output/playwright/task146-checks/native-source-audit.json"
+    - "output/playwright/task146-checks/source-gates.json"
+    - "output/playwright/task146-checks/build-manifest.json"
+  findings:
+    - "Native unsigned16 language type and primary mask use JS numeric coercion, not strong_int/MSVC/memory object emulation. Shared SfxEnumItem/Any reused; existing Locale untouched and not duplicated. Actual German factory differs from all3Calc unknown defaults."
+    - "6related,185Calc,39boundary cases pass. Every raw counter of3changedsharedowners and33Calcowners positive100; all13source gates and portable build pass, inventory zero semantic violations."
+    - "Native audit proves6language IDs/mask/uint16,2members,3Calc defaults and3cycle functions unchanged. New core owner classified for strict browser isolation, native editeng edge admitted without cycle exception."
+    - "21intentional paths/3883source hashes/9native pins/4restored links audited. Language source split is required by500line limit; explicit locale unsupported and pending presentation services remain unverified rather than guessed or falsely promoted."
 commit: null
 comments:
   -
@@ -35,8 +57,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: native language identity/item prerequisites for Calc font defaults, reusing existing shared owners and primitive GC values; no fake Locale services or compiler/memory layer."
+  -
+    type: "verify"
+    at: "2026-10-15T06:05:08.242Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified6related,185Calc,39boundary cases; changed shared/Calc raw100, all13source gates/inventory/build pass;21paths/3883hashes/9pins/4links audited. Real Locale/presentation providers remain explicit gaps; same-agent evaluation not independent."
 doc_version: 3
-doc_updated_at: "2026-10-15T06:04:34.846Z"
+doc_updated_at: "2026-10-15T06:05:08.336Z"
 doc_updated_by: "CODER"
 description: "Task146 adds primitive unsigned16 LanguageType identities/primary mask and original SvxLanguageItem value/copy/default/int Any contracts for Calc font language defaults. Reuse existing SfxEnumItem/Any and existing Locale owner; do not fake LanguageTag/locale translation or localized language-table providers. Native strong_int/MSVC/cache machinery is erased under JS primitives/GC."
 sections:
@@ -61,6 +89,39 @@ sections:
       Result: pass.
       Evidence:6special/default language IDs, primary mask/unsigned16 native type,2member IDs and3actual Calc defaults directly match pinned source;3cycle-rejection functions AST-identical.9native pins at9bc445578031fecf56086729d8e4940c77e14d65,4restored exact reference targets;3883source hashes (3871baseline,9changed existing,12new,3862unchanged),21intentional paths. verification.json/native-source-audit.json/source hashes retained; runtime/provenance/capability mapped as unverified/divergent foundation, no full parity promotion.
       Scope: original value/int contracts only. Broader LANGID declarations, actual LanguageTag Locale conversion, SvtLanguageTable presentation and complete Calc pool/model/UI/ODS remain unported. Existing shared Locale is reused conceptually and untouched, not duplicated; generic native CharacterProperties CharLocale QA is a broader unported property witness, not an executed native suite. No native compiler/probes/memory machinery. Same-agent EVALUATOR is not independent; clean calc and exact post-commit hash evidence required at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T06:05:08.242Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified6related,185Calc,39boundary cases; changed shared/Calc raw100, all13source gates/inventory/build pass;21paths/3883hashes/9pins/4links audited. Real Locale/presentation providers remain explicit gaps; same-agent evaluation not independent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:04:34.846Z, excerpt_hash=sha256:5c100b5e5b0a761c90740f9ff2892d5bf641c9e6a629813f2e192bc002f7287a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150556-ERB0RG/blueprint/resolved-snapshot.json
+    - old_digest: a35e0691eae42f2d1026b9e372641bc840201e9f4eef912ca4479d40ff64a25e
+    - current_digest: a35e0691eae42f2d1026b9e372641bc840201e9f4eef912ca4479d40ff64a25e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610150556-ERB0RG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610150556-ERB0RG -m 🧩 ERB0RG task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task paths in a later authorized task; no reset, merge or publication."
   Findings: |-
     Native SvxLanguageItem_Base exists explicitly for an MSVC workaround and has no distinct logical value behavior. JS primitive unsigned16 values and direct SfxEnumItem inheritance preserve runtime semantics without porting that compiler workaround. Existing Locale is already shared and must not be duplicated. Full numeric language-to-locale mappings cannot be inferred from Intl.Locale because native MS-LANGID identities are a separate source table. Same-agent EVALUATOR is not independent.
@@ -108,6 +169,39 @@ Compare pinned lang.h/langitem.hxx/textitem.cxx/memberids.h/scitems.hxx/docpool.
   Result: pass.
   Evidence:6special/default language IDs, primary mask/unsigned16 native type,2member IDs and3actual Calc defaults directly match pinned source;3cycle-rejection functions AST-identical.9native pins at9bc445578031fecf56086729d8e4940c77e14d65,4restored exact reference targets;3883source hashes (3871baseline,9changed existing,12new,3862unchanged),21intentional paths. verification.json/native-source-audit.json/source hashes retained; runtime/provenance/capability mapped as unverified/divergent foundation, no full parity promotion.
   Scope: original value/int contracts only. Broader LANGID declarations, actual LanguageTag Locale conversion, SvtLanguageTable presentation and complete Calc pool/model/UI/ODS remain unported. Existing shared Locale is reused conceptually and untouched, not duplicated; generic native CharacterProperties CharLocale QA is a broader unported property witness, not an executed native suite. No native compiler/probes/memory machinery. Same-agent EVALUATOR is not independent; clean calc and exact post-commit hash evidence required at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T06:05:08.242Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified6related,185Calc,39boundary cases; changed shared/Calc raw100, all13source gates/inventory/build pass;21paths/3883hashes/9pins/4links audited. Real Locale/presentation providers remain explicit gaps; same-agent evaluation not independent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T06:04:34.846Z, excerpt_hash=sha256:5c100b5e5b0a761c90740f9ff2892d5bf641c9e6a629813f2e192bc002f7287a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610150556-ERB0RG/blueprint/resolved-snapshot.json
+- old_digest: a35e0691eae42f2d1026b9e372641bc840201e9f4eef912ca4479d40ff64a25e
+- current_digest: a35e0691eae42f2d1026b9e372641bc840201e9f4eef912ca4479d40ff64a25e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610150556-ERB0RG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610150556-ERB0RG -m 🧩 ERB0RG task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
