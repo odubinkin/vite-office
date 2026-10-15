@@ -2248,3 +2248,31 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: Clear invokes the cleanup callback and clears each primary vector slot in insertion order, then clears the primary vector and name map. It does not clear any of the six family vectors. GetNumberOfStyleSheets can therefore return0 while a previously borrowed family vector still contains earlier pointers; adding a new style appends to that stale family vector. Explicit Reindex clears and rebuilds all family vectors.
 - Status: suspicious omitted index reset, not a confirmed defect. Preserve the exact omission and explicit rebuild behavior. Observe only styles retained externally, so those native pointers remain valid; do not invent results for dereferencing dangling pointers after actual destruction. JS object references/GC do not recreate native deletion.
 - Local evidence: `apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts` and `apps/office/e2e/shared/indexed-style-sheets.spec.ts`, including partial null-slot visibility during callbacks, retained family views and later explicit Reindex. No native compiler/probe or memory-management experiment.
+
+## CALC-147: style search has disabled general visibility filtering
+
+- Upstream: pinned `svl/source/items/style.cxx`, DoesStyleMatchStyleSheetPredicate::Check and SfxStyleSheetIterator constructor/GetSearchMask; flags in `include/svl/style.hxx`.
+- Observation: the general bMatchVisibility expression is commented out. A hidden style matching ordinary application flags is still returned. Hidden-only search separately admits IsHidden styles, and any style with the Hidden mask bit also matches. Combining Hidden with Used disables the special Hidden-only term because GetSearchMask restores Used; the remaining mask/usage OR terms apply. AllVisible admits hidden styles as well.
+- Status: potentially surprising historical filter behavior, not a confirmed bug. Preserve the exact expression, usage/visibility virtual-call order and AllVisible fast path; do not restore the commented visibility check.
+- Local evidence: `apps/office/src/svl/source/items/native-style-iterator.test.ts`, source-derived fixtures over the actual shared index. No native compiler/probe or claim of a native iterator QA port.
+
+## CALC-148: style iterator Find stores a primary index consumed as a family index by Next
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetIterator::Find, operator[] and Next.
+- Observation: Find stores the absolute primary-vector position returned by FindPositionsByNameAndPredicate. With the exact All mask and a specific family, Next treats that position as a family-vector index. For primary styles [Char:a, Para:b, Para:c], First/Next returns b/c, but Find(b)/Next returns b/null. The predicate path uses absolute positions consistently and returns c after Find(b).
+- Status: suspicious mismatch of index spaces, not a confirmed defect. Preserve Find and Next assignments and path selection; do not translate Find results into family offsets or reset cursors on failed searches.
+- Local evidence: `apps/office/src/svl/source/items/native-style-iterator.test.ts` and `apps/office/e2e/shared/style-iterator.spec.ts`. These are source-derived observations; full production stylesheet/pool construction is still pending.
+
+## CALC-149: style iterator fast-path Count narrows through uint16
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetIterator::Count and First; declared Count return type is sal_Int32 in `include/svl/style.hxx`.
+- Observation: trivial all-family and exact-All family counts cast collection size to sal_uInt16 before returning it as sal_Int32. The predicate count does not use that narrowing. A real index containing 65536 same-family matching styles therefore produces Count=0 and First=null on either fast path, while a filtered iterator produces Count=65536 and a non-null First.
+- Status: potentially unintended historical narrowing, not a confirmed bug or a claim that all document formats allow this many styles. Preserve modulo-65536 conversion only where the source applies it.
+- Local evidence: `apps/office/src/svl/source/items/native-style-iterator.test.ts`, with 65536 distinct actual indexed caller identities and OUString names. No native binary, allocator or memory-sanitizer experiment.
+
+## CALC-150: style-pool addition traverses the destination index
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::operator+=, AddStyleSheetCallback and the pool copy constructor.
+- Observation: operator+= checks that argument r differs from this, but invokes ApplyToAllStyleSheets on this->pImpl->mxIndexedStyleSheets rather than r's collection. Its callback calls this->Add. A newly constructed empty destination therefore visits no styles even when r is nonempty; the copy constructor creates an empty index and delegates to this operation. For a nonempty destination the callback can modify the same collection being traversed, so no defined mutation result is assumed here.
+- Status: suspicious source-side destination/argument mismatch, not a confirmed defect. Preserve it when implementing the pool; do not silently change traversal to r or assign a result to invalidated native iterators.
+- Local evidence: task171 pinned source audit of `svl/source/items/style.cxx`. Pool construction/addition remains unimplemented locally; this entry is source analysis, not a native runtime probe or a completed pool test claim.

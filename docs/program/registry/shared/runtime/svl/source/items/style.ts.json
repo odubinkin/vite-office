@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/style.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "style-sheet-iteration",
+    "capabilityIds": [
+      "CAP-c6d69637-4693-4855-8dee-abc8c5c9063d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/items/style.ts#SfxStyleSheetIterator",
+        "apps/office/src/svl/source/items/native-style-iterator.test.ts#uses the all-family trivial path",
+        "svl/source/items/style.cxx#SfxStyleSheetIterator::Count"
+      ],
+      "justification": "Task171 implements the complete native SfxStyleSheetIterator dependency of SfxStyleSheetBasePool: original search flags/default All, Used separation and predicate call order, all-family/family/predicate count/index/next paths, exact UTF16 name lookup, live index observations and cursor transitions. Reuses actual IndexedStyleSheets; erased borrowed native pool GetIndexedStyleSheets and style GetName/GetFamily/GetMask/IsUsed/IsHidden operations neither instantiate nor replace full style/pool owners. Native operator[] binds to at, vector bounds errors to RangeError and reference identities to GC-owned JS values. Preserve disabled visibility expression (CALC147), Find primary-position versus family Next mismatch (CALC148) and native fast-path uint16 narrowing (CALC149). No memory manager, C++ generator/probe, fake completed pool or broad module parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DoesStyleMatchStyleSheetPredicate",
+        "SfxStyleSheetIterator"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/style.cxx",
+      "upstreamSymbols": [
+        "SfxStyleSheetIterator::Count",
+        "SfxStyleSheetIterator::First",
+        "SfxStyleSheetIterator::Next",
+        "SfxStyleSheetIterator::Find",
+        "SfxStyleSheetIterator::GetSearchMask",
+        "DoesStyleMatchStyleSheetPredicate"
+      ]
+    }
+  }
+}

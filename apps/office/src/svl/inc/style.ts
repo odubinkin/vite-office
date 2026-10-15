@@ -20,3 +20,40 @@ export interface SfxStyleSheetNameReference {
   /** Original style family. @returns Family. */
   GetFamily(): SfxStyleFamily;
 }
+
+/** Original application/search flags from include/svl/style.hxx, including equal-valued Calc/Writer bits. */
+export enum SfxStyleSearchBits {
+  ScStandard = 0x0001,
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values -- Native Calc ScStandard and Writer SwText intentionally share bit 0x0001.
+  SwText = 0x0001,
+  SwChapter = 0x0002,
+  SwList = 0x0004,
+  SwIndex = 0x0008,
+  SwExtra = 0x0010,
+  SwHtml = 0x0020,
+  SwCondColl = 0x0040,
+  Auto = 0x0000,
+  Favourite = 0x0100,
+  Hidden = 0x0200,
+  ReadOnly = 0x2000,
+  Used = 0x4000,
+  UserDefined = 0x8000,
+  AllVisible = 0xe07f,
+  All = 0xe27f,
+}
+
+import type { IndexedStyleSheets } from "./IndexedStyleSheets";
+/** Erased borrowed native style operations consumed by SfxStyleSheetIterator. This neither constructs nor replaces SfxStyleSheetBase. */
+export interface SfxStyleSheetSearchReference extends SfxStyleSheetNameReference {
+  /** Original style mask. @returns Flags. */
+  GetMask(): SfxStyleSearchBits;
+  /** Original virtual usage query. @returns Whether used. */
+  IsUsed(): boolean;
+  /** Original virtual visibility query. @returns Whether hidden. */
+  IsHidden(): boolean;
+}
+/** Erased borrowed native pool index operation, accessed by the original friend iterator. No substitute pool owner or service is constructed. */
+export interface SfxStyleSheetBasePoolIndexReference {
+  /** Original protected pool index view. @returns Actual indexed collection. */
+  GetIndexedStyleSheets(): IndexedStyleSheets;
+}
