@@ -121,3 +121,11 @@ export enum SvxShadowLocation {
   BottomRight,
   End,
 }
+
+/** Original writing-position modes, including the declaration-end marker. */
+export enum SvxEscapement {
+  Off,
+  Superscript,
+  Subscript,
+  End,
+}

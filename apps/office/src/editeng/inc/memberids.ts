@@ -121,3 +121,10 @@ export const MID_SHADING_VALUE = 10;
 
 /** Original brush member MID_BACKGROUND_COMPLEX_COLOR. */
 export const MID_BACKGROUND_COMPLEX_COLOR = 11;
+
+/** Original text baseline displacement selector. */
+export const MID_ESC = 0;
+/** Original relative-height selector. */
+export const MID_ESC_HEIGHT = 1;
+/** Original automatic baseline displacement selector. */
+export const MID_AUTO_ESC = 2;

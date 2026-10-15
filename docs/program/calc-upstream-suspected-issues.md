@@ -2114,3 +2114,10 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Observation: two copied color brushes initially compare equal and have identical field hashes. Calling getComplexColor on only one can change its ComplexColor final color and hash, while equality remains true because final color is omitted from that comparison. Calling the getter on both synchronizes their final-color states.
 - Status: source-level const/getter/hash invariant concern, not a confirmed upstream defect or claim of portable native binary hash values. Preserve the side effect and original field folds; do not alter shared ComplexColor equality/hash or make copy construction invoke the getter.
 - Local evidence: explicit getter/hash regression in `apps/office/src/editeng/source/items/native-brush-color.test.ts`; only logical JS values and source field rules are checked.
+
+## CALC-128: disabling automatic escapement retains a near-marker manual offset
+
+- Upstream: pinned `editeng/source/items/textitem.cxx`, SvxEscapementItem::PutValue MID_AUTO_ESC; `include/editeng/escapementitem.hxx` declares ordinary33/-8, height58 and automatic±14000 markers.
+- Observation: enabling automatic mode uses the current offset sign (zero becomes positive) without changing proportional height. Disabling automatic mode changes±14000to±13999 by one unit, preserving height and sign. It does not restore the ordinary33/-8 offset or the mode-setter height58. Non-marker offsets remain unchanged.
+- Status: surprising distinction between mode setter and automatic property transition, not a confirmed upstream defect. Preserve source behavior and shared Any2Bool failure fallback; do not substitute font metrics, ordinary script percentages or off0/100 values.
+- Local evidence: `apps/office/src/editeng/source/items/native-escapement.test.ts`, automatic/manual transition witness with literal source values; no native compiler or memory probe.
