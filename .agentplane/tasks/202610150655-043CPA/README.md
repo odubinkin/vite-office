@@ -1,10 +1,11 @@
 ---
 id: "202610150655-043CPA"
 title: "Restore native signed16 pooled item contracts for text metrics"
-status: "DOING"
+result_summary: "Corrected existing shared SfxInt16Item for native text metric dependencies and actual Calc inheritance; Which identity remains in areSame/set, no Writer compatibility shim or duplicate value wrapper."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Original native SfxInt16Item contracts and ScMergeFlagAttr inheritance source-audited. Direct equality excludes Which; areSame/set retain identity/type guards. Checked JS scalar boundary and no-argument query remain explicit, no compatibility shim."
     - "146related,187Calc,39boundary tests pass with complete changed shared and33Calc owners raw100. All13source gates/build/inventory pass,657runtime sources/2894imports/95edges, no graph or gate exceptions."
     - "13intentional paths/3915source hashes/6native pins/4restored links audited. Initial new test omitted native string nul and was corrected without production change. Native diagnostics/Boost serializer deferred, no memory manager or localized resources."
-commit: null
+commit:
+  hash: "dc202f38a9dde05e55f7c70ed9c1315df5f9ebe2"
+  message: "Implement 043CPA core: native signed16 pooled item contracts"
 comments:
   -
     author: "CODER"
     body: "Start: correct original shared signed16 item contracts and real Calc inherited flag behavior, no compatibility shim or duplicate metric primitive; scoped strict coverage and portable source audit."
+  -
+    author: "CODER"
+    body: "Verified: shared native signed16 copy/mutation/equality/Any/hash/plain presentation and actual Calc merge flag inheritance;146related,187Calc,39boundary tests pass, raw100 and all gates/build/inventory/source audits."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified146related,187Calc,39boundary tests, complete changed shared/33Calc raw100, all13source gates/build/inventory pass.13paths/3915hashes/6pins/4links audited. Native signed16 contracts/actual Calc inheritance restored without Writer shim; same-agent review not independent."
+  -
+    type: "status"
+    at: "2026-10-15T07:04:47.304Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared native signed16 copy/mutation/equality/Any/hash/plain presentation and actual Calc merge flag inheritance;146related,187Calc,39boundary tests pass, raw100 and all gates/build/inventory/source audits."
 doc_version: 3
-doc_updated_at: "2026-10-15T07:04:35.697Z"
+doc_updated_at: "2026-10-15T07:04:47.321Z"
 doc_updated_by: "CODER"
 description: "Task151 corrects shared SfxInt16Item mutation/copy/payload equality/typed Any/hash/numeric presentation, with actual Calc ScMergeFlagAttr inherited behavior and related Writer tests. Real prerequisite for future SvxKerningItem; no duplicate wrapper, no UI localization or memory manager."
 sections:
