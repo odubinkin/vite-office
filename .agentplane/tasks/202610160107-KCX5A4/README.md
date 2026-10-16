@@ -1,10 +1,11 @@
 ---
 id: "202610160107-KCX5A4"
 title: "Implement shared RTL decimal parsing and SAX ODS scalar reader"
-status: "DOING"
+result_summary: "Implemented shared source-faithful RTL decimal reader and SAX numeric attribute overloads using native JS rounding. CALC170 documented;no all-app run or UI/ODS readiness claim."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task184-checks/final-verification.json"
   findings:
     - "Exact shared/Calc raw100,23related/187Calc,13gates,5native pins/38QA inputs,unchanged measure and Writer owners,build and real Chromium/DOM-free Worker/Writer pass. Native decimal rounding reused;no compiler,memory engine or all-app run. Complete Calc document/UI/ODS remains unimplemented."
-commit: null
+commit:
+  hash: "187a4cc32f2e3374f57d877e9c148ee5a5ed661f"
+  message: "✅ KCX5A4 quality: record numeric reader verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement pinned shared RTL decimal reader and SAX ODS scalar contract with native JS rounding, exact statuses and consumed positions; verify related shared and Calc raw100."
+  -
+    author: "CODER"
+    body: "Verified: actual shared RTL/SAX numeric reader complete;23related/187Calc,exact shared and Calc raw100,13gates,build and Chromium/DOM-free Worker/Writer pass;4refs restored. Complete UI/ODS remains pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "23related/187Calc pass;exact3shared/33Calc raw S/B/F/L100 and every counter positive.13gates,5native pins/38QA inputs,unchanged existing measure/SAL/Writer/guard,production build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. CALC170 retained;full UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T01:16:07.434Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual shared RTL/SAX numeric reader complete;23related/187Calc,exact shared and Calc raw100,13gates,build and Chromium/DOM-free Worker/Writer pass;4refs restored. Complete UI/ODS remains pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T01:15:39.551Z"
+doc_updated_at: "2026-10-16T01:16:07.435Z"
 doc_updated_by: "CODER"
 description: "Task184: port pinned RTL stringToDouble lexical/range contract using native JS decimal rounding and expose actual SAX convertDouble reader for ODS values; preserve source statuses and end positions."
 sections:
@@ -132,6 +145,10 @@ sections:
     - Observation: Provenance rejected empty localSymbols on the new pure header facade.
       Impact: Runtime semantic declaration list is correctly empty,but provenance requires named exported contracts.
       Resolution: Record reexported C functions/status as facade provenance symbols; preserve empty runtime declared-symbol set.
+extensions:
+  implementation_commit:
+    hash: "b39eb3a3779c42f6ce0143f5cdc1156e49624125"
+    message: "🔧 KCX5A4 core: implement shared RTL and SAX numeric reader"
 id_source: "generated"
 ---
 ## Summary
