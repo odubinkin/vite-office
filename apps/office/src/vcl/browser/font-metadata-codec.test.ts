@@ -1,0 +1,123 @@
+/** @fileoverview Lossless primitive Font transport over actual native value owners with strict boundary admission. */
+import { expect, it } from "vitest";
+import { encodeFontMetadata, restoreFontMetadata } from "./font-metadata-codec";
+import { Font } from "../source/font/font";
+import { Color, ColorTransparency } from "../../tools/inc/color";
+import { Size } from "../../tools/inc/gen";
+import { TextAlign, FontFamily, FontPitch } from "../../tools/inc/fontenum";
+/** Actual nondefault native value. @returns Font. */ function font(): Font {
+  const f = new Font();
+  f.SetFamilyName("Owner");
+  f.SetStyleName("Native\0Style");
+  f.SetFamily(FontFamily.FAMILY_MODERN);
+  f.SetPitch(FontPitch.PITCH_FIXED);
+  f.SetCharSet(10);
+  f.SetColor(new Color(ColorTransparency, 0x80123456, "ColorTransparencyTag"));
+  f.SetFillColor(new Color(0xabcdef));
+  f.SetTransparent(false);
+  f.SetAlignment(TextAlign.ALIGN_BOTTOM);
+  f.SetFontSize(new Size(-12, 1234));
+  return f;
+}
+it("preserves every represented value across structured clone and independent output copies", /** Caller-owned family name is not duplicated. @returns Nothing. */ () => {
+  const source = font(),
+    record = encodeFontMetadata(source),
+    target = new Font();
+  target.SetFamilyName("Owner");
+  restoreFontMetadata(target, structuredClone(record));
+  expect(target.Equals(source)).toBe(true);
+  Reflect.set(record.fontSize, 0, 99);
+  expect(source.GetAverageFontWidth()).toBe(-12);
+  expect(target.GetAverageFontWidth()).toBe(-12);
+  source.SetFontHeight(2);
+  expect(target.GetFontHeight()).toBe(1234);
+  expect(target.GetColor().toUInt32()).toBe(0x80123456);
+});
+it("restores legacy four-field metadata using actual native Font value defaults", /** A previously populated recipient must not retain stale new fields. @returns Nothing. */ () => {
+  const target = font(),
+    base = new Font(),
+    legacy = { styleName: "Old", family: 0, pitch: 0, charSet: 0 };
+  restoreFontMetadata(target, legacy);
+  base.SetFamilyName("Owner");
+  base.SetStyleName("Old");
+  expect(target.Equals(base)).toBe(true);
+  expect(target.GetFamilyName()).toBe("Owner");
+});
+it("preserves independent transparency after fill restoration and safe integer geometry bounds", /** Source setters determine final values. @returns Nothing. */ () => {
+  const source = new Font();
+  source.SetTransparent(false);
+  source.SetAlignment(TextAlign.TextAlign_FORCE_EQUAL_SIZE);
+  source.SetFontSize(new Size(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER));
+  const target = font();
+  restoreFontMetadata(target, encodeFontMetadata(source));
+  expect(target.GetFillColor().toUInt32()).toBe(0xffffffff);
+  expect(target.IsTransparent()).toBe(false);
+  expect(target.GetAlignment()).toBe(2147483647);
+  expect([target.GetAverageFontWidth(), target.GetFontHeight()]).toEqual([
+    Number.MIN_SAFE_INTEGER,
+    Number.MAX_SAFE_INTEGER,
+  ]);
+});
+it("rejects malformed base metadata before changing any native value", /** Validation remains at the browser record boundary. @returns Nothing. */ () => {
+  const good = encodeFontMetadata(font()),
+    target = font(),
+    copy = new Font(target);
+  for (const value of [
+    null,
+    "bad",
+    [],
+    {},
+    { ...good, styleName: 1 },
+    { ...good, family: "bad" },
+    { ...good, family: 1.5 },
+    { ...good, family: -2147483649 },
+    { ...good, family: 2147483648 },
+    { ...good, pitch: null },
+    { ...good, pitch: 2147483648 },
+    { ...good, charSet: -1 },
+    { ...good, charSet: 65536 },
+  ]) {
+    expect(
+      /** Invalid input. @returns Nothing. */ () => restoreFontMetadata(target, value),
+    ).toThrow("font metadata");
+    expect(target.Equals(copy)).toBe(true);
+  }
+});
+it("rejects partial or malformed new value groups without silent field defaults", /** No partially valid record can mutate the recipient. @returns Nothing. */ () => {
+  const current = encodeFontMetadata(font()),
+    target = font(),
+    copy = new Font(target),
+    legacy = { styleName: "Old", family: 0, pitch: 0, charSet: 0 };
+  const partial = [
+    { ...legacy, color: 1 },
+    { ...legacy, fillColor: 1 },
+    { ...legacy, transparent: true },
+    { ...legacy, alignment: 0 },
+    { ...legacy, fontSize: [0, 0] },
+  ];
+  const invalid = [
+    ...partial,
+    { ...current, color: undefined },
+    { ...current, color: -1 },
+    { ...current, color: 0x100000000 },
+    { ...current, fillColor: -1 },
+    { ...current, fillColor: 0x100000000 },
+    { ...current, transparent: 0 },
+    { ...current, alignment: 1.5 },
+    { ...current, alignment: -2147483649 },
+    { ...current, alignment: 2147483648 },
+    { ...current, fontSize: null },
+    { ...current, fontSize: [0] },
+    { ...current, fontSize: [0, 0, 0] },
+    { ...current, fontSize: ["bad", 0] },
+    { ...current, fontSize: [0, 0.5] },
+    { ...current, fontSize: [Infinity, 0] },
+    { ...current, fontSize: [0, Number.MAX_SAFE_INTEGER + 1] },
+  ];
+  for (const value of invalid) {
+    expect(
+      /** Invalid group. @returns Nothing. */ () => restoreFontMetadata(target, value),
+    ).toThrow("font metadata");
+    expect(target.Equals(copy)).toBe(true);
+  }
+});

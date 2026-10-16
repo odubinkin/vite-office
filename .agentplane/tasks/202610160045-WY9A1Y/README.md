@@ -4,7 +4,7 @@ title: "Preserve shared Font stored values through Writer Worker transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-16T00:57:16.535Z"
+  updated_by: "CODER"
+  note: "Initial real-model regression demonstrates Font state loss;fixed68related/187Calc pass,exact2shared/33Calc raw100,every counter positive,Writer-only gap exempt.13gates,8native pins/core+ODF+guard unchanged,7other codec functions unchanged;build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Browser transport only;full UI/ODS pending,no all-app run."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: reproduce and fix dropped shared Font state in real Writer transport using one reusable browser codec,with native-default legacy restoration and strict validation;core/ODF algorithms stay unchanged."
+  -
+    type: "verify"
+    at: "2026-10-16T00:57:16.535Z"
+    author: "CODER"
+    state: "ok"
+    note: "Initial real-model regression demonstrates Font state loss;fixed68related/187Calc pass,exact2shared/33Calc raw100,every counter positive,Writer-only gap exempt.13gates,8native pins/core+ODF+guard unchanged,7other codec functions unchanged;build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Browser transport only;full UI/ODS pending,no all-app run."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:45:55.335Z"
+doc_updated_at: "2026-10-16T00:57:16.592Z"
 doc_updated_by: "CODER"
 description: "Task183: lossless transport for native Font paint/alignment/size fields added in181. Extract reusable browser Font metadata codec,update Writer record/validation/restore and real structured-clone/Worker round trips;preserve existing browser legacy records at their I/O boundary."
 sections:
@@ -45,10 +51,45 @@ sections:
   Plan: "Demonstrate current Writer structured-clone transport drops new represented Font paint/alignment/size values. Implement one shared vcl/browser Font metadata codec over actual Font,Color and Size;Writer retains external family-name field and delegates metadata encoding/validation/restoration to it. Encode all current represented fields;decode existing four-field metadata through actual native Font defaults at the browser I/O boundary,accept only complete valid new-value groups and reject malformed primitive fields before mutation. Restore fill before explicit transparency to preserve independent source flags. Update actual Writer model/Worker transport tests and real Chromium/dedicated DOM-free Worker,inventory/readiness. Maximum40non-task paths. Existing Font/core/ODF algorithms and deliberate I/O/recovery deviations unchanged. Related shared exact raw S/B/F/L100 plus whole Calc,Writer-only gaps exempt,13gates and production build;4refs absent/restored. No native compiler/probe,new lifetime engine,full all-app run or UI/ODS milestone claim."
   Verify Steps: "Reproduce loss in actual SwDoc numbering Font structured-clone round trip before production changes. Pin native Font/ImplFont copy/equality/defaults and SvxNumberFormat Font copying as the preserved core value contract;browser codec is an explicit adaptation,not a fabricated upstream class. Test all represented metadata,color/fill including alpha,independent transparency,alignment and signed safe-integer size;input/output copies and whole Font/SwNumFormat equality after encode/clone/decode. Test actual native default restoration for legacy four-field/absent metadata,all malformed/partial new groups,enum/int/color/size bounds and validation-before-mutation. Related Writer round trips/Worker runtime/transfer plus actual shared raw S/B/F/L100,whole Calc raw100;Writer-only gaps exempt.13source gates,production build,actual Chromium and dedicated DOM-free Worker round trip plus Writer startup/load/edit;4refs absent/restored. Prove all existing core and ODF algorithm tokens unchanged,record strict owner sets and explicit data/admission limits. No native probe or all-app run."
   Verification: |-
+    Regression before production change: actual SwDoc numbering encode/structured-clone/decode loses paint/alignment/size and restored Font Equals is false;initial-font-roundtrip.log retained. Command: node output/playwright/task183-checks/portable.mjs. Result:pass. Evidence:68related scenarios/11files and187Calc/76files;exact2shared raw S66/B67/F37/L64 and33Calc S4179/B2731/F821/L3727,every raw counter positive100;one Writer-only coverage gap exempt. Command: node output/playwright/task183-checks/native-audit.mjs. Result:pass. Evidence:8native blobs pinned;core Font/Color/Size/numbering,ODF and boundary guard byte-identical;whole Writer emitted runtime unchanged except declared encode/decode and import,7other functions unchanged. Scope:browser logical value transport,not native bytes. Command: node output/playwright/task183-checks/build-browser-portable.mjs. Result:pass. Evidence:production build,actual Chromium and dedicated DOM-free Worker SwDoc numbering Font round trips,and Writer startup/load/edit;4refs absent/restored.13source gates pass;docs/inventory/diff refreshed after acceptance notes. Limits:unrepresented full Font/config/device/rendering and complete Calc pool/document/UI/ODS remain pending;legacy browser handling stays at I/O boundary,no native probe,new memory engine or all-app run.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-16T00:57:16.535Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Initial real-model regression demonstrates Font state loss;fixed68related/187Calc pass,exact2shared/33Calc raw100,every counter positive,Writer-only gap exempt.13gates,8native pins/core+ODF+guard unchanged,7other codec functions unchanged;build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Browser transport only;full UI/ODS pending,no all-app run.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T00:56:49.129Z, excerpt_hash=sha256:8bd4de84eb41e7e03e01a2f614bd7d9a1e107d5cdc853e167f6337f13b09a6d6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160045-WY9A1Y/blueprint/resolved-snapshot.json
+    - old_digest: 942c863b527ae5dec71ade1533bd31f04d6dc3fd6594f8e11e9fb9077dbfdfb7
+    - current_digest: 942c863b527ae5dec71ade1533bd31f04d6dc3fd6594f8e11e9fb9077dbfdfb7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610160045-WY9A1Y
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610160045-WY9A1Y
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert task183 commits only,preserving calc branch,other work and4reference links. No merges,history rewriting,gate weakening or unrelated Writer-only coverage repairs;portable wrappers restore refs in finally."
-  Findings: ""
+  Findings: |-
+    - Observation: The new actual SwDoc/SwNumFormat structured-clone regression fails before production changes: restored Font Equals returns false for nondefault paint/alignment/size. Existing metadata scenario passes. An initial command used the application cwd with repository-relative paths and was corrected before the regression was run.
+      Impact: Writer transport drops newly represented shared Font state;the regression demonstrates a real model round-trip loss,not an inferred schema concern.
+      Resolution: Retain initial-font-roundtrip.log and implement reusable browser metadata encoding/validation/restoration. Keep core Font and ODF bodies unchanged;rerun related runtime/Worker and Calc profiles.
 id_source: "generated"
 ---
 ## Summary
@@ -69,7 +110,39 @@ Reproduce loss in actual SwDoc numbering Font structured-clone round trip before
 
 ## Verification
 
+Regression before production change: actual SwDoc numbering encode/structured-clone/decode loses paint/alignment/size and restored Font Equals is false;initial-font-roundtrip.log retained. Command: node output/playwright/task183-checks/portable.mjs. Result:pass. Evidence:68related scenarios/11files and187Calc/76files;exact2shared raw S66/B67/F37/L64 and33Calc S4179/B2731/F821/L3727,every raw counter positive100;one Writer-only coverage gap exempt. Command: node output/playwright/task183-checks/native-audit.mjs. Result:pass. Evidence:8native blobs pinned;core Font/Color/Size/numbering,ODF and boundary guard byte-identical;whole Writer emitted runtime unchanged except declared encode/decode and import,7other functions unchanged. Scope:browser logical value transport,not native bytes. Command: node output/playwright/task183-checks/build-browser-portable.mjs. Result:pass. Evidence:production build,actual Chromium and dedicated DOM-free Worker SwDoc numbering Font round trips,and Writer startup/load/edit;4refs absent/restored.13source gates pass;docs/inventory/diff refreshed after acceptance notes. Limits:unrepresented full Font/config/device/rendering and complete Calc pool/document/UI/ODS remain pending;legacy browser handling stays at I/O boundary,no native probe,new memory engine or all-app run.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-16T00:57:16.535Z — VERIFY — ok
+
+By: CODER
+
+Note: Initial real-model regression demonstrates Font state loss;fixed68related/187Calc pass,exact2shared/33Calc raw100,every counter positive,Writer-only gap exempt.13gates,8native pins/core+ODF+guard unchanged,7other codec functions unchanged;build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Browser transport only;full UI/ODS pending,no all-app run.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T00:56:49.129Z, excerpt_hash=sha256:8bd4de84eb41e7e03e01a2f614bd7d9a1e107d5cdc853e167f6337f13b09a6d6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160045-WY9A1Y/blueprint/resolved-snapshot.json
+- old_digest: 942c863b527ae5dec71ade1533bd31f04d6dc3fd6594f8e11e9fb9077dbfdfb7
+- current_digest: 942c863b527ae5dec71ade1533bd31f04d6dc3fd6594f8e11e9fb9077dbfdfb7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610160045-WY9A1Y
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610160045-WY9A1Y
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -77,3 +150,7 @@ Reproduce loss in actual SwDoc numbering Font structured-clone round trip before
 Revert task183 commits only,preserving calc branch,other work and4reference links. No merges,history rewriting,gate weakening or unrelated Writer-only coverage repairs;portable wrappers restore refs in finally.
 
 ## Findings
+
+- Observation: The new actual SwDoc/SwNumFormat structured-clone regression fails before production changes: restored Font Equals returns false for nondefault paint/alignment/size. Existing metadata scenario passes. An initial command used the application cwd with repository-relative paths and was corrected before the regression was run.
+  Impact: Writer transport drops newly represented shared Font state;the regression demonstrates a real model round-trip loss,not an inferred schema concern.
+  Resolution: Retain initial-font-roundtrip.log and implement reusable browser metadata encoding/validation/restoration. Keep core Font and ODF bodies unchanged;rerun related runtime/Worker and Calc profiles.

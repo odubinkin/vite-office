@@ -13,6 +13,11 @@ import {
   SwNumRule,
   SwNumRuleType,
 } from "../../../source/core/doc/number";
+import {
+  encodeFontMetadata,
+  restoreFontMetadata,
+  type FontMetadataRecord,
+} from "../../../../vcl/browser/font-metadata-codec";
 import { Font } from "../../../../vcl/source/font/font";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -69,12 +74,7 @@ import {
 interface WriterNumberFormatRecord {
   readonly bulletFont: string;
   readonly bulletFontPresent?: boolean;
-  readonly bulletFontMetadata?: {
-    readonly styleName: string;
-    readonly family: number;
-    readonly pitch: number;
-    readonly charSet: number;
-  };
+  readonly bulletFontMetadata?: FontMetadataRecord;
   readonly bulletGlyph?: number;
   readonly showSymbol?: boolean;
   readonly numberingType?: "arabic" | "char-special" | "none";
@@ -414,12 +414,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
               ...(font === undefined
                 ? {}
                 : {
-                    bulletFontMetadata: {
-                      styleName: font.GetStyleName(),
-                      family: font.GetFamilyType(),
-                      pitch: font.GetPitch(),
-                      charSet: font.GetCharSet(),
-                    },
+                    bulletFontMetadata: encodeFontMetadata(font),
                   }),
               numberingType:
                 format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
@@ -735,21 +730,7 @@ export function decodeWriterDocument(
       )
         throw new Error("Stored Writer numbering marker ownership is invalid.");
       const metadata = format.bulletFontMetadata;
-      if (
-        metadata !== undefined &&
-        (metadata === null ||
-          typeof metadata !== "object" ||
-          format.bulletFontPresent !== true ||
-          typeof metadata.styleName !== "string" ||
-          ![metadata.family, metadata.pitch].every(
-            /** Validates native enum storage. @param value - Enum. @returns Signed32 validity. */ (
-              value,
-            ) => Number.isInteger(value) && value >= -2147483648 && value <= 2147483647,
-          ) ||
-          !Number.isInteger(metadata.charSet) ||
-          metadata.charSet < 0 ||
-          metadata.charSet > 0xffff)
-      )
+      if (metadata !== undefined && format.bulletFontPresent !== true)
         throw new Error("Stored Writer numbering font metadata is invalid.");
       const decoded = createWriterNumFormat(format.kind, format.bulletChar, {
         absLSpace: format.absLSpace ?? 0,
@@ -773,12 +754,7 @@ export function decodeWriterDocument(
       if (format.bulletFontPresent === true) {
         const font = new Font();
         font.SetFamilyName(format.bulletFont);
-        if (metadata !== undefined) {
-          font.SetStyleName(metadata.styleName);
-          font.SetFamily(metadata.family);
-          font.SetPitch(metadata.pitch);
-          font.SetCharSet(metadata.charSet);
-        }
+        if (metadata !== undefined) restoreFontMetadata(font, metadata);
         decoded.SetBulletFont(font);
       } else if (format.bulletFontPresent === false) decoded.SetBulletFont(undefined);
       if (rule.ownedLevels === undefined || rule.ownedLevels[level])
