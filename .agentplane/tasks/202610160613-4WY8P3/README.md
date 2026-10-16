@@ -1,10 +1,11 @@
 ---
 id: "202610160613-4WY8P3"
 title: "Implement minimal Calc scalar document editing chain"
-status: "DOING"
+result_summary: "Connected scalar document editing"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task198-checks/final-audit.json"
   findings:
     - "Reviewed actual document-sheet-column storage, lazy allocation, shared string reuse, native default and rejection paths, source audit and exact committed hashes. Whole Calc 199 tests and all 39 executable owners reach strict raw S/B/F/L100; related 48 tests, Chromium/Worker, build and 13 source gates pass with portable reference removal/restoration. Formula, ODS, rich text, formatting and full constructor services remain explicit gaps; no UI implementation and no full all-app run."
-commit: null
+commit:
+  hash: "3ed61a9e7d027d599ff76898163e88ca1024f4d6"
+  message: "🧩 4WY8P3 calc: connect scalar document sheet and column editing"
 comments:
   -
     author: "CODER"
     body: "Start: implement the user-prioritized minimal canonical scalar document editing chain and update the UI/ODS critical path;defer unrelated language parity without discarding its unfinished work."
+  -
+    author: "CODER"
+    body: "Verified: actual scalar document-sheet-column editing, strict whole-Calc coverage, related tests, portable Chromium/Worker and source gates; same-agent evaluation passed. Formula and ODS readiness remains pending; UI is a separate task."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command:node output/playwright/task198-checks/source-audit.mjs;portable.mjs;browser-portable.mjs;source-gates.mjs;final-audit.mjs. Result:pass. Evidence:15pinned source/QA files;199Calc tests/79files and48related tests;39Calc owners raw4420S/2851B/906F/3956L100,every counter positive;actual production build/Chromium/DOM-free Worker with5refs absent/restored;13gates and86boundary regressions pass;exact27intentional paths. Scope:initial scalar ScDocument/ScTable/ScColumn and numeric/string store integration only. UI implementation remains separate;formula/formatting/full constructor/ODS gaps explicit. No native execution,no new ownership engine;task197 durably deferred without discarding completed shared modules."
+  -
+    type: "status"
+    at: "2026-10-16T06:50:31.054Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual scalar document-sheet-column editing, strict whole-Calc coverage, related tests, portable Chromium/Worker and source gates; same-agent evaluation passed. Formula and ODS readiness remains pending; UI is a separate task."
 doc_version: 3
-doc_updated_at: "2026-10-16T06:46:57.305Z"
+doc_updated_at: "2026-10-16T06:50:31.056Z"
 doc_updated_by: "CODER"
 description: "User-corrected priority:implement the first real source-aligned ScDocument->ScTable->ScColumn numeric/string editing subset using existing shared stores and strings;do not require full native constructors,language/font subsystems or all API parity before connecting UI. Preserve upstream contracts/defaults for supported operations and explicitly record missing services. UI and basic formulas/ODS will build on this same model,without a second browser grid model."
 sections:
