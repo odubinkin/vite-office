@@ -4,7 +4,7 @@ title: "Implement general language-tag grammar and canonicalization"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Connected actual normal parser/canonicalizer/tag values/extensions/t callbacks;32pinned source files/23states/66native QA vectors/17prior contract cases/full static data proofs verified.200related/196Calc tests,exact11shared and36Calc raw100,every counter positive;13gates,build/actual Chromium/DOM-free Worker/Writer pass without5refs.30intentional paths and final audit pass;CALC-180..183 preserved. No fake LanguageTag,ownership engine,native execution or full all-app run;outer LanguageTag/UI/ODS pending."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T05:31:18.691Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR review: exact source16464cb0a797/30declared paths matches evidence. Connected normal native tag values/grammar/canonicalization/extensions/t use actual prior owners.66literal upstream QA plus17independent vectors/full pinned-data invariants/200related tests and196Calc pass. Exact11shared/36Calc raw100,13gates,build/actual Chromium/Worker/Writer and5ref restoration verified;no guards or memory engines."
+  evaluated_sha: "16464cb0a7975548f8286a84362c729ae85ef1af"
+  blueprint_digest: "7dd831ec4ab95def33440ea80855bf29f569db48b9d2c5bbf3c38c5ce9bd9f80"
+  evidence_refs:
+    - ".agentplane/tasks/202610160503-4Q97H7/README.md"
+    - ".agentplane/tasks/202610160503-4Q97H7/quality/20261016-053118691-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160503-4Q97H7/quality/20261016-053118691-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160503-4Q97H7/quality/20261016-053118691-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160503-4Q97H7/blueprint/resolved-snapshot.json"
+    - "output/playwright/task196-checks/final-audit.json"
+    - "output/playwright/task196-checks/native-audit.json"
+    - "output/playwright/task196-checks/source-gates.json"
+  findings:
+    - "Complete normal-parser scope is achieved;no full liblangtag wildcard/locale/maximization API,native executed oracle or enclosing LibreOffice LanguageTag claim. Source immutable-table proofs justify only unreachable data/allocation/assert branches;native cache/shallow-sharing/private-use/t-field quirks are preserved and documented CALC-180..183. Outer LanguageTag/Font/defaults/pools/model/UI/ODS remain required;full all-app run deferred under latest user milestone. Review is same-agent,not independent."
 commit: null
 comments:
   -

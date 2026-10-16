@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160503-4Q97H7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T05:31:18.691Z",
+  "verdict": "pass",
+  "summary": "Same-agent EVALUATOR review: exact source16464cb0a797/30declared paths matches evidence. Connected normal native tag values/grammar/canonicalization/extensions/t use actual prior owners.66literal upstream QA plus17independent vectors/full pinned-data invariants/200related tests and196Calc pass. Exact11shared/36Calc raw100,13gates,build/actual Chromium/Worker/Writer and5ref restoration verified;no guards or memory engines.",
+  "evaluated_sha": "16464cb0a7975548f8286a84362c729ae85ef1af",
+  "blueprint_digest": "7dd831ec4ab95def33440ea80855bf29f569db48b9d2c5bbf3c38c5ce9bd9f80",
+  "findings": [
+    "Complete normal-parser scope is achieved;no full liblangtag wildcard/locale/maximization API,native executed oracle or enclosing LibreOffice LanguageTag claim. Source immutable-table proofs justify only unreachable data/allocation/assert branches;native cache/shallow-sharing/private-use/t-field quirks are preserved and documented CALC-180..183. Outer LanguageTag/Font/defaults/pools/model/UI/ODS remain required;full all-app run deferred under latest user milestone. Review is same-agent,not independent."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160503-4Q97H7/README.md",
+    "output/playwright/task196-checks/final-audit.json",
+    "output/playwright/task196-checks/native-audit.json",
+    "output/playwright/task196-checks/source-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
