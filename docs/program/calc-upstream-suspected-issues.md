@@ -2496,3 +2496,42 @@ rule and the source encoding export, which writes only `x-symbol`.
   standards-conformance verdict or demonstrated downstream document effect.
 - Port: preserve this acceptance and an independent regression vector rather
   than tightening the comparison to a language/subtag equality check.
+
+
+## CALC-177 — Unicode extension key spelling changes type acceptance
+
+Source: pinned liblangtag0.6.8 `extensions/lt-ext-ldml-u.c`,
+`_lt_ext_ldml_u_lookup_key` and `_lt_ext_ldml_u_lookup_type`;raw forwarding in
+`liblangtag/lt-extension.c` and `lt-ext-module.c`. The key lookup compares names
+case-insensitively and stores the original token. Type lookup then selects XML
+keys with case-sensitive `@name = key`,using that stored raw spelling.
+Consequently callback tokens `ca,gregory` succeed,whereas `CA,gregory` fail with
+`Unknown -u- extension type: gregory`;a clipped `CA` alone is accepted and emits
+`ca`. No intervening forwarding owner lowercases the token. Preserve this
+behavior. Evidence is source-derived and replayed in the managed actual
+callback;outer LanguageTag fast-path/normalization reachability and executed
+native library results are not claimed. Task195.
+
+## CALC-178 — Unicode extension discovers transform-only keys
+
+Source: same pinned `_lt_ext_ldml_u_lookup_key`,the native `lt-xml.c` BCP47 group
+order/transform merge and `data/common/bcp47/transform.xml`. Unicode key discovery
+scans all seven groups and selects every key without filtering `@extension`.
+Thus `m0` from the transform group,whose XML declares `extension="t"`,is accepted
+by the u callback,and `m0,ungegn` emits `m0-ungegn`. Its type lookup also omits an
+extension filter. The t callback explicitly filters `@extension = 't'`.
+Preserve the source lookup;do not silently impose a modern extension namespace
+filter. This is a source-derived suspicious boundary,not a standards verdict or
+proof of outer LibreOffice document reachability/native execution. Task195.
+
+## CALC-179 — Unicode getter sorting changes a later type lookup
+
+Source: same pinned `_lt_ext_ldml_u_get_tag` sorts `d->tags` in place,while
+`_lt_ext_ldml_u_lookup_type` uses the last container and the separately retained
+`current_type`. Callback tokens `nu,latn,ca` leave the current family calendar
+and last container `ca`. Calling get_tag sorts containers into `ca,nu-latn`.
+A subsequent `buddhist` token looks up raw key `nu` in calendar data and fails;
+it would succeed before the getter call. Preserve this observable callback
+state effect;the getter is not replaced with a nonmutating copy sort.
+Tests execute the managed callback sequence;actual full-tag incremental API
+reachability and native binary execution remain unproven. Task195.

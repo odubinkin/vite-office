@@ -575,3 +575,46 @@ Production build, actual Chromium/DOM-free Worker scanner/registry values and
 one Writer startup/load/edit scenario pass with all5source references absent
 and restored. Inventory/provenance and existing source gates remain required;
 no full all-app run, complete parser or UI/ODS readiness is claimed.
+
+
+## Unicode extension and functional CLDR values (task195)
+
+Task195 implements the actual liblangtag0.6.8 Unicode extension callback data:
+original state defaults/singleton,parent prechecks,all attribute/key/type
+transitions,registered type and CODEPOINTS validation,case-insensitive stable
+in-place sorting and original canonical payload/final-state callback behavior.
+Attribute spelling,duplicate attributes/keywords,clipped keys and exact raw-key
+XPath selection are preserved. CALC-177 through CALC-179 document suspicious
+source behavior without changing it. Tests replay the Unicode-extension slices
+of original check-tag QA;they do not claim whole-tag grammar or executed C QA.
+
+All1016type entries and484unfiltered languageAlias entries come from the pinned
+archive XML. Seven keyword groups retain native file order;the transform group
+appends five files. Every non-description attribute remains source data. These
+are functional parsing values,not localized UI labels or a new XML DOM/service.
+The native ASCII comparison/lower helpers are shared with the existing IANA
+lookup;scanner and Unicode callbacks now share original error declarations.
+Diagnostics explicitly project fresh native internal slots,not a general error
+stack/refcount/trace engine. JS GC owns all physical storage.
+
+The t callback depends on the actual general tag parser and remains pending.
+General grammar,alias application/canonicalization and enclosing LanguageTag
+state/ID registration remain required before Font/defaults/pools and the real
+Calc document/sheet/column/UI/same-model ODS milestone. No fake t handler or
+successful full parser is exposed, and no full all-app run is reached here.
+
+
+Task195 acceptance:52related tests/5files and196Calc tests/78files pass.
+Exact6changed/new shared executable owners have raw S129/B75/F19/L120100,
+every raw counter positive;all36Calc owners retain S4310/B2777/F864/L3857100.
+Both archive hashes,6LibreOffice pins,24original source/QA/data files,allCLDR
+functional values and8native QA extension slices are checked without native
+execution. Scanner class body differs only in shared diagnostic type/code
+names;IANA data and Calc owner sources remain unchanged. Production build,
+actual Chromium/DOM-free Worker values and1Writer startup/load/edit pass with
+5source references absent/restored. All13source gates pass,including truthful
+inventory/provenance and unchanged guard algorithms. Final review corrected
+the local HEX regex end-before-newline difference and added a direct callback
+regression;related strict coverage,browser/build and affected static checks
+were rerun. General grammar/t/canonicalizer/LanguageTag/UI/ODS remain pending;
+no full all-app run or broad parity promotion.

@@ -1,0 +1,117 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3344052c-d248-40ee-ace2-f2c003df2eea",
+    "capabilityId": "CAP-3344052c-d248-40ee-ace2-f2c003df2eea",
+    "suite": "shared",
+    "subsystem": "language-tag-unicode-extension",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine."
+    },
+    "capability": "Native Unicode extension callbacks and ordered functional CLDR values",
+    "gaps": [
+      "General tag grammar,t handler,canonicalization and enclosing LanguageTag remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-error.h",
+          "marker": "_lt_error_type_t"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-utils.c",
+          "marker": "lt_strlower"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-xml.c",
+          "marker": "lt_xml_get_cldr"
+        },
+        {
+          "path": "vendor/liblangtag-reference/extensions/lt-ext-ldml-u.c",
+          "marker": "_lt_ext_ldml_u_get_singleton"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/liblangtag-reference/tests/check-tag.c",
+          "marker": "en-u-vt-10D40C"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/liblangtag-reference/README",
+          "marker": "Unicode Common Locale Data Repository"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-error.ts",
+          "marker": "DiagnosticSlot"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-utils.ts",
+          "marker": "lt_strcasecmp"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-xml.cldr.ts",
+          "marker": "getCldrKeywords"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-u.ts",
+          "marker": "UnicodeExtensionData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-utils.test.ts",
+          "marker": "preserves all original error code values"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-utils.test.ts",
+          "marker": "matches the complete ASCII lowercase"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-xml.cldr.test.ts",
+          "marker": "preserves every ordered keyword"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-u.test.ts",
+          "marker": "replays native Unicode-extension QA slice"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Unicode extension and functional CLDR values (task195)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "language-tag-unicode-extension-and-cldr-values",
+    "scopeLimitations": [
+      "Native check-tag Unicode-extension slices only;not complete tag grammar QA or executed C tests. State diagnostics and source-derived cases do not establish whole LanguageTag behavior."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim."
+    }
+  }
+}

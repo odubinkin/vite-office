@@ -1,6 +1,7 @@
 /** @fileoverview Source-derived byte/token/error contracts of liblangtag's actual private scanner. */
 import { expect, it } from "vitest";
-import { ScannerErrorCode as Code, TagScanner, type ScannerErrorSlot } from "./lt-tag.scanner";
+import { TagScanner } from "./lt-tag.scanner";
+import { ErrorCode as Code, type DiagnosticSlot } from "./lt-error";
 
 for (const [input, tokens] of [
   ["en-US", ["en", "-", "US"]],
@@ -13,7 +14,7 @@ for (const [input, tokens] of [
   it(`scans original token boundaries ${JSON.stringify(input)}`, /** Replays source-derived token literals, not grammar validation. @returns Nothing. */ () => {
     const scanner = new TagScanner(new TextEncoder().encode(input)),
       output = { token: "seed" as string | null, length: 9 },
-      error: ScannerErrorSlot = { error: { code: Code.LT_ERR_EOT, message: "seed" } },
+      error: DiagnosticSlot = { error: { code: Code.LT_ERR_EOT, message: "seed" } },
       before = error.error;
     for (const token of tokens) {
       expect(scanner.isEof()).toBe(false);
@@ -31,7 +32,7 @@ for (const [input, tokens] of [
 it("preserves consumed error position and resumes after a failed token", /** The source consumes invalid bytes before reporting failure. @returns Nothing. */ () => {
   const scanner = new TagScanner(new TextEncoder().encode("en*US-foo_bar")),
     output = { token: "seed" as string | null, length: 9 },
-    error: ScannerErrorSlot = { error: null };
+    error: DiagnosticSlot = { error: null };
   expect(scanner.getToken(output, error)).toBe(false);
   expect(error.error).toEqual({ code: 4, message: "Invalid wildcard: position = 2" });
   expect(output).toEqual({ token: null, length: 0 });
@@ -61,7 +62,7 @@ it("uses the complete ASCII alnum domain and rejects every other non-NUL byte", 
   for (let byte = 0; byte < 256; byte++) {
     const scanner = new TagScanner(new Uint8Array([byte])),
       output = { token: "seed" as string | null, length: 1 },
-      error: ScannerErrorSlot = { error: null },
+      error: DiagnosticSlot = { error: null },
       c = String.fromCharCode(byte),
       valid = accepted.includes(c);
     expect(scanner.getToken(output, error)).toBe(valid);

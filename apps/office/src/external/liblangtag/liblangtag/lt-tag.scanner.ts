@@ -2,27 +2,12 @@
  * Copyright (C) 2011–2015 Akira TAGOH. SPDX-License-Identifier: MPL-2.0
  */
 
-/** Original lt-error.h codes consumed by the scanner. */
-export enum ScannerErrorCode {
-  LT_ERR_EOT = 3,
-  LT_ERR_FAIL_ON_SCANNER = 4,
-}
-
-/** Native scanner error value, without reference-counted ownership. */
-export interface ScannerError {
-  readonly code: ScannerErrorCode;
-  readonly message: string;
-}
+import { ErrorCode, type DiagnosticSlot } from "./lt-error";
 
 /** Caller-owned token and byte-length output slots. */
 export interface ScannerOutput {
   token: string | null;
   length: number;
-}
-
-/** Caller-owned optional error output, unchanged after successful scanning. */
-export interface ScannerErrorSlot {
-  error: ScannerError | null;
 }
 
 /** Private source scanner state; input is already encoded bytes, as at UTF8.getStr(). */
@@ -42,10 +27,10 @@ export class TagScanner {
   }
 
   /** Reads one native token. @param output - Token/length slots. @param error - Optional error slot. @returns Native success flag. */
-  getToken(output: ScannerOutput, error?: ScannerErrorSlot): boolean {
+  getToken(output: ScannerOutput, error?: DiagnosticSlot): boolean {
     let token = "";
     if (this.isEof())
-      return this.#fail(output, error, ScannerErrorCode.LT_ERR_EOT, "No more tokens in buffer");
+      return this.#fail(output, error, ErrorCode.LT_ERR_EOT, "No more tokens in buffer");
     while (this.#position < this.#string.length) {
       const byte = this.#string[this.#position++] as number,
         c = String.fromCharCode(byte);
@@ -54,14 +39,14 @@ export class TagScanner {
           return this.#fail(
             output,
             error,
-            ScannerErrorCode.LT_ERR_FAIL_ON_SCANNER,
+            ErrorCode.LT_ERR_FAIL_ON_SCANNER,
             `Invalid wildcard: position = ${this.#position - 1}`,
           );
       } else if (!/^[A-Za-z0-9]$/.test(c) && c !== "-") {
         return this.#fail(
           output,
           error,
-          ScannerErrorCode.LT_ERR_FAIL_ON_SCANNER,
+          ErrorCode.LT_ERR_FAIL_ON_SCANNER,
           `Invalid character for tag: '${c}'`,
         );
       }
@@ -77,8 +62,8 @@ export class TagScanner {
   /** Writes the native failure outputs. @param output - Token/length slots. @param error - Optional error slot. @param code - Native code. @param message - Diagnostic byte value. @returns False. */
   #fail(
     output: ScannerOutput,
-    error: ScannerErrorSlot | undefined,
-    code: ScannerErrorCode,
+    error: DiagnosticSlot | undefined,
+    code: ErrorCode,
     message: string,
   ): false {
     if (error) error.error = { code, message };

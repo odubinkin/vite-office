@@ -2,6 +2,7 @@
  * Copyright (C) 2011–2015 Akira TAGOH. SPDX-License-Identifier: MPL-2.0
  */
 import data from "../data/language-subtag-registry.json";
+import { lt_strlower } from "./lt-utils";
 
 /** Original registry families, without XML storage or physical singleton ownership. */
 export type RegistryKind = keyof typeof data;
@@ -22,18 +23,14 @@ for (const kind of Object.keys(data) as RegistryKind[]) {
   const entries = new Map<string, RegistryEntry>();
   for (const row of data[kind]) {
     Object.freeze(row.prefixes);
-    entries.set(row.tag.toLowerCase(), Object.freeze(row));
+    entries.set(lt_strlower(row.tag), Object.freeze(row));
   }
   databases.set(kind, entries);
 }
 
 /** Looks up the exact native ASCII key. @param kind - Registry family. @param subtag - C-string value; bytes after first NUL are ignored. @returns Registered immutable value or native null; no wildcard fallback. */
 export function lookupRegistry(kind: RegistryKind, subtag: string): RegistryEntry | null {
-  const end = subtag.indexOf("\0"),
-    key = (end < 0 ? subtag : subtag.slice(0, end)).replace(
-      /[A-Z]/g,
-      /** Folds only source ASCII capitals, not Unicode aliases. @param c - ASCII capital. @returns Lowercase ASCII. */
-      (c) => c.toLowerCase(),
-    );
-  return (databases.get(kind) as ReadonlyMap<string, RegistryEntry>).get(key) ?? null;
+  return (
+    (databases.get(kind) as ReadonlyMap<string, RegistryEntry>).get(lt_strlower(subtag)) ?? null
+  );
 }
