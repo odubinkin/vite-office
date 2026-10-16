@@ -1,10 +1,11 @@
 ---
 id: "202610160045-WY9A1Y"
 title: "Preserve shared Font stored values through Writer Worker transport"
-status: "DOING"
+result_summary: "Added one reusable browser VCL Font metadata codec and migrated Writer to lossless represented paint/alignment/size transport with strict admission and actual native legacy defaults. Core and ODF algorithms unchanged;inventory/readiness updated. Full Calc pool/document/UI/ODS pending,no all-app run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "Initial actual SwDoc/SwNumFormat structured-clone regression fails before production changes and passes after shared VCL browser codec integration. All represented metadata/paint/alpha/transparency/alignment/size values survive actual model round trip;legacy defaults come from real Font and malformed/partial groups reject before mutation."
     - "68related and187Calc scenarios pass;exact2shared and33Calc raw S/B/F/L100 with every counter positive;one Writer-only coverage gap exempt.13gates,production build,actual Chromium and dedicated DOM-free Worker model round trips plus Writer startup/load/edit pass;4refs restored."
     - "Eight native source/header/QA blobs support the logical copy/default contract. Core Font/Color/Size/numbering and ODF plus guard are byte-identical;whole Writer runtime changes only in declared encode/decode and shared import,7other functions unchanged.11non-task paths fit40;inventory distinguishes browser transport and broad parity stays unverified."
-commit: null
+commit:
+  hash: "07224d931c73e8c278cd4f71ad5c93936de4c73c"
+  message: "🔧 WY9A1Y quality: record lossless font transport verification"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce and fix dropped shared Font state in real Writer transport using one reusable browser codec,with native-default legacy restoration and strict validation;core/ODF algorithms stay unchanged."
+  -
+    author: "CODER"
+    body: "Verified: initial actual Font transport loss fixed;68related/187Calc pass,exact shared/Calc raw100,13gates,build and actual Chromium/DOM-free Worker/Writer checks;4refs restored. Writer-only gap exempt;Calc UI/ODS goal remains active."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Initial real-model regression demonstrates Font state loss;fixed68related/187Calc pass,exact2shared/33Calc raw100,every counter positive,Writer-only gap exempt.13gates,8native pins/core+ODF+guard unchanged,7other codec functions unchanged;build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Browser transport only;full UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T00:59:44.585Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: initial actual Font transport loss fixed;68related/187Calc pass,exact shared/Calc raw100,13gates,build and actual Chromium/DOM-free Worker/Writer checks;4refs restored. Writer-only gap exempt;Calc UI/ODS goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:57:16.592Z"
+doc_updated_at: "2026-10-16T00:59:44.587Z"
 doc_updated_by: "CODER"
 description: "Task183: lossless transport for native Font paint/alignment/size fields added in181. Extract reusable browser Font metadata codec,update Writer record/validation/restore and real structured-clone/Worker round trips;preserve existing browser legacy records at their I/O boundary."
 sections:
@@ -112,6 +125,10 @@ sections:
     - Observation: The new actual SwDoc/SwNumFormat structured-clone regression fails before production changes: restored Font Equals returns false for nondefault paint/alignment/size. Existing metadata scenario passes. An initial command used the application cwd with repository-relative paths and was corrected before the regression was run.
       Impact: Writer transport drops newly represented shared Font state;the regression demonstrates a real model round-trip loss,not an inferred schema concern.
       Resolution: Retain initial-font-roundtrip.log and implement reusable browser metadata encoding/validation/restoration. Keep core Font and ODF bodies unchanged;rerun related runtime/Worker and Calc profiles.
+extensions:
+  implementation_commit:
+    hash: "b12ec0df422065ce67c4446fe06bb59a1d7d7d65"
+    message: "🔧 WY9A1Y transport: preserve native font stored values"
 id_source: "generated"
 ---
 ## Summary
