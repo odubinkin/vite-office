@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "Extraction",
+      "LanguageTagExtractionFields",
+      "simpleExtract"
+    ],
+    "upstreamSymbols": [
+      "LanguageTagImpl::simpleExtract"
+    ],
+    "preservedResponsibilities": [
+      "Task190 implements complete LanguageTagImpl simpleExtract enum,all structural branches,ASCII casing and five mutable output slots over logical UTF16 values. Private/joker classification leaves caller slots untouched;NONE clears them. It deliberately does not validate contents. Existing shared prepared canonical-tag projection reuses native LSC/LV/LR cache field behavior and empty private fields,correcting known es-ES-u-co-trad extension variants,numeric-region versus country separation and synthetic private language fallbacks. Existing general parser field projection remains an explicit boundary,not full LanguageTag. Source calls/canonicalization/state/ID registration/font/pool/document/UI/ODS remain pending;no compiler,new Intl normalization,ICU/liblangtag port or memory manager."
+    ],
+    "omittedResponsibilities": [
+      "Diagnostic logging/debug assertions are not runtime validation;full native LanguageTag class/parser/canonicalization/state and general liblangtag fallback are not implemented here."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.ts",
+          "marker": "simpleExtract"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.test.ts",
+          "marker": "extracts native structural fields"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::simpleExtract"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "bool LanguageTagImpl::cacheSimpleLSCV()"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Complete native pure structural extraction is separated from existing ordered fallback/prepared-field projection,retaining the original private owner responsibility without inventing a public LanguageTag facade."
+    }
+  }
+}

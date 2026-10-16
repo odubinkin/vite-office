@@ -1,4 +1,5 @@
 /** @fileoverview Original non-ISO LanguageTag::getFallbackStrings order over already decomposed language-tag values; canonicalization remains separate; shared canonical-tag field projection is an explicit browser boundary. */
+import { Extraction, simpleExtract } from "./languagetag.extract";
 /** Original field values read by the fallback algorithm, after language-tag parsing. */
 export interface LanguageTagFallbackFields {
   readonly tag: string;
@@ -63,8 +64,24 @@ export function getFallbackStrings(fields: LanguageTagFallbackFields): string[] 
   return result;
 }
 
-/** Decomposes an already canonical BCP47 value for the existing fallback algorithm. This field projection does not implement LanguageTag validation/canonicalization or a replacement language service. @param tag - Canonical value from a native qlt Locale variant. @returns Fields consumed by getFallbackStrings. */
+/** Uses native simple/cached fields and empty private-tag fields for already canonical BCP47 values. Other shapes retain the explicit general prepared-field projection; this does not implement LanguageTag validation/canonicalization or a replacement language service. @param tag - Canonical value from a native qlt Locale variant. @returns Fields consumed by getFallbackStrings. */
 export function decomposeCanonicalLanguageTag(tag: string): LanguageTagFallbackFields {
+  const fields = { language: "", script: "", country: "", region: "", variants: "" },
+    extraction = simpleExtract(tag, fields);
+  if (
+    extraction === Extraction.EXTRACTED_LSC ||
+    extraction === Extraction.EXTRACTED_LV ||
+    extraction === Extraction.EXTRACTED_LR ||
+    extraction === Extraction.EXTRACTED_X ||
+    extraction === Extraction.EXTRACTED_X_JOKER
+  )
+    return {
+      tag,
+      language: fields.language,
+      script: fields.script,
+      country: fields.country,
+      variants: fields.variants,
+    };
   const parts = tag.split("-"),
     language = parts.shift() as string;
   const script = /^[A-Za-z]{4}$/.test(parts[0] ?? "") ? (parts.shift() as string) : "";

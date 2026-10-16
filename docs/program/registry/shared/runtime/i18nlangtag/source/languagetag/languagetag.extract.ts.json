@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-simple-extraction",
+    "capabilityIds": [
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.test.ts",
+        "docs/program/calc-ui-readiness.md#Native known-tag extraction and shared fallback fields (task190)"
+      ],
+      "justification": "Task190 implements complete LanguageTagImpl simpleExtract enum,all structural branches,ASCII casing and five mutable output slots over logical UTF16 values. Private/joker classification leaves caller slots untouched;NONE clears them. It deliberately does not validate contents. Existing shared prepared canonical-tag projection reuses native LSC/LV/LR cache field behavior and empty private fields,correcting known es-ES-u-co-trad extension variants,numeric-region versus country separation and synthetic private language fallbacks. Existing general parser field projection remains an explicit boundary,not full LanguageTag. Source calls/canonicalization/state/ID registration/font/pool/document/UI/ODS remain pending;no compiler,new Intl normalization,ICU/liblangtag port or memory manager.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Extraction",
+        "LanguageTagExtractionFields",
+        "simpleExtract"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTagImpl::simpleExtract"
+      ]
+    }
+  }
+}

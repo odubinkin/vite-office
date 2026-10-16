@@ -14,6 +14,10 @@ preserve LanguageTag's known-mapping fast path and lazy value/state contracts.
 This evidence does not require a new ICU/liblangtag implementation or establish
 that the missing LanguageTag owner has been completed.
 
+Task190 implements the complete structural extraction prerequisite below.
+Known-tag field extraction is now available to the real shared font and locale
+fallback consumers. The LanguageTag value/state owner remains pending.
+
 ## Current conclusion
 
 An editable Calc UI and same-model ODS import/export are not ready. Existing
@@ -420,3 +424,35 @@ management. Current decimal/tab/document-default consumers respect configured
 language. This supersedes task187 public empty-language gap. Full LanguageTag
 synchronization/canonicalization,script-specific fallbacks,standard font/pool
 and complete Calc document/UI/ODS remain pending.
+
+## Native known-tag extraction and shared fallback fields (task190)
+
+Task190 (`202610160315-GVXX3X`) implements the full native private
+LanguageTagImpl::simpleExtract algorithm and all eight Extraction decisions in
+[the extraction owner](../../apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.ts).
+It uses logical UTF16 value slots and existing shared ASCII operations; the
+original API explicitly does not validate case or subtag contents. Private and
+joker classifications leave all five caller outputs untouched; failed
+extraction clears them. C, script, country, three-unit region, variant,
+multiple-variant, known extension and legacy-tag branches preserve their
+original ordering and structural bounds. There is no reference-count, physical
+cache or native string-buffer engine.
+
+The existing prepared canonical-tag projection now uses the fields admitted
+by native cacheSimpleLSCV. Numeric regions remain separate from the country
+getter and are not invented as country fallbacks. The known
+`es-ES-u-co-trad` form retains `u-co-trad` in its native variant field, so its
+ordered candidates include `es-u-co-trad` before `es-ES` and `es`. Known private
+tag fields stay empty and do not synthesize `x` or `*` language fallbacks.
+The primitive extractor itself still leaves private caller outputs unchanged;
+the prepared-field caller starts with empty slots, as native callers do.
+Actual configured-font and LocaleData consumers reuse this same owner.
+
+General parser field projection outside these native cases remains explicitly
+bounded. This is not an ID-only or partial fake LanguageTag class, a new
+validator, or canonicalization of caller input. Native LanguageTag lazy state,
+constructors/reset/copy/equality, known mapping/canonicalization flow, dynamic
+ID registration and independently verified unknown-tag parsing still remain
+before Font can retain the full native language value. Font defaults,
+EditEngine values, Calc document pools/model and same-model ODS filters remain
+pending; this prerequisite does not establish UI readiness.
