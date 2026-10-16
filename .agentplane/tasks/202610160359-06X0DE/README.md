@@ -1,10 +1,11 @@
 ---
 id: "202610160359-06X0DE"
 title: "Resolve pinned language parser contract and native JS substitution limits"
-status: "DOING"
+result_summary: "Resolved pinned general language-parser contract and native JS limits;source-anchored17cases and actual3realm measurements show needed value rules/data while avoiding physical library framework.34audit/196Calc raw100 and13gates/build/browser pass;full LanguageTag/font/pools/model/UI/ODS pending."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task193-checks/final-verification.json"
   findings:
     - "Exact source archives/hashes/safe entries and13source files/6LibreOffice pins/3patches verified;normal versus cross registry versions and static t/u registration are explicit.17library outcomes are source-derived and not claimed as executed native results;actual JS Node/Chromium/Worker evidence separately records registration/canonicalization differences and matching controls. CALC-175/176 preserve source C-string/byte-prefix behavior with reachability caveats.34audit/196Calc exact36raw100,13gates,production build/browser pass,4refs restored.6intentional test/docs paths,production/inventory capability unchanged. Concrete next source-value parser/data route avoids physical trie/XML/refcount/plugin framework and fake parser/class. Full LanguageTag/font/pools/model/UI/ODS pending,no all-app run."
-commit: null
+commit:
+  hash: "03b6263aac1247bd30b0275aa5f0b09663970374"
+  message: "✅ 06X0DE quality: record pinned parser source verification"
 comments:
   -
     author: "CODER"
     body: "Start: inspect verified LibreOffice-pinned liblangtag and registry source to resolve remaining LanguageTag parser behavior/native JS limits;produce source-anchored report/tests without native execution or a fake parser."
+  -
+    author: "CODER"
+    body: "Verified:pinned liblangtag/registry source contract resolved with2verified archives/17source-derived cases and separately measured JS;34audit/196Calc exact36raw100,13gates/build/Chromium/DOM-free Worker pass,4refs restored. CALC-175/176 recorded;no production parser/capability promotion/native execution/all-app run. Full LanguageTag/UI/ODS pending."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned2archives/246entries/13source hashes/6LibreOffice pins/3patches verified;17source-derived parser cases distinguish registration/prefix/CLDR/private/u/C-string contracts from actual JS.34audit/196Calc exact36raw100,13gates,build and actual Chromium/DOM-free Worker pass,4refs restored.6intentional test/docs paths,no production or capability change. CALC-175/176 recorded;value parser/data route concrete,no native execution/framework port/all-app run;UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-16T04:28:07.074Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:pinned liblangtag/registry source contract resolved with2verified archives/17source-derived cases and separately measured JS;34audit/196Calc exact36raw100,13gates/build/Chromium/DOM-free Worker pass,4refs restored. CALC-175/176 recorded;no production parser/capability promotion/native execution/all-app run. Full LanguageTag/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T04:27:51.744Z"
+doc_updated_at: "2026-10-16T04:28:07.075Z"
 doc_updated_by: "CODER"
 description: "Task193: inspect LibreOffice-pinned liblangtag0.6.8 and IANA2026-06-14 source contracts for remaining LanguageTag parser branch,using approved upstream source reading;produce exact algorithm/data boundary and measured native-JS comparisons without native compilation or a fake parser/class."
 sections:
@@ -111,6 +124,10 @@ sections:
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's test/doc source commit;ignored source archives can be retained as pinned evidence. Do not reset user work or touch unrelated tasks. No destructive cleanup required."
   Findings: "None. Generic Intl substitution was already disproved on29source QA cases in task189;this task distinguishes native known-tag handling from the actual external-parser branch so that broad library/memory infrastructure is not ported without evidence."
+extensions:
+  implementation_commit:
+    hash: "601269a5168f0a392e3de063b579304aff9b85cf"
+    message: "🔬 06X0DE calc: resolve pinned language parser contracts"
 id_source: "generated"
 ---
 ## Summary
