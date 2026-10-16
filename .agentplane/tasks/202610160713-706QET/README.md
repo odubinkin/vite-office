@@ -1,10 +1,11 @@
 ---
 id: "202610160713-706QET"
 title: "Connect numeric arithmetic formulas to Calc document cells"
-status: "DOING"
+result_summary: "Connected numeric formulas to Calc document cells"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task200-checks/final-audit.json"
   findings:
     - "Reviewed actual document-sheet-column formula blocks, native logical block events and sheet position updates, scalar scanner/shared RPN compiler, lazy result ownership, compiler/runtime error distinction, common RTL cancellation, and explicit missing service boundaries. The shared mdds container correction is type-only and pointer move append maps to its native by-value operation; no physical object lifetime engine or alternate grid/AST was added.24 pinned native/header/QA sources support this bounded slice without native execution.194related and206Calc tests, exact shared5+Calc47 raw-positive100 owners,3 Chromium/Worker cases, build and13 source gates pass; final86path hashes match committed scope. References/functions/listening/invalidation, serialization/ODS/UI, full modes/services and subnormal power fenv remain explicit gaps."
-commit: null
+commit:
+  hash: "0c88b33ccffeed1379a919902fc4550853d6b473"
+  message: "🧮 706QET calc: connect numeric formulas to document cells"
 comments:
   -
     author: "CODER"
     body: "Start: implement real numeric formula entry and lazy results in the existing Calc cell store; preserve native operations and explicit unsupported boundaries without adding UI or a second expression model."
+  -
+    author: "CODER"
+    body: "Verified: numeric ODFF formula entry and lazy results in actual Calc cells, native logical block events, canonical error forwarding and shared arithmetic/callback contracts. Exact shared5+Calc47 raw100,194related/206Calc tests,3 Chromium/Worker cases,24-source audit, build and13 gates pass; same-agent review passed. References/functions/dependency updates and ODS/UI remain pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending."
+  -
+    type: "status"
+    at: "2026-10-16T07:49:55.589Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: numeric ODFF formula entry and lazy results in actual Calc cells, native logical block events, canonical error forwarding and shared arithmetic/callback contracts. Exact shared5+Calc47 raw100,194related/206Calc tests,3 Chromium/Worker cases,24-source audit, build and13 gates pass; same-agent review passed. References/functions/dependency updates and ODS/UI remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T07:49:02.267Z"
+doc_updated_at: "2026-10-16T07:49:55.591Z"
 doc_updated_by: "CODER"
 description: "Task200: implement numeric formula entry, real token/RPN evaluation and lazy ScFormulaCell results in the existing document-sheet-column store. Reuse shared compiler, RTL parsing, mdds and formula result. No UI or unrelated language expansion."
 sections:
