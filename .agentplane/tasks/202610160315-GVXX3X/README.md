@@ -1,10 +1,11 @@
 ---
 id: "202610160315-GVXX3X"
 title: "Implement native LanguageTag simple extraction for shared font fallbacks"
-status: "DOING"
+result_summary: "Implemented complete native LanguageTag simpleExtract and corrected shared extension,numeric-region and private fallback fields;110related/196Calc exact raw100,13gates and actual browser/Writer pass. Full LanguageTag/state/font/pool/document/UI/ODS remain pending."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task190-checks/final-verification.json"
   findings:
     - "Native branch order/bounds and8enum decisions retain source nonvalidation behavior,ASCII/UTF16 and five output slots;private primitive output preservation is distinct from fresh empty prepared fields. Existing ordered fallback body/7owners/guard unchanged.110related/196Calc exact2shared/36Calc raw100,every counter positive;13gates and5native pins,production build/actual Chromium/DOM-free Worker/Writer pass,4refs restored.10intentional paths and honest inventory with parityflagsfalse. General parser projection remains explicit;full LanguageTag/state/canonicalization/font/pool/model/UI/ODS pending,no fake class or library/memory engine/all-app run."
-commit: null
+commit:
+  hash: "41d20fec5cf4c33ee77db76008ca3fa40a851d5f"
+  message: "✅ GVXX3X quality: record extraction and consumer verification"
 comments:
   -
     author: "CODER"
     body: "Start: port full native simpleExtract,connect admitted field extraction to actual shared canonical-tag fallbacks,verify related and Calc raw100 without fake LanguageTag or library/memory engine."
+  -
+    author: "CODER"
+    body: "Verified:complete native structural extraction and shared font/Locale fallback fields implemented;110related/196Calc exact2shared/36Calc raw100,13gates,5native pins,build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. Full LanguageTag/font/pool/document/UI/ODS pending."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full native simpleExtract8decisions/branches and output slots implemented;shared prepared fallback fields correct extension/numeric-region/private cases.110related/196Calc exact2shared/36Calc raw S/B/F/L100,every counter positive.13gates,5native pins,build/actual Chromium/DOM-free Worker/Writer pass,4refs restored.10intentional paths;no full LanguageTag/parity promotion/library/memory engine/all-app run;UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-16T03:25:44.672Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:complete native structural extraction and shared font/Locale fallback fields implemented;110related/196Calc exact2shared/36Calc raw100,13gates,5native pins,build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. Full LanguageTag/font/pool/document/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T03:25:21.897Z"
+doc_updated_at: "2026-10-16T03:25:44.674Z"
 doc_updated_by: "CODER"
 description: "Task190: port full LanguageTagImpl::simpleExtract field/output/branch semantics, reuse it in existing canonical-tag field projection at native cacheSimpleLSCV boundary, correct real shared font/Locale fallback fields, preserve general parser limits and verify exact raw coverage."
 sections:
@@ -124,6 +137,10 @@ sections:
     - Observation: Existing prepared-tag projection synthesized x or * language fallback for private tags and treated a three-unit region as the native country getter;known es-ES-u-co-trad lost its source variant field.
       Impact: These were local projection gaps,not suspected upstream bugs. Native simpleExtract/cache/getter contracts provide the correct fields.
       Resolution: Reuse native extraction for LSC/LV/LR and empty private-tag field behavior;retain explicit separate general-parser boundary without claiming full LanguageTag. New direct/shared/browser tests cover corrected cases.
+extensions:
+  implementation_commit:
+    hash: "80e2a02512ee980976f21bf293955e20255b69ea"
+    message: "🧩 GVXX3X calc: reuse native language-tag extraction in shared fallbacks"
 id_source: "generated"
 ---
 ## Summary
