@@ -456,3 +456,34 @@ ID registration and independently verified unknown-tag parsing still remain
 before Font can retain the full native language value. Font defaults,
 EditEngine values, Calc document pools/model and same-model ODS filters remain
 pending; this prerequisite does not establish UI readiness.
+
+## Native legacy names and defined mappings (task191)
+
+Task191 (`202610160328-6NB2F9`) implements the complete native Unicode
+`MsLangId::Conversion::convertIsoNamesToLanguage` overload and
+`MsLangId::getDefinedLanguagetags` in the existing shared conversion owner.
+These are called by LanguageTagImpl::convertLocaleToLang and the known-tag set
+used by canonicalization; they are required dependencies of that missing owner.
+
+Four complete ordered legacy tables contain 61 English-country, seven
+nonstandard, four additional nonstandard and eight other-name rows, including
+four native sentinels. The converter retains exact ISO-first priority, English
+country fallback, two legacy selector searches, country-only lookup, private
+names and final best-name lookup. The skip flag bypasses only the native ISO
+and English/country-only stages. IDs are returned raw, without applying the
+Locale converter's override policy. `C`, `posix`, `german` and `sr`/`latin`
+therefore use the original mappings rather than Intl canonicalization.
+
+The complete 643-entry defined mapping result preserves BCP47, script and ISO
+family order, duplicate tags and obsolete IDs. Returned mutable records own
+actual independent OUString values; mutating one record or one returned array
+does not change another record, subsequent calls or the source tables. The
+native allocation/vector/refcount machinery needs no JavaScript equivalent;
+no separate mapping constructor facade is invented.
+
+The std::string_view overload depends on the actual LanguageTag on-the-fly
+registry and remains unrepresented. It is not replaced with the Unicode
+function or a fabricated success. Full LanguageTag lazy state, canonicalization
+and registry, Font language values/defaults, Calc pools/model and same-model
+ODS filters remain pending. Source table anomalies are recorded as CALC-174
+without correcting source data or claiming UI readiness.

@@ -2450,3 +2450,22 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Status: source-observable boundary only;full LanguageTag/producer
   reachability and upstream intent are not established. No bug claim.
 - Port: preserve this exact result;do not add an empty-string guard.
+
+## CALC-174 — English country table has conflicting and mislabeled rows
+
+- Source: `i18nlangtag/source/isolang/isolang.cxx`
+  `aImplIsoLangEngEntries` and the Unicode
+  `MsLangId::Conversion::convertIsoNamesToLanguage` overload.
+- Observation: `KI` (Kiribati) occurs first with LANGUAGE_ENGLISH_UK and later
+  with LANGUAGE_ENGLISH_US. The first-match search returns UK for en/KI;
+  the later US row cannot win this table search. Another `NG` row carries the
+  comment Sierra Leone, while NG denotes Nigeria and Sierra Leone uses SL.
+  Normal en/NG lookup is already intercepted by the earlier main ISO table
+  and returns its Nigeria-specific raw ID; en/SL is not resolved by this
+  Unicode overload. The separate byte overload may attempt LanguageTag and
+  is outside this observation.
+- Status: suspicious source table duplication/comment mismatch, not proof of
+  intended replacement values or a demonstrated downstream document failure.
+- Port: preserve all rows and comments' source context, retain first-match and
+  ISO-before-English priority, test en/KI, en/NG and en/SL explicitly. Do not
+  deduplicate, reorder or silently replace NG with SL.

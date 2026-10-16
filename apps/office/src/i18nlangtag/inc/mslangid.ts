@@ -4,7 +4,10 @@ import {
   convertLocaleToLanguageImpl,
   convertPrivateUseToLanguage,
   getOverride,
+  convertIsoNamesToLanguage,
+  getDefinedLanguagetags,
 } from "../source/isolang/isolang";
+export type { LanguagetagMapping } from "../source/isolang/isolang";
 import { lookupFallbackLocale } from "../source/isolang/isolang.fallback";
 import {
   setConfiguredSystemLanguage,
@@ -28,6 +31,7 @@ export const MsLangId = {
   getConfiguredSystemUILanguage,
   getRealLanguage,
   getFallbackLocale,
+  getDefinedLanguagetags,
   Conversion: {
     convertLanguageToLocale,
     convertLocaleToLanguage,
@@ -36,5 +40,6 @@ export const MsLangId = {
     convertPrivateUseToLanguage,
     getOverride,
     lookupFallbackLocale,
+    convertIsoNamesToLanguage,
   },
 };

@@ -1,0 +1,341 @@
+{
+  "aImplIsoLangEngEntries": [
+    {
+      "mnLang": 2057,
+      "maCountry": "AO"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "BJ"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "BW"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "BI"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "CM"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "GA"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "GM"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "GH"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "GN"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "LS"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "MW"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "MT"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "NA"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "NG"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "UG"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "ZM"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "ZW"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "SZ"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "NG"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "KN"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "SH"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "IO"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "FK"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "GI"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "KI"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "VG"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "MU"
+    },
+    {
+      "mnLang": 2057,
+      "maCountry": "FJ"
+    },
+    {
+      "mnLang": 1033,
+      "maCountry": "KI"
+    },
+    {
+      "mnLang": 1033,
+      "maCountry": "LR"
+    },
+    {
+      "mnLang": 1033,
+      "maCountry": "GU"
+    },
+    {
+      "mnLang": 1033,
+      "maCountry": "MH"
+    },
+    {
+      "mnLang": 1033,
+      "maCountry": "PW"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "AI"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "AG"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "BS"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "BB"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "BM"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "KY"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "GD"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "DM"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "HT"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "MS"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "FM"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "VC"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "LC"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "TC"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "GY"
+    },
+    {
+      "mnLang": 9225,
+      "maCountry": "TT"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "CX"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "CC"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "NF"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "PG"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "SB"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "TV"
+    },
+    {
+      "mnLang": 3081,
+      "maCountry": "NR"
+    },
+    {
+      "mnLang": 5129,
+      "maCountry": "CK"
+    },
+    {
+      "mnLang": 5129,
+      "maCountry": "NU"
+    },
+    {
+      "mnLang": 5129,
+      "maCountry": "TK"
+    },
+    {
+      "mnLang": 5129,
+      "maCountry": "TO"
+    },
+    {
+      "mnLang": 1023,
+      "maCountry": ""
+    }
+  ],
+  "aImplIsoNoneStdLangEntries": [
+    {
+      "mnLang": 1044,
+      "maLanguage": "no",
+      "maCountry": "BOK"
+    },
+    {
+      "mnLang": 2068,
+      "maLanguage": "no",
+      "maCountry": "NYN"
+    },
+    {
+      "mnLang": 2074,
+      "maLanguage": "sr",
+      "maCountry": "latin"
+    },
+    {
+      "mnLang": 3098,
+      "maLanguage": "sr",
+      "maCountry": "cyrillic"
+    },
+    {
+      "mnLang": 1068,
+      "maLanguage": "az",
+      "maCountry": "latin"
+    },
+    {
+      "mnLang": 2092,
+      "maLanguage": "az",
+      "maCountry": "cyrillic"
+    },
+    {
+      "mnLang": 1023,
+      "maLanguage": "",
+      "maCountry": ""
+    }
+  ],
+  "aImplIsoNoneStdLangEntries2": [
+    {
+      "mnLang": 1044,
+      "maLanguage": "no",
+      "maCountry": "bokmaal"
+    },
+    {
+      "mnLang": 1044,
+      "maLanguage": "no",
+      "maCountry": "bokmal"
+    },
+    {
+      "mnLang": 2068,
+      "maLanguage": "no",
+      "maCountry": "nynorsk"
+    },
+    {
+      "mnLang": 1023,
+      "maLanguage": "",
+      "maCountry": ""
+    }
+  ],
+  "aImplOtherEntries": [
+    {
+      "mnLang": 1033,
+      "mpLanguage": "c"
+    },
+    {
+      "mnLang": 2052,
+      "mpLanguage": "chinese"
+    },
+    {
+      "mnLang": 1031,
+      "mpLanguage": "german"
+    },
+    {
+      "mnLang": 1041,
+      "mpLanguage": "japanese"
+    },
+    {
+      "mnLang": 1042,
+      "mpLanguage": "korean"
+    },
+    {
+      "mnLang": 1033,
+      "mpLanguage": "posix"
+    },
+    {
+      "mnLang": 1028,
+      "mpLanguage": "tchinese"
+    },
+    {
+      "mnLang": 1023,
+      "mpLanguage": null
+    }
+  ]
+}
