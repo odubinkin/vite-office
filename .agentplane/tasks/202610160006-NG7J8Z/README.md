@@ -1,10 +1,11 @@
 ---
 id: "202610160006-NG7J8Z"
 title: "Implement native rich-text sections and shared string normalization"
-status: "DOING"
+result_summary: "Implemented actual Section and source-owned section extraction over existing paragraph/attribute values;added real SharedStringPool normalization and preserved CALC167. Native QA span assertions replayed at implemented input boundary. Full text/engine/pool constructors and Calc model/UI/ODS remain pending;no all-app run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Original Section values and GetAllSections payload consume actual ContentInfo/XEditAttribute,retain ordered borders,empty/unformatted sections,borrowed items and first-Which suppression. Native zero-end early return and caller output preservation remain intact. Normalization reuses actual SharedStringPool;no pool/text/document constructor is fabricated."
     - "34related and187Calc scenarios pass;exact3shared and33Calc raw S/B/F/L100 with every raw counter positive. Literal native overlap/five-paragraph partition assertions run at implemented ContentInfo boundary. All13source gates,build,actual Chromium sections and Writer startup/load/edit pass;four refs restored."
     - "Eight original blobs,24unchanged existing methods and81unsigned boundary comparisons support source mapping. Reused pool/value/uppercase/itemset/guard bodies unchanged.21non-task paths fit approved45;inventory parity stays unverified and CALC167 is documented."
-commit: null
+commit:
+  hash: "2a452549d06a17ace00e8a1aaf47bea6ba648fa5"
+  message: "🔧 NG7J8Z quality: record rich text section verification"
 comments:
   -
     author: "CODER"
     body: "Start: port actual section extraction and paragraph normalization using existing core owners;preserve upstream behavior without a fake text-object constructor or EditEngine pool."
+  -
+    author: "CODER"
+    body: "Verified: native sections and paragraph normalization pass34related/187Calc,exact shared/Calc raw100,all13gates,build and actual Chromium/Writer checks;4refs restored. Same-agent quality passes;full Calc UI/ODS goal remains active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "34related/187Calc pass;exact3shared and33Calc raw S/B/F/L100,every counter positive. All13source gates,8native pins/24unchanged old methods/81unsigned comparisons,production build and actual Chromium sections/Writer workflow pass. Four refs restored;actual section/normalization only,no fake text/pool constructor,full Calc UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T00:15:45.298Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native sections and paragraph normalization pass34related/187Calc,exact shared/Calc raw100,all13gates,build and actual Chromium/Writer checks;4refs restored. Same-agent quality passes;full Calc UI/ODS goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:14:53.536Z"
+doc_updated_at: "2026-10-16T00:15:45.299Z"
 doc_updated_by: "CODER"
 description: "Task180: original EditTextObjectImpl GetAllSections payload responsibility over actual ContentInfo/XEditAttribute,actual editeng Section and ContentInfo NormalizeString using existing SharedStringPool. Prerequisite for real rich-text ODS/cell/header-footer model;do not fabricate EditTextObjectImpl or EditEngineItemPool constructors."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: The new pure section header provenance initially named only Section,which the source guard correctly rejected as basename-only evidence.
       Impact: A header facade needs actual member/constructor source evidence rather than matching filenames;runtime algorithms and pass criteria are unchanged.
       Resolution: Add original signed paragraph/start/end members and attribute-vector evidence to the header mapping. Source provenance,inventory and all13source gates pass;run final portable profiles and real browser acceptance.
+extensions:
+  implementation_commit:
+    hash: "96ef3546174cdbd92aabdcb499240c85bd3b7875"
+    message: "🔧 NG7J8Z core: implement native rich text sections"
 id_source: "generated"
 ---
 ## Summary
