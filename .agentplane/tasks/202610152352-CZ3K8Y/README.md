@@ -4,7 +4,7 @@ title: "Restore shared native size item contracts for Calc pool construction"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "95related/187Calc scenarios pass;exact5shared and33Calc raw S/B/F/L100,every counter positive,no Writer gaps. All13source gates,14native pins/16constants/75unchanged unrelated algorithms,build and actual Chromium size/Writer startup-load-edit pass. Four refs restored;native size contracts only,full Calc pool/document/UI/ODS pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T00:04:12.708Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase reviews committed1b4cf62ff28e against approved native size prerequisite scope. All bounded criteria pass;this is not independent review or Calc UI/ODS readiness."
+  evaluated_sha: "1b4cf62ff28ec28bcb2b730d6e1b679bf7402353"
+  blueprint_digest: "f013e6f6468a3d77dc6bc11b2d72fc16788d0ad30f6779b38c14ff3d7a079b65"
+  evidence_refs:
+    - ".agentplane/tasks/202610152352-CZ3K8Y/README.md"
+    - ".agentplane/tasks/202610152352-CZ3K8Y/quality/20261016-000412708-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152352-CZ3K8Y/quality/20261016-000412708-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152352-CZ3K8Y/quality/20261016-000412708-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152352-CZ3K8Y/blueprint/resolved-snapshot.json"
+    - "output/playwright/task179-checks/final-verification.json"
+    - "output/playwright/task179-checks/native-audit.json"
+    - "output/playwright/task179-checks/source-gates.json"
+    - "ap doctor OK with prior managed-hook warning;policy routing OK"
+  findings:
+    - "Single SvxSizeItem implementation uses stable actual tools Size,generated awt Size and existing CPPU Any with original three-member conversions,equality and scaling. Writer required constructor/copy/member/metric overrides follow native definitions;no compatibility adapter bypasses Any dispatch."
+    - "95related and187Calc scenarios pass;exact5shared and33Calc executable owners raw S/B/F/L100 with every counter positive. Actual Chromium and Writer startup/load/edit,production build and all13source gates pass with all4refs absent during runtime/restored.32non-task paths fit approved80."
+    - "14native source/IDL/generator/QA blobs and16constants pinned;75unrelated emitted algorithm bodies and reused geometry/converters/guard unchanged. CALC165..166 preserve original inconsistent failure/conversion branches. Broad inventory parity flags remain false."
 commit: null
 comments:
   -
