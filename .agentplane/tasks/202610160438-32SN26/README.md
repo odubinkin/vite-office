@@ -1,10 +1,11 @@
 ---
 id: "202610160438-32SN26"
 title: "Implement Calc language-tag scanner and registered subtag lookup"
-status: "DOING"
+result_summary: "Implement source-backed tag token scanning and pinned IANA registered lookup"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task194-checks/source-gates.json"
   findings:
     - "Complete general grammar,CLDR aliases/extensions,canonicalization and enclosing LanguageTag remain explicit next dependencies;UI/ODS are not ready. Native QA evidence is limited to lookup preconditions;no executed native parser or independent review is claimed."
-commit: null
+commit:
+  hash: "511cc99b885a40e41b62c82e132e6831b0c1ea55"
+  message: "🔎 32SN26 calc: record scanner and registry verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-backed token scanning and registered subtag lookup for the actual general parser dependency chain, preserving JS GC ownership."
+  -
+    author: "CODER"
+    body: "Verified: native private scanner and pinned registered-subtag lookup implemented with complete functional source data;13related and196Calc tests,strict raw100 coverage,13source gates,production build and actual browser/Worker pass. General parser and UI/ODS remain pending."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Implemented complete private scanner and seven registered-key lookup responsibilities with pinned functional IANA data;13related/196Calc tests,exact2shared and36Calc owners raw100,every counter positive. Both archives/13source files/all9296records verified;build,actual Chromium/DOM-free Worker and selected Writer pass without5source refs.13gates and15path final audit pass;full parser and UI/ODS remain pending,no full all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T04:47:16.693Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native private scanner and pinned registered-subtag lookup implemented with complete functional source data;13related and196Calc tests,strict raw100 coverage,13source gates,production build and actual browser/Worker pass. General parser and UI/ODS remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T04:46:55.128Z"
+doc_updated_at: "2026-10-16T04:47:16.694Z"
 doc_updated_by: "CODER"
 description: "Task194: implement the actual liblangtag token scanner and ordered IANA registry lookup needed by the general LanguageTag parser, using pinned source and functional data with JS GC; no substitute complete parser or physical library framework."
 sections:
@@ -129,6 +142,10 @@ sections:
       Resolution: Repair only task-owned capability/runtime metadata according to existing schema and source evidence, then rerun inventory and remaining gates.
       Promotion: incident-candidate
       Fixability: repo-fixable
+extensions:
+  implementation_commit:
+    hash: "cc3564904be7e0bb03d93326e3eb0b7b270c916d"
+    message: "🧩 32SN26 calc: implement native tag scanning and registry lookup"
 id_source: "generated"
 ---
 ## Summary
