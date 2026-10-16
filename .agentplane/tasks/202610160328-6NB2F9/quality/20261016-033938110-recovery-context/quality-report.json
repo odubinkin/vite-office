@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160328-6NB2F9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T03:39:38.110Z",
+  "verdict": "pass",
+  "summary": "Same-agent source/evidence review passes complete native Unicode name lookup and defined mapping return values;not an independent review.",
+  "evaluated_sha": "d118f9d6c622a453d5edaf8d4847740c566db9c3",
+  "blueprint_digest": "4710f4d1eaa3063843c1e72b1fdbc768bbc77de287f5eb7c6c12a01b6c2d90be",
+  "findings": [
+    "Source confirms80legacy rows/4sentinels/643ordered main entries,first-match/raw ID/skip/private/other semantics and actual required LanguageTag callers. Existing conversion bodies/7owners/guard unchanged;new mapping records retain duplicate aliases with independent actual OUString values.No inferred disagreement for shadowed ISO aliases;tests verify real first priority.68related/196Calc exact2shared/36Calc raw100,every counter positive,13gates,5pins,build/actual Chromium/DOM-free Worker/Writer pass;4refs restored.12intentional paths,honest inventory andCALC-174 without sourcefix. Byte overload/full LanguageTag/font/pool/model/UI/ODS remain pending;no fakeclass/library/memoryengine/all-app run."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160328-6NB2F9/README.md",
+    "output/playwright/task191-checks/final-verification.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
