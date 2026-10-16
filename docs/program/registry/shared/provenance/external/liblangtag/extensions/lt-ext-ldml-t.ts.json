@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-t.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c",
+    "localSymbols": [
+      "State",
+      "TransformExtensionData"
+    ],
+    "upstreamSymbols": [
+      "_lt_ext_ldml_t_create_data",
+      "_lt_ext_ldml_t_parse_tag",
+      "_lt_ext_ldml_t_lookup_type",
+      "_lt_ext_ldml_t_get_tag"
+    ],
+    "preservedResponsibilities": [
+      "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Wildcard range matching,POSIX locale conversion,likely-subtag maximization,full liblangtag API and enclosing LibreOffice LanguageTag are outside this complete normal-parser scope. Physical allocation/error-stack/refcounts/XML/service/module-loader/debug printing are erased,not simulated. Source-only unreachable pinned-data branches are justified by complete immutable-table tests."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-t.ts",
+          "marker": "TransformExtensionData"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-t.test.ts",
+          "marker": "preserves native transform grammar"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.data.test.ts",
+          "marker": "proves all alias targets"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c",
+          "marker": "_lt_ext_ldml_t_create_data"
+        },
+        {
+          "path": "vendor/liblangtag-reference/tests/check-tag.c",
+          "marker": "TDEF (lt_tag_canonicalize)"
+        }
+      ]
+    }
+  }
+}

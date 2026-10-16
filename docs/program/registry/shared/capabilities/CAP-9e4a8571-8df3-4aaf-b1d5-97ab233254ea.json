@@ -9,7 +9,8 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Task194 implements the complete private scanner token/error/position responsibilities and seven exact registered-key DB lookups from pinned liblangtag0.6.8 with IANA2026-06-14 functional data. Native C-string prefix/copy and optional error-slot behavior are preserved as managed byte/string values. All ordered registry rows, expanded ranges, original case, preferred tags, suppress scripts, prefixes, macro language and scope are retained; source wildcard and empty DB values remain explicit keys with no missing-key fallback. JS Map replaces trie/XML storage; GC replaces physical allocation/refcounts/locks. ASCII C-locale scanner classification is bounded to BCP47 bytes;non-ASCII byte diagnostics retain byte values,not host locale-dependent ctype behavior. No complete parser,LanguageTag,CLDR extensions/canonicalization,names/localization,Font/defaults/pools/model/UI/ODS or native execution/parity claim."
+      "Task194 implements the complete private scanner token/error/position responsibilities and seven exact registered-key DB lookups from pinned liblangtag0.6.8 with IANA2026-06-14 functional data. Native C-string prefix/copy and optional error-slot behavior are preserved as managed byte/string values. All ordered registry rows, expanded ranges, original case, preferred tags, suppress scripts, prefixes, macro language and scope are retained; source wildcard and empty DB values remain explicit keys with no missing-key fallback. JS Map replaces trie/XML storage; GC replaces physical allocation/refcounts/locks. ASCII C-locale scanner classification is bounded to BCP47 bytes;non-ASCII byte diagnostics retain byte values,not host locale-dependent ctype behavior. No complete parser,LanguageTag,CLDR extensions/canonicalization,names/localization,Font/defaults/pools/model/UI/ODS or native execution/parity claim.",
+      "Task196 completes and connects the required normal grammar,t callback and canonicalization using these actual scalar/data owners;see CAP-b64f5fbe-dc52-4c69-8802-3c4698aace10. This does not promote broad library/file parity or the enclosing LanguageTag readiness."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -17,7 +18,7 @@
     },
     "capability": "Native language-tag token scanning and pinned registered-subtag lookup",
     "gaps": [
-      "General tag grammar,CLDR aliases/extensions,canonicalization and actual LanguageTag remain pending."
+      "Enclosing LibreOffice LanguageTag state/ID registration,Font/defaults/pools/model/UI/ODS remain pending;full external-library wildcard/locale/maximization APIs are outside this capability."
     ],
     "upstream": {
       "implementation": [

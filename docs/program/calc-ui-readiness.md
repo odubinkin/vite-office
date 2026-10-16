@@ -618,3 +618,50 @@ the local HEX regex end-before-newline difference and added a direct callback
 regression;related strict coverage,browser/build and affected static checks
 were rerun. General grammar/t/canonicalizer/LanguageTag/UI/ODS remain pending;
 no full all-app run or broad parity promotion.
+
+
+## Connected normal language parser and canonicalizer (task196)
+
+Task196 connects actual liblangtag normal private tag fields/defaults/lifecycle,
+original parser-state ordinals,filtered string cache,copy/truncate/asymmetric
+comparison,registered normal grammar and canonicalization. CLDR alias order,
+redundant replacement,preferred subtags,suppress-script and extlang form use
+the existing pinned IANA/CLDR values. Real extension containers invoke the
+existing Unicode callback and actual transform callback;the latter calls the
+same normal parser recursively. Default callbacks retain raw spelling.
+Source callback data sharing and cache/state mutation remain observable JS
+reference/value semantics;no physical ownership or dynamic library engine.
+
+The complete immutable-table tests prove all484alias targets and25preferred
+redundant source/targets parse,all26grandfathered tags have normal replacements,
+normal aliases change primary language,extlang prefix/preferred presence and
+redundant replacement field-subset properties. Native allocation/XML/data-error
+or impossible assertion branches are folded only under these tested facts.
+Normal string/error/state behavior is preserved;no fake failing parser backend,
+coverage-ignore directive or memory/native executable is used.
+
+Original normal parse/canonical/extlang QA slices and task193's independent
+17source/Intl counterexamples now execute the actual connected owner group.
+Transform cases remain source-derived,not an executed native oracle. CALC-180
+through CALC-183 record additional suspicious source cases without changing
+upstream behavior. This is the normal external parser dependency,not a complete
+liblangtag API or the enclosing LibreOffice LanguageTag owner. Wildcard range
+matching,POSIX locale conversion and likely-subtag maximization are outside
+this scope;LanguageTag state/ID registration and real Font/defaults/pools/
+Calc document/sheet/column/UI/same-model ODS remain required next.
+
+
+Task196 acceptance:200related tests/10files and196Calc tests/78files pass.
+Exact11related shared executable owners have raw S596/B449/F62/L519100,
+every raw counter positive;all36Calc owners retain S4310/B2777/F864/L3857100.
+Pinned2archives/6LibreOffice files/32original source/QA/data files,all23native
+state ordinals,66literal normal parse/canonical/extlang QA vectors and17earlier
+independent parser-contract cases are checked. All484alias targets,26GF
+aliases,25preferred redundant records and258registered extlangs support the
+explicit pinned-data invariants. Production build,actual Chromium/DOM-free
+Worker normal parsing/canonicalization/cache/copy/incremental values and1Writer
+startup/load/edit pass with5source refs absent/restored. Existing inventory and
+provenance records link the completed normal parser from earlier scalar/data
+capabilities;no broad parity flag is promoted. All13existing source gates pass;
+no full all-app run. Outer LanguageTag/Font/defaults/pools/model/UI/ODS remain
+pending,so the minimum UI plus same-model ODS milestone is not reached.

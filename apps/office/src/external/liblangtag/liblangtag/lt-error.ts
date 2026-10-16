@@ -25,3 +25,13 @@ export interface TagDiagnostic {
 export interface DiagnosticSlot {
   error: TagDiagnostic | null;
 }
+
+/** Projects one fresh native error slot. @param slot - Optional caller destination. @param message - Native diagnostic. @param code - Native type. @returns False, for native boolean operations. */
+export function setDiagnostic(
+  slot: DiagnosticSlot | undefined,
+  message: string,
+  code = ErrorCode.LT_ERR_FAIL_ON_SCANNER,
+): false {
+  if (slot) slot.error = { code, message };
+  return false;
+}

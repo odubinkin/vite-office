@@ -20,17 +20,19 @@
         "apps/office/src/external/liblangtag/liblangtag/lt-utils.test.ts",
         "docs/program/calc-ui-readiness.md#Unicode extension and functional CLDR values (task195)"
       ],
-      "justification": "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim.",
+      "justification": "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim. Task196 adds one explicitly fresh-slot diagnostic projection shared by actual normal parser/lifecycle/canonicalization operations;the full native error stack remains outside scope.",
       "knownViolations": [],
       "localSymbols": [
         "ErrorCode",
         "TagDiagnostic",
-        "DiagnosticSlot"
+        "DiagnosticSlot",
+        "setDiagnostic"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "vendor/liblangtag-reference/liblangtag/lt-error.h",
       "upstreamSymbols": [
-        "_lt_error_type_t"
+        "_lt_error_type_t",
+        "lt_error_set"
       ]
     }
   }

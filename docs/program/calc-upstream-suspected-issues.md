@@ -2535,3 +2535,50 @@ it would succeed before the getter call. Preserve this observable callback
 state effect;the getter is not replaced with a nonmutating copy sort.
 Tests execute the managed callback sequence;actual full-tag incremental API
 reachability and native binary execution remain unproven. Task195.
+
+
+## CALC-180 — transform fields after a language reject a second key
+
+Source: pinned liblangtag0.6.8 `extensions/lt-ext-ldml-t.c`,
+`_lt_ext_ldml_t_parse_tag` STATE_FIELD2. Discovery of a new key here happens only
+when the nested tag has no language. Thus normal `en-t-m0-ungegn-x0-private`
+is accepted,but `en-t-de-m0-ungegn-x0-private` fails at x0 as an invalid field
+value. The same first field works with a nested language;the restriction starts
+after its first value. Preserve this branch,without extending field discovery
+or sorting fields. Evidence is source-derived plus managed normal-parser and
+callback regressions;no native execution or outer LanguageTag reachability
+claim. Task196.
+
+## CALC-181 — redundant canonical replacement clears private use
+
+Source: same pinned `liblangtag/lt-tag.c`, `_lt_tag_subtract`, `_lt_tag_replace`
+and `_lt_tag_canonicalize`. Both helpers test the privateuse pointer,which the
+constructor always creates,even when its string is empty. Searching a redundant
+prefix for `zh-cmn-x-FOO` finds zh-cmn with preferred cmn. Subtraction clears the
+original private value and replacement copies the preferred tag's empty value;
+canonical output is cmn. Preserve this behavior,including the mutation of the
+actual tag fields. This differs from ordinary en-x-FOO,which retains FOO when
+no redundant replacement occurs. Source-derived evidence,not native binary
+execution or a standards verdict. Task196.
+
+## CALC-182 — multi-variant parse can leave a duplicated string cache
+
+Source: same pinned `lt_tag_parse_state` second-variant path explicitly frees
+and rebuilds the ALL-filter cache for exact prefix comparison before appending
+the variant. `_lt_tag_parse` then appends the whole supplied input string to
+that nonempty cache at bail. For a single full parse of sl-rozaj-biske,the first
+ALL getter returns sl-rozaj-sl-rozaj-biske. Canonicalization changes filters and
+rebuilds from actual fields,producing sl-rozaj-biske. Preserve both the transient
+cache value and canonical result;do not silently invalidate it after append.
+Evidence is source-derived and replayed in managed tag/Chromium/Worker tests;
+no executed native oracle or whole LibreOffice UI effect is claimed. Task196.
+
+## CALC-183 — normal private-use parsing accepts a wildcard token
+
+Source: same pinned `lt_tag_parse_state` PRIVATEUSETOKEN/PRIVATEUSETOKEN2 accepts
+any scanner token with length<=8. The scanner admits a standalone asterisk and
+allow_wildcard=false only disables the separate wildcard-range dispatch,not
+this length branch. Therefore normal x-* parses and canonicalizes to x-*.
+Preserve the original normal parser result;do not add an alphanumeric check
+absent from this branch. Source-derived managed normal-parser/browser evidence,
+not a full outer LanguageTag validity or native execution claim. Task196.

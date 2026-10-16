@@ -9,7 +9,8 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim."
+      "Task195 implements actual liblangtag0.6.8 Unicode extension callback state/default/precheck/parse/sort/canonical payload/validation responsibilities over complete pinned ordered CLDR functional data. Raw-key XPath selection remains case-sensitive after case-insensitive key discovery;type names match case-insensitively,only CODEPOINTS has the source numeric exception. Attribute spelling,duplicate containers,clipped keys,all-group discovery and in-place getter sorting are preserved. Native JS ASCII operations are verified exhaustively and reused by the existing IANA owner. Shared native error codes and fresh-slot diagnostic projections replace scanner-owned declarations;no physical error-stack/refcount/module-loader/XML/trie/allocator/lock framework. All7keyword groups,11file append order,1016types and484unfiltered languageAlias rows retain non-description attributes. Full general grammar,t handler,CLDR alias application,canonicalization,enclosing LanguageTag,Font/defaults/pools/model/UI/ODS remain pending;no broad parity or native execution claim.",
+      "Task196 completes and connects the required normal grammar,t callback and canonicalization using these actual scalar/data owners;see CAP-b64f5fbe-dc52-4c69-8802-3c4698aace10. This does not promote broad library/file parity or the enclosing LanguageTag readiness."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -17,7 +18,7 @@
     },
     "capability": "Native Unicode extension callbacks and ordered functional CLDR values",
     "gaps": [
-      "General tag grammar,t handler,canonicalization and enclosing LanguageTag remain pending."
+      "Enclosing LibreOffice LanguageTag state/ID registration,Font/defaults/pools/model/UI/ODS remain pending;full external-library wildcard/locale/maximization APIs are outside this capability."
     ],
     "upstream": {
       "implementation": [
