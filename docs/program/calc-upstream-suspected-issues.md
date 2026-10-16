@@ -2388,3 +2388,9 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source: `editeng/source/editeng/editobj.cxx`, `EditTextObjectImpl::GetAllSections`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Observation: for nonempty text,an attribute whose start/end both equal paragraph length contributes only the existing final border. Section construction has no section starting at that final border. FindBySectionStart then fails;debug asserts and the ordinary source path returns before swapping output. Previously supplied caller output therefore remains unchanged. No upstream engine-producer reachability or document effect is established.
 - Decision: preserve release early return and caller output;do not append a fabricated zero-length end section or clear output on failure. Empty paragraphs still have the original0..0section. Source-derived actual ContentInfo/attribute regression covers the distinction.
+
+## CALC-168: Font fill color does not determine its independent transparency flag
+
+- Source: `vcl/source/font/font.cxx`, `Font::SetFillColor`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: only a changed fill color enters the setter body. A changed transparent color sets mbTransparent=true,while a changed opaque color leaves the flag unchanged. Repeating the same transparent color after SetTransparent(false) therefore retains false. These fields are explicitly marked compatibility state in ImplFont;the asymmetry may be intentional.
+- Decision: preserve guarded assignment and independent flag state. Do not derive transparency from current fill color,force false for opaque fill,or apply side effects to no-op assignments. Actual shared Font regressions cover all transitions. No wider renderer/document effect is claimed.

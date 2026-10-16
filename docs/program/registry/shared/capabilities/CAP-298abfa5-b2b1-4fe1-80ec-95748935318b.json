@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-298abfa5-b2b1-4fe1-80ec-95748935318b",
+    "capabilityId": "CAP-298abfa5-b2b1-4fe1-80ec-95748935318b",
+    "suite": "shared",
+    "subsystem": "font-stored-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Existing shared Font owns native stored Color/fill/transparency/alignment/size with source defaults.",
+      "Native guarded updates,value copies and fill-side effects are preserved without physical ownership emulation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task181 extends the existing shared VCL Font with original transparent Color/fill defaults,true transparency,TextAlign TOP,stored Size and guarded setters/getters including height/average-width aliases. Actual Color and Size values are copied into immutable shared JS state;no refcount,weak-reference,lifetime manager or renderer cache is introduced. Equality includes every represented metadata/paint/alignment/size field;EqualIgnoreColor excludes only paint colors,not transparency. Preserve fill transparency side effects only when fill color changes and do not force false for opaque fill. Const values are borrowed until owner mutation;physical COW uniqueness/native reference validity after mutation is not simulated. Existing metadata APIs remain intact. Configuration lookup,device matching,render/layout/calculated-width cache,other full Font attributes and complete Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad font parity claim."
+    },
+    "capability": "Native VCL font stored paint alignment and size",
+    "gaps": [
+      "Font configuration/device matching,rendering/calculated-width cache and other full attributes remain pending.",
+      "Physical COW uniqueness/ABI/native references after owner mutation are not simulated.",
+      "Complete Calc/EditEngine pool/document/UI/same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/vcl/source/font/font.ts",
+          "marker": "SetFillColor"
+        },
+        {
+          "path": "apps/office/src/tools/inc/fontenum.ts",
+          "marker": "enum TextAlign"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/vcl/source/font/native-font-values.test.ts",
+          "marker": "replays native VclFontTest alignment values"
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/native-font-metadata.test.ts",
+          "marker": "metadata defaults"
+        },
+        {
+          "path": "apps/office/e2e/shared/font-values.spec.ts",
+          "marker": "stored font colors alignment and size"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native VCL font stored values (task181)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-168"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vcl/source/font/font.cxx",
+          "marker": "Font::SetFillColor"
+        },
+        {
+          "path": "vcl/source/font/font.cxx",
+          "marker": "ImplFont::ImplFont()"
+        },
+        {
+          "path": "vcl/inc/impfont.hxx",
+          "marker": "SetFontSize"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vcl/qa/cppunit/font.cxx",
+          "marker": "VclFontTest::testAlignment"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/vcl/font.hxx",
+          "marker": "GetFillColor"
+        },
+        {
+          "path": "include/tools/fontenum.hxx",
+          "marker": "enum TextAlign"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-font-stored-values",
+    "scopeLimitations": [
+      "Task181 extends the existing shared VCL Font with original transparent Color/fill defaults,true transparency,TextAlign TOP,stored Size and guarded setters/getters including height/average-width aliases. Actual Color and Size values are copied into immutable shared JS state;no refcount,weak-reference,lifetime manager or renderer cache is introduced. Equality includes every represented metadata/paint/alignment/size field;EqualIgnoreColor excludes only paint colors,not transparency. Preserve fill transparency side effects only when fill color changes and do not force false for opaque fill. Const values are borrowed until owner mutation;physical COW uniqueness/native reference validity after mutation is not simulated. Existing metadata APIs remain intact. Configuration lookup,device matching,render/layout/calculated-width cache,other full Font attributes and complete Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad font parity claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

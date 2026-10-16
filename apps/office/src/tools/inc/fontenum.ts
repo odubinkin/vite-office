@@ -89,3 +89,11 @@ export enum FontLineStyle {
   LINESTYLE_BOLDWAVE,
   FontLineStyle_FORCE_EQUAL_SIZE = 2147483647,
 }
+
+/** Original text alignment enum and size sentinel from fontenum.hxx. */
+export enum TextAlign {
+  ALIGN_TOP,
+  ALIGN_BASELINE,
+  ALIGN_BOTTOM,
+  TextAlign_FORCE_EQUAL_SIZE = 2147483647,
+}
