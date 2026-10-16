@@ -539,3 +539,39 @@ plugin framework or claim a full LanguageTag from a partial parser. This task
 adds source evidence and actual native-JS audits, not a production parser or
 new runtime capability. LanguageTag/Font/defaults/pools/document/UI/ODS remain
 pending and the goal remains active.
+
+
+## Registered language parsing foundations (task194)
+
+Task194 implements liblangtag0.6.8's complete private byte scanner and functional
+registered-key lookup responsibilities from the seven actual DB owners. The
+IANA2026-06-14 registry selected by the pinned LibreOffice normal build supplies
+all ordered records, source wildcard/empty values and expanded private ranges.
+Original spelling, preferred tags, suppress scripts, prefix order, scope and
+macro language fields are retained; descriptions/UI labels are not imported.
+Native JS Maps replace XML/trie storage and GC owns the values. No allocator,
+refcount, weak-reference, mutex, module loader or native generator is ported.
+
+The scanner copies the first-NUL byte prefix, preserves native token boundaries,
+consumption after invalid bytes, wildcard error positions, error codes and
+caller output behavior. Native unreachable internal-NUL handling is folded into
+the constructor invariant. Optional diagnostic printing is omitted; optional
+error-slot values are preserved. ASCII C-locale classification is the supported
+BCP47 byte domain; arbitrary host C locale ctype behavior is not claimed.
+
+These are actual parser dependencies, not a successful tag validator. General
+grammar, CLDR aliases and extension rules, canonicalization and the enclosing
+LanguageTag state/ID registration remain pending. Font/defaults/pools and the
+ScDocument/sheet/column chain plus same-model ODS still require those owners.
+No UI readiness or complete liblangtag parity follows from this task.
+
+
+Task194 acceptance:13 related tests/2files and196Calc tests/78files pass.
+Exact2 new shared executable owners have raw S42/B26/F6/L39 and all36Calc
+owners retain S4310/B2777/F864/L3857, every raw counter positive100.
+The source audit verifies both archive hashes,6LibreOffice pins,13 original
+source/test files and every functional row from9296raw registry records.
+Production build, actual Chromium/DOM-free Worker scanner/registry values and
+one Writer startup/load/edit scenario pass with all5source references absent
+and restored. Inventory/provenance and existing source gates remain required;
+no full all-app run, complete parser or UI/ODS readiness is claimed.

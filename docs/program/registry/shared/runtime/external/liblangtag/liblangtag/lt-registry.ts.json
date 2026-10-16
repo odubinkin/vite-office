@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/liblangtag/liblangtag/lt-registry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-registered-parsing",
+    "capabilityIds": [
+      "CAP-9e4a8571-8df3-4aaf-b1d5-97ab233254ea"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/liblangtag/liblangtag/lt-registry.ts",
+        "apps/office/src/external/liblangtag/liblangtag/lt-registry.test.ts",
+        "docs/program/calc-ui-readiness.md#Registered language parsing foundations (task194)"
+      ],
+      "justification": "Task194 implements the complete private scanner token/error/position responsibilities and seven exact registered-key DB lookups from pinned liblangtag0.6.8 with IANA2026-06-14 functional data. Native C-string prefix/copy and optional error-slot behavior are preserved as managed byte/string values. All ordered registry rows, expanded ranges, original case, preferred tags, suppress scripts, prefixes, macro language and scope are retained; source wildcard and empty DB values remain explicit keys with no missing-key fallback. JS Map replaces trie/XML storage; GC replaces physical allocation/refcounts/locks. ASCII C-locale scanner classification is bounded to BCP47 bytes;non-ASCII byte diagnostics retain byte values,not host locale-dependent ctype behavior. No complete parser,LanguageTag,CLDR extensions/canonicalization,names/localization,Font/defaults/pools/model/UI/ODS or native execution/parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RegistryKind",
+        "RegistryEntry",
+        "databases",
+        "lookupRegistry"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/liblangtag-reference/liblangtag/lt-lang-db.c",
+      "upstreamSymbols": [
+        "lt_lang_db_lookup",
+        "lt_lang_db_parse"
+      ]
+    }
+  }
+}

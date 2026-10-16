@@ -4,7 +4,7 @@ title: "Implement Calc language-tag scanner and registered subtag lookup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-16T04:46:55.076Z"
+  updated_by: "CODER"
+  note: "Implemented complete private scanner and seven registered-key lookup responsibilities with pinned functional IANA data;13related/196Calc tests,exact2shared and36Calc owners raw100,every counter positive. Both archives/13source files/all9296records verified;build,actual Chromium/DOM-free Worker and selected Writer pass without5source refs.13gates and15path final audit pass;full parser and UI/ODS remain pending,no full all-app run."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement source-backed token scanning and registered subtag lookup for the actual general parser dependency chain, preserving JS GC ownership."
+  -
+    type: "verify"
+    at: "2026-10-16T04:46:55.076Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implemented complete private scanner and seven registered-key lookup responsibilities with pinned functional IANA data;13related/196Calc tests,exact2shared and36Calc owners raw100,every counter positive. Both archives/13source files/all9296records verified;build,actual Chromium/DOM-free Worker and selected Writer pass without5source refs.13gates and15path final audit pass;full parser and UI/ODS remain pending,no full all-app run."
 doc_version: 3
-doc_updated_at: "2026-10-16T04:39:29.291Z"
+doc_updated_at: "2026-10-16T04:46:55.128Z"
 doc_updated_by: "CODER"
 description: "Task194: implement the actual liblangtag token scanner and ordered IANA registry lookup needed by the general LanguageTag parser, using pinned source and functional data with JS GC; no substitute complete parser or physical library framework."
 sections:
@@ -49,9 +55,62 @@ sections:
     - node output/playwright/task194-checks/browser-portable.mjs: production build and actual Chromium/DOM-free Worker scanner/registry cases with five source refs absent/restored.
     - node output/playwright/task194-checks/source-gates.mjs: all13 existing source gates, unchanged guard algorithms, inventory/provenance/boundaries/routing/doctor.
     - node output/playwright/task194-checks/final-audit.mjs: exact source/ref/path/coverage evidence and truthful remaining parser boundary; record verification, source commit and same-agent EVALUATOR review followed by descriptive finish.
-  Verification: "Pending implementation and declared checks."
+  Verification: |-
+    Command:node output/playwright/task194-checks/native-audit.mjs. Result:pass. Evidence:both pinned archive SHA256 values,6LibreOffice source pins and13original library/source/QA blobs match;all9296raw IANA records match every functional local row including expanded ranges and explicit sentinel keys. No native binaries/generators executed. Scope:complete scanner responsibilities and immutable registered parsing fields,not full parser. Command:node output/playwright/task194-checks/portable.mjs. Result:pass. Evidence:13related tests/2files;exact2shared executable owners raw S42/B26/F6/L39 all100/every counter positive.196Calc tests/78files;exact36Calc owners S4310/B2777/F864/L3857 all100/every counter positive. All5source refs absent/restored. Command:node output/playwright/task194-checks/browser-portable.mjs. Result:pass. Evidence:production build,actual Chromium and DOM-free Worker execute genuine scanner/registry owners;1Writer startup/load/edit passes;all5source refs absent/restored. Command:node output/playwright/task194-checks/source-gates.mjs and final changed-file format/lint/typecheck/docs/diff rerun. Result:13gates pass including inventory/provenance/boundaries/routing/doctor;guard algorithms unchanged. Command:node output/playwright/task194-checks/final-audit.mjs. Result:pass. Evidence:15intentional non-task paths,exact raw owner sets and restored5refs;capability broad contract/behavior/default parity and verified flags remain false. Initial independent range oracle case error,missing constructor JSDoc return and empty upstream test-reference metadata were corrected in-scope;all affected checks pass. Native check-lang lookup preconditions are replayed;private scanner cases/source data are source-derived,not executed C QA. No new suspicion found. General grammar/CLDR aliases/extensions/canonicalization/enclosing LanguageTag/font/defaults/pools/model/UI/ODS remain pending. Full all-app run deferred under latest user instruction;goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-16T04:46:55.076Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implemented complete private scanner and seven registered-key lookup responsibilities with pinned functional IANA data;13related/196Calc tests,exact2shared and36Calc owners raw100,every counter positive. Both archives/13source files/all9296records verified;build,actual Chromium/DOM-free Worker and selected Writer pass without5source refs.13gates and15path final audit pass;full parser and UI/ODS remain pending,no full all-app run.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T04:46:54.600Z, excerpt_hash=sha256:0cb06b9c2038d49fc6963bca1360cca14bd1de2b552590bb3768a30b194eba4b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160438-32SN26/blueprint/resolved-snapshot.json
+    - old_digest: 23fefa070afa2a10e429d98c378eb0065785a911ed518784eedb5bc33b6a9d42
+    - current_digest: 23fefa070afa2a10e429d98c378eb0065785a911ed518784eedb5bc33b6a9d42
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610160438-32SN26
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610160438-32SN26
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task source commit and its registry records/link; preserve user work and unrelated tasks. Ignored pinned archives remain evidence."
-  Findings: "Previous turn answered readiness without code changes;this turn resumes the actual dependency chain. Native JS Intl substitution is already disproved;source-derived outcomes are not described as executed native tests. Physical C ownership, XML DOM/trie and locks are unnecessary for immutable in-process registered data under JS GC."
+  Findings: |-
+    Previous turn answered readiness without code changes;this turn resumes the actual dependency chain. Native JS Intl substitution is already disproved;source-derived outcomes are not described as executed native tests. Physical C ownership, XML DOM/trie and locks are unnecessary for immutable in-process registered data under JS GC.
+
+    - Observation: Initial verification: independent audit expected lowercase private script range although source preserves initial capital Q; production data already preserves it. Documentation gate also reports source-role metadata issues; inspect bounded logs before correction.
+      Impact: Verification remains incomplete; no passing native data or source-gate claim.
+      Resolution: Correct the independent range oracle to retain positional case, repair in-scope metadata from actual source, rerun failed checks and dependent validation.
+      Promotion: incident-candidate
+      Fixability: repo-fixable
+
+    - Observation: Bounded log resolves the documentation failure: scanner constructor JSDoc lacked @returns, not a source-role metadata failure. Native range audit now retains each original position case, matching all source-derived data.
+      Impact: Production registry values were correct; initial broad assertion output was unnecessarily large.
+      Resolution: Added constructor return documentation and bounded audit diagnostics to per-row comparisons; preserve original uppercase Q in script ranges and rerun source gates.
+      Promotion: incident-candidate
+      Fixability: repo-fixable
+
+    - Observation: Existing inventory gate fails after provenance/tree/typecheck pass; inspect exact registry error before changing records.
+      Impact: Runtime inventory acceptance is pending; no guard exemptions or broad parity promotion permitted.
+      Resolution: Repair only task-owned capability/runtime metadata according to existing schema and source evidence, then rerun inventory and remaining gates.
+      Promotion: incident-candidate
+      Fixability: repo-fixable
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +135,40 @@ Implement complete native token scanner and pinned functional IANA registry look
 
 ## Verification
 
-Pending implementation and declared checks.
+Command:node output/playwright/task194-checks/native-audit.mjs. Result:pass. Evidence:both pinned archive SHA256 values,6LibreOffice source pins and13original library/source/QA blobs match;all9296raw IANA records match every functional local row including expanded ranges and explicit sentinel keys. No native binaries/generators executed. Scope:complete scanner responsibilities and immutable registered parsing fields,not full parser. Command:node output/playwright/task194-checks/portable.mjs. Result:pass. Evidence:13related tests/2files;exact2shared executable owners raw S42/B26/F6/L39 all100/every counter positive.196Calc tests/78files;exact36Calc owners S4310/B2777/F864/L3857 all100/every counter positive. All5source refs absent/restored. Command:node output/playwright/task194-checks/browser-portable.mjs. Result:pass. Evidence:production build,actual Chromium and DOM-free Worker execute genuine scanner/registry owners;1Writer startup/load/edit passes;all5source refs absent/restored. Command:node output/playwright/task194-checks/source-gates.mjs and final changed-file format/lint/typecheck/docs/diff rerun. Result:13gates pass including inventory/provenance/boundaries/routing/doctor;guard algorithms unchanged. Command:node output/playwright/task194-checks/final-audit.mjs. Result:pass. Evidence:15intentional non-task paths,exact raw owner sets and restored5refs;capability broad contract/behavior/default parity and verified flags remain false. Initial independent range oracle case error,missing constructor JSDoc return and empty upstream test-reference metadata were corrected in-scope;all affected checks pass. Native check-lang lookup preconditions are replayed;private scanner cases/source data are source-derived,not executed C QA. No new suspicion found. General grammar/CLDR aliases/extensions/canonicalization/enclosing LanguageTag/font/defaults/pools/model/UI/ODS remain pending. Full all-app run deferred under latest user instruction;goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-16T04:46:55.076Z — VERIFY — ok
+
+By: CODER
+
+Note: Implemented complete private scanner and seven registered-key lookup responsibilities with pinned functional IANA data;13related/196Calc tests,exact2shared and36Calc owners raw100,every counter positive. Both archives/13source files/all9296records verified;build,actual Chromium/DOM-free Worker and selected Writer pass without5source refs.13gates and15path final audit pass;full parser and UI/ODS remain pending,no full all-app run.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T04:46:54.600Z, excerpt_hash=sha256:0cb06b9c2038d49fc6963bca1360cca14bd1de2b552590bb3768a30b194eba4b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160438-32SN26/blueprint/resolved-snapshot.json
+- old_digest: 23fefa070afa2a10e429d98c378eb0065785a911ed518784eedb5bc33b6a9d42
+- current_digest: 23fefa070afa2a10e429d98c378eb0065785a911ed518784eedb5bc33b6a9d42
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610160438-32SN26
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610160438-32SN26
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -85,3 +177,21 @@ Revert only this task source commit and its registry records/link; preserve user
 ## Findings
 
 Previous turn answered readiness without code changes;this turn resumes the actual dependency chain. Native JS Intl substitution is already disproved;source-derived outcomes are not described as executed native tests. Physical C ownership, XML DOM/trie and locks are unnecessary for immutable in-process registered data under JS GC.
+
+- Observation: Initial verification: independent audit expected lowercase private script range although source preserves initial capital Q; production data already preserves it. Documentation gate also reports source-role metadata issues; inspect bounded logs before correction.
+  Impact: Verification remains incomplete; no passing native data or source-gate claim.
+  Resolution: Correct the independent range oracle to retain positional case, repair in-scope metadata from actual source, rerun failed checks and dependent validation.
+  Promotion: incident-candidate
+  Fixability: repo-fixable
+
+- Observation: Bounded log resolves the documentation failure: scanner constructor JSDoc lacked @returns, not a source-role metadata failure. Native range audit now retains each original position case, matching all source-derived data.
+  Impact: Production registry values were correct; initial broad assertion output was unnecessarily large.
+  Resolution: Added constructor return documentation and bounded audit diagnostics to per-row comparisons; preserve original uppercase Q in script ranges and rerun source gates.
+  Promotion: incident-candidate
+  Fixability: repo-fixable
+
+- Observation: Existing inventory gate fails after provenance/tree/typecheck pass; inspect exact registry error before changing records.
+  Impact: Runtime inventory acceptance is pending; no guard exemptions or broad parity promotion permitted.
+  Resolution: Repair only task-owned capability/runtime metadata according to existing schema and source evidence, then rerun inventory and remaining gates.
+  Promotion: incident-candidate
+  Fixability: repo-fixable
