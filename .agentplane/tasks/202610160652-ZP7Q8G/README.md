@@ -1,10 +1,11 @@
 ---
 id: "202610160652-ZP7Q8G"
 title: "Compile basic arithmetic formula tokens to canonical RPN"
-status: "DOING"
+result_summary: "Compiled scalar arithmetic tokens to RPN"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task199-checks/final-audit.json"
   findings:
     - "Reviewed source-shaped recursive precedence, original token identity output, default virtual error hook and consumer recording test, recalc/return behavior, and explicit pre-mutation rejection of missing opcode/array contexts. Six pinned native files support the implemented subset without native execution. All31 related and199 Calc tests, strict raw coverage of shared1+Calc39 owners, two Chromium/Worker cases, build and13 gates pass. Exact9path final hashes match committed scope. Scanner, Calc interpreter/formula cells/recalc, ODS and UI remain pending; no full all-app run."
-commit: null
+commit:
+  hash: "ddcdb90f74e8f40d1d8f3cffe7e1a3838765caba"
+  message: "🧮 ZP7Q8G formula: compile scalar arithmetic tokens to RPN"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-backed shared arithmetic token compilation for the minimal Calc formula path, preserving explicit unsupported boundaries and existing token owners."
+  -
+    author: "CODER"
+    body: "Verified: bounded shared arithmetic token-to-RPN compilation, strict changed-shared and whole-Calc raw coverage, related tests, portable Chromium/Worker and source gates; same-agent evaluation passed. Scanner/evaluation/recalc and ODS readiness remain pending; UI stays separate."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: node output/playwright/task199-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs. Result: pass. Evidence: six pinned upstream implementation/header/QA files audited without native execution; 31 related formula tests in7 files pass; exact changed shared executable owner1 reaches raw S117/B75/F14/L107 with every counter positive; whole Calc199 tests/79files and exact39 executable owners reach raw S4420/B2851/F906/L3956 every counter positive. Production build and2 actual Chromium/DOM-free Worker cases pass. All13 source gates pass. All5 reference links absent during portable runs/restored afterward. Final exact9source/metadata path hash audit: output/playwright/task199-checks/final-audit.json. Scope: token-to-RPN scalar arithmetic only; no text scanner, formula-cell evaluation/recalc, ODS or UI readiness; no full all-app run. Follow-on scope remains minimal Calc formula editing then same-model ODS."
+  -
+    type: "status"
+    at: "2026-10-16T07:06:50.618Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: bounded shared arithmetic token-to-RPN compilation, strict changed-shared and whole-Calc raw coverage, related tests, portable Chromium/Worker and source gates; same-agent evaluation passed. Scanner/evaluation/recalc and ODS readiness remain pending; UI stays separate."
 doc_version: 3
-doc_updated_at: "2026-10-16T07:06:15.058Z"
+doc_updated_at: "2026-10-16T07:06:50.620Z"
 doc_updated_by: "CODER"
 description: "Advance the minimal Calc formula editing path by extending the existing shared FormulaCompiler with the source-shaped scalar arithmetic compilation subset over the actual FormulaTokenArray. No UI, locale expansion or alternate expression model."
 sections:
