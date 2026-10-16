@@ -1,10 +1,11 @@
 ---
 id: "202610160449-4VVT0H"
 title: "Implement registered Unicode language-tag extension parsing"
-status: "DOING"
+result_summary: "Implement registered Unicode extension callbacks and pinned CLDR values"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task195-checks/source-gates.json"
   findings:
     - "Full general grammar,t callback,alias application/canonicalization and enclosing LanguageTag remain explicit required next work;no whole-tag native QA or native execution/parity claim. Source-derived CALC-177/178/179 are preserved. Final HEX newline regression fixes a local native-JS mismatch;all affected checks rerun. Review is same-agent,not independent."
-commit: null
+commit:
+  hash: "44966bcd577f69d2aa19ca6be0c6bed4f944b350"
+  message: "🔎 4VVT0H calc: record Unicode extension verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual Unicode extension callbacks and pinned functional CLDR data,sharing source ASCII and diagnostic values with the existing scanner and registered-key owners."
+  -
+    author: "CODER"
+    body: "Verified: native Unicode extension callback state and complete pinned functional CLDR data implemented;shared source ASCII/error values reused.52related/196Calc tests,strict exact raw100 coverage,13source gates,build and real browser/Worker pass. General grammar and UI/ODS remain pending."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual Unicode-extension callback/data responsibility group and shared ASCII/error values implemented;allCLDR values/24source files/8native QA slices verified.52related/196Calc tests,exact6shared and36Calc raw100/every counter positive,13source gates,build/real Chromium/DOM-free Worker and selected Writer pass without5refs.28intentional paths,source/Calc invariants and final audit pass;CALC-177/178/179 preserved. General parser/t/canonicalizer/LanguageTag/UI/ODS remain pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T05:01:44.268Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Unicode extension callback state and complete pinned functional CLDR data implemented;shared source ASCII/error values reused.52related/196Calc tests,strict exact raw100 coverage,13source gates,build and real browser/Worker pass. General grammar and UI/ODS remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T05:01:09.170Z"
+doc_updated_at: "2026-10-16T05:01:44.269Z"
 doc_updated_by: "CODER"
 description: "Task195: implement the actual liblangtag Unicode extension state machine and pinned ordered CLDR functional lookup needed by general LanguageTag grammar/canonicalization, reusing shared byte/error/ASCII values without physical library machinery."
 sections:
@@ -115,6 +128,10 @@ sections:
     An early bounded CLI read used head and caused harmless stdout EPIPE after Verify Steps were printed. Subsequent CLI reads use non-closing output filtering. No semantic mutation or failed verification was inferred from that read.
 
     Final source review caught the JavaScript dollar-anchor exception before a trailing newline in the initial HEX regex. Native code checks every byte;production now uses explicit4..6length plus exclusion of any non-hex character. A direct callback regression for0061 followed by newline proves rejection;scanner-fed real inputs already reject newline earlier. This is a local implementation correction,not a new upstream suspicion. Rerun changed shared coverage,browser/build and affected static checks;Calc owners remain byte-identical to their passing portable run.
+extensions:
+  implementation_commit:
+    hash: "92338808d712bcc89ffc3a372364e987b31d0a79"
+    message: "🧩 4VVT0H calc: implement registered Unicode extension parsing"
 id_source: "generated"
 ---
 ## Summary
