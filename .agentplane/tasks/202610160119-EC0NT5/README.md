@@ -1,10 +1,11 @@
 ---
 id: "202610160119-EC0NT5"
 title: "Implement native Calc document calculation options"
-status: "DOING"
+result_summary: "Implemented native document calculation options,shared source measurement/default bindings and actual preferences item. CALC171/172 documented;full configuration/formatter/document/UI/ODS and next full all-app run remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task185-checks/final-verification.json"
   findings:
     - "Actual ScDocOptions/ScTpCalcItem complete represented value API;shared SearchParam and locale fallback reused,285measurement fields and1950schema exact,17native comparison fields match.19related/192Calc,exact raw100,13gates,build and actual Chromium/DOM-free Worker/Writer pass,4refs restored. CALC171/172 preserved;live configuration/ScDocCfg/formatter/document/UI/ODS remain pending. No compiler or memory engine or all-app run."
-commit: null
+commit:
+  hash: "0ac4f01f111c156c1df03ef3165656985d65c640"
+  message: "✅ EC0NT5 quality: record document options evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement actual document calculation options and item using native defaults and reused shared SearchParam/locale/pool values;verify exact related and Calc raw100."
+  -
+    author: "CODER"
+    body: "Verified: native Calc document options and item implemented;19related/192Calc,exact related and Calc raw100,13gates,source resource audits,build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. Full UI/ODS remains pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "19related/192Calc pass;exact6related(4shared+2Calc)/35Calc owners raw S/B/F/L100,every counter positive.13gates,9native pins,285locale fields,1950schema,17comparison fields,unchanged prior locale/shared/Writer/guard;build and real Chromium/DOM-free Worker/Writer pass,4refs restored. CALC171/172 retained;full UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T01:32:53.141Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Calc document options and item implemented;19related/192Calc,exact related and Calc raw100,13gates,source resource audits,build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. Full UI/ODS remains pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T01:32:23.442Z"
+doc_updated_at: "2026-10-16T01:32:53.143Z"
 doc_updated_by: "CODER"
 description: "Task185: implement actual ScDocOptions/ScTpCalcItem required by eager ScPoolHelper document construction,shared locale measurement binding and source schema date defaults;reuse SearchParam."
 sections:
@@ -120,6 +133,10 @@ sections:
     - Observation: A new dedicated Calc capability was added instead of retaining unrelated Writer ODF capability references;inventory requires its complete parity-mapping scope fields.
       Impact: Runtime/source checks pass;the new inventory record needs aspect,atomic operation and explicit scope limitations.
       Resolution: Complete the canonical mapping schema and static native caller anchors;retain unverified broad parity flags and pending live configuration/model services.
+extensions:
+  implementation_commit:
+    hash: "13b321d6ee5cbbda54b1daec9f2c49c9c8785963"
+    message: "🔧 EC0NT5 core: implement native Calc document options"
 id_source: "generated"
 ---
 ## Summary
