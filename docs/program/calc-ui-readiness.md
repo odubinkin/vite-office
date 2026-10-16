@@ -707,3 +707,16 @@ raw4420statements/2851branches/906functions/3956lines100,plus48related tests.
 Production build and real Chromium/DOM-free Worker editing pass with all5
 source references absent/restored. All13existing source/inventory gates pass. This is the first scalar integration milestone,not final readiness
 for formula editing or basic ODS;those are the next core integration tasks.
+
+## Arithmetic compilation slice (task199)
+
+The existing shared FormulaCompiler now compiles source-order scalar arithmetic
+tokens to RPN in the actual FormulaTokenArray. It preserves native precedence
+(including left-associative power and unary negation before power), token
+identity and the virtual error boundary. Unsupported functions, reference
+operators, existing array-context tokens, implicit-intersection and matrix
+compilation reject explicitly.
+This is not formula entry or evaluation yet: the Calc scanner, formula-cell
+storage, interpreter and dependency invalidation must connect this shared
+compiler to the document chain before basic formula editing is ready. ODS
+filters remain pending and UI implementation remains a separate task.

@@ -6,7 +6,7 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "formula-compiler-jump",
+    "subsystem": "formula-compiler-scalar",
     "capabilityIds": [
       "CAP-476ea52d-9853-45e2-ad3f-ee61ee7503c9"
     ],
@@ -14,22 +14,24 @@
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/formula/inc/FormulaCompiler.ts#FormulaCompiler",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
         "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
-        "include/formula/FormulaCompiler.hxx#IsOpCodeJumpCommand"
+        "include/formula/FormulaCompiler.hxx#IsOpCodeJumpCommand",
+        "include/formula/FormulaCompiler.hxx#CompileTokenArray"
       ],
-      "justification": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81. Only the actual static IsOpCodeJumpCommand member is bound; no compiler instance constructors, token array, parsing or compilation implementation is claimed.",
+      "justification": "Task199 reexports the single real shared FormulaCompiler class, including its static jump classification and bounded default scalar arithmetic token-to-RPN compilation. The header declares no second implementation. Unknown force-array context is required; functions, reference operators, implicit intersection and matrix services remain unsupported. Broad compiler contracts/defaults/behavior remain unverified; no text scanner, Calc formula-cell/recalc, ODS or UI readiness is claimed.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "aligned",
       "upstreamFile": "include/formula/FormulaCompiler.hxx",
       "upstreamSymbols": [
-        "IsOpCodeJumpCommand"
+        "IsOpCodeJumpCommand",
+        "CompileTokenArray"
       ]
     }
   }

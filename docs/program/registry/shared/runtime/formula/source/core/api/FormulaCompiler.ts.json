@@ -6,7 +6,7 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "formula-compiler-jump",
+    "subsystem": "formula-compiler-scalar",
     "capabilityIds": [
       "CAP-476ea52d-9853-45e2-ad3f-ee61ee7503c9"
     ],
@@ -14,7 +14,7 @@
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/formula/source/core/api/FormulaCompiler.ts#FormulaCompiler",
         "apps/office/src/formula/source/core/api/FormulaCompiler.ts#IsOpCodeJumpCommand",
@@ -22,17 +22,44 @@
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
         "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
-        "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::IsOpCodeJumpCommand"
+        "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::IsOpCodeJumpCommand",
+        "apps/office/src/formula/source/core/api/FormulaCompiler.ts#CompileTokenArray",
+        "apps/office/src/formula/source/core/api/compiler-arithmetic.test.ts#preserves arithmetic precedence, left-associative power and unary-before-power",
+        "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::PowLine"
       ],
-      "justification": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81. Only the actual static IsOpCodeJumpCommand member is bound; no compiler instance constructors, token array, parsing or compilation implementation is claimed.",
+      "justification": "Task199 adds the default-mode shared scalar arithmetic token-to-RPN subset over the existing FormulaTokenArray. Native recursive precedence, original token identities, prefix-plus elision, whitespace skipping, first-error virtual boundary, expression/token recursion limits, forced recalc retention and subtotal-return meaning are preserved for supported tokens. The base error hook remains the actual native empty operation. Unsupported opcode families, existing array-context tokens and implicit-intersection/matrix modes reject explicitly before RPN mutation. No text scanner, function/reference-operator grammar, formula-cell evaluation/recalc, ODS, UI, full compiler constructor/services, or broad parity is claimed. Existing token-array limit bounds emitted scalar RPN; native overflow paths requiring expansions are outside this subset. Scope reduction is explicit and broad flags remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "FormulaCompiler",
+        "CompileTokenArray",
+        "SetError",
+        "GetToken",
+        "NextToken",
+        "PutCode",
+        "Factor",
+        "UnaryLine",
+        "PostOpLine",
+        "PowLine",
+        "MulDivLine",
+        "AddSubLine",
+        "Expression",
         "IsOpCodeJumpCommand"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "formula/source/core/api/FormulaCompiler.cxx",
       "upstreamSymbols": [
+        "FormulaCompiler::CompileTokenArray",
+        "FormulaCompiler::SetError",
+        "FormulaCompiler::GetToken",
+        "FormulaCompiler::NextToken",
+        "FormulaCompiler::PutCode",
+        "FormulaCompiler::Factor",
+        "FormulaCompiler::UnaryLine",
+        "FormulaCompiler::PostOpLine",
+        "FormulaCompiler::PowLine",
+        "FormulaCompiler::MulDivLine",
+        "FormulaCompiler::AddSubLine",
+        "FormulaCompiler::Expression",
         "FormulaCompiler::IsOpCodeJumpCommand"
       ]
     }
