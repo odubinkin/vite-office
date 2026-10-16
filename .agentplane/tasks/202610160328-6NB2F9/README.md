@@ -1,10 +1,11 @@
 ---
 id: "202610160328-6NB2F9"
 title: "Implement native legacy language names and defined tag mappings"
-status: "DOING"
+result_summary: "Implemented complete native Unicode language-name lookup and643ordered defined tag mappings;80legacy rows/4sentinels,raw IDs and actual Unicode value ownership preserved.68related/196Calc exact raw100 and13gates/build/browser/Writer pass;full LanguageTag/font/pool/document/UI/ODS pending."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task191-checks/final-verification.json"
   findings:
     - "Source confirms80legacy rows/4sentinels/643ordered main entries,first-match/raw ID/skip/private/other semantics and actual required LanguageTag callers. Existing conversion bodies/7owners/guard unchanged;new mapping records retain duplicate aliases with independent actual OUString values.No inferred disagreement for shadowed ISO aliases;tests verify real first priority.68related/196Calc exact2shared/36Calc raw100,every counter positive,13gates,5pins,build/actual Chromium/DOM-free Worker/Writer pass;4refs restored.12intentional paths,honest inventory andCALC-174 without sourcefix. Byte overload/full LanguageTag/font/pool/model/UI/ODS remain pending;no fakeclass/library/memoryengine/all-app run."
-commit: null
+commit:
+  hash: "9bf2bcf9ac19f7a6bc5936295c7fc71711984986"
+  message: "✅ 6NB2F9 quality: record native language-name verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement complete source OUString name conversion and defined mappings required by LanguageTag,with raw IDs/order/independent values and strict portable checks;no missing byte overload fake."
+  -
+    author: "CODER"
+    body: "Verified:complete native Unicode name conversion and643defined tag mappings implemented with80exact legacy rows/4sentinels,raw IDs/order/independent OUString values;68related/196Calc exact raw100,13gates,5pins,build/Chromium/DOM-free Worker/Writer pass,4refs restored. CALC-174 recorded;full LanguageTag/UI/ODS pending."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Complete native Unicode name conversion/643defined tag sequence implemented;80legacy rows/4sentinels exact,skip/priority/raw IDs/actual OUString ownership preserved.68related/196Calc exact2shared/36Calc raw100,every counter positive;13gates,5native pins,build/Chromium/DOM-free Worker/Writer pass,4refs restored.12intentional paths,CALC-174 recorded;no byte overload fake/full LanguageTag/library/memoryengine/all-app run;UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-16T03:39:50.338Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:complete native Unicode name conversion and643defined tag mappings implemented with80exact legacy rows/4sentinels,raw IDs/order/independent OUString values;68related/196Calc exact raw100,13gates,5pins,build/Chromium/DOM-free Worker/Writer pass,4refs restored. CALC-174 recorded;full LanguageTag/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T03:39:37.546Z"
+doc_updated_at: "2026-10-16T03:39:50.339Z"
 doc_updated_by: "CODER"
 description: "Task191: implement complete OUString convertIsoNamesToLanguage and getDefinedLanguagetags prerequisites called by LanguageTag conversion/canonicalization,port exact four legacy tables and preserve raw IDs/order/sentinels. No fake LanguageTag or byte overload requiring missing class."
 sections:
@@ -120,6 +133,10 @@ sections:
     - Observation: The ku/IQ alias candidate is also shadowed by an earlier canonical1170 row. Exhaustive first-row inspection shows every numeric redirect ISO row is preceded by a row for the same language/country.
       Impact: A forced raw-versus-normalized numeric disagreement is not supported by this source table. The converter's direct raw return and defined mapping alias retention remain required contracts.
       Resolution: Test actual first-match la/VA1142 and ku/IQ1170 alongside the retained later32886/3622 records;remove the unsupported disagreement assertion and correct browser expected literal. Production code unchanged.
+extensions:
+  implementation_commit:
+    hash: "d118f9d6c622a453d5edaf8d4847740c566db9c3"
+    message: "🧩 6NB2F9 calc: add native language names and defined tag mappings"
 id_source: "generated"
 ---
 ## Summary
