@@ -4,7 +4,7 @@ title: "Implement Calc language-tag scanner and registered subtag lookup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Implemented complete private scanner and seven registered-key lookup responsibilities with pinned functional IANA data;13related/196Calc tests,exact2shared and36Calc owners raw100,every counter positive. Both archives/13source files/all9296records verified;build,actual Chromium/DOM-free Worker and selected Writer pass without5source refs.13gates and15path final audit pass;full parser and UI/ODS remain pending,no full all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T04:47:07.609Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR review: exact source commit cc3564904be7 and15declared source paths match final evidence. Real scanner and pinned registered-key owners preserve bounded source responsibilities;no fake full parser/LanguageTag,physical memory engine or parity promotion.13related/196Calc tests,exact raw100 owner sets,build/actual browser/Worker,source data and13gates pass."
+  evaluated_sha: "cc3564904be7e0bb03d93326e3eb0b7b270c916d"
+  blueprint_digest: "23fefa070afa2a10e429d98c378eb0065785a911ed518784eedb5bc33b6a9d42"
+  evidence_refs:
+    - ".agentplane/tasks/202610160438-32SN26/README.md"
+    - ".agentplane/tasks/202610160438-32SN26/quality/20261016-044707609-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160438-32SN26/quality/20261016-044707609-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160438-32SN26/quality/20261016-044707609-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160438-32SN26/blueprint/resolved-snapshot.json"
+    - "output/playwright/task194-checks/final-audit.json"
+    - "output/playwright/task194-checks/native-audit.json"
+    - "output/playwright/task194-checks/source-gates.json"
+  findings:
+    - "Complete general grammar,CLDR aliases/extensions,canonicalization and enclosing LanguageTag remain explicit next dependencies;UI/ODS are not ready. Native QA evidence is limited to lookup preconditions;no executed native parser or independent review is claimed."
 commit: null
 comments:
   -
