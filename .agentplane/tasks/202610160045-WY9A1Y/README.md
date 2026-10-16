@@ -4,7 +4,7 @@ title: "Preserve shared Font stored values through Writer Worker transport"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Initial real-model regression demonstrates Font state loss;fixed68related/187Calc pass,exact2shared/33Calc raw100,every counter positive,Writer-only gap exempt.13gates,8native pins/core+ODF+guard unchanged,7other codec functions unchanged;build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Browser transport only;full UI/ODS pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T00:59:11.480Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase reviews committedb12ec0df4220 against approved lossless Font transport scope;all required evidence passes. Not independent review or full Font/Calc UI/ODS certification."
+  evaluated_sha: "b12ec0df422065ce67c4446fe06bb59a1d7d7d65"
+  blueprint_digest: "942c863b527ae5dec71ade1533bd31f04d6dc3fd6594f8e11e9fb9077dbfdfb7"
+  evidence_refs:
+    - ".agentplane/tasks/202610160045-WY9A1Y/README.md"
+    - ".agentplane/tasks/202610160045-WY9A1Y/quality/20261016-005911480-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160045-WY9A1Y/quality/20261016-005911480-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160045-WY9A1Y/quality/20261016-005911480-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160045-WY9A1Y/blueprint/resolved-snapshot.json"
+    - "output/playwright/task183-checks/initial-font-roundtrip.log"
+    - "output/playwright/task183-checks/final-verification.json"
+    - "output/playwright/task183-checks/native-audit.json"
+    - "output/playwright/task183-checks/source-gates.json"
+    - "ap doctor OK with prior managed-hook warning;policy routing OK"
+  findings:
+    - "Initial actual SwDoc/SwNumFormat structured-clone regression fails before production changes and passes after shared VCL browser codec integration. All represented metadata/paint/alpha/transparency/alignment/size values survive actual model round trip;legacy defaults come from real Font and malformed/partial groups reject before mutation."
+    - "68related and187Calc scenarios pass;exact2shared and33Calc raw S/B/F/L100 with every counter positive;one Writer-only coverage gap exempt.13gates,production build,actual Chromium and dedicated DOM-free Worker model round trips plus Writer startup/load/edit pass;4refs restored."
+    - "Eight native source/header/QA blobs support the logical copy/default contract. Core Font/Color/Size/numbering and ODF plus guard are byte-identical;whole Writer runtime changes only in declared encode/decode and shared import,7other functions unchanged.11non-task paths fit40;inventory distinguishes browser transport and broad parity stays unverified."
 commit: null
 comments:
   -
