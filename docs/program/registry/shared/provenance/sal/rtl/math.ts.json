@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/math.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/math.cxx",
+    "localSymbols": [
+      "digit",
+      "stringToDouble",
+      "rtl_math_stringToDouble",
+      "rtl_math_uStringToDouble"
+    ],
+    "upstreamSymbols": [
+      "stringToDouble",
+      "rtl_math_stringToDouble",
+      "rtl_math_uStringToDouble"
+    ],
+    "preservedResponsibilities": [
+      "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim."
+    ],
+    "omittedResponsibilities": [
+      "Other RTL numeric APIs,formatting/unit overloads,physical ABI/NaN payload and complete Calc document/UI/same-model ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/math.ts",
+          "marker": "rtl_math_stringToDouble"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/math.cxx",
+          "marker": "stringToDouble"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/qa/rtl/math/test-rtl-math.cxx",
+          "marker": "test_stringToDouble_good"
+        }
+      ]
+    }
+  }
+}

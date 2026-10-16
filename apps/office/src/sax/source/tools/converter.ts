@@ -1,5 +1,11 @@
 /** @fileoverview Implements the existing measure targets from pinned sax/source/tools/converter.cxx. */
 
+import {
+  rtl_math_ConversionStatus,
+  rtl_math_stringToDouble,
+  rtl_math_uStringToDouble,
+} from "../../../sal/inc/rtl/math.h";
+
 /** Native core length targets implemented by Writer XML import. */
 export type CoreMeasureUnit = "twip" | "mm100";
 
@@ -10,6 +16,27 @@ const measureRatios = {
 
 /** Owns SAX scalar conversion without document or XML-context policy. */
 export const Converter = {
+  /** Reads the native UTF16/byte string-view overload; success depends on status, not complete consumption. @param output - Value slot, always written. @param input - Borrowed string view. @param rest - Optional unconsumed suffix slot. @returns Whether RTL reports Ok. */
+  convertDouble(
+    output: [number],
+    input: string | Uint8Array,
+    rest?: [string | Uint8Array],
+  ): boolean {
+    const status: [rtl_math_ConversionStatus] = [
+      rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok,
+    ];
+    const end: [number] = [0];
+    if (typeof input === "string") {
+      const units = new Uint16Array(input.length);
+      for (let i = 0; i < input.length; i++) units[i] = input.charCodeAt(i);
+      output[0] = rtl_math_uStringToDouble(units, units.length, 46, 44, status, end);
+      if (rest) rest[0] = input.slice(end[0]);
+    } else {
+      output[0] = rtl_math_stringToDouble(input, input.length, 46, 44, status, end);
+      if (rest) rest[0] = input.subarray(end[0]);
+    }
+    return status[0] === rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok;
+  },
   /** Serializes a core integer to centimetres with the pinned SAX precision. @param value - Core measure. @param source - Native core unit. @returns XML centimetre measure. */
   convertMeasureToXML(value: number, source: CoreMeasureUnit): string {
     const absolute = Math.abs(value);

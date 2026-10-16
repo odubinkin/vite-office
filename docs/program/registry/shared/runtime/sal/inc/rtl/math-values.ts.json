@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/math-values.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/rtl/math-values.ts",
+        "apps/office/src/sal/rtl/math.test.ts",
+        "docs/program/calc-ui-readiness.md#Shared ODS decimal scalar reader (task184)"
+      ],
+      "justification": "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rtl_math_ConversionStatus"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/rtl/math.h",
+      "upstreamSymbols": [
+        "rtl_math_ConversionStatus"
+      ]
+    }
+  }
+}

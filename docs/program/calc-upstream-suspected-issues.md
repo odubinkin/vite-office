@@ -2400,3 +2400,18 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source: `vcl/source/font/font.cxx`, `Font::IsSameInstance`;`include/vcl/font.hxx`, ImplType;`include/o3tl/cow_wrapper.hxx`, operator==;pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Observation: the method name suggests an identity predicate,but its implementation uses the same cow_wrapper operator== as Font equality. That operator returns same_object OR dereferenced value equality. Independently changed handles that arrive at equal values therefore compare true. This is an unexpected naming contract,not an established upstream defect.
 - Decision: preserve the exact value result and correct our earlier identity-only implementation/test. Reuse represented Font equality;do not port C++ reference counting or physical COW merely to reproduce this observable predicate. Other full Font fields remain outside current verified scope.
+
+## CALC-170 — SAX numeric success does not require consuming a number
+
+- Source: `sal/rtl/math.cxx` `stringToDouble`, native QA
+  `sal/qa/rtl/math/test-rtl-math.cxx` `test_stringToDouble_bad`, and
+  `sax/source/tools/converter.cxx` `Converter::convertDouble` read overloads.
+- Observation: malformed inputs such as `garbage` or `.` leave the numeric
+  result zero and parsed end at the beginning, with conversion status `Ok`.
+  SAX returns success based on status alone, and optional rest retains the
+  entire input. A numeric prefix followed by junk also succeeds.
+- Status: explicitly source-tested RTL behavior; suspicious only when a
+  caller assumes success means a complete valid number. No upstream bug or
+  reachable Calc import error is established.
+- Port: preserve value, status, consumed end and SAX success/rest behavior.
+  Consumers must follow their own upstream checks; no stricter shared parser.

@@ -323,3 +323,14 @@ Task183 repairs loss of new represented native Font paint/alignment/size fields 
 The actual SwDoc/SwNumFormat structured-clone regression fails before this correction because restored Font equality is false. Native Font copy/defaults and number-format font copying define the value contract;native alignment QA is supporting stored-value context only,not a native transport QA claim.
 
 Task183 acceptance:68related scenarios/11files and187Calc/76files pass. Exact2shared executable owners raw S66/B67/F37/L64 and all33Calc S4179/B2731/F821/L3727 have every raw statement/function/branch counter positive100;one Writer-only coverage gap remains exempt. Production build,actual Chromium and dedicated DOM-free Worker SwDoc numbering Font round trips,and1Writer startup/load/edit pass with4reference links absent/restored. Eight native source/header/QA blobs are pinned;core Font/Color/Size/numbering,ODF and dependency guard are byte-identical. Whole Writer emitted runtime differs only in declared encode/decode bodies and the shared codec import;7other functions retain tokens. Current primitive data and native-default legacy handling remain browser-owned;no native binary transport or full font/device/Calc model/UI/ODS claim. No full all-app run.
+
+## Shared ODS decimal scalar reader (task184)
+
+The real SAX `Converter.convertDouble` byte/UTF16 read overloads now delegate
+one shared RTL decimal parser. Native lexical rules, partial consumption,
+status and rest output are preserved. JS `Number` handles only the recognized
+decimal prefix; it does not determine source grammar. Native QA and binary64
+boundary tests cover rounding, range and the historical rounded DBL_MAX fix.
+This prepares ODS numeric attributes; it does not provide Calc XML contexts,
+a document owner chain or same-model ODS round trips. Numeric formatting and
+unit-converting overloads remain separate unimplemented responsibilities.
