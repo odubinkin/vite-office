@@ -4,7 +4,7 @@ title: "Implement native rich-text sections and shared string normalization"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-16T00:14:53.475Z"
+  updated_by: "CODER"
+  note: "34related/187Calc pass;exact3shared and33Calc raw S/B/F/L100,every counter positive. All13source gates,8native pins/24unchanged old methods/81unsigned comparisons,production build and actual Chromium sections/Writer workflow pass. Four refs restored;actual section/normalization only,no fake text/pool constructor,full Calc UI/ODS pending,no all-app run."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: port actual section extraction and paragraph normalization using existing core owners;preserve upstream behavior without a fake text-object constructor or EditEngine pool."
+  -
+    type: "verify"
+    at: "2026-10-16T00:14:53.475Z"
+    author: "CODER"
+    state: "ok"
+    note: "34related/187Calc pass;exact3shared and33Calc raw S/B/F/L100,every counter positive. All13source gates,8native pins/24unchanged old methods/81unsigned comparisons,production build and actual Chromium sections/Writer workflow pass. Four refs restored;actual section/normalization only,no fake text/pool constructor,full Calc UI/ODS pending,no all-app run."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:07:08.828Z"
+doc_updated_at: "2026-10-16T00:14:53.536Z"
 doc_updated_by: "CODER"
 description: "Task180: original EditTextObjectImpl GetAllSections payload responsibility over actual ContentInfo/XEditAttribute,actual editeng Section and ContentInfo NormalizeString using existing SharedStringPool. Prerequisite for real rich-text ODS/cell/header-footer model;do not fabricate EditTextObjectImpl or EditEngineItemPool constructors."
 sections:
@@ -45,10 +51,49 @@ sections:
   Plan: "Implement genuine editeng Section field/constructor values and source-owned GetAllSections algorithm over actual ContentInfo/XEditAttribute arrays;split large editobj implementation by native section responsibility without creating a fake EditTextObjectImpl or pool. Preserve ordered paragraph/border partitioning,empty paragraphs,borrowed item identities,first-Which duplicate suppression,unformatted spans and output replacement/unchanged-empty behavior. Add missing ContentInfo NormalizeString using actual SharedStringPool;existing value methods remain unchanged. Update inventory/readiness/suspected cases;maximum45non-task paths. Verify original source/QA context and unchanged old methods,whole Calc and related shared strict raw S/B/F/L100,13gates,build and actual Chromium sections plus Writer startup/load/edit with4refs absent/restored. No native probes,full all-app run,pool fallback substitute,localization or full rich-text/document/UI/ODS claim."
   Verify Steps: "Pin original Section hxx/cxx,EditTextObjectImpl GetAllSections,ContentInfo NormalizeString,editobj2 and SharedStringPool definitions plus actual related QA context. Test multiple/empty/unformatted paragraphs,overlapping/adjacent/zero spans,duplicate Which first wins,empty/null holder attributes,borrowed item identities and unchanged caller output when source is empty;defined initialized signed32 producer domain. Test actual normalization preserves text and stable SharedString member while interning actual equal/case-related values;old ContentInfo/attribute methods emitted tokens unchanged. Whole Calc and related shared raw S/B/F/L100,every raw counter positive;Writer-only gaps exempt.13source gates,production build,real Chromium rich-text sections and Writer startup/load/edit with4refs absent/restored. No native compiler/probe,all-app run or fake full text/pool/document claim."
   Verification: |-
+    Command: node output/playwright/task180-checks/native-audit.mjs. Result:pass. Evidence:8pinned native sources/headers/QA blobs,24unchanged original ContentInfo/attribute methods,existing string pool/shared values/uppercase/itemset/dependency guard byte-identical;81unsigned boundary comparisons and all-signed32 two-partition ordering argument. Scope:actual section payload and normalization;literal upstream overlap/five-paragraph assertions at actual ContentInfo input boundary,no EditEngine construction/QA-suite claim. Command: node output/playwright/task180-checks/portable.mjs. Result:pass. Evidence:34related scenarios/5files and187Calc/76files;exact3shared raw S108/B55/F30/L96 and33Calc S4179/B2731/F821/L3727,every raw counter positive100. Scope:declared real shared values and all Calc owners. Command: node output/playwright/task180-checks/build-browser-portable.mjs. Result:pass. Evidence:production build,actual Chromium sections and Writer startup/load/edit;all4source refs absent/restored. Scope:actual shared code in browser and existing Writer workflow. All13source gates pass after adding header field evidence;final artifact audit required before commit. Limits:full EditTextObjectImpl/EditEngineItemPool constructors,render/layout services,native debug abort/ABI/allocator and connected Calc model/UI/ODS remain unverified;no native compiler/probe or all-app run.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-16T00:14:53.475Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 34related/187Calc pass;exact3shared and33Calc raw S/B/F/L100,every counter positive. All13source gates,8native pins/24unchanged old methods/81unsigned comparisons,production build and actual Chromium sections/Writer workflow pass. Four refs restored;actual section/normalization only,no fake text/pool constructor,full Calc UI/ODS pending,no all-app run.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T00:14:16.055Z, excerpt_hash=sha256:22fe4988e68ad91eaeebcaed25c033ce1273b9ba52e4dc011605020ca0abc53d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160006-NG7J8Z/blueprint/resolved-snapshot.json
+    - old_digest: 0c182ec99bb25ebdaa525153f0862c06caf8edf7a058c661022a375783214634
+    - current_digest: 0c182ec99bb25ebdaa525153f0862c06caf8edf7a058c661022a375783214634
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610160006-NG7J8Z
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610160006-NG7J8Z
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task180 commits;preserve calc branch,other work and reference links. No merges,history rewriting,gate weakening or unrelated Writer-only coverage repairs."
-  Findings: ""
+  Findings: |-
+    - Observation: Initial32of33related cases pass;the normalization fixture assumed JS multi-character sharp-s uppercase SS,while the existing source-faithful uppercase owner returns capital sharp-s. Section cases and normalization code itself pass their other assertions.
+      Impact: The fixture must match the already verified source uppercase contract;production string or normalization behavior must not be changed to accommodate the test.
+      Resolution: Retain initial log and use actual capital sharp-s in the prepared-locale fixture. All33related cases then pass with exact3shared raw S108/B55/F30/L96100. Add literal native section QA partition assertions and actual browser extraction before final acceptance.
+
+    - Observation: The new pure section header provenance initially named only Section,which the source guard correctly rejected as basename-only evidence.
+      Impact: A header facade needs actual member/constructor source evidence rather than matching filenames;runtime algorithms and pass criteria are unchanged.
+      Resolution: Add original signed paragraph/start/end members and attribute-vector evidence to the header mapping. Source provenance,inventory and all13source gates pass;run final portable profiles and real browser acceptance.
 id_source: "generated"
 ---
 ## Summary
@@ -69,7 +114,39 @@ Pin original Section hxx/cxx,EditTextObjectImpl GetAllSections,ContentInfo Norma
 
 ## Verification
 
+Command: node output/playwright/task180-checks/native-audit.mjs. Result:pass. Evidence:8pinned native sources/headers/QA blobs,24unchanged original ContentInfo/attribute methods,existing string pool/shared values/uppercase/itemset/dependency guard byte-identical;81unsigned boundary comparisons and all-signed32 two-partition ordering argument. Scope:actual section payload and normalization;literal upstream overlap/five-paragraph assertions at actual ContentInfo input boundary,no EditEngine construction/QA-suite claim. Command: node output/playwright/task180-checks/portable.mjs. Result:pass. Evidence:34related scenarios/5files and187Calc/76files;exact3shared raw S108/B55/F30/L96 and33Calc S4179/B2731/F821/L3727,every raw counter positive100. Scope:declared real shared values and all Calc owners. Command: node output/playwright/task180-checks/build-browser-portable.mjs. Result:pass. Evidence:production build,actual Chromium sections and Writer startup/load/edit;all4source refs absent/restored. Scope:actual shared code in browser and existing Writer workflow. All13source gates pass after adding header field evidence;final artifact audit required before commit. Limits:full EditTextObjectImpl/EditEngineItemPool constructors,render/layout services,native debug abort/ABI/allocator and connected Calc model/UI/ODS remain unverified;no native compiler/probe or all-app run.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-16T00:14:53.475Z — VERIFY — ok
+
+By: CODER
+
+Note: 34related/187Calc pass;exact3shared and33Calc raw S/B/F/L100,every counter positive. All13source gates,8native pins/24unchanged old methods/81unsigned comparisons,production build and actual Chromium sections/Writer workflow pass. Four refs restored;actual section/normalization only,no fake text/pool constructor,full Calc UI/ODS pending,no all-app run.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T00:14:16.055Z, excerpt_hash=sha256:22fe4988e68ad91eaeebcaed25c033ce1273b9ba52e4dc011605020ca0abc53d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160006-NG7J8Z/blueprint/resolved-snapshot.json
+- old_digest: 0c182ec99bb25ebdaa525153f0862c06caf8edf7a058c661022a375783214634
+- current_digest: 0c182ec99bb25ebdaa525153f0862c06caf8edf7a058c661022a375783214634
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610160006-NG7J8Z
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610160006-NG7J8Z
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -77,3 +154,11 @@ Pin original Section hxx/cxx,EditTextObjectImpl GetAllSections,ContentInfo Norma
 Revert only task180 commits;preserve calc branch,other work and reference links. No merges,history rewriting,gate weakening or unrelated Writer-only coverage repairs.
 
 ## Findings
+
+- Observation: Initial32of33related cases pass;the normalization fixture assumed JS multi-character sharp-s uppercase SS,while the existing source-faithful uppercase owner returns capital sharp-s. Section cases and normalization code itself pass their other assertions.
+  Impact: The fixture must match the already verified source uppercase contract;production string or normalization behavior must not be changed to accommodate the test.
+  Resolution: Retain initial log and use actual capital sharp-s in the prepared-locale fixture. All33related cases then pass with exact3shared raw S108/B55/F30/L96100. Add literal native section QA partition assertions and actual browser extraction before final acceptance.
+
+- Observation: The new pure section header provenance initially named only Section,which the source guard correctly rejected as basename-only evidence.
+  Impact: A header facade needs actual member/constructor source evidence rather than matching filenames;runtime algorithms and pass criteria are unchanged.
+  Resolution: Add original signed paragraph/start/end members and attribute-vector evidence to the header mapping. Source provenance,inventory and all13source gates pass;run final portable profiles and real browser acceptance.

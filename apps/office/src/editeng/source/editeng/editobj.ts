@@ -7,6 +7,7 @@ import { SfxStyleFamily } from "../../../svl/inc/style";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { rtl_uString } from "../../../sal/inc/rtl/ustring.h";
 import { EE_PARA_START, EE_CHAR_END, EE_FEATURE_START, EE_FEATURE_END } from "../../inc/eeitem";
+import type { SharedStringPool } from "../../../svl/inc/sharedstringpool";
 import { WrongList, type WrongListConstReference } from "./edtspell";
 
 /** Original character-format value association and independent signed32 span, without native memory-management machinery. */
@@ -108,6 +109,20 @@ export class ContentInfo {
   /** Original stable const shared-string member reference. @returns Actual member. */
   GetSharedString(): SharedStringConstReference {
     return this.maText;
+  }
+  /** Original shared-pool normalization of initialized paragraph text,retaining the actual SharedString member identity. @param pool - Actual string pool. @returns Nothing. */
+  NormalizeString(pool: SharedStringPool): void {
+    const text = this.GetText();
+    try {
+      const normalized = pool.intern(text);
+      try {
+        this.maText.assign(normalized);
+      } finally {
+        normalized.dispose();
+      }
+    } finally {
+      text.dispose();
+    }
   }
   /** Original by-value Unicode string. Initialized text data is the native producer precondition. @returns Independent string handle. */
   GetText(): OUString {

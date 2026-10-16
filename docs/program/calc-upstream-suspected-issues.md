@@ -2382,3 +2382,9 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source: `sw/source/core/layout/atrfrm.cxx`, `SwFormatFrameSize::PutValue`, same pinned baseline.
 - Observation: percentage and percentage-relation members initialize a signed16 temporary to zero and ignore extraction failure. An incompatible Any can therefore reset the field to zero and return success. Width,height,size and sizing-type members instead check extraction. Writer queries also always convert dimensions,whereas PutValue converts only when requested. Unknown query members return true with unchanged output;unknown put members return false.
 - Decision: preserve these source branches and native bool-access preconditions without a compatibility fallback or correction. Actual Any regression tests cover the distinctions;broader document consequences remain unverified.
+
+## CALC-167: Terminal zero-span rich-text attribute has no section start
+
+- Source: `editeng/source/editeng/editobj.cxx`, `EditTextObjectImpl::GetAllSections`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: for nonempty text,an attribute whose start/end both equal paragraph length contributes only the existing final border. Section construction has no section starting at that final border. FindBySectionStart then fails;debug asserts and the ordinary source path returns before swapping output. Previously supplied caller output therefore remains unchanged. No upstream engine-producer reachability or document effect is established.
+- Decision: preserve release early return and caller output;do not append a fabricated zero-length end section or clear output on failure. Empty paragraphs still have the original0..0section. Source-derived actual ContentInfo/attribute regression covers the distinction.
