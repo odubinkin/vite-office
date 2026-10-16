@@ -1,5 +1,14 @@
 # Calc UI and ODS implementation critical path
 
+Priority correction (task198, explicit user direction): deliver a minimal
+canonical core ready for a separate editable UI task and basic ODS import/export
+before pursuing broad kernel parity. UI implementation is outside this stage.
+Source fidelity applies to supported operations and
+module boundaries; it does not require completing every dependency's entire
+API or the full native constructor graph before UI work can begin. The
+language/font prerequisite ordering below is superseded by the implementation
+order in this document. Task197 normal LanguageTag expansion is deferred.
+
 Source audit: task161 (`202610151810-GWCMX9`), following task160; stored Font metadata updated by task162 and configured candidate resources by task163 and search-name normalization by task164 and registered browser face matching by task165; required prepared-locale uppercase by task166 and actual shared string pool by task167 and the eager shared named-style index by task168.
 Reference: local LibreOffice commit
 `9bc445578031fecf56086729d8e4940c77e14d65`.
@@ -20,7 +29,9 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 
 ## Current conclusion
 
-An editable Calc UI and same-model ODS import/export are not ready. Existing
+An editable Calc UI and same-model ODS import/export are not ready. This is a
+delivery gap,not a reason to postpone starting their minimal implementation.
+Existing
 coordinate, selection, scalar cell, token, matrix, item and shared text values
 are dependencies, not a spreadsheet document. No meaningful percentage, task
 count or delivery date follows from the number of ported declarations.
@@ -34,6 +45,12 @@ no-ops. Native allocation/destruction mechanisms do not require corresponding
 JavaScript memory managers.
 
 ## Constructor dependencies: eager versus lazy
+
+This table describes the complete native object graph,not a mandatory porting
+checklist for the first editor. Implement the real contracts needed by the
+supported scalar/formula/ODS operations and document omitted services. Do not
+claim a complete native constructor or add fake/no-op services. Expand the
+subset only when an actual supported operation consumes another dependency.
 
 | Native entry point | Observed behavior | Consequence |
 | --- | --- | --- |
@@ -96,10 +113,11 @@ and document release paths remain missing.
 | [Fast parser](../../apps/office/src/sax/source/fastparser/fastparser.ts) and [import contexts](../../apps/office/src/xmloff/source/core/xmlimp.ts) | Namespace-aware bounded SAX and XML context adapters already used by Writer. | Reuse and extend real tokens/contexts required by Calc. They are not a complete native SvXMLImport implementation. |
 | [Writer package reader](../../apps/office/src/sw/source/filter/xml/swxml.ts) and [Writer XML importer](../../apps/office/src/sw/source/filter/xml/xmlimp.ts) | SwXMLReader and SwXMLImport target SwDoc. Writer body import explicitly ignores office:spreadsheet. | Share package/XML mechanisms, not Writer document semantics. Do not copy SwDoc or call the Writer reader an ODS importer. |
 
-No ScDocument, ScTable, ScColumn, ScDocumentPool, ScAttrArray,
-ScStyleSheetPool, CharClass, SvNumberFormatter or Calc XML importer/exporter
-implementation exists in the current TypeScript tree. Structural document
-interfaces used by reference primitives are not those implementations.
+Task198 now introduces the actual initial scalar ScDocument/ScTable/ScColumn
+chain below. Full native constructor/service construction,ScDocumentPool,
+ScAttrArray,ScStyleSheetPool,full CharClass/SvNumberFormatter and Calc XML
+import/export remain unimplemented. These gaps do not require completing
+unrelated APIs before verifying the supported minimal editing operations.
 
 ## ODS owners and ordering
 
@@ -121,31 +139,26 @@ and later claim its round trip proves Calc integration.
 
 ## Implementation order and acceptance boundaries
 
-1. Unblock normal document construction: actual spreadsheet default-font/value
-   resolution -> ScDocumentPool and real shared style-pool ownership; actual
-   SharedStringPool with the whole-string casing operation it requires.
-   The next implementation scope is the VCL font/default-font pipeline
-   consumed by docpool.cxx, not more unrelated EditEngine field subclasses.
-   Audit browser/configuration binding and migrate necessary Writer consumers
-   in the same scope. Source-compatible APIs without a real provider are not
-   acceptance evidence.
-2. Implement the actual column/store and empty-sheet ownership chain, reusing
-   shared mdds, coordinate limits, segments, attributes and scalar values.
-   Complete missing constructor dependencies as reached; preserve native lazy
-   and early-return boundaries. Never synthesize dummy formula/text owners
-   to make container registrations appear complete.
-3. Connect ScDocument table creation and scalar get/set to that chain, with
-   storage invalidation and notification effects. Test replacements and
-   boundaries as well as new writes. This is the earliest model-level
-   integration milestone; it is not a claim that keyboard input works.
-4. Add the actual user-input path, number recognition/formatting, required
-   formula/edit-text behavior, command/undo and view consumers. Reuse shared
-   command infrastructure. Display and editing must query the same document.
-5. Complete shared package contracts and Calc XML import/export on that model.
-   Verify real ODS fixtures and round trips for implemented numeric/string,
-   boolean/date/error/formula, style and sheet/repetition contracts; explicitly
-   account for unimplemented features rather than silently dropping them.
-6. At the genuine minimum UI plus same-model ODS milestone, perform the next
+1. Implement the minimal actual ScDocument -> ScTable -> ScColumn scalar
+   editing chain (task198),reusing existing shared strings,stores,coordinates
+   and values. Cover numeric/string writes,reads,replacements,clear and sheet
+   boundaries. Full language/font/pool/service parity is not its prerequisite;
+   supported-operation effects and defaults remain source-derived contracts.
+2. Expose and verify the core cell-input/query contracts needed by the future
+   browser editor on that same document. UI implementation remains a separate
+   later task,after an explicit readiness assessment. Do not require complete
+   formatting,language or kernel APIs,and do not introduce a second cell model.
+3. Add the basic formula input/evaluation/dependency-update slice needed by
+   the first editor. Preserve native contracts for implemented expressions;
+   unsupported operations must be explicit,not successful placeholders. Full
+   function-library and interpreter parity belongs to a later stage.
+4. Implement basic Calc ODS import/export against the same document using the
+   existing shared ZIP/manifest/SAX owners. Verify genuine simple ODS fixtures
+   and reopen-after-edit round trips for the declared scalar/formula/sheet and
+   repetition subset. Document unsupported formats/features rather than
+   silently losing them. Extend only the styling needed by that concrete path.
+5. Once the minimal core is ready for separate UI work and basic same-model
+   ODS read/save,perform the next
    full all-application run, repair applicable failures, then pause the goal
    as requested. Writer-only coverage gaps remain outside this goal.
 
@@ -665,3 +678,32 @@ provenance records link the completed normal parser from earlier scalar/data
 capabilities;no broad parity flag is promoted. All13existing source gates pass;
 no full all-app run. Outer LanguageTag/Font/defaults/pools/model/UI/ODS remain
 pending,so the minimum UI plus same-model ODS milestone is not reached.
+
+## Deferred normal LanguageTag owner (task197)
+
+Task197 (`202610160534-Z7BW2Y`) is unverified and deferred at low priority.
+Its37own active implementation/metadata/guard paths were backed up and restored
+or removed from active discovery. Completed shared foundations remain. The
+complete38-path reviewable patch and recovery manifest are preserved under
+`.agentplane/tasks/202610160534-Z7BW2Y/artifacts/`; `git apply --check` succeeds
+when excluding the readiness map that task198 intentionally updated. Recovery
+also retains source findings and the managed427-test evidence without claiming
+raw100 or native execution. This work must not block minimal core/ODS readiness.
+
+## Initial scalar document chain (task198)
+
+Task198 (`202610160613-4WY8P3`) implements numeric/string reads,writes,
+replacement,clear,sheet creation/names and shifted column identities on the
+actual ScDocument -> ScTable -> ScColumn chain. Existing shared mdds stores,
+CellTextAttr and SharedStringPool are reused. Scalar block events have no
+native formula/note effects,so the represented numeric/string specialization
+uses the existing empty event owner without fabricating absent services.
+
+Literal single-line SetTextCell content is supported;number-format attributes,
+multiline edit text,formula cells,recalculation/listeners and full native
+constructor services are explicit remaining responsibilities. No UI is added.
+The first portable check passes199Calc tests/79files with39executable owners
+raw4420statements/2851branches/906functions/3956lines100,plus48related tests.
+Production build and real Chromium/DOM-free Worker editing pass with all5
+source references absent/restored. All13existing source/inventory gates pass. This is the first scalar integration milestone,not final readiness
+for formula editing or basic ODS;those are the next core integration tasks.

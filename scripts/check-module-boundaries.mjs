@@ -108,6 +108,8 @@ const allowedEdges = new Map([
       // Original Calc formularesult.hxx includes the shared formula error contracts.
       "formula",
       "framework",
+      // Library_sc.mk links i18nlangtag; global.cxx includes i18nlangtag/mslangid.hxx.
+      "i18nlangtag",
       "o3tl",
       "offapi",
       "package",

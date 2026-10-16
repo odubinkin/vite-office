@@ -731,6 +731,7 @@ it("admits original set-item MapUnit and page-item OUString dependencies without
 
 it("keeps primitive language identities below Editeng and browser owners", /** Native SAL/Locale conversion dependencies are admitted while app/browser edges remain forbidden. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("editeng", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("sc", "i18nlangtag")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("i18nlangtag", "udkapi")).toBe(false);
   for (const owner of ["editeng", "sc", "sw", "framework", "vcl"])

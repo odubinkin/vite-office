@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/document.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "scalar-document-editing",
+    "capabilityIds": [
+      "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/document.ts",
+        "apps/office/src/sc/source/core/data/document.scalar.test.ts",
+        "docs/program/calc-ui-readiness.md#Implementation order and acceptance boundaries"
+      ],
+      "justification": "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScDocument"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/document.cxx",
+      "upstreamSymbols": [
+        "ScDocument::SetValue",
+        "ScDocument::GetValue",
+        "ScDocument::GetCellType",
+        "ScDocument::GetName",
+        "ScDocument::InsertTab"
+      ]
+    }
+  }
+}

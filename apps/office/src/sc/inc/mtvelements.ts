@@ -151,3 +151,21 @@ export const CellTextAttrStoreType = Object.setPrototypeOf(
 ) as typeof text_attr_constructor & Omit<typeof multi_type_vector, "prototype">;
 /** Original text attribute container typedef instance, sharing the generic container owner. */
 export type CellTextAttrStoreType = InstanceType<typeof CellTextAttrStoreType>;
+
+/** Numeric/string portion of CellStoreTraits;formula and edit-text blocks are registered when those cell owners are supported. Their native block events cannot occur in this scalar specialization. */
+export const CellStoreTraits = {
+  ...default_traits,
+  block_funcs: element_block_funcs(numeric_block, string_block),
+};
+const cell_store_constructor = (multi_type_vector<empty_event_func>).bind(
+  null,
+  CellStoreTraits,
+  empty_event_value_ops,
+);
+/** Existing shared SoA container bound to the represented Calc scalar cell alternatives. */
+export const CellStoreType = Object.setPrototypeOf(
+  cell_store_constructor,
+  multi_type_vector,
+) as typeof cell_store_constructor & Omit<typeof multi_type_vector, "prototype">;
+/** Scalar cell-store instance;the container implementation is shared with the other Calc stores. */
+export type CellStoreType = InstanceType<typeof CellStoreType>;
