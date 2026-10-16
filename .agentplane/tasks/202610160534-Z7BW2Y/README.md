@@ -2,9 +2,9 @@
 id: "202610160534-Z7BW2Y"
 title: "Implement shared LanguageTag normal value and registry owner"
 status: "DOING"
-priority: "med"
+priority: "low"
 owner: "CODER"
-revision: 5
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement actual normal shared LanguageTag value/private canonicalization/cache/registry owner using completed source components,with observable ID semantics and JS GC ownership."
 doc_version: 3
-doc_updated_at: "2026-10-16T05:37:04.443Z"
+doc_updated_at: "2026-10-16T06:33:22.744Z"
 doc_updated_by: "CODER"
 description: "Task197: implement the actual LibreOffice LanguageTag normal constructors/reset/lazy private state,known fast canonicalization,normal fields/ISO validity,semantic tag/ID registry and on-the-fly IDs using completed parser and shared owners;connect actual normal API needed by Font,without physical ownership engine or fake facade."
 sections:
@@ -51,7 +51,7 @@ sections:
     - node output/playwright/task197-checks/final-audit.mjs: exact source/path/ref/owner/QA evidence and remaining Font/defaults/pools/model/UI/ODS gaps;record verify,source commit,same-agent EVALUATOR review and descriptive finish. Keep task active if complete approved scope is not yet verified.
   Verification: "Pending implementation and declared checks."
   Rollback Plan: "Revert only this task source/registry/metadata/test/doc commit. Preserve user work,earlier core/parser owners and all5source-reference links. No resets,merges or destructive cleanup."
-  Findings: "Previous goal turn made authoritative progress:task196 normal parser/canonicalizer/t group completed and verified. Current preflight is clean on calc;only2unrelated standing tasks are active. Native LanguageTag known fallback discovery instantiates actual numeric LanguageTag values and populates semantic registries;do not replace it with a detached approximate known-tag set or simulated backend. Registry IDs/shared script metadata are observable document semantics,not physical memory management."
+  Findings: "Deferred by explicit user priority correction:full normal LanguageTag is not a prerequisite for minimal core/UI readiness and ODS. Preserve the complete38-path unverified snapshot as task-local artifacts/deferred-source.patch and manifest;restore only its unchanged own tracked implementation/metadata/guard files and remove only its hash-verified backed-up new files from active discovery. Keep current task198 readiness-map edits. Completed tasks194-196 stay untouched. This is reversible deferral,not completion or deletion of user work. Task197 remains DOING/low/unverified and must not resume before the minimal-core/ODS milestone. Last related427tests/24files passed but raw coverage was incomplete. Root goal remains active;UI implementation is explicitly separate."
 id_source: "generated"
 ---
 ## Summary
@@ -84,4 +84,4 @@ Revert only this task source/registry/metadata/test/doc commit. Preserve user wo
 
 ## Findings
 
-Previous goal turn made authoritative progress:task196 normal parser/canonicalizer/t group completed and verified. Current preflight is clean on calc;only2unrelated standing tasks are active. Native LanguageTag known fallback discovery instantiates actual numeric LanguageTag values and populates semantic registries;do not replace it with a detached approximate known-tag set or simulated backend. Registry IDs/shared script metadata are observable document semantics,not physical memory management.
+Deferred by explicit user priority correction:full normal LanguageTag is not a prerequisite for minimal core/UI readiness and ODS. Preserve the complete38-path unverified snapshot as task-local artifacts/deferred-source.patch and manifest;restore only its unchanged own tracked implementation/metadata/guard files and remove only its hash-verified backed-up new files from active discovery. Keep current task198 readiness-map edits. Completed tasks194-196 stay untouched. This is reversible deferral,not completion or deletion of user work. Task197 remains DOING/low/unverified and must not resume before the minimal-core/ODS milestone. Last related427tests/24files passed but raw coverage was incomplete. Root goal remains active;UI implementation is explicitly separate.

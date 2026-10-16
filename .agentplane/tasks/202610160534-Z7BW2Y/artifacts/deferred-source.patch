@@ -1,0 +1,3144 @@
+diff --git a/apps/office/src/i18nlangtag/inc/lang.ts b/apps/office/src/i18nlangtag/inc/lang.ts
+index 5e7e62212..892ea4895 100644
+--- a/apps/office/src/i18nlangtag/inc/lang.ts
++++ b/apps/office/src/i18nlangtag/inc/lang.ts
+@@ -31,3 +31,21 @@ export const LANGUAGE_ENGLISH_US = LanguageType(0x0409);
+ export const LANGUAGE_PROCESS_OR_USER_DEFAULT = LanguageType(0x0400);
+ /** Original system-default language alias. */
+ export const LANGUAGE_SYSTEM_DEFAULT = LanguageType(0x0800);
++/** Original primary range for dynamically registered language IDs. */
++export const LANGUAGE_ON_THE_FLY_START = LanguageType(0x03e0);
++/** Original inclusive dynamic primary end. */
++export const LANGUAGE_ON_THE_FLY_END = LanguageType(0x03fe);
++/** Original first dynamic sublanguage. */
++export const LANGUAGE_ON_THE_FLY_SUB_START = LanguageType(0x01);
++/** Original inclusive dynamic sublanguage end. */
++export const LANGUAGE_ON_THE_FLY_SUB_END = LanguageType(0x3e);
++/** Original dated/traditional Spanish identity. */
++export const LANGUAGE_SPANISH_DATED = LanguageType(0x040a);
++/** Original native ID composition. @param sub - Sublanguage UInt16 value. @param pri - Primary UInt16 value. @returns Native UInt16 ID. */
++export function makeLangID(sub: number, pri: number): number {
++  return LanguageType((LanguageType(sub) << 10) | LanguageType(pri));
++}
++/** Original native sublanguage extraction. @param value - Native UInt16 ID. @returns Sublanguage. */
++export function subLanguage(value: number): number {
++  return LanguageType(value) >>> 10;
++}
+diff --git a/apps/office/src/i18nlangtag/inc/mslangid.ts b/apps/office/src/i18nlangtag/inc/mslangid.ts
+index cb324d34a..a3309e2f8 100644
+--- a/apps/office/src/i18nlangtag/inc/mslangid.ts
++++ b/apps/office/src/i18nlangtag/inc/mslangid.ts
+@@ -9,6 +9,7 @@ import {
+ } from "../source/isolang/isolang";
+ export type { LanguagetagMapping } from "../source/isolang/isolang";
+ import { lookupFallbackLocale } from "../source/isolang/isolang.fallback";
++import { makeLangID, primary, subLanguage } from "./lang";
+ import {
+   setConfiguredSystemLanguage,
+   setConfiguredSystemUILanguage,
+@@ -23,6 +24,9 @@ import {
+ } from "../source/isolang/mslangid";
+ /** Source static namespace;private/friend access is a compile-time boundary in the native source. */
+ export const MsLangId = {
++  makeLangID,
++  getPrimaryLanguage: primary,
++  getSubLanguage: subLanguage,
+   LanguageTagAccess: { setConfiguredSystemLanguage },
+   setConfiguredSystemUILanguage,
+   getSystemLanguage,
+diff --git a/docs/program/calc-ui-readiness.md b/docs/program/calc-ui-readiness.md
+index edd543256..3271bfe0f 100644
+--- a/docs/program/calc-ui-readiness.md
++++ b/docs/program/calc-ui-readiness.md
+@@ -665,3 +665,27 @@ provenance records link the completed normal parser from earlier scalar/data
+ capabilities;no broad parity flag is promoted. All13existing source gates pass;
+ no full all-app run. Outer LanguageTag/Font/defaults/pools/model/UI/ODS remain
+ pending,so the minimum UI plus same-model ODS milestone is not reached.
++
++## Normal shared LanguageTag owner (task197)
++
++Task197 (`202610160534-Z7BW2Y`) is in progress. The actual normal value owner
++connects existing shared Locale/OUString/MsLangId, structural extraction,
++ordered fallbacks and the normal external parser. Constructors include the
++four separate ODF language attributes, with explicit BCP47 precedence. Copy,
++assignment, reset, lazy canonicalization/field queries and normal static
++conversions operate on the same shared values. Semantic BCP47, raw-ID and SYSTEM
++registries use native Maps; JS GC owns their objects. Dynamic identifiers keep
++the original finite range, collision rules and shared script metadata.
++
++The first portable related check passes423tests in24files with all5reference
++links absent/restored, including actual1922-ID rollover/exhaustion and the
++source Norwegian collision cases. The new normal-owner coverage remains below
++the required raw100 gate; this task is not verified or finished. CALC-184 records
++the confirmed source initialization-order effect for short numeric regions.
++Inventory/provenance maps each responsibility without promoting broad parity.
++
++POSIX rtl_Locale/glibc operations and unrelated full library APIs are outside
++this normal-owner task. Chromium/Worker, wholeCalc and final source-gate checks
++remain pending. Font integration/defaults, real Calc pools/document/sheet/column
++and same-model ODS import/export still need implementation before the minimum
++UI milestone and the requested final all-application test run.
+diff --git a/docs/program/calc-upstream-suspected-issues.md b/docs/program/calc-upstream-suspected-issues.md
+index b513ddc29..cd3859772 100644
+--- a/docs/program/calc-upstream-suspected-issues.md
++++ b/docs/program/calc-upstream-suspected-issues.md
+@@ -2582,3 +2582,21 @@ this length branch. Therefore normal x-* parses and canonicalizes to x-*.
+ Preserve the original normal parser result;do not add an alphanumeric check
+ absent from this branch. Source-derived managed normal-parser/browser evidence,
+ not a full outer LanguageTag validity or native execution claim. Task196.
++
++## CALC-184 — short numeric-region Locale depends on registry initialization order
++
++Source: pinned LibreOffice `i18nlangtag/source/languagetag/languagetag.cxx`,
++`LanguageTagImpl::cacheSimpleLSCV`, `getRegionFromLangtag`, `isIsoLocale`,
++`LanguageTag::registerImpl` and `getKnowns`. The simple cache stores country but
++discards the separately extracted numeric region; without an external parser
++owner, getRegionFromLangtag returns that country cache. In a fresh registry,
++the first string-origin es-419 is known without external parsing, then passes
++the short ISO predicate with empty country. Its Locale becomes (es,"","") and
++its suggested primary ID is10. If getKnowns first constructs the actual numeric
++language owners, the ID22538 owner keeps meIsIsoLocale=NO from its qlt conversion;
++the later es-419 string shares that owner and returns (qlt,"",es-419),ID22538.
++The existing upstream QA sequence asserts the latter result after earlier
++initialization. Preserve both source paths and the real registry side effects;
++do not prime registries artificially or make the cache retain numeric regions.
++Evidence: source inspection and isolated managed normal-owner tests,not an
++executed native oracle or a demonstrated document corruption. Task197.
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/inc/lang.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/inc/lang.ts.json
+index c69e9c201..6caa5a379 100644
+--- a/docs/program/registry/shared/provenance/i18nlangtag/inc/lang.ts.json
++++ b/docs/program/registry/shared/provenance/i18nlangtag/inc/lang.ts.json
+@@ -18,7 +18,14 @@
+       "LANGUAGE_GERMAN",
+       "LANGUAGE_ENGLISH_US",
+       "LANGUAGE_PROCESS_OR_USER_DEFAULT",
+-      "LANGUAGE_SYSTEM_DEFAULT"
++      "LANGUAGE_SYSTEM_DEFAULT",
++      "LANGUAGE_ON_THE_FLY_START",
++      "LANGUAGE_ON_THE_FLY_END",
++      "LANGUAGE_ON_THE_FLY_SUB_START",
++      "LANGUAGE_ON_THE_FLY_SUB_END",
++      "LANGUAGE_SPANISH_DATED",
++      "makeLangID",
++      "subLanguage"
+     ],
+     "upstreamSymbols": [
+       "LanguageType",
+@@ -28,7 +35,8 @@
+     "preservedResponsibilities": [
+       "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
+       "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine.",
+-      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
++      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine.",
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
+     ],
+     "omittedResponsibilities": [
+       "Other named lang.h constants,full LanguageTag/system-language resolution,localized presentation and complete Calc model/UI/ODS remain pending. Task187 separately implements actual ordered mapping tables and private Conversion owners;native ABI/memory machinery is erased."
+@@ -52,6 +60,10 @@
+         {
+           "path": "vendor/libreoffice-reference/include/i18nlangtag/lang.h",
+           "marker": "LanguageType"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/mslangid.hxx",
++          "marker": "makeLangID"
+         }
+       ]
+     }
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/inc/mslangid.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/inc/mslangid.ts.json
+index 33328db02..c6f056b4e 100644
+--- a/docs/program/registry/shared/provenance/i18nlangtag/inc/mslangid.ts.json
++++ b/docs/program/registry/shared/provenance/i18nlangtag/inc/mslangid.ts.json
+@@ -17,7 +17,8 @@
+     "preservedResponsibilities": [
+       "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine.",
+       "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine.",
+-      "Task191 adds complete native OUString convertIsoNamesToLanguage and getDefinedLanguagetags. Four exact ordered legacy tables contain61English/7nonstandard/4additional/8other rows including4sentinels. Lookup retains source ISO-first/English/nonstandard/country-only/private/other order,explicit skip flag,ASCII-only case and raw unnormalized IDs. All643BCP47/script/ISO mappings retain source order/duplicates/aliases and each call returns fresh mutable records owning actual OUString values. No fake mapping constructor/LanguageTag class,byte overload/on-the-fly substitute,ICU/native compiler or physical ownership engine. Full LanguageTag conversion state/canonicalization/registry/font/pool/document/UI/ODS remain pending."
++      "Task191 adds complete native OUString convertIsoNamesToLanguage and getDefinedLanguagetags. Four exact ordered legacy tables contain61English/7nonstandard/4additional/8other rows including4sentinels. Lookup retains source ISO-first/English/nonstandard/country-only/private/other order,explicit skip flag,ASCII-only case and raw unnormalized IDs. All643BCP47/script/ISO mappings retain source order/duplicates/aliases and each call returns fresh mutable records owning actual OUString values. No fake mapping constructor/LanguageTag class,byte overload/on-the-fly substitute,ICU/native compiler or physical ownership engine. Full LanguageTag conversion state/canonicalization/registry/font/pool/document/UI/ODS remain pending.",
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
+     ],
+     "omittedResponsibilities": [
+       "Other MsLangId/LanguageTag/system/configuration/font/document/UI/ODS responsibilities remain pending.",
+@@ -58,6 +59,10 @@
+         {
+           "path": "vendor/libreoffice-reference/include/i18nlangtag/mslangid.hxx",
+           "marker": "struct LanguagetagMapping"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/mslangid.hxx",
++          "marker": "makeLangID"
+         }
+       ]
+     }
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/inc/lang.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/inc/lang.ts.json
+index 8681b65c5..d5afea959 100644
+--- a/docs/program/registry/shared/runtime/i18nlangtag/inc/lang.ts.json
++++ b/docs/program/registry/shared/runtime/i18nlangtag/inc/lang.ts.json
+@@ -10,7 +10,8 @@
+     "capabilityIds": [
+       "CAP-7d2fec82-b1ea-403d-ab79-a9ec5d9ef8ff",
+       "CAP-bf560a1c-defb-4644-bf0b-34cd0dff0ae2",
+-      "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5"
++      "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5",
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
+     ],
+     "semantic": {
+       "behaviorStatus": "unverified",
+@@ -22,9 +23,10 @@
+         "apps/office/src/editeng/source/items/native-language-item.test.ts",
+         "docs/program/calc-core.md#Native language item values for Calc font defaults (task146)",
+         "apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
+-        "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts"
++        "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts"
+       ],
+-      "justification": "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained. Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine. Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine.",
++      "justification": "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained. Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine. Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine. Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
+       "knownViolations": [],
+       "localSymbols": [
+         "LanguageType",
+@@ -38,7 +40,14 @@
+         "LANGUAGE_GERMAN",
+         "LANGUAGE_ENGLISH_US",
+         "LANGUAGE_PROCESS_OR_USER_DEFAULT",
+-        "LANGUAGE_SYSTEM_DEFAULT"
++        "LANGUAGE_SYSTEM_DEFAULT",
++        "LANGUAGE_ON_THE_FLY_START",
++        "LANGUAGE_ON_THE_FLY_END",
++        "LANGUAGE_ON_THE_FLY_SUB_START",
++        "LANGUAGE_ON_THE_FLY_SUB_END",
++        "LANGUAGE_SPANISH_DATED",
++        "makeLangID",
++        "subLanguage"
+       ],
+       "sourceResponsibility": "divergent",
+       "upstreamFile": "include/i18nlangtag/lang.h",
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/inc/mslangid.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/inc/mslangid.ts.json
+index 737c2f34e..223fde4e6 100644
+--- a/docs/program/registry/shared/runtime/i18nlangtag/inc/mslangid.ts.json
++++ b/docs/program/registry/shared/runtime/i18nlangtag/inc/mslangid.ts.json
+@@ -9,7 +9,8 @@
+     "subsystem": "language-id-locale-conversion",
+     "capabilityIds": [
+       "CAP-bf560a1c-defb-4644-bf0b-34cd0dff0ae2",
+-      "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5"
++      "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5",
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
+     ],
+     "semantic": {
+       "behaviorStatus": "unverified",
+@@ -23,9 +24,10 @@
+         "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+         "apps/office/src/i18nlangtag/source/isolang/isolang.names.test.ts",
+         "apps/office/src/i18nlangtag/source/isolang/locale-name-tables.json",
+-        "docs/program/calc-ui-readiness.md#Native legacy names and defined mappings (task191)"
++        "docs/program/calc-ui-readiness.md#Native legacy names and defined mappings (task191)",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts"
+       ],
+-      "justification": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine. Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine. Task191 adds complete native OUString convertIsoNamesToLanguage and getDefinedLanguagetags. Four exact ordered legacy tables contain61English/7nonstandard/4additional/8other rows including4sentinels. Lookup retains source ISO-first/English/nonstandard/country-only/private/other order,explicit skip flag,ASCII-only case and raw unnormalized IDs. All643BCP47/script/ISO mappings retain source order/duplicates/aliases and each call returns fresh mutable records owning actual OUString values. No fake mapping constructor/LanguageTag class,byte overload/on-the-fly substitute,ICU/native compiler or physical ownership engine. Full LanguageTag conversion state/canonicalization/registry/font/pool/document/UI/ODS remain pending.",
++      "justification": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine. Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine. Task191 adds complete native OUString convertIsoNamesToLanguage and getDefinedLanguagetags. Four exact ordered legacy tables contain61English/7nonstandard/4additional/8other rows including4sentinels. Lookup retains source ISO-first/English/nonstandard/country-only/private/other order,explicit skip flag,ASCII-only case and raw unnormalized IDs. All643BCP47/script/ISO mappings retain source order/duplicates/aliases and each call returns fresh mutable records owning actual OUString values. No fake mapping constructor/LanguageTag class,byte overload/on-the-fly substitute,ICU/native compiler or physical ownership engine. Full LanguageTag conversion state/canonicalization/registry/font/pool/document/UI/ODS remain pending. Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
+       "knownViolations": [],
+       "localSymbols": [
+         "MsLangId"
+diff --git a/scripts/check-module-boundaries.mjs b/scripts/check-module-boundaries.mjs
+index eaac13a82..90091d44f 100644
+--- a/scripts/check-module-boundaries.mjs
++++ b/scripts/check-module-boundaries.mjs
+@@ -83,7 +83,8 @@ const allowedEdges = new Map([
+   ["framework", new Set(["sfx2", "svl"])],
+   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
+   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
+-  ["i18nlangtag", new Set(["sal", "udkapi"])],
++  // Library_i18nlangtag.mk links external liblangtag; languagetag.cxx includes langtag.h.
++  ["i18nlangtag", new Set(["external", "sal", "udkapi"])],
+   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
+   // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
+   ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
+diff --git a/scripts/check-module-boundaries.test.ts b/scripts/check-module-boundaries.test.ts
+index ad14527a8..be5d0066e 100644
+--- a/scripts/check-module-boundaries.test.ts
++++ b/scripts/check-module-boundaries.test.ts
+@@ -733,6 +733,8 @@ it("keeps primitive language identities below Editeng and browser owners", /** N
+   expect(isForbiddenModuleEdge("editeng", "i18nlangtag")).toBe(false);
+   expect(isForbiddenModuleEdge("i18nlangtag", "sal")).toBe(false);
+   expect(isForbiddenModuleEdge("i18nlangtag", "udkapi")).toBe(false);
++  expect(isForbiddenModuleEdge("i18nlangtag", "external")).toBe(false);
++  expect(isForbiddenModuleEdge("external", "i18nlangtag")).toBe(true);
+   for (const owner of ["editeng", "sc", "sw", "framework", "vcl"])
+     expect(isForbiddenModuleEdge("i18nlangtag", owner)).toBe(true);
+   expect(getRuntimeOwnershipLayer("i18nlangtag/inc/lang.ts")).toBe("upstream-mechanism");
+diff --git a/apps/office/src/i18nlangtag/inc/languagetag.ts b/apps/office/src/i18nlangtag/inc/languagetag.ts
+new file mode 100644
+index 000000000..6442f7b9b
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/inc/languagetag.ts
+@@ -0,0 +1,3 @@
++/** @fileoverview Canonical public header boundary for the actual normal shared LanguageTag owner. */
++export { LanguageTag } from "../source/languagetag/languagetag.value";
++export { ScriptType, PrivateUse } from "../source/languagetag/languagetag.state";
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts
+new file mode 100644
+index 000000000..4b2b45404
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts
+@@ -0,0 +1,122 @@
++/** @fileoverview Actual LanguageTagImpl known-locale fast path and external parser fallback. */
++import { Decision as D, convertToBcp47 } from "./languagetag.conversion";
++import { Extraction as E, simpleExtract } from "./languagetag.extract";
++import { MsLangId } from "../../inc/mslangid";
++import { LANGUAGE_DONTKNOW, LANGUAGE_SYSTEM } from "../../inc/lang";
++import { text, unicode } from "../isolang/isolang.tables";
++import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
++import { lt_tag_new } from "../../../external/liblangtag/liblangtag/lt-tag";
++import { lt_tag_parse } from "../../../external/liblangtag/liblangtag/lt-tag.parse";
++import { lt_tag_canonicalize } from "../../../external/liblangtag/liblangtag/lt-tag.canonicalize";
++import type { DiagnosticSlot } from "../../../external/liblangtag/liblangtag/lt-error";
++import type { LanguageTagImpl } from "./languagetag.impl";
++import { getKnowns, isParsingDisabled } from "./languagetag.registry";
++
++/** Preserves native canonicalization and each temporary/init/decision side effect. @param state - Actual private owner. @returns Whether the BCP47 value changed. */
++export function canonicalize(state: LanguageTagImpl): boolean {
++  let changed = false;
++  state.getBcp47();
++  if (state.meIsLiblangtagNeeded === D.DECISION_DONTKNOW) {
++    let temporaryLocale = false,
++      temporaryLangID = false;
++    if (!state.mbInitializedLocale && !state.mbInitializedLangID) {
++      if (state.mbSystemLocale) {
++        state.mnLangID = MsLangId.getRealLanguage(LANGUAGE_SYSTEM);
++        state.mbInitializedLangID = true;
++      } else {
++        const fields = { language: "", script: "", country: "", region: "", variants: "" },
++          extraction = simpleExtract(text(state.maBcp47), fields);
++        if (extraction !== E.EXTRACTED_NONE) {
++          if (
++            extraction === E.EXTRACTED_LSC ||
++            extraction === E.EXTRACTED_LV ||
++            extraction === E.EXTRACTED_LR
++          ) {
++            const normalized = [
++              fields.language,
++              fields.script,
++              fields.country,
++              fields.region,
++              fields.variants,
++            ]
++              .filter(Boolean)
++              .join("-");
++            if (text(state.maBcp47) !== normalized) {
++              state.maBcp47.assign(unicode(normalized));
++              changed = true;
++            }
++          }
++          if (
++            (extraction === E.EXTRACTED_LSC && !fields.script) ||
++            extraction === E.EXTRACTED_C_LOCALE
++          ) {
++            state.maLocale.Language.assign(unicode(fields.language));
++            state.maLocale.Country.assign(unicode(fields.country));
++          } else {
++            state.maLocale.Language.assign(unicode("qlt"));
++            state.maLocale.Country.assign(unicode(fields.country));
++            state.maLocale.Variant.assign(state.maBcp47);
++          }
++          temporaryLocale = state.mbInitializedLocale = true;
++        }
++      }
++    }
++    if (state.mbInitializedLangID && !state.mbInitializedLocale) state.convertLangToLocale();
++    if (state.mbInitializedLocale) {
++      if (!state.mbInitializedLangID) {
++        if (state.convertLocaleToLang(false)) changed = true;
++        if (temporaryLocale || state.mnLangID === LANGUAGE_DONTKNOW) temporaryLangID = true;
++      }
++      if (state.mnLangID !== LANGUAGE_DONTKNOW && state.mnLangID !== LANGUAGE_SYSTEM)
++        state.meIsLiblangtagNeeded = D.DECISION_NO;
++      else if (getKnowns().has(text(state.maBcp47))) state.meIsLiblangtagNeeded = D.DECISION_NO;
++      const override = MsLangId.Conversion.getOverride(state.maLocale);
++      if (
++        override.Language.getLength() &&
++        (text(override.Language) !== text(state.maLocale.Language) ||
++          text(override.Country) !== text(state.maLocale.Country) ||
++          text(override.Variant) !== text(state.maLocale.Variant))
++      ) {
++        state.maBcp47.assign(convertToBcp47(override));
++        changed = true;
++        state.meIsIsoLocale = state.meIsIsoODF = D.DECISION_DONTKNOW;
++        state.meIsLiblangtagNeeded = D.DECISION_NO;
++      }
++    }
++    if (temporaryLocale) {
++      state.mbInitializedLocale = false;
++      state.maLocale.assign(new Locale());
++    }
++    if (temporaryLangID) {
++      state.mbInitializedLangID = false;
++      state.mnLangID = LANGUAGE_DONTKNOW;
++    }
++  }
++  if (state.meIsLiblangtagNeeded === D.DECISION_NO) {
++    state.meIsValid = D.DECISION_YES;
++    return changed;
++  }
++  state.meIsLiblangtagNeeded = D.DECISION_YES;
++  state.mpImplLangtag ??= lt_tag_new();
++  const error: DiagnosticSlot = { error: null };
++  if (!isParsingDisabled() && lt_tag_parse(state.mpImplLangtag, text(state.maBcp47), error)) {
++    if (!error.error) {
++      const result = lt_tag_canonicalize(state.mpImplLangtag, error);
++      if (result !== null) {
++        if (text(state.maBcp47) !== result) {
++          state.maBcp47.assign(unicode(result));
++          changed = true;
++          state.meIsIsoLocale = state.meIsIsoODF = D.DECISION_DONTKNOW;
++          if (!lt_tag_parse(state.mpImplLangtag, result, error)) {
++            state.meIsValid = D.DECISION_NO;
++            return changed;
++          }
++        }
++        state.meIsValid = D.DECISION_YES;
++        return changed;
++      }
++    }
++  }
++  state.meIsValid = D.DECISION_NO;
++  return changed;
++}
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts
+new file mode 100644
+index 000000000..511b3a8dd
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts
+@@ -0,0 +1,158 @@
++/** @fileoverview Actual private LanguageTagImpl copy/cache/field behavior and original ISO fallback branches. */
++import { expect, it } from "vitest";
++import { LanguageTagImpl } from "./languagetag.impl";
++import { createValueState, ScriptType } from "./languagetag.state";
++import { Decision as D } from "./languagetag.conversion";
++import { text, unicode } from "../isolang/isolang.tables";
++import { getIsoFallbackStrings } from "./languagetag.iso-fallback";
++import { LanguageTag } from "../../inc/languagetag";
++
++/** Uses the real string-constructor field defaults for a private implementation value. @param value - Native string input. @returns Actual implementation. */
++function fromString(value: string): LanguageTagImpl {
++  const state = createValueState();
++  state.maBcp47.assign(unicode(value));
++  state.mnLangID = 1023;
++  state.mbSystemLocale = !value;
++  state.mbInitializedBcp47 = !!value;
++  return new LanguageTagImpl(state);
++}
++
++it("keeps native empty qualified fields on failed parsing and independent script cache initialization", /** Real incomplete Locale values are not replaced with a successful language service. @returns Nothing. */ () => {
++  const state = createValueState();
++  state.maLocale.Language.assign(unicode("qlt"));
++  state.mnLangID = 1023;
++  state.mbSystemLocale = false;
++  state.mbInitializedLocale = true;
++  const value = new LanguageTagImpl(state);
++  expect(text(value.getLanguageFromLangtag())).toBe("");
++  expect(text(value.getScriptFromLangtag())).toBe("");
++  expect(text(value.getRegionFromLangtag())).toBe("");
++  expect(text(value.getVariantsFromLangtag())).toBe("");
++  expect(value.hasScript()).toBe(false);
++  const scripted = fromString("sr-Latn-RS");
++  expect(scripted.hasScript()).toBe(true);
++  const variants = fromString("de-1901-x-test");
++  expect(text(variants.getVariantsFromLangtag())).toBe("1901");
++  const numericRegion = fromString("es-419-x-test");
++  expect(text(numericRegion.getCountry())).toBe("");
++  expect(text(numericRegion.getRegion())).toBe("419");
++});
++
++it("preserves source system conversion wrappers and native case normalization", /** Uses the actual configured scalar and normal field values. @returns Nothing. */ () => {
++  const state = createValueState(),
++    system = new LanguageTagImpl(state);
++  system.convertLocaleToLang(false);
++  expect(system.mbInitializedLangID).toBe(true);
++  system.convertBcp47ToLang();
++  expect(system.mbInitializedLangID).toBe(true);
++  const fromBcp = fromString("de-DE");
++  fromBcp.convertBcp47ToLang();
++  expect(fromBcp.mnLangID).toBe(1031);
++  const mixed = fromString("DE-de");
++  expect(mixed.canonicalize()).toBe(true);
++  expect(text(mixed.getBcp47())).toBe("de-DE");
++});
++
++it("copies actual parsed fields independently and retains shared immutable registry values", /** Native copy duplicates tag caches/container values while preserving normal source metadata and decisions. @returns Nothing. */ () => {
++  const original = fromString("en-Latn-US-x-task197");
++  expect(original.canonicalize()).toBe(true);
++  expect(text(original.getBcp47())).toBe("en-US-x-task197");
++  original.getLanguage();
++  original.getScript();
++  original.getCountry();
++  original.getVariants();
++  original.setScriptType(ScriptType.WESTERN);
++  const copy = new LanguageTagImpl(original);
++  expect(copy.mpImplLangtag).not.toBe(original.mpImplLangtag);
++  expect(copy.mpImplLangtag?.language).toBe(original.mpImplLangtag?.language);
++  expect(copy.mpImplLangtag?.variants).not.toBe(original.mpImplLangtag?.variants);
++  expect(text(copy.getLanguage())).toBe("en");
++  expect(text(copy.getCountry())).toBe("US");
++  expect(copy.getScriptType()).toBe(ScriptType.WESTERN);
++  expect(copy.isValidBcp47()).toBe(true);
++  expect(copy.assign(copy)).toBe(copy);
++  copy.maCachedCountry.clear();
++  expect(text(original.getCountry())).toBe("US");
++  const other = fromString("de-DE");
++  copy.assign(other);
++  expect(copy.mpImplLangtag).toBeNull();
++  expect(text(copy.maBcp47)).toBe("de-DE");
++});
++
++it("converts actual numeric fields through both original private wrappers", /** Checks ID-to-BCP47 and Locale-to-BCP47 responsibilities on the same borrowed Unicode owner. @returns Nothing. */ () => {
++  const state = createValueState();
++  state.mnLangID = 1031;
++  state.mbSystemLocale = false;
++  state.mbInitializedLangID = true;
++  const value = new LanguageTagImpl(state),
++    borrowed = value.maBcp47;
++  value.convertLangToBcp47();
++  expect(value.getBcp47()).toBe(borrowed);
++  expect(text(borrowed)).toBe("de-DE");
++  value.maLocale.Country.assign(unicode("AT"));
++  value.convertLocaleToBcp47();
++  expect(text(borrowed)).toBe("de-AT");
++});
++
++it("retains actual failed-parse field queries and lazy ISO decisions", /** Invalid input does not acquire a successful parser or fabricated fields. @returns Nothing. */ () => {
++  const value = fromString("en--US");
++  expect(value.isValidBcp47()).toBe(false);
++  expect(text(value.getLanguageFromLangtag())).toBe("en");
++  expect(text(value.getScriptFromLangtag())).toBe("");
++  expect(text(value.getRegion())).toBe("");
++  expect(text(value.getVariantsFromLangtag())).toBe("");
++  expect(value.isIsoLocale()).toBe(true);
++  expect(value.isIsoODF()).toBe(true);
++  expect(value.meIsValid).toBe(D.DECISION_NO);
++});
++
++it("replays source C-locale remapping and non-ISO script/variant attributes", /** Uses real legacy lookup and actual parsed Unicode outputs needed by font attributes. @returns Nothing. */ () => {
++  const value = new LanguageTag("C", true);
++  expect(text(value.getBcp47())).toBe("en-US");
++  for (const [input, expected] of [
++    ["sr-Latn-RS", ["sr", "Latn", "RS"]],
++    ["ca-ES-valencia", ["ca", "", "ES"]],
++    ["x-private", ["", "", ""]],
++  ] as const) {
++    const tag = new LanguageTag(input),
++      language = unicode("old"),
++      script = unicode("old"),
++      country = unicode("old");
++    tag.getIsoLanguageScriptCountry(language, script, country);
++    expect([text(language), text(script), text(country)]).toEqual(expected);
++    tag.assign(tag);
++    const assigned = new LanguageTag().assign(tag);
++    tag.reset("de-DE");
++    expect(text(assigned.getBcp47())).toBe(input);
++  }
++  expect(text(new LanguageTag(1034).getBcp47MS())).toBe("es-ES_tradnl");
++  expect(text(new LanguageTag("de-DE").getBcp47MS())).toBe("de-DE");
++});
++
++// Literal complete native ISO branch outputs,including legacy branches remapped by the enclosing owner.
++for (const [language, country, expected] of [
++  ["zh", "HK", ["zh-HK", "zh-TW", "zh"]],
++  ["zh", "MO", ["zh-MO", "zh-TW", "zh"]],
++  ["zh", "SG", ["zh-SG", "zh-CN", "zh"]],
++  ["zh", "CN", ["zh-CN", "zh"]],
++  ["sh", "RS", ["sh-RS", "sr-Latn-RS", "sr-Latn", "sh", "sr-RS", "sr"]],
++  ["ca", "XV", ["ca-XV", "ca-ES-valencia", "ca-XV", "ca-valencia", "ca-ES", "ca"]],
++  ["ku", "TR", ["ku-TR", "kmr-Latn-TR", "kmr-TR", "kmr-Latn", "kmr", "ku"]],
++  ["ku", "SY", ["ku-SY", "kmr-Latn-SY", "kmr-SY", "kmr-Latn", "kmr", "ku"]],
++  ["ku", "IQ", ["ku-IQ", "ckb-IQ", "ckb"]],
++  ["ku", "IR", ["ku-IR", "ckb-IR", "ckb"]],
++  ["ku", "DE", ["ku-DE"]],
++  ["kmr", "TR", ["kmr-TR", "ku-Latn-TR", "ku-TR", "kmr", "ku"]],
++  ["kmr", "SY", ["kmr-SY", "ku-Latn-SY", "ku-SY", "kmr", "ku"]],
++  ["kmr", "DE", ["kmr-DE", "kmr"]],
++  ["ckb", "IQ", ["ckb-IQ", "ku-Arab-IQ", "ku-IQ", "ckb"]],
++  ["ckb", "IR", ["ckb-IR", "ku-Arab-IR", "ku-IR", "ckb"]],
++  ["ckb", "DE", ["ckb-DE", "ckb"]],
++  ["sh", "", ["sh", "sr-Latn", "sr"]],
++  ["pli", "", ["pli", "pi-Latn", "pi"]],
++  ["de", "", ["de"]],
++] as const)
++  it(`preserves native ISO fallback order ${language}/${country}`, /** Tests the complete extracted source ISO responsibility using its consumed fields. @returns Nothing. */ () => {
++    expect(getIsoFallbackStrings(language, country, true)).toEqual(expected);
++    expect(getIsoFallbackStrings(language, country, false)).toEqual(expected.slice(1));
++  });
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts
+new file mode 100644
+index 000000000..0b7cafd78
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts
+@@ -0,0 +1,352 @@
++/** @fileoverview Actual normal LanguageTagImpl value/cache/conversion owner; physical lifetime machinery is erased. */
++import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
++import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
++import { MsLangId } from "../../inc/mslangid";
++import { LANGUAGE_SYSTEM, LANGUAGE_DONTKNOW } from "../../inc/lang";
++import { text, unicode } from "../isolang/isolang.tables";
++import {
++  Decision as D,
++  convertLangToLocale,
++  convertLocaleToBcp47,
++  convertLangToBcp47,
++  getBcp47,
++  type LanguageTagConversionState,
++} from "./languagetag.conversion";
++import { Extraction as E, simpleExtract } from "./languagetag.extract";
++import { canonicalize } from "./languagetag.canonical";
++import {
++  ScriptType,
++  isIsoLanguage,
++  isIsoCountry,
++  isIsoScript,
++  type LanguageTagValueState,
++} from "./languagetag.state";
++import { registerOnTheFly } from "./languagetag.registry";
++import { lt_tag_copy, type Tag } from "../../../external/liblangtag/liblangtag/lt-tag";
++
++/** Native private implementation for supported normal constructors and queries. */
++export class LanguageTagImpl implements LanguageTagConversionState {
++  readonly maLocale = new Locale();
++  readonly maBcp47 = new OUString();
++  readonly maCachedLanguage = new OUString();
++  readonly maCachedScript = new OUString();
++  readonly maCachedCountry = new OUString();
++  readonly maCachedVariants = new OUString();
++  readonly maCachedGlibcString = new OUString();
++  mpImplLangtag: Tag | null = null;
++  mnLangID: number;
++  meScriptType = ScriptType.UNKNOWN;
++  meIsValid = D.DECISION_DONTKNOW;
++  meIsIsoLocale = D.DECISION_DONTKNOW;
++  meIsIsoODF = D.DECISION_DONTKNOW;
++  meIsLiblangtagNeeded = D.DECISION_DONTKNOW;
++  mbSystemLocale: boolean;
++  mbInitializedBcp47: boolean;
++  mbInitializedLocale: boolean;
++  mbInitializedLangID: boolean;
++  mbCachedLanguage = false;
++  mbCachedScript = false;
++  mbCachedCountry = false;
++  mbCachedVariants = false;
++  mbCachedGlibcString = false;
++
++  /** Copies actual constructor or implementation values. @param state - Native front-end fields or implementation copy source. @returns Real private implementation. */
++  constructor(state: LanguageTagValueState | LanguageTagImpl) {
++    this.maLocale.assign(state.maLocale);
++    this.maBcp47.assign(state.maBcp47);
++    this.mnLangID = state.mnLangID;
++    this.mbSystemLocale = state.mbSystemLocale;
++    this.mbInitializedBcp47 = state.mbInitializedBcp47;
++    this.mbInitializedLocale = state.mbInitializedLocale;
++    this.mbInitializedLangID = state.mbInitializedLangID;
++    if (state instanceof LanguageTagImpl) this.assign(state);
++  }
++
++  /** Preserves source implementation assignment and actual parser copy semantics. @param other - Actual source. @returns This. */
++  assign(other: LanguageTagImpl): this {
++    if (other === this) return this;
++    this.maLocale.assign(other.maLocale);
++    for (const key of [
++      "maBcp47",
++      "maCachedLanguage",
++      "maCachedScript",
++      "maCachedCountry",
++      "maCachedVariants",
++      "maCachedGlibcString",
++    ] as const)
++      this[key].assign(other[key]);
++    this.mpImplLangtag = other.mpImplLangtag ? lt_tag_copy(other.mpImplLangtag) : null;
++    for (const key of [
++      "mnLangID",
++      "meScriptType",
++      "meIsValid",
++      "meIsIsoLocale",
++      "meIsIsoODF",
++      "meIsLiblangtagNeeded",
++      "mbSystemLocale",
++      "mbInitializedBcp47",
++      "mbInitializedLocale",
++      "mbInitializedLangID",
++      "mbCachedLanguage",
++      "mbCachedScript",
++      "mbCachedCountry",
++      "mbCachedVariants",
++      "mbCachedGlibcString",
++    ] as const)
++      Object.assign(this, { [key]: other[key] });
++    return this;
++  }
++
++  /** Calls the actual private canonicalization responsibility. @returns Whether BCP47 changed. */
++  canonicalize(): boolean {
++    return canonicalize(this);
++  }
++
++  /** Preserves lazy canonicalization and initialized-conversion synchronization. @returns Whether BCP47 changed. */
++  synCanonicalize(): boolean {
++    let changed = false;
++    if (this.meIsLiblangtagNeeded !== D.DECISION_NO && !this.mpImplLangtag) {
++      changed = this.canonicalize();
++      if (changed) {
++        if (this.mbInitializedLocale) this.convertBcp47ToLocale();
++        if (this.mbInitializedLangID) this.convertBcp47ToLang();
++      }
++    }
++    return changed;
++  }
++
++  /** Reuses actual shared native conversion group. @returns Borrowed Unicode value. */
++  getBcp47(): OUStringConstReference {
++    return getBcp47(this);
++  }
++  /** Reuses actual native conversion. @returns Nothing. */
++  convertLangToLocale(): void {
++    convertLangToLocale(this);
++  }
++  /** Reuses actual native conversion. @returns Nothing. */
++  convertLangToBcp47(): void {
++    convertLangToBcp47(this);
++  }
++  /** Reuses actual native conversion. @returns Nothing. */
++  convertLocaleToBcp47(): void {
++    convertLocaleToBcp47(this);
++  }
++
++  /** Converts actual Locale to a native known or dynamic ID. @param allowOnTheFly - Source registration control. @returns Whether legacy names remapped BCP47. */
++  convertLocaleToLang(allowOnTheFly: boolean): boolean {
++    let remapped = false;
++    if (this.mbSystemLocale) this.mnLangID = MsLangId.getRealLanguage(LANGUAGE_SYSTEM);
++    else {
++      this.mnLangID = MsLangId.Conversion.convertLocaleToLanguage(this.maLocale);
++      if (this.mnLangID === LANGUAGE_DONTKNOW) {
++        this.mnLangID = MsLangId.Conversion.convertIsoNamesToLanguage(
++          this.maLocale.Language,
++          this.maLocale.Country,
++          true,
++        );
++        if (this.mnLangID !== LANGUAGE_DONTKNOW) {
++          const original = text(this.maBcp47);
++          this.convertLangToLocale();
++          this.convertLocaleToBcp47();
++          remapped = text(this.maBcp47) !== original;
++        }
++      }
++      if (this.mnLangID === LANGUAGE_DONTKNOW && allowOnTheFly && this.isValidBcp47()) {
++        if (this.getCountry().getLength() === 0 && this.isIsoODF()) {
++          const locale = MsLangId.Conversion.lookupFallbackLocale(this.maLocale);
++          if (text(locale.Language) !== "en" || text(this.getLanguage()) === "en") {
++            this.mnLangID = MsLangId.Conversion.convertLocaleToLanguage(locale);
++            if (this.mnLangID !== LANGUAGE_DONTKNOW)
++              this.mnLangID = MsLangId.getPrimaryLanguage(this.mnLangID);
++          }
++        }
++        registerOnTheFly(this, this.mnLangID);
++      }
++    }
++    this.mbInitializedLangID = true;
++    return remapped;
++  }
++
++  /** Preserves qlt versus ISO triplet conversion. @returns Nothing. */
++  convertBcp47ToLocale(): void {
++    if (this.isIsoLocale()) {
++      this.maLocale.Language.assign(this.getLanguageFromLangtag());
++      this.maLocale.Country.assign(this.getRegionFromLangtag());
++      this.maLocale.Variant.clear();
++    } else {
++      this.maLocale.Language.assign(unicode("qlt"));
++      this.maLocale.Country.assign(this.getCountry());
++      this.maLocale.Variant.assign(this.maBcp47);
++    }
++    this.mbInitializedLocale = true;
++  }
++
++  /** Preserves system origin and ordinary BCP47-to-ID conversion. @returns Nothing. */
++  convertBcp47ToLang(): void {
++    if (this.mbSystemLocale) this.mnLangID = MsLangId.getRealLanguage(LANGUAGE_SYSTEM);
++    else {
++      if (!this.mbInitializedLocale) this.convertBcp47ToLocale();
++      this.convertLocaleToLang(true);
++    }
++    this.mbInitializedLangID = true;
++  }
++
++  /** Caches the original structural fields,discarding numeric region from country. @returns Whether extraction succeeded. */
++  cacheSimpleLSCV(): boolean {
++    const fields = { language: "", script: "", country: "", region: "", variants: "" },
++      decision = simpleExtract(text(this.maBcp47), fields),
++      success =
++        decision === E.EXTRACTED_LSC || decision === E.EXTRACTED_LV || decision === E.EXTRACTED_LR;
++    if (success) {
++      this.maCachedLanguage.assign(unicode(fields.language));
++      this.maCachedScript.assign(unicode(fields.script));
++      this.maCachedCountry.assign(unicode(fields.country));
++      this.maCachedVariants.assign(unicode(fields.variants));
++      this.mbCachedLanguage =
++        this.mbCachedScript =
++        this.mbCachedCountry =
++        this.mbCachedVariants =
++          true;
++    }
++    return success;
++  }
++
++  /** Reads the actual parsed or native structural language. @returns Independent source value. */
++  getLanguageFromLangtag(): OUString {
++    this.synCanonicalize();
++    if (!this.maBcp47.getLength()) return new OUString();
++    if (this.mpImplLangtag) return unicode(this.mpImplLangtag.language?.tag ?? "");
++    return this.mbCachedLanguage || this.cacheSimpleLSCV()
++      ? new OUString(this.maCachedLanguage)
++      : new OUString();
++  }
++  /** Reads the actual parsed or native structural script. @returns Independent source value. */
++  getScriptFromLangtag(): OUString {
++    this.synCanonicalize();
++    if (!this.maBcp47.getLength()) return new OUString();
++    if (this.mpImplLangtag) return unicode(this.mpImplLangtag.script?.tag ?? "");
++    return this.mbCachedScript || this.cacheSimpleLSCV()
++      ? new OUString(this.maCachedScript)
++      : new OUString();
++  }
++  /** Reads original region behavior,including the cached-country fallback. @returns Region value. */
++  getRegionFromLangtag(): OUString {
++    this.synCanonicalize();
++    if (!this.maBcp47.getLength()) return new OUString();
++    if (this.mpImplLangtag) return unicode(this.mpImplLangtag.region?.tag ?? "");
++    return this.mbCachedCountry || this.cacheSimpleLSCV()
++      ? new OUString(this.maCachedCountry)
++      : new OUString();
++  }
++  /** Reads actual registered variants only. @returns Variant value. */
++  getVariantsFromLangtag(): OUString {
++    this.synCanonicalize();
++    if (!this.maBcp47.getLength()) return new OUString();
++    if (this.mpImplLangtag)
++      return unicode(
++        this.mpImplLangtag.variants
++          .map(
++            /** Reads actual immutable variant spelling. @param variant - Native value. @returns Tag. */ (
++              variant,
++            ) => variant.tag,
++          )
++          .join("-"),
++      );
++    return this.mbCachedVariants || this.cacheSimpleLSCV()
++      ? new OUString(this.maCachedVariants)
++      : new OUString();
++  }
++  /** Borrows native cached language. @returns Unicode field. */
++  getLanguage(): OUStringConstReference {
++    if (!this.mbCachedLanguage) {
++      this.maCachedLanguage.assign(this.getLanguageFromLangtag());
++      this.mbCachedLanguage = true;
++    }
++    return this.maCachedLanguage;
++  }
++  /** Borrows native cached script. @returns Unicode field. */
++  getScript(): OUStringConstReference {
++    if (!this.mbCachedScript) {
++      this.maCachedScript.assign(this.getScriptFromLangtag());
++      this.mbCachedScript = true;
++    }
++    return this.maCachedScript;
++  }
++  /** Borrows country cache,clearing non-ISO regions only on this path. @returns Unicode field. */
++  getCountry(): OUStringConstReference {
++    if (!this.mbCachedCountry) {
++      this.maCachedCountry.assign(this.getRegionFromLangtag());
++      if (!isIsoCountry(this.maCachedCountry)) this.maCachedCountry.clear();
++      this.mbCachedCountry = true;
++    }
++    return this.maCachedCountry;
++  }
++  /** Reads original uncached region wrapper. @returns Region value. */
++  getRegion(): OUString {
++    return this.getRegionFromLangtag();
++  }
++  /** Borrows native variants cache. @returns Unicode field. */
++  getVariants(): OUStringConstReference {
++    if (!this.mbCachedVariants) {
++      this.maCachedVariants.assign(this.getVariantsFromLangtag());
++      this.mbCachedVariants = true;
++    }
++    return this.maCachedVariants;
++  }
++  /** Queries the cached script. @returns Presence. */
++  hasScript(): boolean {
++    if (!this.mbCachedScript) this.getScript();
++    return this.maCachedScript.getLength() !== 0;
++  }
++  /** Reads source script metadata. @returns Script type. */
++  getScriptType(): ScriptType {
++    return this.meScriptType;
++  }
++  /** Preserves original first non-UNKNOWN script metadata. @param type - Requested type. @returns Nothing. */
++  setScriptType(type: ScriptType): void {
++    if (this.meScriptType === ScriptType.UNKNOWN) this.meScriptType = type;
++  }
++
++  /** Original lazy ISO Locale predicate. @returns Native decision. */
++  isIsoLocale(): boolean {
++    if (this.meIsIsoLocale === D.DECISION_DONTKNOW) {
++      this.synCanonicalize();
++      this.meIsIsoLocale =
++        !this.maBcp47.getLength() ||
++        (this.maBcp47.getLength() <= 6 &&
++          isIsoLanguage(this.getLanguage()) &&
++          isIsoCountry(this.getRegion()))
++          ? D.DECISION_YES
++          : D.DECISION_NO;
++    }
++    return this.meIsIsoLocale === D.DECISION_YES;
++  }
++  /** Original lazy ISO ODF predicate,not the full validity check. @returns Native decision. */
++  isIsoODF(): boolean {
++    if (this.meIsIsoODF === D.DECISION_DONTKNOW) {
++      this.synCanonicalize();
++      if (!isIsoScript(this.getScript())) {
++        this.meIsIsoODF = D.DECISION_NO;
++        return false;
++      }
++      if (this.isIsoLocale()) {
++        this.meIsIsoODF = D.DECISION_YES;
++        return true;
++      }
++      this.meIsIsoODF =
++        this.maBcp47.getLength() <= 11 &&
++        isIsoLanguage(this.getLanguage()) &&
++        isIsoCountry(this.getRegion()) &&
++        isIsoScript(this.getScript()) &&
++        this.getVariants().getLength() === 0
++          ? D.DECISION_YES
++          : D.DECISION_NO;
++    }
++    return this.meIsIsoODF === D.DECISION_YES;
++  }
++  /** Original lazy validity decision. @returns Whether known or parsed valid. */
++  isValidBcp47(): boolean {
++    if (this.meIsValid === D.DECISION_DONTKNOW) this.synCanonicalize();
++    return this.meIsValid === D.DECISION_YES;
++  }
++}
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts
+new file mode 100644
+index 000000000..cdbaf3b47
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts
+@@ -0,0 +1,37 @@
++/** @fileoverview Complete original ISO getFallbackStrings branch over its consumed language/country values. */
++import { LanguageTag } from "./languagetag.value";
++import { text } from "../isolang/isolang.tables";
++
++/** Executes native ISO fallback order,including legacy branches. @param language - Source language value. @param country - Source ISO country value. @param include - Include full tag. @returns Ordered native strings. */
++export function getIsoFallbackStrings(
++  language: string,
++  country: string,
++  include: boolean,
++): string[] {
++  const result: string[] = [];
++  if (country) {
++    if (include) result.push(language + "-" + country);
++    if (language === "zh") {
++      if (country === "HK" || country === "MO") result.push("zh-TW");
++      else if (country !== "CN") result.push("zh-CN");
++      result.push(language);
++    } else if (language === "sh")
++      result.push("sr-Latn-" + country, "sr-Latn", "sh", "sr-" + country, "sr");
++    else if (language === "ca" && country === "XV")
++      result.push(...new LanguageTag("ca-ES-valencia").getFallbackStrings(true).map(text));
++    else if (language === "ku") {
++      if (country === "TR" || country === "SY")
++        result.push("kmr-Latn-" + country, "kmr-" + country, "kmr-Latn", "kmr", language);
++      else if (country === "IQ" || country === "IR") result.push("ckb-" + country, "ckb");
++    } else if (language === "kmr" && (country === "TR" || country === "SY"))
++      result.push("ku-Latn-" + country, "ku-" + country, language, "ku");
++    else if (language === "ckb" && (country === "IQ" || country === "IR"))
++      result.push("ku-Arab-" + country, "ku-" + country, language);
++    else result.push(language);
++  } else {
++    if (include) result.push(language);
++    if (language === "sh") result.push("sr-Latn", "sr");
++    else if (language === "pli") result.push("pi-Latn", "pi");
++  }
++  return result;
++}
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts
+new file mode 100644
+index 000000000..3a41237db
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts
+@@ -0,0 +1,135 @@
++/** @fileoverview Native registry realm,system-origin and cache-order contracts on real LanguageTag owners. */
++import { expect, it, vi } from "vitest";
++import { text, unicode } from "../isolang/isolang.tables";
++
++it("retains resolved old SYSTEM values and resolves new values through the configured owner", /** Uses actual independent source module state,not a simulated conversion service. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag } = await import("../../inc/languagetag");
++  LanguageTag.setConfiguredSystemLanguage(1031);
++  const old = new LanguageTag(),
++    explicit = new LanguageTag(1031),
++    same = new LanguageTag();
++  expect(old.isSystemLocale()).toBe(true);
++  expect(old.getLanguageType(false)).toBe(0);
++  expect(text(old.getBcp47(false))).toBe("");
++  expect(text(old.getLocale(false).Language)).toBe("");
++  expect(old.Equals(same)).toBe(true);
++  expect(old.Equals(explicit)).toBe(false);
++  expect(old.equals(explicit)).toBe(true);
++  expect(text(old.getBcp47())).toBe("de-DE");
++  expect(old.getLanguageType()).toBe(1031);
++  LanguageTag.setConfiguredSystemLanguage(1041);
++  expect(text(old.getBcp47())).toBe("de-DE");
++  expect(text(new LanguageTag().getBcp47())).toBe("ja-JP");
++  LanguageTag.setConfiguredSystemLanguage(0);
++  LanguageTag.setConfiguredSystemLanguage(1023);
++  expect(text(new LanguageTag().getBcp47())).toBe("ja-JP");
++  expect(
++    text(
++      LanguageTag.convertToBcp47(
++        new (await import("../../../udkapi/com/sun/star/lang/Locale")).Locale(),
++      ),
++    ),
++  ).toBe("ja-JP");
++  expect(
++    LanguageTag.convertToLanguageType(
++      new (await import("../../../udkapi/com/sun/star/lang/Locale")).Locale(),
++    ),
++  ).toBe(1041);
++  expect(new LanguageTag("de-DE").LessThan(new LanguageTag("ja-JP"))).toBe(true);
++  expect(new LanguageTag("de-DE").LessThan(new LanguageTag("DE-de"))).toBe(false);
++});
++
++it("keeps native case-insensitive registry keys and shared non-system origin", /** Source registry aliases do not overwrite the original front-end SYSTEM flag. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag, ScriptType } = await import("../../inc/languagetag");
++  LanguageTag.setConfiguredSystemLanguage(1031);
++  const explicit = new LanguageTag("de-DE"),
++    system = new LanguageTag();
++  explicit.setScriptType(ScriptType.WESTERN);
++  expect(system.getScriptType()).toBe(ScriptType.WESTERN);
++  expect(explicit.isSystemLocale()).toBe(false);
++  expect(text(explicit.getBcp47(false))).toBe("de-DE");
++  expect(explicit.getLanguageType(false)).toBe(1031);
++  const upper = new LanguageTag("DE-de", true);
++  expect(upper.getScriptType()).toBe(ScriptType.WESTERN);
++  expect(upper.Equals(explicit)).toBe(true);
++  expect(upper.isSystemLocale()).toBe(false);
++});
++
++it("preserves raw numeric aliases and native unknown singleton conversion", /** Checks raw identifier origin separately from real system resolution. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag } = await import("../../inc/languagetag");
++  LanguageTag.setConfiguredSystemLanguage(1031);
++  const alias = new LanguageTag(1024),
++    normal = new LanguageTag(1031),
++    unknown = new LanguageTag(1023);
++  expect(alias.getLanguageType()).toBe(1024);
++  expect(text(alias.getBcp47())).toBe("de-DE");
++  expect(alias.Equals(normal)).toBe(false);
++  expect(unknown.getLanguageType()).toBe(1023);
++  expect(text(unknown.getBcp47())).toBe("en-US");
++  expect(new LanguageTag(1023).getBcp47()).not.toBe(unknown.getBcp47());
++  expect(text(new LanguageTag(1023).getBcp47())).toBe("en-US");
++});
++
++it("keeps instance known-tag validity independent of the one-way external parser switch", /** Native disabling leaves known fast paths valid and rejects static parsing. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag } = await import("../../inc/languagetag");
++  expect(new LanguageTag("de-DE").isValidBcp47()).toBe(true);
++  LanguageTag.disable_lt_tag_parse();
++  expect(new LanguageTag("de-DE").isValidBcp47()).toBe(true);
++  expect(new LanguageTag("en-x-task197").isValidBcp47()).toBe(false);
++  const output = unicode("kept");
++  expect(LanguageTag.isValidBcp47(unicode("de-DE"), output)).toBe(false);
++  expect(text(output)).toBe("kept");
++});
++
++it("preserves finite native on-the-fly ID rollover and exhaustion through real valid tags", /** Covers the source 31primary by62sublanguage namespace and stable previously registered values. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag } = await import("../../inc/languagetag");
++  const ids = new Set<number>();
++  for (let i = 0; i < 1922; i++) {
++    const tag = "qaa-x-task197-" + i.toString(36),
++      value = new LanguageTag(tag),
++      id = value.getLanguageType();
++    expect(LanguageTag.isOnTheFlyID(id)).toBe(true);
++    expect(ids.has(id)).toBe(false);
++    ids.add(id);
++    if (i === 0) expect(id).toBe(0x07e0);
++    if (i === 30) expect(id).toBe(0x07fe);
++    if (i === 31) expect(id).toBe(0x0be0);
++    if (i === 1921) expect(id).toBe(0xfbfe);
++    expect(text(new LanguageTag(id).getBcp47())).toBe(tag);
++  }
++  expect(new LanguageTag("qaa-x-task197-overflow").getLanguageType()).toBe(1023);
++  expect(new LanguageTag("qaa-x-task197-again").getLanguageType()).toBe(1023);
++  expect(new LanguageTag("qaa-x-task197-0").getLanguageType()).toBe(0x07e0);
++});
++
++it("replays native Norwegian suggested-primary collision QA", /** Shared primary IDs cannot alias distinct canonical BCP47 strings. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag } = await import("../../inc/languagetag");
++  const no = new LanguageTag("no", true),
++    nb = new LanguageTag("nb", true),
++    nn = new LanguageTag("nn", true);
++  expect(LanguageTag.isOnTheFlyID(no.getLanguageType())).toBe(true);
++  expect(nb.getLanguageType()).not.toBe(no.getLanguageType());
++  expect(nn.getLanguageType()).not.toBe(no.getLanguageType());
++  expect(nn.getLanguageType()).not.toBe(nb.getLanguageType());
++  for (const tag of [no, nb, nn])
++    expect(text(new LanguageTag(tag.getLanguageType()).getBcp47())).toBe(text(tag.getBcp47()));
++});
++
++it("preserves native short numeric-region cache order before known-tag initialization", /** The source cacheSimpleLSCV stores country and discards numeric region;known-ID priming is intentionally not injected. @returns Nothing. */ async () => {
++  vi.resetModules();
++  const { LanguageTag } = await import("../../inc/languagetag");
++  const first = new LanguageTag("es-419");
++  expect(text(first.getBcp47())).toBe("es-419");
++  expect([
++    text(first.getLocale().Language),
++    text(first.getLocale().Country),
++    text(first.getLocale().Variant),
++  ]).toEqual(["es", "", ""]);
++  expect(first.getLanguageType()).toBe(10);
++});
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts
+new file mode 100644
+index 000000000..186568581
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts
+@@ -0,0 +1,216 @@
++/** @fileoverview Original semantic BCP47/ID/system registries and finite on-the-fly IDs; no physical ownership engine. */
++import { LanguageTagImpl } from "./languagetag.impl";
++import { LanguageTag } from "./languagetag.value";
++import { ScriptType, createValueState, type LanguageTagValueState } from "./languagetag.state";
++import { MsLangId } from "../../inc/mslangid";
++import {
++  LANGUAGE_DONTKNOW,
++  LANGUAGE_SYSTEM,
++  LANGUAGE_ON_THE_FLY_START as START,
++  LANGUAGE_ON_THE_FLY_END as END,
++  LANGUAGE_ON_THE_FLY_SUB_START as SUB_START,
++  LANGUAGE_ON_THE_FLY_SUB_END as SUB_END,
++} from "../../inc/lang";
++import { text, lower } from "../isolang/isolang.tables";
++import { convertToBcp47 } from "./languagetag.conversion";
++
++const mapBcp47 = new Map<string, LanguageTagImpl>(),
++  mapLangID = new Map<number, LanguageTagImpl>();
++let systemLocale: LanguageTagImpl | null = null,
++  dontKnow: LanguageTagImpl | null = null,
++  nextLanguage = 0,
++  parsingDisabled = false,
++  knowns: Set<string> | null = null;
++
++/** Source-known fallbacks built via actual numeric LanguageTag values and registry side effects. @returns Case-sensitive known strings. */
++export function getKnowns(): ReadonlySet<string> {
++  if (!knowns) {
++    const values = new Set<string>();
++    for (const row of MsLangId.getDefinedLanguagetags())
++      for (const value of new LanguageTag(row.mnLang).getFallbackStrings(true))
++        values.add(text(value));
++    knowns = values;
++  }
++  return knowns;
++}
++
++/** Preserves native one-way parser-disable switch. @returns Nothing. */
++export function disableParsing(): void {
++  parsingDisabled = true;
++}
++/** Queries actual source switch. @returns Whether disabled. */
++export function isParsingDisabled(): boolean {
++  return parsingDisabled;
++}
++
++/** Allocates the next semantic UInt16 language identity. @returns Original ID or zero after exhaustion. */
++function getNextOnTheFlyLanguage(): number {
++  if (!nextLanguage) nextLanguage = MsLangId.makeLangID(SUB_START, START);
++  else if (MsLangId.getPrimaryLanguage(nextLanguage) !== END) nextLanguage++;
++  else {
++    const sub = MsLangId.getSubLanguage(nextLanguage);
++    if (sub === SUB_END) return 0;
++    nextLanguage = MsLangId.makeLangID(sub + 1, START);
++  }
++  return nextLanguage;
++}
++
++/** Original finite dynamic range predicate. @param language - Native ID. @returns Membership. */
++export function isOnTheFlyID(language: number): boolean {
++  const primary = MsLangId.getPrimaryLanguage(language),
++    sub = MsLangId.getSubLanguage(language);
++  return START <= primary && primary <= END && SUB_START <= sub && sub <= SUB_END;
++}
++/** Original registration criterion for generated or suggested primary IDs. @param language - Native ID. @returns Native predicate. */
++function isKnownOnTheFlyID(language: number): boolean {
++  return (
++    language !== LANGUAGE_DONTKNOW &&
++    language !== LANGUAGE_SYSTEM &&
++    (isOnTheFlyID(language) || language === MsLangId.getPrimaryLanguage(language))
++  );
++}
++/** Implements source insert-not-overwrite semantics. @param id - Native ID. @param impl - Actual owner. @returns Nothing. */
++function insertID(id: number, impl: LanguageTagImpl): void {
++  if (!mapLangID.has(id)) mapLangID.set(id, impl);
++}
++/** Inserts an ASCII-case-insensitive native tag key. @param tag - Original value. @param impl - New owner. @returns Stored owner and insertion flag. */
++function insertBcp(
++  tag: string,
++  impl: LanguageTagImpl,
++): { value: LanguageTagImpl; inserted: boolean } {
++  const key = lower(tag),
++    old = mapBcp47.get(key);
++  if (old) return { value: old, inserted: false };
++  mapBcp47.set(key, impl);
++  return { value: impl, inserted: true };
++}
++
++/** Original on-the-fly registration and suggested-ID collision rules. @param state - Actual implementation. @param suggested - Source suggested identity. @returns Registered owner or null for empty input. */
++export function registerOnTheFly(
++  state: LanguageTagImpl,
++  suggested: number,
++): LanguageTagImpl | null {
++  if (!state.mbInitializedBcp47 && state.mbInitializedLocale) {
++    state.maBcp47.assign(convertToBcp47(state.maLocale));
++    state.mbInitializedBcp47 = state.maBcp47.getLength() !== 0;
++  }
++  if (!state.maBcp47.getLength()) return null;
++  const key = lower(text(state.maBcp47));
++  let impl = mapBcp47.get(key),
++    other = false;
++  if (impl) {
++    if (impl !== state) {
++      state.assign(impl);
++      other = true;
++    }
++  } else {
++    impl = new LanguageTagImpl(state);
++    mapBcp47.set(key, impl);
++  }
++  if (!other || !impl.mbInitializedLangID) {
++    if (!suggested || suggested === LANGUAGE_DONTKNOW) suggested = getNextOnTheFlyLanguage();
++    else {
++      const current = mapLangID.get(suggested);
++      if (current && text(current.maBcp47) !== text(state.maBcp47))
++        suggested = getNextOnTheFlyLanguage();
++    }
++    if (!suggested) return impl;
++    impl.mnLangID = suggested;
++    impl.mbInitializedLangID = true;
++    if (impl !== state) {
++      state.mnLangID = suggested;
++      state.mbInitializedLangID = true;
++    }
++  }
++  insertID(impl.mnLangID, impl);
++  return impl;
++}
++
++/** Registers the actual front-end values,including system and round-trip shortcuts. @param state - Source front-end fields. @returns Shared native implementation. */
++export function registerImpl(state: LanguageTagValueState): LanguageTagImpl {
++  if (state.mbSystemLocale) {
++    if (systemLocale) return systemLocale;
++    if (!state.mbInitializedLangID) {
++      state.mnLangID = MsLangId.getRealLanguage(LANGUAGE_SYSTEM);
++      state.mbInitializedLangID = state.mnLangID !== LANGUAGE_SYSTEM;
++    }
++  }
++  if (state.mbInitializedLangID) {
++    if (state.mnLangID === LANGUAGE_DONTKNOW) {
++      dontKnow ??= new LanguageTagImpl(state);
++      return dontKnow;
++    }
++    if (systemLocale && systemLocale.mnLangID === state.mnLangID) return systemLocale;
++  }
++  if (!state.mbInitializedLangID && !state.mbInitializedBcp47) {
++    if (
++      !state.mbInitializedLocale &&
++      (state.mbSystemLocale || state.maLocale.Language.getLength() !== 0)
++    )
++      state.mbInitializedLocale = true;
++    state.maBcp47.assign(convertToBcp47(state.maLocale));
++    state.mbInitializedBcp47 = state.maBcp47.getLength() !== 0;
++  }
++  if (
++    state.mbInitializedBcp47 &&
++    systemLocale &&
++    text(systemLocale.maBcp47) === text(state.maBcp47)
++  )
++    return systemLocale;
++  let impl: LanguageTagImpl;
++  if (state.mbInitializedLangID) {
++    const existing = mapLangID.get(state.mnLangID);
++    if (existing) impl = existing;
++    else {
++      impl = new LanguageTagImpl(state);
++      mapLangID.set(state.mnLangID, impl);
++      if (!impl.mbInitializedLocale) impl.convertLangToLocale();
++      const language = MsLangId.Conversion.convertLocaleToLanguage(impl.maLocale);
++      if (!impl.mbInitializedBcp47) impl.convertLocaleToBcp47();
++      if (language === impl.mnLangID) insertBcp(text(impl.maBcp47), impl);
++    }
++  } else if (state.maBcp47.getLength()) {
++    const originalKey = lower(text(state.maBcp47)),
++      existing = mapBcp47.get(originalKey);
++    if (existing) impl = existing;
++    else {
++      impl = new LanguageTagImpl(state);
++      mapBcp47.set(originalKey, impl);
++      if (impl.synCanonicalize()) {
++        const canonical = insertBcp(text(impl.maBcp47), impl);
++        if (!canonical.inserted && canonical.value !== impl) {
++          impl = canonical.value;
++          mapBcp47.set(originalKey, impl);
++        }
++      }
++      if (!impl.mbInitializedLangID) {
++        if (!impl.mbInitializedLocale) impl.convertBcp47ToLocale();
++        if (!impl.mbInitializedLangID) impl.convertLocaleToLang(true);
++        let insert = isKnownOnTheFlyID(impl.mnLangID);
++        if (!insert && impl.mnLangID !== LANGUAGE_DONTKNOW) {
++          const bcp47 = convertToBcp47(
++            MsLangId.Conversion.convertLanguageToLocale(impl.mnLangID, true),
++          );
++          insert = text(bcp47) === text(impl.maBcp47);
++        }
++        if (insert) insertID(impl.mnLangID, impl);
++      }
++    }
++  } else impl = new LanguageTagImpl(state);
++  if (state.mbSystemLocale && state.mbInitializedLangID) systemLocale = impl;
++  return impl;
++}
++
++/** Original dynamic-ID script metadata lookup. @param id - Registered ID. @returns Metadata or UNKNOWN. */
++export function getOnTheFlyScriptType(id: number): ScriptType {
++  return mapLangID.get(id)?.getScriptType() ?? ScriptType.UNKNOWN;
++}
++
++/** Replaces the source system selection and prepares its actual registry owner. @param language - Non-system,non-unknown ID. @returns Nothing. */
++export function setConfiguredSystemLanguage(language: number): void {
++  if (language === LANGUAGE_SYSTEM || language === LANGUAGE_DONTKNOW) return;
++  MsLangId.LanguageTagAccess.setConfiguredSystemLanguage(language);
++  systemLocale = null;
++  // Source explicitly registers the new system owner,without requesting a public conversion.
++  registerImpl(createValueState());
++}
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts
+new file mode 100644
+index 000000000..35969fa6c
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts
+@@ -0,0 +1,65 @@
++/** @fileoverview Actual normal LanguageTag front-end fields and original static ISO predicates. */
++import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
++import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
++import { LANGUAGE_SYSTEM } from "../../inc/lang";
++import { text } from "../isolang/isolang.tables";
++import type { LanguageTagImpl } from "./languagetag.impl";
++
++/** Original nested script values; UNKNOWN remains first-wins metadata. */
++export enum ScriptType {
++  UNKNOWN = 0,
++  WESTERN = 1,
++  CJK = 2,
++  CTL = 3,
++  RTL = 4,
++}
++/** Original static validation private/local-use policy. */
++export enum PrivateUse {
++  ALLOW = 0,
++  DISALLOW = 1,
++  ALLOW_ART_X = 2,
++}
++
++/** Source-private front-end member values shared only by its responsibility files. */
++export interface LanguageTagValueState {
++  readonly maLocale: Locale;
++  readonly maBcp47: OUString;
++  mnLangID: number;
++  mbSystemLocale: boolean;
++  mbInitializedBcp47: boolean;
++  mbInitializedLocale: boolean;
++  mbInitializedLangID: boolean;
++  mbIsFallback: boolean;
++  mpImpl: LanguageTagImpl | null;
++}
++
++/** Creates exact resetVars defaults using actual shared values. @returns Front-end fields. */
++export function createValueState(): LanguageTagValueState {
++  return {
++    maLocale: new Locale(),
++    maBcp47: new OUString(),
++    mnLangID: LANGUAGE_SYSTEM,
++    mbSystemLocale: true,
++    mbInitializedBcp47: false,
++    mbInitializedLocale: false,
++    mbInitializedLangID: false,
++    mbIsFallback: false,
++    mpImpl: null,
++  };
++}
++
++/** Original case-sensitive static ISO language shape, not registration validation. @param language - Actual Unicode value. @returns Native predicate. */
++export function isIsoLanguage(language: OUStringConstReference): boolean {
++  const value = text(language);
++  return (value.length === 2 || value.length === 3) && !/[^a-z]/.test(value);
++}
++/** Original case-sensitive ISO country shape, including empty. @param country - Actual Unicode value. @returns Native predicate. */
++export function isIsoCountry(country: OUStringConstReference): boolean {
++  const value = text(country);
++  return value.length === 0 || (value.length === 2 && !/[^A-Z]/.test(value));
++}
++/** Original case-sensitive ISO script shape, including empty. @param script - Actual Unicode value. @returns Native predicate. */
++export function isIsoScript(script: OUStringConstReference): boolean {
++  const value = text(script);
++  return value.length === 0 || (value.length === 4 && /^[A-Z][a-z]{3}$/.test(value));
++}
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts
+new file mode 100644
+index 000000000..26cb07330
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts
+@@ -0,0 +1,75 @@
++/** @fileoverview Original normal LanguageTag static conversion overloads and single-item Locale cache. */
++import { LanguageTag } from "./languagetag.value";
++import { convertToBcp47 as assembleBcp47 } from "./languagetag.conversion";
++import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
++import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
++import { LanguageType, LANGUAGE_SYSTEM } from "../../inc/lang";
++import { MsLangId } from "../../inc/mslangid";
++import { text } from "../isolang/isolang.tables";
++
++let cacheKey: Locale | null = null,
++  cacheValue: number = LANGUAGE_SYSTEM;
++
++/** Copies the source by-value Locale result. @param value - Borrowed triplet. @returns Independent Locale. */
++function copyLocale(value: LocaleConstReference): Locale {
++  const result = new Locale();
++  result.assign(value);
++  return result;
++}
++
++/** Original ID/string to Locale overloads,including simplified SYSTEM detection. @param input - Native ID or BCP47. @param resolve - Resolve system locale. @returns Independent Locale. */
++export function convertToLocale(input: number | OUStringConstReference, resolve = true): Locale {
++  if (typeof input === "number") {
++    const id = LanguageType(input);
++    if (!resolve && (id === LANGUAGE_SYSTEM || MsLangId.getRealLanguage(id) !== id))
++      return new Locale();
++    return copyLocale(new LanguageTag(id).getLocale(resolve));
++  }
++  if (!input.getLength() && !resolve) return new Locale();
++  return copyLocale(new LanguageTag(input).getLocale(resolve));
++}
++
++/** Original native number/Locale to BCP47 overloads,without recursive unresolved SYSTEM conversion. @param input - Native input. @param resolve - Locale overload resolution flag. @returns Independent string. */
++export function convertToBcp47(input: number | LocaleConstReference, resolve = true): OUString {
++  if (typeof input === "number") {
++    const locale = convertToLocale(input);
++    if (!locale.Language.getLength()) return new OUString();
++    return assembleBcp47(locale);
++  }
++  if (!input.Language.getLength())
++    return resolve ? convertToBcp47(LANGUAGE_SYSTEM) : new OUString();
++  return assembleBcp47(input);
++}
++
++/** Original Locale/string to ID overloads,retaining the unresolved single-item cache. @param input - Actual triplet or BCP47. @param resolve - Locale overload resolution flag. @returns Native ID. */
++export function convertToLanguageType(
++  input: LocaleConstReference | OUStringConstReference,
++  resolve = true,
++): number {
++  if (!("Language" in input)) return new LanguageTag(input).getLanguageType();
++  if (!input.Language.getLength() && !resolve) return LANGUAGE_SYSTEM;
++  if (resolve) return new LanguageTag(input).getLanguageType(resolve);
++  if (
++    !cacheKey ||
++    text(cacheKey.Language) !== text(input.Language) ||
++    text(cacheKey.Country) !== text(input.Country) ||
++    text(cacheKey.Variant) !== text(input.Variant)
++  ) {
++    cacheValue = new LanguageTag(input).getLanguageType(false);
++    cacheKey = copyLocale(input);
++  }
++  return cacheValue;
++}
++
++/** Original string/Locale fallback-to-ID overloads,with the Locale-only empty-language guard. @param input - Native input. @returns Fallback ID. */
++export function convertToLanguageTypeWithFallback(
++  input: LocaleConstReference | OUStringConstReference,
++): number {
++  if ("Language" in input && !input.Language.getLength()) return LANGUAGE_SYSTEM;
++  return new LanguageTag(input).makeFallback().getLanguageType();
++}
++
++/** Original string fallback-to-Locale overload. @param input - Actual BCP47. @returns Independent triplet. */
++export function convertToLocaleWithFallback(input: OUStringConstReference): Locale {
++  return copyLocale(new LanguageTag(input).makeFallback().getLocale());
++}
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts
+new file mode 100644
+index 000000000..5e19e8be3
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts
+@@ -0,0 +1,206 @@
++/** @fileoverview Native LanguageTag QA cases and actual ODF/font-facing value contracts. */
++import { expect, it } from "vitest";
++import { LanguageTag, PrivateUse, ScriptType } from "../../inc/languagetag";
++import { MsLangId } from "../../inc/mslangid";
++import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
++import { text, unicode } from "../isolang/isolang.tables";
++import { getKnowns } from "./languagetag.registry";
++
++/** Reads the actual generated triplet without exposing its mutable fields. @param value - Actual borrowed Locale. @returns Native field values. */
++function fields(value: ReturnType<LanguageTag["getLocale"]>): string[] {
++  return [text(value.Language), text(value.Country), text(value.Variant)];
++}
++
++it("preserves incomplete qlt Locale query order instead of inventing a valid language", /** These native Locale inputs exercise delayed conversions independently of parser success. @returns Nothing. */ () => {
++  const emptyQualified = new Locale(unicode("qlt"), unicode(""), unicode(""));
++  const idFirst = new LanguageTag(emptyQualified);
++  expect(idFirst.getLanguageType()).toBe(1023);
++  expect(text(idFirst.getBcp47())).toBe("");
++  expect(idFirst.isValidBcp47()).toBe(false);
++  const bcpFirst = new LanguageTag().reset(emptyQualified);
++  expect(text(bcpFirst.getBcp47())).toBe("");
++  expect(bcpFirst.getLanguageType()).toBe(1023);
++  expect(bcpFirst.isSystemLocale()).toBe(false);
++  expect(fields(bcpFirst.getLocale())).toEqual(["qlt", "", ""]);
++  const unknown = new LanguageTag(1023);
++  expect(fields(unknown.getLocale())).toEqual(["en", "US", ""]);
++  expect(text(unknown.getBcp47())).toBe("en-US");
++});
++
++it("retains independent static Locale assembly and unsupported raw ID results", /** Existing scalar conversion returns empty for unmapped IDs while prepared Locale assembly keeps original fields. @returns Nothing. */ () => {
++  expect(
++    text(LanguageTag.convertToBcp47(new Locale(unicode("de"), unicode("AT"), unicode("ignored")))),
++  ).toBe("de-AT");
++  expect(text(LanguageTag.convertToBcp47(0xffff))).toBe("en-US");
++  const value = new LanguageTag("ca-valencia");
++  expect(value.makeFallback()).toBe(value);
++  expect(text(value.getBcp47())).toBe("ca-ES-valencia");
++  expect(value.makeFallback()).toBe(value);
++  const unknown = new LanguageTag("qaa-x-private");
++  expect(text(unknown.makeFallback().getBcp47())).toBe("en-US");
++  const german = new LanguageTag("de-DE");
++  expect(german.equals(new LanguageTag("de-DE"))).toBe(true);
++  expect(german.equals(new LanguageTag("fr-FR"))).toBe(false);
++  expect(LanguageTag.isValidBcp47(unicode("de-DE"))).toBe(true);
++});
++
++// Literal expectations from TestLanguageTag::testAllTags,not generated from the port.
++for (const [input, canonical, locale, isoLocale, isoODF, fallbacks] of [
++  ["de-Latn-DE", "de-DE", ["de", "DE", ""], true, true, ["de-DE", "de"]],
++  ["i-klingon", "tlh", ["tlh", "", ""], true, true, ["tlh"]],
++  ["sr-RS", "sr-RS", ["sr", "RS", ""], true, true, ["sr-RS", "sr"]],
++  [
++    "sr-Latn-RS",
++    "sr-Latn-RS",
++    ["qlt", "RS", "sr-Latn-RS"],
++    false,
++    true,
++    ["sr-Latn-RS", "sh-RS", "sr-Latn", "sh", "sr-RS", "sr"],
++  ],
++  [
++    "sr-Latn-CS",
++    "sr-Latn-CS",
++    ["qlt", "CS", "sr-Latn-CS"],
++    false,
++    true,
++    ["sr-Latn-CS", "sr-Latn-YU", "sh-CS", "sh-YU", "sr-Latn", "sh", "sr-CS", "sr-YU", "sr"],
++  ],
++  [
++    "sh-RS",
++    "sr-Latn-RS",
++    ["qlt", "RS", "sr-Latn-RS"],
++    false,
++    true,
++    ["sr-Latn-RS", "sh-RS", "sr-Latn", "sh", "sr-RS", "sr"],
++  ],
++  ["bs-Latn-BA", "bs-BA", ["bs", "BA", ""], true, true, ["bs-BA", "bs"]],
++  [
++    "ca-XV",
++    "ca-ES-valencia",
++    ["qlt", "ES", "ca-ES-valencia"],
++    false,
++    false,
++    ["ca-ES-valencia", "ca-XV", "ca-valencia", "ca-ES", "ca"],
++  ],
++] as const)
++  it(`replays native normal LanguageTag QA ${input}`, /** Checks real canonicalization,triplet,ISO decisions and complete ordered fallbacks. @returns Nothing. */ () => {
++    const value = new LanguageTag(unicode(input), true);
++    expect(text(value.getBcp47())).toBe(canonical);
++    expect(fields(value.getLocale())).toEqual(locale);
++    expect(value.isValidBcp47()).toBe(true);
++    expect(value.isIsoLocale()).toBe(isoLocale);
++    expect(value.isIsoODF()).toBe(isoODF);
++    expect(value.getFallbackStrings(true).map(text)).toEqual(fallbacks);
++    expect(value.getFallbackStrings(false).map(text)).toEqual(fallbacks.slice(1));
++    expect(text(value.getLanguageAndScript())).toBe(
++      text(value.getLanguage()) + (value.hasScript() ? "-" + text(value.getScript()) : ""),
++    );
++  });
++
++it("reuses actual numeric and triplet owners,while copies reset independently", /** Checks native constructor variants,raw numeric IDs and semantic shared script metadata. @returns Nothing. */ () => {
++  const numeric = new LanguageTag(1031),
++    locale = new Locale(unicode("de"), unicode("DE"), unicode("vendor")),
++    fromLocale = new LanguageTag(locale);
++  expect(text(fromLocale.getBcp47())).toBe("de-DE");
++  expect(text(locale.Variant)).toBe("vendor");
++  expect(fields(numeric.getLocale())).toEqual(["de", "DE", ""]);
++  expect(numeric.getLanguageType()).toBe(1031);
++  expect(numeric.Equals(fromLocale)).toBe(true);
++  const copy = new LanguageTag(numeric);
++  copy.setScriptType(ScriptType.WESTERN);
++  numeric.setScriptType(ScriptType.CJK);
++  expect(fromLocale.getScriptType()).toBe(ScriptType.WESTERN);
++  copy.reset("ja-JP");
++  expect(text(copy.getBcp47())).toBe("ja-JP");
++  expect(text(numeric.getBcp47())).toBe("de-DE");
++  copy.reset(new Locale(unicode("fr"), unicode("FR"), unicode("vendor")));
++  expect(text(copy.getBcp47())).toBe("fr-FR");
++  copy.reset(1031);
++  expect(copy.Equals(numeric)).toBe(true);
++});
++
++it("constructs actual ODF language attributes with explicit BCP47 precedence", /** Checks source four-field constructor,including retained trailing separator when country is empty. @returns Nothing. */ () => {
++  for (const [bcp, language, script, country, expected, locale] of [
++    ["de-DE", "ja", "Jpan", "JP", "de-DE", ["de", "DE", ""]],
++    ["", "de", "", "DE", "de-DE", ["de", "DE", ""]],
++    ["", "de", "", "", "de-", ["de", "", ""]],
++    ["", "sr", "Latn", "RS", "sr-Latn-RS", ["qlt", "RS", "sr-Latn-RS"]],
++    ["", "sr", "Latn", "", "sr-Latn", ["qlt", "", "sr-Latn"]],
++  ] as const) {
++    const value = new LanguageTag(
++      unicode(bcp),
++      unicode(language),
++      unicode(script),
++      unicode(country),
++    );
++    expect(text(value.getBcp47())).toBe(expected);
++    expect(fields(value.getLocale())).toEqual(locale);
++  }
++  const system = new LanguageTag(unicode(""), unicode(""), unicode("Latn"), unicode("US"));
++  expect(system.isSystemLocale()).toBe(true);
++  expect(text(system.getBcp47(false))).toBe("");
++});
++
++it("registers actual dynamic IDs with numeric round trips and shared script metadata", /** Uses a real registered local-use language,not a fabricated parser or ID backend. @returns Nothing. */ () => {
++  const value = new LanguageTag("qty"),
++    id = value.getLanguageType();
++  expect(LanguageTag.isOnTheFlyID(id)).toBe(true);
++  expect(text(new LanguageTag(id).getBcp47())).toBe("qty");
++  expect(LanguageTag.getOnTheFlyScriptType(id)).toBe(ScriptType.UNKNOWN);
++  value.setScriptType(ScriptType.CTL);
++  value.setScriptType(ScriptType.RTL);
++  expect(LanguageTag.getOnTheFlyScriptType(id)).toBe(ScriptType.CTL);
++  expect(new LanguageTag("QTY", true).getLanguageType()).toBe(id);
++  expect(LanguageTag.getOnTheFlyScriptType(0xffff)).toBe(ScriptType.UNKNOWN);
++});
++
++it("replays numeric-region native QA after real known-tag discovery", /** Discovery must instantiate the native IDs and populate their real shared owners. @returns Nothing. */ () => {
++  expect(getKnowns().has("es-419")).toBe(true);
++  const value = new LanguageTag("es-419");
++  expect(fields(value.getLocale())).toEqual(["qlt", "", "es-419"]);
++  expect(value.getLanguageType()).toBe(22538);
++  expect(value.getFallbackStrings(true).map(text)).toEqual(["es-419", "es"]);
++});
++
++for (const [input, policy, valid, canonical] of [
++  ["de-Latn-DE", PrivateUse.ALLOW, true, "de-DE"],
++  ["en-x-private", PrivateUse.ALLOW, true, "en-x-private"],
++  ["en-x-private", PrivateUse.DISALLOW, false, "en-x-private"],
++  ["qlt", PrivateUse.DISALLOW, false, "qlt"],
++  ["art-x-private", PrivateUse.ALLOW_ART_X, true, "art-x-private"],
++  ["art-Latn-x-private", PrivateUse.ALLOW_ART_X, true, "art-Latn-x-private"],
++  ["x-private", PrivateUse.ALLOW_ART_X, false, "x-private"],
++  ["en--US", PrivateUse.ALLOW, false, "unchanged"],
++] as const)
++  it(`preserves native static validation output ${input}/${policy}`, /** A policy rejection still assigns canonical output;parse failure does not. @returns Nothing. */ () => {
++    const output = unicode("unchanged");
++    expect(LanguageTag.isValidBcp47(unicode(input), output, policy)).toBe(valid);
++    expect(text(output)).toBe(canonical);
++  });
++
++it("uses original fallback conversions and returns independent static Locale values", /** Exercises real source overloads without a second model or parser. @returns Nothing. */ () => {
++  expect(text(LanguageTag.convertToBcp47(1031))).toBe("de-DE");
++  const locale = LanguageTag.convertToLocale(1031);
++  locale.Language.clear();
++  expect(fields(new LanguageTag(1031).getLocale())).toEqual(["de", "DE", ""]);
++  expect(fields(LanguageTag.convertToLocale(unicode("de-DE")))).toEqual(["de", "DE", ""]);
++  expect(fields(LanguageTag.convertToLocale(0, false))).toEqual(["", "", ""]);
++  expect(fields(LanguageTag.convertToLocale(0x0400, false))).toEqual(["", "", ""]);
++  expect(fields(LanguageTag.convertToLocale(unicode(""), false))).toEqual(["", "", ""]);
++  expect(text(LanguageTag.convertToBcp47(new Locale(), false))).toBe("");
++  const german = new Locale(unicode("de"), unicode("DE"), unicode(""));
++  expect(LanguageTag.convertToLanguageType(german, false)).toBe(1031);
++  expect(LanguageTag.convertToLanguageType(german, false)).toBe(1031);
++  german.Language.assign(unicode("ja"));
++  german.Country.assign(unicode("JP"));
++  expect(LanguageTag.convertToLanguageType(german, false)).toBe(1041);
++  expect(LanguageTag.convertToLanguageType(unicode("de-DE"))).toBe(1031);
++  expect(LanguageTag.convertToLanguageType(new Locale(), false)).toBe(0);
++  expect(LanguageTag.convertToLanguageTypeWithFallback(new Locale())).toBe(0);
++  expect(text(LanguageTag.convertToLocaleWithFallback(unicode("ca-valencia")).Variant)).toBe(
++    "ca-ES-valencia",
++  );
++  expect(LanguageTag.convertToLanguageTypeWithFallback(unicode("de-DE"))).toBe(1031);
++  expect(MsLangId.getPrimaryLanguage(MsLangId.makeLangID(62, 0x3fe))).toBe(0x3fe);
++  expect(MsLangId.getSubLanguage(MsLangId.makeLangID(62, 0x3fe))).toBe(62);
++});
+diff --git a/apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts b/apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts
+new file mode 100644
+index 000000000..b6e9de3b8
+--- /dev/null
++++ b/apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts
+@@ -0,0 +1,441 @@
++/** @fileoverview Actual shared normal LibreOffice LanguageTag value and lazy front-end contracts. */
++import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
++import { Locale, type LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
++import {
++  LanguageType,
++  LANGUAGE_SYSTEM,
++  LANGUAGE_DONTKNOW,
++  LANGUAGE_SPANISH_DATED,
++} from "../../inc/lang";
++import { MsLangId } from "../../inc/mslangid";
++import { text, unicode, lower } from "../isolang/isolang.tables";
++import { handleVendorVariant } from "./languagetag.conversion";
++import {
++  convertToLocale,
++  convertToBcp47,
++  convertToLanguageType,
++  convertToLanguageTypeWithFallback,
++  convertToLocaleWithFallback,
++} from "./languagetag.static";
++import {
++  ScriptType,
++  PrivateUse,
++  createValueState,
++  isIsoLanguage,
++  isIsoCountry,
++  isIsoScript,
++} from "./languagetag.state";
++import {
++  registerImpl,
++  isOnTheFlyID,
++  getOnTheFlyScriptType,
++  setConfiguredSystemLanguage,
++  disableParsing,
++  isParsingDisabled,
++} from "./languagetag.registry";
++import type { LanguageTagImpl } from "./languagetag.impl";
++import { getIsoFallbackStrings } from "./languagetag.iso-fallback";
++import { getFallbackStrings } from "./languagetag";
++import { lt_tag_new } from "../../../external/liblangtag/liblangtag/lt-tag";
++import { lt_tag_parse } from "../../../external/liblangtag/liblangtag/lt-tag.parse";
++import { lt_tag_canonicalize } from "../../../external/liblangtag/liblangtag/lt-tag.canonicalize";
++
++const emptyBcp47 = new OUString(),
++  emptyLocale = new Locale();
++/** Source normal constructor/reset domain;POSIX rtl_Locale is a separate unsupported API. */
++export type LanguageTagInput =
++  number | string | OUStringConstReference | LocaleConstReference | LanguageTag;
++
++/** Actual normal value owner,sharing semantic implementations via native registries. */
++export class LanguageTag {
++  static readonly ScriptType = ScriptType;
++  static readonly PrivateUse = PrivateUse;
++  static readonly isOnTheFlyID = isOnTheFlyID;
++  static readonly getOnTheFlyScriptType = getOnTheFlyScriptType;
++  static readonly disable_lt_tag_parse = disableParsing;
++  static readonly isIsoLanguage = isIsoLanguage;
++  static readonly isIsoCountry = isIsoCountry;
++  static readonly isIsoScript = isIsoScript;
++  static readonly convertToLocale = convertToLocale;
++  static readonly convertToBcp47 = convertToBcp47;
++  static readonly convertToLanguageType = convertToLanguageType;
++  static readonly convertToLanguageTypeWithFallback = convertToLanguageTypeWithFallback;
++  static readonly convertToLocaleWithFallback = convertToLocaleWithFallback;
++  readonly #state = createValueState();
++
++  /** Creates the normal source number/string/Locale/copy value or ODF four-field value. @param args - Actual constructor arguments;the string form includes the original canonicalize flag. @returns Actual LanguageTag. */
++  constructor(
++    ...args:
++      | [input?: LanguageTagInput | undefined, canonicalize?: boolean | undefined]
++      | [
++          input: OUStringConstReference,
++          language: OUStringConstReference,
++          script: OUStringConstReference,
++          country: OUStringConstReference,
++        ]
++  ) {
++    const s = this.#state;
++    if (args.length === 4) {
++      const [bcp, languageValue, script, country] = args;
++      s.maBcp47.assign(bcp);
++      s.mnLangID = LANGUAGE_DONTKNOW;
++      s.mbSystemLocale = !s.maBcp47.getLength() && !languageValue.getLength();
++      s.mbInitializedBcp47 = !!s.maBcp47.getLength();
++      if (s.mbSystemLocale || s.mbInitializedBcp47) return;
++      const language = text(languageValue),
++        scriptText = text(script),
++        countryText = text(country);
++      if (!scriptText) {
++        s.maBcp47.assign(unicode(language + "-" + countryText));
++        s.maLocale.Language.assign(languageValue);
++        s.maLocale.Country.assign(country);
++      } else {
++        s.maBcp47.assign(
++          unicode(language + "-" + scriptText + (countryText ? "-" + countryText : "")),
++        );
++        s.maLocale.Language.assign(unicode("qlt"));
++        s.maLocale.Country.assign(country);
++        s.maLocale.Variant.assign(s.maBcp47);
++      }
++      s.mbInitializedBcp47 = s.mbInitializedLocale = true;
++      return;
++    }
++    const [input = LANGUAGE_SYSTEM, canonicalize = false] = args;
++    if (input instanceof LanguageTag) {
++      this.assign(input);
++    } else if (typeof input === "number") {
++      s.mnLangID = LanguageType(input);
++      s.mbSystemLocale = s.mnLangID === LANGUAGE_SYSTEM;
++      s.mbInitializedLangID = !s.mbSystemLocale;
++    } else if (typeof input !== "string" && "Language" in input) {
++      s.maLocale.assign(input);
++      s.mnLangID = LANGUAGE_DONTKNOW;
++      s.mbSystemLocale = !input.Language.getLength();
++      handleVendorVariant(s.maLocale);
++    } else {
++      s.maBcp47.assign(typeof input === "string" ? unicode(input) : input);
++      s.mnLangID = LANGUAGE_DONTKNOW;
++      s.mbSystemLocale = !s.maBcp47.getLength();
++      s.mbInitializedBcp47 = !s.mbSystemLocale;
++      if (canonicalize) {
++        this.#getImpl().canonicalize();
++        this.#syncFromImpl();
++      }
++    }
++  }
++
++  /** Original defaulted memberwise copy assignment;physical ownership remains with JS GC. @param other - Actual source value. @returns This. */
++  assign(other: LanguageTag): this {
++    const s = this.#state,
++      source = other.#state;
++    s.maLocale.assign(source.maLocale);
++    s.maBcp47.assign(source.maBcp47);
++    s.mnLangID = source.mnLangID;
++    s.mbSystemLocale = source.mbSystemLocale;
++    s.mbInitializedBcp47 = source.mbInitializedBcp47;
++    s.mbInitializedLocale = source.mbInitializedLocale;
++    s.mbInitializedLangID = source.mbInitializedLangID;
++    s.mbIsFallback = source.mbIsFallback;
++    s.mpImpl = source.mpImpl;
++    return this;
++  }
++
++  /** Resets exactly the source normal value fields. @param input - String,Locale or numeric ID. @returns This. */
++  reset(input: number | string | OUStringConstReference | LocaleConstReference): this {
++    const s = this.#state;
++    s.mpImpl = null;
++    s.maLocale.assign(new Locale());
++    s.maBcp47.clear();
++    s.mnLangID = LANGUAGE_SYSTEM;
++    s.mbSystemLocale = true;
++    s.mbInitializedBcp47 = s.mbInitializedLocale = s.mbInitializedLangID = s.mbIsFallback = false;
++    if (typeof input === "number") {
++      s.mnLangID = LanguageType(input);
++      s.mbSystemLocale = s.mnLangID === LANGUAGE_SYSTEM;
++      s.mbInitializedLangID = !s.mbSystemLocale;
++    } else if (typeof input !== "string" && "Language" in input) {
++      s.maLocale.assign(input);
++      s.mbSystemLocale = !input.Language.getLength();
++      s.mbInitializedLocale = !s.mbSystemLocale;
++      handleVendorVariant(s.maLocale);
++    } else {
++      s.maBcp47.assign(typeof input === "string" ? unicode(input) : input);
++      s.mbSystemLocale = !s.maBcp47.getLength();
++      s.mbInitializedBcp47 = !s.mbSystemLocale;
++    }
++    return this;
++  }
++
++  /** Queries source system origin,not the resolved ID. @returns Origin flag. */
++  isSystemLocale(): boolean {
++    return this.#state.mbSystemLocale;
++  }
++  /** Borrows actual cached string,leaving SYSTEM unresolved when requested. @param resolve - Source resolution flag. @returns Actual Unicode reference. */
++  getBcp47(resolve = true): OUStringConstReference {
++    const s = this.#state;
++    if (!resolve && s.mbSystemLocale) return emptyBcp47;
++    if (!s.mbInitializedBcp47) this.#syncVarsFromImpl();
++    if (!s.mbInitializedBcp47) {
++      this.#getImpl().getBcp47();
++      this.#syncFromImpl();
++    }
++    return s.maBcp47;
++  }
++  /** Borrows actual native triplet,optionally without resolving SYSTEM. @param resolve - Source resolution flag. @returns Native Locale reference. */
++  getLocale(resolve = true): LocaleConstReference {
++    const s = this.#state;
++    if (!resolve && s.mbSystemLocale) return emptyLocale;
++    if (!s.mbInitializedLocale) this.#syncVarsFromImpl();
++    if (!s.mbInitializedLocale) {
++      if (s.mbInitializedBcp47) this.#getImpl().convertBcp47ToLocale();
++      else this.#getImpl().convertLangToLocale();
++      this.#syncFromImpl();
++    }
++    return s.maLocale;
++  }
++  /** Gets native raw or dynamically registered ID,retaining source lazy order. @param resolve - Resolve SYSTEM. @returns Native UInt16 identity. */
++  getLanguageType(resolve = true): number {
++    const s = this.#state;
++    if (!resolve && s.mbSystemLocale) return LANGUAGE_SYSTEM;
++    if (!s.mbInitializedLangID) this.#syncVarsFromImpl();
++    if (!s.mbInitializedLangID) {
++      if (s.mbInitializedBcp47) {
++        this.#getImpl().convertBcp47ToLang();
++        this.#syncFromImpl();
++      } else {
++        this.#getImpl().convertLocaleToLang(true);
++        this.#syncFromImpl();
++        if (
++          (!s.mbSystemLocale && s.mnLangID === LANGUAGE_SYSTEM) ||
++          s.mnLangID === LANGUAGE_DONTKNOW
++        )
++          this.#synCanonicalize();
++      }
++    }
++    return s.mnLangID;
++  }
++
++  /** Source language query returns an independent Unicode value. @returns Language. */
++  getLanguage(): OUString {
++    const impl = this.#getImpl();
++    if (impl.mbCachedLanguage) return new OUString(impl.maCachedLanguage);
++    const value = new OUString(impl.getLanguage());
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Source script query. @returns Script. */
++  getScript(): OUString {
++    const impl = this.#getImpl();
++    if (impl.mbCachedScript) return new OUString(impl.maCachedScript);
++    const value = new OUString(impl.getScript());
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Source country query,which differs from a numeric region. @returns Country. */
++  getCountry(): OUString {
++    const impl = this.#getImpl();
++    if (impl.mbCachedCountry) return new OUString(impl.maCachedCountry);
++    const value = new OUString(impl.getCountry());
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Source variants query. @returns Variants. */
++  getVariants(): OUString {
++    const impl = this.#getImpl();
++    if (impl.mbCachedVariants) return new OUString(impl.maCachedVariants);
++    const value = new OUString(impl.getVariants());
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Combines source language/script queries. @returns New value. */
++  getLanguageAndScript(): OUString {
++    const language = text(this.getLanguage()),
++      script = text(this.getScript());
++    return unicode(language + (script ? "-" + script : ""));
++  }
++  /** Source script presence wrapper. @returns Presence. */
++  hasScript(): boolean {
++    const value = this.#getImpl().hasScript();
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Source cached script metadata. @returns Type. */
++  getScriptType(): ScriptType {
++    return this.#getImpl().getScriptType();
++  }
++  /** Source first-wins metadata update. @param type - Script type. @returns Nothing. */
++  setScriptType(type: ScriptType): void {
++    this.#getImpl().setScriptType(type);
++  }
++  /** Source ISO Locale wrapper. @returns Decision. */
++  isIsoLocale(): boolean {
++    const value = this.#getImpl().isIsoLocale();
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Source ISO ODF wrapper. @returns Decision. */
++  isIsoODF(): boolean {
++    const value = this.#getImpl().isIsoODF();
++    this.#syncFromImpl();
++    return value;
++  }
++  /** Source instance validity wrapper,including known fast paths. @returns Decision. */
++  isValidBcp47(): boolean {
++    const value = this.#getImpl().isValidBcp47();
++    this.#syncFromImpl();
++    return value;
++  }
++
++  /** Writes original independent ISO-compatible fields. @param language - Output. @param script - Output. @param country - Output. @returns Nothing. */
++  getIsoLanguageScriptCountry(language: OUString, script: OUString, country: OUString): void {
++    if (this.isIsoODF()) {
++      language.assign(this.getLanguage());
++      script.assign(this.getScript());
++      country.assign(this.getCountry());
++    } else {
++      const l = this.getLanguage(),
++        s = this.getScript(),
++        c = this.getCountry();
++      language.assign(isIsoLanguage(l) ? l : new OUString());
++      script.assign(isIsoScript(s) ? s : new OUString());
++      country.assign(isIsoCountry(c) ? c : new OUString());
++    }
++  }
++
++  /** Preserves complete original fallback order over actual native fields. @param include - Include full tag. @returns Fresh actual Unicode values. */
++  getFallbackStrings(include: boolean): OUString[] {
++    const language = text(this.getLanguage()),
++      country = text(this.getCountry());
++    if (this.isIsoLocale()) return getIsoFallbackStrings(language, country, include).map(unicode);
++    const tag = text(this.getBcp47()),
++      values = include ? [tag] : [];
++    values.push(
++      ...getFallbackStrings({
++        tag,
++        language,
++        country,
++        script: text(this.getScript()),
++        variants: text(this.getVariants()),
++      }),
++    );
++    return values.map(unicode);
++  }
++  /** Preserves source fallback replacement and one-time flag. @returns This. */
++  makeFallback(): this {
++    if (!this.#state.mbIsFallback) {
++      const current = this.getLocale();
++      let fallback = MsLangId.Conversion.lookupFallbackLocale(current);
++      if (
++        text(current.Language) !== text(fallback.Language) ||
++        text(current.Country) !== text(fallback.Country) ||
++        text(current.Variant) !== text(fallback.Variant)
++      ) {
++        if (
++          text(current.Language) !== "en" &&
++          text(fallback.Language) === "en" &&
++          text(fallback.Country) === "US"
++        )
++          for (const tag of this.getFallbackStrings(false)) {
++            fallback = MsLangId.Conversion.lookupFallbackLocale(new LanguageTag(tag).getLocale());
++            if (text(fallback.Language) !== "en" || text(fallback.Country) !== "US") break;
++          }
++        this.reset(fallback);
++      }
++      this.#state.mbIsFallback = true;
++    }
++    return this;
++  }
++  /** Returns source Microsoft compatibility spelling. @returns BCP47 or dated Spanish form. */
++  getBcp47MS(): OUString {
++    return this.getLanguageType() === LANGUAGE_SPANISH_DATED
++      ? unicode("es-ES_tradnl")
++      : new OUString(this.getBcp47());
++  }
++  /** Source operator== semantics with unresolved SYSTEM. @param other - Actual value. @returns Equality. */
++  Equals(other: LanguageTag): boolean {
++    if (this.isSystemLocale() && other.isSystemLocale()) return true;
++    if (this.#state.mbInitializedLangID && other.#state.mbInitializedLangID)
++      return (
++        this.#state.mnLangID === other.#state.mnLangID &&
++        this.isSystemLocale() === other.isSystemLocale()
++      );
++    return text(this.getBcp47(false)) === text(other.getBcp47(false));
++  }
++  /** Source equals semantics resolving mixed SYSTEM origins. @param other - Actual value. @returns Equality. */
++  equals(other: LanguageTag): boolean {
++    return this.isSystemLocale() === other.isSystemLocale()
++      ? this.Equals(other)
++      : text(this.getBcp47()) === text(other.getBcp47());
++  }
++  /** Source operator< logical UTF16 ASCII-insensitive order. @param other - Actual value. @returns Ordering. */
++  LessThan(other: LanguageTag): boolean {
++    return lower(text(this.getBcp47(false))) < lower(text(other.getBcp47(false)));
++  }
++
++  /** Source configured-system update with native refusal rules. @param language - Native ID. @returns Nothing. */
++  static setConfiguredSystemLanguage(language: number): void {
++    setConfiguredSystemLanguage(LanguageType(language));
++  }
++  /** Source static parser validation bypasses known-locale fast paths. @param input - Actual Unicode input. @param output - Optional canonical output,also set when private policy rejects. @param policy - Source private/local-use policy. @returns Native validity. */
++  static isValidBcp47(
++    input: OUStringConstReference,
++    output?: OUString,
++    policy = PrivateUse.ALLOW,
++  ): boolean {
++    const tag = lt_tag_new();
++    if (isParsingDisabled() || !lt_tag_parse(tag, text(input))) return false;
++    const result = lt_tag_canonicalize(tag);
++    if (result === null) return false;
++    let valid = true;
++    if (policy !== PrivateUse.ALLOW) {
++      const language = tag.language?.tag;
++      if (language === "qlt") valid = false;
++      else if (!(policy === PrivateUse.ALLOW_ART_X && language === "art") && tag.privateuse)
++        valid = false;
++    }
++    if (output) output.assign(unicode(result));
++    return valid;
++  }
++
++  /** Obtains the actual shared native implementation and synchronizes new registrations. @returns Native owner. */
++  #getImpl(): LanguageTagImpl {
++    if (!this.#state.mpImpl) {
++      this.#state.mpImpl = registerImpl(this.#state);
++      this.#syncVarsFromRawImpl();
++    }
++    return this.#state.mpImpl;
++  }
++  /** Copies only original mutable front-end variables. @returns Nothing. */
++  #syncVarsFromRawImpl(): void {
++    const s = this.#state,
++      impl = s.mpImpl;
++    if (!impl) return;
++    s.maBcp47.assign(impl.maBcp47);
++    s.maLocale.assign(impl.maLocale);
++    s.mnLangID = impl.mnLangID;
++    s.mbInitializedBcp47 = impl.mbInitializedBcp47;
++    s.mbInitializedLocale = impl.mbInitializedLocale;
++    s.mbInitializedLangID = impl.mbInitializedLangID;
++  }
++  /** Preserves source registration versus direct synchronization. @returns Nothing. */
++  #syncVarsFromImpl(): void {
++    if (!this.#state.mpImpl) this.#getImpl();
++    else this.#syncVarsFromRawImpl();
++  }
++  /** Re-registers changed identities only after syncing native mutable values. @returns Nothing. */
++  #syncFromImpl(): void {
++    const s = this.#state,
++      impl = this.#getImpl(),
++      again =
++        (s.mbInitializedBcp47 && text(s.maBcp47) !== text(impl.maBcp47)) ||
++        (s.mbInitializedLangID && s.mnLangID !== impl.mnLangID);
++    this.#syncVarsFromRawImpl();
++    if (again) s.mpImpl = registerImpl(s);
++  }
++  /** Source wrapper for final remap synchronization. @returns Whether changed. */
++  #synCanonicalize(): boolean {
++    const changed = this.#getImpl().synCanonicalize();
++    if (changed) this.#syncFromImpl();
++    return changed;
++  }
++}
+diff --git a/docs/program/registry/shared/capabilities/CAP-41e22378-32c9-45d6-9fdc-ea961184de42.json b/docs/program/registry/shared/capabilities/CAP-41e22378-32c9-45d6-9fdc-ea961184de42.json
+new file mode 100644
+index 000000000..cdce13bc8
+--- /dev/null
++++ b/docs/program/registry/shared/capabilities/CAP-41e22378-32c9-45d6-9fdc-ea961184de42.json
+@@ -0,0 +1,114 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "id": "CAP-41e22378-32c9-45d6-9fdc-ea961184de42",
++    "capabilityId": "CAP-41e22378-32c9-45d6-9fdc-ea961184de42",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "type": "model",
++    "maturity": "implemented",
++    "assertions": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "stackDivergence": {
++      "kind": "browser-adaptation",
++      "rationale": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    },
++    "capability": "Normal shared LanguageTag value and semantic registry",
++    "gaps": [
++      "Strict raw100,Chromium/Worker and final task verification pending.",
++      "POSIX/glibc,full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS remain outside this implementation."
++    ],
++    "upstream": {
++      "implementation": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTag::registerImpl"
++        }
++      ],
++      "tests": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/qa/cppunit/test_languagetag.cxx",
++          "marker": "testAllTags"
++        }
++      ],
++      "docs": [
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "implemented": true,
++    "contractParity": false,
++    "behaviorParity": false,
++    "defaultParity": false,
++    "verified": false,
++    "local": {
++      "implementation": [
++        {
++          "path": "apps/office/src/i18nlangtag/inc/languagetag.ts",
++          "marker": "LanguageTag"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
++          "marker": "LanguageTag"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
++          "marker": "LanguageTagImpl"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
++          "marker": "canonicalize"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
++          "marker": "registerImpl"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
++          "marker": "createValueState"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
++          "marker": "getIsoFallbackStrings"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
++          "marker": "convertToLocale"
++        }
++      ],
++      "tests": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++          "marker": "preserves finite native on-the-fly"
++        }
++      ],
++      "docs": [
++        {
++          "path": "docs/program/calc-ui-readiness.md",
++          "marker": "Normal shared LanguageTag owner (task197)"
++        }
++      ]
++    },
++    "aspect": "model-operation",
++    "atomicOperation": "normal-language-tag-value-canonicalization-id-registry",
++    "scopeLimitations": [
++      "Source-derived managed tests;no executed native oracle,no binary or physical ownership parity."
++    ],
++    "confidence": {
++      "level": "low",
++      "rationale": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    },
++    "sourceResponsibility": {
++      "kind": "browser-adaptation",
++      "rationale": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/inc/languagetag.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/inc/languagetag.ts.json
+new file mode 100644
+index 000000000..eb568a4e1
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/inc/languagetag.ts.json
+@@ -0,0 +1,48 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/inc/languagetag.ts",
++    "status": "mapped",
++    "upstreamPath": "include/i18nlangtag/languagetag.hxx",
++    "localSymbols": [
++      "LanguageTag",
++      "ScriptType",
++      "PrivateUse"
++    ],
++    "upstreamSymbols": [
++      "LanguageTag",
++      "ScriptType",
++      "PrivateUse"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/inc/languagetag.ts",
++          "marker": "LanguageTag"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "enum class ScriptType"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "getIsoLanguageScriptCountry"
++        }
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.canonical.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.canonical.ts.json
+new file mode 100644
+index 000000000..d6baf656e
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.canonical.ts.json
+@@ -0,0 +1,49 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "canonicalize"
++    ],
++    "upstreamSymbols": [
++      "LanguageTagImpl::canonicalize"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
++          "marker": "canonicalize"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTagImpl::canonicalize"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.impl.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.impl.ts.json
+new file mode 100644
+index 000000000..8899979d7
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.impl.ts.json
+@@ -0,0 +1,54 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "LanguageTagImpl"
++    ],
++    "upstreamSymbols": [
++      "LanguageTagImpl::LanguageTagImpl",
++      "LanguageTagImpl::operator=",
++      "LanguageTagImpl::synCanonicalize",
++      "LanguageTagImpl::convertLocaleToLang",
++      "LanguageTagImpl::getLanguage",
++      "LanguageTagImpl::isIsoODF"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
++          "marker": "LanguageTagImpl"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTagImpl::LanguageTagImpl"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json
+new file mode 100644
+index 000000000..6a60089ab
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json
+@@ -0,0 +1,49 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "getIsoFallbackStrings"
++    ],
++    "upstreamSymbols": [
++      "LanguageTag::getFallbackStrings"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
++          "marker": "getIsoFallbackStrings"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTag::getFallbackStrings"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.registry.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.registry.ts.json
+new file mode 100644
+index 000000000..b4c901e82
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.registry.ts.json
+@@ -0,0 +1,65 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "getKnowns",
++      "disableParsing",
++      "isParsingDisabled",
++      "getNextOnTheFlyLanguage",
++      "isOnTheFlyID",
++      "isKnownOnTheFlyID",
++      "insertID",
++      "insertBcp",
++      "registerOnTheFly",
++      "registerImpl",
++      "getOnTheFlyScriptType",
++      "setConfiguredSystemLanguage"
++    ],
++    "upstreamSymbols": [
++      "getKnowns",
++      "getNextOnTheFlyLanguage",
++      "LanguageTagImpl::registerOnTheFly",
++      "LanguageTag::registerImpl",
++      "LanguageTag::getOnTheFlyScriptType",
++      "LanguageTag::setConfiguredSystemLanguage"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
++          "marker": "registerImpl"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "getKnowns"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.state.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.state.ts.json
+new file mode 100644
+index 000000000..245537fbd
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.state.ts.json
+@@ -0,0 +1,58 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "ScriptType",
++      "PrivateUse",
++      "LanguageTagValueState",
++      "createValueState",
++      "isIsoLanguage",
++      "isIsoCountry",
++      "isIsoScript"
++    ],
++    "upstreamSymbols": [
++      "LanguageTag::resetVars",
++      "LanguageTag::isIsoLanguage",
++      "LanguageTag::isIsoCountry",
++      "LanguageTag::isIsoScript"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
++          "marker": "createValueState"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTag::resetVars"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.static.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.static.ts.json
+new file mode 100644
+index 000000000..53b7eb673
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.static.ts.json
+@@ -0,0 +1,58 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "copyLocale",
++      "convertToLocale",
++      "convertToBcp47",
++      "convertToLanguageType",
++      "convertToLanguageTypeWithFallback",
++      "convertToLocaleWithFallback"
++    ],
++    "upstreamSymbols": [
++      "LanguageTag::convertToLocale",
++      "LanguageTag::convertToBcp47",
++      "LanguageTag::convertToLanguageType",
++      "LanguageTag::convertToLanguageTypeWithFallback",
++      "LanguageTag::convertToLocaleWithFallback"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
++          "marker": "convertToLocale"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTag::convertToLocale"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.value.ts.json b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.value.ts.json
+new file mode 100644
+index 000000000..c0120f8da
+--- /dev/null
++++ b/docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.value.ts.json
+@@ -0,0 +1,56 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "classification": "upstream-mechanism",
++    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
++    "status": "mapped",
++    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
++    "localSymbols": [
++      "LanguageTagInput",
++      "LanguageTag"
++    ],
++    "upstreamSymbols": [
++      "LanguageTag::LanguageTag",
++      "LanguageTag::reset",
++      "LanguageTag::syncFromImpl",
++      "LanguageTag::getLanguageType",
++      "LanguageTag::getIsoLanguageScriptCountry",
++      "LanguageTag::makeFallback",
++      "LanguageTag::isValidBcp47"
++    ],
++    "preservedResponsibilities": [
++      "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed."
++    ],
++    "omittedResponsibilities": [
++      "POSIX rtl_Locale/glibc operations,physical native ownership/ABI and unrelated full library APIs are outside this normal-owner scope. Font/defaults/pools/Calc document/UI/ODS remain incomplete. Verification of this owner is pending."
++    ],
++    "evidence": {
++      "local": [
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
++          "marker": "LanguageTag"
++        },
++        {
++          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++          "marker": "replays native normal LanguageTag QA"
++        }
++      ],
++      "upstream": [
++        {
++          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
++          "marker": "LanguageTag::LanguageTag"
++        },
++        {
++          "path": "vendor/libreoffice-reference/include/i18nlangtag/languagetag.hxx",
++          "marker": "class"
++        }
++      ]
++    },
++    "filenameDivergence": {
++      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
++      "stackNecessity": "responsibility-split",
++      "rationale": "Normal native LanguageTag value,private state,canonicalization,registry,ISO fallback and static conversions are separated by responsibility to retain source boundaries within authored module size limits."
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/inc/languagetag.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/inc/languagetag.ts.json
+new file mode 100644
+index 000000000..754bad32d
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/inc/languagetag.ts.json
+@@ -0,0 +1,41 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/inc/languagetag.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/inc/languagetag.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "LanguageTag",
++        "ScriptType",
++        "PrivateUse"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "include/i18nlangtag/languagetag.hxx",
++      "upstreamSymbols": [
++        "LanguageTag",
++        "ScriptType",
++        "PrivateUse"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.canonical.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.canonical.ts.json
+new file mode 100644
+index 000000000..d7464bc44
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.canonical.ts.json
+@@ -0,0 +1,37 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "canonicalize"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "LanguageTagImpl::canonicalize"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.impl.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.impl.ts.json
+new file mode 100644
+index 000000000..12c6b06f2
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.impl.ts.json
+@@ -0,0 +1,42 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "LanguageTagImpl"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "LanguageTagImpl::LanguageTagImpl",
++        "LanguageTagImpl::operator=",
++        "LanguageTagImpl::synCanonicalize",
++        "LanguageTagImpl::convertLocaleToLang",
++        "LanguageTagImpl::getLanguage",
++        "LanguageTagImpl::isIsoODF"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json
+new file mode 100644
+index 000000000..9b36f31da
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json
+@@ -0,0 +1,37 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "getIsoFallbackStrings"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "LanguageTag::getFallbackStrings"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.registry.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.registry.ts.json
+new file mode 100644
+index 000000000..29f0951d9
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.registry.ts.json
+@@ -0,0 +1,53 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "getKnowns",
++        "disableParsing",
++        "isParsingDisabled",
++        "getNextOnTheFlyLanguage",
++        "isOnTheFlyID",
++        "isKnownOnTheFlyID",
++        "insertID",
++        "insertBcp",
++        "registerOnTheFly",
++        "registerImpl",
++        "getOnTheFlyScriptType",
++        "setConfiguredSystemLanguage"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "getKnowns",
++        "getNextOnTheFlyLanguage",
++        "LanguageTagImpl::registerOnTheFly",
++        "LanguageTag::registerImpl",
++        "LanguageTag::getOnTheFlyScriptType",
++        "LanguageTag::setConfiguredSystemLanguage"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.state.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.state.ts.json
+new file mode 100644
+index 000000000..30682e016
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.state.ts.json
+@@ -0,0 +1,46 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "ScriptType",
++        "PrivateUse",
++        "LanguageTagValueState",
++        "createValueState",
++        "isIsoLanguage",
++        "isIsoCountry",
++        "isIsoScript"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "LanguageTag::resetVars",
++        "LanguageTag::isIsoLanguage",
++        "LanguageTag::isIsoCountry",
++        "LanguageTag::isIsoScript"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.static.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.static.ts.json
+new file mode 100644
+index 000000000..9e767ff76
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.static.ts.json
+@@ -0,0 +1,46 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "copyLocale",
++        "convertToLocale",
++        "convertToBcp47",
++        "convertToLanguageType",
++        "convertToLanguageTypeWithFallback",
++        "convertToLocaleWithFallback"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "LanguageTag::convertToLocale",
++        "LanguageTag::convertToBcp47",
++        "LanguageTag::convertToLanguageType",
++        "LanguageTag::convertToLanguageTypeWithFallback",
++        "LanguageTag::convertToLocaleWithFallback"
++      ]
++    }
++  }
++}
+diff --git a/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.value.ts.json b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.value.ts.json
+new file mode 100644
+index 000000000..959cdd419
+--- /dev/null
++++ b/docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.value.ts.json
+@@ -0,0 +1,44 @@
++{
++  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
++  "baselineTag": "libreoffice-26.8.0.2",
++  "record": {
++    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
++    "classification": "upstream-mechanism",
++    "state": "foundation",
++    "suite": "shared",
++    "subsystem": "language-tag-normal-value-registry",
++    "capabilityIds": [
++      "CAP-41e22378-32c9-45d6-9fdc-ea961184de42"
++    ],
++    "semantic": {
++      "behaviorStatus": "unverified",
++      "contractStatus": "unverified",
++      "defaultStatus": "unverified",
++      "divergenceClass": "B",
++      "evidence": [
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
++        "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
++        "docs/program/calc-ui-readiness.md#Normal shared LanguageTag owner (task197)"
++      ],
++      "justification": "Task197 connects normal LanguageTag value/copy/assignment/reset,ODF four-field construction,lazy field/ISO/canonicalization conversions and semantic BCP47/ID/system registries using the actual shared OUString,Locale,MsLangId,extraction,fallback and normal parser owners. Native Map/Set and JS GC preserve observable registry identity and finite IDs without physical reference counting,weak ownership,allocators,locks or lifetime machinery. Source initialization order and first-wins behavior are retained,including CALC-184. This is in-progress normal-owner implementation:strict raw100,browser/Worker and final verification remain pending;POSIX/glibc,unrelated full LanguageTag APIs,Font/defaults/pools/Calc model/UI/ODS are not claimed.",
++      "knownViolations": [],
++      "localSymbols": [
++        "LanguageTagInput",
++        "LanguageTag"
++      ],
++      "sourceResponsibility": "divergent",
++      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
++      "upstreamSymbols": [
++        "LanguageTag::LanguageTag",
++        "LanguageTag::reset",
++        "LanguageTag::syncFromImpl",
++        "LanguageTag::getLanguageType",
++        "LanguageTag::getIsoLanguageScriptCountry",
++        "LanguageTag::makeFallback",
++        "LanguageTag::isValidBcp47"
++      ]
++    }
++  }
++}

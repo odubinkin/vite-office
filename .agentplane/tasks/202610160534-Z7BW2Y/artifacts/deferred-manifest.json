@@ -1,0 +1,243 @@
+{
+  "task": "202610160534-Z7BW2Y",
+  "status": "deferred-unverified-preserved",
+  "reason": "User prioritizes minimal canonical editable UI and basic ODS over language parity",
+  "head": "79de6b7a28575a7ed49cbd59e73800c0cd3a56f3",
+  "paths": [
+    {
+      "path": "apps/office/src/i18nlangtag/inc/lang.ts",
+      "sha256": "d39fd0c7ee6647c8c176ab777473dab0e9ee3922c1b703f7b6049694b1403fca",
+      "untracked": false
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/inc/mslangid.ts",
+      "sha256": "0bd1a90e022a02bddc15625ffdb77a5339122fc7ad92380b7918d7bc8334539e",
+      "untracked": false
+    },
+    {
+      "path": "docs/program/calc-ui-readiness.md",
+      "sha256": "af1fa8a224310748dedf63b3528390c37f713865d99920b1853f08762d7e7268",
+      "untracked": false
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "22d0f74992bdbb7279155b451eda279c80c0b53ad929fd044d042bf4aca96df9",
+      "untracked": false
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/inc/lang.ts.json",
+      "sha256": "224e7149bd0956d412ba1113ef9666bc0b9d846729cb36b03f8feb3f983f83a5",
+      "untracked": false
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/inc/mslangid.ts.json",
+      "sha256": "6c79578e6dea0bf843466c1b52e6f16edd7b2e2dbcb1c9004dc3458f81c6116a",
+      "untracked": false
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/inc/lang.ts.json",
+      "sha256": "ccb47000dbb11b93953fe87aa6ecbdb0ac28e6e9d5933ad91ab8390e29e4cb77",
+      "untracked": false
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/inc/mslangid.ts.json",
+      "sha256": "14e63fd58577c6c5ad25db11aef43a2f9fe8b79351e0c3f3107e57530ccb7302",
+      "untracked": false
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "sha256": "d4d7fcc246a2f3bfa11e06f7e63f24c5057be37787d5bca853c0021d33d848bc",
+      "untracked": false
+    },
+    {
+      "path": "scripts/check-module-boundaries.test.ts",
+      "sha256": "fc08607dfc8f2a1be870976b60c8ec612f706810ba81942f21242908a319d014",
+      "untracked": false
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/inc/languagetag.ts",
+      "sha256": "d3656467e81b85262eb7f0e7396681533cc6a0241ac2afffbb63ba02d03f560f",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
+      "sha256": "327bf3fd1bf888c184f964f6ed8f126da74c1bb1d0674dc649221850af1e6f5d",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
+      "sha256": "8876763cf66d6e30598ee23c4bdd3a88cb08f6681505a7e96b5cb410f77120e1",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
+      "sha256": "e89314d9584a1b85dc7eb3219833d3add4dd40fd2eb634edf8e0bfc44b7478d5",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
+      "sha256": "0c245c6ad7868f034ba525898245d5465c18c5e07e419bd9dec7752c80803c89",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
+      "sha256": "9a1d239e59443ad3a0f7deff53ce0200f213f06eb9667cf144f405a252b58399",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
+      "sha256": "7d004ac4d6f9c19a752c4595b83198016aab1e657a37d8e7b7e2103356e52141",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
+      "sha256": "5bc99188bb4f81939da379a905c1a8483ffced60927b7e7c2b59c46124819613",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
+      "sha256": "1e46be41f75efffdbfdc2863edb11a7d704dd0700821e6994f086f3395882520",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+      "sha256": "5e9c4296f353b1c2e2e3dc28fbc42c5d34e0c615ad12f0cf35abbe59a0b3a6a0",
+      "untracked": true
+    },
+    {
+      "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+      "sha256": "3f37eacae7932aabb11c265f5e6df63c90b2a7e69246f81cb1f1e8687d6604db",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-41e22378-32c9-45d6-9fdc-ea961184de42.json",
+      "sha256": "a1514c4dad593130981cca110dd98e40faabd503a4090ac56d305a6698003a0d",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/inc/languagetag.ts.json",
+      "sha256": "8bc559930c0ec7c126f395960de7591d7b6a0dc99472a4e9be982f11c2f5c7b3",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.canonical.ts.json",
+      "sha256": "ea877b877163088f5c0c41990c8b343876b37056472c2f7e66371071cf029945",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.impl.ts.json",
+      "sha256": "c2486fe4097c1be91cd77781e362effbd7814c683ef4b9cba2c3fadb4c0b80b3",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json",
+      "sha256": "0d507a1fa23cbc5272f4bc2ef66e7c1cbcdc61d613b301b4dd901f2b1cb0eb72",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.registry.ts.json",
+      "sha256": "dd71ef79bb8aadbeb8dd117b4b71f6c926ed9c2d2f1e6297100dc15d58eed4f4",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.state.ts.json",
+      "sha256": "67a9521ff62562856b06d47afbd2d26cfc4c6c99d5185b3bbb730602e3cb4304",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.static.ts.json",
+      "sha256": "869d6f7cfc8880d344686c681fa82045633f7e65e2bc86703d4b15e787fc0532",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.value.ts.json",
+      "sha256": "636d2fa05a8475b82bf2643ab269adfd8f92a69db78523ed5ba198ea988d433a",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/inc/languagetag.ts.json",
+      "sha256": "79ceb4c989f3d9ea9399c5ec946dd09b0c84dcaaed980e67396f0458556b81aa",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.canonical.ts.json",
+      "sha256": "a26bb9b6062078e6e952cdf2f39f56a14932b5e8b1753b1e2d3bad040a92cc0f",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.impl.ts.json",
+      "sha256": "5165cdc7275dd73c8d0d4fdc21b212445fc2faed23528b3478b0de9a941ea20d",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json",
+      "sha256": "32795ffa9f915a8b7e38d247c277b4e796a0f8b6dc550cc78a578249c0cac8d7",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.registry.ts.json",
+      "sha256": "a8e1aea546c8e0a9ccf328ae3753343d61567078354b26db17fc71f700dbc837",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.state.ts.json",
+      "sha256": "879a68f9837e3529e953da1869d70f12446b1fbd8a3e86b5039a931b8234b092",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.static.ts.json",
+      "sha256": "5ab7ed610590cc2bc860a90d7eb5db57db1a67347552f13d7a65619cfcf9c5ae",
+      "untracked": true
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.value.ts.json",
+      "sha256": "fe9b2017a2321a2b810ecdf31fe4abca85c8166ff1b06b970c75c13990a531f7",
+      "untracked": true
+    }
+  ],
+  "patchSha256": "cd0576904b4cfbd8ed6d39a198ccbd79765b9fc245451d631c92a052f121d9a7",
+  "codeRemoved": true,
+  "codeCommitted": false,
+  "archivedFromActiveTree": [
+    "apps/office/src/i18nlangtag/inc/lang.ts",
+    "apps/office/src/i18nlangtag/inc/mslangid.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/shared/provenance/i18nlangtag/inc/lang.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/inc/mslangid.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/inc/lang.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/inc/mslangid.ts.json",
+    "scripts/check-module-boundaries.mjs",
+    "scripts/check-module-boundaries.test.ts",
+    "apps/office/src/i18nlangtag/inc/languagetag.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.canonical.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.impl.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.test.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.registry.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.state.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.static.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.test.ts",
+    "apps/office/src/i18nlangtag/source/languagetag/languagetag.value.ts",
+    "docs/program/registry/shared/capabilities/CAP-41e22378-32c9-45d6-9fdc-ea961184de42.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/inc/languagetag.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.canonical.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.impl.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.registry.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.state.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.static.ts.json",
+    "docs/program/registry/shared/provenance/i18nlangtag/source/languagetag/languagetag.value.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/inc/languagetag.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.canonical.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.impl.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.iso-fallback.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.registry.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.state.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.static.ts.json",
+    "docs/program/registry/shared/runtime/i18nlangtag/source/languagetag/languagetag.value.ts.json"
+  ],
+  "retainedActivePaths": [
+    "docs/program/calc-ui-readiness.md"
+  ]
+}
