@@ -1,4 +1,10 @@
-/** @fileoverview Minimal ScDocument scalar/numeric-formula chain for browser/ODS integration. Full construction,formatting,dependency and shell services are not claimed. */
+/** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import { ScHint } from "../../../inc/brdcst";
+import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
+import type { SvtListener } from "../../../../svl/source/notify/listener";
+import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -26,9 +32,17 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private pFormulaTree: ScFormulaCell | null = null;
+  private pEOFormulaTree: ScFormulaCell | null = null;
+  private pFormulaTrack: ScFormulaCell | null = null;
+  private pEOFormulaTrack: ScFormulaCell | null = null;
+  private nFormulaTrackCount = 0;
+  private nFormulaCodeInTree = 0;
+  private bHasForcedFormulas = false;
+  private bCalculatingFormulaTree = false;
   private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
-  private readonly bAutoCalc = true;
+  private bAutoCalc = true;
   private readonly maTabs: ScTable[] = [];
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   private readonly mpCellStringPool: SharedStringPool;
@@ -53,6 +67,166 @@ export class ScDocument {
   /** Reads the normal document's native automatic-calculation default. @returns Enabled. */
   GetAutoCalc(): boolean {
     return this.bAutoCalc;
+  }
+  /** Applies the native normal-document auto-calc switch and forced-formula wakeup. Shell/interpreter callback modes are unsupported. @param enabled - Enabled. @returns Nothing. */
+  SetAutoCalc(enabled: boolean): void {
+    const old = this.bAutoCalc;
+    this.bAutoCalc = enabled;
+    if (!old && enabled && this.bHasForcedFormulas && !this.bCalculatingFormulaTree)
+      this.CalcFormulaTree(true);
+  }
+  /** Borrows the native numeric/string/formula cell view. @param position - Cell. @returns View. */
+  GetRefCellValue(position: ScAddress): ScRefCellValue {
+    return (
+      this.FetchTable(position.Tab())?.GetRefCellValue(position.Col(), position.Row()) ??
+      new ScRefCellValue()
+    );
+  }
+  /** Borrows a source broadcaster. @param position - Cell. @returns Broadcaster or null. */
+  GetBroadcaster(position: ScAddress): SvtBroadcaster<SfxHint> | null {
+    return this.FetchTable(position.Tab())?.GetBroadcaster(position.Col(), position.Row()) ?? null;
+  }
+  /** Registers the original native listener at a cell. @param position - Cell. @param listener - Listener. @returns Nothing. */
+  StartListeningCell(position: ScAddress, listener: SvtListener<SfxHint>): void {
+    this.FetchTable(position.Tab())?.StartListening(position, listener);
+  }
+  /** Ends an original reciprocal registration. @param position - Cell. @param listener - Listener. @returns Nothing. */
+  EndListeningCell(position: ScAddress, listener: SvtListener<SfxHint>): void {
+    this.FetchTable(position.Tab())?.EndListening(position, listener);
+  }
+  /** Dispatches native hints through existing single-cell broadcasters. Area subscribers remain unsupported. @param hint - Hint. @returns Whether delivered. */
+  BroadcastHintInternal(hint: ScHint): boolean {
+    let delivered = false,
+      last: SvtBroadcaster<SfxHint> | null = null;
+    for (let row = 0; row < hint.GetRowCount(); row++) {
+      const address = new ScAddress(hint.GetStartAddress());
+      address.SetRow(address.Row() + row);
+      const broadcaster = this.GetBroadcaster(address);
+      if (broadcaster && broadcaster !== last) {
+        broadcaster.Broadcast(hint);
+        delivered = true;
+        last = broadcaster;
+      }
+    }
+    return delivered;
+  }
+  /** Broadcasts a normal single-cell change and tracks its dependent formulas. @param hint - Hint. @returns Nothing. */
+  Broadcast(hint: ScHint): void {
+    if (this.BroadcastHintInternal(hint)) this.TrackFormulas(hint.GetId());
+  }
+  /** Reports native logical formula-tree membership. @param cell - Formula. @returns Membership. */
+  IsInFormulaTree(cell: ScFormulaCell): boolean {
+    return cell.GetPrevious() !== null || this.pFormulaTree === cell;
+  }
+  /** Reports native logical tracking membership. @param cell - Formula. @returns Membership. */
+  IsInFormulaTrack(cell: ScFormulaCell): boolean {
+    return cell.GetPreviousTrack() !== null || this.pFormulaTrack === cell;
+  }
+  /** Appends a formula to the native calculation list. This is logical ordering, not object lifetime management. @param cell - Formula. @returns Nothing. */
+  PutInFormulaTree(cell: ScFormulaCell): void {
+    this.RemoveFromFormulaTree(cell);
+    if (this.pEOFormulaTree) this.pEOFormulaTree.SetNext(cell);
+    else this.pFormulaTree = cell;
+    cell.SetPrevious(this.pEOFormulaTree);
+    cell.SetNext(null);
+    this.pEOFormulaTree = cell;
+    this.nFormulaCodeInTree += cell.GetCode().GetCodeLen();
+  }
+  /** Removes native calculation membership and preserves the normal counter/clamp result. @param cell - Formula. @returns Nothing. */
+  RemoveFromFormulaTree(cell: ScFormulaCell): void {
+    const previous = cell.GetPrevious();
+    if (!previous && this.pFormulaTree !== cell) return;
+    const next = cell.GetNext();
+    if (previous) previous.SetNext(next);
+    else this.pFormulaTree = next;
+    if (next) next.SetPrevious(previous);
+    else this.pEOFormulaTree = previous;
+    cell.SetPrevious(null);
+    cell.SetNext(null);
+    this.nFormulaCodeInTree = Math.max(0, this.nFormulaCodeInTree - cell.GetCode().GetCodeLen());
+  }
+  /** Reads the actual native RPN count in the calculation list. @returns Count. */
+  GetFormulaCodeInTree(): number {
+    return this.nFormulaCodeInTree;
+  }
+  /** Appends tracking membership after removing calculation membership. @param cell - Formula. @returns Nothing. */
+  AppendToFormulaTrack(cell: ScFormulaCell): void {
+    this.RemoveFromFormulaTrack(cell);
+    this.RemoveFromFormulaTree(cell);
+    if (this.pEOFormulaTrack) this.pEOFormulaTrack.SetNextTrack(cell);
+    else this.pFormulaTrack = cell;
+    cell.SetPreviousTrack(this.pEOFormulaTrack);
+    cell.SetNextTrack(null);
+    this.pEOFormulaTrack = cell;
+    this.nFormulaTrackCount = (this.nFormulaTrackCount + 1) & 0xffff;
+  }
+  /** Removes a formula's native tracking links. @param cell - Formula. @returns Nothing. */
+  RemoveFromFormulaTrack(cell: ScFormulaCell): void {
+    const previous = cell.GetPreviousTrack();
+    if (!previous && this.pFormulaTrack !== cell) return;
+    const next = cell.GetNextTrack();
+    if (previous) previous.SetNextTrack(next);
+    else this.pFormulaTrack = next;
+    if (next) next.SetPreviousTrack(previous);
+    else this.pEOFormulaTrack = previous;
+    cell.SetPreviousTrack(null);
+    cell.SetNextTrack(null);
+    this.nFormulaTrackCount = (this.nFormulaTrackCount - 1) & 0xffff;
+  }
+  /** Performs native two-pass single-cell tracking, including contiguous-row hint compression. Bulk/area/group/script services are not represented. @param id - Hint ID. @returns Nothing. */
+  TrackFormulas(id: SfxHintId = SfxHintId.ScDataChanged): void {
+    for (let cell = this.pFormulaTrack; cell; cell = cell.GetNextTrack()) {
+      const address = new ScAddress(cell.aPos);
+      let rows = 1;
+      for (let next = cell.GetNextTrack(); next; next = next.GetNextTrack()) {
+        if (!next.aPos.equals(new ScAddress(address.Col(), address.Row() + rows, address.Tab())))
+          break;
+        rows++;
+        cell = next;
+      }
+      this.BroadcastHintInternal(new ScHint(id, address, rows));
+    }
+    let forced = false;
+    while (this.pFormulaTrack) {
+      const cell = this.pFormulaTrack;
+      this.RemoveFromFormulaTrack(cell);
+      this.PutInFormulaTree(cell);
+      if (cell.GetCode().IsRecalcModeForced()) forced = true;
+    }
+    if (forced) {
+      this.bHasForcedFormulas = true;
+      if (this.bAutoCalc && !this.bCalculatingFormulaTree) this.CalcFormulaTree(true);
+    }
+  }
+  /** Calculates represented dirty scalar formulas from the real tree; re-scan after recursive reads remove other tree nodes. @param onlyForced - Native forced-only mode. @returns Nothing. */
+  CalcFormulaTree(onlyForced = false): void {
+    const oldAutoCalc = this.bAutoCalc;
+    this.bAutoCalc = true;
+    this.bCalculatingFormulaTree = true;
+    try {
+      for (;;) {
+        let cell = this.pFormulaTree;
+        while (cell && (!cell.GetDirty() || (onlyForced && !cell.GetCode().IsRecalcModeForced())))
+          cell = cell.GetNext();
+        if (!cell) break;
+        cell.Interpret();
+      }
+    } finally {
+      this.bAutoCalc = oldAutoCalc;
+      this.bCalculatingFormulaTree = false;
+    }
+  }
+  /** Marks all represented formulas with the actual native default dirty context; deleted-tab restoration is unsupported. @param context - Dirty context. @returns Nothing. */
+  SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
+    if (context.mbClearTabDeletedFlag)
+      throw new Error("Deleted-sheet flag clearing is not implemented");
+    const old = this.bAutoCalc;
+    this.bAutoCalc = false;
+    try {
+      for (const table of this.maTabs) table.SetAllFormulasDirty(context);
+    } finally {
+      this.SetAutoCalc(old);
+    }
   }
   /** Writes supported numeric formula content through the existing sheet/column owner chain. @param position - Cell. @param source - Formula. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(position: ScAddress, source: OUStringConstReference, grammar: Grammar): void {
@@ -128,6 +302,7 @@ export class ScDocument {
     if (!ValidTab(position)) return false;
     this.maTabs.splice(position, 0, new ScTable(this, position, name));
     for (let i = position + 1; i < this.maTabs.length; i++) (this.maTabs[i] as ScTable).SetTabNo(i);
+    this.SetAllFormulasDirty(new SetFormulaDirtyContext());
     return true;
   }
   /** Writes a number through the actual sheet/column chain. @param position - Cell address. @param value - Number. @returns Nothing. */

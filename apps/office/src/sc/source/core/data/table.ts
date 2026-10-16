@@ -1,4 +1,9 @@
-/** @fileoverview ScTable scalar/numeric-formula cell operations with lazy contiguous columns. Full formatting,reference and dependency services remain unsupported. */
+/** @fileoverview ScTable scalar/local-reference cell operations and single-cell listening over lazy contiguous columns. Formatting and area/group services remain unsupported. */
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import type { SvtListener } from "../../../../svl/source/notify/listener";
+import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
+import type { SfxHint } from "../../../../svl/inc/hint";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -43,6 +48,43 @@ export class ScTable {
       this.aCol.push(column);
     }
     return this.aCol[col] as ScColumn;
+  }
+  /** Borrows an actual scalar/formula cell view without allocating columns. @param col - Column. @param row - Row. @returns Cell view. */
+  GetRefCellValue(col: number, row: number): ScRefCellValue {
+    return this.rDocument.ValidColRow(col, row) && col < this.aCol.length
+      ? (this.aCol[col] as ScColumn).GetCellValue(row)
+      : new ScRefCellValue();
+  }
+  /** Borrows the actual row broadcaster. @param col - Column. @param row - Row. @returns Broadcaster or null. */
+  GetBroadcaster(col: number, row: number): SvtBroadcaster<SfxHint> | null {
+    return this.rDocument.ValidColRow(col, row) && col < this.aCol.length
+      ? (this.aCol[col] as ScColumn).GetBroadcaster(row)
+      : null;
+  }
+  /** Starts actual single-cell listening, allocating only required columns. @param address - Position. @param listener - Listener. @returns Nothing. */
+  StartListening(address: ScAddress, listener: SvtListener<SfxHint>): void {
+    if (this.rDocument.ValidColRow(address.Col(), address.Row()))
+      this.CreateColumnIfNotExists(address.Col()).StartListening(listener, address.Row());
+  }
+  /** Ends single-cell listening without allocating. @param address - Position. @param listener - Listener. @returns Nothing. */
+  EndListening(address: ScAddress, listener: SvtListener<SfxHint>): void {
+    if (
+      this.rDocument.ValidColRow(address.Col(), address.Row()) &&
+      address.Col() < this.aCol.length
+    )
+      (this.aCol[address.Col()] as ScColumn).EndListening(listener, address.Row());
+  }
+  /** Marks native default-context formula state without per-cell calculation. @param context - Default dirty context. @returns Nothing. */
+  SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
+    if (context.mbClearTabDeletedFlag)
+      throw new Error("Deleted-sheet flag clearing is not implemented");
+    const old = this.rDocument.GetAutoCalc();
+    this.rDocument.SetAutoCalc(false);
+    try {
+      for (const col of this.aCol) col.SetAllFormulasDirty(context);
+    } finally {
+      this.rDocument.SetAutoCalc(old);
+    }
   }
   /** Writes a formula at valid coordinates through the actual column. @param col - Column. @param row - Row. @param source - Formula. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(col: number, row: number, source: OUStringConstReference, grammar: Grammar): void {

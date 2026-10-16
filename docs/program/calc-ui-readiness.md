@@ -32,8 +32,10 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 An editable Calc UI and same-model ODS import/export are not ready. This is a
 delivery gap,not a reason to postpone starting their minimal implementation.
 The document/sheet/column chain and scalar/numeric formula operations now
-exist. Formula references/functions/dependency updates and same-model ODS
-remain delivery gaps. No meaningful percentage, task count or delivery date
+exist. Local cell references and dependency updates are implemented in task201.
+Formula serialization and basic same-model ODS remain the next delivery gap.
+Full functions/ranges, localization and native constructor services belong to
+later scope unless a supported basic operation directly requires them. No meaningful percentage, task count or delivery date
 follows from the number of ported declarations.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
@@ -735,3 +737,18 @@ The scanner does not implement localized formatter/string/name/reference
 services; subnormal power exception classification is explicitly unsupported.
 No UI is implemented; full all-app verification remains deferred until the
 minimal formula and same-model ODS stage is ready, then the goal must pause.
+
+## Local-reference editing and dependency invalidation (task201)
+
+Valid same-sheet ODFF A1 references now use the actual reference tokens,
+cell views, shared observers and typed broadcaster stores. FormulaTrack and
+FormulaTree preserve logical native membership and edit propagation, including
+forced/manual modes, sparse cells, replacement/clear and normal cycle errors.
+Direct references preserve numeric, empty and text results. JS GC owns physical
+lifetime; deterministic Dispose closes subscriptions and queue membership.
+
+Next deliverable: canonical formula serialization and basic ODS read/save on
+this same document model. Full range/function/locale/area/group parity is not
+a prerequisite for that bounded milestone. No UI is implemented. Declare
+readiness only after the supported edit and ODS round-trip paths pass, then
+run all-app verification and pause as requested.

@@ -15,7 +15,8 @@
       "CAP-e601605e-ed6e-4a7b-ac84-a7457c0220df",
       "CAP-71c36f68-d212-4d89-8178-4e124bb8e6b9",
       "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a",
-      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d",
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -35,9 +36,10 @@
         "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range.test.ts#matches complete original scalar input-range set permutation stream",
         "apps/office/src/external/mdds/include/mdds/multi_type_vector/soa/container-range-owned.test.ts#matches original owned input-range set whole stream",
         "apps/office/src/sc/inc/mtvelements-range.test.ts#matches complete original Calc input-range write stream",
-        "apps/office/src/sc/source/core/data/document.scalar.test.ts"
+        "apps/office/src/sc/source/core/data/document.scalar.test.ts",
+        "apps/office/src/sc/source/core/data/reference-protocol.test.ts"
       ],
-      "justification": "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
+      "justification": "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false. Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity.",
       "knownViolations": [],
       "localSymbols": [
         "element_type_broadcaster",

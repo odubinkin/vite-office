@@ -1,4 +1,4 @@
-/** @fileoverview Numeric ODFF ScCompiler specialization. Names, references, functions, strings and localized input formatting remain unsupported. */
+/** @fileoverview Numeric/local-A1 ODFF compilation. Names, cross-sheet/range references, functions, string literals and localized input formatting remain unsupported. */
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
 import { FormulaByteToken, FormulaSpaceToken } from "../../../../formula/inc/token";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
@@ -11,7 +11,9 @@ import {
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
+import { ScSingleRefData } from "../../../inc/refdata";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScRefFlags, ScAddress } from "../../../inc/address";
 import { ScTokenArray } from "../../../inc/tokenarray";
 const symbols: Readonly<Record<string, OpCode>> = {
   "+": OpCode.ocAdd,
@@ -43,6 +45,21 @@ export class ScCompiler extends FormulaCompiler {
   /** Records the first actual code error. @param error - Error. @returns Nothing. */
   protected override SetError(error: FormulaError): void {
     if (this.mpArr.GetCodeError() === FormulaError.NONE) this.mpArr.SetCodeError(error);
+  }
+  /** Binds valid local A1 parse flags to genuine relative/absolute native reference data. @param name - Unwrapped address. @returns Recognized reference. */
+  private ParseSingleReference(name: string): boolean {
+    const address = new ScAddress(this.aPos),
+      flags = address.Parse(unicode(name), this.rDoc, ScAddress.detailsOOOa1);
+    if (!(flags & ScRefFlags.VALID)) throw new Error("Reference/name fallback is not implemented");
+    const reference = new ScSingleRefData();
+    reference.InitAddress(address);
+    reference.SetColRel(!(flags & ScRefFlags.COL_ABS));
+    reference.SetRowRel(!(flags & ScRefFlags.ROW_ABS));
+    reference.SetTabRel(true);
+    reference.SetAddress(this.rDoc.GetSheetLimits(), address, this.aPos);
+    if (!(this.mpArr as ScTokenArray).AddSingleReference(reference))
+      this.SetError(FormulaError.CodeOverflow);
+    return true;
   }
   /** Scans the represented numeric ODFF subset into its actual Calc array, preserving native leading equals, forced recalc and default bracket completion. @param formula - Unicode formula. @returns Source-order token owner. */
   CompileString(formula: OUStringConstReference): ScTokenArray {
@@ -82,6 +99,15 @@ export class ScCompiler extends FormulaCompiler {
           break;
         }
         index++;
+        continue;
+      }
+      if (ch === "[") {
+        const close = source.indexOf("]", index + 1);
+        if (close < 0 || source[index + 1] !== ".")
+          throw new Error("Only bracketed local ODF references are implemented");
+        this.ParseSingleReference(source.slice(index + 2, close));
+        last = OpCode.ocPush;
+        index = close + 1;
         continue;
       }
       const numeric = /^(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?/.exec(source.slice(index));

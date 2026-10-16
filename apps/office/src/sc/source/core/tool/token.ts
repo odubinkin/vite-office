@@ -2,6 +2,8 @@
 import { FormulaTokenArray } from "../../../../formula/inc/tokenarray";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
+import type { ScSingleRefData } from "../../../inc/refdata";
+import { ScSingleRefToken } from "./token.references";
 import type { ScDocument } from "../../../inc/document";
 import { ScComplexRefData } from "../../../inc/refdata";
 import { RangeMatrix } from "../../../inc/types";
@@ -388,6 +390,10 @@ export class ScTokenArray extends FormulaTokenArray {
         : source instanceof ScSheetLimits
           ? source
           : source.GetSheetLimits();
+  }
+  /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
+  AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
+    return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference));
   }
   /** Appends actual native separator/byte token classes for supported arithmetic opcodes. @param code - Opcode. @returns Appended token or null. */
   AddOpCode(code: OpCode): FormulaToken | null {

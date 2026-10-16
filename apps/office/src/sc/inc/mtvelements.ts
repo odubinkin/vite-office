@@ -1,5 +1,7 @@
 /** @fileoverview Original Calc mtvelements.hxx value-block specializations over shared mdds and actual SVL/Calc value owners. */
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
+import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
+import type { SfxHint } from "../../svl/inc/hint";
 import type { ScFormulaCell } from "./formulacell";
 import { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
 export { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
@@ -9,7 +11,8 @@ import { CellTextAttr } from "./celltextattr";
 import { type DelayedValueOperations } from "../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts";
 import {
   default_element_block,
-  noncopyable_element_block,
+  managed_element_block,
+  noncopyable_managed_element_block,
   element_type_user_start,
   element_type_empty as empty,
 } from "../../external/mdds/include/mdds/multi_type_vector/types.ts";
@@ -159,17 +162,14 @@ export type CellTextAttrStoreType = InstanceType<typeof CellTextAttrStoreType>;
 
 /** Real formula pointer identity uses ordinary GC; physical managed-pointer deletion is not ported. Native noncopyable operations remain explicit. */
 export const formula_block = Object.assign(
-  default_element_block<ScFormulaCell | null>(
-    element_type_formula,
-    null,
-    /** Preserves actual formula-cell identity. @param value - Cell. @returns Same cell. */ (
-      value,
-    ) => value,
-  ),
+  noncopyable_managed_element_block<ScFormulaCell>(element_type_formula, {
+    /** Ends actual subscriptions and formula-list membership; JS GC owns physical lifetime. @param cell - Removed cell. @returns Nothing. */
+    delete(cell) {
+      cell.Dispose();
+    },
+  }),
   {
-    copy_block: noncopyable_element_block.copy_block,
-    clone_block: noncopyable_element_block.clone_block,
-    /** Formula value equality is outside this editing subset; never substitute pointer equality for missing native semantic comparison. @returns Never. */
+    /** Full formula semantic equality is outside this editing subset. @returns Never. */
     equal_block(): never {
       throw new Error("Formula block semantic equality is not implemented");
     },
@@ -198,3 +198,39 @@ export const CellStoreType = Object.setPrototypeOf(
 ) as typeof cell_store_constructor & Omit<typeof multi_type_vector, "prototype">;
 /** Actual typed cell-store instance. */
 export type CellStoreType = InstanceType<typeof CellStoreType>;
+
+/** Native broadcaster copy/semantic destruction. Dispose ends registrations and sends dying notifications; JS GC owns physical lifetime. */
+export const broadcaster_block = managed_element_block<SvtBroadcaster<SfxHint>>(
+  element_type_broadcaster,
+  {
+    /** Copies native reciprocal registrations. @param source - Source. @returns Broadcaster. */
+    copy_construct(source) {
+      return new SvtBroadcaster(source);
+    },
+    /** Ends native observable registrations; this does not free JS memory. @param value - Removed broadcaster. @returns Nothing. */
+    delete(value) {
+      value.Dispose();
+    },
+  },
+);
+export const broadcaster_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(
+  element_type_broadcaster,
+  null as SvtBroadcaster<SfxHint> | null,
+  broadcaster_block,
+);
+export const BroadcasterTraits = {
+  ...default_traits,
+  block_funcs: element_block_funcs(broadcaster_block),
+};
+const broadcaster_constructor = (multi_type_vector<empty_event_func>).bind(
+  null,
+  BroadcasterTraits,
+  empty_event_value_ops,
+);
+/** Actual shared SoA broadcaster store, separate from cell values. */
+export const BroadcasterStoreType = Object.setPrototypeOf(
+  broadcaster_constructor,
+  multi_type_vector,
+) as typeof broadcaster_constructor & Omit<typeof multi_type_vector, "prototype">;
+/** Native broadcaster-store instance. */
+export type BroadcasterStoreType = InstanceType<typeof BroadcasterStoreType>;

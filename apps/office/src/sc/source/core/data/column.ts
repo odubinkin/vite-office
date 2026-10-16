@@ -1,4 +1,4 @@
-/** @fileoverview Scalar and numeric-formula ScColumn storage over shared block vectors and text metadata. Rich text,notes,reference and listener services remain unsupported. */
+/** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
 import {
   CellStoreType,
   CellTextAttrStoreType,
@@ -10,6 +10,21 @@ import {
 } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
+import type { SvtListener } from "../../../../svl/source/notify/listener";
+import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
+import { ScHint } from "../../../inc/brdcst";
+import {
+  BroadcasterStoreType,
+  broadcaster_element_callbacks,
+  element_type_broadcaster,
+  numeric_block,
+  string_block,
+  formula_block,
+} from "../../../inc/mtvelements";
+import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
 import { ProcessFormula } from "../../../inc/mtvcellfunc";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { ScAddress } from "../../../inc/address";
@@ -32,10 +47,12 @@ export class ScColumn {
   mnBlkCountCellNotes = 0;
   private nCol = 0;
   private nTab = 0;
+  private readonly maBroadcasters: BroadcasterStoreType;
   private readonly maCells: CellStoreType;
   private readonly maCellTextAttrs: CellTextAttrStoreType;
   /** Creates empty stores spanning the document's actual row domain. @param rDocument - Owning document. @returns Column. */
   constructor(private readonly rDocument: ScDocument) {
+    this.maBroadcasters = new BroadcasterStoreType(rDocument.GetMaxRowCount());
     this.maCells = new CellStoreType(new CellStoreEvent(this));
     this.maCells.resize(rDocument.GetMaxRowCount());
     this.maCellTextAttrs = new CellTextAttrStoreType(rDocument.GetMaxRowCount());
@@ -74,8 +91,10 @@ export class ScColumn {
   /** Writes numeric cell content and invalidates its text measurement metadata. @param row - Row. @param value - Number. @returns Nothing. */
   SetValue(row: number, value: number): void {
     if (!this.rDocument.ValidRow(row)) return;
+    this.DetachFormulaCell(row);
     this.maCells.set(row, value, double_element_callbacks);
     this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    this.BroadcastNewCell(row);
   }
   /** Stores literal text using the document's shared pool,without number or formula recognition. @param row - Row. @param value - Unicode text or already interned string. @returns Nothing. */
   SetRawString(row: number, value: OUStringConstReference | SharedStringConstReference): void {
@@ -85,11 +104,13 @@ export class ScColumn {
         ? new SharedString(value)
         : this.rDocument.GetSharedStringPool().intern(value);
     try {
+      this.DetachFormulaCell(row);
       this.maCells.set(row, shared, string_element_callbacks);
       this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
     } finally {
       shared.dispose();
     }
+    this.BroadcastNewCell(row);
   }
   /** Compiles and stores a supported formula in the actual typed block store. @param row - Row. @param formula - Source. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(row: number, formula: OUStringConstReference, grammar: Grammar): void {
@@ -100,8 +121,11 @@ export class ScColumn {
       formula,
       grammar,
     );
+    this.DetachFormulaCell(row);
     this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
     this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    cell.StartListeningTo(this.rDocument);
+    cell.SetDirty();
   }
   /** Borrows an actual formula-cell identity. @param row - Valid row. @returns Formula cell or null. */
   GetFormulaCell(row: number): ScFormulaCell | null {
@@ -113,6 +137,80 @@ export class ScColumn {
   /** Reads a real formula error, with native nonformula NONE. @param row - Valid row. @returns Error. */
   GetErrCode(row: number): FormulaError {
     return this.GetFormulaCell(row)?.GetErrCode() ?? FormulaError.NONE;
+  }
+  /** Performs native default-context dirty marking and tree membership without tracking broadcasts. @param context - Dirty context. @returns Nothing. */
+  SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
+    if (context.mbClearTabDeletedFlag)
+      throw new Error("Deleted-sheet flag clearing is not implemented");
+    ProcessFormula(
+      this.maCells,
+      /** Marks the actual cell. @param row - Row. @param cell - Formula. @returns Nothing. */ (
+        row,
+        cell,
+      ) => {
+        void row;
+        cell.SetDirtyVar();
+        if (!this.rDocument.IsInFormulaTree(cell)) this.rDocument.PutInFormulaTree(cell);
+      },
+    );
+  }
+  /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
+  GetCellValue(row: number): ScRefCellValue {
+    const position = this.maCells.position(row),
+      block = position.first.get(),
+      data = block.data as base_element_block;
+    if (block.type === element_type_numeric)
+      return new ScRefCellValue(numeric_block.at(data, position.second));
+    if (block.type === element_type_string)
+      return new ScRefCellValue(string_block.at(data, position.second));
+    if (block.type === element_type_formula)
+      return new ScRefCellValue(formula_block.at(data, position.second) as ScFormulaCell);
+    return new ScRefCellValue();
+  }
+  /** Borrows an existing source broadcaster without allocating. @param row - Valid row. @returns Broadcaster or null. */
+  GetBroadcaster(row: number): SvtBroadcaster<SfxHint> | null {
+    if (this.maBroadcasters.get_type(row) !== element_type_broadcaster) return null;
+    const value: [SvtBroadcaster<SfxHint> | null] = [null];
+    this.maBroadcasters.get(row, broadcaster_element_callbacks, value);
+    return value[0];
+  }
+  /** Registers with the actual row broadcaster, allocating it only when required. @param listener - Listener. @param row - Valid row. @returns Nothing. */
+  StartListening(listener: SvtListener<SfxHint>, row: number): void {
+    let broadcaster = this.GetBroadcaster(row);
+    if (!broadcaster) {
+      broadcaster = new SvtBroadcaster<SfxHint>();
+      listener.StartListening(broadcaster);
+      this.maBroadcasters.set<SvtBroadcaster<SfxHint> | null>(
+        row,
+        broadcaster,
+        broadcaster_element_callbacks,
+      );
+    } else listener.StartListening(broadcaster);
+  }
+  /** Ends reciprocal registration and removes an empty broadcaster. @param listener - Listener. @param row - Valid row. @returns Nothing. */
+  EndListening(listener: SvtListener<SfxHint>, row: number): void {
+    const broadcaster = this.GetBroadcaster(row);
+    if (!broadcaster) return;
+    listener.EndListening(broadcaster);
+    if (!broadcaster.HasListeners()) this.maBroadcasters.set_empty(row, row);
+  }
+  /** Removes formula subscriptions and logical queue/tree membership before content replacement. @param row - Valid row. @returns Nothing. */
+  private DetachFormulaCell(row: number): void {
+    const formula = this.GetFormulaCell(row);
+    if (!formula) return;
+    formula.EndListeningTo(this.rDocument);
+    this.rDocument.RemoveFromFormulaTrack(formula);
+    this.rDocument.RemoveFromFormulaTree(formula);
+  }
+  /** Broadcasts the represented normal-document source write. Import/clipboard modes remain unsupported. @param row - Valid row. @returns Nothing. */
+  private BroadcastNewCell(row: number): void {
+    this.Broadcast(row);
+  }
+  /** Dispatches actual native cell-change hints. @param row - Valid row. @returns Nothing. */
+  private Broadcast(row: number): void {
+    this.rDocument.Broadcast(
+      new ScHint(SfxHintId.ScDataChanged, new ScAddress(this.nCol, row, this.nTab)),
+    );
   }
   /** Reads the scalar discriminator;unsupported cell alternatives cannot be inserted in this store. @param row - Valid row. @returns Cell type. */
   GetCellType(row: number): CellType {
@@ -139,7 +237,9 @@ export class ScColumn {
   }
   /** Clears content and its text metadata in the represented scalar stores. @param row - Valid row. @returns Nothing. */
   Delete(row: number): void {
+    this.DetachFormulaCell(row);
     this.maCells.set_empty(row, row);
     this.maCellTextAttrs.set_empty(row, row);
+    this.Broadcast(row);
   }
 }

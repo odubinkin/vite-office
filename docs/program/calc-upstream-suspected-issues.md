@@ -2595,3 +2595,19 @@ IllegalFPOperation (503). Preserve this distinction; do not normalize both to
 a generic numeric error. Source-derived evidence and real document error
 regressions in task200; no native execution or defect verdict is claimed.
 CALC-184 belongs to the deferred task197 snapshot and is not reused here.
+
+## CALC-186 — a deleted arithmetic reference can still read cell A1
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`sc/source/core/tool/interpr4.cxx`, `PopSingleRef` and `GetDouble` single-ref
+branches. `GetDouble` initializes its output address to zero. `PopSingleRef`
+sets NoRef for an initialized deleted reference and leaves that address
+unchanged. `GetDouble` then still reads the cell at that address through
+`GetCellValue`, preserving the previous NoRef error. Thus, on sheet zero,
+a deleted reference used in arithmetic can evaluate a dirty A1 even though
+the expression ultimately reports NoRef. Final direct-reference resolution
+has a separate error guard and does not make this read. Preserve both paths;
+do not skip the arithmetic read merely because an error already exists.
+Task201 tests initialized reference data and actual formula cells. This is
+source-derived evidence, not native execution or a claim about imported
+malformed formulas, locale coercion or full UI effects.

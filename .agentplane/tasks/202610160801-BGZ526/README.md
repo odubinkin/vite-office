@@ -4,7 +4,7 @@ title: "Connect local cell references and native formula tracking"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-16T08:56:07.764Z"
+  updated_by: "CODER"
+  note: "Passed bounded local-reference/tracking delivery:214Calc cases and49owners raw100;242related cases and2shared owners raw100;build+4Chromium/Worker scenarios,13source gates,20pinned-source audit and58path/hash audit. No UI/ODS readiness or all-app full-run claim."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement local cell-reference evaluation and actual single-cell broadcaster/FormulaTrack invalidation on the existing document, reusing shared observers and cell views without UI or a second graph."
+  -
+    type: "verify"
+    at: "2026-10-16T08:56:07.764Z"
+    author: "CODER"
+    state: "ok"
+    note: "Passed bounded local-reference/tracking delivery:214Calc cases and49owners raw100;242related cases and2shared owners raw100;build+4Chromium/Worker scenarios,13source gates,20pinned-source audit and58path/hash audit. No UI/ODS readiness or all-app full-run claim."
 doc_version: 3
-doc_updated_at: "2026-10-16T08:02:50.917Z"
+doc_updated_at: "2026-10-16T08:56:07.838Z"
 doc_updated_by: "CODER"
 description: "Task201: extend the actual Calc formula path with valid local A1 references, real cell views, shared Svt notifications, broadcaster stores and source-shaped FormulaTrack/FormulaTree invalidation. Keep ODS and separate UI readiness as the delivery priority; no alternative dependency graph."
 sections:
@@ -49,9 +55,47 @@ sections:
     - node output/playwright/task201-checks/browser-portable.mjs: build and real formula reference edits/propagation in Chromium and DOM-free Worker without native references; affected Writer functional smoke if runtime notifier behavior changes.
     - node output/playwright/task201-checks/source-gates.mjs: all existing format/lint/types/docs/size/dependency/tree/provenance/inventory/routing/doctor/diff gates, without threshold/allowlist relaxation.
     - Final source/path/ref/coverage audit, recorded verification/source commit and same-agent quality review before finish. No UI implementation, ODS claim or full all-app run until the requested milestone.
-  Verification: "Pending implementation and checks."
+  Verification: |-
+    Command: node output/playwright/task201-checks/source-audit.mjs. Result: pass. Evidence:20 pinned LibreOffice files, no native compilation/execution; both shared notifier bodies unchanged after erasing the generic bound. Scope: local references/views/parser/interpreter/queues and explicit unsupported services.
+    Command: node output/playwright/task201-checks/portable.mjs. Result: pass. Evidence:214Calc cases/83files; exact49executable owners, raw5047statements/3257branches/1029functions/4525lines all100 with every raw counter positive. Related242cases/47files, exact2shared notifier owners raw129/61/29/116 all100. Includes affected Writer notification cases; no Writer-only gap remediation. Scope: whole Calc and changed shared owners, all5reference links absent/restored.
+    Command: node output/playwright/task201-checks/browser-portable.mjs. Result: pass. Evidence:production build and4Chromium scenarios, each executes actual core modules in page and DOM-free Worker. Reference chain edit/cycle/replacement/clear passes. Scope:no product UI implementation; all5source references absent/restored. Writer browser rerun is inapplicable because the only shared runtime changes are erased types, with body identity proven and related Writer tests green.
+    Command: node output/playwright/task201-checks/source-gates.mjs (all13gates, targeted remediation/resume; final format/lint/types/docs rerun after source changes). Result: pass. Evidence:format,lint,types,docs,size,dependencies,tree,provenance,inventory,routing,doctor,diff,boundaries. Doctor retains existing managed-hook warning; no hook changes.
+    Command: node output/playwright/task201-checks/final-audit.mjs. Result: pass. Evidence:exact58non-task paths and hashes match the final portable source snapshot;49Calc/2shared raw100,13gates,20native source files and restored reference links. Scope:bounded same-sheet reference milestone only. ODS/formula serialization remains next;UI is a separate task;no all-app full run or readiness claim.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-16T08:56:07.764Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Passed bounded local-reference/tracking delivery:214Calc cases and49owners raw100;242related cases and2shared owners raw100;build+4Chromium/Worker scenarios,13source gates,20pinned-source audit and58path/hash audit. No UI/ODS readiness or all-app full-run claim.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T08:56:07.070Z, excerpt_hash=sha256:bfeb58f325e81d1ef905ff88f0c7e202d3f2840ebd01943ac6252ae5b8193bba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160801-BGZ526/blueprint/resolved-snapshot.json
+    - old_digest: 2c263c86b103a76a3d8fbb5759496aa049270741d0f4b33827b0b324775cefd7
+    - current_digest: 2c263c86b103a76a3d8fbb5759496aa049270741d0f4b33827b0b324775cefd7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610160801-BGZ526
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610160801-BGZ526
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task201 source/metadata commits while preserving unrelated tasks and deferred LanguageTag work. No destructive reset, branch merge, publication or native-reference mutation."
-  Findings: "Previous goal turn completed task200, source0c88b33ccffeed1379a919902fc4550853d6b473, close995f701559a7, clean calc branch. Native single-cell invalidation uses Svt broadcasters stored separately from cell values and intrusive logical FormulaTrack/FormulaTree order; do not replace it with an ad-hoc Map graph, recursive global invalidation or memory ownership engine. Existing shared observer dispatch is reusable; its browser-kind generic constraint is an erased-type restriction and must accept actual native hint objects. This does not certify all unconsumed native hint/lifecycle families or require unrelated Writer parity work before core edits. Existing ScRefCellValue and ScSingleRefData must be extended/reused instead of bypassed. Native GetSharedString intentionally does not expose formula string results; formula GetString is separate. Native default string coercion is LOCALE; do not silently replace its unavailable formatter with another mode or a generic NoValue stub. Only valid local A1 parsing is supported in this slice; absent name/invalid-address fallback remains explicit."
+  Findings: "Initial focused checks found a brittle error-message assertion and a missing IsDeleted check; corrected against pinned interpreter source. Additional source inspection retained native default-address reads after deleted references and per-axis invalid-address handling, with actual formula regression and journal CALC-186. Initial raw coverage exposed meaningful noncontiguous queue/invalid-coordinate paths; public initialized-owner tests cover them without private-state mutation or threshold changes. Lint removed test non-null assertions; erased-only bounds allow actual SfxHint. Initial typecheck called an unported document shortcut; the existing sheet-limit validator supplies the same native bounds. New facade provenance needs an exported binding although runtime-declared symbols stay empty; native namespace-contained symbols use their literal spelling. Capability IDs were regenerated by the existing inventory:id CLI after UUID-version validation. All final gates pass unchanged;no native compilation,network,physical memory manager,UI implementation or Writer-only coverage remediation. Source-derived edge findings do not certify broad upstream parity. Same-agent quality review follows the implementation commit."
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +120,44 @@ Calc address Details/Parse local A1 subset, ScCompiler/ScTokenArray reference bi
 
 ## Verification
 
-Pending implementation and checks.
+Command: node output/playwright/task201-checks/source-audit.mjs. Result: pass. Evidence:20 pinned LibreOffice files, no native compilation/execution; both shared notifier bodies unchanged after erasing the generic bound. Scope: local references/views/parser/interpreter/queues and explicit unsupported services.
+Command: node output/playwright/task201-checks/portable.mjs. Result: pass. Evidence:214Calc cases/83files; exact49executable owners, raw5047statements/3257branches/1029functions/4525lines all100 with every raw counter positive. Related242cases/47files, exact2shared notifier owners raw129/61/29/116 all100. Includes affected Writer notification cases; no Writer-only gap remediation. Scope: whole Calc and changed shared owners, all5reference links absent/restored.
+Command: node output/playwright/task201-checks/browser-portable.mjs. Result: pass. Evidence:production build and4Chromium scenarios, each executes actual core modules in page and DOM-free Worker. Reference chain edit/cycle/replacement/clear passes. Scope:no product UI implementation; all5source references absent/restored. Writer browser rerun is inapplicable because the only shared runtime changes are erased types, with body identity proven and related Writer tests green.
+Command: node output/playwright/task201-checks/source-gates.mjs (all13gates, targeted remediation/resume; final format/lint/types/docs rerun after source changes). Result: pass. Evidence:format,lint,types,docs,size,dependencies,tree,provenance,inventory,routing,doctor,diff,boundaries. Doctor retains existing managed-hook warning; no hook changes.
+Command: node output/playwright/task201-checks/final-audit.mjs. Result: pass. Evidence:exact58non-task paths and hashes match the final portable source snapshot;49Calc/2shared raw100,13gates,20native source files and restored reference links. Scope:bounded same-sheet reference milestone only. ODS/formula serialization remains next;UI is a separate task;no all-app full run or readiness claim.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-16T08:56:07.764Z — VERIFY — ok
+
+By: CODER
+
+Note: Passed bounded local-reference/tracking delivery:214Calc cases and49owners raw100;242related cases and2shared owners raw100;build+4Chromium/Worker scenarios,13source gates,20pinned-source audit and58path/hash audit. No UI/ODS readiness or all-app full-run claim.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T08:56:07.070Z, excerpt_hash=sha256:bfeb58f325e81d1ef905ff88f0c7e202d3f2840ebd01943ac6252ae5b8193bba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160801-BGZ526/blueprint/resolved-snapshot.json
+- old_digest: 2c263c86b103a76a3d8fbb5759496aa049270741d0f4b33827b0b324775cefd7
+- current_digest: 2c263c86b103a76a3d8fbb5759496aa049270741d0f4b33827b0b324775cefd7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610160801-BGZ526
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610160801-BGZ526
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -84,4 +165,4 @@ Revert only task201 source/metadata commits while preserving unrelated tasks and
 
 ## Findings
 
-Previous goal turn completed task200, source0c88b33ccffeed1379a919902fc4550853d6b473, close995f701559a7, clean calc branch. Native single-cell invalidation uses Svt broadcasters stored separately from cell values and intrusive logical FormulaTrack/FormulaTree order; do not replace it with an ad-hoc Map graph, recursive global invalidation or memory ownership engine. Existing shared observer dispatch is reusable; its browser-kind generic constraint is an erased-type restriction and must accept actual native hint objects. This does not certify all unconsumed native hint/lifecycle families or require unrelated Writer parity work before core edits. Existing ScRefCellValue and ScSingleRefData must be extended/reused instead of bypassed. Native GetSharedString intentionally does not expose formula string results; formula GetString is separate. Native default string coercion is LOCALE; do not silently replace its unavailable formatter with another mode or a generic NoValue stub. Only valid local A1 parsing is supported in this slice; absent name/invalid-address fallback remains explicit.
+Initial focused checks found a brittle error-message assertion and a missing IsDeleted check; corrected against pinned interpreter source. Additional source inspection retained native default-address reads after deleted references and per-axis invalid-address handling, with actual formula regression and journal CALC-186. Initial raw coverage exposed meaningful noncontiguous queue/invalid-coordinate paths; public initialized-owner tests cover them without private-state mutation or threshold changes. Lint removed test non-null assertions; erased-only bounds allow actual SfxHint. Initial typecheck called an unported document shortcut; the existing sheet-limit validator supplies the same native bounds. New facade provenance needs an exported binding although runtime-declared symbols stay empty; native namespace-contained symbols use their literal spelling. Capability IDs were regenerated by the existing inventory:id CLI after UUID-version validation. All final gates pass unchanged;no native compilation,network,physical memory manager,UI implementation or Writer-only coverage remediation. Source-derived edge findings do not certify broad upstream parity. Same-agent quality review follows the implementation commit.

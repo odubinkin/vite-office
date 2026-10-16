@@ -32,7 +32,7 @@ it("edits actual numeric formula cells with lazy results and no separate grid", 
   ] as const) {
     doc.SetFormula(pos, unicode(source), grammar);
     const cell = doc.GetFormulaCell(pos);
-    expect(cell?.GetDirty()).toBe(true);
+    expect(cell?.GetDirty()).toBe(!source.startsWith("=="));
     expect(doc.GetCellType(pos)).toBe(CellType.CELLTYPE_FORMULA);
     expect(cell?.IsValue()).toBe(true);
     expect(doc.GetValue(pos)).toBeCloseTo(value, 14);

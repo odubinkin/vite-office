@@ -1,2 +1,2 @@
-/** @fileoverview Original cellvalue.hxx owner boundary for the actual scalar ScCellValue family; rich-text/formula/document families remain subsequent owners. */
+/** @fileoverview Original cellvalue.hxx owner boundary for the scalar ScCellValue and borrowed scalar/formula/document ScRefCellValue subsets; rich text remains unsupported. */
 export { ScCellValue, ScRefCellValue } from "../source/core/data/cellvalue";

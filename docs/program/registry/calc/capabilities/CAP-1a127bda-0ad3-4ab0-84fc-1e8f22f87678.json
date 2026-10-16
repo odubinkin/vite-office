@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678",
+    "capabilityId": "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678",
+    "suite": "calc",
+    "subsystem": "local-reference-tracking",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
+    },
+    "capability": "Local cell-reference editing and dependency invalidation",
+    "gaps": [
+      "Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen7.cxx",
+          "marker": "ScDocument::TrackFormulas"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::PopSingleRef"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula.cxx",
+          "marker": "[.B1]"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/brdcst.hxx",
+          "marker": "class ScHint"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "TrackFormulas"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr4.ts",
+          "marker": "PopSingleRef"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.references.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Local-reference editing and dependency invalidation (task201)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "local-reference-editing",
+    "scopeLimitations": [
+      "Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity.",
+      "Upstream QA is source evidence only; no native compilation or execution."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
+    }
+  }
+}

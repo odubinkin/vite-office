@@ -20,7 +20,7 @@ export class SvtQueryBase {
 }
 
 /** M:N listener. Stable allocation identity represents native pointer ordering in the browser. */
-export class SvtListener<Hint extends BrowserNotificationPayload = BrowserNotificationPayload> {
+export class SvtListener<Hint extends object = BrowserNotificationPayload> {
   public readonly allocationIdentity = ++nextListenerIdentity;
   private readonly broadcasters: Set<SvtBroadcaster<Hint>>;
 

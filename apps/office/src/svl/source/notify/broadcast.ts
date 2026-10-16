@@ -8,13 +8,13 @@ export interface BrowserNotificationPayload {
 
 let nextBroadcasterIdentity = 0;
 /** Browser representation of a native pointer with its deleted tag. */
-interface ListenerSlot<Hint extends BrowserNotificationPayload> {
+interface ListenerSlot<Hint extends object> {
   readonly listener: SvtListener<Hint>;
   readonly deleted: boolean;
 }
 
 /** Separate native observer channel; listeners retain their own reciprocal registrations. */
-export class SvtBroadcaster<Hint extends BrowserNotificationPayload = BrowserNotificationPayload> {
+export class SvtBroadcaster<Hint extends object = BrowserNotificationPayload> {
   public readonly allocationIdentity = ++nextBroadcasterIdentity;
   private listeners: ListenerSlot<Hint>[] = [];
   private destructedListeners: SvtListener<Hint>[] = [];

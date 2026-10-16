@@ -1,5 +1,8 @@
 /** @fileoverview Numerical ScAddress/ScRange owners from pinned sc/inc/address.hxx and sc/source/core/tool/address.cxx. No browser or Writer state enters these owners. */
-import { MAXTAB, SanitizeCol, SanitizeRow } from "../../../inc/address";
+import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScRefFlags, MAXTAB, SanitizeCol, SanitizeRow } from "../../../inc/address";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
 
 /** Structural view of the original ScDocument boundary used by address movement. */
@@ -12,8 +15,56 @@ export interface ScAddressDocument {
   GetTableCount(): SCTAB;
 }
 
+/** Native address parsing convention and base coordinate value. Document-derived convention selection remains unsupported. */
+export class ScAddressDetails {
+  nRow: SCROW;
+  nCol: SCCOL;
+  /** Binds the source convention/base constructor family. @param eConv - Convention. @param rowOrAddress - Base row or address. @param col - Base column. @returns Details. */
+  constructor(
+    public eConv: AddressConvention,
+    rowOrAddress: SCROW | ScAddress = 0,
+    col: SCCOL = 0,
+  ) {
+    this.nRow = typeof rowOrAddress === "number" ? rowOrAddress | 0 : rowOrAddress.Row();
+    this.nCol = typeof rowOrAddress === "number" ? (col << 16) >> 16 : rowOrAddress.Col();
+  }
+}
 /** Mutable native coordinate value; API arguments are column, row, sheet. */
 export class ScAddress {
+  static readonly Details = ScAddressDetails;
+  static readonly detailsOOOa1: Readonly<ScAddressDetails> = new ScAddressDetails(
+    FormulaGrammar.AddressConvention.CONV_OOO,
+  );
+  /** Implements the valid local A1 subset of native Parse; other conventions, sheet/external/name/error fallbacks are explicit missing APIs. @param value - Unwrapped local A1 address. @param doc - Limits owner. @param details - Convention/base. @returns Native valid/absolute flags. */
+  Parse(
+    value: OUStringConstReference,
+    doc: ScAddressDocument,
+    details: Readonly<ScAddressDetails>,
+  ): ScRefFlags {
+    if (
+      details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
+      details.eConv !== FormulaGrammar.AddressConvention.CONV_ODF
+    )
+      throw new Error("Only local A1 address parsing is implemented");
+    const input = text(value);
+    if (!input) return ScRefFlags.ZERO;
+    const match = /^(\$?)([A-Za-z]+)(\$?)([0-9]+)$/.exec(input);
+    if (!match)
+      throw new Error("Sheet, external, named and invalid address fallbacks are not implemented");
+    let column = 0;
+    for (const c of match[2] as string) column = column * 26 + c.toUpperCase().charCodeAt(0) - 64;
+    const row = Number(match[4]) - 1;
+    if (column < 1 || column > doc.MaxCol() + 1 || row < 0 || row > doc.MaxRow())
+      throw new Error("Out-of-bounds address/name fallback is not implemented");
+    this.SetCol(column - 1);
+    this.SetRow(row);
+    return (ScRefFlags.VALID |
+      ScRefFlags.COL_VALID |
+      ScRefFlags.ROW_VALID |
+      ScRefFlags.TAB_VALID |
+      (match[1] ? ScRefFlags.COL_ABS : 0) |
+      (match[3] ? ScRefFlags.ROW_ABS : 0)) as ScRefFlags;
+  }
   public static readonly INITIALIZE_INVALID = "INITIALIZE_INVALID";
   private nRow: SCROW;
   private nCol: SCCOL;
