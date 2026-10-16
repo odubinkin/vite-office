@@ -1,10 +1,11 @@
 ---
 id: "202610160019-654ZGX"
 title: "Restore shared VCL font paint alignment and size values for Calc pool defaults"
-status: "DOING"
+result_summary: "Extended shared Font with native stored colors,fill transparency,alignment and copied Size plus source equality and aliases. Existing Color/Size and metadata methods reused;inventory/readiness and CALC168 updated. Actual Calc/EditEngine pools/document/UI/same-model ODS remain pending;no all-app run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Existing Font now owns native represented paint,alignment and stored geometry using actual Color/Size and immutable JS value sharing. Guarded assignments,no-op identity,independent copies,fill flag asymmetry and represented noncolor/full equality match pinned source without memory or renderer mechanisms."
     - "30related and187Calc scenarios pass;exact2shared and33Calc raw S/B/F/L100 with every counter positive.13source gates,build,actual Chromium Font values and Writer startup/load/edit pass;4refs restored.11non-task paths fit approved40."
     - "Ten native source/header/QA/consumer blobs pinned;13old metadata methods and7old enum declarations unchanged. Reused Color,Size,browser default-font device and dependency guard unchanged. Native alignment QA assertions replayed and CALC168 retained;inventory broad parity remains unverified."
-commit: null
+commit:
+  hash: "cf94358c53fb89310492adb04ca564696685105a"
+  message: "🔧 654ZGX quality: record stored font verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore native shared Font stored paint/alignment/size values with actual Color and Size;preserve guarded assignment side effects without new memory or renderer mechanisms."
+  -
+    author: "CODER"
+    body: "Verified: native stored Font paint/alignment/size pass30related/187Calc,exact shared/Calc raw100,13gates,build and actual Chromium/Writer workflow;4refs restored. Same-agent quality passes;full Calc UI/ODS goal remains active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "30related/187Calc pass;exact2shared and33Calc raw S/B/F/L100,every counter positive.13source gates,10native pins/13unchanged methods/7unchanged enums,build and actual Chromium Font/Writer startup-load-edit pass;4refs restored. Native stored Font values only,no ownership manager or full pool/document/UI/ODS claim,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T00:28:02.156Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native stored Font paint/alignment/size pass30related/187Calc,exact shared/Calc raw100,13gates,build and actual Chromium/Writer workflow;4refs restored. Same-agent quality passes;full Calc UI/ODS goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:26:30.999Z"
+doc_updated_at: "2026-10-16T00:28:02.157Z"
 doc_updated_by: "CODER"
 description: "Task181: extend actual shared Font with original color/fill/transparency/alignment and stored size contracts needed by native bullet/default-font values;reuse Color/Size and immutable JS value sharing,without renderer/configuration or memory machinery."
 sections:
@@ -111,6 +124,10 @@ sections:
     - Observation: Initial related profile passes all functional cases with exact2shared raw S118/B38/F38/L117100. Source provenance rejected an evidence marker that collapsed native spacing before GetFontSize.
       Impact: Only the evidence anchor was inaccurate;production behavior and pass criteria are unchanged.
       Resolution: Reference the exact native GetFontSize() const method text and rerun provenance/inventory/source gates. Keep actual source signatures and no broad parity promotion.
+extensions:
+  implementation_commit:
+    hash: "e925351fd5b047de2771b46c0e923bb05f6d55d7"
+    message: "🔧 654ZGX core: restore native stored font values"
 id_source: "generated"
 ---
 ## Summary
