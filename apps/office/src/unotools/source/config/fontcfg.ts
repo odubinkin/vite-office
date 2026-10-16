@@ -1,5 +1,6 @@
 /** @fileoverview Source-backed DefaultFontConfiguration::getDefaultFont field binding over the shipped VCL DefaultFonts resource. No fake configuration provider, LanguageTag class or output device. */
 import resources from "./data/default-fonts.json" with { type: "json" };
+import { convertToBcp47 } from "../../../i18nlangtag/source/languagetag/languagetag.conversion";
 import { DefaultFontType } from "../../inc/fontdefs";
 import {
   getFallbackStrings,
@@ -25,7 +26,7 @@ export function getConfiguredDefaultFont(
     country = text(locale.Country),
     variant = text(locale.Variant);
   const key = DefaultFontType[type] ?? "";
-  const tag = language === "qlt" ? variant : language + (country ? "-" + country : "");
+  const tag = text(convertToBcp47(locale));
   let result = configuration[tag]?.[key] ?? "";
   if (!result) {
     if (language !== "qlt") {

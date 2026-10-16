@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-510c65e6-8342-4471-a889-1f11c5594bdf",
+    "capabilityId": "CAP-510c65e6-8342-4471-a889-1f11c5594bdf",
+    "suite": "shared",
+    "subsystem": "language-tag-conversion-state",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task192 implements six complete native private responsibilities:handleVendorVariant,raw Locale convertToBcp47,convertLangToLocale,convertLocaleToBcp47,convertLangToBcp47 and getBcp47. Actual Locale/OUString field owners retain borrowed object identity under assignment;native Decision/initialized flags,system-origin bit and raw numeric IDs are preserved. The total raw converter handles the native diagnostic empty output without a fake backend or ignored branch. Actual configured-font prepared binding reuses the common raw converter while resource/fallback order stays. This explicit private conversion-state interface is not a fabricated complete LanguageTagImpl/public LanguageTag/parser/registry service. No new ICU/compiler/ownership engine;full class/synchronization/canonicalization/registry/font/defaults/pool/model/UI/ODS remain pending."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine."
+    },
+    "capability": "Native private LanguageTag ID Locale BCP47 conversion state",
+    "gaps": [
+      "Full enclosing LanguageTag class/synchronization/canonicalization/registry/parser,font/defaults/pools/document/UI/ODS remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "handleVendorVariant"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLangToLocale"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLocaleToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLangToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::getBcp47"
+        }
+      ],
+      "tests": [
+        {
+          "path": "i18nlangtag/qa/cppunit/test_languagetag.cxx",
+          "marker": "LanguageTag de_DE( LANGUAGE_GERMAN )"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "Resolve system here!"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts",
+          "marker": "getBcp47"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/fontcfg.ts",
+          "marker": "convertToBcp47"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.test.ts",
+          "marker": "resolves private SYSTEM fields once"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.test.ts",
+          "marker": "keeps qlt field and ISO decision transitions"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native LanguageTag conversion state (task192)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "language-tag-private-locale-id-bcp47-state-conversion",
+    "scopeLimitations": [
+      "Complete six-method private group over actual value fields,not a complete class/public wrapper/parser/registry or native physical memory ABI."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task192 implements six complete native private responsibilities:handleVendorVariant,raw Locale convertToBcp47,convertLangToLocale,convertLocaleToBcp47,convertLangToBcp47 and getBcp47. Actual Locale/OUString field owners retain borrowed object identity under assignment;native Decision/initialized flags,system-origin bit and raw numeric IDs are preserved. The total raw converter handles the native diagnostic empty output without a fake backend or ignored branch. Actual configured-font prepared binding reuses the common raw converter while resource/fallback order stays. This explicit private conversion-state interface is not a fabricated complete LanguageTagImpl/public LanguageTag/parser/registry service. No new ICU/compiler/ownership engine;full class/synchronization/canonicalization/registry/font/defaults/pool/model/UI/ODS remain pending."
+    }
+  }
+}

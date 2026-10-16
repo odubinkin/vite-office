@@ -487,3 +487,36 @@ function or a fabricated success. Full LanguageTag lazy state, canonicalization
 and registry, Font language values/defaults, Calc pools/model and same-model
 ODS filters remain pending. Source table anomalies are recorded as CALC-174
 without correcting source data or claiming UI readiness.
+
+## Native LanguageTag conversion state (task192)
+
+Task192 (`202610160343-ZGSFSH`) implements the complete native private
+conversion group in
+[the shared owner](../../apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts):
+vendor-variant cleanup, raw Locale-to-BCP47 assembly, ID-to-Locale,
+Locale-to-BCP47, ID-to-BCP47 and the private lazy BCP47 getter. It uses actual
+Locale and OUString values plus the source Decision enum and initialized flags.
+The minimal state interface describes fields consumed by these methods; it is
+not a public LanguageTag or a fake complete LanguageTagImpl class.
+
+SYSTEM resolution happens only for an uninitialized SYSTEM ID. The system
+origin bit and other raw IDs survive conversion. Initialized Locale and BCP47
+paths retain source cache behavior. Field assignment preserves borrowed value
+owner identity. A qlt conversion sets the ISO-Locale decision to No; ordinary
+conversion does not invent an affirmative validity/ISO decision. The raw static
+converter retains case, ignores non-qlt vendor variants and never resolves
+SYSTEM. Mutable vendor cleanup separately preserves the exact qlt marker.
+
+The source diagnostic empty-Locale branch clears BCP47. The total raw converter
+already returns an empty actual Unicode value for that input, so assigning
+that result to the same field preserves output and decision/initialized flag
+semantics without a fabricated backend, coverage suppression or a separate
+memory mechanism. Native buffer addresses/refcounts/allocation are not ported.
+
+Actual configured-font selection now reuses this common raw Locale assembly
+instead of its own language/country concatenation. Candidate resources and
+lookup/fallback order are retained, and related Writer consumers are checked.
+The enclosing LanguageTag constructors/copy/reset, shared implementation state,
+synchronization, known-tag canonicalization, dynamic-ID registry and general
+parser remain pending. Font language/defaults, Calc pools/model and same-model
+ODS still require those real owners; UI readiness is not established here.

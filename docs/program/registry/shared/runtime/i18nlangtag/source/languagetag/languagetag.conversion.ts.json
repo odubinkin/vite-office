@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-conversion-state",
+    "capabilityIds": [
+      "CAP-510c65e6-8342-4471-a889-1f11c5594bdf"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.test.ts",
+        "docs/program/calc-ui-readiness.md#Native LanguageTag conversion state (task192)"
+      ],
+      "justification": "Task192 implements six complete native private responsibilities:handleVendorVariant,raw Locale convertToBcp47,convertLangToLocale,convertLocaleToBcp47,convertLangToBcp47 and getBcp47. Actual Locale/OUString field owners retain borrowed object identity under assignment;native Decision/initialized flags,system-origin bit and raw numeric IDs are preserved. The total raw converter handles the native diagnostic empty output without a fake backend or ignored branch. Actual configured-font prepared binding reuses the common raw converter while resource/fallback order stays. This explicit private conversion-state interface is not a fabricated complete LanguageTagImpl/public LanguageTag/parser/registry service. No new ICU/compiler/ownership engine;full class/synchronization/canonicalization/registry/font/defaults/pool/model/UI/ODS remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Decision",
+        "LanguageTagConversionState",
+        "handleVendorVariant",
+        "convertToBcp47",
+        "convertLangToLocale",
+        "convertLocaleToBcp47",
+        "convertLangToBcp47",
+        "getBcp47"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "handleVendorVariant",
+        "LanguageTagImpl::convertToBcp47",
+        "LanguageTagImpl::convertLangToLocale",
+        "LanguageTagImpl::convertLocaleToBcp47",
+        "LanguageTagImpl::convertLangToBcp47",
+        "LanguageTagImpl::getBcp47"
+      ]
+    }
+  }
+}

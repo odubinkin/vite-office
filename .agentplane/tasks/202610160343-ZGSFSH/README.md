@@ -4,7 +4,7 @@ title: "Implement native LanguageTag conversion state and shared font tag assemb
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: port complete native private LanguageTag conversion state/vendor methods and reuse actual Locale tag assembly in shared font selection;verify flags/identity and strict portable coverage without a fake class/parser."
 doc_version: 3
-doc_updated_at: "2026-10-16T03:44:45.272Z"
+doc_updated_at: "2026-10-16T03:53:03.391Z"
 doc_updated_by: "CODER"
 description: "Task192: port complete native private ID/Locale/BCP47 conversion state methods and vendor cleanup using actual Locale/OUString/Decision values;reuse raw Locale-to-BCP47 in actual configured font binding. Preserve lazy flags/system origin/borrowed field identity;no fake complete LanguageTag or parser."
 sections:
@@ -52,7 +52,7 @@ sections:
     - node output/playwright/task192-checks/browser-portable.mjs:production build,actual state transitions/borrowed identity/real configured fonts in Chromium/DOM-free Worker and related Writer startup;four source refs absent/restored.
     - node output/playwright/task192-checks/source-gates.mjs:13source gates including source-tree/provenance/inventory/boundaries/doctor,no exceptions.
     - node output/playwright/task192-checks/final-audit.mjs:exact paths/owners/manifests/references;source commit,recorded verification and same-agent EVALUATOR review before descriptive finish.
-  Verification: "Pending. Full LanguageTag class/state synchronization/canonicalization/registry/parser,Font/defaults/pools/document/UI/ODS remain pending. Next all-app run waits for real minimum UI/ODS readiness,then fix applicable failures and pause goal."
+  Verification: "Command: node output/playwright/task192-checks/native-audit.mjs. Result:pass. Evidence:5native pins,6complete private source methods,3Decision values/8required fields;empty-result equivalence and font-only common assembly,7owners/guard unchanged. No native binary execution. Command: node output/playwright/task192-checks/portable.mjs --shared-only then --calc-only with retained successful shared audit. Result:pass. Evidence:49related/9files,196Calc/78files;exact2changed shared owners raw S64/B48/F9/L51100 and36Calc raw S4310/B2777/F864/L3857100,every raw counter positive. Four source refs absent/restored. Includes source numeric field snapshots,actual configured/SYSTEM/alias/unknown fallback,flags and borrowed identity,qlt/ASCII/UTF16/vendor handling,cached/prepared paths and actual256configured-font properties/Writer defaults/ODF roundtrip. Command: node output/playwright/task192-checks/browser-portable.mjs. Result:pass. Evidence:production build,actual private state/borrowed identity/real font reuse in Chromium/DOM-free Worker and Writer startup/load/edit pass,4refs restored. Command: node output/playwright/task192-checks/source-gates.mjs. Result:13gates pass including inventory/provenance/boundaries/doctor. Command: node output/playwright/task192-checks/final-audit.mjs. Result:pass. Evidence:10intentional paths,exact owners/counters/manifests and broad parityflags remainfalse. Only private method group/state fields,not an enclosing class/public wrappers/parser/registry. Full LanguageTag/Font/defaults/pool/model/UI/ODS pending;no ICU/compiler/memoryengine/all-app run;goal active."
   Rollback Plan: "Revert the source commit and associated metadata/docs;retain historical task evidence and do not reset user work or touch unrelated active tasks."
   Findings: "The private conversion group has source-defined lazy state independent of the general parser. Its total raw converter preserves the diagnostic empty-result outcome without needing a fabricated locale backend or native memory mechanisms."
 id_source: "generated"
@@ -79,7 +79,7 @@ Port six complete native private LanguageTag conversion/vendor responsibilities 
 
 ## Verification
 
-Pending. Full LanguageTag class/state synchronization/canonicalization/registry/parser,Font/defaults/pools/document/UI/ODS remain pending. Next all-app run waits for real minimum UI/ODS readiness,then fix applicable failures and pause goal.
+Command: node output/playwright/task192-checks/native-audit.mjs. Result:pass. Evidence:5native pins,6complete private source methods,3Decision values/8required fields;empty-result equivalence and font-only common assembly,7owners/guard unchanged. No native binary execution. Command: node output/playwright/task192-checks/portable.mjs --shared-only then --calc-only with retained successful shared audit. Result:pass. Evidence:49related/9files,196Calc/78files;exact2changed shared owners raw S64/B48/F9/L51100 and36Calc raw S4310/B2777/F864/L3857100,every raw counter positive. Four source refs absent/restored. Includes source numeric field snapshots,actual configured/SYSTEM/alias/unknown fallback,flags and borrowed identity,qlt/ASCII/UTF16/vendor handling,cached/prepared paths and actual256configured-font properties/Writer defaults/ODF roundtrip. Command: node output/playwright/task192-checks/browser-portable.mjs. Result:pass. Evidence:production build,actual private state/borrowed identity/real font reuse in Chromium/DOM-free Worker and Writer startup/load/edit pass,4refs restored. Command: node output/playwright/task192-checks/source-gates.mjs. Result:13gates pass including inventory/provenance/boundaries/doctor. Command: node output/playwright/task192-checks/final-audit.mjs. Result:pass. Evidence:10intentional paths,exact owners/counters/manifests and broad parityflags remainfalse. Only private method group/state fields,not an enclosing class/public wrappers/parser/registry. Full LanguageTag/Font/defaults/pool/model/UI/ODS pending;no ICU/compiler/memoryengine/all-app run;goal active.
 
 ## Rollback Plan
 
