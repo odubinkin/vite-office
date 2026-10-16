@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160713-706QET",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T07:49:03.475Z",
+  "verdict": "pass",
+  "summary": "Same-agent review passes bounded numeric ODFF document formula editing at 0c88b33ccffeed1379a919902fc4550853d6b473; no independent review or overall UI/ODS readiness claim.",
+  "evaluated_sha": "0c88b33ccffeed1379a919902fc4550853d6b473",
+  "blueprint_digest": "6bc9b227e6b005c91c4148603a7e39fef1a4f3512295cfb3d48406d7f93d1442",
+  "findings": [
+    "Reviewed actual document-sheet-column formula blocks, native logical block events and sheet position updates, scalar scanner/shared RPN compiler, lazy result ownership, compiler/runtime error distinction, common RTL cancellation, and explicit missing service boundaries. The shared mdds container correction is type-only and pointer move append maps to its native by-value operation; no physical object lifetime engine or alternate grid/AST was added.24 pinned native/header/QA sources support this bounded slice without native execution.194related and206Calc tests, exact shared5+Calc47 raw-positive100 owners,3 Chromium/Worker cases, build and13 source gates pass; final86path hashes match committed scope. References/functions/listening/invalidation, serialization/ODS/UI, full modes/services and subnormal power fenv remain explicit gaps."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160713-706QET/README.md",
+    "output/playwright/task200-checks/final-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
