@@ -1,10 +1,11 @@
 ---
 id: "202610160032-WW0KDX"
 title: "Correct native Font IsSameInstance value comparison"
-status: "DOING"
+result_summary: "Corrected identity-only Font predicate through existing base value equality with native nonvirtual binding. State and29other methods unchanged;inventory/readiness and CALC169 updated. Next verify new Font fields in Writer Worker transport;full Calc pool/document/UI/ODS pending,no all-app run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Exact native chain Font IsSameInstance->cow_wrapper operator==->same object OR ImplFont value proves prior JS identity-only behavior wrong. Reuse existing base Font equality with nonvirtual binding;all other runtime state and29methods remain unchanged."
     - "32related and187Calc scenarios pass;exact1shared and33Calc raw S/B/F/L100 with every counter positive. Independent equal handles,unequal fields and derived hiding-overload cases pass.13source gates,build,actual Chromium/Writer workflow pass with4refs absent/restored;9non-task paths fit20."
     - "Five native blobs pinned and whole emitted module differs only in declared method body. Inventory broad parity flags remain false;CALC169 and prior identity-interpretation correction are explicit. No C++ ownership wrapper is ported."
-commit: null
+commit:
+  hash: "c5e1ef892189b7b157f0607f9e3a31c0c4077287"
+  message: "🔧 WW0KDX quality: record native font comparison verification"
 comments:
   -
     author: "CODER"
     body: "Start: correct the proven Font IsSameInstance mismatch using existing value equality;preserve state and all unrelated methods,add exact source-chain evidence without porting ownership machinery."
+  -
+    author: "CODER"
+    body: "Verified: native Font IsSameInstance value/nonvirtual contract passes32related/187Calc,exact raw100,13gates,build and actual Chromium/Writer checks;4refs restored. Same-agent quality passes. Font Worker transport follow-up recorded;Calc UI/ODS goal remains active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "32related/187Calc pass;exact1shared and33Calc raw S/B/F/L100,every counter positive.13source gates,5native pins,whole emitted module unchanged except declared comparison and29other methods unchanged;build and actual Chromium/Writer pass,4refs restored. Native nonvirtual value predicate only;new stored Font Worker transport follow-up recorded;full UI/ODS remains pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T00:42:44.550Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Font IsSameInstance value/nonvirtual contract passes32related/187Calc,exact raw100,13gates,build and actual Chromium/Writer checks;4refs restored. Same-agent quality passes. Font Worker transport follow-up recorded;Calc UI/ODS goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:41:21.511Z"
+doc_updated_at: "2026-10-16T00:42:44.551Z"
 doc_updated_by: "CODER"
 description: "Task182: native Font IsSameInstance uses cow_wrapper operator==,which compares shared identity OR ImplFont values;correct current JS record identity-only implementation through existing represented Font equality. No cow wrapper/refcount library or memory manager. Update related tests and truthful inventory/suspected source case."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: Read-only follow-up inspection finds Writer browser writer-document-codec still projects bullet Font to the original family/style/family-class/pitch/charset fields. New stored Font paint/alignment/size fields added in task181 are not present in that transport projection.
       Impact: A separate next task must verify and repair lossless Worker/document transport for the newly represented shared value fields;this does not alter the approved single-method IsSameInstance correction.
       Resolution: Keep goal active and prioritize a source-backed round-trip regression and actual codec/type/caller update after task182 closes. Do not change ODF semantics or add a compatibility mechanism to conceal dropped state.
+extensions:
+  implementation_commit:
+    hash: "a42e73eeb77dd609dea0cdfe8355b5d97fb6b1be"
+    message: "🔧 WW0KDX core: match native font value comparison"
 id_source: "generated"
 ---
 ## Summary
