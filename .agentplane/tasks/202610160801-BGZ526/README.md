@@ -1,10 +1,11 @@
 ---
 id: "202610160801-BGZ526"
 title: "Connect local cell references and native formula tracking"
-status: "DOING"
+result_summary: "Connected valid same-sheet ODFF references and borrowed cell views to real formula cells;native logical tracking propagates edits and cleans subscriptions on replacement/clear, with normal cycle errors and forced/manual calculation. Shared notifier dispatch is reused unchanged. Inventory/provenance and CALC-186 journal updated. No UI implementation or ODS readiness claim;formula serialization/basic same-model ODS remains next."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Actual ScDocument/ScTable/ScColumn/formula/token owners reuse shared Svt and mdds;no parallel dependency graph or physical memory manager. Shared runtime bodies are unchanged after erasing types. Native default-address error read is preserved and journaled CALC-186."
     - "Whole Calc214cases/49owners and related242cases/2shared owners have strict every-raw-counter100;production build+4Chromium/DOM-free Worker scenarios and13source gates pass. All5native links were absent for portable runs and restored."
-commit: null
+commit:
+  hash: "229b0d18a438e0cbae1562360f57025ec877c96c"
+  message: "🧮 BGZ526 calc: connect local references and formula tracking"
 comments:
   -
     author: "CODER"
     body: "Start: implement local cell-reference evaluation and actual single-cell broadcaster/FormulaTrack invalidation on the existing document, reusing shared observers and cell views without UI or a second graph."
+  -
+    author: "CODER"
+    body: "Verified: local A1 references and native formula tracking use real shared owners;214Calc and242related cases,49Calc/2shared owners raw100,build+4Chromium/Worker scenarios,13source gates and same-agent source review pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed bounded local-reference/tracking delivery:214Calc cases and49owners raw100;242related cases and2shared owners raw100;build+4Chromium/Worker scenarios,13source gates,20pinned-source audit and58path/hash audit. No UI/ODS readiness or all-app full-run claim."
+  -
+    type: "status"
+    at: "2026-10-16T08:56:45.352Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: local A1 references and native formula tracking use real shared owners;214Calc and242related cases,49Calc/2shared owners raw100,build+4Chromium/Worker scenarios,13source gates and same-agent source review pass."
 doc_version: 3
-doc_updated_at: "2026-10-16T08:56:07.838Z"
+doc_updated_at: "2026-10-16T08:56:45.354Z"
 doc_updated_by: "CODER"
 description: "Task201: extend the actual Calc formula path with valid local A1 references, real cell views, shared Svt notifications, broadcaster stores and source-shaped FormulaTrack/FormulaTree invalidation. Keep ODS and separate UI readiness as the delivery priority; no alternative dependency graph."
 sections:
