@@ -4,7 +4,7 @@ title: "Correct native Font IsSameInstance value comparison"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "32related/187Calc pass;exact1shared and33Calc raw S/B/F/L100,every counter positive.13source gates,5native pins,whole emitted module unchanged except declared comparison and29other methods unchanged;build and actual Chromium/Writer pass,4refs restored. Native nonvirtual value predicate only;new stored Font Worker transport follow-up recorded;full UI/ODS remains pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T00:42:16.940Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase reviews commita42e73eeb77d against approved Font comparison correction. Required bounded criteria pass;not independent review or full Font/Calc UI/ODS certification."
+  evaluated_sha: "a42e73eeb77dd609dea0cdfe8355b5d97fb6b1be"
+  blueprint_digest: "fd5a3e741ab9cd693205c004974a4d5e0f32e08b14965de88c4214416cf14840"
+  evidence_refs:
+    - ".agentplane/tasks/202610160032-WW0KDX/README.md"
+    - ".agentplane/tasks/202610160032-WW0KDX/quality/20261016-004216940-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160032-WW0KDX/quality/20261016-004216940-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160032-WW0KDX/quality/20261016-004216940-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160032-WW0KDX/blueprint/resolved-snapshot.json"
+    - "output/playwright/task182-checks/final-verification.json"
+    - "output/playwright/task182-checks/native-audit.json"
+    - "output/playwright/task182-checks/source-gates.json"
+    - "ap doctor OK with prior managed-hook warning;policy routing OK"
+  findings:
+    - "Exact native chain Font IsSameInstance->cow_wrapper operator==->same object OR ImplFont value proves prior JS identity-only behavior wrong. Reuse existing base Font equality with nonvirtual binding;all other runtime state and29methods remain unchanged."
+    - "32related and187Calc scenarios pass;exact1shared and33Calc raw S/B/F/L100 with every counter positive. Independent equal handles,unequal fields and derived hiding-overload cases pass.13source gates,build,actual Chromium/Writer workflow pass with4refs absent/restored;9non-task paths fit20."
+    - "Five native blobs pinned and whole emitted module differs only in declared method body. Inventory broad parity flags remain false;CALC169 and prior identity-interpretation correction are explicit. No C++ ownership wrapper is ported."
 commit: null
 comments:
   -
