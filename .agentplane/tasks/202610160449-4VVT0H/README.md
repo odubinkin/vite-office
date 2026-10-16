@@ -4,7 +4,7 @@ title: "Implement registered Unicode language-tag extension parsing"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Actual Unicode-extension callback/data responsibility group and shared ASCII/error values implemented;allCLDR values/24source files/8native QA slices verified.52related/196Calc tests,exact6shared and36Calc raw100/every counter positive,13source gates,build/real Chromium/DOM-free Worker and selected Writer pass without5refs.28intentional paths,source/Calc invariants and final audit pass;CALC-177/178/179 preserved. General parser/t/canonicalizer/LanguageTag/UI/ODS remain pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T05:01:36.965Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase: exact source commit92338808d712/28declared paths matches recorded evidence. Complete Unicode callback value/state group and pinned CLDR source data are implemented;shared ASCII/error ownership replaces duplication without physical engines.52related/196Calc tests,strict exact6shared/36Calc raw100,13gates,build/actual Chromium/Worker/Writer and5ref restoration pass."
+  evaluated_sha: "92338808d712bcc89ffc3a372364e987b31d0a79"
+  blueprint_digest: "96d60a8fefb9700dccc72ea768fe5f094c111e01a71ac0559ccb6418043561c8"
+  evidence_refs:
+    - ".agentplane/tasks/202610160449-4VVT0H/README.md"
+    - ".agentplane/tasks/202610160449-4VVT0H/quality/20261016-050136965-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160449-4VVT0H/quality/20261016-050136965-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160449-4VVT0H/quality/20261016-050136965-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160449-4VVT0H/blueprint/resolved-snapshot.json"
+    - "output/playwright/task195-checks/final-audit.json"
+    - "output/playwright/task195-checks/native-audit.json"
+    - "output/playwright/task195-checks/source-gates.json"
+  findings:
+    - "Full general grammar,t callback,alias application/canonicalization and enclosing LanguageTag remain explicit required next work;no whole-tag native QA or native execution/parity claim. Source-derived CALC-177/178/179 are preserved. Final HEX newline regression fixes a local native-JS mismatch;all affected checks rerun. Review is same-agent,not independent."
 commit: null
 comments:
   -
