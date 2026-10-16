@@ -1,10 +1,11 @@
 ---
 id: "202610160149-P52EJ4"
 title: "Implement shared native language ID and locale conversion"
-status: "DOING"
+result_summary: "Implemented actual MsLangId private Conversion tables and algorithms,replaced duplicate fallback projection,corrected four shared locale results and verified actual text/Calc consumers. CALC173 documented;full system/LanguageTag/font/pool/document/UI/ODS and next full all-app run remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task187-checks/final-verification.json"
   findings:
     - "24related/196Calc,exact6shared/36Calc raw100,every counter positive,13gates.8native pins,643ordered+6private rows/11special IDs and aliases exact;allUInt16 forward modes,stable Locale outputs,302prior values+4source-corrected projections and actual text/Calc consumers. Guard algorithms unchanged,only native SAL/UDKAPI edges/one expected-data group updated,43boundary tests pass. Build and actual Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. CALC173 retained;public system/full LanguageTag/LocaleData/font/pool/document/UI/ODS pending,no compiler/ICU/memory engine/all-app run."
-commit: null
+commit:
+  hash: "8026d28c1ee1ce7d2a43b48a8963749bf9d508a9"
+  message: "✅ P52EJ4 quality: record native language conversion evidence"
 comments:
   -
     author: "CODER"
     body: "Start: port actual ordered MsLangId Conversion tables/algorithms and reuse them for existing locale fallback,using actual Locale/OUString/SAL ASCII values without ICU or fake services."
+  -
+    author: "CODER"
+    body: "Verified: native shared locale/ID/fallback conversion implemented;302prior results retained and4wrong projections corrected.24related/196Calc exact raw100,13gates,source audits,build and actual Chromium/controlled-host DOM-free Worker/Writer pass;4refs restored. Full system/LanguageTag/document/UI/ODS pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "24related/196Calc,exact6shared/36Calc raw S/B/F/L100,every counter positive.13gates,8native pins,643+6rows/11special IDs exact,allUInt16 modes,302prior values+4canonical corrections,actual text/Calc consumer regressions. Build,real Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. Guard logic unchanged,native edges only. CALC173 preserved;public system/full LanguageTag/UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T02:21:24.238Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native shared locale/ID/fallback conversion implemented;302prior results retained and4wrong projections corrected.24related/196Calc exact raw100,13gates,source audits,build and actual Chromium/controlled-host DOM-free Worker/Writer pass;4refs restored. Full system/LanguageTag/document/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T02:19:19.351Z"
+doc_updated_at: "2026-10-16T02:21:24.239Z"
 doc_updated_by: "CODER"
 description: "Task187: port MsLangId Conversion table algorithms required by LanguageTag/default-font and ODS language attributes,using actual upstream ordered ID/ISO/script/BCP47/private-use mappings and existing Locale/OUString/SAL ASCII helpers."
 sections:
@@ -128,6 +141,10 @@ sections:
     - Observation: Worker host input is now controlled;an intermediate E2E edit added expected hostLanguage without returning that diagnostic field. The test failed on missing diagnostic fields and was corrected before acceptance.
       Impact: Browser test result remains unaccepted;production conversion/default behavior is unchanged.
       Resolution: Return observed Navigator.language from actual realm reads,rerun the browser test and source-test checks,and retain strict expected host/default values.
+extensions:
+  implementation_commit:
+    hash: "bffbc66d73125c01726deb6c1d42b34c331b53c4"
+    message: "🔧 P52EJ4 core: implement native shared language conversions"
 id_source: "generated"
 ---
 ## Summary
