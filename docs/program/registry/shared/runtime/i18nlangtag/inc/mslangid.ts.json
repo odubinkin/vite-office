@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "language-id-locale-conversion",
     "capabilityIds": [
-      "CAP-bf560a1c-defb-4644-bf0b-34cd0dff0ae2"
+      "CAP-bf560a1c-defb-4644-bf0b-34cd0dff0ae2",
+      "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,10 @@
       "evidence": [
         "apps/office/src/i18nlangtag/inc/mslangid.ts",
         "apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
-        "docs/program/calc-ui-readiness.md#Shared native language ID and Locale conversion (task187)"
+        "docs/program/calc-ui-readiness.md#Shared native language ID and Locale conversion (task187)",
+        "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts"
       ],
-      "justification": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine.",
+      "justification": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine. Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine.",
       "knownViolations": [],
       "localSymbols": [
         "MsLangId"

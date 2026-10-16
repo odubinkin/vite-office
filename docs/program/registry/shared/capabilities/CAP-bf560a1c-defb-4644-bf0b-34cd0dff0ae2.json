@@ -84,7 +84,8 @@
     "atomicOperation": "language-id-locale-and-fallback-conversion",
     "scopeLimitations": [
       "Only represented source table-conversion responsibilities;full language subsystem/API/service parity remains unverified.",
-      "Original LanguageTag QA pairs are static context or literal value anchors,not an executed full native suite. No compiler/generator/probe or physical ABI/lifetime claim."
+      "Original LanguageTag QA pairs are static context or literal value anchors,not an executed full native suite. No compiler/generator/probe or physical ABI/lifetime claim.",
+      "Task188 supplies the native public empty-language/system wrapper and configured data/UI scalar state through an explicit browser platform binding. Full LanguageTag synchronization/canonicalization and LocaleData services remain pending."
     ]
   }
 }

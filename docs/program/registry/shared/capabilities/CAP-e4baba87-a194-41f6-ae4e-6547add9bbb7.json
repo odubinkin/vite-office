@@ -42,7 +42,7 @@
           "marker": "getLocaleDecimalSeparator"
         },
         {
-          "path": "apps/office/src/unotools/source/misc/syslocale.ts",
+          "path": "apps/office/src/i18nlangtag/source/isolang/insys.locale.ts",
           "marker": "unicode"
         },
         {

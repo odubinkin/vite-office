@@ -26,3 +26,8 @@ export const LANGUAGE_GERMAN = LanguageType(0x0407);
 
 /** Original US English fallback/fast-path identity. */
 export const LANGUAGE_ENGLISH_US = LanguageType(0x0409);
+
+/** Original process/user preferred-language alias. */
+export const LANGUAGE_PROCESS_OR_USER_DEFAULT = LanguageType(0x0400);
+/** Original system-default language alias. */
+export const LANGUAGE_SYSTEM_DEFAULT = LanguageType(0x0800);

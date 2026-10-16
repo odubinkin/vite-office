@@ -16,7 +16,7 @@ const resources = new Map<string, string>(Object.entries(separators));
 const measurementResources = new Map<string, string>(Object.entries(measurements));
 /** Uses the real native language-only fallback owner instead of a second projected lookup table. @param name - Prepared service language. @returns Source service name. */
 function fallbackServiceName(name: string): string {
-  const locale = MsLangId.Conversion.lookupFallbackLocale(
+  const locale = MsLangId.getFallbackLocale(
     new Locale(unicode(name), new OUString(), new OUString()),
   );
   return text(locale.Language) === "qlt"

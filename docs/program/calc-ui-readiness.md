@@ -393,3 +393,23 @@ the latter resolves empty language through configured system settings first.
 That public/system responsibility and complete LocaleData service behavior
 remain pending;current normal nonempty service-name fallback uses the actual
 private conversion owner. No fake system provider or public wrapper is added.
+
+## Native configured and system language resolution (task188)
+
+MsLangId now owns actual configured data/UI scalar state,native alias and
+UNKNOWN resolution,and public Locale conversion/fallback wrappers. Empty
+language resolves the configured/system language rather than unconditionally
+using en-US. Original origin-sensitive last resort and nonrecursive settings
+are preserved. The existing prepared browser Locale algorithm moves unchanged
+to one platform field owner;SysLocale delegates it and reads actual configured
+override state. No duplicate platform query,RTL locale allocator/registry,
+physical cache/mutex engine or fake LanguageTag/SvtSysLocale class is added.
+
+The browser platform binding maps the actual primary host Locale through real
+source table fallback/conversion and keeps independent lazy data/UI snapshots.
+Both use the one locale exposed by the browser;configured values remain
+independent. These are logical language settings/snapshots,not native memory
+management. Current decimal/tab/document-default consumers respect configured
+language. This supersedes task187 public empty-language gap. Full LanguageTag
+synchronization/canonicalization,script-specific fallbacks,standard font/pool
+and complete Calc document/UI/ODS remain pending.

@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5",
+    "capabilityId": "CAP-3e317593-5d46-4b4f-aa1e-d92a093021f5",
+    "suite": "shared",
+    "subsystem": "system-language-resolution",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
+    },
+    "capability": "Native configured/system/UI language resolution and Locale wrappers",
+    "gaps": [
+      "Full LanguageTag synchronization/canonicalization,script fallback APIs,font/pool/document/UI/ODS remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/mslangid.cxx",
+          "marker": "MsLangId::getRealLanguage"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/inunx.cxx",
+          "marker": "getPlatformSystemLanguageImpl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "i18nlangtag/qa/cppunit/test_languagetag.cxx",
+          "marker": "class TestLanguageTag"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/i18nlangtag/mslangid.hxx",
+          "marker": "getConfiguredSystemLanguage"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.ts",
+          "marker": "getRealLanguage"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/insys.ts",
+          "marker": "getPlatformSystemLanguage"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+          "marker": "keeps native independent lazy platform categories"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+          "marker": "uses actual configured system locale"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native configured and system language resolution (task188)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "system-language-resolution-and-locale-wrappers",
+    "scopeLimitations": [
+      "Browser platform field binding uses the primary host locale for both categories while preserving independent snapshots/configured overrides;no Unix environment/Win32/RTL ABI claim.",
+      "Original full LanguageTag QA remains unexecuted;source-derived state matrices and actual browser/Worker consumers are executed evidence."
+    ]
+  }
+}

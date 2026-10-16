@@ -15,7 +15,8 @@
       "lookupFallbackLocale"
     ],
     "preservedResponsibilities": [
-      "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine."
+      "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine.",
+      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
     ],
     "omittedResponsibilities": [
       "Other MsLangId/LanguageTag/system/configuration/font/document/UI/ODS responsibilities remain pending."
@@ -25,6 +26,10 @@
         {
           "path": "apps/office/src/i18nlangtag/inc/mslangid.ts",
           "marker": "MsLangId"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/mslangid.test.ts",
+          "marker": "uses actual configured system locale"
         }
       ],
       "upstream": [
