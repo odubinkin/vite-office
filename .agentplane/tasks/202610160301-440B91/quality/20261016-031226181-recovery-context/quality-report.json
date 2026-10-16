@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160301-440B91",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T03:12:26.181Z",
+  "verdict": "pass",
+  "summary": "Same-agent source/evidence review passes the native JS suitability audit;not an independent review.",
+  "evaluated_sha": "b5f2a19cb3c8048fab1bf5faa48d7452cb6dc577",
+  "blueprint_digest": "00c70046283ce4c1c890d0ad25d1a1c36f72ea2ea0b4797c27316613022d867b",
+  "findings": [
+    "Fixture preserves29pinned source expectations including stored first output and invalid string preservation;source audit resolves values/anchors/hashes rather than claiming native execution.Actual Node/Chromium/Worker evidence disproves direct Intl/minimize replacement without requiring a whole library port.16audit/196Calc exact36 raw100,13gates,production build/browser pass;4refs restored.No production owner,policy,guard or inventory changes;full LanguageTag/font/pool/document/UI/ODS remain pending."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160301-440B91/README.md",
+    "output/playwright/task189-checks/final-verification.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
