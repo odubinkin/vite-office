@@ -1,10 +1,11 @@
 ---
 id: "202610160301-440B91"
 title: "Audit native Intl language tag behavior for Calc font prerequisites"
-status: "DOING"
+result_summary: "verified-202610160301-440B91"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -21,9 +22,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-16T03:12:25.557Z"
+  updated_at: "2026-10-16T03:12:42.853Z"
   updated_by: "CODER"
-  note: "29native source QA cases/5pins validated;Node24/Chromium151/DOM-free Worker agree on measured Intl results.Direct APIs15matches,8rejections,6successful differences;minimize10matches.No blanket native JS parity.16audit/196Calc exact36owners raw S4310/B2777/F864/L3857 all100,13gates,build/browser pass,4refs restored.6intentional test/docs paths,no production or inventory/capability claim changes,no all-app run. UI/ODS pending."
+  note: "verified-202610160301-440B91"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - "output/playwright/task189-checks/final-verification.json"
   findings:
     - "Fixture preserves29pinned source expectations including stored first output and invalid string preservation;source audit resolves values/anchors/hashes rather than claiming native execution.Actual Node/Chromium/Worker evidence disproves direct Intl/minimize replacement without requiring a whole library port.16audit/196Calc exact36 raw100,13gates,production build/browser pass;4refs restored.No production owner,policy,guard or inventory changes;full LanguageTag/font/pool/document/UI/ODS remain pending."
-commit: null
+commit:
+  hash: "373157f364e8ffff11131792183287dce2fa7de7"
+  message: "✅ 440B91 quality: record native Intl audit verification"
 comments:
   -
     author: "CODER"
     body: "Start: audit native JS language tag normalization against pinned upstream QA and source branches before implementing LanguageTag for actual Calc font defaults. No production fake or library port."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610160301-440B91. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "29native source QA cases/5pins validated;Node24/Chromium151/DOM-free Worker agree on measured Intl results.Direct APIs15matches,8rejections,6successful differences;minimize10matches.No blanket native JS parity.16audit/196Calc exact36owners raw S4310/B2777/F864/L3857 all100,13gates,build/browser pass,4refs restored.6intentional test/docs paths,no production or inventory/capability claim changes,no all-app run. UI/ODS pending."
+  -
+    type: "verify"
+    at: "2026-10-16T03:12:42.853Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610160301-440B91"
+  -
+    type: "status"
+    at: "2026-10-16T03:12:42.999Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610160301-440B91. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-16T03:12:25.621Z"
+doc_updated_at: "2026-10-16T03:13:34.122Z"
 doc_updated_by: "CODER"
 description: "Task189: compare Intl.Locale/getCanonicalLocales against pinned LibreOffice LanguageTag QA and native fast-path contracts in Node, Chromium and a DOM-free Worker; record exact mismatches and next implementation boundary without ICU/liblangtag or a fake LanguageTag."
 sections:
@@ -108,6 +127,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-16T03:12:42.853Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610160301-440B91
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T03:12:25.621Z, excerpt_hash=sha256:8f4223bc53d2de41c80d5cecf9f23140733e4cdfca2c19aa212787b6bf1fd236
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160301-440B91/blueprint/resolved-snapshot.json
+    - old_digest: 00c70046283ce4c1c890d0ad25d1a1c36f72ea2ea0b4797c27316613022d867b
+    - current_digest: 00c70046283ce4c1c890d0ad25d1a1c36f72ea2ea0b4797c27316613022d867b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610160301-440B91
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610160301-440B91 --result verified-202610160301-440B91 --commit 373157f364e8ffff11131792183287dce2fa7de7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task source commit and associated docs/fixtures/tests; retain historical task evidence. Do not reset user work or touch unrelated active tasks."
   Findings: |-
@@ -132,6 +181,14 @@ sections:
     - Observation: JSDoc gate requires documentation on test describe/map/find callbacks as well as exported helpers;16 short audit callbacks were missing it.
       Impact: Only documentation gate incomplete; no behavior or parity result changes.
       Resolution: Document each test callback at its declaration and resume source gates; keep existing runtime results because edits are comments only.
+
+    - Observation: Route task-complete marked DONE but its generated generic result produced a closure subject rejected by commit guard. Repeating finish on DONE is refused; --close and explicit -m are mutually exclusive.
+      Impact: Implementation and quality commits remain verified;only completed-task artifacts await persistence. No force or guard change is warranted.
+      Resolution: Persist completed-task artifacts with the canonical ordinary ap commit allow-tasks command and an informative closure subject,then recompute route and inspect clean status.
+extensions:
+  implementation_commit:
+    hash: "b5f2a19cb3c8048fab1bf5faa48d7452cb6dc577"
+    message: "🔬 440B91 calc: audit native Intl against LanguageTag contracts"
 id_source: "generated"
 ---
 ## Summary
@@ -189,6 +246,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-16T03:12:42.853Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610160301-440B91
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T03:12:25.621Z, excerpt_hash=sha256:8f4223bc53d2de41c80d5cecf9f23140733e4cdfca2c19aa212787b6bf1fd236
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160301-440B91/blueprint/resolved-snapshot.json
+- old_digest: 00c70046283ce4c1c890d0ad25d1a1c36f72ea2ea0b4797c27316613022d867b
+- current_digest: 00c70046283ce4c1c890d0ad25d1a1c36f72ea2ea0b4797c27316613022d867b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610160301-440B91
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610160301-440B91 --result verified-202610160301-440B91 --commit 373157f364e8ffff11131792183287dce2fa7de7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -218,3 +305,7 @@ Initial task-new attempt used two primary tags and was rejected before task crea
 - Observation: JSDoc gate requires documentation on test describe/map/find callbacks as well as exported helpers;16 short audit callbacks were missing it.
   Impact: Only documentation gate incomplete; no behavior or parity result changes.
   Resolution: Document each test callback at its declaration and resume source gates; keep existing runtime results because edits are comments only.
+
+- Observation: Route task-complete marked DONE but its generated generic result produced a closure subject rejected by commit guard. Repeating finish on DONE is refused; --close and explicit -m are mutually exclusive.
+  Impact: Implementation and quality commits remain verified;only completed-task artifacts await persistence. No force or guard change is warranted.
+  Resolution: Persist completed-task artifacts with the canonical ordinary ap commit allow-tasks command and an informative closure subject,then recompute route and inspect clean status.
