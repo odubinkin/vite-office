@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/inc/unomid.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "native-size-values",
+    "capabilityIds": [
+      "CAP-4563afdb-586a-4ca1-931d-9a9f6a234394"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/inc/unomid.ts",
+        "docs/program/calc-ui-readiness.md#Shared native size values (task179)"
+      ],
+      "justification": "Task179 restores native SvxSizeItem stable tools Size value ownership,copy/default/Clone,payload-only equality,typed Size/width/height Any,integral conversions and llround metric scaling. Genuine awt Size IDL fields and normal CPPU type metadata reuse existing compound access,without a new allocator or binary format. Writer uses the same base and native derived member conversions,percentage/sync/type/clamps and deliberate nonmetric overrides. Preserve HEIGHT failed extraction success and Writer zero-on-failed-short-extraction behavior. Existing no-output browser dimension transport remains explicit;native Any calls do not bypass derived dispatch. Full localized presentation,XML diagnostics,native memory caches,unsafe integer domains,ScDocumentPool/document/UI/same-model ODS remain pending;no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MID_FRMSIZE_SIZE",
+        "MID_FRMSIZE_REL_HEIGHT",
+        "MID_FRMSIZE_REL_WIDTH",
+        "MID_FRMSIZE_WIDTH",
+        "MID_FRMSIZE_HEIGHT",
+        "MID_FRMSIZE_SIZE_TYPE",
+        "MID_FRMSIZE_IS_AUTO_HEIGHT",
+        "MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT",
+        "MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH",
+        "MID_FRMSIZE_WIDTH_TYPE",
+        "MID_FRMSIZE_REL_WIDTH_RELATION",
+        "MID_FRMSIZE_REL_HEIGHT_RELATION"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/inc/unomid.h",
+      "upstreamSymbols": [
+        "MID_FRMSIZE_SIZE",
+        "MID_FRMSIZE_REL_HEIGHT",
+        "MID_FRMSIZE_REL_WIDTH",
+        "MID_FRMSIZE_WIDTH",
+        "MID_FRMSIZE_HEIGHT",
+        "MID_FRMSIZE_SIZE_TYPE",
+        "MID_FRMSIZE_IS_AUTO_HEIGHT",
+        "MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT",
+        "MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH",
+        "MID_FRMSIZE_WIDTH_TYPE",
+        "MID_FRMSIZE_REL_WIDTH_RELATION",
+        "MID_FRMSIZE_REL_HEIGHT_RELATION"
+      ]
+    }
+  }
+}

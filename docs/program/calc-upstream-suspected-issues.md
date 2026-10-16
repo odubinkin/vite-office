@@ -2370,3 +2370,15 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source: `package/source/zippackage/ZipPackageFolder.cxx`, `ZipPackageFolder::LookForUnexpectedODF12Streams`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Observation: ordinary child folders assign their recursive result directly to `bHasUnexpected` instead of OR-ing it with the current flag. An earlier unexpected stream can therefore cease to affect the final result if a subsequently visited folder has no unexpected entries.
 - Status: suspicious source logic,preserved literally. Native contents use unordered-map traversal,whose bucket order is not a contract to reproduce as binary data. JS Map supplies logical catalog traversal;tests state their order explicitly and do not claim native compiler/hash-layout ordering or broad package parity. No invented monotonic correction or native memory/compiler probe is used.
+
+## CALC-165: Size item HEIGHT extraction failure returns success
+
+- Source: `editeng/source/items/frmitems.cxx`, `SvxSizeItem::PutValue`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: failed signed32 WIDTH extraction returns false;the corresponding HEIGHT branch returns true without changing the height. SIZE struct extraction failure returns false. This may be a historical inconsistency.
+- Decision: preserve the distinct return values and unchanged payload;source-derived tests exercise all three real Any paths. Do not normalize failure handling.
+
+## CALC-166: Writer size short extraction can silently reset fields
+
+- Source: `sw/source/core/layout/atrfrm.cxx`, `SwFormatFrameSize::PutValue`, same pinned baseline.
+- Observation: percentage and percentage-relation members initialize a signed16 temporary to zero and ignore extraction failure. An incompatible Any can therefore reset the field to zero and return success. Width,height,size and sizing-type members instead check extraction. Writer queries also always convert dimensions,whereas PutValue converts only when requested. Unknown query members return true with unchanged output;unknown put members return false.
+- Decision: preserve these source branches and native bool-access preconditions without a compatibility fallback or correction. Actual Any regression tests cover the distinctions;broader document consequences remain unverified.

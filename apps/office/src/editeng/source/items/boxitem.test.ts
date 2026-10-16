@@ -435,3 +435,11 @@ it("owns canonical Color values while retaining a stable borrowed color referenc
   const box = new SvxBoxItem(113);
   expect(box.PutValue(lineRecord(signed), 1)).toBe(true);
 });
+
+it("retains the native default-true validity setter without resetting unrelated flags", /** Existing shared owner remains covered after size responsibility extraction. @returns Nothing. */ () => {
+  const item = new SvxBoxInfoItem(1);
+  item.SetValid(SvxBoxInfoItemValidFlags.TOP, false);
+  expect(item.IsValid(SvxBoxInfoItemValidFlags.TOP)).toBe(false);
+  item.SetValid(SvxBoxInfoItemValidFlags.TOP);
+  expect(item.IsValid(SvxBoxInfoItemValidFlags.TOP)).toBe(true);
+});

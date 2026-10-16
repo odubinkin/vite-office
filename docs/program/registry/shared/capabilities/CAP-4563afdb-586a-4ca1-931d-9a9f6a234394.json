@@ -1,0 +1,108 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4563afdb-586a-4ca1-931d-9a9f6a234394",
+    "capabilityId": "CAP-4563afdb-586a-4ca1-931d-9a9f6a234394",
+    "suite": "shared",
+    "subsystem": "native-size-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual shared geometry and awt Size/Any contracts drive size attributes reused by Calc and Writer.",
+      "Native integral conversion,equality and derived metric overrides retain original behavior."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task179 restores native SvxSizeItem stable tools Size value ownership,copy/default/Clone,payload-only equality,typed Size/width/height Any,integral conversions and llround metric scaling. Genuine awt Size IDL fields and normal CPPU type metadata reuse existing compound access,without a new allocator or binary format. Writer uses the same base and native derived member conversions,percentage/sync/type/clamps and deliberate nonmetric overrides. Preserve HEIGHT failed extraction success and Writer zero-on-failed-short-extraction behavior. Existing no-output browser dimension transport remains explicit;native Any calls do not bypass derived dispatch. Full localized presentation,XML diagnostics,native memory caches,unsafe integer domains,ScDocumentPool/document/UI/same-model ODS remain pending;no broad parity promotion."
+    },
+    "capability": "Shared native size item and required Writer derived contracts",
+    "gaps": [
+      "Localized presentation and XML diagnostics remain pending.",
+      "Finite safe-integer tools geometry is the represented browser domain;native binary ABI/overflow/lifetime are not simulated.",
+      "Full Calc document/pool/UI/same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.size.ts",
+          "marker": "class SvxSizeItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/Size.ts",
+          "marker": "cppu_detail_getUnoType_Size"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmtfsize.ts",
+          "marker": "PutValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-size-item.test.ts",
+          "marker": "HEIGHT failed-extraction success"
+        },
+        {
+          "path": "apps/office/src/sw/inc/native-frame-size-members.test.ts",
+          "marker": "native Writer copying"
+        },
+        {
+          "path": "apps/office/e2e/shared/size-item.spec.ts",
+          "marker": "typed size members in Chromium"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Shared native size values (task179)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-165"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/frmitems.cxx",
+          "marker": "SvxSizeItem::PutValue"
+        },
+        {
+          "path": "sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatFrameSize::QueryValue"
+        },
+        {
+          "path": "include/editeng/sizeitem.hxx",
+          "marker": "const Size& GetSize()"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tools/qa/cppunit/test_GenericTypeSerializer.cxx",
+          "marker": "testRoundtripSize"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/awt/Size.idl",
+          "marker": "long Width"
+        },
+        {
+          "path": "include/svl/memberid.h",
+          "marker": "MID_SIZE_SIZE"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-shared-size-item",
+    "scopeLimitations": [
+      "Task179 restores native SvxSizeItem stable tools Size value ownership,copy/default/Clone,payload-only equality,typed Size/width/height Any,integral conversions and llround metric scaling. Genuine awt Size IDL fields and normal CPPU type metadata reuse existing compound access,without a new allocator or binary format. Writer uses the same base and native derived member conversions,percentage/sync/type/clamps and deliberate nonmetric overrides. Preserve HEIGHT failed extraction success and Writer zero-on-failed-short-extraction behavior. Existing no-output browser dimension transport remains explicit;native Any calls do not bypass derived dispatch. Full localized presentation,XML diagnostics,native memory caches,unsafe integer domains,ScDocumentPool/document/UI/same-model ODS remain pending;no broad parity promotion."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
