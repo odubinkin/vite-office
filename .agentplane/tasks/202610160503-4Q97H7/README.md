@@ -1,10 +1,11 @@
 ---
 id: "202610160503-4Q97H7"
 title: "Implement general language-tag grammar and canonicalization"
-status: "DOING"
+result_summary: "Connect native normal language-tag grammar and canonicalization"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task196-checks/source-gates.json"
   findings:
     - "Complete normal-parser scope is achieved;no full liblangtag wildcard/locale/maximization API,native executed oracle or enclosing LibreOffice LanguageTag claim. Source immutable-table proofs justify only unreachable data/allocation/assert branches;native cache/shallow-sharing/private-use/t-field quirks are preserved and documented CALC-180..183. Outer LanguageTag/Font/defaults/pools/model/UI/ODS remain required;full all-app run deferred under latest user milestone. Review is same-agent,not independent."
-commit: null
+commit:
+  hash: "780174efffb9f027da3c04c4471fe192cd7f4ef4"
+  message: "🔎 4Q97H7 calc: record connected parser verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement connected normal tag values,registered grammar,canonicalizer,extension container and t callbacks from pinned source;reuse actual completed scanner/IANA/CLDR/u owners."
+  -
+    author: "CODER"
+    body: "Verified: actual normal language-tag value/parser/canonicalizer/extension/t responsibility group connected to existing scanner/IANA/CLDR/u owners.200related/196Calc tests,exact strict raw100 coverage,13gates,production build and real browser/Worker pass. Outer LanguageTag and UI/ODS remain pending."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Connected actual normal parser/canonicalizer/tag values/extensions/t callbacks;32pinned source files/23states/66native QA vectors/17prior contract cases/full static data proofs verified.200related/196Calc tests,exact11shared and36Calc raw100,every counter positive;13gates,build/actual Chromium/DOM-free Worker/Writer pass without5refs.30intentional paths and final audit pass;CALC-180..183 preserved. No fake LanguageTag,ownership engine,native execution or full all-app run;outer LanguageTag/UI/ODS pending."
+  -
+    type: "status"
+    at: "2026-10-16T05:31:30.586Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual normal language-tag value/parser/canonicalizer/extension/t responsibility group connected to existing scanner/IANA/CLDR/u owners.200related/196Calc tests,exact strict raw100 coverage,13gates,production build and real browser/Worker pass. Outer LanguageTag and UI/ODS remain pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T05:30:47.843Z"
+doc_updated_at: "2026-10-16T05:31:30.587Z"
 doc_updated_by: "CODER"
 description: "Task196: connect actual pinned liblangtag normal tag value/state/parser/canonicalizer,extension container and t callback to the completed scanner/IANA/CLDR/u owners. Preserve observable native semantics and use JS GC;no partial successful parser or fake LanguageTag."
 sections:
@@ -123,6 +136,10 @@ sections:
     Portable related profile now passes200tests with exact11shared owners every raw counter positive:S586/B448/F62/L509100. Initial static lint flags one unused test import (lt_tag_get_string in transform tests);remove only that import and resume unchanged static gates. No production or verification-scope drift.
 
     TS7 rejects the original C switch fallthrough under the existing noFallthroughCasesInSwitch setting. Preserve native state mutations by using a separate local dispatch state/loop for grammar alternatives,and group FIELD/FIELD2 logic explicitly in the transform callback. Do not alter tsconfig,guard settings or original stored state ordinals. Rerun all related tests/raw coverage and typecheck after this in-scope language adaptation.
+extensions:
+  implementation_commit:
+    hash: "16464cb0a7975548f8286a84362c729ae85ef1af"
+    message: "🧩 4Q97H7 calc: connect native language-tag grammar and canonicalization"
 id_source: "generated"
 ---
 ## Summary
