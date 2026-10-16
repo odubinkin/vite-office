@@ -1,10 +1,15 @@
 /** @fileoverview Original Calc mtvelements.hxx value-block specializations over shared mdds and actual SVL/Calc value owners. */
+import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
+import type { ScFormulaCell } from "./formulacell";
+import { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
+export { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
 import { SharedString } from "../../svl/inc/sharedstring";
 import { CellTextAttr } from "./celltextattr";
 import { type DelayedValueOperations } from "../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector.ts";
 import {
   default_element_block,
+  noncopyable_element_block,
   element_type_user_start,
   element_type_empty as empty,
 } from "../../external/mdds/include/mdds/multi_type_vector/types.ts";
@@ -152,20 +157,44 @@ export const CellTextAttrStoreType = Object.setPrototypeOf(
 /** Original text attribute container typedef instance, sharing the generic container owner. */
 export type CellTextAttrStoreType = InstanceType<typeof CellTextAttrStoreType>;
 
-/** Numeric/string portion of CellStoreTraits;formula and edit-text blocks are registered when those cell owners are supported. Their native block events cannot occur in this scalar specialization. */
+/** Real formula pointer identity uses ordinary GC; physical managed-pointer deletion is not ported. Native noncopyable operations remain explicit. */
+export const formula_block = Object.assign(
+  default_element_block<ScFormulaCell | null>(
+    element_type_formula,
+    null,
+    /** Preserves actual formula-cell identity. @param value - Cell. @returns Same cell. */ (
+      value,
+    ) => value,
+  ),
+  {
+    copy_block: noncopyable_element_block.copy_block,
+    clone_block: noncopyable_element_block.clone_block,
+    /** Formula value equality is outside this editing subset; never substitute pointer equality for missing native semantic comparison. @returns Never. */
+    equal_block(): never {
+      throw new Error("Formula block semantic equality is not implemented");
+    },
+  },
+);
+export const formula_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(
+  element_type_formula,
+  null as ScFormulaCell | null,
+  formula_block,
+);
+/** Supported scalar/formula alternatives, with native logical block events. Rich edit-text remains unsupported. */
 export const CellStoreTraits = {
   ...default_traits,
-  block_funcs: element_block_funcs(numeric_block, string_block),
+  event_func: CellStoreEvent,
+  block_funcs: element_block_funcs(numeric_block, string_block, formula_block),
 };
-const cell_store_constructor = (multi_type_vector<empty_event_func>).bind(
+const cell_store_constructor = (multi_type_vector<CellStoreEvent>).bind(
   null,
   CellStoreTraits,
-  empty_event_value_ops,
+  cell_store_event_value_ops,
 );
-/** Existing shared SoA container bound to the represented Calc scalar cell alternatives. */
+/** Existing shared SoA engine bound to actual supported Calc cell alternatives. */
 export const CellStoreType = Object.setPrototypeOf(
   cell_store_constructor,
   multi_type_vector,
 ) as typeof cell_store_constructor & Omit<typeof multi_type_vector, "prototype">;
-/** Scalar cell-store instance;the container implementation is shared with the other Calc stores. */
+/** Actual typed cell-store instance. */
 export type CellStoreType = InstanceType<typeof CellStoreType>;

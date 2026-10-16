@@ -33,7 +33,8 @@
       "ScExternalDoubleRefToken",
       "ScExternalNameToken",
       "ScMatrixRangeToken",
-      "extendRangeReference"
+      "extendRangeReference",
+      "ScTokenArray"
     ],
     "upstreamSymbols": [
       "ScEmptyCellToken::operator==",
@@ -52,7 +53,9 @@
       "ScExternalDoubleRefToken",
       "ScExternalNameToken",
       "ScMatrixRangeToken",
-      "extendRangeReference"
+      "extendRangeReference",
+      "ScTokenArray::ScTokenArray",
+      "ScTokenArray::AddOpCode"
     ],
     "preservedResponsibilities": [
       "Original Calc header/core tool responsibility and genuine empty/hybrid result token classes.",
@@ -62,7 +65,8 @@
       "Original reference token aggregate export boundary and single/range/list/table ownership family; explicit core responsibility shard.",
       "Original external file-id/string/reference value/copy/move/equality responsibility and canonical exports, reusing existing real reference family owner.",
       "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations.",
-      "Original canonical range operator export boundary and real peer/data operation ownership."
+      "Original canonical range operator export boundary and real peer/data operation ownership.",
+      "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false."
     ],
     "omittedResponsibilities": [
       "Task82 user-authorized GC adaptation removes inherited FormulaToken ownership counters/policies/delete hooks and Boost runtime. Semantic fields/value cleanup remain unchanged; native tests explicitly omit only removed base count/policy columns. Direct JS token references retain identity and no FAP cascading deletion or GC finalizer is introduced. Original C++ memory bookkeeping is intentionally outside parity claims; existing shared string owners remain a separate unchanged boundary.",

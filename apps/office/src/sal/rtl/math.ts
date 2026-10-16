@@ -177,3 +177,21 @@ export function rtl_math_uStringToDouble(
 ): number {
   return stringToDouble(data, length, decimal & 65535, group & 65535, status, parsedEnd);
 }
+
+/** Native binary64 approximate equality, including the representable-integer exception. Decimal powers use correctly rounded decimal conversion like the source constant table. @param a - First value. @param b - Second value. @returns Approximate equality. */
+export function rtl_math_approxEqual(a: number, b: number): boolean {
+  if (a === b) return true;
+  if (a === 0 || b === 0 || a < 0 !== b < 0) return false;
+  const difference = Math.abs(a - b);
+  if (!Number.isFinite(difference)) return false;
+  a = Math.abs(a);
+  b = Math.abs(b);
+  const minimum = Math.min(a, b);
+  const threshold = Math.max(
+    minimum * 2 ** -48,
+    Number("1e" + Math.floor(Math.log10(minimum))) * 5e-15,
+  );
+  if (difference >= threshold) return false;
+  if (a < 2 ** 53 && Number.isInteger(a) && b < 2 ** 53 && Number.isInteger(b)) return false;
+  return true;
+}

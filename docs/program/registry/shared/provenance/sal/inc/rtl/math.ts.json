@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/math.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/math.hxx",
+    "localSymbols": [
+      "approxAdd",
+      "approxSub"
+    ],
+    "upstreamSymbols": [
+      "approxAdd",
+      "approxSub",
+      "approxEqual"
+    ],
+    "preservedResponsibilities": [
+      "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/math.ts",
+          "marker": "approxAdd"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/math.hxx",
+          "marker": "approxAdd"
+        }
+      ]
+    }
+  }
+}

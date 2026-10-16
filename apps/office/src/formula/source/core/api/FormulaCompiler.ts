@@ -23,7 +23,7 @@ const arithmetic = new Set<OpCode>([
 
 /** Shared source-shaped grammar over actual code/RPN arrays, using GC token identities. */
 export class FormulaCompiler {
-  protected readonly mpArr: FormulaTokenArray;
+  protected mpArr: FormulaTokenArray;
   private mpToken: FormulaToken = new FormulaByteToken(OpCode.ocStop);
   private meLastOp: OpCode = OpCode.ocPush;
   private mnRecursion = 0;

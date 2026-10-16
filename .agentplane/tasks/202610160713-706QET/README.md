@@ -4,7 +4,7 @@ title: "Connect numeric arithmetic formulas to Calc document cells"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-16T07:46:56.284Z"
+  updated_by: "CODER"
+  note: "Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement real numeric formula entry and lazy results in the existing Calc cell store; preserve native operations and explicit unsupported boundaries without adding UI or a second expression model."
+  -
+    type: "verify"
+    at: "2026-10-16T07:46:56.284Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T07:14:09.194Z"
+doc_updated_at: "2026-10-16T07:46:56.360Z"
 doc_updated_by: "CODER"
 description: "Task200: implement numeric formula entry, real token/RPN evaluation and lazy ScFormulaCell results in the existing document-sheet-column store. Reuse shared compiler, RTL parsing, mdds and formula result. No UI or unrelated language expansion."
 sections:
@@ -49,9 +55,43 @@ sections:
     - node output/playwright/task200-checks/browser-portable.mjs: production build and real document formula editing/lazy evaluation in Chromium and DOM-free Worker without references.
     - node output/playwright/task200-checks/source-gates.mjs: existing format/lint/type/docs/size/dependency/tree/provenance/inventory/routing/doctor/diff gates.
     - Final scope/hash audit, recorded verify, source commit and same-agent quality review before finish. Explicitly no UI/full all-app run or claim of formula references/functions/ODS readiness.
-  Verification: "Pending implementation and checks."
+  Verification: |-
+    Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-16T07:46:56.284Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T07:46:55.564Z, excerpt_hash=sha256:2f0deae1b910e43b90744974a69052b1ebdffd05ba28eba360a6b4e39bdb90d3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160713-706QET/blueprint/resolved-snapshot.json
+    - old_digest: 6bc9b227e6b005c91c4148603a7e39fef1a4f3512295cfb3d48406d7f93d1442
+    - current_digest: 6bc9b227e6b005c91c4148603a7e39fef1a4f3512295cfb3d48406d7f93d1442
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610160713-706QET
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610160713-706QET
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task200 source and metadata commits, preserving unrelated work and deferred LanguageTag snapshot. No reset, branch merge, publication or network writes."
-  Findings: "Previous goal turn completed task199 (source ddcdb90f74e8, close83e7962127e9), with clean calc branch. User standing approval covers minimal canonical core; UI explicitly remains separate. Native numeric ODFF ParseValue already calls existing RTL stringToDouble, avoiding formatter/localization dependencies for this subset. ScColumn owns formula block counts via actual CellStoreEvent. Native pointer deletion is physical ownership and will use ordinary JS GC, not a new memory manager. Native mbCloseBrackets defaults true; scanner must retain that real behavior. Source power underflow fenv cannot be assumed from Math.pow; unproven subnormal regions must remain explicit gaps rather than false parity claims."
+  Findings: "Task200 records bounded numeric ODFF formula entry/evaluation; references/functions/listening/serialization/ODS/UI remain pending. Native ScCompiler closes missing parentheses by default. The base shared compiler array pointer must be mutable, as native CompileString binds its returned owner. Actual per-document null-formatter context and sheet limits are retained; unconsumed RNG/cache/formatter services are omitted explicitly. Formula pointers use JS GC with native noncopyable copy/clone boundaries and explicit unsupported semantic block equality; no physical delete/refcount engine. Shared mdds integration initially failed typecheck because ContainerCallbacks demanded unused emplace helpers and the pointer wrapper lacked its erased moved-pointer append witness. Native pointer append is by value; corrected the common consumed type and bound that witness to the same real append. Initial focused test failures were test inputs: wrong nested FormulaGrammar enum access, and repeated equals in an overflow formula; corrected without changing native behavior. A long-formula test exposed quadratic regex ASCII-space trimming; terminated only the confirmed task200 test descendants, kept the wrapper alive to restore all5 reference links, replaced trimming with native-shaped linear bounds and retained the large test (then all8 focused tests passed in2.7s). First whole Calc run:206 tests passed but3 statements/3 branches/1 function uncovered. This exposed ScTable GetErrCode bypassing the canonical column method; corrected native forwarding and added the remaining numeric token-limit witness. Provenance then required actual native token-array placement; moved ScTokenArray into existing token.ts matching token.cxx, without adding divergence allowlists. All13 source/inventory gates now pass. Routes recomputed after failures. Native ODFF numeric-overflow error distinction is preserved and documented as CALC-185; reserved deferred CALC-184 is not reused. Source audit pins24 files, executes no native code, proves shared mdds main runtime unchanged. Subnormal power fenv classification remains explicitly unsupported. Final portable/browser/raw coverage verification and same-agent review remain pending."
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +116,40 @@ Calc sc/inc and source/core data/tool owners: ScTokenArray, ScCompiler, ScInterp
 
 ## Verification
 
-Pending implementation and checks.
+Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-16T07:46:56.284Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: node output/playwright/task200-checks/source-audit.mjs; portable.mjs; browser-portable.mjs; source-gates.mjs; final-audit.mjs. Result: pass. Evidence:24 pinned reached native/header/QA files audited without native execution, including native by-value pointer append and type-only shared mdds container correction.194 related tests/40files pass. Exact5 changed shared executable owners reach raw S508/B331/F117/L471 with every counter positive. Whole Calc206tests/81files and exact47 executable owners reach raw S4671/B3039/F959/L4184 with every counter positive. Production build and3 actual Chromium plus DOM-free Worker cases pass. All13 source/inventory gates pass. All5 source-reference links absent during portable tests/build/browser runs and restored afterward. Exact86 intentional source/test/metadata/doc paths hashed in output/playwright/task200-checks/final-audit.json. Post-test edits only clarified one-line code descriptions and metadata; runtime implementation and coverage source locations stayed unchanged, and affected source/inventory gates were rechecked. Scope: real numeric ODFF formula entry/lazy results on actual document owners, normal finite arithmetic/powers and explicit error/gap boundaries. Unsupported: reference/function/dependency/listener/serialization services, unproven subnormal power classification, ODS and UI. No full all-app run; requested milestone-triggered full run/pause remains pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-16T07:46:55.564Z, excerpt_hash=sha256:2f0deae1b910e43b90744974a69052b1ebdffd05ba28eba360a6b4e39bdb90d3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610160713-706QET/blueprint/resolved-snapshot.json
+- old_digest: 6bc9b227e6b005c91c4148603a7e39fef1a4f3512295cfb3d48406d7f93d1442
+- current_digest: 6bc9b227e6b005c91c4148603a7e39fef1a4f3512295cfb3d48406d7f93d1442
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610160713-706QET
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610160713-706QET
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -84,4 +157,4 @@ Revert only task200 source and metadata commits, preserving unrelated work and d
 
 ## Findings
 
-Previous goal turn completed task199 (source ddcdb90f74e8, close83e7962127e9), with clean calc branch. User standing approval covers minimal canonical core; UI explicitly remains separate. Native numeric ODFF ParseValue already calls existing RTL stringToDouble, avoiding formatter/localization dependencies for this subset. ScColumn owns formula block counts via actual CellStoreEvent. Native pointer deletion is physical ownership and will use ordinary JS GC, not a new memory manager. Native mbCloseBrackets defaults true; scanner must retain that real behavior. Source power underflow fenv cannot be assumed from Math.pow; unproven subnormal regions must remain explicit gaps rather than false parity claims.
+Task200 records bounded numeric ODFF formula entry/evaluation; references/functions/listening/serialization/ODS/UI remain pending. Native ScCompiler closes missing parentheses by default. The base shared compiler array pointer must be mutable, as native CompileString binds its returned owner. Actual per-document null-formatter context and sheet limits are retained; unconsumed RNG/cache/formatter services are omitted explicitly. Formula pointers use JS GC with native noncopyable copy/clone boundaries and explicit unsupported semantic block equality; no physical delete/refcount engine. Shared mdds integration initially failed typecheck because ContainerCallbacks demanded unused emplace helpers and the pointer wrapper lacked its erased moved-pointer append witness. Native pointer append is by value; corrected the common consumed type and bound that witness to the same real append. Initial focused test failures were test inputs: wrong nested FormulaGrammar enum access, and repeated equals in an overflow formula; corrected without changing native behavior. A long-formula test exposed quadratic regex ASCII-space trimming; terminated only the confirmed task200 test descendants, kept the wrapper alive to restore all5 reference links, replaced trimming with native-shaped linear bounds and retained the large test (then all8 focused tests passed in2.7s). First whole Calc run:206 tests passed but3 statements/3 branches/1 function uncovered. This exposed ScTable GetErrCode bypassing the canonical column method; corrected native forwarding and added the remaining numeric token-limit witness. Provenance then required actual native token-array placement; moved ScTokenArray into existing token.ts matching token.cxx, without adding divergence allowlists. All13 source/inventory gates now pass. Routes recomputed after failures. Native ODFF numeric-overflow error distinction is preserved and documented as CALC-185; reserved deferred CALC-184 is not reused. Source audit pins24 files, executes no native code, proves shared mdds main runtime unchanged. Subnormal power fenv classification remains explicitly unsupported. Final portable/browser/raw coverage verification and same-agent review remain pending.

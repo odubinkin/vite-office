@@ -31,10 +31,10 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 
 An editable Calc UI and same-model ODS import/export are not ready. This is a
 delivery gap,not a reason to postpone starting their minimal implementation.
-Existing
-coordinate, selection, scalar cell, token, matrix, item and shared text values
-are dependencies, not a spreadsheet document. No meaningful percentage, task
-count or delivery date follows from the number of ported declarations.
+The document/sheet/column chain and scalar/numeric formula operations now
+exist. Formula references/functions/dependency updates and same-model ODS
+remain delivery gaps. No meaningful percentage, task count or delivery date
+follows from the number of ported declarations.
 
 The target is one real owner chain: document -> sheet -> column -> cell store,
 with commands, display and ODS filters all operating on that chain. Do not
@@ -720,3 +720,18 @@ This is not formula entry or evaluation yet: the Calc scanner, formula-cell
 storage, interpreter and dependency invalidation must connect this shared
 compiler to the document chain before basic formula editing is ready. ODS
 filters remain pending and UI implementation remains a separate task.
+
+## Numeric arithmetic formula entry (task200)
+
+The actual document/sheet/column chain now stores numeric formula cells using
+ScTokenArray, the shared FormulaCompiler, ScInterpreter and ScFormulaResult.
+Supported ODFF numeric arithmetic is lazily evaluated through GetValue/GetErrCode;
+block counts and formula positions follow real cell-store events and sheet
+insertion. Common RTL cancellation preserves native arithmetic witnesses.
+Formula object lifetime uses JS GC without porting native pointer deletion.
+This is still not UI/ODS readiness: references, SUM/functions, dependency
+listening/invalidation and formula serialization remain next core work.
+The scanner does not implement localized formatter/string/name/reference
+services; subnormal power exception classification is explicitly unsupported.
+No UI is implemented; full all-app verification remains deferred until the
+minimal formula and same-model ODS stage is ready, then the goal must pause.

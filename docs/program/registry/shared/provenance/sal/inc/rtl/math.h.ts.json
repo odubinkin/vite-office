@@ -9,14 +9,17 @@
     "localSymbols": [
       "rtl_math_ConversionStatus",
       "rtl_math_stringToDouble",
-      "rtl_math_uStringToDouble"
+      "rtl_math_uStringToDouble",
+      "rtl_math_approxEqual"
     ],
     "upstreamSymbols": [
       "rtl_math_stringToDouble",
-      "rtl_math_uStringToDouble"
+      "rtl_math_uStringToDouble",
+      "rtl_math_approxEqual"
     ],
     "preservedResponsibilities": [
-      "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim."
+      "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim.",
+      "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
     ],
     "omittedResponsibilities": [
       "Other RTL numeric APIs,formatting/unit overloads,physical ABI/NaN payload and complete Calc document/UI/same-model ODS remain pending."

@@ -1,4 +1,8 @@
-/** @fileoverview Initial ScTable scalar cell operations with lazy contiguous column ownership. Full sheet formatting and formula services remain separate. */
+/** @fileoverview ScTable scalar/numeric-formula cell operations with lazy contiguous columns. Full formatting,reference and dependency services remain unsupported. */
+import type { Grammar } from "../../../../formula/inc/grammar";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import type { ScFormulaCell } from "../../../inc/formulacell";
+import { ScAddress } from "../../../inc/address";
 import { ScColumn } from "../../../inc/column";
 import { CellType } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -24,7 +28,7 @@ export class ScTable {
   /** Updates sheet and existing column coordinates after sheet insertion. @param tab - New position. @returns Nothing. */
   SetTabNo(tab: number): void {
     this.nTab = tab;
-    for (const col of this.aCol) col.Init(col.GetCol(), tab);
+    for (const col of this.aCol) col.SetTabNo(tab);
   }
   /** Reports how many columns have actually been allocated. @returns Count. */
   GetAllocatedColumnsCount(): number {
@@ -39,6 +43,24 @@ export class ScTable {
       this.aCol.push(column);
     }
     return this.aCol[col] as ScColumn;
+  }
+  /** Writes a formula at valid coordinates through the actual column. @param col - Column. @param row - Row. @param source - Formula. @param grammar - ODFF grammar. @returns Nothing. */
+  SetFormula(col: number, row: number, source: OUStringConstReference, grammar: Grammar): void {
+    if (this.rDocument.ValidColRow(col, row))
+      this.CreateColumnIfNotExists(col).SetFormula(row, source, grammar);
+  }
+  /** Borrows a formula cell without allocating storage. @param col - Column. @param row - Row. @returns Cell or null. */
+  GetFormulaCell(col: number, row: number): ScFormulaCell | null {
+    return this.rDocument.ValidColRow(col, row) && col < this.aCol.length
+      ? (this.aCol[col] as ScColumn).GetFormulaCell(row)
+      : null;
+  }
+  /** Reads the native formula error with empty default. @param position - Address. @returns Error. */
+  GetErrCode(position: ScAddress): FormulaError {
+    return this.rDocument.ValidColRow(position.Col(), position.Row()) &&
+      position.Col() < this.aCol.length
+      ? (this.aCol[position.Col()] as ScColumn).GetErrCode(position.Row())
+      : FormulaError.NONE;
   }
   /** Writes numeric content only at valid coordinates. @param col - Column. @param row - Row. @param value - Number. @returns Nothing. */
   SetValue(col: number, row: number, value: number): void {

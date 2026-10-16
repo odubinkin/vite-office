@@ -9,7 +9,8 @@
     "subsystem": "odf-filter",
     "capabilityIds": [
       "CAP-0113",
-      "CAP-0128"
+      "CAP-0128",
+      "CAP-a4a3caad-6757-4cc5-a8f1-997a7ccd4a2f"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -21,14 +22,15 @@
         "apps/office/src/sal/rtl/math.test.ts",
         "docs/program/calc-ui-readiness.md#Shared ODS decimal scalar reader (task184)"
       ],
-      "justification": "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim.",
+      "justification": "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim. Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "unverified",
       "upstreamFile": "include/rtl/math.h",
       "upstreamSymbols": [
         "rtl_math_stringToDouble",
-        "rtl_math_uStringToDouble"
+        "rtl_math_uStringToDouble",
+        "rtl_math_approxEqual"
       ]
     }
   }

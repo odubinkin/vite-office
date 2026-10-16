@@ -1,4 +1,9 @@
-/** @fileoverview Minimal ScDocument scalar editing chain for the first browser/ODS integration. Full native construction,formatting,formula and shell services are not claimed. */
+/** @fileoverview Minimal ScDocument scalar/numeric-formula chain for browser/ODS integration. Full construction,formatting,dependency and shell services are not claimed. */
+import { ScSheetLimits } from "../../../inc/sheetlimits";
+import { ScInterpreterContext } from "../../../inc/interpretercontext";
+import type { ScFormulaCell } from "../../../inc/formulacell";
+import type { Grammar } from "../../../../formula/inc/grammar";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScTable } from "../../../inc/table";
 import {
   ScAddress,
@@ -21,6 +26,9 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
+  private readonly maInterpreterContext = new ScInterpreterContext(this, null);
+  private readonly bAutoCalc = true;
   private readonly maTabs: ScTable[] = [];
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   private readonly mpCellStringPool: SharedStringPool;
@@ -33,6 +41,30 @@ export class ScDocument {
         return uppercase(value, locale);
       },
     });
+  }
+  /** Borrows document-independent native sheet limits. @returns Limits. */
+  GetSheetLimits(): ScSheetLimits {
+    return this.mxSheetLimits;
+  }
+  /** Borrows the actual nonthreaded numeric interpreter context. @returns Context. */
+  GetNonThreadedContext(): ScInterpreterContext {
+    return this.maInterpreterContext;
+  }
+  /** Reads the normal document's native automatic-calculation default. @returns Enabled. */
+  GetAutoCalc(): boolean {
+    return this.bAutoCalc;
+  }
+  /** Writes supported numeric formula content through the existing sheet/column owner chain. @param position - Cell. @param source - Formula. @param grammar - ODFF grammar. @returns Nothing. */
+  SetFormula(position: ScAddress, source: OUStringConstReference, grammar: Grammar): void {
+    this.FetchTable(position.Tab())?.SetFormula(position.Col(), position.Row(), source, grammar);
+  }
+  /** Borrows the actual formula cell, or native null. @param position - Cell. @returns Formula cell or null. */
+  GetFormulaCell(position: ScAddress): ScFormulaCell | null {
+    return this.FetchTable(position.Tab())?.GetFormulaCell(position.Col(), position.Row()) ?? null;
+  }
+  /** Reads the native compiler/interpreter error code. @param position - Cell. @returns Error. */
+  GetErrCode(position: ScAddress): FormulaError {
+    return this.FetchTable(position.Tab())?.GetErrCode(position) ?? FormulaError.NONE;
   }
   /** Borrows the actual shared string pool. @returns Pool. */
   GetSharedStringPool(): SharedStringPool {

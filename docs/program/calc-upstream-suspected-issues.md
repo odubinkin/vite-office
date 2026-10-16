@@ -2582,3 +2582,16 @@ this length branch. Therefore normal x-* parses and canonicalizes to x-*.
 Preserve the original normal parser result;do not add an alphanumeric check
 absent from this branch. Source-derived managed normal-parser/browser evidence,
 not a full outer LanguageTag validity or native execution claim. Task196.
+
+## CALC-185 — ODFF numeric overflow becomes a compiler argument error
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`sc/source/core/tool/compiler.cxx`, `ScCompiler::ParseValue` ODFF/OOXML branch.
+When RTL parsing reports OutOfRange, the compiler sets IllegalArgument (502)
+and still creates the numeric token. The source itself asks why infinity is
+not instead accepted and diagnosed by the interpreter. Consequently numeric
+`1e999` has a compiler error, while arithmetic `1e308*1e308` reaches interpreter
+IllegalFPOperation (503). Preserve this distinction; do not normalize both to
+a generic numeric error. Source-derived evidence and real document error
+regressions in task200; no native execution or defect verdict is claimed.
+CALC-184 belongs to the deferred task197 snapshot and is not reused here.
