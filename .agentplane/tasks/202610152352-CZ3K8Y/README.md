@@ -1,10 +1,11 @@
 ---
 id: "202610152352-CZ3K8Y"
 title: "Restore shared native size item contracts for Calc pool construction"
-status: "DOING"
+result_summary: "Restored native shared size value/Any/conversion/equality/scaling and Writer derived contracts without duplicate geometry,converters or lifetime engines. Inventory/readiness and CALC165..166 updated. Actual Calc document-pool/model/UI/same-model ODS remain pending;no all-app run."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
     - "Single SvxSizeItem implementation uses stable actual tools Size,generated awt Size and existing CPPU Any with original three-member conversions,equality and scaling. Writer required constructor/copy/member/metric overrides follow native definitions;no compatibility adapter bypasses Any dispatch."
     - "95related and187Calc scenarios pass;exact5shared and33Calc executable owners raw S/B/F/L100 with every counter positive. Actual Chromium and Writer startup/load/edit,production build and all13source gates pass with all4refs absent during runtime/restored.32non-task paths fit approved80."
     - "14native source/IDL/generator/QA blobs and16constants pinned;75unrelated emitted algorithm bodies and reused geometry/converters/guard unchanged. CALC165..166 preserve original inconsistent failure/conversion branches. Broad inventory parity flags remain false."
-commit: null
+commit:
+  hash: "7fba518a9b1da43124c9fbe636b30d2063084aaa"
+  message: "🔧 CZ3K8Y quality: record native size verification"
 comments:
   -
     author: "CODER"
     body: "Start: restore shared size value/Any behavior and necessary Writer derived contracts using existing geometry,CPPU and conversions;preserve upstream quirks and test without native probes."
+  -
+    author: "CODER"
+    body: "Verified: shared native size contracts and necessary Writer derived members pass95related/187Calc,exact raw100,all13source gates,production build and actual Chromium/Writer checks;all4refs restored. Same-agent quality review passes;full Calc UI/ODS goal remains active."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "95related/187Calc scenarios pass;exact5shared and33Calc raw S/B/F/L100,every counter positive,no Writer gaps. All13source gates,14native pins/16constants/75unchanged unrelated algorithms,build and actual Chromium size/Writer startup-load-edit pass. Four refs restored;native size contracts only,full Calc pool/document/UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T00:04:27.470Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: shared native size contracts and necessary Writer derived members pass95related/187Calc,exact raw100,all13source gates,production build and actual Chromium/Writer checks;all4refs restored. Same-agent quality review passes;full Calc UI/ODS goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-16T00:03:41.972Z"
+doc_updated_at: "2026-10-16T00:04:27.472Z"
 doc_updated_by: "CODER"
 description: "Task179: canonical SvxSizeItem over actual tools Size and generated awt Size/Any,correct native member conversion/equality/scaling and necessary Writer frame-size caller migration;reuse shared geometry/conversion/CPPU. Direct prerequisite for ScDocumentPool page-size defaults,not a document or UI facade."
 sections:
@@ -115,6 +128,10 @@ sections:
     - Observation: All functional cases pass and strict shared raw coverage reaches100 after exercising the existing default-true border-validity setter. Inventory initially treated facade reexports as local class declarations;lint/docs also identified test tuple assertions and missing callback documentation.
       Impact: No production semantics or verification criteria changed. The actual size class must be inventoried once in its source shard,while header and legacy exports borrow it.
       Resolution: Use const tuples and callback docs;record empty local declarations for the pure header and remove the retired local class declaration from the legacy owner semantic record. Preserve provenance exports and all prior parity statuses. Inventory and all source gates now pass;rerun final portable profiles and browser acceptance.
+extensions:
+  implementation_commit:
+    hash: "1b4cf62ff28ec28bcb2b730d6e1b679bf7402353"
+    message: "🔧 CZ3K8Y core: restore shared native size contracts"
 id_source: "generated"
 ---
 ## Summary
