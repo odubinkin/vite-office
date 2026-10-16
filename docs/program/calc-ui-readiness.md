@@ -520,3 +520,22 @@ The enclosing LanguageTag constructors/copy/reset, shared implementation state,
 synchronization, known-tag canonicalization, dynamic-ID registry and general
 parser remain pending. Font language/defaults, Calc pools/model and same-model
 ODS still require those real owners; UI readiness is not established here.
+
+## General parser source contract (task193)
+
+Task193 (`202610160359-06X0DE`) resolves the external parser/data boundary in
+[Calc LanguageTag general parser contract](calc-language-tag-parser-contract.md).
+Both exact LibreOffice-pinned source archives were hash-verified. The selected
+source rules show that current Intl syntax acceptance, canonical aliases,
+private-use case and extension handling do not preserve this branch. Source
+--disable-modules retains static t/u handlers. The shipped registry XML is
+older than the separate pinned raw registry; normal and cross-build data
+selection are recorded explicitly. No native binary or generator was run.
+
+Implement the necessary value parser and functional data using native JS
+strings/maps and existing core owners, preserving source rules and the
+CALC-175/176 edge cases. Do not port the library's physical ownership/XML/trie/
+plugin framework or claim a full LanguageTag from a partial parser. This task
+adds source evidence and actual native-JS audits, not a production parser or
+new runtime capability. LanguageTag/Font/defaults/pools/document/UI/ODS remain
+pending and the goal remains active.

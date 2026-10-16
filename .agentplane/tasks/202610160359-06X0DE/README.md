@@ -4,7 +4,7 @@ title: "Resolve pinned language parser contract and native JS substitution limit
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: inspect verified LibreOffice-pinned liblangtag and registry source to resolve remaining LanguageTag parser behavior/native JS limits;produce source-anchored report/tests without native execution or a fake parser."
 doc_version: 3
-doc_updated_at: "2026-10-16T04:00:39.041Z"
+doc_updated_at: "2026-10-16T04:27:50.221Z"
 doc_updated_by: "CODER"
 description: "Task193: inspect LibreOffice-pinned liblangtag0.6.8 and IANA2026-06-14 source contracts for remaining LanguageTag parser branch,using approved upstream source reading;produce exact algorithm/data boundary and measured native-JS comparisons without native compilation or a fake parser/class."
 sections:
@@ -52,7 +52,7 @@ sections:
     - node output/playwright/task193-checks/browser-portable.mjs:production build and actual Chromium/DOM-free Worker native-JS audit,source refs absent/restored;no native binary or fake production parser.
     - node output/playwright/task193-checks/source-gates.mjs:13source gates including inventory/provenance/boundaries/doctor with no exemptions.
     - node output/playwright/task193-checks/final-audit.mjs:exact source/fixture/observations/path evidence,reference restoration and truthful implementation next boundary;source commit,recorded verify and same-agent EVALUATOR review then descriptive finish.
-  Verification: "Pending. Prior goal turn made progress with completed task192. This audit must change the next implementation decision through actual source evidence. Full class/font/defaults/pool/model/UI/ODS remain pending;all-app run still waits for real minimum UI/ODS readiness then fix applicable failures and pause."
+  Verification: "Command:curl exact two LibreOffice source-mirror archive URLs into task output,then SHA256/safe regular-file extraction. Result:pass. Evidence:liblangtag0.6.8 a96975b79ddd8fef6d9295c083fe3f1afa1a8898a57235d4069255ade44e5cf2 and registry2026-06-14 e74af13fd11fbcb24a5910d0f50e45d8505d86267bde2bb2d1d45aed966bc3bb match pinned download.lst;246extracted entries,no archive scripts/native binaries run. Command:node output/playwright/task193-checks/native-audit.mjs. Result:pass. Evidence:13source hashes,6LibreOffice pins/3build patches,registry counts/selected functional records and version equivalence,alias/calendar/key data,static t/u and source scanner/prefix/C-string anchors.17expected outcomes are source-derived,not native execution. Command:node output/playwright/task193-checks/portable.mjs. Result:pass. Evidence:34audit/2files and196Calc/78files,exact36Calc raw S4310/B2777/F864/L3857100,every counter positive,4source refs absent/restored. No changed shared runtime owner or new shared coverage scope. Command:node output/playwright/task193-checks/browser-portable.mjs. Result:pass. Evidence:production build and actual Node24/Chromium151/DOM-free Worker observations agree on17selected cases;14differences from source-derived outcomes,3matching controls,not a compatibility rate. Command:node output/playwright/task193-checks/source-gates.mjs. Result:13gates pass including unchanged inventory/provenance/guards. Command:node output/playwright/task193-checks/final-audit.mjs. Result:pass. Evidence:6intentional test/doc paths,exact source/fixture/observations/owner/ref manifests. Report chooses source value parser/functional data over wholesale Intl replacement and unnecessary physical library framework;CALC-175/176 recorded without sourcefix. No production parser/class/library/memoryengine/capability promotion/all-app run. Full LanguageTag/font/defaults/pools/model/UI/ODS remain pending;goal active."
   Rollback Plan: "Revert only this task's test/doc source commit;ignored source archives can be retained as pinned evidence. Do not reset user work or touch unrelated tasks. No destructive cleanup required."
   Findings: "None. Generic Intl substitution was already disproved on29source QA cases in task189;this task distinguishes native known-tag handling from the actual external-parser branch so that broad library/memory infrastructure is not ported without evidence."
 id_source: "generated"
@@ -79,7 +79,7 @@ Read only exact LibreOffice-pinned liblangtag/IANA archives with verified hashes
 
 ## Verification
 
-Pending. Prior goal turn made progress with completed task192. This audit must change the next implementation decision through actual source evidence. Full class/font/defaults/pool/model/UI/ODS remain pending;all-app run still waits for real minimum UI/ODS readiness then fix applicable failures and pause.
+Command:curl exact two LibreOffice source-mirror archive URLs into task output,then SHA256/safe regular-file extraction. Result:pass. Evidence:liblangtag0.6.8 a96975b79ddd8fef6d9295c083fe3f1afa1a8898a57235d4069255ade44e5cf2 and registry2026-06-14 e74af13fd11fbcb24a5910d0f50e45d8505d86267bde2bb2d1d45aed966bc3bb match pinned download.lst;246extracted entries,no archive scripts/native binaries run. Command:node output/playwright/task193-checks/native-audit.mjs. Result:pass. Evidence:13source hashes,6LibreOffice pins/3build patches,registry counts/selected functional records and version equivalence,alias/calendar/key data,static t/u and source scanner/prefix/C-string anchors.17expected outcomes are source-derived,not native execution. Command:node output/playwright/task193-checks/portable.mjs. Result:pass. Evidence:34audit/2files and196Calc/78files,exact36Calc raw S4310/B2777/F864/L3857100,every counter positive,4source refs absent/restored. No changed shared runtime owner or new shared coverage scope. Command:node output/playwright/task193-checks/browser-portable.mjs. Result:pass. Evidence:production build and actual Node24/Chromium151/DOM-free Worker observations agree on17selected cases;14differences from source-derived outcomes,3matching controls,not a compatibility rate. Command:node output/playwright/task193-checks/source-gates.mjs. Result:13gates pass including unchanged inventory/provenance/guards. Command:node output/playwright/task193-checks/final-audit.mjs. Result:pass. Evidence:6intentional test/doc paths,exact source/fixture/observations/owner/ref manifests. Report chooses source value parser/functional data over wholesale Intl replacement and unnecessary physical library framework;CALC-175/176 recorded without sourcefix. No production parser/class/library/memoryengine/capability promotion/all-app run. Full LanguageTag/font/defaults/pools/model/UI/ODS remain pending;goal active.
 
 ## Rollback Plan
 

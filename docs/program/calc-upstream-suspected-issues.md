@@ -2469,3 +2469,30 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Port: preserve all rows and comments' source context, retain first-match and
   ISO-before-English priority, test en/KI, en/NG and en/SL explicitly. Do not
   deduplicate, reorder or silently replace NG with SL.
+
+## CALC-175 — general language parser consumes only the prefix before NUL
+
+- Source: LibreOffice `LanguageTagImpl::canonicalize` passes UTF8 getStr() to
+  liblangtag0.6.8 `lt_tag_parse`; `lt_tag_scanner_new` copies with strdup and
+  records strlen. The pinned source/data archives are traced in task193.
+- Observation: logical input en followed by embedded NUL and -INVALID reaches
+  the library as the C-string prefix en, which can parse and canonicalize to
+  en. This is a source-derived outcome, not a native binary observation.
+- Status: suspicious input-boundary behavior; no claim of a reachable ODF/XML
+  document failure or of the intended policy for embedded NUL.
+- Port: preserve this specific parser boundary and test the full logical input.
+  Do not truncate unrelated OUString values or raw Locale conversions globally.
+
+## CALC-176 — first language variant prefix is a byte-prefix comparison
+
+- Source: liblangtag0.6.8 `lt_tag_parse_state`, STATE_VARIANT, uses case-insensitive
+  prefix-length comparison against the canonicalized partial tag. The pinned
+  registry's 1901 variant lists Prefix de; den is a registered language with no
+  replacement alias in the shipped supplemental metadata.
+- Observation: de is also a byte prefix of den, so den-1901 passes this first-
+  variant prefix check. The parser does not require a subtag boundary there.
+  Later variant combinations have further exact-prefix/duplicate checks.
+- Status: suspicious source-derived acceptance edge; no native execution,
+  standards-conformance verdict or demonstrated downstream document effect.
+- Port: preserve this acceptance and an independent regression vector rather
+  than tightening the comparison to a language/subtag equality check.
