@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-14d16c14-9c4b-4519-9251-dd42385b275e",
+    "capabilityId": "CAP-14d16c14-9c4b-4519-9251-dd42385b275e",
+    "suite": "shared",
+    "subsystem": "font-value-equality",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Independent Font handles with equal represented values satisfy native IsSameInstance.",
+      "Other runtime state and methods remain unchanged;existing value equality is reused."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task182 corrects the prior identity-only interpretation of Font IsSameInstance. Native Font stores cow_wrapper<ImplFont>;both Font operator== and IsSameInstance use its operator==,which returns shared-object identity OR ImplFont value equality. The existing represented Font Equals therefore supplies the correct observable value predicate for independent equal handles,without porting C++ ownership machinery. All stored state,copy/update guards and other Font methods retain emitted runtime tokens. Tests now require true for independent equal metadata/paint/alignment/geometry/transparency values and false for differences. Earlier task162/181 identity wording and the one equal-value identity expectation were incorrect;this correction supersedes that interpretation without rewriting historical source evidence. Physical COW/refcount/cache/weak/lifetime mechanisms remain erased under JS GC. Full unrepresented Font attributes/config/device/rendering and Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad parity promotion."
+    },
+    "capability": "Native Font IsSameInstance value predicate",
+    "gaps": [
+      "Full unrepresented Font attributes,configuration/device/rendering and broad parity remain pending.",
+      "Physical COW identity/refcounts are not simulated.",
+      "Calc/EditEngine pools/document/UI/same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/vcl/source/font/font.ts",
+          "marker": "Font.prototype.Equals.call"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/vcl/source/font/native-font-values.test.ts",
+          "marker": "matches native IsSameInstance value equality"
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/native-font-metadata.test.ts",
+          "marker": "preserves native value comparisons"
+        },
+        {
+          "path": "apps/office/e2e/shared/font-values.spec.ts",
+          "marker": "independentEqual"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native Font IsSameInstance correction (task182)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-169"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vcl/source/font/font.cxx",
+          "marker": "bool Font::IsSameInstance"
+        },
+        {
+          "path": "include/o3tl/cow_wrapper.hxx",
+          "marker": "return a.same_object(b) || *a == *b;"
+        },
+        {
+          "path": "vcl/source/font/font.cxx",
+          "marker": "bool ImplFont::operator=="
+        }
+      ],
+      "tests": [
+        {
+          "path": "vcl/qa/cppunit/font.cxx",
+          "marker": "VclFontTest::testAlignment"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/vcl/font.hxx",
+          "marker": "typedef o3tl::cow_wrapper< ImplFont > ImplType;"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-font-is-same-instance-value-comparison",
+    "scopeLimitations": [
+      "Task182 corrects the prior identity-only interpretation of Font IsSameInstance. Native Font stores cow_wrapper<ImplFont>;both Font operator== and IsSameInstance use its operator==,which returns shared-object identity OR ImplFont value equality. The existing represented Font Equals therefore supplies the correct observable value predicate for independent equal handles,without porting C++ ownership machinery. All stored state,copy/update guards and other Font methods retain emitted runtime tokens. Tests now require true for independent equal metadata/paint/alignment/geometry/transparency values and false for differences. Earlier task162/181 identity wording and the one equal-value identity expectation were incorrect;this correction supersedes that interpretation without rewriting historical source evidence. Physical COW/refcount/cache/weak/lifetime mechanisms remain erased under JS GC. Full unrepresented Font attributes/config/device/rendering and Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad parity promotion."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

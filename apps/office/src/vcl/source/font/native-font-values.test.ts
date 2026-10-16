@@ -32,7 +32,7 @@ it("retains original transparent colors,alignment and zero size defaults", /** N
     TextAlign.TextAlign_FORCE_EQUAL_SIZE,
   ]).toEqual([0, 1, 2, 2147483647]);
 });
-it("copies actual paint values and preserves native no-op assignment identity", /** Input Color mutation must not change the font. @returns Nothing. */ () => {
+it("copies actual paint values and preserves native repeated-assignment equality", /** Input Color mutation must not change the font. @returns Nothing. */ () => {
   const f = new Font(),
     original = new Font(f),
     color = new Color(0x123456);
@@ -108,4 +108,56 @@ it("copies native geometry and retains guarded size,height and average-width ali
   f.SetAverageFontWidth(12);
   expect(f.Equals(copy)).toBe(true);
   expect(copy.GetFontSize()).toBe(copy.GetAverageFontSize());
+});
+
+it("matches native IsSameInstance value equality for independently updated handles", /** The native cow_wrapper comparison is same_object OR ImplFont equality,not an identity-only predicate. @returns Nothing. */ () => {
+  const left = new Font(),
+    right = new Font();
+  for (const font of [left, right]) {
+    font.SetFamilyName("Independent");
+    font.SetColor(new Color(0x123456));
+    font.SetFillColor(new Color(0xabcdef));
+    font.SetAlignment(TextAlign.ALIGN_BOTTOM);
+    font.SetFontSize(new Size(12, 24));
+    font.SetTransparent(false);
+  }
+  expect(left.IsSameInstance(right)).toBe(true);
+  expect(right.IsSameInstance(left)).toBe(true);
+  expect(left.IsSameInstance(left)).toBe(true);
+  const changes: ((font: Font) => void)[] = [
+    /** Different paint color. @param f - Actual font. @returns Nothing. */ (f) =>
+      f.SetColor(new Color(0x654321)),
+    /** Different fill. @param f - Actual font. @returns Nothing. */ (f) =>
+      f.SetFillColor(new Color(0xabcdef + 1)),
+    /** Different alignment. @param f - Actual font. @returns Nothing. */ (f) =>
+      f.SetAlignment(TextAlign.ALIGN_TOP),
+    /** Different width. @param f - Actual font. @returns Nothing. */ (f) =>
+      f.SetAverageFontWidth(13),
+    /** Different height. @param f - Actual font. @returns Nothing. */ (f) => f.SetFontHeight(25),
+    /** Different transparency. @param f - Actual font. @returns Nothing. */ (f) =>
+      f.SetTransparent(true),
+  ];
+  for (const change of changes) {
+    const candidate = new Font(right);
+    change(candidate);
+    expect(left.IsSameInstance(candidate)).toBe(false);
+    expect(left.IsSameInstance(right)).toBe(true);
+  }
+});
+
+it("keeps native Font IsSameInstance independent of a derived equality overload", /** Native Font comparison is nonvirtual;the receiver uses the base value operation. @returns Nothing. */ () => {
+  /** Actual Font subtype with a hiding equality operation,as C++ allows for a derived Font caller. */ class DerivedFont extends Font {
+    /** Represents a distinct derived equality overload. @param other - Native font. @returns False. */ override Equals(
+      other: ConstFont,
+    ): boolean {
+      void other;
+      return false;
+    }
+  }
+  const derived = new DerivedFont(),
+    plain = new Font();
+  derived.SetFamilyName("Same");
+  plain.SetFamilyName("Same");
+  expect(derived.Equals(plain)).toBe(false);
+  expect(derived.IsSameInstance(plain)).toBe(true);
 });

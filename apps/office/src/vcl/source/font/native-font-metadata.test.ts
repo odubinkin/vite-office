@@ -1,4 +1,4 @@
-/** @fileoverview Source-backed Font metadata defaults, independent copies and no-op identity; no native memory/ABI probe. */
+/** @fileoverview Source-backed Font metadata defaults, independent copies and native value equality; no native memory/ABI probe. */
 import { expect, expectTypeOf, it } from "vitest";
 import { Font, type ConstFont } from "./font";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
@@ -27,7 +27,7 @@ it("retains native empty and unknown metadata defaults", /** Checks actual ImplF
 });
 
 it.each(["familyName", "styleName", "family", "pitch", "charSet"] as const)(
-  "copies %s independently and preserves no-op setter identity",
+  "copies %s independently and preserves native value comparisons",
   /** Checks mutations through real public aliases and all represented inequality paths. @param field - Changed member. @returns Nothing. */ (
     field,
   ) => {
@@ -63,7 +63,7 @@ it.each(["familyName", "styleName", "family", "pitch", "charSet"] as const)(
     expect(copy.IsSameInstance(second)).toBe(true);
     change(source);
     expect(source.Equals(copy)).toBe(true);
-    expect(source.IsSameInstance(copy)).toBe(false);
+    expect(source.IsSameInstance(copy)).toBe(true);
     source.SetFamilyName(source.GetFamilyName());
     source.SetStyleName(source.GetStyleName());
     source.SetFamily(source.GetFamilyType());

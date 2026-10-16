@@ -23,11 +23,19 @@ test("uses native stored font colors alignment and size in Chromium", /** Loads 
       font.SetFillColor(new n.Color(0xffffff));
       font.SetAlignment(n.TextAlign.ALIGN_BOTTOM);
       font.SetFontSize(new n.Size(12, 24));
+      const independent = new n.Font();
+      independent.SetTransparent(false);
+      independent.SetColor(new n.Color(0x123456));
+      independent.SetFillColor(new n.Color(0xffffff));
+      independent.SetAlignment(n.TextAlign.ALIGN_BOTTOM);
+      independent.SetFontSize(new n.Size(12, 24));
+      const independentEqual = font.IsSameInstance(independent);
       const held = new n.Font(font);
       font.SetFontSize(new n.Size(12, 24));
       const same = font.IsSameInstance(held);
       font.SetFontHeight(25);
       return {
+        independentEqual,
         sameFill,
         same,
         color: font.GetColor().toUInt32(),
@@ -39,6 +47,7 @@ test("uses native stored font colors alignment and size in Chromium", /** Loads 
     },
   );
   expect(result).toEqual({
+    independentEqual: true,
     sameFill: false,
     same: true,
     color: 0x123456,

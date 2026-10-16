@@ -2394,3 +2394,9 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Source: `vcl/source/font/font.cxx`, `Font::SetFillColor`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Observation: only a changed fill color enters the setter body. A changed transparent color sets mbTransparent=true,while a changed opaque color leaves the flag unchanged. Repeating the same transparent color after SetTransparent(false) therefore retains false. These fields are explicitly marked compatibility state in ImplFont;the asymmetry may be intentional.
 - Decision: preserve guarded assignment and independent flag state. Do not derive transparency from current fill color,force false for opaque fill,or apply side effects to no-op assignments. Actual shared Font regressions cover all transitions. No wider renderer/document effect is claimed.
+
+## CALC-169: Font IsSameInstance also accepts equal independent values
+
+- Source: `vcl/source/font/font.cxx`, `Font::IsSameInstance`;`include/vcl/font.hxx`, ImplType;`include/o3tl/cow_wrapper.hxx`, operator==;pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the method name suggests an identity predicate,but its implementation uses the same cow_wrapper operator== as Font equality. That operator returns same_object OR dereferenced value equality. Independently changed handles that arrive at equal values therefore compare true. This is an unexpected naming contract,not an established upstream defect.
+- Decision: preserve the exact value result and correct our earlier identity-only implementation/test. Reuse represented Font equality;do not port C++ reference counting or physical COW merely to reproduce this observable predicate. Other full Font fields remain outside current verified scope.

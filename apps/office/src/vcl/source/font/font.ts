@@ -87,9 +87,9 @@ export class Font {
     if (this.GetCharSet() !== charSet)
       this.mpImplFont = Object.freeze({ ...this.mpImplFont, charSet });
   }
-  /** Native shared implementation identity, distinct from value equality. @param other - Font. @returns Shared identity. */
+  /** Original cow_wrapper comparison admits shared state or equal values despite this method name;reuse represented Font equality without implementing C++ ownership. @param other - Font. @returns Equal represented value. */
   public IsSameInstance(other: ConstFont): boolean {
-    return this.mpImplFont === (other as Font).mpImplFont;
+    return Font.prototype.Equals.call(this, other);
   }
   /** Native borrowed const color value,valid until owner mutation. @returns Color. */
   public GetColor(): Readonly<Color> {
