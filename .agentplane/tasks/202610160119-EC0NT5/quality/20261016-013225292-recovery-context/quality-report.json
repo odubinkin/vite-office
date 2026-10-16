@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160119-EC0NT5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T01:32:25.292Z",
+  "verdict": "pass",
+  "summary": "Same-agent source/evidence audit passes native document options;not an independent review.",
+  "evaluated_sha": "13b321d6ee5cbbda54b1daec9f2c49c9c8785963",
+  "blueprint_digest": "078f68df31f6dc86df906075515763b4269f7f21411ebe14d7b48e8239610800",
+  "findings": [
+    "Actual ScDocOptions/ScTpCalcItem complete represented value API;shared SearchParam and locale fallback reused,285measurement fields and1950schema exact,17native comparison fields match.19related/192Calc,exact raw100,13gates,build and actual Chromium/DOM-free Worker/Writer pass,4refs restored. CALC171/172 preserved;live configuration/ScDocCfg/formatter/document/UI/ODS remain pending. No compiler or memory engine or all-app run."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160119-EC0NT5/README.md",
+    "output/playwright/task185-checks/final-verification.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

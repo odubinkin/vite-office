@@ -4,7 +4,7 @@ title: "Implement native Calc document calculation options"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "19related/192Calc pass;exact6related(4shared+2Calc)/35Calc owners raw S/B/F/L100,every counter positive.13gates,9native pins,285locale fields,1950schema,17comparison fields,unchanged prior locale/shared/Writer/guard;build and real Chromium/DOM-free Worker/Writer pass,4refs restored. CALC171/172 retained;full UI/ODS pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T01:32:25.292Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent source/evidence audit passes native document options;not an independent review."
+  evaluated_sha: "13b321d6ee5cbbda54b1daec9f2c49c9c8785963"
+  blueprint_digest: "078f68df31f6dc86df906075515763b4269f7f21411ebe14d7b48e8239610800"
+  evidence_refs:
+    - ".agentplane/tasks/202610160119-EC0NT5/README.md"
+    - ".agentplane/tasks/202610160119-EC0NT5/quality/20261016-013225292-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160119-EC0NT5/quality/20261016-013225292-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160119-EC0NT5/quality/20261016-013225292-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160119-EC0NT5/blueprint/resolved-snapshot.json"
+    - "output/playwright/task185-checks/final-verification.json"
+  findings:
+    - "Actual ScDocOptions/ScTpCalcItem complete represented value API;shared SearchParam and locale fallback reused,285measurement fields and1950schema exact,17native comparison fields match.19related/192Calc,exact raw100,13gates,build and actual Chromium/DOM-free Worker/Writer pass,4refs restored. CALC171/172 preserved;live configuration/ScDocCfg/formatter/document/UI/ODS remain pending. No compiler or memory engine or all-app run."
 commit: null
 comments:
   -
