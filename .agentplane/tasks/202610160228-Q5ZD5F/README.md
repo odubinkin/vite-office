@@ -1,10 +1,11 @@
 ---
 id: "202610160228-Q5ZD5F"
 title: "Implement native system language resolution and locale wrappers"
-status: "DOING"
+result_summary: "Implemented native system/configured language scalar state,public Locale wrappers and one reused platform Locale preparation;existing text/Calc defaults honor configured language. No RTL memory engine. Full LanguageTag/font/pool/document/UI/ODS and next full all-app run remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task188-checks/final-verification.json"
   findings:
     - "28related/196Calc,exact10shared/36Calc raw100,every counter positive,13gates.9native pins/2aliases/default state,moved host preparation unchanged,old private/consumer/Writer/guard owners unchanged. Actual configured language affects existing text/Calc defaults and closes empty-Locale fallback gap. Build and real Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. Native platform role is explicitly divergent browser input,not OS/RTL ABI/body parity. Full LanguageTag/font/pool/document/UI/ODS pending;no compiler/ICU/memory engine/all-app run."
-commit: null
+commit:
+  hash: "d6577ba4e321f353bfefae30fcc54241ab8e1608"
+  message: "✅ Q5ZD5F quality: record system language verification"
 comments:
   -
     author: "CODER"
     body: "Start: port actual native system/data/UI language resolution and Locale wrappers,reuse host Locale preparation and correct empty-language shared fallback;verify related and Calc raw100 without RTL memory machinery."
+  -
+    author: "CODER"
+    body: "Verified: native configured/system/UI resolution and public Locale wrappers implemented;empty-language gap closed.28related/196Calc exact raw100,13gates,source audits,build and actual Chromium/controlled-host DOM-free Worker/Writer pass;4refs restored. Full LanguageTag/font/pool/document/UI/ODS pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "28related/196Calc,exact10shared/36Calc raw S/B/F/L100,every counter positive.13gates,9native pins/2aliases/defaults,unchanged moved host logic/private tables/consumers/Writer/guards. Actual configured/system/UI and empty-Locale real text/Calc consumers pass;build,Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. Platform input divergence explicit;full LanguageTag/font/pool/UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T02:55:31.123Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native configured/system/UI resolution and public Locale wrappers implemented;empty-language gap closed.28related/196Calc exact raw100,13gates,source audits,build and actual Chromium/controlled-host DOM-free Worker/Writer pass;4refs restored. Full LanguageTag/font/pool/document/UI/ODS pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T02:54:07.187Z"
+doc_updated_at: "2026-10-16T02:55:31.125Z"
 doc_updated_by: "CODER"
 description: "Task188: implement actual MsLangId configured/system/UI resolution and public Locale wrappers;reuse one browser platform-locale field binding instead of adding RTL locale memory structures or fake LanguageTag services."
 sections:
@@ -120,6 +133,10 @@ sections:
     - Observation: Runtime inventory identified incorrect browser-adaptation classification for the two insys source-mechanism files. They implement the native platform-language selection/input responsibility at its upstream-shaped source boundary;their browser input strategy is a stack divergence. Runtime/Calc/build/Chromium/Worker/Writer checks passed;final audit correctly refused pending metadata gates.
       Impact: The records must distinguish native platform-mechanism responsibility from browser application adapters and must not claim exact Unix/Win32/RTL bodies.
       Resolution: Map the actual inunx platform input/selection responsibility with explicit divergent source status and module-resolution/responsibility-split rationale. Retain browser input/ABI limits and all parity flags unverified;change no guard algorithm or known-violation exemption. Rerun source records/gates/final audit only;passing runtime code is unchanged.
+extensions:
+  implementation_commit:
+    hash: "4aedd3c6ef731f50c86f99e17dc7e871cafc14b4"
+    message: "🔧 Q5ZD5F core: implement native system language resolution"
 id_source: "generated"
 ---
 ## Summary
