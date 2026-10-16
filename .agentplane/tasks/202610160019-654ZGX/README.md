@@ -4,7 +4,7 @@ title: "Restore shared VCL font paint alignment and size values for Calc pool de
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "CODER"
   note: "30related/187Calc pass;exact2shared and33Calc raw S/B/F/L100,every counter positive.13source gates,10native pins/13unchanged methods/7unchanged enums,build and actual Chromium Font/Writer startup-load-edit pass;4refs restored. Native stored Font values only,no ownership manager or full pool/document/UI/ODS claim,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T00:27:40.501Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent EVALUATOR phase reviews committede925351fd5b0 against approved stored-font prerequisite scope;all required bounded evidence passes. Not independent review or full VCL/pool/Calc UI/ODS certification."
+  evaluated_sha: "e925351fd5b047de2771b46c0e923bb05f6d55d7"
+  blueprint_digest: "b76a6b1bb72f0ad27f6a147b2c497bc4df379a4af8d69f364f6e30fbda3565ad"
+  evidence_refs:
+    - ".agentplane/tasks/202610160019-654ZGX/README.md"
+    - ".agentplane/tasks/202610160019-654ZGX/quality/20261016-002740501-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160019-654ZGX/quality/20261016-002740501-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160019-654ZGX/quality/20261016-002740501-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160019-654ZGX/blueprint/resolved-snapshot.json"
+    - "output/playwright/task181-checks/final-verification.json"
+    - "output/playwright/task181-checks/native-audit.json"
+    - "output/playwright/task181-checks/source-gates.json"
+    - "ap doctor OK with existing managed-hook warning;policy routing OK"
+  findings:
+    - "Existing Font now owns native represented paint,alignment and stored geometry using actual Color/Size and immutable JS value sharing. Guarded assignments,no-op identity,independent copies,fill flag asymmetry and represented noncolor/full equality match pinned source without memory or renderer mechanisms."
+    - "30related and187Calc scenarios pass;exact2shared and33Calc raw S/B/F/L100 with every counter positive.13source gates,build,actual Chromium Font values and Writer startup/load/edit pass;4refs restored.11non-task paths fit approved40."
+    - "Ten native source/header/QA/consumer blobs pinned;13old metadata methods and7old enum declarations unchanged. Reused Color,Size,browser default-font device and dependency guard unchanged. Native alignment QA assertions replayed and CALC168 retained;inventory broad parity remains unverified."
 commit: null
 comments:
   -
