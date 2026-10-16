@@ -1,10 +1,11 @@
 ---
 id: "202610160136-JAK7PV"
 title: "Implement native Calc grid option values using shared SVX"
-status: "DOING"
+result_summary: "Implemented native Calc drawing-grid options and corrected shared nonvirtual copy construction without duplicated grid fields. Inventory updated;source QA context limitation explicit. Full view/color/document/UI/ODS and next full all-app run remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "output/playwright/task186-checks/final-verification.json"
   findings:
     - "Actual existing shared grid state/getters reused,constructor/reset distinction and metric defaults preserved. Initial derived-copy regression fixed by nonvirtual base binding;15other shared methods unchanged.18related/196Calc exact raw100,13gates,5native pins/7comparison fields,build and real Chromium/DOM-free Worker/Writer pass,4refs restored. Native QA anchor is explicitly context only;full view/color/configuration/document/UI/ODS remains pending,no compiler/memory engine/all-app run."
-commit: null
+commit:
+  hash: "36a0faffed0fc604937d19842abc886ed82360fe"
+  message: "✅ JAK7PV quality: record Calc grid options verification"
 comments:
   -
     author: "CODER"
     body: "Start: reuse actual SVX grid values for native Calc reset/comparison and correct shared copy-constructor nonvirtual dispatch;verify related and Calc raw100."
+  -
+    author: "CODER"
+    body: "Verified: complete native ScGridOptions reuses shared SVX;constructor binding regression fixed.18related/196Calc,exact raw100,13gates,source audits,build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. Full UI/ODS remains pending."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Initial real derived-copy regression reproduced and fixed.18related/196Calc,exact related/Calc raw S/B/F/L100,every counter positive;13gates,5native pins,7comparison fields,15unchanged shared methods and whole module except ctor. Build,actual Chromium/DOM-free Worker/Writer pass,4refs restored. Native QA context limit explicit;full UI/ODS pending,no all-app run."
+  -
+    type: "status"
+    at: "2026-10-16T01:44:29.255Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete native ScGridOptions reuses shared SVX;constructor binding regression fixed.18related/196Calc,exact raw100,13gates,source audits,build and actual Chromium/DOM-free Worker/Writer pass;4refs restored. Full UI/ODS remains pending."
 doc_version: 3
-doc_updated_at: "2026-10-16T01:44:05.947Z"
+doc_updated_at: "2026-10-16T01:44:29.256Z"
 doc_updated_by: "CODER"
 description: "Task186: port complete ScGridOptions value owner required by Calc view options,using existing SvxOptionsGrid and real ScOptionsUtil;correct shared copy-constructor nonvirtual dispatch and verify actual browser/Worker."
 sections:
@@ -116,6 +129,10 @@ sections:
     - Observation: Inventory requires a nonempty upstream QA anchor;bounded source search found no ScGridOptions/GetGridOptions case in Calc/SVX QA.
       Impact: The implemented drawing-grid value class has source-derived tests,not an executed original upstream QA case.
       Resolution: Keep the existing related ScUiCalcTest cell-grid-visibility anchor as explicitly unexecuted view context only,a different field;record this limitation and retain broad parity flags false. Do not fabricate direct QA or add a native compiler probe.
+extensions:
+  implementation_commit:
+    hash: "7aa18d0815fad23723e7f214aa039b3c7a1a0581"
+    message: "🔧 JAK7PV core: reuse shared SVX for native Calc grid options"
 id_source: "generated"
 ---
 ## Summary
