@@ -334,3 +334,23 @@ boundary tests cover rounding, range and the historical rounded DBL_MAX fix.
 This prepares ODS numeric attributes; it does not provide Calc XML contexts,
 a document owner chain or same-model ODS round trips. Numeric formatting and
 unit-converting overloads remain separate unimplemented responsibilities.
+
+## Native document calculation options (task185)
+
+ScDocOptions and ScTpCalcItem now own actual calculation settings used by the
+eager ScPoolHelper member: iteration defaults100/0.001,null date1899-12-30,
+unlimited precision65535,normal shipped two-digit-year threshold1950 and
+locale-based tab distance709metric/720otherwise. Shared SearchParam owns mode
+conversion;copy/reset/setters retain native cache and flag transitions.
+Comparison deliberately retains the source omission of IgnoreLineBreaks and
+its direct comparison of the lazy mode cache. No independent options model,
+formatter class or configuration service is fabricated.
+
+The shared locale owner resolves both decimal and measurement fields through
+one original fallback algorithm. All285LC_CTYPE measurement resources are
+extracted with original references;mapping is ASCII-insensitive Metric versus
+US for every other string,including UK. Existing decimal consumers keep their
+behavior. Formatter defaults bind the current shipped Common.xcs property;
+full user configuration services,ScDocCfg and formatter remain unimplemented.
+These values prepare document construction and ODS settings,not a complete
+ScDocument/sheet/column chain or UI/ODS milestone.

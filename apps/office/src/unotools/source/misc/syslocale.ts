@@ -2,8 +2,8 @@
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { getLocaleDecimalSeparator } from "../../../i18npool/source/localedata/localedata";
-/** Browser host-locale query replaces only the native system-locale configuration source. Raw browser language is retained even when Intl lacks that locale; Intl supplies the host default in non-DOM environments. @returns First UTF16 unit of the original locale decimal separator. */
-export function getSystemDecimalSeparator(): string {
+/** Browser host-locale query replaces only the native system-locale configuration source. Raw browser language is retained even when Intl lacks that locale; Intl supplies the host default in non-DOM environments. @returns Actual prepared Locale value. */
+export function getSystemLocale(): Locale {
   const input = globalThis.navigator?.language || new Intl.NumberFormat().resolvedOptions().locale;
   const units = input.split("-");
   units[0] = (units[0] as string).toLowerCase();
@@ -30,7 +30,7 @@ export function getSystemDecimalSeparator(): string {
     unicode(region),
     unicode(simple ? "" : tag),
   );
-  return getLocaleDecimalSeparator(locale).charAt(0);
+  return locale;
 }
 
 /** Existing known-length shared string constructor at the browser ASCII language-tag boundary. @param value - BCP47 ASCII text. @returns Actual shared string. */
@@ -44,4 +44,9 @@ function unicode(value: string): OUString {
     ),
     value.length,
   );
+}
+
+/** Existing source decimal field over the shared host Locale query. @returns Original first decimal unit. */
+export function getSystemDecimalSeparator(): string {
+  return getLocaleDecimalSeparator(getSystemLocale()).charAt(0);
 }

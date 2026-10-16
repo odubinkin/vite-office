@@ -2415,3 +2415,26 @@ rule and the source encoding export, which writes only `x-symbol`.
   reachable Calc import error is established.
 - Port: preserve value, status, consumed end and SAX success/rest behavior.
   Consumers must follow their own upstream checks; no stricter shared parser.
+
+## CALC-171 — document-option comparison ignores a setting and observes a cache
+
+- Source: `sc/inc/docoptio.hxx` `ScDocOptions::operator==` and
+  `GetFormulaSearchType`,plus setters in `sc/source/core/tool/docoptio.cxx`.
+- Observation: equality omits `bIgnoreLineBreaks`,although copy/reset retain
+  it. Equality compares `eFormulaSearchType` directly. Calling the const lazy
+  mode getter on only one of two equal Unknown-mode values can make them
+  unequal without a setting change;normalizing both restores equality.
+- Status: source-observable comparison contract;no claim that a reachable
+  consumer loses settings or that upstream intends different behavior.
+- Port: preserve both effects;test independent copies and lazy normalization.
+
+## CALC-172 — locale measurement text UK maps to US
+
+- Source: `unotools/source/i18n/localedatawrapper.cxx`
+  `mapMeasurementStringToEnum`,and shipped LC_CTYPE measurement fields.
+- Observation: only ASCII-case-insensitive metric maps to Metric. All other
+  strings,including the UK spelling present in two source locale resources,
+  map to US. en_GB itself explicitly uses Metric.
+- Status: source policy,possibly intentional;not a demonstrated upstream bug.
+- Port: preserve mapping and the original resource values without guessing a
+  browser Intl/territory-specific measurement policy.
