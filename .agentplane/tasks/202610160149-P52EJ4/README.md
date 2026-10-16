@@ -4,7 +4,7 @@ title: "Implement shared native language ID and locale conversion"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "24related/196Calc,exact6shared/36Calc raw S/B/F/L100,every counter positive.13gates,8native pins,643+6rows/11special IDs exact,allUInt16 modes,302prior values+4canonical corrections,actual text/Calc consumer regressions. Build,real Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. Guard logic unchanged,native edges only. CALC173 preserved;public system/full LanguageTag/UI/ODS pending,no all-app run."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-16T02:19:59.255Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent source/evidence audit passes real private MsLangId conversion and canonical shared fallback corrections;not an independent review."
+  evaluated_sha: "bffbc66d73125c01726deb6c1d42b34c331b53c4"
+  blueprint_digest: "dd33589ee6a88027d40980ce65e9930b1932960eb8dfa1cb873f4a256806ad72"
+  evidence_refs:
+    - ".agentplane/tasks/202610160149-P52EJ4/README.md"
+    - ".agentplane/tasks/202610160149-P52EJ4/quality/20261016-021959255-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610160149-P52EJ4/quality/20261016-021959255-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610160149-P52EJ4/quality/20261016-021959255-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610160149-P52EJ4/blueprint/resolved-snapshot.json"
+    - "output/playwright/task187-checks/final-verification.json"
+  findings:
+    - "24related/196Calc,exact6shared/36Calc raw100,every counter positive,13gates.8native pins,643ordered+6private rows/11special IDs and aliases exact;allUInt16 forward modes,stable Locale outputs,302prior values+4source-corrected projections and actual text/Calc consumers. Guard algorithms unchanged,only native SAL/UDKAPI edges/one expected-data group updated,43boundary tests pass. Build and actual Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. CALC173 retained;public system/full LanguageTag/LocaleData/font/pool/document/UI/ODS pending,no compiler/ICU/memory engine/all-app run."
 commit: null
 comments:
   -
