@@ -7,6 +7,13 @@ This is the current priority map; historical task notes in
 [calc-core.md](calc-core.md) are evidence of their individual scopes, not
 current readiness estimates or scheduling instructions.
 
+Task189 audits the required Font language owner in
+[Calc LanguageTag: native JavaScript suitability](calc-language-tag-native-js-audit.md).
+Direct Intl canonicalization and minimization fail pinned native cases;
+preserve LanguageTag's known-mapping fast path and lazy value/state contracts.
+This evidence does not require a new ICU/liblangtag implementation or establish
+that the missing LanguageTag owner has been completed.
+
 ## Current conclusion
 
 An editable Calc UI and same-model ODS import/export are not ready. Existing
