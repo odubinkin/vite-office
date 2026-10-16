@@ -354,3 +354,17 @@ behavior. Formatter defaults bind the current shipped Common.xcs property;
 full user configuration services,ScDocCfg and formatter remain unimplemented.
 These values prepare document construction and ODS settings,not a complete
 ScDocument/sheet/column chain or UI/ODS milestone.
+
+## Native Calc drawing-grid options (task186)
+
+Complete ScGridOptions reuses the existing shared SvxOptionsGrid owner and
+real ScOptionsUtil measurement binding. Default/copy construction keeps common
+SVX values100/0/100/0,false/true/false;only explicit SetDefaults resets the
+base then assigns Calc steps1000metric/1270otherwise and divisions1.
+Seven-field equality reads native fields directly,including when a derived
+class hides getters. Shared base copy construction now binds its nonvirtual
+copy operation;the initial real derived-copy regression failed before this
+correction. Existing shared methods and native fixture observations remain.
+No new grid array,duplicate state,configuration/color/view/document service
+or native memory manager is introduced. Full view/color settings and the
+actual document/sheet/column/UI/ODS chain remain pending.

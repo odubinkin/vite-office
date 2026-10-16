@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-fa57947b-531e-448f-b73b-6f9b86861f50",
+    "capabilityId": "CAP-fa57947b-531e-448f-b73b-6f9b86861f50",
+    "suite": "calc",
+    "subsystem": "view-grid-options",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task186 ports the complete native ScGridOptions value responsibility over actual shared SvxOptionsGrid. Construction retains100/0/100/0,false/true/false;explicit SetDefaults first resets all base fields then uses real source measurement for1000metric/1270otherwise and divisions1. Equality reads all seven actual fields in source order. Base-copy construction binds the real nonvirtual copy operation rather than dispatching to hidden derived assignment. No duplicate grid storage/getters or fake view/document/color/configuration service. Full ScViewOptions,SvxGridItem,color settings and connected Calc document/UI/ODS remain pending;physical ownership uses JS GC."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task186 ports the complete native ScGridOptions value responsibility over actual shared SvxOptionsGrid. Construction retains100/0/100/0,false/true/false;explicit SetDefaults first resets all base fields then uses real source measurement for1000metric/1270otherwise and divisions1. Equality reads all seven actual fields in source order. Base-copy construction binds the real nonvirtual copy operation rather than dispatching to hidden derived assignment. No duplicate grid storage/getters or fake view/document/color/configuration service. Full ScViewOptions,SvxGridItem,color settings and connected Calc document/UI/ODS remain pending;physical ownership uses JS GC."
+    },
+    "capability": "Native Calc drawing-grid option values",
+    "gaps": [
+      "Full ScViewOptions,rendering/color configuration,SvxGridItem and document/UI/ODS remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/viewopti.hxx",
+          "marker": "class ScGridOptions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/viewopti.cxx",
+          "marker": "ScGridOptions::SetDefaults"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/uicalc/uicalc.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf142854_GridVisibilityImportXlsxInHeadlessMode_Globally)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/optgrid.hxx",
+          "marker": "class SVX_DLLPUBLIC SvxOptionsGrid"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/viewopti.ts",
+          "marker": "ScGridOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/viewopti.grid.ts",
+          "marker": "export class ScGridOptions"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/viewopti.grid.test.ts",
+          "marker": "native Calc grid options"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/native-grid-copy-binding.test.ts",
+          "marker": "copies actual base fields"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native Calc drawing-grid options (task186)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "drawing-grid-option-values",
+    "scopeLimitations": [
+      "Complete ScGridOptions value class only;source-derived tests and existing shared native observations are executed evidence.",
+      "No native compiler/probe,physical ownership engine or full original view/Calc QA claim.",
+      "The ScUiCalcTest cell-grid-visibility anchor is unexecuted view-settings context and a different display field;it is not direct drawing-grid/ScGridOptions QA or behavior proof. Source-derived assertions and existing shared native observations are the executed evidence."
+    ]
+  }
+}

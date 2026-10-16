@@ -11,7 +11,7 @@ export class SvxOptionsGrid {
   protected m_bGridVisible = false;
   /** Original default and implicit value-copy construction. @param source - Optional actual const source. @returns Options. */
   constructor(source?: Readonly<SvxOptionsGrid>) {
-    if (source) this.copy_assign(source);
+    if (source) SvxOptionsGrid.prototype.copy_assign.call(this, source);
   }
   /** Original implicit copy assignment reads actual protected value fields. @param sourceReference - Initialized const source. @returns Recipient. */
   copy_assign(sourceReference: Readonly<SvxOptionsGrid>): this {

@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Original shared grid-value header/core responsibility, constructor defaults and actual field-copy/getter/setter behavior.",
-      "Native UInt32 parameters use JSinteger narrowing; no Calc-specific duplicated model or fake service."
+      "Native UInt32 parameters use JSinteger narrowing; no Calc-specific duplicated model or fake service.",
+      "Task186 ports the complete native ScGridOptions value responsibility over actual shared SvxOptionsGrid. Construction retains100/0/100/0,false/true/false;explicit SetDefaults first resets all base fields then uses real source measurement for1000metric/1270otherwise and divisions1. Equality reads all seven actual fields in source order. Base-copy construction binds the real nonvirtual copy operation rather than dispatching to hidden derived assignment. No duplicate grid storage/getters or fake view/document/color/configuration service. Full ScViewOptions,SvxGridItem,color settings and connected Calc document/UI/ODS remain pending;physical ownership uses JS GC."
     ],
     "omittedResponsibilities": [
       "Task100 implements complete actual shared SvxOptionsGrid default/value/copy/implicit assignment and all14getter/setter contracts, original protected fields100/0/100/0/false/true/false. Source responsibility follows include/svx/optgrid.hxx and svx/source/dialog/optgrid.cxx; native UInt32 scalar argument narrowing uses JS>>>0 without library. Ordinary value fields and copies, no count/pool/finalizer/memory wrapper. Full unchanged original class and constructor compile over actual sal/svx dependency headers and verified real generated configuration, normal2commands7sourcehashes1configuration. Full19099-byte625-line initialized default/13boundary-inputs8bool-combinations/value-copy/selfassignment/input-mutation stream matches. GUI/grid-item/Sfx/color/locale/config/Calc-derived default services unimplemented separate real owners, not stubbed. Calc ScGridOptions:SetDefaults overrides drawing steps by actual metric service1000/1270; sharedbase defaults remain100. New shared owner has no runtime dependencies/existing consumers; Writer code unchanged, genuine integrations should reuse owner when ported. Original ScUiCalcTest cell-grid visibility QA anchor is unexecuted view-settings context only, a different display field, not direct drawing-grid/SvxOptionsGrid QA or behavior proof; full actual native stream provides proof. Physical layout/native ABI/uninitialized/GUI/wholeQA excluded, no sanitizer/memory experiment. Actual CalcView/config/Doc/UI/ODS pipeline pending; nextfull101first/continue then pause second111/repairs, Writer-only repair separate."
@@ -28,6 +29,10 @@
         {
           "path": "apps/office/src/svx/source/dialog/optgrid.test.ts",
           "marker": "matches complete original shared grid option defaults and value-copy histories"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/native-grid-copy-binding.test.ts",
+          "marker": "copies actual base fields"
         }
       ],
       "upstream": [
