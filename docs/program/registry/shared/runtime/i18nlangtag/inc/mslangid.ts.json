@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/inc/mslangid.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-id-locale-conversion",
+    "capabilityIds": [
+      "CAP-bf560a1c-defb-4644-bf0b-34cd0dff0ae2"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/inc/mslangid.ts",
+        "apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
+        "docs/program/calc-ui-readiness.md#Shared native language ID and Locale conversion (task187)"
+      ],
+      "justification": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MsLangId"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/i18nlangtag/mslangid.hxx",
+      "upstreamSymbols": [
+        "MsLangId"
+      ]
+    }
+  }
+}

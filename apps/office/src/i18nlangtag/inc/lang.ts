@@ -23,3 +23,6 @@ export const LANGUAGE_SYSTEM = LanguageType(0x0000);
 export const LANGUAGE_INVARIANT = LanguageType(0x007f);
 /** Original German ID used by SvxLanguageItem factory. */
 export const LANGUAGE_GERMAN = LanguageType(0x0407);
+
+/** Original US English fallback/fast-path identity. */
+export const LANGUAGE_ENGLISH_US = LanguageType(0x0409);

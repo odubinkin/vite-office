@@ -2438,3 +2438,15 @@ rule and the source encoding export, which writes only `x-symbol`.
 - Status: source policy,possibly intentional;not a demonstrated upstream bug.
 - Port: preserve mapping and the original resource values without guessing a
   browser Intl/territory-specific measurement policy.
+
+## CALC-173 — empty qualified fallback matches an empty table fallback
+
+- Source: `i18nlangtag/source/isolang/isolang.cxx`
+  `MsLangId::Conversion::lookupFallbackLocale`,BCP47 entry search.
+- Observation: Locale Language `qlt` with empty Variant matches the first
+  empty `mpFallback` in the BCP47 table,so returns `ca-ES-valencia` rather
+  than the final en-US fallback. The condition compares fallback text
+  without requiring it to be nonempty.
+- Status: source-observable boundary only;full LanguageTag/producer
+  reachability and upstream intent are not established. No bug claim.
+- Port: preserve this exact result;do not add an empty-string guard.

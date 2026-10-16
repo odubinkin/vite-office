@@ -1,7 +1,10 @@
 /** @fileoverview Browser resource binding for the actual LocaleDataImpl numeric decimal field, preserving source first-name/language/default fallback and qlt fallback order. No UNO service facade is fabricated. */
 import separators from "./data/decimal-separators.json" with { type: "json" };
 import measurements from "./data/measurement-systems.json" with { type: "json" };
-import languageFallbacks from "../../../i18nlangtag/source/isolang/locale-fallbacks.json" with { type: "json" };
+import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import {
   getFallbackStrings,
   decomposeCanonicalLanguageTag,
@@ -9,25 +12,21 @@ import {
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 /** Actual embedded source resource values; no current Intl decimal data is substituted. */
 const resources = new Map<string, string>(Object.entries(separators));
-/** Source-projected language-only lookup results, including original language-ID overrides. */
+/** Original LC_CTYPE measurement resource values. */
 const measurementResources = new Map<string, string>(Object.entries(measurements));
-const defaults = new Map<string, string>(Object.entries(languageFallbacks));
+/** Uses the real native language-only fallback owner instead of a second projected lookup table. @param name - Prepared service language. @returns Source service name. */
+function fallbackServiceName(name: string): string {
+  const locale = MsLangId.Conversion.lookupFallbackLocale(
+    new Locale(unicode(name), new OUString(), new OUString()),
+  );
+  return text(locale.Language) === "qlt"
+    ? text(locale.Variant).replaceAll("-", "_")
+    : text(locale.Language) + (text(locale.Country) ? "_" + text(locale.Country) : "");
+}
 /** Original lookup-table exact or language-only fallback. @param name - Locale service name. @param values - Source field table. @returns Decimal resource, absent when the native service would not be found. */
 function lookup(name: string, values: ReadonlyMap<string, string>): string | undefined {
   return (
-    values.get(name) ??
-    (!name.includes("_")
-      ? values.get(
-          defaults.get(
-            name.replace(
-              /[A-Z]/g,
-              /** Original ASCII-only case conversion. @param unit - Uppercase ASCII unit. @returns Lowercase ASCII. */ (
-                unit,
-              ) => unit.toLowerCase(),
-            ),
-          ) ?? "en_US",
-        )
-      : undefined)
+    values.get(name) ?? (!name.includes("_") ? values.get(fallbackServiceName(name)) : undefined)
   );
 }
 /** Extracts the native string units, excluding OUString's logical trailing terminator. @param value - Shared string reference. @returns JS text. */

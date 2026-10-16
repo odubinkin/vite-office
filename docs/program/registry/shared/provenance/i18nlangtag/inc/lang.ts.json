@@ -15,7 +15,8 @@
       "LANGUAGE_HID_HUMAN_INTERFACE_DEVICE",
       "LANGUAGE_SYSTEM",
       "LANGUAGE_INVARIANT",
-      "LANGUAGE_GERMAN"
+      "LANGUAGE_GERMAN",
+      "LANGUAGE_ENGLISH_US"
     ],
     "upstreamSymbols": [
       "LanguageType",
@@ -23,16 +24,21 @@
       "LANGUAGE_GERMAN"
     ],
     "preservedResponsibilities": [
-      "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained."
+      "Task146 ports required original unsigned16 LanguageType identities, primary mask and SvxLanguageItem value/copy/German factory/int Any contracts for actual Calc Latin110/CJK115/CTL120 DONTKNOW defaults. JS numeric coercion erases strong_int tags, the MSVC-only helper base and instance/lifetime managers. Shared SfxEnumItem and Any preserve concrete payload equality ignoringWhich, signed16 queries, int32 extraction/uint16 narrowing, selector masks and unknown untouched success. Real LanguageTag LANGID/Locale conversion and SvtLanguageTable localized presentation remain unported; locale member is explicitly unsupportedfalse instead of a fake provider or guessed Intl mapping. Existing shared Locale is not duplicated. Only required special/default language declarations are represented. Complete Calc pool/document/connected UI/ODS remains pending; intentional browser I/O/recovery choices retained.",
+      "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine."
     ],
     "omittedResponsibilities": [
-      "The wider LANGID table, LanguageTag Locale conversion, localized language presentation and complete Calc model/UI/ODS are unported; native ABI/memory mechanisms are erased."
+      "Other named lang.h constants,full LanguageTag/system-language resolution,localized presentation and complete Calc model/UI/ODS remain pending. Task187 separately implements actual ordered mapping tables and private Conversion owners;native ABI/memory machinery is erased."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/i18nlangtag/inc/lang.ts",
           "marker": "LanguageType"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/isolang.test.ts",
+          "marker": "corrects exactly four prior fallback projections"
         }
       ],
       "upstream": [

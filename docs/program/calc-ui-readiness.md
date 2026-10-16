@@ -368,3 +368,28 @@ correction. Existing shared methods and native fixture observations remain.
 No new grid array,duplicate state,configuration/color/view/document service
 or native memory manager is introduced. Full view/color settings and the
 actual document/sheet/column/UI/ODS chain remain pending.
+
+## Shared native language ID and Locale conversion (task187)
+
+Real MsLangId.Conversion owns the ordered source ISO/script/BCP47/private
+entries and ID/Locale/override/fallback operations needed by LanguageTag and
+standard font/language attributes. It reuses actual Locale/OUString and SAL
+ASCII operations;native JS equality/prefix follows ASCII-only normalization.
+This does not require ICU,localized language labels or a fake LanguageTag.
+Unknown IDs preserve caller fields and the native override restart order is
+retained. Full LanguageTag/system settings,font defaults,pools and the actual
+Calc document/UI/ODS chain remain pending.
+
+The former306-language fallback projection is removed from production and
+retained only as a clearly named prior-projection test fixture.302results
+remain;four projection defects are corrected:ber -> kab-DZ,cmn -> zh-CN,
+fuv -> ff-NG,ji -> yi-IL. The previous generator stopped at a repeated script
+override;the real source continues into canonical ISO entries. Existing text
+tab decimals and Calc document tab distances now use the genuine shared
+fallback. These are corrections of local code,not suspected upstream bugs.
+
+The private table fallback and public MsLangId.getFallbackLocale are distinct:
+the latter resolves empty language through configured system settings first.
+That public/system responsibility and complete LocaleData service behavior
+remain pending;current normal nonempty service-name fallback uses the actual
+private conversion owner. No fake system provider or public wrapper is added.

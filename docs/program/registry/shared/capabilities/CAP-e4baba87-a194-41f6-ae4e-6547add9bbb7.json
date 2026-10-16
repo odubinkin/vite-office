@@ -54,7 +54,7 @@
           "marker": "\"fr_CH\""
         },
         {
-          "path": "apps/office/src/i18nlangtag/source/isolang/locale-fallbacks.json",
+          "path": "apps/office/src/test/fixtures/prior-language-first-fallbacks.json",
           "marker": "\"pt\""
         },
         {
@@ -140,7 +140,8 @@
     "scopeLimitations": [
       "Original value/container and typed property contracts are implemented and validated by348related/187Calc/19browser tests; this bounded acceptance does not certify translated presentation, diagnostic XML or all native service contracts.",
       "Prepared Locale numeric field and raw browser host locale binding are implemented. General SvtSysLocale/LocaleDataWrapper/LanguageTag interfaces and language-tag construction/canonicalization remain unported.",
-      "Full EditEngine/EditTextObject and Calc pool/document/connected UI/same-model ODS remain pending. Native binary ABI, new lifetime/refcount managers and C++ probes are outside this work. Existing deliberate browser I/O/recovery deviations remain."
+      "Full EditEngine/EditTextObject and Calc pool/document/connected UI/same-model ODS remain pending. Native binary ABI, new lifetime/refcount managers and C++ probes are outside this work. Existing deliberate browser I/O/recovery deviations remain.",
+      "Task187 replaces the prior language fallback projection with the actual shared MsLangId algorithm. The prior306-value projection is retained as a historical test fixture;four ber/cmn/fuv/ji results were wrong and are now source-corrected. Decimal/measurement consumers use actual shared fallback,not that fixture."
     ],
     "implemented": true,
     "contractParity": false,

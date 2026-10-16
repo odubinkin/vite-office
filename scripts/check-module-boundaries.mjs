@@ -82,7 +82,8 @@ const allowedEdges = new Map([
   ["formula", new Set(["offapi", "sal", "svl"])],
   ["framework", new Set(["sfx2", "svl"])],
   // Original lang.h strong_int/sal tags are erased into primitive numeric values.
-  ["i18nlangtag", new Set()],
+  // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
+  ["i18nlangtag", new Set(["sal", "udkapi"])],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
   // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
   ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
