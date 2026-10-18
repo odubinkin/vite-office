@@ -156,16 +156,27 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
   });
 
   it("records import failures without exposing package or XML error values", /** Checks sanitized failure reports. @returns Completion after import. */ async () => {
+    const malformed = await diagnoseOdtImport(
+      await replaceFixtureEntry(
+        "META-INF/manifest.xml",
+        new TextEncoder().encode("invalid manifest"),
+      ),
+    );
+    // Native ManifestReader discards SAX failures; ZipPackage can recover the MIME from mimetype.
+    expect(malformed.imported).toBe(true);
+    expect(JSON.stringify(malformed)).not.toContain("invalid manifest");
     const manifestFailure = await replaceFixtureEntry(
       "META-INF/manifest.xml",
-      new TextEncoder().encode("invalid manifest"),
+      new TextEncoder().encode(
+        '<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"><manifest:file-entry manifest:full-path="/" manifest:media-type="application/vnd.private.invalid-manifest"/></manifest:manifest>',
+      ),
     );
     const report = await diagnoseOdtImport(manifestFailure);
     expect(report.imported).toBe(false);
     expect(report.diagnostics).toContainEqual(
       expect.objectContaining({ kind: "import-error", stream: "package" }),
     );
-    expect(JSON.stringify(report)).not.toContain("invalid manifest");
+    expect(JSON.stringify(report)).not.toContain("application/vnd.private.invalid-manifest");
 
     const content = await new ZipFile(fixture).readTextEntry("content.xml");
     const changed = content.replace("</office:text>", "<office:spreadsheet/></office:text>");
