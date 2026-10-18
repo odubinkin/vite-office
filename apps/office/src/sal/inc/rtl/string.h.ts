@@ -9,3 +9,5 @@ export const RTL_STR_MAX_VALUEOFINT32 = 33;
 export const RTL_STR_MAX_VALUEOFINT64 = 65;
 /** Original unsigned64 formatting-buffer macro. */
 export const RTL_STR_MAX_VALUEOFUINT64 = 65;
+/** Original float-format buffer bound,including terminating zero. */
+export const RTL_STR_MAX_VALUEOFFLOAT = 15;

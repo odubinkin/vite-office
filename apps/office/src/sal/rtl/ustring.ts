@@ -293,3 +293,7 @@ export function rtl_ustr_valueOfUInt64(
 export function rtl_ustr_toAsciiUpperCase_WithLength(data: Uint16Array, length: number): void {
   str.replaceChars(new str.with_length(data, length | 0), str.toAsciiUpper);
 }
+/** Original Unicode float C wrapper over the genuine source template specialization. @param data - Native macro-sized borrowed output buffer or checked null pointer. @param value - Original float parameter,explicitly narrowed from the JS number binding. @returns Written length excluding terminating zero. */
+export function rtl_ustr_valueOfFloat(data: Uint16Array | null, value: number): number {
+  return str.valueOfFP(data, Math.fround(value));
+}

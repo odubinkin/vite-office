@@ -390,3 +390,5 @@ export const toAsciiUpper = new CaseReplace(isAsciiLowerCase, toAsciiUpperCase);
 export function replaceChars(range: with_length, replacer: CaseReplace): void {
   for (let i = 0; i < range.len; i++) range.p[i] = replacer.Replace(range.p[i] as number);
 }
+/** Original Unicode float valueOfFP specialization remains with the existing source arithmetic responsibility split. */
+export { valueOfFP } from "./strtmpl.math";

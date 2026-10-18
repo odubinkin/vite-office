@@ -13,7 +13,8 @@
       "doubleToString"
     ],
     "preservedResponsibilities": [
-      "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported."
+      "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported.",
+      "TaskK80KHH adds original rtl_ustr_valueOfFloat through actual valueOfFP Unicode/float/maxLen15 specialization and canonical macro15/header owners. Binary32 parameter narrowing precedes original checked null-buffer assertion. Consumed G7/period/no-group/trailing-zero-erasure preserves pre-round E/F selection,integer-significand half-up rounding,carry,three-digit signed exponents,NaN/INF/signedzero and full caller-buffer writes. Existing Automatic/Max and integer source function bodies remain unchanged. Host shortest binary64 text substitutes Dragonbox as an explicit stack binding;complete full original normal and ASan/UBSan SAL/CPPU observations compare37026binary32 input buffers including all256exponents/8mantissa patterns/bothsigns,decimal-boundary neighbors and32768deterministic full-bit samples. This is not exhaustive all2^32states,native ABI/lifetime,arbitrary malformed JS storage,general format modes or full VCL/Calc UI parity. Genuine cached dependencies are verified offline;no source stubs or network. VariationsToString/item/pool/UI integration remain pending."
     ],
     "omittedResponsibilities": [
       "Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
@@ -23,12 +24,20 @@
         {
           "path": "apps/office/src/sal/rtl/strtmpl.math.ts",
           "marker": "doubleToString"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/float-format.test.ts",
+          "marker": "matches every byte of native float output buffers"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
           "marker": "doubleToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "valueOfFP"
         }
       ]
     },

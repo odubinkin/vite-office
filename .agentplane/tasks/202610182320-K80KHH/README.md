@@ -4,7 +4,7 @@ title: "Implement native RTL float output for VCL axis serialization"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-18T23:26:36.930Z"
+  updated_by: "CODER"
+  note: "Actual native RTL float output matches all37026 complete original normal/ASanUBSan buffers;346source files/genuine69object graphs,original null assertion verified. WholeCalc299 and affected5files14cases pass raw100percent scopes. Types/build/static/style/docs/dependency/provenance/inventories/doctor/routing pass. No approximate VCL serializer or fake pool;overallgoalactive,nextfull30."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start:implement exact native float output primitive and compare full genuine native caller buffers under normal and sanitized execution before connecting VCL serialization."
+  -
+    type: "verify"
+    at: "2026-10-18T23:26:36.930Z"
+    author: "CODER"
+    state: "ok"
+    note: "Actual native RTL float output matches all37026 complete original normal/ASanUBSan buffers;346source files/genuine69object graphs,original null assertion verified. WholeCalc299 and affected5files14cases pass raw100percent scopes. Types/build/static/style/docs/dependency/provenance/inventories/doctor/routing pass. No approximate VCL serializer or fake pool;overallgoalactive,nextfull30."
 doc_version: 3
-doc_updated_at: "2026-10-18T23:21:07.601Z"
+doc_updated_at: "2026-10-18T23:26:36.981Z"
 doc_updated_by: "CODER"
 description: "Task23 of approved Calc UI/core goal:port original rtl_ustr_valueOfFloat/valueOfFP bound G7/no-group/erase float contract and macro/header ownership,without altering existing Automatic/Max output. Compare complete caller buffer writes against genuine full pinned SAL/CPPU under normal and ASan/UBSan using cached verified native dependencies. This is required by native VariationsToString and the actual missing font-variation item/pool. No approximate formatter,UI placeholder,network or merge;only calc checkout/branch."
 sections:
@@ -52,9 +58,42 @@ sections:
   Verify Steps: "Native probe --write with genuine full original normal+ASan/UBSan builds and verified offline dependencies:both complete buffer streams identical,exit0,no sanitizer diagnoses;original null output assertion aborts with original expression. Replay full source-pinned native fixtures through original public C/header/macro owners;edge powers/exponents,mantissa edges,rounding/notation boundaries,random binary32,NaNs/INF/signedzero,sentinels/terminators verified. Existing Automatic/Max and integer/RTL parsing tests remain unchanged and pass. Scoped raw100percent for changed strtmpl.math module including oldAutomatic/newG7 responsibility;wholeCalc raw100percent S/B/F/L. Types/build/static,touchedPrettier/eslint,dependency/docs/size/tree/provenance,shared+Calc scopedinventory,ap doctor/routing. Full application/e2e cadence not due(task30)."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-18T23:26:36.930Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Actual native RTL float output matches all37026 complete original normal/ASanUBSan buffers;346source files/genuine69object graphs,original null assertion verified. WholeCalc299 and affected5files14cases pass raw100percent scopes. Types/build/static/style/docs/dependency/provenance/inventories/doctor/routing pass. No approximate VCL serializer or fake pool;overallgoalactive,nextfull30.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:26:36.491Z, excerpt_hash=sha256:a31202c0c9ec87787e6bc79eb8e652b8574c832f429170a580373149a9b5819e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182320-K80KHH/blueprint/resolved-snapshot.json
+    - old_digest: 108408a9b574e0f16b5e78efec1279fa2d73a7ba21433c36b76cdc3d8d3b668a
+    - current_digest: 108408a9b574e0f16b5e78efec1279fa2d73a7ba21433c36b76cdc3d8d3b668a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182320-K80KHH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610182320-K80KHH -m 🧩 K80KHH task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task23 float C/template/header/macro additions,native observation caller/fixture/test,owner records and prerequisite docs. Retain prior integer/Automatic formatter bodies and VCL parser/UI/core tasks. No resets,merges or outside checkout actions."
-  Findings: ""
+  Findings: |-
+    # Task23 verification
+
+    Approved scope:19 intentional non-task paths in calc checkout/branch. Implements actual rtl_ustr_valueOfFloat/valueOfFP Unicode/float output primitive and original macro15/header ownership as the next dependency of VCL VariationsToString. Existing Automatic/Max and integer formatter function bodies remain unchanged. No UI command or pool placeholder is introduced. Overall goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -79,6 +118,36 @@ Native probe --write with genuine full original normal+ASan/UBSan builds and ver
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-18T23:26:36.930Z — VERIFY — ok
+
+By: CODER
+
+Note: Actual native RTL float output matches all37026 complete original normal/ASanUBSan buffers;346source files/genuine69object graphs,original null assertion verified. WholeCalc299 and affected5files14cases pass raw100percent scopes. Types/build/static/style/docs/dependency/provenance/inventories/doctor/routing pass. No approximate VCL serializer or fake pool;overallgoalactive,nextfull30.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:26:36.491Z, excerpt_hash=sha256:a31202c0c9ec87787e6bc79eb8e652b8574c832f429170a580373149a9b5819e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182320-K80KHH/blueprint/resolved-snapshot.json
+- old_digest: 108408a9b574e0f16b5e78efec1279fa2d73a7ba21433c36b76cdc3d8d3b668a
+- current_digest: 108408a9b574e0f16b5e78efec1279fa2d73a7ba21433c36b76cdc3d8d3b668a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182320-K80KHH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610182320-K80KHH -m 🧩 K80KHH task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -86,3 +155,7 @@ Native probe --write with genuine full original normal+ASan/UBSan builds and ver
 Revert only task23 float C/template/header/macro additions,native observation caller/fixture/test,owner records and prerequisite docs. Retain prior integer/Automatic formatter bodies and VCL parser/UI/core tasks. No resets,merges or outside checkout actions.
 
 ## Findings
+
+# Task23 verification
+
+Approved scope:19 intentional non-task paths in calc checkout/branch. Implements actual rtl_ustr_valueOfFloat/valueOfFP Unicode/float output primitive and original macro15/header ownership as the next dependency of VCL VariationsToString. Existing Automatic/Max and integer formatter function bodies remain unchanged. No UI command or pool placeholder is introduced. Overall goal remains active.
