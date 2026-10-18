@@ -1,10 +1,11 @@
 ---
 id: "202610182039-BG0GG5"
 title: "Apply Calc input to selected sheets with native cell Undo owners"
-status: "DOING"
+result_summary: "Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T20:50:15.365Z"
+  updated_at: "2026-10-18T20:51:42.634Z"
   updated_by: "CODER"
-  note: "Selected-sheet input uses real native values and ScUndoSetCell children under one shared list action. All288Calc cases raw100percent,122related cases with touched shared undo100percent,8source cases,types/build/style/source/inventory gates and built-browser3sheet edit/Undo/Redo/styles pass;see verification.md."
+  note: "Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610182039-BG0GG5/browser-review.json"
   findings:
     - "Source typed value/range/move contracts and selected-mark list ordering match the represented slice. All288Calc cases raw100percent,122related cases with touched shared Undo100percent,8source cases and type/build/style/source/inventory gates pass. Built browser verifies3selected sheets,one Undo/Redo,cursor order and actual computed indigo borders;no fake formatter or view facade was introduced."
-commit: null
+commit:
+  hash: "3ba4a9f0549b6bfbe0de580cf555dd81d3e7e447"
+  message: "🧩 BG0GG5 ui: edit selected Calc sheets with native cell Undo actions"
 comments:
   -
     author: "CODER"
     body: "Start: Move typed Calc cell Undo to native owner and apply current input to actual selected sheets through shared list history."
+  -
+    author: "CODER"
+    body: "Verified: Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Selected-sheet input uses real native values and ScUndoSetCell children under one shared list action. All288Calc cases raw100percent,122related cases with touched shared undo100percent,8source cases,types/build/style/source/inventory gates and built-browser3sheet edit/Undo/Redo/styles pass;see verification.md."
+  -
+    type: "verify"
+    at: "2026-10-18T20:51:42.634Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass."
+  -
+    type: "status"
+    at: "2026-10-18T20:51:42.726Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T20:50:15.418Z"
+doc_updated_at: "2026-10-18T20:51:42.727Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI continuation task15. Port actual ScUndoSetCell typed-content ownership and affected-range contract at native source/header paths;replace private browser CellChangeAction. Extend ScCellValue release so prepared actual formula owners transfer to the real document. Reuse shared SfxListUndoAction native inherited GetUndoAction surface for browser cursor restoration after reverse Undo/forward Redo. Current browser plain-input decoding prepares real native values for every selected sheet before writes,then applies the source ScViewFunc selected-mark loop under one native list action with per-sheet formula positions. Show selected sheet groups in existing Writer visual tokens. No fake ScDocFunc/ScUndoEnterData/formatter services. Up to40non-task files with truthful metadata;allCalc100percent and related tests;full regression next task20;calc checkout/branch only."
 sections:
@@ -102,6 +121,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182039-BG0GG5 -m 🧩 BG0GG5 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T20:51:42.634Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:50:15.418Z, excerpt_hash=sha256:3e8e211271ab34c15751e36a9e155bb81c1d630ab7cc60c9de92e8572ec30f92
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182039-BG0GG5/blueprint/resolved-snapshot.json
+    - old_digest: a8fdfde9403b573a5144c44737fc49690991e0ed7f7348e0cfbee919a11cfabc
+    - current_digest: a8fdfde9403b573a5144c44737fc49690991e0ed7f7348e0cfbee919a11cfabc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182039-BG0GG5
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182039-BG0GG5 --result verified-202610182039-BG0GG5 --commit 2b9d94ccbc2f0928eb100ec96c1daa4cd0ddcac7
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -193,6 +242,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182039-BG0GG5 -m 🧩 BG0GG5 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T20:51:42.634Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc edits all selected sheets through native cell actions in one Undo list;288Calc cases100percent and122related cases with shared Undo100percent plus built-browser3sheet validation pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:50:15.418Z, excerpt_hash=sha256:3e8e211271ab34c15751e36a9e155bb81c1d630ab7cc60c9de92e8572ec30f92
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182039-BG0GG5/blueprint/resolved-snapshot.json
+- old_digest: a8fdfde9403b573a5144c44737fc49690991e0ed7f7348e0cfbee919a11cfabc
+- current_digest: a8fdfde9403b573a5144c44737fc49690991e0ed7f7348e0cfbee919a11cfabc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182039-BG0GG5
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182039-BG0GG5 --result verified-202610182039-BG0GG5 --commit 2b9d94ccbc2f0928eb100ec96c1daa4cd0ddcac7
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
