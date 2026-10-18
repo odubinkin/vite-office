@@ -1,10 +1,11 @@
 ---
 id: "202610181721-0V5WR6"
 title: "Connect editable Calc workspace to production application"
-status: "DOING"
+result_summary: "Connected production Calc workspace with canonical scalar editing,formula recalculation,sheet controls and shared Sfx history"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T17:51:20.838Z"
+  updated_at: "2026-10-18T17:51:57.764Z"
   updated_by: "CODER"
-  note: "Calc252tests/95files,100% all metrics;shared25/Desktop11;build,typecheck,touched lint/format,architecture/docs/source provenance/Calc parity and real-browser production checks pass. Task5/10;full regression follows user cadence."
+  note: "Verified Calc252tests with100% coverage,shared25/Desktop11,production browser and declared build/style/source gates."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Reviewed65530b0f5e84:actual ScDocument/ScViewData storage,shared Sfx shell/frame/dispatcher/history,and controlled React presenters form one ownership chain. Formula history adopts copied native token arrays and preserves code errors. Native DeleteTab guards and subscription cleanup are covered without claiming unported reference services."
     - "Evidence records252Calc tests at100% in all four metrics,25shared and11Writer Desktop tests,production browser editing/history/sheet and maximum-coordinate geometry checks,plus build/typecheck/style/architecture/source gates.40non-task files fit the35+5 scope tolerance."
-commit: null
+commit:
+  hash: "65530b0f5e849c71f21287f20da015a4863e6524"
+  message: "✨ 0V5WR6 calc: connect editable production workspace to canonical owners"
 comments:
   -
     author: "CODER"
     body: "Start: Connect production Calc route to actual scalar document/edit/view owners,shared Sfx command/history infrastructure and existing controlled presenters. Complete mounted behavior and Calc coverage before closure."
+  -
+    author: "CODER"
+    body: "Verified: Connected production Calc workspace with canonical scalar editing,formula recalculation,sheet controls and shared Sfx history. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc252tests/95files,100% all metrics;shared25/Desktop11;build,typecheck,touched lint/format,architecture/docs/source provenance/Calc parity and real-browser production checks pass. Task5/10;full regression follows user cadence."
+  -
+    type: "verify"
+    at: "2026-10-18T17:51:57.764Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Calc252tests with100% coverage,shared25/Desktop11,production browser and declared build/style/source gates."
+  -
+    type: "status"
+    at: "2026-10-18T17:51:57.868Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Connected production Calc workspace with canonical scalar editing,formula recalculation,sheet controls and shared Sfx history. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T17:51:20.891Z"
+doc_updated_at: "2026-10-18T17:51:57.869Z"
 doc_updated_by: "CODER"
 description: "Approved UI plan task5/10. Register lazy Calc module in /calc and connect the existing controlled grid,input line,sheet tabs to real ScDocument/ScViewData through a document shell,source-shaped input/selection commands and browser view controller. Use shared SfxObjectShell,SfxUndoManager,SfxViewFrame/SfxInterface dispatcher and Writer control styles. Support current scalar text/numeric/native-A1 formula edits,cancel/commit,navigation,name-box selection,sheet switching/append,undo/redo and bounded virtual scrolling. Preserve formula dependency updates and one model;no synthetic workbook grid,formatter facade,disabled-command no-ops or kernel expansion. Next tasks finish shared menus/file workflows/status/sidebar and broader behavior. Bound to8runtime modules,main/module registration adjustments,their tests and required scoped runtime/provenance/capability/application records (up to35non-task files). No merges/network or other checkouts."
 sections:
@@ -142,6 +161,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610181721-0V5WR6 -m 🧩 0V5WR6 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T17:51:57.764Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Calc252tests with100% coverage,shared25/Desktop11,production browser and declared build/style/source gates.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T17:51:20.891Z, excerpt_hash=sha256:2ca23e0b0293ec0b6c7d1184d037735c6418b4bc53dd19ee5e7910986ac6cfb2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181721-0V5WR6/blueprint/resolved-snapshot.json
+    - old_digest: d6006f8f42bcc66440fe76fc61eaf814f2366a9a7b7bbadf8e11250297c925b6
+    - current_digest: d6006f8f42bcc66440fe76fc61eaf814f2366a9a7b7bbadf8e11250297c925b6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181721-0V5WR6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181721-0V5WR6 --result verified-202610181721-0V5WR6 --commit 5cfe24ee583c2eb44f8387f285784340c7323cc5
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -241,6 +290,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181721-0V5WR6 -m 🧩 0V5WR6 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T17:51:57.764Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Calc252tests with100% coverage,shared25/Desktop11,production browser and declared build/style/source gates.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T17:51:20.891Z, excerpt_hash=sha256:2ca23e0b0293ec0b6c7d1184d037735c6418b4bc53dd19ee5e7910986ac6cfb2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181721-0V5WR6/blueprint/resolved-snapshot.json
+- old_digest: d6006f8f42bcc66440fe76fc61eaf814f2366a9a7b7bbadf8e11250297c925b6
+- current_digest: d6006f8f42bcc66440fe76fc61eaf814f2366a9a7b7bbadf8e11250297c925b6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181721-0V5WR6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181721-0V5WR6 --result verified-202610181721-0V5WR6 --commit 5cfe24ee583c2eb44f8387f285784340c7323cc5
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
