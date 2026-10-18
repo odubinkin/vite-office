@@ -4,7 +4,7 @@ title: "Correct shared office menu and Calc grid accessibility semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "Calc271tests100percent;affected32files286tests and3runtime-renderers100percent;all6foundation/launcher/geometry cases pass with zero axe violations;full browser372passed and final2conditional-root-query repairs pass in3-case focused run. Types/build/style/module/source/registry/doctor/routing pass;see verification.md. Native owners,commands and visual style preserved."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T19:57:49.048Z"
+  updated_by: "EVALUATOR"
+  note: "Actual shared menu/title and Calc header/status ARIA defects are repaired without suite forks or weaker native UI assertions."
+  evaluated_sha: "cf90142089d1eddcc3942ee15572d3b883ad7441"
+  blueprint_digest: "9bd3047f67d6af18dd96da25a5b55b93729b451e08ad6552a58a570ab354c075"
+  evidence_refs:
+    - ".agentplane/tasks/202610181929-YDAWMM/README.md"
+    - ".agentplane/tasks/202610181929-YDAWMM/quality/20261018-195749048-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181929-YDAWMM/quality/20261018-195749048-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181929-YDAWMM/quality/20261018-195749048-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181929-YDAWMM/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181929-YDAWMM/verification.md"
+    - ".agentplane/tasks/202610181929-YDAWMM/related-final.log"
+    - ".agentplane/tasks/202610181929-YDAWMM/axe-final.log"
+    - ".agentplane/tasks/202610181929-YDAWMM/browser-boundary-final.log"
+  findings:
+    - "Shared top triggers retain native HTML buttons and command/focus behavior while exposing menuitem semantics;title and grid/status structure now pass real axe. Calc271tests has100percent raw coverage;286focused cases cover every repaired broad-run failure and3affected renderers100percent. Complete browser run accounts for374cases after the2conditional-root query repairs;all6foundation/launcher/geometry cases and current built Calc GoToSheet pass. Source,type,build,style and registry gates pass."
 commit: null
 comments:
   -
