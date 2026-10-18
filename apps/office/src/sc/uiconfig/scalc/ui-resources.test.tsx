@@ -1,11 +1,17 @@
 /** @fileoverview Production Calc resource hierarchy and shared Writer menu/toolbar contracts. */
+import { FontList } from "../../../vcl/browser/font-list";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { createCalcSession } from "../../browser/composition/calc-module";
 import { CalcWorkbench } from "../../browser/presentation/calc-workbench";
 import { getCalcCommandResource } from "./menubar/menubar";
 import { calcStandardBarItems } from "./toolbar/standardbar";
-afterEach(/** Releases mounted chrome. @returns Nothing. */ () => cleanup());
+afterEach(
+  /** Releases mounted chrome and platform spies. @returns Nothing. */ () => {
+    cleanup();
+    vi.restoreAllMocks();
+  },
+);
 it("opens every source top menu with unavailable operations disabled and shared shortcut captions", /** Uses real production Sfx bindings and shared presenters. @returns Nothing. */ () => {
   const session = createCalcSession();
   render(
@@ -139,6 +145,80 @@ it("retains the complete visible source standardbar with disabled missing slots 
   expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   fireEvent.click(toolbar.getByRole("button", { name: "Open" }));
   expect(screen.getByRole("dialog")).toBeVisible();
+  cleanup();
+  session.Close();
+});
+
+it("renders the full native cell formatting toolbar through shared disabled controls with empty unknown font state", /** Verifies actual source placements and production Sfx ownership. @returns Nothing. */ () => {
+  const session = createCalcSession();
+  const fontsRequested = vi.spyOn(FontList, "FromBrowser");
+  render(
+    <CalcWorkbench
+      controller={session.controller}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  const bar = screen.getByRole("toolbar", { name: "Calc formatting toolbar" }),
+    controls = bar.querySelectorAll("button,select");
+  const labels = [
+    "Font Name",
+    "Font Size",
+    "Bold",
+    "Italic",
+    "Underline",
+    "Font Color",
+    "Background Color",
+    "Align Left",
+    "Align Center",
+    "Align Right",
+    "Align Top",
+    "Center Vertically",
+    "Align Bottom",
+    "Wrap Text",
+    "Merge and Center Cells",
+    "Merge Cells",
+    "Unmerge Cells",
+    "Currency",
+    "Percent",
+    "Number",
+    "Date",
+    "Add Decimal Place",
+    "Delete Decimal Place",
+    "Increase",
+    "Decrease",
+    "Borders (Shift to overwrite)",
+    "Border Style",
+    "Border Color",
+    "Conditional",
+    "Left-To-Right",
+    "Right-To-Left",
+    "Text direction from left to right",
+    "Text direction from top to bottom",
+  ];
+  expect(
+    [...controls].map(
+      /** Reads actual label. @param control - Shared control. @returns Source label. */ (
+        control,
+      ) => control.getAttribute("aria-label"),
+    ),
+  ).toEqual(labels);
+  const fonts = within(bar).getAllByRole("combobox");
+  expect(fonts).toHaveLength(2);
+  expect(fontsRequested).not.toHaveBeenCalled();
+  for (const font of fonts) {
+    expect(font).toBeDisabled();
+    expect(font).toHaveValue("");
+  }
+  for (const button of within(bar).getAllByRole("button")) {
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
+    if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
+      expect(button).toHaveTextContent(/B|I|U/);
+    else expect(button.querySelector("svg")).not.toBeNull();
+  }
+  expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   cleanup();
   session.Close();
 });

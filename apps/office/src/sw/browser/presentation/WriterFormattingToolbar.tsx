@@ -1,21 +1,12 @@
 /** @fileoverview Renders Writer text and numbering toolbar resources through shared command descriptors. */
+import { CommandSelectControl } from "../../../framework/browser/presentation/CommandSelectControl";
+import { FontNameSelect, FontSizeSelect } from "../../../svx/browser/tbxctrls/FontSelects";
+import { getOfficeFormattingButtonContent as getWriterButtonContent } from "../../../framework/browser/presentation/office-formatting-content";
+import { officeCommandIcons as icons } from "../../../framework/browser/presentation/office-command-icons";
 import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
-import {
-  AlignCenter,
-  AlignJustify,
-  AlignLeft,
-  AlignRight,
-  IndentIncrease,
-  List,
-  ListOrdered,
-  Outdent,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
 import {
   type CommandToolbarPlacement,
   CommandToolbarItems,
-  type CommandIcon,
 } from "../../../framework/browser/presentation/CommandToolbar";
 import {
   type BrowserCommandSurfaceProps,
@@ -31,17 +22,6 @@ import { WriterLineSpacingControl } from "./WriterLineSpacingControl";
 import { selectWriterCommandResource } from "./writer-command-presentation";
 import type { WriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resource";
-
-const icons = new Map<string, CommandIcon>([
-  [WRITER_COMMAND_IDS.alignLeft, AlignLeft],
-  [WRITER_COMMAND_IDS.alignCenter, AlignCenter],
-  [WRITER_COMMAND_IDS.alignRight, AlignRight],
-  [WRITER_COMMAND_IDS.alignJustify, AlignJustify],
-  [WRITER_COMMAND_IDS.unorderedList, List],
-  [WRITER_COMMAND_IDS.orderedList, ListOrdered],
-  [WRITER_COMMAND_IDS.increaseIndent, IndentIncrease],
-  [WRITER_COMMAND_IDS.decreaseIndent, Outdent],
-]);
 
 /** Inputs shared by the complete Writer text formatting toolbar. */
 export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
@@ -136,14 +116,6 @@ function isWriterSpecialToolbarPlacement(
     : item.kind === "command-select" && "label" in item && "options" in item;
 }
 
-/** Returns compact glyphs for text-format commands without changing command metadata. @param commandUrl - Canonical command URL. @returns Visible glyph or undefined for icon-backed commands. */
-function getWriterButtonContent(commandUrl: string): React.ReactNode {
-  if (commandUrl === WRITER_COMMAND_IDS.bold) return "B";
-  if (commandUrl === WRITER_COMMAND_IDS.italic) return <span className="font-serif italic">I</span>;
-  if (commandUrl === WRITER_COMMAND_IDS.underline) return <span className="underline">U</span>;
-  return undefined;
-}
-
 /** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param paragraphStyleOptions - Binding-backed style selector options. @param focusDocument - Owning document client port. @param isInputEnabled - Active frame eligibility. @param resolveArguments - Browser argument adapter. @param embeddedFontFamilies - Package font families. @param fontAvailability - Browser load status. @returns Rendered special item. */
 function renderSpecialToolbarItem(
   placement: Extract<
@@ -160,29 +132,36 @@ function renderSpecialToolbarItem(
   fontAvailability: Readonly<Record<string, boolean>>,
 ): React.ReactNode {
   const item = placement;
-  if (item.kind === "font-select")
+  if (item.kind === "font-select" || item.kind === "font-size-select")
     return (
-      <FontNameSelect
+      <CommandSelectControl
         commandId={item.commandId}
         commandSource={commandSource}
         getCommandResource={getCommandResource}
-        key={item.commandId}
-        label={getCommandResource(item.commandId).controlLabel}
         resolveArguments={resolveArguments}
-        embeddedFontFamilies={embeddedFontFamilies}
-        fontAvailability={fontAvailability}
-      />
-    );
-  if (item.kind === "font-size-select")
-    return (
-      <FontSizeSelect
-        commandId={item.commandId}
-        commandSource={commandSource}
-        getCommandResource={getCommandResource}
+        argumentName={item.kind === "font-select" ? "fontFamily" : "fontSizePt"}
         key={item.commandId}
-        label={getCommandResource(item.commandId).controlLabel}
-        resolveArguments={resolveArguments}
-      />
+      >
+        {
+          /** Injects the actual shared widget into the Sfx binding controller. @param binding - Current state and execution port. @returns Font widget. */ (
+            binding,
+          ) =>
+            item.kind === "font-select" ? (
+              <FontNameSelect
+                {...binding}
+                label={getCommandResource(item.commandId).controlLabel}
+                embeddedFontFamilies={embeddedFontFamilies}
+                fontAvailability={fontAvailability}
+                unavailableFontMessage="Embedded font unavailable; using Liberation Serif fallback"
+              />
+            ) : (
+              <FontSizeSelect
+                {...binding}
+                label={getCommandResource(item.commandId).controlLabel}
+              />
+            )
+        }
+      </CommandSelectControl>
     );
   return (
     <ParagraphStyleSelect
@@ -239,138 +218,5 @@ function ParagraphStyleSelect({
         }
       }
     />
-  );
-}
-
-/** Device-backed font selector. @param props - Command surface properties. @returns Selector. */
-function FontNameSelect({
-  commandId,
-  commandSource,
-  getCommandResource,
-  label,
-  resolveArguments,
-  embeddedFontFamilies,
-  fontAvailability,
-}: {
-  readonly commandId: string;
-  readonly commandSource: BrowserCommandSurfaceProps["commandSource"];
-  readonly getCommandResource: (commandUrl: string) => WriterCommandResource;
-  readonly label: string;
-  readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
-  readonly embeddedFontFamilies: readonly string[];
-  readonly fontAvailability: Readonly<Record<string, boolean>>;
-}): React.JSX.Element {
-  const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
-  const selected = String(
-    useBrowserCommandPresentation(commandSource, commandId, getCommandResource).selectedValue,
-  );
-  useEffect(
-    /** Loads device fonts after mount. @returns Cleanup. */ () => {
-      let active = true;
-      void FontList.FromBrowser().then(
-        /** Publishes the font list. @param fontList - Loaded fonts. @returns Nothing. */ (
-          fontList,
-        ) => {
-          if (active) setFonts(fontList.GetFontNames());
-        },
-      );
-      return /** Prevents stale publication. @returns Nothing. */ () => {
-        active = false;
-      };
-    },
-    [],
-  );
-  /* istanbul ignore next -- Imported fonts outside the device list are retained for round-trip fidelity. */
-  const options = [...new Set([selected, ...embeddedFontFamilies, ...fonts])];
-  const unavailable =
-    embeddedFontFamilies.includes(selected) && fontAvailability[selected] === false;
-  return (
-    <label className="contents">
-      <span className="sr-only">{label}</span>
-      <select
-        aria-label={label}
-        className="h-8 min-w-40 max-w-52 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
-        onChange={
-          /** Applies the selected font. @param event - Select change. @returns Nothing. */ (
-            event,
-          ) => {
-            const base = resolveArguments(commandId);
-            commandSource.Execute(commandId, {
-              ...(typeof base === "object" && base !== null ? base : {}),
-              fontFamily: event.target.value,
-            });
-          }
-        }
-        style={{ fontFamily: selected }}
-        value={selected}
-      >
-        {options.map(
-          /** Renders one font family. @param font - Family. @returns Option. */ (font) => (
-            <option key={font} style={{ fontFamily: font }}>
-              {font}
-            </option>
-          ),
-        )}
-      </select>
-      {unavailable ? (
-        <span role="status" className="text-xs text-amber-700">
-          Embedded font unavailable; using Liberation Serif fallback
-        </span>
-      ) : null}
-    </label>
-  );
-}
-
-const STANDARD_FONT_SIZES_PT = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 72] as const;
-
-/** Point-size selector backed by Writer command state. @param props - Command surface properties. @returns Selector. */
-function FontSizeSelect({
-  commandId,
-  commandSource,
-  getCommandResource,
-  label,
-  resolveArguments,
-}: {
-  readonly commandId: string;
-  readonly commandSource: BrowserCommandSurfaceProps["commandSource"];
-  readonly getCommandResource: (commandUrl: string) => WriterCommandResource;
-  readonly label: string;
-  readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
-}): React.JSX.Element {
-  const selected = Number(
-    useBrowserCommandPresentation(commandSource, commandId, getCommandResource).selectedValue,
-  );
-  /* istanbul ignore next -- Imported nonstandard point sizes are retained for round-trip fidelity. */
-  const options = STANDARD_FONT_SIZES_PT.includes(
-    selected as (typeof STANDARD_FONT_SIZES_PT)[number],
-  )
-    ? STANDARD_FONT_SIZES_PT
-    : [selected, ...STANDARD_FONT_SIZES_PT];
-  return (
-    <label className="contents">
-      <span className="sr-only">{label}</span>
-      <select
-        aria-label={label}
-        className="h-8 min-w-20 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
-        onChange={
-          /** Applies the selected font height. @param event - Select change. @returns Nothing. */ (
-            event,
-          ) => {
-            const base = resolveArguments(commandId);
-            commandSource.Execute(commandId, {
-              ...(typeof base === "object" && base !== null ? base : {}),
-              fontSizePt: Number(event.target.value),
-            });
-          }
-        }
-        value={selected}
-      >
-        {options.map(
-          /** Renders one point size. @param size - Point height. @returns Option. */ (size) => (
-            <option key={size} value={size}>{`${size} pt`}</option>
-          ),
-        )}
-      </select>
-    </label>
   );
 }

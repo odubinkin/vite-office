@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/tbxctrls/FontSelects.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0112",
+      "CAP-0115"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/tbxctrls/FontSelects.tsx#FontNameSelect"
+      ],
+      "justification": "Task98VCB0 extracts actual Writer font-family/point-size widgets into shared SVX browser toolbox presentation. The owning Sfx frame supplies read-only value,enabled state and acceptance ports. SVX retains original styles,font inventory,nonstandard sizes and embedded-font options;unknown values stay empty. No Framework or application module dependency is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FontNameSelect",
+        "FontSizeSelect"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

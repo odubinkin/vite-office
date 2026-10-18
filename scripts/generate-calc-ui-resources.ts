@@ -21,6 +21,7 @@ const surfaces = {
   sheettab: "sc/uiconfig/scalc/popupmenu/sheettab.xml",
   menubar: "sc/uiconfig/scalc/menubar/menubar.xml",
   standardbar: "sc/uiconfig/scalc/toolbar/standardbar.xml",
+  formatobjectbar: "sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
   textobjectbar: "sc/uiconfig/scalc/toolbar/textobjectbar.xml",
 } as const;
 const catalogPaths = [

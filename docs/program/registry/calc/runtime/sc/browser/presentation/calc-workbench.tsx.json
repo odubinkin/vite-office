@@ -27,7 +27,7 @@
         "apps/office/e2e/foundation.spec.ts",
         "apps/office/e2e/shared/launcher.spec.ts"
       ],
-      "justification": "Renders the current Calc editing slice using shared Writer office header,menus,complete visible source standard toolbar with common icons,popup and file dialogs. Native Sfx state owns availability; no fake unsupported command handlers. Full formatting toolbar and whole Calc UI remain unported.",
+      "justification": "Renders the current Calc editing slice using shared Writer office header,menus,complete visible source standard toolbar with common icons,popup and file dialogs. Native Sfx state owns availability; no fake unsupported command handlers. Full formatting toolbar and whole Calc UI remain unported. Task98VCB0 mounts the complete pinned native formatobjectbar cell-context resource using actual shared Writer selectors,format glyphs,icons and styles. Source-visible unported formatting commands are disabled through real Sfx state;unknown font name/height remain blank. No fake formatting slots,document attributes or defaults are introduced.",
       "knownViolations": [],
       "localSymbols": [
         "CalcWorkbench"

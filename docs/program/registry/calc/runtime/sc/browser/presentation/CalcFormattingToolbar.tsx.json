@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
+      "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50",
+      "CAP-3315316f-31e4-478e-b359-0cd714f0db20",
+      "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx#CalcFormattingToolbar"
+      ],
+      "justification": "Task98VCB0 renders source-visible cell formatting composition through actual shared Writer command controls,FontNameSelect/FontSizeSelect,icons,glyphs and styles. Existing Sfx bindings own availability;unported native formatting is disabled and unknown font state stays empty. No kernel/default substitute is provided.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcFormattingToolbar"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

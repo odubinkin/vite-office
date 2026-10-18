@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/framework/browser/presentation/office-control-styles.ts",
     "rationale": "These shared React/Tailwind control style strings are browser presentation resources extracted from the existing Writer toolbar. They have no corresponding native C++ implementation owner; they preserve the browser visual system for Writer and Calc.",
     "responsibilities": [
-      "Preserves the exact existing Writer command-button styling for both applications and provides matching text-field styling."
+      "Preserves the exact existing Writer command-button styling for both applications and provides matching text-field styling.",
+      "Task98VCB0 uses the actual shared Writer formatting button style for Calc,with fixed32px width and no flex shrink."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

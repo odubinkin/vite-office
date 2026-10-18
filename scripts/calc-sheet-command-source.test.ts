@@ -209,3 +209,34 @@ it("pins the actual cell-context formatting bar separately from text-context for
     /private:resource\/toolbar\/formatobjectbar[\s\S]*?<value xml:lang="en-US">Formatting<\/value>/,
   );
 });
+
+it("projects the exact cell formatobjectbar visibility and command order independently of native slots", /** Reads pinned source XML directly. @returns Nothing. */ () => {
+  const xml = source("sc/uiconfig/scalc/toolbar/formatobjectbar.xml");
+  const visible = [...xml.matchAll(/<toolbar:toolbaritem\s+([^>]+)\/>/g)]
+    .filter(
+      /** Honors native visibility. @param match - Attributes. @returns Visible. */ (match) =>
+        !match[1]?.includes('toolbar:visible="false"'),
+    )
+    .map(
+      /** Reads original identity. @param match - Attributes. @returns URL. */ (match) =>
+        match[1]?.match(/xlink:href="([^"]+)"/)?.[1],
+    );
+  expect(visible).toHaveLength(33);
+  expect(
+    calcResources.surfaces.formatobjectbar
+      .filter(
+        /** Keeps visible source commands. @param node - Resource. @returns Visible. */ (node) =>
+          node.kind === "command" && !("visible" in node && node.visible === false),
+      )
+      .map(
+        /** Reads source identity. @param node - Resource. @returns URL. */ (node) =>
+          "commandUrl" in node ? node.commandUrl : undefined,
+      ),
+  ).toEqual(visible);
+  expect(
+    calcResources.sources.some(
+      /** Pins source hash entry. @param item - Source entry. @returns Match. */ (item) =>
+        item.path === "sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
+    ),
+  ).toBe(true);
+});

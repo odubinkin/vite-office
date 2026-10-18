@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx",
+    "status": "local-only",
+    "rationale": "React DOM platform code binds existing canonical source model/view and shared Sfx contracts;it does not claim to translate a native VCL implementation file.",
+    "responsibilities": [
+      "Task98VCB0 renders source-visible cell formatting composition through actual shared Writer command controls,FontNameSelect/FontSizeSelect,icons,glyphs and styles. Existing Sfx bindings own availability;unported native formatting is disabled and unknown font state stays empty. No kernel/default substitute is provided."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser-owned lifecycle,input and viewport adaptation uses the same React/Tailwind visual controls as Writer."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/CalcFormattingToolbar.tsx",
+          "marker": "CalcFormattingToolbar"
+        }
+      ]
+    }
+  }
+}

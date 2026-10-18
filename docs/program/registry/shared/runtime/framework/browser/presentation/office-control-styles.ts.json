@@ -21,7 +21,7 @@
         "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
         "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx"
       ],
-      "justification": "Extracts the existing Writer formatting toolbar button class string unchanged for shared Writer/Calc controls;adds a companion input field using the existing Writer slate/indigo palette. No native document behavior changes.",
+      "justification": "Extracts the existing Writer formatting toolbar button class string unchanged for shared Writer/Calc controls;adds a companion input field using the existing Writer slate/indigo palette. No native document behavior changes. Task98VCB0 uses the actual shared Writer formatting button style for Calc,with fixed32px width and no flex shrink.",
       "knownViolations": [],
       "localSymbols": [
         "officeToolbarButtonClassName",

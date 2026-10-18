@@ -46,12 +46,12 @@ it("opens the native dialog through the shared menu,filters case-sensitively,and
   fireEvent.keyDown(mask, { key: "PageDown", ctrlKey: true });
   expect(c.viewData.GetTabNumber()).toBe(0);
   fireEvent.change(mask, { target: { value: "sheet" } });
-  expect(screen.queryAllByRole("option")).toHaveLength(0);
+  expect(within(screen.getByRole("listbox")).queryAllByRole("option")).toHaveLength(0);
   fireEvent.keyDown(screen.getByRole("listbox"), { key: "ArrowDown" });
   fireEvent.change(mask, { target: { value: "Sheet" } });
-  expect(screen.getAllByRole("option")).toHaveLength(3);
+  expect(within(screen.getByRole("listbox")).getAllByRole("option")).toHaveLength(3);
   expect(
-    screen
+    within(screen.getByRole("listbox"))
       .getAllByRole("option")
       .every(
         /** Checks native rebuilt rows have no selection. @param row - Source row. @returns Deselected. */ (

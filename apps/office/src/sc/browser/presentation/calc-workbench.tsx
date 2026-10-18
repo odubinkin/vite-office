@@ -19,6 +19,7 @@ import {
 } from "../../../framework/browser/presentation/CommandPopupMenu";
 import { calcSheetTabItems } from "../../uiconfig/scalc/popupmenu/sheettab";
 import { getCalcPopupCommandResource } from "../../uiconfig/scalc/menubar/menubar";
+import { CalcFormattingToolbar } from "./CalcFormattingToolbar";
 import { ScGridWindow } from "./ScGridWindow";
 import { ScInputWindow, type CalcInputAction } from "./ScInputWindow";
 import { ScTabControl } from "./ScTabControl";
@@ -40,6 +41,10 @@ export interface CalcWorkbenchProps {
   readonly fileWorkflows: CalcFileWorkflows;
   readonly controller: CalcViewController;
   readonly frame: SfxViewFrame<CalcViewController>;
+}
+/** Existing void-slot browser arguments shared by all current Calc command surfaces;typed widgets augment their own payload through the generic controller. @returns Undefined. */
+function resolveCalcCommandArguments(): undefined {
+  return undefined;
 }
 /** Renders one mounted Calc editing session. @param props - Canonical owners. @returns Workspace. */
 export function CalcWorkbench({
@@ -289,9 +294,13 @@ export function CalcWorkbench({
               idPrefix="calc-menu"
               isInputEnabled={!modal}
               menus={calcMenus}
-              resolveArguments={
-                /** File/history slots need no arguments. @returns Nothing. */ () => undefined
-              }
+              resolveArguments={resolveCalcCommandArguments}
+            />
+          }
+          formattingToolbar={
+            <CalcFormattingToolbar
+              commandSource={source}
+              resolveArguments={resolveCalcCommandArguments}
             />
           }
           toolbar={
@@ -300,9 +309,7 @@ export function CalcWorkbench({
               items={calcStandardBarItems}
               icons={officeCommandIcons}
               getCommandResource={getCalcCommandResource}
-              resolveArguments={
-                /** Current standard slots need no arguments. @returns Nothing. */ () => undefined
-              }
+              resolveArguments={resolveCalcCommandArguments}
             />
           }
         />
@@ -479,9 +486,7 @@ export function CalcWorkbench({
           items={calcSheetTabItems}
           position={sheetPopup}
           getCommandResource={getCalcPopupCommandResource}
-          resolveArguments={
-            /** Native sheet context slots take no arguments. @returns Undefined. */ () => undefined
-          }
+          resolveArguments={resolveCalcCommandArguments}
           onClose={closeSheetPopup}
         />
       )}

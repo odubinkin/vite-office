@@ -10,7 +10,7 @@ Copy assignment unregisters before reading the source. This preserves the origin
 
 Only the native unnamed default branch before `ScGlobal` resource initialization is represented. Initialized Standard style resources, `ScStyleSheet` resolution, `ScDocumentPool`, attribute arrays and actual document/column ownership still need their original services. No default family, font height or number format is fabricated. This prerequisite is not yet connected to document formatting or enabled UI commands. Font/render/number APIs outside this represented slice are absent.
 
-The ordinary cell-context formatting resource is `sc/uiconfig/scalc/toolbar/formatobjectbar.xml`. `textobjectbar.xml` is a separate text-context toolbar. Future UI integration must generate the correct source surface and reuse actual Writer controls through shared modules, with state and defaults supplied by the native owners. Existing Writer save/open/autosave deviations remain applicable.
+The ordinary cell-context formatting resource is `sc/uiconfig/scalc/toolbar/formatobjectbar.xml`. `textobjectbar.xml` is a separate text-context toolbar. The browser now generates this correct cell-context surface and reuses actual Writer controls through shared modules;state and defaults still must be supplied by the native owners. Existing Writer save/open/autosave deviations remain applicable.
 
 Tests exercise actual shared values, INVALID/default/conditional precedence, canonical identity, ownership/key behavior and native zero-terminated item lists. Original `sc/qa/unit/ucalc.cxx` references are context, not a claim to have executed native C++ QA or established whole Calc parity.
 
@@ -19,3 +19,12 @@ Tests exercise actual shared values, INVALID/default/conditional precedence, can
 The shared browser bridge `vcl/browser/default-font-metadata.ts` now reuses actual registered/loaded family selection and returns an independent existing VCL `Font` value. The pinned native role switch supplies its represented family, pitch, symbol encoding and height12; the platform explicitly supplies the normal text encoding. Style name retains the real `Font` default. It never enumerates or guesses unregistered system fonts and returns absence until an eligible face is loaded. Existing Writer family selection and preparation APIs remain unchanged.
 
 This is the represented metadata of the configured/matched branch. It is not an `OutputDevice` substitute: native physical best-match/substitution, `MaybeAskConfig`, unrepresented Font weight/language and device geometry remain outside the bridge. Calc's document-pool helper consumes family/name/style/pitch/charset. Full document-pool construction still requires initialized spell languages, shared default-font acquisition and real `ScPageHFItem` / `EditTextObjectImpl` dependencies; the current pattern owner is not yet connected to document formatting.
+
+
+## Cell formatting toolbar composition
+
+Task20 mounts all33source-visible `formatobjectbar.xml` placements in original order:two font selectors and31command controls. Native hidden entries remain hidden,and separators use the same normalization as Writer. The shared header supplies the same layout and actual Writer button/glyph/icon styles.
+
+The actual Writer font widgets now live in `svx/browser/tbxctrls/FontSelects.tsx`. They receive selected value,availability and acceptance ports. `framework/browser/presentation/CommandSelectControl.tsx` supplies actual Sfx state and argument augmentation through an injected widget render port. Framework has no SVX/VCL import and SVX has no Framework import. Writer and Calc compose the same controls;neither creates a second document-format model.
+
+The current Calc kernel still lacks document-backed formatting slots. The new controls therefore remain disabled through actual Sfx bindings;unknown family/height are blank. Font-list options are not document defaults. Color swatches,palette/dropdown behavior,editable native font-size acceptance,RTL/CTL contextual visibility and actual formatting/history/ODS behavior still require their source services and controllers. Source composition does not certify that full behavior. The kernel prerequisites and original UI goal remain active.

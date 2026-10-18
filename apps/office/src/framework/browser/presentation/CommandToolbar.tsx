@@ -66,17 +66,24 @@ export function CommandButton({
 }
 
 /** Inputs for a sequence of generated toolbar placements. */
-export interface CommandToolbarItemsProps extends BrowserCommandSurfaceProps {
+export interface CommandToolbarItemsProps<
+  Placement extends CommandToolbarPlacement = CommandToolbarPlacement,
+> extends BrowserCommandSurfaceProps {
   readonly buttonClassName?: string;
   readonly getCommandResource: (commandUrl: string) => ToolbarCommandResource;
   readonly getButtonContent?: (commandUrl: string) => ReactNode;
   readonly icons?: ReadonlyMap<string, CommandIcon>;
-  readonly items: readonly CommandToolbarPlacement[];
-  readonly renderSpecialItem?: (item: CommandToolbarPlacement, index: number) => ReactNode;
+  readonly items: readonly Placement[];
+  readonly renderSpecialItem?: (
+    item: Exclude<Placement, { kind: "command" | "separator" }>,
+    index: number,
+  ) => ReactNode;
 }
 
 /** Renders commands and separators in generated resource order. @param props - Toolbar resource inputs. @returns Toolbar item fragment. */
-export function CommandToolbarItems({
+export function CommandToolbarItems<
+  Placement extends CommandToolbarPlacement = CommandToolbarPlacement,
+>({
   commandSource,
   buttonClassName,
   getCommandResource,
@@ -85,7 +92,7 @@ export function CommandToolbarItems({
   items,
   renderSpecialItem,
   resolveArguments,
-}: CommandToolbarItemsProps): React.JSX.Element {
+}: CommandToolbarItemsProps<Placement>): React.JSX.Element {
   return (
     <>
       {items.map(
@@ -101,7 +108,13 @@ export function CommandToolbarItems({
                 key={`separator-${index}`}
               />
             );
-          if (item.kind !== "command") return renderSpecialItem?.(item, index) ?? null;
+          if (item.kind !== "command")
+            return (
+              renderSpecialItem?.(
+                item as Exclude<Placement, { kind: "command" | "separator" }>,
+                index,
+              ) ?? null
+            );
           const content = getButtonContent?.(item.commandId);
           const icon = icons?.get(item.commandId);
           return (

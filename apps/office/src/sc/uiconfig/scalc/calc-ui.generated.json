@@ -16,6 +16,10 @@
       "sha256": "f26fc022e91baf0b174481bd4a177dae24dd8b66692d2580b1bb7c3e698e4639"
     },
     {
+      "path": "sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
+      "sha256": "c6722a5a75189cb61c3ccabb1172fdd3f2ee25d29bcbf89799ca3292030c289b"
+    },
+    {
       "path": "sc/uiconfig/scalc/toolbar/textobjectbar.xml",
       "sha256": "810c86528767c4e390fd6650f1cb663f395ad76c0f920c175607db94b7bfd079"
     },
@@ -91,6 +95,12 @@
       "shortcuts": ["Ctrl+J", "Meta+J"],
       "semantics": "action"
     },
+    ".uno:AlignBottom": {
+      "label": "Align Bottom",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:AlignHorizontalCenter": {
       "label": "Align Center",
       "showsDialog": false,
@@ -107,6 +117,18 @@
       "label": "Align Right",
       "showsDialog": false,
       "shortcuts": ["Ctrl+R", "Meta+R"],
+      "semantics": "action"
+    },
+    ".uno:AlignTop": {
+      "label": "Align Top",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AlignVCenter": {
+      "label": "Center Vertically",
+      "showsDialog": false,
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:AnchorMenu": {
@@ -183,6 +205,12 @@
     },
     ".uno:AvailableToolbars": {
       "label": "Toolbars",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:BackgroundColor": {
+      "label": "Background Color",
       "showsDialog": false,
       "shortcuts": [],
       "semantics": "action"
@@ -666,6 +694,12 @@
       "shortcuts": [],
       "semantics": "check"
     },
+    ".uno:DecrementIndent": {
+      "label": "Decrease",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:DefaultCellStyles": {
       "label": "Default",
       "showsDialog": false,
@@ -1014,6 +1048,12 @@
       "shortcuts": [],
       "semantics": "check"
     },
+    ".uno:FrameLineColor": {
+      "label": "Border Color",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:Freeline": {
       "label": "Freeform Line, Filled",
       "showsDialog": false,
@@ -1221,6 +1261,12 @@
       "showsDialog": false,
       "shortcuts": [],
       "semantics": "check"
+    },
+    ".uno:IncrementIndent": {
+      "label": "Increase",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
     },
     ".uno:InputLineVisible": {
       "label": "Formula Bar",
@@ -1520,6 +1566,12 @@
       "shortcuts": [],
       "semantics": "check"
     },
+    ".uno:LineStyle": {
+      "label": "Border Style",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:ListBox": {
       "label": "List Box",
       "showsDialog": false,
@@ -1634,8 +1686,20 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:NumberFormatDecDecimals": {
+      "label": "Delete Decimal Place",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:NumberFormatDecimal": {
       "label": "Number",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatIncDecimals": {
+      "label": "Add Decimal Place",
       "showsDialog": false,
       "shortcuts": [],
       "semantics": "action"
@@ -2178,6 +2242,12 @@
       "shortcuts": [],
       "semantics": "action"
     },
+    ".uno:SetBorderStyle": {
+      "label": "Borders (Shift to overwrite)",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
     ".uno:SetDocumentProperties": {
       "label": "Properties",
       "showsDialog": true,
@@ -2445,6 +2515,12 @@
       "showsDialog": false,
       "shortcuts": [],
       "semantics": "check"
+    },
+    ".uno:StyleApply": {
+      "label": "Apply Style",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
     },
     ".uno:StyleNewByExample": {
       "label": "New Style from Selection",
@@ -3807,6 +3883,70 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:HelpIndex", "kind": "command", "visible": false },
       { "commandUrl": ".uno:ExtendedHelp", "kind": "command", "visible": false }
+    ],
+    "formatobjectbar": [
+      { "commandUrl": ".uno:DesignerDialog", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:FontHeight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Grow", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Shrink", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Underline", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:UnderlineDouble", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:SubScript", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Overline", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:OutlineFont", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Color", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:BackgroundColor", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:AlignLeft", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignHorizontalCenter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignRight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignBlock", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:AlignTop", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignVCenter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignBottom", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:WrapText", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ToggleMergeCells", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:MergeCells", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SplitCell", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:NumberFormatStandard", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:NumberFormatCurrency", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:NumberFormatPercent", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:NumberFormatDecimal", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:NumberFormatDate", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:NumberFormatScientific", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:NumberFormatIncDecimals", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:NumberFormatDecDecimals", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:IncrementIndent", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DecrementIndent", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SetBorderStyle", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:LineStyle", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:FrameLineColor", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ConditionalFormatMenu", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ToggleSheetGrid", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ParaLeftToRight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ParaRightToLeft", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:TextdirectionLeftToRight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:TextdirectionTopToBottom", "kind": "command", "visible": true }
     ],
     "textobjectbar": [
       { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
