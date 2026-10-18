@@ -4,7 +4,7 @@ title: "Repair stale regression expectations exposed by milestone full run"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "ok"
     note: "Six scoped test/config repairs verified:12Writer cases,123inventory/raw100,3tooling,237Calc/raw100;13source gates,6nativepins,6exact paths,no production/guard/threshold changes. All5reference links absent during execution/restored."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:28:56.888Z"
+doc_updated_at: "2026-10-18T15:30:03.667Z"
 doc_updated_by: "CODER"
 description: "Task206:resolve7failures in full checkpoint task205 through pinned-source and current-registry evidence. Scope6paths:Writer native-content-frame-query.test.ts;apps/office/test-projects.ts;check-legacy-font-boundary.test.ts;native-tools-ownership.test.ts;inventory odt-import-diagnostics.test.ts and parity-mapping-cli.test.ts. Preserve native runtime semantics,strict guards and Writer-only coverage exemption. No UI or feature expansion."
 sections:
@@ -110,6 +110,10 @@ sections:
     - Observation: Native SwModify::Add inserts after anchor,so newer qualifying client precedes the earlier one. ManifestReader catches SAX failure and ZipPackage can infer application/vnd MIME;privacy test now also exercises an actual MIME conflict. Current registry has48records/46implemented/43verified with3unresolved,so readiness is false. Existing tools/o3tl,tools/cppu and Writer/unotools edges are source-proven;only obsolete test expectations changed.
       Impact: Seven assertions from full checkpoint were stale;production behavior and existing dependency guards must remain canonical.
       Resolution: Corrected6scoped test/config paths. Partitioned3Writer integration files and2Calc consumer files exactly once using the guard own preProcessFile discovery,including dynamic imports. First focused Writer command used wrong cwd and discovered no tests;rerun from apps/office passes12cases. Inventory strict coverage now passes;final tooling check passes. Final Calc and source gates pending. No runtime/threshold/guard modifications.
+
+    - Observation: Quality review initially rejected because checkpoint205 README was dirty outside task206 subtree;subsequent quality commit/finish correctly could not proceed. No source/test failure.
+      Impact: Evaluator requires clean tracked state outside its own task artifacts.
+      Resolution: Persist checkpoint205 evidence first,then task206 lifecycle note;recheck source hashes and record same-agent evaluator only after tracked state is clean.
 id_source: "generated"
 ---
 ## Summary
@@ -193,3 +197,7 @@ Task205 full office16952pass/2assertionfail;only5Writer paths have raw gaps,expl
 - Observation: Native SwModify::Add inserts after anchor,so newer qualifying client precedes the earlier one. ManifestReader catches SAX failure and ZipPackage can infer application/vnd MIME;privacy test now also exercises an actual MIME conflict. Current registry has48records/46implemented/43verified with3unresolved,so readiness is false. Existing tools/o3tl,tools/cppu and Writer/unotools edges are source-proven;only obsolete test expectations changed.
   Impact: Seven assertions from full checkpoint were stale;production behavior and existing dependency guards must remain canonical.
   Resolution: Corrected6scoped test/config paths. Partitioned3Writer integration files and2Calc consumer files exactly once using the guard own preProcessFile discovery,including dynamic imports. First focused Writer command used wrong cwd and discovered no tests;rerun from apps/office passes12cases. Inventory strict coverage now passes;final tooling check passes. Final Calc and source gates pending. No runtime/threshold/guard modifications.
+
+- Observation: Quality review initially rejected because checkpoint205 README was dirty outside task206 subtree;subsequent quality commit/finish correctly could not proceed. No source/test failure.
+  Impact: Evaluator requires clean tracked state outside its own task artifacts.
+  Resolution: Persist checkpoint205 evidence first,then task206 lifecycle note;recheck source hashes and record same-agent evaluator only after tracked state is clean.
