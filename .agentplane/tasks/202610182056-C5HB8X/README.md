@@ -4,7 +4,7 @@ title: "Add source Calc sheet-tab context menu through shared Writer popup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Native sheet-tab resource and formula/context admission use actual shared Writer popup. All292Calc cases raw100percent,201related popup/menu cases,source/resource gates,types/build/style/inventory and2built viewport/axe cases pass;see verification.md. Original UI goal remains active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T21:19:26.504Z"
+  updated_by: "EVALUATOR"
+  note: "Native sheet context popup reuses the actual Writer renderer and satisfies the approved slice."
+  evaluated_sha: "68bcbdbeedd09ae99759c79329ea3be67ab38cd0"
+  blueprint_digest: "221901da5d39f0874704d37d6078bff795907876d2a7c814b5d00a7af405cd13"
+  evidence_refs:
+    - ".agentplane/tasks/202610182056-C5HB8X/README.md"
+    - ".agentplane/tasks/202610182056-C5HB8X/quality/20261018-211926504-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610182056-C5HB8X/quality/20261018-211926504-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610182056-C5HB8X/quality/20261018-211926504-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610182056-C5HB8X/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610182056-C5HB8X/verification.md"
+    - ".agentplane/tasks/202610182056-C5HB8X/browser-e2e-verified.log"
+  findings:
+    - "Reviewed implementation 68bcbdbee: source XML order and PopupLabel adaptation, native selected-tab/formula admission, shared popup dispatch and focus lifecycle match declared scope. Recorded raw Calc coverage is 100 percent across all four metrics; 292 Calc cases, 201 related cases and both built-browser viewport/axe cases pass."
 commit: null
 comments:
   -
