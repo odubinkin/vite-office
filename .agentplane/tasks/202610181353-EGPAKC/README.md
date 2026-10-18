@@ -4,7 +4,7 @@ title: "Add canonical row-major cell traversal for ODS export"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-18T14:05:35.960Z"
+  updated_by: "CODER"
+  note: "Passed217Calc cases/exact50owners raw100;175related cases;build+6Chromium/DOM-free Worker scenarios;13source gates;8pinned native sources and23path/hash closure. Actual typed row-major traversal complete;ODS filters/UI readiness unclaimed."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: add actual row-major typed-block traversal for same-model ODS export,reusing native column views and shared mdds without a second grid or UI."
+  -
+    type: "verify"
+    at: "2026-10-18T14:05:35.960Z"
+    author: "CODER"
+    state: "ok"
+    note: "Passed217Calc cases/exact50owners raw100;175related cases;build+6Chromium/DOM-free Worker scenarios;13source gates;8pinned native sources and23path/hash closure. Actual typed row-major traversal complete;ODS filters/UI readiness unclaimed."
 doc_version: 3
-doc_updated_at: "2026-10-18T13:54:27.647Z"
+doc_updated_at: "2026-10-18T14:05:36.011Z"
 doc_updated_by: "CODER"
 description: "Task203: implement actual ScHorizontalCellIterator over existing typed column blocks and borrowed cell views, preserving native row-major state/skip behavior and sheet reset. Reuse native GetCellStore and allocated-column bounds;no copied grid or UI. This is the direct core traversal consumed by minimal same-model ODS export."
 sections:
@@ -49,9 +55,47 @@ sections:
     node output/playwright/task203-checks/browser-portable.mjs: build and actual sparse row-major traversal in Chromium/DOM-free Worker,without source references.
     node output/playwright/task203-checks/source-gates.mjs: existing13format/lint/types/docs/size/dependency/tree/provenance/inventory/routing/doctor/diff/boundary gates with no threshold/allowlist relaxation.
     Final exact path/hash/reference/coverage audit,recorded verification/source commit and same-agent review. No all-app full run until minimum core plus basic ODS milestone,then pause;UI remains separate.
-  Verification: "Pending approved implementation and declared evidence."
+  Verification: |-
+    Command: node output/playwright/task203-checks/source-audit.mjs. Result: pass. Evidence:8pinned native source/header/QA files;native vector/block scan order,typed toRefCell conversion,allocated bounds and SetTab preconditions. Scope:source-derived valid-domain horizontal traversal;no C++ execution,physical memory probe or broad parity claim.
+    Command: node output/playwright/task203-checks/portable.mjs. Result: pass. Evidence:whole Calc217cases/85files,exact50executable owners;raw5165statements/3312branches/1045functions/4633lines all100,every raw counter positive. Related175cases/26files cover actual mdds/token consumers plus traversal. No shared implementation changed,so related tests do not claim shared raw coverage. Scope:all Calc plus changed-module dependencies,all5source links absent/restored. Native explicit-coordinate test oracle covers400range windows and real borrowed scalar/string/formula owners.
+    Command: node output/playwright/task203-checks/browser-portable.mjs. Result: pass. Evidence:production build and6Chromium scenarios,each executes actual modules in the page and DOM-free Worker;fresh sparse traversal reaches row900000,preserves ordering and formula dirty state,and retains allocated-column count. Scope:core portability,no UI implementation,all5native source links absent/restored.
+    Command: node output/playwright/task203-checks/source-gates.mjs (all13gates with focused remediation/resume,final format/lint after browser tuple typing). Result: pass. Evidence:format,lint,types,docs,size,dependencies,tree,provenance,inventory,routing,doctor,diff,boundaries;no checker/allowlist/threshold edits. Existing managed-hook warning persists.
+    Command: node output/playwright/task203-checks/final-audit.mjs. Result: pass. Evidence:23exact non-task paths and hashes match final portable browser snapshot,50Calc raw100,related zero exit,13gates,8native source files and restored5links. Runtime/unit-test files were unchanged after the Calc run;the retained format-write log confirms unchanged bytes and only the new browser fixture needed tuple typing,so the passing unit profile was not replayed. Scope:row-major traversal only;ODS filters and UI remain pending. Same-agent quality review follows the source commit. Full all-app verification remains due at the user minimum core/ODS milestone,then pause.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-18T14:05:35.960Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Passed217Calc cases/exact50owners raw100;175related cases;build+6Chromium/DOM-free Worker scenarios;13source gates;8pinned native sources and23path/hash closure. Actual typed row-major traversal complete;ODS filters/UI readiness unclaimed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T14:05:35.487Z, excerpt_hash=sha256:d5c8900189800a49ffe53fc4759c1e572f90717c63a8874961aecae617590446
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181353-EGPAKC/blueprint/resolved-snapshot.json
+    - old_digest: cb56bb3970d6e971689ea7bf7469b438eecc660b6280e3fb6e01f7a2082d720e
+    - current_digest: cb56bb3970d6e971689ea7bf7469b438eecc660b6280e3fb6e01f7a2082d720e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181353-EGPAKC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610181353-EGPAKC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task203 code and metadata commits;retain task202 formula output and existing shared stores. No branch integration or user file changes."
-  Findings: "Standing user approval covers the minimal canonical core and same-model ODS priority. Prior goal turn completed task202 atc01a5ffd9013/close2b96eacc0bbf and is progress. Existing shared ZIP/manifest/SAX/XML facilities will be reused by Calc filters. Native output-reference coordinates use mutable one-element slots;JS GC owns physical lifetime. No copied cell model is introduced."
+  Findings: "Initial typecheck found two imports made unused by the native toRefCell refactor;removed them. A focused expectation assumed SetTextCell(\"\") retains a stored empty string,but the existing canonical document API clears it;the test now uses actual native Column.SetRawString to cover an explicitly stored empty string. No production behavior was changed for that expectation. Native ColContainer source confirms SetTab retained-allocation precondition;outside-domain JS rejection is documented and journaled CALC-188,without C++ memory probes. Browser test coordinates were made readonly tuples for TS7 indexing. Targeted start-ready incident advice was reviewed:forward Vitest flags directly,no second standalone separator,no counter rewriting or irrelevant Writer-parent/language scope. No shared implementation changes,no C++ compilation,no physical lifetime engine or UI. Whole Calc217/related175 cases pass;source gates pass;final browser/hash closure is pending."
 id_source: "generated"
 ---
 ## Summary
@@ -76,7 +120,44 @@ Final exact path/hash/reference/coverage audit,recorded verification/source comm
 
 ## Verification
 
-Pending approved implementation and declared evidence.
+Command: node output/playwright/task203-checks/source-audit.mjs. Result: pass. Evidence:8pinned native source/header/QA files;native vector/block scan order,typed toRefCell conversion,allocated bounds and SetTab preconditions. Scope:source-derived valid-domain horizontal traversal;no C++ execution,physical memory probe or broad parity claim.
+Command: node output/playwright/task203-checks/portable.mjs. Result: pass. Evidence:whole Calc217cases/85files,exact50executable owners;raw5165statements/3312branches/1045functions/4633lines all100,every raw counter positive. Related175cases/26files cover actual mdds/token consumers plus traversal. No shared implementation changed,so related tests do not claim shared raw coverage. Scope:all Calc plus changed-module dependencies,all5source links absent/restored. Native explicit-coordinate test oracle covers400range windows and real borrowed scalar/string/formula owners.
+Command: node output/playwright/task203-checks/browser-portable.mjs. Result: pass. Evidence:production build and6Chromium scenarios,each executes actual modules in the page and DOM-free Worker;fresh sparse traversal reaches row900000,preserves ordering and formula dirty state,and retains allocated-column count. Scope:core portability,no UI implementation,all5native source links absent/restored.
+Command: node output/playwright/task203-checks/source-gates.mjs (all13gates with focused remediation/resume,final format/lint after browser tuple typing). Result: pass. Evidence:format,lint,types,docs,size,dependencies,tree,provenance,inventory,routing,doctor,diff,boundaries;no checker/allowlist/threshold edits. Existing managed-hook warning persists.
+Command: node output/playwright/task203-checks/final-audit.mjs. Result: pass. Evidence:23exact non-task paths and hashes match final portable browser snapshot,50Calc raw100,related zero exit,13gates,8native source files and restored5links. Runtime/unit-test files were unchanged after the Calc run;the retained format-write log confirms unchanged bytes and only the new browser fixture needed tuple typing,so the passing unit profile was not replayed. Scope:row-major traversal only;ODS filters and UI remain pending. Same-agent quality review follows the source commit. Full all-app verification remains due at the user minimum core/ODS milestone,then pause.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-18T14:05:35.960Z — VERIFY — ok
+
+By: CODER
+
+Note: Passed217Calc cases/exact50owners raw100;175related cases;build+6Chromium/DOM-free Worker scenarios;13source gates;8pinned native sources and23path/hash closure. Actual typed row-major traversal complete;ODS filters/UI readiness unclaimed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T14:05:35.487Z, excerpt_hash=sha256:d5c8900189800a49ffe53fc4759c1e572f90717c63a8874961aecae617590446
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181353-EGPAKC/blueprint/resolved-snapshot.json
+- old_digest: cb56bb3970d6e971689ea7bf7469b438eecc660b6280e3fb6e01f7a2082d720e
+- current_digest: cb56bb3970d6e971689ea7bf7469b438eecc660b6280e3fb6e01f7a2082d720e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181353-EGPAKC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610181353-EGPAKC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -84,4 +165,4 @@ Revert only task203 code and metadata commits;retain task202 formula output and 
 
 ## Findings
 
-Standing user approval covers the minimal canonical core and same-model ODS priority. Prior goal turn completed task202 atc01a5ffd9013/close2b96eacc0bbf and is progress. Existing shared ZIP/manifest/SAX/XML facilities will be reused by Calc filters. Native output-reference coordinates use mutable one-element slots;JS GC owns physical lifetime. No copied cell model is introduced.
+Initial typecheck found two imports made unused by the native toRefCell refactor;removed them. A focused expectation assumed SetTextCell("") retains a stored empty string,but the existing canonical document API clears it;the test now uses actual native Column.SetRawString to cover an explicitly stored empty string. No production behavior was changed for that expectation. Native ColContainer source confirms SetTab retained-allocation precondition;outside-domain JS rejection is documented and journaled CALC-188,without C++ memory probes. Browser test coordinates were made readonly tuples for TS7 indexing. Targeted start-ready incident advice was reviewed:forward Vitest flags directly,no second standalone separator,no counter rewriting or irrelevant Writer-parent/language scope. No shared implementation changes,no C++ compilation,no physical lifetime engine or UI. Whole Calc217/related175 cases pass;source gates pass;final browser/hash closure is pending.

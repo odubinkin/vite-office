@@ -20,11 +20,8 @@ import {
   BroadcasterStoreType,
   broadcaster_element_callbacks,
   element_type_broadcaster,
-  numeric_block,
-  string_block,
-  formula_block,
+  toRefCell,
 } from "../../../inc/mtvelements";
-import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
 import { ProcessFormula } from "../../../inc/mtvcellfunc";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { ScAddress } from "../../../inc/address";
@@ -75,6 +72,10 @@ export class ScColumn {
         cell.aPos.SetTab(tab);
       },
     );
+  }
+  /** Borrows the actual native typed store; callers preserve the iterator invalidation contract. @returns Cell store. */
+  GetCellStore(): CellStoreType {
+    return this.maCells;
   }
   /** Reads the native column coordinate. @returns Column. */
   GetCol(): number {
@@ -156,16 +157,8 @@ export class ScColumn {
   }
   /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
   GetCellValue(row: number): ScRefCellValue {
-    const position = this.maCells.position(row),
-      block = position.first.get(),
-      data = block.data as base_element_block;
-    if (block.type === element_type_numeric)
-      return new ScRefCellValue(numeric_block.at(data, position.second));
-    if (block.type === element_type_string)
-      return new ScRefCellValue(string_block.at(data, position.second));
-    if (block.type === element_type_formula)
-      return new ScRefCellValue(formula_block.at(data, position.second) as ScFormulaCell);
-    return new ScRefCellValue();
+    const position = this.maCells.cposition(row);
+    return toRefCell(position.first, position.second);
   }
   /** Borrows an existing source broadcaster without allocating. @param row - Valid row. @returns Broadcaster or null. */
   GetBroadcaster(row: number): SvtBroadcaster<SfxHint> | null {

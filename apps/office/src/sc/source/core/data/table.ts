@@ -49,6 +49,10 @@ export class ScTable {
     }
     return this.aCol[col] as ScColumn;
   }
+  /** Clamps to the native last allocated column, including the empty -1 sentinel. @param col - Requested column. @returns Clamped coordinate. */
+  ClampToAllocatedColumns(col: number): number {
+    return Math.min(col, this.aCol.length - 1);
+  }
   /** Borrows an actual scalar/formula cell view without allocating columns. @param col - Column. @param row - Row. @returns Cell view. */
   GetRefCellValue(col: number, row: number): ScRefCellValue {
     return this.rDocument.ValidColRow(col, row) && col < this.aCol.length

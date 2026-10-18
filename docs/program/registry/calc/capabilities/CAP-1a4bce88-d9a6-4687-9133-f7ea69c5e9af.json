@@ -1,0 +1,85 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1a4bce88-d9a6-4687-9133-f7ea69c5e9af",
+    "capabilityId": "CAP-1a4bce88-d9a6-4687-9133-f7ea69c5e9af",
+    "suite": "calc",
+    "subsystem": "horizontal-cell-iteration",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration. Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
+    },
+    "capability": "Row-major traversal of actual nonempty cells",
+    "gaps": [
+      "Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/dociter.cxx",
+          "marker": "ScHorizontalCellIterator::GetNext"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "ScHorizontalCellIterator aIter"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/dociter.hxx",
+          "marker": "ScHorizontalCellIterator"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/dociter.ts",
+          "marker": "ScHorizontalCellIterator"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/mtvelements.ts",
+          "marker": "toRefCell"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/dociter.test.ts",
+          "marker": "visits interleaved actual blocks"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Row-major cell traversal (task203)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "horizontal-nonempty-cell-iteration",
+    "scopeLimitations": [
+      "Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration. Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration. Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
+    }
+  }
+}

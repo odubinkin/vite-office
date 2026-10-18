@@ -765,3 +765,15 @@ source integer rounding/presentation, with no Dragonbox or buffer-memory port.
 Other grammars, localized error resources and full function/reference/rewriter
 services remain unsupported. Next is basic ODS import/export on the same model;
 this task neither implements UI nor certifies UI/ODS readiness.
+
+## Row-major cell traversal (task203)
+
+ScHorizontalCellIterator now visits actual nonempty column blocks in row-major
+order,including sparse row jumps and bounded windows. Shared mdds const cursors
+and the actual borrowed ScRefCellValue are reused. The native toRefCell helper
+also serves direct column reads;numeric,string and formula identities remain
+on the same document model. Iteration does not evaluate formulas or allocate a
+second grid. Native sheet/area/iterator-invalidation preconditions apply;SetTab
+retains the original constructor's allocated-column clamp. The next core work
+is basic ODS filtering using this traversal plus task202 formula serialization
+and existing shared ZIP/manifest/XML services. No UI or ODS readiness is claimed.

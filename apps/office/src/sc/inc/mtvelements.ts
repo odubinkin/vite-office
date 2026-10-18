@@ -4,7 +4,11 @@ import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import type { SfxHint } from "../../svl/inc/hint";
 import type { ScFormulaCell } from "./formulacell";
 import { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
-export { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
+export {
+  CellStoreEvent,
+  cell_store_event_value_ops,
+  toRefCell,
+} from "../source/core/data/mtvelements";
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
 import { SharedString } from "../../svl/inc/sharedstring";
 import { CellTextAttr } from "./celltextattr";

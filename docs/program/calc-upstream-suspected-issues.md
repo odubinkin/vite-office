@@ -2626,3 +2626,19 @@ as the finished formula output. JS shortest conversion is used only for the
 decimal decomposition before the native rounding/presentation steps. Task202
 has source-derived and managed regression witnesses, not native execution or
 a claim that this intentional precision policy is a confirmed upstream bug.
+
+## CALC-188 — horizontal iterator sheet reset retains the old allocation bound
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`ScHorizontalCellIterator` constructor and SetTab in `dociter.cxx`, plus
+`ScColContainer::operator[]` in `colcontainer.hxx`. Only construction clamps
+nEndCol to the first sheet's allocated columns. SetTab retains that bound
+and directly indexes columns on the next sheet without a fresh allocation
+check. Thus a shorter second sheet is outside the visibly safe source domain;
+whether all native callers enforce that precondition remains unverified.
+Preserve the original bound and native valid-domain cursor behavior. The JS
+implementation explicitly rejects a missing sheet or a retained nonempty
+column range that the next sheet has not allocated;it neither creates columns
+nor silently re-clamps. Task203 covers supported resets and the rejected
+precondition. This is source-derived,not native execution,physical memory
+emulation or a claim of a confirmed document-level upstream defect.

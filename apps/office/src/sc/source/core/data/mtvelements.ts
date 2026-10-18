@@ -6,6 +6,16 @@ import {
 import type { EventValueOps } from "../../../../external/mdds/include/mdds/multi_type_vector/soa/main.ts";
 import { element_type_formula, element_type_cellnote } from "../../../inc/mtvelements";
 import type { ScColumn } from "../../../inc/column";
+import {
+  numeric_block,
+  string_block,
+  formula_block,
+  element_type_numeric,
+  element_type_string,
+  type CellStoreType,
+} from "../../../inc/mtvelements";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScFormulaCell } from "../../../inc/formulacell";
 /** Native per-column block count events. */
 export class CellStoreEvent {
   /** Binds an optional actual column owner. @param mpCol - Column. @returns Handler. */
@@ -54,3 +64,18 @@ export const cell_store_event_value_ops: EventValueOps<CellStoreEvent> = {
     left.swap(right);
   },
 };
+
+/** Converts the actual typed block at an offset into a borrowed cell view; edit-text blocks are not represented by the current store traits. @param position - Native const block iterator. @param offset - Offset inside its actual block. @returns Cell view. */
+export function toRefCell(
+  position: ReturnType<CellStoreType["cbegin"]>,
+  offset: number,
+): ScRefCellValue {
+  const block = position.get(),
+    data = block.data as base_element_block;
+  if (block.type === element_type_numeric)
+    return new ScRefCellValue(numeric_block.at(data, offset));
+  if (block.type === element_type_string) return new ScRefCellValue(string_block.at(data, offset));
+  if (block.type === element_type_formula)
+    return new ScRefCellValue(formula_block.at(data, offset) as ScFormulaCell);
+  return new ScRefCellValue();
+}
