@@ -50,7 +50,7 @@ function fixture() {
     { kind: "submenu", id: "empty", label: "Empty", items: [] },
   ];
   const mounted = render(view(items));
-  fireEvent.click(screen.getByRole("button", { name: "Native" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Native" }));
   return { session, owner, ...mounted, view };
 }
 it.each(["ArrowRight", "Enter", " "])(

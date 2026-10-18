@@ -121,33 +121,34 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
             height: viewport.rowHeight,
           }}
         >
-          <button
-            type="button"
+          <div
             role="columnheader"
             aria-label="Select all cells"
             className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
             style={{ width: 48, height: viewport.rowHeight }}
-            onClick={
-              /** Routes the corner-header selection intent. @param event - Platform click. @returns Nothing. */ (
-                event,
-              ) => props.onHeader("all", 0, event)
-            }
-          />
+          >
+            <button
+              type="button"
+              aria-label="Select all cells"
+              onClick={
+                /** Routes the corner-header selection intent. @param event - Platform click. @returns Nothing. */ (
+                  event,
+                ) => props.onHeader("all", 0, event)
+              }
+              className="block h-full w-full"
+            >
+              <span className="sr-only">Select all cells</span>
+            </button>
+          </div>
           {columns.map(
             /** Renders one canonical column heading. @param col - Column coordinate. @returns Heading. */ (
               col,
             ) => (
-              <button
+              <div
                 key={col}
-                type="button"
                 role="columnheader"
                 aria-colindex={col + 2}
                 aria-label={`Column ${columnLabel(col)}`}
-                onClick={
-                  /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
-                    event,
-                  ) => props.onHeader("column", col, event)
-                }
                 style={{
                   left: 48 + col * viewport.columnWidth,
                   width: viewport.columnWidth,
@@ -155,8 +156,19 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 }}
                 className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
               >
-                {columnLabel(col)}
-              </button>
+                <button
+                  type="button"
+                  aria-label={`Column ${columnLabel(col)}`}
+                  onClick={
+                    /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
+                      event,
+                    ) => props.onHeader("column", col, event)
+                  }
+                  className="block h-full w-full"
+                >
+                  {columnLabel(col)}
+                </button>
+              </div>
             ),
           )}
         </div>
@@ -174,21 +186,26 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 height: viewport.rowHeight,
               }}
             >
-              <button
-                type="button"
+              <div
                 role="rowheader"
                 aria-colindex={1}
                 aria-label={`Row ${r + 1}`}
-                onClick={
-                  /** Routes row selection. @param event - Platform click. @returns Nothing. */ (
-                    event,
-                  ) => props.onHeader("row", r, event)
-                }
                 style={{ width: 48, height: viewport.rowHeight }}
                 className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
               >
-                {r + 1}
-              </button>
+                <button
+                  type="button"
+                  aria-label={`Row ${r + 1}`}
+                  onClick={
+                    /** Routes row selection. @param event - Platform click. @returns Nothing. */ (
+                      event,
+                    ) => props.onHeader("row", r, event)
+                  }
+                  className="block h-full w-full"
+                >
+                  {r + 1}
+                </button>
+              </div>
               {columns.map(
                 /** Paints one cell from the display contract, never from an application array. @param col - Column. @returns Cell or inline editor. */ (
                   col,

@@ -63,9 +63,9 @@ it("mounts the lazy production factory and edits actual scalar/formula cells thr
   fireEvent.keyDown(grid, { key: "x", altKey: true });
   fireEvent.keyDown(grid, { key: "x", isComposing: true });
   fireEvent.keyDown(grid, { key: "Control" });
-  fireEvent.click(screen.getByRole("columnheader", { name: "Column C" }));
-  fireEvent.click(screen.getByRole("rowheader", { name: "Row 2" }));
-  fireEvent.click(screen.getByRole("columnheader", { name: "Select all cells" }));
+  fireEvent.click(screen.getByRole("button", { name: "Column C" }));
+  fireEvent.click(screen.getByRole("button", { name: "Row 2" }));
+  fireEvent.click(screen.getByRole("button", { name: "Select all cells" }));
 });
 
 it("keeps canonical selection,sheet ownership,failed drafts and physical scrolling independent", /** Platform geometry uses DOM getters while all spreadsheet state remains real. @returns Nothing. */ () => {

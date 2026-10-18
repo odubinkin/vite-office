@@ -17,7 +17,7 @@ async function completed(result: CommandDispatchResult<unknown>): Promise<void> 
 }
 /** Opens the actual source menu placement. @returns Nothing. */
 function open() {
-  fireEvent.click(screen.getByRole("button", { name: "Sheet" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Sheet" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Navigate" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Go to Sheet…" }));
 }

@@ -73,7 +73,7 @@ function values(shell: ReturnType<typeof fixture>["shell"]) {
 
 /** Opens the existing paragraph request and toggles its automatic checkbox. @returns Nothing. */
 function toggleDialog() {
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
   fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
 }

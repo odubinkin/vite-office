@@ -68,7 +68,7 @@ function fixture(none = false) {
 }
 /** Opens actual native Lists menu. @returns Nothing. */
 function menu(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
 }
 /** Assigns actual cross-paragraph browser selection and dispatches real selection capture. @param f - Mounted owners. @param boundary - Whether point targets boundary paragraph. @returns Nothing. */

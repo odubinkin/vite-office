@@ -71,7 +71,7 @@ for (const width of [1280, 390])
     await expect(maximumEditor).toHaveAttribute("data-list-level", "9");
     /** Opens the real submenu through visible controls. @returns Completion. */
     async function menu(): Promise<void> {
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).hover();
     }
     /** Closes the actual menu stack. @returns Completion. */

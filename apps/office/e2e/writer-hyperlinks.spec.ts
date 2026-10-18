@@ -41,7 +41,7 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
     "https://example.test/first",
   );
 
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
   await page.getByLabel("URL").fill("https://example.test/updated");
   await page.getByRole("button", { name: "Apply" }).click();
@@ -51,7 +51,7 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
   );
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Export…" }).click();
   await page.getByRole("button", { name: "Download ODT" }).click();
   const download = await downloadPromise;

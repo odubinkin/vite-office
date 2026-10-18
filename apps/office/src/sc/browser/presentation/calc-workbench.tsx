@@ -414,7 +414,7 @@ export function CalcWorkbench({
             }
           />
         </div>
-        <footer
+        <div
           role="status"
           aria-label="Calc status bar"
           className="flex shrink-0 items-center gap-5 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
@@ -424,7 +424,7 @@ export function CalcWorkbench({
           </span>
           <span>{controller.Address()}</span>
           <span className="ml-auto">{controller.error || "Ready"}</span>
-        </footer>
+        </div>
       </div>
       {dialog === undefined ? null : (
         <CalcFileDialog

@@ -47,7 +47,7 @@ it.each([false, true])(
     } finally {
       p.Dispose();
     }
-    fireEvent.click(screen.getByRole("button", { name: /^Edit$/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /^Edit$/ }));
     const menu = screen.getByRole("menuitem", { name: "Hyperlink…" });
     expect(menu).toBeEnabled();
     fireEvent.click(menu);
@@ -66,7 +66,7 @@ it.each([false, true])(
       shell.GetCursor().GetPoint().GetContentIndex(),
       shell.GetCursor().GetMark().GetContentIndex(),
     ]).toEqual([8, 5]);
-    fireEvent.click(screen.getByRole("button", { name: /^Edit$/ }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /^Edit$/ }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Hyperlink…" }));
     const url = await screen.findByLabelText("URL");
     fireEvent.change(url, { target: { value: "https://example.test/changed" } });

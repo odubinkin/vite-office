@@ -75,7 +75,7 @@ function mountMenus() {
     execute,
     refresh: /** Changes placement identity without changing content. @returns Nothing. */ () =>
       mounted.rerender(surface([...menus])),
-    trigger: screen.getByRole("button", { name: "Format" }),
+    trigger: screen.getByRole("menuitem", { name: "Format" }),
   };
 }
 
@@ -91,8 +91,8 @@ describe("root popup opening", /** Groups opening and reuse contracts. @returns 
 
   it("transfers pointer focus to a neighboring root without preselection", /** Checks pointer switching. @returns Nothing. */ function switchesPointerPopup(): void {
     mountMenus();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.mouseEnter(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
     expect(screen.getByRole("menuitem", { name: "Delta" })).not.toHaveFocus();
     expect(screen.queryByRole("menu", { name: "Format menu" })).not.toBeInTheDocument();

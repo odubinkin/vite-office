@@ -86,7 +86,7 @@ function fixture() {
     );
   }
   const mounted = render(view());
-  fireEvent.click(screen.getByRole("button", { name: "Native" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Native" }));
   return { session, owner, menus, view, ...mounted };
 }
 /** Opens one original child with ordinary browser keyboard input. @param label - Native resource label. @returns Original child popup. */

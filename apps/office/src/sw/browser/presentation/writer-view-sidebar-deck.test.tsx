@@ -41,7 +41,7 @@ describe("Writer Properties deck lifecycle", /** Groups source-owned deck lifecy
     expect(session.view.IsSidebarVisible()).toBe(true);
     const activation = within(sidebar).getByRole("button", { name: "Properties" });
     expect(activation).toHaveAttribute("aria-pressed", "false");
-    fireEvent.click(frame.getByRole("button", { name: "View" }));
+    fireEvent.click(frame.getByRole("menuitem", { name: "View" }));
     expect(frame.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveAttribute(
       "aria-checked",
       "true",

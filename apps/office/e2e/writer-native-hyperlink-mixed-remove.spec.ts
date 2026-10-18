@@ -54,7 +54,7 @@ test("Chromium preserves mixed native dispatch and one undo with pending popup p
   await add(editor, 0, 3, "https://example.test/a");
   await add(editor, 5, 8, "https://example.test/b");
   await select(editor, 0, 8);
-  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeDisabled();
   const fixtureId = "writer-native-mixed-fixture",
     result = await build({

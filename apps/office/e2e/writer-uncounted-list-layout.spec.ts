@@ -23,7 +23,7 @@ for (const cellMode of [false, true])
     });
     await editor.click();
     await page.keyboard.type("Geometry");
-    await page.getByRole("button", { name: "Format", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Format", exact: true }).click();
     await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
     await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
     const readGeometry =

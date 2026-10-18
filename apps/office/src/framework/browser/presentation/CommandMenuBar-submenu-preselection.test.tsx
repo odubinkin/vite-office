@@ -69,7 +69,7 @@ function renderPreselectionMenu() {
       resolveArguments={/** Supplies no fixture arguments. @returns Undefined. */ () => undefined}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   return { ...mounted, execute, trigger: screen.getByRole("menuitem", { name: "Text" }) };
 }
 
@@ -172,7 +172,7 @@ describe("submenu preselection", /** Groups pointer and keyboard opening contrac
     popup.focus();
     fireEvent.keyDown(popup, { key: "Enter" });
     expect(screen.queryAllByRole("menu")).toHaveLength(0);
-    expect(screen.getByRole("button", { name: "Format" })).toHaveFocus();
+    expect(screen.getByRole("menuitem", { name: "Format" })).toHaveFocus();
     expect(fixture.execute).not.toHaveBeenCalled();
   });
 });

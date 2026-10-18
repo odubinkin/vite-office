@@ -86,7 +86,7 @@ const getText =
 
 /** Opens the upstream Format menu placement for the paragraph dialog. @returns Nothing. */
 function openParagraphDialog(): void {
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
 }
 
@@ -212,7 +212,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       target: { value: "3" },
     });
     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Height (cm)" }), {
@@ -353,7 +353,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const openInsert =
       /** Opens one Insert menu command. @param label - Menu item name. @returns Nothing. */
       (label: RegExp): void => {
-        fireEvent.click(screen.getByRole("button", { name: "Insert" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: "Insert" }));
         if (label.source.includes("Manual Break"))
           fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "More Breaks" }));
         fireEvent.click(screen.getByRole("menuitem", { name: label }));

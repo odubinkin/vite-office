@@ -14,7 +14,7 @@ test("native root Ctrl-F6 closes the Writer popup and focuses its document", /**
   await expect(page.getByRole("menu")).toHaveCount(0);
   await expect(editor).toBeFocused();
   await page.keyboard.press("F10");
-  await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
+  await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
 });
 test("native menubar trigger Ctrl-F6 resets the Writer activation cycle", /** Checks no-popup deactivation and subsequent fresh native menu key. @param fixtures - Browser fixture. @returns Nothing. */ async ({
   page,
@@ -27,14 +27,14 @@ test("native menubar trigger Ctrl-F6 resets the Writer activation cycle", /** Ch
   await page.keyboard.press("Control+F6");
   await expect(editor).toBeFocused();
   await page.keyboard.press("F10");
-  await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
+  await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
   await expect(page.getByRole("menu")).toHaveCount(0);
 });
 test("native child Ctrl-F6 closes only the Writer owning submenu", /** Checks nearest parent consumes input before Writer direct document routing. @param fixtures - Browser fixture. @returns Nothing. */ async ({
   page,
 }) => {
   await page.goto("/writer");
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   const trigger = page.getByRole("menuitem", { name: "Text", exact: true });
   await trigger.focus();
   await trigger.press("ArrowRight");

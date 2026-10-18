@@ -13,8 +13,11 @@ for (const width of [1280, 390])
       await page.keyboard.type("Original");
       const table = page.getByRole("table", { name: "Table1" });
       for (const behind of [false, true]) {
-        await page.getByRole("button", { name: "Table", exact: true }).click();
-        await page.getByRole("menuitem", { name: "Insert", exact: true }).hover();
+        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+        await page
+          .getByRole("menu", { name: "Table menu" })
+          .getByRole("menuitem", { name: "Insert", exact: true })
+          .hover();
         await page
           .getByRole("menuitem", {
             name: behind ? "Insert Rows Below" : "Insert Rows Above",

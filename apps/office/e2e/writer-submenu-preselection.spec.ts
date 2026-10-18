@@ -5,7 +5,7 @@ test("pointer submenu owns focus without a selected Writer command", /** Checks 
   page,
 }) => {
   await page.goto("/writer");
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   const trigger = page.getByRole("menuitem", { name: "Text", exact: true });
   await trigger.hover();
   const popup = page.getByRole("menu", { name: "Text menu" });
@@ -36,7 +36,7 @@ test("keyboard opening still preselects and executes one Writer command", /** Ch
   page,
 }) => {
   await page.goto("/writer");
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   const trigger = page.getByRole("menuitem", { name: "Text", exact: true });
   await trigger.hover();
   const popup = page.getByRole("menu", { name: "Text menu" });
@@ -48,7 +48,7 @@ test("keyboard opening still preselects and executes one Writer command", /** Ch
   await expect(bold).toBeFocused();
   await bold.press("Enter");
   await expect(page.getByRole("menu")).toHaveCount(0);
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await trigger.focus();
   await trigger.press("Enter");
   await expect(bold).toBeFocused();

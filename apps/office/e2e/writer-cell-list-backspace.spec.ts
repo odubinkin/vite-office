@@ -18,7 +18,7 @@ test("Writer Backspace hides a cell marker and ShiftBackspace restores native nu
     neighbor = page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true });
   await cell.click();
   await page.keyboard.type("Item");
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
   for (let i = 0; i < 4; i++) await cell.press("ArrowLeft");

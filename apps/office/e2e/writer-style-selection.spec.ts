@@ -122,7 +122,7 @@ for (const width of [1280, 390]) {
       fullPage: true,
     });
     const download = page.waitForEvent("download");
-    await page.getByRole("button", { name: "File", exact: true }).click();
+    await page.getByRole("menuitem", { name: "File", exact: true }).click();
     await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
     await page.getByRole("button", { name: "Download ODT", exact: true }).click();
     const path = await (await download).path();

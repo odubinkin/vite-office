@@ -36,7 +36,7 @@ for (const width of [1280, 390])
       await expect(editor).toBeFocused();
       await expect(editor).toHaveText("");
       await page.keyboard.type("NativeMenus");
-      await page.getByRole("button", { name: "Edit", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
       await page.keyboard.press("Home");
       const activeUndo = page.getByRole("menuitem", { name: "Undo", exact: true });
       await expect(activeUndo).toBeEnabled();

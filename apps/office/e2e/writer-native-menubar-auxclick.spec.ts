@@ -10,7 +10,7 @@ for (const width of [1280, 390])
         await page.setViewportSize({ width, height: 900 });
         await page.goto("/writer");
         const editor = page.getByLabel("Writer document body", { exact: true }),
-          edit = page.getByRole("button", { name: "Edit", exact: true });
+          edit = page.getByRole("menuitem", { name: "Edit", exact: true });
         await editor.focus();
         await edit.click({ button });
         const menu = page.getByRole("menu", { name: "Edit menu" }),

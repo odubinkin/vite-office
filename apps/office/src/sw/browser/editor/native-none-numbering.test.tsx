@@ -99,7 +99,7 @@ it("renders imported NONE as a list with an empty marker and native inactive lev
   expect(f.first.IsInList()).toBe(true);
   expect(f.first.GetNumRule()?.Get(0).GetNumberingType()).toBe(5);
   focus(f.noneEditor);
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
   expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeDisabled();
   expect(screen.getByRole("menuitem", { name: "Promote Outline Level" })).toBeDisabled();

@@ -20,11 +20,11 @@ test("Writer cell list levels use native commands and survive history and ODT re
     toolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
   await cell.click();
   await page.keyboard.type("NestedCell");
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
   await expect(toolbar.getByRole("button", { name: "Decrease", exact: true })).toBeDisabled();
-  await page.getByRole("button", { name: "Format", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
   const demote = page.getByRole("menuitem", { name: "Demote Outline Level", exact: true });
   await expect(demote).toBeEnabled();
@@ -47,7 +47,7 @@ test("Writer cell list levels use native commands and survive history and ODT re
   await toolbar.getByRole("button", { name: "Increase", exact: true }).click();
   await expect(cell).toHaveAttribute("data-list-level", "1");
   const pending = page.waitForEvent("download");
-  await page.getByRole("button", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "File", exact: true }).click();
   await page.getByRole("menuitem", { name: "Export…" }).click();
   await page.getByRole("button", { name: "Download ODT" }).click();
   const path = await (await pending).path();

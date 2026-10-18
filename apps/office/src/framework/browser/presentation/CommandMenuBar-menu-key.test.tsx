@@ -86,8 +86,8 @@ function mountMenuKey(enabled: boolean | undefined = true, id = "first", empty =
   const frame = screen.getByRole("region", { name: `${id} frame` });
   return {
     document: within(frame).getByRole("textbox", { name: `${id} document` }),
-    first: within(frame).queryByRole("button", { name: "First" }),
-    second: within(frame).queryByRole("button", { name: "Second" }),
+    first: within(frame).queryByRole("menuitem", { name: "First" }),
+    second: within(frame).queryByRole("menuitem", { name: "Second" }),
     execute,
     unmount: result.unmount,
     setEnabled:
@@ -222,7 +222,7 @@ describe("menubar menu key", /** Groups activation and frame-routing contracts. 
     const editor = screen.getByLabelText("Writer document body");
     editor.focus();
     pressMenuKey();
-    expect(screen.getByRole("button", { name: "File" })).toHaveFocus();
+    expect(screen.getByRole("menuitem", { name: "File" })).toHaveFocus();
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
     pressMenuKey();
     expect(editor).toHaveFocus();

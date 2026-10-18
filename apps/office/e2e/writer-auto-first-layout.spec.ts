@@ -169,14 +169,14 @@ for (const width of [1280, 390])
         "left",
         "152px",
       );
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
       await expect(dialog.getByLabel("First line indent (pt)")).toHaveValue("18.35");
       await expect(dialog.getByLabel("Automatic first-line indent")).toBeChecked();
       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
       await checkLayout(automaticPoints);
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
       await dialog.getByLabel("Automatic first-line indent").uncheck();
       await dialog.getByRole("button", { name: "OK", exact: true }).click();

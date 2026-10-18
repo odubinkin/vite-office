@@ -66,7 +66,7 @@ it("executes native menu actions and document accelerators from grid and formula
       sheetWorkflows={s.sheetWorkflows}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Sheet" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Sheet" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Navigate" }));
   expect(screen.getByRole("menuitem", { name: "To Next Sheet" })).toHaveAttribute(
     "aria-keyshortcuts",
@@ -74,12 +74,12 @@ it("executes native menu actions and document accelerators from grid and formula
   );
   fireEvent.click(screen.getByRole("menuitem", { name: "To Next Sheet" }));
   expect(screen.getByRole("tab", { name: "Sheet2" })).toHaveAttribute("aria-current", "page");
-  fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select to Previous Sheet" }));
   expect(screen.getByRole("tab", { name: "Sheet2" })).toHaveAttribute("aria-selected", "true");
   expect(screen.getByRole("tab", { name: "Sheet1" })).toHaveAttribute("aria-selected", "true");
-  fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Select All Sheets" }));
   expect(screen.getAllByRole("tab", { selected: true })).toHaveLength(3);

@@ -11,7 +11,7 @@ async function openCommand(
   command: string,
   submenu?: string,
 ): Promise<void> {
-  await page.getByRole("button", { name: root, exact: true }).click();
+  await page.getByRole("menuitem", { name: root, exact: true }).click();
   if (submenu !== undefined)
     await page.getByRole("menuitem", { name: submenu, exact: true }).press("ArrowRight");
   await page.getByRole("menuitem", { name: command, exact: true }).click();

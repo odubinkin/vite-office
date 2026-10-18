@@ -5,7 +5,7 @@ doctor: checking project-local blueprints
 doctor: checking prompt graph
 doctor: checking recent task archive
 doctor: checking workflow contract
-{"ts":"2026-10-18T19:50:16.678Z","component":"workflow-runtime","event":"workflow_doctor_check","details":{"ok":true,"findings":0}}
+{"ts":"2026-10-18T19:54:47.569Z","component":"workflow-runtime","event":"workflow_doctor_check","details":{"ok":true,"findings":0}}
 warning: doctor findings: errors=0 warnings=1 info=1
 - [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches
 Likely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery

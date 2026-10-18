@@ -60,7 +60,7 @@ for (const width of [1280, 390])
     await expect(arabicEditor).toHaveAttribute("data-list-marker", "1");
     /** Opens the real submenu through visible controls. @returns Completion. */
     async function menu(): Promise<void> {
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).hover();
     }
     /** Closes the actual menu stack. @returns Completion. */

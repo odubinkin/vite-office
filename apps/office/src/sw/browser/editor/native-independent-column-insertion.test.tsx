@@ -1,5 +1,5 @@
 /** @fileoverview Mounted column menus mutate independent native rows and replay document insertion. */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { within, act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
@@ -45,8 +45,12 @@ for (const behind of [false, true])
         render(<WriterWorkbench isActive view={session.view} />);
         const element = screen.getByRole("table", { name: "Independent" }),
           width = element.style.width;
-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
-        fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Insert" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+        fireEvent.mouseEnter(
+          within(screen.getByRole("menu", { name: "Table menu" })).getByRole("menuitem", {
+            name: "Insert",
+          }),
+        );
         fireEvent.click(
           screen.getByRole("menuitem", {
             name: behind ? "Insert Columns After" : "Insert Columns Before",

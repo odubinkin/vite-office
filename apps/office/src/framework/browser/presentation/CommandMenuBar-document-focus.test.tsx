@@ -62,7 +62,7 @@ function mountDocumentMenu(id = "first", fallback = true) {
   return {
     document: within(frame).getByRole("textbox", { name: `${id} document` }),
     toolbar: within(frame).getByRole("textbox", { name: `${id} toolbar` }),
-    trigger: within(frame).getByRole("button", { name: "Edit" }),
+    trigger: within(frame).getByRole("menuitem", { name: "Edit" }),
     focusDocument,
     execute,
   };
@@ -72,7 +72,7 @@ describe("menubar document fallback", /** Groups frame-client focus contracts. @
   it("routes the actual Writer menu to its editing host and accepts input", /** Checks real view-client reference and editing boundary. @returns Nothing. */ function routesWriterClient(): void {
     globalThis.history.replaceState(null, "", "/writer");
     render(<Desktop modules={createOfficeModuleDescriptors([createWriterModuleFactory()])} />);
-    const trigger = screen.getByRole("button", { name: "View" });
+    const trigger = screen.getByRole("menuitem", { name: "View" });
     act(
       /** Enters the menubar without a saved owner. @returns Nothing. */ () => {
         (document.activeElement as HTMLElement).blur();

@@ -18,7 +18,7 @@ for (const width of [1280, 390])
         ["Select Column", 2],
         ["Select Table", 4],
       ] as const) {
-        await page.getByRole("button", { name: "Table", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
         await page.getByRole("menuitem", { name: "Select", exact: true }).hover();
         await page.getByRole("menuitem", { name: label, exact: true }).click();
         await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(count);

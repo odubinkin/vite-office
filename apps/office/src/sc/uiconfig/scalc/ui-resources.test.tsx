@@ -30,7 +30,7 @@ it("opens every source top menu with unavailable operations disabled and shared 
     "Help",
   ];
   for (const label of labels) {
-    fireEvent.click(screen.getByRole("button", { name: label }));
+    fireEvent.click(screen.getByRole("menuitem", { name: label }));
     expect(screen.getAllByRole("menu").length).toBeGreaterThan(0);
     if (label === "File") {
       expect(screen.getByRole("menuitem", { name: "Open…" })).toBeEnabled();

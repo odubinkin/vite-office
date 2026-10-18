@@ -62,7 +62,7 @@ function selectWriterParagraphText(paragraph: HTMLElement): void {
 
 /** Invokes one Writer File menu command by its accessible label. @param name - Visible command label. @returns A promise fulfilled after asynchronous command state settles. */
 async function invokeWriterFileCommand(name: string): Promise<void> {
-  fireEvent.click(screen.getByRole("button", { name: "File" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
   fireEvent.click(screen.getByRole("menuitem", { name }));
   await act(
     /** Flushes state scheduled by asynchronous File commands. @returns A fulfilled React act promise. */
@@ -205,7 +205,7 @@ describe("App" /**
       "true",
     );
     selectWriterParagraphText(editor);
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
     fireEvent.click(screen.getByRole("menuitemcheckbox", { name: "Italic" }));
     expect(editor.querySelector("strong em")).toHaveTextContent("Body");
@@ -265,7 +265,7 @@ describe("App" /**
           caption: "Caption",
           footnote: "Footnote",
         };
-        fireEvent.click(screen.getByRole("button", { name: "Styles" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: "Styles" }));
         fireEvent.click(screen.getByRole("menuitemradio", { name: names[style] }));
         expect(
           Array.from((styleSelect as HTMLSelectElement).options).map(
@@ -300,7 +300,7 @@ describe("App" /**
     expect(screen.queryByRole("button", { name: "Remove paragraph 1" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Move paragraph 1 up" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitemradio", { name: "No List" })).toHaveAttribute(
       "aria-checked",
@@ -319,7 +319,7 @@ describe("App" /**
     expect(paragraph.textContent).not.toContain("•");
     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
     expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitemradio", { name: "Unordered List" }));
     expect(screen.queryByTestId(`writer-list-marker-${paragraphId}`)).not.toBeInTheDocument();
@@ -327,7 +327,7 @@ describe("App" /**
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
     expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("1.");
     expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
@@ -335,12 +335,12 @@ describe("App" /**
     expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "36pt" });
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Decrease" }));
     expect(paragraph).toHaveAttribute("data-list-level", "0");
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();

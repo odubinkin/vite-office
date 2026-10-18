@@ -40,45 +40,47 @@ export function OfficeWorkspaceHeader({
     <header className="relative z-50 shrink-0 border-b border-slate-200 bg-white">
       <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
         <div className="min-w-0">
-          {isEditingTitle ? (
-            <input
-              aria-label={titleLabel}
-              autoFocus
-              className="w-full min-w-48 rounded border border-indigo-300 px-1 text-sm font-bold text-slate-950 outline-none ring-indigo-200 focus:ring-2"
-              onBlur={commitTitle}
-              onChange={
-                /** Retains the current title draft. @param event - Input change. @returns Nothing. */ (
-                  event,
-                ) => setDraftTitle(event.target.value)
-              }
-              onKeyDown={
-                /** Commits the title when Enter blurs the editor. @param event - Keyboard input. @returns Nothing. */ (
-                  event,
-                ) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    event.currentTarget.blur();
+          <h1 className="m-0 text-sm font-bold leading-5">
+            {isEditingTitle ? (
+              <input
+                aria-label={titleLabel}
+                autoFocus
+                className="w-full min-w-48 rounded border border-indigo-300 px-1 text-sm font-bold text-slate-950 outline-none ring-indigo-200 focus:ring-2"
+                onBlur={commitTitle}
+                onChange={
+                  /** Retains the current title draft. @param event - Input change. @returns Nothing. */ (
+                    event,
+                  ) => setDraftTitle(event.target.value)
+                }
+                onKeyDown={
+                  /** Commits the title when Enter blurs the editor. @param event - Keyboard input. @returns Nothing. */ (
+                    event,
+                  ) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    }
                   }
                 }
-              }
-              type="text"
-              value={draftTitle}
-            />
-          ) : (
-            <button
-              aria-label={editTitleLabel}
-              className="block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"
-              onClick={
-                /** Opens title editing with the current document title. @returns Nothing. */ () => {
-                  setDraftTitle(documentTitle);
-                  setIsEditingTitle(true);
+                type="text"
+                value={draftTitle}
+              />
+            ) : (
+              <button
+                aria-label={editTitleLabel}
+                className="block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"
+                onClick={
+                  /** Opens title editing with the current document title. @returns Nothing. */ () => {
+                    setDraftTitle(documentTitle);
+                    setIsEditingTitle(true);
+                  }
                 }
-              }
-              type="button"
-            >
-              {documentTitle}
-            </button>
-          )}
+                type="button"
+              >
+                {documentTitle}
+              </button>
+            )}
+          </h1>
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700">
             {subtitle}
           </p>

@@ -77,9 +77,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   fireEvent.keyDown(grid, { key: "ArrowDown", shiftKey: true });
   expect(props.onKeyDown).toHaveBeenCalledOnce();
   for (const label of ["Select all cells", "Column AA", "Row 5"])
-    fireEvent.click(
-      screen.getByRole(label.startsWith("Row") ? "rowheader" : "columnheader", { name: label }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: label }));
   expect(
     vi
       .mocked(props.onHeader)

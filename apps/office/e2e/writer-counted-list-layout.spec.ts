@@ -64,7 +64,7 @@ for (const cell of [false, true])
     await expect(neighbor).toHaveText("NeighborProof");
     if (cell) {
       await paragraph.click();
-      await page.getByRole("button", { name: "Format", exact: true }).click();
+      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
       await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
     }
@@ -85,7 +85,7 @@ for (const cell of [false, true])
     // Native label-alignment activation resets cell direct margins; imported body margins remain.
     await expect.poll(measure).toBeCloseTo(cell ? 24 : 88, 1);
     await paragraph.click();
-    await page.getByRole("button", { name: "Format", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Format", exact: true }).click();
     await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
     const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
     await dialog.getByLabel("First line indent (pt)").fill("6");

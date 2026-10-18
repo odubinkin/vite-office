@@ -54,7 +54,7 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
       sheetWorkflows={session.sheetWorkflows}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "File" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /Save As/ }));
   expect(screen.getByRole("dialog", { name: "Save As" })).toBeVisible();
   expect(screen.getByRole("grid").parentElement).toHaveAttribute("inert");
@@ -97,7 +97,7 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
   expect(screen.getByRole("dialog", { name: "Save As" })).toBeVisible();
   fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
   expect(screen.getByRole("grid")).toHaveFocus();
-  fireEvent.click(screen.getByRole("button", { name: "File" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
   expect(screen.getByRole("button", { name: "Download ODS" })).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Close" }));

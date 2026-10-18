@@ -49,7 +49,7 @@ function fixture() {
       resolveArguments={/** Reads original native defaults. @returns Undefined. */ () => undefined}
     />,
   );
-  return { session, owner, trigger: screen.getByRole("button", { name: "Native" }) };
+  return { session, owner, trigger: screen.getByRole("menuitem", { name: "Native" }) };
 }
 /** Emits the browser-native nonprimary completion event. @param target - Original target. @param button - Native mouse button. @returns Event default cancellation. */
 function auxiliary(target: HTMLElement, button: number) {

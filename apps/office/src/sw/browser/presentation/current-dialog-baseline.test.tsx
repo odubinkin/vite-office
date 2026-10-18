@@ -85,7 +85,7 @@ async function expectedUiRejection(action: () => void, message: string): Promise
 it("current paragraph heading closes the actual native request without changing history", /** Checks a newly added chrome callback. @returns Nothing. */ () => {
   const owner = session();
   render(<WriterWorkbench isActive services={owner.services} view={owner.view} />);
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
   const dialog = screen.getByRole("dialog", { name: "Paragraph" });
   fireEvent.click(within(dialog).getByRole("button", { name: "Close" }));

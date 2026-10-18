@@ -5,7 +5,7 @@ test("menu commands and submenus align their labels", /** Checks rendered label 
   page,
 }) => {
   await page.goto("/writer");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   const paragraph = page.getByRole("menuitem", { name: "Paragraph…" });
   const lists = page.getByRole("menuitem", { name: "Lists" });
   const commandLabel = await paragraph.locator("span").nth(1).boundingBox();
@@ -17,7 +17,7 @@ test("menu commands and submenus align their labels", /** Checks rendered label 
   expect(commandX - rowX).toBeLessThanOrEqual(20);
   await lists.hover();
   await expect(page.getByRole("menuitemradio", { name: "No List" })).toBeVisible();
-  await page.getByRole("button", { name: "View" }).hover();
+  await page.getByRole("menuitem", { name: "View" }).hover();
   const sidebarX =
     (
       await page

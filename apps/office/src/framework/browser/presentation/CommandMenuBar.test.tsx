@@ -82,7 +82,7 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
       .spyOn(root, "querySelectorAll")
       .mockReturnValue([] as unknown as NodeListOf<Element>);
     try {
-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
       const trigger = screen.getByRole("menuitem", { name: "Numbering" });
       fireEvent.keyDown(trigger, { key: "ArrowRight" });
       expect(screen.getByRole("menu", { name: "Numbering menu" })).toBeVisible();
@@ -105,7 +105,7 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
     const removeDocument = vi.spyOn(document, "removeEventListener");
     const mounted = renderGeometryMenu();
     try {
-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
       const menu = screen.getByRole("menu", { name: "Format menu" });
       expect(menu).toHaveStyle({
         left: "158px",
@@ -150,7 +150,7 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
     vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(224);
     const mounted = renderGeometryMenu();
     try {
-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
       const trigger = screen.getByRole("menuitem", { name: "Numbering" });
       fireEvent.keyDown(trigger, { key: "ArrowRight" });
       const submenu = screen.getByRole("menu", { name: "Numbering menu" });
@@ -209,7 +209,7 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
       />,
     );
-    expect(screen.getByRole("button", { name: "File" })).toBeVisible();
+    expect(screen.getByRole("menuitem", { name: "File" })).toBeVisible();
   });
 
   it("switches open top-level menus on hover", /** Verifies hover switching does not open a closed menubar. @returns Nothing. */ function switchesOpenMenusOnHover(): void {
@@ -251,8 +251,8 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
       />,
     );
-    const file = screen.getByRole("button", { name: "File" });
-    const edit = screen.getByRole("button", { name: "Edit" });
+    const file = screen.getByRole("menuitem", { name: "File" });
+    const edit = screen.getByRole("menuitem", { name: "Edit" });
     fireEvent.mouseEnter(edit);
     expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
     fireEvent.click(file);
@@ -315,13 +315,13 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const menuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(menuItem).toHaveAttribute("aria-checked", "true");
     expect(menuItem.querySelector("[data-menu-checkmark]")).toHaveTextContent("✓");
     expect(menuItem.querySelector("[data-menu-checkmark]")).not.toHaveClass("text-indigo-700");
     fireEvent.click(menuItem);
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
     const uncheckedMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(uncheckedMenuItem).toHaveAttribute("aria-checked", "false");
     expect(uncheckedMenuItem.querySelector("[data-menu-checkmark]")).toHaveTextContent("");
@@ -330,7 +330,7 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
 
 it("focuses literal UNO menu identities without interpreting dots,colons or quotes as CSS selectors", /** Regression for the production Calc File/Edit crash. @returns Nothing. */ () => {
   const mounted = renderGeometryMenu(".uno:PickList", '.uno:StyleApply?Style="Quoted"');
-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
   expect(screen.getByRole("menu", { name: "Format menu" })).toHaveFocus();
   fireEvent.keyDown(screen.getByRole("menuitem", { name: "Numbering" }), { key: "ArrowRight" });
   expect(screen.getByRole("menuitem", { name: "Apply" })).toHaveFocus();

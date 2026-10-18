@@ -55,7 +55,7 @@ describe("native cell list level UI", /** Registers mounted actual-owner contrac
       toolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
     expect(screen.getByRole("button", { name: "Decrease" })).toBeDisabled();
     expect(owner.cell).toHaveAttribute("data-list-level", "0");
-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     const demote = screen.getByRole("menuitem", { name: "Demote Outline Level" });
     expect(demote).toBeEnabled();

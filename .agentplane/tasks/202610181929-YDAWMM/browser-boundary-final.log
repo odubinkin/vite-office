@@ -1,0 +1,12 @@
+[WebServer] (node:50994) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:50997) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:5:3 › Home replaces the active Writer root popup and returns to editing on Escape (517ms)
+  ✓  2 [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:5:3 › End replaces the active Writer root popup and returns to editing on Escape (512ms)
+  ✓  3 [writer] › apps/office/e2e/writer-root-menu-boundary.spec.ts:34:1 › Writer F10 boundary navigation stays unopened until an explicit popup key (394ms)
+
+  3 passed (2.8s)

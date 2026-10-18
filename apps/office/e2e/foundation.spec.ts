@@ -32,11 +32,11 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(writerMenuBar).toHaveCSS("overflow-x", "visible");
   await page.getByRole("textbox", { name: "Writer document text" }).focus();
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();
-  const fileMenuButton = page.getByRole("button", { name: "File" });
+  const fileMenuButton = page.getByRole("menuitem", { name: "File" });
   await fileMenuButton.focus();
   await fileMenuButton.press("ArrowRight");
-  await expect(page.getByRole("button", { exact: true, name: "Edit" })).toBeFocused();
-  await page.getByRole("button", { exact: true, name: "Edit" }).press("ArrowDown");
+  await expect(page.getByRole("menuitem", { exact: true, name: "Edit" })).toBeFocused();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).press("ArrowDown");
   const editPopup = page.getByRole("menu", { name: "Edit menu" });
   const undoMenuItem = editPopup.getByRole("menuitem", { exact: true, name: "Undo" });
   await expect(undoMenuItem).toBeDisabled();
@@ -62,13 +62,13 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();
-  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "File" }).click();
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
-  await page.getByRole("button", { name: "File" }).press("Escape");
-  await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).click();
+  await page.getByRole("menuitem", { name: "File" }).press("Escape");
+  await writerMenuBar.getByRole("menuitem", { exact: true, name: "Insert" }).click();
   await expect(page.getByRole("menuitem", { exact: true, name: "Hyperlink…" })).toBeVisible();
-  await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).press("Escape");
-  await expect(writerMenuBar.getByRole("button")).toHaveText([
+  await writerMenuBar.getByRole("menuitem", { exact: true, name: "Insert" }).press("Escape");
+  await expect(writerMenuBar.getByRole("menuitem")).toHaveText([
     "File",
     "Edit",
     "View",
@@ -90,7 +90,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   const sidebarMenuItem = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
   await expect(sidebarMenuItem).toHaveAttribute("aria-checked", "true");
   await sidebarMenuItem.click();
@@ -98,14 +98,14 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     0,
   );
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   const hiddenSidebarMenuItem = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
   await expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
   await hiddenSidebarMenuItem.click();
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
   const rulersMenu = page.getByRole("menuitem", { name: "Rulers" });
   await rulersMenu.focus();
@@ -114,7 +114,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(rulerMenuItem).toHaveAttribute("aria-checked", "true");
   await rulerMenuItem.click();
   await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   const hiddenRulersMenu = page.getByRole("menuitem", { name: "Rulers" });
   await hiddenRulersMenu.focus();
   await hiddenRulersMenu.press("ArrowRight");
@@ -123,13 +123,13 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await hiddenRulerMenuItem.click();
   await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   const statusBarMenuItem = page.getByRole("menuitemcheckbox", { name: "Status Bar" });
   await expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
   await statusBarMenuItem.click();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "View" }).click();
   const hiddenStatusBarMenuItem = page.getByRole("menuitemcheckbox", { name: "Status Bar" });
   await expect(hiddenStatusBarMenuItem).toHaveAttribute("aria-checked", "false");
   await hiddenStatusBarMenuItem.click();
@@ -143,7 +143,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(writerEditor).not.toHaveAttribute("contenteditable");
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   await expect(
     writerEditor.evaluate(
@@ -162,12 +162,12 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
       .getByRole("toolbar", { name: "Writer standard toolbar" })
       .getByRole("button", { name: "Copy" }),
   ).toBeVisible();
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Copy" }).click();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
     "Document has unsaved changes.",
   );
-  await page.getByRole("button", { name: "Styles" }).click();
+  await page.getByRole("menuitem", { name: "Styles" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
   await expect(writerEditor).toHaveCSS("font-size", "24px");
   await expect(writerEditor).toHaveCSS("font-weight", "700");
@@ -210,7 +210,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await trailingWriterParagraph.press("Backspace");
   await expect(trailingWriterParagraph).toHaveCount(0);
   await expect(writerEditor).toHaveText("A browser-authored paragraph.");
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toBeVisible();
   await writerEditor.evaluate(
@@ -234,13 +234,13 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await writerEditor.press("Delete");
   await expect(trailingWriterParagraph).toHaveCount(0);
   await expect(writerEditor).toHaveText("A browser-authored paragraph.");
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toBeVisible();
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toHaveCount(0);
-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "left");
 

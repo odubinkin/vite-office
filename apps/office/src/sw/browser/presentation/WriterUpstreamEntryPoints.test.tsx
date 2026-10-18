@@ -22,7 +22,7 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
     const table = session.docShell.GetDoc().GetTables()[0];
     expect(table?.GetTabLines()).toHaveLength(2);
     expect(table?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(3);
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Table Properties…" }));
     expect(screen.getByRole("dialog", { name: "Table Properties" })).toBeInTheDocument();
     fireEvent.click(
@@ -30,15 +30,15 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
         name: "Cancel",
       }),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
     expect(screen.getByRole("menuitem", { name: "Table…" })).toBeDisabled();
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
     act(
       /** Leaves the table before opening native body insertion. @returns Nothing. */ () => {
         session.view.GetWrtShell().FocusNode(session.docShell.GetDoc().paragraphs[0] as SwTextNode);
       },
     );
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Table…" }));
     expect(screen.getByRole("dialog", { name: "Insert Table" })).toBeInTheDocument();
     fireEvent.click(
@@ -46,13 +46,13 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
         name: "Cancel",
       }),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Tools" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Line Numbering…" }));
     const dialog = screen.getByRole("dialog", { name: "Line Numbering" });
     fireEvent.click(within(dialog).getByRole("checkbox", { name: "Show numbering" }));
     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
     expect(session.docShell.GetDoc().GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
-    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Tools" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Line Numbering…" }));
     fireEvent.click(
       within(screen.getByRole("dialog", { name: "Line Numbering" })).getByRole("button", {

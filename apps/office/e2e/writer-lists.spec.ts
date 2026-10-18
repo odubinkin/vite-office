@@ -8,7 +8,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and persistent f
   await page.goto("/writer");
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First list item");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Ordered List" }).click();
   const firstProjectionId = await firstParagraph.getAttribute("data-writer-paragraph-id");
@@ -40,13 +40,13 @@ test("Writer bullets and numbering" /** Verifies Format submenu and persistent f
   await expect(
     formattingToolbar.getByRole("button", { exact: true, name: "Decrease" }),
   ).toBeDisabled();
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Unordered List" }).click();
   await expect(secondMarker).toHaveText("•");
   await expect(secondParagraph).toHaveText("Second list item");
   await expect(secondParagraph).toHaveAccessibleDescription("");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { name: "Demote Outline Level" }).click();
   await expect(secondParagraph).toHaveAttribute("data-list-level", "1");
@@ -63,7 +63,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and persistent f
     .getByRole("button", { exact: true, name: "Decrease" })
     .click();
   await expect(secondParagraph).toHaveAttribute("data-list-level", "0");
-  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { name: "No List" }).click();
   await expect(secondMarker).toHaveCount(0);

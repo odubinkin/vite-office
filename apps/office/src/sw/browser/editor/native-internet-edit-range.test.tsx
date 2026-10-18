@@ -36,7 +36,7 @@ it("mounted Edit Hyperlink changes one original equal neighbor with actual histo
     },
   );
   point.Dispose();
-  fireEvent.click(screen.getByRole("button", { name: /^Edit$/ }));
+  fireEvent.click(screen.getByRole("menuitem", { name: /^Edit$/ }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Hyperlink…" }));
   const url = await screen.findByLabelText("URL");
   fireEvent.change(url, { target: { value: "https://example.test/changed" } });

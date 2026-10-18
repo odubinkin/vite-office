@@ -160,7 +160,7 @@ for (const viewport of [1280, 390]) {
     await columns(page);
     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
     await page.getByRole("button", { name: "Cancel", exact: true }).click();
-    await page.getByRole("button", { name: "Table", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Table", exact: true }).click();
     await page.getByRole("menuitem", { name: "Select", exact: true }).hover();
     await page.getByRole("menuitem", { name: "Select Table", exact: true }).click();
     await columns(page);

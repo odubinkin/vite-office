@@ -15,8 +15,11 @@ for (const width of [1280, 390])
         before = await table.boundingBox();
       if (before === null) throw new Error("Missing native table geometry");
       for (const behind of [false, true]) {
-        await page.getByRole("button", { name: "Table", exact: true }).click();
-        await page.getByRole("menuitem", { name: "Insert", exact: true }).hover();
+        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+        await page
+          .getByRole("menu", { name: "Table menu" })
+          .getByRole("menuitem", { name: "Insert", exact: true })
+          .hover();
         await page
           .getByRole("menuitem", {
             name: behind ? "Insert Columns After" : "Insert Columns Before",

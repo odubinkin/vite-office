@@ -496,6 +496,7 @@ export function CommandMenuBar({
           return (
             <div className="relative" key={menu.id}>
               <button
+                role="menuitem"
                 aria-controls={`${idPrefix}-${menu.id}-menu`}
                 aria-expanded={openMenuIndex === index}
                 aria-haspopup="menu"

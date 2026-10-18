@@ -38,7 +38,7 @@ for (const width of [1280, 390])
       await editor.click({ position: { x: 8, y: 8 } });
       /** Opens the source Table > Size > Row Height command. @returns Completion. */
       async function open(): Promise<void> {
-        await page.getByRole("button", { name: "Table", exact: true }).click();
+        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
         await page.getByRole("menuitem", { name: "Size", exact: true }).hover();
         await page.getByRole("menuitem", { name: "Row Height…", exact: true }).click();
       }

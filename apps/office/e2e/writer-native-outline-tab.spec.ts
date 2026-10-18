@@ -55,7 +55,7 @@ for (const width of [1280, 390])
     await expect(heading).toHaveText("Heading");
     await expect(heading).toHaveAttribute("data-style", "heading-3");
     const download = page.waitForEvent("download");
-    await page.getByRole("button", { name: "File", exact: true }).click();
+    await page.getByRole("menuitem", { name: "File", exact: true }).click();
     await page.getByRole("menuitem", { name: "Export…" }).click();
     await page.getByRole("button", { name: "Download ODT" }).click();
     const path = await (await download).path();
