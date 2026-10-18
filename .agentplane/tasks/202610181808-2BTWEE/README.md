@@ -4,7 +4,7 @@ title: "Share file dialogs and wire Calc file menu workflows"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "Final completed Calc coverage run:263tests/98files,6293statements,4020branches,1299functions,5651lines all100%;process exit0. Related247tests at100%;production reported regressions and all declared gates verified."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T18:31:57.333Z"
+  updated_by: "EVALUATOR"
+  note: "Calc now shares actual Writer header,menu,standard-toolbar and file-dialog components;reported menu crash and shortcut-caption mismatch are fixed,with real ODS workflows and required scoped evidence."
+  evaluated_sha: "e7c3410ecd8f095c0fe6891b12f71dca1d2ce1cc"
+  blueprint_digest: "c9deece3267f8412164866f0d6d904c01fd4bffc6877ca217855c9718e04486b"
+  evidence_refs:
+    - ".agentplane/tasks/202610181808-2BTWEE/README.md"
+    - ".agentplane/tasks/202610181808-2BTWEE/quality/20261018-183157333-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181808-2BTWEE/quality/20261018-183157333-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181808-2BTWEE/quality/20261018-183157333-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181808-2BTWEE/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181808-2BTWEE/verification.md"
+    - ".agentplane/tasks/202610181808-2BTWEE/calc-coverage.log"
+    - ".agentplane/tasks/202610181808-2BTWEE/shared-coverage.log"
+    - ".agentplane/tasks/202610181808-2BTWEE/browser-review.json"
+  findings:
+    - "Reviewed implementatione7c3410ecd8f:OfficeWorkspaceHeader is extracted from actual Writer chrome and reused by Writer/Calc;CommandMenuBar/CommandToolbarItems are common. Literal popup identity lookup fixes Chromium crashes without sanitizing or renaming native UNO identities. Native File slots and actual ODS IO remain with canonical owners;Export preserves primary identity and save position."
+    - "Completed allCalc263tests at100% all four metrics;related247tests at100% touched shared/Writer presentation. Browser repeats File/Edit three times,opens actual42/84 primary ODS,shows SaveAs/Export dialogs,uses adjacent title/menu and Writer default standard-button classes,normalizes Ctrl captions,and reports zero console errors/warnings.63non-task files fit60+5scope tolerance. Build,typecheck,touched style,architecture/docs/source/registry/doctor/routing gates pass."
 commit: null
 comments:
   -
