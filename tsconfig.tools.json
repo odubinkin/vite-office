@@ -8,6 +8,7 @@
   "include": [
     "scripts/generate-writer-ui-resources.ts",
     "scripts/generate-calc-ui-resources.ts",
+    "scripts/calc-sheet-command-source.test.ts",
     "scripts/office-ui-command-catalog.test.ts",
     "scripts/libreoffice-inventory/**/*.ts",
     "scripts/test-projects.test.ts",

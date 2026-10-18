@@ -9,6 +9,10 @@ export interface CalcCommandTarget {
   Redo(): boolean;
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
+  SelectNextTab(direction: number, extend?: boolean): void;
+  SelectAllTables(): void;
+  DeselectAllTables(): void;
+  HasMultipleSelectedTables(): boolean;
 }
 /** Resource labels for the initial implemented edit slots; full Calc resource/menu projection follows separately. */
 export const calcEditCommands = [
@@ -33,16 +37,63 @@ export const calcFileCommands = [
   },
   { id: ".uno:ExportTo", slotId: 5829, label: "Export", shortcuts: [], kind: "export" },
 ] as const;
+/** Native adjacent-sheet slots:SID_KEYFUNC_START=26521;sheet grouping slots:TAB_POPUP_START=26358. */
+export const calcSheetNavigationCommands = [
+  {
+    id: ".uno:JumpToNextTable",
+    slotId: 26543,
+    label: "To Next Sheet",
+    direction: 1,
+    extend: false,
+    shortcuts: ["Control+PageDown"],
+  },
+  {
+    id: ".uno:JumpToPrevTable",
+    slotId: 26544,
+    label: "To Previous Sheet",
+    direction: -1,
+    extend: false,
+    shortcuts: ["Control+PageUp"],
+  },
+  {
+    id: ".uno:JumpToNextTableSel",
+    slotId: 26561,
+    label: "Select to Next Sheet",
+    direction: 1,
+    extend: true,
+    shortcuts: [],
+  },
+  {
+    id: ".uno:JumpToPrevTableSel",
+    slotId: 26562,
+    label: "Select to Previous Sheet",
+    direction: -1,
+    extend: true,
+    shortcuts: [],
+  },
+] as const;
+/** Select-all is a native visible menubar operation;deselect remains a native dispatcher/context operation. */
+export const calcSheetSelectionCommands = [
+  { id: ".uno:TableSelectAll", slotId: 26361, label: "Select All Sheets" },
+  { id: ".uno:TableDeselectAll", slotId: 26365, label: "Deselect All Sheets" },
+] as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
-export const calcUserCommands = [...calcEditCommands, ...calcFileCommands].map(
+export const calcUserCommands = [
+  ...calcEditCommands,
+  ...calcFileCommands,
+  ...calcSheetNavigationCommands,
+  calcSheetSelectionCommands[0],
+].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
   (item) => ({
     id: item.id,
     label: item.label,
     capabilityId:
-      "kind" in item
-        ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-        : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      "direction" in item || item.id === ".uno:TableSelectAll"
+        ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+        : "kind" in item
+          ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+          : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @returns Interface. */
@@ -64,6 +115,42 @@ export function createCalcInterface(): SfxInterface<CalcCommandTarget> {
           /** Executes through the actual action manager. @param target - Active owner. @returns Changed. */ (
             target: CalcCommandTarget,
           ) => (resource.id === ".uno:Undo" ? target.Undo() : target.Redo()),
+      }),
+    ),
+    ...calcSheetNavigationCommands.map(
+      /** Binds the native ExecuteMove direction/extension contract. @param resource - Source slot. @returns Slot. */ (
+        resource,
+      ) => ({
+        commandUrl: resource.id,
+        slotId: resource.slotId,
+        label: resource.label,
+        shortcuts: resource.shortcuts,
+        execute:
+          /** Delegates through input commit and the actual source view owner. @param target - Active view. @returns Nothing. */ (
+            target: CalcCommandTarget,
+          ) => target.SelectNextTab(resource.direction, resource.extend),
+      }),
+    ),
+    ...calcSheetSelectionCommands.map(
+      /** Binds source tab-group slots and their original availability rule. @param resource - Source slot. @returns Slot. */ (
+        resource,
+      ) => ({
+        commandUrl: resource.id,
+        slotId: resource.slotId,
+        label: resource.label,
+        getState:
+          /** Deselect is available only for multiple selected sheets. @param target - Active view. @returns State. */ (
+            target: CalcCommandTarget,
+          ) => ({
+            enabled: resource.id === ".uno:TableSelectAll" || target.HasMultipleSelectedTables(),
+          }),
+        execute:
+          /** Changes canonical sheet membership without modifying the document. @param target - Active view. @returns Nothing. */ (
+            target: CalcCommandTarget,
+          ) =>
+            resource.id === ".uno:TableSelectAll"
+              ? target.SelectAllTables()
+              : target.DeselectAllTables(),
       }),
     ),
     {

@@ -1,0 +1,79 @@
+/** @fileoverview Source ScTabView sheet grouping,per-sheet cursors and native wrap default on actual Calc owners. */
+import { expect, it } from "vitest";
+import { ScTabView } from "../inc/tabview";
+import { ScViewData } from "../inc/viewdata";
+import { ScDocument } from "../../../inc/document";
+import { ScRange, MAXTAB } from "../../../inc/address";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+/** Builds real visible sheets and the shared view/mark owners. @param count - Sheet count. @returns Owners. */
+function fixture(count = 3) {
+  const doc = new ScDocument();
+  for (let i = 0; i < count; i++) {
+    const name = unicode(`Sheet${i + 1}`);
+    doc.InsertTab(i, name);
+    name.dispose();
+  }
+  const data = new ScViewData(doc),
+    view = new ScTabView(data);
+  return { doc, data, view, marks: data.GetMarkData() };
+}
+it("uses Calc.xcs wrap=true and preserves independent sheet cursors", /** Source SelectNextTab,SetTabNo and old cursor rules. @returns Nothing. */ () => {
+  const { data, view, marks } = fixture();
+  data.SetCurX(4);
+  data.SetCurY(7);
+  marks.SetMarkArea(new ScRange(1, 2, 0, 3, 4, 0));
+  view.SelectNextTab(-1);
+  expect(data.GetTabNumber()).toBe(2);
+  expect(marks.IsMarked()).toBe(false);
+  expect(data.GetCurX()).toBe(0);
+  data.SetCurX(6);
+  data.SetCurY(8);
+  data.SetOldCursor(1, 2);
+  view.SelectNextTab(1);
+  expect(data.GetTabNumber()).toBe(0);
+  expect([data.GetCurX(), data.GetCurY()]).toEqual([4, 7]);
+  view.SelectNextTab(1);
+  expect(data.GetTabNumber()).toBe(1);
+  view.SelectNextTab(1);
+  expect([data.GetCurX(), data.GetCurY()]).toEqual([6, 8]);
+  expect(data.GetOldCurX()).toBe(6);
+  view.SelectNextTab(0);
+  expect(data.GetTabNumber()).toBe(2);
+  new ScTabView(data, false).SelectNextTab(1);
+  expect(data.GetTabNumber()).toBe(2);
+  view.SetTabNo(0);
+  new ScTabView(data, false).SelectNextTab(-1);
+  expect(data.GetTabNumber()).toBe(0);
+  for (const tab of [-1, MAXTAB + 1, 3]) view.SetTabNo(tab);
+  expect(data.GetTabNumber()).toBe(0);
+  view.SetTabNo(0);
+  expect(data.GetTabNumber()).toBe(0);
+  const single = fixture(1);
+  single.view.SelectNextTab(1);
+  single.view.SelectNextTab(-1);
+  single.view.SelectAllTables();
+  expect([...single.marks.GetSelectedTabs()]).toEqual([0]);
+});
+it("retains a partial group when entering a selected sheet and collapses an all-sheet group", /** Mirrors native SetTabNo loop and bNew override. @returns Nothing. */ () => {
+  const { data, view, marks } = fixture();
+  view.SelectNextTab(1, true);
+  expect([...marks.GetSelectedTabs()]).toEqual([0, 1]);
+  view.SetTabNo(0);
+  expect([...marks.GetSelectedTabs()]).toEqual([0, 1]);
+  view.SelectNextTab(-1, true);
+  expect([...marks.GetSelectedTabs()]).toEqual([0, 1, 2]);
+  expect(data.GetTabNumber()).toBe(2);
+  view.SetTabNo(1);
+  expect([...marks.GetSelectedTabs()]).toEqual([1]);
+  view.SelectAllTables();
+  marks.SetMarkArea(new ScRange(2, 3, 1, 4, 5, 1));
+  view.SetTabNo(1);
+  expect(marks.IsMarked()).toBe(true);
+  view.SetTabNo(1, true);
+  expect([...marks.GetSelectedTabs()]).toEqual([0, 1, 2]);
+  expect(marks.IsMarked()).toBe(false);
+  view.DeselectAllTables();
+  expect([...marks.GetSelectedTabs()]).toEqual([1]);
+  view.SetTabNo(2);
+  expect([...marks.GetSelectedTabs()]).toEqual([2]);
+});

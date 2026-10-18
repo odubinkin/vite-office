@@ -192,7 +192,7 @@ export function CalcWorkbench({
   return (
     <section
       onKeyDown={
-        /** Routes file shortcuts through the same active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
+        /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
           event,
         ) => {
           if (
@@ -203,11 +203,15 @@ export function CalcWorkbench({
             return;
           const key = event.key.toLowerCase(),
             url =
-              key === "o"
-                ? ".uno:OpenFromCalc"
-                : key === "s" && event.shiftKey
-                  ? ".uno:SaveAs"
-                  : undefined;
+              !event.altKey && !event.shiftKey && key === "pagedown"
+                ? ".uno:JumpToNextTable"
+                : !event.altKey && !event.shiftKey && key === "pageup"
+                  ? ".uno:JumpToPrevTable"
+                  : key === "o"
+                    ? ".uno:OpenFromCalc"
+                    : key === "s" && event.shiftKey
+                      ? ".uno:SaveAs"
+                      : undefined;
           if (url) {
             event.preventDefault();
             frame.GetDispatcher().Execute(url);
@@ -394,15 +398,11 @@ export function CalcWorkbench({
               ) => {
                 if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
                   event.preventDefault();
-                  controller.SelectTab(
-                    Math.max(
-                      0,
-                      Math.min(
-                        doc.GetTableCount() - 1,
-                        view.GetTabNumber() + (event.key === "ArrowRight" ? 1 : -1),
-                      ),
-                    ),
-                  );
+                  frame
+                    .GetDispatcher()
+                    .Execute(
+                      event.key === "ArrowRight" ? ".uno:JumpToNextTable" : ".uno:JumpToPrevTable",
+                    );
                   focusGrid();
                 }
               }

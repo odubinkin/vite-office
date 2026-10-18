@@ -8,7 +8,8 @@
     "rationale": "React DOM platform code binds existing canonical source model/view and shared Sfx contracts;it does not claim to translate a native VCL implementation file.",
     "responsibilities": [
       "Task0V5WR6 connects the production Calc route to actual ScDocument,ScViewData and ScDocShell owners through shared SfxObjectShell,SfxUndoManager,SfxInterface,SfxViewFrame,dispatcher and command bindings. Controlled React presenters reuse Writer toolbar styles,Tailwind,Lucide and global fonts. The supported slice includes plain scalar/native local-A1 input,recalculation,cancel,selection,name-box navigation,sheet append/switch,typed token-valued undo/redo and bounded browser viewport projection. Compiled formula adoption retains code errors in history;sheet deletion ends formula subscriptions and renumbers source cells. One real model owns cells;browser state contains transient input/geometry only. This is a bounded editable workspace,not full Calc/native parity.",
-      "TaskFJTKAS connects actual Calc ODS packages and ScDocShell lifecycle/history to shared primary browser storage and Writer autosave policy. Open imports into a separate real ScDocument and adopts it only while request/content generation remain current. Replacement resets actual view/history ownership and ends displaced formula subscriptions. Confirmed Save/SaveAs captures source model,medium,generation and shared SfxUndoSavePosition;later edits remain dirty and stale/failed/closed completions cannot adopt a destination. The first two displayed scalar words in native row-major sheet order name an untitled browser document,matching Writer first-two-word naming;empty documents are excluded. Stored bodies are complete existing ODS packages,not alternate workbook JSON. No recovery UI/storage is introduced."
+      "TaskFJTKAS connects actual Calc ODS packages and ScDocShell lifecycle/history to shared primary browser storage and Writer autosave policy. Open imports into a separate real ScDocument and adopts it only while request/content generation remain current. Replacement resets actual view/history ownership and ends displaced formula subscriptions. Confirmed Save/SaveAs captures source model,medium,generation and shared SfxUndoSavePosition;later edits remain dirty and stale/failed/closed completions cannot adopt a destination. The first two displayed scalar words in native row-major sheet order name an untitled browser document,matching Writer first-two-word naming;empty documents are excluded. Stored bodies are complete existing ODS packages,not alternate workbook JSON. No recovery UI/storage is introduced.",
+      "TaskFKYDT8 ports ScTabView SelectNextTab and SetTabNo sheet grouping from tabview3.cxx and SelectAllTables/DeselectAllTables from tabview2.cxx over real ScViewData/ScMarkData. Native WrapNextPrevSheetTab defaults true. Existing per-sheet cursor state survives navigation;normal selection retains a partial group on already-selected target sheets and collapses an all-selected group. Native Sfx slots26543,26544,26561,26562,26361,26365 use original operation/state boundaries. Navigation commits the real input draft first and rejected drafts prevent movement. Source group-only commands do not change model generation,dirty state or history. Shared CommandMenuBar executes real slots and browser Ctrl/Meta+PageUp/PageDown plus tab-arrow navigation use the same dispatcher. Hidden/alternate sheets,reference editing,drawing/window services and full native parity remain unported."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
           "marker": "real isolated primary package store"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+          "marker": "uses source slots"
         }
       ]
     }

@@ -1,0 +1,95 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3315316f-31e4-478e-b359-0cd714f0db20",
+    "capabilityId": "CAP-3315316f-31e4-478e-b359-0cd714f0db20",
+    "suite": "calc",
+    "subsystem": "sheet-navigation",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "TaskFKYDT8 ports ScTabView SelectNextTab and SetTabNo sheet grouping from tabview3.cxx and SelectAllTables/DeselectAllTables from tabview2.cxx over real ScViewData/ScMarkData. Native WrapNextPrevSheetTab defaults true. Existing per-sheet cursor state survives navigation;normal selection retains a partial group on already-selected target sheets and collapses an all-selected group. Native Sfx slots26543,26544,26561,26562,26361,26365 use original operation/state boundaries. Navigation commits the real input draft first and rejected drafts prevent movement. Source group-only commands do not change model generation,dirty state or history. Shared CommandMenuBar executes real slots and browser Ctrl/Meta+PageUp/PageDown plus tab-arrow navigation use the same dispatcher. Hidden/alternate sheets,reference editing,drawing/window services and full native parity remain unported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Source sheet navigation and grouping commands",
+    "gaps": [
+      "Only all-visible sheets and the existing cursor/mark kernel are represented;hidden/alternate sheets,reference mode and VCL services remain unported.",
+      "Full all-app regression is scheduled at task10;current task9 uses all Calc and affected shared/Writer checks."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview3.cxx",
+          "marker": "ScTabView::SelectNextTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview2.cxx",
+          "marker": "ScTabView::SelectAllTables"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/cellsh4.cxx",
+          "marker": "case SID_NEXT_TABLE:"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+          "marker": "WrapNextPrevSheetTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "JumpToNextTable"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+          "marker": "ScTabView"
+        },
+        {
+          "path": "apps/office/src/sc/sdi/scalc.ts",
+          "marker": "calcSheetNavigationCommands"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+          "marker": "uses source slots"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview3.test.ts",
+          "marker": "uses Calc.xcs wrap=true"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+          "marker": "ScTabView"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-sheet-navigation-and-group-selection",
+    "scopeLimitations": [
+      "Only all-visible sheets and the existing cursor/mark kernel are represented;hidden/alternate sheets,reference mode and VCL services remain unported.",
+      "Full all-app regression is scheduled at task10;current task9 uses all Calc and affected shared/Writer checks."
+    ]
+  }
+}

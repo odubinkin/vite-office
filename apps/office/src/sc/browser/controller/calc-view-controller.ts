@@ -1,5 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import { ScDocShell } from "../../source/ui/docshell/docsh";
+import { ScTabView } from "../../source/ui/inc/tabview";
 import { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
 import { SfxUndoAction } from "../../../svl/source/undo/undo";
@@ -256,14 +257,32 @@ export class CalcViewController {
   /** Switches actual tab/cursor/mark ownership. @param tab - Existing tab. @param extend - Toggle selected sheets. @returns Nothing. */
   SelectTab(tab: number, extend = false): void {
     if (!this.shell.GetDocument().FetchTable(tab) || !this.Commit()) return;
-    this.viewData.SetTabNo(tab);
-    const marks = this.viewData.GetMarkData();
-    if (extend) marks.SelectTable(tab, true);
-    else marks.SelectOneTable(tab);
-    marks.ResetMark();
+    new ScTabView(this.viewData).SetTabNo(tab, false, extend);
     this.anchor = this.Position();
     this.addressText = this.Address();
     this.Changed();
+  }
+  /** Executes native adjacent-sheet navigation after accepting pending input. @param direction - Previous or next. @param extend - Extend the selected sheet group. @returns Nothing. */
+  SelectNextTab(direction: number, extend = false): void {
+    if (!this.Commit()) return;
+    new ScTabView(this.viewData).SelectNextTab(direction, extend);
+    this.anchor = this.Position();
+    this.addressText = this.Address();
+    this.Changed();
+  }
+  /** Selects all actual sheets through the source view owner. @returns Nothing. */
+  SelectAllTables(): void {
+    new ScTabView(this.viewData).SelectAllTables();
+    this.Changed();
+  }
+  /** Deselects the group while retaining the active sheet. @returns Nothing. */
+  DeselectAllTables(): void {
+    new ScTabView(this.viewData).DeselectAllTables();
+    this.Changed();
+  }
+  /** Queries original tab-group state for the native deselection slot. @returns Multiple selected. */
+  HasMultipleSelectedTables(): boolean {
+    return this.viewData.GetMarkData().GetSelectCount() > 1;
   }
   /** Appends a real uniquely named sheet and records a reversible action. @returns Nothing. */
   InsertSheet(): void {
