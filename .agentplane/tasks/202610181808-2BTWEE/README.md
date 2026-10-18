@@ -1,10 +1,11 @@
 ---
 id: "202610181808-2BTWEE"
 title: "Share file dialogs and wire Calc file menu workflows"
-status: "DOING"
+result_summary: "Calc shares Writer header,menus,toolbars and file dialogs with working native file slots and corrected popup identities and shortcut captions"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T18:31:54.943Z"
+  updated_at: "2026-10-18T18:32:19.667Z"
   updated_by: "CODER"
-  note: "Final completed Calc coverage run:263tests/98files,6293statements,4020branches,1299functions,5651lines all100%;process exit0. Related247tests at100%;production reported regressions and all declared gates verified."
+  note: "Verified263Calc and247related tests with100% coverage,production browser regressions fixed,and all declared architecture/source/build/style gates pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Reviewed implementatione7c3410ecd8f:OfficeWorkspaceHeader is extracted from actual Writer chrome and reused by Writer/Calc;CommandMenuBar/CommandToolbarItems are common. Literal popup identity lookup fixes Chromium crashes without sanitizing or renaming native UNO identities. Native File slots and actual ODS IO remain with canonical owners;Export preserves primary identity and save position."
     - "Completed allCalc263tests at100% all four metrics;related247tests at100% touched shared/Writer presentation. Browser repeats File/Edit three times,opens actual42/84 primary ODS,shows SaveAs/Export dialogs,uses adjacent title/menu and Writer default standard-button classes,normalizes Ctrl captions,and reports zero console errors/warnings.63non-task files fit60+5scope tolerance. Build,typecheck,touched style,architecture/docs/source/registry/doctor/routing gates pass."
-commit: null
+commit:
+  hash: "e7c3410ecd8f095c0fe6891b12f71dca1d2ce1cc"
+  message: "✨ 2BTWEE calc: reuse Writer chrome and file dialogs with native file slots"
 comments:
   -
     author: "CODER"
     body: "Start: Share actual Writer file-dialog components and connect Calc ODS File commands through canonical shell/primary IO and shared menus;verify both suites and production browser."
+  -
+    author: "CODER"
+    body: "Verified: Calc shares Writer header,menus,toolbars and file dialogs with working native file slots and corrected popup identities and shortcut captions. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Final completed Calc coverage run:263tests/98files,6293statements,4020branches,1299functions,5651lines all100%;process exit0. Related247tests at100%;production reported regressions and all declared gates verified."
+  -
+    type: "verify"
+    at: "2026-10-18T18:32:19.667Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified263Calc and247related tests with100% coverage,production browser regressions fixed,and all declared architecture/source/build/style gates pass."
+  -
+    type: "status"
+    at: "2026-10-18T18:32:19.806Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc shares Writer header,menus,toolbars and file dialogs with working native file slots and corrected popup identities and shortcut captions. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T18:31:55.029Z"
+doc_updated_at: "2026-10-18T18:32:19.807Z"
 doc_updated_by: "CODER"
 description: "Approved UI plan task7/10. Extract Writer file dialog presentation,modal header,title-collision panel and dialog requests into shared framework browser modules,retaining permanent suite adapters and identical Writer behavior/style. Connect Calc File commands/menu and toolbar to real ODS browser open/import/save-as/download and collision workflows,using shared menu/command controls,primary store,autosave flush and canonical shell/view owners. Add actual shell Export boundary preserving primary identity and dirty state. UI adapters validate/commit current input before file operations,retain errors and source focus. Up to60non-task files including required metadata and focused tests. Full native menu/resource and remaining chrome/interaction breadth is subsequent work;no network,merges or other checkouts."
 sections:
@@ -186,6 +205,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610181808-2BTWEE --result verified-202610181808-2BTWEE --commit e7c3410ecd8f095c0fe6891b12f71dca1d2ce1cc
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T18:32:19.667Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified263Calc and247related tests with100% coverage,production browser regressions fixed,and all declared architecture/source/build/style gates pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:31:55.029Z, excerpt_hash=sha256:8a000065674b745d39d817b752063024c470fa158a3d2ced2c00f0e1213b24e0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181808-2BTWEE/blueprint/resolved-snapshot.json
+    - old_digest: c9deece3267f8412164866f0d6d904c01fd4bffc6877ca217855c9718e04486b
+    - current_digest: c9deece3267f8412164866f0d6d904c01fd4bffc6877ca217855c9718e04486b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181808-2BTWEE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181808-2BTWEE --result verified-202610181808-2BTWEE --commit dbbf64a6b799e34b38a81a3f0f83375ec5309dd6
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -325,6 +374,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610181808-2BTWEE --result verified-202610181808-2BTWEE --commit e7c3410ecd8f095c0fe6891b12f71dca1d2ce1cc
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T18:32:19.667Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified263Calc and247related tests with100% coverage,production browser regressions fixed,and all declared architecture/source/build/style gates pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:31:55.029Z, excerpt_hash=sha256:8a000065674b745d39d817b752063024c470fa158a3d2ced2c00f0e1213b24e0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181808-2BTWEE/blueprint/resolved-snapshot.json
+- old_digest: c9deece3267f8412164866f0d6d904c01fd4bffc6877ca217855c9718e04486b
+- current_digest: c9deece3267f8412164866f0d6d904c01fd4bffc6877ca217855c9718e04486b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181808-2BTWEE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181808-2BTWEE --result verified-202610181808-2BTWEE --commit dbbf64a6b799e34b38a81a3f0f83375ec5309dd6
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
