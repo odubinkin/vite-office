@@ -1,10 +1,11 @@
 ---
 id: "202610181334-NXE4RF"
 title: "Serialize scalar Calc formulas through canonical compiler owners"
-status: "DOING"
+result_summary: "Implemented ScFormulaCell.GetFormula with explicit ODFF through real shared and Calc compiler owners,including source whitespace/quotes,forced equals,relative/absolute local references and canonical consumed decimal output. Shared scalar symbols are reused and no alternate formula text model exists. Inventory/provenance and CALC-187 updated. ODS filters remain next;UI is separate;minimal readiness and full all-app verification remain pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "Formula output uses real source-order tokens and Calc reference convention,with native grammar-state ownership and empty base virtual. Existing shared RPN bodies are byte-identical. English symbol entries are reused by scanning and output. RTL consumed decimal rules preserve signed zero,integer precision,rounding and exponent/max guards using native JS shortest decomposition plus exact integer arithmetic."
     - "Whole Calc215cases/exact49owners and related206cases/exact3shared owners pass every raw S/B/F/L counter;build+5Chromium/DOM-free Worker scenarios and13gates pass with restored source links. Inventory remains partial/unverified and CALC-187 records precision behavior."
-commit: null
+commit:
+  hash: "c01a5ffd901369b8431049602efc3c4d0f4cc5ca"
+  message: "🧮 NXE4RF calc: serialize scalar formulas through real token owners"
 comments:
   -
     author: "CODER"
     body: "Start: serialize real scalar/local-reference tokens through shared and Calc compiler owners for ODS, with consumed native decimal formatting and no UI or second formula model."
+  -
+    author: "CODER"
+    body: "Verified: source-token formula serialization and consumed RTL decimal formatting pass215Calc/206related tests,49Calc/3shared strict raw100,build+5Chromium/Worker cases,13source gates and same-agent source review."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed215Calc/206related cases;49Calc/3shared owners strict raw100;build+5Chromium/DOM-free Worker scenarios;13source gates;8pinned-source and24path/hash audit. Core formula serialization complete;ODS/UI readiness unclaimed."
+  -
+    type: "status"
+    at: "2026-10-18T13:49:56.320Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: source-token formula serialization and consumed RTL decimal formatting pass215Calc/206related tests,49Calc/3shared strict raw100,build+5Chromium/Worker cases,13source gates and same-agent source review."
 doc_version: 3
-doc_updated_at: "2026-10-18T13:49:21.849Z"
+doc_updated_at: "2026-10-18T13:49:56.322Z"
 doc_updated_by: "CODER"
 description: "Task202: expose source-token formula serialization on the actual shared FormulaCompiler/Calc compiler/cell/document chain for same-model ODS. Implement the consumed native RTL Automatic/Max decimal-format specialization with JS shortest-decimal primitives and source integer rounding; retain native exponent/default/sign rules. No UI or broad locale/function parity."
 sections:
