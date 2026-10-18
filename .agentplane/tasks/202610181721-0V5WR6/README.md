@@ -4,7 +4,7 @@ title: "Connect editable Calc workspace to production application"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,26 @@ verification:
   updated_by: "CODER"
   note: "Calc252tests/95files,100% all metrics;shared25/Desktop11;build,typecheck,touched lint/format,architecture/docs/source provenance/Calc parity and real-browser production checks pass. Task5/10;full regression follows user cadence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T17:51:47.258Z"
+  updated_by: "EVALUATOR"
+  note: "Production Calc scalar workspace satisfies the approved task5 slice with real canonical owners and Writer shared style;all declared scoped checks pass."
+  evaluated_sha: "65530b0f5e849c71f21287f20da015a4863e6524"
+  blueprint_digest: "d6006f8f42bcc66440fe76fc61eaf814f2366a9a7b7bbadf8e11250297c925b6"
+  evidence_refs:
+    - ".agentplane/tasks/202610181721-0V5WR6/README.md"
+    - ".agentplane/tasks/202610181721-0V5WR6/quality/20261018-175147258-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181721-0V5WR6/quality/20261018-175147258-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181721-0V5WR6/quality/20261018-175147258-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181721-0V5WR6/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181721-0V5WR6/verification.md"
+    - ".agentplane/tasks/202610181721-0V5WR6/calc-coverage.log"
+    - ".agentplane/tasks/202610181721-0V5WR6/browser-review.json"
+    - ".agentplane/tasks/202610181721-0V5WR6/parity.log"
+  findings:
+    - "Reviewed65530b0f5e84:actual ScDocument/ScViewData storage,shared Sfx shell/frame/dispatcher/history,and controlled React presenters form one ownership chain. Formula history adopts copied native token arrays and preserves code errors. Native DeleteTab guards and subscription cleanup are covered without claiming unported reference services."
+    - "Evidence records252Calc tests at100% in all four metrics,25shared and11Writer Desktop tests,production browser editing/history/sheet and maximum-coordinate geometry checks,plus build/typecheck/style/architecture/source gates.40non-task files fit the35+5 scope tolerance."
 commit: null
 comments:
   -
