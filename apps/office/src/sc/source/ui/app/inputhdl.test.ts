@@ -47,3 +47,33 @@ it("keeps native modification independent of caret mode and resets only at input
   input.ResetModified();
   expect(input.IsModified()).toBe(false);
 });
+
+it("retains native StartsLikeFormula context for existing content versus new typing", /** Formula-mode admission uses original first-character rules and lifecycle resets. @returns Nothing. */ () => {
+  const input = new ScInputHandler();
+  expect(input.IsFormulaMode()).toBe(false);
+  for (const [value, expected] of [
+    ["", false],
+    ["1", false],
+    ["=", true],
+    ["+1", true],
+    ["-1", true],
+    [" word", false],
+  ] as const) {
+    input.UpdateInputState(value, false);
+    expect(input.IsFormulaMode()).toBe(expected);
+  }
+  input.UpdateInputState("-2", true);
+  expect(input.IsFormulaMode()).toBe(false);
+  input.UpdateInputState("+A1");
+  expect(input.IsFormulaMode()).toBe(false);
+  input.UpdateInputState("=A1");
+  expect(input.IsFormulaMode()).toBe(true);
+  input.StartOrToggleEditMode();
+  expect(input.IsFormulaMode()).toBe(true);
+  input.SetModified();
+  input.ResetInputState();
+  expect(input.IsFormulaMode()).toBe(false);
+  expect(input.IsModified()).toBe(false);
+  input.UpdateInputState("-2");
+  expect(input.IsFormulaMode()).toBe(true);
+});

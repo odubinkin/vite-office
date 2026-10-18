@@ -193,6 +193,7 @@ it("projects actual sheet names and separate selected/active tabs without retain
       canInsert
       onSelect={onSelect}
       onInsert={onInsert}
+      onContextPopup={vi.fn()}
       onScroll={onScroll}
       onKeyDown={onTabKeyDown}
     />,
@@ -220,6 +221,7 @@ it("projects actual sheet names and separate selected/active tabs without retain
       canInsert={false}
       onSelect={onSelect}
       onInsert={onInsert}
+      onContextPopup={vi.fn()}
       onScroll={onScroll}
       onKeyDown={onTabKeyDown}
     />,

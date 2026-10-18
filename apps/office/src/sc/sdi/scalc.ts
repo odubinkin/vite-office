@@ -73,7 +73,7 @@ export const calcSheetNavigationCommands = [
     shortcuts: [],
   },
 ] as const;
-/** Select-all is a native visible menubar operation;deselect remains a native dispatcher/context operation. */
+/** Select-all is a native menubar/context operation;deselect is a native context operation. */
 export const calcSheetSelectionCommands = [
   { id: ".uno:TableSelectAll", slotId: 26361, label: "Select All Sheets" },
   { id: ".uno:TableDeselectAll", slotId: 26365, label: "Deselect All Sheets" },
@@ -96,7 +96,7 @@ export const calcUserCommands = [
   calcInputModeCommand,
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
-  calcSheetSelectionCommands[0],
+  ...calcSheetSelectionCommands,
   calcGoToSheetCommand,
 ].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
@@ -106,7 +106,9 @@ export const calcUserCommands = [
     capabilityId:
       item.id === ".uno:JumpToTable"
         ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-        : "direction" in item || item.id === ".uno:TableSelectAll"
+        : "direction" in item ||
+            item.id === ".uno:TableSelectAll" ||
+            item.id === ".uno:TableDeselectAll"
           ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
           : "kind" in item
             ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)

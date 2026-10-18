@@ -1,4 +1,5 @@
 /** @fileoverview Pinned native defaults and numeric slot identities consumed by Calc sheet-navigation UI. */
+import calcResources from "../apps/office/src/sc/uiconfig/scalc/calc-ui.generated.json" with { type: "json" };
 import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
 /** Reads an original pinned source. @param path - Relative native path. @returns Text. */
@@ -115,4 +116,30 @@ it("pins selected-sheet list transactions and native typed-cell Undo ownership",
     "rDoc.SetFormulaCell(rPos, getFormula())",
   );
   expect(source("include/svl/undo.hxx")).toContain("SfxUndoAction* GetUndoAction(size_t idx)");
+});
+
+it("pins complete sheet-tab popup resource and source selection/formula admission", /** Actual native XML and controller bodies define the resource and context policy. @returns Nothing. */ () => {
+  const xml = source("sc/uiconfig/scalc/popupmenu/sheettab.xml"),
+    control = source("sc/source/ui/view/tabcont.cxx"),
+    input = source("sc/source/ui/app/inputhdl.cxx");
+  const urls = [...xml.matchAll(/menu:id="([^"]+)"/g)].map(
+    /** Reads an original command identity. @param match - Native entry. @returns URL. */ (match) =>
+      match[1],
+  );
+  expect(
+    calcResources.surfaces.sheettab.flatMap(
+      /** Reads original generated leaves. @param node - Source node. @returns Native URL if a command. */ (
+        node,
+      ) => ("commandUrl" in node ? [node.commandUrl] : []),
+    ),
+  ).toEqual(urls);
+  expect(urls).toHaveLength(14);
+  expect(calcResources.surfaces.sheettab).toHaveLength(17);
+  expect([...xml.matchAll(/<menu:menuseparator\/>/g)]).toHaveLength(3);
+  expect(control).toContain("bool bAlreadySelected = IsPageSelected( nId )");
+  expect(control).toContain("if(bAlreadySelected)\n        return;");
+  expect(control).toContain("pScMod->IsFormulaMode() || pScMod->IsModalMode()");
+  expect(control).toContain('ExecutePopup( u"sheettab"_ustr )');
+  expect(input).toContain("mbEditingExistingContent = !cTyped && !aStr.isEmpty()");
+  expect(input).toContain("(!mbEditingExistingContent && (rStr[0] == '+' || rStr[0] == '-'))");
 });

@@ -10,6 +10,7 @@ import {
 } from "./office-ui-resource-model";
 import {
   findEnglishLabel,
+  findEnglishLabelProperty,
   findShortcuts,
   stripMnemonic,
   findCommandPropertyBits,
@@ -17,6 +18,7 @@ import {
 const root = "vendor/libreoffice-reference/",
   output = "apps/office/src/sc/uiconfig/scalc/calc-ui.generated.json";
 const surfaces = {
+  sheettab: "sc/uiconfig/scalc/popupmenu/sheettab.xml",
   menubar: "sc/uiconfig/scalc/menubar/menubar.xml",
   standardbar: "sc/uiconfig/scalc/toolbar/standardbar.xml",
   textobjectbar: "sc/uiconfig/scalc/toolbar/textobjectbar.xml",
@@ -98,12 +100,19 @@ const commands = Object.fromEntries(
       /** Projects exact source English labels and shared default accelerator notation. @param url - Original command. @returns Resource pair. */ (
         url,
       ) => {
-        const label = findEnglishLabel(url, ...catalogs);
+        const label = findEnglishLabel(url, ...catalogs),
+          popupLabel = findEnglishLabelProperty(url, "PopupLabel", ...catalogs);
         return [
           url,
           {
             label: stripMnemonic(label),
             showsDialog: label.endsWith("..."),
+            ...(popupLabel === undefined
+              ? {}
+              : {
+                  popupLabel: stripMnemonic(popupLabel),
+                  popupShowsDialog: popupLabel.endsWith("..."),
+                }),
             shortcuts: findShortcuts(url, texts[catalogPaths[2]] as string),
             semantics: (findCommandPropertyBits(url, ...catalogs) & 8) !== 0 ? "check" : "action",
           },

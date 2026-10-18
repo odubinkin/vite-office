@@ -4,6 +4,10 @@
   "locale": "en-US",
   "sources": [
     {
+      "path": "sc/uiconfig/scalc/popupmenu/sheettab.xml",
+      "sha256": "a7ab4f18a4123a266b434f740028b4654b1d4ec26ff7a8ee48f567e9d21e0eb5"
+    },
+    {
       "path": "sc/uiconfig/scalc/menubar/menubar.xml",
       "sha256": "17c47048431d2933ac248977da2dbba66636c7ae1310a361825d8334828f97bc"
     },
@@ -438,6 +442,8 @@
     ".uno:ColumnWidth": {
       "label": "Column Width",
       "showsDialog": true,
+      "popupLabel": "Column Width",
+      "popupShowsDialog": true,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -583,6 +589,8 @@
     ".uno:DataDataPilotRun": {
       "label": "Pivot Table",
       "showsDialog": false,
+      "popupLabel": "Properties",
+      "popupShowsDialog": true,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -691,6 +699,8 @@
     ".uno:Delete": {
       "label": "Clear Cells",
       "showsDialog": true,
+      "popupLabel": "Clear Contents",
+      "popupShowsDialog": true,
       "shortcuts": ["DELETE", "BACKSPACE"],
       "semantics": "action"
     },
@@ -703,6 +713,8 @@
     ".uno:DeleteCell": {
       "label": "Delete Cells",
       "showsDialog": true,
+      "popupLabel": "Delete",
+      "popupShowsDialog": true,
       "shortcuts": ["Ctrl+SUBTRACT", "Meta+SUBTRACT"],
       "semantics": "action"
     },
@@ -967,6 +979,8 @@
     ".uno:FormatCellDialog": {
       "label": "Format Cells",
       "showsDialog": true,
+      "popupLabel": "Format Cells",
+      "popupShowsDialog": true,
       "shortcuts": ["Ctrl+1", "Meta+1"],
       "semantics": "action"
     },
@@ -1153,6 +1167,8 @@
     ".uno:HideColumn": {
       "label": "Hide Columns",
       "showsDialog": false,
+      "popupLabel": "Hide Columns",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1171,6 +1187,8 @@
     ".uno:HideRow": {
       "label": "Hide Rows",
       "showsDialog": false,
+      "popupLabel": "Hide Rows",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1225,6 +1243,8 @@
     ".uno:InsertAnnotation": {
       "label": "Comment",
       "showsDialog": false,
+      "popupLabel": "Insert Comment",
+      "popupShowsDialog": false,
       "shortcuts": ["Ctrl+Alt+C", "Meta+Alt+C"],
       "semantics": "action"
     },
@@ -1243,6 +1263,8 @@
     ".uno:InsertCell": {
       "label": "Insert Cells",
       "showsDialog": true,
+      "popupLabel": "Insert",
+      "popupShowsDialog": true,
       "shortcuts": ["Ctrl+ADD", "Meta+ADD", "Ctrl+Shift+ADD", "Meta+Shift+ADD"],
       "semantics": "action"
     },
@@ -1255,12 +1277,16 @@
     ".uno:InsertColumnsAfter": {
       "label": "Insert Columns After",
       "showsDialog": false,
+      "popupLabel": "Insert Columns After",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertColumnsBefore": {
       "label": "Insert Columns Before",
       "showsDialog": false,
+      "popupLabel": "Insert Columns Before",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1309,6 +1335,8 @@
     ".uno:InsertGraphic": {
       "label": "Image",
       "showsDialog": true,
+      "popupLabel": "Insert Image",
+      "popupShowsDialog": true,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1387,12 +1415,16 @@
     ".uno:InsertRowsAfter": {
       "label": "Insert Rows Below",
       "showsDialog": false,
+      "popupLabel": "Insert Rows Below",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertRowsBefore": {
       "label": "Insert Rows Above",
       "showsDialog": false,
+      "popupLabel": "Insert Rows Above",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1737,6 +1769,8 @@
     ".uno:PageFormatDialog": {
       "label": "Format Page",
       "showsDialog": true,
+      "popupLabel": "Format Page",
+      "popupShowsDialog": true,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1785,18 +1819,24 @@
     ".uno:PasteOnlyFormula": {
       "label": "Paste Only Formula",
       "showsDialog": false,
+      "popupLabel": "Formula",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
     ".uno:PasteOnlyText": {
       "label": "Paste Only Text",
       "showsDialog": false,
+      "popupLabel": "Text",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
     ".uno:PasteOnlyValue": {
       "label": "Paste Only Numbers",
       "showsDialog": false,
+      "popupLabel": "Number",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1809,12 +1849,16 @@
     ".uno:PasteTransposed": {
       "label": "Paste Transposed",
       "showsDialog": false,
+      "popupLabel": "Transpose",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
     ".uno:PasteUnformatted": {
       "label": "Paste Unformatted Text",
       "showsDialog": false,
+      "popupLabel": "Unformatted Text",
+      "popupShowsDialog": false,
       "shortcuts": ["Ctrl+Alt+Shift+V", "Meta+Alt+Shift+V"],
       "semantics": "action"
     },
@@ -1881,6 +1925,8 @@
     ".uno:ProtectTraceChangeMode": {
       "label": "Protect",
       "showsDialog": true,
+      "popupLabel": "Protect Track Changes",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -1965,6 +2011,8 @@
     ".uno:RowHeight": {
       "label": "Row Height",
       "showsDialog": true,
+      "popupLabel": "Row Height",
+      "popupShowsDialog": true,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2145,6 +2193,8 @@
     ".uno:SetLanguageAllTextMenu": {
       "label": "For All Text",
       "showsDialog": false,
+      "popupLabel": "Language for All Text",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2175,6 +2225,8 @@
     ".uno:SetTabBgColor": {
       "label": "Sheet Tab Color",
       "showsDialog": true,
+      "popupLabel": "Tab Color",
+      "popupShowsDialog": true,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2199,6 +2251,8 @@
     ".uno:SheetRightToLeft": {
       "label": "Sheet Right-To-Left",
       "showsDialog": false,
+      "popupLabel": "Sheet Right-To-Left",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2223,6 +2277,8 @@
     ".uno:ShowColumn": {
       "label": "Show Columns",
       "showsDialog": false,
+      "popupLabel": "Show Columns",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2277,6 +2333,8 @@
     ".uno:ShowRow": {
       "label": "Show Rows",
       "showsDialog": false,
+      "popupLabel": "Show Rows",
+      "popupShowsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2427,6 +2485,12 @@
     ".uno:TabDialog": {
       "label": "Activation Order",
       "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TableDeselectAll": {
+      "label": "Deselect All Sheets",
+      "showsDialog": false,
       "shortcuts": [],
       "semantics": "action"
     },
@@ -2715,6 +2779,25 @@
     }
   },
   "surfaces": {
+    "sheettab": [
+      { "commandUrl": ".uno:Insert", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Remove", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:RenameTable", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DuplicateSheet", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Move", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:TableSelectAll", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:TableDeselectAll", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Protect", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Hide", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Show", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ToggleSheetGrid", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SetTabBgColor", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SheetRightToLeft", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:TableEvents", "kind": "command", "visible": true }
+    ],
     "menubar": [
       {
         "id": ".uno:PickList",

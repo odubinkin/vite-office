@@ -2,6 +2,8 @@
 import { ScInputMode } from "../../inc/global";
 import {
   useEffect,
+  useState,
+  useCallback,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -11,6 +13,12 @@ import {
 import { Undo2, Redo2, FolderOpen } from "lucide-react";
 import { CalcViewController } from "../controller/calc-view-controller";
 import { cellPresentation } from "../editor/cell-input";
+import {
+  CommandPopupMenu,
+  type CommandPopupMenuProps,
+} from "../../../framework/browser/presentation/CommandPopupMenu";
+import { calcSheetTabItems } from "../../uiconfig/scalc/popupmenu/sheettab";
+import { getCalcPopupCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { ScGridWindow } from "./ScGridWindow";
 import { ScInputWindow, type CalcInputAction } from "./ScInputWindow";
 import { ScTabControl } from "./ScTabControl";
@@ -51,7 +59,13 @@ export function CalcWorkbench({
     sheetWorkflows.dialogs.GetSnapshot,
     sheetWorkflows.dialogs.GetSnapshot,
   );
+  const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
+  const closeSheetPopup = useCallback(
+    /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
+    [],
+  );
   const modal = dialog !== undefined || sheetDialog !== undefined;
+  if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null);
   const view = controller.viewData,
@@ -397,6 +411,17 @@ export function CalcWorkbench({
           <ScTabControl
             viewData={view}
             canInsert={doc.GetTableCount() <= MAXTAB}
+            onContextPopup={
+              /** Admits native selection/formula policy before mounting the shared Writer popup. @param tab - Original target. @param point - Device anchor. @param owner - Actual sheet-tab button. @returns Nothing. */ (
+                tab,
+                point,
+                owner,
+              ) => {
+                if (modal || !controller.PrepareSheetContextMenu(tab)) return;
+                owner.focus({ preventScroll: true });
+                setSheetPopup(point);
+              }
+            }
             onSelect={
               /** Selects source sheets and marks. @param tab - Sheet. @param event - Click. @returns Nothing. */ (
                 tab,
@@ -453,6 +478,19 @@ export function CalcWorkbench({
           <span className="ml-auto">{controller.error || "Ready"}</span>
         </div>
       </div>
+      {sheetPopup === undefined || modal ? null : (
+        <CommandPopupMenu
+          ariaLabel="Calc sheet context menu"
+          commandSource={source}
+          items={calcSheetTabItems}
+          position={sheetPopup}
+          getCommandResource={getCalcPopupCommandResource}
+          resolveArguments={
+            /** Native sheet context slots take no arguments. @returns Undefined. */ () => undefined
+          }
+          onClose={closeSheetPopup}
+        />
+      )}
       {dialog === undefined ? null : (
         <CalcFileDialog
           workflows={fileWorkflows}

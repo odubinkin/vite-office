@@ -9,6 +9,11 @@ import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 export interface ScTabControlProps {
   readonly viewData: ScViewData;
   readonly canInsert: boolean;
+  readonly onContextPopup: (
+    tab: number | undefined,
+    position: Readonly<{ x: number; y: number }>,
+    owner: HTMLButtonElement,
+  ) => void;
   readonly onSelect: (tab: number, event: MouseEvent<HTMLButtonElement>) => void;
   readonly onInsert: () => void;
   readonly onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
@@ -33,6 +38,18 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
     <div
       role="group"
       aria-label="Sheet controls"
+      onContextMenu={
+        /** Native page-id zero keeps selection when the pointer is over the strip rather than a tab. @param event - Background context request. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.defaultPrevented) return;
+          event.preventDefault();
+          const owner = event.currentTarget.querySelector<HTMLButtonElement>(
+            '[aria-current="page"]',
+          ) as HTMLButtonElement;
+          props.onContextPopup(undefined, { x: event.clientX, y: event.clientY }, owner);
+        }
+      }
       className="flex min-h-10 shrink-0 items-stretch gap-1 border-t border-slate-200 bg-slate-50 px-3 py-1 text-sm text-slate-700"
     >
       {(
@@ -90,6 +107,44 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
               aria-selected={props.viewData.GetMarkData().GetTableSelect(tab)}
               aria-current={props.viewData.GetTabNumber() === tab ? "page" : undefined}
               tabIndex={props.viewData.GetTabNumber() === tab ? 0 : -1}
+              onContextMenu={
+                /** Suppresses browser chrome and forwards the original sheet pointer target. @param event - Actual context event. @returns Nothing. */ (
+                  event,
+                ) => {
+                  event.preventDefault();
+                  props.onContextPopup(
+                    tab,
+                    { x: event.clientX, y: event.clientY },
+                    event.currentTarget,
+                  );
+                }
+              }
+              onKeyDown={
+                /** Forwards native keyboard popup requests from the actual focused tab. @param event - Keyboard event. @returns Nothing. */ (
+                  event,
+                ) => {
+                  if (
+                    event.nativeEvent.isComposing ||
+                    event.ctrlKey ||
+                    event.metaKey ||
+                    event.altKey
+                  )
+                    return;
+                  if (
+                    (event.key === "ContextMenu" && !event.shiftKey) ||
+                    (event.key === "F10" && event.shiftKey)
+                  ) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    props.onContextPopup(
+                      tab,
+                      { x: rect.left, y: rect.bottom },
+                      event.currentTarget,
+                    );
+                  }
+                }
+              }
               onClick={
                 /** Forwards sheet selection with source modifier intent intact. @param event - Platform click. @returns Nothing. */ (
                   event,

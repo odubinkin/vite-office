@@ -51,14 +51,33 @@ export const calcMenus: readonly CommandMenuPlacement[] = (
 );
 /** Reads source labels,default accelerators and toggle properties;unregistered commands stay disabled in shared Sfx bindings. @param url - Original identity. @returns Resource. */
 export function getCalcCommandResource(url: string): MenuCommandResource {
+  return selectCalcResource(url, false);
+}
+/** Selects native popup-specific command labels with source fallback. @param url - Original command. @returns Popup presentation. */
+export function getCalcPopupCommandResource(url: string): MenuCommandResource {
+  return selectCalcResource(url, true);
+}
+/** Reads one source resource without guessing labels. @param url - Original identity. @param popup - Whether PopupLabel applies. @returns Presentation. */
+function selectCalcResource(url: string, popup: boolean): MenuCommandResource {
   const resource = (
     generated.commands as Readonly<
-      Record<string, Readonly<{ label: string; semantics: string; shortcuts: readonly string[] }>>
+      Record<
+        string,
+        Readonly<{
+          label: string;
+          popupLabel?: string;
+          semantics: string;
+          shortcuts: readonly string[];
+        }>
+      >
     >
   )[url];
   if (resource === undefined) throw new Error(`Unknown Calc command resource: ${url}`);
   return {
-    label: resource.label.replaceAll("%PRODUCTNAME", "Vite Office"),
+    label: (popup ? (resource.popupLabel ?? resource.label) : resource.label).replaceAll(
+      "%PRODUCTNAME",
+      "Vite Office",
+    ),
     semantics: resource.semantics as "action" | "check",
     shortcuts: resource.shortcuts,
   };

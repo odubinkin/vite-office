@@ -1,0 +1,4 @@
+Error: Project(s) "sheet-context-menu.spec.ts" not found. Available projects: "writer", "calc", "shared"
+    at Object.filterProjects (/Users/odubinkin/Projects/vite-office-calc/node_modules/playwright/lib/runner/index.js:2142:11)
+    at runTests (/Users/odubinkin/Projects/vite-office-calc/node_modules/playwright/lib/cli/testActions.js:61:30)
+    at _Command.<anonymous> (/Users/odubinkin/Projects/vite-office-calc/node_modules/playwright/lib/program.js:55:7)

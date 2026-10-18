@@ -67,7 +67,7 @@ export class CalcViewController {
           this.viewData = new ScViewData(shell.GetDocument());
           this.anchor = new ScAddress();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-          this.inputHandler.ResetModified();
+          this.inputHandler.ResetInputState();
           this.inputText = "";
           this.addressText = "A1";
           this.error = "";
@@ -160,8 +160,14 @@ export class CalcViewController {
   /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Nothing. */
   StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): void {
     this.shell.EnsureOpen();
-    this.inputText = replacement ?? this.Input();
+    const original = this.Input(),
+      starting = !this.inputHandler.IsInputMode();
+    this.inputText = replacement ?? original;
     this.inputHandler.SetMode(mode);
+    this.inputHandler.UpdateInputState(
+      this.inputText,
+      starting ? mode !== ScInputMode.SC_INPUT_TYPE && original.length > 0 : undefined,
+    );
     if (replacement !== undefined) this.inputHandler.SetModified();
     this.error = "";
     this.Changed();
@@ -171,8 +177,13 @@ export class CalcViewController {
     this.shell.EnsureOpen();
     if ((!this.inputHandler.IsInputMode() || this.inputHandler.IsTopMode()) && !this.Commit())
       return false;
+    const starting = !this.inputHandler.IsInputMode();
     this.inputText = this.Input();
     this.inputHandler.StartOrToggleEditMode();
+    this.inputHandler.UpdateInputState(
+      this.inputText,
+      starting ? this.inputText.length > 0 : undefined,
+    );
     this.error = "";
     this.Changed();
     return true;
@@ -181,13 +192,14 @@ export class CalcViewController {
   ChangeInput(value: string): void {
     this.inputText = value;
     this.inputHandler.SetModified();
+    this.inputHandler.UpdateInputState(value);
     this.error = "";
     this.Changed();
   }
   /** Cancels without changing cells/history. @returns Nothing. */
   Cancel(): void {
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-    this.inputHandler.ResetModified();
+    this.inputHandler.ResetInputState();
     this.inputText = "";
     this.error = "";
     this.Changed();
@@ -226,7 +238,7 @@ export class CalcViewController {
         this.shell.SetDocumentModified();
       }
       this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-      this.inputHandler.ResetModified();
+      this.inputHandler.ResetInputState();
       this.inputText = "";
       this.error = "";
       this.Changed();
@@ -266,6 +278,16 @@ export class CalcViewController {
       this.Changed();
       return false;
     }
+  }
+  /** Source ScTabControl context admission and SwitchToPageId policy:already-selected keeps canonical active sheet/group;unselected selects only its target. @param tab - Real clicked/focused sheet. @returns Whether popup may open. */
+  PrepareSheetContextMenu(tab?: number): boolean {
+    if (this.inputHandler.IsFormulaMode()) return false;
+    if (tab === undefined) return true;
+    if (!this.shell.GetDocument().FetchTable(tab)) return false;
+    if (this.viewData.GetMarkData().GetTableSelect(tab)) return true;
+    if (!this.Commit()) return false;
+    this.SelectTab(tab);
+    return true;
   }
   /** Switches actual tab/cursor/mark ownership. @param tab - Existing tab. @param extend - Toggle selected sheets. @returns Nothing. */
   SelectTab(tab: number, extend = false): void {
@@ -338,7 +360,7 @@ export class CalcViewController {
       action = redo ? manager.GetRedoAction() : manager.GetUndoAction();
     if (!(redo ? this.shell.Redo() : this.shell.Undo())) return false;
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-    this.inputHandler.ResetModified();
+    this.inputHandler.ResetInputState();
     let cursorAction = action;
     while (cursorAction instanceof SfxListUndoAction)
       cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
