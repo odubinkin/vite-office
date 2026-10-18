@@ -1,10 +1,11 @@
 ---
 id: "202610182329-RJ5DY8"
 title: "Implement original mutable Unicode string buffer ownership and mutations"
-status: "DOING"
+result_summary: "Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T23:47:58.487Z"
+  updated_at: "2026-10-18T23:49:25.992Z"
   updated_by: "CODER"
-  note: "Actual Unicode buffer C/template owners match671 original normal/ASanUBSan states and21source assertions on verified138genuine objects/346sources;undefined null-held transfer rejected by original nonnull contract. Entire canonical/newscope19files52cases/raw100percent andwholeCalc299/raw100percent pass;all declared gates pass. Overallgoalactive,nextfull30."
+  note: "Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage."
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "All9Unicode C functions and5template responsibilities use genuine existing SAL data/allocation/refs. Growth depends on logical length,null insertion preserves initialized gaps,UTF32 validation order matches source,and transfer returns actual same nonnull data without copy/acquire. Entire canonical482line template retains original prefix and needs no shard."
     - "Two new original observation callers use checked prior genuine full69normal+69ASanUBSan object graphs,346source hashes and138object hashes.671state snapshots and21original assertion expressions agree;valid streams/overflow exit0 with no sanitizer diagnostics. Initial null-held test was undefined under original returns_nonnull annotation and was corrected to real empty data without weakening sanitizer checks."
     - "WholeCalc299/raw100percent and19relatedfiles52cases/raw100percent across entire canonical/new C modules pass. Existing original CPPU fixture supplies old terminated-compare coverage. Types/build/static/style/docs/dependency/provenance/inventories/doctor/routing pass;13intentional paths,validators/thresholds unchanged."
-commit: null
+commit:
+  hash: "259c3e8f8a8fc4ad4728f3cdca7c9c553fb68f06"
+  message: "🧩 RJ5DY8 core: port native mutable Unicode buffer ownership and mutations"
 comments:
   -
     author: "CODER"
     body: "Start:implement real native Unicode buffer ownership/mutation primitives and verify original capacity/transfer contracts before building OUStringBuffer/axis output."
+  -
+    author: "CODER"
+    body: "Verified: Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual Unicode buffer C/template owners match671 original normal/ASanUBSan states and21source assertions on verified138genuine objects/346sources;undefined null-held transfer rejected by original nonnull contract. Entire canonical/newscope19files52cases/raw100percent andwholeCalc299/raw100percent pass;all declared gates pass. Overallgoalactive,nextfull30."
+  -
+    type: "verify"
+    at: "2026-10-18T23:49:25.992Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage."
+  -
+    type: "status"
+    at: "2026-10-18T23:49:26.089Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T23:47:58.537Z"
+doc_updated_at: "2026-10-18T23:49:26.090Z"
 doc_updated_by: "CODER"
 description: "Task24 of approved Calc UI/core goal:port genuine SAL Unicode buffer C/header/template responsibilities required by OUStringBuffer and VariationsToString. Preserve native constructor/copy capacity,growth based on length,checked mutation order,tail moves,UTF16/ASCII copy,null source,reserve/remove,ref return and makeStringAndClear transfer on actual existing rtl_uString allocator/refcount owners. No JS string-builder substitute or fake buffer. Only calc checkout/branch,offline,no merge."
 sections:
@@ -103,6 +122,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182329-RJ5DY8 -m 🧩 RJ5DY8 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T23:49:25.992Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:47:58.537Z, excerpt_hash=sha256:731b6f9a1252dbe170a8273dcadb4627f537f735b507717a13177064c4804004
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182329-RJ5DY8/blueprint/resolved-snapshot.json
+    - old_digest: 32abdee94d34accaf518ec545171def22bf493d8c67c87e7765c69d2bd7e3361
+    - current_digest: 32abdee94d34accaf518ec545171def22bf493d8c67c87e7765c69d2bd7e3361
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182329-RJ5DY8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182329-RJ5DY8 --result verified-202610182329-RJ5DY8 --commit c6c094dacd593f0ff0ac089252aa82ec5013857e
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -163,6 +212,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182329-RJ5DY8 -m 🧩 RJ5DY8 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T23:49:25.992Z — VERIFY — ok
+
+By: CODER
+
+Note: Original Unicode buffer ownership,capacity,mutations and transfer now match671native states and21source assertions with100percent canonical scope coverage.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:47:58.537Z, excerpt_hash=sha256:731b6f9a1252dbe170a8273dcadb4627f537f735b507717a13177064c4804004
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182329-RJ5DY8/blueprint/resolved-snapshot.json
+- old_digest: 32abdee94d34accaf518ec545171def22bf493d8c67c87e7765c69d2bd7e3361
+- current_digest: 32abdee94d34accaf518ec545171def22bf493d8c67c87e7765c69d2bd7e3361
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182329-RJ5DY8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182329-RJ5DY8 --result verified-202610182329-RJ5DY8 --commit c6c094dacd593f0ff0ac089252aa82ec5013857e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
