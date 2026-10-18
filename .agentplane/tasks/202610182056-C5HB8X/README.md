@@ -1,10 +1,11 @@
 ---
 id: "202610182056-C5HB8X"
 title: "Add source Calc sheet-tab context menu through shared Writer popup"
-status: "DOING"
+result_summary: "Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T21:15:45.341Z"
+  updated_at: "2026-10-18T21:19:43.046Z"
   updated_by: "CODER"
-  note: "Native sheet-tab resource and formula/context admission use actual shared Writer popup. All292Calc cases raw100percent,201related popup/menu cases,source/resource gates,types/build/style/inventory and2built viewport/axe cases pass;see verification.md. Original UI goal remains active."
+  note: "Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks."
   attempts: 0
 quality_review:
   state: "pass"
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tasks/202610182056-C5HB8X/browser-e2e-verified.log"
   findings:
     - "Reviewed implementation 68bcbdbee: source XML order and PopupLabel adaptation, native selected-tab/formula admission, shared popup dispatch and focus lifecycle match declared scope. Recorded raw Calc coverage is 100 percent across all four metrics; 292 Calc cases, 201 related cases and both built-browser viewport/axe cases pass."
-commit: null
+commit:
+  hash: "68bcbdbeedd09ae99759c79329ea3be67ab38cd0"
+  message: "🧩 C5HB8X ui: reuse Writer popup for native Calc sheet-tab context menu"
 comments:
   -
     author: "CODER"
     body: "Start: Generate native sheet-tab resource and connect real shared Writer popup with source selection and formula admission."
+  -
+    author: "CODER"
+    body: "Verified: Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -58,8 +64,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native sheet-tab resource and formula/context admission use actual shared Writer popup. All292Calc cases raw100percent,201related popup/menu cases,source/resource gates,types/build/style/inventory and2built viewport/axe cases pass;see verification.md. Original UI goal remains active."
+  -
+    type: "verify"
+    at: "2026-10-18T21:19:43.046Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks."
+  -
+    type: "status"
+    at: "2026-10-18T21:19:43.143Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T21:15:45.397Z"
+doc_updated_at: "2026-10-18T21:19:43.144Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI continuation task16. Generate native sheettab.xml and PopupLabel metadata through existing shared Writer tooling. Render actual framework CommandPopupMenu on sheet pointer/ContextMenu/ShiftF10,with native selected-group retention/unselected collapse and formula/modal admission. Extend actual ScInputHandler represented formula-mode flags/predicate using explicit browser text/context projections,without fake EditEngine services. Use existing SelectAll/Deselect slots;unsupported native entries remain disabled including Insert requiring unported dialog. Preserve shared popup focus/keyboard/geometry. Up to40non-task files including truthful registry/source resources. AllCalc100percent,related shared/Writer popup and source tests,standard gates;next full task20;only calc checkout/branch."
 sections:
@@ -97,6 +116,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182056-C5HB8X -m 🧩 C5HB8X task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T21:19:43.046Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:15:45.397Z, excerpt_hash=sha256:a2d3922745bb3237d769a0ee4098459ff39098317646ab05c278a1bc1fd17f28
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182056-C5HB8X/blueprint/resolved-snapshot.json
+    - old_digest: 221901da5d39f0874704d37d6078bff795907876d2a7c814b5d00a7af405cd13
+    - current_digest: 221901da5d39f0874704d37d6078bff795907876d2a7c814b5d00a7af405cd13
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182056-C5HB8X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182056-C5HB8X --result verified-202610182056-C5HB8X --commit d76c6bb93e08b3babffe6cd10794e702d221d932
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -188,6 +237,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182056-C5HB8X -m 🧩 C5HB8X task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T21:19:43.046Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc sheet tabs open the shared Writer popup from the complete pinned source resource; native group selection and formula admission are verified with raw 100 percent Calc coverage and both viewport accessibility checks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:15:45.397Z, excerpt_hash=sha256:a2d3922745bb3237d769a0ee4098459ff39098317646ab05c278a1bc1fd17f28
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182056-C5HB8X/blueprint/resolved-snapshot.json
+- old_digest: 221901da5d39f0874704d37d6078bff795907876d2a7c814b5d00a7af405cd13
+- current_digest: 221901da5d39f0874704d37d6078bff795907876d2a7c814b5d00a7af405cd13
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182056-C5HB8X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182056-C5HB8X --result verified-202610182056-C5HB8X --commit d76c6bb93e08b3babffe6cd10794e702d221d932
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
