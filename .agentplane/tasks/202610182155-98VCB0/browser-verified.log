@@ -1,0 +1,21 @@
+[WebServer] (node:79415) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 2 workers
+
+(node:79416) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:79417) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [writer] › apps/office/e2e/native-bullet-font-roundtrip.spec.ts:29:3 › native bullet font ODT body cell width=1280 (2.4s)
+  ✓  3 [writer] › apps/office/e2e/native-bullet-font-roundtrip.spec.ts:29:3 › native bullet font ODT body cell width=390 (1.9s)
+(node:79433) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (4.8s)
+  ✓  4 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (2.4s)
+  ✓  5 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 1280x800 (4.2s)
+  ✓  6 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 1280x800 (3.9s)
+  ✓  7 [calc] › apps/office/e2e/calc/sheet-context-menu.spec.ts:8:3 › native sheet context menu at 390x600 (2.2s)
+  ✓  8 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 390x600 (2.0s)
+
+  8 passed (14.7s)

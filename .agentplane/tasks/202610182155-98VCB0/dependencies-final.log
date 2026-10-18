@@ -1,0 +1,7 @@
+
+> vite-office@0.1.0 check:dependencies
+> node scripts/check-module-boundaries.mjs
+
+Module boundary check failed:
+- apps/office/src/svx/browser/tbxctrls/FontCommandSelects.tsx: non-allowlisted module edge svx -> framework
+- apps/office/src/svx/browser/tbxctrls/FontCommandSelects.tsx: non-allowlisted module edge svx -> framework

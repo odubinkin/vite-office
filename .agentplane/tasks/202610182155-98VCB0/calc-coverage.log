@@ -1,0 +1,48 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office -- --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+···············x···························································································································································································································································································
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-goto-sheet.test.tsx > opens the native dialog through the shared menu,filters case-sensitively,and applies a real selected sheet
+AssertionError: expected [ <option></option>, …(28) ] to have a length of +0 but got 29
+
+- Expected
++ Received
+
+- 0
++ 29
+
+ ❯ src/sc/browser/presentation/calc-goto-sheet.test.tsx:49:43
+     47|   expect(c.viewData.GetTabNumber()).toBe(0);
+     48|   fireEvent.change(mask, { target: { value: "sheet" } });
+     49|   expect(screen.queryAllByRole("option")).toHaveLength(0);
+       |                                           ^
+     50|   fireEvent.keyDown(screen.getByRole("listbox"), { key: "ArrowDown" });
+     51|   fireEvent.change(mask, { target: { value: "Sheet" } });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 110 passed (111)
+      Tests  1 failed | 298 passed (299)
+   Start at  05:00:20
+   Duration  64.86s (transform 18.33s, setup 8.91s, import 32.86s, tests 21.57s, environment 47.86s)
+
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage --maxWorkers=4 --reporter=dot

@@ -1,0 +1,19 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+······x···x····························npm error Lifecycle script `test:coverage` failed with error:
+npm error code 130
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage --maxWorkers=4 --reporter=dot
