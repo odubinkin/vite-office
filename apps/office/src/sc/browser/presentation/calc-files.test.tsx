@@ -93,7 +93,7 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
   fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
   expect(screen.getByRole("grid")).toHaveFocus();
   fireEvent.click(screen.getByRole("button", { name: "File" }));
-  fireEvent.click(screen.getByRole("menuitem", { name: /Export/ }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
   expect(screen.getByRole("button", { name: "Download ODS" })).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Close" }));
   cleanup();
@@ -234,10 +234,10 @@ it("rejects failed source input or unavailable storage,and exposes source comman
     workflows = new CalcFileWorkflows(c, db, undefined),
     missing = new CalcFileWorkflows(c, undefined, undefined);
   expect(workflows.GetShell()).toBeDefined();
-  expect(getCalcCommandResource(".uno:OpenFromCalc").shortcuts).toEqual(["Ctrl+O"]);
-  expect(getCalcCommandResource(".uno:SaveAs").shortcuts).toEqual(["Ctrl+Shift+S"]);
-  expect(getCalcCommandResource(".uno:Undo").shortcuts).toEqual(["Ctrl+Z"]);
-  expect(getCalcCommandResource(".uno:Redo").shortcuts).toEqual(["Ctrl+Shift+Z"]);
+  expect(getCalcCommandResource(".uno:OpenFromCalc").shortcuts[0]).toBe("Ctrl+O");
+  expect(getCalcCommandResource(".uno:SaveAs").shortcuts[0]).toBe("Ctrl+Shift+S");
+  expect(getCalcCommandResource(".uno:Undo").shortcuts[0]).toBe("Ctrl+Z");
+  expect(getCalcCommandResource(".uno:Redo").shortcuts[0]).toBe("Ctrl+Shift+Z");
 
   expect(getCalcCommandResource(".uno:Undo").label).toBe("Undo");
   expect(

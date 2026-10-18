@@ -6,9 +6,9 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "calc",
-    "subsystem": "browser-file-ui",
+    "subsystem": "source-ui-resources",
     "capabilityIds": [
-      "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50"
+      "CAP-a8560287-c005-4bae-8300-bcd06f394ec7"
     ],
     "semantic": {
       "behaviorStatus": "divergent",
@@ -17,10 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
-        "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
-        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx"
+        "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+        "scripts/office-ui-command-catalog.test.ts"
       ],
-      "justification": "Task2BTWEE user browser review exposed that duplicated Calc header/standard-button styling was inconsistent with Writer and literal UNO menu identities crashed dynamic CSS lookup in Chromium. The actual Writer title/menu/toolbar header is now extracted unchanged into OfficeWorkspaceHeader and consumed by both suites. Both use CommandMenuBar and CommandToolbarItems with the same default button component/styles. SaveAs stays in File and unsupported standardbar entries are not replaced with unrelated commands. Shared popup lookup matches literal owned menu attributes rather than compiling source identity as CSS. Calc shortcut captions pass through the existing framework normalizer and use the original preferred Ctrl+Shift+Z redo sequence. Real-browser menu/header/toolbar checks and literal dotted/colon/quoted-ID regression tests validate the correction.",
+      "justification": "Task905DK4 projects pinned Calc menu hierarchy, source command labels, dialog suffixes, default accelerators and Properties toggle flags through deterministic generated resources. The actual Writer parser and command-catalog helpers are shared; Writer output remains byte-identical. Shared React menu and toolbar presenters retain original command identities. Unsupported native operations remain disabled through missing Sfx slots. Standardbar retains only registered visible operations in native order. Explicit Writer browser autosave/open/no-recovery policy dispositions remain auditable. Complete native command execution and formatting behavior are not claimed.",
       "knownViolations": [],
       "localSymbols": [
         "calcStandardBarItems"

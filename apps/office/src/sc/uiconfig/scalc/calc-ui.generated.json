@@ -1,0 +1,3918 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "schemaVersion": 1,
+  "locale": "en-US",
+  "sources": [
+    {
+      "path": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "sha256": "17c47048431d2933ac248977da2dbba66636c7ae1310a361825d8334828f97bc"
+    },
+    {
+      "path": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+      "sha256": "f26fc022e91baf0b174481bd4a177dae24dd8b66692d2580b1bb7c3e698e4639"
+    },
+    {
+      "path": "sc/uiconfig/scalc/toolbar/textobjectbar.xml",
+      "sha256": "810c86528767c4e390fd6650f1cb663f395ad76c0f920c175607db94b7bfd079"
+    },
+    {
+      "path": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+      "sha256": "15840b53e3c8fd35b65f6de403a05c3c32b7b94d0ca998da4f01f5ae75c60dde"
+    },
+    {
+      "path": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+      "sha256": "7d6efbf184429ee39d6486e25a10f1762efb2aecdf5a7af47beb2446b6b3584a"
+    },
+    {
+      "path": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+      "sha256": "c1441749f6a4f52c6d64ff38f0f851a309659d4c2a0bc70d9630c86b5de5471f"
+    },
+    {
+      "path": "officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs",
+      "sha256": "9fe7dbe82f7f038134228e5a14a58c0f3aca7382dfca6d1ceff803ebb6ef749b"
+    }
+  ],
+  "commands": {
+    ".uno:About": {
+      "label": "About %PRODUCTNAME",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Accent1CellStyles": {
+      "label": "Accent 1",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Accent2CellStyles": {
+      "label": "Accent 2",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Accent3CellStyles": {
+      "label": "Accent 3",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:AcceptChanges": {
+      "label": "Manage",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Add": {
+      "label": "Insert Sheet at End",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AddField": {
+      "label": "Add Field",
+      "showsDialog": true,
+      "shortcuts": ["Alt+F8"],
+      "semantics": "action"
+    },
+    ".uno:AddName": {
+      "label": "Define Name",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AlignBlock": {
+      "label": "Justified",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+J", "Meta+J"],
+      "semantics": "action"
+    },
+    ".uno:AlignHorizontalCenter": {
+      "label": "Align Center",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+E", "Meta+E"],
+      "semantics": "action"
+    },
+    ".uno:AlignLeft": {
+      "label": "Align Left",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+L", "Meta+L"],
+      "semantics": "action"
+    },
+    ".uno:AlignRight": {
+      "label": "Align Right",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+R", "Meta+R"],
+      "semantics": "action"
+    },
+    ".uno:AnchorMenu": {
+      "label": "Anchor Menu",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ArrowShapes": {
+      "label": "Arrow Shapes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AuditingFillMode": {
+      "label": "Fill Mode",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoComplete": {
+      "label": "AutoInput",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoControlFocus": {
+      "label": "Automatic Control Focus",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:AutoCorrectDlg": {
+      "label": "AutoCorrect Options",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoFormat": {
+      "label": "Table Styles",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoOutline": {
+      "label": "AutoOutline",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoPilotMenu": {
+      "label": "Wizards",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoRedactDoc": {
+      "label": "Auto-Redact",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutoRefreshArrows": {
+      "label": "AutoRefresh Traces",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AutomaticCalculation": {
+      "label": "AutoCalculate",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:AvailableToolbars": {
+      "label": "Toolbars",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:BadCellStyles": {
+      "label": "Bad",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:BasicIDEAppear": {
+      "label": "Edit Macros",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:BasicShapes": {
+      "label": "Basic Shapes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:BezierFill": {
+      "label": "Curve, Filled",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Bezier_Unfilled": {
+      "label": "Curve",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Bold": {
+      "label": "Bold",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+B", "Meta+B"],
+      "semantics": "check"
+    },
+    ".uno:BringToFront": {
+      "label": "Bring to Front",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+ADD", "Meta+Shift+ADD"],
+      "semantics": "action"
+    },
+    ".uno:Calculate": {
+      "label": "Recalculate",
+      "showsDialog": false,
+      "shortcuts": ["F9"],
+      "semantics": "action"
+    },
+    ".uno:CalculateHard": {
+      "label": "Recalculate Hard",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+F9", "Meta+Shift+F9"],
+      "semantics": "action"
+    },
+    ".uno:CalloutShapes": {
+      "label": "Callout Shapes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CancelCheckOut": {
+      "label": "Cancel Checkout",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CellProtection": {
+      "label": "Cell Protection",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:CellVertBottom": {
+      "label": "Bottom",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CellVertCenter": {
+      "label": "Center",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CellVertTop": {
+      "label": "Top",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseRotateCase": {
+      "label": "Cycle Case",
+      "showsDialog": false,
+      "shortcuts": ["Shift+F3"],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToFullWidth": {
+      "label": "Full-width",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToHalfWidth": {
+      "label": "Half-width",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToHiragana": {
+      "label": "Hiragana",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToKatakana": {
+      "label": "Katakana",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToLower": {
+      "label": "lowercase",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToSentenceCase": {
+      "label": "Sentence case",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToTitleCase": {
+      "label": "Capitalize Every Word",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToToggleCase": {
+      "label": "tOGGLE cASE",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangeCaseToUpper": {
+      "label": "UPPERCASE",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChangePicture": {
+      "label": "Replace Image",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CharBackColor": {
+      "label": "Character Highlighting Color",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CharFontName": {
+      "label": "Font Name",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CharmapControl": {
+      "label": "Symbol",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CheckBox": {
+      "label": "Check Box",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CheckIn": {
+      "label": "Check In",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CheckOut": {
+      "label": "Check Out",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChineseConversion": {
+      "label": "Chinese Conversion",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ChooseDesign": {
+      "label": "Spreadsheet Theme",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ClearArrowDependents": {
+      "label": "Remove Dependents",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ClearArrowPrecedents": {
+      "label": "Remove Precedents",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ClearArrows": {
+      "label": "Remove All Traces",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ClearAutoFilter": {
+      "label": "Clear AutoFilter",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ClearOutline": {
+      "label": "Remove Outline",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CloseWin": {
+      "label": "Close Window",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+W", "Meta+W"],
+      "semantics": "action"
+    },
+    ".uno:Color": {
+      "label": "Font Color",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ColumnOperations": {
+      "label": "Column",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ColumnWidth": {
+      "label": "Column Width",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ComboBox": {
+      "label": "Combo Box",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CommandPopup": {
+      "label": "Search Commands",
+      "showsDialog": false,
+      "shortcuts": ["Shift+ESCAPE"],
+      "semantics": "action"
+    },
+    ".uno:CommentChange": {
+      "label": "Comment",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignBottom": {
+      "label": "Bottom",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignHorizontalCenter": {
+      "label": "Centered",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+E", "Meta+E"],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignJustified": {
+      "label": "Justified",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+J", "Meta+J"],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignLeft": {
+      "label": "Left",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+L", "Meta+L"],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignRight": {
+      "label": "Right",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+R", "Meta+R"],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignTop": {
+      "label": "Top",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CommonAlignVerticalCenter": {
+      "label": "Center",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CompareDocuments": {
+      "label": "Compare",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:CompressGraphic": {
+      "label": "Compress Image",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConditionalFormatMenu": {
+      "label": "Conditional",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConfigureDialog": {
+      "label": "Customize",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ConnectorToolbox": {
+      "label": "Connectors",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ControlProperties": {
+      "label": "Control Properties",
+      "showsDialog": true,
+      "shortcuts": ["Alt+Enter", "F4"],
+      "semantics": "check"
+    },
+    ".uno:ConvertFormulaToValue": {
+      "label": "Formula to Value",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Copy": {
+      "label": "Copy",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+C", "Meta+C", "COPY", "Ctrl+INSERT", "Meta+INSERT"],
+      "semantics": "action"
+    },
+    ".uno:CreateNames": {
+      "label": "Create Names",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Crop": { "label": "Crop", "showsDialog": false, "shortcuts": [], "semantics": "action" },
+    ".uno:CurrencyField": {
+      "label": "Currency Field",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Cut": {
+      "label": "Cut",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+X", "Meta+X", "CUT", "Shift+DELETE"],
+      "semantics": "action"
+    },
+    ".uno:DataAreaRefresh": {
+      "label": "Refresh Range",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataConsolidate": {
+      "label": "Consolidate",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataDataPilotRun": {
+      "label": "Pivot Table",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataFilterAutoFilter": {
+      "label": "AutoFilter",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+L", "Meta+Shift+L"],
+      "semantics": "action"
+    },
+    ".uno:DataFilterHideAutoFilter": {
+      "label": "Hide AutoFilter",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataFilterRemoveFilter": {
+      "label": "Reset Filter",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataFilterSpecialFilter": {
+      "label": "Advanced Filter",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataFilterStandardFilter": {
+      "label": "Standard Filter",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataForm": {
+      "label": "Form",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataProvider": {
+      "label": "Data Provider",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataProviderRefresh": {
+      "label": "Refresh Data Provider",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataSort": {
+      "label": "Sort",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataStreams": {
+      "label": "Streams",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DataSubTotals": {
+      "label": "Subtotals",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DateField": {
+      "label": "Date Field",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:DefaultCellStyles": {
+      "label": "Default",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:DefineDBName": {
+      "label": "Define Range",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DefineLabelRange": {
+      "label": "Define Labels",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DefineName": {
+      "label": "Manage Names",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+F3", "Meta+F3"],
+      "semantics": "action"
+    },
+    ".uno:DefinePrintArea": {
+      "label": "Print Area",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Delete": {
+      "label": "Clear Cells",
+      "showsDialog": true,
+      "shortcuts": ["DELETE", "BACKSPACE"],
+      "semantics": "action"
+    },
+    ".uno:DeleteAllNotes": {
+      "label": "Delete All Comments",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeleteCell": {
+      "label": "Delete Cells",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+SUBTRACT", "Meta+SUBTRACT"],
+      "semantics": "action"
+    },
+    ".uno:DeleteColumnbreak": {
+      "label": "Remove Column Break",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeleteColumns": {
+      "label": "Delete Columns",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeleteNote": {
+      "label": "Delete Comment",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeletePivotTable": {
+      "label": "Delete Pivot Table",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeletePrintArea": {
+      "label": "Clear",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeleteRowbreak": {
+      "label": "Remove Row Break",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DeleteRows": {
+      "label": "Delete Rows",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DesignerDialog": {
+      "label": "Styles",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DevelopmentToolsDockingWindow": {
+      "label": "Development Tools",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Documentation": {
+      "label": "User Guides",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Donation": {
+      "label": "Donate to LibreOffice",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DrawText": {
+      "label": "Text Box",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:DuplicateSheet": {
+      "label": "Duplicate Sheet",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Edit": {
+      "label": "Text Box",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:EditAnnotation": {
+      "label": "Edit Comment",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Alt+C", "Meta+Alt+C"],
+      "semantics": "action"
+    },
+    ".uno:EditDoc": {
+      "label": "Edit Mode",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+M", "Meta+Shift+M"],
+      "semantics": "check"
+    },
+    ".uno:EditHeaderAndFooter": {
+      "label": "Headers and Footers",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:EditLinks": {
+      "label": "Links to External Files",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:EditPrintArea": {
+      "label": "Edit",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:EnterGroup": {
+      "label": "Enter Group",
+      "showsDialog": false,
+      "shortcuts": ["F3"],
+      "semantics": "action"
+    },
+    ".uno:ErrorCellStyles": {
+      "label": "Error",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ExportAsGraphic": {
+      "label": "Export as Image",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ExportDirectToPDF": {
+      "label": "Export Directly as PDF",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ExportTo": {
+      "label": "Export",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ExportToPDF": {
+      "label": "Export as PDF",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ExtendedHelp": {
+      "label": "What's This?",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ExtensionManager": {
+      "label": "Extensions",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+Alt+E", "Meta+Alt+E"],
+      "semantics": "action"
+    },
+    ".uno:ExternalEdit": {
+      "label": "Edit with External Tool",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FileControl": {
+      "label": "File Selection",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:FillDown": {
+      "label": "Fill Down",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+D", "Meta+D"],
+      "semantics": "action"
+    },
+    ".uno:FillLeft": {
+      "label": "Fill Left",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FillRight": {
+      "label": "Fill Right",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FillSeries": {
+      "label": "Fill Series",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FillTable": {
+      "label": "Fill Sheets",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FillUp": {
+      "label": "Fill Up",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FitCellSize": {
+      "label": "Fit to Cell Size",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FlowChartShapes": {
+      "label": "Flowchart Shapes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FontDialog": {
+      "label": "Character",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FontHeight": {
+      "label": "Font Size",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FontworkGalleryFloater": {
+      "label": "Insert Fontwork",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:FootnoteCellStyles": {
+      "label": "Footnote",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:FormProperties": {
+      "label": "Form Properties",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:FormatArea": {
+      "label": "Area",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FormatCellDialog": {
+      "label": "Format Cells",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+1", "Meta+1"],
+      "semantics": "action"
+    },
+    ".uno:FormatGroup": {
+      "label": "Group",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+G", "Meta+Shift+G"],
+      "semantics": "action"
+    },
+    ".uno:FormatLine": {
+      "label": "Line",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FormatPaintbrush": {
+      "label": "Clone Formatting",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:FormatUngroup": {
+      "label": "Ungroup",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Alt+Shift+G", "Meta+Alt+Shift+G"],
+      "semantics": "action"
+    },
+    ".uno:FormattedField": {
+      "label": "Formatted Field",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Freeline": {
+      "label": "Freeform Line, Filled",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Freeline_Unfilled": {
+      "label": "Freeform Line",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FreezePanes": {
+      "label": "Freeze Panes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FreezePanesColumn": {
+      "label": "Freeze First Column",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FreezePanesRow": {
+      "label": "Freeze First Row",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FullScreen": {
+      "label": "Full Screen",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FunctionBox": {
+      "label": "Function List",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:FunctionDialog": {
+      "label": "Function",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+F2", "Meta+F2"],
+      "semantics": "action"
+    },
+    ".uno:Gallery": {
+      "label": "Gallery",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:GetInvolved": {
+      "label": "Get Involved",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:GoalSeekDialog": {
+      "label": "Goal Seek",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:GoodCellStyles": {
+      "label": "Good",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Grid": {
+      "label": "Table Control",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:GridUse": {
+      "label": "Snap to Grid",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:GridVisible": {
+      "label": "Grid",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Group": {
+      "label": "Group",
+      "showsDialog": true,
+      "shortcuts": ["F12"],
+      "semantics": "action"
+    },
+    ".uno:GroupBox": {
+      "label": "Group Box",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Grow": {
+      "label": "Increase",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+BRACKETRIGHT", "Meta+BRACKETRIGHT"],
+      "semantics": "action"
+    },
+    ".uno:HandleDuplicateRecords": {
+      "label": "Duplicates",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HangulHanjaConversion": {
+      "label": "Hangul/Hanja Conversion",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+Shift+F7", "Meta+Shift+F7"],
+      "semantics": "action"
+    },
+    ".uno:Heading1CellStyles": {
+      "label": "Heading 1",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Heading2CellStyles": {
+      "label": "Heading 2",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:HelpIndex": {
+      "label": "%PRODUCTNAME Help",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HelplinesMove": {
+      "label": "Helplines While Moving",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Hide": {
+      "label": "Hide Sheet",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HideColumn": {
+      "label": "Hide Columns",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HideDetail": {
+      "label": "Hide Details",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HideNote": {
+      "label": "Hide Comment",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HideRow": {
+      "label": "Hide Rows",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:HyperlinkDialog": {
+      "label": "Hyperlink",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+K", "Meta+K"],
+      "semantics": "check"
+    },
+    ".uno:Hyphenate": {
+      "label": "Hyphenation",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ImageControl": {
+      "label": "Image Control",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ImageMapDialog": {
+      "label": "ImageMap",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Imagebutton": {
+      "label": "Image Button",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:InputLineVisible": {
+      "label": "Formula Bar",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Insert": {
+      "label": "Insert Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertAVMedia": {
+      "label": "Media",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertAnnotation": {
+      "label": "Comment",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Alt+C", "Meta+Alt+C"],
+      "semantics": "action"
+    },
+    ".uno:InsertCalcTable": {
+      "label": "Table",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertCalculation": {
+      "label": "Calculated Field",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertCell": {
+      "label": "Insert Cells",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+ADD", "Meta+ADD", "Ctrl+Shift+ADD", "Meta+Shift+ADD"],
+      "semantics": "action"
+    },
+    ".uno:InsertColumnBreak": {
+      "label": "Insert Column Break",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+Enter", "Meta+Shift+Enter"],
+      "semantics": "action"
+    },
+    ".uno:InsertColumnsAfter": {
+      "label": "Insert Columns After",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertColumnsBefore": {
+      "label": "Insert Columns Before",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertCurrentDate": {
+      "label": "Insert Current Date",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+SEMICOLON", "Meta+SEMICOLON"],
+      "semantics": "action"
+    },
+    ".uno:InsertCurrentTime": {
+      "label": "Insert Current Time",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+SEMICOLON", "Meta+Shift+SEMICOLON"],
+      "semantics": "action"
+    },
+    ".uno:InsertDraw": {
+      "label": "Draw Functions",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertExternalDataSource": {
+      "label": "External Links",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertFieldDateVariable": {
+      "label": "Date",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertFieldDocTitle": {
+      "label": "Document Title",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertFieldSheet": {
+      "label": "Sheet Name",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertGraphic": {
+      "label": "Image",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertHardHyphen": {
+      "label": "Insert Non-breaking Hyphen",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+SUBTRACT", "Meta+Shift+SUBTRACT"],
+      "semantics": "action"
+    },
+    ".uno:InsertLRM": {
+      "label": "Insert Left-to-Right Mark",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertName": {
+      "label": "Insert Named Range or Expression",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertNarrowNobreakSpace": {
+      "label": "Insert Narrow No-break Space",
+      "showsDialog": false,
+      "shortcuts": ["Alt+Shift+SPACE"],
+      "semantics": "action"
+    },
+    ".uno:InsertNonBreakingSpace": {
+      "label": "Insert No-break Space",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+SPACE", "Meta+Shift+SPACE"],
+      "semantics": "action"
+    },
+    ".uno:InsertObject": {
+      "label": "Insert OLE Object",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertObjectChart": {
+      "label": "Chart",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertObjectStarMath": {
+      "label": "Formula Object",
+      "showsDialog": true,
+      "shortcuts": ["Alt+Shift+E"],
+      "semantics": "action"
+    },
+    ".uno:InsertPivotTable": {
+      "label": "Insert or Edit",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertQrCode": {
+      "label": "QR and Barcode",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertRLM": {
+      "label": "Insert Right-to-Left Mark",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertRowBreak": {
+      "label": "Insert Row Break",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertRowsAfter": {
+      "label": "Insert Rows Below",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertRowsBefore": {
+      "label": "Insert Rows Above",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertSheetFromFile": {
+      "label": "Insert Sheet from File",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertSignatureLine": {
+      "label": "Signature Line",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertSoftHyphen": {
+      "label": "Insert Soft Hyphen",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+SUBTRACT", "Meta+SUBTRACT"],
+      "semantics": "action"
+    },
+    ".uno:InsertSparkline": {
+      "label": "Sparkline",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertSymbol": {
+      "label": "Symbol",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertWJ": {
+      "label": "Insert Word Joiner",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:InsertZWSP": {
+      "label": "Insert Zero-width Space",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+DIVIDE", "Meta+DIVIDE"],
+      "semantics": "action"
+    },
+    ".uno:Italic": {
+      "label": "Italic",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+I", "Meta+I"],
+      "semantics": "check"
+    },
+    ".uno:JumpToNextTable": {
+      "label": "To Next Sheet",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+PAGEDOWN", "Meta+PAGEDOWN"],
+      "semantics": "action"
+    },
+    ".uno:JumpToNextTableSel": {
+      "label": "Select to Next Sheet",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:JumpToPrevTable": {
+      "label": "To Previous Sheet",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+PAGEUP", "Meta+PAGEUP"],
+      "semantics": "action"
+    },
+    ".uno:JumpToPrevTableSel": {
+      "label": "Select to Previous Sheet",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:JumpToTable": {
+      "label": "Go to Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Label": { "label": "Label", "showsDialog": false, "shortcuts": [], "semantics": "check" },
+    ".uno:LeaveGroup": {
+      "label": "Exit Group",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+F3", "Meta+F3"],
+      "semantics": "action"
+    },
+    ".uno:Line": { "label": "Line", "showsDialog": false, "shortcuts": [], "semantics": "action" },
+    ".uno:LineSpacing": {
+      "label": "Line Spacing",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ListBox": {
+      "label": "List Box",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:MacroManager": {
+      "label": "Macro Manager",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:MacroOrganizer?TabId:short=1": {
+      "label": "Organize Dialogs",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:MacroRecorder": {
+      "label": "Record Macro",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:MacroSignature": {
+      "label": "Digital Signature",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ManageXMLSource": {
+      "label": "XML Source",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:MergeCells": {
+      "label": "Merge Cells",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:MergeDocuments": {
+      "label": "Merge",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:MoreDictionaries": {
+      "label": "More Dictionaries Online",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Move": {
+      "label": "Move or Copy Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NavigationBar": {
+      "label": "Navigation Bar",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Navigator": {
+      "label": "Navigator",
+      "showsDialog": false,
+      "shortcuts": ["F5", "Ctrl+Shift+F5", "Meta+Shift+F5"],
+      "semantics": "check"
+    },
+    ".uno:NeutralCellStyles": {
+      "label": "Neutral",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:NewDoc": {
+      "label": "Templates",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+N", "Meta+Shift+N"],
+      "semantics": "action"
+    },
+    ".uno:NewWindow": {
+      "label": "New Window",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NormalViewMode": {
+      "label": "Normal View",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NoteCellStyles": {
+      "label": "Note",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:NumberFormatCurrency": {
+      "label": "Currency",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatDate": {
+      "label": "Date",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatDecimal": {
+      "label": "Number",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatPercent": {
+      "label": "Percent",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatScientific": {
+      "label": "Scientific",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatStandard": {
+      "label": "General",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatThousands": {
+      "label": "Thousands Separator",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumberFormatTime": {
+      "label": "Time",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:NumericField": {
+      "label": "Numerical Field",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ObjectBackOne": {
+      "label": "Back One",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ObjectForwardOne": {
+      "label": "Forward One",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ObjectMenue": {
+      "label": "OLE Object",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ObjectMirrorHorizontal": {
+      "label": "Flip Horizontally",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ObjectMirrorVertical": {
+      "label": "Flip Vertically",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ObjectTitleDescription": {
+      "label": "Alt Text",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:OpenFromCalc": {
+      "label": "Open",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+O", "Meta+O"],
+      "semantics": "action"
+    },
+    ".uno:OpenReadOnly": {
+      "label": "Open in Design Mode",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:OpenTemplate": {
+      "label": "Edit Template",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:OpenUrl": {
+      "label": "Load URL",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:OpenXMLFilterSettings": {
+      "label": "XML Filter Settings",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:OptionsTreeDialog": {
+      "label": "Options",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:OriginalSize": {
+      "label": "Original Size",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:OutlineFont": {
+      "label": "Outline Font Effect",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Overline": {
+      "label": "Overline",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:PageFormatDialog": {
+      "label": "Format Page",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PagebreakMode": {
+      "label": "Page Break",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ParaLeftToRight": {
+      "label": "Left-To-Right",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+A", "Meta+Shift+A"],
+      "semantics": "check"
+    },
+    ".uno:ParaRightToLeft": {
+      "label": "Right-To-Left",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+D", "Meta+Shift+D"],
+      "semantics": "check"
+    },
+    ".uno:ParagraphDialog": {
+      "label": "Paragraph",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ParaspaceDecrease": {
+      "label": "Decrease",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ParaspaceIncrease": {
+      "label": "Increase",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Paste": {
+      "label": "Paste",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+V", "Meta+V", "Shift+INSERT", "PASTE"],
+      "semantics": "action"
+    },
+    ".uno:PasteOnlyFormula": {
+      "label": "Paste Only Formula",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PasteOnlyText": {
+      "label": "Paste Only Text",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PasteOnlyValue": {
+      "label": "Paste Only Numbers",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PasteSpecial": {
+      "label": "Paste Special",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+Shift+V", "Meta+Shift+V"],
+      "semantics": "action"
+    },
+    ".uno:PasteTransposed": {
+      "label": "Paste Transposed",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PasteUnformatted": {
+      "label": "Paste Unformatted Text",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Alt+Shift+V", "Meta+Alt+Shift+V"],
+      "semantics": "action"
+    },
+    ".uno:PatternField": {
+      "label": "Pattern Field",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Polygon_Diagonal": {
+      "label": "Polygon (45°), Filled",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Polygon_Diagonal_Unfilled": {
+      "label": "Polygon (45°)",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Polygon_Unfilled": {
+      "label": "Polygon",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Print": {
+      "label": "Print",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+P", "Meta+P"],
+      "semantics": "action"
+    },
+    ".uno:PrintDefault": {
+      "label": "Print Directly",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PrintPreview": {
+      "label": "Print Preview",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+O", "Meta+Shift+O"],
+      "semantics": "check"
+    },
+    ".uno:PrintRangesMenu": {
+      "label": "Print Ranges",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:PrinterSetup": {
+      "label": "Printer Settings",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Protect": {
+      "label": "Protect Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ProtectTraceChangeMode": {
+      "label": "Protect",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Pushbutton": {
+      "label": "Push Button",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:QuestionAnswers": {
+      "label": "Get Help Online",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RadioButton": {
+      "label": "Option Button",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:RandomNumberGeneratorDialog": {
+      "label": "Fill Random Number",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RecalcPivotTable": {
+      "label": "Refresh Pivot Table",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RedactDoc": {
+      "label": "Redact",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Redo": {
+      "label": "Redo",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+Z", "Meta+Shift+Z", "Ctrl+Y", "Meta+Y"],
+      "semantics": "action"
+    },
+    ".uno:RefreshArrows": {
+      "label": "Refresh Traces",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Remove": {
+      "label": "Delete Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RenameObject": {
+      "label": "Name",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RenameTable": {
+      "label": "Rename Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Repeat": {
+      "label": "Repeat",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+Y", "Meta+Shift+Y"],
+      "semantics": "action"
+    },
+    ".uno:ResetAttributes": {
+      "label": "Clear",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RowHeight": {
+      "label": "Row Height",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RowOperations": {
+      "label": "Row",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:RunMacro": {
+      "label": "Run Macro",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SafeMode": {
+      "label": "Restart in Troubleshoot Mode",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SaveAs": {
+      "label": "Save As",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+Shift+S", "Meta+Shift+S"],
+      "semantics": "action"
+    },
+    ".uno:SaveAsTemplate": {
+      "label": "Save as Template",
+      "showsDialog": true,
+      "shortcuts": ["Shift+F11"],
+      "semantics": "action"
+    },
+    ".uno:SaveGraphic": {
+      "label": "Save Image",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ScenarioManager": {
+      "label": "Scenarios",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ScriptOrganizer": {
+      "label": "Organize Macros",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ScrollBar": {
+      "label": "Scrollbar",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:SearchDialog": {
+      "label": "Find and Replace",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:SelectAll": {
+      "label": "Select All",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+A", "Meta+A"],
+      "semantics": "action"
+    },
+    ".uno:SelectArrayFormula": {
+      "label": "Select Array Formula",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+DIVIDE", "Meta+DIVIDE"],
+      "semantics": "action"
+    },
+    ".uno:SelectColumn": {
+      "label": "Select Column",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SelectDB": {
+      "label": "Select Range",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SelectData": {
+      "label": "Select Data Area",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+MULTIPLY", "Meta+MULTIPLY"],
+      "semantics": "action"
+    },
+    ".uno:SelectRow": {
+      "label": "Select Row",
+      "showsDialog": false,
+      "shortcuts": ["Shift+SPACE"],
+      "semantics": "action"
+    },
+    ".uno:SelectTables": {
+      "label": "Select Sheets",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SelectUnprotectedCells": {
+      "label": "Select Unprotected Cells",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SelectVisibleColumns": {
+      "label": "Select Visible Columns Only",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SelectVisibleRows": {
+      "label": "Select Visible Rows Only",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SendFeedback": {
+      "label": "Send Feedback",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SendMail": {
+      "label": "Email",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SendMailDocAsMS": {
+      "label": "Email as Microsoft Excel",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SendMailDocAsOOo": {
+      "label": "Email as OpenDocument Spreadsheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SendMailDocAsPDF": {
+      "label": "Email as PDF",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SendToBack": {
+      "label": "Send to Back",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+SUBTRACT", "Meta+Shift+SUBTRACT"],
+      "semantics": "action"
+    },
+    ".uno:SendViaBluetooth": {
+      "label": "Send via Bluetooth",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetDocumentProperties": {
+      "label": "Properties",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetInputMode": {
+      "label": "Cell Edit Mode",
+      "showsDialog": false,
+      "shortcuts": ["F2"],
+      "semantics": "action"
+    },
+    ".uno:SetLanguageAllTextMenu": {
+      "label": "For All Text",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetObjectToBackground": {
+      "label": "To Background",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetObjectToForeground": {
+      "label": "To Foreground",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetOptimalColumnWidth": {
+      "label": "Optimal Column Width",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetOptimalRowHeight": {
+      "label": "Optimal Row Height",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SetTabBgColor": {
+      "label": "Sheet Tab Color",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Shadowed": {
+      "label": "Shadow",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ShareDocument": {
+      "label": "Share Spreadsheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SheetInsertName": {
+      "label": "Insert",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SheetRightToLeft": {
+      "label": "Sheet Right-To-Left",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Show": {
+      "label": "Show Sheet",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowAnnotations": {
+      "label": "Show Comments",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ShowChanges": {
+      "label": "Show",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowColumn": {
+      "label": "Show Columns",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowDependents": {
+      "label": "Trace Dependents",
+      "showsDialog": false,
+      "shortcuts": ["Shift+F5"],
+      "semantics": "action"
+    },
+    ".uno:ShowDetail": {
+      "label": "Show Details",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowErrors": {
+      "label": "Trace Error",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowFmExplorer": {
+      "label": "Form Navigator",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:ShowInvalid": {
+      "label": "Mark Invalid Data",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowLicense": {
+      "label": "License Information",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowNote": {
+      "label": "Show Comment",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ShowPrecedents": {
+      "label": "Trace Precedents",
+      "showsDialog": false,
+      "shortcuts": ["Shift+F9"],
+      "semantics": "action"
+    },
+    ".uno:ShowRow": {
+      "label": "Show Rows",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Shrink": {
+      "label": "Decrease",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+BRACKETLEFT", "Meta+BRACKETLEFT"],
+      "semantics": "action"
+    },
+    ".uno:Shuffle": {
+      "label": "Shuffle",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Sidebar": {
+      "label": "Sidebar",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+F5", "Meta+F5"],
+      "semantics": "action"
+    },
+    ".uno:SignPDF": {
+      "label": "Sign Existing PDF",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Signature": {
+      "label": "Digital Signatures",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SmallCaps": {
+      "label": "Small capitals",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+K", "Meta+Shift+K"],
+      "semantics": "check"
+    },
+    ".uno:SolverDialog": {
+      "label": "Solver",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SortAscending": {
+      "label": "Sort Ascending",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SortDescending": {
+      "label": "Sort Descending",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Spacing": {
+      "label": "Character Spacing",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SpellDialog": {
+      "label": "Spelling",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SpellOnline": {
+      "label": "Auto Spellcheck",
+      "showsDialog": false,
+      "shortcuts": ["Shift+F7"],
+      "semantics": "check"
+    },
+    ".uno:SpinButton": {
+      "label": "Spin Button",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:SplitCell": {
+      "label": "Unmerge Cells",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:SplitWindow": {
+      "label": "Split Window",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:StarShapes": {
+      "label": "Star Shapes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:StatusBarVisible": {
+      "label": "Status Bar",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Strikeout": {
+      "label": "Strikethrough",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:StyleNewByExample": {
+      "label": "New Style from Selection",
+      "showsDialog": false,
+      "shortcuts": ["Shift+F11"],
+      "semantics": "action"
+    },
+    ".uno:StyleUpdateByExample": {
+      "label": "Update",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+F11", "Meta+Shift+F11"],
+      "semantics": "action"
+    },
+    ".uno:SubScript": {
+      "label": "Subscript",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+B", "Meta+Shift+B", "Ctrl+NUMBERSIGN", "Meta+NUMBERSIGN"],
+      "semantics": "check"
+    },
+    ".uno:SuperScript": {
+      "label": "Superscript",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+P", "Meta+Shift+P"],
+      "semantics": "check"
+    },
+    ".uno:SwitchControlDesignMode": {
+      "label": "Toggle Design Mode",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:SymbolShapes": {
+      "label": "Symbol Shapes",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TabDialog": {
+      "label": "Activation Order",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TableEvents": {
+      "label": "Sheet Events",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TableOperationDialog": {
+      "label": "Multiple Operations",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TableSelectAll": {
+      "label": "Select All Sheets",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TextAttributes": {
+      "label": "Text",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TextToColumns": {
+      "label": "Text to Columns",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TextdirectionLeftToRight": {
+      "label": "Text direction from left to right",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TextdirectionTopToBottom": {
+      "label": "Text direction from top to bottom",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ThemeDialog": {
+      "label": "Theme",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ThesaurusDialog": {
+      "label": "Thesaurus",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+F7", "Meta+F7"],
+      "semantics": "action"
+    },
+    ".uno:TimeField": {
+      "label": "Time Field",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:TipOfTheDay": {
+      "label": "Tip of the day",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ToggleFormula": {
+      "label": "Show Formulas",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ToggleMergeCells": {
+      "label": "Merge and Center Cells",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ToggleObjectBezierMode": {
+      "label": "Toggle Point Edit Mode",
+      "showsDialog": false,
+      "shortcuts": ["F8"],
+      "semantics": "action"
+    },
+    ".uno:ToggleRelative": {
+      "label": "Cycle Cell Reference Types",
+      "showsDialog": false,
+      "shortcuts": ["F4"],
+      "semantics": "action"
+    },
+    ".uno:ToggleSheetGrid": {
+      "label": "View Grid Lines",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ToolProtectionDocument": {
+      "label": "Protect Spreadsheet Structure",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TraceChangeMode": {
+      "label": "Record",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TransformDialog": {
+      "label": "Position and Size",
+      "showsDialog": true,
+      "shortcuts": ["F4"],
+      "semantics": "action"
+    },
+    ".uno:TwainSelect": {
+      "label": "Select Source",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:TwainTransfer": {
+      "label": "Request",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:UIPicker": {
+      "label": "User Interface",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Underline": {
+      "label": "Underline",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+U", "Meta+U"],
+      "semantics": "check"
+    },
+    ".uno:UnderlineDouble": {
+      "label": "Double Underline",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+D", "Meta+D"],
+      "semantics": "check"
+    },
+    ".uno:UnderlineSingle": {
+      "label": "Single Underline",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Undo": {
+      "label": "Undo",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Z", "Meta+Z", "Alt+BACKSPACE", "UNDO"],
+      "semantics": "action"
+    },
+    ".uno:Ungroup": {
+      "label": "Ungroup",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+F12", "Meta+F12"],
+      "semantics": "action"
+    },
+    ".uno:UseWizards": {
+      "label": "Form Control Wizards",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:Validation": {
+      "label": "Validity",
+      "showsDialog": true,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ViewColumnRowHighlighting": {
+      "label": "Column/Row Highlighting",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ViewDataSourceBrowser": {
+      "label": "Data Sources",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+Shift+F4", "Meta+Shift+F4"],
+      "semantics": "check"
+    },
+    ".uno:ViewHiddenColRow": {
+      "label": "Show Hidden Row/Column Indicator",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ViewRowColumnHeaders": {
+      "label": "View Headers",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ViewSidebarStyles": {
+      "label": "Styles",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ViewValueHighlighting": {
+      "label": "Value Highlighting",
+      "showsDialog": false,
+      "shortcuts": ["Ctrl+F8", "Meta+F8"],
+      "semantics": "action"
+    },
+    ".uno:WarningCellStyles": {
+      "label": "Warning",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "check"
+    },
+    ".uno:WebHtml": {
+      "label": "Preview in Web Browser",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:WrapText": {
+      "label": "Wrap Text",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Zoom": { "label": "Zoom", "showsDialog": true, "shortcuts": [], "semantics": "action" },
+    ".uno:Zoom100Percent": {
+      "label": "100%",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Zoom150Percent": {
+      "label": "150%",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Zoom200Percent": {
+      "label": "200%",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Zoom50Percent": {
+      "label": "50%",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:Zoom75Percent": {
+      "label": "75%",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ZoomOptimal": {
+      "label": "Optimal",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ZoomPage": {
+      "label": "Entire Page",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    ".uno:ZoomPageWidth": {
+      "label": "Page Width",
+      "showsDialog": false,
+      "shortcuts": [],
+      "semantics": "action"
+    },
+    "vnd.sun.star.findbar:FocusToFindbar": {
+      "label": "Find",
+      "showsDialog": true,
+      "shortcuts": ["Ctrl+F", "Meta+F"],
+      "semantics": "action"
+    }
+  },
+  "surfaces": {
+    "menubar": [
+      {
+        "id": ".uno:PickList",
+        "items": [
+          { "commandUrl": ".uno:OpenFromCalc", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:AutoPilotMenu", "kind": "command", "visible": true },
+          {
+            "id": ".uno:TemplateMenu",
+            "items": [
+              { "commandUrl": ".uno:OpenTemplate", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SaveAsTemplate", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:NewDoc", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Templates"
+          },
+          { "commandUrl": ".uno:CompareDocuments", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:MergeDocuments", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:CheckOut", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:CancelCheckOut", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:CheckIn", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ExportTo", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ExportToPDF", "kind": "command", "visible": true },
+          {
+            "id": ".uno:SendTo",
+            "items": [
+              { "commandUrl": ".uno:SendMail", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SendMailDocAsOOo", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SendMailDocAsMS", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SendMailDocAsPDF", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SendViaBluetooth", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Send"
+          },
+          { "commandUrl": ".uno:WebHtml", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:PrintPreview", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Print", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:PrinterSetup", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SetDocumentProperties", "kind": "command", "visible": true },
+          {
+            "id": ".uno:SignaturesMenu",
+            "items": [
+              { "commandUrl": ".uno:Signature", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SignPDF", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Digital Signatures"
+          }
+        ],
+        "kind": "menu",
+        "label": "File"
+      },
+      {
+        "id": ".uno:EditMenu",
+        "items": [
+          { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Repeat", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+          {
+            "id": ".uno:PasteSpecialMenu",
+            "items": [
+              { "commandUrl": ".uno:PasteUnformatted", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:PasteOnlyText", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:PasteOnlyValue", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:PasteOnlyFormula", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:PasteTransposed", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:PasteSpecial", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Paste Special"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": true },
+          {
+            "id": ".uno:EditSelectMenu",
+            "items": [
+              { "commandUrl": ".uno:TableSelectAll", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectTables", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:JumpToNextTableSel", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:JumpToPrevTableSel", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:SelectRow", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectColumn", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectData", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectUnprotectedCells", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectVisibleRows", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectVisibleColumns", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SelectArrayFormula", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Select"
+          },
+          { "kind": "separator" },
+          {
+            "commandUrl": "vnd.sun.star.findbar:FocusToFindbar",
+            "kind": "command",
+            "visible": true
+          },
+          { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:ChangesMenu",
+            "items": [
+              { "commandUrl": ".uno:TraceChangeMode", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowChanges", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:AcceptChanges", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:CommentChange", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ProtectTraceChangeMode", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Track Changes"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SetInputMode", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:CellProtection", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:EditLinks", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ObjectMenue", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:EditDoc", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Edit"
+      },
+      {
+        "id": ".uno:ViewMenu",
+        "items": [
+          { "commandUrl": ".uno:NormalViewMode", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:PagebreakMode", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:UIPicker", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:AvailableToolbars", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InputLineVisible", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:StatusBarVisible", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ViewRowColumnHeaders", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ToggleSheetGrid", "kind": "command", "visible": true },
+          {
+            "id": ".uno:GridMenu",
+            "items": [
+              { "commandUrl": ".uno:GridVisible", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:GridUse", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:HelplinesMove", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Grid and Helplines"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ViewValueHighlighting", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ViewColumnRowHighlighting", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ViewHiddenColRow", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ToggleFormula", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ShowAnnotations", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SplitWindow", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:FreezePanes", "kind": "command", "visible": true },
+          {
+            "id": ".uno:FreezeCellsMenu",
+            "items": [
+              { "commandUrl": ".uno:FreezePanesColumn", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FreezePanesRow", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Freeze Cells"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ViewSidebarStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Gallery", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Navigator", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:FunctionBox", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ViewDataSourceBrowser", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:FullScreen", "kind": "command", "visible": true },
+          {
+            "id": ".uno:ZoomMenu",
+            "items": [
+              { "commandUrl": ".uno:ZoomPage", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ZoomPageWidth", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ZoomOptimal", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Zoom50Percent", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Zoom75Percent", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Zoom100Percent", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Zoom150Percent", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Zoom200Percent", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Zoom", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Zoom"
+          }
+        ],
+        "kind": "menu",
+        "label": "View"
+      },
+      {
+        "id": ".uno:InsertMenu",
+        "items": [
+          { "commandUrl": ".uno:InsertGraphic", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertObjectChart", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertSparkline", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataDataPilotRun", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertCalcTable", "kind": "command", "visible": true },
+          {
+            "id": ".uno:GraphicMenu",
+            "items": [
+              { "commandUrl": ".uno:Gallery", "kind": "command", "visible": true },
+              {
+                "id": ".uno:Scan",
+                "items": [
+                  { "commandUrl": ".uno:TwainSelect", "kind": "command", "visible": true },
+                  { "commandUrl": ".uno:TwainTransfer", "kind": "command", "visible": true }
+                ],
+                "kind": "menu",
+                "label": "Scan"
+              },
+              { "commandUrl": ".uno:InsertAVMedia", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Media"
+          },
+          {
+            "id": ".uno:ObjectMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertObjectStarMath", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertQrCode", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertObject", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "OLE Object"
+          },
+          {
+            "id": ".uno:ShapesMenu",
+            "items": [
+              {
+                "id": ".uno:ShapesLineMenu",
+                "items": [
+                  { "commandUrl": ".uno:Line", "kind": "command", "visible": true },
+                  { "commandUrl": ".uno:Freeline_Unfilled", "kind": "command", "visible": true },
+                  { "commandUrl": ".uno:Freeline", "kind": "command", "visible": true },
+                  { "commandUrl": ".uno:Bezier_Unfilled", "kind": "command", "visible": true },
+                  { "commandUrl": ".uno:BezierFill", "kind": "command", "visible": true },
+                  { "commandUrl": ".uno:Polygon_Unfilled", "kind": "command", "visible": true },
+                  {
+                    "commandUrl": ".uno:Polygon_Diagonal_Unfilled",
+                    "kind": "command",
+                    "visible": true
+                  },
+                  { "commandUrl": ".uno:Polygon_Diagonal", "kind": "command", "visible": true }
+                ],
+                "kind": "menu",
+                "label": "Line"
+              },
+              { "commandUrl": ".uno:ConnectorToolbox", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:BasicShapes", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ArrowShapes", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SymbolShapes", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:StarShapes", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CalloutShapes", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FlowChartShapes", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Shape"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:FunctionDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertName", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:DrawText", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:FontworkGalleryFloater", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertSymbol", "kind": "command", "visible": true },
+          {
+            "id": ".uno:FormattingMarkMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertNonBreakingSpace", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertHardHyphen", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertSoftHyphen", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertNarrowNobreakSpace", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertZWSP", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertWJ", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertLRM", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertRLM", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Formatting Mark"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:InsertCurrentDate", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertCurrentTime", "kind": "command", "visible": true },
+          {
+            "id": ".uno:FieldMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertFieldDateVariable", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertFieldSheet", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertFieldDocTitle", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Field"
+          },
+          { "commandUrl": ".uno:EditHeaderAndFooter", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:InsertFormMenu",
+            "items": [
+              { "commandUrl": ".uno:Label", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Edit", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CheckBox", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:RadioButton", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ListBox", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ComboBox", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Pushbutton", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Imagebutton", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:FormattedField", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DateField", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:TimeField", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumericField", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CurrencyField", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:PatternField", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:GroupBox", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ImageControl", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FileControl", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Grid", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NavigationBar", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:SpinButton", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ScrollBar", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Form Control"
+          },
+          { "commandUrl": ".uno:InsertSignatureLine", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Insert"
+      },
+      {
+        "id": ".uno:FormatMenu",
+        "items": [
+          {
+            "id": ".uno:FormatTextMenu",
+            "items": [
+              { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:UnderlineSingle", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:UnderlineDouble", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Overline", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Shadowed", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:OutlineFont", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:WrapText", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ChangeCaseToUpper", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseToLower", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseRotateCase", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ChangeCaseToSentenceCase", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseToTitleCase", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseToToggleCase", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ChangeCaseToHalfWidth", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseToFullWidth", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseToHiragana", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangeCaseToKatakana", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Text"
+          },
+          {
+            "id": ".uno:TextAlign",
+            "items": [
+              { "commandUrl": ".uno:CommonAlignLeft", "kind": "command", "visible": true },
+              {
+                "commandUrl": ".uno:CommonAlignHorizontalCenter",
+                "kind": "command",
+                "visible": true
+              },
+              { "commandUrl": ".uno:CommonAlignRight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CommonAlignJustified", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:CommonAlignTop", "kind": "command", "visible": true },
+              {
+                "commandUrl": ".uno:CommonAlignVerticalCenter",
+                "kind": "command",
+                "visible": true
+              },
+              { "commandUrl": ".uno:CommonAlignBottom", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Align Text"
+          },
+          {
+            "id": ".uno:NumberFormatMenu",
+            "items": [
+              { "commandUrl": ".uno:NumberFormatStandard", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumberFormatDecimal", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumberFormatPercent", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumberFormatCurrency", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumberFormatDate", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumberFormatTime", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:NumberFormatScientific", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:NumberFormatThousands", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Number Format"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:FormatCellDialog", "kind": "command", "visible": true },
+          {
+            "id": ".uno:RowMenu",
+            "items": [
+              { "commandUrl": ".uno:RowHeight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SetOptimalRowHeight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:HideRow", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowRow", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Rows"
+          },
+          {
+            "id": ".uno:ColumnMenu",
+            "items": [
+              { "commandUrl": ".uno:ColumnWidth", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SetOptimalColumnWidth", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:HideColumn", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowColumn", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Columns"
+          },
+          {
+            "id": ".uno:MergeCellsMenu",
+            "items": [
+              { "commandUrl": ".uno:ToggleMergeCells", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:MergeCells", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SplitCell", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Merge and Unmerge Cells"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:PageFormatDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:PrintRangesMenu", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ConditionalFormatMenu", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:AutoFormat", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ChooseDesign", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ThemeDialog", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:FormatImageMenu",
+            "items": [
+              { "commandUrl": ".uno:Crop", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:OriginalSize", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FitCellSize", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ExternalEdit", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChangePicture", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CompressGraphic", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SaveGraphic", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Image"
+          },
+          {
+            "id": ".uno:ChartMenu",
+            "items": [{ "commandUrl": ".uno:ExportAsGraphic", "kind": "command", "visible": true }],
+            "kind": "menu",
+            "label": "Chart"
+          },
+          {
+            "id": ".uno:FormatObjectMenu",
+            "items": [
+              { "commandUrl": ".uno:TransformDialog", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FormatLine", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FormatArea", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:TextAttributes", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ToggleObjectBezierMode", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Text Box and Shape"
+          },
+          { "commandUrl": ".uno:RenameObject", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ObjectTitleDescription", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:AnchorMenu", "kind": "command", "visible": true },
+          {
+            "id": ".uno:ArrangeMenu",
+            "items": [
+              { "commandUrl": ".uno:BringToFront", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ObjectForwardOne", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ObjectBackOne", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SendToBack", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:SetObjectToForeground", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SetObjectToBackground", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Arrange"
+          },
+          {
+            "id": ".uno:FlipMenu",
+            "items": [
+              { "commandUrl": ".uno:ObjectMirrorVertical", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ObjectMirrorHorizontal", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Flip"
+          },
+          {
+            "id": ".uno:GroupMenu",
+            "items": [
+              { "commandUrl": ".uno:FormatGroup", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FormatUngroup", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:EnterGroup", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:LeaveGroup", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Group Shapes"
+          }
+        ],
+        "kind": "menu",
+        "label": "Format"
+      },
+      {
+        "id": ".uno:FormatStylesMenu",
+        "items": [
+          { "commandUrl": ".uno:DefaultCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Accent1CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Accent2CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Accent3CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Heading1CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Heading2CellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:GoodCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:BadCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:NeutralCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ErrorCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:WarningCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:FootnoteCellStyles", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:NoteCellStyles", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:StyleUpdateByExample", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:StyleNewByExample", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:DesignerDialog", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Styles"
+      },
+      {
+        "id": ".uno:SheetMenu",
+        "items": [
+          { "commandUrl": ".uno:InsertCell", "kind": "command", "visible": true },
+          {
+            "id": ".uno:InsertRowsMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertRowsBefore", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Insert Rows"
+          },
+          {
+            "id": ".uno:InsertColumnsMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Insert Columns"
+          },
+          {
+            "id": ".uno:InsertBreakMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertRowBreak", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertColumnBreak", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Insert Page Break"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:DeleteCell", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DeleteRows", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DeleteColumns", "kind": "command", "visible": true },
+          {
+            "id": ".uno:DelBreakMenu",
+            "items": [
+              { "commandUrl": ".uno:DeleteRowbreak", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteColumnbreak", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Delete Page Break"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Insert", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Add", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertSheetFromFile", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertExternalDataSource", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Remove", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Delete", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ToggleRelative", "kind": "command", "visible": true },
+          {
+            "id": ".uno:FillCellsMenu",
+            "items": [
+              { "commandUrl": ".uno:FillDown", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FillRight", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FillUp", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FillLeft", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FillTable", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FillSeries", "kind": "command", "visible": true },
+              {
+                "commandUrl": ".uno:RandomNumberGeneratorDialog",
+                "kind": "command",
+                "visible": true
+              }
+            ],
+            "kind": "menu",
+            "label": "Fill Cells"
+          },
+          {
+            "id": ".uno:NamesMenu",
+            "items": [
+              { "commandUrl": ".uno:AddName", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DefineName", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:SheetInsertName", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:CreateNames", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DefineLabelRange", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Named Ranges and Expressions"
+          },
+          {
+            "id": ".uno:SheetCommentMenu",
+            "items": [
+              { "commandUrl": ".uno:EditAnnotation", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:HideNote", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowNote", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteNote", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeleteAllNotes", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Cell Comments"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:RenameTable", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Hide", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Show", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Move", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DuplicateSheet", "kind": "command", "visible": true },
+          {
+            "id": ".uno:NavigateMenu",
+            "items": [
+              { "commandUrl": ".uno:JumpToTable", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:JumpToPrevTable", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:JumpToNextTable", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Navigate"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SetTabBgColor", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:TableEvents", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SheetRightToLeft", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Sheet"
+      },
+      {
+        "id": ".uno:DataMenu",
+        "items": [
+          { "commandUrl": ".uno:DataSort", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SortAscending", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SortDescending", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Shuffle", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:DataFilterAutoFilter", "kind": "command", "visible": true },
+          {
+            "id": ".uno:FilterMenu",
+            "items": [
+              { "commandUrl": ".uno:DataFilterStandardFilter", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DataFilterSpecialFilter", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:DataFilterRemoveFilter", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DataFilterHideAutoFilter", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ClearAutoFilter", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "More Filters"
+          },
+          { "commandUrl": ".uno:HandleDuplicateRecords", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:DefineDBName", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SelectDB", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataAreaRefresh", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:DataPilotMenu",
+            "items": [
+              { "commandUrl": ".uno:InsertPivotTable", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:InsertCalculation", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:RecalcPivotTable", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DeletePivotTable", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Pivot Table"
+          },
+          { "kind": "separator" },
+          {
+            "id": ".uno:CellContentsMenu",
+            "items": [
+              { "commandUrl": ".uno:Calculate", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:CalculateHard", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ConvertFormulaToValue", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:AutomaticCalculation", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Calculate"
+          },
+          { "commandUrl": ".uno:Validation", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataSubTotals", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataForm", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:DataStreams", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ManageXMLSource", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataProvider", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataProviderRefresh", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:TableOperationDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:TextToColumns", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DataConsolidate", "kind": "command", "visible": true },
+          {
+            "id": ".uno:GroupOutlineMenu",
+            "items": [
+              { "commandUrl": ".uno:Group", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Ungroup", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:AutoOutline", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ClearOutline", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:HideDetail", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowDetail", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Group and Outline"
+          }
+        ],
+        "kind": "menu",
+        "label": "Data"
+      },
+      {
+        "id": ".uno:ToolsMenu",
+        "items": [
+          { "commandUrl": ".uno:SpellDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SpellOnline", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ThesaurusDialog", "kind": "command", "visible": true },
+          {
+            "id": ".uno:LanguageMenu",
+            "items": [
+              { "commandUrl": ".uno:SetLanguageAllTextMenu", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:Hyphenate", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ChineseConversion", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:HangulHanjaConversion", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:MoreDictionaries", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Language"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:AutoCorrectDlg", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:AutoComplete", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ImageMapDialog", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:RedactDoc", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:AutoRedactDoc", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:GoalSeekDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SolverDialog", "kind": "command", "visible": true },
+          {
+            "id": ".uno:AuditMenu",
+            "items": [
+              { "commandUrl": ".uno:ShowPrecedents", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowDependents", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ClearArrows", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ClearArrowPrecedents", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ClearArrowDependents", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ShowErrors", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:RefreshArrows", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:AuditingFillMode", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:AutoRefreshArrows", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ShowInvalid", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Detective"
+          },
+          { "commandUrl": ".uno:ScenarioManager", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:ToolsFormsMenu",
+            "items": [
+              { "commandUrl": ".uno:SwitchControlDesignMode", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:UseWizards", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ControlProperties", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:FormProperties", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ShowFmExplorer", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:TabDialog", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:AddField", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:OpenReadOnly", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:AutoControlFocus", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Forms"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ShareDocument", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Protect", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ToolProtectionDocument", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:MacrosMenu",
+            "items": [
+              { "commandUrl": ".uno:MacroManager", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:MacroRecorder", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:RunMacro", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:BasicIDEAppear", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:ScriptOrganizer", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:MacroSignature", "kind": "command", "visible": true },
+              {
+                "commandUrl": ".uno:MacroOrganizer?TabId:short=1",
+                "kind": "command",
+                "visible": true
+              }
+            ],
+            "kind": "menu",
+            "label": "Macros"
+          },
+          {
+            "commandUrl": ".uno:DevelopmentToolsDockingWindow",
+            "kind": "command",
+            "visible": true
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:OpenXMLFilterSettings", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ExtensionManager", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ConfigureDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:OptionsTreeDialog", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Tools"
+      },
+      {
+        "id": ".uno:WindowList",
+        "items": [
+          { "commandUrl": ".uno:NewWindow", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:CloseWin", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Window"
+      },
+      {
+        "id": ".uno:HelpMenu",
+        "items": [
+          { "commandUrl": ".uno:HelpIndex", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:ExtendedHelp", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Documentation", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:TipOfTheDay", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:CommandPopup", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:QuestionAnswers", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:SendFeedback", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SafeMode", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:GetInvolved", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Donation", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ShowLicense", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:About", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Help"
+      }
+    ],
+    "standardbar": [
+      { "commandUrl": ".uno:OpenUrl", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:NewDoc", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:OpenFromCalc", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:SendMail", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:EditDoc", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ExportDirectToPDF", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:PrintDefault", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Print", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:PrintPreview", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:FormatPaintbrush", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ResetAttributes", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SearchDialog", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SpellDialog", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SpellOnline", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Navigator", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:RowOperations", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertRowsBefore", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:InsertRowsAfter", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:DeleteRows", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:ColumnOperations", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertColumnsBefore", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:InsertColumnsAfter", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:DeleteColumns", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DataSort", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SortAscending", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SortDescending", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DataFilterAutoFilter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DataFilterStandardFilter", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:DataFilterSpecialFilter", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:GoalSeekDialog", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:InsertGraphic", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Gallery", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:InsertObjectChart", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertObjectStarMath", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:DataDataPilotRun", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertRowBreak", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:CharmapControl", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertAnnotation", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DrawText", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:EditHeaderAndFooter", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DefinePrintArea", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:EditPrintArea", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:DeletePrintArea", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:FreezePanes", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SplitWindow", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Line", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:BasicShapes", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:InsertDraw", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ViewDataSourceBrowser", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Zoom", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:HelpIndex", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:ExtendedHelp", "kind": "command", "visible": false }
+    ],
+    "textobjectbar": [
+      { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:FontHeight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Grow", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Shrink", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Underline", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:UnderlineDouble", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:Strikeout", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Overline", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SuperScript", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SubScript", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Shadowed", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:OutlineFont", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ChangeCaseToLower", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:ChangeCaseToUpper", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:SmallCaps", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Color", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CharBackColor", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:AlignLeft", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignHorizontalCenter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignRight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:AlignBlock", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:CellVertTop", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CellVertCenter", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CellVertBottom", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:LineSpacing", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Spacing", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:ParaspaceIncrease", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ParaspaceDecrease", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:TextdirectionLeftToRight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:TextdirectionTopToBottom", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:ParaLeftToRight", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:ParaRightToLeft", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:FontDialog", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": false }
+    ]
+  },
+  "dispositions": [
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AddDirect",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-document-lifecycle"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:OpenRemote",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-open-dialog"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:RecentFileList",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-open-dialog"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:CloseDoc",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-document-lifecycle"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Reload",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "no-recovery-or-reload"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:VersionDialog",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "no-recovery-or-reload"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Save",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-autosave"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SaveAsRemote",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-copy-dialog"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SaveACopy",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-copy-dialog"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:SaveAll",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-primary-autosave"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:PickList"],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Quit",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "browser-owned-application-lifecycle"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:FormatMenu"],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:FormatSparklineMenu",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "empty-policy-filtered-menu"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:DataMenu"],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:DataTableMenu",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "empty-policy-filtered-menu"
+    },
+    {
+      "classification": "X",
+      "context": [".uno:DataMenu"],
+      "entryKind": "menu",
+      "sourceUrl": ".uno:StatisticsMenu",
+      "sourcePath": "sc/uiconfig/scalc/menubar/menubar.xml",
+      "reason": "empty-policy-filtered-menu"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:AddDirect",
+      "sourcePath": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+      "reason": "browser-primary-document-lifecycle"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:OpenRemote",
+      "sourcePath": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+      "reason": "browser-primary-open-dialog"
+    },
+    {
+      "classification": "X",
+      "context": [],
+      "entryKind": "command",
+      "sourceUrl": ".uno:Save",
+      "sourcePath": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+      "reason": "browser-primary-autosave"
+    }
+  ]
+}

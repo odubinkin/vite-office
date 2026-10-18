@@ -1,0 +1,88 @@
+/** @fileoverview Source-backed shared Writer/Calc command captions, accelerator notation and native toggle flags. */
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { expect, it } from "vitest";
+import {
+  findEnglishLabel,
+  findEnglishLabelProperty,
+  findShortcuts,
+  findCommandPropertyBits,
+  convertShortcut,
+  stripMnemonic,
+  decodeXml,
+  escapeRegExp,
+} from "./office-ui-command-catalog";
+const root = "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/Office/";
+const calc = readFileSync(root + "UI/CalcCommands.xcu", "utf8");
+const generic = readFileSync(root + "UI/GenericCommands.xcu", "utf8");
+const accelerators = readFileSync(root + "Accelerators.xcu", "utf8");
+it("uses the same source captions and accelerator order for both suite generators", /** Checks actual pinned command resources. @returns Nothing. */ () => {
+  expect(stripMnemonic(findEnglishLabel(".uno:OpenFromCalc", calc, generic))).toBe("Open");
+  expect(findShortcuts(".uno:OpenFromCalc", accelerators)[0]).toBe("Ctrl+O");
+  expect(findShortcuts(".uno:SaveAs", accelerators).slice(0, 2)).toEqual([
+    "Ctrl+Shift+S",
+    "Meta+Shift+S",
+  ]);
+  expect(findShortcuts(".uno:Redo", accelerators).slice(0, 2)).toEqual([
+    "Ctrl+Shift+Z",
+    "Meta+Shift+Z",
+  ]);
+  expect(findShortcuts(".uno:Unknown", accelerators)).toEqual([]);
+  expect(findCommandPropertyBits(".uno:Bold", calc, generic) & 8).toBe(8);
+  expect(findCommandPropertyBits(".uno:Unknown", calc, generic)).toBe(0);
+  expect(findEnglishLabelProperty(".uno:OpenFromCalc", "PopupLabel", calc)).toBeUndefined();
+  expect(
+    /** Verifies missing source resources fail closed. @returns Nothing. */ () =>
+      findEnglishLabel(".uno:Unknown", calc, generic),
+  ).toThrow("Missing upstream English label");
+});
+it("preserves shared notation and catalog inheritance without fabricating labels", /** Verifies deterministic pure transformations. @returns Nothing. */ () => {
+  expect(convertShortcut("RETURN_MOD1_MOD2_SHIFT")).toBe("Ctrl+Alt+Shift+Enter");
+  expect(convertShortcut("F2")).toBe("F2");
+  expect(stripMnemonic("~Save As...")).toBe("Save As");
+  expect(decodeXml("&lt;A&amp;B&gt;")).toBe("<A&B>");
+  expect(escapeRegExp(".uno:X[1](a)+?")).toBe("\\.uno:X\\[1\\]\\(a\\)\\+\\?");
+  const module =
+    '<node oor:name=".uno:X"><prop oor:name="Label"><value xml:lang="en-US">~Module</value></prop></node>';
+  const fallback =
+    '<node oor:name=".uno:X"><prop oor:name="Properties"><value>8</value></prop></node>';
+  expect(findEnglishLabel(".uno:X", module, fallback)).toBe("~Module");
+  expect(findCommandPropertyBits(".uno:X", module, fallback)).toBe(8);
+});
+
+it("audits generated Calc source hashes and preserves the complete native top menu order", /** Pins source closure independently of the runtime adapter. @returns Nothing. */ () => {
+  const artifact = JSON.parse(
+    readFileSync("apps/office/src/sc/uiconfig/scalc/calc-ui.generated.json", "utf8"),
+  ) as {
+    sources: { path: string; sha256: string }[];
+    surfaces: { menubar: { label: string }[] };
+    commands: Record<string, { shortcuts: string[] }>;
+  };
+  for (const source of artifact.sources)
+    expect(source.sha256).toBe(
+      createHash("sha256")
+        .update(readFileSync("vendor/libreoffice-reference/" + source.path))
+        .digest("hex"),
+    );
+  expect(
+    artifact.surfaces.menubar.map(
+      /** Reads native label order. @param item - Source menu. @returns Caption. */ (item) =>
+        item.label,
+    ),
+  ).toEqual([
+    "File",
+    "Edit",
+    "View",
+    "Insert",
+    "Format",
+    "Styles",
+    "Sheet",
+    "Data",
+    "Tools",
+    "Window",
+    "Help",
+  ]);
+  expect(artifact.commands[".uno:Save"]).toBeUndefined();
+  expect(artifact.commands[".uno:Cut"]).toBeDefined();
+  expect(artifact.commands[".uno:Redo"]?.shortcuts[0]).toBe("Ctrl+Shift+Z");
+});

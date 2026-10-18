@@ -13,12 +13,11 @@
       ".uno:"
     ],
     "preservedResponsibilities": [
-      "Preserves consumed native menu/toolbar command identities and relative placement order;normalizes source shortcut captions through the existing framework accelerator boundary.",
-      "Shared React controls and Writer primary-save deviations are retained."
+      "Task905DK4 projects pinned Calc menu hierarchy, source command labels, dialog suffixes, default accelerators and Properties toggle flags through deterministic generated resources. The actual Writer parser and command-catalog helpers are shared; Writer output remains byte-identical. Shared React menu and toolbar presenters retain original command identities. Unsupported native operations remain disabled through missing Sfx slots. Standardbar retains only registered visible operations in native order. Explicit Writer browser autosave/open/no-recovery policy dispositions remain auditable. Complete native command execution and formatting behavior are not claimed."
     ],
     "omittedResponsibilities": [
-      "Only implemented current-core commands are placed;full native resource/command breadth and strict whole-UI parity remain unclaimed.",
-      "Save As remains in File and manual Save remains absent from the toolbar under the same browser policy as Writer."
+      "Unported native operations remain unavailable; this task adds source resource projection, not new spreadsheet execution services.",
+      "Browser primary save/open/recovery policy intentionally follows Writer."
     ],
     "evidence": {
       "local": [
@@ -27,8 +26,8 @@
           "marker": "calcStandardBarItems"
         },
         {
-          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
-          "marker": "Mounted production owners"
+          "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+          "marker": "opens every source top menu"
         }
       ],
       "upstream": [

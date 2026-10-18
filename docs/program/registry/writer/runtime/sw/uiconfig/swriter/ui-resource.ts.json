@@ -18,11 +18,9 @@
       "evidence": [
         "apps/office/src/sw/uiconfig/swriter/ui-resource.ts#WriterMenuPlacement"
       ],
-      "justification": "Defines local typed composition data without claiming a LibreOffice implementation source.",
+      "justification": "Retains Writer placement types and compatibility export of the actual shared office toolbar normalizer; no local implementation ownership is claimed.",
       "knownViolations": [],
-      "localSymbols": [
-        "normalizeWriterToolbarItems"
-      ],
+      "localSymbols": [],
       "sourceResponsibility": "divergent",
       "upstreamFile": null,
       "upstreamSymbols": []

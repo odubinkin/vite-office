@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a8560287-c005-4bae-8300-bcd06f394ec7",
+    "capabilityId": "CAP-a8560287-c005-4bae-8300-bcd06f394ec7",
+    "suite": "calc",
+    "subsystem": "source-ui-resources",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Task905DK4 projects pinned Calc menu hierarchy, source command labels, dialog suffixes, default accelerators and Properties toggle flags through deterministic generated resources. The actual Writer parser and command-catalog helpers are shared; Writer output remains byte-identical. Shared React menu and toolbar presenters retain original command identities. Unsupported native operations remain disabled through missing Sfx slots. Standardbar retains only registered visible operations in native order. Explicit Writer browser autosave/open/no-recovery policy dispositions remain auditable. Complete native command execution and formatting behavior are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Pinned Calc UI resource projection",
+    "gaps": [
+      "Native unsupported operations remain disabled; full execution/formatting parity is outside this resource projection.",
+      "Full all-app regression follows task10; current task8 uses all Calc and affected shared/Writer checks."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/menubar/menubar.xml",
+          "marker": ".uno:OpenFromCalc"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/schema/org/openoffice/Office/UI/Commands.xcs",
+          "marker": "Properties"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts",
+          "marker": "calcMenus"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
+          "marker": "opens every source top menu"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/menubar/menubar.ts",
+          "marker": "calcMenus"
+        }
+      ]
+    },
+    "aspect": "command-placement",
+    "atomicOperation": "calc-source-ui-resource-projection",
+    "scopeLimitations": [
+      "Native unsupported operations remain disabled; full execution/formatting parity is outside this resource projection.",
+      "Full all-app regression follows task10; current task8 uses all Calc and affected shared/Writer checks."
+    ]
+  }
+}
