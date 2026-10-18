@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/workflows/file-dialog-controller.ts",
+    "rationale": "React browser file presentation and platform orchestration consume actual suite model/filter/medium owners and source command identities;no native VCL implementation file is falsely assigned as the browser implementation owner.",
+    "responsibilities": [
+      "Task2BTWEE extracts the actual Writer file-dialog presentation,dialog header,primary-name collision choices and observable file-dialog request owner into framework/browser. Suite adapters supply supported formats,canonical IO callbacks and primary stores;shared presentation owns only tab,busy,error,drop and collision drafts. Writer preserves ODT/TXT behavior,its modal marker and existing primary-save policy. Shared office-dialog CSS aliases retain original Writer styling and responsive layout. Calc uses this same presentation for ODS files;no duplicate suite-specific file UI implementation or recovery UI is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React DOM and browser primary file choices share the existing Writer visual style and deliberate save/open policy."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/workflows/file-dialog-controller.ts",
+          "marker": "BrowserFileDialogController"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "Actual Calc file/menu/dialog integration"
+        }
+      ]
+    }
+  }
+}

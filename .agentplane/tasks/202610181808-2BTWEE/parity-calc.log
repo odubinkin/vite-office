@@ -1,0 +1,48 @@
+
+> vite-office@0.1.0 inventory:parity:calc
+> tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc
+
+{
+  "scope": "calc",
+  "capabilityCount": 253,
+  "moduleCount": 618,
+  "invariantCount": 4,
+  "globalRecordCount": 2037,
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 0,
+    "classifiedDivergenceCount": 0,
+    "contractParityCount": 0,
+    "defaultParityCount": 0,
+    "differentialParityCount": 0,
+    "exceptionCount": 0,
+    "gapCount": 431,
+    "implementedCount": 253,
+    "parityReady": false,
+    "ownershipParityCount": 0,
+    "recordCount": 253,
+    "schemaVersion": 6,
+    "serializationParityCount": 0,
+    "scopeLimitationCount": 421,
+    "unresolvedParityCount": 253,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 0
+  },
+  "provenance": {
+    "browserAdaptationCount": 44,
+    "localInfrastructureCount": 8,
+    "mappedCount": 566,
+    "moduleCount": 618
+  },
+  "runtime": {
+    "commandCount": 5,
+    "exportedOperationCount": 725,
+    "internalOperationCount": 11,
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 0
+  },
+  "evidenceNote": "Compact scalar summary of successful registry CLI output;full records remain in the registry.",
+  "rawOutputSha256": "a8c88f4628e7e68f0281ada9c7c4c213e00b43d91beb5600b1f826459278bbd6"
+}

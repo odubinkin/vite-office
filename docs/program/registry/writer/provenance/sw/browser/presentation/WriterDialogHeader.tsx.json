@@ -8,19 +8,23 @@
         {
           "marker": "WriterDialogHeader",
           "path": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "downloads actual ODS"
         }
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterDialogHeader.tsx",
     "rationale": "Shares the Open document visual heading across browser-owned Writer modal panels.",
     "responsibilities": [
-      "Renders a title, optional description and non-submitting close button."
+      "Renders a title, optional description and non-submitting close button.",
+      "Task2BTWEE extracts the actual Writer file-dialog presentation,dialog header,primary-name collision choices and observable file-dialog request owner into framework/browser. Suite adapters supply supported formats,canonical IO callbacks and primary stores;shared presentation owns only tab,busy,error,drop and collision drafts. Writer preserves ODT/TXT behavior,its modal marker and existing primary-save policy. Shared office-dialog CSS aliases retain original Writer styling and responsive layout. Calc uses this same presentation for ODS files;no duplicate suite-specific file UI implementation or recovery UI is introduced."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
       "rationale": "React and browser DOM render modal headings in place of native VCL widgets."
     },
     "status": "local-only"
-  },
-  "legacyOrder": 100
+  }
 }

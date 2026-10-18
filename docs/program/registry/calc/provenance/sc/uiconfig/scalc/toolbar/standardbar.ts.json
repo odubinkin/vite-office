@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+    "upstreamPath": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+    "localSymbols": [
+      "calcStandardBarItems"
+    ],
+    "upstreamSymbols": [
+      ".uno:"
+    ],
+    "preservedResponsibilities": [
+      "Preserves consumed native menu/toolbar command identities and relative placement order;normalizes source shortcut captions through the existing framework accelerator boundary.",
+      "Shared React controls and Writer primary-save deviations are retained."
+    ],
+    "omittedResponsibilities": [
+      "Only implemented current-core commands are placed;full native resource/command breadth and strict whole-UI parity remain unclaimed.",
+      "Save As remains in File and manual Save remains absent from the toolbar under the same browser policy as Writer."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+          "marker": "calcStandardBarItems"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "Mounted production owners"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/toolbar/standardbar.xml",
+          "marker": ".uno:"
+        }
+      ]
+    }
+  }
+}

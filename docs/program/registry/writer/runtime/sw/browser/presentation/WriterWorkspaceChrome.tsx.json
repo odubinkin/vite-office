@@ -9,7 +9,8 @@
     "subsystem": "browser-presentation",
     "capabilityIds": [
       "CAP-0101",
-      "CAP-0115"
+      "CAP-0115",
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -24,9 +25,10 @@
         "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#retainsWriterDeck",
         "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#recreatesSidebarDeck",
         "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx#focusesOwningWriter",
-        "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus"
+        "apps/office/e2e/writer-sidebar-deck.spec.ts#Properties deck closes and reopens with document focus",
+        "apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx"
       ],
-      "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open.",
+      "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner. Existing Properties deck close/reopen follows inspected sfx2 SidebarController RequestCloseDeck/RequestOpenDeck/OpenThenToggleDeck, TabBar activation and FocusManager Escape: close retains mounted content and an unselected rail independently of whole Sidebar visibility, activation first returns to the owning document, cancellation does not toggle. Owned lifecycle/mount/state/frame/no-dispatch and rebuilt desktop/mobile browser checks cover only this contract. Whole F6/Sidebar panel focus, Help/settings/floating/other decks/default sizing and complete native composition remain open. Task2BTWEE user browser review exposed that duplicated Calc header/standard-button styling was inconsistent with Writer and literal UNO menu identities crashed dynamic CSS lookup in Chromium. The actual Writer title/menu/toolbar header is now extracted unchanged into OfficeWorkspaceHeader and consumed by both suites. Both use CommandMenuBar and CommandToolbarItems with the same default button component/styles. SaveAs stays in File and unsupported standardbar entries are not replaced with unrelated commands. Shared popup lookup matches literal owned menu attributes rather than compiling source identity as CSS. Calc shortcut captions pass through the existing framework normalizer and use the original preferred Ctrl+Shift+Z redo sequence. Real-browser menu/header/toolbar checks and literal dotted/colon/quoted-ID regression tests validate the correction.",
       "knownViolations": [],
       "localSymbols": [
         "WriterWorkspaceChrome"

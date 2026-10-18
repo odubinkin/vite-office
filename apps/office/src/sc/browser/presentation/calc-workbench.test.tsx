@@ -73,7 +73,9 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(960);
   const session = createCalcSession(),
     c = session.controller;
-  const mounted = render(<CalcWorkbench controller={c} frame={session.frame} />);
+  const mounted = render(
+    <CalcWorkbench controller={c} frame={session.frame} fileWorkflows={session.fileWorkflows} />,
+  );
   const grid = screen.getByRole("grid"),
     name = screen.getByRole("textbox", { name: "Name Box" }),
     line = screen.getByRole("textbox", { name: "Input line" });

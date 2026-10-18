@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx",
+    "rationale": "Browser React header/presentation resources share actual Writer implementation and existing generic Sfx presenters;no native VCL source file is falsely claimed as their implementation owner.",
+    "responsibilities": [
+      "Task2BTWEE user browser review exposed that duplicated Calc header/standard-button styling was inconsistent with Writer and literal UNO menu identities crashed dynamic CSS lookup in Chromium. The actual Writer title/menu/toolbar header is now extracted unchanged into OfficeWorkspaceHeader and consumed by both suites. Both use CommandMenuBar and CommandToolbarItems with the same default button component/styles. SaveAs stays in File and unsupported standardbar entries are not replaced with unrelated commands. Shared popup lookup matches literal owned menu attributes rather than compiling source identity as CSS. Calc shortcut captions pass through the existing framework normalizer and use the original preferred Ctrl+Shift+Z redo sequence. Real-browser menu/header/toolbar checks and literal dotted/colon/quoted-ID regression tests validate the correction."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "React DOM layout retains the same Writer title/menu/toolbar styling and suite command ownership."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx",
+          "marker": "OfficeWorkspaceHeader"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "Mounted production owners"
+        }
+      ]
+    }
+  }
+}

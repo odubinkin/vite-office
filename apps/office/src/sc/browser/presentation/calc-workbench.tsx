@@ -7,7 +7,7 @@ import {
   useSyncExternalStore,
   type KeyboardEvent,
 } from "react";
-import { Undo2, Redo2 } from "lucide-react";
+import { Undo2, Redo2, FolderOpen } from "lucide-react";
 import { CalcViewController } from "../controller/calc-view-controller";
 import { cellPresentation } from "../editor/cell-input";
 import { ScGridWindow } from "./ScGridWindow";
@@ -15,17 +15,32 @@ import { ScInputWindow, type CalcInputAction } from "./ScInputWindow";
 import { ScTabControl } from "./ScTabControl";
 import type { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
-import { CommandButton } from "../../../framework/browser/presentation/CommandToolbar";
-import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
+import { CommandToolbarItems } from "../../../framework/browser/presentation/CommandToolbar";
+import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/OfficeWorkspaceHeader";
+import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
+import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
+import { CalcFileDialog } from "./CalcFileDialog";
+import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
+import { calcMenus, getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { MAXTAB } from "../../inc/address";
 /** Production document/view and its shared Sfx frame. */
 export interface CalcWorkbenchProps {
+  readonly fileWorkflows: CalcFileWorkflows;
   readonly controller: CalcViewController;
   readonly frame: SfxViewFrame<CalcViewController>;
 }
 /** Renders one mounted Calc editing session. @param props - Canonical owners. @returns Workspace. */
-export function CalcWorkbench({ controller, frame }: CalcWorkbenchProps): React.JSX.Element {
+export function CalcWorkbench({
+  controller,
+  frame,
+  fileWorkflows,
+}: CalcWorkbenchProps): React.JSX.Element {
   useSyncExternalStore(controller.Subscribe, controller.GetSnapshot, controller.GetSnapshot);
+  const dialog = useSyncExternalStore(
+    fileWorkflows.dialogs.Subscribe,
+    fileWorkflows.dialogs.GetSnapshot,
+    fileWorkflows.dialogs.GetSnapshot,
+  );
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null);
   const view = controller.viewData,
@@ -176,204 +191,248 @@ export function CalcWorkbench({ controller, frame }: CalcWorkbenchProps): React.
   }
   return (
     <section
+      onKeyDown={
+        /** Routes file shortcuts through the same active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
+          event,
+        ) => {
+          if (
+            event.nativeEvent.isComposing ||
+            dialog !== undefined ||
+            !(event.ctrlKey || event.metaKey)
+          )
+            return;
+          const key = event.key.toLowerCase(),
+            url =
+              key === "o"
+                ? ".uno:OpenFromCalc"
+                : key === "s" && event.shiftKey
+                  ? ".uno:SaveAs"
+                  : undefined;
+          if (url) {
+            event.preventDefault();
+            frame.GetDispatcher().Execute(url);
+          }
+        }
+      }
       ref={root}
       aria-label="Calc workspace"
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
-      <header className="relative z-50 shrink-0 border-b border-slate-200 bg-white">
-        <div className="flex min-h-12 items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
-          <h1 className="truncate text-sm font-bold text-slate-950">
-            {controller.shell.GetTitle()}
-            {controller.shell.IsModified() ? " •" : ""}
-          </h1>
-        </div>
-        <div
-          role="toolbar"
-          aria-label="Calc standard toolbar"
-          className="flex min-h-12 items-center gap-2 bg-slate-50 px-3 py-1.5"
-        >
-          {(
-            [
-              [".uno:Undo", Undo2],
-              [".uno:Redo", Redo2],
-            ] as const
-          ).map(
-            /** Uses the same shared command button and state bindings as Writer. @param item - Slot/icon. @returns Button. */ ([
-              id,
-              Icon,
-            ]) => (
-              <CommandButton
-                key={id}
-                commandId={id}
-                commandSource={source}
-                className={officeToolbarButtonClassName}
-                icon={Icon}
-                getCommandResource={
-                  /** Projects the existing source slot label. @param url - Slot. @returns Resource. */ (
-                    url,
-                  ) => ({ label: url === ".uno:Undo" ? "Undo" : "Redo", semantics: "action" })
-                }
-                resolveArguments={
-                  /** History has no arguments. @returns No payload. */ () => undefined
-                }
-              />
-            ),
-          )}
-        </div>
-      </header>
-      <ScInputWindow
-        addressText={controller.addressText}
-        inputText={controller.Input()}
-        editing={controller.mode !== "none"}
-        enabledActions={
-          new Set<CalcInputAction>(controller.mode === "none" ? ["equals"] : ["cancel", "accept"])
-        }
-        onAddressChange={
-          /** Updates transient position text. @param value - Draft. @returns Nothing. */ (value) =>
-            controller.ChangeAddress(value)
-        }
-        onAddressKeyDown={
-          /** Accepts/cancels the name box through actual A1 parsing. @param event - Key. @returns Nothing. */ (
-            event,
-          ) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              if (controller.GoToAddress()) focusGrid();
-            }
-            if (event.key === "Escape") {
-              controller.ChangeAddress(controller.Address());
-              focusGrid();
+      <div className="contents" inert={dialog !== undefined}>
+        <OfficeWorkspaceHeader
+          documentTitle={controller.shell.GetTitle()}
+          onDocumentTitleChange={
+            /** Renames the actual shell through Writer-compatible title editing. @param title - Accepted name. @returns Nothing. */ (
+              title,
+            ) => {
+              controller.shell.Rename(title);
             }
           }
-        }
-        onInput={
-          /** Changes the input owner's sole draft. @param value - Draft. @returns Nothing. */ (
-            value,
-          ) => controller.ChangeInput(value)
-        }
-        onInputFocus={
-          /** Enters formula-line mode. @returns Nothing. */ () => controller.StartInput("top")
-        }
-        onInputKeyDown={inputKey}
-        onAction={inputAction}
-      />
-      <ScGridWindow
-        idPrefix="calc"
-        viewData={view}
-        viewport={controller.viewport}
-        editing={controller.mode === "table"}
-        inputText={controller.inputText}
-        getCell={
-          /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
-            pos,
-          ) => cellPresentation(doc, pos)
-        }
-        onSelect={
-          /** Routes pointer selection with shift extension. @param pos - Cell. @param event - Pointer. @returns Nothing. */ (
-            pos,
-            event,
-          ) => {
-            if (event.button === 0) controller.Select(pos.Col(), pos.Row(), event.shiftKey);
+          titleLabel="Document title"
+          editTitleLabel="Edit document title"
+          subtitle="Calc · browser workbench"
+          standardToolbarLabel="Calc standard toolbar"
+          formattingToolbarLabel="Calc formatting toolbar"
+          menuBar={
+            <CommandMenuBar
+              ariaLabel="Calc menu"
+              commandSource={source}
+              focusDocument={focusGrid}
+              getCommandResource={getCalcCommandResource}
+              idPrefix="calc-menu"
+              isInputEnabled={dialog === undefined}
+              menus={calcMenus}
+              resolveArguments={
+                /** File/history slots need no arguments. @returns Nothing. */ () => undefined
+              }
+            />
           }
-        }
-        onHeader={
-          /** Selects actual source row/column/all marks. @param kind - Header. @param index - Coordinate. @returns Nothing. */ (
-            kind,
-            index,
-          ) => controller.Header(kind, index)
-        }
-        onEdit={
-          /** Starts inline editing through the input owner. @param pos - Cell. @returns Nothing. */ (
-            pos,
-          ) => {
-            controller.Select(pos.Col(), pos.Row());
-            controller.StartInput("table");
+          toolbar={
+            <CommandToolbarItems
+              commandSource={source}
+              items={calcStandardBarItems}
+              icons={
+                new Map([
+                  [".uno:OpenFromCalc", FolderOpen],
+                  [".uno:Undo", Undo2],
+                  [".uno:Redo", Redo2],
+                ])
+              }
+              getCommandResource={getCalcCommandResource}
+              resolveArguments={
+                /** Current standard slots need no arguments. @returns Nothing. */ () => undefined
+              }
+            />
           }
-        }
-        onKeyDown={key}
-        onScroll={
-          /** Projects actual physical scroll geometry into logical rows. @param event - Scroll. @returns Nothing. */ (
-            event,
-          ) => {
-            const client = event.currentTarget;
-            controller.Scroll(
-              client.scrollLeft,
-              client.scrollTop,
-              client.clientWidth,
-              client.clientHeight,
-            );
+        />
+
+        <ScInputWindow
+          addressText={controller.addressText}
+          inputText={controller.Input()}
+          editing={controller.mode !== "none"}
+          enabledActions={
+            new Set<CalcInputAction>(controller.mode === "none" ? ["equals"] : ["cancel", "accept"])
           }
-        }
-        onInput={
-          /** Shares one draft with the formula line. @param value - Draft. @returns Nothing. */ (
-            value,
-          ) => controller.ChangeInput(value)
-        }
-        onInputKeyDown={inputKey}
-      />
-      <div ref={tabs}>
-        <ScTabControl
-          viewData={view}
-          canInsert={doc.GetTableCount() <= MAXTAB}
-          onSelect={
-            /** Selects source sheets and marks. @param tab - Sheet. @param event - Click. @returns Nothing. */ (
-              tab,
+          onAddressChange={
+            /** Updates transient position text. @param value - Draft. @returns Nothing. */ (
+              value,
+            ) => controller.ChangeAddress(value)
+          }
+          onAddressKeyDown={
+            /** Accepts/cancels the name box through actual A1 parsing. @param event - Key. @returns Nothing. */ (
               event,
             ) => {
-              controller.SelectTab(tab, event.ctrlKey || event.metaKey);
-              focusGrid();
-            }
-          }
-          onInsert={
-            /** Inserts a real undoable sheet. @returns Nothing. */ () => controller.InsertSheet()
-          }
-          onScroll={
-            /** Scrolls only the tab strip,not the active sheet. @param direction - Native scroll intent. @returns Nothing. */ (
-              direction,
-            ) => {
-              const list = (tabs.current as HTMLDivElement).querySelector(
-                '[role="tablist"]',
-              ) as HTMLDivElement;
-              list.scrollLeft =
-                direction === "first"
-                  ? 0
-                  : direction === "last"
-                    ? list.scrollWidth
-                    : list.scrollLeft + (direction === "next" ? 120 : -120);
-            }
-          }
-          onKeyDown={
-            /** Moves between actual adjacent tabs. @param event - Tab key. @returns Nothing. */ (
-              event,
-            ) => {
-              if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+              if (event.key === "Enter") {
                 event.preventDefault();
-                controller.SelectTab(
-                  Math.max(
-                    0,
-                    Math.min(
-                      doc.GetTableCount() - 1,
-                      view.GetTabNumber() + (event.key === "ArrowRight" ? 1 : -1),
-                    ),
-                  ),
-                );
+                if (controller.GoToAddress()) focusGrid();
+              }
+              if (event.key === "Escape") {
+                controller.ChangeAddress(controller.Address());
                 focusGrid();
               }
             }
           }
+          onInput={
+            /** Changes the input owner's sole draft. @param value - Draft. @returns Nothing. */ (
+              value,
+            ) => controller.ChangeInput(value)
+          }
+          onInputFocus={
+            /** Enters formula-line mode. @returns Nothing. */ () => controller.StartInput("top")
+          }
+          onInputKeyDown={inputKey}
+          onAction={inputAction}
         />
+        <ScGridWindow
+          idPrefix="calc"
+          viewData={view}
+          viewport={controller.viewport}
+          editing={controller.mode === "table"}
+          inputText={controller.inputText}
+          getCell={
+            /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
+              pos,
+            ) => cellPresentation(doc, pos)
+          }
+          onSelect={
+            /** Routes pointer selection with shift extension. @param pos - Cell. @param event - Pointer. @returns Nothing. */ (
+              pos,
+              event,
+            ) => {
+              if (event.button === 0) controller.Select(pos.Col(), pos.Row(), event.shiftKey);
+            }
+          }
+          onHeader={
+            /** Selects actual source row/column/all marks. @param kind - Header. @param index - Coordinate. @returns Nothing. */ (
+              kind,
+              index,
+            ) => controller.Header(kind, index)
+          }
+          onEdit={
+            /** Starts inline editing through the input owner. @param pos - Cell. @returns Nothing. */ (
+              pos,
+            ) => {
+              controller.Select(pos.Col(), pos.Row());
+              controller.StartInput("table");
+            }
+          }
+          onKeyDown={key}
+          onScroll={
+            /** Projects actual physical scroll geometry into logical rows. @param event - Scroll. @returns Nothing. */ (
+              event,
+            ) => {
+              const client = event.currentTarget;
+              controller.Scroll(
+                client.scrollLeft,
+                client.scrollTop,
+                client.clientWidth,
+                client.clientHeight,
+              );
+            }
+          }
+          onInput={
+            /** Shares one draft with the formula line. @param value - Draft. @returns Nothing. */ (
+              value,
+            ) => controller.ChangeInput(value)
+          }
+          onInputKeyDown={inputKey}
+        />
+        <div ref={tabs}>
+          <ScTabControl
+            viewData={view}
+            canInsert={doc.GetTableCount() <= MAXTAB}
+            onSelect={
+              /** Selects source sheets and marks. @param tab - Sheet. @param event - Click. @returns Nothing. */ (
+                tab,
+                event,
+              ) => {
+                controller.SelectTab(tab, event.ctrlKey || event.metaKey);
+                focusGrid();
+              }
+            }
+            onInsert={
+              /** Inserts a real undoable sheet. @returns Nothing. */ () => controller.InsertSheet()
+            }
+            onScroll={
+              /** Scrolls only the tab strip,not the active sheet. @param direction - Native scroll intent. @returns Nothing. */ (
+                direction,
+              ) => {
+                const list = (tabs.current as HTMLDivElement).querySelector(
+                  '[role="tablist"]',
+                ) as HTMLDivElement;
+                list.scrollLeft =
+                  direction === "first"
+                    ? 0
+                    : direction === "last"
+                      ? list.scrollWidth
+                      : list.scrollLeft + (direction === "next" ? 120 : -120);
+              }
+            }
+            onKeyDown={
+              /** Moves between actual adjacent tabs. @param event - Tab key. @returns Nothing. */ (
+                event,
+              ) => {
+                if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                  event.preventDefault();
+                  controller.SelectTab(
+                    Math.max(
+                      0,
+                      Math.min(
+                        doc.GetTableCount() - 1,
+                        view.GetTabNumber() + (event.key === "ArrowRight" ? 1 : -1),
+                      ),
+                    ),
+                  );
+                  focusGrid();
+                }
+              }
+            }
+          />
+        </div>
+        <footer
+          role="status"
+          aria-label="Calc status bar"
+          className="flex shrink-0 items-center gap-5 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
+        >
+          <span>
+            Sheet {view.GetTabNumber() + 1} of {doc.GetTableCount()}
+          </span>
+          <span>{controller.Address()}</span>
+          <span className="ml-auto">{controller.error || "Ready"}</span>
+        </footer>
       </div>
-      <footer
-        role="status"
-        aria-label="Calc status bar"
-        className="flex shrink-0 items-center gap-5 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
-      >
-        <span>
-          Sheet {view.GetTabNumber() + 1} of {doc.GetTableCount()}
-        </span>
-        <span>{controller.Address()}</span>
-        <span className="ml-auto">{controller.error || "Ready"}</span>
-      </footer>
+      {dialog === undefined ? null : (
+        <CalcFileDialog
+          workflows={fileWorkflows}
+          kind={dialog}
+          onClose={
+            /** Closes the dialog and restores the actual grid focus. @returns Nothing. */ () => {
+              fileWorkflows.dialogs.Close();
+              focusGrid();
+            }
+          }
+        />
+      )}
       {controller.error ? (
         <p
           role="alert"

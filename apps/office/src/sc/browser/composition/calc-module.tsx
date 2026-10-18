@@ -9,6 +9,7 @@ import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { CalcViewController } from "../controller/calc-view-controller";
 import { createCalcInterface } from "../../sdi/scalc";
+import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcWorkbench } from "../presentation/calc-workbench";
 /** Creates one actual production session and connects shared Sfx state invalidation. @param store - Injected primary store;defaults to browser IndexedDB when available. @returns Session. */
 export function createCalcSession(
@@ -18,13 +19,18 @@ export function createCalcSession(
 ) {
   const controller = new CalcViewController(),
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
-  frame.SetActiveView(controller, [createSfxShell(controller, createCalcInterface())]);
+  const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store),
+    fileWorkflows = new CalcFileWorkflows(controller, store, autosave);
+  frame.SetActiveView(controller, [
+    createSfxShell(controller, createCalcInterface()),
+    fileWorkflows.GetShell(),
+  ]);
   const detach = controller.Subscribe(
     /** Invalidates shared command bindings when source/input state changes. @returns Nothing. */ () =>
       frame.GetDispatcher().Invalidate("calc-view"),
   );
-  const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store);
   return {
+    fileWorkflows,
     store,
     autosave,
     controller,
@@ -44,7 +50,13 @@ function CalcWorkspaceSession(): React.JSX.Element {
     /** Releases session-owned resources on unmount. @returns Cleanup. */ () => session.Close,
     [session],
   );
-  return <CalcWorkbench controller={session.controller} frame={session.frame} />;
+  return (
+    <CalcWorkbench
+      controller={session.controller}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+    />
+  );
 }
 /** Registers a lazy Calc workspace without constructing a document until mounting. @returns Module factory. */
 export function createCalcModuleFactory(): OfficeModuleFactory {

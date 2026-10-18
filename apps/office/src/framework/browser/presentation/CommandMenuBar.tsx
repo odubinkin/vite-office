@@ -40,6 +40,17 @@ export interface CommandMenuBarProps extends BrowserCommandSurfaceProps {
   readonly menus: readonly CommandMenuPlacement[];
 }
 
+/** Finds an owned popup by literal source identity,without turning UNO punctuation into CSS selector syntax. @param root - Mounted menubar. @param attribute - Original identity attribute. @param value - Original identity. @returns Popup if mounted. */
+function findOwnedPopup(
+  root: HTMLElement,
+  attribute: "id" | "data-submenu",
+  value: string,
+): HTMLElement | undefined {
+  return [...root.querySelectorAll<HTMLElement>('[role="menu"]')].find(
+    /** Matches literal IDs,including dots,colons and quoted/parameterized resource identities. @param popup - Owned popup. @returns Matching. */
+    (popup) => popup.getAttribute(attribute) === value,
+  );
+}
 /** Returns a generated fallback menu label unchanged. @param _id - Stable menu identity. @param fallback - Generated label. @returns Generated label. */
 function useFallbackMenuLabel(_id: string, fallback: string): string {
   return fallback;
@@ -142,8 +153,10 @@ export function CommandMenuBar({
     /** Applies the requested initial focus after React mounts a popup. @returns Nothing. */
     function restoreRequestedMenuFocus(): void {
       if (openMenuIndex === undefined || pendingMenuPreselection.current === undefined) return;
-      const menu = rootRef.current?.querySelector<HTMLElement>(
-        `#${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
+      const menu = findOwnedPopup(
+        rootRef.current as HTMLElement,
+        "id",
+        `${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
       );
       if (menu != null) {
         if (pendingMenuPreselection.current) focusMenuItem(menu, "first");
@@ -169,7 +182,7 @@ export function CommandMenuBar({
       const request = pendingSubmenuFocus.current;
       if (request === undefined) return;
       pendingSubmenuFocus.current = undefined;
-      const submenu = rootRef.current?.querySelector<HTMLElement>(`[data-submenu="${request.id}"]`);
+      const submenu = findOwnedPopup(rootRef.current as HTMLElement, "data-submenu", request.id);
       if (submenu != null) {
         if (request.preSelectFirst) focusMenuItem(submenu, "first");
         else submenu.focus();

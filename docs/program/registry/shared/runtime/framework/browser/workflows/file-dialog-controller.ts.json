@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/workflows/file-dialog-controller.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-file-ui",
+    "capabilityIds": [
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/workflows/file-dialog-controller.ts",
+        "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+      ],
+      "justification": "Task2BTWEE extracts the actual Writer file-dialog presentation,dialog header,primary-name collision choices and observable file-dialog request owner into framework/browser. Suite adapters supply supported formats,canonical IO callbacks and primary stores;shared presentation owns only tab,busy,error,drop and collision drafts. Writer preserves ODT/TXT behavior,its modal marker and existing primary-save policy. Shared office-dialog CSS aliases retain original Writer styling and responsive layout. Calc uses this same presentation for ODS files;no duplicate suite-specific file UI implementation or recovery UI is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BrowserFileDialogController"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

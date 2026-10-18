@@ -262,6 +262,28 @@ export class ScDocShell extends SfxObjectShell {
       throw error;
     }
   }
+  /** Exports an external representation without adopting its medium or acknowledging primary save. @param medium - Export destination. @param persist - Suite platform adapter. @returns Completion. */
+  async Export(
+    medium: SfxMediumInput,
+    persist: (document: ScDocument, medium: SfxMedium) => Promise<void> | void,
+  ): Promise<void> {
+    this.EnsureOpen();
+    const generation = this.GetContentGeneration(),
+      destination = acquireSfxMedium(medium);
+    destination.SetOperation("export", "pending", generation);
+    try {
+      await persist(this.document, destination);
+      destination.SetOperation("export", "succeeded", generation);
+    } catch (error) {
+      destination.SetOperation(
+        "export",
+        "failed",
+        generation,
+        error instanceof Error ? error.message : String(error),
+      );
+      throw error;
+    }
+  }
   /** Retains browser operation feedback on the actual medium. @param operation - Kind. @param state - Outcome. @param generation - Captured content generation. @param message - Error detail. @returns Nothing. */
   SetMediumOperation(
     operation: SfxMediumOperation,

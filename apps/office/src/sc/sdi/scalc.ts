@@ -13,15 +13,36 @@ export interface CalcCommandTarget {
 /** Resource labels for the initial implemented edit slots; full Calc resource/menu projection follows separately. */
 export const calcEditCommands = [
   { id: ".uno:Undo", slotId: 5701, label: "Undo", shortcut: "Control+z" },
-  { id: ".uno:Redo", slotId: 5700, label: "Redo", shortcut: "Control+y" },
+  { id: ".uno:Redo", slotId: 5700, label: "Redo", shortcut: "Control+Shift+z" },
+] as const;
+/** Consumed source file slots and menu resources;primary browser saving replaces native recovery/save policy. */
+export const calcFileCommands = [
+  {
+    id: ".uno:OpenFromCalc",
+    slotId: 26204,
+    label: "Open",
+    shortcuts: ["Control+o"],
+    kind: "open",
+  },
+  {
+    id: ".uno:SaveAs",
+    slotId: 5502,
+    label: "Save As",
+    shortcuts: ["Control+Shift+s"],
+    kind: "save-as",
+  },
+  { id: ".uno:ExportTo", slotId: 5829, label: "Export", shortcuts: [], kind: "export" },
 ] as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
-export const calcUserCommands = calcEditCommands.map(
+export const calcUserCommands = [...calcEditCommands, ...calcFileCommands].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
   (item) => ({
     id: item.id,
     label: item.label,
-    capabilityId: "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const,
+    capabilityId:
+      "kind" in item
+        ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+        : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @returns Interface. */

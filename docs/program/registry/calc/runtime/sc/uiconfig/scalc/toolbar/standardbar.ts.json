@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "browser-file-ui",
+    "capabilityIds": [
+      "CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50"
+    ],
+    "semantic": {
+      "behaviorStatus": "divergent",
+      "contractStatus": "divergent",
+      "defaultStatus": "divergent",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts",
+        "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+        "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx"
+      ],
+      "justification": "Task2BTWEE user browser review exposed that duplicated Calc header/standard-button styling was inconsistent with Writer and literal UNO menu identities crashed dynamic CSS lookup in Chromium. The actual Writer title/menu/toolbar header is now extracted unchanged into OfficeWorkspaceHeader and consumed by both suites. Both use CommandMenuBar and CommandToolbarItems with the same default button component/styles. SaveAs stays in File and unsupported standardbar entries are not replaced with unrelated commands. Shared popup lookup matches literal owned menu attributes rather than compiling source identity as CSS. Calc shortcut captions pass through the existing framework normalizer and use the original preferred Ctrl+Shift+Z redo sequence. Real-browser menu/header/toolbar checks and literal dotted/colon/quoted-ID regression tests validate the correction.",
+      "knownViolations": [],
+      "localSymbols": [
+        "calcStandardBarItems"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/uiconfig/scalc/toolbar/standardbar.xml",
+      "upstreamSymbols": [
+        ".uno:"
+      ]
+    }
+  }
+}
