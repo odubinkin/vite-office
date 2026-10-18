@@ -27,3 +27,20 @@ it("pins native wrap=true and original sheet-navigation slot offsets", /** Check
   expect(sdi).toContain("SfxVoidItem JumpToNextTable SID_NEXT_TABLE");
   expect(sdi).toContain("SfxVoidItem TableSelectAll FID_TAB_SELECTALL");
 });
+
+it("pins Go to Sheet one-based Nr and case-sensitive source filter behavior", /** Checks original slot,dialog and handler composition. @returns Nothing. */ () => {
+  expect(source("sc/inc/sc.hrc")).toMatch(
+    /#define SID_CURRENTTAB\s+TypedWhichId<SfxUInt16Item>\(SC_VIEW_START \+ 42\)/,
+  );
+  expect(source("sc/sdi/scalc.sdi")).toContain("(SfxUInt16Item Nr SID_CURRENTTAB)");
+  const handler = source("sc/source/ui/view/tabvwsh3.cxx"),
+    dialog = source("sc/source/ui/miscdlgs/gototabdlg.cxx");
+  expect(handler).toContain("GetValue() - 1");
+  expect(dialog).toContain("SelectionMode::Single");
+  expect(dialog).toContain("m_xLb->clear()");
+  expect(dialog).toContain("s.indexOf(aMask) >= 0");
+  expect(dialog).toContain("m_xDialog->response(RET_OK)");
+  const ui = source("sc/uiconfig/scalc/ui/gotosheetdialog.ui");
+  for (const id of ["entry-mask", "treeview", "ok", "cancel", "help"])
+    expect(ui).toContain(`id="${id}"`);
+});

@@ -19,12 +19,15 @@ import { CommandToolbarItems } from "../../../framework/browser/presentation/Com
 import { OfficeWorkspaceHeader } from "../../../framework/browser/presentation/OfficeWorkspaceHeader";
 import { calcStandardBarItems } from "../../uiconfig/scalc/toolbar/standardbar";
 import type { CalcFileWorkflows } from "../workflows/calc-file-workflows";
+import { ScGoToTabDlg } from "./ScGoToTabDlg";
+import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { calcMenus, getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { MAXTAB } from "../../inc/address";
 /** Production document/view and its shared Sfx frame. */
 export interface CalcWorkbenchProps {
+  readonly sheetWorkflows: CalcSheetWorkflows;
   readonly fileWorkflows: CalcFileWorkflows;
   readonly controller: CalcViewController;
   readonly frame: SfxViewFrame<CalcViewController>;
@@ -34,6 +37,7 @@ export function CalcWorkbench({
   controller,
   frame,
   fileWorkflows,
+  sheetWorkflows,
 }: CalcWorkbenchProps): React.JSX.Element {
   useSyncExternalStore(controller.Subscribe, controller.GetSnapshot, controller.GetSnapshot);
   const dialog = useSyncExternalStore(
@@ -41,6 +45,12 @@ export function CalcWorkbench({
     fileWorkflows.dialogs.GetSnapshot,
     fileWorkflows.dialogs.GetSnapshot,
   );
+  const sheetDialog = useSyncExternalStore(
+    sheetWorkflows.dialogs.Subscribe,
+    sheetWorkflows.dialogs.GetSnapshot,
+    sheetWorkflows.dialogs.GetSnapshot,
+  );
+  const modal = dialog !== undefined || sheetDialog !== undefined;
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null);
   const view = controller.viewData,
@@ -195,12 +205,7 @@ export function CalcWorkbench({
         /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
           event,
         ) => {
-          if (
-            event.nativeEvent.isComposing ||
-            dialog !== undefined ||
-            !(event.ctrlKey || event.metaKey)
-          )
-            return;
+          if (event.nativeEvent.isComposing || modal || !(event.ctrlKey || event.metaKey)) return;
           const key = event.key.toLowerCase(),
             url =
               !event.altKey && !event.shiftKey && key === "pagedown"
@@ -222,7 +227,7 @@ export function CalcWorkbench({
       aria-label="Calc workspace"
       className="flex h-dvh w-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
-      <div className="contents" inert={dialog !== undefined}>
+      <div className="contents" inert={modal}>
         <OfficeWorkspaceHeader
           documentTitle={controller.shell.GetTitle()}
           onDocumentTitleChange={
@@ -244,7 +249,7 @@ export function CalcWorkbench({
               focusDocument={focusGrid}
               getCommandResource={getCalcCommandResource}
               idPrefix="calc-menu"
-              isInputEnabled={dialog === undefined}
+              isInputEnabled={!modal}
               menus={calcMenus}
               resolveArguments={
                 /** File/history slots need no arguments. @returns Nothing. */ () => undefined
@@ -428,6 +433,26 @@ export function CalcWorkbench({
           onClose={
             /** Closes the dialog and restores the actual grid focus. @returns Nothing. */ () => {
               fileWorkflows.dialogs.Close();
+              focusGrid();
+            }
+          }
+        />
+      )}
+      {sheetDialog === undefined ? null : (
+        <ScGoToTabDlg
+          key={sheetDialog.id}
+          {...sheetDialog.request}
+          onCancel={
+            /** Cancels only this native dialog and restores document focus. @returns Nothing. */ () => {
+              sheetWorkflows.dialogs.Cancel(sheetDialog.id);
+              focusGrid();
+            }
+          }
+          onSubmit={
+            /** Returns native selected name to the originating async slot. @param name - Dialog result. @returns Nothing. */ (
+              name,
+            ) => {
+              sheetWorkflows.dialogs.Complete(sheetDialog.id, name);
               focusGrid();
             }
           }

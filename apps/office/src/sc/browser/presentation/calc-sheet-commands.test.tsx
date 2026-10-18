@@ -58,7 +58,14 @@ it("executes native menu actions and document accelerators from grid and formula
   c.InsertSheet();
   c.InsertSheet();
   c.SelectTab(0);
-  render(<CalcWorkbench controller={c} frame={s.frame} fileWorkflows={s.fileWorkflows} />);
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={s.frame}
+      fileWorkflows={s.fileWorkflows}
+      sheetWorkflows={s.sheetWorkflows}
+    />,
+  );
   fireEvent.click(screen.getByRole("button", { name: "Sheet" }));
   fireEvent.click(screen.getByRole("menuitem", { name: "Navigate" }));
   expect(screen.getByRole("menuitem", { name: "To Next Sheet" })).toHaveAttribute(

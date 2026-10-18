@@ -9,6 +9,7 @@ import { createSfxShell } from "../../../sfx2/source/control/shell";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { CalcViewController } from "../controller/calc-view-controller";
 import { createCalcInterface } from "../../sdi/scalc";
+import { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcWorkbench } from "../presentation/calc-workbench";
 /** Creates one actual production session and connects shared Sfx state invalidation. @param store - Injected primary store;defaults to browser IndexedDB when available. @returns Session. */
@@ -20,22 +21,26 @@ export function createCalcSession(
   const controller = new CalcViewController(),
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
   const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store),
-    fileWorkflows = new CalcFileWorkflows(controller, store, autosave);
+    fileWorkflows = new CalcFileWorkflows(controller, store, autosave),
+    sheetWorkflows = new CalcSheetWorkflows(controller);
   frame.SetActiveView(controller, [
     createSfxShell(controller, createCalcInterface()),
     fileWorkflows.GetShell(),
+    sheetWorkflows.GetShell(),
   ]);
   const detach = controller.Subscribe(
     /** Invalidates shared command bindings when source/input state changes. @returns Nothing. */ () =>
       frame.GetDispatcher().Invalidate("calc-view"),
   );
   return {
+    sheetWorkflows,
     fileWorkflows,
     store,
     autosave,
     controller,
     frame,
     /** Closes this session's shared frame and semantic model resources. @returns Nothing. */ Close(): void {
+      sheetWorkflows.Close();
       autosave?.Close();
       detach();
       frame.CloseView();
@@ -55,6 +60,7 @@ function CalcWorkspaceSession(): React.JSX.Element {
       controller={session.controller}
       frame={session.frame}
       fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
     />
   );
 }

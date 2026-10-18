@@ -1,0 +1,20 @@
+{
+  "task": "202610181859-1J8SQQ",
+  "command": "npm run test:all",
+  "toolSessionId": 92968,
+  "appCoveragePid": 7869,
+  "state": "running",
+  "log": ".agentplane/tasks/202610181859-1J8SQQ/full-regression.log",
+  "observedInitialFailure": "Two main.test bootstrap expectations still registered only Writer. Corrected both factory mocks and expected Writer+Calc descriptors;focused bootstrap tests pass.",
+  "postLaunchScopeChanges": "Go to Sheet argument retrieval now matches native Which identity;list Enter activation is explicit. Entire Calc coverage revalidated271tests100percent after these changes. Full final-source application regression retry may be necessary after the original full run finishes.",
+  "stopRule": "Do not restart or classify the running process as stopped from elapsed time or log silence. Poll the existing session/process. Do not close the task or claim full regression passes until required stages and in-scope repairs are verified.",
+  "remainingStagesToolSessionId": 38859,
+  "remainingStagesCommand": "npm run test:inventory:coverage && npm run test:tooling && npm run test:e2e",
+  "inventoryResult": "pass123tests100percent4metrics",
+  "toolingResult": "pass107tests13files",
+  "e2eState": "running374tests2workers",
+  "calcResult": "pass271tests100percent4metricsafterfinalWhichandEnterchanges",
+  "bootstrapFocusedResult": "pass",
+  "registryFocusedResult": "pass6tests",
+  "nextAction": "Poll sessions92968 and38859. The original full-app run includes already-fixed main.test expectations;after it is terminal,inspect all failures and run a justified final-source application coverage retry if needed. Do not overlap/restart the original application coverage process. E2E is already live and must not be restarted."
+}

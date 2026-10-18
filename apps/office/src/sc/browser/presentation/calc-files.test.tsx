@@ -47,7 +47,12 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
     c = session.controller;
   c.EnterString("Working document");
   render(
-    <CalcWorkbench controller={c} frame={session.frame} fileWorkflows={session.fileWorkflows} />,
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
   );
   fireEvent.click(screen.getByRole("button", { name: "File" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /Save As/ }));

@@ -74,7 +74,12 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   const session = createCalcSession(),
     c = session.controller;
   const mounted = render(
-    <CalcWorkbench controller={c} frame={session.frame} fileWorkflows={session.fileWorkflows} />,
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
   );
   const grid = screen.getByRole("grid"),
     name = screen.getByRole("textbox", { name: "Name Box" }),

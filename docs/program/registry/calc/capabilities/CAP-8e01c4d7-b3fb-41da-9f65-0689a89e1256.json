@@ -1,0 +1,89 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256",
+    "capabilityId": "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256",
+    "suite": "calc",
+    "subsystem": "sheet-dialog",
+    "type": "command",
+    "maturity": "implemented",
+    "assertions": [
+      "Task1J8SQQ connects native JumpToTable/SID_CURRENTTAB26042 and one-based UInt16 Nr to actual Calc sheet view ownership. The asynchronous menu path uses the existing shared SfxDialogController,actual document sheet names and native selected-name result semantics. ScGoToTabDlg retains native ordered single selection,initial active sheet,case-sensitive untrimmed substring mask,selection clearing after filter rebuild,double-click acceptance,empty acceptance with no movement and cancellation. Shared Writer DialogHeader and office-dialog styles render the original entry/list/OK/Cancel/Help composition;Help stays disabled because its service is unported. Pending input must commit before opening;modal background is inert and file/page accelerators are suppressed;session closure cancels the request before destroying the model. This is not hidden-sheet/reference/VCL service parity or full Calc UI completion."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Preserves native consumed slot and menu contracts using shared React presentation and the intentional Writer browser primary-save/open deviation."
+    },
+    "capability": "Source Go to Sheet dialog and command",
+    "gaps": [
+      "The current kernel represents visible sheets only;hidden/alternate sheet views and reference mode remain unported.",
+      "Native Help service is unavailable;its dialog action is explicitly disabled.",
+      "Whole native UI/default/behavior parity is not claimed."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabvwsh3.cxx",
+          "marker": "ScTabViewShell::ExecGoToTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/miscdlgs/gototabdlg.cxx",
+          "marker": "ScGoToTabDlg::Insert"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/inputLine/tdf131326.py",
+          "marker": "class "
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/uiconfig/scalc/ui/gotosheetdialog.ui",
+          "marker": "GoToSheetDialog"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "SfxVoidItem JumpToTable SID_CURRENTTAB"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScGoToTabDlg.tsx",
+          "marker": "ScGoToTabDlg"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+          "marker": "CalcSheetWorkflows"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+          "marker": "opens the native dialog"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/ScGoToTabDlg.tsx",
+          "marker": "ScGoToTabDlg"
+        }
+      ]
+    },
+    "aspect": "command-state",
+    "atomicOperation": "calc-go-to-sheet-dialog",
+    "scopeLimitations": [
+      "The current kernel represents visible sheets only;hidden/alternate sheet views and reference mode remain unported.",
+      "Native Help service is unavailable;its dialog action is explicitly disabled.",
+      "Whole native UI/default/behavior parity is not claimed."
+    ]
+  }
+}

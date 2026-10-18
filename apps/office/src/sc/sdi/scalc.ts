@@ -77,23 +77,32 @@ export const calcSheetSelectionCommands = [
   { id: ".uno:TableSelectAll", slotId: 26361, label: "Select All Sheets" },
   { id: ".uno:TableDeselectAll", slotId: 26365, label: "Deselect All Sheets" },
 ] as const;
+/** Native asynchronous Go to Sheet slot and public Nr contract. */
+export const calcGoToSheetCommand = {
+  id: ".uno:JumpToTable",
+  slotId: 26042,
+  label: "Go to Sheet",
+} as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
 export const calcUserCommands = [
   ...calcEditCommands,
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   calcSheetSelectionCommands[0],
+  calcGoToSheetCommand,
 ].map(
   /** Associates visible history controls with bounded workspace evidence. @param item - SDI edit slot. @returns Inventory entry. */
   (item) => ({
     id: item.id,
     label: item.label,
     capabilityId:
-      "direction" in item || item.id === ".uno:TableSelectAll"
-        ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-        : "kind" in item
-          ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-          : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+      item.id === ".uno:JumpToTable"
+        ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+        : "direction" in item || item.id === ".uno:TableSelectAll"
+          ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+          : "kind" in item
+            ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+            : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @returns Interface. */

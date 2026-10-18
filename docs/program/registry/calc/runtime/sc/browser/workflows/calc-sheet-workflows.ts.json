@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "sheet-dialog",
+    "capabilityIds": [
+      "CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+        "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx"
+      ],
+      "justification": "Task1J8SQQ connects native JumpToTable/SID_CURRENTTAB26042 and one-based UInt16 Nr to actual Calc sheet view ownership. The asynchronous menu path uses the existing shared SfxDialogController,actual document sheet names and native selected-name result semantics. ScGoToTabDlg retains native ordered single selection,initial active sheet,case-sensitive untrimmed substring mask,selection clearing after filter rebuild,double-click acceptance,empty acceptance with no movement and cancellation. Shared Writer DialogHeader and office-dialog styles render the original entry/list/OK/Cancel/Help composition;Help stays disabled because its service is unported. Pending input must commit before opening;modal background is inert and file/page accelerators are suppressed;session closure cancels the request before destroying the model. This is not hidden-sheet/reference/VCL service parity or full Calc UI completion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcSheetWorkflows"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

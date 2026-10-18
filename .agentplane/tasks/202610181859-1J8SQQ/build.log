@@ -18,11 +18,11 @@ dist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB
 dist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB
 dist/assets/odt-worker-B2I8woT4.js    702.38 kB
 dist/assets/index-DNuzW7UY.css         67.49 kB │ gzip:  10.86 kB
-dist/assets/index-Dt6l0tru.js       2,110.19 kB │ gzip: 493.78 kB
+dist/assets/index-C4KKNey4.js       2,110.27 kB │ gzip: 493.72 kB
 
-✓ built in 2.36s
 [plugin builtin:vite-reporter] 
 (!) Some chunks are larger than 500 kB after minification. Consider:
 - Using dynamic import() to code-split the application
 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.99s

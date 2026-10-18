@@ -1,0 +1,33 @@
+
+> vite-office@0.1.0 test:inventory:coverage
+> vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc
+      Coverage enabled with v8
+
+ ❯ scripts/libreoffice-inventory/registry-validation.test.ts (6 tests | 1 failed) 1314ms
+     × checks all and app scopes with complete global discovery and shared references 98ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/libreoffice-inventory/registry-validation.test.ts > global and scoped registry gates > checks all and app scopes with complete global discovery and shared references
+Error: Registry command export is not an array: calcUserCommands
+ ❯ loadRegistryCommands scripts/libreoffice-inventory/registry-validation.ts:219:13
+    217|     const exported = (await loadModule(module))[symbol];
+    218|     if (!Array.isArray(exported))
+    219|       throw new Error(`Registry command export is not an array: ${symb…
+       |             ^
+    220|     for (const command of exported) {
+    221|       if (
+ ❯ runRegistryCli scripts/libreoffice-inventory/registry-cli.ts:73:20
+ ❯ scripts/libreoffice-inventory/registry-validation.test.ts:343:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 37 passed (38)
+      Tests  1 failed | 122 passed (123)
+   Start at  02:13:18
+   Duration  37.32s (transform 1.73s, setup 0ms, import 3.76s, tests 29.31s, environment 3ms)
+

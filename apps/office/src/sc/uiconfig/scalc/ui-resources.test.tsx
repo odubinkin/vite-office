@@ -13,6 +13,7 @@ it("opens every source top menu with unavailable operations disabled and shared 
       controller={session.controller}
       frame={session.frame}
       fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
     />,
   );
   const labels = [
