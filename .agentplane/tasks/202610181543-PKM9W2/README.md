@@ -4,7 +4,7 @@ title: "Integrate writer and calc and synchronize all branches"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute user-approved writer/calc integration, complete full checks and synchronize the three clean project clones."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:43:32.547Z"
+doc_updated_at: "2026-10-18T15:48:18.778Z"
 doc_updated_by: "CODER"
 description: "User-approved integration across vite-office, vite-office-writer and vite-office-calc: push source branches, merge into main, run full verification and fix discovered failures, publish main, back-merge and publish writer/calc, leave all checkouts clean on their requested branches."
 sections:
@@ -51,7 +51,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve original tips main/writer eb7c59194 and calc 991d954b3 in task evidence. If needed, revert integration/fix commits through a separately approved task; never force push or reset user work."
-  Findings: ""
+  Findings: "Initial tips: main/writer eb7c59194; calc 991d954b3 (391 unpublished commits). Writer push was already up to date; calc pushed successfully over explicit HTTPS because the two development clones use SSH origin URLs without an accepted SSH key. No credential or remote configuration changes were made. Content merge had no conflicts; merge commit 084b91ec5 retains both parents. Initial npm run verify stopped on six Prettier formatting failures; all six files received formatting-only corrections, with parsed JSON equality checked. Remaining verify stages are executed individually with complete logs under ignored output/playwright/PKM9W2 so one failure cannot hide subsequent checks. Targeted incident advice was reviewed; the earlier format-parent fixture incidents do not apply to this integration."
 id_source: "generated"
 ---
 ## Summary
@@ -82,3 +82,5 @@ Run npm run verify (all formatting, lint, types, boundaries, resources, tooling/
 Preserve original tips main/writer eb7c59194 and calc 991d954b3 in task evidence. If needed, revert integration/fix commits through a separately approved task; never force push or reset user work.
 
 ## Findings
+
+Initial tips: main/writer eb7c59194; calc 991d954b3 (391 unpublished commits). Writer push was already up to date; calc pushed successfully over explicit HTTPS because the two development clones use SSH origin URLs without an accepted SSH key. No credential or remote configuration changes were made. Content merge had no conflicts; merge commit 084b91ec5 retains both parents. Initial npm run verify stopped on six Prettier formatting failures; all six files received formatting-only corrections, with parsed JSON equality checked. Remaining verify stages are executed individually with complete logs under ignored output/playwright/PKM9W2 so one failure cannot hide subsequent checks. Targeted incident advice was reviewed; the earlier format-parent fixture incidents do not apply to this integration.
