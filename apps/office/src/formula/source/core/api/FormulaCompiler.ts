@@ -1,9 +1,21 @@
-/** @fileoverview Shared FormulaCompiler scalar arithmetic token-to-RPN subset. Text scanning, functions, reference operators and implicit intersection remain unsupported. */
+/** @fileoverview Shared FormulaCompiler scalar arithmetic RPN and ODFF source-token output subsets. Text scanning, functions, reference operators and implicit intersection remain unsupported. */
 import { OpCode } from "../../../inc/opcode";
-import { FormulaToken, FormulaByteToken } from "../../../inc/token";
+import {
+  FormulaToken,
+  FormulaByteToken,
+  FormulaDoubleToken,
+  FormulaStringToken,
+  FormulaSpaceToken,
+  StackVar,
+} from "../../../inc/token";
 import { FormulaTokenArray } from "../../../inc/tokenarray";
 import { ParamClass } from "../../../inc/paramclass";
 import { FormulaError } from "../../../inc/errorcodes";
+
+import { FormulaGrammar, type Grammar } from "../../../inc/grammar";
+import { RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF } from "../../../inc/core_resource";
+import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 
 const arithmetic = new Set<OpCode>([
   OpCode.ocPush,
@@ -23,6 +35,65 @@ const arithmetic = new Set<OpCode>([
 
 /** Shared source-shaped grammar over actual code/RPN arrays, using GC token identities. */
 export class FormulaCompiler {
+  protected meGrammar: Grammar = FormulaGrammar.Grammar.GRAM_UNSPECIFIED;
+  /** Serializes source-order tokens rather than RPN, preserving the native forced-recalc prefix and output replacement. @param output - Actual mutable Unicode output owner. @returns Nothing. */
+  CreateStringFromTokenArray(output: OUString): void {
+    if (this.mpArr.GetLen() && !FormulaGrammar.isODFF(this.meGrammar))
+      throw new Error("ODFF symbols must be selected before serialization");
+    let result = this.mpArr.GetLen() && this.mpArr.IsRecalcModeForced() ? "=" : "";
+    for (const token of this.mpArr.Tokens()) result += this.CreateStringFromToken(token);
+    const value = new OUString(
+      Uint16Array.from(
+        { length: result.length },
+        /** Preserves exact UTF16 code units, including embedded zero and surrogates. @param unused - Unused value. @param index - Unit index. @returns Unit. */ (
+          _,
+          index,
+        ) => result.charCodeAt(index),
+      ),
+      result.length,
+    );
+    try {
+      output.assign(value);
+    } finally {
+      value.dispose();
+    }
+  }
+  /** Emits only source-backed scalar token families; no name/function/array rewrite is fabricated. @param token - Actual source token. @returns Text fragment replacing the native buffer append. */
+  protected CreateStringFromToken(token: FormulaToken): string {
+    const op = token.GetOpCode();
+    if (op === OpCode.ocSpaces || op === OpCode.ocWhitespace) {
+      const byte = (token as FormulaByteToken | FormulaSpaceToken).GetByte();
+      return (
+        op === OpCode.ocSpaces ? " " : String.fromCharCode((token as FormulaSpaceToken).GetChar())
+      ).repeat(byte);
+    }
+    if (op === OpCode.ocPush) {
+      if (token.GetType() === StackVar.svDouble)
+        return doubleToString((token as FormulaDoubleToken).GetDouble());
+      if (token.GetType() === StackVar.svString)
+        return this.AppendString((token as FormulaStringToken).GetString().getString());
+      if (token.GetType() === StackVar.svSingleRef) return this.CreateStringFromSingleRef(token);
+      throw new Error("Formula output token family is not implemented");
+    }
+    const symbol = RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF.get(op);
+    if (symbol === undefined) throw new Error("Formula output opcode is not implemented");
+    return symbol;
+  }
+  /** Emits native quoted text, doubling quotes while retaining exact UTF16 units. @param value - String owner. @returns Text fragment. */
+  private AppendString(value: OUStringConstReference): string {
+    let result = '"';
+    const units = value.getStr();
+    for (let i = 0; i < value.getLength(); i++) {
+      const character = String.fromCharCode(units[i] as number);
+      result += character === '"' ? '""' : character;
+    }
+    return result + '"';
+  }
+  /** Preserves the original empty virtual base operation; Calc supplies its reference convention. @param token - Reference token. @returns Empty base fragment. */
+  protected CreateStringFromSingleRef(token: FormulaToken): string {
+    void token;
+    return "";
+  }
   protected mpArr: FormulaTokenArray;
   private mpToken: FormulaToken = new FormulaByteToken(OpCode.ocStop);
   private meLastOp: OpCode = OpCode.ocPush;

@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-83062832-8e9e-407b-aef7-f0edbfc412b1",
+    "capabilityId": "CAP-83062832-8e9e-407b-aef7-f0edbfc412b1",
+    "suite": "shared",
+    "subsystem": "scalar-formula-output",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported. Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+    },
+    "capability": "Automatic/Max decimal output",
+    "gaps": [
+      "Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "doubleToString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sal/qa/rtl/math/test-rtl-math.cxx",
+          "marker": "test_doubleToString"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "doubleToString"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.math.ts",
+          "marker": "doubleToString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.math.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Formula serialization (task202)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "automatic-max-decimal-output",
+    "scopeLimitations": [
+      "Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported. Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported. Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+    }
+  }
+}

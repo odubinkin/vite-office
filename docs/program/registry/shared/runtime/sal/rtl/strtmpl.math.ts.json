@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/rtl/strtmpl.math.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "scalar-formula-output",
+    "capabilityIds": [
+      "CAP-83062832-8e9e-407b-aef7-f0edbfc412b1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/rtl/strtmpl.math.ts",
+        "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx#doubleToString"
+      ],
+      "justification": "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported. Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification.",
+      "knownViolations": [],
+      "localSymbols": [
+        "doubleToString"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sal/rtl/strtmpl.hxx",
+      "upstreamSymbols": [
+        "doubleToString"
+      ]
+    }
+  }
+}

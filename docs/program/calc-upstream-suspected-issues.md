@@ -2611,3 +2611,18 @@ do not skip the arithmetic read merely because an error already exists.
 Task201 tests initialized reference data and actual formula cells. This is
 source-derived evidence, not native execution or a claim about imported
 malformed formulas, locale coercion or full UI effects.
+
+## CALC-187 — formula number output need not preserve the last binary64 digits
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`FormulaCompiler::AppendDouble` and `sal/rtl/strtmpl.hxx` doubleToString.
+Formula output requests Automatic/Max, but the shared formatter ordinarily
+rounds to15significant decimal digits. For example,1.2345678901234567 is written
+as1.23456789012346 and parsing that text changes the binary64 value. Exact
+integers below2^53 instead retain their full digits; the top five finite
+binary64 values also use the separate17digit overflow-avoidance branch.
+Preserve these source distinctions instead of substituting JS shortest text
+as the finished formula output. JS shortest conversion is used only for the
+decimal decomposition before the native rounding/presentation steps. Task202
+has source-derived and managed regression witnesses, not native execution or
+a claim that this intentional precision policy is a confirmed upstream bug.

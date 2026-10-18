@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-88a94ea5-cc81-408e-a4ca-f9fd426d999e",
+    "capabilityId": "CAP-88a94ea5-cc81-408e-a4ca-f9fd426d999e",
+    "suite": "calc",
+    "subsystem": "scalar-formula-output",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership. Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
+    },
+    "capability": "Formula-cell ODFF serialization",
+    "gaps": [
+      "Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx",
+          "marker": "ScFormulaCell::GetFormula"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula.cxx",
+          "marker": "testFormulaCompiler"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/formulacell.cxx",
+          "marker": "ScFormulaCell::GetFormula"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+          "marker": "GetFormula"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/formula-output.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Formula serialization (task202)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "formula-cell-odff-serialization",
+    "scopeLimitations": [
+      "Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership. Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership. Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified."
+    }
+  }
+}

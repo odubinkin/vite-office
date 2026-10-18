@@ -752,3 +752,16 @@ this same document model. Full range/function/locale/area/group parity is not
 a prerequisite for that bounded milestone. No UI is implemented. Declare
 readiness only after the supported edit and ODS round-trip paths pass, then
 run all-app verification and pause as requested.
+
+## Formula serialization (task202)
+
+ScFormulaCell.GetFormula with explicit ODFF grammar now reconstructs source
+from actual tokens through the shared compiler and Calc reference convention.
+It preserves forced recalc, source whitespace, native decimal output and local
+relative/absolute references at the actual formula position without evaluating
+the cell. English scalar symbol data is shared with the scanner. The consumed
+RTL decimal specialization uses native JS shortest decimal decomposition and
+source integer rounding/presentation, with no Dragonbox or buffer-memory port.
+Other grammars, localized error resources and full function/reference/rewriter
+services remain unsupported. Next is basic ODS import/export on the same model;
+this task neither implements UI nor certifies UI/ODS readiness.

@@ -1,4 +1,4 @@
-/** @fileoverview Scalar/local-reference formula cells with native single-cell subscriptions and logical tracking. Groups, iterative cycles, formatting and serialization remain unsupported. */
+/** @fileoverview Scalar/local-reference formula cells with native single-cell subscriptions and logical tracking. Groups, iterative cycles and localized formatting remain unsupported. */
 import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScSingleRefToken } from "../../../inc/token";
@@ -13,6 +13,9 @@ import { ScFormulaResult } from "../../../inc/formularesult";
 import { ScTokenArray } from "../../../inc/tokenarray";
 import { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+
 /** Formula content is stored as actual code/RPN tokens with the existing result owner. */
 export class ScFormulaCell extends SvtListener<SfxHint> {
   private pPrevious: ScFormulaCell | null = null;
@@ -36,6 +39,20 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     const compiler = new ScCompiler(rDocument, this.aPos, grammar);
     this.pCode = compiler.CompileString(formula);
     compiler.CompileTokenArray();
+  }
+  /** Serializes real source-order tokens without evaluating the cell or caching a second formula model. @param grammar - Explicit serialization grammar. @returns Formula with native leading equals. */
+  GetFormula(grammar: Grammar): OUString {
+    if (this.pCode.GetCodeError() !== FormulaError.NONE && !this.pCode.GetLen())
+      throw new Error("Localized empty-code error strings are not implemented");
+    const output = new OUString();
+    try {
+      new ScCompiler(this.rDocument, this.aPos, this.pCode, grammar).CreateStringFromTokenArray(
+        output,
+      );
+      return unicode("=" + text(output));
+    } finally {
+      output.dispose();
+    }
   }
   /** Borrows the actual formula token owner. @returns Code. */
   GetCode(): ScTokenArray {

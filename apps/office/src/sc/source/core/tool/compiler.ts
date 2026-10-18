@@ -15,19 +15,26 @@ import { ScSingleRefData } from "../../../inc/refdata";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScRefFlags, ScAddress } from "../../../inc/address";
 import { ScTokenArray } from "../../../inc/tokenarray";
-const symbols: Readonly<Record<string, OpCode>> = {
-  "+": OpCode.ocAdd,
-  "-": OpCode.ocSub,
-  "*": OpCode.ocMul,
-  "/": OpCode.ocDiv,
-  "^": OpCode.ocPow,
-  "%": OpCode.ocPercentSign,
-  "(": OpCode.ocOpen,
-  ")": OpCode.ocClose,
-};
+import { RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF } from "../../../../formula/inc/core_resource";
+import { ScSingleRefToken } from "../../../inc/token";
+import type { FormulaToken } from "../../../../formula/inc/token";
+
+const symbols: Readonly<Record<string, OpCode>> = Object.fromEntries(
+  Array.from(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF)
+    .filter(
+      /** Keeps lexical minus distinct from its unary compiler opcode. @param entry - Source entry. @returns Lexical membership. */ ([
+        op,
+      ]) => op !== OpCode.ocNegSub,
+    )
+    .map(
+      /** Reuses the native symbol spelling for scanning. @param entry - Source entry. @returns Scanner entry. */ ([
+        op,
+        symbol,
+      ]) => [symbol, op],
+    ),
+);
 /** Actual shared grammar with the Calc first-error hook and bounded numeric scanner. */
 export class ScCompiler extends FormulaCompiler {
-  private readonly grammar: Grammar;
   readonly aPos: ScAddress;
   /** Native document/position/array-or-grammar constructor subset. @param rDoc - Document. @param position - Formula position. @param arrayOrGrammar - Existing array or scanning grammar. @param grammar - Existing-array grammar. @returns Compiler. */
   constructor(
@@ -38,9 +45,37 @@ export class ScCompiler extends FormulaCompiler {
   ) {
     super(arrayOrGrammar instanceof ScTokenArray ? arrayOrGrammar : new ScTokenArray(rDoc));
     this.aPos = new ScAddress(position);
-    this.grammar = arrayOrGrammar instanceof ScTokenArray ? (grammar as Grammar) : arrayOrGrammar;
-    if (!FormulaGrammar.isODFF(this.grammar))
-      throw new Error("Only numeric ODFF formula grammar is implemented");
+    this.SetGrammar(arrayOrGrammar instanceof ScTokenArray ? (grammar as Grammar) : arrayOrGrammar);
+  }
+  /** Selects the implemented native Calc grammar and reference convention. @param grammar - Grammar. @returns Nothing. */
+  SetGrammar(grammar: Grammar): void {
+    if (!FormulaGrammar.isODFF(grammar))
+      throw new Error("Only ODFF serialization grammar is implemented");
+    this.meGrammar = grammar;
+  }
+  /** Emits native ODFF bracket/dot/absolute flags from the actual reference at the formula position. @param token - Single-reference token. @returns Reference text. */
+  protected override CreateStringFromSingleRef(token: FormulaToken): string {
+    const reference = (token as ScSingleRefToken).GetSingleRef();
+    const address = reference.toAbs(this.rDoc, this.aPos);
+    if (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address))
+      return "[#REF!]";
+    if (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab())
+      throw new Error("Sheet-qualified formula output is not implemented");
+    let column = address.Col() + 1,
+      letters = "";
+    while (column > 0) {
+      column--;
+      letters = String.fromCharCode(65 + (column % 26)) + letters;
+      column = Math.floor(column / 26);
+    }
+    return (
+      "[." +
+      (reference.IsColRel() ? "" : "$") +
+      letters +
+      (reference.IsRowRel() ? "" : "$") +
+      (address.Row() + 1) +
+      "]"
+    );
   }
   /** Records the first actual code error. @param error - Error. @returns Nothing. */
   protected override SetError(error: FormulaError): void {
