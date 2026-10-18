@@ -1,0 +1,21 @@
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:237
+    throw new Error(`JSDoc validation failed:\n${errors.join("\n")}`);
+          ^
+
+Error: JSDoc validation failed:
+apps/office/e2e/shared/menubar-overflow.spec.ts:40 function is missing JSDoc
+apps/office/src/framework/browser/presentation/CommandMenuBar.tsx:70 function is missing JSDoc
+apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx:11 function is missing JSDoc
+apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx:13 function is missing JSDoc
+apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx:33 function is missing @returns
+apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx:44 function documents 0/1 parameters
+apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx:67 function is missing JSDoc
+apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx:74 function is missing JSDoc
+    at main (file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:237:11)
+    at async file:///Users/odubinkin/Projects/vite-office-calc/scripts/check-jsdoc.mjs:243:1
+
+Node.js v24.13.1

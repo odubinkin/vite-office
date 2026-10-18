@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- --coverage.include=src/framework/browser/presentation/menubar-overflow.tsx --coverage.reportsDirectory=coverage/task21-menubar src/framework/browser/presentation/menubar-overflow.test.tsx
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/framework/browser/presentation/menubar-overflow.tsx --coverage.reportsDirectory=coverage/task21-menubar src/framework/browser/presentation/menubar-overflow.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  05:55:20
+   Duration  978ms (transform 183ms, setup 133ms, import 165ms, tests 35ms, environment 481ms)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 34/34 )
+Branches     : 100% ( 18/18 )
+Functions    : 100% ( 9/9 )
+Lines        : 100% ( 33/33 )
+================================================================================

@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/menubar-overflow.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-0115",
+      "CAP-0116",
+      "CAP-b79b623f-979e-48cf-b51d-982a727ff10c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/menubar-overflow.tsx#MenuBarOverflow"
+      ],
+      "justification": "TaskWN0H8T measures actual browser trigger geometry and projects the trailing hidden root menus into the native MenuBarWindow::ImplCreatePopup parent-popup shape. Original command trees and submenu identities are retained;shared React menu state/dispatch/focus ownership remains unchanged. This does not certify complete native VCL parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MenuBarOverflow"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

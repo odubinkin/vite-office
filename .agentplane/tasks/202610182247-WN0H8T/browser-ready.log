@@ -1,0 +1,153 @@
+[WebServer] (node:16275) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 20 tests using 2 workers
+
+(node:16500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:16502) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:4:1 › root Escape returns focus and typing to the saved Writer editor (750ms)
+  ✓   1 [writer] › apps/office/e2e/writer-menu-alignment.spec.ts:4:1 › menu commands and submenus align their labels (893ms)
+  ✓   4 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:4:1 › pointer root popup owns focus and passes keyboard input to its first command (621ms)
+  ✓   3 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:17:1 › root and nested commands restore the saved editor before dispatch (820ms)
+  ✓   5 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowDown selects the first Writer command and executes one toggle (487ms)
+  ✓   6 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:38:1 › a menu command leaves focus in its newly opened Hyperlink dialog (600ms)
+  ✓   7 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root ArrowUp selects the first Writer command and executes one toggle (484ms)
+  ✓   8 [writer] › apps/office/e2e/writer-menu-saved-focus.spec.ts:49:1 › outside pointer focus belongs to the clicked Writer control (516ms)
+  ✓   9 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Enter selects the first Writer command and executes one toggle (484ms)
+  ✓  10 [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Enter (671ms)
+  ✓  11 [writer] › apps/office/e2e/writer-root-menu-focus.spec.ts:24:3 › root Space selects the first Writer command and executes one toggle (507ms)
+(node:16541) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 [writer] › apps/office/e2e/writer-submenu-keyboard.spec.ts:5:3 › nested Writer ruler toggles once with Space (602ms)
+(node:16559) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 1280x800 (3.6s)
+  ✓  14 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 1280x800 (3.4s)
+  ✓  15 [calc] › apps/office/e2e/calc/formatting-toolbar.spec.ts:43:3 › native cell formatting toolbar at 390x600 (1.9s)
+  ✓  16 [calc] › apps/office/e2e/calc/standard-toolbar.spec.ts:40:3 › complete source standard toolbar at 390x600 (1.7s)
+(node:16649) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  17 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 1280px (432ms)
+  ✘  18 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px (30.2s)
+(node:17361) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  19 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 1280px (386ms)
+  ✘  20 [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px (30.2s)
+
+
+  1) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Writer document body', { exact: true })
+        - locator resolved to <article contenteditable="true" data-writer-editing-host="true" aria-label="Writer document body" class="grid w-max min-w-full justify-center gap-6 px-8 text-slate-950 outline-none">…</article>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button tabindex="-1" type="button" aria-checked="false" role="menuitemradio" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> from <header class="relative z-50 shrink-0 border-b border-slate-200 bg-white">…</header> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button tabindex="-1" type="button" aria-checked="false" role="menuitemradio" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> from <header class="relative z-50 shrink-0 border-b border-slate-200 bg-white">…</header> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        56 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button tabindex="-1" type="button" aria-checked="false" role="menuitemradio" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> from <header class="relative z-50 shrink-0 border-b border-slate-200 bg-white">…</header> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      60 |             page.getByRole("menu", { name: `${label} menu`, exact: true }),
+      61 |           ).toBeVisible();
+    > 62 |           await editor.click();
+         |                        ^
+      63 |           await expect(page.getByRole("menu")).toHaveCount(0);
+      64 |           await expect(editor).toBeFocused();
+      65 |         }
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:62:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-wr-c0a1c-s-remain-reachable-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('grid')
+        - locator resolved to <div role="grid" tabindex="0" aria-colcount="16385" aria-rowcount="1048577" aria-label="Spreadsheet" aria-activedescendant="calc-0-0-0" class="min-h-0 flex-1 overflow-auto bg-white text-[13px] text-slate-900 outline-none">…</div>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button disabled tabindex="-1" type="button" aria-checked="false" role="menuitemcheckbox" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> from <header class="relative z-50 shrink-0 border-b border-slate-200 bg-white">…</header> subtree intercepts pointer events
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <button disabled tabindex="-1" type="button" aria-checked="false" role="menuitemcheckbox" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> from <header class="relative z-50 shrink-0 border-b border-slate-200 bg-white">…</header> subtree intercepts pointer events
+        - retrying click action
+          - waiting 100ms
+        56 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <button disabled tabindex="-1" type="button" aria-checked="false" role="menuitemcheckbox" class="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45">…</button> from <header class="relative z-50 shrink-0 border-b border-slate-200 bg-white">…</header> subtree intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+
+
+      60 |             page.getByRole("menu", { name: `${label} menu`, exact: true }),
+      61 |           ).toBeVisible();
+    > 62 |           await editor.click();
+         |                        ^
+      63 |           await expect(page.getByRole("menu")).toHaveCount(0);
+      64 |           await expect(editor).toBeFocused();
+      65 |         }
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-overflow.spec.ts:62:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-overflow-ca-45bab-s-remain-reachable-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › writer top menus remain reachable at 390px 
+    [shared] › apps/office/e2e/shared/menubar-overflow.spec.ts:22:5 › calc top menus remain reachable at 390px 
+  18 passed (1.2m)

@@ -121,6 +121,7 @@ export function WriterWorkspaceChrome({
               ) => setCanvasScrollTop(event.currentTarget.scrollTop)
             }
             role="region"
+            tabIndex={0}
           >
             <WriterRulerLaneContext.Provider
               value={{ lane: rulerLane, scrollTop: canvasScrollTop }}
@@ -146,7 +147,7 @@ export function WriterWorkspaceChrome({
       </div>
 
       {isStatusBarVisible ? (
-        <footer
+        <div
           aria-label="Writer status bar"
           className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
           role="status"
@@ -154,7 +155,7 @@ export function WriterWorkspaceChrome({
           <span aria-live="polite" className="sm:ml-auto">
             {status}
           </span>
-        </footer>
+        </div>
       ) : null}
     </section>
   );

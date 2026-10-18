@@ -1,0 +1,33 @@
+Checking formatting...
+All matched files use Prettier code style!
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/framework/browser/presentation/CommandMenuBar.tsx
+  115:19  warning  The ref value 'rootRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'rootRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+
+✖ 1 problem (0 errors, 1 warning)
+
+ESLint found too many warnings (maximum: 0).
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: npx eslint apps/office/src/framework/browser/presentation/CommandMenuBar.tsx apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx apps/office/e2e/shared/menubar-overflow.spec.ts apps/office/src/framework/browser/presentation/menubar-overflow.test.tsx apps/office/src/framework/browser/presentation/menubar-overflow.tsx --max-warnings 0
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execFileSync (node:child_process:961:15)
+    at file:///Users/odubinkin/Projects/vite-office-calc/[eval1]:1:260
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:268:26)
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:265:20)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 12726,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.13.1

@@ -85,7 +85,7 @@ export function OfficeWorkspaceHeader({
             {subtitle}
           </p>
         </div>
-        <div className="shrink-0">{menuBar}</div>
+        <div className="min-w-0 max-w-full">{menuBar}</div>
       </div>
 
       <div

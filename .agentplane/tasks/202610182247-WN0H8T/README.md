@@ -4,7 +4,7 @@ title: "Expose native trailing menubar entries through shared overflow popup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -14,14 +14,14 @@ verify:
   - "Whole Calc raw100percent S/B/F/L;related shared menubar tests including measured suffix popup and resize lifecycle;built desktop/mobile Writer/Calc overflow reachability and keyboard/axe/pageerrors;types/build/freshness/touchedstyle/dependency/provenance/scopedinventories/doctor/routing. No full run before cadence30."
 plan_approval:
   state: "approved"
-  updated_at: "2026-10-18T22:47:33.920Z"
+  updated_at: "2026-10-18T22:57:21.803Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-18T23:05:57.617Z"
+  updated_by: "CODER"
+  note: "Native hidden menu suffix is reachable through actual shared Writer/Calc popup;whole Calc299 raw100percent,new layout module raw100percent,105shared/menu and23Writer cases pass. Final four desktop/mobile browser scenarios pass whole-page unfilteredaxe/keyboard/resize focus;18other targeted browser cases already passed on final production source. Types/build/static/style/architecture/provenance/scopedinventories/doctor/routing pass. Overall goal active,nextfull30."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start:implement native hidden-suffix parent popup in shared Writer/Calc menubar,then verify measured boundaries and real browser keyboard reachability."
+  -
+    type: "verify"
+    at: "2026-10-18T23:05:57.617Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native hidden menu suffix is reachable through actual shared Writer/Calc popup;whole Calc299 raw100percent,new layout module raw100percent,105shared/menu and23Writer cases pass. Final four desktop/mobile browser scenarios pass whole-page unfilteredaxe/keyboard/resize focus;18other targeted browser cases already passed on final production source. Types/build/static/style/architecture/provenance/scopedinventories/doctor/routing pass. Overall goal active,nextfull30."
 doc_version: 3
-doc_updated_at: "2026-10-18T22:47:34.704Z"
+doc_updated_at: "2026-10-18T23:05:57.670Z"
 doc_updated_by: "CODER"
 description: "Task21 of approved Calc UI goal:fix inaccessible trailing top menus at narrow widths using native MenuBarWindow hidden-item parent popup behavior in actual shared Writer/Calc menubar. Preserve shared visual style,resource identities,commands and keyboard ownership. Only calc checkout/branch,no network/merge. Full regression already task20,next30."
 sections:
@@ -48,13 +54,46 @@ sections:
   Scope: |-
     - In scope: Task21 of approved Calc UI goal:fix inaccessible trailing top menus at narrow widths using native MenuBarWindow hidden-item parent popup behavior in actual shared Writer/Calc menubar. Preserve shared visual style,resource identities,commands and keyboard ownership. Only calc checkout/branch,no network/merge. Full regression already task20,next30.
     - Out of scope: unrelated refactors not required for "Expose native trailing menubar entries through shared overflow popup".
-  Plan: "1.CODER implements measured native trailing-menu projection with More menus parent popup in actual shared CommandMenuBar;Header permits constrained width,unchanged normal desktop appearance. Source:MenuBarWindow::ImplCreatePopup copies hidden suffix into parent popup and keyboard skips hidden roots. Keep native nested resources and existing execution/focus contracts.2.CODER verifies real suffix selection,source order,resizing,keyboard ownership,desktop/mobile Writer/Calc shared styling,unfilteredaxe/pageerrors and wholeCalc100percent plus affected module tests.3.Record evidence,evaluate and commit only task paths. Up to14non-task paths:shared menubar/header plus focused layout module/tests if required,shared runtime/provenance records,shared browser tests and current Calc architecture documentation. Existing goal approval applies;no new network/core formatting or merge. Full cadence next30."
+  Plan: "Approved goal task21:measure native menubar hidden suffix and expose its original roots through shared parent popup;constrain shared Header;keep existing commands,style,focus contracts. Verify wholeCalc raw100percent,affectedshared/Writer tests,newgeometry raw100percent,realbothsuite desktop/mobile mouse/keyboard/resize and whole-page unfilteredaxe/pageerrors plusdeclaredgates. Browser audit identified existing WriterWorkspaceChrome footer role and nonfocusable canvas scroll area;repair semantic element/tabindex with unchanged appearance and actual owner registry records. All changes fit14non-task paths originallybudgeted. No audit exclusions,thresholdchanges,network/merges or coreformat slots. Existing broadusergoalapprovalapplies;nextfull30."
   Verify Steps: "npm run test:coverage:calc must remain raw100percent statements/branches/functions/lines. Run affected shared menubar and header tests and meaningful layout boundary cases (fits,hidden suffix,unmeasured/empty,resize cleanup);new changed module raw100percent using scoped coverage and existing related tests. Built browser at1280x800 and390x600 for bothWriter/Calc:all source top menus reachable,hidden suffix order,mouse/keyboard submenu open/escape/focus and resize;original shared font/toolbar style retained;unfilteredaxe/pageerrors pass. npm run typecheck/build/check:dependencies/check:docs/check:file-size/check:source-tree/check:source-provenance/check:writer-resources/check:calc-resources,touchedPrettier/eslint,shared/Calc scopedinventory,ap doctor and routing. Full task20already passed;next full30."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-18T23:05:57.617Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native hidden menu suffix is reachable through actual shared Writer/Calc popup;whole Calc299 raw100percent,new layout module raw100percent,105shared/menu and23Writer cases pass. Final four desktop/mobile browser scenarios pass whole-page unfilteredaxe/keyboard/resize focus;18other targeted browser cases already passed on final production source. Types/build/static/style/architecture/provenance/scopedinventories/doctor/routing pass. Overall goal active,nextfull30.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:05:57.116Z, excerpt_hash=sha256:aebc7842a145d995956a006e1dbda33c300bf3e3f9a2a34f1eae01418bcdd2de
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182247-WN0H8T/blueprint/resolved-snapshot.json
+    - old_digest: 2fbc342590b9a6a650534c7d5b7bf85f5e3cf63a3950c9aedf7c9089bc43c84b
+    - current_digest: 2fbc342590b9a6a650534c7d5b7bf85f5e3cf63a3950c9aedf7c9089bc43c84b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182247-WN0H8T
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610182247-WN0H8T -m 🧩 WN0H8T task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only task21 measured menubar suffix projection and header constraint with associated tests/registry. Preserve task20 formatting controls and all earlier core owners. No branch resets or merges."
-  Findings: ""
+  Findings: |-
+    # Task21 verification
+
+    Approved scope:14 intentional non-task paths in calc checkout/branch. Native source reference: vcl/source/window/menu.cxx hides the trailing menubar roots and draws its More indicator;vcl/source/window/menubarwindow.cxx MenuBarWindow::ImplCreatePopup borrows the original hidden suffix as child menus. Browser adaptation measures actual DOM label/gap/indicator geometry,keeps original submenu identities and resource arrays,and uses the actual existing shared menu state machine and Sfx command ports. Unknown core formatting remains unavailable;no fake state or new command registrations.
 id_source: "generated"
 ---
 ## Summary
@@ -70,7 +109,7 @@ Task21 of approved Calc UI goal:fix inaccessible trailing top menus at narrow wi
 
 ## Plan
 
-1.CODER implements measured native trailing-menu projection with More menus parent popup in actual shared CommandMenuBar;Header permits constrained width,unchanged normal desktop appearance. Source:MenuBarWindow::ImplCreatePopup copies hidden suffix into parent popup and keyboard skips hidden roots. Keep native nested resources and existing execution/focus contracts.2.CODER verifies real suffix selection,source order,resizing,keyboard ownership,desktop/mobile Writer/Calc shared styling,unfilteredaxe/pageerrors and wholeCalc100percent plus affected module tests.3.Record evidence,evaluate and commit only task paths. Up to14non-task paths:shared menubar/header plus focused layout module/tests if required,shared runtime/provenance records,shared browser tests and current Calc architecture documentation. Existing goal approval applies;no new network/core formatting or merge. Full cadence next30.
+Approved goal task21:measure native menubar hidden suffix and expose its original roots through shared parent popup;constrain shared Header;keep existing commands,style,focus contracts. Verify wholeCalc raw100percent,affectedshared/Writer tests,newgeometry raw100percent,realbothsuite desktop/mobile mouse/keyboard/resize and whole-page unfilteredaxe/pageerrors plusdeclaredgates. Browser audit identified existing WriterWorkspaceChrome footer role and nonfocusable canvas scroll area;repair semantic element/tabindex with unchanged appearance and actual owner registry records. All changes fit14non-task paths originallybudgeted. No audit exclusions,thresholdchanges,network/merges or coreformat slots. Existing broadusergoalapprovalapplies;nextfull30.
 
 ## Verify Steps
 
@@ -79,6 +118,36 @@ npm run test:coverage:calc must remain raw100percent statements/branches/functio
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-18T23:05:57.617Z — VERIFY — ok
+
+By: CODER
+
+Note: Native hidden menu suffix is reachable through actual shared Writer/Calc popup;whole Calc299 raw100percent,new layout module raw100percent,105shared/menu and23Writer cases pass. Final four desktop/mobile browser scenarios pass whole-page unfilteredaxe/keyboard/resize focus;18other targeted browser cases already passed on final production source. Types/build/static/style/architecture/provenance/scopedinventories/doctor/routing pass. Overall goal active,nextfull30.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:05:57.116Z, excerpt_hash=sha256:aebc7842a145d995956a006e1dbda33c300bf3e3f9a2a34f1eae01418bcdd2de
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182247-WN0H8T/blueprint/resolved-snapshot.json
+- old_digest: 2fbc342590b9a6a650534c7d5b7bf85f5e3cf63a3950c9aedf7c9089bc43c84b
+- current_digest: 2fbc342590b9a6a650534c7d5b7bf85f5e3cf63a3950c9aedf7c9089bc43c84b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182247-WN0H8T
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610182247-WN0H8T -m 🧩 WN0H8T task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -86,3 +155,7 @@ npm run test:coverage:calc must remain raw100percent statements/branches/functio
 Revert only task21 measured menubar suffix projection and header constraint with associated tests/registry. Preserve task20 formatting controls and all earlier core owners. No branch resets or merges.
 
 ## Findings
+
+# Task21 verification
+
+Approved scope:14 intentional non-task paths in calc checkout/branch. Native source reference: vcl/source/window/menu.cxx hides the trailing menubar roots and draws its More indicator;vcl/source/window/menubarwindow.cxx MenuBarWindow::ImplCreatePopup borrows the original hidden suffix as child menus. Browser adaptation measures actual DOM label/gap/indicator geometry,keeps original submenu identities and resource arrays,and uses the actual existing shared menu state machine and Sfx command ports. Unknown core formatting remains unavailable;no fake state or new command registrations.

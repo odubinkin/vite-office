@@ -1,6 +1,7 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
+import { MenuBarOverflow, MENUBAR_OVERFLOW_ID, menuBarTriggerClassName } from "./menubar-overflow";
 
 import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
 
@@ -57,7 +58,30 @@ function useFallbackMenuLabel(_id: string, fallback: string): string {
 }
 
 /** Renders the supported menu resource. @param props - Shared command surface. @returns Accessible menu bar. */
-export function CommandMenuBar({
+export function CommandMenuBar(props: CommandMenuBarProps): React.JSX.Element {
+  return (
+    <MenuBarOverflow menus={props.menus} getMenuLabel={props.getMenuLabel ?? useFallbackMenuLabel}>
+      {
+        /** Keeps the existing menu state machine over the measured native root projection. @param menus - Visible roots and hidden-suffix parent. @returns Original renderer. */
+        (menus) => (
+          <CommandMenuBarContent
+            {...props}
+            menus={menus}
+            key={menus
+              .map(
+                /** Keys the active native root projection. @param menu - Visible root. @returns Identity. */ (
+                  menu,
+                ) => menu.id,
+              )
+              .join("|")}
+          />
+        )
+      }
+    </MenuBarOverflow>
+  );
+}
+/** Owns the original native popup/focus state machine independently of measured root visibility. @param props - Current projected roots and original execution ports. @returns Menubar. */
+function CommandMenuBarContent({
   ariaLabel,
   commandSource,
   focusDocument,
@@ -81,6 +105,18 @@ export function CommandMenuBar({
   );
   const savedFocus = useRef<HTMLElement | undefined>(undefined);
   const menuActive = useRef(false);
+
+  useLayoutEffect(
+    /** Returns an owned popup's saved focus before measured root replacement removes its DOM. @returns Teardown. */
+    function retainOwnerAcrossLayout(): () => void {
+      const root = rootRef.current;
+      return /** Restores only a connected owner while focus still belongs to this menu. @returns Nothing. */ () => {
+        if (savedFocus.current?.isConnected === true && root?.contains(document.activeElement))
+          savedFocus.current.focus();
+      };
+    },
+    [],
+  );
 
   /** Retains one external owner for the active menu cycle. @param target - Previous focus target. @returns Nothing. */
   function saveFocus(target: EventTarget | null): void {
@@ -500,7 +536,8 @@ export function CommandMenuBar({
                 aria-controls={`${idPrefix}-${menu.id}-menu`}
                 aria-expanded={openMenuIndex === index}
                 aria-haspopup="menu"
-                className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className={menuBarTriggerClassName}
+                aria-label={label}
                 onClick={
                   /** Toggles this top-level menu. @returns Nothing. */ () =>
                     openMenuIndex === index ? closeMenu() : openMenu(index)
@@ -529,7 +566,7 @@ export function CommandMenuBar({
                 tabIndex={index === activeTriggerIndex ? 0 : -1}
                 type="button"
               >
-                {label}
+                {menu.id === MENUBAR_OVERFLOW_ID ? <span aria-hidden="true">»</span> : label}
               </button>
               {openMenuIndex === index ? (
                 <CommandMenuPopup
