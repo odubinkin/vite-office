@@ -1,10 +1,11 @@
 ---
 id: "202610182145-APQYXE"
 title: "Bind configured browser default fonts to source VCL metadata for Calc pool construction"
-status: "DOING"
+result_summary: "Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T21:51:49.830Z"
+  updated_at: "2026-10-18T21:52:48.891Z"
   updated_by: "CODER"
-  note: "Verified shared configured-font metadata prerequisite:298Calc tests at raw100percent S/B/F/L,51related cases and new shared module raw100percent S/B/F/L,14source and2freshness cases,all declared gates pass. Exact native scope and unported dependencies recorded;existing Writer certification unchanged. Full regression next task20."
+  note: "Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610182145-APQYXE/calc-coverage.log"
   findings:
     - "Implementationc0ee04f63 reuses the actual browser family device and existing VCL Font value. Stored role-family,pitch,12height,symbol encoding and DONTKNOW charset predicate match pinned source;platform encoding is explicit. All23roles use actual configured language fixtures. Raw shared module coverage is22S/27B/1F/20L all100percent with51related cases;wholeCalc298cases remain raw100percent,14source/resource and2freshness cases pass. Types/build and scoped gates pass. Six paths stay within approved scope and Writer API/certified capability remain unchanged."
-commit: null
+commit:
+  hash: "c0ee04f63f393453790d93e84722551cb6687b5b"
+  message: "🧩 APQYXE core: project source default-font metadata through shared VCL values"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved shared configured-font metadata bridge from actual registered browser families and source VCL role/default semantics;no physical-device facade."
+  -
+    author: "CODER"
+    body: "Verified: Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified shared configured-font metadata prerequisite:298Calc tests at raw100percent S/B/F/L,51related cases and new shared module raw100percent S/B/F/L,14source and2freshness cases,all declared gates pass. Exact native scope and unported dependencies recorded;existing Writer certification unchanged. Full regression next task20."
+  -
+    type: "verify"
+    at: "2026-10-18T21:52:48.891Z"
+    author: "CODER"
+    state: "ok"
+    note: "Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit."
+  -
+    type: "status"
+    at: "2026-10-18T21:52:48.985Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T21:51:49.882Z"
+doc_updated_at: "2026-10-18T21:52:48.985Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal task19: bridge existing registered/loaded default-font family selection to actual shared VCL Font values with pinned native role-family,pitch,charset,style and height semantics consumed by ScDocumentPool. Reuse existing generic browser device and core Font;no fake OutputDevice or guessed installed-family fallback. No pool construction before remaining native dependencies exist. Work only calc checkout/branch;no network."
 sections:
@@ -99,6 +118,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182145-APQYXE -m 🧩 APQYXE task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T21:52:48.891Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:51:49.882Z, excerpt_hash=sha256:dc30ac51b349bfecfe0ce59bdf9e9d1ec11fe2f84d4e6c8b0b8d53aee168a1a9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182145-APQYXE/blueprint/resolved-snapshot.json
+    - old_digest: 2f53fa29e9a069e27ac92b210a65e841a07eda6e96c2c1790c13f96099408fd1
+    - current_digest: 2f53fa29e9a069e27ac92b210a65e841a07eda6e96c2c1790c13f96099408fd1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182145-APQYXE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182145-APQYXE --result verified-202610182145-APQYXE --commit aae3415ab6d1ad993dd48086882b19cf949c9ac3
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -181,6 +230,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182145-APQYXE -m 🧩 APQYXE task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T21:52:48.891Z — VERIFY — ok
+
+By: CODER
+
+Note: Shared configured-font metadata now uses actual VCL Font owners and pinned23role family/pitch/charset/default rules over the existing loaded-family device;298Calc and51related cases pass at required raw100percent coverage. Native pool/UI dependencies remain explicit.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:51:49.882Z, excerpt_hash=sha256:dc30ac51b349bfecfe0ce59bdf9e9d1ec11fe2f84d4e6c8b0b8d53aee168a1a9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182145-APQYXE/blueprint/resolved-snapshot.json
+- old_digest: 2f53fa29e9a069e27ac92b210a65e841a07eda6e96c2c1790c13f96099408fd1
+- current_digest: 2f53fa29e9a069e27ac92b210a65e841a07eda6e96c2c1790c13f96099408fd1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182145-APQYXE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182145-APQYXE --result verified-202610182145-APQYXE --commit aae3415ab6d1ad993dd48086882b19cf949c9ac3
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
