@@ -1,10 +1,11 @@
 ---
 id: "202610181519-S0E7YY"
 title: "Repair stale regression expectations exposed by milestone full run"
-status: "DOING"
+result_summary: "Focused recovery complete;checkpoint205 can close and pause goal."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "output/playwright/task206-checks/source-audit.json"
   findings:
     - "Reviewed72bd3975408d exact paths and frozen hashes,6native pins,actual focused manifests and13gates. Native insertion/defaults and existing dependencies determine expectations. Registry readiness now honestly false;discovery remains exclusive and complete. Writer12,inventory123/raw100,tooling3 andCalc237/raw100 pass."
-commit: null
+commit:
+  hash: "404901d883a2608847b12251a894ab8c7b1bfe5c"
+  message: "📋 S0E7YY calc: record quality checkpoint ordering"
 comments:
   -
     author: "CODER"
     body: "Start:repair the seven concrete regression assertions using native insertion/manifest/dependency and current registry evidence;no production behavior or UI change."
+  -
+    author: "CODER"
+    body: "Verified:seven stale regression assertions recovered with native/current-registry evidence;reviewed404901d883a2 contains source72bd3975408d and task evidence,no later source changes."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Six scoped test/config repairs verified:12Writer cases,123inventory/raw100,3tooling,237Calc/raw100;13source gates,6nativepins,6exact paths,no production/guard/threshold changes. All5reference links absent during execution/restored."
+  -
+    type: "status"
+    at: "2026-10-18T15:30:48.197Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:seven stale regression assertions recovered with native/current-registry evidence;reviewed404901d883a2 contains source72bd3975408d and task evidence,no later source changes."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:30:03.667Z"
+doc_updated_at: "2026-10-18T15:30:48.198Z"
 doc_updated_by: "CODER"
 description: "Task206:resolve7failures in full checkpoint task205 through pinned-source and current-registry evidence. Scope6paths:Writer native-content-frame-query.test.ts;apps/office/test-projects.ts;check-legacy-font-boundary.test.ts;native-tools-ownership.test.ts;inventory odt-import-diagnostics.test.ts and parity-mapping-cli.test.ts. Preserve native runtime semantics,strict guards and Writer-only coverage exemption. No UI or feature expansion."
 sections:
