@@ -4,7 +4,7 @@ title: "Bind configured browser default fonts to source VCL metadata for Calc po
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "Verified shared configured-font metadata prerequisite:298Calc tests at raw100percent S/B/F/L,51related cases and new shared module raw100percent S/B/F/L,14source and2freshness cases,all declared gates pass. Exact native scope and unported dependencies recorded;existing Writer certification unchanged. Full regression next task20."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T21:52:38.352Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed shared configured/matched default-font metadata bridge as a Calc pool prerequisite."
+  evaluated_sha: "c0ee04f63f393453790d93e84722551cb6687b5b"
+  blueprint_digest: "2f53fa29e9a069e27ac92b210a65e841a07eda6e96c2c1790c13f96099408fd1"
+  evidence_refs:
+    - ".agentplane/tasks/202610182145-APQYXE/README.md"
+    - ".agentplane/tasks/202610182145-APQYXE/quality/20261018-215238352-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610182145-APQYXE/quality/20261018-215238352-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610182145-APQYXE/quality/20261018-215238352-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610182145-APQYXE/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610182145-APQYXE/verification.md"
+    - ".agentplane/tasks/202610182145-APQYXE/related-coverage-complete.log"
+    - ".agentplane/tasks/202610182145-APQYXE/calc-coverage.log"
+  findings:
+    - "Implementationc0ee04f63 reuses the actual browser family device and existing VCL Font value. Stored role-family,pitch,12height,symbol encoding and DONTKNOW charset predicate match pinned source;platform encoding is explicit. All23roles use actual configured language fixtures. Raw shared module coverage is22S/27B/1F/20L all100percent with51related cases;wholeCalc298cases remain raw100percent,14source/resource and2freshness cases pass. Types/build and scoped gates pass. Six paths stay within approved scope and Writer API/certified capability remain unchanged."
 commit: null
 comments:
   -
