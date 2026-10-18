@@ -4,7 +4,7 @@ title: "Implement source Calc Go to Sheet dialog and cadence regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T19:59:08.095Z"
+  updated_at: "2026-10-18T20:00:30.357Z"
   updated_by: "CODER"
-  note: "GoToSheet source contract and actual browser behavior pass;Calc271tests100percent and shared dialog100percent. Scheduled regression stages complete after documented repairs:full app16998cases100percent,inventory123cases100percent,tooling107cases,and all374browser cases accounted for after completedYDAWMM semantic repair/focused query reruns. See verification-final.md;overall UI goal remains active."
+  note: "Go to Sheet implementation353896defafc and completed semantic repaircf90142089d1 are verified in reviewed snapshotca702074dd4d;Calc271tests100percent,full16998case application100percent,inventory/tooling and all374browser cases accounted for after focused repairs. Overall Calc UI goal remains active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -59,8 +59,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "GoToSheet source contract and actual browser behavior pass;Calc271tests100percent and shared dialog100percent. Scheduled regression stages complete after documented repairs:full app16998cases100percent,inventory123cases100percent,tooling107cases,and all374browser cases accounted for after completedYDAWMM semantic repair/focused query reruns. See verification-final.md;overall UI goal remains active."
+  -
+    type: "verify"
+    at: "2026-10-18T20:00:03.848Z"
+    author: "CODER"
+    state: "ok"
+    note: "Go to Sheet uses native26042 Nr and shared Writer/Sfx dialog infrastructure;Calc271tests100percent and full16998case application100percent cadence plus inventory/tooling and repaired374case browser evidence are complete. Accessibility repairYDAWMM is finished;overall Calc UI goal remains active."
+  -
+    type: "verify"
+    at: "2026-10-18T20:00:30.357Z"
+    author: "CODER"
+    state: "ok"
+    note: "Go to Sheet implementation353896defafc and completed semantic repaircf90142089d1 are verified in reviewed snapshotca702074dd4d;Calc271tests100percent,full16998case application100percent,inventory/tooling and all374browser cases accounted for after focused repairs. Overall Calc UI goal remains active."
 doc_version: 3
-doc_updated_at: "2026-10-18T19:59:08.156Z"
+doc_updated_at: "2026-10-18T20:00:30.407Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal task10/10. Connect native JumpToTable/SID_CURRENTTAB26042 and Nr one-based argument to actual sheet view state. Present original Go to Sheet entry/list/OK/Cancel/Help composition,case-sensitive substring filtering,initial active selection,cleared selection after mask changes,double-click acceptance and cancel semantics using shared Writer dialog header/styles and existing SfxDialogController. No substitute workbook/selection state or hidden-sheet services. Up to35non-task files including tests and provenance. AllCalc100percent,related UI/source checks,production browser verification and one full test:all cadence run. Only Calc checkout/branch,no merges/network."
 sections:
@@ -98,6 +110,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610181859-1J8SQQ -m 🧩 1J8SQQ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T20:00:03.848Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Go to Sheet uses native26042 Nr and shared Writer/Sfx dialog infrastructure;Calc271tests100percent and full16998case application100percent cadence plus inventory/tooling and repaired374case browser evidence are complete. Accessibility repairYDAWMM is finished;overall Calc UI goal remains active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T19:59:08.156Z, excerpt_hash=sha256:4d468bb819dcf42748da489c48fe82dd542caa6da40844c2ec87a883d1583554
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181859-1J8SQQ/blueprint/resolved-snapshot.json
+    - old_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+    - current_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181859-1J8SQQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181859-1J8SQQ --result verified-202610181859-1J8SQQ --commit b8b0e83de9d2983b584019f67724450c23a82bfe
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T20:00:30.357Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Go to Sheet implementation353896defafc and completed semantic repaircf90142089d1 are verified in reviewed snapshotca702074dd4d;Calc271tests100percent,full16998case application100percent,inventory/tooling and all374browser cases accounted for after focused repairs. Overall Calc UI goal remains active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:00:03.906Z, excerpt_hash=sha256:4d468bb819dcf42748da489c48fe82dd542caa6da40844c2ec87a883d1583554
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181859-1J8SQQ/blueprint/resolved-snapshot.json
+    - old_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+    - current_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181859-1J8SQQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181859-1J8SQQ --result verified-202610181859-1J8SQQ --commit b8b0e83de9d2983b584019f67724450c23a82bfe
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -188,6 +260,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181859-1J8SQQ -m 🧩 1J8SQQ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T20:00:03.848Z — VERIFY — ok
+
+By: CODER
+
+Note: Go to Sheet uses native26042 Nr and shared Writer/Sfx dialog infrastructure;Calc271tests100percent and full16998case application100percent cadence plus inventory/tooling and repaired374case browser evidence are complete. Accessibility repairYDAWMM is finished;overall Calc UI goal remains active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T19:59:08.156Z, excerpt_hash=sha256:4d468bb819dcf42748da489c48fe82dd542caa6da40844c2ec87a883d1583554
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181859-1J8SQQ/blueprint/resolved-snapshot.json
+- old_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+- current_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181859-1J8SQQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181859-1J8SQQ --result verified-202610181859-1J8SQQ --commit b8b0e83de9d2983b584019f67724450c23a82bfe
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T20:00:30.357Z — VERIFY — ok
+
+By: CODER
+
+Note: Go to Sheet implementation353896defafc and completed semantic repaircf90142089d1 are verified in reviewed snapshotca702074dd4d;Calc271tests100percent,full16998case application100percent,inventory/tooling and all374browser cases accounted for after focused repairs. Overall Calc UI goal remains active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:00:03.906Z, excerpt_hash=sha256:4d468bb819dcf42748da489c48fe82dd542caa6da40844c2ec87a883d1583554
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181859-1J8SQQ/blueprint/resolved-snapshot.json
+- old_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+- current_digest: 770e57b4b4cc207dba218ed42d193851560fde664339ae5696a38cbf5827e9d0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181859-1J8SQQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181859-1J8SQQ --result verified-202610181859-1J8SQQ --commit b8b0e83de9d2983b584019f67724450c23a82bfe
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
