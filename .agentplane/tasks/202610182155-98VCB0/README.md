@@ -1,10 +1,11 @@
 ---
 id: "202610182155-98VCB0"
 title: "Mount native Calc formatting toolbar through shared Writer controls and run task20 full regression"
-status: "DOING"
+result_summary: "Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T22:45:24.854Z"
+  updated_at: "2026-10-18T22:46:01.353Z"
   updated_by: "CODER"
-  note: "Native formatobjectbar uses actual shared Writer controls;whole Calc299 and full application17055 cases pass with raw100percent S/B/F/L;inventory123/tooling118 pass;all380 browser cases accounted for across original379-pass run and serialized8-case replay after diagnosed worker404 rebuild race;all declared gates pass. Unported formatting slots remain disabled and overall goal active."
+  note: "Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Native source order and visibility retain all33placements;missing core bindings stay disabled and blank. SVX widgets depend on VCL while Framework injects them through its generic Sfx controller;no forbidden dependency exceptions."
     - "Whole Calc299 and complete application17055 cases pass with raw100percent across all four metrics. Inventory123/tooling118 pass. Browser initial379pass and worker404 failure are honestly retained;serialized8case replay covers original failure and final Calc toolbar/context source."
-commit: null
+commit:
+  hash: "47cdae3912223e8ab5171f0f657687b5bc814ebb"
+  message: "🧩 98VCB0 ui: share Writer font controls and native Calc formatting toolbar"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native formatobjectbar through extracted actual Writer controls,blank unavailable binding state and source composition;then complete task20 full regression."
+  -
+    author: "CODER"
+    body: "Verified: Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native formatobjectbar uses actual shared Writer controls;whole Calc299 and full application17055 cases pass with raw100percent S/B/F/L;inventory123/tooling118 pass;all380 browser cases accounted for across original379-pass run and serialized8-case replay after diagnosed worker404 rebuild race;all declared gates pass. Unported formatting slots remain disabled and overall goal active."
+  -
+    type: "verify"
+    at: "2026-10-18T22:46:01.353Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent."
+  -
+    type: "status"
+    at: "2026-10-18T22:46:01.444Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T22:45:24.905Z"
+doc_updated_at: "2026-10-18T22:46:01.445Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal task20: generate actual formatobjectbar source surface,render all source-visible cell formatting placements using actual shared Writer font selectors/glyphs/styles/icons and existing Sfx state. Unported core formatting remains disabled with empty unknown font state;no guessed document defaults or fake slots. Extract actual Writer components into framework. Complete full cadence regression once for task20. Only calc checkout/branch;no network/merges."
 sections:
@@ -100,6 +119,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182155-98VCB0 -m 🧩 98VCB0 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T22:46:01.353Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T22:45:24.905Z, excerpt_hash=sha256:18c68625012eb7744265066d6b88b955c0fd5411ddf620f868424c3e3923b9a5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182155-98VCB0/blueprint/resolved-snapshot.json
+    - old_digest: a91e3114ddbc699b90d7c59357811a9d16095f526661a6ca5f136d62e51f13f6
+    - current_digest: a91e3114ddbc699b90d7c59357811a9d16095f526661a6ca5f136d62e51f13f6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182155-98VCB0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182155-98VCB0 --result verified-202610182155-98VCB0 --commit 1e73f340fd73014b554259bede7289b6ffbbaa2a
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -160,6 +209,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182155-98VCB0 -m 🧩 98VCB0 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T22:46:01.353Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc native formatting toolbar now reuses actual Writer font controls, glyphs and icons; whole Calc and full application raw coverage are100percent.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T22:45:24.905Z, excerpt_hash=sha256:18c68625012eb7744265066d6b88b955c0fd5411ddf620f868424c3e3923b9a5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182155-98VCB0/blueprint/resolved-snapshot.json
+- old_digest: a91e3114ddbc699b90d7c59357811a9d16095f526661a6ca5f136d62e51f13f6
+- current_digest: a91e3114ddbc699b90d7c59357811a9d16095f526661a6ca5f136d62e51f13f6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182155-98VCB0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182155-98VCB0 --result verified-202610182155-98VCB0 --commit 1e73f340fd73014b554259bede7289b6ffbbaa2a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
