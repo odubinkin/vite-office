@@ -8,6 +8,10 @@
         {
           "marker": "parseFastXmlStream",
           "path": "apps/office/src/sax/source/fastparser/fastparser.ts"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "opens exported actual document bytes"
         }
       ],
       "upstream": [
@@ -26,7 +30,8 @@
       "Upstream expat integration, UNO services, and thread-local parser state remain omitted."
     ],
     "preservedResponsibilities": [
-      "Preserves bounded namespace-aware SAX event delivery, DTD rejection, inert comments and processing instructions, cancellation, and resource ceilings from the pinned fast parser."
+      "Preserves bounded namespace-aware SAX event delivery, DTD rejection, inert comments and processing instructions, cancellation, and resource ceilings from the pinned fast parser.",
+      "Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors."
     ],
     "status": "mapped",
     "upstreamPath": "sax/source/fastparser/fastparser.cxx",

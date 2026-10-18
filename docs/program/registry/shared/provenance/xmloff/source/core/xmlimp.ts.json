@@ -8,6 +8,10 @@
         {
           "marker": "parseOdfXmlStream",
           "path": "apps/office/src/xmloff/source/core/xmlimp.ts"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "opens exported actual document bytes"
         }
       ],
       "upstream": [
@@ -54,7 +58,8 @@
     "preservedResponsibilities": [
       "Preserves tokenized attributes, fast import context creation, stack ownership, unknown-element policy, and ordered callbacks at the xmloff import boundary.",
       "Shared FastAttributeList.getAsInteger now owns the bounded decimal byte-view conversion formerly private to list-style import. Nullable absence adapts native getAsInteger bool/out-value; declaration consumers preserve absent defaults and index/start/display normalization. Ordinary item import accepts converted0..32767, ignores negative/out-of-range values and retains native zero on no digits/int32 overflow; headers never convert start. Signed zero is canonical integer0. Compiled unmodified rtl/o3tl integer bodies and exact native item range branch match115 conversions/170 real ordinary/header SAX contexts with platform/view/iterator adapters. Twenty-two literal start spellings in common/automatic numbered/bullet ODT packages verify text,count,levels,restarts,starts,counters,vectors,labels,independent rule/item copies,Worker16,conditional XML and reopen. Complete native scalar/radix/UTF16/token/container/UNO ownership and repeated-sublist restart remain separately unverified; the local FastAttributeList is still an xmloff adapter rather than a native sax-owned class. No whole-module parity promotion or registered save/open/recovery change.",
-      "Iteration222 ports the existing StarBats/StarMath bullet import conversion: immutable native224slot tables, uint16 alias arithmetic, hole substitution U+E12C, exact ASCII family match and source repeated GetProperties glyph mutation with only published descriptor renamed StarSymbol. Actual SvXMLImport owns independent lazy handles and production list contexts borrow it through the original Writer importer; SAX root factories retain a separate explicit structural port. The isolated existing constructor fallback uses that same implemented native conversion owner. Native-related StarSymbol/OpenSymbol browser face fallback preserves stored family. Complete physical glyph coverage, other converters/fonts/functions, full native importer/FontDescriptor/VCL and generic empty bullet publication remain unverified; existing Writer table-import adapter remains explicitly partial. Registered I/O/recovery deviations and all prior statuses/defaults preserved."
+      "Iteration222 ports the existing StarBats/StarMath bullet import conversion: immutable native224slot tables, uint16 alias arithmetic, hole substitution U+E12C, exact ASCII family match and source repeated GetProperties glyph mutation with only published descriptor renamed StarSymbol. Actual SvXMLImport owns independent lazy handles and production list contexts borrow it through the original Writer importer; SAX root factories retain a separate explicit structural port. The isolated existing constructor fallback uses that same implemented native conversion owner. Native-related StarSymbol/OpenSymbol browser face fallback preserves stored family. Complete physical glyph coverage, other converters/fonts/functions, full native importer/FontDescriptor/VCL and generic empty bullet publication remain unverified; existing Writer table-import adapter remains explicitly partial. Registered I/O/recovery deviations and all prior statuses/defaults preserved.",
+      "Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmlimp.cxx",

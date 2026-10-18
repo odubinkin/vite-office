@@ -777,3 +777,27 @@ second grid. Native sheet/area/iterator-invalidation preconditions apply;SetTab
 retains the original constructor's allocated-column clamp. The next core work
 is basic ODS filtering using this traversal plus task202 formula serialization
 and existing shared ZIP/manifest/XML services. No UI or ODS readiness is claimed.
+
+## Basic ODS content filters (task204)
+
+The scalar content filter now imports and exports the actual ScDocument through
+shared ZIP/manifest/SAX/XML owners. ScDocumentImport and Calc sheet/row/cell/text
+contexts preserve supported numbers,single-line text,scalar repeats,sparse and
+empty sheets,and same-sheet ODFF formulas. Export reuses the native row-major
+iterator,formula serialization,RTL decimal output and the existing shared inline
+text encoder. Formula caches are recomputed by the supported formula owner;
+complete native cache/version/recalc policy is not certified. The real pinned
+basic-cell-content.ods input verifies strings,numbers,entities and zero values.
+
+This remains a content subset. Styles/number formats/layout/font metadata are
+not preserved and generate diagnostics when applied;objects,multiline/rich text,
+merged/matrix/external/legacy or repeated-formula services reject explicitly.
+Unknown semantic content is not flattened into ordinary cells. There is no
+second workbook model,UI implementation,ZIP clone or physical lifetime engine.
+The minimum core milestone is ready for a separate UI task: display and edit
+scalar cells,edit supported arithmetic/local-reference formulas,and open/save
+the supported ODS content subset on that same document. Chromium and DOM-free
+Worker checks pass,including a real upstream-created ODS fixture. This does not
+certify opening arbitrary spreadsheets without content or formatting loss.
+Full ODF or full native core parity is not claimed. The all-app regression run
+and requested goal pause follow this milestone;UI implementation stays separate.

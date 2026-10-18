@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-52899cc6-d061-4979-a569-681a6b9e15e0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlwrap.cxx#ScXMLImportWrapper::Import"
+      ],
+      "justification": "Task204 binds native ScXMLImportWrapper package responsibilities to browser byte input/output using existing shared ZipFile/ZipOutputStream,plain manifest reader/writer and actual PropertyValue sequences. The plain modern ODS mimetype and resource/cancellation bounds are explicit;there is no ZIP or manifest clone. Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ODS_MIMETYPE",
+        "ScXMLImportWrapper",
+        "readOdsDocument",
+        "writeOdsDocument"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/xml/xmlwrap.cxx",
+      "upstreamSymbols": [
+        "ScXMLImportWrapper::Import",
+        "ScXMLImportWrapper::Export"
+      ]
+    }
+  }
+}

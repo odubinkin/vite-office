@@ -32,12 +32,13 @@ export interface OdfXmlParseOptions extends FastXmlParseOptions {
 export class FastAttributeList {
   private readonly byToken = new Map<XMLToken, string>();
 
-  /** Tokenizes SAX attributes. @param attributes - Namespace-resolved source attributes. @param path - Current XML element path. @param onDiagnostic - Optional structural sink. @param ignoreUnknown - Whether an owning ignore context discards these attributes. @returns A tokenized list. */
+  /** Tokenizes SAX attributes. @param attributes - Namespace-resolved source attributes. @param path - Current XML element path. @param onDiagnostic - Optional structural sink. @param ignoreUnknown - Whether an owning ignore context discards these attributes. @param resolvePrefix - Borrowed current SAX namespace resolver. @returns A tokenized list. */
   public constructor(
     private readonly attributes: readonly SaxesAttributeNS[],
     private readonly path = "",
     private readonly onDiagnostic?: (diagnostic: OdfXmlDiagnostic) => void,
     ignoreUnknown = false,
+    private readonly resolvePrefix?: (prefix: string) => string | undefined,
   ) {
     for (const attribute of attributes) {
       const token = getXMLToken(attribute.uri, attribute.local);
@@ -53,6 +54,10 @@ export class FastAttributeList {
     }
   }
 
+  /** Browser SAX binding for native importer QName-value resolution in the actual current namespace scope. @param prefix - Prefix. @returns Resolved URI or undefined. */
+  public getNamespaceUri(prefix: string): string | undefined {
+    return this.resolvePrefix?.(prefix);
+  }
   /** Reads one known attribute. @param token - Attribute token. @returns Value or null. */
   public get(token: XMLToken): string | null {
     return this.byToken.get(token) ?? null;
@@ -228,8 +233,8 @@ export function parseOdfXmlStream(
     parseFastXmlStream(
       xml,
       {
-        /** Creates one fast import context. @param tag - SAX tag. @param attributes - SAX attributes. @returns Nothing. */
-        open(tag, attributes): void {
+        /** Creates one fast import context. @param tag - SAX tag. @param attributes - SAX attributes. @param resolvePrefix - Current namespace resolver. @returns Nothing. */
+        open(tag, attributes, resolvePrefix): void {
           activePath = `${stack
             .map(
               /** Projects the QName of a context frame. @param frame - Open frame. @returns QName. */
@@ -242,6 +247,7 @@ export function parseOdfXmlStream(
             activePath,
             options.onDiagnostic,
             parent?.context.ignoreUnknownAttributesForChild(getXMLToken(tag.uri, tag.local)),
+            resolvePrefix,
           );
           const token = getXMLToken(tag.uri, tag.local);
           let context =

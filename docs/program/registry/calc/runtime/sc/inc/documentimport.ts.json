@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/documentimport.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-e5b32882-6308-4ff3-81b7-4cc6a86e5af8"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/documentimport.ts",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
+        "vendor/libreoffice-reference/sc/inc/documentimport.hxx#ScDocumentImport"
+      ],
+      "justification": "Task204 implements consumed ScDocumentImport scalar/string/source-formula setters on the same actual ScDocument and typed columns. The existing cell setters own semantic listeners and shared strings;there is no import workbook DTO or physical lifetime manager. Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/documentimport.hxx",
+      "upstreamSymbols": [
+        "ScDocumentImport"
+      ]
+    }
+  }
+}

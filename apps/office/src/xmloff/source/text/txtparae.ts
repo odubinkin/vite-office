@@ -809,7 +809,7 @@ export function escapeXml(value: string): string {
 }
 
 /** Serializes ODF significant spaces, tabs, and line breaks. @param value - Raw run text. @returns ODF inline XML. */
-function exportText(value: string): string {
+export function exportText(value: string): string {
   let output = "";
   let plain = "";
   /** Flushes accumulated ordinary XML characters. @returns Nothing. */

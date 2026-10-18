@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/package/source/manifest/ManifestWriter.ts",
           "marker": "createManifestXml"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "opens exported actual document bytes"
         }
       ],
       "upstream": [
@@ -29,7 +33,8 @@
     },
     "upstreamPath": "package/source/manifest/ManifestWriter.cxx",
     "localSymbols": [
-      "createManifestXml"
+      "createManifestXml",
+      "createManifestProperty"
     ],
     "upstreamSymbols": [
       "ManifestWriter::writeManifestSequence",
@@ -37,7 +42,8 @@
     ],
     "preservedResponsibilities": [
       "Task177 implements actual plain OASIS ManifestExport over reused PropertyValue/Any/OUString and native comphelper AttributeList plus erased SAX method contracts. Preserve root scan early completion,16OASIS MIME choices,lexical version thresholds,source property/attribute/event order,nonempty entry versions,int64 Size,failed Any extraction destinations,duplicates and retained list values. Worker-safe browser SAX composition serializes exact attribute character values without DOM or a fabricated native Writer service. Writer supplies its own stream/font policy to the same exporter;the removed Writer-only shared export helper has no compatibility alias. Existing Writer import validation stays explicitly bounded pending native ManifestImport;full generic import,encrypted/legacy export,UNO ABI/services and complete ODS document/model/UI remain pending. Immutable native MIME literal contents use JS strings at browser/package boundaries;GC owns physical AttributeList objects and existing OUString/Any value semantics are reused without a new lifetime framework. Extracted actual ODS fixture manifest metadata is checked separately from its ZIP64 package and is not a document round trip or claimed native QA suite port. Whole-class/module parity stays unverified.",
-      "Source-owned plain-XML payload callbacks/composition use JS string output instead of native stream/buffer transport."
+      "Source-owned plain-XML payload callbacks/composition use JS string output instead of native stream/buffer transport.",
+      "Task204 factors the existing Writer string-valued native PropertyValue composition into common ManifestWriter.createManifestProperty. The original factory body is reused;Writer imports it and Calc consumes the same actual UNO property/string/manifest owners. No parallel package schema DTO or new value/lifetime engine is created."
     ],
     "omittedResponsibilities": [
       "Full native SAXWriter/ManifestWriter services,UNO ABI/interfaces,stream lifecycle and byte-buffer management remain omitted;no fake service class is exposed."

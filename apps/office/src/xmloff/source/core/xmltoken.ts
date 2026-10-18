@@ -2,6 +2,7 @@
 
 /** ODF namespace URIs understood by the bounded Writer filter. */
 export const ODF_NAMESPACES = {
+  of: "urn:oasis:names:tc:opendocument:xmlns:of:1.2",
   dc: "http://purl.org/dc/elements/1.1/",
   fo: "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0",
   loext: "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0",
@@ -222,6 +223,11 @@ export enum XMLToken {
   STYLE_BORDER_LINE_WIDTH_LEFT,
   STYLE_BORDER_LINE_WIDTH_RIGHT,
   STYLE_FONT_ADORNMENTS,
+  TABLE_FORMULA,
+  OFFICE_VALUE,
+  OFFICE_STRING_VALUE,
+  TABLE_TABLE_ROWS,
+  TABLE_TABLE_ROW_GROUP,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -351,6 +357,11 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.table, "number-columns-spanned", XMLToken.TABLE_NUMBER_COLUMNS_SPANNED],
   [ODF_NAMESPACES.table, "number-rows-spanned", XMLToken.TABLE_NUMBER_ROWS_SPANNED],
   [ODF_NAMESPACES.office, "value-type", XMLToken.TABLE_VALUE_TYPE],
+  [ODF_NAMESPACES.table, "formula", XMLToken.TABLE_FORMULA],
+  [ODF_NAMESPACES.office, "value", XMLToken.OFFICE_VALUE],
+  [ODF_NAMESPACES.office, "string-value", XMLToken.OFFICE_STRING_VALUE],
+  [ODF_NAMESPACES.table, "table-rows", XMLToken.TABLE_TABLE_ROWS],
+  [ODF_NAMESPACES.table, "table-row-group", XMLToken.TABLE_TABLE_ROW_GROUP],
   [ODF_NAMESPACES.style, "width", XMLToken.STYLE_WIDTH],
   [ODF_NAMESPACES.style, "rel-width", XMLToken.STYLE_REL_WIDTH],
   [ODF_NAMESPACES.style, "min-row-height", XMLToken.STYLE_MIN_ROW_HEIGHT],

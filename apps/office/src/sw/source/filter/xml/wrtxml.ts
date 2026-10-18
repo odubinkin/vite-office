@@ -2,10 +2,11 @@
  * @fileoverview Reimplements the bounded SwXMLWriter package orchestration from pinned LibreOffice `sw/source/filter/xml/wrtxml.cxx`.
  */
 
-import { createManifestXml } from "../../../../package/source/manifest/ManifestWriter";
+import {
+  createManifestXml,
+  createManifestProperty as property,
+} from "../../../../package/source/manifest/ManifestWriter";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
-import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import type { SwDoc } from "../../core/doc/doc";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
@@ -113,30 +114,4 @@ function createWriterManifestXml(fonts: readonly string[]): string {
     },
   );
   return createManifestXml(manifest);
-}
-/** Builds an actual string-valued PropertyValue without a parallel package DTO model. @param name - Property name. @param value - Native value content. @returns Property. */
-function property(name: string, value: string): PropertyValue {
-  const result = new PropertyValue(),
-    key = new OUString(
-      Uint16Array.from(
-        name,
-        /** ASCII name unit. @param c - Character. @returns Unit. */ (c) => c.charCodeAt(0),
-      ),
-      name.length,
-    ),
-    data = new OUString(
-      Uint16Array.from(
-        value.split(""),
-        /** UTF16 content unit. @param c - Unit. @returns Code. */ (c) => c.charCodeAt(0),
-      ),
-      value.length,
-    );
-  try {
-    result.Name = key;
-    result.Value.insert([data.pData], "OUString");
-    return result;
-  } finally {
-    key.dispose();
-    data.dispose();
-  }
 }
