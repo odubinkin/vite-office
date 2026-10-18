@@ -4,7 +4,7 @@ title: "Expose native trailing menubar entries through shared overflow popup"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,27 @@ verification:
   updated_by: "CODER"
   note: "Native hidden menu suffix is reachable through actual shared Writer/Calc popup;whole Calc299 raw100percent,new layout module raw100percent,105shared/menu and23Writer cases pass. Final four desktop/mobile browser scenarios pass whole-page unfilteredaxe/keyboard/resize focus;18other targeted browser cases already passed on final production source. Types/build/static/style/architecture/provenance/scopedinventories/doctor/routing pass. Overall goal active,nextfull30."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T23:06:26.709Z"
+  updated_by: "EVALUATOR"
+  note: "Shared measured native menubar suffix projection meets approved14path scope with actual Writer/Calc resources and verified mobile reachability/focus/accessibility."
+  evaluated_sha: "072afabe1d36955334f709c2323d17ebe25d6083"
+  blueprint_digest: "2fbc342590b9a6a650534c7d5b7bf85f5e3cf63a3950c9aedf7c9089bc43c84b"
+  evidence_refs:
+    - ".agentplane/tasks/202610182247-WN0H8T/README.md"
+    - ".agentplane/tasks/202610182247-WN0H8T/quality/20261018-230626709-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610182247-WN0H8T/quality/20261018-230626709-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610182247-WN0H8T/quality/20261018-230626709-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610182247-WN0H8T/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610182247-WN0H8T/verification.md"
+    - ".agentplane/tasks/202610182247-WN0H8T/browser-final-verified.log"
+    - ".agentplane/tasks/202610182247-WN0H8T/overflow-coverage-summary.json"
+    - ".agentplane/tasks/202610182247-WN0H8T/calc-coverage-summary.json"
+  findings:
+    - "Hidden roots retain original identities and command trees as MenuBarWindow parent-popup construction does. Exact fractional DOM width fixes desktop false overflow;controlled menu geometry/observer teardown is raw100percent covered. No guessed slots or architecture exemptions."
+    - "Whole Calc299 cases retain raw100percent S/B/F/L;105shared/menu and23Writer integration cases pass. Final four actual desktop/mobile browser cases pass whole-page unfilteredaxe,mouse/keyboard/resize saved-owner focus.18other final-source browser cases passed before replay;earlier failing test assumptions are retained honestly."
+    - "Writer canvas tabindex and status div correct full-page mobile audit findings without changing visual classes. Final build/types/static/style/dependency/provenance/inventory/doctor/routing evidence is present. Intentional source paths remain14."
 commit: null
 comments:
   -
