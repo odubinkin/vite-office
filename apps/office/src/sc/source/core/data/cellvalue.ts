@@ -118,6 +118,24 @@ export class ScCellValue {
         rDoc.SetEmptyCell(rPos);
     }
   }
+  /** Original document release transfers formula ownership and empties this value;strings still copy through literal text input. @param rDoc - Destination document. @param rPos - Cell. @returns Nothing. */
+  release(rDoc: ScDocument, rPos: ScAddress): void {
+    switch (this.getType()) {
+      case CellType.CELLTYPE_STRING:
+        rDoc.SetTextCell(rPos, this.getSharedString().getString());
+        break;
+      case CellType.CELLTYPE_VALUE:
+        rDoc.SetValue(rPos, this.getDouble());
+        break;
+      case CellType.CELLTYPE_FORMULA:
+        rDoc.SetFormulaCell(rPos, this.getFormula());
+        break;
+      default:
+        rDoc.SetEmptyCell(rPos);
+    }
+    if (this.maData.index === 2) this.maData.value.dispose();
+    this.reset_to_empty();
+  }
   /** Original emptiness depends on the variant tag, not string content or numeric value. @returns Empty-cell predicate. */
   isEmpty(): boolean {
     return this.getType() === CellType.CELLTYPE_NONE;

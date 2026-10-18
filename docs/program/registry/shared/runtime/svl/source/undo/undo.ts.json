@@ -20,13 +20,14 @@
         "apps/office/src/svl/source/undo/undo.ts#DEFAULT_MAX_UNDO_ACTION_COUNT",
         "vendor/libreoffice-reference/svl/source/undo/undo.cxx#SfxUndoAction"
       ],
-      "justification": "The bounded SfxUndoManager preserves action grouping, compound actions, save marks, cursor-safe failure handling, redo truncation, and the pinned SfxUndoManager constructor default of 20 actions.",
+      "justification": "The bounded SfxUndoManager preserves action grouping, compound actions, save marks, cursor-safe failure handling, redo truncation, and the pinned SfxUndoManager constructor default of 20 actions. TaskBG0GG5 ports actual ScUndoSetCell maPos/maOldValue/maNewValue move ownership,represented SetValue,GetComment and getAffectedRange at native source/header boundaries. ScCellValue.release transfers real formulas without cloning and copies literal strings before clearing ownership. Shared SfxListUndoAction exposes native inherited SfxUndoArray.GetUndoAction forward-storage access. The browser current plain-input decoder prepares actual native cell/formula owners at each selected sheet position before writes;source selected-mark iteration uses existing EnterListAction/LeaveListAction so one user input creates one compound action. Undo reverses children,Redo forwards them;browser focus follows the last executed native affected range. Native selected sheets render Writer indigo/slate selection tokens while active state remains distinct. Full ScSimpleUndo,ScDocFunc/ScViewFunc,ScUndoEnterData raw-string redo,formatter/format attributes,change tracking,sheet views,spill/VCL services remain unported;no facade or injected fake provider is introduced.",
       "knownViolations": [],
       "localSymbols": [
         "DEFAULT_MAX_UNDO_ACTION_COUNT",
         "SfxUndoAction",
         "SfxListUndoAction",
-        "SfxUndoManager"
+        "SfxUndoManager",
+        "GetUndoAction"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "svl/source/undo/undo.cxx",

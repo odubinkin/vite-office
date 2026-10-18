@@ -1,0 +1,31 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- undo.test calc-input-group CommandMenuBar WriterMenuBar --coverage.include=src/svl/source/undo/undo.ts --coverage.reportsDirectory=coverage/calc-group-undo --maxWorkers=4 --reporter=dot
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage undo.test calc-input-group CommandMenuBar WriterMenuBar --coverage.include=src/svl/source/undo/undo.ts --coverage.reportsDirectory=coverage/calc-group-undo --maxWorkers=4 --reporter=dot
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+··························································································································
+
+ Test Files  11 passed (11)
+      Tests  122 passed (122)
+   Start at  03:44:37
+   Duration  12.36s (transform 5.97s, setup 813ms, import 7.96s, tests 7.80s, environment 4.37s)
+
+ % Coverage report from istanbul
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+----------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 145/145 )
+Branches     : 100% ( 66/66 )
+Functions    : 100% ( 39/39 )
+Lines        : 100% ( 127/127 )
+================================================================================

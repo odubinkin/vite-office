@@ -95,7 +95,7 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
                   event,
                 ) => props.onSelect(tab, event)
               }
-              className={`shrink-0 rounded-md border border-slate-300 px-4 ${props.viewData.GetTabNumber() === tab ? "border-indigo-700 bg-indigo-50 font-semibold text-indigo-800" : "bg-white hover:border-indigo-400 hover:text-indigo-800"}`}
+              className={`shrink-0 rounded-md border px-4 ${props.viewData.GetTabNumber() === tab ? "border-indigo-700 bg-indigo-50 font-semibold text-indigo-800" : props.viewData.GetMarkData().GetTableSelect(tab) ? "border-indigo-400 bg-indigo-50 text-indigo-800" : "border-slate-300 bg-white hover:border-indigo-400 hover:text-indigo-800"}`}
             >
               {label}
             </button>

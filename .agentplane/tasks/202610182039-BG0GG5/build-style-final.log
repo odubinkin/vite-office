@@ -1,0 +1,38 @@
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2Ktransforming...✓ 2448 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.54 kB │ gzip:   0.33 kB
+dist/assets/tblsels-CrFA-9L6.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblselw-D9zQinbS.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblsele-ndGfGfAd.svg        5.16 kB │ gzip:   0.61 kB
+dist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB
+dist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB
+dist/assets/odt-worker-C1oBDEL_.js    702.42 kB
+dist/assets/index-CtU_MWDv.css         67.59 kB │ gzip:  10.88 kB
+dist/assets/index-C5fFv6Lc.js       2,116.93 kB │ gzip: 495.16 kB
+
+✓ built in 1.88s
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+{"command":"prettier","args":["--check","apps/office/src/sc/browser/controller/calc-view-controller.ts","apps/office/src/sc/browser/editor/cell-input.ts","apps/office/src/sc/browser/presentation/ScTabControl.tsx","apps/office/src/sc/source/core/data/cellvalue.ts","apps/office/src/svl/source/undo/undo.ts","docs/program/registry/calc/capabilities/CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86.json","docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json","docs/program/registry/calc/provenance/sc/browser/editor/cell-input.ts.json","docs/program/registry/calc/provenance/sc/browser/presentation/ScTabControl.tsx.json","docs/program/registry/calc/provenance/sc/source/core/data/cellvalue.ts.json","docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json","docs/program/registry/calc/runtime/sc/browser/editor/cell-input.ts.json","docs/program/registry/calc/runtime/sc/browser/presentation/ScTabControl.tsx.json","docs/program/registry/calc/runtime/sc/source/core/data/cellvalue.ts.json","docs/program/registry/shared/provenance/svl/source/undo/undo.ts.json","docs/program/registry/shared/runtime/svl/source/undo/undo.ts.json","scripts/calc-sheet-command-source.test.ts","apps/office/src/sc/browser/presentation/calc-input-group.test.tsx","apps/office/src/sc/source/ui/inc/undocell.ts","apps/office/src/sc/source/ui/undo/undocell.test.ts","apps/office/src/sc/source/ui/undo/undocell.ts","docs/program/registry/calc/provenance/sc/source/ui/inc/undocell.ts.json","docs/program/registry/calc/provenance/sc/source/ui/undo/undocell.ts.json","docs/program/registry/calc/runtime/sc/source/ui/inc/undocell.ts.json","docs/program/registry/calc/runtime/sc/source/ui/undo/undocell.ts.json"]}
+Checking formatting...
+All matched files use Prettier code style!
+{"command":"eslint","args":["apps/office/src/sc/browser/controller/calc-view-controller.ts","apps/office/src/sc/browser/editor/cell-input.ts","apps/office/src/sc/browser/presentation/ScTabControl.tsx","apps/office/src/sc/source/core/data/cellvalue.ts","apps/office/src/svl/source/undo/undo.ts","scripts/calc-sheet-command-source.test.ts","apps/office/src/sc/browser/presentation/calc-input-group.test.tsx","apps/office/src/sc/source/ui/inc/undocell.ts","apps/office/src/sc/source/ui/undo/undocell.test.ts","apps/office/src/sc/source/ui/undo/undocell.ts","--max-warnings","0"]}
+Touched checks passed for 25 non-task paths.
+
+> vite-office@0.1.0 check:docs
+> node scripts/check-jsdoc.mjs
+
+JSDoc validation passed for 2273 authored source files.

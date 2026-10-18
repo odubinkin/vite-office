@@ -1,5 +1,6 @@
 /** @fileoverview Browser scalar input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
 import type { SharedStringConstReference } from "../../../svl/inc/sharedstring";
+import { ScFormulaCell } from "../../inc/formulacell";
 import { ScCellValue } from "../../inc/cellvalue";
 import { FormulaError } from "../../../formula/inc/errorcodes";
 import type { ScDocument } from "../../inc/document";
@@ -35,22 +36,34 @@ export function captureCell(doc: ScDocument, pos: ScAddress): ScCellValue {
   value.assign(doc, pos);
   return value;
 }
-/** Adopts transient parsed input through actual document setters. History commits through native ScCellValue. @param doc - Model. @param pos - Cell. @param content - Input or history content. @returns Nothing. */
-export function applyCell(doc: ScDocument, pos: ScAddress, content: CalcCellInput): void {
-  if (content.kind === "empty") {
-    doc.SetEmptyCell(pos);
-    return;
-  }
-  if (content.kind === "number") {
-    doc.SetValue(pos, content.value);
-    return;
-  }
+/** Prepares an actual native value at the target position before grouped writes;this retains no alternate workbook state. @param doc - Actual model. @param pos - Actual target. @param content - Transient parsed input. @returns Owned native value. */
+export function prepareCell(doc: ScDocument, pos: ScAddress, content: CalcCellInput): ScCellValue {
+  if (content.kind === "empty") return new ScCellValue();
+  if (content.kind === "number") return new ScCellValue(content.value);
   const value = unicode(content.value);
   try {
-    if (content.kind === "text") doc.SetTextCell(pos, value);
-    else doc.SetFormula(pos, value, FormulaGrammar.Grammar.GRAM_NATIVE);
+    if (content.kind === "formula") {
+      const result = new ScCellValue();
+      result.set(new ScFormulaCell(doc, pos, value, FormulaGrammar.Grammar.GRAM_NATIVE));
+      return result;
+    }
+    const shared = doc.GetSharedStringPool().intern(value);
+    try {
+      return new ScCellValue(shared);
+    } finally {
+      shared.dispose();
+    }
   } finally {
     value.dispose();
+  }
+}
+/** Adopts transient parsed input through native value release and actual document setters. @param doc - Model. @param pos - Cell. @param content - Transient input. @returns Nothing. */
+export function applyCell(doc: ScDocument, pos: ScAddress, content: CalcCellInput): void {
+  const value = prepareCell(doc, pos, content);
+  try {
+    value.release(doc, pos);
+  } finally {
+    value.clear();
   }
 }
 /** Recognizes current plain scalar input with the source simple-number scanner. Date/currency/format services remain explicitly outside this plain-input binding. @param value - Input. @returns Typed input. @throws {Error} For unsupported multiline content. */

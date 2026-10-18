@@ -1,0 +1,104 @@
+{
+  "selection": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n[\n  {\n    \"name\": \"Sheet1\",\n    \"selected\": \"true\",\n    \"active\": null,\n    \"background\": \"oklch(0.962 0.018 272.314)\",\n    \"border\": \"oklch(0.673 0.182 276.935)\"\n  },\n  {\n    \"name\": \"Sheet2\",\n    \"selected\": \"true\",\n    \"active\": null,\n    \"background\": \"oklch(0.962 0.018 272.314)\",\n    \"border\": \"oklch(0.673 0.182 276.935)\"\n  },\n  {\n    \"name\": \"Sheet3\",\n    \"selected\": \"true\",\n    \"active\": \"page\",\n    \"background\": \"oklch(0.962 0.018 272.314)\",\n    \"border\": \"oklch(0.457 0.24 277.023)\"\n  }\n]\n### Ran Playwright code\n```js\nawait page.evaluate('() => [...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].map(el=>({name:el.textContent,selected:el.getAttribute(\"aria-selected\"),active:el.getAttribute(\"aria-current\"),background:getComputedStyle(el).backgroundColor,border:getComputedStyle(el).borderColor}))');\n```"
+      }
+    ]
+  },
+  "entered": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet1\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet2\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet3\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    }
+  ],
+  "undoCursor": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"a1\": \"\",\n  \"active\": \"Sheet1\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+      }
+    ]
+  },
+  "undone": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"\",\n  \"active\": \"Sheet1\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"\",\n  \"active\": \"Sheet2\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"\",\n  \"active\": \"Sheet3\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    }
+  ],
+  "redoCursor": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet3\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+      }
+    ]
+  },
+  "redone": [
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet1\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet2\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    },
+    {
+      "content": [
+        {
+          "type": "text",
+          "text": "### Result\n{\n  \"a1\": \"9\",\n  \"active\": \"Sheet3\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({a1:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,active:[...document.querySelectorAll(\"[role=\\\\\"tab\\\\\"]\")].find(el=>el.getAttribute(\"aria-current\")===\"page\")?.textContent})');\n```"
+        }
+      ]
+    }
+  ]
+}

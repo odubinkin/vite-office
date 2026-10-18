@@ -6,38 +6,11 @@ import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScTabView } from "../../source/ui/inc/tabview";
 import { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
-import { SfxUndoAction } from "../../../svl/source/undo/undo";
-import { applyCell, captureCell, parseCellInput, cellInputText } from "../editor/cell-input";
+import { ScUndoSetCell } from "../../source/ui/inc/undocell";
+import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
+import { prepareCell, captureCell, parseCellInput, cellInputText } from "../editor/cell-input";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { CalcGridViewport } from "../presentation/ScGridWindow";
-/** Scalar action payload,using shared action history rather than workbook snapshots. */
-class CellChangeAction extends SfxUndoAction<ScDocShell> {
-  /** Retains one actual cell's before/after content. @param position - Cell. @param before - Prior content. @param after - Committed content. @returns Action. */
-  constructor(
-    readonly position: ScAddress,
-    private readonly before: ScCellValue,
-    private readonly after: ScCellValue,
-  ) {
-    super();
-  }
-  /** Restores typed core content. @param shell - Document shell. @returns Nothing. */
-  override UndoWithContext(shell: ScDocShell): void {
-    this.before.commit(shell.GetDocument(), this.position);
-  }
-  /** Restores committed typed content. @param shell - Document shell. @returns Nothing. */
-  override RedoWithContext(shell: ScDocShell): void {
-    this.after.commit(shell.GetDocument(), this.position);
-  }
-  /** Releases actual native value owners when history is cleared,trimmed or replaced. @returns Nothing. */
-  override Dispose(): void {
-    this.before.clear();
-    this.after.clear();
-  }
-  /** Returns the native operation's English label. @returns Label. */
-  override GetComment(): string {
-    return "Input";
-  }
-}
 /** Undoable sheet append within the current scalar document slice. */
 class InsertSheetAction extends SfxUndoAction<ScDocShell> {
   /** Retains the inserted sheet identity. @param tab - Tab index. @param name - Valid sheet name. @returns Action. */
@@ -228,14 +201,27 @@ export class CalcViewController {
         const doc = this.shell.GetDocument(),
           pos = this.Position(),
           content = parseCellInput(this.inputText),
-          before = captureCell(doc, pos);
+          manager = this.shell.GetUndoManager();
+        const prepared: { position: ScAddress; value: ScCellValue }[] = [];
         try {
-          applyCell(doc, pos, content);
-          const after = captureCell(doc, pos);
-          this.shell.GetUndoManager().AddUndoAction(new CellChangeAction(pos, before, after));
-        } catch (error) {
-          before.clear();
-          throw error;
+          for (const tab of this.viewData.GetMarkData().GetSelectedTabs()) {
+            const position = new ScAddress(pos.Col(), pos.Row(), tab);
+            prepared.push({ position, value: prepareCell(doc, position, content) });
+          }
+          manager.EnterListAction("Input");
+          try {
+            for (const { position, value } of prepared) {
+              const before = captureCell(doc, position);
+              value.release(doc, position);
+              manager.AddUndoAction(
+                new ScUndoSetCell(this.shell, position, before, captureCell(doc, position)),
+              );
+            }
+          } finally {
+            manager.LeaveListAction();
+          }
+        } finally {
+          for (const { value } of prepared) value.clear();
         }
         this.shell.SetDocumentModified();
       }
@@ -353,9 +339,12 @@ export class CalcViewController {
     if (!(redo ? this.shell.Redo() : this.shell.Undo())) return false;
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
     this.inputHandler.ResetModified();
+    let cursorAction = action;
+    while (cursorAction instanceof SfxListUndoAction)
+      cursorAction = cursorAction.GetUndoAction(redo ? cursorAction.GetActionCount() - 1 : 0);
     const position =
-      action instanceof CellChangeAction
-        ? action.position
+      cursorAction instanceof ScUndoSetCell
+        ? cursorAction.getAffectedRange().aStart
         : new ScAddress(
             0,
             0,

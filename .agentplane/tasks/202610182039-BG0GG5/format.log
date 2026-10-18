@@ -1,0 +1,7 @@
+apps/office/src/sc/source/core/data/cellvalue.ts 54ms
+apps/office/src/svl/source/undo/undo.ts 23ms
+apps/office/src/sc/source/ui/undo/undocell.ts 6ms
+apps/office/src/sc/source/ui/inc/undocell.ts 1ms (unchanged)
+apps/office/src/sc/browser/editor/cell-input.ts 14ms
+apps/office/src/sc/browser/controller/calc-view-controller.ts 31ms
+apps/office/src/sc/browser/presentation/ScTabControl.tsx 9ms (unchanged)

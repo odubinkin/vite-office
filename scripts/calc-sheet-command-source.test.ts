@@ -99,3 +99,20 @@ it("pins native deep-token clones,formula copy and owning cell history boundarie
   expect(cells).toContain("maData = aRefVal.getFormula()->Clone()");
   expect(cells).toContain("rDoc.SetFormulaCell(rPos, getFormula()->Clone())");
 });
+
+it("pins selected-sheet list transactions and native typed-cell Undo ownership", /** Current UI uses real source value/list owners without simulating unported formatter/view services. @returns Nothing. */ () => {
+  const view = source("sc/source/ui/view/viewfunc.cxx"),
+    undo = source("sc/source/ui/undo/undocell.cxx"),
+    header = source("sc/source/ui/inc/undocell.hxx");
+  expect(view).toContain("rFunc.EnterListAction( STR_UNDO_ENTERDATA )");
+  expect(view).toContain("for (const auto& rTab : aMark)");
+  expect(header).toContain("return ScRange(maPos)");
+  expect(undo).toContain("maOldValue(std::move(aOldVal))");
+  expect(undo).toContain("SetValue(maOldValue)");
+  expect(undo).toContain("SetValue(maNewValue)");
+  expect(undo).toContain("aParam.meSetTextNumFormat = ScSetStringParam::Keep");
+  expect(source("sc/source/core/data/cellvalue.cxx")).toContain(
+    "rDoc.SetFormulaCell(rPos, getFormula())",
+  );
+  expect(source("include/svl/undo.hxx")).toContain("SfxUndoAction* GetUndoAction(size_t idx)");
+});
