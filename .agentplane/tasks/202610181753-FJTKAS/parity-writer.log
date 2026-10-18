@@ -1,0 +1,48 @@
+
+> vite-office@0.1.0 inventory:parity:writer
+> tsx scripts/libreoffice-inventory/registry-cli.ts check --scope writer
+
+{
+  "scope": "writer",
+  "capabilityCount": 223,
+  "moduleCount": 727,
+  "invariantCount": 34,
+  "globalRecordCount": 2017,
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 43,
+    "classifiedDivergenceCount": 107,
+    "contractParityCount": 43,
+    "defaultParityCount": 43,
+    "differentialParityCount": 43,
+    "exceptionCount": 2,
+    "gapCount": 303,
+    "implementedCount": 221,
+    "parityReady": false,
+    "ownershipParityCount": 43,
+    "recordCount": 223,
+    "schemaVersion": 6,
+    "serializationParityCount": 43,
+    "scopeLimitationCount": 361,
+    "unresolvedParityCount": 178,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 43
+  },
+  "provenance": {
+    "browserAdaptationCount": 80,
+    "localInfrastructureCount": 18,
+    "mappedCount": 629,
+    "moduleCount": 727
+  },
+  "runtime": {
+    "commandCount": 56,
+    "exportedOperationCount": 1018,
+    "internalOperationCount": 14,
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 10
+  },
+  "evidenceNote": "Compact scalar summary of successful registry CLI output;full records remain in the registry.",
+  "rawOutputSha256": "c39b8f5d53875b01ae9d899df01104e03ea0f541eb4fc82a0c9f7c85601f0c00"
+}

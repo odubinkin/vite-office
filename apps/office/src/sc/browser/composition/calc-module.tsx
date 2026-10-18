@@ -1,6 +1,8 @@
 /** @fileoverview Lazy production Calc module with one document/controller/frame ownership chain per mounted workspace. */
 /* eslint-disable react-refresh/only-export-components -- The private workspace host belongs to the exported lazy module factory. */
 import { useEffect, useState } from "react";
+import type { BrowserDocumentStore } from "../../../framework/browser/storage/document-store";
+import { createCalcDocumentStore, createCalcAutosave } from "../workflows/calc-ods-io";
 import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
 import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
@@ -8,8 +10,12 @@ import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browse
 import { CalcViewController } from "../controller/calc-view-controller";
 import { createCalcInterface } from "../../sdi/scalc";
 import { CalcWorkbench } from "../presentation/calc-workbench";
-/** Creates one actual production session and connects shared Sfx state invalidation. @returns Session. */
-export function createCalcSession() {
+/** Creates one actual production session and connects shared Sfx state invalidation. @param store - Injected primary store;defaults to browser IndexedDB when available. @returns Session. */
+export function createCalcSession(
+  store: BrowserDocumentStore | undefined = globalThis.indexedDB === undefined
+    ? undefined
+    : createCalcDocumentStore(),
+) {
   const controller = new CalcViewController(),
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
   frame.SetActiveView(controller, [createSfxShell(controller, createCalcInterface())]);
@@ -17,10 +23,14 @@ export function createCalcSession() {
     /** Invalidates shared command bindings when source/input state changes. @returns Nothing. */ () =>
       frame.GetDispatcher().Invalidate("calc-view"),
   );
+  const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store);
   return {
+    store,
+    autosave,
     controller,
     frame,
     /** Closes this session's shared frame and semantic model resources. @returns Nothing. */ Close(): void {
+      autosave?.Close();
       detach();
       frame.CloseView();
       controller.Close();

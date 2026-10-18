@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/workflows/document-autosave.ts",
+    "rationale": "Format-neutral browser platform code owns package storage transactions and scheduling callbacks while suite-specific models,filters,history and medium semantics remain with their actual source owners.",
+    "responsibilities": [
+      "TaskFJTKAS extracts the existing Writer complete-package IndexedDB store,title uniqueness and autosave cadence into format-neutral framework/browser owners. Writer adapters retain the database vite-office-writer-workbench and10second interval,1second idle,30second maximum delay,input/capture handling,primary byte storage and no recovery copies. The shared scheduler receives suite-owned dirty/content,save,failure and subscription callbacks;it owns no document model. Calc uses the same storage transactions and timing policy with a separate suite database. This is an intentional browser persistence adaptation,not native AutoRecovery parity."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "IndexedDB and DOM input/timing replace desktop persistence transport;Writer intentional primary-save behavior is retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/workflows/document-autosave.ts",
+          "marker": "BrowserAutosaveController"
+        },
+        {
+          "path": "apps/office/src/sw/browser/workflows/writer-autosave.test.ts",
+          "marker": "it("
+        }
+      ]
+    }
+  }
+}

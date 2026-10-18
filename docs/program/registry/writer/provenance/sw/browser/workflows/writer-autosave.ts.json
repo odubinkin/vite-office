@@ -8,19 +8,23 @@
         {
           "marker": "WriterAutosaveController",
           "path": "apps/office/src/sw/browser/workflows/writer-autosave.ts"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+          "marker": "real isolated primary package store"
         }
       ]
     },
     "localPath": "apps/office/src/sw/browser/workflows/writer-autosave.ts",
     "rationale": "Schedules browser autosaves after ten seconds, one idle second, and UI capture release. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
     "responsibilities": [
-      "Schedules browser autosaves after ten seconds, one idle second, and UI capture release."
+      "Schedules browser autosaves after ten seconds, one idle second, and UI capture release.",
+      "TaskFJTKAS extracts the existing Writer complete-package IndexedDB store,title uniqueness and autosave cadence into format-neutral framework/browser owners. Writer adapters retain the database vite-office-writer-workbench and10second interval,1second idle,30second maximum delay,input/capture handling,primary byte storage and no recovery copies. The shared scheduler receives suite-owned dirty/content,save,failure and subscription callbacks;it owns no document model. Calc uses the same storage transactions and timing policy with a separate suite database. This is an intentional browser persistence adaptation,not native AutoRecovery parity."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
       "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
     },
     "status": "local-only"
-  },
-  "legacyOrder": 124
+  }
 }

@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- writer-odt-store.test writer-autosave.test writer-odt-io.test writer-module.test current-dialog-baseline.test WriterFileDialog.test writer-view-title-collision.test desktop.test calc-ods-io.test --coverage.include=src/framework/browser/storage/document-store.ts --coverage.include=src/framework/browser/workflows/document-autosave.ts --coverage.include=src/sw/browser/storage/writer-odt-store.ts --coverage.include=src/sw/browser/workflows/writer-autosave.ts --coverage.reportsDirectory=coverage/calc-shared-persistence
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage writer-odt-store.test writer-autosave.test writer-odt-io.test writer-module.test current-dialog-baseline.test WriterFileDialog.test writer-view-title-collision.test desktop.test calc-ods-io.test --coverage.include=src/framework/browser/storage/document-store.ts --coverage.include=src/framework/browser/workflows/document-autosave.ts --coverage.include=src/sw/browser/storage/writer-odt-store.ts --coverage.include=src/sw/browser/workflows/writer-autosave.ts --coverage.reportsDirectory=coverage/calc-shared-persistence
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  9 passed (9)
+      Tests  72 passed (72)
+   Start at  01:01:38
+   Duration  17.45s (transform 8.46s, setup 883ms, import 12.57s, tests 15.11s, environment 4.78s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 217/217 )
+Branches     : 100% ( 77/77 )
+Functions    : 100% ( 55/55 )
+Lines        : 100% ( 203/203 )
+================================================================================

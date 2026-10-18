@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+    "rationale": "Format-neutral browser platform code owns package storage transactions and scheduling callbacks while suite-specific models,filters,history and medium semantics remain with their actual source owners.",
+    "responsibilities": [
+      "TaskFJTKAS connects actual Calc ODS packages and ScDocShell lifecycle/history to shared primary browser storage and Writer autosave policy. Open imports into a separate real ScDocument and adopts it only while request/content generation remain current. Replacement resets actual view/history ownership and ends displaced formula subscriptions. Confirmed Save/SaveAs captures source model,medium,generation and shared SfxUndoSavePosition;later edits remain dirty and stale/failed/closed completions cannot adopt a destination. The first two displayed scalar words in native row-major sheet order name an untitled browser document,matching Writer first-two-word naming;empty documents are excluded. Stored bodies are complete existing ODS packages,not alternate workbook JSON. No recovery UI/storage is introduced."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "IndexedDB and DOM input/timing replace desktop persistence transport;Writer intentional primary-save behavior is retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+          "marker": "createCalcDocumentStore"
+        },
+        {
+          "path": "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+          "marker": "it("
+        }
+      ]
+    }
+  }
+}

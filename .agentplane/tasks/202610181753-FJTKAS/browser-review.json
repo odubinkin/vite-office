@@ -1,0 +1,17 @@
+{
+  "route": "http://127.0.0.1:5175/calc",
+  "procedure": "Actual rendered inputs commit A1=42 and B1=A1*2;wait11seconds;read primary IndexedDB record;re-import stored bytes through actual readOdsDocument;inspect native numeric/formula owners;close imported ScDocShell.",
+  "database": "vite-office-calc-workbench",
+  "result": {
+    "title": "42 84",
+    "savedTitle": "42 84",
+    "version": 2,
+    "byteLength": 1589,
+    "cellA1": 42,
+    "cellB1": 84,
+    "formulaOwner": true
+  },
+  "consoleErrors": 0,
+  "consoleWarnings": 0,
+  "scope": "Production Calc session;shared autosave scheduler and IndexedDB store;existing ODS wrapper;no synthetic model. File menu/dialog presentation remains next task."
+}

@@ -59,7 +59,8 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
-  readonly viewData: ScViewData;
+  viewData: ScViewData;
+  private readonly detachShell: () => void;
   mode: "none" | "table" | "top" = "none";
   inputText = "";
   addressText = "A1";
@@ -80,6 +81,19 @@ export class CalcViewController {
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
   constructor(readonly shell: ScDocShell = new ScDocShell()) {
     this.viewData = new ScViewData(shell.GetDocument());
+    this.detachShell = shell.Subscribe(
+      /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
+        if (this.viewData.GetDocument() !== shell.GetDocument()) {
+          this.viewData = new ScViewData(shell.GetDocument());
+          this.anchor = new ScAddress();
+          this.mode = "none";
+          this.inputText = "";
+          this.addressText = "A1";
+          this.error = "";
+        }
+        this.Changed();
+      },
+    );
   }
   readonly GetSnapshot =
     /** Stable React external-store snapshot. @returns Revision. */ (): number => this.revision;
@@ -324,6 +338,7 @@ export class CalcViewController {
   }
   /** Releases shell/frame subscriber resources on workspace closure. @returns Nothing. */
   Close(): void {
+    this.detachShell();
     this.listeners.clear();
     this.shell.Close();
   }
