@@ -4,7 +4,7 @@ title: "Repair stale regression expectations exposed by milestone full run"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Six scoped test/config repairs verified:12Writer cases,123inventory/raw100,3tooling,237Calc/raw100;13source gates,6nativepins,6exact paths,no production/guard/threshold changes. All5reference links absent during execution/restored."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T15:30:18.121Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review:seven full-run assertions recovered by source-proven corrections in6test/config paths;no production changes."
+  evaluated_sha: "404901d883a2608847b12251a894ab8c7b1bfe5c"
+  blueprint_digest: "bbc71e5fb2345b8e68a76b5ca4074a114ae23ae3d4b10558902f9e25e1a6fe8b"
+  evidence_refs:
+    - ".agentplane/tasks/202610181519-S0E7YY/README.md"
+    - ".agentplane/tasks/202610181519-S0E7YY/quality/20261018-153018121-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181519-S0E7YY/quality/20261018-153018121-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181519-S0E7YY/quality/20261018-153018121-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181519-S0E7YY/blueprint/resolved-snapshot.json"
+    - "output/playwright/task206-checks/final-audit.json"
+    - "output/playwright/task206-checks/source-audit.json"
+  findings:
+    - "Reviewed72bd3975408d exact paths and frozen hashes,6native pins,actual focused manifests and13gates. Native insertion/defaults and existing dependencies determine expectations. Registry readiness now honestly false;discovery remains exclusive and complete. Writer12,inventory123/raw100,tooling3 andCalc237/raw100 pass."
 commit: null
 comments:
   -

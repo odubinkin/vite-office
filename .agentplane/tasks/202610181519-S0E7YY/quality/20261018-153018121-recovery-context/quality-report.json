@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610181519-S0E7YY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-18T15:30:18.121Z",
+  "verdict": "pass",
+  "summary": "Same-agent review:seven full-run assertions recovered by source-proven corrections in6test/config paths;no production changes.",
+  "evaluated_sha": "404901d883a2608847b12251a894ab8c7b1bfe5c",
+  "blueprint_digest": "bbc71e5fb2345b8e68a76b5ca4074a114ae23ae3d4b10558902f9e25e1a6fe8b",
+  "findings": [
+    "Reviewed72bd3975408d exact paths and frozen hashes,6native pins,actual focused manifests and13gates. Native insertion/defaults and existing dependencies determine expectations. Registry readiness now honestly false;discovery remains exclusive and complete. Writer12,inventory123/raw100,tooling3 andCalc237/raw100 pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610181519-S0E7YY/README.md",
+    "output/playwright/task206-checks/final-audit.json",
+    "output/playwright/task206-checks/source-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Initial full reports retain failures;successful focused recovery is explicit. Writer-only raw gaps remain as user directed."
+  ]
+}
