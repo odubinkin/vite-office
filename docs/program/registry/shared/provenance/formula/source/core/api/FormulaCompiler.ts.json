@@ -40,7 +40,8 @@
     "preservedResponsibilities": [
       "Task199 adds the default-mode shared scalar arithmetic token-to-RPN subset over the existing FormulaTokenArray. Native recursive precedence, original token identities, prefix-plus elision, whitespace skipping, first-error virtual boundary, expression/token recursion limits, forced recalc retention and subtotal-return meaning are preserved for supported tokens. The base error hook remains the actual native empty operation. Unsupported opcode families, existing array-context tokens and implicit-intersection/matrix modes reject explicitly before RPN mutation. No text scanner, function/reference-operator grammar, formula-cell evaluation/recalc, ODS, UI, full compiler constructor/services, or broad parity is claimed. Existing token-array limit bounds emitted scalar RPN; native overflow paths requiring expansions are outside this subset. Scope reduction is explicit and broad flags remain unverified.",
       "Task200 keeps the original mutable protected array pointer so ScCompiler::CompileString can bind its actual newly returned token owner. No new parsing algorithm or broad shared compiler parity is claimed.",
-      "Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership."
+      "Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership.",
+      "Task N4JV15 adds the native OOO A1 convention for the existing arithmetic/local-reference subset (GRAM_NATIVE, GRAM_ENGLISH and GRAM_ODFF_A1), sharing actual source/RPN tokens, relative/absolute flags and document listeners with ODFF. Native and ODFF output round-trip the same formula owner without evaluation. Scalar operator spellings in this subset coincide across the represented languages; localized numeric input, function names and separators remain unsupported. Native deleted/out-of-range column and row fragments follow ConventionOOO_A1. No UI formula rewrite, second model or broad compiler parity claim."
     ],
     "omittedResponsibilities": [
       "All opcode families and services outside the scalar token subset, including text scanning, function calls, II and matrix compilation; complete upstream QA is not executed.",
@@ -83,6 +84,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/formula-output.test.ts",
           "marker": "serializes actual code tokens"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/native-a1-formula.test.ts",
+          "marker": "round-trips native A1 references through ODFF"
         }
       ],
       "upstream": [

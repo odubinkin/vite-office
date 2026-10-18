@@ -1,4 +1,4 @@
-/** @fileoverview Numeric/local-A1 ODFF compilation. Names, cross-sheet/range references, functions, string literals and localized input formatting remain unsupported. */
+/** @fileoverview Numeric/local-A1 native and ODFF compilation. Names, cross-sheet/range references, functions, string literals and localized input formatting remain unsupported. */
 import { FormulaCompiler } from "../../../../formula/inc/FormulaCompiler";
 import { FormulaByteToken, FormulaSpaceToken } from "../../../../formula/inc/token";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
@@ -49,15 +49,23 @@ export class ScCompiler extends FormulaCompiler {
   }
   /** Selects the implemented native Calc grammar and reference convention. @param grammar - Grammar. @returns Nothing. */
   SetGrammar(grammar: Grammar): void {
-    if (!FormulaGrammar.isODFF(grammar))
-      throw new Error("Only ODFF serialization grammar is implemented");
+    if (
+      grammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
+      grammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
+      grammar !== FormulaGrammar.Grammar.GRAM_NATIVE &&
+      grammar !== FormulaGrammar.Grammar.GRAM_ENGLISH
+    )
+      throw new Error("Formula language or reference convention is not implemented");
     this.meGrammar = grammar;
   }
   /** Emits native ODFF bracket/dot/absolute flags from the actual reference at the formula position. @param token - Single-reference token. @returns Reference text. */
   protected override CreateStringFromSingleRef(token: FormulaToken): string {
     const reference = (token as ScSingleRefToken).GetSingleRef();
     const address = reference.toAbs(this.rDoc, this.aPos);
-    if (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address))
+    const odf =
+      FormulaGrammar.extractRefConvention(this.meGrammar) ===
+      FormulaGrammar.AddressConvention.CONV_ODF;
+    if (odf && (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address)))
       return "[#REF!]";
     if (reference.IsFlag3D() || address.Tab() !== this.aPos.Tab())
       throw new Error("Sheet-qualified formula output is not implemented");
@@ -69,12 +77,16 @@ export class ScCompiler extends FormulaCompiler {
       column = Math.floor(column / 26);
     }
     return (
-      "[." +
+      (odf ? "[." : "") +
       (reference.IsColRel() ? "" : "$") +
-      letters +
+      (reference.IsColDeleted() || !this.rDoc.GetSheetLimits().ValidCol(address.Col())
+        ? "#REF!"
+        : letters) +
       (reference.IsRowRel() ? "" : "$") +
-      (address.Row() + 1) +
-      "]"
+      (reference.IsRowDeleted() || !this.rDoc.GetSheetLimits().ValidRow(address.Row())
+        ? "#REF!"
+        : address.Row() + 1) +
+      (odf ? "]" : "")
     );
   }
   /** Records the first actual code error. @param error - Error. @returns Nothing. */
@@ -136,7 +148,19 @@ export class ScCompiler extends FormulaCompiler {
         index++;
         continue;
       }
-      if (ch === "[") {
+      const odf =
+        FormulaGrammar.extractRefConvention(this.meGrammar) ===
+        FormulaGrammar.AddressConvention.CONV_ODF;
+      if (!odf) {
+        const reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/.exec(source.slice(index));
+        if (reference) {
+          this.ParseSingleReference(reference[0]);
+          last = OpCode.ocPush;
+          index += reference[0].length;
+          continue;
+        }
+      }
+      if (ch === "[" && odf) {
         const close = source.indexOf("]", index + 1);
         if (close < 0 || source[index + 1] !== ".")
           throw new Error("Only bracketed local ODF references are implemented");
