@@ -1,10 +1,11 @@
 ---
 id: "202610181753-FJTKAS"
 title: "Share browser persistence and connect Calc primary ODS saving"
-status: "DOING"
+result_summary: "Shared browser package storage and autosave now persist canonical Calc ODS with atomic lifecycle and generation-safe history"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T18:06:49.918Z"
+  updated_at: "2026-10-18T18:07:23.273Z"
   updated_by: "CODER"
-  note: "AllCalc259tests and shared/Writer72relatedtests pass;100% coverage all four metrics for Calc and extracted modules. Real-browser ODS IndexedDB roundtrip and all declared build/style/architecture/provenance/scoped registry gates pass. Task6/10."
+  note: "Verified259Calc tests and72related tests with100% coverage;production IndexedDB ODS roundtrip and all declared gates pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "Reviewed29df708d0976:storage and timing algorithms are extracted into format-neutral framework modules;Writer retains suite database and domain callbacks. Calc model/filter/undo ownership remains canonical;browser code does not serialize an alternate grid. Real ODS candidate loading and asynchronous save identity/generation guards are exercised."
     - "AllCalc259tests at100% all four metrics and72related Writer/shared tests at100% extracted-module coverage pass. Production browser saved1589byte ODS and re-imported A1=42,B1formularesult84. Declared compile/style/source/registry/doctor/routing gates pass;31non-task files fit45planned."
-commit: null
+commit:
+  hash: "29df708d097691bf49fb0c6f72bea60aebfa86df"
+  message: "✨ FJTKAS calc: share browser persistence and save canonical ODS documents"
 comments:
   -
     author: "CODER"
     body: "Start: Extract shared persistence and autosave policy,connect actual Calc ODS primary IO and lifecycle,then verify real-byte persistence and race handling at full Calc coverage."
+  -
+    author: "CODER"
+    body: "Verified: Shared browser package storage and autosave now persist canonical Calc ODS with atomic lifecycle and generation-safe history. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "AllCalc259tests and shared/Writer72relatedtests pass;100% coverage all four metrics for Calc and extracted modules. Real-browser ODS IndexedDB roundtrip and all declared build/style/architecture/provenance/scoped registry gates pass. Task6/10."
+  -
+    type: "verify"
+    at: "2026-10-18T18:07:23.273Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified259Calc tests and72related tests with100% coverage;production IndexedDB ODS roundtrip and all declared gates pass."
+  -
+    type: "status"
+    at: "2026-10-18T18:07:23.376Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared browser package storage and autosave now persist canonical Calc ODS with atomic lifecycle and generation-safe history. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T18:06:49.969Z"
+doc_updated_at: "2026-10-18T18:07:23.376Z"
 doc_updated_by: "CODER"
 description: "Approved UI plan task6/10. Extract format-neutral IndexedDB primary document storage and the exact Writer autosave timing/input-capture policy into framework browser modules. Keep Writer domain adapters and defaults. Extend actual ScDocShell with atomic ODS open/replace,primary save acknowledgement and generation/history ownership using shared SfxObjectShell/SfxMedium. Connect Calc canonical controller/session to browser ODS autosave without replacing committed cells or acknowledging later edits. Add real primary ODS IO and tests. Browser file dialogs/menu composition follows task7. Up to45non-task files including required metadata;no network,merges or other checkouts."
 sections:
@@ -150,6 +169,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610181753-FJTKAS -m 🧩 FJTKAS task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T18:07:23.273Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified259Calc tests and72related tests with100% coverage;production IndexedDB ODS roundtrip and all declared gates pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:06:49.969Z, excerpt_hash=sha256:ec256e0a3b571a89859365135647a5d71089e4242219545ec4b89fe95e210d0a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181753-FJTKAS/blueprint/resolved-snapshot.json
+    - old_digest: 67d467c9893f146d25dbf5a4ecd3c5364bb032c8866e8dfca2fab23ee9b7ed8b
+    - current_digest: 67d467c9893f146d25dbf5a4ecd3c5364bb032c8866e8dfca2fab23ee9b7ed8b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181753-FJTKAS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181753-FJTKAS --result verified-202610181753-FJTKAS --commit 417b55dd31b52aa556f0bf906a2cdccf47d730c4
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -259,6 +308,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181753-FJTKAS -m 🧩 FJTKAS task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T18:07:23.273Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified259Calc tests and72related tests with100% coverage;production IndexedDB ODS roundtrip and all declared gates pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:06:49.969Z, excerpt_hash=sha256:ec256e0a3b571a89859365135647a5d71089e4242219545ec4b89fe95e210d0a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181753-FJTKAS/blueprint/resolved-snapshot.json
+- old_digest: 67d467c9893f146d25dbf5a4ecd3c5364bb032c8866e8dfca2fab23ee9b7ed8b
+- current_digest: 67d467c9893f146d25dbf5a4ecd3c5364bb032c8866e8dfca2fab23ee9b7ed8b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181753-FJTKAS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181753-FJTKAS --result verified-202610181753-FJTKAS --commit 417b55dd31b52aa556f0bf906a2cdccf47d730c4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
