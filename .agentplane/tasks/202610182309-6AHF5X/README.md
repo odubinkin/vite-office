@@ -1,10 +1,11 @@
 ---
 id: "202610182309-6AHF5X"
 title: "Port native VCL variation parsing and exact UTF16 view dependencies"
-status: "DOING"
+result_summary: "Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T23:17:26.493Z"
+  updated_at: "2026-10-18T23:18:12.490Z"
   updated_by: "CODER"
-  note: "Actual VCL Variation/input parser and native UTF16 view dependencies pass wholeCalc299/raw100percent and5relatedfiles15cases/raw100percent across entire changed scopes. Architecture87cases,new exact source-backed edges,types/build/static/docs/provenance/inventories/style/doctor/routing pass. No fake item/pool or approximate serializer;overall goalactive,nextfull30."
+  note: "Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage."
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "Source guard/order/tag syntax,malformed numeric prefixes,duplicates,borrowed views and binary32 scalar semantics are directly tested. Real RTL decimal/character owners are reused;no JS trim/parseFloat,axis clamping,fake item or substitute pool."
     - "WholeCalc111files299cases and5relatedfiles15cases pass raw100percent S/B/F/L across declared scopes;architecture2files87cases pass,with exact native VCL->o3tl and SAL header binding additions and unchanged cycle/syntax checks. Types/build/static/provenance/inventories/style/docs/size/tree/doctor/routing pass."
     - "Canonical header facade correctly records no local definitions;actual implementation owns symbols. Metadata remains foundation and behavior/contract/default unverified. Native parser evidence is source-backed vectors,not a claimed compiled fullVCL differential suite."
-commit: null
+commit:
+  hash: "3ba35fa5338ff73e6961f952ff823519d4ba6fe3"
+  message: "🧩 6AHF5X core: port native VCL variation parsing and UTF16 views"
 comments:
   -
     author: "CODER"
     body: "Start:port actual VCL axis parser and native UTF16 helpers as the missing font-variation pool prerequisite,without fake pool defaults or output formatting."
+  -
+    author: "CODER"
+    body: "Verified: Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Actual VCL Variation/input parser and native UTF16 view dependencies pass wholeCalc299/raw100percent and5relatedfiles15cases/raw100percent across entire changed scopes. Architecture87cases,new exact source-backed edges,types/build/static/docs/provenance/inventories/style/doctor/routing pass. No fake item/pool or approximate serializer;overall goalactive,nextfull30."
+  -
+    type: "verify"
+    at: "2026-10-18T23:18:12.490Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage."
+  -
+    type: "status"
+    at: "2026-10-18T23:18:12.593Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T23:17:26.545Z"
+doc_updated_at: "2026-10-18T23:18:12.593Z"
 doc_updated_by: "CODER"
 description: "Task22 of approved Calc UI/core goal:implement actual VCL Variation value and VariationsFromString for missing SvxFontVariationsItem/EditEngine package dependency. Reuse native RTL decimal lexer and o3tl UTF16 whitespace/view helpers;native quoted4byte alphanumeric/space tags,binary32 values,invalid-token handling,order/duplicates and defaults. No fake pool or formatting slot. Only calc checkout/branch;no network/merge. Serialization awaits actual RTL float formatter rather than guessed JS formatting."
 sections:
@@ -101,6 +120,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182309-6AHF5X -m 🧩 6AHF5X task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T23:18:12.490Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:17:26.545Z, excerpt_hash=sha256:68f3247532e32a9a64be5c6e19a272c096414fa78785946e5210eb82ece60d2a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182309-6AHF5X/blueprint/resolved-snapshot.json
+    - old_digest: 1fab80afed4af1c3948c5484fe99abcb924f4c394c90f73e6a756f10163c23d1
+    - current_digest: 1fab80afed4af1c3948c5484fe99abcb924f4c394c90f73e6a756f10163c23d1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182309-6AHF5X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182309-6AHF5X --result verified-202610182309-6AHF5X --commit b3715568cf98f06bf2482b397f7959887423ac73
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -161,6 +210,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182309-6AHF5X -m 🧩 6AHF5X task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T23:18:12.490Z — VERIFY — ok
+
+By: CODER
+
+Note: Native VCL variation input values and original UTF16 token/trim/decimal views now provide verified real EditEngine prerequisites with100percent scoped coverage.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T23:17:26.545Z, excerpt_hash=sha256:68f3247532e32a9a64be5c6e19a272c096414fa78785946e5210eb82ece60d2a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182309-6AHF5X/blueprint/resolved-snapshot.json
+- old_digest: 1fab80afed4af1c3948c5484fe99abcb924f4c394c90f73e6a756f10163c23d1
+- current_digest: 1fab80afed4af1c3948c5484fe99abcb924f4c394c90f73e6a756f10163c23d1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182309-6AHF5X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182309-6AHF5X --result verified-202610182309-6AHF5X --commit b3715568cf98f06bf2482b397f7959887423ac73
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
