@@ -95,6 +95,12 @@ export class ScTable {
     if (this.rDocument.ValidColRow(col, row))
       this.CreateColumnIfNotExists(col).SetFormula(row, source, grammar);
   }
+  /** Adopts compiled formula content through the actual column. @param col - Column. @param row - Row. @param cell - Matching compiled owner. @returns Adopted cell or null. */
+  SetFormulaCell(col: number, row: number, cell: ScFormulaCell): ScFormulaCell | null {
+    return this.rDocument.ValidColRow(col, row)
+      ? this.CreateColumnIfNotExists(col).SetFormulaCell(row, cell)
+      : null;
+  }
   /** Borrows a formula cell without allocating storage. @param col - Column. @param row - Row. @returns Cell or null. */
   GetFormulaCell(col: number, row: number): ScFormulaCell | null {
     return this.rDocument.ValidColRow(col, row) && col < this.aCol.length

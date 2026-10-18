@@ -1,0 +1,33 @@
+{
+  "route": "http://127.0.0.1:5175/calc",
+  "surface": "Production registered Calc module in shared desktop",
+  "title": "Vite Office",
+  "observations": {
+    "gridClient": { "width": 1200, "height": 456 },
+    "input": "A1=4;B1=A1*3",
+    "formulaResult": "12",
+    "undoResult": "",
+    "redoExecuted": true,
+    "insertSheet": [
+      { "name": "Sheet1", "selected": false },
+      { "name": "Sheet2", "selected": true }
+    ],
+    "lastCellNavigation": {
+      "address": "XFD1048576",
+      "activeDescendant": "calc-0-16383-1048575",
+      "scrollHeight": 1000000,
+      "scrollTop": 999544,
+      "scrollLeft": 1571712,
+      "cellBounds": { "x": 1104, "y": 563, "width": 96, "height": 22 },
+      "gridBounds": { "x": 0, "y": 145, "width": 1200, "height": 456 }
+    },
+    "independentScroll": {
+      "scrollTop": 500000,
+      "cursor": "XFD1048576",
+      "activeDescendant": null
+    },
+    "consoleErrors": 0,
+    "consoleWarnings": 0
+  },
+  "limitations": ["DOM/geometry review;no screenshot artifact was captured.", "Bounded scalar editor slice;full menus,files and broader interaction work remain subsequent tasks."]
+}

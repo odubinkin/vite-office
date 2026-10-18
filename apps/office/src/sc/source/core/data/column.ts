@@ -122,11 +122,17 @@ export class ScColumn {
       formula,
       grammar,
     );
+    this.SetFormulaCell(row, cell);
+  }
+  /** Adopts an already compiled native formula owner without reparsing its input text. The cell position/document must match this column and row. @param row - Target row. @param cell - Compiled owner. @returns Adopted cell or null for invalid row. */
+  SetFormulaCell(row: number, cell: ScFormulaCell): ScFormulaCell | null {
+    if (!this.rDocument.ValidRow(row)) return null;
     this.DetachFormulaCell(row);
     this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
     this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
     cell.StartListeningTo(this.rDocument);
     cell.SetDirty();
+    return cell;
   }
   /** Borrows an actual formula-cell identity. @param row - Valid row. @returns Formula cell or null. */
   GetFormulaCell(row: number): ScFormulaCell | null {

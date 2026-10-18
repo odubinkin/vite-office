@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- desktop.test.tsx
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts desktop.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  00:48:42
+   Duration  11.53s (transform 2.80s, setup 288ms, import 3.53s, tests 6.47s, environment 1.07s)
+

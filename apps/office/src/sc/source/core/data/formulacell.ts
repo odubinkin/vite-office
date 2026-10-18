@@ -31,13 +31,18 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   constructor(
     private readonly rDocument: ScDocument,
     position: ScAddress,
-    formula: OUStringConstReference,
+    formula: OUStringConstReference | ScTokenArray,
     grammar: Grammar,
   ) {
     super();
     this.aPos = new ScAddress(position);
-    const compiler = new ScCompiler(rDocument, this.aPos, grammar);
-    this.pCode = compiler.CompileString(formula);
+    const compiler = new ScCompiler(
+      rDocument,
+      this.aPos,
+      formula instanceof ScTokenArray ? formula : grammar,
+      grammar,
+    );
+    this.pCode = formula instanceof ScTokenArray ? formula : compiler.CompileString(formula);
     compiler.CompileTokenArray();
   }
   /** Serializes real source-order tokens without evaluating the cell or caching a second formula model. @param grammar - Explicit serialization grammar. @returns Formula with native leading equals. */

@@ -358,18 +358,15 @@ describe("App" /**
     expect(screen.getByLabelText("Search is unavailable")).toHaveAttribute("aria-disabled", "true");
     expect(screen.getByRole("navigation", { name: "Office applications" })).toBeVisible();
     expect(screen.getByRole("link", { name: "Writer" })).toHaveAttribute("href", "/writer");
-    expect(screen.getByRole("link", { name: "Calc, Foundation only" })).toHaveAttribute(
-      "href",
-      "/calc",
-    );
+    expect(screen.getByRole("link", { name: "Calc" })).toHaveAttribute("href", "/calc");
     expect(document.querySelector("#workspace")).not.toBeInTheDocument();
 
     cleanup();
-    globalThis.history.replaceState(null, "", "/calc");
+    globalThis.history.replaceState(null, "", "/impress");
     render(<App />);
 
-    expect(screen.getByText("Calc: Foundation only")).toBeInTheDocument();
-    expect(screen.getByText(/Worksheets, formulas, analysis/)).toBeInTheDocument();
+    expect(screen.getByText("Impress: Foundation only")).toBeInTheDocument();
+    expect(screen.getByText(/Slide authoring, presenting/)).toBeInTheDocument();
     expect(
       screen.getByText(
         /No document model, editing shell, persistence, or command surface is registered/,

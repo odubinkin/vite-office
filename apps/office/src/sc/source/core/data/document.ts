@@ -1,4 +1,5 @@
 /** @fileoverview Scalar/local-reference ScDocument chain with native logical formula tracking. Full construction,formatting,area/group and shell services remain unsupported. */
+import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScHint } from "../../../inc/brdcst";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
@@ -232,6 +233,12 @@ export class ScDocument {
   SetFormula(position: ScAddress, source: OUStringConstReference, grammar: Grammar): void {
     this.FetchTable(position.Tab())?.SetFormula(position.Col(), position.Row(), source, grammar);
   }
+  /** Transfers a compiled formula into the canonical sheet/column store. Position/document matching is the caller precondition. @param position - Target. @param cell - Matching native owner. @returns Adopted cell or null for an absent sheet. */
+  SetFormulaCell(position: ScAddress, cell: ScFormulaCell): ScFormulaCell | null {
+    return (
+      this.FetchTable(position.Tab())?.SetFormulaCell(position.Col(), position.Row(), cell) ?? null
+    );
+  }
   /** Borrows the actual formula cell, or native null. @param position - Cell. @returns Formula cell or null. */
   GetFormulaCell(position: ScAddress): ScFormulaCell | null {
     return this.FetchTable(position.Tab())?.GetFormulaCell(position.Col(), position.Row()) ?? null;
@@ -302,6 +309,20 @@ export class ScDocument {
     if (!ValidTab(position)) return false;
     this.maTabs.splice(position, 0, new ScTable(this, position, name));
     for (let i = position + 1; i < this.maTabs.length; i++) (this.maTabs[i] as ScTable).SetTabNo(i);
+    this.SetAllFormulasDirty(new SetFormulaDirtyContext());
+    return true;
+  }
+  /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
+  DeleteTab(tab: number): boolean {
+    if (!this.FetchTable(tab) || this.maTabs.length <= 1) return false;
+    const iterator = new ScHorizontalCellIterator(this, tab, 0, 0, this.MaxCol(), this.MaxRow());
+    const col: [number] = [0],
+      row: [number] = [0];
+    let cell;
+    while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
+    this.maTabs.splice(tab, 1);
+    for (let index = tab; index < this.maTabs.length; index++)
+      (this.maTabs[index] as ScTable).SetTabNo(index);
     this.SetAllFormulasDirty(new SetFormulaDirtyContext());
     return true;
   }

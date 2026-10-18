@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/sdi/scalc.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/sdi/scalc.sdi",
+    "localSymbols": [
+      "calcEditCommands",
+      "calcUserCommands",
+      "createCalcInterface"
+    ],
+    "upstreamSymbols": [
+      "EnterString",
+      "InputLineEnter"
+    ],
+    "preservedResponsibilities": [
+      "Task0V5WR6 connects the production Calc route to actual ScDocument,ScViewData and ScDocShell owners through shared SfxObjectShell,SfxUndoManager,SfxInterface,SfxViewFrame,dispatcher and command bindings. Controlled React presenters reuse Writer toolbar styles,Tailwind,Lucide and global fonts. The supported slice includes plain scalar/native local-A1 input,recalculation,cancel,selection,name-box navigation,sheet append/switch,typed token-valued undo/redo and bounded browser viewport projection. Compiled formula adoption retains code errors in history;sheet deletion ends formula subscriptions and renumbers source cells. One real model owns cells;browser state contains transient input/geometry only. This is a bounded editable workspace,not full Calc/native parity."
+    ],
+    "omittedResponsibilities": [
+      "Full native menus,formatting/sidebar/status services,clipboard,rich/multiline cells,functions/ranges/cross-sheet references and locale-aware number formats remain outside this current-core slice.",
+      "Shared file dialogs,ODS filters,primary browser storage/autosave and close workflows are subsequent approved UI tasks;no recovery UI is introduced.",
+      "Token array copies share native const token identities;physical memory uses JS GC. Full native deep-copy/undo-document services and sheet reference transformation are not claimed.",
+      "Browser geometry is platform-owned;native row coordinates are projected onto a bounded physical scroll track. Exact VCL implementation parity is not claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/sdi/scalc.ts",
+          "marker": "calcEditCommands"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-workbench.test.tsx",
+          "marker": "Mounted production Calc workspace"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/sdi/scalc.sdi",
+          "marker": "EnterString"
+        }
+      ]
+    }
+  }
+}

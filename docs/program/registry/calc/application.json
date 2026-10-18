@@ -1,5 +1,8 @@
 {
   "suite": "calc",
   "active": true,
-  "commands": null
+  "commands": {
+    "module": "apps/office/src/sc/sdi/scalc.ts",
+    "export": "calcUserCommands"
+  }
 }
