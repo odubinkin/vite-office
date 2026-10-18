@@ -1,4 +1,5 @@
 /** @fileoverview Verifies actual mounted table paint, dialog and shell read the original native collapsing-border item. */
+import { Color } from "../../../tools/inc/color";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -116,8 +117,8 @@ it.each([false, true])(
       node.SetText("Original native border item");
       const left = new SvxBoxItem(RES_BOX),
         right = new SvxBoxItem(RES_BOX);
-      left.SetLine(new SvxBorderLine(0xff0000, 20), 3);
-      right.SetLine(new SvxBorderLine(0x0000ff, 60), 2);
+      left.SetLine(new SvxBorderLine(new Color(0xff0000), 20), 3);
+      right.SetLine(new SvxBorderLine(new Color(0x0000ff), 60), 2);
       first.GetFrameFormat().SetFormatAttr(left);
       second.GetFrameFormat().SetFormatAttr(right);
       const format = table.GetFrameFormat(),
@@ -160,8 +161,8 @@ it.each([false, true])(
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       expect(signal).not.toHaveBeenCalled();
       expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(modelRevision);
-      expect(first.GetFrameFormat().GetBox().GetRight()?.GetColor()).toBe(0xff0000);
-      expect(second.GetFrameFormat().GetBox().GetLeft()?.GetColor()).toBe(0x0000ff);
+      expect(first.GetFrameFormat().GetBox().GetRight()?.GetColor().toUInt32()).toBe(0xff0000);
+      expect(second.GetFrameFormat().GetBox().GetLeft()?.GetColor().toUInt32()).toBe(0x0000ff);
       expect(first.GetParagraphs()[0]).toBe(node);
       expect(node.GetText()).toBe("Original native border item");
       expect(shell.CaptureCursorState()).toEqual(cursor);

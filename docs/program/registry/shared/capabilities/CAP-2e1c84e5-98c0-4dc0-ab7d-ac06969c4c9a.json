@@ -1,0 +1,124 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2e1c84e5-98c0-4dc0-ab7d-ac06969c4c9a",
+    "capabilityId": "CAP-2e1c84e5-98c0-4dc0-ab7d-ac06969c4c9a",
+    "suite": "shared",
+    "subsystem": "font-effect-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Three original font bool classes preserve factories/copies and shared typed bool transport.",
+      "Relief uses original0through2short member mappings and failure unchanged state/output.",
+      "Calc defaults107108123false and124NONE retain actual shared itemset copies."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger."
+    },
+    "capability": "Shared font effect values",
+    "gaps": [
+      "Native localized presentation/resources/cache/ABI and actual complete DocPool/document/UI/ODS pending or excluded.",
+      "No full native QA certification or full application regression now."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.ts",
+          "marker": "SvxContourItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_RELIEF"
+        },
+        {
+          "path": "apps/office/src/vcl/inc/fntstyle.ts",
+          "marker": "FontRelief"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/contouritem.ts",
+          "marker": "SvxContourItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/shdditem.ts",
+          "marker": "SvxShadowedItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/wrlmitem.ts",
+          "marker": "SvxWordLineModeItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/charreliefitem.ts",
+          "marker": "SvxCharReliefItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/font-effects.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Font contour shadow word-line and relief values (task120)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxContourItem"
+        },
+        {
+          "path": "include/editeng/memberids.h",
+          "marker": "MID_RELIEF"
+        },
+        {
+          "path": "include/vcl/fntstyle.hxx",
+          "marker": "FontRelief"
+        },
+        {
+          "path": "include/editeng/contouritem.hxx",
+          "marker": "SvxContourItem"
+        },
+        {
+          "path": "include/editeng/shdditem.hxx",
+          "marker": "SvxShadowedItem"
+        },
+        {
+          "path": "include/editeng/wrlmitem.hxx",
+          "marker": "SvxWordLineModeItem"
+        },
+        {
+          "path": "include/editeng/charreliefitem.hxx",
+          "marker": "SvxCharReliefItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-font-effects",
+    "scopeLimitations": [
+      "Task120 ports original SvxContourItem/SvxShadowedItem/SvxWordLineModeItem factories/value/copy/Clone using real shared SfxBoolItem typed Any/scalar transport. SvxCharReliefItem uses actual SfxEnumItem and native VCL FontRelief values, member0 short query/update, member narrowing/CONVERT_TWIPS bit and false unchanged invalid updates/outputs. Canonical headers reexport original shared textitem owner. Existing Writer font classes/transport remain in that owner and all complete owner tests pass. Calc107108123false and124NONE defaults tested via actual itemset copies, not a fabricated DocPool/document/provider. Original metadata histories/status retained, no broad parity promotion. Native localized presentation/resources/caches/diagnostics/ABI, other VCL FontKerning responsibilities and complete DocPool/config/storage/document/UI/ODS remain pending or excluded. No memory library/native compilation/generator/sanitizer. Next full only at minimum actual UI contracts plus same-model ODS load/save readiness, then relevant repairs and pause, no task121trigger."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

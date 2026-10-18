@@ -1,4 +1,7 @@
-/** @fileoverview Original ScCellValue scalar variant owner; genuine shared values and native JS refs are reused, rich-text/formula/document peer families remain unported. */
+/** @fileoverview Owning scalar ScCellValue and borrowed scalar/formula/document ScRefCellValue families. Rich text and owning-formula alternatives remain unsupported. */
+import type { ScDocument } from "../../../inc/document";
+import type { ScAddress } from "../../../inc/address";
+import type { ScFormulaCell } from "../../../inc/formulacell";
 import { CellType } from "../../../inc/global";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 
@@ -83,21 +86,37 @@ export class ScCellValue {
   }
 }
 
-/** Original non-owning scalar cell view; callers keep its source valid and use only the getter matching getType(). */
+/** Original non-owning scalar/formula cell view; callers keep its source valid and use only the getter matching getType(). */
 export class ScRefCellValue {
+  private mpFormula: ScFormulaCell | null = null;
   private meType = CellType.CELLTYPE_NONE;
   private mfValue = 0;
   private mpString: SharedStringConstReference | null = null;
   /** Original scalar constructors and implicit memberwise copy; null selects the string-pointer overload. @param value - Optional scalar or copied view. @returns Cell reference. */
-  constructor(value?: number | SharedStringConstReference | null | ScRefCellValue) {
+  constructor(value?: number | SharedStringConstReference | null | ScRefCellValue | ScFormulaCell);
+  /** Borrows actual document content at the source position. @param value - Document. @param position - Cell. @returns View. */
+  constructor(value: ScDocument, position: ScAddress);
+  /** Binds native scalar/formula/document overloads. @param value - Value or owner. @param position - Document position. @returns View. */
+  constructor(
+    value?:
+      number | SharedStringConstReference | null | ScRefCellValue | ScFormulaCell | ScDocument,
+    position?: ScAddress,
+  ) {
+    if (position !== undefined) {
+      this.copy_assign((value as ScDocument).GetRefCellValue(position));
+      return;
+    }
     if (value instanceof ScRefCellValue) this.copy_assign(value);
     else if (value !== undefined) {
       if (typeof value === "number") {
         this.meType = CellType.CELLTYPE_VALUE;
         this.mfValue = value;
+      } else if (value && "GetCode" in value) {
+        this.meType = CellType.CELLTYPE_FORMULA;
+        this.mpFormula = value;
       } else {
         this.meType = CellType.CELLTYPE_STRING;
-        this.mpString = value;
+        this.mpString = value as SharedStringConstReference | null;
       }
     }
   }
@@ -106,6 +125,7 @@ export class ScRefCellValue {
     this.meType = source.meType;
     this.mfValue = source.mfValue;
     this.mpString = source.mpString;
+    this.mpFormula = source.mpFormula;
     return this;
   }
   /** Original clear resets the tag and numeric value; drop the inactive JS reference for GC. @returns Nothing. */
@@ -113,6 +133,7 @@ export class ScRefCellValue {
     this.meType = CellType.CELLTYPE_NONE;
     this.mfValue = 0;
     this.mpString = null;
+    this.mpFormula = null;
   }
   /** Original inline cell type query. @returns Native cell type. */
   getType(): CellType {
@@ -125,6 +146,24 @@ export class ScRefCellValue {
   /** Original borrowed pointer getter requires STRING and can return null. @returns Actual borrowed shared value. */
   getSharedString(): SharedStringConstReference | null {
     return this.mpString;
+  }
+  /** Borrows the actual formula pointer for the FORMULA alternative. @returns Formula or null. */
+  getFormula(): ScFormulaCell | null {
+    return this.mpFormula;
+  }
+  /** Native final-result empty predicate for represented cells. @returns Empty value. */
+  hasEmptyValue(): boolean {
+    return (
+      this.meType === CellType.CELLTYPE_NONE ||
+      (this.meType === CellType.CELLTYPE_FORMULA && (this.mpFormula as ScFormulaCell).IsEmpty())
+    );
+  }
+  /** Native text predicate; formula errors remain value/error results. @returns Text value. */
+  hasString(): boolean {
+    return (
+      this.meType === CellType.CELLTYPE_STRING ||
+      (this.meType === CellType.CELLTYPE_FORMULA && !(this.mpFormula as ScFormulaCell).IsValue())
+    );
   }
   /** Original emptiness tests the tag alone. @returns Empty-cell predicate. */
   isEmpty(): boolean {

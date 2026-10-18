@@ -9,7 +9,8 @@
     "subsystem": "odf-filter",
     "capabilityIds": [
       "CAP-0113",
-      "CAP-0128"
+      "CAP-0128",
+      "CAP-a5afdcf9-2789-4ea8-823e-7bb6a5bed84f"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,10 @@
       "evidence": [
         "apps/office/src/sax/source/fastparser/fastparser.ts#parseFastXmlStream",
         "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
-        "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does"
+        "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts"
       ],
-      "justification": "Pinned SAX fast parser owns bounded event delivery and resource ceilings; browser SAX dependency replaces expat. Broader SAX behavior remains unverified.",
+      "justification": "Pinned SAX fast parser owns bounded event delivery and resource ceilings; browser SAX dependency replaces expat. Broader SAX behavior remains unverified. Task204 adds a borrowed current-SAX namespace resolver for QName-valued attributes and scalar spreadsheet tokens/OF namespace data. Actual host parser prefix resolution preserves inherited aliases and rebinding;no second namespace-scope/cache engine is introduced. Existing XML token numeric IDs retain their order;new tokens append. ODS domain errors pass through the shared parser like ODT/ODF errors. New bounded bindings do not promote broad native parity.",
       "knownViolations": [],
       "localSymbols": [
         "DEFAULT_FAST_XML_LIMITS",

@@ -212,7 +212,7 @@ export function Copy(
   source: Uint16Array | Uint8Array,
   count: number,
 ): void {
-  if (source instanceof Uint8Array) {
+  if (source.BYTES_PER_ELEMENT === 1) {
     for (let i = 0; i < count; i++) {
       const unit = source[i] as number;
       if (unit >= 0x80) throw new Error("assert(rtl::isAscii(static_cast<unsigned char>(c)))");
@@ -252,7 +252,8 @@ export function newFromString(ppThis: rtl_uStringSlot | null, pStr: rtl_uString 
 /** Original class, char and UTF16 pointer getLength specializations. @param pStr - Data or NUL-terminated borrowed units. @returns Original logical length. */
 export function getLength(pStr: rtl_uString | Uint16Array | Uint8Array | null): number {
   if (pStr === null) throw new Error("assert(pStr)");
-  if (!(pStr instanceof Uint16Array) && !(pStr instanceof Uint8Array)) return pStr.length;
+  // The native overload depends on the declared element kind, not a JS realm constructor identity.
+  if (!ArrayBuffer.isView(pStr)) return pStr.length;
   // As in char_traits::length, the caller must provide a reachable terminating zero.
   let n = 0;
   while (pStr[n] !== 0) n++;

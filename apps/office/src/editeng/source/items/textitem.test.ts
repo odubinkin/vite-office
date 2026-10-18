@@ -1,5 +1,5 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
-
+import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 import {
@@ -8,20 +8,18 @@ import {
 } from "../../../sw/browser/filter/xml/writer-document-codec";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { RES_CHRATR_FONT } from "../../../sw/inc/hintids";
-
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
-import { SvxLineSpacingItem } from "./paraitem";
+import { SvxLineSpacingItem } from "../../inc/lspcitem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxPostureItem,
   SvxFontHeightItem,
   SvxUnderlineItem,
   SvxWeightItem,
 } from "./textitem";
-
+import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 /** Test-owned WhichId for font-weight items. */
 const weightWhich = 101;
 /** Test-owned WhichId for font-posture items. */
@@ -37,29 +35,65 @@ function throwing(operation: () => unknown): () => unknown {
 }
 
 describe("EditEngine character items" /** Groups pooled character item contracts. @returns Nothing. */, () => {
-  it("separates serialized and device-resolved font families", /** Verifies runtime resolution does not alter the document value. @returns Nothing. */ () => {
-    const font = new SvxFontItem("Liberation Serif", weightWhich, "Noto Serif");
-    expect(font.GetFamilyName()).toBe("Liberation Serif");
-    expect(font.GetResolvedFamilyName()).toBe("Noto Serif");
-    expect(font.QueryValue()).toBe("Liberation Serif");
-    expect(font.Clone().GetResolvedFamilyName()).toBe("Noto Serif");
+  it("owns the native family value without a second resolved name", /** Native item values admit blank names and retain every state field. @returns Nothing. */ () => {
+    const font = new SvxFontItem(
+      FontFamily.FAMILY_DONTKNOW,
+      "Noto Serif",
+      "Regular",
+      FontPitch.PITCH_VARIABLE,
+      RTL_TEXTENCODING_DONTKNOW,
+      weightWhich,
+    );
+    expect(font.GetFamilyName()).toBe("Noto Serif");
+    expect(font.QueryValue()).toEqual({
+      familyName: "Noto Serif",
+      styleName: "Regular",
+      family: FontFamily.FAMILY_DONTKNOW,
+      pitch: FontPitch.PITCH_VARIABLE,
+      charSet: RTL_TEXTENCODING_DONTKNOW,
+    });
+    expect(font.Clone().GetFamilyName()).toBe("Noto Serif");
     expect(
-      throwing(
-        /** Creates an item with an invalid runtime family. @returns Invalid item. */ () =>
-          new SvxFontItem("Liberation Serif", weightWhich, " "),
-      ),
-    ).toThrow("resolved family name is invalid");
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        " ",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        weightWhich,
+      ).GetFamilyName(),
+    ).toBe(" ");
   });
 
   it("retains the ODF generic family through the browser document transfer", /** callback handles this value. @returns The result. */ () => {
-    const font = new SvxFontItem("Overpass Light", RES_CHRATR_FONT, "Overpass Light", "roman");
-    expect(font.GetGenericFamily()).toBe("roman");
-    expect(font.Clone().GetGenericFamily()).toBe("roman");
-    expect(font.equals(new SvxFontItem("Overpass Light", RES_CHRATR_FONT))).toBe(false);
+    const font = new SvxFontItem(
+      FontFamily.FAMILY_ROMAN,
+      "Overpass Light",
+      "",
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+      RES_CHRATR_FONT,
+    );
+    expect(font.GetFamily()).toBe(FontFamily.FAMILY_ROMAN);
+    expect(font.Clone().GetFamily()).toBe(FontFamily.FAMILY_ROMAN);
+    expect(
+      font.equals(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Overpass Light",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
+      ),
+    ).toBe(false);
     expect(encodeSfxPoolItem(font).value).toEqual({
       familyName: "Overpass Light",
-      resolvedFamilyName: "Overpass Light",
-      genericFamily: "roman",
+      styleName: "",
+      family: FontFamily.FAMILY_ROMAN,
+      pitch: FontPitch.PITCH_DONTKNOW,
+      charSet: RTL_TEXTENCODING_DONTKNOW,
     });
     const document = createWriterDocument();
     document.GetDfltTextFormatColl().SetFormatAttr(font);
@@ -67,33 +101,34 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(
       (
         restored.GetDfltTextFormatColl().GetAttrSet().Get(RES_CHRATR_FONT) as SvxFontItem
-      ).GetGenericFamily(),
-    ).toBe("roman");
+      ).GetFamily(),
+    ).toBe(FontFamily.FAMILY_ROMAN);
   });
 
   it("preserves FontWeight ordering, boolean threshold, identity, and snapshots" /** Verifies SvxWeightItem. @returns Nothing. */, () => {
-    expect(FontWeight.DONTKNOW).toBe(0);
-    expect(FontWeight.NORMAL).toBe(5);
-    expect(FontWeight.BOLD).toBe(8);
-    expect(FontWeight.BLACK).toBe(10);
-    const normal = new SvxWeightItem(FontWeight.NORMAL, weightWhich);
-    const bold = new SvxWeightItem(FontWeight.BOLD, weightWhich);
-    const black = new SvxWeightItem(FontWeight.BLACK, alternateWhich);
+    expect(FontWeight.WEIGHT_DONTKNOW).toBe(0);
+    expect(FontWeight.WEIGHT_NORMAL).toBe(5);
+    expect(FontWeight.WEIGHT_BOLD).toBe(8);
+    expect(FontWeight.WEIGHT_BLACK).toBe(10);
+    expect(new SvxWeightItem(11 as FontWeight, weightWhich).GetWeight()).toBe(11);
+    const normal = new SvxWeightItem(FontWeight.WEIGHT_NORMAL, weightWhich);
+    const bold = new SvxWeightItem(FontWeight.WEIGHT_BOLD, weightWhich);
+    const black = new SvxWeightItem(FontWeight.WEIGHT_BLACK, alternateWhich);
     expect(normal.Which()).toBe(weightWhich);
-    expect(normal.GetWeight()).toBe(FontWeight.NORMAL);
+    expect(normal.GetWeight()).toBe(FontWeight.WEIGHT_NORMAL);
     expect(normal.GetBoolValue()).toBe(false);
     expect(bold.GetBoolValue()).toBe(true);
     expect(black.GetBoolValue()).toBe(true);
     expect(bold.Clone()).not.toBe(bold);
     expect(bold.Clone().equals(bold)).toBe(true);
     expect(bold.equals(normal)).toBe(false);
-    expect(bold.equals(new SvxWeightItem(FontWeight.BOLD, alternateWhich))).toBe(false);
-    expect(bold.equals(new SfxInt16Item(weightWhich, FontWeight.BOLD))).toBe(false);
+    expect(bold.equals(new SvxWeightItem(FontWeight.WEIGHT_BOLD, alternateWhich))).toBe(true);
+    expect(bold.equals(new SfxInt16Item(weightWhich, FontWeight.WEIGHT_BOLD))).toBe(false);
     expect(encodeSfxPoolItem(black)).toEqual({
-      value: FontWeight.BLACK,
+      value: FontWeight.WEIGHT_BLACK,
       which: alternateWhich,
     });
-    for (const value of [-1, 11, 1.5])
+    for (const value of [-1, 1.5])
       expect(
         throwing(
           /** Creates an invalid weight item. @returns Invalid item. */
@@ -103,30 +138,31 @@ describe("EditEngine character items" /** Groups pooled character item contracts
   });
 
   it("preserves FontItalic ordering and boolean posture semantics" /** Verifies SvxPostureItem. @returns Nothing. */, () => {
-    expect(FontItalic.NONE).toBe(0);
-    expect(FontItalic.OBLIQUE).toBe(1);
-    expect(FontItalic.NORMAL).toBe(2);
-    expect(FontItalic.DONTKNOW).toBe(3);
-    const none = new SvxPostureItem(FontItalic.NONE, postureWhich);
-    const oblique = new SvxPostureItem(FontItalic.OBLIQUE, postureWhich);
-    const italic = new SvxPostureItem(FontItalic.NORMAL, alternateWhich);
-    const unknown = new SvxPostureItem(FontItalic.DONTKNOW, postureWhich);
+    expect(FontItalic.ITALIC_NONE).toBe(0);
+    expect(FontItalic.ITALIC_OBLIQUE).toBe(1);
+    expect(FontItalic.ITALIC_NORMAL).toBe(2);
+    expect(FontItalic.ITALIC_DONTKNOW).toBe(3);
+    const none = new SvxPostureItem(FontItalic.ITALIC_NONE, postureWhich);
+    const oblique = new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, postureWhich);
+    const italic = new SvxPostureItem(FontItalic.ITALIC_NORMAL, alternateWhich);
+    const unknown = new SvxPostureItem(FontItalic.ITALIC_DONTKNOW, postureWhich);
     expect(none.Which()).toBe(postureWhich);
-    expect(none.GetPosture()).toBe(FontItalic.NONE);
+    expect(none.GetPosture()).toBe(FontItalic.ITALIC_NONE);
     expect(none.GetBoolValue()).toBe(false);
     expect(oblique.GetBoolValue()).toBe(true);
     expect(italic.GetBoolValue()).toBe(true);
-    expect(unknown.GetBoolValue()).toBe(false);
+    expect(unknown.GetBoolValue()).toBe(true);
+    expect(new SvxPostureItem(4 as FontItalic, postureWhich).GetPosture()).toBe(4);
     expect(italic.Clone()).not.toBe(italic);
     expect(italic.Clone().equals(italic)).toBe(true);
     expect(italic.equals(oblique)).toBe(false);
-    expect(italic.equals(new SvxPostureItem(FontItalic.NORMAL, postureWhich))).toBe(false);
-    expect(italic.equals(new SfxInt16Item(alternateWhich, FontItalic.NORMAL))).toBe(false);
+    expect(italic.equals(new SvxPostureItem(FontItalic.ITALIC_NORMAL, postureWhich))).toBe(true);
+    expect(italic.equals(new SfxInt16Item(alternateWhich, FontItalic.ITALIC_NORMAL))).toBe(false);
     expect(encodeSfxPoolItem(italic)).toEqual({
-      value: FontItalic.NORMAL,
+      value: FontItalic.ITALIC_NORMAL,
       which: alternateWhich,
     });
-    for (const value of [-1, 4, 1.5])
+    for (const value of [-1, 1.5])
       expect(
         throwing(
           /** Creates an invalid posture item. @returns Invalid item. */
@@ -136,72 +172,55 @@ describe("EditEngine character items" /** Groups pooled character item contracts
   });
 
   it("preserves FontLineStyle ordering and underline identity" /** Verifies SvxUnderlineItem. @returns Nothing. */, () => {
-    expect(FontLineStyle.NONE).toBe(0);
-    expect(FontLineStyle.SINGLE).toBe(1);
-    expect(FontLineStyle.BOLDWAVE).toBe(18);
-    const none = new SvxUnderlineItem(FontLineStyle.NONE, underlineWhich);
-    const single = new SvxUnderlineItem(FontLineStyle.SINGLE, underlineWhich);
+    expect(FontLineStyle.LINESTYLE_NONE).toBe(0);
+    expect(FontLineStyle.LINESTYLE_SINGLE).toBe(1);
+    expect(FontLineStyle.LINESTYLE_BOLDWAVE).toBe(18);
+    const none = new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, underlineWhich);
+    const single = new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, underlineWhich);
     expect(none.Which()).toBe(underlineWhich);
-    expect(none.GetLineStyle()).toBe(FontLineStyle.NONE);
+    expect(none.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_NONE);
     expect(none.GetBoolValue()).toBe(false);
     expect(single.GetBoolValue()).toBe(true);
     expect(single.Clone()).not.toBe(single);
     expect(single.Clone().equals(single)).toBe(true);
     expect(single.equals(none)).toBe(false);
-    expect(single.equals(new SvxUnderlineItem(FontLineStyle.SINGLE, alternateWhich))).toBe(false);
+    expect(
+      single.equals(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, alternateWhich)),
+    ).toBe(true);
     expect(single.equals(new SfxInt16Item(underlineWhich, 1))).toBe(false);
     expect(encodeSfxPoolItem(single)).toEqual({
-      value: FontLineStyle.SINGLE,
+      value: FontLineStyle.LINESTYLE_SINGLE,
       which: underlineWhich,
     });
-    for (const value of [-1, 19, 1.5])
-      expect(
-        throwing(
-          /** Creates an invalid underline item. @returns Invalid item. */
-          () => new SvxUnderlineItem(value as FontLineStyle, underlineWhich),
-        ),
-      ).toThrow("SvxUnderlineItem value is invalid");
+    for (const value of [-1, 19, 2147483647])
+      expect(new SvxUnderlineItem(value as FontLineStyle, underlineWhich).GetLineStyle()).toBe(
+        value,
+      );
   });
 
   it("preserves source-derived font-height and paragraph metric items", /** Covers validation, cloning, equality, and persistence for the style-default item subset. @returns Nothing. */ () => {
-    const height = new SvxFontHeightItem(240, weightWhich);
+    const height = new SvxFontHeightItem(240, 100, weightWhich);
     expect(height.GetHeight()).toBe(240);
-    expect(height.QueryValue()).toBe(240);
+    expect(height.QueryValue()).toEqual({ height: 240, prop: 100, propUnit: 13 });
     expect(height.Clone()).not.toBe(height);
     expect(height.Clone().equals(height)).toBe(true);
-    expect(height.equals(new SvxFontHeightItem(241, weightWhich))).toBe(false);
-    expect(height.equals(new SvxFontHeightItem(240, alternateWhich))).toBe(false);
+    expect(height.equals(new SvxFontHeightItem(241, 100, weightWhich))).toBe(false);
+    expect(height.equals(new SvxFontHeightItem(240, 100, alternateWhich))).toBe(true);
     expect(height.equals(new SfxInt16Item(weightWhich, 240))).toBe(false);
     expect(
       /** Creates an invalid font height. @returns Invalid item. */ () =>
-        new SvxFontHeightItem(0, weightWhich),
+        new SvxFontHeightItem(-1, 100, weightWhich),
     ).toThrow("value is invalid");
 
-    const line = new SvxLineSpacingItem(115, weightWhich);
+    const line = new SvxLineSpacingItem(200, weightWhich);
+    expect(line.GetPropLineSpace()).toBe(100);
+    expect(line.GetLineHeight()).toBe(200);
+    line.SetPropLineSpace(115);
     expect(line.GetPropLineSpace()).toBe(115);
-    expect(line.GetMode()).toBe("proportional");
-    expect(line.GetValue()).toBe(115);
-    expect(line.IsFontIndependent()).toBe(false);
-    expect(line.QueryValue()).toBe(115);
+    expect(line.QueryValue().Height).toBe(115);
     expect(line.Clone().equals(line)).toBe(true);
     expect(line.equals(new SvxLineSpacingItem(100, weightWhich))).toBe(false);
     expect(line.equals(new SfxInt16Item(weightWhich, 115))).toBe(false);
-    expect(new SvxLineSpacingItem(0, weightWhich).GetPropLineSpace()).toBe(0);
-    const fixed = new SvxLineSpacingItem(300, weightWhich, "fixed", true);
-    expect(fixed.GetPropLineSpace()).toBe(0);
-    expect(fixed.GetMode()).toBe("fixed");
-    expect(fixed.GetValue()).toBe(300);
-    expect(fixed.IsFontIndependent()).toBe(true);
-    expect(fixed.QueryValue()).toEqual([1, 300, 1]);
-    expect(fixed.Clone().equals(fixed)).toBe(true);
-    expect(fixed.equals(new SvxLineSpacingItem(300, weightWhich, "minimum", true))).toBe(false);
-    expect(fixed.equals(new SvxLineSpacingItem(300, weightWhich, "fixed"))).toBe(false);
-    expect(new SvxLineSpacingItem(115, weightWhich, "proportional", true).QueryValue()).toEqual([
-      0, 115, 1,
-    ]);
-    expect(
-      /** Creates an invalid line-height percentage. @returns Invalid item. */ () =>
-        new SvxLineSpacingItem(-1, weightWhich),
-    ).toThrow("value is invalid");
+    expect(new SvxLineSpacingItem(-1, weightWhich).GetLineHeight()).toBe(65535);
   });
 });

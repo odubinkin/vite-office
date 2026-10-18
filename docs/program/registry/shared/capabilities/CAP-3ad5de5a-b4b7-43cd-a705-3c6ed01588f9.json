@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3ad5de5a-b4b7-43cd-a705-3c6ed01588f9",
+    "capabilityId": "CAP-3ad5de5a-b4b7-43cd-a705-3c6ed01588f9",
+    "suite": "shared",
+    "subsystem": "paper-tray-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native unsigned byte values retain signed byte Any transport and original concrete copy/equality/hash.",
+      "Calc paper-tray default159 uses actual shared SvxPaperBinItem255 without duplicate storage."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion."
+    },
+    "capability": "Shared native byte values and paper-tray defaults",
+    "gaps": [
+      "Original numeric/localized presentation remains unported.",
+      "Real Calc pool/document/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/cintitem.ts",
+          "marker": "CntByteItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.pbin.ts",
+          "marker": "SvxPaperBinItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-byte-item.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/pbinitem.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/pageattr.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared native byte values and paper-tray defaults (task139)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/cintitem.cxx",
+          "marker": "CntByteItem::PutValue"
+        },
+        {
+          "path": "include/editeng/pbinitem.hxx",
+          "marker": "SvxPaperBinItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-byte-and-paper-tray-default",
+    "scopeLimitations": [
+      "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion.",
+      "Native test reference concerns general item-set ownership, not full printer or presentation QA."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

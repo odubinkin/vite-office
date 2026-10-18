@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4a9d2c31-fc36-4a82-acaa-0d56bfeb4d07",
+    "capabilityId": "CAP-4a9d2c31-fc36-4a82-acaa-0d56bfeb4d07",
+    "suite": "shared",
+    "subsystem": "font-text-line-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original text-line hierarchy owns full independent color/complex/enum values, with payload equality and native bool/scalar member operations.",
+      "Canonical enum declarations and real Calc104/105defaults are reused by Writer consumers."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task145 replaces the incorrect scalar-only underline with original SvxTextLineItem enum/Color/ComplexColor value ownership and actual SvxUnderlineItem/SvxOverlineItem specializations. Reuse SfxEnumItem, Tools Color and docmodel ComplexColor; JS GC replaces native instance-manager/lifetime machinery. Defaults are NONE and COL_TRANSPARENT; independent copies retain all payloads; concrete-type/style/color/complex equality ignores Which. Native bool methods, unrestricted initialized enum value domain, signed16 style query, int32 style extraction, bool/Color/own-color member Any operations, alpha preservation and unknown-member untouched success are represented. Actual XComplexColor interface transport is explicitly unsupported (false), not a fabricated object/service; localized EditResId/GetColorString presentation remains unported. Existing browser no-argument style projection is retained as its established transfer boundary, without claiming full native transport. Canonical Tools FontLineStyle includes19LINESTYLE names and native size sentinel; all actual old enum users are migrated, with no duplicate enum or compatibility aliases. Real Calc underline104/overline105 defaults are witnessed without fabricating ScDocumentPool. Complete pool/document/connected UI/ODS and broader presentation/interface parity remain pending; intentional browser I/O/recovery choices preserved."
+    },
+    "capability": "Shared native text-line values for Calc underline and overline",
+    "gaps": [
+      "Real XComplexColor interface transport and localized presentation services remain unported.",
+      "Complete native Calc pool/document/connected UI and same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.ts",
+          "marker": "SvxTextLineItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/udlnitem.ts",
+          "marker": "SvxTextLineItem"
+        },
+        {
+          "path": "apps/office/src/tools/inc/fontenum.ts",
+          "marker": "FontLineStyle"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-text-line.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/text-line-items.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared native text-line values for Calc underline and overline (task145)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxTextLineItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/udlnitem.hxx",
+          "marker": "SvxTextLineItem"
+        },
+        {
+          "path": "include/tools/fontenum.hxx",
+          "marker": "FontLineStyle"
+        },
+        {
+          "path": "sc/source/core/data/docpool.cxx",
+          "marker": "ATTR_FONT_OVERLINE"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_CharacterProperties.java",
+          "marker": "CharUnderline"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-text-line-value-hierarchy",
+    "scopeLimitations": [
+      "Task145 replaces the incorrect scalar-only underline with original SvxTextLineItem enum/Color/ComplexColor value ownership and actual SvxUnderlineItem/SvxOverlineItem specializations. Reuse SfxEnumItem, Tools Color and docmodel ComplexColor; JS GC replaces native instance-manager/lifetime machinery. Defaults are NONE and COL_TRANSPARENT; independent copies retain all payloads; concrete-type/style/color/complex equality ignores Which. Native bool methods, unrestricted initialized enum value domain, signed16 style query, int32 style extraction, bool/Color/own-color member Any operations, alpha preservation and unknown-member untouched success are represented. Actual XComplexColor interface transport is explicitly unsupported (false), not a fabricated object/service; localized EditResId/GetColorString presentation remains unported. Existing browser no-argument style projection is retained as its established transfer boundary, without claiming full native transport. Canonical Tools FontLineStyle includes19LINESTYLE names and native size sentinel; all actual old enum users are migrated, with no duplicate enum or compatibility aliases. Real Calc underline104/overline105 defaults are witnessed without fabricating ScDocumentPool. Complete pool/document/connected UI/ODS and broader presentation/interface parity remain pending; intentional browser I/O/recovery choices preserved.",
+      "Native CharacterProperties Java QA is a broader UNO property witness; its full resource/complex-color service and Writer filter behavior is not claimed ported.",
+      "CharacterProperties Java QA declares CharUnderline in its generic MultiPropertyTest property contract; there is no invented _CharUnderline method and no native test execution claim.",
+      "Text-line class bodies fit the enforced source-size limit in canonical textitem.ts; no split filename or filename-divergence exception is introduced."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

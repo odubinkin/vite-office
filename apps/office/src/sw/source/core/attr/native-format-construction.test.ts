@@ -5,19 +5,15 @@ import { SwFormat } from "./format";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { SwClient, type SwModify } from "../../../inc/calbck";
+import { SwClient, type SwModify, SwIterator } from "../../../inc/calbck";
 import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
 /** Reads actual registered original clients. @param format - Native broadcaster. @returns Original client identities. */
 function clients(format: SwModify): unknown[] {
   const result: unknown[] = [];
-  format.ForAllListeners(
-    /** Captures native registration. @param client - Original client. @returns Continue flag. */ (
-      client,
-    ) => {
-      result.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, format)) {
+    result.push(client);
+    continue writerClients0;
+  }
   return result;
 }
 it("native format constructor registers original inheritance without document mutation", /** Checks actual parent, item set, inherited values and source notification contracts. @returns Nothing. */ () => {

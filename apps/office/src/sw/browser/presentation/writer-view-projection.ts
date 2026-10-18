@@ -1,4 +1,6 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { projectWriterLineSpacing } from "../../source/core/text/itrform2";
+
 import { WriterNativeFormatObserver } from "./writer-native-format-observer";
 import {
   populateStyleToolbox,
@@ -10,7 +12,6 @@ import {
   resolveSwListTextLeftMargin,
   resolveSwListFirstLineIndent,
 } from "../../source/core/txtnode/ndtxt-list-indent";
-
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
@@ -28,11 +29,8 @@ import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
 import { SwTableCursor } from "../../source/core/crsr/swcrsr";
 import type { SwView } from "../../source/uibase/uiview/view";
-import {
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStopItem,
-} from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -71,7 +69,7 @@ import {
   type SwNumberPortionFont,
 } from "../../source/core/text/txtfld";
 import type { SwNumberingTabSettings } from "../../source/core/text/txttab";
-
+import { getFontFamilyGeneric } from "../../../xmloff/source/style/fonthdl";
 /** Detached document style selector metadata. */
 export type WriterParagraphStyleOption = StyleToolboxEntry;
 
@@ -154,7 +152,6 @@ export interface WriterParagraphComputedStyle {
   readonly lineHeight: number;
   readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
   readonly lineSpacingValue?: number;
-  readonly fontIndependentLineSpacing?: boolean;
   readonly tabStopPositionPt?: number | undefined;
   readonly tabStopsPt?: readonly number[] | undefined;
   readonly keepWithNext?: boolean;
@@ -258,7 +255,16 @@ export class WriterViewProjection {
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
         const firstLine = node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem;
         const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-        const explicitTabStops = tabItem.GetStops().flatMap(
+        const explicitTabStops = Array.from(
+          { length: tabItem.Count() },
+          /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+            unused,
+            index,
+          ) => {
+            void unused;
+            return tabItem.At(index);
+          },
+        ).flatMap(
           /** Excludes default hit targets while retaining each explicit tab's item index. @param stop - Writer tab stop. @param index - Raw item index. @returns Immutable ruler identity. */
           (stop, index) =>
             stop.GetAdjustment() === SvxTabAdjust.Default
@@ -282,7 +288,7 @@ export class WriterViewProjection {
         const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
-        const fontFamilyGeneric = font.GetGenericFamily();
+        const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({
           ...(rulerTabStops.length === 0 ? {} : { rulerTabStops: Object.freeze(rulerTabStops) }),
           rulerTabSettings: Object.freeze({
@@ -298,7 +304,7 @@ export class WriterViewProjection {
             contextualSpacing: spacing.GetContext(),
             firstLineIndentPt: firstLine.ResolveTextFirstLineOffset() / 20,
             resolvedFirstLineIndentPt: node.GetParagraphFirstLineIndent() / 20,
-            fontFamily: font.GetResolvedFamilyName(),
+            fontFamily: font.GetFamilyName(),
             ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
               ? "italic"
@@ -312,9 +318,8 @@ export class WriterViewProjection {
               lineSpacing,
               (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
             ),
-            lineSpacingMode: lineSpacing.GetMode(),
-            lineSpacingValue: lineSpacing.GetValue(),
-            fontIndependentLineSpacing: lineSpacing.IsFontIndependent(),
+            lineSpacingMode: projectWriterLineSpacing(lineSpacing).mode,
+            lineSpacingValue: projectWriterLineSpacing(lineSpacing).value,
             tabStopPositionPt: tabStopsPt[0],
             tabStopsPt,
             keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
@@ -343,7 +348,16 @@ export class WriterViewProjection {
                           .GetDocumentSettingManager()
                           .get("TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"),
                         stops: Object.freeze(
-                          tabItem.GetStops().map(
+                          Array.from(
+                            { length: tabItem.Count() },
+                            /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+                              unused,
+                              index,
+                            ) => {
+                              void unused;
+                              return tabItem.At(index);
+                            },
+                          ).map(
                             /** Copies original native tabs without filtering zero/default entries. @param stop - Original tab. @returns Immutable native inputs. */
                             (stop) =>
                               Object.freeze({
@@ -614,7 +628,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       font = handler.ReadItem(RES_CHRATR_FONT) as SvxFontItem;
     const inet = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default)?.GetAttr();
     const link = inet instanceof SwFormatINetFormat ? inet.GetHyperlink() : undefined;
-    const generic = font.GetGenericFamily();
+    const generic = getFontFamilyGeneric(font.GetFamily());
     portions.push(
       Object.freeze({
         startOffset: start,
@@ -631,7 +645,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             : {}),
           ...(authored(RES_CHRATR_FONT)
             ? {
-                fontFamily: font.GetResolvedFamilyName(),
+                fontFamily: font.GetFamilyName(),
                 ...(generic === undefined ? {} : { fontFamilyGeneric: generic }),
               }
             : {}),

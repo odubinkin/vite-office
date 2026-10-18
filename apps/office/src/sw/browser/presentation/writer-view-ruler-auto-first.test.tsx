@@ -1,4 +1,5 @@
 /** @fileoverview Checks effective automatic first-line ruler visibility and actual Writer history. */
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -7,7 +8,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../editeng/source/items/frmitems";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import {
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -40,11 +41,7 @@ function fixture(auto = false, value = 367, inherited = false) {
   shell.SetParagraphItems([
     new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
     new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
-    SvxTabStopItem.FromStops(
-      RES_PARATR_TABSTOP,
-      [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")],
-      7,
-    ),
+    createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(1700, SvxTabAdjust.Right, ",", "_")], 7),
   ]);
   const item = (
     /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {

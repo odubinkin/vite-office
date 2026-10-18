@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native border-page presets, metric rules, ownership and separate item deltas. */
+import { Color } from "../../../tools/inc/color";
 import { expect, it } from "vitest";
 import { SvxBorderTabPage } from "./border";
 import {
@@ -148,7 +149,7 @@ it("source FillItemSet publishes info-only without unchanged outer box or edited
   expect(result.info.GetDefDist()).toBe(0);
   expect(f.info.IsMinDist()).toBe(true);
   expect((f.input.Get(INNER) as SvxBoxInfoItem).GetDefDist()).toBe(28);
-  result.info.SetLine(new SvxBorderLine(1, 10), 0);
+  result.info.SetLine(new SvxBorderLine(new Color(1), 10), 0);
   expect((f.input.Get(INNER) as SvxBoxInfoItem).GetHori()).toBeUndefined();
 });
 it("default-state equal border items clear output entries while preserving native policies", /** Checks source default-state equality clearing. @returns Nothing. */ () => {
@@ -211,7 +212,7 @@ it("mixed native distance/line input retains dontcare validity while explicit ou
   const f = fixture();
   f.info.SetValid(Valid.TOP, false);
   f.info.SetValid(Valid.DISTANCE, false);
-  f.box.SetLine(new SvxBorderLine(0x345678, 20), 1);
+  f.box.SetLine(new SvxBorderLine(new Color(0x345678), 20), 1);
   f.input.Put(f.box);
   f.input.Put(f.info);
   const page = new SvxBorderTabPage(f.input, BOX);
@@ -223,29 +224,29 @@ it("mixed native distance/line input retains dontcare validity while explicit ou
   expect(result.info.IsValid(Valid.TOP)).toBe(false);
   expect(result.info.IsValid(Valid.DISTANCE)).toBe(true);
   expect(result.box.GetLeft()?.GetWidth()).toBe(20);
-  expect(result.box.GetBottom()?.GetColor()).toBe(0x345678);
+  expect(result.box.GetBottom()?.GetColor().toUInt32()).toBe(0x345678);
   expect(result.box.GetDistance(0)).toBe(0);
 });
 it("native uniform visible lines select together; unequal lines retain cache changes without altering them", /** Checks selected-line-only style/color edits and Reset ownership. @returns Nothing. */ () => {
   const f = fixture();
   for (const edge of [0, 1, 2, 3])
-    f.box.SetLine(new SvxBorderLine(0xabcdef, 30, Style.DOUBLE), edge);
+    f.box.SetLine(new SvxBorderLine(new Color(0xabcdef), 30, Style.DOUBLE), edge);
   f.input.Put(f.box);
   const page = new SvxBorderTabPage(f.input, BOX);
   expect(page.GetLineStyle()).toBe(Style.DOUBLE);
   expect(page.GetLineWidth()).toBe(150);
-  expect(page.GetLineColor()).toBe(0xabcdef);
-  page.SelColHdl_Impl(0x123456);
-  expect(output(page, f.input).box.GetTop()?.GetColor()).toBe(0x123456);
+  expect(page.GetLineColor().toUInt32()).toBe(0xabcdef);
+  page.SelColHdl_Impl(new Color(0x123456));
+  expect(output(page, f.input).box.GetTop()?.GetColor().toUInt32()).toBe(0x123456);
   page.Reset();
-  expect(page.GetLineColor()).toBe(0xabcdef);
-  f.box.SetLine(new SvxBorderLine(1, 45), 1);
+  expect(page.GetLineColor().toUInt32()).toBe(0xabcdef);
+  f.box.SetLine(new SvxBorderLine(new Color(1), 45), 1);
   f.input.Put(f.box);
   const mixed = new SvxBorderTabPage(f.input, BOX);
   expect(mixed.GetLineStyle()).toBe(Style.SOLID);
-  expect(mixed.GetLineColor()).toBe(0);
+  expect(mixed.GetLineColor().toUInt32()).toBe(0);
   expect(mixed.GetLineWidth()).toBe(5);
-  mixed.SelColHdl_Impl(0x888888);
+  mixed.SelColHdl_Impl(new Color(0x888888));
   mixed.ModifyWidthMFHdl_Impl(200);
   expect(output(mixed, f.input).box.GetBottom()?.GetWidth()).toBe(45);
 });

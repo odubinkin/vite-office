@@ -1,4 +1,5 @@
 /** @fileoverview Verifies represented native line/box/info contracts with independent numeric expectations. */
+import { Color, ColorTransparency } from "../../../tools/inc/color";
 import { expect, it } from "vitest";
 import { SvxBorderLine, SvxBorderLineStyle, roundBorderMetric } from "./borderline";
 import {
@@ -10,14 +11,26 @@ import {
 } from "./frmitems";
 import { SvxSizeItem } from "./frmitems";
 
+/** Observes all published native fields at the existing browser-record assertions and inputs. @param line - Optional native border. @param convert - Convert to mm100. @returns The complete existing six-field browser record. */
+function lineRecord(line: SvxBorderLine | undefined, convert = false) {
+  const value = SvxBoxItem.SvxLineToLine(line, convert);
+  return {
+    Color: value.Color,
+    InnerLineWidth: value.InnerLineWidth,
+    OuterLineWidth: value.OuterLineWidth,
+    LineDistance: value.LineDistance,
+    LineStyle: value.LineStyle,
+    LineWidth: value.LineWidth,
+  };
+}
 it("preserves native distance minima and drawing-width members with absent lines", /** Checks source-defined member fallbacks and ignored invalid inner directions. @returns Nothing. */ () => {
   const box = new SvxBoxItem(113),
     info = new SvxBoxInfoItem(10023),
-    line = new SvxBorderLine(0x112233, 20);
+    line = new SvxBorderLine(new Color(0x112233), 20);
   box.SetAllDistances(9);
   box.SetDistance(8, 2);
   expect(box.GetSmallestDistance()).toBe(8);
-  expect(box.QueryValue(99)).toEqual(SvxBoxItem.SvxLineToLine(undefined));
+  expect(box.QueryValue(99)).toEqual(lineRecord(undefined));
   expect(box.PutValue(1, 14)).toBe(true);
   expect(box.HasBorder()).toBe(false);
   box.SetLine(line, 0);
@@ -31,8 +44,8 @@ it("preserves native distance minima and drawing-width members with absent lines
 it("retains native partial updates and rejects malformed box and info UNO sequences", /** Checks sequence admission, native default fields and invalid edges. @returns Nothing. */ () => {
   const box = new SvxBoxItem(113),
     info = new SvxBoxInfoItem(10023),
-    line = new SvxBorderLine(0x112233, 20);
-  const uno = SvxBoxItem.SvxLineToLine(line);
+    line = new SvxBorderLine(new Color(0x112233), 20);
+  const uno = lineRecord(line);
   expect(box.PutValue({ ...uno, Color: "bad" }, 1)).toBe(false);
   expect(
     box.PutValue({ Color: 0x112233, InnerLineWidth: 0, OuterLineWidth: 20, LineDistance: 0 }, 1),
@@ -74,14 +87,14 @@ it("retains native partial updates and rejects malformed box and info UNO sequen
   expect(info.PutValue([uno, uno, 7, 127, 127], 0x80)).toBe(true);
   expect(info.GetDefDist()).toBe(72);
   expect(info.QueryValue(0x80)).toEqual([
-    SvxBoxItem.SvxLineToLine(info.GetHori(), true),
-    SvxBoxItem.SvxLineToLine(info.GetVert(), true),
+    lineRecord(info.GetHori(), true),
+    lineRecord(info.GetVert(), true),
     7,
     127,
     127,
   ]);
   expect(info.PutValue(uno, 2)).toBe(true);
-  expect(info.PutValue(SvxBoxItem.SvxLineToLine(undefined), 1)).toBe(true);
+  expect(info.PutValue(lineRecord(undefined), 1)).toBe(true);
   expect(info.GetHori()?.GetWidth()).toBe(11);
   const missingInner = info.Clone();
   missingInner.SetLine(undefined, 0);
@@ -121,14 +134,14 @@ it.each([
     inner,
     gap,
   ) => {
-    const line = new SvxBorderLine(0x112233, 90, style);
+    const line = new SvxBorderLine(new Color(0x112233), 90, style);
     expect([line.GetOutWidth(), line.GetInWidth(), line.GetDistance()]).toEqual([
       outer,
       inner,
       gap,
     ]);
     expect(line.GetScaledWidth()).toBe(outer + inner + gap);
-    expect(line.GetColor()).toBe(0x112233);
+    expect(line.GetColor().toUInt32()).toBe(0x112233);
     expect(line.GetWidth()).toBe(90);
     expect(line.GetBorderLineStyle()).toBe(style);
   },
@@ -136,7 +149,7 @@ it.each([
 it("owns native line state, replaces metric scale and preserves custom doubles", /** Checks deep copying, native equality and primitive transport. @returns Nothing. */ () => {
   const empty = new SvxBorderLine();
   expect(empty.isEmpty()).toBe(true);
-  const line = new SvxBorderLine(0x112233, 90, SvxBorderLineStyle.THINTHICK_SMALLGAP);
+  const line = new SvxBorderLine(new Color(0x112233), 90, SvxBorderLineStyle.THINTHICK_SMALLGAP);
   expect(line.isDouble()).toBe(true);
   line.SetMirrorWidths();
   line.SetMirrorWidths();
@@ -149,7 +162,7 @@ it("owns native line state, replaces metric scale and preserves custom doubles",
   expect(copy.toJSON()).toEqual(line.toJSON());
   copy.ScaleMetrics(1);
   expect(copy.equals(line)).toBe(true);
-  copy.SetColor(0xffffff);
+  copy.SetColor(new Color(0xffffff));
   expect(copy.equals(line)).toBe(false);
   copy.SetColor(line.GetColor());
   copy.SetWidth(91);
@@ -157,7 +170,7 @@ it("owns native line state, replaces metric scale and preserves custom doubles",
   copy.SetWidth(90);
   copy.SetBorderLineStyle(0);
   expect(copy.equals(line)).toBe(false);
-  expect(line.equals(new SvxBorderLine(0x112233, 90, 4))).toBe(false);
+  expect(line.equals(new SvxBorderLine(new Color(0x112233), 90, 4))).toBe(false);
   const custom = new SvxBorderLine();
   custom.GuessLinesWidths(3, 7, 13, 19);
   expect(custom.GetWidth()).toBe(39);
@@ -181,7 +194,7 @@ it("owns native line state, replaces metric scale and preserves custom doubles",
   }
   expect(roundBorderMetric(-1, 0.5)).toBe(-1);
   expect(roundBorderMetric(1, 0.5)).toBe(1);
-  expect(new SvxBorderLine(0, 65535).GetScaledWidth()).toBe(65535);
+  expect(new SvxBorderLine(new Color(0), 65535).GetScaledWidth()).toBe(65535);
 });
 it("keeps four owned lines and signed distances with native negative-read and overflow policy", /** Checks independent public item contracts. @returns Nothing. */ () => {
   expect([
@@ -191,7 +204,7 @@ it("keeps four owned lines and signed distances with native negative-read and ov
     SvxBoxItemLine.RIGHT,
   ]).toEqual([0, 1, 2, 3]);
   const item = new SvxBoxItem(113),
-    line = new SvxBorderLine(0x112233, 20);
+    line = new SvxBorderLine(new Color(0x112233), 20);
   expect(item.QueryValue()).toEqual([
     ...Array.from(
       { length: 4 },
@@ -225,7 +238,7 @@ it("keeps four owned lines and signed distances with native negative-read and ov
   ]).toEqual([20, 20, 20, 20]);
   const copy = item.Clone();
   expect(copy.equals(item)).toBe(true);
-  copy.GetTop()?.SetColor(0xffffff);
+  copy.GetTop()?.SetColor(new Color(0xffffff));
   expect(copy.equals(item)).toBe(false);
   expect(copy.GetTop()).not.toBe(item.GetTop());
   expect(item.equals(new SvxBoxItem(114))).toBe(false);
@@ -265,7 +278,7 @@ it("keeps four owned lines and signed distances with native negative-read and ov
   expect(paddingOnly.HasBorder()).toBe(false);
   expect(paddingOnly.HasBorder(true)).toBe(true);
   expect(paddingOnly.CalcLineSpace(2, true)).toBe(20);
-  item.SetLine(new SvxBorderLine(0, 32767), 3);
+  item.SetLine(new SvxBorderLine(new Color(0), 32767), 3);
   item.SetDistance(1, 3);
   expect(item.CalcLineSpace(3, false, true)).toBe(-32768);
 });
@@ -334,14 +347,8 @@ it("roundtrips native UNO member ordering and both measurement units", /** Check
 });
 it("keeps native info validity127, independent directions, flags, metrics and owned lines", /** Checks complete source-defined info defaults and mutation. @returns Nothing. */ () => {
   const info = new SvxBoxInfoItem(10023),
-    line = new SvxBorderLine(0x112233, 20);
-  expect(info.QueryValue()).toEqual([
-    SvxBoxItem.SvxLineToLine(undefined),
-    SvxBoxItem.SvxLineToLine(undefined),
-    0,
-    127,
-    0,
-  ]);
+    line = new SvxBorderLine(new Color(0x112233), 20);
+  expect(info.QueryValue()).toEqual([lineRecord(undefined), lineRecord(undefined), 0, 127, 0]);
   expect(info.IsValid(SvxBoxInfoItemValidFlags.DISABLE)).toBe(false);
   info.EnableHor(true);
   expect(info.IsHor()).toBe(true);
@@ -354,9 +361,9 @@ it("keeps native info validity127, independent directions, flags, metrics and ow
   info.SetDefDist(72);
   info.SetLine(line, 0);
   info.SetLine(line, 1);
-  line.SetColor(0xffffff);
-  expect(info.GetHori()?.GetColor()).toBe(0x112233);
-  expect(info.GetVert()?.GetColor()).toBe(0x112233);
+  line.SetColor(new Color(0xffffff));
+  expect(info.GetHori()?.GetColor().toUInt32()).toBe(0x112233);
+  expect(info.GetVert()?.GetColor().toUInt32()).toBe(0x112233);
   expect(info.GetLine(0)).toBe(info.GetHori());
   expect(info.QueryValue(0x2e)).toBe(7);
   expect(info.QueryValue(0x29 | 0x80)).toBe(127);
@@ -398,4 +405,41 @@ it("returns native zero drawing width for an absent line", /** Checks the defaul
   expect(box.CalcLineWidth(0)).toBe(0);
   expect(box.CalcLineSpace(0)).toBe(0);
   expect(box.CalcLineSpace(0, true)).toBe(42);
+});
+
+it("owns canonical Color values while retaining a stable borrowed color reference", /** Checks native copy/assignment semantics and signed UNO and primitive record boundaries. @returns Nothing. */ () => {
+  const color = new Color(ColorTransparency, 0x80112233, "ColorTransparencyTag"),
+    line = new SvxBorderLine(color, 20),
+    borrowed = line.GetColor();
+  color.SetRed(0xff);
+  expect(borrowed.toUInt32()).toBe(0x80112233);
+  const next = new Color(ColorTransparency, 0x40224466, "ColorTransparencyTag");
+  line.SetColor(next);
+  expect(line.GetColor()).toBe(borrowed);
+  expect(borrowed.toUInt32()).toBe(0x40224466);
+  next.SetBlue(0);
+  expect(borrowed.GetBlue()).toBe(0x66);
+  const clone = line.Clone();
+  expect(clone.GetColor()).not.toBe(borrowed);
+  expect(clone.equals(line)).toBe(true);
+  clone.SetColor(new Color(0x224466));
+  expect(clone.equals(line)).toBe(false);
+  expect(line.toJSON().color).toBe(0x40224466);
+  expect(SvxBorderLine.FromRecord(line.toJSON()).GetColor().toUInt32()).toBe(0x40224466);
+  expect(new SvxBorderLine(null).GetColor().toUInt32()).toBe(0);
+  const signed = new SvxBorderLine(
+    new Color(ColorTransparency, 0x80112233, "ColorTransparencyTag"),
+    20,
+  );
+  expect(lineRecord(signed).Color).toBe(0x80112233 | 0);
+  const box = new SvxBoxItem(113);
+  expect(box.PutValue(lineRecord(signed), 1)).toBe(true);
+});
+
+it("retains the native default-true validity setter without resetting unrelated flags", /** Existing shared owner remains covered after size responsibility extraction. @returns Nothing. */ () => {
+  const item = new SvxBoxInfoItem(1);
+  item.SetValid(SvxBoxInfoItemValidFlags.TOP, false);
+  expect(item.IsValid(SvxBoxInfoItemValidFlags.TOP)).toBe(false);
+  item.SetValid(SvxBoxInfoItemValidFlags.TOP);
+  expect(item.IsValid(SvxBoxInfoItemValidFlags.TOP)).toBe(true);
 });

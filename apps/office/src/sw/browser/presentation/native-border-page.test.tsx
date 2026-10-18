@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native border-page UI composition and original document/history integration. */
+import { Color } from "../../../tools/inc/color";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen, fireEvent } from "@testing-library/react";
@@ -139,7 +140,7 @@ function fixture(distance = true) {
     box = new SvxBoxItem(1),
     info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
   for (const edge of [0, 1, 2, 3]) {
-    box.SetLine(new SvxBorderLine(0x123456, 20), edge);
+    box.SetLine(new SvxBorderLine(new Color(0x123456), 20), edge);
     box.SetDistance(100 + edge * 37, edge);
   }
   info.SetTable(true);
@@ -192,7 +193,7 @@ it("native preset and selected style/color/thickness changes retain independent 
   f.page.FillItemSet(output);
   const box = output.Get(1) as SvxBoxItem;
   expect(box.GetTop()?.GetWidth()).toBe(25);
-  expect(box.GetTop()?.GetColor()).toBe(0xabcdef);
+  expect(box.GetTop()?.GetColor().toUInt32()).toBe(0xabcdef);
   expect(box.GetTop()?.GetBorderLineStyle()).toBe(Style.DOUBLE_THIN);
   expect(
     [0, 1, 2, 3].map(
@@ -295,7 +296,7 @@ it("actual selected native border page applies inner/outer/padding items to orig
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(boxes[0]?.GetBox().GetTop()).toBeUndefined();
     expect(boxes[2]?.GetBox().GetTop()?.GetWidth()).toBe(45);
-    expect(boxes[2]?.GetBox().GetTop()?.GetColor()).toBe(0xabcdef);
+    expect(boxes[2]?.GetBox().GetTop()?.GetColor().toUInt32()).toBe(0xabcdef);
     expect(boxes[2]?.GetBox().GetDistance(0)).toBe(170);
     expect(boxes[2]?.GetBox().GetDistance(1)).toBe(28);
     expect(boxes[2]?.GetBox().GetRight()).toBeUndefined();
@@ -304,7 +305,7 @@ it("actual selected native border page applies inner/outer/padding items to orig
       expect(shell.Undo()).toBe(true);
       expect(boxes[2]?.GetBox().GetTop()).toBeUndefined();
       expect(shell.Redo()).toBe(true);
-      expect(boxes[2]?.GetBox().GetTop()?.GetColor()).toBe(0xabcdef);
+      expect(boxes[2]?.GetBox().GetTop()?.GetColor().toUInt32()).toBe(0xabcdef);
       expect(table.GetTabLines()[1]?.GetTabBoxes()[0]).toBe(boxes[2]);
     }
     const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Native page" }), {

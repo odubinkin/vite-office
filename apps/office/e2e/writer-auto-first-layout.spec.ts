@@ -1,11 +1,13 @@
 /** @fileoverview Checks real automatic first-glyph layout independently of authored ruler/dialog values. */
+import { SvxLineSpaceRule } from "../src/editeng/inc/svxenum";
+
 import { expect, test } from "@playwright/test";
 import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
 } from "../src/editeng/source/items/frmitems";
-import { SvxLineSpacingItem } from "../src/editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../src/editeng/inc/lspcitem";
 import { SvxFontHeightItem } from "../src/editeng/source/items/textitem";
 import type { OdtWorkerImportResult } from "../src/sw/browser/filter/xml/odt-worker-runtime";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
@@ -38,6 +40,9 @@ for (const width of [1280, 390])
         .set("AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE", disregard);
       const shell = new SwWrtShell(new SwDocShell(document, metadata));
       shell.Insert("AutomaticBodyLayoutProof");
+      const fixedSpacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+      fixedSpacing.SetLineHeight(500);
+      fixedSpacing.SetLineSpaceRule(SvxLineSpaceRule.Fix);
       shell.SetParagraphItems([
         (
           /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
@@ -50,18 +55,18 @@ for (const width of [1280, 390])
           }
         )(),
         new SvxTextLeftMarginItem(SvxIndentValue.twips(487), RES_MARGIN_TEXTLEFT),
-        new SvxFontHeightItem(360, RES_CHRATR_FONTSIZE),
-        new SvxFontHeightItem(360, RES_CHRATR_CJK_FONTSIZE),
-        new SvxFontHeightItem(360, RES_CHRATR_CTL_FONTSIZE),
-        new SvxLineSpacingItem(500, RES_PARATR_LINESPACING, "fixed"),
+        new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE),
+        new SvxFontHeightItem(360, 100, RES_CHRATR_CJK_FONTSIZE),
+        new SvxFontHeightItem(360, 100, RES_CHRATR_CTL_FONTSIZE),
+        fixedSpacing,
       ]);
       shell.SplitNode();
       shell.Insert("UntouchedLayoutProof");
       shell.SetParagraphItems([
         new SvxFirstLineIndentItem(SvxIndentValue.twips(-120), RES_MARGIN_FIRSTLINE),
-        new SvxFontHeightItem(240, RES_CHRATR_FONTSIZE),
-        new SvxFontHeightItem(240, RES_CHRATR_CJK_FONTSIZE),
-        new SvxFontHeightItem(240, RES_CHRATR_CTL_FONTSIZE),
+        new SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE),
+        new SvxFontHeightItem(240, 100, RES_CHRATR_CJK_FONTSIZE),
+        new SvxFontHeightItem(240, 100, RES_CHRATR_CTL_FONTSIZE),
       ]);
       const bytes = writeOdtDocument(document, metadata);
       if (!disregard) {

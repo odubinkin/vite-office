@@ -1,0 +1,199 @@
+---
+id: "202610141239-071SBD"
+title: "Port original shared map and field unit conversions for Calc font metrics"
+result_summary: "Added canonical shared metric owners required by font-height defaults, reused actual o3tl conversions and recorded CALC109.7relatedtests2files4ownersraw100;168Calc64files33ownersraw100;30boundaries12gatespass. No native builds/memory mechanisms/full readiness claim. Continue canonical font-height and actual document/UI/ODS preparation; full regression then pause at actual readiness."
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 17
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-14T12:40:46.804Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-14T12:48:13.493Z"
+  updated_by: "CODER"
+  note: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-14T12:48:11.158Z"
+  updated_by: "EVALUATOR"
+  note: "Original shared map/field metric owners and5scalar helpers satisfy approved task at002a4ccfab7f296f6d71e2cb6e603f849dbc3557; same-agent phase, not independent."
+  evaluated_sha: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557"
+  blueprint_digest: "6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621"
+  evidence_refs:
+    - ".agentplane/tasks/202610141239-071SBD/README.md"
+    - ".agentplane/tasks/202610141239-071SBD/quality/20261014-124811158-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610141239-071SBD/quality/20261014-124811158-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610141239-071SBD/quality/20261014-124811158-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610141239-071SBD/blueprint/resolved-snapshot.json"
+    - "output/playwright/task125-checks/exact-review.json"
+    - "output/playwright/task125-checks/value-coverage-audit.json"
+    - "output/playwright/task125-checks/gates-results.json"
+  findings:
+    - "Exact18paths4changed14new and3653to3667current source hashes;10native pins. New literal independent matrix covers all unit maps, defaults, pixel overrides, signed ties, float32casting and same-direction ControlToItem. Shared4completeowners152S70B18F143L raw100, Calc168/64files33ownersraw100,7relatedtests2files,30boundaries12gates pass. Inventory/provenance foundation statuses and no duplicate header declaration ownership. CALC109 records suspicious behavior without changing source semantics. No native compilation/generator/memory ownership mechanisms."
+commit:
+  hash: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557"
+  message: "🚧 071SBD core: port original shared map and field metric conversions"
+comments:
+  -
+    author: "CODER"
+    body: "Start: implement original shared metric units and scalar helpers for canonical Calc font height dependency."
+  -
+    author: "CODER"
+    body: "Verified: original map/field units and5SVTools scalar helpers; native direction and rounding preserved with complete shared/Calc raw100."
+events:
+  -
+    type: "status"
+    at: "2026-10-14T12:40:57.629Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: implement original shared metric units and scalar helpers for canonical Calc font height dependency."
+  -
+    type: "verify"
+    at: "2026-10-14T12:48:13.493Z"
+    author: "CODER"
+    state: "ok"
+    note: "002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet."
+  -
+    type: "status"
+    at: "2026-10-14T12:48:25.592Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: original map/field units and5SVTools scalar helpers; native direction and rounding preserved with complete shared/Calc raw100."
+doc_version: 3
+doc_updated_at: "2026-10-14T12:48:25.594Z"
+doc_updated_by: "CODER"
+description: "Complete native MapUnit/FieldUnit owners and five scalar SVTools unit helpers required by shared font-height item; reuse existing o3tl integer/floating conversions, preserve suspicious ControlToItem direction, no document stubs or memory mechanisms."
+sections:
+  Summary: "Port original Tools MapUnit/FieldUnit and SVTools scalar unit helpers needed by canonical font-height attributes for the real Calc document pool. User goal remains complete Calc; this prerequisite alone is not UI/ODS readiness."
+  Scope: "18 intentional source/metadata/docs/tooling paths: new tools/inc/mapunit.ts, tools/inc/fldunit.ts, svtools/inc/unitconv.ts, svtools/source/misc/unitconv.ts and shared native-unitconv.test.ts;8runtime/provenance records,1sharedcapability; calc-core and calc-upstream-suspected-issues docs; module-boundary checker and tests. No Calc or Writer fake model/default provider, no unrelated fixes. Actual svtools->tools/o3tl dependencies only, retain reverse/browser guards. Native pinned source local only; all changes in calc checkout/branch."
+  Plan: "Implement all MapUnit/FieldUnit declarations and their complete o3tl mappings including pixel override/defaultinvalid. Implement5native scalar helpers CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit using real existing o3tl integral/floating families. BigInt represents native tools::Long, CalcToUnit number is explicitly float32input before double conversion/std::round away fromzero. Preserve ControlToItem original same-direction delegation; CALC109 documents it without changing behavior. TransformMetric overflow/status overload and UI MetricSpinButton functions remain pending, not stubbed/exported. Independent literal rational matrix/native values/negative halves/invalidunits/pixel overrides distinguish behavior from JS Math.round and plausible inverse. Update original provenance/runtime states with bounded foundation records, no broad native certification. Run strict complete shared raw100 and whole Calc raw100 with4reference links absent/restoredfinally, boundary tests12focusedgates; fresh baseline/sourcehash/nativepins/same-agent EVAL/APfinishclean. No full regression until real minimumUI+same-modelODSread/save readiness then fixes and requested pause."
+  Verify Steps: "Compare all enum constants/maps and5functions with pinned original include/tools/mapunit.hxx,fldunit.hxx,include/svtools/unitconv.hxx,svtools/source/misc/unitconv.cxx plus reused o3tl header. New independent literal unit/mapping tables cover all switches/defaults/pixel overrides, signed rounding,float32boundaries, actual ControlToItem same-direction behavior, unknown initializedunitfallback0. npx vitest existing shared coverage config with selected exactshared tests/includes, strict100S/B/F/L eachpositive rawcounter; whole npm run test:coverage:calc strict100.4reference symlinks absent only during testprocesses/restoredfinally.12focused format/lint/typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff gates; moduleboundarytest suite includes nativeSVTools edges and reverse/browser guards. Exact18paths, freshGitbaseline/nativeSHA256pins+actualnativeGitHEAD; same-agent evaluator not independent. No C++ probes/builds/generators/sanitizers or custom memory machinery. Full regression only true minimumUI+ODSread/save readiness checkpoint."
+  Verification: |-
+    Command: node output/playwright/task125-checks/portable.mjs. Result: pass. Evidence: new4metric matrix tests+existing3o3tl tests7/2files pass;4nonemptysharedowners152S70B18F143L all100everyrawcounterpositive. Calc168/64files33owners4158S2731B821F3706L100. All4reference links absent for tests/restoredfinally. Scope: original Tools complete mappings and5SVTools scalar functions, reused full o3tl owner; no source-map/counter/threshold edits.
+
+    Command: node output/playwright/task125-checks/gates.mjs plus exact metadata-only npm run inventory:parity repair recheck; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence: all12gates final pass;30boundarytests pass. Initial lint/docs/registry failures and narrow repairs retained Findings/logs. Scope: exact18paths4existing14new,3653baseline source blobs,10native source/docs/QA SHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Header borrows source declarations; no duplicate declaration ownership. Native QA evidence only reused o3tl rational rounding, helpers have independent source-derived literal matrices, not a full native certificate.
+
+    Skipped: full application regression and browser suites. Reason: no browser/Writer runtime changed; user moved next full to actualminimumUI+same-modelODS readiness, not reached by this prerequisite. Risk: complete application/native parity not recertified. Approval: explicit human readiness/pause and related-test instructions. Same-agent evaluator phase is not independent. Exact source commit and clean calc checkout recorded at closure.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-14T12:48:13.493Z — VERIFY — ok
+
+    By: CODER
+
+    Note: 002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:47:42.730Z, excerpt_hash=sha256:952b76bf1850d1f12961bcebd9a3a65b682b37fd3c80f74815f1060bc2386539
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141239-071SBD/blueprint/resolved-snapshot.json
+    - old_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+    - current_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610141239-071SBD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610141239-071SBD -m 🧩 071SBD task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only this task source commit and traceable task records if needed; preserve user/unrelated changes and previous canonical shared owners."
+  Findings: |-
+    Previous goal turn completed task124 with clean calc state and strict shared/Calc plus related Writer/Chromium checks: progress. This turn preflight clean on calc; original full docpool/font-height sources show metric helpers are actual prerequisites. ControlToItem delegates to ItemToControl without swapping unit semantics; preserve and document CALC109. Native source-level evidence only, no native executable/ABI certificate. Native TransformMetric uses a different checked-overflow o3tl overload not yet implemented, so it remains unexported pending real implementation rather than inventing a substitute. User permits correcting shared/Writer native mismatches without compatibility workarounds; Writer-only coverage exception remains.
+
+    Initial static12gates9passed: literal-enum rule rejects LAST=MapRelative expression, replace with original numeric13 preserving aliases/value; new4Array.from callbacks require JSDoc, add descriptions only. Capability schema requires upstream docs/nonemptytests; use actual svtoolsREADME and reused o3tl rational rounding QA, explicitly documenting no direct named helper QA found in targeted svtools/tools/o3tl search and no full native certificate. Raw native sources, original9passedgates and3failures retained.
+
+    Second static pass11/12pass; registry identified that canonical unitconv header only reexports, so it must not claim own function declarations in runtime localSymbols. Correct that new header metadata to empty declaration ownership, retaining actual source owner/native symbols/provenance; no checker suppression or status promotion.
+id_source: "generated"
+---
+## Summary
+
+Port original Tools MapUnit/FieldUnit and SVTools scalar unit helpers needed by canonical font-height attributes for the real Calc document pool. User goal remains complete Calc; this prerequisite alone is not UI/ODS readiness.
+
+## Scope
+
+18 intentional source/metadata/docs/tooling paths: new tools/inc/mapunit.ts, tools/inc/fldunit.ts, svtools/inc/unitconv.ts, svtools/source/misc/unitconv.ts and shared native-unitconv.test.ts;8runtime/provenance records,1sharedcapability; calc-core and calc-upstream-suspected-issues docs; module-boundary checker and tests. No Calc or Writer fake model/default provider, no unrelated fixes. Actual svtools->tools/o3tl dependencies only, retain reverse/browser guards. Native pinned source local only; all changes in calc checkout/branch.
+
+## Plan
+
+Implement all MapUnit/FieldUnit declarations and their complete o3tl mappings including pixel override/defaultinvalid. Implement5native scalar helpers CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit using real existing o3tl integral/floating families. BigInt represents native tools::Long, CalcToUnit number is explicitly float32input before double conversion/std::round away fromzero. Preserve ControlToItem original same-direction delegation; CALC109 documents it without changing behavior. TransformMetric overflow/status overload and UI MetricSpinButton functions remain pending, not stubbed/exported. Independent literal rational matrix/native values/negative halves/invalidunits/pixel overrides distinguish behavior from JS Math.round and plausible inverse. Update original provenance/runtime states with bounded foundation records, no broad native certification. Run strict complete shared raw100 and whole Calc raw100 with4reference links absent/restoredfinally, boundary tests12focusedgates; fresh baseline/sourcehash/nativepins/same-agent EVAL/APfinishclean. No full regression until real minimumUI+same-modelODSread/save readiness then fixes and requested pause.
+
+## Verify Steps
+
+Compare all enum constants/maps and5functions with pinned original include/tools/mapunit.hxx,fldunit.hxx,include/svtools/unitconv.hxx,svtools/source/misc/unitconv.cxx plus reused o3tl header. New independent literal unit/mapping tables cover all switches/defaults/pixel overrides, signed rounding,float32boundaries, actual ControlToItem same-direction behavior, unknown initializedunitfallback0. npx vitest existing shared coverage config with selected exactshared tests/includes, strict100S/B/F/L eachpositive rawcounter; whole npm run test:coverage:calc strict100.4reference symlinks absent only during testprocesses/restoredfinally.12focused format/lint/typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff gates; moduleboundarytest suite includes nativeSVTools edges and reverse/browser guards. Exact18paths, freshGitbaseline/nativeSHA256pins+actualnativeGitHEAD; same-agent evaluator not independent. No C++ probes/builds/generators/sanitizers or custom memory machinery. Full regression only true minimumUI+ODSread/save readiness checkpoint.
+
+## Verification
+
+Command: node output/playwright/task125-checks/portable.mjs. Result: pass. Evidence: new4metric matrix tests+existing3o3tl tests7/2files pass;4nonemptysharedowners152S70B18F143L all100everyrawcounterpositive. Calc168/64files33owners4158S2731B821F3706L100. All4reference links absent for tests/restoredfinally. Scope: original Tools complete mappings and5SVTools scalar functions, reused full o3tl owner; no source-map/counter/threshold edits.
+
+Command: node output/playwright/task125-checks/gates.mjs plus exact metadata-only npm run inventory:parity repair recheck; npx vitest run scripts/check-module-boundaries.test.ts. Result: pass. Evidence: all12gates final pass;30boundarytests pass. Initial lint/docs/registry failures and narrow repairs retained Findings/logs. Scope: exact18paths4existing14new,3653baseline source blobs,10native source/docs/QA SHA256pins at9bc445578031fecf56086729d8e4940c77e14d65. Header borrows source declarations; no duplicate declaration ownership. Native QA evidence only reused o3tl rational rounding, helpers have independent source-derived literal matrices, not a full native certificate.
+
+Skipped: full application regression and browser suites. Reason: no browser/Writer runtime changed; user moved next full to actualminimumUI+same-modelODS readiness, not reached by this prerequisite. Risk: complete application/native parity not recertified. Approval: explicit human readiness/pause and related-test instructions. Same-agent evaluator phase is not independent. Exact source commit and clean calc checkout recorded at closure.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-14T12:48:13.493Z — VERIFY — ok
+
+By: CODER
+
+Note: 002a4ccfab7f296f6d71e2cb6e603f849dbc3557 exact18paths3653to3667sourcehashes10nativepins. Shared7tests2files4completeowners152S70B18F143L raw100, Calc168tests64files33ownersraw100. All12gates30boundarytests pass. Native metric behavior preserved, CALC109 recorded. Same-agent evaluator pass not independent; realfont-height/DocPool/UI/ODS still pending, no full checkpoint yet.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-14T12:47:42.730Z, excerpt_hash=sha256:952b76bf1850d1f12961bcebd9a3a65b682b37fd3c80f74815f1060bc2386539
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610141239-071SBD/blueprint/resolved-snapshot.json
+- old_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+- current_digest: 6320d6019a892733e4ed3209ca904af5b1eb1de1cde74a306c2ea99bb2adf621
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610141239-071SBD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610141239-071SBD -m 🧩 071SBD task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only this task source commit and traceable task records if needed; preserve user/unrelated changes and previous canonical shared owners.
+
+## Findings
+
+Previous goal turn completed task124 with clean calc state and strict shared/Calc plus related Writer/Chromium checks: progress. This turn preflight clean on calc; original full docpool/font-height sources show metric helpers are actual prerequisites. ControlToItem delegates to ItemToControl without swapping unit semantics; preserve and document CALC109. Native source-level evidence only, no native executable/ABI certificate. Native TransformMetric uses a different checked-overflow o3tl overload not yet implemented, so it remains unexported pending real implementation rather than inventing a substitute. User permits correcting shared/Writer native mismatches without compatibility workarounds; Writer-only coverage exception remains.
+
+Initial static12gates9passed: literal-enum rule rejects LAST=MapRelative expression, replace with original numeric13 preserving aliases/value; new4Array.from callbacks require JSDoc, add descriptions only. Capability schema requires upstream docs/nonemptytests; use actual svtoolsREADME and reused o3tl rational rounding QA, explicitly documenting no direct named helper QA found in targeted svtools/tools/o3tl search and no full native certificate. Raw native sources, original9passedgates and3failures retained.
+
+Second static pass11/12pass; registry identified that canonical unitconv header only reexports, so it must not claim own function declarations in runtime localSymbols. Correct that new header metadata to empty declaration ownership, retaining actual source owner/native symbols/provenance; no checker suppression or status promotion.

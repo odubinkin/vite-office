@@ -1,8 +1,9 @@
 /** @fileoverview Resolves supported first-line margins from pinned SwTextMargin in itrcrsr.cxx. */
+import { projectWriterLineSpacing } from "./itrform2";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
-import type { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import type { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import {
   RES_CHRATR_FONTSIZE,
@@ -26,8 +27,8 @@ export function resolveSwTextFirstLineIndent(paragraph: SwTextNode): number {
   )
     return height;
   const spacing = paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
-  const value = spacing.GetValue();
-  switch (spacing.GetMode()) {
+  const value = projectWriterLineSpacing(spacing).value;
+  switch (projectWriterLineSpacing(spacing).mode) {
     case "fixed":
       return value;
     case "minimum":

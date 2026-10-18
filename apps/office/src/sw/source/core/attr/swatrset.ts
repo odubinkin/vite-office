@@ -1,14 +1,12 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxTabStopItem, SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,
   SvxFirstLineIndentItem,
@@ -22,9 +20,7 @@ import {
   SvxProtectItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
@@ -91,7 +87,8 @@ import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwTableBoxNumFormat, SwTableBoxFormula, SwTableBoxValue } from "./cellatr";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
@@ -182,43 +179,87 @@ export class SwAttrPool extends SfxItemPool {
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       this.RegisterDefaultItem(
         new SvxFontItem(
-          defaults.get(which)?.requestedFamily as string,
-          which,
+          FontFamily.FAMILY_DONTKNOW,
           defaults.get(which)?.resolvedFamily as string,
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          which,
         ),
-        /** Restores a font item. @param value - Persisted family and optional ODF attributes. @returns Font item. */ (
+        /** Restores every native font value field; UI family-name inputs select an unknown metadata family. @param value - Complete snapshot or UI name. @returns Font item. */ (
           value,
-        ) =>
-          typeof value === "object" && value !== null && !Array.isArray(value)
-            ? new SvxFontItem(
-                String((value as Record<string, unknown>).familyName),
-                which,
-                String((value as Record<string, unknown>).resolvedFamilyName),
-                String((value as Record<string, unknown>).genericFamily),
-              )
-            : new SvxFontItem(String(value), which),
+        ) => {
+          if (typeof value === "string")
+            return new SvxFontItem(
+              FontFamily.FAMILY_DONTKNOW,
+              value,
+              "",
+              FontPitch.PITCH_DONTKNOW,
+              RTL_TEXTENCODING_DONTKNOW,
+              which,
+            );
+          if (
+            typeof value !== "object" ||
+            value === null ||
+            Array.isArray(value) ||
+            !("familyName" in value) ||
+            typeof value.familyName !== "string" ||
+            !("styleName" in value) ||
+            typeof value.styleName !== "string" ||
+            !("family" in value) ||
+            typeof value.family !== "number" ||
+            !("pitch" in value) ||
+            typeof value.pitch !== "number" ||
+            !("charSet" in value) ||
+            typeof value.charSet !== "number"
+          )
+            throw new Error("Invalid font item state.");
+          return new SvxFontItem(
+            value.family,
+            value.familyName,
+            value.styleName,
+            value.pitch,
+            value.charSet,
+            which,
+          );
+        },
       );
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       this.RegisterDefaultItem(
-        new SvxFontHeightItem(12 * 20, which),
-        /** Restores a font height. @param value - Persisted twip height. @returns Font-height item. */ (
+        new SvxFontHeightItem(12 * 20, 100, which),
+        /** Restores all native height/property/unit state without applying the property twice. @param value - Complete logical state. @returns Font-height item. */ (
           value,
-        ) => new SvxFontHeightItem(Number(value), which),
+        ) => {
+          if (
+            typeof value !== "object" ||
+            Array.isArray(value) ||
+            !("height" in value) ||
+            !("prop" in value) ||
+            !("propUnit" in value) ||
+            typeof value.height !== "number" ||
+            typeof value.prop !== "number" ||
+            typeof value.propUnit !== "number"
+          )
+            throw new Error("Invalid font-height item state.");
+          const item = new SvxFontHeightItem(value.height, 100, which);
+          item.SetProp(value.prop, value.propUnit);
+          return item;
+        },
       );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(
-        new SvxPostureItem(FontItalic.NONE, which),
+        new SvxPostureItem(FontItalic.ITALIC_NONE, which),
         /** Restores a posture item. @param value - Persisted enum value. @returns Concrete posture item. */
         (value) => new SvxPostureItem(Number(value) as FontItalic, which),
       );
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       this.RegisterDefaultItem(
-        new SvxWeightItem(FontWeight.NORMAL, which),
+        new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which),
         /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
       );
     this.RegisterDefaultItem(
-      new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE),
+      new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
     );
@@ -235,13 +276,74 @@ export class SwAttrPool extends SfxItemPool {
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
       function restoreAdjust(value): SvxAdjustItem {
-        return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
+        if (typeof value === "number")
+          return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
+        if (typeof value !== "object" || value === null || Array.isArray(value))
+          throw new Error("SvxAdjustItem value is invalid.");
+        const record = value as Record<string, unknown>;
+        if (
+          !Number.isInteger(record.adjust) ||
+          !Number.isInteger(record.lastLine) ||
+          typeof record.expandSingle !== "boolean" ||
+          typeof record.paragraphComposer !== "boolean" ||
+          !Number.isInteger(record.wordSpacing) ||
+          !Number.isInteger(record.wordSpacingMinimum) ||
+          !Number.isInteger(record.wordSpacingMaximum) ||
+          !Number.isInteger(record.letterSpacingMinimum) ||
+          !Number.isInteger(record.letterSpacingMaximum) ||
+          !Number.isInteger(record.scaleWidthMinimum) ||
+          !Number.isInteger(record.scaleWidthMaximum)
+        )
+          throw new Error("SvxAdjustItem value is invalid.");
+        const item = new SvxAdjustItem(record.adjust as SvxAdjust, RES_PARATR_ADJUST);
+        item.SetLastBlock(record.lastLine as SvxAdjust);
+        item.SetOneWord(record.expandSingle ? SvxAdjust.Block : SvxAdjust.Left);
+        item.SetParagraphComposer(record.paragraphComposer);
+        item.SetPropWordSpacing(record.wordSpacing as number);
+        item.SetPropWordSpacingMinimum(record.wordSpacingMinimum as number);
+        item.SetPropWordSpacingMaximum(record.wordSpacingMaximum as number);
+        item.SetPropLetterSpacingMinimum(record.letterSpacingMinimum as number);
+        item.SetPropLetterSpacingMaximum(record.letterSpacingMaximum as number);
+        item.SetPropScaleWidthMinimum(record.scaleWidthMinimum as number);
+        item.SetPropScaleWidthMaximum(record.scaleWidthMaximum as number);
+        return item;
       },
     );
     this.RegisterDefaultItem(
       new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP),
       /** Restores Writer tab stops. @param value - Persisted stop record. @returns Tab-stop item. */
-      (value) => SvxTabStopItem.FromValue(RES_PARATR_TABSTOP, value),
+      (value) => {
+        if (typeof value !== "object" || value === null || Array.isArray(value))
+          throw new Error("SvxTabStopItem value is invalid.");
+        const record = value as Record<string, unknown>;
+        if (!Array.isArray(record.stops) || !Number.isInteger(record.defaultDistance))
+          throw new Error("SvxTabStopItem value is invalid.");
+        const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+        item.SetDefaultDistance(record.defaultDistance as number);
+        for (const entry of record.stops) {
+          if (typeof entry !== "object" || entry === null || Array.isArray(entry))
+            throw new Error("SvxTabStopItem tab value is invalid.");
+          const tab = entry as Record<string, unknown>;
+          if (
+            typeof tab.position !== "number" ||
+            typeof tab.adjustment !== "number" ||
+            typeof tab.decimal !== "string" ||
+            typeof tab.fill !== "string"
+          )
+            throw new Error("SvxTabStopItem tab value is invalid.");
+          const stop = new SvxTabStop(
+            tab.position,
+            tab.adjustment as SvxTabAdjust,
+            tab.decimal,
+            tab.fill,
+          );
+          // Stored state can contain a nul written after construction; restore the field,
+          // rather than reapplying the constructor's system-decimal resolution.
+          stop.GetDecimal(true)[0] = tab.decimal;
+          item.Insert(stop);
+        }
+        return item;
+      },
     );
     this.RegisterDefaultItem(
       new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT),
@@ -306,22 +408,45 @@ export class SwAttrPool extends SfxItemPool {
       },
     );
     this.RegisterDefaultItem(
-      new SvxLineSpacingItem(100, RES_PARATR_LINESPACING),
-      /** Restores Writer line spacing. @param value - Persisted percent or rule tuple. @returns Line-spacing item. */ (
-        value,
-      ) => {
-        if (Array.isArray(value)) {
-          const [modeCode, amount, fontIndependent] = value as [number, number, number?];
-          const mode = (["proportional", "fixed", "minimum", "leading"] as const)[modeCode];
-          if (mode === undefined) throw new Error("Stored Writer line-spacing mode is invalid.");
-          return new SvxLineSpacingItem(
-            Number(amount),
-            RES_PARATR_LINESPACING,
-            mode,
-            fontIndependent === 1,
-          );
+      new SvxLineSpacingItem(200, RES_PARATR_LINESPACING),
+      /** Restores original five-field browser records and prior scalar/tuple inputs at the existing pool I/O boundary. @param value - Persisted value. @returns Native item. */
+      (value) => {
+        const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+        if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+          const record = value as Record<string, unknown>;
+          for (const name of [
+            "nInterLineSpace",
+            "nLineHeight",
+            "nPropLineSpace",
+            "eLineSpaceRule",
+            "eInterLineSpaceRule",
+          ]) {
+            if (typeof record[name] !== "number" || !Number.isInteger(record[name]))
+              throw new Error("Stored Writer line-spacing field is invalid.");
+          }
+          item.SetInterLineSpace(record.nInterLineSpace as number);
+          item.SetLineHeight(record.nLineHeight as number);
+          item.SetPropLineSpace(record.nPropLineSpace as number);
+          item.SetLineSpaceRule(record.eLineSpaceRule as SvxLineSpaceRule);
+          item.SetInterLineSpaceRule(record.eInterLineSpaceRule as SvxInterLineSpaceRule);
+        } else {
+          const mode = Array.isArray(value) ? value[0] : 0;
+          const amount = Number(Array.isArray(value) ? value[1] : value);
+          if (
+            !Number.isInteger(amount) ||
+            amount < 0 ||
+            amount > 65535 ||
+            ![0, 1, 2, 3].includes(Number(mode))
+          )
+            throw new Error("Stored Writer line-spacing mode or value is invalid.");
+          if (mode === 0) item.SetPropLineSpace(amount);
+          else if (mode === 3) item.SetInterLineSpace(amount);
+          else {
+            item.SetLineHeight(amount);
+            if (mode === 1) item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+          }
         }
-        return new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING);
+        return item;
       },
     );
     for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
@@ -511,7 +636,7 @@ export class SwAttrSet extends SfxItemSet {
   }
 
   /** Creates an independent Writer attribute set. @param includeItems - Whether direct deltas are copied. @returns Cloned Writer set. */
-  public CloneAsValue(includeItems = true): SwAttrSet {
+  public override CloneAsValue(includeItems = true): SwAttrSet {
     const clone = new SwAttrSet(
       this.GetPool(),
       this.GetRanges(),

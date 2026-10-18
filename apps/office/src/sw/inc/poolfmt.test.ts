@@ -1,4 +1,7 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
+import { encodeSfxPoolItem } from "../browser/filter/xml/item-codec";
+import { createTabs } from "../../../test/tab-item-fixtures";
+import { FontItalic, FontWeight } from "../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 import { SfxStringItem } from "../../svl/source/items/stritem";
@@ -12,20 +15,14 @@ import {
 import { createWriterDocument } from "../source/core/doc/doc";
 import { getWriterParagraphStyleDefaults } from "../source/core/doc/poolfmt-defaults";
 import {
-  FontItalic,
-  FontWeight,
   SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
   SvxWeightItem,
 } from "../../editeng/source/items/textitem";
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxLineSpacingItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../editeng/inc/adjustitem";
+import { SvxTabStopItem, SvxTabStop } from "../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -315,9 +312,9 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
 
     const heading4 = document.GetTextFormatColl("heading-4").GetAttrSet();
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      expect((heading4.Get(which) as SvxWeightItem).GetWeight()).toBe(FontWeight.BOLD);
+      expect((heading4.Get(which) as SvxWeightItem).GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      expect((heading4.Get(which) as SvxPostureItem).GetPosture()).toBe(FontItalic.NORMAL);
+      expect((heading4.Get(which) as SvxPostureItem).GetPosture()).toBe(FontItalic.ITALIC_NORMAL);
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       expect((heading4.Get(which) as SvxFontHeightItem).GetHeight()).toBe(13 * 20);
 
@@ -327,7 +324,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     const caption = document.GetTextFormatColl("caption").GetAttrSet();
     expect(ulValues(caption.Get(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([120, 120]);
     expect((caption.Get(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture()).toBe(
-      FontItalic.NORMAL,
+      FontItalic.ITALIC_NORMAL,
     );
 
     const comment = document.GetTextFormatColl("comment").GetAttrSet();
@@ -366,11 +363,14 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: "transparent" }),
     ).toEqual(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
     expect(
-      document.GetAttrPool().CreateItem({
-        which: RES_PARATR_TABSTOP,
-        value: SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(0)]).QueryValue(),
-      }),
-    ).toEqual(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(0)]));
+      document
+        .GetAttrPool()
+        .CreateItem({
+          which: RES_PARATR_TABSTOP,
+          value: encodeSfxPoolItem(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(0)])).value,
+        })
+        .equals(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(0)])),
+    ).toBe(true);
   });
 
   it("materializes the pinned HTML-mode text and heading branches", /** Verifies HTML paragraph spacing, heading sizes, font role, and posture rules from DocumentStylePoolManager.cxx. @returns Nothing. */ () => {

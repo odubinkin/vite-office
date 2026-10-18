@@ -204,6 +204,8 @@ export function MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR<T>(
     mdds_mtv_get_value: callbacks.mdds_mtv_get_value,
     mdds_mtv_set_values: callbacks.mdds_mtv_set_values,
     mdds_mtv_append_value: callbacks.mdds_mtv_append_value,
+    // Native pointer append takes its pointer by value for both const and moved arguments.
+    mdds_mtv_append_value_move: callbacks.mdds_mtv_append_value,
     mdds_mtv_prepend_value: callbacks.mdds_mtv_prepend_value,
     mdds_mtv_prepend_values: callbacks.mdds_mtv_prepend_values,
     mdds_mtv_append_values: callbacks.mdds_mtv_append_values,

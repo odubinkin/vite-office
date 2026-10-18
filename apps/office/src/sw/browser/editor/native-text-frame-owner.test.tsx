@@ -1,4 +1,6 @@
 /** @fileoverview Checks real React/native text-frame ownership across editing, invalidation and session close. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -11,14 +13,10 @@ const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 /** Reads actual native frame listeners. @param node - Original text owner. @returns Registered frames. */
 function frames(node: SwTextNode): SwTextFrame[] {
   const result: SwTextFrame[] = [];
-  node.ForAllListeners(
-    /** Collects a native client. @param listener - Actual original client. @returns Continue traversal. */ (
-      listener,
-    ) => {
-      if (listener instanceof SwTextFrame) result.push(listener);
-      return false;
-    },
-  );
+  for (const listener of new SwIterator(SwClient, node)) {
+    if (listener instanceof SwTextFrame) result.push(listener);
+    continue;
+  }
   return result;
 }
 afterEach(

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160149-P52EJ4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T02:19:59.255Z",
+  "verdict": "pass",
+  "summary": "Same-agent source/evidence audit passes real private MsLangId conversion and canonical shared fallback corrections;not an independent review.",
+  "evaluated_sha": "bffbc66d73125c01726deb6c1d42b34c331b53c4",
+  "blueprint_digest": "dd33589ee6a88027d40980ce65e9930b1932960eb8dfa1cb873f4a256806ad72",
+  "findings": [
+    "24related/196Calc,exact6shared/36Calc raw100,every counter positive,13gates.8native pins,643ordered+6private rows/11special IDs and aliases exact;allUInt16 forward modes,stable Locale outputs,302prior values+4source-corrected projections and actual text/Calc consumers. Guard algorithms unchanged,only native SAL/UDKAPI edges/one expected-data group updated,43boundary tests pass. Build and actual Chromium/controlled-host DOM-free Worker/Writer pass,4refs restored. CALC173 retained;public system/full LanguageTag/LocaleData/font/pool/document/UI/ODS pending,no compiler/ICU/memory engine/all-app run."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160149-P52EJ4/README.md",
+    "output/playwright/task187-checks/final-verification.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/paraitem.tabs.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/paraitem.cxx",
+    "localSymbols": ["SVX_TAB_DEFCOUNT", "SVX_TAB_DEFDIST", "SVX_TAB_NOTFOUND", "SvxTabStopItem"],
+    "upstreamSymbols": [
+      "SvxTabStopItem::QueryValue",
+      "SvxTabStopItem::PutValue",
+      "SvxTabStopItem::Insert"
+    ],
+    "preservedResponsibilities": [
+      "Task156 moves SvxTabStopItem collection/copy/merge/hash and typed Sequence<TabStop>/nested Sequence<Any> transport to its native paraitem owner split, exposed by tstpitem.hxx boundary. Original enum/member IDs, source decimal defaults, payload equality, hash omissions, live self-merge and unsigned16 narrowing remain. Browser JSON construction/projection is removed from shared core; Writer existing codec/pool I/O and model/filter/layout/ruler/history consumers use actual native values. Translated presentation/diagnostic XML, broader locale services, real full EditEngine and Calc pool/model/connected UI/same-model ODS remain pending; no new memory owner or native probe. Related348tests/30files and187Calc tests/76files pass, all10changed shared and33Calc runtime owners measured at raw S/B/F/L100 with every counter positive; portable build and19browser scenarios pass with references absent/restored. Source gates and inventory are checked without promoting whole-module/native presentation parity. Writer snapshot restoration preserves explicit post-construction nul fields through real setters; locale JSON imports use standard import attributes. General model/UI/same-model ODS readiness is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Translated tab presentation and diagnostics remain unported; actual full engine/Calc document/UI/ODS pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.tabs.ts",
+          "marker": "SvxTabStopItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx",
+          "marker": "SvxTabStopItem::QueryValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/paraitem.tabs.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Formatted native tab item322lines plus existing paraitem238lines total560, exceeding the500line source budget. Keep one cohesive tab-item implementation under original paraitem.cxx and canonical tstpitem.hxx public boundary."
+    }
+  }
+}

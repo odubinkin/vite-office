@@ -1,4 +1,6 @@
 /** @fileoverview Verifies original root ownership and reuse of native table masters without temporary measurement graphs. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { expect, it, vi } from "vitest";
 import { SwTableLine } from "../table/swtable";
 import { SwDoc } from "../doc/doc";
@@ -15,14 +17,10 @@ function required<T>(value: T | undefined): T {
 /** Reads original native registered clients. @param owner - Native format owner. @returns Registered objects. */
 function clients(owner: SwModify): unknown[] {
   const out: unknown[] = [];
-  owner.ForAllListeners(
-    /** Reads native object identity. @param client - Original client. @returns Continue. */ (
-      client,
-    ) => {
-      out.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, owner)) {
+    out.push(client);
+    continue writerClients0;
+  }
   return out;
 }
 /** Allocates original model and root, with canonical table position. @returns Actual owners. */

@@ -255,10 +255,10 @@ it("matches native same modify assignment copy and detach responsibilities", /**
   for (const [index, source] of [empty, first, first, second, empty, client].entries()) {
     client.StartListeningToSameModifyAs(source);
     recipients = 0;
-    a.Broadcast({ kind: "document-state-changed" });
+    a.CallSwClientNotify({ kind: "document-state-changed" });
     const inA = recipients;
     recipients = 0;
-    b.Broadcast({ kind: "document-state-changed" });
+    b.CallSwClientNotify({ kind: "document-state-changed" });
     expect([
       client.GetRegisteredIn() === a ? 1 : client.GetRegisteredIn() === b ? 2 : 0,
       inA,
@@ -281,8 +281,8 @@ it("matches native same modify assignment copy and detach responsibilities", /**
   first.Dispose();
   second.Dispose();
   client.Dispose();
-  expect(a.HasListeners()).toBe(false);
-  expect(b.HasListeners()).toBe(false);
+  expect(a.HasWriterListeners()).toBe(false);
+  expect(b.HasWriterListeners()).toBe(false);
 });
 it("keeps pointer assigned live rule reads and sparse ownership through actual document and Worker paths", /** Exercises real attached classification,count,registry and labels across assignment and reset and genuine supported ODT transport. @returns Completion. */ async () => {
   const doc = createWriterDocument(),

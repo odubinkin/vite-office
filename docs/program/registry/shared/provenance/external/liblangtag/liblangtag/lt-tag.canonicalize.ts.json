@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/external/liblangtag/liblangtag/lt-tag.canonicalize.ts",
+    "status": "mapped",
+    "upstreamPath": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+    "localSymbols": [
+      "canonicalizeAlias",
+      "replaceRedundant",
+      "canonicalize",
+      "lt_tag_canonicalize",
+      "lt_tag_canonicalize_in_extlang_form"
+    ],
+    "upstreamSymbols": [
+      "_lt_tag_canonicalize_alias",
+      "_lt_tag_canonicalize",
+      "_lt_tag_subtract",
+      "_lt_tag_replace"
+    ],
+    "preservedResponsibilities": [
+      "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Wildcard range matching,POSIX locale conversion,likely-subtag maximization,full liblangtag API and enclosing LibreOffice LanguageTag are outside this complete normal-parser scope. Physical allocation/error-stack/refcounts/XML/service/module-loader/debug printing are erased,not simulated. Source-only unreachable pinned-data branches are justified by complete immutable-table tests."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.canonicalize.ts",
+          "marker": "lt_tag_canonicalize_in_extlang_form"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.qa.test.ts",
+          "marker": "replays native ${kind} QA"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.data.test.ts",
+          "marker": "proves all alias targets"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+          "marker": "_lt_tag_canonicalize_alias"
+        },
+        {
+          "path": "vendor/liblangtag-reference/tests/check-tag.c",
+          "marker": "TDEF (lt_tag_canonicalize)"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/liblangtag/liblangtag/lt-tag.canonicalize.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Retains original mutually recursive normal grammar/canonicalization functions as bounded source responsibility files;only delayed function references occur within the same external owner,with no top-level native objects or import-guard exemptions."
+    }
+  }
+}

@@ -302,7 +302,7 @@ it("empty unpaired transaction and unrelated format hints preserve native table 
     f.owner.CallSwClientNotify(h);
     expect(f.frame.generic).toEqual([]);
     const breakItem = new SfxUInt16Item(101, 1);
-    f.owner.Broadcast({
+    f.owner.CallSwClientNotify({
       kind: "model-transaction",
       hints: [
         new LegacyModifyHint(undefined, new SfxUInt16Item(99, 1)),

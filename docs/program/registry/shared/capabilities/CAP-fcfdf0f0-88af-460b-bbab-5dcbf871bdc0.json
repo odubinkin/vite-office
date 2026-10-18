@@ -1,0 +1,124 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-fcfdf0f0-88af-460b-bbab-5dcbf871bdc0",
+    "capabilityId": "CAP-fcfdf0f0-88af-460b-bbab-5dcbf871bdc0",
+    "suite": "shared",
+    "subsystem": "font-posture-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original posture DONTKNOW booltrue/copy/Clone/payload equality and typed members are preserved.",
+      "Both VCL slant conversions preserve reverse collapse/unknown fallback/sentinel mappings.",
+      "Calc103114119NONE defaults use the existing actual itemset copies."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task122 aligns existing SvxPostureItem with actual SfxEnumItem value/factory/copy/Clone/bool/Any contract: DONTKNOW booltrue, payload-only same-type equality ignoresWhich, bool setterNORMAL/NONE, native bool/FontSlant members with common Any2Bool and exactenum/signed32 fallback. Existing browser FontItalic names are aliases/type alias to one canonical tools enum, not a second enum implementation. Checked JS constructor boundary preserves negative/fractional errors while admitting native nonnegative enum range including initialized unknown4/sentinel; invalid native abort/ABI not certified. Native VCL ConvertFontSlant both switch families use explicit erased-enum source selection for overlapping JSnumbers, not value inference; reverse slants map forward, unknown mapsDONTKNOW and sentinels preserved. Actual FontSlant enum/normal static getter uses existing CPPU, no generator execution/fake types. Original VCL tools/offapi edges and reverse application guards retained. Calc103114119NONE default real itemset copies tested. Existing Writer posture consumer tests and source-backed expected corrections retained, raw100thresholds unchanged. CALC107 records DONTKNOW bool and reverse/unknown member behavior. Existing metadata history/status retained without broad parity promotion. Other VCL helper families/native localized presentation/cache/diagnostics/memoryABI/fullDocPool/config/document/storage/UI/ODS pending/excluded. Next full only at real minimum UI+ODSread/save readiness then repairs/pause, no fixedtasknumber trigger."
+    },
+    "capability": "Canonical shared font posture and slant conversion",
+    "gaps": [
+      "Native localized presentation/resources/cache/ABI and actual complete DocPool/document/UI/ODS pending or excluded.",
+      "No full native QA certification or full application regression now."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.ts",
+          "marker": "SvxPostureItem"
+        },
+        {
+          "path": "apps/office/src/tools/inc/fontenum.ts",
+          "marker": "FontItalic"
+        },
+        {
+          "path": "apps/office/src/vcl/inc/unohelp.ts",
+          "marker": "ConvertFontSlant"
+        },
+        {
+          "path": "apps/office/src/vcl/source/app/unohelp.ts",
+          "marker": "ConvertFontSlant"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/FontSlant.ts",
+          "marker": "FontSlant"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/postitem.ts",
+          "marker": "SvxPostureItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_ITALIC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-posture.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical shared font posture and Calc script defaults (task122)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxPostureItem"
+        },
+        {
+          "path": "include/tools/fontenum.hxx",
+          "marker": "FontItalic"
+        },
+        {
+          "path": "include/vcl/unohelp.hxx",
+          "marker": "ConvertFontSlant"
+        },
+        {
+          "path": "vcl/source/app/unohelp.cxx",
+          "marker": "ConvertFontSlant"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/FontSlant.idl",
+          "marker": "FontSlant"
+        },
+        {
+          "path": "include/editeng/postitem.hxx",
+          "marker": "SvxPostureItem"
+        },
+        {
+          "path": "include/editeng/memberids.h",
+          "marker": "MID_ITALIC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-font-posture",
+    "scopeLimitations": [
+      "Task122 aligns existing SvxPostureItem with actual SfxEnumItem value/factory/copy/Clone/bool/Any contract: DONTKNOW booltrue, payload-only same-type equality ignoresWhich, bool setterNORMAL/NONE, native bool/FontSlant members with common Any2Bool and exactenum/signed32 fallback. Existing browser FontItalic names are aliases/type alias to one canonical tools enum, not a second enum implementation. Checked JS constructor boundary preserves negative/fractional errors while admitting native nonnegative enum range including initialized unknown4/sentinel; invalid native abort/ABI not certified. Native VCL ConvertFontSlant both switch families use explicit erased-enum source selection for overlapping JSnumbers, not value inference; reverse slants map forward, unknown mapsDONTKNOW and sentinels preserved. Actual FontSlant enum/normal static getter uses existing CPPU, no generator execution/fake types. Original VCL tools/offapi edges and reverse application guards retained. Calc103114119NONE default real itemset copies tested. Existing Writer posture consumer tests and source-backed expected corrections retained, raw100thresholds unchanged. CALC107 records DONTKNOW bool and reverse/unknown member behavior. Existing metadata history/status retained without broad parity promotion. Other VCL helper families/native localized presentation/cache/diagnostics/memoryABI/fullDocPool/config/document/storage/UI/ODS pending/excluded. Next full only at real minimum UI+ODSread/save readiness then repairs/pause, no fixedtasknumber trigger."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

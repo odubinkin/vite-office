@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-742f0854-41cd-4bd3-9fdd-220204bae3a4",
+    "capabilityId": "CAP-742f0854-41cd-4bd3-9fdd-220204bae3a4",
+    "suite": "shared",
+    "subsystem": "edit-engine-text-selection",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original defaults/sentinels/value constructors, memberwise copies and borrowed fields preserve position/selection value behavior.",
+      "Selection strict interval order, normalization, collapse and range predicates match original headers."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task149 implements original shared EPaM and ESelection public header value contracts: zero defaults, exact signed32 maximal NotFound/All/AtEnd markers, native default/coordinate/position/copy constructors and implicit memberwise assignment, coordinate and endpoint equality, paragraph/index order, adjustedness/value swapping, collapse to either endpoint, HasRange and original diagnostic stream content. Native operator spellings map to equals/lessThan/greaterThan and ostream insertion to toString. Selection order requires adjusted inputs as asserted only in native debug builds: it means strictly disjoint end-before-start intervals, not lexicographic endpoint order; touching or overlapping selections are unordered. Public start/end getters borrow stable mutable position objects; their setters, constructors, Adjust and collapses copy native value fields without introducing JS aliasing. Valid coordinate inputs inhabit signed32 domain; no fabricated clamp/range exception, numeric ABI or native memory handling is introduced. JS GC owns storage. Existing Writer-specific document selection is not duplicated or replaced; these are missing genuine shared EditEngine types for future Calc cell/header-footer text editing. Actual EditTextObject/ScPageHFItem/full pool/model/connected UI/same-model ODS remain pending; localized UI is deferred and no fake text engine is created."
+    },
+    "capability": "Native EditEngine text position and selection values",
+    "gaps": [
+      "Actual EditEngine/EditTextObject/Calc pool/document/UI/same-model ODS not yet connected."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/inc/EPaM.ts",
+          "marker": "EPaM"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/ESelection.ts",
+          "marker": "ESelection"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/inc/ESelection.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native EditEngine text positions and selections (task149)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/editeng/EPaM.hxx",
+          "marker": "EPaM"
+        },
+        {
+          "path": "include/editeng/ESelection.hxx",
+          "marker": "ESelection"
+        }
+      ],
+      "tests": [
+        {
+          "path": "editeng/qa/unit/core-test.cxx",
+          "marker": "ESelection"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "edit-engine-text-position-selection",
+    "scopeLimitations": [
+      "Task149 implements original shared EPaM and ESelection public header value contracts: zero defaults, exact signed32 maximal NotFound/All/AtEnd markers, native default/coordinate/position/copy constructors and implicit memberwise assignment, coordinate and endpoint equality, paragraph/index order, adjustedness/value swapping, collapse to either endpoint, HasRange and original diagnostic stream content. Native operator spellings map to equals/lessThan/greaterThan and ostream insertion to toString. Selection order requires adjusted inputs as asserted only in native debug builds: it means strictly disjoint end-before-start intervals, not lexicographic endpoint order; touching or overlapping selections are unordered. Public start/end getters borrow stable mutable position objects; their setters, constructors, Adjust and collapses copy native value fields without introducing JS aliasing. Valid coordinate inputs inhabit signed32 domain; no fabricated clamp/range exception, numeric ABI or native memory handling is introduced. JS GC owns storage. Existing Writer-specific document selection is not duplicated or replaced; these are missing genuine shared EditEngine types for future Calc cell/header-footer text editing. Actual EditTextObject/ScPageHFItem/full pool/model/connected UI/same-model ODS remain pending; localized UI is deferred and no fake text engine is created.",
+      "Original EditEngine QA is a broader unported source-context witness; no native QA execution or whole editor parity claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

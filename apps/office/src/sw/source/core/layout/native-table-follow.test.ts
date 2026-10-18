@@ -1,4 +1,6 @@
 /** @fileoverview Verifies original native table flow links, follow constructor, format-client master lookup and split reactions. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwRootFrame } from "./newfrm";
@@ -34,12 +36,10 @@ function follow(master: SwTabFrame) {
 /** Reads actual registered native clients. @param owner - Original format owner. @returns Original client objects. */
 function clients(owner: SwModify): unknown[] {
   const out: unknown[] = [];
-  owner.ForAllListeners(
-    /** Reads original client. @param c - Native client. @returns Continue. */ (c) => {
-      out.push(c);
-      return false;
-    },
-  );
+  writerClients0: for (const c of new SwIterator(SwClient, owner)) {
+    out.push(c);
+    continue writerClients0;
+  }
   return out;
 }
 it("native table flow links begin absent without a stored follow flag", /** Checks original component defaults on an actual master. @returns Nothing. */ () => {

@@ -1,9 +1,11 @@
 /** @fileoverview Checks Writer tab-state preparation and noninteractive native default grids through owned model/DOM inputs. */
+import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxTextLeftMarginItem, SvxRightMarginItem } from "../../../editeng/source/items/frmitems";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT, RES_PARATR_TABSTOP } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterRulers } from "./WriterRulers";
@@ -39,9 +41,7 @@ function fixture(options: Options = {}) {
   const document = session.docShell.GetDoc();
   shell.Insert("DefaultRulerProof");
   if (options.stops !== undefined)
-    shell.SetParagraphItem(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, options.stops, options.distance ?? 0),
-    );
+    shell.SetParagraphItem(createTabs(RES_PARATR_TABSTOP, options.stops, options.distance ?? 0));
   shell.SetParagraphItem(
     new SvxTextLeftMarginItem(SvxIndentValue.twips(options.left ?? 0), RES_MARGIN_TEXTLEFT),
   );
@@ -52,7 +52,7 @@ function fixture(options: Options = {}) {
   if (options.documentDefaults !== undefined) {
     const pool = document.GetAttrPool();
     const original = pool.GetUserOrPoolDefaultItem.bind(pool);
-    const tabs = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, options.documentDefaults);
+    const tabs = createTabs(RES_PARATR_TABSTOP, options.documentDefaults);
     vi.spyOn(pool, "GetUserOrPoolDefaultItem").mockImplementation(
       /** Supplies only the owned document-default boundary. @param which - Requested item. @returns Existing non-tab default or fixture tabs. */ (
         which,
@@ -96,7 +96,8 @@ function positions(container: HTMLElement) {
 
 /** Reads the complete underlying stored item. @param shell - Editing owner. @returns Primitive fields. */
 function itemValue(shell: ReturnType<typeof fixture>["shell"]) {
-  return (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue();
+  return encodeSfxPoolItem(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem)
+    .value;
 }
 
 describe("Writer default ruler tab composition", /** Groups normalization, native grid arithmetic and real transaction checks. @returns Nothing. */ () => {

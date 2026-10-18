@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3d811d25-678a-49ac-9b54-f5b4d7ee7415",
+    "capabilityId": "CAP-3d811d25-678a-49ac-9b54-f5b4d7ee7415",
+    "suite": "shared",
+    "subsystem": "canonical-line-spacing",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Five original fields retain independent inactive state, original setters and typed Any selectors.",
+      "Writer consumers use actual native spacing state; browser snapshot adapters preserve full fields without a core compatibility facade."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task155 replaces the reduced mode/value/font-independent item with original five-field SvxLineSpacingItem state, native rule enums, default/copy/setter/Clone/equality/hash and typed Any contracts. Actual LineSpacing two-short struct uses shared CPPU metadata and ordinary JS scalar cells, not binary persistence or lifetime machinery. Writer height200 defaults, commands, layout and ODF consume actual fields; browser persistence stores all five fields and decodes old scalar/tuple inputs only at its existing I/O boundary. Font-independent line spacing belongs to Drawing text-object properties and is removed from Writer paragraph model/filter/dialog; generic shared XML support remains. Native inactive-field equality versus all-field hashing and unknown-member successful normalization are preserved and documented. Translated presentation, tab-stop canonicalization, real full engine/pool/Calc model/connected UI and same-model ODS remain pending. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged."
+    },
+    "capability": "Canonical shared line spacing and Writer consumers",
+    "gaps": [
+      "Translated presentation and real engine/pool/Calc model/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.spacing.ts",
+          "marker": "SvxLineSpacingItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/lspcitem.ts",
+          "marker": "SvxLineSpacingItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/LineSpacing.ts",
+          "marker": "LineSpacing"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/LineSpacingMode.ts",
+          "marker": "FIX"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-line-spacing.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical shared line spacing and Writer consumers (task155)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/paraitem.cxx",
+          "marker": "SvxLineSpacingItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/lspcitem.hxx",
+          "marker": "LINE_SPACE_DEFAULT_HEIGHT"
+        },
+        {
+          "path": "offapi/com/sun/star/style/LineSpacing.idl",
+          "marker": "LineSpacing"
+        },
+        {
+          "path": "offapi/com/sun/star/style/LineSpacingMode.idl",
+          "marker": "PROP"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_ParagraphProperties.java",
+          "marker": "ParaLineSpacing"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "canonical-line-spacing-writer-consumers",
+    "scopeLimitations": [
+      "Task155 replaces the reduced mode/value/font-independent item with original five-field SvxLineSpacingItem state, native rule enums, default/copy/setter/Clone/equality/hash and typed Any contracts. Actual LineSpacing two-short struct uses shared CPPU metadata and ordinary JS scalar cells, not binary persistence or lifetime machinery. Writer height200 defaults, commands, layout and ODF consume actual fields; browser persistence stores all five fields and decodes old scalar/tuple inputs only at its existing I/O boundary. Font-independent line spacing belongs to Drawing text-object properties and is removed from Writer paragraph model/filter/dialog; generic shared XML support remains. Native inactive-field equality versus all-field hashing and unknown-member successful normalization are preserved and documented. Translated presentation, tab-stop canonicalization, real full engine/pool/Calc model/connected UI and same-model ODS remain pending. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged.",
+      "Generic native ParagraphProperties Java QA is source context only; no native execution or full text engine/filter parity claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

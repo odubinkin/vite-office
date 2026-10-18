@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "language-tag-normal-parsing",
+    "capabilityIds": [
+      "CAP-b64f5fbe-dc52-4c69-8802-3c4698aace10"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/liblangtag/liblangtag/lt-tag.ts",
+        "apps/office/src/external/liblangtag/liblangtag/lt-tag.values.test.ts",
+        "apps/office/src/external/liblangtag/liblangtag/lt-tag.data.test.ts",
+        "docs/program/calc-ui-readiness.md#Connected normal language parser and canonicalizer (task196)"
+      ],
+      "justification": "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TagState",
+        "TagFilter",
+        "Tag",
+        "lt_tag_new",
+        "lt_tag_clear",
+        "lt_tag_copy",
+        "addTagString",
+        "lt_tag_get_string_with_filter",
+        "lt_tag_get_string",
+        "lt_tag_truncate",
+        "lt_tag_compare"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+      "upstreamSymbols": [
+        "lt_tag_new",
+        "lt_tag_clear",
+        "lt_tag_copy",
+        "lt_tag_get_string_with_filter",
+        "lt_tag_truncate",
+        "lt_tag_compare"
+      ]
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e4baba87-a194-41f6-ae4e-6547add9bbb7",
+    "capabilityId": "CAP-e4baba87-a194-41f6-ae4e-6547add9bbb7",
+    "suite": "shared",
+    "subsystem": "canonical-tab-stops",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original TabStop and TabAlign declarations use real shared typed transport.",
+      "Initialized Sequence object address binding shares the original pointer cell without a new lifetime engine.",
+      "Native tab values resolve constructor decimal defaults from source resources, preserve independent field copies/references and reuse SortedVector.",
+      "Original tab item typed properties, copy/merge/hash and explicit Writer JSON boundary pass focused core and real browser regressions."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original tab value/container/typed UNO contracts reuse existing SortedVector/CPPU and ordinary JS fields. Explicit Sequence object-address/member bindings erase C++ syntax without a new lifetime engine or binary document format. Source numeric decimal resources and source fallback order are embedded behind a specific browser locale-field binding; general native locale services and LanguageTag construction are not fabricated. Original paraitem responsibility is split only because238+322lines exceed500, retaining canonical tstpitem.hxx and original enum/member headers. Writer JSON encoding/restoration stays at its existing I/O boundaries and preserves explicit saved nul fields."
+    },
+    "capability": "Canonical tab-stop boundary work",
+    "gaps": [
+      "Translated presentation and diagnostic XML, general locale-service/LanguageTag construction and wider native service contracts remain unported.",
+      "Real engine/pool/Calc model/connected UI/same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/TabStop.ts",
+          "marker": "TabStop"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/TabAlign.ts",
+          "marker": "cppu_detail_getUnoType_TabAlign"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.ts",
+          "marker": "getFallbackStrings"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+          "marker": "getLocaleDecimalSeparator"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/insys.locale.ts",
+          "marker": "unicode"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.ts",
+          "marker": "SvxTabStop"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/localedata/data/decimal-separators.json",
+          "marker": "\"fr_CH\""
+        },
+        {
+          "path": "apps/office/src/test/fixtures/prior-language-first-fallbacks.json",
+          "marker": "\"pt\""
+        },
+        {
+          "path": "apps/office/src/editeng/inc/tstpitem.ts",
+          "marker": "SvxTabStopItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/paraitem.tabs.ts",
+          "marker": "SvxTabStopItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-tab-transport.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-tab-values.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-tab-item.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical tab-stop boundary work (task156)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/style/TabStop.idl",
+          "marker": "TabStop"
+        },
+        {
+          "path": "offapi/com/sun/star/style/TabAlign.idl",
+          "marker": "TabAlign"
+        },
+        {
+          "path": "i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTag::getFallbackStrings"
+        },
+        {
+          "path": "i18npool/source/localedata/localedata.cxx",
+          "marker": "LocaleDataImpl::getLocaleItem2"
+        },
+        {
+          "path": "unotools/source/misc/syslocale.cxx",
+          "marker": "SvtSysLocale::SvtSysLocale"
+        },
+        {
+          "path": "include/editeng/tstpitem.hxx",
+          "marker": "SvxTabStop"
+        },
+        {
+          "path": "i18npool/source/localedata/data/fr_CH.xml",
+          "marker": "DecimalSeparator"
+        },
+        {
+          "path": "i18nlangtag/source/isolang/isolang.cxx",
+          "marker": "lookupFallbackLocale"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_ParagraphProperties.java",
+          "marker": "ParaTabStops"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "canonical-tab-stop-boundary",
+    "scopeLimitations": [
+      "Original value/container and typed property contracts are implemented and validated by348related/187Calc/19browser tests; this bounded acceptance does not certify translated presentation, diagnostic XML or all native service contracts.",
+      "Prepared Locale numeric field and raw browser host locale binding are implemented. General SvtSysLocale/LocaleDataWrapper/LanguageTag interfaces and language-tag construction/canonicalization remain unported.",
+      "Full EditEngine/EditTextObject and Calc pool/document/connected UI/same-model ODS remain pending. Native binary ABI, new lifetime/refcount managers and C++ probes are outside this work. Existing deliberate browser I/O/recovery deviations remain.",
+      "Task187 replaces the prior language fallback projection with the actual shared MsLangId algorithm. The prior306-value projection is retained as a historical test fixture;four ber/cmn/fuv/ji results were wrong and are now source-corrected. Decimal/measurement consumers use actual shared fallback,not that fixture."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

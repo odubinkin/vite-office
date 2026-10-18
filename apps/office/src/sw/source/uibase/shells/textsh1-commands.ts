@@ -1,4 +1,6 @@
 /** @fileoverview Keeps native textsh1 command registration under the mandatory source-size limit. */
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import {
   createWriterInterface,
@@ -14,7 +16,7 @@ import type {
 } from "../dialog/writer-dialog-controller";
 import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
-import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { RES_PARATR_LINESPACING } from "../../../inc/hintids";
 
 /** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
@@ -231,7 +233,9 @@ export function createWriterTextCommandRegistry(
       /** Reads the active proportional spacing, or the custom sentinel. @returns Slot value. */
       getStateValue: (): number | "custom" => {
         const spacing = active().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
-        return spacing.GetMode() === "proportional" ? spacing.GetValue() : "custom";
+        return projectWriterLineSpacing(spacing).mode === "proportional"
+          ? projectWriterLineSpacing(spacing).value
+          : "custom";
       },
       id: WRITER_COMMAND_IDS.lineSpacing,
     },

@@ -1,4 +1,6 @@
 /** @fileoverview Native registered-frame lookup from frmtool.cxx, without view-position geometry or formatting. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import type { SwModify } from "../../../inc/calbck";
 import type { SwPosition } from "../crsr/pam";
 import type { SwTextFrame } from "../text/txtfrm";
@@ -14,21 +16,18 @@ export function GetFrameOfModify(
   position?: SwPosition,
 ): SwFrame | undefined {
   let frame: SwFrame | undefined;
-  modify.ForAllListeners(
-    /** Selects in existing client order without projecting or copying owners. @param listener - Original registered client. @returns Whether the native first-match search is complete. */
-    (listener) => {
-      if (
-        listener instanceof SwFrame &&
-        (listener.GetType() & frameType) !== 0 &&
-        (layout === undefined || layout === listener.getRootFrame()) &&
-        (!(listener instanceof SwContentFrame) || !listener.IsFollow())
-      ) {
-        frame = listener;
-        return true;
-      }
-      return false;
-    },
-  );
+  writerClients0: for (const listener of new SwIterator(SwClient, modify)) {
+    if (
+      listener instanceof SwFrame &&
+      (listener.GetType() & frameType) !== 0 &&
+      (layout === undefined || layout === listener.getRootFrame()) &&
+      (!(listener instanceof SwContentFrame) || !listener.IsFollow())
+    ) {
+      frame = listener;
+      break writerClients0;
+    }
+    continue writerClients0;
+  }
   return position !== undefined && frame !== undefined && frame.IsTextFrame()
     ? (frame as SwTextFrame).GetFrameAtPos(position)
     : frame;

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141556-8TJGNR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T16:55:19.026Z",
+  "verdict": "pass",
+  "summary": "Canonical shared font values, actual Writer consumers and ODF metadata satisfy approved task135 scope; same-agent review is not independent.",
+  "evaluated_sha": "a16c186d0c61b9c5ee322ddbb0a7e904f052a78d",
+  "blueprint_digest": "7b20c3203d26737c6466960d4b24cecde434bda00edaf1efccd6c52adb70724b",
+  "findings": [
+    "Compared native five-field defaults/constructors/setters/equality/hash, full pool comparator/name allocation and original Add return with pinned sources; reuses existing shared SortedVector and SAL/o3tl without a second lifetime engine.",
+    "Actual history/browser/3script ODT tests,411related cases and175Calc cases pass; all10changedshared and33Calc owners have positive raw coverage counters. Build and8Chromium cases pass without reference links;36boundary cases and12source gates pass.",
+    "Exact97paths within100approved,24runtime/provenance pairs, zero semantic inventory violations,3751source hashes and10native pins audited. Writer-only gaps in6owners remain explicitly exempt, not silently certified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141556-8TJGNR/README.md",
+    "output/playwright/task135-checks/verification.json",
+    "output/playwright/task135-checks/inventory-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native FontDescriptor Any/presentation/full font services and real Calc document/UI/ODS remain pending; no whole-module or goal parity claim. Same-agent evaluation is not independent."
+  ]
+}

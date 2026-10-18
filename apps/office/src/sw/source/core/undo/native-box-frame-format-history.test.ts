@@ -179,7 +179,7 @@ it("native table deletion releases all actual cell clients and their final share
     doc.nodes.DeleteTable(table.GetTableNode());
     expect(first.GetRegisteredIn()).toBeUndefined();
     expect(second.GetRegisteredIn()).toBeUndefined();
-    expect(format.HasListeners()).toBe(false);
+    expect(format.HasWriterListeners()).toBe(false);
     expect(format.IsDisposed()).toBe(true);
   } finally {
     session.Close();

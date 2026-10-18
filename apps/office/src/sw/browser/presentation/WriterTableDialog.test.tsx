@@ -1,4 +1,5 @@
 /** @fileoverview Verifies the Writer table controls and editable cell boundary. */
+import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { nativeTableInputForTest, nativeBoxFormat } from "../../../test/table-box-test-helpers";
 import { RES_BOX } from "../../inc/hintids";
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
@@ -10,12 +11,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT } from "../../inc/hintids";
-import {
-  FontItalic,
-  FontWeight,
-  SvxPostureItem,
-  SvxWeightItem,
-} from "../../../editeng/source/items/textitem";
+import { SvxPostureItem, SvxWeightItem } from "../../../editeng/source/items/textitem";
 import { WriterEditableTable } from "../editor/WriterEditableTable";
 import { WriterTableDialog } from "./WriterTableDialog";
 import { WriterViewProjection } from "./writer-view-projection";
@@ -264,8 +260,8 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     const node = table.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0];
     if (node === undefined) throw new Error("Middle-page cell is missing.");
     node.SetText("Styled cell");
-    node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-    node.SetAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
+    node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
     render(
       <WriterEditableTable
         firstRow={1}

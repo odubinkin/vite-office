@@ -1,4 +1,5 @@
 /** @fileoverview Checks Writer line numbering on measured page and text frames. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -13,14 +14,10 @@ let owner = new SwDoc();
 afterEach(
   /** Releases actual fixture frame clients before the native source graph. @returns Nothing. */ () => {
     for (const node of owner.GetNodes().entries())
-      node.ForAllListeners(
-        /** Destroys actual fixture frames. @param listener - Original client. @returns Continue traversal. */ (
-          listener,
-        ) => {
-          if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
-          return false;
-        },
-      );
+      writerClients0: for (const listener of new SwIterator(SwClient, node)) {
+        if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
+        continue writerClients0;
+      }
     owner.Dispose();
     owner = new SwDoc();
   },

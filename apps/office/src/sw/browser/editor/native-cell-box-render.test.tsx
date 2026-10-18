@@ -1,4 +1,5 @@
 /** @fileoverview Verifies direct native box rendering on natural and fixed rows and through native history. */
+import { Color } from "../../../tools/inc/color";
 import { nativeTableInputForTest } from "../../../test/table-box-test-helpers";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
@@ -19,7 +20,7 @@ it("native empty box guides preserve column geometry and dialog retains a custom
   table.AddColumnWidth(1500);
   const empty = new SvxBoxItem(RES_BOX),
     owned = new SvxBoxItem(RES_BOX);
-  owned.SetLine(new SvxBorderLine(0x112233, 40, 2), 0);
+  owned.SetLine(new SvxBorderLine(new Color(0x112233), 40, 2), 0);
   doc.nodes.AppendTableRow(table, 2, {}, [{ box: empty }, { box: owned }]);
   try {
     render(<WriterWorkbench isActive view={session.view} />);
@@ -103,8 +104,8 @@ it("isolates missing-edge guides for every native paint family on natural and fi
   for (const fixed of [false, true])
     for (let style = 0; style <= 17; style++) {
       const item = new SvxBoxItem(RES_BOX);
-      item.SetLine(new SvxBorderLine(0x112233, 90, style), 0);
-      item.SetLine(new SvxBorderLine(0, 0), 2);
+      item.SetLine(new SvxBorderLine(new Color(0x112233), 90, style), 0);
+      item.SetLine(new SvxBorderLine(new Color(0), 0), 2);
       const box = required(
         doc.nodes
           .AppendTableRow(
@@ -161,7 +162,7 @@ for (const fixed of [false, true])
     table.AddColumnWidth(6000);
     const item = new SvxBoxItem(RES_BOX);
     for (const [edge, style] of [0, 1, 3, 11].entries()) {
-      const line = new SvxBorderLine(0x112233 + edge, (edge + 1) * 20);
+      const line = new SvxBorderLine(new Color(0x112233 + edge), (edge + 1) * 20);
       line.SetBorderLineStyle(style);
       item.SetLine(line, edge);
       item.SetDistance((edge + 1) * 15, edge);
@@ -204,7 +205,7 @@ for (const fixed of [false, true])
       }
       const changed = new SvxBoxItem(RES_BOX);
       changed.SetAllDistances(75);
-      changed.SetLine(new SvxBorderLine(0xaabbcc, 40, 2), 0);
+      changed.SetLine(new SvxBorderLine(new Color(0xaabbcc), 40, 2), 0);
       const items = new SfxItemSet(doc.GetAttrPool(), [[RES_BOX, RES_BOX]]);
       items.Put(changed);
       act(
@@ -271,7 +272,7 @@ it.each([
       table = doc.nodes.MakeTableNode("Styles", { width: 3000 }, doc.paragraphs[0]);
     table.AddColumnWidth(3000);
     const item = new SvxBoxItem(RES_BOX);
-    item.SetLine(new SvxBorderLine(0x112233, 90, style), 0);
+    item.SetLine(new SvxBorderLine(new Color(0x112233), 90, style), 0);
     const box = required(doc.nodes.AppendTableRow(table, 1, {}, [{ box: item }]).GetTabBoxes()[0]);
     required(box.GetParagraphs()[0]).SetText("StylePaint");
     try {

@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c2fbe373-256e-4e80-9400-11bf4dc133b5",
+    "capabilityId": "CAP-c2fbe373-256e-4e80-9400-11bf4dc133b5",
+    "suite": "shared",
+    "subsystem": "cell-shadow-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native shadow values/defaults/copy/mutation/equality/hash/space/metric contracts are retained.",
+      "Actual ShadowFormat and ShadowLocation CPPU types support original member query/put behavior."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task136 adds the missing native SvxShadowItem pool dependency with owned Color values, gray100NONE defaults, original constructors/copy/clone/setters/equality/hash/side-space/metrics and complete supported typed Any query/put. Published ShadowFormat/ShadowLocation use existing CPPU normal metadata and ordinary scalar member cells, with no new allocator or lifetime engine. IsTransparent write omission, ignored extraction failures, signed short widths and checked transparency multiplication are preserved. Native final-class Query0 is always true, so its redundant left conjunct is source-folded while both actual query/extraction operations still execute. JS logical booleans represent valid IDL boolean values; binary boolean byte domains, native ABI, localized presentation/XML diagnostics, full DocPool/document/UI/ODS remain unverified. Existing metadata history/status/classification and conscious I/O/recovery deviations remain intact."
+    },
+    "capability": "Canonical shared cell shadow values and transport",
+    "gaps": [
+      "Native localized presentation/XML diagnostics and noncanonical raw boolean bytes remain unverified.",
+      "Real Calc DocPool/document/UI/ODS integration remains pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.shadow.ts",
+          "marker": "SvxShadowItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/ShadowFormat.ts",
+          "marker": "ShadowFormat"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-shadow-item.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/ShadowFormat.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical shared cell shadow values and transport (task136)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/frmitems.cxx",
+          "marker": "SvxShadowItem::PutValue"
+        },
+        {
+          "path": "include/editeng/shaditem.hxx",
+          "marker": "SvxShadowItem"
+        },
+        {
+          "path": "offapi/com/sun/star/table/ShadowFormat.idl",
+          "marker": "ShadowFormat"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-native-shadow-values",
+    "scopeLimitations": [
+      "Task136 adds the missing native SvxShadowItem pool dependency with owned Color values, gray100NONE defaults, original constructors/copy/clone/setters/equality/hash/side-space/metrics and complete supported typed Any query/put. Published ShadowFormat/ShadowLocation use existing CPPU normal metadata and ordinary scalar member cells, with no new allocator or lifetime engine. IsTransparent write omission, ignored extraction failures, signed short widths and checked transparency multiplication are preserved. Native final-class Query0 is always true, so its redundant left conjunct is source-folded while both actual query/extraction operations still execute. JS logical booleans represent valid IDL boolean values; binary boolean byte domains, native ABI, localized presentation/XML diagnostics, full DocPool/document/UI/ODS remain unverified. Existing metadata history/status/classification and conscious I/O/recovery deviations remain intact."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

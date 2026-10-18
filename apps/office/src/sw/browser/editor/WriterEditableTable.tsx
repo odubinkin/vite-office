@@ -37,7 +37,7 @@ function browserBorderLine(line: SvxBorderLine | Style | undefined, fixedGuide: 
                   : "solid";
   const width = line instanceof Style ? line.GetWidth() : line.GetScaledWidth();
   const color = line instanceof Style ? line.GetColorPrim() : line.GetColor();
-  return `${width / 20}pt ${cssStyle} #${(color & 0xffffff).toString(16).padStart(6, "0")}`;
+  return `${width / 20}pt ${cssStyle} #${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
 }
 /** Projects the four independent native edges and distances directly. @param item - Actual box item. @param fixedGuide - Use isolated fixed-row guides. @returns Browser geometry. */
 function browserCellBoxStyle(item: SvxBoxItem, fixedGuide: boolean): React.CSSProperties {

@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8958d287-291f-4f9d-82f4-fff24b515bfe",
+    "capabilityId": "CAP-8958d287-291f-4f9d-82f4-fff24b515bfe",
+    "suite": "shared",
+    "subsystem": "background-brush-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual brush color constructor/value family and scalar Any contracts preserve source transparency/default/side-effect rules.",
+      "Calc background148 uses original shared transparent brush values, with no fake image provider."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task147 ports original SvxBrushItem Which/Color/Color+ComplexColor/copy constructor family for reachable non-graphic GPOS_NONE values, actual transparent Calc ATTR_BACKGROUND148 default, full color/filter/complex/shading/graphic-percent value state, isUsed, copy/clone/equality/logical hash and supported typed scalar Any methods. Reuse shared Color/ComplexColor/Any/hash primitives; no native memory/move/instance manager. Mutable color borrowing, side-effecting complex getter, original0xfe percent scale, byte casts, RGB alpha preservation and failed graphic-percent extraction default0 are preserved. Full original ShadingPattern long constants and brush position/version declarations are represented without pretending they provide graphics. Real Graphic/GraphicObject constructors/positions/links/URL/filter loaders, XGraphic and XComplexColor transport remain unported; their known provider selectors explicitly returnfalse. No fake image/provider/security path or browser snapshot projection is introduced; inherited no-argument query remains undefined. UI-localized presentation is deferred per user direction. Broader native graphic behavior and complete Calc pool/document/connected UI/ODS remain pending, with deliberate I/O/recovery deviations retained."
+    },
+    "capability": "Native brush color values for Calc background defaults",
+    "gaps": [
+      "Actual graphics and complex-interface providers remain unported.",
+      "UI localization deferred per user; complete Calc pool/document/UI/ODS remains pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.brush.ts",
+          "marker": "SvxBrushItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/brushitem.ts",
+          "marker": "SvxBrushItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/drawing/ShadingPattern.ts",
+          "marker": "ShadingPattern"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-brush-color.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/background-brush.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native brush color values for Calc background defaults (task147)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/frmitems.cxx",
+          "marker": "SvxBrushItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/brushitem.hxx",
+          "marker": "SvxBrushItem"
+        },
+        {
+          "path": "offapi/com/sun/star/drawing/ShadingPattern.idl",
+          "marker": "CLEAR"
+        },
+        {
+          "path": "sc/source/core/data/docpool.cxx",
+          "marker": "ATTR_BACKGROUND"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/table/_CellProperties.java",
+          "marker": "CellBackColor"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-non-graphic-brush-value-family",
+    "scopeLimitations": [
+      "Task147 ports original SvxBrushItem Which/Color/Color+ComplexColor/copy constructor family for reachable non-graphic GPOS_NONE values, actual transparent Calc ATTR_BACKGROUND148 default, full color/filter/complex/shading/graphic-percent value state, isUsed, copy/clone/equality/logical hash and supported typed scalar Any methods. Reuse shared Color/ComplexColor/Any/hash primitives; no native memory/move/instance manager. Mutable color borrowing, side-effecting complex getter, original0xfe percent scale, byte casts, RGB alpha preservation and failed graphic-percent extraction default0 are preserved. Full original ShadingPattern long constants and brush position/version declarations are represented without pretending they provide graphics. Real Graphic/GraphicObject constructors/positions/links/URL/filter loaders, XGraphic and XComplexColor transport remain unported; their known provider selectors explicitly returnfalse. No fake image/provider/security path or browser snapshot projection is introduced; inherited no-argument query remains undefined. UI-localized presentation is deferred per user direction. Broader native graphic behavior and complete Calc pool/document/connected UI/ODS remain pending, with deliberate I/O/recovery deviations retained.",
+      "Native CellProperties generic CellBackColor QA is a broader UNO property witness; the full filter/graphic/service scenario is not claimed ported or executed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

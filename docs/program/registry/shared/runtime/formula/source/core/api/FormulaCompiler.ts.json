@@ -6,15 +6,16 @@
     "classification": "upstream-mechanism",
     "state": "foundation",
     "suite": "shared",
-    "subsystem": "formula-compiler-jump",
+    "subsystem": "formula-compiler-scalar",
     "capabilityIds": [
-      "CAP-476ea52d-9853-45e2-ad3f-ee61ee7503c9"
+      "CAP-476ea52d-9853-45e2-ad3f-ee61ee7503c9",
+      "CAP-c599d213-59a2-4207-a60b-d087bb370ae0"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
-      "divergenceClass": "none",
+      "divergenceClass": "B",
       "evidence": [
         "apps/office/src/formula/source/core/api/FormulaCompiler.ts#FormulaCompiler",
         "apps/office/src/formula/source/core/api/FormulaCompiler.ts#IsOpCodeJumpCommand",
@@ -22,17 +23,45 @@
         "apps/office/src/formula/inc/native-token.test.ts#matches all original UInt16 opcode classifications",
         "apps/office/src/formula/inc/native-token.test.ts#matches all original string-op parameter counts",
         "apps/office/src/formula/inc/token.test.ts#uses real shared string ownership",
-        "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::IsOpCodeJumpCommand"
+        "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::IsOpCodeJumpCommand",
+        "apps/office/src/formula/source/core/api/FormulaCompiler.ts#CompileTokenArray",
+        "apps/office/src/formula/source/core/api/compiler-arithmetic.test.ts#preserves arithmetic precedence, left-associative power and unary-before-power",
+        "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::PowLine",
+        "apps/office/src/sc/source/core/tool/formula-output.test.ts"
       ],
-      "justification": "Task75 preserves the original token family and genuine owned values/reference operations, with explicit erased C++ type/category/access witnesses. Existing SAL atomics, OUString, SharedString, FormulaError, OpCode and ParamClass are reused. Ordinary unchanged full headers and complete selected member definitions compile over real SAL/Boost dependencies; whole initialized native streams and complete affected raw100/source-absent checks provide bounded evidence. Broad module parity flags remain unverified. Full tokenarray/compiler/Calc cell/matrix/document/input/view/UI, native physical ABI, invalid object casts/lifetimes, concurrent execution, debug process termination and complete upstream QA remain unfinished or unverified. No fake Calc/compiler/pointee class, alternate engine, threshold change or routine sanitizer is introduced. Next full81. Only the actual static IsOpCodeJumpCommand member is bound; no compiler instance constructors, token array, parsing or compilation implementation is claimed.",
+      "justification": "Task199 adds the default-mode shared scalar arithmetic token-to-RPN subset over the existing FormulaTokenArray. Native recursive precedence, original token identities, prefix-plus elision, whitespace skipping, first-error virtual boundary, expression/token recursion limits, forced recalc retention and subtotal-return meaning are preserved for supported tokens. The base error hook remains the actual native empty operation. Unsupported opcode families, existing array-context tokens and implicit-intersection/matrix modes reject explicitly before RPN mutation. No text scanner, function/reference-operator grammar, formula-cell evaluation/recalc, ODS, UI, full compiler constructor/services, or broad parity is claimed. Existing token-array limit bounds emitted scalar RPN; native overflow paths requiring expansions are outside this subset. Scope reduction is explicit and broad flags remain unverified. Task200 keeps the original mutable protected array pointer so ScCompiler::CompileString can bind its actual newly returned token owner. No new parsing algorithm or broad shared compiler parity is claimed. Task202 serializes actual source-order scalar ODFF tokens through shared FormulaCompiler and ScCompiler reference convention into ScFormulaCell.GetFormula with explicit grammar. It preserves forced equals, source whitespace/quotes, native numeric presentation and relative/absolute A1 references at the actual cell position. It neither evaluates formulas nor stores an alternate text model. The shared native base reference hook remains empty; Calc overrides it. JS strings replace buffer fragments; actual OUString assignment preserves output ownership. Other grammars/localized symbol services,functions/names/external/range/matrix/table references and missing-argument rewrite services remain unsupported. Compiler string token output does not imply string-expression evaluation. Localized empty-code errors reject explicitly. ODS filters and UI are not implemented by this task; no broad native parity is certified.",
       "knownViolations": [],
       "localSymbols": [
         "FormulaCompiler",
+        "CompileTokenArray",
+        "SetError",
+        "GetToken",
+        "NextToken",
+        "PutCode",
+        "Factor",
+        "UnaryLine",
+        "PostOpLine",
+        "PowLine",
+        "MulDivLine",
+        "AddSubLine",
+        "Expression",
         "IsOpCodeJumpCommand"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "formula/source/core/api/FormulaCompiler.cxx",
       "upstreamSymbols": [
+        "FormulaCompiler::CompileTokenArray",
+        "FormulaCompiler::SetError",
+        "FormulaCompiler::GetToken",
+        "FormulaCompiler::NextToken",
+        "FormulaCompiler::PutCode",
+        "FormulaCompiler::Factor",
+        "FormulaCompiler::UnaryLine",
+        "FormulaCompiler::PostOpLine",
+        "FormulaCompiler::PowLine",
+        "FormulaCompiler::MulDivLine",
+        "FormulaCompiler::AddSubLine",
+        "FormulaCompiler::Expression",
         "FormulaCompiler::IsOpCodeJumpCommand"
       ]
     }

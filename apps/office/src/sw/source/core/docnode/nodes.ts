@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
@@ -198,25 +199,19 @@ export class SwNodes {
         this.m_aOutlineNodes.erase(node);
         node.RemoveFromList();
       }
-    tableNode
-      .GetTable()
-      .GetFrameFormat()
-      .ForAllListeners(
-        /** Removes original table frames before releasing their model client. @param client - Original format listener. @returns Continue flag. */
-        (client) => {
-          if (client instanceof SwTabFrame && client.GetTable() === tableNode.GetTable())
-            client.DestroyImpl();
-          return false;
-        },
-      );
+    writerClients0: for (const client of new SwIterator(
+      SwClient,
+      tableNode.GetTable().GetFrameFormat(),
+    )) {
+      if (client instanceof SwTabFrame && client.GetTable() === tableNode.GetTable())
+        client.DestroyImpl();
+      continue writerClients0;
+    }
     for (const row of tableNode.GetTable().GetTabLines()) {
-      row.GetFrameFormat().ForAllListeners(
-        /** Destroys actual flat row frames before their model line, as native DelFrames does. @param client - Original format client. @returns Continue flag. */
-        (client) => {
-          if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
-          return false;
-        },
-      );
+      writerClients1: for (const client of new SwIterator(SwClient, row.GetFrameFormat())) {
+        if (client instanceof SwRowFrame && client.GetTabLine() === row) client.DestroyImpl();
+        continue writerClients1;
+      }
       for (const box of row.GetTabBoxes()) this.DestroyTableBox(box);
       row.Dispose();
     }
@@ -444,14 +439,11 @@ export class SwNodes {
       }
     this.nodeArray.splice(index, section.nodes.length);
     table.RemoveLine(section.line);
-    section.line.GetFrameFormat().ForAllListeners(
-      /** Destroys native clients of the deleted flat row before releasing its registration. @param client - Original format client. @returns Continue flag. */
-      (client) => {
-        if (client instanceof SwRowFrame && client.GetTabLine() === section.line)
-          client.DestroyImpl();
-        return false;
-      },
-    );
+    writerClients2: for (const client of new SwIterator(SwClient, section.line.GetFrameFormat())) {
+      if (client instanceof SwRowFrame && client.GetTabLine() === section.line)
+        client.DestroyImpl();
+      continue writerClients2;
+    }
     for (const box of section.line.GetTabBoxes()) this.DestroyTableBox(box);
     section.line.Dispose();
     this.document.NotifyModelChange({ index, kind: "node-removed" });
@@ -459,17 +451,13 @@ export class SwNodes {
 
   /** Removes actual cell layout clients before releasing the original model box. @param box - Deleted native cell. @returns Nothing. */
   private DestroyTableBox(box: SwTableBox): void {
-    box.GetFrameFormat().ForAllListeners(
-      /** Removes matching original physical cells only. @param client - Native format listener. @returns Continue flag. */ (
-        client,
-      ) => {
-        if (client instanceof SwCellFrame && client.GetTabBox() === box) {
-          if (client.GetUpper() !== undefined) client.RemoveFromLayout();
-          client.DestroyImpl();
-        }
-        return false;
-      },
-    );
+    writerClients3: for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
+      if (client instanceof SwCellFrame && client.GetTabBox() === box) {
+        if (client.GetUpper() !== undefined) client.RemoveFromLayout();
+        client.DestroyImpl();
+      }
+      continue writerClients3;
+    }
     box.Dispose();
   }
 

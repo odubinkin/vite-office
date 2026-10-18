@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/textitem.color.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/textitem.cxx",
+    "localSymbols": [
+      "SvxColorItem",
+      "CreateDefault",
+      "hashCode"
+    ],
+    "upstreamSymbols": [
+      "SvxColorItem",
+      "CreateDefault",
+      "hashCode"
+    ],
+    "preservedResponsibilities": [
+      "Task131 implements actual SvxColorItem value ownership needed by ScDocumentPool, using real Tools Color and docmodel ComplexColor with SfxPoolItem. Original Which-only black, Color/Which, Color/ComplexColor/Which and implicit-copy constructors, CreateDefault black0, independent Clone, stable borrowed Color and ComplexColor getters, both Color setter families, complete ComplexColor assignment, equality ignoring Which, hash support and original signed32 Color/complex field fold are preserved. Browser logical unsigned64 item hashes reuse existing o3tl and browser32 ComplexColor logical hashes; native ABI std::hash/size_t bit patterns are not claimed. Setters do not implicitly resolve or synchronize the independently stored Color and ComplexColor final value. Canonical colritem header reexports the single source class and owns original VERSION_USEAUTOCOLOR1. Color methods are grouped in an existing-style textitem source shard: the current value87lines alone plus main402 could fit489, but the original full color Any/presentation body cannot fit the500line responsibility target, so one class remains the final source owner. Native font-color Which109 and ScDocPool COL_AUTO/defaultUnused ComplexColor are checked through real shared itemset cloning, without a fabricated ScDocumentPool, configuration peer or color resolver. Native Any/UNO interface transport, localized presentation/XMLdump and actual Writer scalar color migration remain unfinished until the real shared interface helper is available; inherited base unsupported methods are not certified as native SvxColorItem behavior, and no placeholder complex-color member is introduced. This source slice alone does not make full DocPool/document/UI/ODS ready. Existing IO/recovery deviations retained, no C++/memory library and no full regression before actual UI+ODS readiness."
+    ],
+    "omittedResponsibilities": [
+      "Native Any/UNO complex interface, presentation/XMLdump, Writer color integration, complete DocPool/document/UI/ODS pending; no fullQA/ABI certificate."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-color.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx",
+          "marker": "SvxColorItem"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/textitem.color.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original textitem.cxx color responsibility has a separate source shard alongside existing height/effects shards; current main402 plus value87 is489, while the complete original ColorItem Any/presentation body would exceed the500line responsibility target. Canonical header borrows this single class owner; native transport remains explicitly pending."
+    }
+  }
+}

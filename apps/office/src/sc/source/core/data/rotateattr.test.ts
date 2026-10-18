@@ -1,0 +1,32 @@
+/** @fileoverview Original Calc cell rotation and DocPool explicit zero with shared signed angle transport. */
+import { expect, it } from "vitest";
+import { ScRotateValueItem } from "../../../inc/attrib";
+import { ATTR_ROTATE_VALUE } from "../../../inc/scitems";
+import { SdrAngleItem } from "../../../../svx/inc/sdangitm";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemPool } from "../../../../svl/source/items/itempool";
+it("retains explicit zero, signed hundredths and copy versus fixed-Which Clone", /** Checks actual native base and pool item transport. @returns Nothing. */ () => {
+  expect(new ScRotateValueItem(-0).GetValue()).toBe(0);
+  const zero = new ScRotateValueItem(0);
+  expect(ATTR_ROTATE_VALUE).toBe(135);
+  expect([zero.Which(), zero.GetValue()]).toEqual([135, 0]);
+  expect(zero).toBeInstanceOf(SdrAngleItem);
+  const item = new ScRotateValueItem(-4500);
+  item.SetWhich(999);
+  const copy = new ScRotateValueItem(item);
+  const clone = item.Clone();
+  expect([copy.Which(), clone.Which()]).toEqual([999, 135]);
+  expect(copy.equals(item)).toBe(true);
+  expect(clone.equals(item)).toBe(true);
+  item.SetValue(72500);
+  expect(item.GetValue()).toBe(72500);
+  expect([copy.GetValue(), clone.GetValue()]).toEqual([-4500, -4500]);
+  const input = new Any([9000], "sal_Int32");
+  expect(clone.PutValue(input, 255)).toBe(true);
+  input.dispose();
+  const set = new SfxItemSet(new SfxItemPool(), [[135, 135]]);
+  set.Put(clone);
+  clone.SetValue(0);
+  expect((set.Get(135) as ScRotateValueItem).GetValue()).toBe(9000);
+});

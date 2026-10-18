@@ -1,17 +1,18 @@
 /** @fileoverview Verifies independent native size items without reference checkout access. */
+import { Size } from "../../tools/inc/gen";
 import { expect, it } from "vitest";
 import { SvxSizeItem } from "../../editeng/source/items/frmitems";
 import { SwFormatFrameSize, SwFrameSize } from "./fmtfsize";
 import { RES_FRM_SIZE } from "./hintids";
 it("native base size owns both dimensions, identity, copy and default query", /** Checks base item value semantics. @returns Nothing. */ () => {
-  const input = { width: 72, height: 144 },
+  const input = new Size(72, 144),
     item = new SvxSizeItem(90, input),
     defaultItem = new SvxSizeItem(91);
-  input.width = 900;
-  expect(item.GetSize()).toEqual({ width: 72, height: 144 });
-  expect(defaultItem.GetSize()).toEqual({ width: 0, height: 0 });
+  input.setWidth(900);
+  expect([item.GetSize().Width(), item.GetSize().Height()]).toEqual([72, 144]);
+  expect([defaultItem.GetSize().Width(), defaultItem.GetSize().Height()]).toEqual([0, 0]);
   const exposed = item.GetSize();
-  Reflect.set(exposed, "height", 800);
+  expect(exposed).toBe(item.GetSize());
   expect(item.GetHeight()).toBe(144);
   const clone = item.Clone();
   expect(item.equals(clone)).toBe(true);
@@ -22,7 +23,7 @@ it("native base size owns both dimensions, identity, copy and default query", /*
   expect(item.equals(clone)).toBe(false);
   expect(item.equals(defaultItem)).toBe(false);
   expect(item.QueryValue()).toEqual({ Width: 72, Height: 144 });
-  item.SetSize({ width: 90, height: 100 });
+  item.SetSize(new Size(90, 100));
   expect(item.GetWidth()).toBe(90);
   expect(item.GetHeight()).toBe(100);
 });
@@ -82,6 +83,6 @@ it("native frame size retains all eight defaults, fields and complete clone equa
     change(candidate);
     expect(item.equals(candidate)).toBe(false);
   }
-  expect(item.equals(new SvxSizeItem(90, { width: 72, height: 144 }))).toBe(false);
+  expect(item.equals(new SvxSizeItem(90, new Size(72, 144)))).toBe(false);
   expect(item.equals(copy)).toBe(true);
 });

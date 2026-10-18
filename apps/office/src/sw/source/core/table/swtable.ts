@@ -1,4 +1,5 @@
 /** @fileoverview Implements the bounded SwTable, SwTableLine and SwTableBox graph from pinned swtable.cxx. */
+import { Color } from "../../../../tools/inc/color";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { SwTableBox, SwTableLine } from "./swtable-boxline";
@@ -59,7 +60,8 @@ export interface SwTableBoxFormat {
 export function createWriterTableBoxItem(borders: boolean): SvxBoxItem {
   const item = new SvxBoxItem(RES_BOX);
   item.SetAllDistances(borders ? 55 : 0);
-  if (borders) for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(0, 10), edge);
+  if (borders)
+    for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(new Color(0), 10), edge);
   return item;
 }
 

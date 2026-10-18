@@ -1855,3 +1855,790 @@ The non-collapsing handleAttributeValue CR branch advances the local pointer but
 Evidence: pinned XmlReader::handleAttributeValue and header peek; task110 actual public reader inputs and attribute queries. No invalid native execution, sanitizer, memory experiment or compiled differential claim.
 
 Decision: preserve global-peek behavior on defined inputs. Browser invalid input offsets retain native DataView RangeError; this is a host boundary, not native undefined-behavior emulation. Audit schema/configuration consumers later.
+
+
+## CALC-097: boolean cell-attribute Clone resets Which while implicit copy retains it
+
+Status: source-confirmed construction difference; normal pool callers and user-visible consequences remain unverified.
+
+ScShrinkToFitCell, ScVerticalStackCell, ScLineBreakCell and ScHyphenateCell have implicit copy constructors that copy the SfxBoolItem base and retain a changed source Which. Their Clone implementations instead construct a new concrete item from GetValue, restoring that class's fixed attribute identity. Same-type SfxBoolItem equality compares only the payload after the base item-type assertion, so differing Which values do not make otherwise equal bool items unequal.
+
+Evidence: complete pinned attrib.hxx/cxx, scitems.hxx, include/svl/eitem.hxx, cenumitm.cxx and SfxPoolItem::operator== scopes; task112 actual owned-item copy/Clone/equality histories and real shared pool/item-set consumers. No fake provider, native invalid downcast execution, compiled differential, native instance-cache or full document QA claim.
+
+Decision: preserve implicit-copy identity, fixed-id Clone and payload-only same-type equality. Correct shared bool behavior and its previous Which-sensitive test rather than duplicate a Calc-specific workaround. Audit normal document/pool callers before calling this a defect.
+
+
+## CALC-098: sorted_vector initializer-list construction retains duplicate values
+
+Status: source-confirmed constructor difference; user-visible impact remains unverified.
+
+The original include/o3tl/sorted_vector.hxx initializer-list constructor copies values and calls std::sort without a unique pass. Single insertion rejects comparator-equivalent values. ScCondFormatItem takes that actual vector by const reference or move, so construction and copies must preserve duplicate indices. Its Clone reconstructs from the vector and restores Which154, whereas implicit copy retains the source Which. Preserve this behavior; do not normalize through repeated unique insertions. Task113 tests real shared vector and Calc item histories. No compiled native or full-document QA claim.
+
+## CALC-099: page-scale Any accepts signed16 negative values as unsigned dimensions
+
+Status: source-confirmed typed conversion, not identified as a defect.
+
+ScPageScaleToItem::PutValue extracts sal_uInt16 from an actual Any. Original cppu/source/uno/assign.hxx accepts SHORT and UNSIGNED_SHORT at equal width by reading their bits as unsigned16. Thus a typed signed16 -1 becomes65535, while a LONG is rejected even when its value would fit. Preserve actual shared Any conversion; do not add a value-range policy to the native typed path. The explicit browser scalar transport only accepts unsigned16 numbers. Task113 uses the existing actual CPPU owners; no duplicate conversion engine.
+
+
+## CALC-100: enum-item equality ignores Which while its hash includes Which
+
+Status: source-confirmed asymmetry; valid pooled-caller impact remains unverified.
+
+SfxEnumItemInterface compares GetEnumValue after the native base type assertion, without comparing Which. SfxEnumItem additionally compares full EnumT payload. Its hashCode returns Which xor GetEnumValue. Consequently same-type equal enum items with different Which values can have different hashes. Calc ScViewObjectModeItem reuses the template for three page-output identities. Keep equality and hashing as written; audit native item-manager key partitioning before identifying a defect. Task114 checks actual shared generic values and Calc copies. No full document/native runtime certification.
+
+
+## CALC-101: unsigned16 legacy Any input wraps out-of-range signed32 values
+
+Status: explicit upstream compatibility, not identified as a defect.
+
+CntUInt16Item::PutValue first attempts sal_uInt16 extraction, then deliberately accepts sal_Int32 for old callers. It emits warnings for negative or overflowing values but still static_casts to unsigned16, so signed32 65537 becomes1 and -1 becomes65535. CntUInt32Item projects unsigned bits through signed32 Any, accepting the corresponding signed32 extraction. Preserve these paths through actual shared CPPU, without adding a range rejection to typed Any input. Existing checked JS scalar constructor bounds remain a separately documented browser domain.
+
+Unsigned16/32 same-type equality also ignores Which after the original base assertion, while their o3tl hash fold includes Which. This parallels CALC-100; keep the source contracts and inspect native pool key partitioning before declaring a defect. ScIndentItem implicit copy retains Which, but its value-based Clone restores131. Task115 checks these real shared/Calc histories; no compiled native or full-document certification.
+
+
+## CALC-102: angle values accept signed32 minimum while presentation negates negative signed32
+
+Status: source-level suspicious arithmetic; native runtime consequences unexecuted.
+
+Degree100 is a signed32 hundredths-of-degree value. SdrAngleItem stores that payload without normalization. In svx/source/svdraw/svdattr.cxx GetPresentation copies it into sal_Int32 nValue and performs nValue = -nValue when negative. For INT32_MIN the positive mathematical result does not fit signed32, so this expression appears to enter C++ signed-overflow undefined behavior. No sanitizer/native experiment or invented expected text is added. Preserve valid full-width stored angle values and do not add normalization or a minimum-value rejection. Localized presentation remains pending; resolve its defined-domain adaptation with the real locale/presentation owners.
+
+ScRotateValueItem implicit copy retains Which, while its GetValue-based Clone restores135; SdrAngleItem Clone explicitly retains Which. Task116 tests actual shared/Calc copy histories and degree values, not the suspicious native presentation path.
+
+
+## CALC-103: alignment setters can return success after failed extraction or ignored member
+
+Status: source-confirmed behavior; consumer-visible impact remains unverified.
+
+SvxVerJustifyItem::PutValue ignores the result of extracting the default long member. Failure leaves the initialized STANDARD value, resets the stored mode to Standard and returns true. Its typed VerticalAlignment member instead returns false without mutation on extraction failure. SvxRotateModeItem also replaces failed long extraction with STANDARD, stores Standard and returns true. SvxHorJustifyItem unknown members succeed without changing state; QueryValue likewise succeeds while leaving the output Any untouched. Preserve all these differences rather than adding uniform rejection.
+
+Vertical querying through MID_HORJUST_ADJUST maps both Standard and Block to VerticalAlignment_TOP, so that member cannot round-trip those modes. The default member uses CellVertJustify2 long values and preserves all five normal modes. These member/type distinctions are tested with actual shared items/Any and generated normal enum types. No full document/native QA or defect certification.
+
+
+## CALC-104: margin writes enforce only an upper bound before signed16 narrowing
+
+Status: source-confirmed behavior, consumer-visible defect not established.
+
+SvxMarginItem::PutValue extracts sal_Int32 and rejects values greater than SHRT_MAX, or its rounded mm100 equivalent when CONVERT_TWIPS is selected. It does not reject values below SHRT_MIN. Negative values can therefore narrow into positive signed16 margins: raw -32769 becomes32767; converted -60000mm100 rounds to -34016twips and narrows to31520. Preserve the upper-only check and original conversion order using actual shared integral conversion, without adding a lower clamp. QueryValue returns signed32 and converts in the other direction when requested.
+
+SvxOrientationItem matches only exact9000/27000hundredths when not stacked; negative -9000 and45000 remain Standard, while stacked overrides the angle. Keep these constructor rules without modulo normalization. Task118 uses real items/Any/common unit definitions and Writer consumers, not a fake document or compiled native probe.
+
+
+## CALC-105: Stacked direction has no entry in the frame-direction presentation table
+
+Status: source-level suspicion; no native memory experiment or consumer-visible failure established.
+
+The pinned include/editeng/frmdir.hxx declares Stacked from WritingMode2::STACKED (7). SvxFrameDirectionItem QueryValue and PutValue explicitly handle this direction. In editeng/source/items/frmitems.cxx, getFrmDirResId has seven resource entries (indices0through6), and GetPresentation indexes that table using GetEnumValue without a local bounds check. Stacked and Unknown therefore deserve review if they reach that presentation path. The logical value/UNO mappings retain native behavior. Localized resource presentation remains unported; no fallback label or new clamp has been introduced. Task119 documents this discrepancy without executing invalid native memory access.
+
+
+## CALC-106: strikeout and emphasis unknown members report success without updating output
+
+Status: source-confirmed behavior; consumer-visible defect not established.
+
+In editeng/source/items/textitem.cxx, SvxCrossedOutItem QueryValue/PutValue and SvxEmphasisMarkItem QueryValue/PutValue return true for unknown member identifiers after removing CONVERT_TWIPS, without modifying the destination or stored value. Strikeout bool member uses common Any2Bool: failed bool and signed32 extraction resets the value to NONE while still succeeding; its numeric member instead fails extraction without mutation. Emphasis invalid numeric input fails, but an unknown stored style maps to NONE on query. PosBelow wins when both position flags are present. Preserve these differences and original typed Any behavior rather than adding validation or normalizing flags. Localized presentation is not exercised; no native memory probe is used. Task121 tests public value histories and reuses the actual common helper for Writer automatic first-line flags.
+
+
+## CALC-107: unknown font posture is truthy and reverse slants lose their reverse component
+
+Status: source-confirmed behavior; consumer-visible defect not established.
+
+SvxPostureItem GetBoolValue in editeng/source/items/textitem.cxx checks GetValue() >= ITALIC_OBLIQUE, so ITALIC_DONTKNOW also reports true. The former local upper bound incorrectly excluded DONTKNOW and is corrected in task122. VCL ConvertFontSlant maps reverse oblique/italic to ordinary OBLIQUE/NORMAL because the internal enum has no reverse forms; unknown initialized values fall back to DONTKNOW. QueryValue/PutValue unknown members return true with output/state untouched, while bool updates use Any2Bool fallback to NONE. Preserve these source behaviors. Native presentation/diagnostic/assertion paths are excluded; no native memory probe is used. The original SfxEnumItem equality ignoresWhich and is now shared by posture; earlier local identity-sensitive expectations are corrected from source rather than preserved as an intentional deviation.
+
+
+## CALC-108: font weight uses upper thresholds and falls back to unknown above BLACK
+
+Status: source-confirmed behavior; consumer-visible defect not established.
+
+VCL ConvertFontWeight maps each input float to the first greater-or-equal weight constant. Values above BLACK200 and NaN fall back to WEIGHT_DONTKNOW, rather than clamping to BLACK; native float32 casts affect values just above100or200. The pinned MEDIUM wire weight is105. SvxWeightItem bool failure through Any2Bool resets to NORMAL, while numeric extraction failure leaves state unchanged; unknown members report untouched success. Its legacy signed32 extraction after failed double extraction cannot succeed for actual Any: cppu/source/uno/assign.hxx accepts BYTE/SHORT/UNSIGNED_SHORT/LONG/UNSIGNED_LONG for LONG, and all of those plus FLOAT/DOUBLE for DOUBLE. Both original extraction calls are retained without constructing a fake peer to force an impossible success path. Original threshold/cast/failure ordering is preserved, without adding clamps or native memory probes. Task123 also corrects earlier local Which-sensitive weight equality to the original shared payload comparison.
+
+
+## CALC-109: ControlToItem delegates in the item-to-control direction
+
+Status: suspicious source direction; original behavior preserved.
+
+Pinned `svtools/source/misc/unitconv.cxx:138` implements `ControlToItem(nIn, eCtrl, eItem)` by returning `ItemToControl(nIn, eItem, eCtrl)`. The called function maps the item unit to the field unit. It does not invert that conversion even though the public function name suggests the opposite direction.
+
+Initialized examples: `ControlToItem(200, FieldUnit::POINT, MapUnit::MapTwip)` gives10, as does `ItemToControl(200, MapUnit::MapTwip, FieldUnit::POINT)`. Converting200points into twips would instead give4000. Native `SvxFontHeightItem::SetHeight` with four arguments also calls this helper; its caller invariants and intended historical behavior have not been established.
+
+The shared implementation retains the exact same-direction delegation. Literal initialized assertions in `apps/office/src/svtools/source/misc/native-unitconv.test.ts` distinguish it from a plausible inverse. Source inspection and ordinary TypeScript tests provide the evidence; no native build, sanitizer, binary/ABI certification or upstream issue publication occurred. An upstream correction would require separate evidence and user direction; this record does not authorize changing behavior.
+
+
+## CALC-110: Font-height percentages multiply in unsigned32 before division
+
+Status: source-defined arithmetic preserved; caller overflow limits remain unreviewed.
+
+Pinned editeng/source/items/textitem.cxx:1055 and:1071 compute sal_uInt32((nNewHeight*nNewProp)/100) in both SvxFontHeightItem::SetHeight overloads. Height is unsigned32 and property unsigned16: multiplication wraps in unsigned32 before division. Keeping an unbounded product until after division changes the result.
+
+Initialized height4294967295 and prop65535 produce product modulo2^32 equal4294901761 and stored height42949017. The TypeScript value owner casts unsigned32 before integral division and asserts the literal result. Zero height is native-valid; native same-type equality compares height/property/unit and ignoresWhich, correcting the prior local expectation.
+
+The4argument overload also uses the same-direction ControlToItem helper from CALC109: height100, delta2points and coremm100 store123. Native callers may constrain these values; no full caller invariant, native binary execution, sanitizer or upstream issue report is claimed. Original defined behavior is preserved.
+
+
+## CALC-111: Font-height Any updates have different failure mutation boundaries
+
+Status: original source behavior preserved; complete consumer invariants remain unreviewed.
+
+Pinned editeng/source/items/textitem.cxx:909ff resets property/unit before checking scalar height type/range. A correctly typed FontHeight struct with invalid Height also resets property/unit, while a wrong struct type leaves them untouched. Failed signed-short property extraction returns true without mutation. Difference update reconstructs original height before extracting the new value: a failed update can change height; repeated failures can reconstruct again with old proportion still present.
+
+Initialized example: stored height200, prop125, relative unit, then an invalid bool Any for difference member with CONVERT_TWIPS. The call returns false and height160 with prop125 unchanged; a second failed call leaves height128. Struct Diff is ignored on successful put. Negative point difference stores signed-short bits in unsigned nProp, so querying Diff after putting-1 can return65535. Native real-height relative multiplication also wraps unsigned32 before division and the absolute reconstruction clamps rather than underflows.
+
+Actual Any and source-derived initialized assertions in native-font-height-transport.test.ts preserve these results. No failure is normalized into an atomic update, no fake extraction peer forces unreachable numeric fallbacks, and no native binary/ABI execution or external defect report is claimed.
+
+
+## CALC-112: Dark-color exception compares the full packed value
+
+Status: source behavior preserved; the explicit exception may be intentional, no confirmed defect.
+
+Pinned tools/source/generic/color.cxx IsDark compares the complete stored value with 0x729fcf. This opaque default shape color takes the integer luminance threshold62: its luminance151 therefore returns false. The same RGB channels with transparency1 bypass that exception and use WCAG luminance83 against threshold87, returning true. Transparency thus changes this brightness predicate even though both luminance methods themselves depend only on RGB.
+
+The initialized color.test.ts assertions retain both cases. No RGB-only normalization or upstream fix is applied. Automatic and transparent constants sharing 0xffffffff are preserved as deliberate role aliases, not classified as an error.
+
+
+## CALC-113: ComplexColor equality and hashing use different state fields
+
+Status: original field behavior retained; potential equality/hash invariant violation, no upstream defect claim.
+
+Pinned docmodel/source/color/ComplexColor.cxx operator== compares representation, three components, system type, last Color, theme index and transformation sequence. It omits final Color and theme usage. getHash includes final Color, but omits theme index and usage.
+
+Two initialized RGB values with identical components and transformations compare equal after only one final Color is changed, while their field-based hashes can differ. This may conflict with equal-key hash requirements if such states enter the same hashed container. Different theme indices can compare unequal while sharing a hash; that collision alone is valid.
+
+ComplexColor.test.ts preserves these cases, including usage-only equality/hash stability. No fields are added to equality or removed from hashing. Browser logical hashes deliberately reuse the existing scalar binding and do not certify binary std::hash<double>/size_t results; the source field mismatch exists independently of that language adaptation. Native theme/UNO consumers still require further integration review.
+
+## CALC-114: XMLFontAutoStylePool Add returns empty for a new entry
+
+Status: original return behavior retained; no upstream defect claim.
+
+Pinned `xmloff/source/style/XMLFontAutoStylePool.cxx` initializes `sPoolName` to
+empty in `XMLFontAutoStylePool::Add`. The existing-entry branch assigns the
+stored name. The new-entry branch allocates and registers `sName`, but does not
+assign it to `sPoolName` before the final return. Consequently the first Add
+returns empty, the next identical Add returns the stored name, and Find can
+read that name immediately after insertion. This looks surprising for an API
+returning the assigned name, although callers that ignore Add and use Find
+are unaffected. Preserve the source behavior and exercise both paths; the
+browser property boundary registers then looks up the actual entry.
+
+The same pool deliberately compares symbol encoding separately from all
+non-symbol encodings. Full style/family/pitch values participate in its key,
+while different non-symbol encodings compare equivalent. Preserve this source
+rule and the source encoding export, which writes only `x-symbol`.
+
+## CALC-115: shadow PutValue ignores IsTransparent and most extraction failures
+
+- Upstream: `editeng/source/items/frmitems.cxx`, `SvxShadowItem::PutValue`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: `QueryValue` publishes both packed Color transparency and IsTransparent. Put reads IsTransparent but commits only Location, ShadowWidth and packed Color, so changing only the flag does not change the stored Color alpha. Non-location member extraction results and full ShadowFormat extraction results do not replace the initial success result; an incompatible Any can therefore return true and commit the queried state. A conversion query narrows width through signed short before conversion back, so even a failed field extraction can change a large stored width.
+- Source example: an opaque shadow remains opaque after a successful IsTransparent=true write. Width65535 queried in mm100 becomes115596, narrows to-15476, converts back to-8774twips and stores uint16 value56762 even when the incoming width Any has the wrong type.
+- Status: suspicious behavior or legacy contract, not a confirmed upstream bug. Preserve the original path and verify it with actual shared Any values; no corrective normalization.
+- Local evidence: `apps/office/src/editeng/source/items/native-shadow-item.test.ts`, `apps/office/src/editeng/source/items/frmitems.shadow.ts`. Native localized presentation, raw boolean bytes and full document integration remain outside this record.
+
+## CALC-116: SvxLineItem style member overlaps the conversion flag
+
+- Upstream: `include/editeng/memberids.h` defines MID_LINE_STYLE0x90; `include/svl/poolitem.hxx` defines CONVERT_TWIPS0x80. `editeng/source/items/frmitems.cxx`, SvxLineItem::PutValue strips the conversion bit before switching on the member, including its MID_LINE_STYLE case. Pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: after byte conversion and removing0x80, the member is at most0x7f. The MID_LINE_STYLE0x90 branch therefore cannot be selected; passing0x90 selects unsupported0x10 and returns false. For a numeric Any, the source allocates a new zero-width border before rejecting the member. An absent-line scalar QueryValue returns true with untouched Any, whereas the same unsupported member on a present line returns false.
+- Status: suspicious identifier/control-flow overlap, not a confirmed upstream bug. Preserve the failed style write and the observable allocation. Source-fold the unreachable style mutation instead of introducing a dead branch or fake test provider.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-item.test.ts`, `apps/office/src/editeng/source/items/frmitems.line.ts`. Complete BoxItem Any and broad native document behavior remain separately unverified.
+
+## CALC-117: page descriptor name is omitted from copy and equality
+
+- Upstream: `include/svx/pageitem.hxx` and `svx/source/items/pageitem.cxx`, SvxPageItem copy constructor/operator==, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the class stores descriptor name, numbering type, landscape and usage. The copy constructor copies only the three latter fields, leaving the name default-empty. Equality also ignores the name. Native GetPresentation reads the name, so copying can change later presentation text despite value equality.
+- Status: possibly intentional auxiliary presentation state, not a confirmed defect. Preserve omission and do not invent a name getter or copy fix. The existing browser noarg state projection observes the actual fields separately from native typed Any.
+- Local evidence: `apps/office/src/svx/source/items/pageitem.test.ts`, `apps/office/src/sc/source/core/data/pageattr.test.ts`; actual shared item-set copy retains the same omission. Native localized presentation is still pending.
+
+## CALC-118: page numbering admission has no matching lower-bound presentation guard
+
+- Upstream: `svx/source/items/pageitem.cxx`, SvxPageItem::PutValue and GetNumberingDescription, same pinned commit.
+- Observation: PutValue accepts an extracted signed32 numbering value and casts to the fixed signed16 SvxNumType, including-1. GetNumberingDescription checks only `eNumType <= NUMBER_NONE` before indexing its six-entry classic-name array with that value; it has no explicit nonnegative check.
+- Status: source-level suspicious invalid-data path, not a reproduced native runtime failure. Preserve the defined Put/Query behavior; do not execute/simulate undefined native array memory access or assert a specific crash outcome. Localized presentation/numbering services remain unported.
+- Local evidence: `apps/office/src/svx/source/items/pageitem.test.ts` verifies negative admission and query only. The native source audit is the evidence for the unported presentation path.
+
+## CALC-119: set-item rvalue constructor copies its named argument
+
+- Upstream: `svl/source/items/sitem.cxx`, `SfxSetItem(sal_uInt16, SfxItemSet&&)`, and `svx/source/items/pageitem.cxx` forwarding constructor, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the Svx wrapper forwards `std::move(_pSet)`, but the base initializes `maSet(pS)`. A named rvalue-reference parameter is an lvalue expression, so this selects the `SfxItemSet` copy constructor; it does not move or reset the original set. This looks surprising for the rvalue overload and may be intentional or an overlooked copy optimization.
+- Status: source-level ownership/copy observation, not a confirmed defect or memory failure. Preserve the actual copy behavior. Both erased argument categories share the same ordinary JS copy path; do not infer a move operation from the signature, port native reference counting, or add a memory manager.
+- Local evidence: `apps/office/src/svl/source/items/sitem.ts`, `apps/office/src/svl/source/items/sitem.test.ts`, `apps/office/src/sc/source/core/data/pageattr.test.ts` verify independent copies with retained input pool/parent/states and unchanged source. No native compiler or memory probe is used.
+
+## CALC-120: an all-zero slot package rescans its empty map on every access
+
+- Upstream: `svl/source/items/itempool.cxx`, `ItemInfoPackage::getSlotIDToWhichIDMap`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the implementation fills its cache whenever `maSlotIDToWhichIDMap.empty()`, inserting only entries with nonzero SlotID. If every slot is zero, the map remains empty and each later call scans the metadata again. The comment says it will be filled only once, but no separate initialized marker exists. The returned map identity and lookup results remain stable.
+- Status: source-level possible redundant-work/cache concern, not a confirmed defect. Preserve repeated reads and the same empty map; do not introduce an initialized flag or change package semantics.
+- Local evidence: `apps/office/src/svl/source/items/iteminfo.test.ts` counts actual static-entry reads across empty/nonempty cache calls; `apps/office/src/svl/source/items/itempool.ts` follows the source empty-map condition. No native performance, compiler or memory probe is used.
+
+## CALC-121: namespace QName caches survive table changes and cold/hot unknown outputs differ
+
+- Upstream: `xmloff/source/core/namespacemap.cxx`, assignment/Add/AddIfKnown and GetKeyByQName/GetQNameByKey, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: assignment replaces namespace tables but leaves destination QName caches; Add/AddIfKnown also do not invalidate them. A cached generated QName can retain an old prefix after a new alias becomes canonical. A cached parsed name can retain its old key while its URI output is read from the replacement reverse table. New copy construction starts with empty caches. For an unknown/nonnamespace/xmlns prefix, a cold parsed name leaves a provided URI output untouched; a cache hit assigns the key lookup result, commonly an empty string.
+- Status: possibly intentional cache-lifetime assumptions or surprising output contracts, not a confirmed defect. Preserve exact lookup/cache/write paths; do not add invalidation or normalize cold outputs.
+- Local evidence: `apps/office/src/xmloff/source/core/namespacemap.test.ts` exercises stale assignment/alias cache values and independent cold/hot output witnesses.
+
+## CALC-122: Add returns requested URI resolution when an existing prefix blocks insertion
+
+- Upstream: same file/commit, `SvXMLNamespaceMap::Add`.
+- Observation: the method resolves the requested URI key before testing prefix existence. If the prefix already exists, it leaves that prefix mapping unchanged but returns the resolved key for the requested URI, including UNKNOWN for a new URI; that can differ from GetKeyByPrefix on the same prefix.
+- Status: source-level surprising return contract, not a confirmed bug. Preserve the returned key and unchanged tables; do not turn Add into replacement or return the existing-prefix key.
+- Local evidence: the shared namespace-map test uses independent existing/new URI witnesses.
+
+## CALC-123: automatic namespace keys can reach reserved marker values
+
+- Upstream: same file/commit, `SvXMLNamespaceMap::Add_`, plus reserved markers in `include/xmloff/namespacemap.hxx`.
+- Observation: automatic allocation starts at0x8000 and increments an unsigned16 key until a free reverse-map key is found. It does not skip XMLNS65533/NONE65534/UNKNOWN65535 marker values. Explicit Add rejects NONE, yet auto allocation can produce it.
+- Status: source-level capacity/identity concern, not a native memory failure or confirmed defect. Preserve the logical key rule. A bounded JS fixture fills explicit keys0x8000through65533 once, then checks the single automatic scan reaches NONE and subsequent name resolution follows the defined release fallbacks. This checks identifiers, not native allocation or memory management. Full key-space exhaustion and its nonterminating source search are not executed or simulated.
+- Local evidence: `apps/office/src/xmloff/source/core/namespacemap.test.ts`; no native compiler, sanitizer, hash-table implementation or memory probe.
+
+## CALC-124: attribute Add4 accepts an unresolved namespace while Set4 rejects it
+
+- Upstream: `xmloff/source/core/SvXMLAttrCollection.cxx` at pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`, four-string AddAttr and SetAt overloads, with namespace-map Add semantics from CALC-122.
+- Observation: an existing prefix bound to a different URI can make Add return UNKNOWN. AddAttr still appends an attribute with this key and returns true, so namespace/prefix queries return empty. SetAt explicitly returns false on that same key and preserves the previous attribute.
+- Status: surprising source-level asymmetry, not a confirmed upstream defect. Preserve both behaviors; do not silently reject Add or repair/rebind the namespace.
+- Local evidence: `apps/office/src/xmloff/source/core/xmlcnimp.test.ts`, conflict and nonmutation witnesses.
+
+## CALC-125: removed XML attributes leave namespace history affecting equality
+
+- Upstream: the same pinned collection file, Remove and operator==.
+- Observation: Remove erases only the ordered attribute vector. Namespace-map entries remain, and equality compares that map as well as attributes. Removing all qualified attributes therefore leaves a count-zero collection unequal to a fresh empty one. Adding a same-URI prefix alias also changes the canonical prefix reported for earlier attributes through their stored key.
+- Status: observable historical state, possibly deliberate; not a confirmed defect. Preserve unpruned namespace tables, alias semantics and source equality.
+- Local evidence: `apps/office/src/xmloff/source/core/xmlcnimp.test.ts`, retained-history/copy and alias witnesses.
+
+## CALC-126: brush100percent transparency retains alpha1
+
+- Upstream: pinned `editeng/source/items/frmitems.cxx`, lcl_PercentToTransparency, TransparencyToPercent and SvxBrushItem color-transparency members.
+- Observation: the helper deliberately uses0xfe and documents that0xff must not be returned. Writing100percent produces alpha1, so the fully-transparent member remains false and the non-graphic isUsed test remains true, while reading the percentage returns100.
+- Status: surprising reserved-marker behavior, not a confirmed defect. Preserve integer truncation, signed8 conversion and Color alpha assignment rather than changing the scale to255 or rounding differently.
+- Local evidence: `apps/office/src/editeng/source/items/native-brush-color.test.ts`, percentage/flag witnesses; no native compiler or memory probe.
+
+## CALC-127: a const brush getter can change hash while equality stays true
+
+- Upstream: pinned `include/editeng/brushitem.hxx` getComplexColor updates final color from GetColor; `editeng/source/items/frmitems.cxx` brush hash includes ComplexColor. See CALC-113 for native ComplexColor equality/hash field differences.
+- Observation: two copied color brushes initially compare equal and have identical field hashes. Calling getComplexColor on only one can change its ComplexColor final color and hash, while equality remains true because final color is omitted from that comparison. Calling the getter on both synchronizes their final-color states.
+- Status: source-level const/getter/hash invariant concern, not a confirmed upstream defect or claim of portable native binary hash values. Preserve the side effect and original field folds; do not alter shared ComplexColor equality/hash or make copy construction invoke the getter.
+- Local evidence: explicit getter/hash regression in `apps/office/src/editeng/source/items/native-brush-color.test.ts`; only logical JS values and source field rules are checked.
+
+## CALC-128: disabling automatic escapement retains a near-marker manual offset
+
+- Upstream: pinned `editeng/source/items/textitem.cxx`, SvxEscapementItem::PutValue MID_AUTO_ESC; `include/editeng/escapementitem.hxx` declares ordinary33/-8, height58 and automatic±14000 markers.
+- Observation: enabling automatic mode uses the current offset sign (zero becomes positive) without changing proportional height. Disabling automatic mode changes±14000to±13999 by one unit, preserving height and sign. It does not restore the ordinary33/-8 offset or the mode-setter height58. Non-marker offsets remain unchanged.
+- Status: surprising distinction between mode setter and automatic property transition, not a confirmed upstream defect. Preserve source behavior and shared Any2Bool failure fallback; do not substitute font metrics, ordinary script percentages or off0/100 values.
+- Local evidence: `apps/office/src/editeng/source/items/native-escapement.test.ts`, automatic/manual transition witness with literal source values; no native compiler or memory probe.
+
+## CALC-129: kerning unit query narrows converted distance back to signed16
+
+- Upstream: pinned `editeng/source/items/textitem.cxx`, SvxKerningItem::QueryValue; original common integral twip-to-mm100 conversion.
+- Observation: the stored signed16 twip value is converted to mm100, then explicitly cast back to signed16 before Any insertion. A valid stored32767twips becomes57797mm100 before narrowing, yielding queried-7739; stored-32768twips yields queried7737. Query does not mutate storage, clamp/saturate or widen to a32bit Any. Practical formatting ranges may avoid the boundary.
+- Status: surprising source transport overflow, not a confirmed upstream defect. Preserve integral rounding, explicit short narrowing and original16bit transport; do not fix the source by saturating or widening the property.
+- Local evidence: `apps/office/src/editeng/source/items/native-text-spacing.test.ts`, literal original boundary/half-rounding queries; no native compiler or memory probe.
+
+## CALC-130: script-hint property accepts values outside its localized label table
+
+- Upstream: pinned `editeng/source/items/textitem.cxx`, SvxScriptHintItem::PutValue/QueryValue/GetValueText; native ScriptHintType has5declared values0..4.
+- Observation: the property setter extracts any unsigned16 value and constructs the enum without a0..4range check. For example5or65535is accepted and queried unchanged. GetValueText later indexes a5entry translated-label array with `.at(static_cast<size_t>(eValue))`, so such stored values would reach an out-of-range checked lookup if localized presentation is requested.
+- Status: source-level admission/presentation mismatch, not a confirmed upstream defect. Preserve numeric value acceptance and transport; do not silently clamp/reject based on the label table or introduce a fake label fallback. Localized presentation itself is deferred.
+- Local evidence: `apps/office/src/editeng/source/items/native-text-modes.test.ts`, arbitrary unsigned16 hint round trip; the native presentation consequence is inspected in source only, not compiled/executed.
+
+## CALC-131: equal line-spacing items can hash differently due to inactive fields
+
+- Upstream: pinned `editeng/source/items/paraitem.cxx`, SvxLineSpacingItem::operator== and hashCode.
+- Observation: equality ignores absolute height when the absolute rule is Auto, and ignores inactive proportional/additive values. Hashing folds all five stored fields. Default-height200 and default-height0 items therefore compare equal in Auto/Off state while their logical field hashes differ.
+- Status: source equality/hash invariant concern, not a confirmed defect or portable binary hash claim. Preserve active-field comparison and all-field hashing.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, independent default heights and complete copied-state witnesses.
+
+## CALC-132: unknown line-spacing property members can normalize state successfully
+
+- Upstream: the same pinned file, SvxLineSpacingItem::QueryValue and PutValue default member branches.
+- Observation: an unknown query member reports a diagnostic but returns true without changing its output. PutValue first projects current state to the two-short descriptor; an unknown member retains successful extraction and applies that descriptor. For example Auto/Off with stored height777 becomes stored height100, even though the input Any was not used.
+- Status: surprising successful normalization, not a confirmed defect. Preserve return values, ignored input and state changes; do not replace the native diagnostic branch with false.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, unknown-member query preservation and write normalization.
+
+## CALC-133: negative line-spacing heights convert differently by mode
+
+- Upstream: the same pinned file, SvxLineSpacingItem::PutValue LEADING versus FIX/MINIMUM conversion order.
+- Observation: LEADING converts the signed short distance. FIX/MINIMUM first assign the same short into unsigned16 line height and then convert. A descriptor height-1mm100 remains-1twip in LEADING but converts wrapped65535mm100 to37154twips in FIX.
+- Status: surprising source cast-order consequence, not a confirmed defect. Preserve signed versus unsigned conversion order and short storage rather than rejecting or saturating negative input.
+- Local evidence: `apps/office/src/editeng/source/items/native-line-spacing.test.ts`, real typed descriptor conversion witnesses; no native compiler or memory probe.
+
+## CALC-134: non-ISO Kurdish fallback conditions spell the language krm
+
+- Upstream: pinned `i18nlangtag/source/languagetag/languagetag.cxx`, non-ISO LanguageTag::getFallbackStrings branch.
+- Observation: Latin-script legacy ku fallbacks test the language string krm, while the ISO branch and language tables use kmr for Northern Kurdish. Thus these particular extra ku candidates are added for krm-Latn and are absent for the corresponding kmr-Latn input. Other language/country fallbacks still apply.
+- Status: suspected transposition, not a confirmed defect. Preserve the source spelling and order instead of silently changing it to kmr.
+- Local evidence: `apps/office/src/editeng/source/items/native-tab-values.test.ts`, literal fallback sequences over decomposed source fields; no native compiler or ICU implementation.
+
+## CALC-135: inserting a tab item into itself removes alternating entries
+
+- Upstream: pinned `editeng/source/items/paraitem.cxx`, SvxTabStopItem::Insert(const SvxTabStopItem*).
+- Observation: the first pass removes matching target positions while its index and Count both refer to the live source. If source and target are the same item, removing a tab shifts the next tab before the incremented index. Self-insertion of positions1,2,3,4 therefore retains2,4; the second pass cannot restore the erased entries.
+- Status: source aliasing concern, not a confirmed defect. Preserve both live passes; do not silently clone the input or turn self-insertion into a no-op.
+- Local evidence: `apps/office/src/editeng/source/items/native-tab-item.test.ts`, literal self-merge witness; no native compiler or memory probe.
+
+## CALC-136: tab count narrowing can hide values from equality but retain them in hashing
+
+- Upstream: pinned `include/editeng/tstpitem.hxx` Count and GetPos return unsigned16; `editeng/source/items/paraitem.cxx` equality loops over Count while hashCode iterates the complete vector.
+- Observation:65536stored tabs narrow to Count0 and can compare equal to an empty item with the same default distance, while hashes differ. Index65535 also collides with SVX_TAB_NOTFOUND: insertion at that existing position cannot remove it first, so the position-only vector rejects the replacement. Copy construction still copies every stored entry.
+- Status: source width/invariant concern, not a confirmed defect or portable binary hash claim. Preserve the original narrowing, sentinel and loop domains instead of clamping size or changing equality.
+- Local evidence: `apps/office/src/editeng/source/items/native-tab-item.test.ts`, initialized65536entry vector and actual typed query; no undefined index access, native compiler or memory probe.
+
+## CALC-137: BlockLine paragraph adjustment falls back to Left
+
+- Upstream: pinned `include/editeng/adjustitem.hxx` SetAdjust/GetAdjust and `editeng/source/items/paraitem.cxx` constructor/PutValue.
+- Observation: SvxAdjust declares BlockLine4, but SetAdjust assigns six primary bits only for Left,Right,Block,Center,ParaStart,ParaEnd. BlockLine therefore leaves all six false and GetAdjust returns Left. The property setter admits0..6, so4succeeds and queries0. End/other initialized int values also have the direct-setter Left fallback.
+- Status: surprising declaration/storage mapping, not a confirmed defect. Preserve source flags/fallback rather than retain a browser-only BlockLine-to-justify implementation.
+- Local evidence: `apps/office/src/editeng/source/items/native-adjust-item.test.ts` and real Writer ODT alignment regression, no native compiler/probe.
+
+## CALC-138: failed paragraph spacing property extraction writes minus one successfully
+
+- Upstream: pinned `editeng/source/items/paraitem.cxx`, SvxAdjustItem::PutValue numeric spacing members.
+- Observation: every spacing branch initializes a signed short to-1 and ignores the extraction result before calling the setter. A boolean/empty Any therefore returns true while storing65535in unsigned word-spacing fields, or-1in signed letter-spacing/glyph-scaling fields. Query of unsigned word65535 is signed short-1. There is no property range check.
+- Status: surprising failed-extraction mutation, not a confirmed defect. Preserve initialization, cast order and successful return rather than reject or keep prior values. Direct setters retain declared-width conversions.
+- Local evidence: `apps/office/src/editeng/source/items/native-adjust-item.test.ts`, actual typed Any failures and all seven numeric members.
+
+## CALC-139: default spelling invalid-end marker wraps on insertion
+
+- Upstream: pinned `editeng/source/editeng/edtspell.cxx`, WrongList constructor and TextInserted.
+- Observation: default invalid interval is [0, size_t max]. Inserting one unit at position1 follows invalid-end >= position and adds the length without a sentinel check, producing unsigned64 zero for invalid-end while retaining invalid-start0. There are no spelling ranges in this example.
+- Status: surprising unsigned sentinel arithmetic, not a confirmed defect. Preserve the original branch and unsigned arithmetic; do not clamp or reinterpret the marker.
+- Local evidence: `apps/office/src/editeng/source/editeng/native-wrong-list.test.ts`; source-derived literal assertions without native compiler/probe.
+
+## CALC-140: spelling-range split retains the original insertion loop limit
+
+- Upstream: pinned `editeng/source/editeng/edtspell.cxx`, WrongList::TextInserted.
+- Observation: the loop captures the original vector size. Splitting a range inserts before it and increments the index inside the branch as well as at loop end. With [1,7] and [10,12], insertion of3separator units at5 yields [1,5], [6,10], [10,12]; the original trailing range is not shifted because its new index reaches the captured limit. The second split start is position+1, independently of inserted length.
+- Status: suspicious captured-bound/split behavior, not a confirmed defect. Preserve both the limit and increments and record the result rather than repairing upstream semantics.
+- Local evidence: `apps/office/src/editeng/source/editeng/native-wrong-list.test.ts`.
+
+## CALC-141: replacing an item set from itself clears its direct values
+
+- Upstream: pinned `svl/source/items/itemset.cxx`, SfxItemSet::Set.
+- Observation: Set clears the destination before examining the source. When both references identify the same set, its direct values disappear and the operation may return false. The returned flag describes subsequent insertions rather than the initial clear. Inherited SET values may still be copied by the deep path when a parent exists.
+- Status: surprising self-assignment and return behavior, not a confirmed defect. Preserve the ordering; do not add a self-assignment shortcut.
+- Local evidence: `apps/office/src/svl/source/items/native-itemset-set-holder.test.ts`.
+
+## CALC-142: URL field Name is copied but excluded from equality and hashing
+
+- Upstream: pinned `include/editeng/flditem.hxx` SvxURLField m_Name/GetName/SetName and `editeng/source/items/flditem.cxx` SvxURLField::operator==/hashCode.
+- Observation: copy/Clone preserves m_Name (documented as alternative text), but equality compares only format, URL, representation and target frame. Hash uses the same four values. Two fields differing only in Name remain equal; inserting their SvxFieldItem values into the real SfxItemSet can therefore return unchanged and retain the previous Name.
+- Status: potentially surprising omitted state, not a confirmed defect. Preserve all copied strings and the literal equality/hash omission; do not add Name to comparison/hash to repair upstream.
+- Local evidence: `apps/office/src/editeng/source/items/native-field-values.test.ts`, including independent copies and an actual item-set change-gate assertion. No native compiler/probe or memory test.
+
+## CALC-143: IPAex Mincho search alias is spelled ipaexmimcho
+
+- Upstream: pinned `unotools/source/misc/fontdefs.cxx`, GetEnglishSearchFontName dictionary entry `ipaex\u660E\u671D` maps to `ipaexmimcho`.
+- Observation: the English alias differs from the apparent Mincho spelling used by related entries. Native normalization of IPAex明朝 reaches this exact value; correcting the apparent typo would change physical font lookup.
+- Status: suspicious spelling, not a confirmed defect. Preserve `ipaexmimcho` exactly; do not change it to a guessed English family.
+- Local evidence: complete source dictionary projection and `unotools/source/misc/native-font-names.test.ts`. No native compiler/probe.
+
+## CALC-144: font search dictionary contains conflicting duplicate Chinese keys
+
+- Upstream: pinned `unotools/source/misc/fontdefs.cxx`, static FontNameDictionary initializer in GetEnglishSearchFontName. The literal contains155 rows but153 unique keys.
+- Observation: 方正黑体 appears with `fzhei` and later `fzheiti`; 方正楷体 appears with `fzkai` and later `fzkaiti`. A unique-key unordered_map cannot retain both aliases for one search key. Direct native testSingleElement does not cover these conflicts.
+- Status: suspicious conflicting initialization, not a confirmed defect. Preserve all literal rows/order in the resource. The browser binding performs sequential unique insertion and retains first values `fzhei`/`fzkai`, without overwriting with later entries or claiming a cross-standard-library constructor-selection guarantee. Other native platform outcomes are not verified; no compiler/probe is introduced to investigate container internals.
+- Local evidence: exact source-row audit and `unotools/source/misc/native-font-names.test.ts`, which checks the documented first-insertion choice separately from ordinary dictionary pairs. These two ambiguous mappings do not justify full native-library parity promotion.
+
+## CALC-145: hyphenated font dictionary keys are unreachable after normalization
+
+- Upstream: pinned `unotools/source/misc/fontdefs.cxx`, GetEnglishSearchFontName strips ASCII punctuation except semicolon/parentheses before querying its literal dictionary.
+- Observation: literal keys `hg正楷書体-pro` -> `hgseikaishotaipro` and `hg丸ｺﾞｼｯｸ-pro` -> `hgmarugothicmpro` contain ASCII hyphens, which are removed before lookup. Their normalized forms have no dictionary entry, so these inputs return `hg正楷書体pro` and `hg丸ｺﾞｼｯｸpro` instead of the apparent intended English aliases.
+- Status: potentially unreachable source entries, not a confirmed defect. Preserve both raw keys and the original preprocessing order. Do not normalize dictionary keys, add aliases or special-case the two inputs.
+- Local evidence: complete dictionary/source audit and `unotools/source/misc/native-font-names.test.ts`. No native compiler/probe and no full physical font resolution claim.
+
+
+## CALC-146: style-index Clear retains the family vectors
+
+- Upstream: pinned `svl/source/items/IndexedStyleSheets.cxx`, IndexedStyleSheets::Clear, Reindex and GetStyleSheetsByFamily; declarations in `include/svl/IndexedStyleSheets.hxx`.
+- Observation: Clear invokes the cleanup callback and clears each primary vector slot in insertion order, then clears the primary vector and name map. It does not clear any of the six family vectors. GetNumberOfStyleSheets can therefore return0 while a previously borrowed family vector still contains earlier pointers; adding a new style appends to that stale family vector. Explicit Reindex clears and rebuilds all family vectors.
+- Status: suspicious omitted index reset, not a confirmed defect. Preserve the exact omission and explicit rebuild behavior. Observe only styles retained externally, so those native pointers remain valid; do not invent results for dereferencing dangling pointers after actual destruction. JS object references/GC do not recreate native deletion.
+- Local evidence: `apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts` and `apps/office/e2e/shared/indexed-style-sheets.spec.ts`, including partial null-slot visibility during callbacks, retained family views and later explicit Reindex. No native compiler/probe or memory-management experiment.
+
+## CALC-147: style search has disabled general visibility filtering
+
+- Upstream: pinned `svl/source/items/style.cxx`, DoesStyleMatchStyleSheetPredicate::Check and SfxStyleSheetIterator constructor/GetSearchMask; flags in `include/svl/style.hxx`.
+- Observation: the general bMatchVisibility expression is commented out. A hidden style matching ordinary application flags is still returned. Hidden-only search separately admits IsHidden styles, and any style with the Hidden mask bit also matches. Combining Hidden with Used disables the special Hidden-only term because GetSearchMask restores Used; the remaining mask/usage OR terms apply. AllVisible admits hidden styles as well.
+- Status: potentially surprising historical filter behavior, not a confirmed bug. Preserve the exact expression, usage/visibility virtual-call order and AllVisible fast path; do not restore the commented visibility check.
+- Local evidence: `apps/office/src/svl/source/items/native-style-iterator.test.ts`, source-derived fixtures over the actual shared index. No native compiler/probe or claim of a native iterator QA port.
+
+## CALC-148: style iterator Find stores a primary index consumed as a family index by Next
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetIterator::Find, operator[] and Next.
+- Observation: Find stores the absolute primary-vector position returned by FindPositionsByNameAndPredicate. With the exact All mask and a specific family, Next treats that position as a family-vector index. For primary styles [Char:a, Para:b, Para:c], First/Next returns b/c, but Find(b)/Next returns b/null. The predicate path uses absolute positions consistently and returns c after Find(b).
+- Status: suspicious mismatch of index spaces, not a confirmed defect. Preserve Find and Next assignments and path selection; do not translate Find results into family offsets or reset cursors on failed searches.
+- Local evidence: `apps/office/src/svl/source/items/native-style-iterator.test.ts` and `apps/office/e2e/shared/style-iterator.spec.ts`. These are source-derived observations; full production stylesheet/pool construction is still pending.
+
+## CALC-149: style iterator fast-path Count narrows through uint16
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetIterator::Count and First; declared Count return type is sal_Int32 in `include/svl/style.hxx`.
+- Observation: trivial all-family and exact-All family counts cast collection size to sal_uInt16 before returning it as sal_Int32. The predicate count does not use that narrowing. A real index containing 65536 same-family matching styles therefore produces Count=0 and First=null on either fast path, while a filtered iterator produces Count=65536 and a non-null First.
+- Status: potentially unintended historical narrowing, not a confirmed bug or a claim that all document formats allow this many styles. Preserve modulo-65536 conversion only where the source applies it.
+- Local evidence: `apps/office/src/svl/source/items/native-style-iterator.test.ts`, with 65536 distinct actual indexed caller identities and OUString names. No native binary, allocator or memory-sanitizer experiment.
+
+## CALC-150: style-pool addition traverses the destination index
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::operator+=, AddStyleSheetCallback and the pool copy constructor.
+- Observation: operator+= checks that argument r differs from this, but invokes ApplyToAllStyleSheets on this->pImpl->mxIndexedStyleSheets rather than r's collection. Its callback calls this->Add. A newly constructed empty destination therefore visits no styles even when r is nonempty; the copy constructor creates an empty index and delegates to this operation. For a nonempty destination the callback can modify the same collection being traversed, so no defined mutation result is assumed here.
+- Status: suspicious source-side destination/argument mismatch, not a confirmed defect. Preserve it when implementing the pool; do not silently change traversal to r or assign a result to invalidated native iterators.
+- Local evidence: task171 first recorded the pinned source analysis. Task173 implements actual core pool owners and checks empty-destination copy/assignment in `apps/office/src/svl/source/items/native-style-model.test.ts`. A throwing native virtual copy factory is also checked: the exception exits before an invalidated traversal advances. No normal nonempty-destination iterator result, complete UNO pool implementation or native runtime probe is claimed.
+
+## CALC-151: merged pool ranges remain cached after replacing the secondary chain
+
+- Upstream: pinned `svl/source/items/itempool.cxx`, SfxItemPool::GetMergedIdRanges and SetSecondaryPool; pool-only SfxItemSet construction in `svl/source/items/itemset.cxx`.
+- Observation: GetMergedIdRanges computes only while maPoolRanges is empty. SetSecondaryPool changes master/secondary links without clearing this cache. After first computing ranges for pools [10..12]+[1..2], replacing the secondary with [20..22] leaves GetMergedIdRanges and subsequently constructed pool-only item sets at [1..2,10..12]. Default/slot lookup follows the new live chain and can resolve20..22 despite those old ranges.
+- Status: potentially surprising cache lifetime/precondition, not a confirmed defect; callers may be expected to freeze chain topology before constructing sets. Preserve the absence of invalidation and ordinary copied range-value semantics. Do not add an automatic cache reset or infer native metadata from browser snapshot defaults.
+- Local evidence: `apps/office/src/svl/source/items/native-pool-chain.test.ts` and `apps/office/e2e/shared/pool-chain.spec.ts`, real registered metadata packages, shared pools and item sets. Source-derived cases; no native compiler/probe or new memory manager.
+
+## CALC-152: base style copy retains the source pool pointer when added to another pool
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBase copy constructor, SfxStyleSheetBasePool::Create(const SfxStyleSheetBase&) and Add.
+- Observation: the base copy constructor retains r.m_pPool, and the default copy factory simply constructs that base copy. Add stores the copy in the destination index without rebinding its pool pointer. With actual base pools A/B, B.Add(aStyleFromA) therefore stores a different style whose GetPool still returns A. Subsequent style operations use A for parent/name validation, notifications and lazy item-set creation.
+- Status: suspicious cross-pool ownership contract, not a confirmed defect; derived factories may intentionally override it. Preserve the original pointer and default factory rather than silently rebinding to the index owner.
+- Local evidence: actual core owners in `apps/office/src/svl/source/items/native-style-model.test.ts`. Full derived style/UNO pool behavior remains unimplemented; no native probe.
+
+## CALC-153: base Make stores a new style without a creation notification
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::Make and StoreStyleSheet; descriptive comment in `include/svl/style.hxx`.
+- Observation: the header comment promises a StyleSheetCreated notification from Make, but the actual implementation only calls Create and StoreStyleSheet, and StoreStyleSheet only adds to the index. There is no current StyleSheetCreated enum member in hint.hxx. Successful rename does emit StyleSheetModifiedExtended.
+- Status: likely stale explanatory comment or intentional silent creation, not a confirmed defect. Preserve silent Make/Insert storage; do not invent a creation hint or substitute another ID.
+- Local evidence: actual listener over actual pool creation/rename in `apps/office/src/svl/source/items/native-style-model.test.ts` and `apps/office/e2e/shared/style-model.spec.ts`.
+
+## CALC-154: Add reparents existing children away from the replaced style
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool::Add, Remove and ChangeParent.
+- Observation: Add's comment describes recreating a style and reconnecting its children, but Add first calls Remove. Remove immediately changes matching children's parent to the old style's parent before broadcasting Erased. Add then inserts the replacement and broadcasts Changed without restoring those child links. Replacing a root style therefore leaves its former children with an empty parent, rather than the replacement's name.
+- Status: suspicious replacement/description mismatch, not a confirmed defect or a claim about overriding derived factories. Preserve child Modified then old Erased then new Changed order and the resulting core parent values.
+- Local evidence: actual target/source core style pools in `apps/office/src/svl/source/items/native-style-model.test.ts`; no fake provider or native runtime experiment.
+
+## CALC-155: style-pool destruction emits Dying before and after clearing
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheetBasePool destructor, and `svl/source/notify/SfxBroadcaster.cxx`, SfxBroadcaster destructor.
+- Observation: the pool destructor first broadcasts Dying and quietly clears its index. The inherited broadcaster destructor then broadcasts another Dying before detaching listeners. A retained listener therefore sees the same pool with populated primary index on the first notification and empty primary index on the second.
+- Status: potentially surprising duplicate lifecycle notification, not a confirmed defect; derived/base destruction phases may intentionally differ. Preserve both notifications and their index-state order, without adding an idempotent disposed flag or collapsing them.
+- Local evidence: actual core pool/listener in `apps/office/src/svl/source/items/native-style-model.test.ts` and `apps/office/e2e/shared/style-model.spec.ts`. Explicit Dispose binds native destructor execution; JS GC owns physical storage and no reference-count lifetime engine is recreated.
+
+## CALC-156: shared style-pool copy factory slices to the base style
+
+- Upstream: pinned `include/svl/style.hxx`, SfxStyleSheetPool uses the base Create overloads and overrides only the field factory; `svl/source/items/style.cxx`, base copy factory and Add.
+- Observation: Make on SfxStyleSheetPool creates SfxStyleSheet, but Add uses the inherited Create(const SfxStyleSheetBase&) and constructs SfxStyleSheetBase. The stored replacement therefore lacks listener/broadcaster roles despite living in a derived pool. Explicit SfxStyleSheet copy construction separately copies all three native bases.
+- Status: suspicious inherited factory asymmetry, not a confirmed defect; derived consumers may avoid this path or override it. Preserve slicing, and do not assign a supported result to later invalid static parent casts involving the sliced object.
+- Local evidence: actual shared pools and styles in `apps/office/src/svl/source/items/native-style-sheet.test.ts`; no fake provider or native probe.
+
+## CALC-157: removing a retained parent can leave the child subscribed to it
+
+- Upstream: pinned `svl/source/items/style.cxx`, base-pool Remove/ChangeParent and SfxStyleSheet::SetParent.
+- Observation: Remove erases the parent from the index before calling ChangeParent. The child changes its stored parent through SetParent, but the derived old-parent lookup now finds no object and skips EndListening. If the removed parent is held alive externally, its broadcasts still reach the child despite the cleared parent name. Final parent destruction detaches the remaining subscription.
+- Status: potentially surprising retained-parent notification link, not a confirmed defect. Preserve removal/reparent/lookup ordering and the missing-parent guard rather than retaining an invented old lookup pointer.
+- Local evidence: actual externally held parent/child owners and forwarded hints in `apps/office/src/svl/source/items/native-style-sheet.test.ts`.
+
+## CALC-158: constructor parent name does not create a subscription
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheet field constructor and SetParent.
+- Observation: construction passes the parent name only into the base style fields. It does not StartListening to that parent. A later SetParent with the same name returns early and also does not attach. Changing to another value and back does establish the ordinary notification chain.
+- Status: potentially caller-dependent initialization behavior, not a confirmed defect or claim about later Calc overrides. Preserve stored name versus subscription state; do not silently subscribe during construction.
+- Local evidence: actual shared factory/parent/style instances in `apps/office/src/svl/source/items/native-style-sheet.test.ts`.
+
+## CALC-159: reentrant pool clearing can precede parent subscription rebinding
+
+- Upstream: pinned `svl/source/items/style.cxx`, SfxStyleSheet::SetParent invokes base SetParent before its old/new parent lookups; the base broadcasts Modified synchronously.
+- Observation: a pool listener can Clear the index during that Modified callback while external references keep all styles alive. The base has already stored the new parent name, but both derived lookups can then fail: the old subscription remains and no new subscription is created. No cached parent pointers bridge the callback.
+- Status: potentially surprising reentrant ordering, not a confirmed defect. Preserve the broadcast-before-lookups order and both null guards. Do not infer outcomes for invalid cyclic graphs or dead style pointers.
+- Local evidence: actual pool Clear callback with retained owners in `apps/office/src/svl/source/items/native-style-sheet.test.ts`; this is a source-derived scenario, not a native memory or sanitizer experiment.
+
+## CALC-160: first user-default construction saves metadata before creating the entry
+
+- Upstream: pinned `svl/source/items/itempool.cxx`, impCreateUserDefault, ItemInfoUser constructor and SetUserDefaultItem.
+- Observation: impCreateUserDefault inserts the original ItemInfo into maUserItemInfos before allocating/constructing ItemInfoUser. If the value clone/construction throws, maItemInfos still contains the original entry while override bookkeeping already exists. The replacement path instead constructs a new entry before assigning it and deleting the previous user entry.
+- Status: potential first-insertion exception-safety issue, not a confirmed defect. Preserve statement ordering; do not add a rollback absent from upstream. No normal post-first-failure cleanup/lifetime outcome is claimed.
+- Local evidence: pinned source audit. `apps/office/src/svl/source/items/native-user-defaults.test.ts` tests the defined replacement-clone failure path, where the previous user metadata/value remains intact; it does not claim a native first-failure cleanup test or run a compiler/memory probe.
+
+## CALC-161 — Duplicate SAX attributes are retained during manifest property export
+
+- Source: `comphelper/source/xml/attributelist.cxx` (`AttributeList::AddAttribute`) and `package/source/manifest/ManifestExport.cxx` (root property scan and file-entry loop), pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: duplicate-name assertion is commented out with an upstream TODO noting test failures. Root scanning stops after a complete path/media/version triplet,but file-entry emission traverses every property. Repeated Version properties can therefore retain the initial document version while emitting duplicate version attributes in the entry.
+- Status: suspicious source case,not a confirmed defect for valid native package producers. Preserve original ordered list/events and do not deduplicate or rewrite values. Literal PropertyValue/AttributeList regressions cover this represented behavior;no native compiler or memory probe is used.
+
+## CALC-162 — Level-two manifest entries do not check root validity
+
+- Source: `package/source/manifest/ManifestImport.cxx`, `ManifestImport::startElement` level1/level2 dispatch, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: an unrecognized root marks its scope invalid,but the level-two file-entry branch calls `doFileEntry` without checking the parent validity. A recognized manifest file entry below a different root can still enter the result vector.
+- Status: suspicious source behavior,not a confirmed defect for valid package producers. Preserve the original dispatch and test actual PropertyValue output;do not propagate root invalidity as an invented fix. Native reader parse failures and package admission are separate responsibilities.
+
+## CALC-163 — Manifest namespace conversion searches past an unknown inner binding
+
+- Source: `package/source/manifest/ManifestImport.cxx`, `PushNameAndNamespaces`, `ConvertNameWithNamespace` and `ConvertName`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: a namespace alias bound to an unrecognized URI in an inner scope returns an empty conversion,so lookup continues to a recognized outer binding instead of stopping at the shadowing declaration. The same conversion also applies a recognized default namespace to unprefixed attribute names. Raw original names remain the final fallback.
+- Status: compatibility leniency is plausible;the source explicitly mentions accepting inconsistent older documents. Preserve these cases rather than replacing them with standard namespace-resolution behavior. Literal XML/SAX cases exercise the shared importer;no native compiler or memory probe is used.
+
+## CALC-164 — Recursive package-folder consistency assignment can replace an earlier true flag
+
+- Source: `package/source/zippackage/ZipPackageFolder.cxx`, `ZipPackageFolder::LookForUnexpectedODF12Streams`, pinned commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: ordinary child folders assign their recursive result directly to `bHasUnexpected` instead of OR-ing it with the current flag. An earlier unexpected stream can therefore cease to affect the final result if a subsequently visited folder has no unexpected entries.
+- Status: suspicious source logic,preserved literally. Native contents use unordered-map traversal,whose bucket order is not a contract to reproduce as binary data. JS Map supplies logical catalog traversal;tests state their order explicitly and do not claim native compiler/hash-layout ordering or broad package parity. No invented monotonic correction or native memory/compiler probe is used.
+
+## CALC-165: Size item HEIGHT extraction failure returns success
+
+- Source: `editeng/source/items/frmitems.cxx`, `SvxSizeItem::PutValue`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: failed signed32 WIDTH extraction returns false;the corresponding HEIGHT branch returns true without changing the height. SIZE struct extraction failure returns false. This may be a historical inconsistency.
+- Decision: preserve the distinct return values and unchanged payload;source-derived tests exercise all three real Any paths. Do not normalize failure handling.
+
+## CALC-166: Writer size short extraction can silently reset fields
+
+- Source: `sw/source/core/layout/atrfrm.cxx`, `SwFormatFrameSize::PutValue`, same pinned baseline.
+- Observation: percentage and percentage-relation members initialize a signed16 temporary to zero and ignore extraction failure. An incompatible Any can therefore reset the field to zero and return success. Width,height,size and sizing-type members instead check extraction. Writer queries also always convert dimensions,whereas PutValue converts only when requested. Unknown query members return true with unchanged output;unknown put members return false.
+- Decision: preserve these source branches and native bool-access preconditions without a compatibility fallback or correction. Actual Any regression tests cover the distinctions;broader document consequences remain unverified.
+
+## CALC-167: Terminal zero-span rich-text attribute has no section start
+
+- Source: `editeng/source/editeng/editobj.cxx`, `EditTextObjectImpl::GetAllSections`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: for nonempty text,an attribute whose start/end both equal paragraph length contributes only the existing final border. Section construction has no section starting at that final border. FindBySectionStart then fails;debug asserts and the ordinary source path returns before swapping output. Previously supplied caller output therefore remains unchanged. No upstream engine-producer reachability or document effect is established.
+- Decision: preserve release early return and caller output;do not append a fabricated zero-length end section or clear output on failure. Empty paragraphs still have the original0..0section. Source-derived actual ContentInfo/attribute regression covers the distinction.
+
+## CALC-168: Font fill color does not determine its independent transparency flag
+
+- Source: `vcl/source/font/font.cxx`, `Font::SetFillColor`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: only a changed fill color enters the setter body. A changed transparent color sets mbTransparent=true,while a changed opaque color leaves the flag unchanged. Repeating the same transparent color after SetTransparent(false) therefore retains false. These fields are explicitly marked compatibility state in ImplFont;the asymmetry may be intentional.
+- Decision: preserve guarded assignment and independent flag state. Do not derive transparency from current fill color,force false for opaque fill,or apply side effects to no-op assignments. Actual shared Font regressions cover all transitions. No wider renderer/document effect is claimed.
+
+## CALC-169: Font IsSameInstance also accepts equal independent values
+
+- Source: `vcl/source/font/font.cxx`, `Font::IsSameInstance`;`include/vcl/font.hxx`, ImplType;`include/o3tl/cow_wrapper.hxx`, operator==;pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Observation: the method name suggests an identity predicate,but its implementation uses the same cow_wrapper operator== as Font equality. That operator returns same_object OR dereferenced value equality. Independently changed handles that arrive at equal values therefore compare true. This is an unexpected naming contract,not an established upstream defect.
+- Decision: preserve the exact value result and correct our earlier identity-only implementation/test. Reuse represented Font equality;do not port C++ reference counting or physical COW merely to reproduce this observable predicate. Other full Font fields remain outside current verified scope.
+
+## CALC-170 — SAX numeric success does not require consuming a number
+
+- Source: `sal/rtl/math.cxx` `stringToDouble`, native QA
+  `sal/qa/rtl/math/test-rtl-math.cxx` `test_stringToDouble_bad`, and
+  `sax/source/tools/converter.cxx` `Converter::convertDouble` read overloads.
+- Observation: malformed inputs such as `garbage` or `.` leave the numeric
+  result zero and parsed end at the beginning, with conversion status `Ok`.
+  SAX returns success based on status alone, and optional rest retains the
+  entire input. A numeric prefix followed by junk also succeeds.
+- Status: explicitly source-tested RTL behavior; suspicious only when a
+  caller assumes success means a complete valid number. No upstream bug or
+  reachable Calc import error is established.
+- Port: preserve value, status, consumed end and SAX success/rest behavior.
+  Consumers must follow their own upstream checks; no stricter shared parser.
+
+## CALC-171 — document-option comparison ignores a setting and observes a cache
+
+- Source: `sc/inc/docoptio.hxx` `ScDocOptions::operator==` and
+  `GetFormulaSearchType`,plus setters in `sc/source/core/tool/docoptio.cxx`.
+- Observation: equality omits `bIgnoreLineBreaks`,although copy/reset retain
+  it. Equality compares `eFormulaSearchType` directly. Calling the const lazy
+  mode getter on only one of two equal Unknown-mode values can make them
+  unequal without a setting change;normalizing both restores equality.
+- Status: source-observable comparison contract;no claim that a reachable
+  consumer loses settings or that upstream intends different behavior.
+- Port: preserve both effects;test independent copies and lazy normalization.
+
+## CALC-172 — locale measurement text UK maps to US
+
+- Source: `unotools/source/i18n/localedatawrapper.cxx`
+  `mapMeasurementStringToEnum`,and shipped LC_CTYPE measurement fields.
+- Observation: only ASCII-case-insensitive metric maps to Metric. All other
+  strings,including the UK spelling present in two source locale resources,
+  map to US. en_GB itself explicitly uses Metric.
+- Status: source policy,possibly intentional;not a demonstrated upstream bug.
+- Port: preserve mapping and the original resource values without guessing a
+  browser Intl/territory-specific measurement policy.
+
+## CALC-173 — empty qualified fallback matches an empty table fallback
+
+- Source: `i18nlangtag/source/isolang/isolang.cxx`
+  `MsLangId::Conversion::lookupFallbackLocale`,BCP47 entry search.
+- Observation: Locale Language `qlt` with empty Variant matches the first
+  empty `mpFallback` in the BCP47 table,so returns `ca-ES-valencia` rather
+  than the final en-US fallback. The condition compares fallback text
+  without requiring it to be nonempty.
+- Status: source-observable boundary only;full LanguageTag/producer
+  reachability and upstream intent are not established. No bug claim.
+- Port: preserve this exact result;do not add an empty-string guard.
+
+## CALC-174 — English country table has conflicting and mislabeled rows
+
+- Source: `i18nlangtag/source/isolang/isolang.cxx`
+  `aImplIsoLangEngEntries` and the Unicode
+  `MsLangId::Conversion::convertIsoNamesToLanguage` overload.
+- Observation: `KI` (Kiribati) occurs first with LANGUAGE_ENGLISH_UK and later
+  with LANGUAGE_ENGLISH_US. The first-match search returns UK for en/KI;
+  the later US row cannot win this table search. Another `NG` row carries the
+  comment Sierra Leone, while NG denotes Nigeria and Sierra Leone uses SL.
+  Normal en/NG lookup is already intercepted by the earlier main ISO table
+  and returns its Nigeria-specific raw ID; en/SL is not resolved by this
+  Unicode overload. The separate byte overload may attempt LanguageTag and
+  is outside this observation.
+- Status: suspicious source table duplication/comment mismatch, not proof of
+  intended replacement values or a demonstrated downstream document failure.
+- Port: preserve all rows and comments' source context, retain first-match and
+  ISO-before-English priority, test en/KI, en/NG and en/SL explicitly. Do not
+  deduplicate, reorder or silently replace NG with SL.
+
+## CALC-175 — general language parser consumes only the prefix before NUL
+
+- Source: LibreOffice `LanguageTagImpl::canonicalize` passes UTF8 getStr() to
+  liblangtag0.6.8 `lt_tag_parse`; `lt_tag_scanner_new` copies with strdup and
+  records strlen. The pinned source/data archives are traced in task193.
+- Observation: logical input en followed by embedded NUL and -INVALID reaches
+  the library as the C-string prefix en, which can parse and canonicalize to
+  en. This is a source-derived outcome, not a native binary observation.
+- Status: suspicious input-boundary behavior; no claim of a reachable ODF/XML
+  document failure or of the intended policy for embedded NUL.
+- Port: preserve this specific parser boundary and test the full logical input.
+  Do not truncate unrelated OUString values or raw Locale conversions globally.
+
+## CALC-176 — first language variant prefix is a byte-prefix comparison
+
+- Source: liblangtag0.6.8 `lt_tag_parse_state`, STATE_VARIANT, uses case-insensitive
+  prefix-length comparison against the canonicalized partial tag. The pinned
+  registry's 1901 variant lists Prefix de; den is a registered language with no
+  replacement alias in the shipped supplemental metadata.
+- Observation: de is also a byte prefix of den, so den-1901 passes this first-
+  variant prefix check. The parser does not require a subtag boundary there.
+  Later variant combinations have further exact-prefix/duplicate checks.
+- Status: suspicious source-derived acceptance edge; no native execution,
+  standards-conformance verdict or demonstrated downstream document effect.
+- Port: preserve this acceptance and an independent regression vector rather
+  than tightening the comparison to a language/subtag equality check.
+
+
+## CALC-177 — Unicode extension key spelling changes type acceptance
+
+Source: pinned liblangtag0.6.8 `extensions/lt-ext-ldml-u.c`,
+`_lt_ext_ldml_u_lookup_key` and `_lt_ext_ldml_u_lookup_type`;raw forwarding in
+`liblangtag/lt-extension.c` and `lt-ext-module.c`. The key lookup compares names
+case-insensitively and stores the original token. Type lookup then selects XML
+keys with case-sensitive `@name = key`,using that stored raw spelling.
+Consequently callback tokens `ca,gregory` succeed,whereas `CA,gregory` fail with
+`Unknown -u- extension type: gregory`;a clipped `CA` alone is accepted and emits
+`ca`. No intervening forwarding owner lowercases the token. Preserve this
+behavior. Evidence is source-derived and replayed in the managed actual
+callback;outer LanguageTag fast-path/normalization reachability and executed
+native library results are not claimed. Task195.
+
+## CALC-178 — Unicode extension discovers transform-only keys
+
+Source: same pinned `_lt_ext_ldml_u_lookup_key`,the native `lt-xml.c` BCP47 group
+order/transform merge and `data/common/bcp47/transform.xml`. Unicode key discovery
+scans all seven groups and selects every key without filtering `@extension`.
+Thus `m0` from the transform group,whose XML declares `extension="t"`,is accepted
+by the u callback,and `m0,ungegn` emits `m0-ungegn`. Its type lookup also omits an
+extension filter. The t callback explicitly filters `@extension = 't'`.
+Preserve the source lookup;do not silently impose a modern extension namespace
+filter. This is a source-derived suspicious boundary,not a standards verdict or
+proof of outer LibreOffice document reachability/native execution. Task195.
+
+## CALC-179 — Unicode getter sorting changes a later type lookup
+
+Source: same pinned `_lt_ext_ldml_u_get_tag` sorts `d->tags` in place,while
+`_lt_ext_ldml_u_lookup_type` uses the last container and the separately retained
+`current_type`. Callback tokens `nu,latn,ca` leave the current family calendar
+and last container `ca`. Calling get_tag sorts containers into `ca,nu-latn`.
+A subsequent `buddhist` token looks up raw key `nu` in calendar data and fails;
+it would succeed before the getter call. Preserve this observable callback
+state effect;the getter is not replaced with a nonmutating copy sort.
+Tests execute the managed callback sequence;actual full-tag incremental API
+reachability and native binary execution remain unproven. Task195.
+
+
+## CALC-180 — transform fields after a language reject a second key
+
+Source: pinned liblangtag0.6.8 `extensions/lt-ext-ldml-t.c`,
+`_lt_ext_ldml_t_parse_tag` STATE_FIELD2. Discovery of a new key here happens only
+when the nested tag has no language. Thus normal `en-t-m0-ungegn-x0-private`
+is accepted,but `en-t-de-m0-ungegn-x0-private` fails at x0 as an invalid field
+value. The same first field works with a nested language;the restriction starts
+after its first value. Preserve this branch,without extending field discovery
+or sorting fields. Evidence is source-derived plus managed normal-parser and
+callback regressions;no native execution or outer LanguageTag reachability
+claim. Task196.
+
+## CALC-181 — redundant canonical replacement clears private use
+
+Source: same pinned `liblangtag/lt-tag.c`, `_lt_tag_subtract`, `_lt_tag_replace`
+and `_lt_tag_canonicalize`. Both helpers test the privateuse pointer,which the
+constructor always creates,even when its string is empty. Searching a redundant
+prefix for `zh-cmn-x-FOO` finds zh-cmn with preferred cmn. Subtraction clears the
+original private value and replacement copies the preferred tag's empty value;
+canonical output is cmn. Preserve this behavior,including the mutation of the
+actual tag fields. This differs from ordinary en-x-FOO,which retains FOO when
+no redundant replacement occurs. Source-derived evidence,not native binary
+execution or a standards verdict. Task196.
+
+## CALC-182 — multi-variant parse can leave a duplicated string cache
+
+Source: same pinned `lt_tag_parse_state` second-variant path explicitly frees
+and rebuilds the ALL-filter cache for exact prefix comparison before appending
+the variant. `_lt_tag_parse` then appends the whole supplied input string to
+that nonempty cache at bail. For a single full parse of sl-rozaj-biske,the first
+ALL getter returns sl-rozaj-sl-rozaj-biske. Canonicalization changes filters and
+rebuilds from actual fields,producing sl-rozaj-biske. Preserve both the transient
+cache value and canonical result;do not silently invalidate it after append.
+Evidence is source-derived and replayed in managed tag/Chromium/Worker tests;
+no executed native oracle or whole LibreOffice UI effect is claimed. Task196.
+
+## CALC-183 — normal private-use parsing accepts a wildcard token
+
+Source: same pinned `lt_tag_parse_state` PRIVATEUSETOKEN/PRIVATEUSETOKEN2 accepts
+any scanner token with length<=8. The scanner admits a standalone asterisk and
+allow_wildcard=false only disables the separate wildcard-range dispatch,not
+this length branch. Therefore normal x-* parses and canonicalizes to x-*.
+Preserve the original normal parser result;do not add an alphanumeric check
+absent from this branch. Source-derived managed normal-parser/browser evidence,
+not a full outer LanguageTag validity or native execution claim. Task196.
+
+## CALC-185 — ODFF numeric overflow becomes a compiler argument error
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`sc/source/core/tool/compiler.cxx`, `ScCompiler::ParseValue` ODFF/OOXML branch.
+When RTL parsing reports OutOfRange, the compiler sets IllegalArgument (502)
+and still creates the numeric token. The source itself asks why infinity is
+not instead accepted and diagnosed by the interpreter. Consequently numeric
+`1e999` has a compiler error, while arithmetic `1e308*1e308` reaches interpreter
+IllegalFPOperation (503). Preserve this distinction; do not normalize both to
+a generic numeric error. Source-derived evidence and real document error
+regressions in task200; no native execution or defect verdict is claimed.
+CALC-184 belongs to the deferred task197 snapshot and is not reused here.
+
+## CALC-186 — a deleted arithmetic reference can still read cell A1
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`sc/source/core/tool/interpr4.cxx`, `PopSingleRef` and `GetDouble` single-ref
+branches. `GetDouble` initializes its output address to zero. `PopSingleRef`
+sets NoRef for an initialized deleted reference and leaves that address
+unchanged. `GetDouble` then still reads the cell at that address through
+`GetCellValue`, preserving the previous NoRef error. Thus, on sheet zero,
+a deleted reference used in arithmetic can evaluate a dirty A1 even though
+the expression ultimately reports NoRef. Final direct-reference resolution
+has a separate error guard and does not make this read. Preserve both paths;
+do not skip the arithmetic read merely because an error already exists.
+Task201 tests initialized reference data and actual formula cells. This is
+source-derived evidence, not native execution or a claim about imported
+malformed formulas, locale coercion or full UI effects.
+
+## CALC-187 — formula number output need not preserve the last binary64 digits
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`FormulaCompiler::AppendDouble` and `sal/rtl/strtmpl.hxx` doubleToString.
+Formula output requests Automatic/Max, but the shared formatter ordinarily
+rounds to15significant decimal digits. For example,1.2345678901234567 is written
+as1.23456789012346 and parsing that text changes the binary64 value. Exact
+integers below2^53 instead retain their full digits; the top five finite
+binary64 values also use the separate17digit overflow-avoidance branch.
+Preserve these source distinctions instead of substituting JS shortest text
+as the finished formula output. JS shortest conversion is used only for the
+decimal decomposition before the native rounding/presentation steps. Task202
+has source-derived and managed regression witnesses, not native execution or
+a claim that this intentional precision policy is a confirmed upstream bug.
+
+## CALC-188 — horizontal iterator sheet reset retains the old allocation bound
+
+Source: pinned LibreOffice `9bc445578031fecf56086729d8e4940c77e14d65`,
+`ScHorizontalCellIterator` constructor and SetTab in `dociter.cxx`, plus
+`ScColContainer::operator[]` in `colcontainer.hxx`. Only construction clamps
+nEndCol to the first sheet's allocated columns. SetTab retains that bound
+and directly indexes columns on the next sheet without a fresh allocation
+check. Thus a shorter second sheet is outside the visibly safe source domain;
+whether all native callers enforce that precondition remains unverified.
+Preserve the original bound and native valid-domain cursor behavior. The JS
+implementation explicitly rejects a missing sheet or a retained nonempty
+column range that the next sheet has not allocated;it neither creates columns
+nor silently re-clamps. Task203 covers supported resets and the rejected
+precondition. This is source-derived,not native execution,physical memory
+emulation or a claim of a confirmed document-level upstream defect.

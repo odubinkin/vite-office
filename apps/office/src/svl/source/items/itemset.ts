@@ -2,13 +2,13 @@
  * @fileoverview Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`.
  */
 
-import type { SfxItemPool } from "./itempool";
+import { SfxItemPool } from "./itempool";
 import {
   DISABLED_POOL_ITEM,
   INVALID_POOL_ITEM,
   IsDisabledItem,
   IsInvalidItem,
-  type SfxPoolItem,
+  SfxPoolItem,
 } from "./poolitem";
 
 /** Matches LibreOffice's externally significant SfxItemState numeric values. */
@@ -20,25 +20,120 @@ export enum SfxItemState {
   SET = 0x0040,
 }
 
-/** Inclusive WhichId range accepted by an item set. */
-export type WhichRange = readonly [first: number, last: number];
+import type { WhichRangesContainer } from "../../inc/whichranges";
+export type { WhichRange, WhichRangesContainer } from "../../inc/whichranges";
 
-/** Ordered collection of inclusive WhichId ranges. */
-export type WhichRangesContainer = readonly WhichRange[];
+/** Original pool/item association represented by real JS references and value copies; native cache/refcount/surrogate lifetime registration is deliberately erased. */
+export class SfxPoolItemHolder {
+  private m_pPool: SfxItemPool | null = null;
+  private m_pItem: SfxPoolItem | null = null;
+  /** Original empty, pool/item and implicit-copy forms. Caller-owned transient items are copied; copied shareable values retain logical identity. @param args - Native constructor form. @returns Holder. */
+  constructor(
+    ...args:
+      | []
+      | [pool: SfxItemPool, item: SfxPoolItem | null, passingOwnership?: boolean]
+      | [source: SfxPoolItemHolder]
+  ) {
+    if (args.length === 0) return;
+    if (args[0] instanceof SfxPoolItemHolder) {
+      const source = args[0];
+      this.m_pPool = source.m_pPool;
+      this.m_pItem = bindHolderValue(source.m_pPool as SfxItemPool, source.m_pItem, true, false);
+    } else {
+      this.m_pPool = args[0];
+      this.m_pItem = implCreateItemEntry(
+        this.m_pPool,
+        args[1] as SfxPoolItem | null,
+        args[2] === true,
+      );
+    }
+  }
+  /** Original borrowed pool; a present pool is the caller precondition. @returns Actual pool. */
+  getPool(): SfxItemPool {
+    return this.m_pPool as SfxItemPool;
+  }
+  /** Original borrowed logical item reference. @returns Actual item or null. */
+  getItem(): SfxPoolItem | null {
+    return this.m_pItem;
+  }
+  /** Original logical holder copy assignment, retaining pool/item identity for shareable values. @param source - Native source. @returns This holder. */
+  assign(source: SfxPoolItemHolder): this {
+    if (this === source || this.equals(source)) return this;
+    this.m_pPool = source.m_pPool;
+    this.m_pItem = bindHolderValue(source.m_pPool as SfxItemPool, source.m_pItem, true, false);
+    return this;
+  }
+  /** Original pool plus item identity comparison; no payload-based pointer interning is fabricated. @param other - Other holder. @returns Equality. */
+  equals(other: SfxPoolItemHolder): boolean {
+    return this.m_pPool === other.m_pPool && this.m_pItem === other.m_pItem;
+  }
+  /** Original explicit presence predicate. @returns Item presence. */
+  is(): boolean {
+    return this.m_pItem !== null;
+  }
+  /** Original operator! binding. @returns Item absence. */
+  not(): boolean {
+    return this.m_pItem === null;
+  }
+  /** Original item identity or zero for null. @returns Which. */
+  Which(): number {
+    return this.m_pItem === null ? 0 : this.m_pItem.Which();
+  }
+}
+
+/** Original shared ItemSet/ItemPool helper entry. Existing logical value binding retains native default/target-pool/copy cases; physical allocation/refcount/cache machinery stays erased. @param pool - Actual pool. @param item - Borrowed item or null. @param passingOwnership - Native adoption argument. @returns Associated logical value. */
+export function implCreateItemEntry(
+  pool: SfxItemPool,
+  item: SfxPoolItem | null,
+  passingOwnership: boolean,
+): SfxPoolItem | null {
+  return bindHolderValue(pool, item, false, passingOwnership);
+}
+
+/** Erases only native allocation/refcount/cache policy while preserving default, request-value, target-set-pool and explicit value-copy cases. No logical item count or registry is introduced. @param pool - Actual destination. @param item - Existing item or null. @param held - Copying an already held const value. @param passing - Original ownership argument, represented by ordinary JS reference adoption. @returns Associated native value. */
+function bindHolderValue(
+  pool: SfxItemPool,
+  item: SfxPoolItem | null,
+  held: boolean,
+  passing: boolean,
+): SfxPoolItem | null {
+  if (item === null || item.isStaticDefault()) return item;
+  if (item.Which() === 0) return passing ? item : item.Clone();
+  if (item.isDynamicDefault() && pool.GetPoolDefaultItem(item.Which()) === item) return item;
+  if (SfxItemPool.IsSlot(item.Which())) return passing ? item : item.Clone(pool.GetMasterPool());
+  const master = pool.GetMasterPool();
+  if (item.isSetItem() && (item as import("./sitem").SfxSetItem).GetItemSet().GetPool() !== master)
+    return item.Clone(master);
+  return passing || (held && item.isShareable()) ? item : item.Clone(master);
+}
 
 /** Stores only explicit item deltas and resolves inherited/default values on demand. */
 export class SfxItemSet {
   private readonly poolItemMap = new Map<number, SfxPoolItem>();
   private parent: SfxItemSet | undefined;
 
-  /** Creates an item set for one pool and bounded WhichId ranges. @param pool - Owning item pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited item set. @returns Nothing. */
+  private readonly pool: SfxItemPool;
+  private readonly ranges: WhichRangesContainer;
+  /** Original pool-only, explicit pool/ranges and base copy constructors. Copying slices derived source sets, without invoking virtual Clone. @param args - Pool/ranges/optional browser parent or actual const source. @returns Item set. */
   public constructor(
-    private readonly pool: SfxItemPool,
-    private readonly ranges: WhichRangesContainer,
-    parent?: SfxItemSet,
+    ...args:
+      | [pool: SfxItemPool, ranges: WhichRangesContainer, parent?: SfxItemSet | undefined]
+      | [source: SfxItemSet]
+      | [pool: SfxItemPool]
   ) {
-    validateRanges(ranges);
-    this.SetParent(parent);
+    const source = args[0];
+    if (source instanceof SfxItemSet) {
+      this.pool = source.pool;
+      this.ranges = source.ranges;
+      this.parent = source.parent;
+      if (this.ranges.length !== 0) source.CopyItemsTo(this);
+    } else {
+      this.pool = source;
+      this.ranges =
+        args.length === 1 ? source.GetMergedIdRanges() : (args[1] as WhichRangesContainer);
+      validateRanges(this.ranges);
+      this.SetParent(args[2]);
+    }
   }
 
   /** Returns the owning pool. @returns Item pool. */
@@ -73,13 +168,10 @@ export class SfxItemSet {
     if (comparePool && this.pool !== other.pool) return false;
     if (this.Count() !== other.Count()) return false;
     if (this.Count() === 0) return true;
-    for (const [which, item] of this.poolItemMap) {
+    for (const which of this.poolItemMap.keys()) {
       const state = this.GetItemState(which, false);
       if (state !== other.GetItemState(which, false)) return false;
-      if (
-        state === SfxItemState.SET &&
-        !item.equals(other.GetItemIfSet(which, false) as SfxPoolItem)
-      )
+      if (!SfxPoolItem.areSame(this.GetItemIfSet(which, false), other.GetItemIfSet(which, false)))
         return false;
     }
     return true;
@@ -127,14 +219,8 @@ export class SfxItemSet {
     if (IsDisabledItem(item)) return undefined;
     if (!this.containsWhich(item.Which())) return undefined;
     const current = this.poolItemMap.get(item.Which());
-    if (
-      current !== undefined &&
-      !IsInvalidItem(current) &&
-      !IsDisabledItem(current) &&
-      current.equals(item)
-    )
-      return undefined;
-    const stored = item.Clone() as SfxPoolItem;
+    if (SfxPoolItem.areSame(current, item)) return undefined;
+    const stored = implCreateItemEntry(this.pool, item, false) as SfxPoolItem;
     this.Changed(current, stored);
     this.poolItemMap.set(stored.Which(), stored);
     return stored;
@@ -150,6 +236,21 @@ export class SfxItemSet {
         else this.InvalidateItem(which);
       } else changed = this.Put(item) !== undefined || changed;
     }
+    return changed;
+  }
+
+  /** Original replacing Set operation; clears first even for self-set, then copies declared-range effective SET values or shallow direct states. @param source - Source set. @param deep - Include effective parent SET values. @returns Whether insertion/Put changed a value, independently of the initial clear. */
+  public Set(source: SfxItemSet, deep = true): boolean {
+    if (this.Count() !== 0) this.ClearItem();
+    if (!deep) return this.PutSet(source, false);
+    let changed = false;
+    for (const [first, last] of this.ranges)
+      for (let which = first; which <= last; which += 1) {
+        if (!source.containsWhich(which)) continue;
+        if (source.GetItemState(which, true) !== SfxItemState.SET) continue;
+        const item = source.GetItemIfSet(which, true) as SfxPoolItem;
+        changed = this.Put(item) !== undefined || changed;
+      }
     return changed;
   }
 
@@ -197,6 +298,13 @@ export class SfxItemSet {
     );
     if (includeItems) this.CopyItemsTo(clone, pool === this.pool);
     return clone;
+  }
+
+  /** Original nonvirtual value clone, valid only on actual base sets. The existing Clone body implements the same pool/parent/state cases. @param includeItems - Copy direct values and native same-pool states. @param pool - Optional destination pool. @returns Independent actual base set. */
+  public CloneAsValue(includeItems = true, pool = this.pool): SfxItemSet {
+    if (this.constructor !== SfxItemSet)
+      throw new Error("SfxItemSet::CloneAsValue requires an actual base SfxItemSet.");
+    return this.Clone(includeItems, pool);
   }
 
   /** Receives old and new entries before storage changes, as in the native virtual hook. @param oldItem - Previous direct entry. @param newItem - Replacement entry. @returns Nothing. */
@@ -267,4 +375,37 @@ function validateRanges(ranges: WhichRangesContainer): void {
       previousEnd = range[1];
     },
   );
+}
+
+/** Native WhichRangesContainer::MergeRange value operation. Sorted range tuples replace native owning pair storage. The first native needMerge conjunct is always true for sorted valid pairs, so only its second conjunct is evaluated. @param ranges - Original sorted value. @param from - Native uint16 lower bound. @param to - Native uint16 upper bound. @returns Independent merged value. */
+export function MergeRange(
+  ranges: WhichRangesContainer,
+  from: number,
+  to: number,
+): WhichRangesContainer {
+  from &= 0xffff;
+  to &= 0xffff;
+  if (from === 0 || from > to)
+    throw new Error("WhichRangesContainer requires a valid nonzero range");
+  if (ranges.length === 0) return [[from, to]];
+  const result: [number, number][] = [];
+  let added = false;
+  for (const pair of ranges) {
+    if (!added && pair[0] >= from) {
+      result.push([from, to]);
+      added = true;
+    }
+    result.push([pair[0], pair[1]]);
+  }
+  if (!added) result.push([from, to]);
+  let i = 0;
+  while (i + 1 < result.length) {
+    const current = result[i] as [number, number],
+      next = result[i + 1] as [number, number];
+    if (next[0] - 1 <= current[1]) {
+      current[1] = Math.max(current[1], next[1]);
+      result.splice(i + 1, 1);
+    } else i++;
+  }
+  return result;
 }

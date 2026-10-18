@@ -8,7 +8,7 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SwDoc } from "../doc/doc";

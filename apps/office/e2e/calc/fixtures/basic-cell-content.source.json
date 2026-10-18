@@ -1,0 +1,7 @@
+{
+  "sourceRepository": "LibreOffice",
+  "sourceCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePath": "sc/qa/unit/data/ods/basic-cell-content.ods",
+  "sha256": "634fe14c4daaf4e3e15db2dd3b72ba0deabb52d95a05d0f95764006c838ba0dc",
+  "purpose": "Test-only interoperable ODS input data;no native implementation or executable dependency is copied."
+}

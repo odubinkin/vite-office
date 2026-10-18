@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native overlap splitting and tie arbitration without upstream runtime access. */
+import { Color } from "../../../../tools/inc/color";
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -21,7 +22,13 @@ function ownedFrame(table: ReturnType<SwDoc["nodes"]["MakeTableNode"]>): SwTabFr
 
 /** Creates an independently owned source entry. @param start - Interval start. @param end - Interval end. @param color - Original color. @param width - Native width. @returns Entry. */
 function entry(start: number, end: number, color = 1, width = 20): SwLineEntry {
-  return new SwLineEntry(4, start, end, false, new Style(new SvxBorderLine(color, width)));
+  return new SwLineEntry(
+    4,
+    start,
+    end,
+    false,
+    new Style(new SvxBorderLine(new Color(color), width)),
+  );
 }
 it("paints all four outer boundaries of an original single cell", /** Checks the constructor's original row and cell traversal through the paint boundary. @returns Nothing. */ () => {
   const doc = new SwDoc();
@@ -106,7 +113,7 @@ it.each([false, true])(
         (line, family) => {
           expect(family).toBe(horizontal);
           expect(line.mnStartPos).toBeLessThan(line.mnEndPos);
-          lines.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim()]);
+          lines.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim().toUInt32()]);
         },
       );
       expect(lines).toEqual([
@@ -137,7 +144,7 @@ it.each([false, true])(
       /** Observes independent native output. @param line - Resolved interval. @param family - Native family. @returns Nothing. */
       (line, family) => {
         expect(family).toBe(horizontal);
-        lines.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim()]);
+        lines.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim().toUInt32()]);
         line.mnEndPos = -100;
         line.maAttribute.SetWordTableCell(true);
       },
@@ -155,7 +162,8 @@ it.each([false, true])(
     const second: number[][] = [];
     painter.PaintLines(
       /** Re-observes retained native state after prior device mutation. @param line - Original interval copy. @returns Nothing. */
-      (line) => second.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim()]),
+      (line) =>
+        second.push([line.mnStartPos, line.mnEndPos, line.maAttribute.GetColorPrim().toUInt32()]),
     );
     expect(second).toEqual(lines);
   },

@@ -9,7 +9,8 @@
     "subsystem": "odf-filter",
     "capabilityIds": [
       "CAP-0113",
-      "CAP-0129"
+      "CAP-0129",
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -21,9 +22,10 @@
         "vendor/libreoffice-reference/xmloff/source/style/XMLFontAutoStylePool.cxx#XMLFontAutoStylePool::Add",
         "apps/office/src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts",
         "apps/office/src/xmloff/source/style/native-bullet-font.test.ts",
-        "apps/office/e2e/native-bullet-font-roundtrip.spec.ts"
+        "apps/office/e2e/native-bullet-font-roundtrip.spec.ts",
+        "docs/program/calc-core.md#Canonical font-family values and ODF metadata (task135)"
       ],
-      "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/XMLFontAutoStylePool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration221 restores the represented optional bullet Font family ODT path through actual Writer UNO/xmloff owners: nonempty CHAR_SPECIAL family uses existing font pool Find or direct quoted fo:font-family fallback without artificial font registration; import resolves existing declaration then applies nonempty direct-family override, publishes represented BulletFont descriptor and copy/applies/commits with native empty-Name ignore and malformed descriptor rejection. Common/automatic/body/cell/Worker/custom Chromium cases exercise the slice. Existing family handlers shared without a new font owner or cyclic export dependency. Native admitted tight-tab ruler drag consumes label click intentionally, no pointer-affinity patch. Full FontDescriptor style/family/pitch/charset/metrics and StarBats/StarMath glyph recoding remain unrepresented/unverified; all prior statuses/defaults/registered I/O/recovery deviations preserved.",
+      "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/XMLFontAutoStylePool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Iteration221 restores the represented optional bullet Font family ODT path through actual Writer UNO/xmloff owners: nonempty CHAR_SPECIAL family uses existing font pool Find or direct quoted fo:font-family fallback without artificial font registration; import resolves existing declaration then applies nonempty direct-family override, publishes represented BulletFont descriptor and copy/applies/commits with native empty-Name ignore and malformed descriptor rejection. Common/automatic/body/cell/Worker/custom Chromium cases exercise the slice. Existing family handlers shared without a new font owner or cyclic export dependency. Native admitted tight-tab ruler drag consumes label click intentionally, no pointer-affinity patch. Full FontDescriptor style/family/pitch/charset/metrics and StarBats/StarMath glyph recoding remain unrepresented/unverified; all prior statuses/defaults/registered I/O/recovery deviations preserved. Task135: Uses original five-field comparator, Symbol versus non-Symbol equivalence, name allocation, sorted declarations and first-Add empty result CALC114; JS GC owns ordinary entry objects. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine. Task135 reuses the actual shared SortedVector for native font entry lookup, unique insertion and ordered iteration, matching upstream o3tl::sorted_vector without a duplicated container or ownership engine.",
       "knownViolations": [],
       "localSymbols": [
         "XMLFontAutoStylePool"

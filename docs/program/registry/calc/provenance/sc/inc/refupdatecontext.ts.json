@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/refupdatecontext.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/refupdatecontext.hxx",
+    "localSymbols": [
+      "SetFormulaDirtyContext"
+    ],
+    "upstreamSymbols": [
+      "SetFormulaDirtyContext"
+    ],
+    "preservedResponsibilities": [
+      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only."
+    ],
+    "omittedResponsibilities": [
+      "Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/refupdatecontext.ts",
+          "marker": "SetFormulaDirtyContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+          "marker": "preserves native formula-list membership"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/refupdatecontext.hxx",
+          "marker": "SetFormulaDirtyContext"
+        }
+      ]
+    }
+  }
+}

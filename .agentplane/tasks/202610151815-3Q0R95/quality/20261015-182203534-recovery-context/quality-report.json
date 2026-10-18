@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610151815-3Q0R95",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T18:22:03.534Z",
+  "verdict": "pass",
+  "summary": "Native stored Font metadata defaults, getters/setters and independent copies are implemented in existing shared VCL owner, with real Writer numbering and Worker transport preservation.",
+  "evaluated_sha": "4491fd725093182a2a211d2aa7a27abf03a27a00",
+  "blueprint_digest": "403412b8a2bab10267c947dbf9deb45969731f9b7dd5e24571bca07019805e53",
+  "findings": [
+    "Same-agent review, not independent. Source audit6 pinned blobs/18 anchors;42 related and187 Calc tests pass with strict shared/Calc raw100 and exact measured owner sets. All13 gates, build and19 browser cases pass; only native vcl-to-sal edge added, no cycle algorithm changes. No full Font/default-device or UI/ODS readiness claim; inventory limitations preserved."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610151815-3Q0R95/README.md",
+    "output/playwright/task162-checks/final-verification.json",
+    "apps/office/src/vcl/source/font/native-font-metadata.test.ts",
+    "apps/office/src/sw/browser/filter/xml/native-font-metadata.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

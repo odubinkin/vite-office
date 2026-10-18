@@ -1,4 +1,7 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+
 import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
@@ -7,12 +10,8 @@ import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
-import {
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
@@ -108,7 +107,6 @@ export interface WriterParagraphFormatValue {
   readonly contextual: boolean;
   readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
   readonly lineValue: number;
-  readonly fontIndependent: boolean;
   readonly tabStopsPt: readonly number[];
   readonly keepWithNext: boolean;
   readonly keepTogether?: boolean;
@@ -523,6 +521,13 @@ export class SwTextShell {
       RES_MARGIN_FIRSTLINE,
     );
     first.SetAutoFirst(value.autoTextIndent === true);
+    const lineSpacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    if (value.lineMode === "proportional") lineSpacing.SetPropLineSpace(value.lineValue);
+    else if (value.lineMode === "leading") lineSpacing.SetInterLineSpace(value.lineValue);
+    else {
+      lineSpacing.SetLineHeight(value.lineValue);
+      if (value.lineMode === "fixed") lineSpacing.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+    }
     return this.ApplyParagraphItems(
       /** Builds each selected paragraph's items. @param paragraph - Selected paragraph. @returns Pooled items. */ (
         paragraph,
@@ -533,12 +538,7 @@ export class SwTextShell {
           RES_UL_SPACE,
           value.contextual,
         ),
-        new SvxLineSpacingItem(
-          value.lineValue,
-          RES_PARATR_LINESPACING,
-          value.lineMode,
-          value.fontIndependent,
-        ),
+        lineSpacing,
         this.CreateTabStops(positions, paragraph),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
         new SfxBoolItem(RES_PARATR_SPLIT, !(value.keepTogether ?? false)),
@@ -575,7 +575,9 @@ export class SwTextShell {
   /** Applies the toolbar's proportional line-spacing value. @param percent - Percent. @returns Whether changed. */
   public SetLineSpacingPercent(percent: number): boolean {
     if (!Number.isInteger(percent) || percent < 0) return false;
-    return this.SetParagraphItem(new SvxLineSpacingItem(percent, RES_PARATR_LINESPACING));
+    const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    item.SetPropLineSpace(percent);
+    return this.SetParagraphItem(item);
   }
 
   /** Reads paragraph-dialog values from the active pooled items. @returns Primitive current paragraph format. */
@@ -591,11 +593,18 @@ export class SwTextShell {
       upperPt: spacing.GetUpper() / 20,
       lowerPt: spacing.GetLower() / 20,
       contextual: spacing.GetContext(),
-      lineMode: lineSpacing.GetMode(),
-      lineValue: lineSpacing.GetValue(),
-      fontIndependent: lineSpacing.IsFontIndependent(),
-      tabStopsPt: tabStops
-        .GetStops()
+      lineMode: projectWriterLineSpacing(lineSpacing).mode,
+      lineValue: projectWriterLineSpacing(lineSpacing).value,
+      tabStopsPt: Array.from(
+        { length: tabStops.Count() },
+        /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
+          unused,
+          index,
+        ) => {
+          void unused;
+          return tabStops.At(index);
+        },
+      )
         .filter(
           /** Keeps authored stops. @param stop - Candidate tab. @returns Whether explicit. */ (
             stop,
@@ -658,18 +667,15 @@ export class SwTextShell {
     paragraph = this.target.GetActiveParagraph(),
   ): SvxTabStopItem {
     const current = paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
-    return SvxTabStopItem.FromStops(
-      RES_PARATR_TABSTOP,
-      positions.map(
-        /** Retains metadata at unchanged positions. @param position - Twips. @returns Tab stop. */ (
-          position,
-        ) =>
-          current.GetPos(position) !== 65535
-            ? current.At(current.GetPos(position))
-            : new SvxTabStop(position),
-      ),
-      current.GetDefaultDistance(),
-    );
+    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    item.SetDefaultDistance(current.GetDefaultDistance());
+    for (const position of positions)
+      item.Insert(
+        current.GetPos(position) !== 65535
+          ? current.At(current.GetPos(position))
+          : new SvxTabStop(position),
+      );
+    return item;
   }
 
   /** Applies paragraph dialog attributes in one history entry. @param items - Paragraph attributes. @returns Whether a paragraph changed. */

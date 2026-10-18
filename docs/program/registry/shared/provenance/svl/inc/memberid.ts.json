@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/memberid.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/memberid.h",
+    "localSymbols": [
+      "MID_WIDTH",
+      "MID_HEIGHT",
+      "MID_SIZE_SIZE",
+      "MID_SIZE_WIDTH",
+      "MID_SIZE_HEIGHT"
+    ],
+    "upstreamSymbols": [
+      "MID_WIDTH",
+      "MID_HEIGHT",
+      "MID_SIZE_SIZE",
+      "MID_SIZE_WIDTH",
+      "MID_SIZE_HEIGHT"
+    ],
+    "preservedResponsibilities": [
+      "Original shared width member declaration only.",
+      "Task136 adds the missing native SvxShadowItem pool dependency with owned Color values, gray100NONE defaults, original constructors/copy/clone/setters/equality/hash/side-space/metrics and complete supported typed Any query/put. Published ShadowFormat/ShadowLocation use existing CPPU normal metadata and ordinary scalar member cells, with no new allocator or lifetime engine. IsTransparent write omission, ignored extraction failures, signed short widths and checked transparency multiplication are preserved. Native final-class Query0 is always true, so its redundant left conjunct is source-folded while both actual query/extraction operations still execute. JS logical booleans represent valid IDL boolean values; binary boolean byte domains, native ABI, localized presentation/XML diagnostics, full DocPool/document/UI/ODS remain unverified. Existing metadata history/status/classification and conscious I/O/recovery deviations remain intact.",
+      "Task155 replaces the reduced mode/value/font-independent item with original five-field SvxLineSpacingItem state, native rule enums, default/copy/setter/Clone/equality/hash and typed Any contracts. Actual LineSpacing two-short struct uses shared CPPU metadata and ordinary JS scalar cells, not binary persistence or lifetime machinery. Writer height200 defaults, commands, layout and ODF consume actual fields; browser persistence stores all five fields and decodes old scalar/tuple inputs only at its existing I/O boundary. Font-independent line spacing belongs to Drawing text-object properties and is removed from Writer paragraph model/filter/dialog; generic shared XML support remains. Native inactive-field equality versus all-field hashing and unknown-member successful normalization are preserved and documented. Translated presentation, tab-stop canonicalization, real full engine/pool/Calc model/connected UI and same-model ODS remain pending. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged.",
+      "Task179 restores native SvxSizeItem stable tools Size value ownership,copy/default/Clone,payload-only equality,typed Size/width/height Any,integral conversions and llround metric scaling. Genuine awt Size IDL fields and normal CPPU type metadata reuse existing compound access,without a new allocator or binary format. Writer uses the same base and native derived member conversions,percentage/sync/type/clamps and deliberate nonmetric overrides. Preserve HEIGHT failed extraction success and Writer zero-on-failed-short-extraction behavior. Existing no-output browser dimension transport remains explicit;native Any calls do not bypass derived dispatch. Full localized presentation,XML diagnostics,native memory caches,unsafe integer domains,ScDocumentPool/document/UI/same-model ODS remain pending;no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Native localized presentation/XML diagnostics, binary ABI and complete Calc document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/memberid.ts",
+          "marker": "MID_WIDTH"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/memberid.h",
+          "marker": "MID_WIDTH"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/viewopti.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/viewopti.hxx",
+    "localSymbols": [
+      "ScGridOptions"
+    ],
+    "upstreamSymbols": [
+      "ScGridOptions"
+    ],
+    "preservedResponsibilities": [
+      "Task186 ports the complete native ScGridOptions value responsibility over actual shared SvxOptionsGrid. Construction retains100/0/100/0,false/true/false;explicit SetDefaults first resets all base fields then uses real source measurement for1000metric/1270otherwise and divisions1. Equality reads all seven actual fields in source order. Base-copy construction binds the real nonvirtual copy operation rather than dispatching to hidden derived assignment. No duplicate grid storage/getters or fake view/document/color/configuration service. Full ScViewOptions,SvxGridItem,color settings and connected Calc document/UI/ODS remain pending;physical ownership uses JS GC."
+    ],
+    "omittedResponsibilities": [
+      "Other view options/rendering,color/configuration,document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/viewopti.ts",
+          "marker": "ScGridOptions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/viewopti.hxx",
+          "marker": "ScGridOptions"
+        }
+      ]
+    }
+  }
+}

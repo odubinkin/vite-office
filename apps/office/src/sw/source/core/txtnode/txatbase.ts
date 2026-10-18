@@ -1,11 +1,9 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
-
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -39,7 +37,8 @@ import type { SwAttrPool } from "../attr/swatrset";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import { SwFormatINetFormat } from "./fmtatr2";
 import type { SwpHints } from "./ndhints";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
@@ -408,25 +407,44 @@ export function createSwFormatAutoFormat(
     items.Put(new SfxStringItem(RES_CHRATR_COLOR, attributes.color));
   if (attributes.fontFamily !== inherited.fontFamily && attributes.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      items.Put(new SvxFontItem(attributes.fontFamily, which));
+      items.Put(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          attributes.fontFamily,
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          which,
+        ),
+      );
   if (
     attributes.fontSizeTwips !== inherited.fontSizeTwips &&
     attributes.fontSizeTwips !== undefined
   )
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, which));
+      items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, 100, which));
   if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
     items.Put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, attributes.highlight));
   if (attributes.bold !== inherited.bold)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      items.Put(new SvxWeightItem(attributes.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
+      items.Put(
+        new SvxWeightItem(
+          attributes.bold ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
+          which,
+        ),
+      );
   if (attributes.italic !== inherited.italic)
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      items.Put(new SvxPostureItem(attributes.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
+      items.Put(
+        new SvxPostureItem(
+          attributes.italic ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,
+          which,
+        ),
+      );
   if (attributes.underline !== inherited.underline)
     items.Put(
       new SvxUnderlineItem(
-        attributes.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE,
+        attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
         RES_CHRATR_UNDERLINE,
       ),
     );

@@ -22,7 +22,9 @@ import {
 } from "../../../editeng/source/items/textitem";
 import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import { encodeWriterDocument, decodeWriterDocument } from "../filter/xml/writer-document-codec";
-
+import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
+import { getFontFamilyFromGeneric } from "../../../xmloff/source/style/fonthdl";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Releases actual owners and mounted views. @returns Nothing. */ () => {
@@ -76,8 +78,15 @@ for (const cell of [false, true])
               new SvxUnderlineItem(1, 14),
               new SfxStringItem(3, "#123456"),
               new SfxStringItem(42, "#abcdef"),
-              new SvxFontHeightItem(320, 8),
-              new SvxFontItem("Stored Face", 7, "Resolved Face", generic ? "modern" : undefined),
+              new SvxFontHeightItem(320, 100, 8),
+              new SvxFontItem(
+                getFontFamilyFromGeneric(generic ? "modern" : undefined),
+                "Resolved Face",
+                "",
+                FontPitch.PITCH_DONTKNOW,
+                RTL_TEXTENCODING_DONTKNOW,
+                7,
+              ),
             ),
             2,
             4,
@@ -169,7 +178,16 @@ it("native display retains inherited items and explicit normal resets in a clipp
     node = required(doc.paragraphs[0]);
   doc.GetDfltTextFormatColl().SetFormatAttr(new SvxWeightItem(8, 15));
   doc.GetDfltTextFormatColl().SetFormatAttr(new SvxPostureItem(2, 11));
-  node.SetAttr(new SvxFontItem("Inherited", 7, "Inherited", "roman"));
+  node.SetAttr(
+    new SvxFontItem(
+      FontFamily.FAMILY_ROMAN,
+      "Inherited",
+      "",
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+      7,
+    ),
+  );
   node.SetText("ab😀ef");
   node
     .GetOrCreateSwpHints()
@@ -237,7 +255,14 @@ for (const cell of [false, true])
         session,
         new SvxWeightItem(8, 15),
         new SvxPostureItem(2, 11),
-        new SvxFontItem("Stored", 7, "Resolved", "modern"),
+        new SvxFontItem(
+          FontFamily.FAMILY_MODERN,
+          "Resolved",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          7,
+        ),
       ),
       2,
       4,

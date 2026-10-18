@@ -1,4 +1,5 @@
 /** @fileoverview Verifies represented native Number/Bullet font construction without upstream execution. */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
@@ -6,9 +7,7 @@ import { createWriterNumFormat, SvxNumType } from "../doc/number";
 import { Font } from "../../../../vcl/source/font/font";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -28,7 +27,8 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 for (const preserve of [false, true])
   it(`native number font uses paragraph attr ownership and source reset preserve=${preserve}`, /** Checks native enums, independent optional font copies and no history/model mutation while resolving. @returns Nothing. */ () => {
     const doc = new SwDoc(),
@@ -42,12 +42,19 @@ for (const preserve of [false, true])
       doc.GetDocumentSettingManager().set("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT", preserve);
       node.SetText("Paragraph text");
       node.SetAttr(
-        new SvxFontItem("Liberation Serif", RES_CHRATR_FONT, "Liberation Serif", "roman"),
+        new SvxFontItem(
+          FontFamily.FAMILY_ROMAN,
+          "Liberation Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
       );
-      node.SetAttr(new SvxFontHeightItem(400, RES_CHRATR_FONTSIZE));
-      node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-      node.SetAttr(new SvxPostureItem(FontItalic.OBLIQUE, RES_CHRATR_POSTURE));
-      node.SetAttr(new SvxUnderlineItem(FontLineStyle.DOUBLE, RES_CHRATR_UNDERLINE));
+      node.SetAttr(new SvxFontHeightItem(400, 100, RES_CHRATR_FONTSIZE));
+      node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+      node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, RES_CHRATR_POSTURE));
+      node.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE));
       node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
       applyWriterParagraphList(node, { kind: "bullet", level: 0, ruleName: "Font rule" });
       const rule = node.GetNumRule();
@@ -57,9 +64,9 @@ for (const preserve of [false, true])
       expect(initial).toEqual({
         familyName: "OpenSymbol",
         heightTwips: 400,
-        weight: preserve ? FontWeight.BOLD : FontWeight.NORMAL,
-        posture: preserve ? FontItalic.OBLIQUE : FontItalic.NONE,
-        underline: preserve ? FontLineStyle.DOUBLE : FontLineStyle.NONE,
+        weight: preserve ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
+        posture: preserve ? FontItalic.ITALIC_OBLIQUE : FontItalic.ITALIC_NONE,
+        underline: preserve ? FontLineStyle.LINESTYLE_DOUBLE : FontLineStyle.LINESTYLE_NONE,
         color: "#336699",
       });
       expect(Object.isFrozen(initial)).toBe(true);
@@ -86,9 +93,9 @@ for (const preserve of [false, true])
         familyName: "Liberation Serif",
         genericFamily: "roman",
         heightTwips: 400,
-        weight: FontWeight.BOLD,
-        posture: FontItalic.OBLIQUE,
-        underline: preserve ? FontLineStyle.DOUBLE : FontLineStyle.NONE,
+        weight: FontWeight.WEIGHT_BOLD,
+        posture: FontItalic.ITALIC_OBLIQUE,
+        underline: preserve ? FontLineStyle.LINESTYLE_DOUBLE : FontLineStyle.LINESTYLE_NONE,
         color: "#336699",
       });
       format.SetNumberingType(SvxNumType.SVX_NUM_BITMAP);
@@ -97,7 +104,9 @@ for (const preserve of [false, true])
       node.SetCountedInList(false);
       expect(resolveSwNumberPortionFont(node)).toBeUndefined();
       expect(node.GetText()).toBe("Paragraph text");
-      expect((node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(FontWeight.BOLD);
+      expect((node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(
+        FontWeight.WEIGHT_BOLD,
+      );
       expect(doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     } finally {
       doc.Dispose();

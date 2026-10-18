@@ -1,9 +1,10 @@
 /** @fileoverview Verifies direct Writer paragraph margins through ODT package import and export. */
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { describe, expect, it } from "vitest";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
-import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
   SvxRightMarginItem,
@@ -100,7 +101,7 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     paragraph.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(-283), RES_MARGIN_FIRSTLINE));
     paragraph.SetAttr(new SvxRightMarginItem(SvxIndentValue.twips(567), RES_MARGIN_RIGHT));
     paragraph.SetAttr(new SvxULSpaceItem(120, 60, RES_UL_SPACE));
-    paragraph.SetAttr(new SvxLineSpacingItem(115, RES_PARATR_LINESPACING));
+    paragraph.SetAttr(lineSpacingFixture(115, RES_PARATR_LINESPACING));
 
     const bytes = writeOdtDocument(writer, metadata());
     const content = await new ZipFile(bytes).readTextEntry("content.xml");
@@ -175,4 +176,20 @@ function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefi
   if (item === undefined) return undefined;
   const values = [item.QueryValue(3), item.QueryValue(4)];
   return item.QueryValue(7) === true ? [...values, 1] : values;
+}
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
 }

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610181411-WFPT6E",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-18T15:03:05.375Z",
+  "verdict": "pass",
+  "summary": "Same-agent evaluator review:basic same-model ODS scope verified at ca72d59c6fa8;ready for limited UI handoff and all-app checkpoint.",
+  "evaluated_sha": "ca72d59c6fa8d8dc9379823e85b33dac85830e6c",
+  "blueprint_digest": "ee87028f7af4d784f1f63233102a7216cc4ca28c8e38ec7e3ba80e62c338488e",
+  "findings": [
+    "Exact66committed paths and65source hashes verified;native source responsibilities/defaults,shared helper bodies,raw maps/coverage and Chromium/Worker manifests inspected. No alternate model or UI;unsupported rich/format/formula/cache services explicitly bounded."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610181411-WFPT6E/README.md",
+    "output/playwright/task204-checks/final-audit.json",
+    "output/playwright/task204-checks/source-audit.json",
+    "output/playwright/task204-checks/value-coverage-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Content-only ODS;arbitrary spreadsheets can reject or lose diagnosed formatting. Full all-app regression is the next checkpoint before requested pause."
+  ]
+}

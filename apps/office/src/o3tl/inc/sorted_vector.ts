@@ -1,11 +1,42 @@
 /** @fileoverview Ports the ordered unique vector operations used by Writer from include/o3tl/sorted_vector.hxx. */
 
-/** Sorted unique values with comparator equality and destination-preserving bulk union. */
+/** Primitive native value-copy specializations supported by initializer/copy operations. */
+export type PrimitiveSortedVectorValue = number | bigint | boolean | string;
+
+/** Original ordered vector: insertion is unique, while initializer-list construction retains duplicates. */
 export class SortedVector<T> implements Iterable<T> {
   private m_vector: T[] = [];
 
-  /** Binds the native comparator policy. @param compare - Strict weak ordering. @returns Container. */
-  public constructor(private readonly compare: (left: T, right: T) => boolean) {}
+  /** Binds the native comparator policy. @param compare - Strict weak ordering. @param initial - Primitive initializer list retaining duplicates. @returns Container. */
+  public constructor(
+    private readonly compare: (left: T, right: T) => boolean,
+    initial?: T extends PrimitiveSortedVectorValue ? readonly T[] : never,
+  ) {
+    if (initial !== undefined) {
+      this.m_vector = [...initial];
+      this.m_vector.sort(
+        /** Original Compare ordering through native sort; equivalent elements are retained. @param left - First value. @param right - Second value. @returns Three-way ordering. */ (
+          left,
+          right,
+        ) => (compare(left, right) ? -1 : compare(right, left) ? 1 : 0),
+      );
+    }
+  }
+  /** Original primitive ValueT vector-copy specialization; class-value copies require their own native binding. @param source - Actual scalar vector. @returns Independent value vector. */
+  public static copy<T extends PrimitiveSortedVectorValue>(
+    source: SortedVector<T>,
+  ): SortedVector<T> {
+    const result = new SortedVector<T>(source.compare);
+    result.m_vector = source.m_vector.slice();
+    return result;
+  }
+  /** Original defaulted vector move through ordinary JS array references, without an ownership engine. @param source - Actual moved vector. @returns Destination over transferred data. */
+  public static move<T>(source: SortedVector<T>): SortedVector<T> {
+    const result = new SortedVector<T>(source.compare);
+    result.m_vector = source.m_vector;
+    source.m_vector = [];
+    return result;
+  }
 
   /** Reads the element count. @returns Count. */
   public size(): number {

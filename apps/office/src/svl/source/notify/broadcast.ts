@@ -1,16 +1,20 @@
 /** @fileoverview Ports SvtBroadcaster snapshot dispatch and lifetime from pinned `svl/source/notify/broadcast.cxx`. */
-import type { SfxHint } from "./SfxBroadcaster";
 import type { SvtListener, SvtDyingHint } from "./listener";
+
+/** Existing browser notification discriminator; distinct from native SfxHint values. */
+export interface BrowserNotificationPayload {
+  readonly kind: string;
+}
 
 let nextBroadcasterIdentity = 0;
 /** Browser representation of a native pointer with its deleted tag. */
-interface ListenerSlot<Hint extends SfxHint> {
+interface ListenerSlot<Hint extends object> {
   readonly listener: SvtListener<Hint>;
   readonly deleted: boolean;
 }
 
 /** Separate native observer channel; listeners retain their own reciprocal registrations. */
-export class SvtBroadcaster<Hint extends SfxHint = SfxHint> {
+export class SvtBroadcaster<Hint extends object = BrowserNotificationPayload> {
   public readonly allocationIdentity = ++nextBroadcasterIdentity;
   private listeners: ListenerSlot<Hint>[] = [];
   private destructedListeners: SvtListener<Hint>[] = [];

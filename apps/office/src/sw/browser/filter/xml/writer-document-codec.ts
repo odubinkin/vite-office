@@ -3,7 +3,7 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
-import { importBoxProperties } from "../../../../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "../../../source/filter/xml/xmlimpit";
 
 import {
   SvxNumType,
@@ -13,6 +13,11 @@ import {
   SwNumRule,
   SwNumRuleType,
 } from "../../../source/core/doc/number";
+import {
+  encodeFontMetadata,
+  restoreFontMetadata,
+  type FontMetadataRecord,
+} from "../../../../vcl/browser/font-metadata-codec";
 import { Font } from "../../../../vcl/source/font/font";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -69,6 +74,7 @@ import {
 interface WriterNumberFormatRecord {
   readonly bulletFont: string;
   readonly bulletFontPresent?: boolean;
+  readonly bulletFontMetadata?: FontMetadataRecord;
   readonly bulletGlyph?: number;
   readonly showSymbol?: boolean;
   readonly numberingType?: "arabic" | "char-special" | "none";
@@ -401,9 +407,15 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
             level,
           ) => {
             const format = rule.Get(level);
+            const font = format.GetBulletFont();
             return {
               ...format.GetPositionProperties(),
-              bulletFont: format.GetBulletFont()?.GetFamilyName() ?? "",
+              bulletFont: font?.GetFamilyName() ?? "",
+              ...(font === undefined
+                ? {}
+                : {
+                    bulletFontMetadata: encodeFontMetadata(font),
+                  }),
               numberingType:
                 format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
                   ? "none"
@@ -717,6 +729,9 @@ export function decodeWriterDocument(
             format.bulletGlyph > 0xffffffff))
       )
         throw new Error("Stored Writer numbering marker ownership is invalid.");
+      const metadata = format.bulletFontMetadata;
+      if (metadata !== undefined && format.bulletFontPresent !== true)
+        throw new Error("Stored Writer numbering font metadata is invalid.");
       const decoded = createWriterNumFormat(format.kind, format.bulletChar, {
         absLSpace: format.absLSpace ?? 0,
         firstLineOffset: format.firstLineOffset ?? 0,
@@ -739,6 +754,7 @@ export function decodeWriterDocument(
       if (format.bulletFontPresent === true) {
         const font = new Font();
         font.SetFamilyName(format.bulletFont);
+        if (metadata !== undefined) restoreFontMetadata(font, metadata);
         decoded.SetBulletFont(font);
       } else if (format.bulletFontPresent === false) decoded.SetBulletFont(undefined);
       if (rule.ownedLevels === undefined || rule.ownedLevels[level])

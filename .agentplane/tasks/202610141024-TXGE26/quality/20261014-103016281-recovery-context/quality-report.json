@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141024-TXGE26",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T10:30:16.281Z",
+  "verdict": "pass",
+  "summary": "Same-agent source review passed37intentional paths,12native pins, wholeCalc159tests and28related tests raw100 plus24boundary tests/12gates; not independent review.",
+  "evaluated_sha": "292f1e492734fe9aab080efa01b34fe765f70a84",
+  "blueprint_digest": "48e037bdb65e484abe2ab28fb32aa5ce78d6d18c59214bed7c56a79861dbce2e",
+  "findings": [
+    "Actual shared enum interface/template/helper preserve value, narrowing, Any extraction, bool defaults and equality/hash contracts; Calc three real page-output defaults/copy/Clone use shared owners. No fake service or memory engine."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141024-TXGE26/README.md",
+    "output/playwright/task114-checks/exact-review.json",
+    "output/playwright/task114-checks/value-coverage-audit.json",
+    "output/playwright/task114-checks/gates-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native presentation/diagnostics/caches/invalid enum domains/ABI/full document/UI/ODS remain pending or excluded; full replay121next."
+  ]
+}

@@ -2,14 +2,10 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
-
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxLineSpacingItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,
   SvxFirstLineIndentItem,
@@ -17,8 +13,6 @@ import {
 } from "../../../../editeng/inc/lrspitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
-  FontWeight,
   SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
@@ -56,7 +50,8 @@ import {
 } from "../../../inc/hintids";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
 import type { SwTextFormatColl } from "./fmtcol";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Direct item values created by one upstream pool-style switch branch. */
 export interface WriterParagraphStyleDefaults {
   readonly adjust?: SvxAdjust;
@@ -223,10 +218,11 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
         RES_UL_SPACE,
       ),
     );
-  if (defaults.lineHeightPercent !== undefined)
-    collection.SetFormatAttr(
-      new SvxLineSpacingItem(defaults.lineHeightPercent, RES_PARATR_LINESPACING),
-    );
+  if (defaults.lineHeightPercent !== undefined) {
+    const lineSpacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    lineSpacing.SetPropLineSpace(defaults.lineHeightPercent);
+    collection.SetFormatAttr(lineSpacing);
+  }
   if (defaults.tabStopTwips !== undefined) {
     const tabs = new SvxTabStopItem(RES_PARATR_TABSTOP);
     tabs.Insert(new SvxTabStop(defaults.tabStopTwips));
@@ -246,13 +242,13 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
   for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
     if (defaults.bold !== undefined)
-      collection.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, which));
+      collection.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));
   for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
     if (defaults.italic !== undefined)
-      collection.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, which));
+      collection.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, which));
   for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
     if (defaults.fontSizeTwips !== undefined)
-      collection.SetFormatAttr(new SvxFontHeightItem(defaults.fontSizeTwips, which));
+      collection.SetFormatAttr(new SvxFontHeightItem(defaults.fontSizeTwips, 100, which));
   if (defaults.fontRole !== undefined) applyScriptFonts(collection, defaults.fontRole);
 }
 
@@ -272,7 +268,14 @@ function applyScriptFonts(collection: SwTextFormatColl, role: "fixed" | "heading
       script,
     );
     collection.SetFormatAttr(
-      new SvxFontItem(selection.requestedFamily, which, selection.resolvedFamily),
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        selection.resolvedFamily,
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        which,
+      ),
     );
   }
 }

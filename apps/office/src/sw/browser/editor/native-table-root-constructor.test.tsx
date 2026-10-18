@@ -1,4 +1,6 @@
 /** @fileoverview Checks actual browser mouse table frame allocation borrows the original native Writer root. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
@@ -56,14 +58,10 @@ it.each([false, true])(
     }
     /** Reads actual original registered native frame. @returns Original frame. */ function native() {
       let result: SwTabFrame | undefined;
-      table.GetFrameFormat().ForAllListeners(
-        /** Finds original table client. @param client - Native registered client. @returns Continue. */ (
-          client,
-        ) => {
-          if (client instanceof SwTabFrame) result = client;
-          return false;
-        },
-      );
+      for (const client of new SwIterator(SwClient, table.GetFrameFormat())) {
+        if (client instanceof SwTabFrame) result = client;
+        continue;
+      }
       return required(result);
     }
     try {

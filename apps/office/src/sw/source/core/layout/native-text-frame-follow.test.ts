@@ -1,4 +1,6 @@
 /** @fileoverview Checks original native text-frame master/follow ownership, destruction and position affinity. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwFrame } from "./wsfrm";
@@ -34,14 +36,10 @@ afterEach(
     for (const root of roots.splice(0)) root.DestroyImpl();
     for (const doc of docs.splice(0)) {
       for (const node of doc.nodes.entries())
-        node.ForAllListeners(
-          /** Releases native clients. @param listener - Original frame client. @returns Continue iteration. */ (
-            listener,
-          ) => {
-            if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
-            return false;
-          },
-        );
+        writerClients0: for (const listener of new SwIterator(SwClient, node)) {
+          if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
+          continue writerClients0;
+        }
       doc.Dispose();
     }
     SwTextCursor.SetRightMargin(false);

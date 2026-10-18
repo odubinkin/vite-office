@@ -8,13 +8,17 @@
         {
           "marker": "createBrowserDefaultFontDevice",
           "path": "apps/office/src/vcl/browser/default-font-device.ts"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/default-font-device.test.ts",
+          "marker": "uses configured candidate order"
         }
       ]
     },
     "localPath": "apps/office/src/vcl/browser/default-font-device.ts",
-    "rationale": "Adapts synchronous CSS Font Loading availability checks to the narrow output-device contract used for locale- and script-specific Writer defaults.",
+    "rationale": "Adapts synchronous CSS Font Loading availability checks to the narrow output-device contract used for locale- and script-specific Writer defaults. Task165 replaces hardcoded Writer role-family lists and permissive CSS check presence tests with a generic DefaultFontType/prepared Locale browser binding. Existing source-configured lists, UTF16 tokens and search-name normalization match actual registered FontFace families; synchronous queries require loaded faces and async preparation loads all faces of candidate families in order, continuing after failures. Writer owns its native text/heading/FIXED role mapping; main awaits font preparation before mounting document factories. CSS descriptor decoding preserves registered family names. Browser/system fonts outside the registered FontFaceSet are not guessed or permission-enumerated. Full physical best-match/substitution, user configuration overrides, remaining Font attributes and Writer legacy requested-family fallback policy are not represented by this bounded device; Calc document/UI/ODS remain pending. No fake PhysicalFontCollection, native compiler/probe or lifetime manager.",
     "responsibilities": [
-      "Selects the first browser-available default font family for a role and script request."
+      "Generic native-role/prepared-locale matching on actual registered/loaded FontFace families, with awaited platform resource preparation; unavailable families remain explicit absence."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

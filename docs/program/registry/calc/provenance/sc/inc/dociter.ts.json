@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/dociter.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/dociter.hxx",
+    "localSymbols": [
+      "ScHorizontalCellIterator"
+    ],
+    "upstreamSymbols": [
+      "ScHorizontalCellIterator"
+    ],
+    "preservedResponsibilities": [
+      "Task203 implements native ScHorizontalCellIterator row-major traversal over actual shared mdds const block cursors,with original column-parameter vector,SkipInvalidInRow/FindNextNonEmptyRow order,stable borrowed result owner,inclusive area bounds and original allocated-column clamp. Native GetCellStore/ClampToAllocatedColumns and toRefCell provide the same real typed values used by editing. No cell grid,snapshot,priority heap or alternate document model is created;formula cells are not evaluated by iteration."
+    ],
+    "omittedResponsibilities": [
+      "Only existing sheets,valid typed-store area coordinates and numeric/string/formula/empty block families are supported. SetTab retains the constructor column clamp and requires that allocated-column domain on the next sheet;out-of-domain input rejects explicitly rather than creating columns. Rich edit text,all other dociter families,full document services,ODS filters and UI remain unported. JS GC owns physical lifetime;native borrowed-result and iterator invalidation preconditions remain caller responsibilities. Broad native contract/behavior/default parity is not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/dociter.ts",
+          "marker": "ScHorizontalCellIterator"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/dociter.test.ts",
+          "marker": "visits interleaved actual blocks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/dociter.hxx",
+          "marker": "ScHorizontalCellIterator"
+        }
+      ]
+    }
+  }
+}

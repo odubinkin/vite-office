@@ -4,10 +4,17 @@
 
 import { mountApplication } from "./framework/browser/app/bootstrap";
 import { createOfficeModuleDescriptors } from "./framework/browser/app/modulemanager";
-import { createWriterModuleFactory } from "./sw/browser/composition/writer-module";
+import {
+  createWriterModuleFactory,
+  prepareWriterBrowserFonts,
+} from "./sw/browser/composition/writer-module";
 import "./vcl/browser/styles.css";
 
-mountApplication(
-  document.getElementById("root"),
-  createOfficeModuleDescriptors([createWriterModuleFactory()]),
+void prepareWriterBrowserFonts(document, globalThis.navigator?.language ?? "en-US").then(
+  /** Constructs document sessions only after their configured web-font candidates are available. @returns Nothing. */ () => {
+    mountApplication(
+      document.getElementById("root"),
+      createOfficeModuleDescriptors([createWriterModuleFactory()]),
+    );
+  },
 );

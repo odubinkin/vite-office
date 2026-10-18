@@ -2,7 +2,7 @@
 import { createRef } from "react";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SvxTabAdjust } from "../../../editeng/source/items/paraitem";
+import { SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterViewStore } from "./writer-view-projection";
 import { WriterRulers, type WriterRulerDocumentDrag } from "./WriterRulers";

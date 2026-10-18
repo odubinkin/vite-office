@@ -1,0 +1,95 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9e4a8571-8df3-4aaf-b1d5-97ab233254ea",
+    "capabilityId": "CAP-9e4a8571-8df3-4aaf-b1d5-97ab233254ea",
+    "suite": "shared",
+    "subsystem": "language-tag-registered-parsing",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task194 implements the complete private scanner token/error/position responsibilities and seven exact registered-key DB lookups from pinned liblangtag0.6.8 with IANA2026-06-14 functional data. Native C-string prefix/copy and optional error-slot behavior are preserved as managed byte/string values. All ordered registry rows, expanded ranges, original case, preferred tags, suppress scripts, prefixes, macro language and scope are retained; source wildcard and empty DB values remain explicit keys with no missing-key fallback. JS Map replaces trie/XML storage; GC replaces physical allocation/refcounts/locks. ASCII C-locale scanner classification is bounded to BCP47 bytes;non-ASCII byte diagnostics retain byte values,not host locale-dependent ctype behavior. No complete parser,LanguageTag,CLDR extensions/canonicalization,names/localization,Font/defaults/pools/model/UI/ODS or native execution/parity claim.",
+      "Task196 completes and connects the required normal grammar,t callback and canonicalization using these actual scalar/data owners;see CAP-b64f5fbe-dc52-4c69-8802-3c4698aace10. This does not promote broad library/file parity or the enclosing LanguageTag readiness."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine."
+    },
+    "capability": "Native language-tag token scanning and pinned registered-subtag lookup",
+    "gaps": [
+      "Enclosing LibreOffice LanguageTag state/ID registration,Font/defaults/pools/model/UI/ODS remain pending;full external-library wildcard/locale/maximization APIs are outside this capability."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+          "marker": "lt_tag_scanner_new"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-lang-db.c",
+          "marker": "lt_lang_db_lookup"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/liblangtag-reference/tests/check-lang.c",
+          "marker": "No empty element for lang"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/liblangtag-reference/README",
+          "marker": "Licensing"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.scanner.ts",
+          "marker": "TagScanner"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-registry.ts",
+          "marker": "lookupRegistry"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.scanner.test.ts",
+          "marker": "scans original token boundaries"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-registry.test.ts",
+          "marker": "looks up every ordered registry record"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Registered language parsing foundations (task194)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "language-tag-token-and-registered-key-lookup",
+    "scopeLimitations": [
+      "ASCII C-locale byte tokenization and immutable registered functional values,not full liblangtag/LanguageTag.",
+      "Only registered lookup preconditions from native check-lang QA are replayed;scanner cases are source-derived and no native comparison/full parser QA is claimed."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task194 implements the complete private scanner token/error/position responsibilities and seven exact registered-key DB lookups from pinned liblangtag0.6.8 with IANA2026-06-14 functional data. Native C-string prefix/copy and optional error-slot behavior are preserved as managed byte/string values. All ordered registry rows, expanded ranges, original case, preferred tags, suppress scripts, prefixes, macro language and scope are retained; source wildcard and empty DB values remain explicit keys with no missing-key fallback. JS Map replaces trie/XML storage; GC replaces physical allocation/refcounts/locks. ASCII C-locale scanner classification is bounded to BCP47 bytes;non-ASCII byte diagnostics retain byte values,not host locale-dependent ctype behavior. No complete parser,LanguageTag,CLDR extensions/canonicalization,names/localization,Font/defaults/pools/model/UI/ODS or native execution/parity claim."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task194 implements the complete private scanner token/error/position responsibilities and seven exact registered-key DB lookups from pinned liblangtag0.6.8 with IANA2026-06-14 functional data. Native C-string prefix/copy and optional error-slot behavior are preserved as managed byte/string values. All ordered registry rows, expanded ranges, original case, preferred tags, suppress scripts, prefixes, macro language and scope are retained; source wildcard and empty DB values remain explicit keys with no missing-key fallback. JS Map replaces trie/XML storage; GC replaces physical allocation/refcounts/locks. ASCII C-locale scanner classification is bounded to BCP47 bytes;non-ASCII byte diagnostics retain byte values,not host locale-dependent ctype behavior. No complete parser,LanguageTag,CLDR extensions/canonicalization,names/localization,Font/defaults/pools/model/UI/ODS or native execution/parity claim."
+    }
+  }
+}

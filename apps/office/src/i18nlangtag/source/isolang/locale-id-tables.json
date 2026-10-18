@@ -1,0 +1,3925 @@
+{
+  "iso": [
+    {
+      "mnLang": 1033,
+      "maLanguage": "en",
+      "maCountry": "US",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2057,
+      "maLanguage": "en",
+      "maCountry": "GB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9,
+      "maLanguage": "en",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3081,
+      "maLanguage": "en",
+      "maCountry": "AU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4105,
+      "maLanguage": "en",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1036,
+      "maLanguage": "fr",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1031,
+      "maLanguage": "de",
+      "maCountry": "DE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1040,
+      "maLanguage": "it",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1043,
+      "maLanguage": "nl",
+      "maCountry": "NL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3082,
+      "maLanguage": "es",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2070,
+      "maLanguage": "pt",
+      "maCountry": "PT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1046,
+      "maLanguage": "pt",
+      "maCountry": "BR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1030,
+      "maLanguage": "da",
+      "maCountry": "DK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1032,
+      "maLanguage": "el",
+      "maCountry": "GR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2052,
+      "maLanguage": "zh",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4,
+      "maLanguage": "zh",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2052,
+      "maLanguage": "cmn",
+      "maCountry": "CN",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1028,
+      "maLanguage": "zh",
+      "maCountry": "TW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1028,
+      "maLanguage": "cmn",
+      "maCountry": "TW",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 3076,
+      "maLanguage": "zh",
+      "maCountry": "HK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4100,
+      "maLanguage": "zh",
+      "maCountry": "SG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5124,
+      "maLanguage": "zh",
+      "maCountry": "MO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30724,
+      "maLanguage": "zh",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1166,
+      "maLanguage": "yue",
+      "maCountry": "HK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 15369,
+      "maLanguage": "en",
+      "maCountry": "HK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1041,
+      "maLanguage": "ja",
+      "maCountry": "JP",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1042,
+      "maLanguage": "ko",
+      "maCountry": "KR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2066,
+      "maLanguage": "ko",
+      "maCountry": "KR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32786,
+      "maLanguage": "ko",
+      "maCountry": "KP",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1053,
+      "maLanguage": "sv",
+      "maCountry": "SE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2077,
+      "maLanguage": "sv",
+      "maCountry": "FI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1035,
+      "maLanguage": "fi",
+      "maCountry": "FI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1049,
+      "maLanguage": "ru",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1092,
+      "maLanguage": "tt",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5129,
+      "maLanguage": "en",
+      "maCountry": "NZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 6153,
+      "maLanguage": "en",
+      "maCountry": "IE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2067,
+      "maLanguage": "nl",
+      "maCountry": "BE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2060,
+      "maLanguage": "fr",
+      "maCountry": "BE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3084,
+      "maLanguage": "fr",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4108,
+      "maLanguage": "fr",
+      "maCountry": "CH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2055,
+      "maLanguage": "de",
+      "maCountry": "CH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3079,
+      "maLanguage": "de",
+      "maCountry": "AT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2064,
+      "maLanguage": "it",
+      "maCountry": "CH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1052,
+      "maLanguage": "sq",
+      "maCountry": "AL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1025,
+      "maLanguage": "ar",
+      "maCountry": "SA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3073,
+      "maLanguage": "ar",
+      "maCountry": "EG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 14337,
+      "maLanguage": "ar",
+      "maCountry": "AE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2049,
+      "maLanguage": "ar",
+      "maCountry": "IQ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4097,
+      "maLanguage": "ar",
+      "maCountry": "LY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5121,
+      "maLanguage": "ar",
+      "maCountry": "DZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 6145,
+      "maLanguage": "ar",
+      "maCountry": "MA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 7169,
+      "maLanguage": "ar",
+      "maCountry": "TN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 8193,
+      "maLanguage": "ar",
+      "maCountry": "OM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9217,
+      "maLanguage": "ar",
+      "maCountry": "YE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 10241,
+      "maLanguage": "ar",
+      "maCountry": "SY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 11265,
+      "maLanguage": "ar",
+      "maCountry": "JO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 12289,
+      "maLanguage": "ar",
+      "maCountry": "LB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 13313,
+      "maLanguage": "ar",
+      "maCountry": "KW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 15361,
+      "maLanguage": "ar",
+      "maCountry": "BH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 16385,
+      "maLanguage": "ar",
+      "maCountry": "QA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32769,
+      "maLanguage": "ar",
+      "maCountry": "TD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33793,
+      "maLanguage": "ar",
+      "maCountry": "KM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34817,
+      "maLanguage": "ar",
+      "maCountry": "DJ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 35841,
+      "maLanguage": "ar",
+      "maCountry": "ER",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 36865,
+      "maLanguage": "ar",
+      "maCountry": "IL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 37889,
+      "maLanguage": "ar",
+      "maCountry": "MR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 38913,
+      "maLanguage": "ar",
+      "maCountry": "PS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 39937,
+      "maLanguage": "ar",
+      "maCountry": "SO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 40961,
+      "maLanguage": "ar",
+      "maCountry": "SD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1,
+      "maLanguage": "ar",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1069,
+      "maLanguage": "eu",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1069,
+      "maLanguage": "eu",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1026,
+      "maLanguage": "bg",
+      "maCountry": "BG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1029,
+      "maLanguage": "cs",
+      "maCountry": "CZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1029,
+      "maLanguage": "cz",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 8201,
+      "maLanguage": "en",
+      "maCountry": "JM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9225,
+      "maLanguage": "en",
+      "maCountry": "BS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 10249,
+      "maLanguage": "en",
+      "maCountry": "BZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 11273,
+      "maLanguage": "en",
+      "maCountry": "TT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 12297,
+      "maLanguage": "en",
+      "maCountry": "ZW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 14345,
+      "maLanguage": "en",
+      "maCountry": "ID",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1061,
+      "maLanguage": "et",
+      "maCountry": "EE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1080,
+      "maLanguage": "fo",
+      "maCountry": "FO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1065,
+      "maLanguage": "fa",
+      "maCountry": "IR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5132,
+      "maLanguage": "fr",
+      "maCountry": "LU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 6156,
+      "maLanguage": "fr",
+      "maCountry": "MC",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4103,
+      "maLanguage": "de",
+      "maCountry": "LU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5127,
+      "maLanguage": "de",
+      "maCountry": "LI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1037,
+      "maLanguage": "he",
+      "maCountry": "IL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1037,
+      "maLanguage": "iw",
+      "maCountry": "IL",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1038,
+      "maLanguage": "hu",
+      "maCountry": "HU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1039,
+      "maLanguage": "is",
+      "maCountry": "IS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1057,
+      "maLanguage": "id",
+      "maCountry": "ID",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1057,
+      "maLanguage": "in",
+      "maCountry": "ID",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 20,
+      "maLanguage": "no",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1044,
+      "maLanguage": "nb",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31764,
+      "maLanguage": "nb",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2068,
+      "maLanguage": "nn",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30740,
+      "maLanguage": "nn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1045,
+      "maLanguage": "pl",
+      "maCountry": "PL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1047,
+      "maLanguage": "rm",
+      "maCountry": "CH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1048,
+      "maLanguage": "ro",
+      "maCountry": "RO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2072,
+      "maLanguage": "ro",
+      "maCountry": "MD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1051,
+      "maLanguage": "sk",
+      "maCountry": "SK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1060,
+      "maLanguage": "sl",
+      "maCountry": "SI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2058,
+      "maLanguage": "es",
+      "maCountry": "MX",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4106,
+      "maLanguage": "es",
+      "maCountry": "GT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5130,
+      "maLanguage": "es",
+      "maCountry": "CR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 6154,
+      "maLanguage": "es",
+      "maCountry": "PA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 7178,
+      "maLanguage": "es",
+      "maCountry": "DO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 8202,
+      "maLanguage": "es",
+      "maCountry": "VE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9226,
+      "maLanguage": "es",
+      "maCountry": "CO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 10250,
+      "maLanguage": "es",
+      "maCountry": "PE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 11274,
+      "maLanguage": "es",
+      "maCountry": "AR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 12298,
+      "maLanguage": "es",
+      "maCountry": "EC",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 13322,
+      "maLanguage": "es",
+      "maCountry": "CL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 14346,
+      "maLanguage": "es",
+      "maCountry": "UY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 15370,
+      "maLanguage": "es",
+      "maCountry": "PY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 16394,
+      "maLanguage": "es",
+      "maCountry": "BO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 17418,
+      "maLanguage": "es",
+      "maCountry": "SV",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 18442,
+      "maLanguage": "es",
+      "maCountry": "HN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 19466,
+      "maLanguage": "es",
+      "maCountry": "NI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 20490,
+      "maLanguage": "es",
+      "maCountry": "PR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 21514,
+      "maLanguage": "es",
+      "maCountry": "US",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1055,
+      "maLanguage": "tr",
+      "maCountry": "TR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1058,
+      "maLanguage": "uk",
+      "maCountry": "UA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1066,
+      "maLanguage": "vi",
+      "maCountry": "VN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1062,
+      "maLanguage": "lv",
+      "maCountry": "LV",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1071,
+      "maLanguage": "mk",
+      "maCountry": "MK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1086,
+      "maLanguage": "ms",
+      "maCountry": "MY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2110,
+      "maLanguage": "ms",
+      "maCountry": "BN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 17417,
+      "maLanguage": "en",
+      "maCountry": "MY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1054,
+      "maLanguage": "th",
+      "maCountry": "TH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1063,
+      "maLanguage": "lt",
+      "maCountry": "LT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2087,
+      "maLanguage": "lt",
+      "maCountry": "LT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1050,
+      "maLanguage": "hr",
+      "maCountry": "HR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4122,
+      "maLanguage": "hr",
+      "maCountry": "BA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5146,
+      "maLanguage": "bs",
+      "maCountry": "BA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30746,
+      "maLanguage": "bs",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 10266,
+      "maLanguage": "sr",
+      "maCountry": "RS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 35866,
+      "maLanguage": "sr",
+      "maCountry": "RS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3098,
+      "maLanguage": "sr",
+      "maCountry": "CS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3098,
+      "maLanguage": "sr",
+      "maCountry": "YU",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 12314,
+      "maLanguage": "sr",
+      "maCountry": "ME",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 52250,
+      "maLanguage": "sr",
+      "maCountry": "ME",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 7194,
+      "maLanguage": "sr",
+      "maCountry": "BA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 27674,
+      "maLanguage": "sr",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9242,
+      "maLanguage": "sh",
+      "maCountry": "RS",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 34842,
+      "maLanguage": "sh",
+      "maCountry": "RS",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2074,
+      "maLanguage": "sh",
+      "maCountry": "CS",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2074,
+      "maLanguage": "sh",
+      "maCountry": "YU",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 11290,
+      "maLanguage": "sh",
+      "maCountry": "ME",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 51226,
+      "maLanguage": "sh",
+      "maCountry": "ME",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 6170,
+      "maLanguage": "sh",
+      "maCountry": "BA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 28698,
+      "maLanguage": "sh",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1067,
+      "maLanguage": "hy",
+      "maCountry": "AM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32811,
+      "maLanguage": "hy",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33835,
+      "maLanguage": "hy",
+      "maCountry": "IR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1068,
+      "maLanguage": "az",
+      "maCountry": "AZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1091,
+      "maLanguage": "uz",
+      "maCountry": "UZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31811,
+      "maLanguage": "uz",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2117,
+      "maLanguage": "bn",
+      "maCountry": "BD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1093,
+      "maLanguage": "bn",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1109,
+      "maLanguage": "my",
+      "maCountry": "MM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1087,
+      "maLanguage": "kk",
+      "maCountry": "KZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 16393,
+      "maLanguage": "en",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2080,
+      "maLanguage": "ur",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1056,
+      "maLanguage": "ur",
+      "maCountry": "PK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1081,
+      "maLanguage": "hi",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1095,
+      "maLanguage": "gu",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1099,
+      "maLanguage": "kn",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1101,
+      "maLanguage": "as",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2144,
+      "maLanguage": "ks",
+      "maCountry": "IN",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1120,
+      "maLanguage": "ks",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1100,
+      "maLanguage": "ml",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1112,
+      "maLanguage": "mni",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1102,
+      "maLanguage": "mr",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1111,
+      "maLanguage": "kok",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1121,
+      "maLanguage": "ne",
+      "maCountry": "NP",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2145,
+      "maLanguage": "ne",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1096,
+      "maLanguage": "or",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1094,
+      "maLanguage": "pa",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1103,
+      "maLanguage": "sa",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1097,
+      "maLanguage": "ta",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2121,
+      "maLanguage": "ta",
+      "maCountry": "LK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1098,
+      "maLanguage": "te",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2118,
+      "maLanguage": "pnb",
+      "maCountry": "PK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31814,
+      "maLanguage": "pnb",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2118,
+      "maLanguage": "lah",
+      "maCountry": "PK",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2118,
+      "maLanguage": "pa",
+      "maCountry": "PK",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2137,
+      "maLanguage": "sd",
+      "maCountry": "PK",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1113,
+      "maLanguage": "sd",
+      "maCountry": "IN",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1059,
+      "maLanguage": "be",
+      "maCountry": "BY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1027,
+      "maLanguage": "ca",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33795,
+      "maLanguage": "ca",
+      "maCountry": "AD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34819,
+      "maLanguage": "ca",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 35843,
+      "maLanguage": "ca",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2051,
+      "maLanguage": "ca",
+      "maCountry": "XV",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2051,
+      "maLanguage": "qcv",
+      "maCountry": "ES",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 11276,
+      "maLanguage": "fr",
+      "maCountry": "CM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 12300,
+      "maLanguage": "fr",
+      "maCountry": "CI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 13324,
+      "maLanguage": "fr",
+      "maCountry": "ML",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 10252,
+      "maLanguage": "fr",
+      "maCountry": "SN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9228,
+      "maLanguage": "fr",
+      "maCountry": "CD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 14348,
+      "maLanguage": "fr",
+      "maCountry": "MA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 8204,
+      "maLanguage": "fr",
+      "maCountry": "RE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1122,
+      "maLanguage": "fy",
+      "maCountry": "NL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2108,
+      "maLanguage": "ga",
+      "maCountry": "IE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1169,
+      "maLanguage": "gd",
+      "maCountry": "GB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1084,
+      "maLanguage": "gd",
+      "maCountry": "GB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1110,
+      "maLanguage": "gl",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1079,
+      "maLanguage": "ka",
+      "maCountry": "GE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1107,
+      "maLanguage": "km",
+      "maCountry": "KH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1088,
+      "maLanguage": "ky",
+      "maCountry": "KG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1108,
+      "maLanguage": "lo",
+      "maCountry": "LA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1082,
+      "maLanguage": "mt",
+      "maCountry": "MT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1104,
+      "maLanguage": "mn",
+      "maCountry": "MN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30800,
+      "maLanguage": "mn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2072,
+      "maLanguage": "ro",
+      "maCountry": "MD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2072,
+      "maLanguage": "mo",
+      "maCountry": "MD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2073,
+      "maLanguage": "ru",
+      "maCountry": "MD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1089,
+      "maLanguage": "sw",
+      "maCountry": "KE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32833,
+      "maLanguage": "sw",
+      "maCountry": "TZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1064,
+      "maLanguage": "tg",
+      "maCountry": "TJ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31784,
+      "maLanguage": "tg",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1105,
+      "maLanguage": "bo",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32849,
+      "maLanguage": "bo",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33873,
+      "maLanguage": "bo",
+      "maCountry": "BT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3153,
+      "maLanguage": "dz",
+      "maCountry": "BT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2129,
+      "maLanguage": "dz",
+      "maCountry": "BT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 63569,
+      "maLanguage": "dz",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1090,
+      "maLanguage": "tk",
+      "maCountry": "TM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1106,
+      "maLanguage": "cy",
+      "maCountry": "GB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1072,
+      "maLanguage": "st",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1132,
+      "maLanguage": "nso",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1132,
+      "maLanguage": "ns",
+      "maCountry": "ZA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1073,
+      "maLanguage": "ts",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1074,
+      "maLanguage": "tn",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 7177,
+      "maLanguage": "en",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1078,
+      "maLanguage": "af",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1075,
+      "maLanguage": "ve",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1075,
+      "maLanguage": "ven",
+      "maCountry": "ZA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1076,
+      "maLanguage": "xh",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1077,
+      "maLanguage": "zu",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2155,
+      "maLanguage": "quz",
+      "maCountry": "EC",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2155,
+      "maLanguage": "qu",
+      "maCountry": "EC",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 3179,
+      "maLanguage": "quz",
+      "maCountry": "PE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3179,
+      "maLanguage": "qu",
+      "maCountry": "PE",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1131,
+      "maLanguage": "qu",
+      "maCountry": "BO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1123,
+      "maLanguage": "ps",
+      "maCountry": "AF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1138,
+      "maLanguage": "om",
+      "maCountry": "ET",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1125,
+      "maLanguage": "dv",
+      "maCountry": "MV",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1152,
+      "maLanguage": "ug",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1139,
+      "maLanguage": "ti",
+      "maCountry": "ET",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2163,
+      "maLanguage": "ti",
+      "maCountry": "ER",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1118,
+      "maLanguage": "am",
+      "maCountry": "ET",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1140,
+      "maLanguage": "gug",
+      "maCountry": "PY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1141,
+      "maLanguage": "haw",
+      "maCountry": "US",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1126,
+      "maLanguage": "bin",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1127,
+      "maLanguage": "ff",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1127,
+      "maLanguage": "fuv",
+      "maCountry": "NG",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2151,
+      "maLanguage": "ff",
+      "maCountry": "SN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1128,
+      "maLanguage": "ha",
+      "maCountry": "NG",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 32872,
+      "maLanguage": "ha",
+      "maCountry": "GH",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1136,
+      "maLanguage": "ig",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1137,
+      "maLanguage": "kr",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1130,
+      "maLanguage": "yo",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1143,
+      "maLanguage": "so",
+      "maCountry": "SO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1145,
+      "maLanguage": "pap",
+      "maCountry": "AN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32889,
+      "maLanguage": "pap",
+      "maCountry": "AW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33913,
+      "maLanguage": "pap",
+      "maCountry": "CW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34937,
+      "maLanguage": "pap",
+      "maCountry": "BQ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 18441,
+      "maLanguage": "en",
+      "maCountry": "SG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32829,
+      "maLanguage": "yi",
+      "maCountry": "US",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33853,
+      "maLanguage": "yi",
+      "maCountry": "IL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33853,
+      "maLanguage": "ji",
+      "maCountry": "IL",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1114,
+      "maLanguage": "syr",
+      "maCountry": "TR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1115,
+      "maLanguage": "si",
+      "maCountry": "LK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1116,
+      "maLanguage": "chr",
+      "maCountry": "US",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2141,
+      "maLanguage": "iu",
+      "maCountry": "CA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 31837,
+      "maLanguage": "iu",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1083,
+      "maLanguage": "se",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 9275,
+      "maLanguage": "smn",
+      "maCountry": "FI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 28731,
+      "maLanguage": "smn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4155,
+      "maLanguage": "smj",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5179,
+      "maLanguage": "smj",
+      "maCountry": "SE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31803,
+      "maLanguage": "smj",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3131,
+      "maLanguage": "se",
+      "maCountry": "FI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2107,
+      "maLanguage": "se",
+      "maCountry": "SE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 8251,
+      "maLanguage": "sms",
+      "maCountry": "FI",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 29755,
+      "maLanguage": "sms",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 6203,
+      "maLanguage": "sma",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 7227,
+      "maLanguage": "sma",
+      "maCountry": "SE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30779,
+      "maLanguage": "sma",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32827,
+      "maLanguage": "sjd",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1146,
+      "maLanguage": "arn",
+      "maCountry": "CL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1155,
+      "maLanguage": "co",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1156,
+      "maLanguage": "gsw",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1157,
+      "maLanguage": "sah",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1148,
+      "maLanguage": "moh",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1133,
+      "maLanguage": "ba",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1158,
+      "maLanguage": "qut",
+      "maCountry": "GT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1164,
+      "maLanguage": "prs",
+      "maCountry": "AF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1164,
+      "maLanguage": "gbz",
+      "maCountry": "AF",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1160,
+      "maLanguage": "wo",
+      "maCountry": "SN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1124,
+      "maLanguage": "fil",
+      "maCountry": "PH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1592,
+      "maLanguage": "tl",
+      "maCountry": "PH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 13321,
+      "maLanguage": "en",
+      "maCountry": "PH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1129,
+      "maLanguage": "ibb",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1144,
+      "maLanguage": "ii",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 19465,
+      "maLanguage": "en",
+      "maCountry": "AE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 20489,
+      "maLanguage": "en",
+      "maCountry": "BH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 21513,
+      "maLanguage": "en",
+      "maCountry": "EG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 22537,
+      "maLanguage": "en",
+      "maCountry": "JO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 23561,
+      "maLanguage": "en",
+      "maCountry": "KW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 24585,
+      "maLanguage": "en",
+      "maCountry": "TR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 25609,
+      "maLanguage": "en",
+      "maCountry": "YE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2143,
+      "maLanguage": "kab",
+      "maCountry": "DZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1625,
+      "maLanguage": "kab",
+      "maCountry": "DZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2143,
+      "maLanguage": "ber",
+      "maCountry": "DZ",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 4191,
+      "maLanguage": "tmz",
+      "maCountry": "MA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 3167,
+      "maLanguage": "tmz",
+      "maCountry": "MA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4191,
+      "maLanguage": "ber",
+      "maCountry": "MA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1142,
+      "maLanguage": "la",
+      "maCountry": "VA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32886,
+      "maLanguage": "la",
+      "maCountry": "VA",
+      "mnOverride": 1142
+    },
+    {
+      "mnLang": 1552,
+      "maLanguage": "la",
+      "maCountry": "VA",
+      "mnOverride": 1142
+    },
+    {
+      "mnLang": 1142,
+      "maLanguage": "la",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1553,
+      "maLanguage": "eo",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1554,
+      "maLanguage": "ia",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1687,
+      "maLanguage": "ie",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1153,
+      "maLanguage": "mi",
+      "maCountry": "NZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1568,
+      "maLanguage": "mi",
+      "maCountry": "NZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1159,
+      "maLanguage": "rw",
+      "maCountry": "RW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1569,
+      "maLanguage": "rw",
+      "maCountry": "RW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1070,
+      "maLanguage": "hsb",
+      "maCountry": "DE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1571,
+      "maLanguage": "hsb",
+      "maCountry": "DE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2094,
+      "maLanguage": "dsb",
+      "maCountry": "DE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31790,
+      "maLanguage": "dsb",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1572,
+      "maLanguage": "dsb",
+      "maCountry": "DE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1154,
+      "maLanguage": "oc",
+      "maCountry": "FR",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1573,
+      "maLanguage": "oc",
+      "maCountry": "FR",
+      "mnOverride": 1154
+    },
+    {
+      "mnLang": 1574,
+      "maLanguage": "kmr",
+      "maCountry": "TR",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1574,
+      "maLanguage": "ku",
+      "maCountry": "TR",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2598,
+      "maLanguage": "kmr",
+      "maCountry": "SY",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2598,
+      "maLanguage": "ku",
+      "maCountry": "SY",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1170,
+      "maLanguage": "ckb",
+      "maCountry": "IQ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1170,
+      "maLanguage": "ku",
+      "maCountry": "IQ",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 3622,
+      "maLanguage": "ku",
+      "maCountry": "IQ",
+      "mnOverride": 1170
+    },
+    {
+      "mnLang": 33938,
+      "maLanguage": "sdh",
+      "maCountry": "IR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32914,
+      "maLanguage": "sdh",
+      "maCountry": "IQ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4646,
+      "maLanguage": "ckb",
+      "maCountry": "IR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4646,
+      "maLanguage": "ku",
+      "maCountry": "IR",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 31890,
+      "maLanguage": "ckb",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1575,
+      "maLanguage": "sc",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1616,
+      "maLanguage": "sro",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1617,
+      "maLanguage": "sdn",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1618,
+      "maLanguage": "src",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1619,
+      "maLanguage": "sdc",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1150,
+      "maLanguage": "br",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1577,
+      "maLanguage": "br",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1135,
+      "maLanguage": "kl",
+      "maCountry": "GL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1578,
+      "maLanguage": "kl",
+      "maCountry": "GL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1579,
+      "maLanguage": "ss",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1580,
+      "maLanguage": "nr",
+      "maCountry": "ZA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2098,
+      "maLanguage": "tn",
+      "maCountry": "BW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32818,
+      "maLanguage": "tn",
+      "maCountry": "BW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 38921,
+      "maLanguage": "en",
+      "maCountry": "BW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1581,
+      "maLanguage": "mos",
+      "maCountry": "BF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1582,
+      "maLanguage": "bm",
+      "maCountry": "ML",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1583,
+      "maLanguage": "ak",
+      "maCountry": "GH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1134,
+      "maLanguage": "lb",
+      "maCountry": "LU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1584,
+      "maLanguage": "lb",
+      "maCountry": "LU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1585,
+      "maLanguage": "fur",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1586,
+      "maLanguage": "fj",
+      "maCountry": "FJ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32822,
+      "maLanguage": "af",
+      "maCountry": "NA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32777,
+      "maLanguage": "en",
+      "maCountry": "NA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1587,
+      "maLanguage": "wa",
+      "maCountry": "BE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1588,
+      "maLanguage": "cop",
+      "maCountry": "EG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1590,
+      "maLanguage": "gsc",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32775,
+      "maLanguage": "de",
+      "maCountry": "BE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1589,
+      "maLanguage": "cv",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1591,
+      "maLanguage": "ee",
+      "maCountry": "GH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33801,
+      "maLanguage": "en",
+      "maCountry": "GH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1594,
+      "maLanguage": "sg",
+      "maCountry": "CF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1595,
+      "maLanguage": "lg",
+      "maCountry": "UG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1593,
+      "maLanguage": "ln",
+      "maCountry": "CD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1596,
+      "maLanguage": "nds",
+      "maCountry": "DE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1597,
+      "maLanguage": "hil",
+      "maCountry": "PH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34825,
+      "maLanguage": "en",
+      "maCountry": "MW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1598,
+      "maLanguage": "ny",
+      "maCountry": "MW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1599,
+      "maLanguage": "csb",
+      "maCountry": "PL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 23562,
+      "maLanguage": "es",
+      "maCountry": "CU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32778,
+      "maLanguage": "es",
+      "maCountry": "CU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1601,
+      "maLanguage": "qul",
+      "maCountry": "BO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1602,
+      "maLanguage": "quh",
+      "maCountry": "BO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1603,
+      "maLanguage": "brx",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1604,
+      "maLanguage": "dgo",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1605,
+      "maLanguage": "mai",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1606,
+      "maLanguage": "sat",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1600,
+      "maLanguage": "tet",
+      "maCountry": "ID",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2624,
+      "maLanguage": "tet",
+      "maCountry": "TL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1607,
+      "maLanguage": "tpi",
+      "maCountry": "PG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1608,
+      "maLanguage": "shs",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1609,
+      "maLanguage": "grc",
+      "maCountry": "GR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1610,
+      "maLanguage": "ast",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1611,
+      "maLanguage": "ltg",
+      "maCountry": "LV",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1612,
+      "maLanguage": "swb",
+      "maCountry": "YT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1613,
+      "maLanguage": "buc",
+      "maCountry": "YT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1614,
+      "maLanguage": "ty",
+      "maCountry": "PF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1165,
+      "maLanguage": "plt",
+      "maCountry": "MG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1165,
+      "maLanguage": "mg",
+      "maCountry": "MG",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1615,
+      "maLanguage": "plt",
+      "maCountry": "MG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1620,
+      "maLanguage": "ksf",
+      "maCountry": "CM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1621,
+      "maLanguage": "ki",
+      "maCountry": "KE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1622,
+      "maLanguage": "rue",
+      "maCountry": "UA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33366,
+      "maLanguage": "rue",
+      "maCountry": "SK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1623,
+      "maLanguage": "lif",
+      "maCountry": "NP",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1624,
+      "maLanguage": "jbo",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1626,
+      "maLanguage": "ht",
+      "maCountry": "HT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 15372,
+      "maLanguage": "fr",
+      "maCountry": "HT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1627,
+      "maLanguage": "beq",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1628,
+      "maLanguage": "bkw",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1629,
+      "maLanguage": "mkw",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1630,
+      "maLanguage": "ldi",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1631,
+      "maLanguage": "mdw",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1636,
+      "maLanguage": "ebo",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1632,
+      "maLanguage": "tek",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1633,
+      "maLanguage": "tyx",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1634,
+      "maLanguage": "vif",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32790,
+      "maLanguage": "pt",
+      "maCountry": "AO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1635,
+      "maLanguage": "gv",
+      "maCountry": "GB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1637,
+      "maLanguage": "an",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1638,
+      "maLanguage": "qtz",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1639,
+      "maLanguage": "pli",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1640,
+      "maLanguage": "ky",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1641,
+      "maLanguage": "kpv",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1642,
+      "maLanguage": "koi",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1643,
+      "maLanguage": "pjt",
+      "maCountry": "AU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1644,
+      "maLanguage": "myv",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1645,
+      "maLanguage": "mhr",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1646,
+      "maLanguage": "kca",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1647,
+      "maLanguage": "liv",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1648,
+      "maLanguage": "mdf",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1649,
+      "maLanguage": "mrj",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1650,
+      "maLanguage": "nio",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1651,
+      "maLanguage": "olo",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1652,
+      "maLanguage": "vep",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1653,
+      "maLanguage": "vro",
+      "maCountry": "EE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1654,
+      "maLanguage": "yrk",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1655,
+      "maLanguage": "axk",
+      "maCountry": "CF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33399,
+      "maLanguage": "axk",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1656,
+      "maLanguage": "bvx",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1657,
+      "maLanguage": "dde",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1658,
+      "maLanguage": "xku",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1659,
+      "maLanguage": "kng",
+      "maCountry": "CD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33403,
+      "maLanguage": "kng",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1660,
+      "maLanguage": "njx",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1661,
+      "maLanguage": "ngz",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1662,
+      "maLanguage": "njy",
+      "maCountry": "CM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33406,
+      "maLanguage": "njy",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1663,
+      "maLanguage": "puu",
+      "maCountry": "GA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33407,
+      "maLanguage": "puu",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1664,
+      "maLanguage": "sdj",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1665,
+      "maLanguage": "kkw",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1666,
+      "maLanguage": "tsa",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1667,
+      "maLanguage": "iyx",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1668,
+      "maLanguage": "yom",
+      "maCountry": "CD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33412,
+      "maLanguage": "yom",
+      "maCountry": "CG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1669,
+      "maLanguage": "sid",
+      "maCountry": "ET",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1670,
+      "maLanguage": "nqo",
+      "maCountry": "GN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1671,
+      "maLanguage": "udm",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1672,
+      "maLanguage": "kw",
+      "maCountry": "GB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1672,
+      "maLanguage": "kw",
+      "maCountry": "UK",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 33851,
+      "maLanguage": "sje",
+      "maCountry": "SE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1673,
+      "maLanguage": "gym",
+      "maCountry": "PA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1674,
+      "maLanguage": "kum",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1675,
+      "maLanguage": "nog",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1677,
+      "maLanguage": "lld",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32780,
+      "maLanguage": "fr",
+      "maCountry": "BF",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1678,
+      "maLanguage": "pui",
+      "maCountry": "CO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1680,
+      "maLanguage": "av",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1682,
+      "maLanguage": "lgr",
+      "maCountry": "SB",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33804,
+      "maLanguage": "fr",
+      "maCountry": "BJ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34828,
+      "maLanguage": "fr",
+      "maCountry": "NE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 35852,
+      "maLanguage": "fr",
+      "maCountry": "TG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1683,
+      "maLanguage": "fkv",
+      "maCountry": "NO",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1684,
+      "maLanguage": "cu",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1685,
+      "maLanguage": "vec",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 36873,
+      "maLanguage": "en",
+      "maCountry": "GM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32898,
+      "maLanguage": "oc",
+      "maCountry": "ES",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1686,
+      "maLanguage": "frp",
+      "maCountry": "FR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2710,
+      "maLanguage": "frp",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3734,
+      "maLanguage": "frp",
+      "maCountry": "CH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1688,
+      "maLanguage": "apt",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 39945,
+      "maLanguage": "en",
+      "maCountry": "MU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 36876,
+      "maLanguage": "fr",
+      "maCountry": "MU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1689,
+      "maLanguage": "szl",
+      "maCountry": "PL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1690,
+      "maLanguage": "mnc",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1691,
+      "maLanguage": "sjo",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1692,
+      "maLanguage": "ktu",
+      "maCountry": "CD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1693,
+      "maLanguage": "fon",
+      "maCountry": "BJ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1694,
+      "maLanguage": "pdt",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1695,
+      "maLanguage": "hyw",
+      "maCountry": "AM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1696,
+      "maLanguage": "xcl",
+      "maCountry": "AM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1697,
+      "maLanguage": "ktz",
+      "maCountry": "NA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1698,
+      "maLanguage": "nhr",
+      "maCountry": "BW",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1699,
+      "maLanguage": "ilo",
+      "maCountry": "PH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 40969,
+      "maLanguage": "en",
+      "maCountry": "ZM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 41993,
+      "maLanguage": "en",
+      "maCountry": "LK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 43017,
+      "maLanguage": "en",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1700,
+      "maLanguage": "kbd",
+      "maCountry": "RU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1701,
+      "maLanguage": "gcf",
+      "maCountry": "GP",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1702,
+      "maLanguage": "lij",
+      "maCountry": "IT",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1703,
+      "maLanguage": "min",
+      "maCountry": "ID",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1704,
+      "maLanguage": "sun",
+      "maCountry": "ID",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1705,
+      "maLanguage": "yaf",
+      "maCountry": "CD",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 44041,
+      "maLanguage": "en",
+      "maCountry": "KE",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1706,
+      "maLanguage": "cjp",
+      "maCountry": "CR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1707,
+      "maLanguage": "bzd",
+      "maCountry": "CR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 45065,
+      "maLanguage": "en",
+      "maCountry": "DK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32816,
+      "maLanguage": "st",
+      "maCountry": "LS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1708,
+      "maLanguage": "tlh",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 46089,
+      "maLanguage": "en",
+      "maCountry": "IL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1711,
+      "maLanguage": "pdc",
+      "maCountry": "US",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33814,
+      "maLanguage": "pt",
+      "maCountry": "MZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33802,
+      "maLanguage": "es",
+      "maCountry": "GQ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34826,
+      "maLanguage": "es",
+      "maCountry": "PH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 47113,
+      "maLanguage": "en",
+      "maCountry": "AG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1712,
+      "maLanguage": "skr",
+      "maCountry": "PK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1714,
+      "maLanguage": "mfe",
+      "maCountry": "MU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 37900,
+      "maLanguage": "fr",
+      "maCountry": "GN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1716,
+      "maLanguage": "ab",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 48137,
+      "maLanguage": "en",
+      "maCountry": "GY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1717,
+      "maLanguage": "gos",
+      "maCountry": "NL",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1718,
+      "maLanguage": "ext",
+      "maCountry": "ES",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 65519,
+      "maLanguage": "mul",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 65520,
+      "maLanguage": "und",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 255,
+      "maLanguage": "zxx",
+      "maCountry": "",
+      "mnOverride": 0
+    }
+  ],
+  "script": [
+    {
+      "mnLang": 9242,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "RS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 34842,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "RS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 11290,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "ME",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 51226,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "ME",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 6170,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "BA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2074,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "CS",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2074,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "YU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 28698,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31770,
+      "maLanguageScript": "sr-Latn",
+      "maCountry": "",
+      "mnOverride": 28698
+    },
+    {
+      "mnLang": 10266,
+      "maLanguageScript": "sr-Cyrl",
+      "maCountry": "RS",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 12314,
+      "maLanguageScript": "sr-Cyrl",
+      "maCountry": "ME",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 7194,
+      "maLanguageScript": "sr-Cyrl",
+      "maCountry": "BA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 3098,
+      "maLanguageScript": "sr-Cyrl",
+      "maCountry": "CS",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 27674,
+      "maLanguageScript": "sr-Cyrl",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 8218,
+      "maLanguageScript": "bs-Cyrl",
+      "maCountry": "BA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 25626,
+      "maLanguageScript": "bs-Cyrl",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2092,
+      "maLanguageScript": "az-Cyrl",
+      "maCountry": "AZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 29740,
+      "maLanguageScript": "az-Cyrl",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2115,
+      "maLanguageScript": "uz-Cyrl",
+      "maCountry": "UZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30787,
+      "maLanguageScript": "uz-Cyrl",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1104,
+      "maLanguageScript": "mn-Cyrl",
+      "maCountry": "MN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30800,
+      "maLanguageScript": "mn-Cyrl",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 3152,
+      "maLanguageScript": "mn-Mong",
+      "maCountry": "MN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2128,
+      "maLanguageScript": "mn-Mong",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31824,
+      "maLanguageScript": "mn-Mong",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1639,
+      "maLanguageScript": "pi-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2663,
+      "maLanguageScript": "pi-Thai",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1676,
+      "maLanguageScript": "kaa-Latn",
+      "maCountry": "UZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1064,
+      "maLanguageScript": "tg-Cyrl",
+      "maCountry": "TJ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31784,
+      "maLanguageScript": "tg-Cyrl",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1068,
+      "maLanguageScript": "az-Latn",
+      "maCountry": "AZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30764,
+      "maLanguageScript": "az-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32829,
+      "maLanguageScript": "yi-Hebr",
+      "maCountry": "US",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 33853,
+      "maLanguageScript": "yi-Hebr",
+      "maCountry": "IL",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1091,
+      "maLanguageScript": "uz-Latn",
+      "maCountry": "UZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31811,
+      "maLanguageScript": "uz-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1113,
+      "maLanguageScript": "sd-Deva",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2137,
+      "maLanguageScript": "sd-Arab",
+      "maCountry": "PK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31833,
+      "maLanguageScript": "sd-Arab",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1116,
+      "maLanguageScript": "chr-Cher",
+      "maCountry": "US",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31836,
+      "maLanguageScript": "chr-Cher",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1117,
+      "maLanguageScript": "iu-Cans",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30813,
+      "maLanguageScript": "iu-Cans",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2141,
+      "maLanguageScript": "iu-Latn",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31837,
+      "maLanguageScript": "iu-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 4191,
+      "maLanguageScript": "tzm-Tfng",
+      "maCountry": "MA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30815,
+      "maLanguageScript": "tzm-Tfng",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2144,
+      "maLanguageScript": "ks-Deva",
+      "maCountry": "IN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1120,
+      "maLanguageScript": "ks-Arab",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1128,
+      "maLanguageScript": "ha-Latn",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32872,
+      "maLanguageScript": "ha-Latn",
+      "maCountry": "GH",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31848,
+      "maLanguageScript": "ha-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1142,
+      "maLanguageScript": "la-Latn",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1167,
+      "maLanguageScript": "tdd-Tale",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1168,
+      "maLanguageScript": "khb-Talu",
+      "maCountry": "CN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1170,
+      "maLanguageScript": "ku-Arab",
+      "maCountry": "IQ",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 31890,
+      "maLanguageScript": "ku-Arab",
+      "maCountry": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1574,
+      "maLanguageScript": "kmr-Latn",
+      "maCountry": "TR",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2598,
+      "maLanguageScript": "kmr-Latn",
+      "maCountry": "SY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2118,
+      "maLanguageScript": "pnb-Arab",
+      "maCountry": "PK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31814,
+      "maLanguageScript": "pnb-Arab",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2118,
+      "maLanguageScript": "pa-Arab",
+      "maCountry": "PK",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31814,
+      "maLanguageScript": "pa-Arab",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2143,
+      "maLanguageScript": "tzm-Latn",
+      "maCountry": "DZ",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 31839,
+      "maLanguageScript": "tzm-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1127,
+      "maLanguageScript": "ff-Latn",
+      "maCountry": "NG",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 2151,
+      "maLanguageScript": "ff-Latn",
+      "maCountry": "SN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31847,
+      "maLanguageScript": "ff-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 5146,
+      "maLanguageScript": "bs-Latn",
+      "maCountry": "BA",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 26650,
+      "maLanguageScript": "bs-Latn",
+      "maCountry": "",
+      "mnOverride": 30746
+    },
+    {
+      "mnLang": 31748,
+      "maLanguageScript": "zh-Hant",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2052,
+      "maLanguageScript": "zh-Hans",
+      "maCountry": "CN",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1028,
+      "maLanguageScript": "zh-Hant",
+      "maCountry": "TW",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 4100,
+      "maLanguageScript": "zh-Hans",
+      "maCountry": "SG",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 3076,
+      "maLanguageScript": "zh-Hant",
+      "maCountry": "HK",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 5124,
+      "maLanguageScript": "zh-Hant",
+      "maCountry": "MO",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1679,
+      "maLanguageScript": "emk-Latn",
+      "maCountry": "GN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1681,
+      "maLanguageScript": "crk-Latn",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33425,
+      "maLanguageScript": "crk-Cans",
+      "maCountry": "CA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1681,
+      "maLanguageScript": "crk-Latn",
+      "maCountry": "CN",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 33425,
+      "maLanguageScript": "crk-Cans",
+      "maCountry": "CN",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 32782,
+      "maLanguageScript": "hu-Hung",
+      "maCountry": "HU",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32830,
+      "maLanguageScript": "ms-Arab",
+      "maCountry": "MY",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 33854,
+      "maLanguageScript": "ms-Arab",
+      "maCountry": "BN",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 2111,
+      "maLanguageScript": "kk-Latn",
+      "maCountry": "KZ",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 31807,
+      "maLanguageScript": "kk-Latn",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 30783,
+      "maLanguageScript": "kk-Cyrl",
+      "maCountry": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1137,
+      "maLanguageScript": "kr-Latn",
+      "maCountry": "NG",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1119,
+      "maLanguageScript": "tzm-Arab",
+      "maCountry": "MA",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1713,
+      "maLanguageScript": "rhg-Rhog",
+      "maCountry": "MM",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1715,
+      "maLanguageScript": "sat-Olck",
+      "maCountry": "IN",
+      "mnOverride": 0
+    }
+  ],
+  "bcp": [
+    {
+      "mnLang": 2051,
+      "mpBcp47": "ca-ES-valencia",
+      "maCountry": "ES",
+      "mpFallback": "ca-valencia",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32771,
+      "mpBcp47": "ca-ES-valencia",
+      "maCountry": "ES",
+      "mpFallback": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 37897,
+      "mpBcp47": "en-GB-oxendict",
+      "maCountry": "GB",
+      "mpFallback": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 35849,
+      "mpBcp47": "en-GB-oed",
+      "maCountry": "GB",
+      "mpFallback": "",
+      "mnOverride": 37897
+    },
+    {
+      "mnLang": 1034,
+      "mpBcp47": "es-ES-u-co-trad",
+      "maCountry": "ES",
+      "mpFallback": "es-u-co-trad",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1034,
+      "mpBcp47": "es-ES_tradnl",
+      "maCountry": "ES",
+      "mpFallback": "",
+      "mnOverride": 65535
+    },
+    {
+      "mnLang": 1154,
+      "mpBcp47": "oc-FR-lengadoc",
+      "maCountry": "FR",
+      "mpFallback": "oc-lengadoc",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 32898,
+      "mpBcp47": "oc-ES-aranes",
+      "maCountry": "ES",
+      "mpFallback": "oc-aranes",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1085,
+      "mpBcp47": "yi-001",
+      "maCountry": "",
+      "mpFallback": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 7180,
+      "mpBcp47": "fr-029",
+      "maCountry": "",
+      "mpFallback": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 22538,
+      "mpBcp47": "es-419",
+      "maCountry": "",
+      "mpFallback": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 58378,
+      "mpBcp47": "es-419",
+      "maCountry": "",
+      "mpFallback": "",
+      "mnOverride": 22538
+    },
+    {
+      "mnLang": 1709,
+      "mpBcp47": "art-Latn-x-interslv",
+      "maCountry": "",
+      "mpFallback": "",
+      "mnOverride": 0
+    },
+    {
+      "mnLang": 1710,
+      "mpBcp47": "art-Cyrl-x-interslv",
+      "maCountry": "",
+      "mpFallback": "",
+      "mnOverride": 0
+    }
+  ],
+  "private": [
+    {
+      "mnLang": 65518,
+      "mpLanguage": "x-no-translate"
+    },
+    {
+      "mnLang": 65517,
+      "mpLanguage": "x-default"
+    },
+    {
+      "mnLang": 65516,
+      "mpLanguage": "x-comment"
+    },
+    {
+      "mnLang": 65514,
+      "mpLanguage": "x-none"
+    },
+    {
+      "mnLang": 65515,
+      "mpLanguage": "*"
+    },
+    {
+      "mnLang": 1023,
+      "mpLanguage": null
+    }
+  ],
+  "countryless": [
+    1716,
+    1553,
+    1554,
+    1687,
+    1624,
+    1120,
+    1708,
+    1638,
+    65519,
+    65520,
+    255
+  ],
+  "lastResort": {
+    "mnLang": 1033,
+    "maLanguage": "en",
+    "maCountry": "US",
+    "mnOverride": 0
+  }
+}

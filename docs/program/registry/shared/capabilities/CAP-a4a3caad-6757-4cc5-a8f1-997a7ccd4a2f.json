@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-a4a3caad-6757-4cc5-a8f1-997a7ccd4a2f",
+    "capabilityId": "CAP-a4a3caad-6757-4cc5-a8f1-997a7ccd4a2f",
+    "suite": "shared",
+    "subsystem": "rtl-approx-arithmetic",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
+    },
+    "capability": "Native scalar arithmetic cancellation",
+    "gaps": [
+      "Complete formula references/functions/dependencies/ODS/UI and broad service parity remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/math.hxx",
+          "marker": "approxAdd"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sal/qa/rtl/math/test-rtl-math.cxx",
+          "marker": "void test_approx()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/math.hxx",
+          "marker": "approxAdd"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/math.ts",
+          "marker": "approxAdd"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/approx.test.ts",
+          "marker": "preserves native equality exceptions"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Numeric arithmetic formula entry (task200)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "rtl-approximate-arithmetic",
+    "scopeLimitations": [
+      "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed.",
+      "Referenced upstream QA supplies context/witnesses, not execution or broad certification."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
+    }
+  }
+}

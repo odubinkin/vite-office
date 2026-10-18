@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141052-ZWCGK6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T11:02:31.007Z",
+  "verdict": "pass",
+  "summary": "Same-agent source-bound review passed46paths/18native pins,162Calc/18related/27module tests, complete changedowner raw100 and12focused gates. Not independent review.",
+  "evaluated_sha": "e45ed009bd458c8a46060977c99cd31163793957",
+  "blueprint_digest": "a990d65479b9adf4a824a61fbaca837f597a0fcefbd15571e948ce2f81fb384e",
+  "findings": [
+    "Actual shared cell alignment/rotate-mode and5IDL owners preserve enum/short/long transport, copy/default/member and failure quirks; native normal enum getter uses genuine CPPU, no generator/fake provider. Source-backed module edge migration preserves reverse/browser guards."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141052-ZWCGK6/README.md",
+    "output/playwright/task117-checks/exact-review.json",
+    "output/playwright/task117-checks/value-coverage-audit.json",
+    "output/playwright/task117-checks/gates-results.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Localized presentation/diagnostics/caches/ABI/comprehensive generated helpers/fullDocPool/document/UI/ODS remain pending or excluded. Full121next."
+  ]
+}

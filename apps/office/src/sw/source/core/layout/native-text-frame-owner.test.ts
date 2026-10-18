@@ -1,4 +1,6 @@
 /** @fileoverview Verifies original native text-frame clients, reconciliation, invalidation and explicit release. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
 import { afterEach, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTextFrame, createSwTextFrameInputs, makeSwTextFrame } from "../text/txtfrm";
@@ -22,14 +24,10 @@ const info = new SwLineNumberInfo().QueryValue();
 /** Enumerates real original-node clients without substituting their registration. @param node - Native owner. @returns Registered text frames. */
 function frames(node: SwTextNode): SwTextFrame[] {
   const result: SwTextFrame[] = [];
-  node.ForAllListeners(
-    /** Collects a native client. @param listener - Original registered listener. @returns Continue traversal. */ (
-      listener,
-    ) => {
-      if (listener instanceof SwTextFrame) result.push(listener);
-      return false;
-    },
-  );
+  writerClients0: for (const listener of new SwIterator(SwClient, node)) {
+    if (listener instanceof SwTextFrame) result.push(listener);
+    continue writerClients0;
+  }
   return result;
 }
 /** Creates an initialized native document and original text. @returns Actual document and body node. */
@@ -46,14 +44,10 @@ afterEach(
     for (const root of roots.splice(0)) root.DestroyImpl();
     for (const doc of owners.splice(0)) {
       for (const node of doc.nodes.entries())
-        node.ForAllListeners(
-          /** Releases original remaining fixture clients. @param listener - Native client. @returns Continue traversal. */ (
-            listener,
-          ) => {
-            if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
-            return false;
-          },
-        );
+        writerClients1: for (const listener of new SwIterator(SwClient, node)) {
+          if (listener instanceof SwFrame) SwFrame.DestroyFrame(listener);
+          continue writerClients1;
+        }
       doc.Dispose();
     }
   },

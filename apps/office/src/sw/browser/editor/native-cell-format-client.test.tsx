@@ -1,4 +1,7 @@
 /** @fileoverview Verifies actual main UI and painter use original linked native cell frames with bounded lifetimes. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
+import { Color } from "../../../tools/inc/color";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -22,14 +25,10 @@ function checkClients(
   root?: ReturnType<ReturnType<typeof createWriterDocumentSession>["view"]["GetLayout"]>,
 ): void {
   const clients: unknown[] = [];
-  box.GetFrameFormat().ForAllListeners(
-    /** Reads actual surviving clients. @param client - Native format listener. @returns Continue flag. */ (
-      client,
-    ) => {
-      clients.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, box.GetFrameFormat())) {
+    clients.push(client);
+    continue;
+  }
   if (root !== undefined) {
     const frames = clients.filter(
       /** Reads exact native cell clients retained by mounted layout. @param client - Original object. @returns Whether cell. */
@@ -62,7 +61,8 @@ it("mounted main table renders native linked cell formats and history without bo
     for (const box of [first, second]) {
       const item = new SvxBoxItem(113);
       item.SetAllDistances(60);
-      for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(0x112233, 30), edge);
+      for (const edge of [0, 1, 2, 3])
+        item.SetLine(new SvxBorderLine(new Color(0x112233), 30), edge);
       box.ClaimFrameFormat().SetFormatAttr(item);
     }
     const position = new SwPosition(node, 2);

@@ -1,4 +1,6 @@
 /** @fileoverview Verifies native table hierarchy lifetimes at actual browser rendering and mouse measurement boundaries. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -17,14 +19,10 @@ function required<T>(value: T | undefined): T {
 /** Reads actual registered clients. @param format - Original format. @returns Current original objects. */
 function clients(format: SwModify): unknown[] {
   const result: unknown[] = [];
-  format.ForAllListeners(
-    /** Reads native client identity. @param client - Registered client. @returns Continue flag. */ (
-      client,
-    ) => {
-      result.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, format)) {
+    result.push(client);
+    continue;
+  }
   return result;
 }
 it("browser table render skips empty native rows and releases the table hierarchy on rendering failure", /** Exercises the actual JSX error boundary without a test adapter. @returns Nothing. */ () => {

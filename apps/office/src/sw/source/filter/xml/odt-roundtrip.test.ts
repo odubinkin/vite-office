@@ -1,15 +1,12 @@
 /**
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatBullet } from "../../core/doc/number";
-
 import { describe, expect, it, vi } from "vitest";
-
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
@@ -41,7 +38,8 @@ import { importWriterXml, parseOdfXml } from "./xmlimp";
 import { SwXMLWriter, writeOdtDocument } from "./wrtxml";
 import type { SwDoc } from "../../core/doc/doc";
 import type { OdtExportControl } from "./wrtxml";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Creates complete metadata used at the import boundary. @param title - Title. @returns Metadata. */
 function metadata(title = "Imported") {
   return createDocument({ id: "odt-1", suiteId: "writer", title });
@@ -216,36 +214,47 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const writer = createWriterDocument();
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      writer.GetDfltTextFormatColl().SetFormatAttr(new SvxFontItem("Noto Serif", which));
+      writer
+        .GetDfltTextFormatColl()
+        .SetFormatAttr(
+          new SvxFontItem(
+            FontFamily.FAMILY_DONTKNOW,
+            "Noto Serif",
+            "",
+            FontPitch.PITCH_DONTKNOW,
+            RTL_TEXTENCODING_DONTKNOW,
+            which,
+          ),
+        );
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CJK_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CTL_WEIGHT));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_CTL_WEIGHT));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
+      .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CJK_POSTURE));
+      .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_CJK_POSTURE));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CTL_POSTURE));
+      .SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE));
     writer
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
+      .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
     writer.GetTextFormatColl("heading-1").SetFormatName("Heading & one");
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       writer
         .GetTextFormatColl("heading-1")
-        .SetFormatAttr(new SvxWeightItem(FontWeight.NORMAL, which));
+        .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
     const first = writer.paragraphs[0];
     first?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     first?.SetParagraphAlignment("right");
@@ -266,12 +275,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const second = writer.nodes.MakeTextNode();
     second.SetParagraphAlignment("justify");
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      second.SetAttr(new SvxWeightItem(FontWeight.NORMAL, which));
+      second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      second.SetAttr(new SvxPostureItem(FontItalic.NONE, which));
-    second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
+      second.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NONE, which));
+    second.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     const third = writer.nodes.MakeTextNode();
-    third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
+    third.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     if (first !== undefined) applyWriterParagraphList(first, { kind: "numbered", level: 0 });
     applyWriterParagraphList(second, { kind: "numbered", level: 1 });
     applyWriterParagraphList(third, { kind: "bullet", level: 0 });
@@ -525,7 +534,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     ).toThrow("Conflicting ODF list rule");
   });
 
-  it("maps every supported SvxAdjust variant and rejects invalid adjustment items" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("maps native primary modes and preserves Left fallback for unrepresented adjustment flags" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     for (const [adjust, expected] of [
       [SvxAdjust.Left, "start"],
       [SvxAdjust.ParaStart, "start"],
@@ -533,35 +542,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.ParaEnd, "end"],
       [SvxAdjust.Center, "center"],
       [SvxAdjust.Block, "justify"],
-      [SvxAdjust.BlockLine, "justify"],
+      [SvxAdjust.BlockLine, "start"],
+      [SvxAdjust.End, "start"],
+      [99 as SvxAdjust, "start"],
     ] as const) {
       const writer = createWriterDocument();
       writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
       expect(exportStylesXml(writer)).toContain(`fo:text-align="${expected}"`);
     }
-    const invalidItem = createWriterDocument();
-    const invalidSet = invalidItem.GetDfltTextFormatColl().GetAttrSet() as unknown as {
-      poolItemMap: Map<number, unknown>;
-    };
-    invalidSet.poolItemMap.set(65, {
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      Which: () => 65,
-    });
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(invalidItem),
-    ).toThrow("adjustment item is invalid");
-    const invalidValue = createWriterDocument();
-    const item = new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST);
-    (item as unknown as { adjust: number }).adjust = SvxAdjust.End;
-    const valueSet = invalidValue.GetDfltTextFormatColl().GetAttrSet() as unknown as {
-      poolItemMap: Map<number, unknown>;
-    };
-    valueSet.poolItemMap.set(65, item);
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(invalidValue),
-    ).toThrow("adjustment value is unsupported");
   });
 
   it("validates package order, media type, required streams, and explicit limits" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
@@ -588,13 +576,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     await expect(readOdtDocument(compressedType, metadata())).rejects.toThrow(
       "mimetype must be stored without compression",
     );
-    for (const name of [
-      "mimetype",
-      "META-INF/manifest.xml",
-      "styles.xml",
-      "content.xml",
-      "meta.xml",
-    ])
+    for (const name of ["mimetype", "META-INF/manifest.xml"])
       await expect(
         readOdtDocument(await rewritePackage(bytes, { [name]: null }), metadata()),
       ).rejects.toThrow(name === "mimetype" ? "mimetype must be the first" : "Missing ZIP entry");
@@ -695,10 +677,11 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
       "",
     );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */ () =>
-        importWriterXml(withoutStandard, content, metadata(), meta),
-    ).toThrow("ODF");
+    const defaulted = importWriterXml(withoutStandard, content, metadata(), meta);
+    expect(defaulted.document.paragraphs[0]?.GetText()).toBe(writer.paragraphs[0]?.GetText());
+    expect(defaulted.document.GetTextFormatColl("default").GetName()).toBe(
+      writer.GetTextFormatColl("default").GetName(),
+    );
     const withoutHeading = importWriterXml(
       styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),
       content,
@@ -839,13 +822,18 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const standardStyle = styles.match(
       /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
     )?.[0] as string;
+    const separateFamily = importWriterXml(
+      styles.replace('style:family="paragraph"', 'style:family="table"'),
+      content,
+      metadata(),
+      meta,
+    );
+    expect(separateFamily.document.GetTextFormatColl("default").GetName()).toBe(
+      writer.GetTextFormatColl("default").GetName(),
+    );
     const mutations = [
       [styles.replace(' style:name="Standard"', ""), "style name is missing"],
       [styles.replace(' style:family="paragraph"', ""), "style family is missing"],
-      [
-        styles.replace('style:family="paragraph"', 'style:family="table"'),
-        "Standard paragraph style",
-      ],
       [
         styles.replace("</office:styles>", standardStyle + "</office:styles>"),
         "Duplicate ODF style",

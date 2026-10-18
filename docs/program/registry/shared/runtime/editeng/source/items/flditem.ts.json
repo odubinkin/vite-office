@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/source/items/flditem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-text-field-values",
+    "capabilityIds": [
+      "CAP-5be3a230-2daf-4359-aec8-db71a320a736"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/source/items/flditem.ts",
+        "apps/office/src/editeng/source/items/native-field-values.test.ts",
+        "docs/program/calc-core.md#Native text-field values (task160)"
+      ],
+      "justification": "Task160 ports actual SvxFieldData/SvxFieldItem and complete locale-independent URL/page/pages/page-title/time/document-title/table stored values. Real SfxPoolItem, Unicode, hash-combine, holder, XEditAttribute and ContentInfo are reused. Field copy/Clone retains dynamic type and independent values; explicit adopt=true only erases unique_ptr constructor syntax under JS GC. Native pointer/null/type/value equality and field hash delegation are retained. URL default/copy/assignment/get/set preserves all four Unicode strings and format, including stable const views/embedded nul/surrogates; Name is copied but omitted by native equality/hash. All17OffAPI field IDs are declared. Opaque process/compiler-specific std::type_index hash is bound to JS class reflection plus existing SAL hash; native numeric bits/RTTI binary identity are not reproduced or serialized. URL hashes retain source order and shared Unicode hashes. No new type/ownership/refcount/cache/deletion registry, native compiler/probe, core JSON or UI localization. UNO Create/XTextContent/property services/date-time formatting and other field families remain absent until genuine providers exist. Full EditTextObject/EditEngine/default pool/Calc document/connected UI/same-model ODS remain pending. Bounded acceptance passes53related tests/7files and187Calc tests/76files, production build and19related Writer browser scenarios. Exact2new shared executable owners raw S123/B37/F52/L117 and all33Calc owners S4179/B2731/F821/L3727 have every raw counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0, plus43boundary tests with both complete guard files unchanged. Native evidence pins13files and all17field IDs. All4source references are absent during tests/build/browser and restored exactly finally. Full engine/pool/document/connected UI/same-model ODS readiness and native type-index numeric ABI are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxFieldData",
+        "SvxFieldItem",
+        "SvxURLField",
+        "SvxPageField",
+        "SvxPagesField",
+        "SvxPageTitleField",
+        "SvxTimeField",
+        "SvxFileField",
+        "SvxTableField"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "editeng/source/items/flditem.cxx",
+      "upstreamSymbols": [
+        "SvxFieldData",
+        "SvxFieldItem",
+        "SvxURLField",
+        "SvxPageField",
+        "SvxPagesField",
+        "SvxPageTitleField",
+        "SvxTimeField",
+        "SvxFileField",
+        "SvxTableField",
+        "SvxURLFormat"
+      ]
+    }
+  }
+}

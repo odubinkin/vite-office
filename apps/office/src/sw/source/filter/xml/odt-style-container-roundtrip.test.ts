@@ -249,10 +249,10 @@ it("replaces the active automatic context while retaining independent common sty
   });
 });
 
-it("preserves the existing missing common-container diagnostic", /** Checks the bounded Writer bridge when the required named Standard container is absent. @returns Completion after rejection. */ async () => {
+it("uses the real Writer defaults when a common Standard definition is absent", /** Native styles import does not require an explicit built-in declaration. @returns Completion. */ async () => {
   const base = writeOdtDocument(createWriterDocument(), { title: "Absent common container" });
   const bytes = await input(base, "<text:p>x</text:p>", undefined, "", "");
-  await expect(readOdtDocument(bytes, { title: "Absent common container" })).rejects.toThrow(
-    "ODF Writer Standard paragraph style is missing.",
-  );
+  const result = await readOdtDocument(bytes, { title: "Absent common container" });
+  expect(result.document.paragraphs[0]?.GetText()).toBe("x");
+  expect(result.document.IsInReading()).toBe(false);
 });

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native common border reads, selection scope, owned items and read-only shell input. */
+import { Color } from "../../../../tools/inc/color";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
@@ -40,7 +41,7 @@ function fixture() {
     for (const box of doc.nodes.AppendTableRow(table, 3).GetTabBoxes()) {
       const item = new SvxBoxItem(RES_BOX);
       for (const edge of [0, 1, 2, 3]) {
-        item.SetLine(new SvxBorderLine(0x123456, 20), edge);
+        item.SetLine(new SvxBorderLine(new Color(0x123456), 20), edge);
         item.SetDistance(40 + edge * 10, edge);
       }
       box.SetFormat({ box: item });
@@ -103,17 +104,17 @@ it("reads six equal common lines and four independent distances while preserving
     91,
   ]);
   for (const edge of [0, 1, 2, 3]) {
-    expect(box.GetLine(edge)?.GetColor()).toBe(0x123456);
+    expect(box.GetLine(edge)?.GetColor().toUInt32()).toBe(0x123456);
     expect(box.GetDistance(edge)).toBe(40 + edge * 10);
   }
-  expect(info.GetHori()?.GetColor()).toBe(0x123456);
-  expect(info.GetVert()?.GetColor()).toBe(0x123456);
+  expect(info.GetHori()?.GetColor().toUInt32()).toBe(0x123456);
+  expect(info.GetVert()?.GetColor().toUInt32()).toBe(0x123456);
   expect(f.doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
   expect(f.doc.GetUndoManager().GetUndoActionCount()).toBe(0);
   expect(f.cursor.GetPoint().GetContentIndex()).toBe(1);
   expect(f.cursor.GetMark().GetContentIndex()).toBe(2);
   box.SetAllDistances(999);
-  box.GetTop()?.SetColor(0xffffff);
+  box.GetTop()?.SetColor(new Color(0xffffff));
   info.SetDist(true);
   expect(
     f.boxes.map(
@@ -145,7 +146,7 @@ for (const component of components)
           difference === "absent"
             ? undefined
             : new SvxBorderLine(
-                difference === "color" ? 0x654321 : 0x123456,
+                new Color(difference === "color" ? 0x654321 : 0x123456),
                 difference === "width" ? 40 : 20,
               ),
           component.edge,

@@ -1,6 +1,7 @@
 /** @fileoverview Implements the represented native SvxBorderLine value and width arithmetic. */
 import { BorderLineStyle } from "../../../offapi/com/sun/star/table/BorderLineStyle";
 import { BorderWidthImpl } from "../../../svtools/source/control/ctrlbox";
+import { Color, ColorTransparency } from "../../../tools/inc/color";
 export { BorderLineStyle as SvxBorderLineStyle };
 
 /** Rounds signed metrics as native BigInt::Scale(double), with ties away from zero. @param value - Metric. @param scale - Scale factor. @returns Rounded metric. */
@@ -22,17 +23,18 @@ export interface BorderLineRecord {
 
 /** Owns a native line independently of any CSS serialization. */
 export class SvxBorderLine {
+  private readonly color = new Color();
   private scale = 1;
   private mirror = false;
   private useLeftTop = false;
   private implementation: BorderWidthImpl;
-  /** Creates the native black, zero-width, solid default. @param color - Final RGB color. @param width - Authored total twips. @param style - Native style. @returns Nothing. */
+  /** Creates the native black, zero-width, solid default. @param color - Borrowed optional native Color, copied into the owner. @param width - Authored total twips. @param style - Native style. @returns Nothing. */
   public constructor(
-    private color = 0,
+    color: Readonly<Color> | null = null,
     private width = 0,
     private style = BorderLineStyle.SOLID,
   ) {
-    this.color = color >>> 0;
+    if (color !== null) this.color.assign(color);
     this.width = Math.trunc(width);
     this.implementation = SvxBorderLine.getWidthImpl(style);
   }
@@ -73,13 +75,13 @@ export class SvxBorderLine {
         return new BorderWidthImpl(0, 0, 0, 0);
     }
   }
-  /** Reads final native color. @returns RGB value. */
-  public GetColor(): number {
+  /** Reads final native color. @returns Borrowed const native color. */
+  public GetColor(): Readonly<Color> {
     return this.color;
   }
-  /** Changes final native color. @param color - RGB value. @returns Nothing. */
-  public SetColor(color: number): void {
-    this.color = color >>> 0;
+  /** Changes final native color. @param color - Native color copied into this owner. @returns Nothing. */
+  public SetColor(color: Readonly<Color>): void {
+    this.color.assign(color);
   }
   /** Reads authored total width before metric scaling. @returns Twips. */
   public GetWidth(): number {
@@ -186,7 +188,7 @@ export class SvxBorderLine {
   /** Compares represented native fields; native equality does not compare scale. @param other - Candidate. @returns Whether equal. */
   public equals(other: SvxBorderLine): boolean {
     return (
-      this.color === other.color &&
+      this.color.equals(other.color) &&
       this.width === other.width &&
       this.style === other.style &&
       this.mirror === other.mirror &&
@@ -197,7 +199,7 @@ export class SvxBorderLine {
   /** Exposes complete represented primitive state at the browser transport boundary. @returns Native line record. */
   public toJSON(): BorderLineRecord {
     return {
-      color: this.color,
+      color: this.color.toUInt32(),
       width: this.width,
       style: this.style,
       scale: this.scale,
@@ -208,7 +210,11 @@ export class SvxBorderLine {
   }
   /** Restores already validated transport state, including custom double widths. @param value - Validated record. @returns Owned native line. */
   public static FromRecord(value: BorderLineRecord): SvxBorderLine {
-    const line = new SvxBorderLine(value.color, value.width, value.style);
+    const line = new SvxBorderLine(
+      new Color(ColorTransparency, value.color, "ColorTransparencyTag"),
+      value.width,
+      value.style,
+    );
     line.scale = value.scale;
     line.mirror = value.mirror;
     line.useLeftTop = value.useLeftTop;

@@ -1,0 +1,132 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e",
+    "capabilityId": "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e",
+    "suite": "shared",
+    "subsystem": "text-format-modes",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original3attribute values/constructors/copies/Clone/typed members/defaults reuse actual enum/bool/Any owners.",
+      "Native script-hint declaration aliases and IDL groups preserve numeric transport and the real header dependency without scanner or localization facades."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task153 implements actual SvxCaseMapItem/SvxScriptHintItem/SvxOpticalSizingItem constructor/copy/concrete Clone/value/typed member contracts on existing shared enum/bool/Any owners. Case mapping has exact6native declarations and actual5IDL short constants: queries map4modes explicitly and otherwise NONE, while unsigned16 property writes accept only5published values, ignoring member. Script hint uses the actual5fixed-unsigned16 native aliases over real5IDL constants and MID_SCRIPTHINT0, with original byte/twips selector mask, unknown untouched success and unsigned16 extraction without declared-enum range validation. Native argument narrowing is explicit through JS bit operations; no wrapper identity or type-provider facade. Optical sizing reuses real bool transport and no factory absent from native declarations is invented. Existing inherited scalar queries remain explicit browser bindings. Actual EditEngine defaults4071NotMapped/4075Automatic/4076false are source-backed witnesses, not a dummy pool. Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx and Library_editeng links i18nutil; only this native dependency edge is admitted, reverse/browser guards retained and all existing dependency/cycle function bodies unchanged. Original451line textitem owner cannot fit this full value family under500, so canonical3headers reexport a necessary source responsibility split. ScriptHintType declaration is not a script scanner, case-mode storage is not a casing engine, optical bool is not a font-axis provider; no ICU/native ownership manager is added. Localized GetPresentation/GetValueText/resources and diagnostics/instance caches remain unported. Source accepts out-of-enum hints; do not silently clamp them. UI localization and actual EditEngine/EditTextObject/ScPageHFItem/Calc pool/model/connected UI/same-model ODS remain pending; statuses and deliberate I/O/recovery deviations unchanged."
+    },
+    "capability": "Native case script and optical values for EditEngine defaults",
+    "gaps": [
+      "Native localized presentation/value text/scanner/casing/font-axis/diagnostic/instance services remain unported.",
+      "Actual EditEngine/Calc pool/model/UI/same-model ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.modes.ts",
+          "marker": "SvxCaseMapItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/cmapitem.ts",
+          "marker": "SvxCaseMapItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/scripthintitem.ts",
+          "marker": "SvxScriptHintItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/opticalsizingitem.ts",
+          "marker": "SvxOpticalSizingItem"
+        },
+        {
+          "path": "apps/office/src/i18nutil/inc/scriptchangescanner.ts",
+          "marker": "ScriptHintType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/CaseMap.ts",
+          "marker": "NONE"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/ScriptHintType.ts",
+          "marker": "AUTOMATIC"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-text-modes.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "scripts/check-module-boundaries.test.ts",
+          "marker": "admits original Editeng script-hint values"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native case script and optical values for EditEngine defaults (task153)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxCaseMapItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/cmapitem.hxx",
+          "marker": "SvxCaseMapItem"
+        },
+        {
+          "path": "include/editeng/scripthintitem.hxx",
+          "marker": "SvxScriptHintItem"
+        },
+        {
+          "path": "include/editeng/opticalsizingitem.hxx",
+          "marker": "SvxOpticalSizingItem"
+        },
+        {
+          "path": "include/i18nutil/scriptchangescanner.hxx",
+          "marker": "ScriptHintType"
+        },
+        {
+          "path": "offapi/com/sun/star/style/CaseMap.idl",
+          "marker": "NONE"
+        },
+        {
+          "path": "offapi/com/sun/star/text/ScriptHintType.idl",
+          "marker": "AUTOMATIC"
+        },
+        {
+          "path": "editeng/Library_editeng.mk",
+          "marker": "i18nutil"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_CharacterProperties.java",
+          "marker": "CharCaseMap"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-text-format-mode-values",
+    "scopeLimitations": [
+      "Task153 implements actual SvxCaseMapItem/SvxScriptHintItem/SvxOpticalSizingItem constructor/copy/concrete Clone/value/typed member contracts on existing shared enum/bool/Any owners. Case mapping has exact6native declarations and actual5IDL short constants: queries map4modes explicitly and otherwise NONE, while unsigned16 property writes accept only5published values, ignoring member. Script hint uses the actual5fixed-unsigned16 native aliases over real5IDL constants and MID_SCRIPTHINT0, with original byte/twips selector mask, unknown untouched success and unsigned16 extraction without declared-enum range validation. Native argument narrowing is explicit through JS bit operations; no wrapper identity or type-provider facade. Optical sizing reuses real bool transport and no factory absent from native declarations is invented. Existing inherited scalar queries remain explicit browser bindings. Actual EditEngine defaults4071NotMapped/4075Automatic/4076false are source-backed witnesses, not a dummy pool. Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx and Library_editeng links i18nutil; only this native dependency edge is admitted, reverse/browser guards retained and all existing dependency/cycle function bodies unchanged. Original451line textitem owner cannot fit this full value family under500, so canonical3headers reexport a necessary source responsibility split. ScriptHintType declaration is not a script scanner, case-mode storage is not a casing engine, optical bool is not a font-axis provider; no ICU/native ownership manager is added. Localized GetPresentation/GetValueText/resources and diagnostics/instance caches remain unported. Source accepts out-of-enum hints; do not silently clamp them. UI localization and actual EditEngine/EditTextObject/ScPageHFItem/Calc pool/model/connected UI/same-model ODS remain pending; statuses and deliberate I/O/recovery deviations unchanged.",
+      "Native CharacterProperties CharCaseMap generic QA is broader unported source context only, not native execution or whole property/filter parity."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

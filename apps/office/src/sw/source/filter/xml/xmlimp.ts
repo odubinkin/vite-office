@@ -1,25 +1,20 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import {
   SvxIndentValue,
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-
 import { NumberingRulePropertyError, SwXNumberingRules } from "../../core/unocore/unosett";
 import type { XMLParagraphImportProperties } from "../../../../xmloff/source/text/txtparai";
-
-import {
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -50,6 +45,7 @@ import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
   XMLFontStylesContext,
   type XMLFontStylesImportTarget,
+  type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
@@ -106,7 +102,9 @@ import {
   RES_LINENUMBER,
 } from "../../../inc/hintids";
 import { getWriterStyleIdFromOdfName } from "../../../inc/poolfmt";
-
+import { FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW, RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 const ignoredDocumentChildren = new Set([XMLToken.OFFICE_SETTINGS, XMLToken.OFFICE_SCRIPTS]);
 
 const ignoredMetadataChildren = new Set([
@@ -153,8 +151,8 @@ export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number
 
 /** Imports all package XML into one temporary canonical document. @param stylesXml - Named styles stream. @param contentXml - Content stream. @param metadata - Shell metadata. @param metaXml - Optional metadata stream. @param options - Parser controls. @returns Imported document candidate. */
 export function importWriterXml(
-  stylesXml: string,
-  contentXml: string,
+  stylesXml: string | undefined,
+  contentXml: string | undefined,
   metadata: Readonly<{ title: string; locale?: string }>,
   metaXml?: string,
   options: OdfXmlParseOptions & { readonly defaultFontDevice?: DefaultFontDevice } = {},
@@ -167,7 +165,7 @@ export function importWriterXml(
   }
   const xmlImport = new SwXMLImport(
     new SwDoc({
-      createInitialTextNode: false,
+      createInitialTextNode: contentXml === undefined,
       locale,
       ...(options.defaultFontDevice === undefined
         ? {}
@@ -176,10 +174,14 @@ export function importWriterXml(
   );
   xmlImport.document.SetInReading(true);
   try {
-    xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
-    xmlImport.finishNamedStyles();
-    xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
-    xmlImport.finishContent();
+    if (stylesXml !== undefined) {
+      xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
+      xmlImport.finishNamedStyles();
+    }
+    if (contentXml !== undefined) {
+      xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
+      xmlImport.finishContent();
+    }
     if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
     return {
       document: xmlImport.document,
@@ -206,6 +208,7 @@ class SwXMLImport
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
   private readonly fontFaceGenerics = new Map<string, string>();
+  private readonly fontFaceMetadata = new Map<string, OdfFontFaceMetadata>();
   private readonly masterPages = new Map<
     string,
     Readonly<{ followName?: string; pageLayoutName: string }>
@@ -290,13 +293,24 @@ class SwXMLImport
     return this.fontFaceGenerics.get(name);
   }
 
-  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @param generic - ODF generic family. @returns Nothing. */
-  public registerFontFace(name: string, familyName: string, generic?: string): void {
+  /** Resolves original font-face style/pitch/encoding values. @param name - Declared face name. @returns Stored native metadata. */
+  public getFontFaceProperties(name: string): OdfFontFaceMetadata | undefined {
+    return this.fontFaceMetadata.get(name);
+  }
+
+  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @param generic - ODF generic family. @param metadata - Native style, pitch and encoding. @returns Nothing. */
+  public registerFontFace(
+    name: string,
+    familyName: string,
+    generic?: string,
+    metadata?: OdfFontFaceMetadata,
+  ): void {
     const existing = this.fontFaces.get(name);
     if (existing !== undefined && existing !== familyName)
       throw new Error(`Conflicting ODF font face: ${name}`);
     this.fontFaces.set(name, familyName);
     if (generic !== undefined) this.fontFaceGenerics.set(name, generic);
+    if (metadata !== undefined) this.fontFaceMetadata.set(name, metadata);
   }
 
   /** Retains one package-backed font declaration for ZIP resolution after XML import. @param font - ODF face URI. @returns Nothing. */
@@ -644,7 +658,7 @@ class SwXMLDocContext extends SvXMLImportContext {
         this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
     ) {
       attributes.assertOnly([], "font face declarations");
-      return new XMLFontStylesContext(this.xmlImport);
+      return new XMLFontStylesContext(this.xmlImport, RTL_TEXTENCODING_UTF8);
     }
     if (
       element === XMLToken.OFFICE_MASTER_STYLES &&
@@ -785,31 +799,63 @@ function putCharacterProperties(
   if (properties.fontFamily !== undefined)
     put(
       new SvxFontItem(
+        getFontFamilyFromGeneric(properties.fontFamilyGeneric),
         properties.fontFamily,
+        properties.fontStyleName ?? "",
+        properties.fontPitch ?? FontPitch.PITCH_DONTKNOW,
+        properties.fontCharSet ?? RTL_TEXTENCODING_DONTKNOW,
         RES_CHRATR_FONT,
-        properties.fontFamily,
-        properties.fontFamilyGeneric,
       ),
     );
   const asianFamily = properties.fontFamilyAsian ?? properties.fontFamily;
-  if (asianFamily !== undefined) put(new SvxFontItem(asianFamily, RES_CHRATR_CJK_FONT));
+  if (asianFamily !== undefined)
+    put(
+      new SvxFontItem(
+        getFontFamilyFromGeneric(properties.fontFamilyGenericAsian),
+        asianFamily,
+        properties.fontStyleNameAsian ?? "",
+        properties.fontPitchAsian ?? FontPitch.PITCH_DONTKNOW,
+        properties.fontCharSetAsian ?? RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_CJK_FONT,
+      ),
+    );
   const complexFamily = properties.fontFamilyComplex ?? properties.fontFamily;
-  if (complexFamily !== undefined) put(new SvxFontItem(complexFamily, RES_CHRATR_CTL_FONT));
+  if (complexFamily !== undefined)
+    put(
+      new SvxFontItem(
+        getFontFamilyFromGeneric(properties.fontFamilyGenericComplex),
+        complexFamily,
+        properties.fontStyleNameComplex ?? "",
+        properties.fontPitchComplex ?? FontPitch.PITCH_DONTKNOW,
+        properties.fontCharSetComplex ?? RTL_TEXTENCODING_DONTKNOW,
+        RES_CHRATR_CTL_FONT,
+      ),
+    );
   if (properties.fontSizeTwips !== undefined)
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      put(new SvxFontHeightItem(properties.fontSizeTwips, which));
+      put(new SvxFontHeightItem(properties.fontSizeTwips, 100, which));
   if (properties.highlight !== undefined)
     put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, properties.highlight));
   if (properties.bold !== undefined)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      put(new SvxWeightItem(properties.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
+      put(
+        new SvxWeightItem(
+          properties.bold ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
+          which,
+        ),
+      );
   if (properties.italic !== undefined)
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      put(new SvxPostureItem(properties.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
+      put(
+        new SvxPostureItem(
+          properties.italic ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,
+          which,
+        ),
+      );
   if (properties.underline !== undefined)
     put(
       new SvxUnderlineItem(
-        properties.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE,
+        properties.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
         RES_CHRATR_UNDERLINE,
       ),
     );
@@ -856,41 +902,38 @@ function putParagraphProperties(
     properties.lineHeightAtLeastTwips ??
     properties.lineSpacingTwips ??
     properties.lineHeightPercent;
-  if (lineValue !== undefined)
-    put(
-      new SvxLineSpacingItem(
-        lineValue,
-        RES_PARATR_LINESPACING,
-        lineMode,
-        properties.fontIndependentLineSpacing ??
-          (inherited(RES_PARATR_LINESPACING) as SvxLineSpacingItem).IsFontIndependent(),
-      ),
-    );
-  if (properties.tabStopDetails !== undefined)
-    put(
-      SvxTabStopItem.FromStops(
-        RES_PARATR_TABSTOP,
-        properties.tabStopDetails.map(
-          /** Builds an upstream Writer tab from ODF properties. @param stop - ODF tab. @returns Writer tab. */
-          (stop) =>
-            new SvxTabStop(
-              // Pinned SvxTabStopItem::PutValue uses o3tl::toTwips on the integer MM100 property.
-              Math.trunc((stop.position * 72 + (stop.position >= 0 ? 63 : -63)) / 127),
-              stop.alignment === "right"
-                ? SvxTabAdjust.Right
-                : stop.alignment === "center"
-                  ? SvxTabAdjust.Center
-                  : stop.alignment === "char"
-                    ? SvxTabAdjust.Decimal
-                    : stop.alignment === "default"
-                      ? SvxTabAdjust.Default
-                      : SvxTabAdjust.Left,
-              stop.decimal,
-              stop.fill,
-            ),
+  if (lineValue !== undefined) {
+    const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    if (lineMode === "proportional") item.SetPropLineSpace(lineValue);
+    else if (lineMode === "leading") item.SetInterLineSpace(lineValue);
+    else {
+      item.SetLineHeight(lineValue);
+      if (lineMode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+    }
+    put(item);
+  }
+  if (properties.tabStopDetails !== undefined) {
+    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    for (const stop of properties.tabStopDetails)
+      item.Insert(
+        new SvxTabStop(
+          // Pinned SvxTabStopItem::PutValue uses o3tl::toTwips on the integer MM100 property.
+          Math.trunc((stop.position * 72 + (stop.position >= 0 ? 63 : -63)) / 127),
+          stop.alignment === "right"
+            ? SvxTabAdjust.Right
+            : stop.alignment === "center"
+              ? SvxTabAdjust.Center
+              : stop.alignment === "char"
+                ? SvxTabAdjust.Decimal
+                : stop.alignment === "default"
+                  ? SvxTabAdjust.Default
+                  : SvxTabAdjust.Left,
+          stop.decimal,
+          stop.fill,
         ),
-      ),
-    );
+      );
+    put(item);
+  }
   if (properties.keepWithNext !== undefined)
     put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
   if (properties.keepTogether !== undefined)

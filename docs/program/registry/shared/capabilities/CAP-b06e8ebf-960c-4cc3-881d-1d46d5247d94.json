@@ -1,0 +1,161 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b06e8ebf-960c-4cc3-881d-1d46d5247d94",
+    "capabilityId": "CAP-b06e8ebf-960c-4cc3-881d-1d46d5247d94",
+    "suite": "shared",
+    "subsystem": "cell-alignment-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original cell/paragraph alignment mappings preserve actual UNO enum/short/long types and member semantics.",
+      "Actual shared items and CPPU static enum descriptions are reused without fake provider.",
+      "Native reset-success and unknown-member untouched-success quirks are preserved."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task117 adds actual SvxHorJustifyItem, SvxVerJustifyItem, SvxJustifyMethodItem and SvxRotateModeItem normal value/default/copy/Clone/full member query/update contracts over existing SfxEnumItem/CPPU Any. Original internal enums, member IDs and five OffAPI IDL declarations remain in shared original owners. CellHoriJustify and VerticalAlignment actual typed Any queries use original cppumaker-normal static enum type getter logic over existing real static_enum_type_init/borrowedTypecell, with declared overload identity suffixing and no fake type/provider or generator execution. Enum versus short versus long wire types and cross-type rejection are preserved. Browser plain numeric extraction/output binding is explicit. Members narrow to unsigned8 and horizontal/vertical strip CONVERT_TWIPS. Horizontal unknown member returns true with untouched Any; vertical default member ignores failed long extraction and resets Standard withtrue, while typed adjustment member fails unchanged. RotateMode also resets Standard and returnstrue after failed long extraction; method item rejects failed extraction unchanged. Unknown fixed-int scoped core enum values preserve original switch fallbacks; native invalid casts/assertions/uninitialized/ABI excluded. Original localized presentation/value-text/diagnostics/native caches/thread/lifetime, comprehensive generated enum type variants/other IDL helpers and complete DocPool/document/config/storage/UI/ODS pending/excluded. Calc Which129/130/132/133/136 correspond to explicit DocPool Standard/Auto/Standard/Auto/Bottom values; these actual items and real pooled copies are tested without a fake DocPool. Existing metadata history/status retained without broad parity promotion. No new memory/refcount engine, C++ generator/nativebuild/sanitizer. Goalactive, full121next."
+    },
+    "capability": "Shared cell alignment and rotated-text anchor values",
+    "gaps": [
+      "Localized presentation/diagnostics/native cache/ABI/invalid casts and complete DocPool/document/UI/ODS pending/excluded.",
+      "Generated normal enum getter modeled from pinned original template over real CPPU; comprehensive/legacy generated variants and full original QA unexecuted.",
+      "Explicit browser scalar transport/type-overload erasure is not native binary ABI certification."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/inc/svxenum.ts",
+          "marker": "SvxCellHorJustify"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_HORJUST_HORJUST"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/justifyitem.ts",
+          "marker": "SvxHorJustifyItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/justifyitem.ts",
+          "marker": "SvxHorJustifyItem"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/CellHoriJustify.ts",
+          "marker": "CellHoriJustify"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/VerticalAlignment.ts",
+          "marker": "VerticalAlignment"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/ParagraphAdjust.ts",
+          "marker": "ParagraphAdjust"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/CellVertJustify2.ts",
+          "marker": "CellVertJustify2"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/CellJustifyMethod.ts",
+          "marker": "CellJustifyMethod"
+        },
+        {
+          "path": "apps/office/src/svx/inc/rotmodit.ts",
+          "marker": "SvxRotateMode"
+        },
+        {
+          "path": "apps/office/src/svx/source/items/rotmodit.ts",
+          "marker": "SvxRotateModeItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/justifyitem.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svx/source/items/rotmodit.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared cell alignment and rotated-text anchoring values (task117)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/editeng/svxenum.hxx",
+          "marker": "SvxCellHorJustify"
+        },
+        {
+          "path": "include/editeng/memberids.h",
+          "marker": "MID_HORJUST_HORJUST"
+        },
+        {
+          "path": "include/editeng/justifyitem.hxx",
+          "marker": "SvxHorJustifyItem"
+        },
+        {
+          "path": "editeng/source/items/justifyitem.cxx",
+          "marker": "SvxHorJustifyItem"
+        },
+        {
+          "path": "offapi/com/sun/star/table/CellHoriJustify.idl",
+          "marker": "CellHoriJustify"
+        },
+        {
+          "path": "offapi/com/sun/star/style/VerticalAlignment.idl",
+          "marker": "VerticalAlignment"
+        },
+        {
+          "path": "offapi/com/sun/star/style/ParagraphAdjust.idl",
+          "marker": "ParagraphAdjust"
+        },
+        {
+          "path": "offapi/com/sun/star/table/CellVertJustify2.idl",
+          "marker": "CellVertJustify2"
+        },
+        {
+          "path": "offapi/com/sun/star/table/CellJustifyMethod.idl",
+          "marker": "CellJustifyMethod"
+        },
+        {
+          "path": "include/svx/rotmodit.hxx",
+          "marker": "SvxRotateMode"
+        },
+        {
+          "path": "svx/source/items/rotmodit.cxx",
+          "marker": "SvxRotateModeItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-cell-alignment-value-contracts",
+    "scopeLimitations": [
+      "Task117 adds actual SvxHorJustifyItem, SvxVerJustifyItem, SvxJustifyMethodItem and SvxRotateModeItem normal value/default/copy/Clone/full member query/update contracts over existing SfxEnumItem/CPPU Any. Original internal enums, member IDs and five OffAPI IDL declarations remain in shared original owners. CellHoriJustify and VerticalAlignment actual typed Any queries use original cppumaker-normal static enum type getter logic over existing real static_enum_type_init/borrowedTypecell, with declared overload identity suffixing and no fake type/provider or generator execution. Enum versus short versus long wire types and cross-type rejection are preserved. Browser plain numeric extraction/output binding is explicit. Members narrow to unsigned8 and horizontal/vertical strip CONVERT_TWIPS. Horizontal unknown member returns true with untouched Any; vertical default member ignores failed long extraction and resets Standard withtrue, while typed adjustment member fails unchanged. RotateMode also resets Standard and returnstrue after failed long extraction; method item rejects failed extraction unchanged. Unknown fixed-int scoped core enum values preserve original switch fallbacks; native invalid casts/assertions/uninitialized/ABI excluded. Original localized presentation/value-text/diagnostics/native caches/thread/lifetime, comprehensive generated enum type variants/other IDL helpers and complete DocPool/document/config/storage/UI/ODS pending/excluded. Calc Which129/130/132/133/136 correspond to explicit DocPool Standard/Auto/Standard/Auto/Bottom values; these actual items and real pooled copies are tested without a fake DocPool. Existing metadata history/status retained without broad parity promotion. No new memory/refcount engine, C++ generator/nativebuild/sanitizer. Goalactive, full121next."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

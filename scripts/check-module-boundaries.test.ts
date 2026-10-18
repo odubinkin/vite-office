@@ -1,9 +1,8 @@
 /** @fileoverview Verifies application and shared runtime responsibility boundaries independently of repository paths. */
-
 import { describe, expect, it } from "vitest";
-
 import {
   findUnapprovedModuleCycle,
+  getRuntimeImportSpecifiers,
   isOriginalSalO3tlImport,
   isForbiddenModuleEdge,
   getProtectedBrowserGlobalReferences,
@@ -11,7 +10,6 @@ import {
   getRuntimeOwnershipLayer,
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
-
 it("keeps XML reader byte values below application and browser owners", /** Admits only original shared value dependencies and header/source ownership. @returns Nothing. */ () => {
   for (const dependency of ["cppu", "sal"])
     expect(isForbiddenModuleEdge("xmlreader", dependency)).toBe(false);
@@ -49,12 +47,13 @@ it("keeps shared configuration nodes below application and browser owners", /** 
   );
 });
 
-it("owns genuine CPPU type metadata and SAL comparison without browser or reverse dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
+it("owns genuine CPPU type metadata and SAL comparison without browser dependencies", /** Protects actual typelib primitive owners. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("cppu", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("cppu", "o3tl")).toBe(false);
   // Original include/com/sun/star/uno/Type.h includes the generated TypeClass enum.
   expect(isForbiddenModuleEdge("cppu", "udkapi")).toBe(false);
-  expect(isForbiddenModuleEdge("udkapi", "cppu")).toBe(true);
+  // Original generated .hpp bindings require CPPU; CPPU TypeClass back-references are type-only.
+  expect(isForbiddenModuleEdge("udkapi", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("o3tl", "cppu")).toBe(true);
   expect(isForbiddenModuleEdge("sal", "cppu")).toBe(true);
   for (const source of [
@@ -203,7 +202,8 @@ it("owns original locale and case-mapping dependencies without browser or revers
   // Original transliteration.hxx consumes the generated IDL enum, whose hdl includes SAL types/sentinel.
   expect(isForbiddenModuleEdge("offapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "offapi")).toBe(true);
-  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(true);
+  // Original cppumaker normal enum getters use CPPU static type initialization.
+  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(false);
   for (const owner of ["udkapi", "i18nutil", "offapi"])
     for (const dependency of ["sc", "sw", "framework", "vcl"])
       expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
@@ -285,9 +285,10 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   });
   it("admits source-owned cui border pages and svx line selection with no reverse or browser edges", /** Checks the native dialog owner graph. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("sw", "cui")).toBe(false);
-    for (const module of ["editeng", "svl", "svx"])
+    for (const module of ["editeng", "svl", "svx", "tools"])
       expect(isForbiddenModuleEdge("cui", module)).toBe(false);
     expect(isForbiddenModuleEdge("svx", "editeng")).toBe(false);
+    expect(isForbiddenModuleEdge("tools", "cui")).toBe(true);
     for (const module of ["sw", "framework"])
       expect(isForbiddenModuleEdge("cui", module)).toBe(true);
     expect(isForbiddenModuleEdge("editeng", "svx")).toBe(true);
@@ -306,7 +307,9 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
   it("admits native border value dependencies while rejecting reverse browser edges", /** Checks source-owned box dependencies and browser isolation. @returns Nothing. */ () => {
     expect(isForbiddenModuleEdge("editeng", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("editeng", "svtools")).toBe(false);
-    expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(false);
+    expect(isForbiddenModuleEdge("xmloff", "editeng")).toBe(true);
+    expect(isForbiddenModuleEdge("editeng", "xmloff")).toBe(false);
+    expect(isForbiddenModuleEdge("xmloff", "offapi")).toBe(false);
     expect(isForbiddenModuleEdge("svtools", "editeng")).toBe(true);
     expect(isForbiddenModuleEdge("svtools", "sw")).toBe(true);
     expect(getRuntimeOwnershipLayer("svtools/source/control/ctrlbox.ts")).toBe(
@@ -543,4 +546,300 @@ it("keeps shared formula header ownership independent of applications and browse
       "../../framework/browser/app/desktop",
     ),
   ).toBeDefined();
+});
+
+it("permits Calc attribute Any transport while protecting reverse and browser boundaries", /** Checks only the actual original dependency. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sc", "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("cppu", "sc")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "sc/source/core/data/attrib.values.ts",
+      "vcl/browser/font-list.ts",
+      "../../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("keeps original enum extraction below SVL and Calc without reverse or browser edges", /** Checks exact native helper dependencies. @returns Nothing. */ () => {
+  for (const target of ["comphelper", "cppu"])
+    expect(isForbiddenModuleEdge("svl", target)).toBe(false);
+  for (const target of ["cppu", "udkapi"])
+    expect(isForbiddenModuleEdge("comphelper", target)).toBe(false);
+  for (const target of ["sc", "sw", "svl", "framework"])
+    expect(isForbiddenModuleEdge("comphelper", target)).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "comphelper")).toBe(true);
+  for (const source of ["comphelper/inc/extract.ts", "svl/inc/eitem.ts", "svl/inc/cenumitm.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+  }
+  expect(
+    getRuntimeOwnershipViolation(
+      "comphelper/inc/extract.ts",
+      "vcl/browser/font-list.ts",
+      "../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("permits the original shared integer hash dependency while retaining reverse restrictions", /** Protects original unsigned item hashing. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svl", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "svl")).toBe(true);
+  for (const source of ["svl/inc/cintitem.ts", "svl/inc/intitem.ts"])
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+});
+
+it("keeps original SVX angle units below Calc and browser responsibilities", /** Checks exact native header dependency and reverse restrictions. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svx", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "svx")).toBe(true);
+  for (const source of ["svx/inc/sdangitm.ts", "tools/inc/degree.ts"]) {
+    expect(getRuntimeOwnershipLayer(source)).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipViolation(source, "", "react")).toMatch(/presentation package/u);
+  }
+});
+
+it("permits actual generated alignment enum dependencies without reverse or browser ownership", /** Checks source includes and generated type responsibility. @returns Nothing. */ () => {
+  for (const source of ["editeng", "offapi", "svx"])
+    expect(isForbiddenModuleEdge(source, "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("svx", "offapi")).toBe(false);
+  for (const target of ["editeng", "offapi", "svx"])
+    expect(isForbiddenModuleEdge("cppu", target)).toBe(true);
+  expect(getRuntimeOwnershipLayer("editeng/inc/justifyitem.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("editeng/inc/justifyitem.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
+
+it("permits original metric owners and only the exact SAL64 numeric header witness", /** Protects native value dependencies without broader SAL/o3tl permissions. @returns Nothing. */ () => {
+  for (const source of ["editeng", "svx", "tools"])
+    expect(isForbiddenModuleEdge(source, "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("editeng", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "editeng")).toBe(true);
+  const path = "../../sal/inc/types";
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/unit_conversion.ts",
+      "sal/inc/types",
+      `import { SAL_MIN_INT64, SAL_MAX_INT64 } from "${path}";`,
+      path,
+    ),
+  ).toBe(true);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/unit_conversion.ts",
+      "sal/inc/types",
+      `import { SAL_MIN_INT32, SAL_MAX_INT32 } from "${path}";`,
+      path,
+    ),
+  ).toBe(false);
+});
+
+it("allows original VCL slant helper dependencies while retaining reverse application guards", /** Native unohelp.hxx consumes tools/fontenum and awt FontSlant; no browser dependency is introduced. @returns Nothing. */ () => {
+  for (const dependency of ["tools", "offapi"]) {
+    expect(isForbiddenModuleEdge("vcl", dependency)).toBe(false);
+    expect(isForbiddenModuleEdge(dependency, "vcl")).toBe(true);
+  }
+  for (const application of ["sc", "sw", "framework"])
+    expect(isForbiddenModuleEdge("vcl", application)).toBe(true);
+});
+
+it("permits original SVTools scalar metric dependencies while preserving reverse application and browser guards", /** Original unitconv consumes Tools and o3tl, without presentation owners. @returns Nothing. */ () => {
+  for (const target of ["tools", "o3tl"]) {
+    expect(isForbiddenModuleEdge("svtools", target)).toBe(false);
+    expect(isForbiddenModuleEdge(target, "svtools")).toBe(true);
+  }
+  for (const target of ["sc", "sw", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("svtools", target)).toBe(true);
+  expect(getRuntimeOwnershipLayer("svtools/source/misc/unitconv.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("svtools/source/misc/unitconv.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
+
+it("admits original Tools Color Any operators while retaining reverse and application guards", /** Header owns the original specialization, no CPPU to Tools dependency. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("tools", "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("cppu", "tools")).toBe(true);
+  for (const target of ["sc", "sw", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("tools", target)).toBe(true);
+  expect(getRuntimeOwnershipLayer("tools/inc/color.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("tools/inc/color.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});
+
+it("admits native docmodel color values using Tools and o3tl without app or reverse edges", /** Checks shared color value ownership. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("docmodel", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("docmodel", "o3tl")).toBe(false);
+  for (const module of ["sw", "sc", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("docmodel", module)).toBe(true);
+  expect(isForbiddenModuleEdge("tools", "docmodel")).toBe(true);
+  expect(getRuntimeOwnershipLayer("docmodel/inc/color/ComplexColor.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("docmodel/inc/color/ComplexColor.ts", "", "react")).toMatch(
+    /browser presentation package/u,
+  );
+});
+
+it("admits the original color-item dependency on docmodel without reverse item or app edges", /** Checks the native colritem.hxx Color and ComplexColor owner boundary. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "docmodel")).toBe(false);
+  expect(isForbiddenModuleEdge("docmodel", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sc")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+  expect(getRuntimeOwnershipLayer("editeng/inc/colritem.ts")).toBe("upstream-mechanism");
+  expect(
+    getRuntimeOwnershipViolation("editeng/source/items/textitem.color.ts", "", "react"),
+  ).toMatch(/browser presentation package/u);
+});
+
+it("admits native font-item SAL encoding and Unicode hash owners without app or browser edges", /** Checks fontitem.hxx RTL text declarations and source string hash ownership. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sc")).toBe(true);
+  expect(getRuntimeOwnershipLayer("editeng/inc/fontitem.ts")).toBe("upstream-mechanism");
+  expect(
+    getRuntimeOwnershipViolation("editeng/source/items/textitem.font.ts", "", "react"),
+  ).toMatch(/browser presentation package/u);
+});
+
+it("admits original ODF font handlers using Tools enums and SAL encoding declarations", /** Preserves font-only shared dependencies without app or reverse edges. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("xmloff", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("xmloff", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("sal", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "sc")).toBe(true);
+});
+
+it("admits native Writer charset declarations without granting shared reverse dependencies", /** Protects font-value enum ownership. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sw", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "sw")).toBe(true);
+});
+
+it("admits original ODF border IDL values without application or reverse dependencies", /** Original bordrhdl.cxx consumes the published BorderLine2 type. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("xmloff", "offapi")).toBe(false);
+  expect(isForbiddenModuleEdge("offapi", "xmloff")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "sw")).toBe(true);
+});
+
+it("admits original set-item MapUnit and page-item OUString dependencies without reverse edges", /** Native presentation signatures borrow existing shared types and no browser service. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("svl", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("tools", "svl")).toBe(true);
+  expect(isForbiddenModuleEdge("svx", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("sal", "svx")).toBe(true);
+});
+
+it("keeps primitive language identities below Editeng and browser owners", /** Native SAL/Locale conversion dependencies are admitted while app/browser edges remain forbidden. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("sc", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nlangtag", "sal")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nlangtag", "udkapi")).toBe(false);
+  for (const owner of ["editeng", "sc", "sw", "framework", "vcl"])
+    expect(isForbiddenModuleEdge("i18nlangtag", owner)).toBe(true);
+  expect(getRuntimeOwnershipLayer("i18nlangtag/inc/lang.ts")).toBe("upstream-mechanism");
+  expect(getRuntimeOwnershipViolation("i18nlangtag/inc/lang.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "i18nlangtag/inc/lang.ts",
+      "vcl/browser/font-list.ts",
+      "../font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("admits original Editeng script-hint values without reverse or browser dependencies", /** Native public header and library link own this dependency, not UI localization. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "i18nutil")).toBe(false);
+  for (const owner of ["editeng", "sc", "sw", "framework", "vcl", "tools", "svl"])
+    expect(isForbiddenModuleEdge("i18nutil", owner)).toBe(true);
+  expect(getRuntimeOwnershipLayer("i18nutil/inc/scriptchangescanner.ts")).toBe(
+    "upstream-mechanism",
+  );
+  expect(getRuntimeOwnershipViolation("i18nutil/inc/scriptchangescanner.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "i18nutil/inc/scriptchangescanner.ts",
+      "vcl/browser/font-list.ts",
+      "../font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("keeps native numeric locale resources below tab items and application/browser owners", /** Allows the source-backed locale client/producer edges while blocking reverse and application dependencies. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "unotools")).toBe(false);
+  expect(isForbiddenModuleEdge("unotools", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("unotools", "i18npool")).toBe(false);
+  for (const owner of ["i18npool", "unotools"])
+    for (const app of ["sc", "sw", "framework"])
+      expect(isForbiddenModuleEdge(owner, app)).toBe(true);
+  for (const owner of ["i18nlangtag", "udkapi"])
+    expect(isForbiddenModuleEdge("i18npool", owner)).toBe(false);
+  expect(isForbiddenModuleEdge("i18npool", "unotools")).toBe(true);
+  expect(isForbiddenModuleEdge("i18nlangtag", "i18npool")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "i18npool/source/localedata/localedata.ts",
+      "sw/browser/presentation/WriterView.tsx",
+      "../../sw/browser/presentation/WriterView",
+    ),
+  ).toMatch(/browser adapters/u);
+});
+
+it("admits original paragraph property clients without admitting reverse application dependencies", /** Keeps the actual native link edges and existing layer/cycle guards. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("editeng", "comphelper")).toBe(false);
+  expect(isForbiddenModuleEdge("sw", "cppu")).toBe(false);
+  expect(isForbiddenModuleEdge("comphelper", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("comphelper", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("cppu", "editeng")).toBe(true);
+  expect(isForbiddenModuleEdge("editeng", "sw")).toBe(true);
+});
+
+it("distinguishes emitted imports from erased type syntax before runtime cycle detection", /** Owner allowlisting still applies to both kinds of import. @returns Nothing. */ () => {
+  const source = `import type { TypeClass } from "type-only";
+ import { type A, type B as C } from "named-types";
+ import { A, type B } from "mixed";
+ import Foo from "default";
+ import * as ns from "namespace";
+ import "side-effect";
+ import {} from "empty";
+ export type { X } from "export-type";
+ export { type X } from "export-named-type";
+ export { type X, Y } from "export-mixed";
+ export * from "export-star";
+ export * as alias from "export-namespace";
+ export {} from "export-empty";
+ type Query=typeof import("type-query");
+ type Module=import("import-type").A;
+ import Legacy=require("equals");
+ import type LegacyType=require("equals-type");
+ const load=()=>import("dynamic");
+ const required=require("require");`;
+  expect([...getRuntimeImportSpecifiers(source)].sort()).toEqual(
+    [
+      "default",
+      "dynamic",
+      "empty",
+      "equals",
+      "export-empty",
+      "export-mixed",
+      "export-named-type",
+      "export-namespace",
+      "export-star",
+      "mixed",
+      "named-types",
+      "namespace",
+      "require",
+      "side-effect",
+    ].sort(),
+  );
+  expect([...getRuntimeImportSpecifiers("const value=1;")]).toEqual([]);
+  expect(isForbiddenModuleEdge("svl", "udkapi")).toBe(false);
+  for (const module of ["sc", "sw", "vcl", "framework"]) {
+    expect(isForbiddenModuleEdge("udkapi", module)).toBe(true);
+    expect(isForbiddenModuleEdge("cppu", module)).toBe(true);
+  }
 });

@@ -1,76 +1,88 @@
-/** @fileoverview Implements the bounded SfxBroadcaster contract from pinned `svl/source/notify/SfxBroadcaster.cxx`. */
+/** @fileoverview Native SfxBroadcaster slot graph from pinned svl/source/notify/SfxBroadcaster.cxx. */
+import { SfxHint, SfxHintId } from "../../inc/hint";
+import type { SfxListener } from "./lstner";
 
-/** Minimum typed notification payload accepted by the bounded broadcaster. */
-export interface SfxHint {
-  /** Stable notification discriminator. */
-  readonly kind: string;
-}
+/** Erased TypeScript constructor constraint for native multiple-inheritance role binding. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TypeScript mixin constructor constraints require an arbitrary argument list; this alias emits no runtime code.
+export type SfxNotificationBase = abstract new (...args: any[]) => object;
 
-/** Listener surface used without coupling SfxBroadcaster to one concrete listener class. */
-export interface SfxListenerTarget<Hint extends SfxHint> {
-  /** Receives one synchronous broadcaster notification. */
-  Notify(broadcaster: SfxBroadcaster<Hint>, hint: Hint): void;
-  /** Detaches the dying broadcaster without attempting a reciprocal removal. */
-  BroadcasterDying(broadcaster: SfxBroadcaster<Hint>): void;
-}
-
-/** Synchronous M:N typed broadcaster with upstream slot reuse and explicit destruction. */
-export class SfxBroadcaster<Hint extends SfxHint> {
-  private disposed = false;
-  private readonly listeners: (SfxListenerTarget<Hint> | undefined)[] = [];
-  private readonly removedPositions: number[] = [];
-
-  /** Registers a listener once. @param listener - Listener to attach. @returns Whether it was newly attached. */
-  public AddListener(listener: SfxListenerTarget<Hint>): boolean {
-    if (this.disposed) throw new Error("Cannot listen to a disposed SfxBroadcaster.");
-    if (this.listeners.includes(listener)) return false;
-    const position = this.removedPositions.pop();
-    if (position === undefined) this.listeners.push(listener);
-    else this.listeners[position] = listener;
-    return true;
-  }
-
-  /** Removes one listener. @param listener - Exact listener identity. @returns Whether it was attached. */
-  public RemoveListener(listener: SfxListenerTarget<Hint>): boolean {
-    const position = this.listeners.indexOf(listener);
-    if (position < 0) return false;
-    this.listeners[position] = undefined;
-    this.removedPositions.push(position);
-    return true;
-  }
-
-  /** Visits live slots in native order, stopping when requested. @param visitor - Listener predicate. @returns Nothing. */
-  public ForAllListeners(visitor: (listener: SfxListenerTarget<Hint>) => boolean): void {
-    for (let index = 0; index < this.listeners.length; index++) {
-      const listener = this.listeners[index];
-      if (listener !== undefined && visitor(listener)) break;
+/** Applies the original SfxBroadcaster fields and algorithms to a native base subobject on the same JS identity. @param Base - Actual primary base. @returns Native role base constructor. */
+export function withSfxBroadcaster<TBase extends SfxNotificationBase>(Base: TBase) {
+  /** Original native role fields and algorithms, shared by standalone and multiple-inheritance owners. */
+  abstract class SfxBroadcasterBase extends Base {
+    private readonly m_Listeners: (SfxListener | null)[] = [];
+    private readonly m_RemovedPositions: number[] = [];
+    /** Original copy-constructor initialization, reused by the root class and native multiple-inheritance owners. @param source - Copy source. @returns Nothing. */
+    protected CopyBroadcasterFrom(source?: SfxBroadcaster): void {
+      if (source !== undefined)
+        for (let i = 0; i < source.m_Listeners.length; ++i)
+          source.m_Listeners[i]?.StartListening(this);
+    }
+    /** Native friend-only operation, public for TypeScript cross-class access; duplicates are controlled by SfxListener. @param listener - Exact listener. @returns Nothing. */
+    public AddListener(listener: SfxListener): void {
+      if (this.m_RemovedPositions.length === 0) this.m_Listeners.push(listener);
+      else {
+        const position = this.m_RemovedPositions.pop() as number;
+        this.m_Listeners[position] = listener;
+      }
+    }
+    /** Removes one native slot, retaining its position for active delivery loops. Registered membership is a native precondition. @param listener - Registered listener. @returns Nothing. */
+    public RemoveListener(listener: SfxListener): void {
+      let position = -1;
+      if (this.m_RemovedPositions.length !== 0) {
+        const i = this.m_RemovedPositions[this.m_RemovedPositions.length - 1] as number;
+        if (i < this.m_Listeners.length - 2 && this.m_Listeners[i + 1] === listener)
+          position = i + 1;
+        else if (i > 0 && this.m_Listeners[i - 1] === listener) position = i - 1;
+      }
+      if (position === -1) position = this.m_Listeners.indexOf(listener);
+      if (position < 0) throw new Error("SfxBroadcaster requires a registered listener");
+      this.m_Listeners[position] = null;
+      this.m_RemovedPositions.push(position);
+    }
+    /** Visits live slots, including appended slots, until requested to stop. @param visitor - Native predicate. @returns Nothing. */
+    public ForAllListeners(visitor: (listener: SfxListener) => boolean): void {
+      for (let i = 0; i < this.m_Listeners.length; ++i) {
+        const listener = this.m_Listeners[i];
+        if (listener && visitor(listener)) break;
+      }
+    }
+    /** Reports original live-slot count. @returns Count. */
+    public GetListenerCount(): number {
+      return this.m_Listeners.length - this.m_RemovedPositions.length;
+    }
+    /** Reports native membership. @returns Whether nonempty. */
+    public HasListeners(): boolean {
+      return this.GetListenerCount() !== 0;
+    }
+    /** Native dynamic-type query. @returns False in the base class. */
+    public IsSfxStyleSheet(): boolean {
+      return false;
+    }
+    /** Delivers over the initial slot count while observing live removals/reuse. @param hint - Original hint. @returns Nothing. */
+    public Broadcast(hint: SfxHint): void {
+      const size = this.m_Listeners.length;
+      for (let i = 0; i < size; ++i) this.m_Listeners[i]?.Notify(this, hint);
+    }
+    /** Forwards with the original source and a live loop bound. @param source - Original source. @param hint - Original hint. @returns Nothing. */
+    protected Forward(source: SfxBroadcaster, hint: SfxHint): void {
+      for (let i = 0; i < this.m_Listeners.length; ++i) this.m_Listeners[i]?.Notify(source, hint);
+    }
+    /** Explicit native destructor boundary: Dying precedes reciprocal detachment. Call once, then discard the object. @returns Nothing. */
+    public Dispose(): void {
+      this.Broadcast(new SfxHint(SfxHintId.Dying));
+      for (let i = 0; i < this.m_Listeners.length; ++i)
+        this.m_Listeners[i]?.RemoveBroadcaster_Impl(this);
     }
   }
+  return SfxBroadcasterBase;
+}
 
-  /** Reports whether live listeners are attached. @returns True for a non-empty broadcaster. */
-  public HasListeners(): boolean {
-    return this.listeners.length > this.removedPositions.length;
-  }
-
-  /** Delivers one typed hint over the pinned initial slot count, observing reuse of future vacant slots. @param hint - Notification payload. @returns Nothing. */
-  public Broadcast(hint: Hint): void {
-    if (this.disposed) return;
-    const count = this.listeners.length;
-    for (let index = 0; index < count; index += 1) this.listeners[index]?.Notify(this, hint);
-  }
-
-  /** Announces destruction and detaches all reciprocal listener registrations. @returns Nothing. */
-  public PrepareForDestruction(): void {
-    if (this.disposed) return;
-    this.disposed = true;
-    const listeners = [...this.listeners];
-    this.listeners.length = 0;
-    this.removedPositions.length = 0;
-    for (const listener of listeners) listener?.BroadcasterDying(this);
-  }
-
-  /** Reports whether destruction has begun. @returns True after PrepareForDestruction. */
-  public IsDisposed(): boolean {
-    return this.disposed;
+/** Original standalone SfxBroadcaster class; the shared role implementation also supports native multiple inheritance. */
+export class SfxBroadcaster extends withSfxBroadcaster(Object) {
+  /** Original default/copy constructor. @param source - Optional copy. @returns Native owner. */
+  public constructor(source?: SfxBroadcaster) {
+    super();
+    this.CopyBroadcasterFrom(source);
   }
 }

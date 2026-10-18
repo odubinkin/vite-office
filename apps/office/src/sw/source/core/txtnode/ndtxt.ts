@@ -7,7 +7,7 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";

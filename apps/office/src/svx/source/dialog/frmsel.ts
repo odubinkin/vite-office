@@ -1,4 +1,5 @@
 /** @fileoverview Owns represented native frame-border selection, independent of browser geometry. */
+import { Color } from "../../../tools/inc/color";
 import { SvxBorderLine, SvxBorderLineStyle } from "../../../editeng/source/items/borderline";
 
 /** Native frame edge identities, including disabled diagonal keyboard neighbors. */
@@ -125,22 +126,23 @@ export class FrameSelector {
       ? [first.GetWidth(), first.GetBorderLineStyle()]
       : undefined;
   }
-  /** Reads uniform visible RGB. @returns Color or absence. */
-  public GetVisibleColor(): number | undefined {
+  /** Reads uniform visible color without altering output on failure. @param color - Actual output value. @returns Native consensus success. */
+  public GetVisibleColor(color: Color): boolean {
     const visible = [...this.borders.values()].filter(
         /** Selects source visible lines. @param border - Owned border. @returns Whether visible. */ (
           border,
         ) => border.state === FrameBorderState.Show,
       ),
       first = visible[0]?.line;
-    return first !== undefined &&
+    const found =
+      first !== undefined &&
       visible.every(
         /** Compares native visible color consensus. @param border - Visible owned line. @returns Whether equal to first. */ (
           border,
-        ) => border.line.GetColor() === first.GetColor(),
-      )
-      ? first.GetColor()
-      : undefined;
+        ) => border.line.GetColor().equals(first.GetColor()),
+      );
+    if (found) color.assign(first.GetColor());
+    return found;
   }
   /** Reads native edge selection. @param edge - Enabled edge. @returns Selected flag. */
   public IsBorderSelected(edge: FrameBorderType): boolean {
@@ -180,7 +182,7 @@ export class FrameSelector {
       if (border.selected) this.SetBorderState(edge, FrameBorderState.Show);
   }
   /** Changes cached color and every selected line. @param color - Native RGB. @returns Nothing. */
-  public SetColorToSelection(color: number): void {
+  public SetColorToSelection(color: Readonly<Color>): void {
     this.current.SetColor(color);
     for (const [edge, border] of this.borders)
       if (border.selected) this.SetBorderState(edge, FrameBorderState.Show);

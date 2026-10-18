@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e",
+    "capabilityId": "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e",
+    "suite": "shared",
+    "subsystem": "grab-bag-properties",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Ordered UTF16 keys and independent typed Any values preserve native map/default/copy/Clone/equality/hash contracts.",
+      "Exact Sequence<PropertyValue> transport preserves generated defaults, sorted names and last duplicate replacement.",
+      "Failed type extraction leaves stored values unchanged; no browser JSON or lifetime manager is added."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task159 adds genuine SfxGrabBagItem ordered property metadata and actual UDK PropertyValue/PropertyState values with normal generated CPPU enum/struct binding. Existing Unicode/Any/Sequence/type/SAL hash/o3tl combine owners are reused. Native std::map OUString keys bind to primitive UTF16 Map value keys, including case, embedded nul and surrogate units; native ordering is preserved without locale normalization. Const map/Any views borrow stable real values; copy/Clone/property projection retain independent Any values. Query emits sorted Sequence<PropertyValue> with original generated Handle0/StateDIRECT_VALUE. Put accepts exact typed sequence, leaves failures unchanged, clears on successful empty input and keeps last duplicates while ignoring Handle/State/member selector. Keys-only hash omits values exactly as source. No core JSON, new lifetime/refcount/cache/memory library, native compiler/probe, fake engine/pool/provider or UI localization. This fills a real EditEngine default/ODS-metadata dependency; full engine/pool/Calc document/connected UI/same-model ODS remain pending. Bounded acceptance passes65related tests/7files,187Calc tests/76files, production build and19related Writer browser scenarios. Exact3new shared owners raw S106/B46/F29/L98 and all33Calc owners S4179/B2731/F821/L3727 have every counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0. Native evidence pins20files; all28original guard function bodies remain unchanged, with a separately tested type-import classification helper and no new cycle exception. All4source references are absent during execution and restored exactly finally. Full engine/pool/Calc document/connected UI/same-model ODS readiness is not claimed."
+    },
+    "capability": "Native ordered grab-bag properties",
+    "gaps": [
+      "Full EditEngine/default pool/Calc document/connected UI/same-model ODS remain pending.",
+      "Physical native memory/cache/refcount/iterator/binary representation deliberately erased under JS GC."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/grabbagitem.ts",
+          "marker": "SfxGrabBagItem"
+        },
+        {
+          "path": "apps/office/src/svl/inc/grabbagitem.ts",
+          "marker": "SfxGrabBagItem"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyValue.ts",
+          "marker": "PropertyValue"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyState.ts",
+          "marker": "PropertyState"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-grab-bag.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native grab-bag property values (task159)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/grabbagitem.cxx",
+          "marker": "SfxGrabBagItem"
+        },
+        {
+          "path": "include/svl/grabbagitem.hxx",
+          "marker": "SfxGrabBagItem"
+        },
+        {
+          "path": "udkapi/com/sun/star/beans/PropertyValue.idl",
+          "marker": "PropertyValue"
+        },
+        {
+          "path": "udkapi/com/sun/star/beans/PropertyState.idl",
+          "marker": "PropertyState"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "typelib_static_struct_type_init"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+          "marker": "testGrabBag"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/beans/PropertyValue.idl",
+          "marker": "specifies a property value"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-grab-bag-properties",
+    "scopeLimitations": [
+      "Task159 adds genuine SfxGrabBagItem ordered property metadata and actual UDK PropertyValue/PropertyState values with normal generated CPPU enum/struct binding. Existing Unicode/Any/Sequence/type/SAL hash/o3tl combine owners are reused. Native std::map OUString keys bind to primitive UTF16 Map value keys, including case, embedded nul and surrogate units; native ordering is preserved without locale normalization. Const map/Any views borrow stable real values; copy/Clone/property projection retain independent Any values. Query emits sorted Sequence<PropertyValue> with original generated Handle0/StateDIRECT_VALUE. Put accepts exact typed sequence, leaves failures unchanged, clears on successful empty input and keeps last duplicates while ignoring Handle/State/member selector. Keys-only hash omits values exactly as source. No core JSON, new lifetime/refcount/cache/memory library, native compiler/probe, fake engine/pool/provider or UI localization. This fills a real EditEngine default/ODS-metadata dependency; full engine/pool/Calc document/connected UI/same-model ODS remain pending. Bounded acceptance passes65related tests/7files,187Calc tests/76files, production build and19related Writer browser scenarios. Exact3new shared owners raw S106/B46/F29/L98 and all33Calc owners S4179/B2731/F821/L3727 have every counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0. Native evidence pins20files; all28original guard function bodies remain unchanged, with a separately tested type-import classification helper and no new cycle exception. All4source references are absent during execution and restored exactly finally. Full engine/pool/Calc document/connected UI/same-model ODS readiness is not claimed.",
+      "Referenced native Writer DOCX roundtrip fixture establishes why grab-bag metadata is retained; full DOCX/ODS/document import-export scenario is not claimed ported. Existing Writer JSON/ODT pipelines are tested as related regressions, not made into native UNO providers."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

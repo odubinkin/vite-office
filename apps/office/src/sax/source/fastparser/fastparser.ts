@@ -26,7 +26,11 @@ export interface FastXmlParseOptions {
 
 /** The import layer owns context creation and dispatch. */
 export interface FastXmlHandler {
-  open(tag: SaxesTagNS, attributes: readonly SaxesAttributeNS[]): void;
+  open(
+    tag: SaxesTagNS,
+    attributes: readonly SaxesAttributeNS[],
+    resolvePrefix: (prefix: string) => string | undefined,
+  ): void;
   characters(value: string): void;
   close(): void;
 }
@@ -73,7 +77,13 @@ export function parseFastXmlStream(
         throw new Error("ODF XML exceeds attribute limit.");
       if (depth === 0) rootsSeen++;
       depth++;
-      handler.open(tag, attributes);
+      handler.open(
+        tag,
+        attributes,
+        /** Borrows actual SAX namespace resolution during this callback. @param prefix - Prefix. @returns URI. */ (
+          prefix,
+        ) => parser.resolve(prefix),
+      );
     },
   );
   const characters = /** Delivers bounded text. @param value - Decoded text. @returns Nothing. */ (
@@ -101,7 +111,7 @@ export function parseFastXmlStream(
   } catch (error) {
     if (
       error instanceof Error &&
-      /^(ODF |ODT |Unsupported ODF|Unsupported script-specific ODF|Duplicate ODF|Cyclic ODF|Conflicting ODF)/u.test(
+      /^(ODF |ODT |ODS |Unsupported ODF|Unsupported script-specific ODF|Duplicate ODF|Cyclic ODF|Conflicting ODF)/u.test(
         error.message,
       )
     )

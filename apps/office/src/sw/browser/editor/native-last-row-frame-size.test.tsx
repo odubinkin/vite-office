@@ -1,4 +1,6 @@
 /** @fileoverview Verifies mounted last-row height presentation and the original native table frame invalidation path. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -89,14 +91,10 @@ it("mounted last-row commands update fixed clipping and invalidate the original 
       expect(node.GetText()).toBe("Mounted original last row");
       expect(shell.CaptureCursorState()).toEqual(cursor);
       const clients: unknown[] = [];
-      last.GetFrameFormat().ForAllListeners(
-        /** Reads original registrations after render. @param client - Native listener. @returns Continue flag. */ (
-          client,
-        ) => {
-          clients.push(client);
-          return false;
-        },
-      );
+      for (const client of new SwIterator(SwClient, last.GetFrameFormat())) {
+        clients.push(client);
+        continue;
+      }
       const owned = clients.filter(
         /** Reads the additional original root-owned row, excluding the explicit standalone fixture. @param client - Original native object. @returns Whether root-owned row. */
         (client) => client instanceof SwRowFrame && client !== lastFrame,
@@ -111,25 +109,18 @@ it("mounted last-row commands update fixed clipping and invalidate the original 
     }
     frame.DestroyImpl();
     const clients: unknown[] = [];
-    last.GetFrameFormat().ForAllListeners(
-      /** Reads survivors after native layout teardown. @param client - Native listener. @returns Continue flag. */ (
-        client,
-      ) => {
-        clients.push(client);
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, last.GetFrameFormat())) {
+      clients.push(client);
+      continue;
+    }
     expect(clients).toHaveLength(2);
     cleanup();
     session.view.GetLayout().DestroyImpl();
     clients.length = 0;
-    last.GetFrameFormat().ForAllListeners(
-      /** Reads original model-only baseline after original root teardown. @param client - Actual registered object. @returns Continue. */
-      (client) => {
-        clients.push(client);
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, last.GetFrameFormat())) {
+      clients.push(client);
+      continue;
+    }
     expect(clients).toEqual([last]);
   } finally {
     cleanup();

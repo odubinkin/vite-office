@@ -3,9 +3,10 @@
  */
 
 import {
-  createOdtManifestXml,
-  ODT_MIMETYPE,
-} from "../../../../package/source/manifest/ManifestExport";
+  createManifestXml,
+  createManifestProperty as property,
+} from "../../../../package/source/manifest/ManifestWriter";
+import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import type { SwDoc } from "../../core/doc/doc";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
@@ -41,7 +42,7 @@ export class SwXMLWriter {
     output.putNextEntry(
       "META-INF/manifest.xml",
       encoder.encode(
-        createOdtManifestXml(
+        createWriterManifestXml(
           fonts.map(
             /** Projects a font path. @param font - Document font. @returns Package path. */ (
               font,
@@ -88,4 +89,29 @@ export function writeOdtDocument(
 function checkpoint(control: OdtExportControl, stage: OdtExportProgressStage): void {
   if (control.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
   control.onProgress?.(stage);
+}
+
+/** Writer-owned stream policy feeds the shared native manifest sequence exporter. @param fonts - Embedded font entry paths. @returns XML. */
+function createWriterManifestXml(fonts: readonly string[]): string {
+  const entries: readonly (readonly [string, string])[] = [
+    ["/", ODT_MIMETYPE],
+    ["content.xml", "text/xml"],
+    ["styles.xml", "text/xml"],
+    ["meta.xml", "text/xml"],
+    ...fonts.map(
+      /** Writer font media type. @param path - Path. @returns Entry. */ (path) =>
+        [path, "application/x-font-ttf"] as const,
+    ),
+  ];
+  const manifest = entries.map(
+    /** Creates actual package properties. @param entry - Path and media type. @returns Native sequence. */ ([
+      path,
+      media,
+    ]) => {
+      const sequence = [property("FullPath", path), property("MediaType", media)];
+      if (path === "/") sequence.push(property("Version", "1.3"));
+      return sequence;
+    },
+  );
+  return createManifestXml(manifest);
 }

@@ -24,3 +24,9 @@ export enum CRFlags {
   ManualSize = 0x08,
   All = 0x0f,
 }
+
+/** Original object output modes on a page, from global.hxx. */
+export enum ScVObjMode {
+  VOBJ_MODE_SHOW = 0,
+  VOBJ_MODE_HIDE = 1,
+}

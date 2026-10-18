@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlwrap.cxx",
+    "localSymbols": [
+      "ODS_MIMETYPE",
+      "ScXMLImportWrapper",
+      "readOdsDocument",
+      "writeOdsDocument"
+    ],
+    "upstreamSymbols": [
+      "ScXMLImportWrapper::Import",
+      "ScXMLImportWrapper::Export"
+    ],
+    "preservedResponsibilities": [
+      "Task204 binds native ScXMLImportWrapper package responsibilities to browser byte input/output using existing shared ZipFile/ZipOutputStream,plain manifest reader/writer and actual PropertyValue sequences. The plain modern ODS mimetype and resource/cancellation bounds are explicit;there is no ZIP or manifest clone."
+    ],
+    "omittedResponsibilities": [
+      "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+          "marker": "ODS_MIMETYPE"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "opens exported actual document bytes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlwrap.cxx",
+          "marker": "ScXMLImportWrapper::Import"
+        }
+      ]
+    }
+  }
+}

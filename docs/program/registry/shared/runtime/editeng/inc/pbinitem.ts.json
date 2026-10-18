@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/pbinitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "paper-tray-values",
+    "capabilityIds": [
+      "CAP-3ad5de5a-b4b7-43cd-a705-3c6ed01588f9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/inc/pbinitem.ts",
+        "docs/program/calc-core.md#Shared native byte values and paper-tray defaults (task139)"
+      ],
+      "justification": "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/editeng/pbinitem.hxx",
+      "upstreamSymbols": [
+        "SvxPaperBinItem",
+        "PAPERBIN_PRINTER_SETTINGS"
+      ]
+    }
+  }
+}

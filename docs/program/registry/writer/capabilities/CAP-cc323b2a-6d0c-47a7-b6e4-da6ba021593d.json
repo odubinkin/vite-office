@@ -1,0 +1,155 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-cc323b2a-6d0c-47a7-b6e4-da6ba021593d",
+    "capabilityId": "CAP-cc323b2a-6d0c-47a7-b6e4-da6ba021593d",
+    "suite": "writer",
+    "subsystem": "font-enum-ownership",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Font weight and posture consumers use the original Tools enum owner and native member names without TextItem alias exports.",
+      "Existing literal enum values and actual Svx item behavior are preserved across formatting, import and presentation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task124 removes the temporary TextItem FontWeight and FontItalic const/type compatibility bridges. TextItem and all existing Writer defaults, attributes, text hints, numbering fonts, ODT import and paragraph painting consumers use the single original tools enums and native WEIGHT_/ITALIC_ member names directly. Literal numeric values, Svx item behavior and existing document contracts are unchanged. Only two obsolete bridge-consistency assertions are removed; native value, conversion and Writer behavioral assertions remain. This supersedes earlier task122/123 alias notes without rewriting history. The user explicitly authorizes canonical shared and Writer corrections without compatibility workarounds. Existing semantic states, provenance classifications, mapped/local-only status and conscious save/open/recovery deviations remain unchanged; this owner/import cleanup is not broad native parity certification. Complete document/UI and same-model ODS load/save remain pending. Whole Calc and complete changed shared owners require raw S/B/F/L100; Writer-only coverage gaps remain exempt by user instruction. No full regression until minimum actual UI+ODS readiness, then relevant repairs and goal pause."
+    },
+    "capability": "Direct canonical Tools font enum consumers",
+    "gaps": [
+      "Complete native font/document/UI and ODS parity are not certified by this owner/import migration.",
+      "Writer-only coverage gaps are explicitly exempt; shared and Calc raw coverage remain mandatory100."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/txtfld.ts",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+          "marker": "FontWeight"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+          "marker": "FontWeight"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/browser/editor/native-numbering-font.test.tsx",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.test.tsx",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-canonical-state.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-split-attributes.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-format-to-text.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-section-navigation.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/text/native-numbering-font.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/inc/poolfmt.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Direct canonical Tools font enum consumers (task124)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl"
+        },
+        {
+          "path": "sw/source/core/txtnode/txatbase.cxx",
+          "marker": "RES_TXTATR_AUTOFMT"
+        },
+        {
+          "path": "sw/source/core/text/txtfld.cxx",
+          "marker": "SwTextFormatter::NewNumberPortion"
+        },
+        {
+          "path": "sw/source/core/attr/swatrset.cxx",
+          "marker": "SwAttrPool"
+        },
+        {
+          "path": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "DocumentStylePoolManager::GetTextCollFromPool"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "writer-canonical-font-enum-consumption",
+    "scopeLimitations": [
+      "Task124 removes the temporary TextItem FontWeight and FontItalic const/type compatibility bridges. TextItem and all existing Writer defaults, attributes, text hints, numbering fonts, ODT import and paragraph painting consumers use the single original tools enums and native WEIGHT_/ITALIC_ member names directly. Literal numeric values, Svx item behavior and existing document contracts are unchanged. Only two obsolete bridge-consistency assertions are removed; native value, conversion and Writer behavioral assertions remain. This supersedes earlier task122/123 alias notes without rewriting history. The user explicitly authorizes canonical shared and Writer corrections without compatibility workarounds. Existing semantic states, provenance classifications, mapped/local-only status and conscious save/open/recovery deviations remain unchanged; this owner/import cleanup is not broad native parity certification. Complete document/UI and same-model ODS load/save remain pending. Whole Calc and complete changed shared owners require raw S/B/F/L100; Writer-only coverage gaps remain exempt by user instruction. No full regression until minimum actual UI+ODS readiness, then relevant repairs and goal pause."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

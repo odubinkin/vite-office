@@ -1,0 +1,237 @@
+---
+id: "202610181503-YCCX41"
+title: "Run minimal Calc ODS milestone full regression and pause"
+result_summary: "Minimal core/basic ODS milestone verified. Full checkpoint complete with focused recovery;pause goal as requested."
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 19
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-18T15:03:44.500Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-18T15:30:28.146Z"
+  updated_by: "CODER"
+  note: "Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T15:31:55.819Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent review:one full milestone run completed,seven assertion failures recovered in task206;only exempt Writer coverage gaps remain."
+  evaluated_sha: "f157ea1e795b0f08597b69e008d292053eb68edf"
+  blueprint_digest: "8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd"
+  evidence_refs:
+    - ".agentplane/tasks/202610181503-YCCX41/README.md"
+    - ".agentplane/tasks/202610181503-YCCX41/quality/20261018-153155819-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181503-YCCX41/quality/20261018-153155819-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181503-YCCX41/quality/20261018-153155819-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181503-YCCX41/blueprint/resolved-snapshot.json"
+    - "output/playwright/task205-checks/final-audit.json"
+    - "output/playwright/task205-checks/final-gates.json"
+  findings:
+    - "Reviewed committed checkpoint058019b9eca9 and actual logs/manifests:16952office pass then2assertions recovered;inventory123strict100,tooling failures recovered,Calc237strict100. All374browser/static pass. Every raw counter positive for404shared+60Calc. Frozen65source hashes and5references restored;task206DONE. No UI or second full replay."
+commit:
+  hash: "f157ea1e795b0f08597b69e008d292053eb68edf"
+  message: "📋 YCCX41 calc: bind committed checkpoint review target"
+comments:
+  -
+    author: "CODER"
+    body: "Start:run the user-requested full all-app checkpoint after minimal same-model ODS readiness;classify Writer-only coverage exemption,then pause goal without starting UI."
+  -
+    author: "CODER"
+    body: "Start:attach the committed verification-only checkpoint058019b9eca9 as explicit review target;all verification and focused recovery evidence is complete."
+  -
+    author: "CODER"
+    body: "Verified:full checkpoint and focused recovery complete;reviewedf157ea1e795b includes committed checkpoint058019b9eca9. Calc/shared raw100,374browser/static pass;only exempt Writer coverage gaps remain. Pause goal."
+events:
+  -
+    type: "status"
+    at: "2026-10-18T15:03:44.902Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start:run the user-requested full all-app checkpoint after minimal same-model ODS readiness;classify Writer-only coverage exemption,then pause goal without starting UI."
+  -
+    type: "verify"
+    at: "2026-10-18T15:30:28.146Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure."
+  -
+    type: "status"
+    at: "2026-10-18T15:31:39.864Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start:attach the committed verification-only checkpoint058019b9eca9 as explicit review target;all verification and focused recovery evidence is complete."
+  -
+    type: "status"
+    at: "2026-10-18T15:32:13.842Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:full checkpoint and focused recovery complete;reviewedf157ea1e795b includes committed checkpoint058019b9eca9. Calc/shared raw100,374browser/static pass;only exempt Writer coverage gaps remain. Pause goal."
+doc_version: 3
+doc_updated_at: "2026-10-18T15:32:13.843Z"
+doc_updated_by: "CODER"
+description: "Task205:user-requested all-app checkpoint after task204 minimal editable core/basic ODS readiness. Execute full office coverage,inventory,tooling,all browser projects and static checks with all5native references absent. Preserve Writer-only coverage exemption;fix applicable Calc/shared regressions if found. No UI implementation or language detour. After successful applicable checks pause the goal."
+sections:
+  Summary: "Task205 executes the full all-app regression checkpoint at the minimal Calc core/basic ODS milestone,and then pauses the goal. UI remains a separate future task."
+  Scope: "Verification and task evidence only,with all5native reference symlinks absent during all execution and restored afterward. Full office raw coverage,inventory/tooling,all browser projects and static build. Preserve strict Calc/shared raw100 and exact owner audit;Writer-only coverage gaps are explicitly exempt and must not be fixed. Applicable Calc/shared regression fixes,if any,must have concrete causes and task-local evidence;no feature expansion or UI. No network or native execution. Keep calc branch and this checkout."
+  Plan: "1.Execute the full all-app verification once at the actual minimal core/ODS milestone,without native source references. 2.Classify failures from retained logs/raw coverage;exempt only Writer coverage gaps and correct applicable regressions within approved scope. 3.Record exact results and same-agent quality review,finish checkpoint,and pause the goal. No UI work."
+  Verify Steps: |-
+    python3 output/playwright/task205-checks/full-run.py: execute npm run test:coverage -- --coverage.reportOnFailure=true; npm run test:inventory:coverage; npm run test:tooling; npm run test:e2e; npm run test:static,with all5native links absent/restored. Retain complete logs and exit manifests.
+    node output/playwright/task205-checks/final-audit.mjs: inspect actual test outcomes/raw counters,accept only Writer-only coverage exception,confirm Calc/shared exact owners and all5links restored,scope/hashes/clean tracked state.
+    ap doctor and node .agentplane/policy/check-routing.mjs;record verification,commit task evidence,same-agent quality review,finish;then pause the existing goal as explicitly requested.
+  Verification: |-
+    Command:python3 output/playwright/task205-checks/full-run.py. Result:full checkpoint executed once,with concrete failures retained and subsequently recovered in task206. Evidence:office970files/16954cases,16952pass/2assertionfail;inventory123cases/2fail;tooling102cases/3fail;all374browser cases pass;static build smoke passes. All5native references absent during execution/restored in finally. Scope:all applications plus inventory/tooling/browser/static,no native execution or UI implementation.
+    Command:task206 focused recovery scripts and final-audit. Result:pass. Evidence:12Writer frame cases,inventory123cases/raw S1734/B1292/F436/L1668 all100,3previously failing tooling files pass. Complete exclusive ownership discovery passes with3additional Writer and2Calc integration files correctly assigned. Final Calc88files/237cases,60exact executable owners raw S5452/B3491/F1095/L4888 all100. No production behavior,coverage thresholds or dependency-guard changes. Source72bd3975408d;task206 verification/evaluator records contain source/default proofs.
+    Command:node output/playwright/task205-checks/final-audit.mjs. Result:pass. Evidence:all404shared and60Calc raw executable owners have every counter positive;5Writer files contain36uncovered raw counters,explicitly exempt and unchanged. Task20465source hashes stable. Exact5reference symlinks restored. Initial failed reports remain unaltered;successful focused recovery cited separately;the16952passing cases were not replayed unnecessarily.
+    Command:ap doctor and node .agentplane/policy/check-routing.mjs. Result:pass. Evidence:final-gates.json;existing managed-hook warning only. Scope:task checkpoint and routing,not policy modifications.
+    Outcome:minimum core is ready for a separate UI task restricted to scalar cell editing,existing arithmetic/local references and basic same-model ODS content. Arbitrary ODS fidelity/full formulas/styles/rich text remain outside this milestone. No UI work begins. Following quality review/closure,the existing goal will be paused as explicitly requested.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-18T15:30:28.146Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T15:29:42.862Z, excerpt_hash=sha256:5afde93728a1f8a947f0200a24371a270a98c0080a8541892aec19cb83635ed3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181503-YCCX41/blueprint/resolved-snapshot.json
+    - old_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+    - current_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181503-YCCX41
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610181503-YCCX41
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "No production changes planned. Revert only task205 evidence if needed;restore all5reference symlinks in finally. Preserve all prior Calc/Writer work;no merge."
+  Findings: |-
+    User explicitly requested full run at minimum readiness,then goal pause,and separately confirmed UI must not be implemented here. Task204 source ca72d59c6fa8/close584100e09d29 reached content-only scalar/local-formula ODS milestone. Standing authorization covers this checkpoint. Deferred language task197 and unrelated active Writer tasks remain untouched.
+
+    - Observation: Command npm run test:coverage -- --coverage.reportOnFailure=true exited 1; actual complete log output/playwright/task205-checks/task205-full-office.log.
+      Impact: Required acceptance check failed; no global pass claim.
+      Resolution: Recompute route, inspect exact failure after independent remaining full checks; correct only approved Calc/shared scope and retain Writer-only coverage gaps as instructed.
+
+    - Observation: Command npm run test:inventory:coverage exited 1; actual complete log output/playwright/task205-checks/task205-full-inventory.log.
+      Impact: Required acceptance check failed; no global pass claim.
+      Resolution: Recompute route, inspect exact failure after independent remaining full checks; correct only approved Calc/shared scope and retain Writer-only coverage gaps as instructed.
+
+    - Observation: Command npm run test:tooling exited 1; actual complete log output/playwright/task205-checks/task205-full-tooling.log.
+      Impact: Required acceptance check failed; no global pass claim.
+      Resolution: Recompute route, inspect exact failure after independent remaining full checks; correct only approved Calc/shared scope and retain Writer-only coverage gaps as instructed.
+
+    - Observation: Full run completed once. All7actual assertion failures were stale source/registry/ownership expectations and are repaired in task206,with pinned source evidence and focused passing reruns. Global office raw gaps occur only in5Writer files;all404shared and60Calc owners have every raw counter positive.
+      Impact: Initial full-run exit codes remain nonzero and are preserved honestly. Writer-only coverage gaps must not be filled;full native ODF/UI parity remains unclaimed.
+      Resolution: Accept successful focused recovery and existing user Writer-only coverage exemption. Browser374cases/static smoke pass;inventory123strict100 and final Calc237strict100 pass. No full replay or feature expansion;finish checkpoint and pause goal now.
+id_source: "generated"
+---
+## Summary
+
+Task205 executes the full all-app regression checkpoint at the minimal Calc core/basic ODS milestone,and then pauses the goal. UI remains a separate future task.
+
+## Scope
+
+Verification and task evidence only,with all5native reference symlinks absent during all execution and restored afterward. Full office raw coverage,inventory/tooling,all browser projects and static build. Preserve strict Calc/shared raw100 and exact owner audit;Writer-only coverage gaps are explicitly exempt and must not be fixed. Applicable Calc/shared regression fixes,if any,must have concrete causes and task-local evidence;no feature expansion or UI. No network or native execution. Keep calc branch and this checkout.
+
+## Plan
+
+1.Execute the full all-app verification once at the actual minimal core/ODS milestone,without native source references. 2.Classify failures from retained logs/raw coverage;exempt only Writer coverage gaps and correct applicable regressions within approved scope. 3.Record exact results and same-agent quality review,finish checkpoint,and pause the goal. No UI work.
+
+## Verify Steps
+
+python3 output/playwright/task205-checks/full-run.py: execute npm run test:coverage -- --coverage.reportOnFailure=true; npm run test:inventory:coverage; npm run test:tooling; npm run test:e2e; npm run test:static,with all5native links absent/restored. Retain complete logs and exit manifests.
+node output/playwright/task205-checks/final-audit.mjs: inspect actual test outcomes/raw counters,accept only Writer-only coverage exception,confirm Calc/shared exact owners and all5links restored,scope/hashes/clean tracked state.
+ap doctor and node .agentplane/policy/check-routing.mjs;record verification,commit task evidence,same-agent quality review,finish;then pause the existing goal as explicitly requested.
+
+## Verification
+
+Command:python3 output/playwright/task205-checks/full-run.py. Result:full checkpoint executed once,with concrete failures retained and subsequently recovered in task206. Evidence:office970files/16954cases,16952pass/2assertionfail;inventory123cases/2fail;tooling102cases/3fail;all374browser cases pass;static build smoke passes. All5native references absent during execution/restored in finally. Scope:all applications plus inventory/tooling/browser/static,no native execution or UI implementation.
+Command:task206 focused recovery scripts and final-audit. Result:pass. Evidence:12Writer frame cases,inventory123cases/raw S1734/B1292/F436/L1668 all100,3previously failing tooling files pass. Complete exclusive ownership discovery passes with3additional Writer and2Calc integration files correctly assigned. Final Calc88files/237cases,60exact executable owners raw S5452/B3491/F1095/L4888 all100. No production behavior,coverage thresholds or dependency-guard changes. Source72bd3975408d;task206 verification/evaluator records contain source/default proofs.
+Command:node output/playwright/task205-checks/final-audit.mjs. Result:pass. Evidence:all404shared and60Calc raw executable owners have every counter positive;5Writer files contain36uncovered raw counters,explicitly exempt and unchanged. Task20465source hashes stable. Exact5reference symlinks restored. Initial failed reports remain unaltered;successful focused recovery cited separately;the16952passing cases were not replayed unnecessarily.
+Command:ap doctor and node .agentplane/policy/check-routing.mjs. Result:pass. Evidence:final-gates.json;existing managed-hook warning only. Scope:task checkpoint and routing,not policy modifications.
+Outcome:minimum core is ready for a separate UI task restricted to scalar cell editing,existing arithmetic/local references and basic same-model ODS content. Arbitrary ODS fidelity/full formulas/styles/rich text remain outside this milestone. No UI work begins. Following quality review/closure,the existing goal will be paused as explicitly requested.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-18T15:30:28.146Z — VERIFY — ok
+
+By: CODER
+
+Note: Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T15:29:42.862Z, excerpt_hash=sha256:5afde93728a1f8a947f0200a24371a270a98c0080a8541892aec19cb83635ed3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181503-YCCX41/blueprint/resolved-snapshot.json
+- old_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+- current_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181503-YCCX41
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610181503-YCCX41
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+No production changes planned. Revert only task205 evidence if needed;restore all5reference symlinks in finally. Preserve all prior Calc/Writer work;no merge.
+
+## Findings
+
+User explicitly requested full run at minimum readiness,then goal pause,and separately confirmed UI must not be implemented here. Task204 source ca72d59c6fa8/close584100e09d29 reached content-only scalar/local-formula ODS milestone. Standing authorization covers this checkpoint. Deferred language task197 and unrelated active Writer tasks remain untouched.
+
+- Observation: Command npm run test:coverage -- --coverage.reportOnFailure=true exited 1; actual complete log output/playwright/task205-checks/task205-full-office.log.
+  Impact: Required acceptance check failed; no global pass claim.
+  Resolution: Recompute route, inspect exact failure after independent remaining full checks; correct only approved Calc/shared scope and retain Writer-only coverage gaps as instructed.
+
+- Observation: Command npm run test:inventory:coverage exited 1; actual complete log output/playwright/task205-checks/task205-full-inventory.log.
+  Impact: Required acceptance check failed; no global pass claim.
+  Resolution: Recompute route, inspect exact failure after independent remaining full checks; correct only approved Calc/shared scope and retain Writer-only coverage gaps as instructed.
+
+- Observation: Command npm run test:tooling exited 1; actual complete log output/playwright/task205-checks/task205-full-tooling.log.
+  Impact: Required acceptance check failed; no global pass claim.
+  Resolution: Recompute route, inspect exact failure after independent remaining full checks; correct only approved Calc/shared scope and retain Writer-only coverage gaps as instructed.
+
+- Observation: Full run completed once. All7actual assertion failures were stale source/registry/ownership expectations and are repaired in task206,with pinned source evidence and focused passing reruns. Global office raw gaps occur only in5Writer files;all404shared and60Calc owners have every raw counter positive.
+  Impact: Initial full-run exit codes remain nonzero and are preserved honestly. Writer-only coverage gaps must not be filled;full native ODF/UI parity remains unclaimed.
+  Resolution: Accept successful focused recovery and existing user Writer-only coverage exemption. Browser374cases/static smoke pass;inventory123strict100 and final Calc237strict100 pass. No full replay or feature expansion;finish checkpoint and pause goal now.

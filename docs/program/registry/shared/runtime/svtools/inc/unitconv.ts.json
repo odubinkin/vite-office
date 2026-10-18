@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/inc/unitconv.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "metric-unit-conversion",
+    "capabilityIds": [
+      "CAP-3a59eaa1-399b-45f7-8063-84fce73d2b6b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svtools/source/misc/native-unitconv.test.ts",
+        "docs/program/calc-core.md#Original shared metric units for font-height attributes (task125)"
+      ],
+      "justification": "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause. Header exports borrow the actual source/misc declarations; no duplicate local declaration ownership is claimed.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/svtools/unitconv.hxx",
+      "upstreamSymbols": [
+        "CalcToUnit",
+        "CalcToPoint",
+        "ItemToControl",
+        "ControlToItem",
+        "MapToFieldUnit"
+      ]
+    }
+  }
+}

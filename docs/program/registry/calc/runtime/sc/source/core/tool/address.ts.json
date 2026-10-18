@@ -9,7 +9,8 @@
     "subsystem": "coordinate-model",
     "capabilityIds": [
       "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
-      "CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008"
+      "CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008",
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -24,9 +25,10 @@
         "apps/office/src/sc/source/core/tool/sticky-range.test.ts#preserves existing maximum end anchors",
         "vendor/libreoffice-reference/sc/source/core/tool/address.cxx#ScRange::MoveSticky",
         "apps/office/src/sc/source/core/tool/native-address.test.ts#matches all 768 pinned native sticky movements",
-        "scripts/calc-address-native-probe.mjs#const functions = interval"
+        "scripts/calc-address-native-probe.mjs#const functions = interval",
+        "apps/office/src/sc/source/core/data/reference-protocol.test.ts"
       ],
-      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task 202610090725-D6Z7XD adds source-owned sticky range movement and independent conditional row/column adjustments; original semantic statuses remain unverified. Literal endpoint/error cases cover pre-existing and newly sticky anchors, full axes, singleton/reversed ranges, narrowing and strict boundary/overlap limits. Shared owners remain unchanged. Native probe compiles unchanged numerical definitions in a bounded class shell with three document getters and exact signed widths. All768 native sticky result/error tuples match actual TypeScript owners under ASan/UBSan; source and body SHA256 hashes are checked. Full ScDocument integration, other compiled but unexecuted methods and undefined arithmetic domains remain unverified; no whole-module semantic promotion.",
+      "justification": "Calc task 202610090711-S6VCEJ implements the bounded numerical coordinate foundation from the exact pinned local source. Defaults, signed widths, copies, ordering, inclusive containment/intersection and ordinary movement are tested independently with real V8 coverage. Header-declared inline numerical owners are implemented in core/tool and re-exported through the original header boundary. No browser, storage, undo, notification or Writer ownership is duplicated. Whole native API and compiled differential parity remain unverified. Task 202610090725-D6Z7XD adds source-owned sticky range movement and independent conditional row/column adjustments; original semantic statuses remain unverified. Literal endpoint/error cases cover pre-existing and newly sticky anchors, full axes, singleton/reversed ranges, narrowing and strict boundary/overlap limits. Shared owners remain unchanged. Native probe compiles unchanged numerical definitions in a bounded class shell with three document getters and exact signed widths. All768 native sticky result/error tuples match actual TypeScript owners under ASan/UBSan; source and body SHA256 hashes are checked. Full ScDocument integration, other compiled but unexecuted methods and undefined arithmetic domains remain unverified; no whole-module semantic promotion. Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity.",
       "knownViolations": [],
       "localSymbols": [
         "ScAddress",
@@ -39,7 +41,8 @@
         "IncEndColSticky",
         "IncEndRowSticky",
         "IncColIfNotLessThan",
-        "IncRowIfNotLessThan"
+        "IncRowIfNotLessThan",
+        "ScAddressDetails"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sc/source/core/tool/address.cxx",

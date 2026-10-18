@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+    "capabilityId": "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+    "suite": "calc",
+    "subsystem": "document-calculation-options",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native ScDocOptions defaults,copy/reset,scalar/date API,search-mode transitions and cached comparison plus actual ScTpCalcItem are represented over shared source locale/default/SearchParam owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Physical C++ ownership is erased under JS GC;system Locale and currently shipped normal-mode Common schema fields are explicit browser/resource bindings. Native source values and transitions are preserved."
+    },
+    "capability": "Native document calculation options and preferences item",
+    "gaps": [
+      "Full ScDocCfg/live user configuration,formatter services and real Calc document/sheet/column/UI/ODS remain pending.",
+      "No whole-module parity,native compiler/probe,full original Calc QA or physical ABI claim."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/docoptio.hxx",
+          "marker": "class SC_DLLPUBLIC ScDocOptions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/docoptio.cxx",
+          "marker": "ScDocOptions::ResetDocOptions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/optutil.cxx",
+          "marker": "ScOptionsUtil::IsMetricSystem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "ScDocOptions aOpt = m_pDoc->GetDocOptions();"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/docoptio.hxx",
+          "marker": "class SC_DLLPUBLIC ScDocOptions"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/docoptio.ts",
+          "marker": "ScDocOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/docoptio.ts",
+          "marker": "export class ScDocOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/optutil.ts",
+          "marker": "ScOptionsUtil"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/docoptio.test.ts",
+          "marker": "native Calc document options"
+        },
+        {
+          "path": "apps/office/src/unotools/source/i18n/measurement.test.ts",
+          "marker": "uses the original measurement strings"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native document calculation options (task185)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "document-calculation-options-values",
+    "scopeLimitations": [
+      "Full ScDocCfg/live user configuration,formatter services and real Calc document/sheet/column/UI/ODS remain pending.",
+      "No whole-module parity,native compiler/probe,full original Calc QA or physical ABI claim.",
+      "Native comparison omission and cached-mode effect preserved as CALC171;measurement UK-to-US source policy preserved as CALC172. Source defaults1950and709/720 verified against real resources.",
+      "Native QA caller anchor is static context only;source-derived value assertions and actual browser/Worker checks are the executed evidence."
+    ]
+  }
+}

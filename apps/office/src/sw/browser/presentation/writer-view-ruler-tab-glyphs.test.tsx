@@ -1,7 +1,9 @@
 /** @fileoverview Checks typed tab glyphs and their anchored ownership through the actual Writer projection. */
+import { encodeSfxPoolItem } from "../filter/xml/item-codec";
+import { createTabs } from "../../../../test/tab-item-fixtures";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -74,7 +76,7 @@ function fixture() {
   const shell = session.view.GetWrtShell();
   shell.Insert("RulerTabGlyphProof");
   shell.SetParagraphItem(
-    SvxTabStopItem.FromStops(
+    createTabs(
       RES_PARATR_TABSTOP,
       [
         new SvxTabStop(360, SvxTabAdjust.Default, ";", "~"),
@@ -115,7 +117,8 @@ function rectangles(owner: Element) {
 
 /** Reads every stored model field, including hidden stops. @param shell - Writer editing owner. @returns Primitive item. */
 function itemValue(shell: ReturnType<typeof fixture>["shell"]) {
-  return (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue();
+  return encodeSfxPoolItem(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem)
+    .value;
 }
 
 describe("Writer typed ruler tab markers", /** Groups drawing, projection and accepted gesture checks. @returns Nothing. */ () => {

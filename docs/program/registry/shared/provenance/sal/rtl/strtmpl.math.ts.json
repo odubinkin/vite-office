@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/strtmpl.math.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/strtmpl.hxx",
+    "localSymbols": [
+      "doubleToString"
+    ],
+    "upstreamSymbols": [
+      "doubleToString"
+    ],
+    "preservedResponsibilities": [
+      "Task202 implements the consumed strtmpl.hxx doubleToString Automatic/Max/no-group/erase specialization. Native JS shortest decimal supplies the decimal decomposition; BigInt reproduces source decimal half-up rounding. Native exact safe-integer handling,15significant-digit rounding,format selection before carry,three-digit signed exponent,signed zero,NaN/INF and DBL_MAX four-nextafter guard are represented. No Dragonbox library or physical buffer manager is ported."
+    ],
+    "omittedResponsibilities": [
+      "Only the consumed Automatic/Max/no-group/erase decimal mode is implemented; other precision/mode/grouping/buffer APIs remain unported. Source-derived witnesses and host primitive checks are not executed native QA or whole-library certification."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.math.ts",
+          "marker": "doubleToString"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
+          "marker": "doubleToString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/rtl/strtmpl.math.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native strtmpl.hxx template contains both pointer/character-storage algorithms and decimal conversion. Browser decimal conversion specializes the binary64 responsibility on native shortest-decimal JS strings, independently of UTF16 pointer and allocation storage. The numeric shard preserves the native filename prefix and one implementation owner while keeping this consumed numeric specialization separate from the existing character-storage template specialization; no second formatter or physical buffer allocator is introduced."
+    }
+  }
+}

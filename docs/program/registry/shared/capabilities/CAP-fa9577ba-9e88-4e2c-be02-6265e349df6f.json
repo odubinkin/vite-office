@@ -1,0 +1,97 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-fa9577ba-9e88-4e2c-be02-6265e349df6f",
+    "capabilityId": "CAP-fa9577ba-9e88-4e2c-be02-6265e349df6f",
+    "suite": "shared",
+    "subsystem": "item-pool-ranges",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original linked-pool/master and lazy range-value contracts feed real pool-only item-set construction.",
+      "Default/slot ownership follows actual secondary metadata; cached range retention CALC151 is preserved."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task172 restores actual shared SfxItemPool master/secondary links, detach/attach propagation, terminal traversal, metadata-based lazy merged ranges, secondary default/slot resolution and native pool-only SfxItemSet construction. Native WhichRangesContainer value storage is immutable JS tuple arrays; MergeRange remains in original itemset implementation responsibility and type declarations move to the canonical whichranges header. Ordered insertion/adjacent union preserves independent values; the first native needMerge conjunct is redundant for sorted valid inputs. Native includes produce a safe ES-module function-binding cycle used only after initialization, with no import-order workaround. Logical range cache retention after secondary changes is preserved (CALC151). Existing explicit-range Writer callers and its separate browser snapshot/default registry remain intact; that registry does not invent native metadata ranges. No smart-pointer/refcount/cache-manager library is added; GC owns object lifetime. Full native named/copy/shutdown/user-default pool contracts, styles/document/UI/ODS remain pending."
+    },
+    "capability": "Native pool-chain ranges and item-set construction",
+    "gaps": [
+      "Native invalid cyclic/two-master pointer graphs, ABI/concurrency and physical allocation/lifetime behavior receive no invented supported outcome.",
+      "Full named/copy/shutdown/user-default pool owners, style/pool construction, Calc document/UI/same-model ODS remain pending.",
+      "Cases are source-derived; the native screenshot range consumer is supporting QA context, not a claimed port of a pool-chain QA suite."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/itempool.ts",
+          "marker": "GetMergedIdRanges"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "marker": "export function MergeRange"
+        },
+        {
+          "path": "apps/office/src/svl/inc/whichranges.ts",
+          "marker": "WhichRangesContainer"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-pool-chain.test.ts",
+          "marker": "uses native merged metadata ranges"
+        },
+        {
+          "path": "apps/office/e2e/shared/pool-chain.spec.ts",
+          "marker": "constructs native pool-only item sets"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native pool-chain ranges (task172)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-151"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "SfxItemPool::GetMergedIdRanges"
+        },
+        {
+          "path": "svl/source/items/itemset.cxx",
+          "marker": "WhichRangesContainer::MergeRange"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/screenshots/screenshots.cxx",
+          "marker": "mpItemSet->MergeRange"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/whichranges.hxx",
+          "marker": "WhichRangesContainer"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-pool-chain-ranges",
+    "scopeLimitations": [
+      "Task172 restores actual shared SfxItemPool master/secondary links, detach/attach propagation, terminal traversal, metadata-based lazy merged ranges, secondary default/slot resolution and native pool-only SfxItemSet construction. Native WhichRangesContainer value storage is immutable JS tuple arrays; MergeRange remains in original itemset implementation responsibility and type declarations move to the canonical whichranges header. Ordered insertion/adjacent union preserves independent values; the first native needMerge conjunct is redundant for sorted valid inputs. Native includes produce a safe ES-module function-binding cycle used only after initialization, with no import-order workaround. Logical range cache retention after secondary changes is preserved (CALC151). Existing explicit-range Writer callers and its separate browser snapshot/default registry remain intact; that registry does not invent native metadata ranges. No smart-pointer/refcount/cache-manager library is added; GC owns object lifetime. Full native named/copy/shutdown/user-default pool contracts, styles/document/UI/ODS remain pending.",
+      "Task172 bounded acceptance:199 related scenarios/19files,187Calc/76files, production build,1actual shared Chromium pool/chain/set scenario and1targeted Writer production startup/load/edit case pass. Exact2changed shared executable owners raw S342/B263/F71/L277 and all33Calc S4179/B2731/F821/L3727 have every raw counter positive100. All13source gates pass. Seven pinned original blobs and15675sorted range-pair cases support the native value projection; the original first merge predicate conjunct is mathematically redundant on sorted valid input. Actual pool-first shared browser initialization and Writer startup validate the original module dependency cycle without lazy import workarounds. All4source references are absent during runtime checks/restored afterward. CALC151 cache retention is preserved; browser snapshot defaults never invent native metadata. Full native named/copy/shutdown/user-default pools, styles/Calc document/connected UI/same-model ODS and broad parity remain pending. No full all-app run occurred."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

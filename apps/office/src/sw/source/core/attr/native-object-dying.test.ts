@@ -20,18 +20,18 @@ it("native CheckRegistration returns original replacement owners only for the ex
   expect(changed).toEqual(new ModifyChangedHint(root));
   expect(changed?.m_pNew).toBe(root);
   expect(client.GetRegisteredIn()).toBe(root);
-  expect(client.HasBroadcaster()).toBe(true);
+  expect(client.GetRegisteredIn()).toBeDefined();
   expect(parent.HasWriterListeners()).toBe(false);
   expect(client.CheckRegistration(new ObjectDyingHint(root))).toEqual(
     new ModifyChangedHint(undefined),
   );
   expect(client.GetRegisteredIn()).toBeUndefined();
-  expect(client.HasBroadcaster()).toBe(false);
+  expect(client.GetRegisteredIn()).toBeUndefined();
   expect(client.CheckRegistration(new ObjectDyingHint(root))).toBeUndefined();
   client.RegisterToModify(parent);
   client.EndListeningAll();
   expect(client.GetRegisteredIn()).toBeUndefined();
-  expect(client.HasBroadcaster()).toBe(false);
+  expect(client.GetRegisteredIn()).toBeUndefined();
   expect(parent.HasWriterListeners()).toBe(false);
   const modify = new SwModify();
   modify.RegisterToModify(root);

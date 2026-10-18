@@ -1,5 +1,4 @@
 /** @fileoverview Checks pinned Writer embedded-font fixtures through package, model, Worker and export paths. */
-
 import fs from "node:fs";
 import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
@@ -14,7 +13,6 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
-
 const fixture = new Uint8Array(
   fs.readFileSync("src/sw/qa/extras/embedded_fonts/data/embed-unrestricted1.odt"),
 );
@@ -175,6 +173,8 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     };
     document.RegisterEmbeddedFont(reference);
     document.RegisterEmbeddedFont(reference);
+    document.RegisterEmbeddedFont({ ...reference, faceName: "FaceAlias" });
+    expect(document.GetEmbeddedFonts()).toHaveLength(1);
     expect(
       /** Registers a conflicting face. @returns Nothing. */ () =>
         document.RegisterEmbeddedFont({ ...reference, familyName: "Other" }),
@@ -345,7 +345,23 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
       onDiagnostic: /** Ignores unrelated fixture declarations. @returns Nothing. */ () =>
         undefined,
     });
-    expect(reopened.document.GetEmbeddedFonts()).toEqual(transferred.GetEmbeddedFonts());
+    // Native font-face names are declaration-local aliases; the shared package resource identity and bytes remain unchanged.
+    const resources =
+      /** Compares package resource identity independently of declaration aliases. @param fonts - Document resources. @returns Resource payloads. */ (
+        fonts: ReturnType<typeof transferred.GetEmbeddedFonts>,
+      ) =>
+        fonts.map(
+          /** Removes only the declaration-local alias. @param value - Resource record. @returns Resource identity and bytes. */ ({
+            faceName,
+            ...resource
+          }) => {
+            void faceName;
+            return resource;
+          },
+        );
+    expect(resources(reopened.document.GetEmbeddedFonts())).toEqual(
+      resources(transferred.GetEmbeddedFonts()),
+    );
   });
 
   it("keeps font family and page state when the upstream properties fixture has no package font", /** Uses embedded_fonts.cxx::testEmbeddedFontProps without inventing unavailable bytes. @returns Completion. */ async () => {

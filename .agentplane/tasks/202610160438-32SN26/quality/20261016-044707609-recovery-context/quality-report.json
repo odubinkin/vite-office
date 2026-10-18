@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610160438-32SN26",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-16T04:47:07.609Z",
+  "verdict": "pass",
+  "summary": "Same-agent EVALUATOR review: exact source commit cc3564904be7 and15declared source paths match final evidence. Real scanner and pinned registered-key owners preserve bounded source responsibilities;no fake full parser/LanguageTag,physical memory engine or parity promotion.13related/196Calc tests,exact raw100 owner sets,build/actual browser/Worker,source data and13gates pass.",
+  "evaluated_sha": "cc3564904be7e0bb03d93326e3eb0b7b270c916d",
+  "blueprint_digest": "23fefa070afa2a10e429d98c378eb0065785a911ed518784eedb5bc33b6a9d42",
+  "findings": [
+    "Complete general grammar,CLDR aliases/extensions,canonicalization and enclosing LanguageTag remain explicit next dependencies;UI/ODS are not ready. Native QA evidence is limited to lookup preconditions;no executed native parser or independent review is claimed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610160438-32SN26/README.md",
+    "output/playwright/task194-checks/final-audit.json",
+    "output/playwright/task194-checks/native-audit.json",
+    "output/playwright/task194-checks/source-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

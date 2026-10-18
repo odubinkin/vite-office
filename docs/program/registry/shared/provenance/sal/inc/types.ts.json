@@ -15,7 +15,9 @@
       "_sal_Sequence",
       "sal_Sequence",
       "SAL_SEQUENCE_HEADER_SIZE",
-      "SAL_NO_ACQUIRE_ARGUMENT"
+      "SAL_NO_ACQUIRE_ARGUMENT",
+      "SAL_MIN_INT64",
+      "SAL_MAX_INT64"
     ],
     "upstreamSymbols": [
       "SAL_MAX_ENUM",
@@ -25,7 +27,9 @@
       "__sal_NoAcquire",
       "_sal_Sequence",
       "sal_Sequence",
-      "SAL_SEQUENCE_HEADER_SIZE"
+      "SAL_SEQUENCE_HEADER_SIZE",
+      "SAL_MIN_INT64",
+      "SAL_MAX_INT64"
     ],
     "preservedResponsibilities": [
       "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders.",
@@ -34,10 +38,12 @@
       "Original prim.hxx inline operations retain null callback branches, actual C interface slots, initialized mapping inout pointer and TYPELIB_DANGER_GET/RELEASE ownership, signed32 inputs with unsigned64 wrap before the unsigned32 sequence allocation guard, actual static empty sequence {1,0,{0}} and lazy acquired VOID pointer. SAL sequence header offset8 is a source logical offset; it does not claim JS binary layout. Actual Int32Array storage and existing OSL Atomics implement the address of the one original sequence count; the mutable VOID global is one cross-module pointer cell. Source empty Any construction changes only pType and normal-build pData=self, leaving initialized caller pReserved untouched. The original identical equality and TYPE_ACQUIRE bodies reuse the existing actual CPPU C predicate/acquire owner. New headers declare actual C callback/record/typedef contracts only, without fake providers, allocated Any values or complete data/sequence engines. Full unchanged original prim.hxx and 72 full SAL/CPPU translation units (including genuine any/data/sequence owners) supply normal and ASan/UBSan complete streams. Caller callbacks only record arguments/order and return a caller pointer, without substituting any native operation. Initialized copied C reference records are const equality witnesses only. Physical pointer/ABI/object lifetime, arbitrary invalid JS storage/numbers/callbacks, debug1 configuration, full data/Any/Sequence/queryInterface/Reference/default RuntimeException/case/service/UI consumers, concurrency/shutdown and full upstream QA remain unfinished or unverified. System dependencies are uninstrumented and leak detection disabled; broad parity flags remain false.",
       "Complete original destr.hxx normal LP64 destruction retains original type/reference/string release ownership, base-first/reverse own-member compound order, ascending element/subrange order and size returns, temporary/provided description lifetime, callback/null/default interface branches and actual atomic sequence zero transitions. Actual original data.cxx destructStruct/destructSequence/uno_type_destructData/uno_destructData, any.cxx uno_any_destruct/uno_any_clear and sequence.cxx uno_type_sequence_destroy boundaries reuse one real destruction owner. Native free is browser GC reclamation without synthetic field resets, provider/type factories or an independent memory registry. Existing SAL sequence char-tail declaration now accepts caller-addressed logical source byte-offset storage for non-byte elements; the original empty byte tail remains Int8Array. Scalar/pointer addresses and nested compound addresses retain actual caller cells/maps, without binary JS ABI. One stable Int32Array accessor address per actual sequence record reuses the existing OSL atomic owner; the static empty sequence count uses its existing address, no independent counter. Caller-initialized Any, registered compound and element descriptions are actual native type/string owners; FFI callbacks only observe caller pointers/order/counts. Full72 unchanged original native SAL/CPPU translation units normal/ASan/UBSan compare complete initialized fields/count/name/description streams for fundamental/default/enums/derived/nested/exception/empty/base-only data, every Any class, nested Any, every element class/ranges and sequence transitions/descriptions/zero-count C boundary. Both original zero-count assertions abort in native and retain the existing browser Error assertion adaptation. Normal diagnostic-only unexpected nested Any/TYPEDEF/unsupported element branches are observed without claiming supported generic producers. Copy/construction/assignment/queryInterface/Any/Sequence/Reference/default RuntimeException/case/service/UI consumer closure, native binary/pointer/object lifetime, 32-bit/debug1, native threads/shutdown and full upstream QA remain unfinished or unverified. System dependencies remain uninstrumented and leak detection disabled. Broad parity/default/verified flags remain false.",
       "The real char-tail declaration accepts only the actual logical byte-address get operation for non-byte storage, rather than promising unimplemented full Map methods. Existing Int8Array byte tails and all source field names remain unchanged; pointer-sized scalar/Any/nested address aliases are witnessed by the original native copy caller. No binary JS ABI, storage default or independent sequence owner.",
-      "Task49 retains the actual __sal_NoAcquire enum type and numeric SAL_NO_ACQUIRE=0. SAL_NO_ACQUIRE_ARGUMENT is an immutable explicit declared-type/value witness for C++ overload erasure, not a new enum/type/value/default policy. Public Sequence uses the typed enum witness for pointer adoption, including NULL, while integer zero selects its element-pointer/length overload. Remove pointer-record shape inference and null-to-empty normalization; existing numeric symbols and Writer owners remain unchanged. Genuine original placement-constructed NULL adoption is observed only through get(), with no dereferencing destructor or invalid memory read; accepted constructor/field behavior does not certify other nullable-handle operations."
+      "Task49 retains the actual __sal_NoAcquire enum type and numeric SAL_NO_ACQUIRE=0. SAL_NO_ACQUIRE_ARGUMENT is an immutable explicit declared-type/value witness for C++ overload erasure, not a new enum/type/value/default policy. Public Sequence uses the typed enum witness for pointer adoption, including NULL, while integer zero selects its element-pointer/length overload. Remove pointer-record shape inference and null-to-empty normalization; existing numeric symbols and Writer owners remain unchanged. Genuine original placement-constructed NULL adoption is observed only through get(), with no dereferencing destructor or invalid memory read; accepted constructor/field behavior does not certify other nullable-handle operations.",
+      "Task118 adds original normal20Length base ratios/minimal pair table/getConversionMulDiv/convert/toTwips and Tools convertTwipToMm100 over shared SAL64 bounds. BigInt selects integral N and exact signed64 rounding/preconditions; number selects floating N even for numerically integral doubles. No value-based type guessing, memory library or generic ownership mechanism. Native positive-factor/index/overflow assertions have explicit checked host errors only, not native abort/ABI certification. Immutable constexpr table positivity/product/nonzero-gcd assertions are source-proven static invariants rather than runtime private fault cases. Saturating/status overloads and other Tools helpers remain pending. Writer existing LR owner reuses seven exact integer conversions; fractional font-relative rounding remains unchanged. SvxMarginItem actual default20twips on four signed16 sides, explicit/copy/Clone/get/set/payload equality and complete member Any/metric transport preserve original upper-only admission and negative narrowing. SvxOrientationItem actual enum/rotation+stacked/copy/Clone/typed enum output and enum-integer input use original shared SfxEnumItem/CPPU/CellOrientation normal generated type binding; no generator execution or fake provider. Exact9000/27000 angles are matched without modulo normalization, stacked wins. Calc143uses the actual margin default/real pooled copies and existing rotation/stacked values. Native locale/presentation/diagnostics/caches/invalid domains/ABI/fullDocPool/document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status retained without broad parity promotion. Latest user instruction supersedes task121cadence: full regression at minimum real document/cell/UI-contract and ODS load/save readiness, repair then pausegoal. Goalactive; no full suite now."
     ],
     "omittedResponsibilities": [
-      "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
+      "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement.",
+      "Task118 covers normal Length integral/floating and margin/orientation values only. Saturating/status helpers, native abort/privateconstexpr invalid-domain experiments, localized presentation/diagnostics/caches/ABI/fullDocPool/document/UI/ODS pending or excluded."
     ],
     "evidence": {
       "local": [
@@ -80,6 +86,10 @@
         {
           "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.test.ts",
           "marker": "matches original copied/adopted cold pointer ownership without eager type initialization"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/unit_conversion.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -98,6 +108,10 @@
         {
           "path": "include/sal/types.h",
           "marker": "SAL_SEQUENCE_HEADER_SIZE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/sal/types.h",
+          "marker": "SAL_MIN_INT64"
         }
       ]
     }

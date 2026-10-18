@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/editeng/section.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/editeng/section.cxx",
+    "localSymbols": [
+      "Section"
+    ],
+    "upstreamSymbols": [
+      "Section::Section"
+    ],
+    "preservedResponsibilities": [
+      "Task180 implements original Section fields/constructor and EditTextObjectImpl GetAllSections payload over actual ContentInfo/XEditAttribute. Native paragraph/border ordering,unformatted and empty sections,borrowed item references,first-Which duplicate suppression and caller-output swap/early-return behavior remain intact. UInt32 projection has the same unsigned ordering as native size_t for signed32 border producers and Section parameters recover signed32 values;no binary storage is simulated. Redundant zero-border conjunct and impossible missing-paragraph branch are folded from proven construction invariants. ContentInfo NormalizeString uses actual SharedStringPool while retaining its stable SharedString member. Existing shared owners are reused without fake text/pool/document objects. Native pool-dependent EditTextObjectImpl/EditEngineItemPool constructors,render/layout services and connected Calc document/UI/same-model ODS remain pending;no broad parity claim."
+    ],
+    "omittedResponsibilities": [
+      "Complete EditTextObjectImpl/EditEngineItemPool constructors,layout/render services and connected Calc model/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/section.ts",
+          "marker": "Section"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/section.cxx",
+          "marker": "Section::Section"
+        }
+      ]
+    }
+  }
+}

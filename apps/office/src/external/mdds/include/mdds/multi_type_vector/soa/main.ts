@@ -241,7 +241,10 @@ export const empty_event_value_ops: EventValueOps<empty_event_func> = {
   },
 };
 /** Explicit erased original scalar overload family; numeric native types are never inferred from JS values. */
-export type ContainerCallbacks<T = DelayedVectorValue> = ValueResultCallbacks<T>;
+export type ContainerCallbacks<T = DelayedVectorValue> = Omit<
+  ValueResultCallbacks<T>,
+  "mdds_mtv_emplace_back_construct" | "mdds_mtv_emplace_back_value"
+>;
 const move_construction = Symbol("native move construction");
 /** Original SoA multi_type_vector field/lifetime owner; subsequent original segment algorithms are not replaced by a different engine. */
 export class multi_type_vector<E extends ContainerEvent = empty_event_func> {

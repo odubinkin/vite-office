@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4fb628d0-f89d-4bc5-9899-44f772141581",
+    "capabilityId": "CAP-4fb628d0-f89d-4bc5-9899-44f772141581",
+    "suite": "shared",
+    "subsystem": "font-height-transport",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual FontHeight values and normal shared type binding transport the original float/short/float members.",
+      "All original font-height Any members preserve admission, rounding, partial mutation and unknown-member success."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task127 implements original FontHeight float/short/float value semantics and normal cppumaker static_struct_type_init over actual existing CPPU. Three ordinary JS scalar cells only expose stable lvalues to that existing compound contract, no new allocator/addressmanager/refcountengine/binarybuffer. Complete SvxFontHeightItem QueryValue/PutValue members0/1/2/3 retain memberbyte/convertbit, unknownuntouchedtrue, typedstruct/scalars, unsignedproperty query, signedshortinputs and original realheightreconstruction/clamp/unsigned32arithmetic. Native struct Diff is ignored on put; height failures resetproperty, failedproperty extraction returns untouchedtrue, difference reconstruction occurs before failure and can repeat. Actual Any DOUBLEadmission containsLONG sources, both height extraction calls preserved without fake fallback-success provider; DIFF genuinely uses LONGfallback after FLOATrejectsLONG. Browser noarg complete-state projection from126 retained. Normalbrowser nonfuzz environment represented; nativefuzz-onlyperformanceguard and undefinedNaN/out-of-rangesignedcast domains notcertified, nofakeFuzzingprovider. Human explicitly prioritizes ordinaryJS rounding over library reconstruction; Math.round boundedUInt32height-to-mm100pointtenths and Math.fround scalarcasts suffice. Denominator127 excludes exacthalf, nearest halfdistance1/254 exceeds conservative1e-4 floating/correction bound for maxUInt32height; short boundary witnesses only, no RTLlibraryport/exhaustive/nativebinarytests. CALC111 records original partialmutation/differenceunsigned behavior. Calc3script defaults query through actualAny. Existing metadatahistory/status and IOrecovery deviations retained; no broadparitypromotion. Localizedpresentation, realfullDocPool/document/UI/same-modelODS pending; fullregression onlyactualminimumUI+ODS readiness then repairs/pause. No C++build/generator/sanitizer/memorylibrary."
+    },
+    "capability": "Native shared font-height Any members",
+    "gaps": [
+      "Localizedpresentation/fuzz-specific and undefinednumericcast domains notcertified.",
+      "Real fullDocPool/document/UI/same-modelODS remain pending, no fullQA certificate."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.height.ts",
+          "marker": "SvxFontHeightItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "MID_FONTHEIGHT"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/status/FontHeight.ts",
+          "marker": "FontHeight"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-height-transport.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/status/FontHeight.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/heightattr.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Font-height Any transport with browser arithmetic (task127)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxFontHeightItem"
+        },
+        {
+          "path": "include/editeng/memberids.h",
+          "marker": "MID_FONTHEIGHT"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/status/FontHeight.idl",
+          "marker": "FontHeight"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-font-height-any-transport",
+    "scopeLimitations": [
+      "Task127 implements original FontHeight float/short/float value semantics and normal cppumaker static_struct_type_init over actual existing CPPU. Three ordinary JS scalar cells only expose stable lvalues to that existing compound contract, no new allocator/addressmanager/refcountengine/binarybuffer. Complete SvxFontHeightItem QueryValue/PutValue members0/1/2/3 retain memberbyte/convertbit, unknownuntouchedtrue, typedstruct/scalars, unsignedproperty query, signedshortinputs and original realheightreconstruction/clamp/unsigned32arithmetic. Native struct Diff is ignored on put; height failures resetproperty, failedproperty extraction returns untouchedtrue, difference reconstruction occurs before failure and can repeat. Actual Any DOUBLEadmission containsLONG sources, both height extraction calls preserved without fake fallback-success provider; DIFF genuinely uses LONGfallback after FLOATrejectsLONG. Browser noarg complete-state projection from126 retained. Normalbrowser nonfuzz environment represented; nativefuzz-onlyperformanceguard and undefinedNaN/out-of-rangesignedcast domains notcertified, nofakeFuzzingprovider. Human explicitly prioritizes ordinaryJS rounding over library reconstruction; Math.round boundedUInt32height-to-mm100pointtenths and Math.fround scalarcasts suffice. Denominator127 excludes exacthalf, nearest halfdistance1/254 exceeds conservative1e-4 floating/correction bound for maxUInt32height; short boundary witnesses only, no RTLlibraryport/exhaustive/nativebinarytests. CALC111 records original partialmutation/differenceunsigned behavior. Calc3script defaults query through actualAny. Existing metadatahistory/status and IOrecovery deviations retained; no broadparitypromotion. Localizedpresentation, realfullDocPool/document/UI/same-modelODS pending; fullregression onlyactualminimumUI+ODS readiness then repairs/pause. No C++build/generator/sanitizer/memorylibrary."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

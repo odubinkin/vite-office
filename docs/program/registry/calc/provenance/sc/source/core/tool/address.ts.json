@@ -20,6 +20,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/native-address.test.ts",
           "marker": "matches all 768 pinned native sticky movements"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+          "marker": "preserves local A1 details"
         }
       ],
       "upstream": [
@@ -45,7 +49,8 @@
       "IncEndColSticky",
       "IncEndRowSticky",
       "IncColIfNotLessThan",
-      "IncRowIfNotLessThan"
+      "IncRowIfNotLessThan",
+      "ScAddressDetails"
     ],
     "omittedResponsibilities": [
       "Full reference parsing/formatting, external links, native hashes and range subtraction remain outside this module implementation.",
@@ -55,7 +60,8 @@
       "Native zero/invalid coordinates, exact standard/jumbo capacities and signed 16/32-bit assignments.",
       "Original numeric constructor ordering, inclusive coordinate operations and movement error contracts; no browser-specific state.",
       "Original seven sticky movement and conditional insertion/deletion adjustment methods on the same ScRange owner, with native narrowing before limit checks.",
-      "Native differential acceptance proves all 768 configured sticky result/error outputs against unchanged extracted C++ definitions; ASan/UBSan clean and full source/body hashes recorded."
+      "Native differential acceptance proves all 768 configured sticky result/error outputs against unchanged extracted C++ definitions; ASan/UBSan clean and full source/body hashes recorded.",
+      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/address.cxx",

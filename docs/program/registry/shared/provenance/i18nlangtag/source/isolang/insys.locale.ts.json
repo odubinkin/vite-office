@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nlangtag/source/isolang/insys.locale.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nlangtag/source/isolang/inunx.cxx",
+    "localSymbols": [
+      "getPlatformLocale",
+      "unicode"
+    ],
+    "upstreamSymbols": [
+      "getLangFromEnvironment",
+      "getPlatformSystemLanguageImpl"
+    ],
+    "preservedResponsibilities": [
+      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
+    ],
+    "omittedResponsibilities": [
+      "Full LanguageTag and source system/configuration services,script fallbacks,physical OS ABI,font/pool/document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/isolang/insys.locale.ts",
+          "marker": "getPlatformLocale"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/inunx.cxx",
+          "marker": "getLangFromEnvironment"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/isolang/inunx.cxx",
+          "marker": "getPlatformSystemLanguageImpl"
+        }
+      ]
+    },
+    "rationale": "Explicit browser platform binding at the native insys selection responsibility:actual Navigator/Intl host Locale preparation and native table-based language selection replace unavailable Unix/Win32 inputs. Existing preparation is moved unchanged and shared;no native OS ABI,RTL locale service,provider class or physical cache/mutex/lifetime implementation is claimed.",
+    "responsibilities": [
+      "Task188 ports native MsLangId configured data/UI scalar state,getSystemLanguage/getSystemUILanguage,getConfigured getters,getRealLanguage alias/UNKNOWN rules and public Locale conversion/fallback wrappers. Browser platform selection reuses the exact prior prepared Locale algorithm in one lower-level owner,with independent lazy logical data/UI language snapshots and native table fallback;it does not emulate Unix/Win32/RTL ABI or physical caches. Existing live SysLocale field query delegates this preparation and respects actual configured override through an internal field projection,without inventing a LanguageTag/SvtSysLocale service. LocaleData uses actual public getFallbackLocale so empty language resolves configured/system language. Existing private table algorithms and nonempty behavior remain. Full LanguageTag synchronization/canonicalization,script fallbacks,font/pool/document/UI/ODS remain pending;no compiler,generator,probe,new ICU or ownership engine."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Explicit browser platform binding at the native insys selection responsibility:actual Navigator/Intl host Locale preparation and native table-based language selection replace unavailable Unix/Win32 inputs. Existing preparation is moved unchanged and shared;no native OS ABI,RTL locale service,provider class or physical cache/mutex/lifetime implementation is claimed."
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/isolang/insys.locale.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Native insys.cxx selects inunx/inwnt translation units. The TypeScript insys boundary selects browser platform inputs and separates shared Locale preparation,retaining native role/entry points and logical snapshots while explicitly diverging from OS ABI/input bodies."
+    }
+  }
+}

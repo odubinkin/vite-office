@@ -1,0 +1,108 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a",
+    "capabilityId": "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a",
+    "suite": "calc",
+    "subsystem": "scalar-document-editing",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed."
+    },
+    "capability": "Minimal scalar document editing chain",
+    "gaps": [
+      "UI is a separate later task;basic formula operations and same-model ODS are the next core priorities.",
+      "Full constructors,formatting,rich text,formula/listener services and broad upstream parity are not implemented."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::SetValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/document.hxx",
+          "marker": "GetSharedString"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.ts",
+          "marker": "ScDocument"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table.ts",
+          "marker": "ScTable"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/column.ts",
+          "marker": "ScColumn"
+        },
+        {
+          "path": "apps/office/src/sc/inc/document.ts",
+          "marker": "ScDocument"
+        },
+        {
+          "path": "apps/office/src/sc/inc/table.ts",
+          "marker": "ScTable"
+        },
+        {
+          "path": "apps/office/src/sc/inc/column.ts",
+          "marker": "ScColumn"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.scalar.test.ts",
+          "marker": "creates sheets and edits real numeric/string"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Priority correction (task198"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "scalar-document-sheet-column-editing",
+    "scopeLimitations": [
+      "Single-line literal text content only;number-format attributes and full native SetTextCell contract remain unimplemented.",
+      "No native compiler/execution or full constructor/service parity claim.",
+      "Native QA reference supplies the shared string identity contract only;the complete SetString/purge/undo case is not ported or executed here."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task198 implements the initial numeric/string ScDocument->ScTable->ScColumn editing subset on actual shared SoA mdds stores,CellTextAttr and SharedStringPool. Supported scalar reads,writes,replacements,clear,sheet names/insertion and coordinate defaults follow their source contracts. Literal SetTextCell implements only single-line content;number-format attributes,multiline EditTextObject,formulas/dependencies/listeners/full constructor services are explicit unsupported responsibilities. Scalar CellStoreTraits registers numeric/string blocks only;native CellStoreEvent has no acquired/released effects for these alternatives,so the existing empty event owner suffices. No second browser grid model,no fake services and no extra language subsystem is introduced. The supported scalar slice passes wholeCalc199tests with39raw100 owners,48related tests,actual Chromium/Worker without references,and existing source/inventory gates. Full document/formula/ODS readiness and broad parity are not claimed."
+    }
+  }
+}

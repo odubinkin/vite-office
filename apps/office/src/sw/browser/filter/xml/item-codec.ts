@@ -2,6 +2,12 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { Any2Bool } from "../../../../svl/inc/poolitem";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -13,7 +19,6 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import { MeasureUnit } from "../../../../offapi/com/sun/star/util/MeasureUnit";
-import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import {
   normalizeWriterHyperlink,
@@ -22,7 +27,6 @@ import {
 } from "../../../source/core/txtnode/fmtatr2";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
-
 /** Browser-owned internet value record; omitted native IDs retain the existing ZERO contract. */
 export interface WriterInternetFormatRecord extends WriterHyperlink {
   readonly inetFormatId?: number;
@@ -68,28 +72,87 @@ function decodeInternetStyleId(candidate: unknown): SwPoolFormatId {
   return candidate as SwPoolFormatId;
 }
 
+/** Browser snapshot of the explicit native tab fields, distinct from UNO transport. */
+export type TabStopItemSnapshot = Omit<SfxPoolItemSnapshot, "value"> & {
+  readonly value: {
+    readonly defaultDistance: number;
+    readonly stops: readonly {
+      readonly position: number;
+      readonly adjustment: number;
+      readonly decimal: string;
+      readonly fill: string;
+    }[];
+  };
+};
+/** Native paragraph state carried by the existing Writer snapshot boundary. */
+export type AdjustItemValue = {
+  readonly adjust: number;
+  readonly lastLine: number;
+  readonly expandSingle: boolean;
+  readonly paragraphComposer: boolean;
+  readonly wordSpacing: number;
+  readonly wordSpacingMinimum: number;
+  readonly wordSpacingMaximum: number;
+  readonly letterSpacingMinimum: number;
+  readonly letterSpacingMaximum: number;
+  readonly scaleWidthMinimum: number;
+  readonly scaleWidthMaximum: number;
+};
+/** Concrete adjustment browser record. */
+export type AdjustItemSnapshot = Omit<SfxPoolItemSnapshot, "value"> & {
+  readonly value: AdjustItemValue;
+};
+/** Encodes all reachable native adjustment fields outside core. @param item - Native item. @returns Typed browser record. */
+export function encodeSfxPoolItem(item: SvxAdjustItem): AdjustItemSnapshot;
+/** Encodes concrete tab values at the browser boundary. @param item - Tab item. @returns Typed browser record. */
+export function encodeSfxPoolItem(item: SvxTabStopItem): TabStopItemSnapshot;
+/** Encodes any supported pooled item at the browser boundary. @param item - Core item. @returns Browser record. */
+export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
+
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
   const value =
-    item instanceof SvxULSpaceItem
-      ? encodeULSpaceValue(item)
-      : item instanceof SvxTextLeftMarginItem
-        ? encodeLegacyTextLeftMarginValue(item)
-        : item instanceof SvxRightMarginItem
-          ? encodeLegacyRightMarginValue(item)
-          : item instanceof SvxFirstLineIndentItem
-            ? encodeLegacyFirstLineValue(item)
-            : item instanceof SwFormatINetFormat
-              ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
-              : item instanceof SvxFontItem && item.GetGenericFamily() !== undefined
-                ? {
-                    familyName: item.GetFamilyName(),
-                    resolvedFamilyName: item.GetResolvedFamilyName(),
-                    genericFamily: item.GetGenericFamily() as string,
-                  }
-                : item.QueryValue();
+    item instanceof SvxAdjustItem
+      ? encodeAdjustment(item)
+      : item instanceof SvxTabStopItem
+        ? {
+            defaultDistance: item.GetDefaultDistance(),
+            stops: Array.from(
+              { length: item.Count() },
+              /** Encodes the native scalar fields only at this browser boundary. @param unused - Empty array slot. @param index - Native index. @returns Cloneable record. */
+              (unused, index) => {
+                void unused;
+                const stop = item.At(index);
+                return {
+                  position: stop.GetTabPos(),
+                  adjustment: stop.GetAdjustment(),
+                  decimal: stop.GetDecimal(),
+                  fill: stop.GetFill(),
+                };
+              },
+            ),
+          }
+        : item instanceof SvxLineSpacingItem
+          ? {
+              nInterLineSpace: item.GetInterLineSpace(),
+              nLineHeight: item.GetLineHeight(),
+              nPropLineSpace: item.GetPropLineSpace(),
+              eLineSpaceRule: item.GetLineSpaceRule(),
+              eInterLineSpaceRule: item.GetInterLineSpaceRule(),
+            }
+          : item instanceof SvxULSpaceItem
+            ? encodeULSpaceValue(item)
+            : item instanceof SvxTextLeftMarginItem
+              ? encodeLegacyTextLeftMarginValue(item)
+              : item instanceof SvxRightMarginItem
+                ? encodeLegacyRightMarginValue(item)
+                : item instanceof SvxFirstLineIndentItem
+                  ? encodeLegacyFirstLineValue(item)
+                  : item instanceof SwFormatINetFormat
+                    ? JSON.stringify(encodeSwFormatINetFormatRecord(item))
+                    : item.QueryValue();
   if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
     value,
@@ -183,4 +246,25 @@ function encodeLegacyTextLeftMarginValue(item: SvxTextLeftMarginItem): number {
   )
     throw new Error("SvxTextLeftMarginItem is not persistence-safe.");
   return value.m_dValue;
+}
+
+/** Projects full native state without losing a single-word flag hidden by the primary mode. @param item - Actual native item. @returns Browser value. */
+function encodeAdjustment(item: SvxAdjustItem): AdjustItemValue {
+  const single = new Any();
+  item.QueryValue(single, MID_EXPAND_SINGLE);
+  const expandSingle = Any2Bool(single);
+  single.dispose();
+  return {
+    adjust: item.GetAdjust(),
+    lastLine: item.GetLastBlock(),
+    expandSingle,
+    paragraphComposer: item.GetParagraphComposer(),
+    wordSpacing: item.GetPropWordSpacing(),
+    wordSpacingMinimum: item.GetPropWordSpacingMinimum(),
+    wordSpacingMaximum: item.GetPropWordSpacingMaximum(),
+    letterSpacingMinimum: item.GetPropLetterSpacingMinimum(),
+    letterSpacingMaximum: item.GetPropLetterSpacingMaximum(),
+    scaleWidthMinimum: item.GetPropScaleWidthMinimum(),
+    scaleWidthMaximum: item.GetPropScaleWidthMaximum(),
+  };
 }

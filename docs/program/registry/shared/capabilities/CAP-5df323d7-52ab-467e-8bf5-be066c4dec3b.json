@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b",
+    "capabilityId": "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b",
+    "suite": "shared",
+    "subsystem": "font-family-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Five native fields, default/value/copy construction, mutation, clone, equality and original hash fold are retained.",
+      "Actual Writer history, browser snapshots and ODT font declarations preserve complete supported font metadata."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine."
+    },
+    "capability": "Canonical font-family values and ODF metadata",
+    "gaps": [
+      "Native Any FontDescriptor and localized presentation remain unported.",
+      "Full font/device/config services and Calc document/UI/ODS remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.font.ts",
+          "marker": "SvxFontItem"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+          "marker": "XMLFontAutoStylePool"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-font-family.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-font-style-roundtrip.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical font-family values and ODF metadata (task135)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxFontItem"
+        },
+        {
+          "path": "include/editeng/fontitem.hxx",
+          "marker": "SvxFontItem"
+        },
+        {
+          "path": "xmloff/source/style/XMLFontAutoStylePool.cxx",
+          "marker": "XMLFontAutoStylePool::Add"
+        }
+      ],
+      "tests": [
+        {
+          "path": "editeng/qa/unit/core-test.cxx",
+          "marker": "SvxFontItem aFont"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-native-font-family-values",
+    "scopeLimitations": [
+      "Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

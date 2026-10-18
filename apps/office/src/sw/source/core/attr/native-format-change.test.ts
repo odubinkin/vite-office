@@ -147,7 +147,7 @@ it("inherited format changes rebind the item set to actual registration and supp
     alternate.CallSwClientNotify(inherited);
     expect(child.GetAttrSet().GetParent()).toBe(alternate.GetAttrSet());
     expect(observer.hints.at(-1)).toBe(inherited);
-    child.EndListening();
+    child.EndListeningAll();
     expect(child.DerivedFrom()).toBeUndefined();
     const detached = new SwFormatChangeHint(alternate, undefined);
     child.SwClientNotify(alternate, detached);
@@ -162,7 +162,7 @@ it("inherited format changes rebind the item set to actual registration and supp
   }
 });
 
-it("native inheritance hints remain identical through existing bounded transactions and foreign-source rejection", /** Checks atomic parent filtering and stable borrowed format pointers. @returns Nothing. */ () => {
+it("native inheritance hints retain identity through browser batches and the original native hint filter", /** Checks atomic parent filtering and stable borrowed format pointers. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     parent = doc.MakeTableBoxFormat(),
     child = doc.MakeTableBoxFormat(),
@@ -172,8 +172,9 @@ it("native inheritance hints remain identical through existing bounded transacti
   observer.StartListening(child.GetNotifier());
   const hint = new SwFormatChangeHint(parent, parent);
   try {
-    child.Notify(foreign, hint);
-    expect(observer.hints).toEqual([]);
+    child.SwClientNotify(foreign, hint);
+    expect(observer.hints).toEqual([hint]);
+    observer.hints.length = 0;
     parent.RunNotificationTransaction(
       /** Queues original native inheritance alongside an existing bounded selection hint. @returns Nothing. */ () => {
         parent.SwClientNotify(parent, hint);
@@ -185,7 +186,7 @@ it("native inheritance hints remain identical through existing bounded transacti
     expect(batch?.kind).toBe("model-transaction");
     if (batch?.kind !== "model-transaction") throw Error("Missing actual native transaction");
     expect(batch.hints[0]).toBe(hint);
-    expect(batch.hints[1]).toEqual({ kind: "cursor-selection-changed" });
+    expect(batch.hints).toHaveLength(1);
     expect(child.GetAttrSet().GetParent()).toBe(parent.GetAttrSet());
     expect(child.IsModifyLocked()).toBe(false);
   } finally {

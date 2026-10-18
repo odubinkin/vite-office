@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/txtparae.types.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/txtparae.cxx",
+    "localSymbols": [
+      "OdfCharacterProperties",
+      "FontFaceNameResolver"
+    ],
+    "upstreamSymbols": [
+      "XMLTextParagraphExport"
+    ],
+    "preservedResponsibilities": [
+      "Type-only browser neutral character handoff and complete font callback, shared with the actual text exporter; not claimed to be a native named struct or provider.",
+      "Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine."
+    ],
+    "omittedResponsibilities": [
+      "Native Any FontDescriptor, full font services and complete Calc document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtparae.types.ts",
+          "marker": "export"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/text/txtparae.types.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Type-only browser neutral character handoff and complete font callback, shared with the actual text exporter; not claimed to be a native named struct or provider."
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual mounted numbering font ownership for body and table-cell lists. */
+import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { act, cleanup, render } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -9,9 +10,7 @@ import { applyWriterParagraphList } from "../../source/core/doc/list";
 import { createWriterNumFormat } from "../../source/core/doc/number";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -26,6 +25,8 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_COLOR,
 } from "../../inc/hintids";
+import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Unmounts before original owner disposal. @returns Nothing. */ () => {
@@ -49,12 +50,19 @@ for (const cell of [false, true])
       if (node === undefined) throw Error("Missing member");
       node.SetText("Owned label font");
       node.SetAttr(
-        new SvxFontItem("Liberation Serif", RES_CHRATR_FONT, "Liberation Serif", "roman"),
+        new SvxFontItem(
+          FontFamily.FAMILY_ROMAN,
+          "Liberation Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
       );
-      node.SetAttr(new SvxFontHeightItem(320, RES_CHRATR_FONTSIZE));
-      node.SetAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-      node.SetAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
-      node.SetAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
+      node.SetAttr(new SvxFontHeightItem(320, 100, RES_CHRATR_FONTSIZE));
+      node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+      node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+      node.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
       node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
       applyWriterParagraphList(node, { kind, level: 0, ruleName: "LabelFont" });
       const rule = node.GetNumRule();
@@ -104,9 +112,11 @@ for (const cell of [false, true])
           textDecorationLine: "underline",
         });
         expect(retained.activeParagraph.listMarkerFont?.weight).toBe(
-          kind === "bullet" ? FontWeight.NORMAL : FontWeight.BOLD,
+          kind === "bullet" ? FontWeight.WEIGHT_NORMAL : FontWeight.WEIGHT_BOLD,
         );
-        expect(retained.activeParagraph.listMarkerFont?.underline).toBe(FontLineStyle.NONE);
+        expect(retained.activeParagraph.listMarkerFont?.underline).toBe(
+          FontLineStyle.LINESTYLE_NONE,
+        );
         act(
           /** Admits native label affinity while retaining the selected source font. @returns Nothing. */ () => {
             session.view.GetEditWin().SetSelection({
@@ -161,7 +171,7 @@ it("detached and follow projections retain the previous device fallback without 
         {...props}
         paragraph={{
           ...detached,
-          listMarkerFont: { ...listMarkerFont, posture: FontItalic.OBLIQUE, color: "auto" },
+          listMarkerFont: { ...listMarkerFont, posture: FontItalic.ITALIC_OBLIQUE, color: "auto" },
         }}
       />,
     );

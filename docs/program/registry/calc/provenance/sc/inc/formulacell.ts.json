@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/formulacell.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/formulacell.hxx",
+    "localSymbols": [
+      "ScFormulaCell"
+    ],
+    "upstreamSymbols": [
+      "ScFormulaCell"
+    ],
+    "preservedResponsibilities": [
+      "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false."
+    ],
+    "omittedResponsibilities": [
+      "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/formulacell.ts",
+          "marker": "ScFormulaCell"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/formulacell.hxx",
+          "marker": "ScFormulaCell"
+        }
+      ]
+    }
+  }
+}

@@ -1,8 +1,6 @@
 /** @fileoverview Implements bounded SwModify/SwClient registration from pinned `sw/inc/calbck.hxx`. */
 
-import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/SfxBroadcaster";
 import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
-import { SfxListener } from "../../svl/source/notify/lstner";
 import {
   AttrSetChangeHint,
   ObjectDyingHint,
@@ -48,9 +46,27 @@ export class LegacyModifyHint {
   }
 }
 
-/** One Writer client registered at no more than one SwModify. */
-export class SwClient extends SfxListener<SwModelHint> {
-  private registeredIn: SwModify | undefined;
+/** Original WriterListener relationship fields use JS references; no native pointer/lifetime container is reproduced. */
+export abstract class WriterListener {
+  private m_pLeft: WriterListener | undefined;
+  private m_pRight: WriterListener | undefined;
+  /** Original sole-client predicate. @returns Whether neither neighbor exists. */
+  IsLast(): boolean {
+    return this.m_pLeft === undefined && this.m_pRight === undefined;
+  }
+  /** Original native notification hook. @param source - Registered owner. @param hint - Native hint. @returns Nothing. */
+  protected abstract SwClientNotify(source: SwModify, hint: SwModelHint): void;
+}
+/** Erased native friend access; no runtime registry or wrapper. */
+interface WriterClientFields {
+  m_pLeft: WriterListener | undefined;
+  m_pRight: WriterListener | undefined;
+  m_pRegisteredIn: SwModify | undefined;
+  SwClientNotify(source: SwModify, hint: SwModelHint): void;
+}
+/** Original ClientBase<SwModify> single registration. Existing optional callback is a bounded browser receiver binding, not an SfxListener. */
+export class SwClient extends WriterListener {
+  private m_pRegisteredIn: SwModify | undefined;
 
   /** Creates an optional callback-backed client. @param callback - Typed notification receiver. @returns Nothing. */
   public constructor(private readonly callback?: (source: SwModify, hint: SwModelHint) => void) {
@@ -59,34 +75,19 @@ export class SwClient extends SfxListener<SwModelHint> {
 
   /** Registers this client at exactly one modify source. @param modify - New source. @returns Nothing. */
   public RegisterToModify(modify: SwModify): void {
-    if (this.registeredIn === modify) return;
-    this.EndListeningAll();
-    this.registeredIn = modify;
-    this.StartListening(modify);
+    modify.Add(this);
   }
 
   /** Follows the native source client registration, detaching when it has no modify. @param other - Source registration. @returns Nothing. */
   public StartListeningToSameModifyAs(other: Pick<SwClient, "GetRegisteredIn">): void {
     const source = other.GetRegisteredIn();
     if (source !== undefined) this.RegisterToModify(source);
-    else this.Dispose();
+    else this.EndListeningAll();
   }
 
   /** Returns the current Writer source. @returns Registered modify, when present. */
   public GetRegisteredIn(): SwModify | undefined {
-    return this.registeredIn;
-  }
-
-  /** Receives one source notification. @param broadcaster - Emitting broadcaster. @param hint - Typed Writer hint. @returns Nothing. */
-  public override Notify(broadcaster: SfxBroadcaster<SwModelHint>, hint: SwModelHint): void {
-    if (broadcaster !== this.registeredIn) return;
-    this.SwClientNotify(this.registeredIn, hint);
-  }
-
-  /** Detaches a dying source. @param broadcaster - Disposed broadcaster. @returns Nothing. */
-  public override BroadcasterDying(broadcaster: SfxBroadcaster<SwModelHint>): void {
-    super.BroadcasterDying(broadcaster);
-    this.CheckRegistration(new ObjectDyingHint(broadcaster as SwModify));
+    return this.m_pRegisteredIn;
   }
 
   /** Applies the native matching-source death registration check. @param hint - Original dying owner. @returns Native replacement hint or absent for a foreign owner. */
@@ -95,9 +96,8 @@ export class SwClient extends SfxListener<SwModelHint> {
   }
 
   /** Clears reciprocal registrations and the native single-owner pointer together. @returns Nothing. */
-  public override EndListeningAll(): void {
-    super.EndListeningAll();
-    this.registeredIn = undefined;
+  public EndListeningAll(): void {
+    this.m_pRegisteredIn?.Remove(this);
   }
 
   /** Ends the single Writer registration. @returns Nothing. */
@@ -112,97 +112,91 @@ export class SwClient extends SfxListener<SwModelHint> {
   }
 }
 
-/** Writer broadcaster that may itself be registered at one upstream SwModify. */
-export class SwModify
-  extends SfxBroadcaster<SwModelHint>
-  implements SfxListenerTarget<SwModelHint>
-{
+/** Original SwModify derives from SwClient and owns its WriterListener chain, independently of shared Sfx notification. Existing explicit browser batching/disposal binds document event delivery only. */
+export class SwModify extends SwClient {
+  private m_pWriterListeners: WriterListener | undefined;
+  private readonly m_aClientIterators = new Set<ClientIteratorBase>();
   private m_bModifyLocked = false;
+  private disposed = false;
   private notificationDepth = 0;
   private pendingHints: SwAtomicModelHint[] = [];
-  private registeredIn: SwModify | undefined;
-
-  /** Registers this modify as a client of one parent modify. @param modify - Parent source. @returns Nothing. */
-  public RegisterToModify(modify: SwModify): void {
-    if (this.registeredIn === modify) return;
-    this.EndListening();
-    this.registeredIn = modify;
-    modify.AddListener(this);
+  /** Original Add inserts immediately right of the anchor and first detaches a foreign registration. @param depend - Actual client. @returns Nothing. */
+  Add(depend: SwClient): void {
+    if (depend.GetRegisteredIn() === this) return;
+    depend.GetRegisteredIn()?.Remove(depend);
+    const fields = depend as unknown as WriterClientFields;
+    if (this.m_pWriterListeners === undefined) {
+      this.m_pWriterListeners = depend;
+      fields.m_pLeft = undefined;
+      fields.m_pRight = undefined;
+    } else {
+      const anchor = this.m_pWriterListeners as unknown as WriterClientFields;
+      fields.m_pRight = anchor.m_pRight;
+      anchor.m_pRight = depend;
+      fields.m_pLeft = this.m_pWriterListeners;
+      if (fields.m_pRight !== undefined)
+        (fields.m_pRight as unknown as WriterClientFields).m_pLeft = depend;
+    }
+    fields.m_pRegisteredIn = this;
   }
-
-  /** Ends the optional parent registration. @returns Nothing. */
-  public EndListening(): void {
-    this.EndListeningAll();
+  /** Original unlink updates every active iterator's current/position relation before clearing client fields. The per-owner Set erases the native global intrusive iterator ring, preserving its root-filtered repair. @param depend - Registered client. @returns Nothing. */
+  Remove(depend: SwClient): void {
+    if (depend.GetRegisteredIn() !== this) throw new Error("assert: foreign Writer client removal");
+    const fields = depend as unknown as WriterClientFields,
+      right = fields.m_pRight,
+      left = fields.m_pLeft;
+    if (this.m_pWriterListeners === depend) this.m_pWriterListeners = left ?? right;
+    if (left !== undefined) (left as unknown as WriterClientFields).m_pRight = right;
+    if (right !== undefined) (right as unknown as WriterClientFields).m_pLeft = left;
+    for (const iterator of this.m_aClientIterators) {
+      const cursor = iterator as unknown as {
+        m_pCurrent: WriterListener | undefined;
+        m_pPosition: WriterListener | undefined;
+      };
+      if (cursor.m_pCurrent === depend || cursor.m_pPosition === depend) cursor.m_pPosition = right;
+    }
+    fields.m_pLeft = undefined;
+    fields.m_pRight = undefined;
+    fields.m_pRegisteredIn = undefined;
   }
-
-  /** Ends the represented native single-parent registration. @returns Nothing. */
-  public EndListeningAll(): void {
-    this.registeredIn?.RemoveListener(this);
-    this.registeredIn = undefined;
+  /** Original remove-until-empty operation. @returns Nothing. */
+  RemoveAllWriterListeners(): void {
+    while (this.m_pWriterListeners !== undefined)
+      (this.m_pWriterListeners as SwClient).EndListeningAll();
   }
-
-  /** Returns the parent modify used for Writer-style reparenting. @returns Parent source. */
-  public GetRegisteredIn(): SwModify | undefined {
-    return this.registeredIn;
+  /** Original anchor-presence predicate. @returns Whether native clients remain. */
+  HasWriterListeners(): boolean {
+    return this.m_pWriterListeners !== undefined;
   }
-
-  /** Receives and propagates one parent notification. @param broadcaster - Parent source. @param hint - Typed hint. @returns Nothing. */
-  public Notify(broadcaster: SfxBroadcaster<SwModelHint>, hint: SwModelHint): void {
-    if (broadcaster !== this.registeredIn) return;
-    if (
-      hint.kind === "attr-set-change" ||
-      hint.kind === "format-change" ||
-      hint.kind === "object-dying"
-    ) {
-      this.SwClientNotify(broadcaster as SwModify, hint);
-    } else if (hint.kind === "model-transaction") {
-      if (
-        hint.hints.some(
-          /** Identifies native attribute deltas requiring parent filtering. @param nested - Atomic hint. @returns Whether native. */
-          (nested) =>
-            nested.kind === "attr-set-change" ||
-            nested.kind === "format-change" ||
-            nested.kind === "object-dying",
-        )
-      )
-        this.RunNotificationTransaction(
-          /** Filters each original native delta before the existing transaction boundary. @returns Nothing. */ () => {
-            for (const nested of hint.hints) this.Notify(broadcaster, nested);
+  /** Original sole-client predicate. @returns Whether exactly one remains. */
+  HasOnlyOneListener(): boolean {
+    return this.m_pWriterListeners !== undefined && this.m_pWriterListeners.IsLast();
+  }
+  /** Original format-death iteration reparents before its callback. @param hint - Original owner substitution. @returns Nothing. */
+  PrepareFormatDeath(hint: SwFormatChangeHint): void {
+    for (const client of new WriterListenerIterator(this)) {
+      (client as SwClient).RegisterToModify(hint.m_pNewFormat as SwModify);
+      (client as unknown as WriterClientFields).SwClientNotify(this, hint);
+    }
+  }
+  /** Existing explicit browser lifecycle query, now owned by Writer rather than inherited from an incorrect Sfx base. @returns Whether its disposal boundary completed. */
+  IsDisposed(): boolean {
+    return this.disposed;
+  }
+  /** Original ordered Writer notification loop after the existing browser batching boundary. @param hint - Native hint or bounded browser batch. @returns Nothing. */
+  protected DeliverWriterNotification(hint: SwModelHint): void {
+    if (this.disposed) return;
+    for (const client of new WriterListenerIterator(this)) {
+      if (hint.kind === "model-transaction" && client instanceof SwModify) {
+        // Browser batches are unpacked before the original native virtual hint filter.
+        client.RunNotificationTransaction(
+          /** Keeps the existing browser batch boundary around actual native callbacks. @returns Nothing. */ () => {
+            for (const nested of hint.hints) client.SwClientNotify(this, nested);
           },
         );
-      else if (this.notificationDepth === 0) this.Broadcast(hint);
-      else for (const nested of hint.hints) this.CallSwClientNotify(nested);
-    } else this.CallSwClientNotify(hint);
+      } else (client as unknown as WriterClientFields).SwClientNotify(this, hint);
+    }
   }
-
-  /** Detaches a parent that has begun destruction. @param broadcaster - Dying source. @returns Nothing. */
-  public BroadcasterDying(broadcaster: SfxBroadcaster<SwModelHint>): void {
-    this.CheckRegistration(new ObjectDyingHint(broadcaster as SwModify));
-  }
-
-  /** Applies native ClientBase cleanup to this original modify registration. @param hint - Original dying owner. @returns Borrowed replacement hint or absent. */
-  public CheckRegistration(hint: ObjectDyingHint): ModifyChangedHint | undefined {
-    return checkRegistration(this, hint);
-  }
-
-  /** Reports native Writer clients independently of observer subscriptions. @returns Whether a Writer client remains. */
-  public HasWriterListeners(): boolean {
-    return this.HasListeners();
-  }
-
-  /** Moves each original Writer client before delivering the borrowed death replacement hint. @param hint - Native old and surviving format owners. @returns Nothing. */
-  public PrepareFormatDeath(hint: SwFormatChangeHint): void {
-    this.ForAllListeners(
-      /** Reparents the actual registered client before its native callback. @param listener - Original Writer client. @returns Continue flag. */
-      (listener) => {
-        const client = listener as SwModify;
-        client.RegisterToModify(hint.m_pNewFormat as SwModify);
-        client.SwClientNotify(this, hint);
-        return false;
-      },
-    );
-  }
-
   /** Locks native modify notifications; the source flag is boolean, not a depth counter. @returns Nothing. */
   public LockModify(): void {
     this.m_bModifyLocked = true;
@@ -216,10 +210,11 @@ export class SwModify
     return this.m_bModifyLocked;
   }
   /** Dispatches native attribute changes while preventing recursive modify calls. @param source - Native emitting owner. @param hint - Native notification. @returns Nothing. */
-  public SwClientNotify(source: SwModify, hint: SwModelHint): void {
+  public override SwClientNotify(source: SwModify, hint: SwModelHint): void {
     void source;
     if (
-      (hint.kind !== "attr-set-change" &&
+      (hint.kind !== "legacy-modify" &&
+        hint.kind !== "attr-set-change" &&
         hint.kind !== "format-change" &&
         hint.kind !== "object-dying") ||
       this.IsModifyLocked()
@@ -234,9 +229,11 @@ export class SwModify
   }
 
   /** Emits or queues one atomic Writer hint. @param hint - Atomic typed change. @returns Nothing. */
-  public CallSwClientNotify(hint: SwAtomicModelHint): void {
-    if (this.notificationDepth > 0 && hint.kind !== "object-dying") this.pendingHints.push(hint);
-    else this.Broadcast(hint);
+  public CallSwClientNotify(hint: SwModelHint): void {
+    if (this.notificationDepth > 0 && hint.kind !== "object-dying") {
+      if (hint.kind === "model-transaction") this.pendingHints.push(...hint.hints);
+      else this.pendingHints.push(hint);
+    } else this.DeliverWriterNotification(hint);
   }
 
   /** Runs a semantic mutation as one bounded notification transaction. @param mutation - Synchronous model operation. @returns Its result. */
@@ -250,7 +247,7 @@ export class SwModify
         if (this.notificationDepth === 0 && this.pendingHints.length > 0) {
           const hints = Object.freeze(this.pendingHints.slice());
           this.pendingHints = [];
-          this.Broadcast(Object.freeze({ hints, kind: "model-transaction" }));
+          this.DeliverWriterNotification(Object.freeze({ hints, kind: "model-transaction" }));
         }
       }
     }
@@ -261,15 +258,10 @@ export class SwModify
     if (this.IsDisposed()) return;
     const hint = new ObjectDyingHint(this);
     SwModify.prototype.SwClientNotify.call(this, this, hint);
-    this.ForAllListeners(
-      /** Applies native fallback cleanup to clients whose override did not detach. @param listener - Original remaining Writer client. @returns Continue flag. */
-      (listener) => {
-        (listener as SwClient | SwModify).CheckRegistration(hint);
-        return false;
-      },
-    );
-    this.PrepareForDestruction();
-    this.EndListening();
+    while (this.m_pWriterListeners !== undefined)
+      (this.m_pWriterListeners as SwClient).CheckRegistration(hint);
+    this.EndListeningAll();
+    this.disposed = true;
     this.pendingHints = [];
     this.notificationDepth = 0;
   }
@@ -296,9 +288,9 @@ export class BroadcastingModify extends SwModify {
     return this.broadcasterMixin.GetNotifier();
   }
   /** Terminal native CallSwClientNotify dispatch: original Writer clients first, then the same hint to observers. The existing browser transaction flush also terminates here. @param hint - Original hint or browser transaction. @returns Nothing. */
-  public override Broadcast(hint: SwModelHint): void {
+  protected override DeliverWriterNotification(hint: SwModelHint): void {
     if (this.IsDisposed()) return;
-    super.Broadcast(hint);
+    super.DeliverWriterNotification(hint);
     this.GetNotifier().Broadcast(hint);
   }
   /** Destroys the notifier before the Writer base, matching native base destruction order. @returns Nothing. */
@@ -329,4 +321,106 @@ export function ClientNotifyAttrChg(
     modify,
     new AttrSetChangeHint(new SwAttrSetChg(set, oldSet), new SwAttrSetChg(set, newSet)),
   );
+}
+
+/** Erased original friend access to the owner's anchor and native iterator relationships. */
+interface OwnerFields {
+  readonly m_pWriterListeners: WriterListener | undefined;
+  readonly m_aClientIterators: Set<ClientIteratorBase>;
+}
+/** Erased original neighbor references. */
+interface ListenerFields {
+  readonly m_pLeft: WriterListener | undefined;
+  readonly m_pRight: WriterListener | undefined;
+}
+/** Original active cursor state. Per-root JS Set replaces the global native intrusive iterator ring and its root filter; it tracks mutation semantics, not object lifetime. */
+export class ClientIteratorBase {
+  protected m_pCurrent: WriterListener | undefined;
+  protected m_pPosition: WriterListener | undefined;
+  /** Original anchor initialization and active cursor registration. @param m_rRoot - Actual modify. @returns Cursor. */
+  constructor(protected readonly m_rRoot: SwModify) {
+    const root = m_rRoot as unknown as OwnerFields;
+    root.m_aClientIterators.add(this);
+    this.m_pCurrent = this.m_pPosition = root.m_pWriterListeners;
+  }
+  /** Original iterator scope end; JS iterable finally binds native RAII. @returns Nothing. */
+  dispose(): void {
+    (this.m_rRoot as unknown as OwnerFields).m_aClientIterators.delete(this);
+  }
+  /** Original next-neighbor query; a non-end position is the source caller precondition. @returns Next pointer. */
+  protected GetRightOfPos(): WriterListener | undefined {
+    return (this.m_pPosition as unknown as ListenerFields).m_pRight;
+  }
+  /** Original leftmost traversal from the current anchor. @returns First pointer. */
+  protected GoStart(): WriterListener | undefined {
+    this.m_pPosition = (this.m_rRoot as unknown as OwnerFields).m_pWriterListeners;
+    while (
+      this.m_pPosition !== undefined &&
+      (this.m_pPosition as unknown as ListenerFields).m_pLeft !== undefined
+    )
+      this.m_pPosition = (this.m_pPosition as unknown as ListenerFields).m_pLeft;
+    this.m_pCurrent = this.m_pPosition;
+    return this.m_pCurrent;
+  }
+  /** Original mutation marker. @returns Whether removal repaired the position. */
+  IsChanged(): boolean {
+    return this.m_pPosition !== this.m_pCurrent;
+  }
+  /** Original current/position synchronization. @returns Current pointer. */
+  protected Sync(): WriterListener | undefined {
+    this.m_pCurrent = this.m_pPosition;
+    return this.m_pCurrent;
+  }
+}
+/** Original internal all-WriterListener iterator from calbck.cxx. */
+export class WriterListenerIterator extends ClientIteratorBase {
+  /** Original first operation. @returns First pointer. */
+  First(): WriterListener | undefined {
+    return this.GoStart();
+  }
+  /** Original mutation-aware next operation; do not call after end. @returns Next pointer. */
+  Next(): WriterListener | undefined {
+    if (!this.IsChanged()) this.m_pPosition = this.GetRightOfPos();
+    return this.Sync();
+  }
+  /** Native loop scope bound to JS iteration and finally cleanup. @returns Actual clients in native order. */
+  *[Symbol.iterator](): Generator<WriterListener, void, unknown> {
+    try {
+      for (let value = this.First(); value !== undefined; value = this.Next()) yield value;
+    } finally {
+      this.dispose();
+    }
+  }
+}
+/** Original exact dynamic-type template iterator, with its erased C++ type argument supplied as the actual JS constructor. Multi-listener unwrapping is not fabricated. */
+export class SwIterator<Element extends SwClient> extends ClientIteratorBase {
+  /** Binds original template type and source constructor. @param elementType - Actual native class binding. @param root - Actual modify. @returns Cursor. */
+  constructor(
+    private readonly elementType: abstract new (...args: never[]) => Element,
+    root: SwModify,
+  ) {
+    super(root);
+  }
+  /** Original first sets an unsynchronized current pointer before filtering. @returns First qualifying pointer. */
+  First(): Element | undefined {
+    this.GoStart();
+    if (this.m_pPosition === undefined) return undefined;
+    this.m_pCurrent = undefined;
+    return this.Next();
+  }
+  /** Original exact dynamic-type scan and live removal repair; caller does not advance past end. @returns Next qualifying pointer. */
+  Next(): Element | undefined {
+    if (!this.IsChanged()) this.m_pPosition = this.GetRightOfPos();
+    while (this.m_pPosition !== undefined && !(this.m_pPosition instanceof this.elementType))
+      this.m_pPosition = this.GetRightOfPos();
+    return this.Sync() as Element | undefined;
+  }
+  /** Original loop scope in JS syntax, releasing its active cursor on normal end, break or throw. @returns Actual matching clients. */
+  *[Symbol.iterator](): Generator<Element, void, unknown> {
+    try {
+      for (let value = this.First(); value !== undefined; value = this.Next()) yield value;
+    } finally {
+      this.dispose();
+    }
+  }
 }

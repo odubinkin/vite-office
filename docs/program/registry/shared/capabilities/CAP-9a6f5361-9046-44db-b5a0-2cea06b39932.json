@@ -1,0 +1,113 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9a6f5361-9046-44db-b5a0-2cea06b39932",
+    "capabilityId": "CAP-9a6f5361-9046-44db-b5a0-2cea06b39932",
+    "suite": "shared",
+    "subsystem": "uno-color-types",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual native IDL interfaces and Color long alias reuse existing shared Type/Reference/Sequence/Any owners.",
+      "Original normal type-cache/auto-root identity and typed-null/color scalar admission are retained."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task132 supplies the actual offapi Color typedef and XTheme/XComplexColor contracts needed by native complex-color Any transport. IDL util::Color remains a compile-only number alias for signed32 UNO long and introduces no runtime TYPEDEF or pixel buffer. XTheme extends actual XInterface and returns actual OUString/Sequence<Color>; XComplexColor exposes original signed32 getType/getThemeColorType and resolveColor(Reference<XTheme>) using existing shared generic declarations. Native normal getters reuse original CPPU static_mi_interface_type_init with0explicitbases and actual borrowed type-cell view, including implicit XInterface, native incomplete reflection state and cold/warm identity. Original deprecated Reference pointer getters and static_type wrappers use existing UnoType with explicit erased template type, never a value-inferred provider. Upstream cppumaker defaultdynamic/normal mode and gbuild ordinary offapi target are the source; comprehensive-C and lightweight-L are different genuine modes and no comprehensive method table is fabricated. Existing normal FontHeight/FontSlant bindings use the same approach. Pure IDL alias provenance cites the complete published typedef long Color declaration rather than basename-only similarity. Real Any/Reference typed-null same/root/cross interface admission and signed32 Color scalar transport are exercised, with no fake component or default theme. Type-only alias has no executable coverage counters; both new executable modules are measured completely. Native component UnoComplexColor, WeakImplHelper inheritance/lifetime integration and full SvxColorItem Any/Writer color migration remain pending; tests do not certify non-null components, dynamic fullReflection, true DocPool/document/UI/same-model ODS or native ABI. No C++generator/build/probe, no new allocator/refcount/type factory or provider; existing IO/recovery deviations and readiness-gated full regression remain unchanged."
+    },
+    "capability": "Native normal UNO color and theme type contracts",
+    "gaps": [
+      "Concrete UnoComplexColor/helper and full ColorItem transport remain pending.",
+      "Native non-null/fullReflection/ABI and full document/UI/ODS parity not claimed."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/Color.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/XTheme.ts",
+          "marker": "XTheme"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/XComplexColor.ts",
+          "marker": "XComplexColor"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.ts",
+          "marker": "ArrayBuffer.isView"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/native-color-interfaces.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/color-uno-types.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-length-realms.test.ts",
+          "marker": "real foreign typed arrays"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical UNO color and theme interface contracts (task132)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/util/Color.idl",
+          "marker": "published typedef long Color"
+        },
+        {
+          "path": "offapi/com/sun/star/util/XTheme.idl",
+          "marker": "getColorSet"
+        },
+        {
+          "path": "offapi/com/sun/star/util/XComplexColor.idl",
+          "marker": "resolveColor"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "InterfaceType::dumpNormalGetCppuType"
+        },
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "std::char_traits<T>::length(pStr)"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svx/qa/unit/xoutdev.cxx",
+          "marker": "XComplexColor"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/util/XTheme.idl",
+          "marker": "sequence of 12 colors"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-uno-color-types",
+    "scopeLimitations": [
+      "Task132 supplies the actual offapi Color typedef and XTheme/XComplexColor contracts needed by native complex-color Any transport. IDL util::Color remains a compile-only number alias for signed32 UNO long and introduces no runtime TYPEDEF or pixel buffer. XTheme extends actual XInterface and returns actual OUString/Sequence<Color>; XComplexColor exposes original signed32 getType/getThemeColorType and resolveColor(Reference<XTheme>) using existing shared generic declarations. Native normal getters reuse original CPPU static_mi_interface_type_init with0explicitbases and actual borrowed type-cell view, including implicit XInterface, native incomplete reflection state and cold/warm identity. Original deprecated Reference pointer getters and static_type wrappers use existing UnoType with explicit erased template type, never a value-inferred provider. Upstream cppumaker defaultdynamic/normal mode and gbuild ordinary offapi target are the source; comprehensive-C and lightweight-L are different genuine modes and no comprehensive method table is fabricated. Existing normal FontHeight/FontSlant bindings use the same approach. Pure IDL alias provenance cites the complete published typedef long Color declaration rather than basename-only similarity. Real Any/Reference typed-null same/root/cross interface admission and signed32 Color scalar transport are exercised, with no fake component or default theme. Type-only alias has no executable coverage counters; both new executable modules are measured completely. Native component UnoComplexColor, WeakImplHelper inheritance/lifetime integration and full SvxColorItem Any/Writer color migration remain pending; tests do not certify non-null components, dynamic fullReflection, true DocPool/document/UI/same-model ODS or native ABI. No C++generator/build/probe, no new allocator/refcount/type factory or provider; existing IO/recovery deviations and readiness-gated full regression remain unchanged.",
+      "Task132 corrects only getLength host overload selection: actual Uint8Array/Uint16Array from another JS context must use native terminated-pointer length, not rtl_uString class length. Constructor instanceof failed across realms, including jsdom TextEncoder output and new normal UNO interface names. Standard ArrayBuffer.isView preserves the native element-kind distinction independent of realm; original first-zero loop and real string-record length branch stay unchanged. A real vm-created typed-array test plus existing related SAL fixtures verify the whole owner. No constructor/factory workaround, string trimming, extra tag/library, new C++/memory probes or lifecycle change; repeated human authorization covers shared/Writer canonical corrections.",
+      "The same shared strtmpl owner also used realm-dependent instanceof for the native Copy byte/Unicode overload. Use the standard BYTES_PER_ELEMENT1 discriminator under the existing typed-array domain, preserving native ASCII guard and known-length embedded zeros for both real foreign byte/Unicode inputs. Current focused JS-context test covers public C literal/Unicode constructors, with no new native binary/memory probe. Add existing integer-format/o3tl string-view/CPPU typelib unit selections to cover the complete shared owner numeric and compare methods; initial24tests8files already passed, and only coverage lacked those unchanged parts. Both interface owners already had all raw counters covered."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

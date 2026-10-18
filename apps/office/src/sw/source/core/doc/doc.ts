@@ -1,5 +1,4 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
-
 import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { SwFrameFormat } from "../layout/atrfrm";
@@ -82,7 +81,6 @@ import {
   SwPageDesc,
   type WriterPageDescriptorValue,
 } from "../layout/pagedesc";
-
 /** Construction policy for locale/device-dependent Writer defaults. */
 export interface SwDocOptions {
   readonly createInitialTextNode?: boolean;
@@ -250,12 +248,11 @@ export class SwDoc {
   public GetLocale(): string {
     return this.locale;
   }
-  /** Registers a package font declaration before its ZIP entry is read. @param font - Declared face and package path. @returns Nothing. */
+  /** Registers one package font resource by path; distinct declaration face names may alias the same resource, as in native fontFilesMap. @param font - Declared face and package path. @returns Nothing. */
   public RegisterEmbeddedFont(font: WriterEmbeddedFont): void {
     const existing = this.embeddedFonts.get(font.path);
     if (existing !== undefined) {
       if (
-        existing.faceName !== font.faceName ||
         existing.familyName !== font.familyName ||
         existing.weight !== font.weight ||
         existing.style !== font.style ||

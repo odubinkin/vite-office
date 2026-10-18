@@ -2,7 +2,7 @@
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwFrameFormat } from "../layout/atrfrm";
-import { SwClient, type SwModify } from "../../../inc/calbck";
+import { SwClient, type SwModify, SwIterator } from "../../../inc/calbck";
 import { SwFormatChangeHint, type SwModelHint } from "../../../inc/hints";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
@@ -10,13 +10,10 @@ import { SwFormatVertOrient } from "../../../inc/fmtornt";
 /** Borrows original registrations without graph copies. @param format - Native owner. @returns Actual clients. */
 function clients(format: SwModify): unknown[] {
   const result: unknown[] = [];
-  format.ForAllListeners(
-    /** Collects a registered original client. @param client - Native client. @returns Continue flag. */
-    (client) => {
-      result.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, format)) {
+    result.push(client);
+    continue writerClients0;
+  }
   return result;
 }
 

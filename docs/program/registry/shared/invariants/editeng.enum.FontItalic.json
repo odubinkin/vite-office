@@ -7,7 +7,7 @@
     "kind": "enum",
     "local": {
       "marker": "export enum FontItalic {",
-      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "path": "apps/office/src/tools/inc/fontenum.ts",
       "value": "NONE,OBLIQUE,NORMAL,DONTKNOW"
     },
     "upstream": {

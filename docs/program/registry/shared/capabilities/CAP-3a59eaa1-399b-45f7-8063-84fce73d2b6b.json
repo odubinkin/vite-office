@@ -1,0 +1,100 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-3a59eaa1-399b-45f7-8063-84fce73d2b6b",
+    "capabilityId": "CAP-3a59eaa1-399b-45f7-8063-84fce73d2b6b",
+    "suite": "shared",
+    "subsystem": "metric-unit-conversion",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original map/field enum values, complete mappings and invalid/pixel defaults are preserved.",
+      "Five scalar helpers retain native integral/floating rounding and same-direction ControlToItem delegation."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause."
+    },
+    "capability": "Original shared map/field units and scalar metrics",
+    "gaps": [
+      "Checked-overflow TransformMetric and widget/device helpers remain unported.",
+      "Canonical full font-height, real DocPool/document/UI and same-model ODS remain pending; no full QA certificate."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/tools/inc/mapunit.ts",
+          "marker": "MapUnit"
+        },
+        {
+          "path": "apps/office/src/tools/inc/fldunit.ts",
+          "marker": "FieldUnit"
+        },
+        {
+          "path": "apps/office/src/svtools/inc/unitconv.ts",
+          "marker": "CalcToUnit"
+        },
+        {
+          "path": "apps/office/src/svtools/source/misc/unitconv.ts",
+          "marker": "CalcToUnit"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svtools/source/misc/native-unitconv.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Original shared metric units for font-height attributes (task125)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/tools/mapunit.hxx",
+          "marker": "MapUnit"
+        },
+        {
+          "path": "include/tools/fldunit.hxx",
+          "marker": "FieldUnit"
+        },
+        {
+          "path": "include/svtools/unitconv.hxx",
+          "marker": "CalcToUnit"
+        },
+        {
+          "path": "svtools/source/misc/unitconv.cxx",
+          "marker": "CalcToUnit"
+        }
+      ],
+      "tests": [
+        {
+          "path": "o3tl/qa/test-unit_conversion.cxx",
+          "marker": "static_assert(o3tl::convert(50, o3tl::Length::mm100, o3tl::Length::mm) == 1)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "svtools/README.md",
+          "marker": "Tools on the Top of VCL"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-map-field-metric-conversion",
+    "scopeLimitations": [
+      "Task125 implements original MapUnit/FieldUnit declaration order, aliases/sentinel, complete length maps and pixel override/invalid defaults once in Tools. Original SVTools CalcToUnit,CalcToPoint,ItemToControl,ControlToItem,MapToFieldUnit reuse real common o3tl conversion. Native tools::Long uses BigInt; native float input narrows with Math.fround before double conversion and std::round halfway away fromzero. Integral conversion/negative rounding and overflow preconditions remain owned by o3tl. ControlToItem deliberately preserves same-direction ItemToControl delegation (CALC109), no speculative inverse correction. Static native-only DBG_ASSERT allowed-unit diagnostics are not runtime filtering; original switches accept all valid map length families. Original native SVTools->Tools/o3tl module edges admitted with reverse/application/browser guards retained. Independent literal rational matrices test all mapped units and invalidfallbacks. TransformMetric checked-overflow overload and widget/device helpers remain unported, not stubbed. Shared font-height itself/fullDocPool/config/document/UI/same-modelODS remain pending; this prerequisite is not UI+ODSreadiness. Native caches/refcounts/ABI/native builds/generators/sanitizers/memory libraries excluded. No broad parity promotion; full regression only at actual minimalUI+ODSread/save then fixes/pause.",
+      "The pinned o3tl QA reference covers the reused rational rounding owner, not a native executable certificate for the5SVTools helpers. Targeted searches in svtools/tools/o3tl QA found no direct named helper tests; current helper assertions are independently source-derived."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

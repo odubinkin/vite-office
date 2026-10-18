@@ -1,6 +1,6 @@
 /** @fileoverview Applies named paragraph collections with the native common-style creation/finish ownership from prstylei.cxx and txtstyli.cxx. */
 import { SvxTextLeftMarginItem, SvxIndentValue } from "../../../../editeng/inc/lrspitem";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type {
   OdfStyleDefinition,
@@ -30,7 +30,6 @@ export function applyNamedParagraphStyles(
   ) => void,
   listName: (name: string) => string | undefined,
 ): void {
-  if (!styles.has("Standard")) throw new Error("ODF Writer Standard paragraph style is missing.");
   const collections = new Map<string, SwTextFormatColl>();
   for (const [name, definition] of styles) {
     const builtIn = getWriterStyleIdFromOdfName(name);

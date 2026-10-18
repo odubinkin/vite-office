@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "canonical-tab-stops",
+    "capabilityIds": [
+      "CAP-e4baba87-a194-41f6-ae4e-6547add9bbb7",
+      "CAP-011abe8a-24ca-49dd-8334-ce3e50aa9165"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.ts",
+        "apps/office/src/editeng/source/items/native-tab-values.test.ts",
+        "apps/office/src/unotools/source/config/native-default-fonts.test.ts",
+        "apps/office/src/i18nlangtag/source/languagetag/languagetag.extract.test.ts"
+      ],
+      "justification": "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine. Task163 ports all23 DefaultFontType IDs, all33 locales/256 configured DefaultFonts properties from pinned VCL.xcu, source exact/language/non-ISO/en lookup order and GetNextFontToken UTF16 borrowed-view/index behavior. getConfiguredDefaultFont is a field-specific resource binding on actual prepared Locale/OUString values, not a fabricated DefaultFontConfiguration/LanguageTag/UNO/OutputDevice service. Canonical-tag decomposition is shared with existing numeric locale data; native fallback algorithm is reused. Native system-locale parsing, configuration overrides/provider APIs, UI-font special fallback, physical font matching/substitution, font search-name normalization and other fontdefs operations remain pending. No C++ compilation/probe, new lifetime engine or UI localization. Task190 implements complete LanguageTagImpl simpleExtract enum,all structural branches,ASCII casing and five mutable output slots over logical UTF16 values. Private/joker classification leaves caller slots untouched;NONE clears them. It deliberately does not validate contents. Existing shared prepared canonical-tag projection reuses native LSC/LV/LR cache field behavior and empty private fields,correcting known es-ES-u-co-trad extension variants,numeric-region versus country separation and synthetic private language fallbacks. Existing general parser field projection remains an explicit boundary,not full LanguageTag. Source calls/canonicalization/state/ID registration/font/pool/document/UI/ODS remain pending;no compiler,new Intl normalization,ICU/liblangtag port or memory manager.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LanguageTagFallbackFields",
+        "getFallbackStrings"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18nlangtag/source/languagetag/languagetag.cxx",
+      "upstreamSymbols": [
+        "LanguageTag::getFallbackStrings"
+      ]
+    }
+  }
+}

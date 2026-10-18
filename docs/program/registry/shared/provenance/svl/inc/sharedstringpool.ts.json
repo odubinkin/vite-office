@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/sharedstringpool.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/sharedstringpool.hxx",
+    "localSymbols": [
+      "SharedStringPool"
+    ],
+    "upstreamSymbols": [
+      "SharedStringPool",
+      "intern",
+      "purge",
+      "getCount",
+      "getCountIgnoreCase"
+    ],
+    "preservedResponsibilities": [
+      "Task167 adds the original SharedStringPool owner over actual StringWithHash, OUString and SharedString values. One original-to-uppercase map also owns uppercase-to-uppercase canonical keys; preserve preexisting pointer identities, initial insertion ordering, static empty entry, original two-pass purge and both unit-test counts. std::unordered_map/set value equality binds to native JS exact logical UTF16 string keys, including embedded nul/surrogates and unequal native-hash collisions. Native hash buckets, iterators, mutex and unique_ptr allocation do not become browser libraries; synchronous object operations run to completion and JS GC owns the heap. Purge reads existing SAL value state and drops existing map-owned values; no new counter, WeakRef/finalizer, allocator, lifetime/type registry or memory manager is added. The constructor borrows the source-consumed uppercase operation contract; tests bind task166 actual uppercase to genuine prepared Locale state. This does not fabricate full CharClass, LanguageTag/system locale or UNO service construction. Native allocation failure/concurrency and actual Calc document/sheet/UI/ODS owners remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete CharClass/LanguageTag/system locale and UNO construction, allocation failure/concurrency and actual Calc document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/sharedstringpool.ts",
+          "marker": "SharedStringPool"
+        },
+        {
+          "path": "apps/office/src/svl/source/misc/native-sharedstringpool.test.ts",
+          "marker": "ports testSharedStringPool"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svl/sharedstringpool.hxx",
+          "marker": "class SVL_DLLPUBLIC SharedStringPool"
+        }
+      ]
+    }
+  }
+}

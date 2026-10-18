@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-20d5c31d-598e-444e-b968-1431c43403ed"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts#Exception",
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts#RuntimeException",
+        "udkapi/com/sun/star/uno/Exception.idl#Exception",
+        "udkapi/com/sun/star/uno/RuntimeException.idl#RuntimeException",
+        "codemaker/source/cppumaker/cpputype.cxx#ExceptionType::dumpHppFile",
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-initialization.test.ts#initializes actual generated exception values"
+      ],
+      "justification": "Task166a: the original generated base and derived exception values now share one base-first JavaScript initialization unit. Public Exception/RuntimeException paths reexport the same actual classes; unchanged value/member bodies and the original cached type factory preserve the existing contracts. This resolves the actual Exception -> Reference -> Any/genfunc -> RuntimeException eager heritage cycle, without consumer import-order workarounds, new registry, prototype installer or lifetime mechanism. C++ header/declaration ordering and ESM value evaluation are distinct language responsibilities. No full parity claim follows.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Exception",
+        "RuntimeException"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "codemaker/source/cppumaker/cpputype.cxx",
+      "upstreamSymbols": [
+        "ExceptionType::dumpHppFile",
+        "ExceptionType::dumpDeclaration"
+      ]
+    }
+  }
+}

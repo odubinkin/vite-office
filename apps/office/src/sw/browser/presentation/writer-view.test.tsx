@@ -1,4 +1,8 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
+import { tabStops } from "../../../../test/tab-item-fixtures";
+import { createTabs } from "../../../../test/tab-item-fixtures";
+import { SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
+
 import { VertOrientation } from "./../../../offapi/com/sun/star/text/VertOrientation";
 
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
@@ -10,11 +14,8 @@ import {
   projectWriterLineHeight,
   projectWriterLineHeightItem,
 } from "../../source/core/text/itrform2";
-import {
-  SvxLineSpacingItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { SvxFirstLineIndentItem, SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -498,10 +499,12 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       120,
     );
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetValue(),
+      (
+        shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
+      ).GetPropLineSpace(),
     ).toBe(150);
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
+      tabStops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).map(
         /** Projects a tab position. @param stop - Tab stop. @returns Twips. */
         (stop) => stop.GetTabPos(),
       ),
@@ -547,7 +550,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.pointerDown(rulerSurface, { clientX: 240 });
     fireEvent.pointerUp(window, { clientX: 240 });
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops(),
+      tabStops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem),
     ).toHaveLength(3);
     openParagraphDialog();
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
@@ -585,41 +588,30 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
   });
   it("projects fixed, minimum, and extra Writer line spacing", /** Covers the imported ODF spacing rules. @returns Nothing. */ () => {
     expect(
-      projectWriterLineHeightItem(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed"), 12),
+      projectWriterLineHeightItem(lineSpacingFixture(360, RES_PARATR_LINESPACING, "fixed"), 12),
     ).toBe(1.5);
     expect(
-      projectWriterLineHeightItem(new SvxLineSpacingItem(1, RES_PARATR_LINESPACING, "fixed"), 12),
+      projectWriterLineHeightItem(lineSpacingFixture(1, RES_PARATR_LINESPACING, "fixed"), 12),
     ).toBe(0.05);
     expect(
-      projectWriterLineHeightItem(
-        new SvxLineSpacingItem(200, RES_PARATR_LINESPACING, "minimum"),
-        12,
-      ),
+      projectWriterLineHeightItem(lineSpacingFixture(200, RES_PARATR_LINESPACING, "minimum"), 12),
     ).toBe(1.15);
     expect(
-      projectWriterLineHeightItem(
-        new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "minimum"),
-        12,
-      ),
+      projectWriterLineHeightItem(lineSpacingFixture(360, RES_PARATR_LINESPACING, "minimum"), 12),
     ).toBe(1.5);
     expect(
-      projectWriterLineHeightItem(
-        new SvxLineSpacingItem(60, RES_PARATR_LINESPACING, "leading"),
-        12,
-      ),
+      projectWriterLineHeightItem(lineSpacingFixture(60, RES_PARATR_LINESPACING, "leading"), 12),
     ).toBe(1.4);
-    expect(
-      projectWriterLineHeightItem(new SvxLineSpacingItem(115, RES_PARATR_LINESPACING), 12),
-    ).toBe(1.3);
+    expect(projectWriterLineHeightItem(lineSpacingFixture(115, RES_PARATR_LINESPACING), 12)).toBe(
+      1.3,
+    );
   });
   it("projects explicit paragraph colors without altering native text attributes", /** Checks projects explicit paragraph colors without altering native text attributes. @returns Test callback result. */ () => {
     const document = createWriterDocument();
     const node = document.paragraphs[0]!;
     node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
     node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
-    node.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
-    );
+    node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]));
     const cursor = new SwPaM(new SwPosition(node, 0));
     const projected = new WriterViewProjection().Project(
       document,
@@ -632,7 +624,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       highlight: "#fedcba",
       tabStopsPt: [36, 72],
     });
-    node.SetAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(960)]));
+    node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(960)]));
     expect(
       new WriterViewProjection().Project(
         document,
@@ -958,3 +950,19 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(true).toBe(true);
   });
 });
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
+}

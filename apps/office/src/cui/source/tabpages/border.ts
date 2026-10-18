@@ -1,4 +1,5 @@
 /** @fileoverview Owns Writer's represented native border tab page and separate item-set deltas. */
+import { Color } from "../../../tools/inc/color";
 import {
   SvxBoxItem,
   SvxBoxInfoItemLine,
@@ -76,7 +77,7 @@ export class SvxBorderTabPage {
   private style = Style.SOLID;
   private width = 5;
   private customWidth = false;
-  private color = 0;
+  private readonly color = new Color();
   private preset: number | undefined;
   /** Captures owned input, independent of document mutation. @param input - Native original items. @param boxWhich - Pool's outer box identity. @param mergeWhich - Mapped Writer table-mode item. @returns Nothing. */
   public constructor(
@@ -149,11 +150,12 @@ export class SvxBorderTabPage {
     for (let edge = 0; edge < 4; edge++) this.savedDistances[edge] = this.distances[edge];
     if (!selector.IsAnyBorderVisible()) selector.DeselectAllBorders();
     const uniform = selector.GetVisibleWidth(),
-      color = selector.GetVisibleColor();
+      color = new Color(),
+      hasColor = selector.GetVisibleColor(color);
     if (uniform !== undefined) this.SetLineWidth(uniform[0] * 5);
     this.style = uniform?.[1] ?? Style.SOLID;
-    this.color = color ?? 0;
-    if (uniform !== undefined && color !== undefined) selector.SelectAllVisibleBorders();
+    this.color.assign(color);
+    if (uniform !== undefined && hasColor) selector.SelectAllVisibleBorders();
     this.SelStyleHdl_Impl(this.style);
     this.SelColHdl_Impl(this.color);
     this.preset = undefined;
@@ -197,7 +199,7 @@ export class SvxBorderTabPage {
     return this.customWidth;
   }
   /** Reads displayed RGB. @returns Native color. */
-  public GetLineColor(): number {
+  public GetLineColor(): Readonly<Color> {
     return this.color;
   }
   /** Reads selected arrangement preset. @returns One-based preset or absence. */
@@ -252,8 +254,8 @@ export class SvxBorderTabPage {
     this.frameSelector.SetStyleToSelection(next, style);
   }
   /** Changes current and selected native line color. @param color - RGB. @returns Nothing. */
-  public SelColHdl_Impl(color: number): void {
-    this.color = color >>> 0;
+  public SelColHdl_Impl(color: Readonly<Color>): void {
+    this.color.assign(color);
     this.frameSelector.SetColorToSelection(this.color);
   }
   /** Lists the five native source arrangement descriptions for enabled inner lines. @returns Preset labels. */

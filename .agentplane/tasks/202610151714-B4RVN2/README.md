@@ -1,0 +1,224 @@
+---
+id: "202610151714-B4RVN2"
+title: "Port native grab-bag property values for text attributes"
+result_summary: "Implemented real shared ordered grab-bag values and typed UDK property transport; corrected runtime graph classification of erased type imports without a cycle exception. Inventory updated. Full text engine/Calc model/UI/same-model ODS still pending; goal active."
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 9
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-15T17:15:40.490Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-15T17:36:19.760Z"
+  updated_by: "CODER"
+  note: "Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T17:36:07.652Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent non-independent review of02195a75a75f478a1224cf6eaf92495a0bcbd383: bounded native grab-bag property values satisfy approved scope."
+  evaluated_sha: "02195a75a75f478a1224cf6eaf92495a0bcbd383"
+  blueprint_digest: "c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876"
+  evidence_refs:
+    - ".agentplane/tasks/202610151714-B4RVN2/README.md"
+    - ".agentplane/tasks/202610151714-B4RVN2/quality/20261015-173607652-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610151714-B4RVN2/quality/20261015-173607652-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610151714-B4RVN2/quality/20261015-173607652-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610151714-B4RVN2/blueprint/resolved-snapshot.json"
+    - "output/playwright/task159-checks/final-verification.json"
+    - "output/playwright/task159-checks/boundary-algorithm-proof.json"
+    - "output/playwright/task159-checks/erased-type-import-proof.json"
+    - "output/playwright/task159-checks/const-view-runtime-proof.json"
+    - "output/playwright/task159-checks/native-audit.json"
+  findings:
+    - "Actual SfxGrabBagItem and UDK PropertyValue/PropertyState reuse existing Unicode/Any/Sequence/type owners; nonempty and nested typed transport, exact failure behavior, Unicode key order, last duplicates, generated defaults and independent shared set/paragraph copies pass. Exact3new shared and33Calc profiles have every raw counter positive100."
+    - "Source-proven generated API graph edges are declared. No cycle exception is added; all28original guard function bodies remain unchanged. Full type clauses are erased from runtime graph, owner allowlisting still covers every declaration, and43tests plus actual compiler output for9CPPu files in two modes validate classification."
+commit:
+  hash: "02195a75a75f478a1224cf6eaf92495a0bcbd383"
+  message: "🚧 B4RVN2 core: port native grab-bag property values"
+comments:
+  -
+    author: "CODER"
+    body: "Start: implement genuine shared grab-bag property values and UDK dependencies over existing transport; preserve source behavior and GC adaptation within approved scope."
+  -
+    author: "CODER"
+    body: "Verified: native grab-bag/PropertyValue/PropertyState contracts pass65related/187Calc/19browser cases and43boundary tests, raw100coverage,13source gates and exact source/native hashes."
+events:
+  -
+    type: "status"
+    at: "2026-10-15T17:15:45.215Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: implement genuine shared grab-bag property values and UDK dependencies over existing transport; preserve source behavior and GC adaptation within approved scope."
+  -
+    type: "verify"
+    at: "2026-10-15T17:36:19.760Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active."
+  -
+    type: "status"
+    at: "2026-10-15T17:36:34.432Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native grab-bag/PropertyValue/PropertyState contracts pass65related/187Calc/19browser cases and43boundary tests, raw100coverage,13source gates and exact source/native hashes."
+doc_version: 3
+doc_updated_at: "2026-10-15T17:36:34.433Z"
+doc_updated_by: "CODER"
+description: "Task159: implement genuine shared SfxGrabBagItem and required UDK PropertyValue/PropertyState typed values over existing Any/Sequence/Unicode owners; preserve sorted UTF16 key/value semantics, duplicate replacement, copy/equality/hash/property transport and native failure behavior. Required missing EditEngine/ODS metadata dependency, not a fake text-engine/pool facade."
+sections:
+  Summary: "Task159 implements the actual SfxGrabBagItem metadata value required by the native EditEngine default table and later Calc/ODS property preservation, including its genuine UDK PropertyValue/PropertyState dependencies over existing CPPU transport."
+  Scope: "At most110 intentional non-agent paths: new canonical svl grabbagitem source/header, UDK beans PropertyValue/PropertyState declaration values and generated normal static type bindings; directly required existing shared string/Any/Sequence borrowing only if absent, related tests and canonical inventory/provenance/capability/docs. Use ordinary JS Map with primitive UTF16 string keys as the std::map key binding; preserve value-key equivalence, exact unsigned-code-unit order, no normalization, embedded nul/surrogate units and stable const map view. Values remain real independent Any objects. No duplicate Writer-only property implementation, native lifetime/cache/refcount manager, JSON methods in shared core, fake engine/pool/provider, UI localization or unrelated font rendering. No native compiler/probe/sanitizer. No new policy or guard exceptions; actual native library graph corrections only if source-proven and all algorithm bodies remain unchanged."
+  Plan: "Implement native PropertyState enum and PropertyValue default/copy/member construction, assignment, stable string/Any fields, equality and normal CPPU compound/enum bindings using actual existing type/sequence/Any owners. Logical member offsets are the existing compound dispatcher contract, not document bytes. Port SfxGrabBagItem default/Which/map/copy/factory/Clone/equality/keys-only hash and actual Sequence<PropertyValue> QueryValue/PutValue semantics; native member selectors ignored, failed extraction unchanged, duplicate names last-wins and incoming Handle/State discarded. Reuse existing SAL Unicode hash and o3tl combine. Verify nonempty/nested typed Any values and actual shared pool/set/ContentInfo target copies plus real Writer property transport users where applicable. Register exact metadata without broad parity promotion; run strict whole-owner shared and Calc100, related tests, all13source gates and portable build/relevant browser checks. Record source quirks, review/verify/commit/finish."
+  Verify Steps: "Pinned include/svl/grabbagitem.hxx and svl/source/items/grabbagitem.cxx plus UDK beans PropertyValue.idl/PropertyState.idl and real cppumaker enum/struct rules authoritative. Constructor defaults Which0/mapempty; value/copy independence; exact concrete payload/Which participation per actual base equality; full sorted case-sensitive UTF16 key equivalence/order; keys-only hash omissions; Query emits real Sequence<PropertyValue> sorted names/independent typed Any values with generated Handle0/StateDIRECT_VALUE; Put accepts exact declared sequence, clears on successful empty input, last duplicate wins, ignores Handle/State/member selector and rejects wrong types unchanged. PropertyValue actual string/long/Any/enum values preserve live member references, implicit value copies, signed32 conversions and typed compound transport without fabricated value/type providers. Test initialized/nonempty/nested Any and source/clone/query mutations plus real shared item-set/ContentInfo copies. Every changed/new executable shared owner and all Calc owners strict raw S/B/F/L100/every counter positive/exact measured owner sets; Writer-only gaps exempt, real related tests required. All13source gates/inventory semanticViolationCount0, portable production build and relevant existing Writer/browser scenarios. All4reference symlinks absent during tests/build/browser and restored exactly finally; exact source hashes, pinned native evidence, <=110 intentional paths and clean calc branch. Full all-app run remains deferred until genuine minimum connected UI+same-model ODS readiness, then applicable fixes and requested pause. No readiness claim for full engine/model/UI/ODS."
+  Verification: |-
+    Command: node output/playwright/task159-checks/portable.mjs; current-source shared-only rerun after type-only const API refinement. Result: pass. Evidence:65related tests/7files and187Calc tests/76files. Exact3new shared owners S106/B46/F29/L98 and all33Calc S4179/B2731/F821/L3727 are raw S/B/F/L100 with every counter positive and exact measured owner sets. Real nonempty/nested Any/Sequence<PropertyValue>, Unicode keys, stable views, independent copies/projections, wrong-type rejection, duplicate replacement and genuine SfxItemSet/ContentInfo target-pool copies are tested. Existing Writer item-codec/attributes/ODT tests pass. No Writer-only coverage repair.
+
+    Command: exact13argv in source-gates.json. Result: pass. Evidence:format/lint/typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff and43boundary tests, semanticViolationCount0. Actual SVL/UDK/CPPU native graph edges are source-proven. Runtime graph classification excludes fully erased type clauses while retaining ownership checks for all imports and conservative value-capable named specifiers. Existing28guard/search/cycle bodies are unchanged; two independently tested classifier functions added, no UDK/CPPU cycle exception. Actual compiler output for9current CPPU source files erases UDK back-references in both ordinary and verbatim modes; source and emitted hashes retained.
+
+    Command: node output/playwright/task159-checks/build-browser-portable.mjs. Result: pass. Evidence:production build plus19related Writer browser scenarios/7files, no skips/retries/flaky outcomes; body/cell paragraph/list/history/ODT reopen and tab/ruler behavior pass. All4native source references absent during tests/build/browser and restored exactly finally. Final const-Any API refinement changes types only; emitted runtime hashes are identical, with fresh shared source maps and static checks.
+
+    Command: python3 output/playwright/task159-checks/audit-final.py. Result: pass. Evidence:4073current source hashes against4059baseline,17intentional non-agent paths (3existing/14new) within110approved,20pinned native files at9bc445578031fecf56086729d8e4940c77e14d65, exact raw-positive profiles,13source gates,43boundary tests,19browser cases and4original symlink targets restored on calc. Canonical inventory retains unverified broad parity statuses and explicitly distinguishes native value contracts from parent document/engine fixture context.
+
+    Limits: JS primitive UTF16 keys replace native OUString map key representation with exact code-unit equality/order; actual Any values reuse existing shared transport and independent copy contracts. No native memory/cache/refcount/physical pointer/iterator ABI manager, fake provider/pool, core JSON, localization or C++ generator/compiler/probe/sanitizer. Full EditTextObject/EditEngine/default fonts/pool/Calc document/connected UI/same-model ODS remain pending. Referenced upstream DOCX fixture supplies responsibility context; its full export workflow is not claimed ported. Full all-app regression remains deferred until genuine minimum connected UI+same-model ODS readiness, then applicable repairs and requested pause. Goal active; quality review same-agent, not independent.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T17:36:19.760Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:35:33.951Z, excerpt_hash=sha256:9a7a7ba3785e8a210cb54df2aa95f4f71d68daa82b2c946f935ccc42191482a1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151714-B4RVN2/blueprint/resolved-snapshot.json
+    - old_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+    - current_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610151714-B4RVN2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610151714-B4RVN2 -m 🧩 B4RVN2 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only intentional task implementation and lifecycle artifacts; preserve user merges, unrelated tasks and native reference links. No history destruction."
+  Findings: |-
+    Preflight clean calc at a7f22a3658e2db9b06e270c8c02d4a80ca3ba83b. Actual native61EditEngine defaults require SfxGrabBagItem; no prior implementation exists. Optical sizing already exists and was reused rather than duplicated. Genuine UDK PropertyValue/PropertyState values and normal static type bindings reuse real Any/Sequence/Unicode/typelib owners. Existing Writer pipelines are related regressions; full document metadata import/export is not newly claimed.
+
+    - Command: initial typecheck. Result: fail. Evidence: unused uno_Any import and unsupported override modifiers on native hash methods (the existing base binding does not declare those methods). Resolution: reuse uno_Any in the actual C assignment for raw compound Any members and follow existing concrete hash-method declaration conventions. DECLARE_ITEM_TYPE_FUNCTION declares ItemType only; do not invent a GrabBag CreateDefault factory. The later const-map return annotation was narrowed from mutable Any to its real const-view type; no runtime change or weaker type assertion was used. Retained logs; corrected typecheck passes.
+    - Command: native property/metadata related suite. Result: pass. Evidence:65cases/7files, exact3new runtime owners raw S106/B46/F29/L98 all100/every counter positive. Full Calc187cases/76files passes with all33owners raw100. Actual typed nonempty/nested properties, independent source/copy/query mutations, exact failed extraction and real SfxItemSet/ContentInfo pool copies are tested.
+    - Command: initial module dependency check. Result: fail. Evidence: native svl->udkapi and generated UDK API->cppu edges were absent. A reported cppu->udkapi->cppu cycle included declaration-only TypeClass imports. Resolution: source-proven graph edges from grabbagitem.cxx/normal cppumaker headers; classify fully erased type clauses before building the runtime graph while preserving all owner allowlist checks. Do not add a UDK/CPPU cycle exception or duplicate Any/Sequence/type providers. All28original guard function bodies are unchanged; new classification is independently exercised, retaining named type specifiers conservatively because verbatim-module emit can preserve empty imports. Original SAL/o3tl admission/search logic is untouched.
+    - Command: provenance gate. Result: rework. Evidence: a PropertyState-only upstream symbol list relied on basename similarity. Resolution: record actual IDL enumerators, PropertyValue fields and pinned cppumaker static type bodies, without altering parity/history status. No fabricated upstream scenario or matching filename-only proof.
+
+    Limits: primitive UTF16 Map keys preserve native value comparison/order; actual Any values retain existing copy/protocol behavior. No native ownership/cache/refcount manager, JSON core methods, fake engine/default pool, localization or native generator/probe is added. Full EditTextObject/EditEngine/default fonts/Calc document/connected UI/same-model ODS remain pending; full all-app run only at genuine minimum readiness followed by repairs/pause. Goal active.
+
+    - Command: actual TypeScript emit proof for CPPU UDK back-references. Result: pass. Evidence:9real CPPU source files contain only full import-type UDK declarations; both ordinary and verbatim-module emit remove all of them. No real runtime CPPU/UDK cycle is suppressed. Scope: current-source source hashes and emitted hashes are retained in erased-type-import-proof.json.
+    - Observation: refine the const-map value view to expose every existing const Any operation while omitting only mutations/destructor. Resolution: type-only Omit view, no new runtime wrapper. Identical emitted runtime hashes prove the previously accepted Calc/build/browser still execute identical code; rerun65related tests with current source maps and format/lint/typecheck/docs/diff. Exact3new owners remain raw100.
+    - Command: final acceptance/audit. Result: pass. Evidence:65related/187Calc/19browser cases,43boundary tests,13source gates/inventory0,20native pins,17intentional non-agent paths and4073current source hashes against4059baseline. All4source links restored; original28guard bodies unchanged, two classifier functions added, no cycle exception. Resolution: same-agent review and canonical commit/finish. Full goal remains incomplete; continue real engine/pool/Calc document/UI/ODS prerequisites, not an all-app run before minimum readiness.
+id_source: "generated"
+---
+## Summary
+
+Task159 implements the actual SfxGrabBagItem metadata value required by the native EditEngine default table and later Calc/ODS property preservation, including its genuine UDK PropertyValue/PropertyState dependencies over existing CPPU transport.
+
+## Scope
+
+At most110 intentional non-agent paths: new canonical svl grabbagitem source/header, UDK beans PropertyValue/PropertyState declaration values and generated normal static type bindings; directly required existing shared string/Any/Sequence borrowing only if absent, related tests and canonical inventory/provenance/capability/docs. Use ordinary JS Map with primitive UTF16 string keys as the std::map key binding; preserve value-key equivalence, exact unsigned-code-unit order, no normalization, embedded nul/surrogate units and stable const map view. Values remain real independent Any objects. No duplicate Writer-only property implementation, native lifetime/cache/refcount manager, JSON methods in shared core, fake engine/pool/provider, UI localization or unrelated font rendering. No native compiler/probe/sanitizer. No new policy or guard exceptions; actual native library graph corrections only if source-proven and all algorithm bodies remain unchanged.
+
+## Plan
+
+Implement native PropertyState enum and PropertyValue default/copy/member construction, assignment, stable string/Any fields, equality and normal CPPU compound/enum bindings using actual existing type/sequence/Any owners. Logical member offsets are the existing compound dispatcher contract, not document bytes. Port SfxGrabBagItem default/Which/map/copy/factory/Clone/equality/keys-only hash and actual Sequence<PropertyValue> QueryValue/PutValue semantics; native member selectors ignored, failed extraction unchanged, duplicate names last-wins and incoming Handle/State discarded. Reuse existing SAL Unicode hash and o3tl combine. Verify nonempty/nested typed Any values and actual shared pool/set/ContentInfo target copies plus real Writer property transport users where applicable. Register exact metadata without broad parity promotion; run strict whole-owner shared and Calc100, related tests, all13source gates and portable build/relevant browser checks. Record source quirks, review/verify/commit/finish.
+
+## Verify Steps
+
+Pinned include/svl/grabbagitem.hxx and svl/source/items/grabbagitem.cxx plus UDK beans PropertyValue.idl/PropertyState.idl and real cppumaker enum/struct rules authoritative. Constructor defaults Which0/mapempty; value/copy independence; exact concrete payload/Which participation per actual base equality; full sorted case-sensitive UTF16 key equivalence/order; keys-only hash omissions; Query emits real Sequence<PropertyValue> sorted names/independent typed Any values with generated Handle0/StateDIRECT_VALUE; Put accepts exact declared sequence, clears on successful empty input, last duplicate wins, ignores Handle/State/member selector and rejects wrong types unchanged. PropertyValue actual string/long/Any/enum values preserve live member references, implicit value copies, signed32 conversions and typed compound transport without fabricated value/type providers. Test initialized/nonempty/nested Any and source/clone/query mutations plus real shared item-set/ContentInfo copies. Every changed/new executable shared owner and all Calc owners strict raw S/B/F/L100/every counter positive/exact measured owner sets; Writer-only gaps exempt, real related tests required. All13source gates/inventory semanticViolationCount0, portable production build and relevant existing Writer/browser scenarios. All4reference symlinks absent during tests/build/browser and restored exactly finally; exact source hashes, pinned native evidence, <=110 intentional paths and clean calc branch. Full all-app run remains deferred until genuine minimum connected UI+same-model ODS readiness, then applicable fixes and requested pause. No readiness claim for full engine/model/UI/ODS.
+
+## Verification
+
+Command: node output/playwright/task159-checks/portable.mjs; current-source shared-only rerun after type-only const API refinement. Result: pass. Evidence:65related tests/7files and187Calc tests/76files. Exact3new shared owners S106/B46/F29/L98 and all33Calc S4179/B2731/F821/L3727 are raw S/B/F/L100 with every counter positive and exact measured owner sets. Real nonempty/nested Any/Sequence<PropertyValue>, Unicode keys, stable views, independent copies/projections, wrong-type rejection, duplicate replacement and genuine SfxItemSet/ContentInfo target-pool copies are tested. Existing Writer item-codec/attributes/ODT tests pass. No Writer-only coverage repair.
+
+Command: exact13argv in source-gates.json. Result: pass. Evidence:format/lint/typecheck/docs/size/dependencies/tree/provenance/inventory/routing/doctor/diff and43boundary tests, semanticViolationCount0. Actual SVL/UDK/CPPU native graph edges are source-proven. Runtime graph classification excludes fully erased type clauses while retaining ownership checks for all imports and conservative value-capable named specifiers. Existing28guard/search/cycle bodies are unchanged; two independently tested classifier functions added, no UDK/CPPU cycle exception. Actual compiler output for9current CPPU source files erases UDK back-references in both ordinary and verbatim modes; source and emitted hashes retained.
+
+Command: node output/playwright/task159-checks/build-browser-portable.mjs. Result: pass. Evidence:production build plus19related Writer browser scenarios/7files, no skips/retries/flaky outcomes; body/cell paragraph/list/history/ODT reopen and tab/ruler behavior pass. All4native source references absent during tests/build/browser and restored exactly finally. Final const-Any API refinement changes types only; emitted runtime hashes are identical, with fresh shared source maps and static checks.
+
+Command: python3 output/playwright/task159-checks/audit-final.py. Result: pass. Evidence:4073current source hashes against4059baseline,17intentional non-agent paths (3existing/14new) within110approved,20pinned native files at9bc445578031fecf56086729d8e4940c77e14d65, exact raw-positive profiles,13source gates,43boundary tests,19browser cases and4original symlink targets restored on calc. Canonical inventory retains unverified broad parity statuses and explicitly distinguishes native value contracts from parent document/engine fixture context.
+
+Limits: JS primitive UTF16 keys replace native OUString map key representation with exact code-unit equality/order; actual Any values reuse existing shared transport and independent copy contracts. No native memory/cache/refcount/physical pointer/iterator ABI manager, fake provider/pool, core JSON, localization or C++ generator/compiler/probe/sanitizer. Full EditTextObject/EditEngine/default fonts/pool/Calc document/connected UI/same-model ODS remain pending. Referenced upstream DOCX fixture supplies responsibility context; its full export workflow is not claimed ported. Full all-app regression remains deferred until genuine minimum connected UI+same-model ODS readiness, then applicable repairs and requested pause. Goal active; quality review same-agent, not independent.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T17:36:19.760Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified02195a75a75f:65related/187Calc/19browser cases,43boundary tests/build/all13gates pass. Exact3new shared/33Calc owners raw S/B/F/L100/every counter positive, inventory0;20native pins/17paths/4073hashes/4links restored. All28old guard bodies unchanged;9CPPu back-reference source files erase type imports in both emit modes, no cycle exception. Full engine/Calc model/UI/ODS pending, goal active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T17:35:33.951Z, excerpt_hash=sha256:9a7a7ba3785e8a210cb54df2aa95f4f71d68daa82b2c946f935ccc42191482a1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610151714-B4RVN2/blueprint/resolved-snapshot.json
+- old_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+- current_digest: c38ef9f982a842da33a9e9840b3f272a11a332de5fb03378dbaaf9a469824876
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610151714-B4RVN2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610151714-B4RVN2 -m 🧩 B4RVN2 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only intentional task implementation and lifecycle artifacts; preserve user merges, unrelated tasks and native reference links. No history destruction.
+
+## Findings
+
+Preflight clean calc at a7f22a3658e2db9b06e270c8c02d4a80ca3ba83b. Actual native61EditEngine defaults require SfxGrabBagItem; no prior implementation exists. Optical sizing already exists and was reused rather than duplicated. Genuine UDK PropertyValue/PropertyState values and normal static type bindings reuse real Any/Sequence/Unicode/typelib owners. Existing Writer pipelines are related regressions; full document metadata import/export is not newly claimed.
+
+- Command: initial typecheck. Result: fail. Evidence: unused uno_Any import and unsupported override modifiers on native hash methods (the existing base binding does not declare those methods). Resolution: reuse uno_Any in the actual C assignment for raw compound Any members and follow existing concrete hash-method declaration conventions. DECLARE_ITEM_TYPE_FUNCTION declares ItemType only; do not invent a GrabBag CreateDefault factory. The later const-map return annotation was narrowed from mutable Any to its real const-view type; no runtime change or weaker type assertion was used. Retained logs; corrected typecheck passes.
+- Command: native property/metadata related suite. Result: pass. Evidence:65cases/7files, exact3new runtime owners raw S106/B46/F29/L98 all100/every counter positive. Full Calc187cases/76files passes with all33owners raw100. Actual typed nonempty/nested properties, independent source/copy/query mutations, exact failed extraction and real SfxItemSet/ContentInfo pool copies are tested.
+- Command: initial module dependency check. Result: fail. Evidence: native svl->udkapi and generated UDK API->cppu edges were absent. A reported cppu->udkapi->cppu cycle included declaration-only TypeClass imports. Resolution: source-proven graph edges from grabbagitem.cxx/normal cppumaker headers; classify fully erased type clauses before building the runtime graph while preserving all owner allowlist checks. Do not add a UDK/CPPU cycle exception or duplicate Any/Sequence/type providers. All28original guard function bodies are unchanged; new classification is independently exercised, retaining named type specifiers conservatively because verbatim-module emit can preserve empty imports. Original SAL/o3tl admission/search logic is untouched.
+- Command: provenance gate. Result: rework. Evidence: a PropertyState-only upstream symbol list relied on basename similarity. Resolution: record actual IDL enumerators, PropertyValue fields and pinned cppumaker static type bodies, without altering parity/history status. No fabricated upstream scenario or matching filename-only proof.
+
+Limits: primitive UTF16 Map keys preserve native value comparison/order; actual Any values retain existing copy/protocol behavior. No native ownership/cache/refcount manager, JSON core methods, fake engine/default pool, localization or native generator/probe is added. Full EditTextObject/EditEngine/default fonts/Calc document/connected UI/same-model ODS remain pending; full all-app run only at genuine minimum readiness followed by repairs/pause. Goal active.
+
+- Command: actual TypeScript emit proof for CPPU UDK back-references. Result: pass. Evidence:9real CPPU source files contain only full import-type UDK declarations; both ordinary and verbatim-module emit remove all of them. No real runtime CPPU/UDK cycle is suppressed. Scope: current-source source hashes and emitted hashes are retained in erased-type-import-proof.json.
+- Observation: refine the const-map value view to expose every existing const Any operation while omitting only mutations/destructor. Resolution: type-only Omit view, no new runtime wrapper. Identical emitted runtime hashes prove the previously accepted Calc/build/browser still execute identical code; rerun65related tests with current source maps and format/lint/typecheck/docs/diff. Exact3new owners remain raw100.
+- Command: final acceptance/audit. Result: pass. Evidence:65related/187Calc/19browser cases,43boundary tests,13source gates/inventory0,20native pins,17intentional non-agent paths and4073current source hashes against4059baseline. All4source links restored; original28guard bodies unchanged, two classifier functions added, no cycle exception. Resolution: same-agent review and canonical commit/finish. Full goal remains incomplete; continue real engine/pool/Calc document/UI/ODS prerequisites, not an all-app run before minimum readiness.

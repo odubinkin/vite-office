@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-667c907c-e2ec-4609-bfdf-ddea20cf2c19",
+    "capabilityId": "CAP-667c907c-e2ec-4609-bfdf-ddea20cf2c19",
+    "suite": "writer",
+    "subsystem": "font-height-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original height/property/unit state, constructors/copies/metric arithmetic and script defaults are preserved.",
+      "Actual Writer snapshot/history retains complete fields without constructor compatibility bridges."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task126 ports original SvxFontHeightItem height/property/unit value state, original3argument/copy constructors,240100factory,SetProp,bothSetHeightoverloads,copyClone,payload equality ignoringWhich,4fieldhash and llround-basedScaleMetrics/HasMetrics. Original unsigned32product wraps before /100 and signed16absolute delta/4argument ControlToItem direction retained (CALC109110). Existing checkedJS height guard retains negative/fractional errors and admits native0/MAX. All40original calls across24files migrate to native3argument form without2argcompatibility overload. Existing Writer browser snapshot now retains height,prop,propUnit; its pool factory restores stored height with100thenSetProp to avoid applying property twice. Old scalar-height snapshot payloads are rejected; no fallback that discards native fields. Actual Writer history/itemset/graph roundtrip tests retain complete absolute/relative state. Native typedAny transport and localizedpresentation remain unported, not simulated by the existing browser state projection. Source shard required by enforced500line budget; canonical textitem/fhgtitem reexport oneowner. Calc101112117height200prop100relative defaults use actualitemset clones, no fakeDocPool/document/provider. Existing metadata histories/statuses and IO/recovery exceptions preserved, no broad parity promotion. FullDocPool/config/document/UI/same-modelODS pending. No C++build/generator/sanitizer/custommemoryengine. Full regression only actualminimumUI+ODSread/save readiness then repairs/pause; Writer-only coverage gaps remain exempt."
+    },
+    "capability": "Canonical font-height value state and consumers",
+    "gaps": [
+      "Native typedAny transport/presentation/fullDocPool/document/UI/ODS remain pending.",
+      "No full nativeQA certificate; changed snapshot factory requires complete native fields."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+          "marker": "SvxFontHeightItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+          "marker": "SvxFontHeightItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+          "marker": "SvxFontHeightItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+          "marker": "SvxFontHeightItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-font-height-state.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical font-height value state and Writer consumers (task126)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/core/attr/swatrset.cxx",
+          "marker": "SwAttrPool"
+        },
+        {
+          "path": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "DocumentStylePoolManager::GetTextCollFromPool"
+        },
+        {
+          "path": "sw/source/core/txtnode/txatbase.cxx",
+          "marker": "RES_TXTATR_AUTOFMT"
+        },
+        {
+          "path": "sw/source/filter/xml/xmlimp.cxx",
+          "marker": "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/core/attr/attr.cxx",
+          "marker": "testSwAttrSet"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/README.md",
+          "marker": "SwDoc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "writer-native-font-height-values",
+    "scopeLimitations": [
+      "Task126 ports original SvxFontHeightItem height/property/unit value state, original3argument/copy constructors,240100factory,SetProp,bothSetHeightoverloads,copyClone,payload equality ignoringWhich,4fieldhash and llround-basedScaleMetrics/HasMetrics. Original unsigned32product wraps before /100 and signed16absolute delta/4argument ControlToItem direction retained (CALC109110). Existing checkedJS height guard retains negative/fractional errors and admits native0/MAX. All40original calls across24files migrate to native3argument form without2argcompatibility overload. Existing Writer browser snapshot now retains height,prop,propUnit; its pool factory restores stored height with100thenSetProp to avoid applying property twice. Old scalar-height snapshot payloads are rejected; no fallback that discards native fields. Actual Writer history/itemset/graph roundtrip tests retain complete absolute/relative state. Native typedAny transport and localizedpresentation remain unported, not simulated by the existing browser state projection. Source shard required by enforced500line budget; canonical textitem/fhgtitem reexport oneowner. Calc101112117height200prop100relative defaults use actualitemset clones, no fakeDocPool/document/provider. Existing metadata histories/statuses and IO/recovery exceptions preserved, no broad parity promotion. FullDocPool/config/document/UI/same-modelODS pending. No C++build/generator/sanitizer/custommemoryengine. Full regression only actualminimumUI+ODSread/save readiness then repairs/pause; Writer-only coverage gaps remain exempt."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

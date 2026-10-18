@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141838-426QVV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-15T04:34:34.638Z",
+  "verdict": "pass",
+  "summary": "Native shared ItemInfo packages and single-pool registration meet task141 scope; same-agent review is not independent.",
+  "evaluated_sha": "dc5cf6e4846bc005356547d7bfe2b354137ef3f9",
+  "blueprint_digest": "cb974d59c0a085eda739695de6f1519dd0877afc0e217364fa9c1b2f95dfa735",
+  "findings": [
+    "Actual metadata/default identity and static/dynamic classification, protected/private native friend calls, package EMPTY/nonzero-slot cache and single-pool registration/default/slot paths are source-grounded. Ordinary JS Maps/references/GC own data; no refcount/delete/weak manager or public setter is introduced.",
+    "46related cases/6files,181Calc/71files and38boundaries pass;2complete changed shared owners and33Calc owners every raw counter positive100. Existing Writer browser default/factory consumers pass unchanged. Portable build and13source gates pass,636records zero violations.",
+    "14intentional paths/3824source hashes/6native pins/four restored links verified. CALC-120 retains source empty-cache rescans without a bug claim. Real Calc183/184 pool-dependent set-item package witnesses do not claim full Calc SID/default package, chains/user defaults or document/UI/ODS readiness."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141838-426QVV/README.md",
+    "output/playwright/task141-checks/verification.json",
+    "output/playwright/task141-checks/source-gates.json",
+    "output/playwright/task141-checks/source-contract-audit.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

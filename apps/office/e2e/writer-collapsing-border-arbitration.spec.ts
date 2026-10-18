@@ -1,4 +1,5 @@
 /** @fileoverview Verifies source border competition and mode history in current production Chromium. */
+import { Color } from "../src/tools/inc/color";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SvxBoxItem } from "../src/editeng/source/items/frmitems";
@@ -19,9 +20,9 @@ for (const width of [1280, 390])
       table.AddColumnWidth(3000);
       table.AddColumnWidth(3000);
       for (const [r, pair] of [
-        [new SvxBorderLine(0xff0000, 20), new SvxBorderLine(0x0000ff, 20)],
-        [new SvxBorderLine(0xff0000, 20, 2), new SvxBorderLine(0x0000ff, 20)],
-        [new SvxBorderLine(0xff0000, 60), new SvxBorderLine(0x0000ff, 60, 3)],
+        [new SvxBorderLine(new Color(0xff0000), 20), new SvxBorderLine(new Color(0x0000ff), 20)],
+        [new SvxBorderLine(new Color(0xff0000), 20, 2), new SvxBorderLine(new Color(0x0000ff), 20)],
+        [new SvxBorderLine(new Color(0xff0000), 60), new SvxBorderLine(new Color(0x0000ff), 60, 3)],
       ].entries()) {
         for (const [c, cell] of doc.nodes.AppendTableRow(table, 2).GetTabBoxes().entries()) {
           const box = new SvxBoxItem(RES_BOX);

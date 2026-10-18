@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/font-metadata-codec.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-50bc08cb-e3a0-456a-befb-ee9b9d0d2126"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/font-metadata-codec.ts",
+        "apps/office/src/vcl/browser/font-metadata-codec.test.ts"
+      ],
+      "justification": "Task183 repairs loss of new represented native Font paint/alignment/size fields in Writer browser document/Worker records. One shared vcl/browser metadata codec transports actual Font values using existing Color/Size owners;Writer keeps its existing family-name/presence ownership fields and delegates metadata encode/restore. Complete current groups preserve packed alpha colors,independent transparency,alignment and signed safe-integer geometry. Validation rejects malformed/partial new groups before mutating the actual Font;legacy four-field metadata restores absent new values from a genuine default Font at the existing browser I/O boundary. Fill precedes explicit transparency to preserve native independent flags. Core Font/Color/Size/numbering and ODF algorithms remain unchanged. This is browser primitive transport,not a native wire format,service or class facsimile. Full unrepresented Font/config/device/rendering and actual Calc pool/document/UI/same-model ODS remain pending;registered save/open/recovery deviations and broad parity statuses are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeFontMetadata",
+        "restoreFontMetadata"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

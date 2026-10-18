@@ -87,9 +87,9 @@ for (const width of [1280, 390])
             ? "WrappedProof " + "list text wraps beyond its label ".repeat(10)
             : profile.name + "Proof";
         node.SetText(text);
-        node.SetAttr(new SvxFontHeightItem(profile.font * 20, RES_CHRATR_FONTSIZE));
-        node.SetAttr(new SvxFontHeightItem(profile.font * 20, RES_CHRATR_CJK_FONTSIZE));
-        node.SetAttr(new SvxFontHeightItem(profile.font * 20, RES_CHRATR_CTL_FONTSIZE));
+        node.SetAttr(new SvxFontHeightItem(profile.font * 20, 100, RES_CHRATR_FONTSIZE));
+        node.SetAttr(new SvxFontHeightItem(profile.font * 20, 100, RES_CHRATR_CJK_FONTSIZE));
+        node.SetAttr(new SvxFontHeightItem(profile.font * 20, 100, RES_CHRATR_CTL_FONTSIZE));
         const kind = profile.numbered ? "numbered" : "bullet",
           rule = doc.EnsureNumRule(profile.name, kind),
           indent = 720 + profile.level * 360;

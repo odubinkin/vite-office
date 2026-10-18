@@ -1,0 +1,76 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f1c0cdbb-30cb-4ee2-97ca-33b10387b949",
+    "capabilityId": "CAP-f1c0cdbb-30cb-4ee2-97ca-33b10387b949",
+    "suite": "calc",
+    "subsystem": "font-weight-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original weight NORMAL factory/copies/Clone/payload equality and bool-float Any members are preserved.",
+      "Native VCL11weight constants/ordered float thresholds and float32casts retain original logical behavior.",
+      "Calc102113118NORMAL defaults use existing actual itemset copies."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task123 aligns existing SvxWeightItem with actual SfxEnumItem enum/factory/copy/Clone/boldthreshold/BOLD-or-NORMAL setter/payload equality and native bool/float Any transport. Native tools FontWeight exists once, legacy Writer names are readonly const/type aliases with broad canonical enum value types preserving old parameter inference; same type-only widening applied to existing FontItalic aliases. CheckedJS constructor negative/fractional/out-of-enum-range guards retained, native initialized unknown11/sentinel accepted. VCL ConvertFontWeight preserves original11AWTfloat constants (MEDIUM105) and ordered<=float mapping/defaultDONTKNOW using Math.fround for nativefloat parameter/cast. Explicit erased-family selector avoids number-based overload guessing. Actual Any double then signed32 calls retained in short-circuit form; native assignLONG source set is subsetofDOUBLE, no fake fallback-success peer/private forcing. Unknown members untouchedsuccess and invalid bool resetsNORMAL; float above200orNaN mapsDONTKNOW. Calc102113118NORMAL defaults use real shared itemset copies. Existing equality/unknown11 expectations corrected from source; negative/fractional guards and raw100thresholds retained. FontWeight invariant witness moves to tools keeping ID/value/native evidence. CALC108 records threshold/default/fallback oddities. Existing metadata history/status retained without broad parity promotion. Other VCL helpers/native presentation/cache/diagnostics/refcounts/ABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No C++build/generator/sanitizer/memory library. Next full only real minimum UI+ODSread/save readiness then relevant repairs/pause."
+    },
+    "capability": "Calc3script weight default values",
+    "gaps": [
+      "Native localized presentation/resources/cache/ABI and actual complete DocPool/document/UI/ODS pending or excluded.",
+      "No full native QA certification or full application regression now."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/scitems.ts",
+          "marker": "ATTR_FONT_WEIGHT"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/data/weightattr.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Canonical shared font weight and Calc script defaults (task123)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/scitems.hxx",
+          "marker": "ATTR_FONT_WEIGHT"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "class Test"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Calc"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "calc-weight-defaults",
+    "scopeLimitations": [
+      "Task123 aligns existing SvxWeightItem with actual SfxEnumItem enum/factory/copy/Clone/boldthreshold/BOLD-or-NORMAL setter/payload equality and native bool/float Any transport. Native tools FontWeight exists once, legacy Writer names are readonly const/type aliases with broad canonical enum value types preserving old parameter inference; same type-only widening applied to existing FontItalic aliases. CheckedJS constructor negative/fractional/out-of-enum-range guards retained, native initialized unknown11/sentinel accepted. VCL ConvertFontWeight preserves original11AWTfloat constants (MEDIUM105) and ordered<=float mapping/defaultDONTKNOW using Math.fround for nativefloat parameter/cast. Explicit erased-family selector avoids number-based overload guessing. Actual Any double then signed32 calls retained in short-circuit form; native assignLONG source set is subsetofDOUBLE, no fake fallback-success peer/private forcing. Unknown members untouchedsuccess and invalid bool resetsNORMAL; float above200orNaN mapsDONTKNOW. Calc102113118NORMAL defaults use real shared itemset copies. Existing equality/unknown11 expectations corrected from source; negative/fractional guards and raw100thresholds retained. FontWeight invariant witness moves to tools keeping ID/value/native evidence. CALC108 records threshold/default/fallback oddities. Existing metadata history/status retained without broad parity promotion. Other VCL helpers/native presentation/cache/diagnostics/refcounts/ABI/fullDocPool/config/storage/document/UI/ODS pending/excluded. No C++build/generator/sanitizer/memory library. Next full only real minimum UI+ODSread/save readiness then relevant repairs/pause."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

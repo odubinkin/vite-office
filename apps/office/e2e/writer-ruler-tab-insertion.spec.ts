@@ -1,6 +1,7 @@
 /** @fileoverview Checks insertion at a stored default tab through Chromium without upstream dependencies. */
+import { createTabs } from "../test/tab-item-fixtures";
 import { expect, test } from "@playwright/test";
-import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../src/editeng/source/items/paraitem";
+import { SvxTabStop, SvxTabAdjust } from "../src/editeng/inc/tstpitem";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { RES_PARATR_TABSTOP } from "../src/sw/inc/hintids";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
@@ -21,11 +22,7 @@ for (const width of [1280, 390]) {
     const shell = new SwWrtShell(new SwDocShell(document, metadata));
     shell.Insert("RulerTabInsertionProof");
     shell.SetParagraphItem(
-      SvxTabStopItem.FromStops(
-        RES_PARATR_TABSTOP,
-        [new SvxTabStop(1200, SvxTabAdjust.Default, ",", "_")],
-        720,
-      ),
+      createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(1200, SvxTabAdjust.Default, ",", "_")], 720),
     );
     const bytes = writeOdtDocument(document, metadata);
     await page.setViewportSize({ width, height: 800 });

@@ -18,9 +18,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/filter/xml/xmlfonte.ts#createWriterFontAutoStylePool",
-        "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx#SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl"
+        "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx#SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+        "docs/program/calc-core.md#Canonical font-family values and ODF metadata (task135)"
       ],
-      "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlfonte.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+      "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlfonte.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity. Task135: Registers complete native font keys through Add then Find at the existing browser callback boundary; preserves native first-Add empty return. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
       "knownViolations": [],
       "localSymbols": [
         "createWriterFontAutoStylePool"

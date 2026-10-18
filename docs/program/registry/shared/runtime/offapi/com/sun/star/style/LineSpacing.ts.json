@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/style/LineSpacing.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "canonical-line-spacing",
+    "capabilityIds": [
+      "CAP-3d811d25-678a-49ac-9b54-f5b4d7ee7415"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/style/LineSpacing.ts",
+        "apps/office/src/editeng/source/items/native-line-spacing.test.ts",
+        "docs/program/calc-core.md#Canonical shared line spacing and Writer consumers (task155)"
+      ],
+      "justification": "Task155 replaces the reduced mode/value/font-independent item with original five-field SvxLineSpacingItem state, native rule enums, default/copy/setter/Clone/equality/hash and typed Any contracts. Actual LineSpacing two-short struct uses shared CPPU metadata and ordinary JS scalar cells, not binary persistence or lifetime machinery. Writer height200 defaults, commands, layout and ODF consume actual fields; browser persistence stores all five fields and decodes old scalar/tuple inputs only at its existing I/O boundary. Font-independent line spacing belongs to Drawing text-object properties and is removed from Writer paragraph model/filter/dialog; generic shared XML support remains. Native inactive-field equality versus all-field hashing and unknown-member successful normalization are preserved and documented. Translated presentation, tab-stop canonicalization, real full engine/pool/Calc model/connected UI and same-model ODS remain pending. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "the_type",
+        "cppu_detail_getUnoType_LineSpacing",
+        "LineSpacing"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/style/LineSpacing.idl",
+      "upstreamSymbols": [
+        "LineSpacing",
+        "Mode",
+        "Height"
+      ]
+    }
+  }
+}

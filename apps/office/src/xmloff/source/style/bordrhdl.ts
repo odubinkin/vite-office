@@ -1,6 +1,6 @@
 /** @fileoverview Imports and exports represented native border properties from bordrhdl.cxx. */
-import { SvxBoxItem, type BorderLine2 } from "../../../editeng/source/items/frmitems";
-import { SvxBorderLineStyle, type SvxBorderLine } from "../../../editeng/source/items/borderline";
+import { BorderLine2 } from "../../../offapi/com/sun/star/table/BorderLine2";
+import { BorderLineStyle } from "../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 
 /** Filter-only ODF border and distance properties; scalar fields never enter the kernel. */
@@ -22,7 +22,7 @@ export interface OdfBoxProperties {
   readonly borderLineWidthRight?: string | undefined;
 }
 /** Native ODF style token values. */
-const borderStyles: Readonly<Record<string, SvxBorderLineStyle>> = {
+const borderStyles: Readonly<Record<string, BorderLineStyle>> = {
   none: 32767,
   hidden: 32767,
   solid: 0,
@@ -38,9 +38,9 @@ const borderStyles: Readonly<Record<string, SvxBorderLineStyle>> = {
   "dash-dot": 16,
   "dash-dot-dot": 17,
 };
-/** Converts native style to the source ODF token. @param style - Native style. @returns ODF token. */
-function borderStyleToken(style: number): string {
-  if (style === SvxBorderLineStyle.NONE) return "solid";
+/** Shared pure source token spelling also used by the Writer presentation boundary; not an invented native class API. Converts native style to the source ODF token. @param style - Native style. @returns ODF token. */
+export function borderStyleToken(style: number): string {
+  if (style === BorderLineStyle.NONE) return "solid";
   if (style >= 3 && style <= 9) return "double";
   return (
     Object.entries(borderStyles).find(
@@ -49,12 +49,6 @@ function borderStyleToken(style: number): string {
     )?.[0] ?? "solid"
   );
 }
-/** Formats native twip values for the existing presentation shorthand control. @param line - Native line. @returns Presentation input. */
-export function exportBorderShorthand(line: SvxBorderLine | undefined): string {
-  if (line === undefined || line.isEmpty()) return "none";
-  return `${line.GetWidth() / 20}pt ${borderStyleToken(line.GetBorderLineStyle())} #${(line.GetColor() & 0xffffff).toString(16).padStart(6, "0")}`;
-}
-
 /** Owns the native border shorthand parser at the XML boundary. */
 export class XMLBorderHdl {
   /** Imports native style, width and color without clearing omitted fields. @param text - ODF shorthand. @param target - In/out UNO line. @param converter - Core measure device. @returns Whether valid. */
@@ -81,10 +75,10 @@ export class XMLBorderHdl {
         width = metric;
       } else return false;
     }
-    if (style === undefined || (style !== SvxBorderLineStyle.NONE && width === undefined))
+    if (style === undefined || (style !== BorderLineStyle.NONE && width === undefined))
       return false;
-    const value = { ...target.value };
-    if (style === SvxBorderLineStyle.NONE || (!named && width === 0)) {
+    const value = new BorderLine2(target.value);
+    if (style === BorderLineStyle.NONE || (!named && width === 0)) {
       value.InnerLineWidth = 0;
       value.OuterLineWidth = 0;
       value.LineDistance = 0;
@@ -119,12 +113,11 @@ export class XMLBorderWidthHdl {
       (token) => converter.convertMeasureToCore(token, 0, 500),
     );
     if (widths.includes(null)) return false;
-    target.value = {
-      ...target.value,
-      InnerLineWidth: widths[0] as number,
-      LineDistance: widths[1] as number,
-      OuterLineWidth: widths[2] as number,
-    };
+    const value = new BorderLine2(target.value);
+    value.InnerLineWidth = widths[0] as number;
+    value.LineDistance = widths[1] as number;
+    value.OuterLineWidth = widths[2] as number;
+    target.value = value;
     return true;
   }
   /** Exports a represented compound line when native style permits it. @param value - UNO line. @param converter - XML measure device. @returns Triple or absent. */
@@ -144,53 +137,4 @@ export class XMLBorderWidthHdl {
       )
       .join(" ");
   }
-}
-
-/** Converts four independent filter properties to an owned item. @param value - ODF properties or presentation shorthand. @param which - Destination native identity. @returns Native item or absent for an empty declaration. */
-export function importBoxProperties(
-  value: OdfBoxProperties,
-  which: number,
-): SvxBoxItem | undefined {
-  if (
-    !Object.keys(value).some(
-      /** Finds a represented property. @param key - Property name. @returns Whether supplied. */
-      (key) =>
-        (key.startsWith("border") || key.startsWith("padding")) &&
-        value[key as keyof OdfBoxProperties] !== undefined,
-    )
-  )
-    return undefined;
-  const item = new SvxBoxItem(which),
-    border = new XMLBorderHdl(),
-    compound = new XMLBorderWidthHdl();
-  for (const [edge, suffix] of ["Top", "Bottom", "Left", "Right"].entries()) {
-    const distance = value[`padding${suffix}` as keyof OdfBoxProperties] ?? value.padding;
-    if (typeof distance === "number") item.SetDistance(distance, edge);
-    const text = value[`border${suffix}` as keyof OdfBoxProperties] ?? value.border;
-    const widthText =
-      value[`borderLineWidth${suffix}` as keyof OdfBoxProperties] ?? value.borderLineWidth;
-    const target = { value: SvxBoxItem.SvxLineToLine(undefined, true) };
-    if (typeof text === "string") {
-      if (!border.importXML(text, target)) throw new Error(`Unsupported ODF cell border: ${text}`);
-      if (typeof widthText === "string" && !compound.importXML(widthText, target))
-        throw new Error(`Unsupported ODF border widths: ${widthText}`);
-      // Native member order is top/bottom/left/right = 3/4/1/2.
-      item.PutValue(target.value, ([3, 4, 1, 2][edge] as number) | 0x80);
-    }
-  }
-  return item;
-}
-/** Exports all four native edges without collapsing authored independent values. @param item - Native item. @returns Filter-only properties. */
-export function exportBoxProperties(item: SvxBoxItem | undefined): OdfBoxProperties {
-  if (item === undefined) return {};
-  const result: Record<string, number | string | undefined> = {},
-    border = new XMLBorderHdl(),
-    compound = new XMLBorderWidthHdl();
-  for (const [edge, suffix] of ["Top", "Bottom", "Left", "Right"].entries()) {
-    const value = SvxBoxItem.SvxLineToLine(item.GetLine(edge), true);
-    result[`padding${suffix}`] = item.GetDistance(edge, true);
-    result[`border${suffix}`] = border.exportXML(value);
-    result[`borderLineWidth${suffix}`] = compound.exportXML(value);
-  }
-  return result;
 }

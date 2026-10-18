@@ -1,7 +1,18 @@
 /** @fileoverview Original Calc empty, hybrid, matrix result and reference tokens over genuine shared token, string and matrix owners; references use JS GC. */
+import { FormulaTokenArray } from "../../../../formula/inc/tokenarray";
+import { OpCode } from "../../../../formula/inc/opcode";
+import { ScSheetLimits } from "../../../inc/sheetlimits";
+import type { ScSingleRefData } from "../../../inc/refdata";
+import { ScSingleRefToken } from "./token.references";
+import type { ScDocument } from "../../../inc/document";
 import { ScComplexRefData } from "../../../inc/refdata";
 import { RangeMatrix } from "../../../inc/types";
-import { FormulaToken, FormulaDoubleToken, StackVar } from "../../../../formula/inc/token";
+import {
+  FormulaToken,
+  FormulaDoubleToken,
+  FormulaByteToken,
+  StackVar,
+} from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -356,3 +367,39 @@ export {
 } from "./token.references";
 
 export { extendRangeReference } from "./token.ranges";
+
+const operators = new Set<OpCode>([
+  OpCode.ocAdd,
+  OpCode.ocSub,
+  OpCode.ocMul,
+  OpCode.ocDiv,
+  OpCode.ocPow,
+  OpCode.ocNegSub,
+  OpCode.ocPercentSign,
+  OpCode.ocStop,
+]);
+/** Calc array retains document-independent sheet limits with ordinary JS references. */
+export class ScTokenArray extends FormulaTokenArray {
+  readonly mxSheetLimits: ScSheetLimits;
+  /** Constructs the represented numeric state or a native shallow token copy. @param source - Document, limits or copied array. @returns Owner. */
+  constructor(source: ScDocument | ScSheetLimits | ScTokenArray) {
+    super(source instanceof ScTokenArray ? source : undefined);
+    this.mxSheetLimits =
+      source instanceof ScTokenArray
+        ? source.mxSheetLimits
+        : source instanceof ScSheetLimits
+          ? source
+          : source.GetSheetLimits();
+  }
+  /** Appends the actual native single-reference token with the retained limits owner. @param reference - Initialized reference data. @returns Added token or null. */
+  AddSingleReference(reference: ScSingleRefData): FormulaToken | null {
+    return this.Add(new ScSingleRefToken(this.mxSheetLimits, reference));
+  }
+  /** Appends actual native separator/byte token classes for supported arithmetic opcodes. @param code - Opcode. @returns Appended token or null. */
+  AddOpCode(code: OpCode): FormulaToken | null {
+    if (code === OpCode.ocOpen || code === OpCode.ocClose)
+      return this.Add(new FormulaToken(StackVar.svSep, code));
+    if (!operators.has(code)) throw new Error("Calc opcode construction is not implemented");
+    return this.Add(new FormulaByteToken(code));
+  }
+}

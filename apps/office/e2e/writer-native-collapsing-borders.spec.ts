@@ -1,4 +1,5 @@
 /** @fileoverview Verifies production collapsing/separating table models and native checkbox history in Chromium. */
+import { Color } from "../src/tools/inc/color";
 import { expect, test } from "@playwright/test";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
 import { SvxBoxItem } from "../src/editeng/source/items/frmitems";
@@ -85,7 +86,10 @@ for (const width of [1280, 390])
           for (const [column, box] of doc.nodes.AppendTableRow(table, 2).GetTabBoxes().entries()) {
             const item = new SvxBoxItem(RES_BOX);
             for (const edge of [0, 1, 2, 3])
-              item.SetLine(new SvxBorderLine(column ? 0x123456 : 0xabcdef, column ? 45 : 20), edge);
+              item.SetLine(
+                new SvxBorderLine(new Color(column ? 0x123456 : 0xabcdef), column ? 45 : 20),
+                edge,
+              );
             item.SetAllDistances(28);
             box.SetFormat({ box: item });
             const node = box.GetParagraphs()[0];

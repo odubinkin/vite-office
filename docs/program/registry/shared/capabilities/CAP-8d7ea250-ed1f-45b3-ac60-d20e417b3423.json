@@ -1,0 +1,105 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8d7ea250-ed1f-45b3-ac60-d20e417b3423",
+    "capabilityId": "CAP-8d7ea250-ed1f-45b3-ac60-d20e417b3423",
+    "suite": "shared",
+    "subsystem": "item-pool-user-defaults",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original and effective pool defaults remain distinct through actual saved metadata and user entries.",
+      "Native first insertion,equality replacement,reset,secondary ownership and existing logical item binding are preserved without new lifetime machinery."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. Native refcount/cache/allocator/deletion machinery is erased under GC without a new counter/lifetime framework. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
+    },
+    "capability": "Native item-pool user defaults",
+    "gaps": [
+      "Physical pool/item interned-pointer/refcount/deletion/destructor timing and invalid post-failure cleanup outcomes are not simulated. No new lifetime/cache manager.",
+      "Full native named/copy/shutdown pool ownership,Sc style/page defaults callers/document/connected UI/ODS remain pending.",
+      "First creation stores original metadata before potentially throwing entry construction; source ordering is preserved,without a claimed normal cleanup outcome after that failure.",
+      "User-default fixtures are source-derived; native Calc screenshot range/item-set usage is supporting QA context,not a claimed user-default QA suite port."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/itempool.ts",
+          "marker": "ItemInfoUser"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "marker": "export function implCreateItemEntry"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-user-defaults.test.ts",
+          "marker": "retains original pool defaults"
+        },
+        {
+          "path": "apps/office/e2e/shared/user-defaults.spec.ts",
+          "marker": "separates original and effective"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native pool user defaults (task175)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-160"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "SfxItemPool::SetUserDefaultItem"
+        },
+        {
+          "path": "svl/source/items/itempool.cxx",
+          "marker": "ItemInfoUser::ItemInfoUser"
+        },
+        {
+          "path": "svl/source/items/itemset.cxx",
+          "marker": "implCreateItemEntry"
+        },
+        {
+          "path": "sc/source/core/data/stlsheet.cxx",
+          "marker": "rItemPool.SetUserDefaultItem( aPageItem )"
+        },
+        {
+          "path": "svl/source/items/globalpool.cxx",
+          "marker": "implCreateItemEntry"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/screenshots/screenshots.cxx",
+          "marker": "mpItemSet->MergeRange"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/itempool.hxx",
+          "marker": "GetUserDefaultItem"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-item-pool-user-defaults",
+    "scopeLimitations": [
+      "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. Native refcount/cache/allocator/deletion machinery is erased under GC without a new counter/lifetime framework. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

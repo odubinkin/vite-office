@@ -20,11 +20,12 @@
         "apps/office/src/sw/browser/presentation/writer-view.test.tsx#projects fixed, minimum, and extra Writer line spacing",
         "vendor/libreoffice-reference/sw/source/core/text/itrform2.cxx#SwTextFormatter::CalcRealHeight"
       ],
-      "justification": "Places supported proportional, fixed, minimum, and leading line-height policy in the pinned core text responsibility while browser font measurement remains a device approximation.",
+      "justification": "Places supported proportional, fixed, minimum, and leading line-height policy in the pinned core text responsibility while browser font measurement remains a device approximation. Task155 replaces the reduced mode/value/font-independent item with original five-field SvxLineSpacingItem state, native rule enums, default/copy/setter/Clone/equality/hash and typed Any contracts. Actual LineSpacing two-short struct uses shared CPPU metadata and ordinary JS scalar cells, not binary persistence or lifetime machinery. Writer height200 defaults, commands, layout and ODF consume actual fields; browser persistence stores all five fields and decodes old scalar/tuple inputs only at its existing I/O boundary. Font-independent line spacing belongs to Drawing text-object properties and is removed from Writer paragraph model/filter/dialog; generic shared XML support remains. Native inactive-field equality versus all-field hashing and unknown-member successful normalization are preserved and documented. Translated presentation, tab-stop canonicalization, real full engine/pool/Calc model/connected UI and same-model ODS remain pending. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "projectWriterLineHeight",
-        "projectWriterLineHeightItem"
+        "projectWriterLineHeightItem",
+        "projectWriterLineSpacing"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/core/text/itrform2.cxx",

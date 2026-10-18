@@ -1,6 +1,7 @@
 /** @fileoverview Resolves the supported Writer line-spacing rules from pinned itrform2.cxx. */
 
-import type { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
 /** Applies Writer proportional leading to the browser device font-height estimate. @param percent - Item percentage. @returns CSS line-height multiplier. */
 export function projectWriterLineHeight(percent: number): number {
@@ -13,8 +14,9 @@ export function projectWriterLineHeight(percent: number): number {
 /** Resolves fixed, minimum, leading, or proportional Writer spacing. @param item - Pooled spacing rule. @param fontSizePt - Device font size in points. @returns CSS line-height multiplier. */
 export function projectWriterLineHeightItem(item: SvxLineSpacingItem, fontSizePt: number): number {
   const natural = 1.15;
-  const valuePt = item.GetValue() / 20;
-  switch (item.GetMode()) {
+  const spacing = projectWriterLineSpacing(item);
+  const valuePt = spacing.value / 20;
+  switch (spacing.mode) {
     case "fixed":
       return Math.max(0.05, valuePt / fontSizePt);
     case "minimum":
@@ -22,6 +24,23 @@ export function projectWriterLineHeightItem(item: SvxLineSpacingItem, fontSizePt
     case "leading":
       return natural + valuePt / fontSizePt;
     case "proportional":
-      return projectWriterLineHeight(item.GetValue());
+      return projectWriterLineHeight(spacing.value);
   }
+}
+
+/** Browser device and Writer filter projection of the active native rule; inactive fields stay on the core item. @param item - Native item. @returns Mode and active value. */
+export function projectWriterLineSpacing(item: SvxLineSpacingItem): {
+  mode: "proportional" | "fixed" | "minimum" | "leading";
+  value: number;
+} {
+  const rule = item.GetLineSpaceRule();
+  if (rule === SvxLineSpaceRule.Fix) return { mode: "fixed", value: item.GetLineHeight() };
+  if (rule === SvxLineSpaceRule.Min) return { mode: "minimum", value: item.GetLineHeight() };
+  const inter = item.GetInterLineSpaceRule();
+  if (inter === SvxInterLineSpaceRule.Fix)
+    return { mode: "leading", value: item.GetInterLineSpace() };
+  return {
+    mode: "proportional",
+    value: inter === SvxInterLineSpaceRule.Off ? 100 : item.GetPropLineSpace(),
+  };
 }

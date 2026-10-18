@@ -1,0 +1,133 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b64f5fbe-dc52-4c69-8802-3c4698aace10",
+    "capabilityId": "CAP-b64f5fbe-dc52-4c69-8802-3c4698aace10",
+    "suite": "shared",
+    "subsystem": "language-tag-normal-parsing",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task187 implements actual MsLangId Conversion ordered tables and forward/reverse/private/override/fallback algorithms over real Locale/OUString values. Source538ISO+91script+14BCP47 rows,6private rows including sentinel and11countryless IDs retain order/aliases. Family-specific override restart history continues after a repeated script row;unknown IDs leave caller fields unchanged. ASCII matching uses existing SAL scalar operations and native JS equality/prefix after ASCII-only folding,without Unicode/ICU canonicalization. Actual shared fallback replaces a second projected language table:302prior values remain and4incorrect projections ber,cmn,fuv,ji are corrected canonically. Real tab defaults/Calc options consume corrected decimal/measurement fields. Full LanguageTag/system settings,font/pool/document/UI/ODS remain pending;no localized labels,native compiler/generator/probe or physical ownership engine."
+    },
+    "capability": "Native normal language-tag grammar,canonicalization and transform extension",
+    "gaps": [
+      "Enclosing LibreOffice LanguageTag state/ID registration,Font/defaults/pools/model/UI/ODS remain pending;wildcard/locale/maximization APIs are not implemented."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+          "marker": "lt_tag_new"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+          "marker": "lt_tag_parse"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.c",
+          "marker": "_lt_tag_canonicalize_alias"
+        },
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-extension.c",
+          "marker": "lt_extension_add_singleton"
+        },
+        {
+          "path": "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c",
+          "marker": "_lt_ext_ldml_t_create_data"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/liblangtag-reference/tests/check-tag.c",
+          "marker": "TDEF (lt_tag_parse)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/liblangtag-reference/liblangtag/lt-tag.h",
+          "marker": "LT_TAG_FILTER_ALL"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.ts",
+          "marker": "lt_tag_compare"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.parse.ts",
+          "marker": "privateUse"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.canonicalize.ts",
+          "marker": "lt_tag_canonicalize_in_extlang_form"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-extension.ts",
+          "marker": "ExtensionData"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-t.ts",
+          "marker": "TransformExtensionData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.values.test.ts",
+          "marker": "preserves original constructor defaults"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.qa.test.ts",
+          "marker": "replays native normal parse QA"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.qa.test.ts",
+          "marker": "replays native ${kind} QA"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.errors.test.ts",
+          "marker": "preserves container defaults"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/extensions/lt-ext-ldml-t.test.ts",
+          "marker": "preserves native transform grammar"
+        },
+        {
+          "path": "apps/office/src/external/liblangtag/liblangtag/lt-tag.data.test.ts",
+          "marker": "proves all alias targets"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Connected normal language parser and canonicalizer (task196)"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "language-tag-normal-grammar-canonicalization-transform",
+    "scopeLimitations": [
+      "Original normal parse/canonical/extlang QA slices plus source-derived tests,not full external library QA or an executed native oracle. Logical fields/semantics are preserved;C pointer/binary ownership is not reproduced."
+    ],
+    "confidence": {
+      "level": "low",
+      "rationale": "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion."
+    },
+    "sourceResponsibility": {
+      "kind": "browser-adaptation",
+      "rationale": "Task196 connects actual normal liblangtag tag defaults/fields/cache/filter/clear/copy/truncate/asymmetric comparison,registered scanner grammar,CLDR ordered aliases/redundant/preferred/suppress canonicalization,extlang form,normal extension/default callbacks and transform callback state. Actual scanner/IANA/CLDR/u and shared ASCII/error owners are reused. Source cache mutation,private spelling,variant prefix quirks,shallow callback-data sharing,ordinal singleton ordering and t field limitations are preserved under JS GC. Full pinned-data invariants prove every alias target and preferred redundant record parses,all grandfathered tags have normal aliases,no reachable normal alias is an identity,extlang prefix/preferred presence and redundant field-subset facts;unreachable native XML/allocation/data-error/assert branches are folded only under those immutable full-table proofs. No native execution,allocator/refcount/weak/mutex/module-loader engine or successful fake LanguageTag. Wildcard matching,locale conversion/maximization,full external library APIs and enclosing LibreOffice LanguageTag/state/ID registration remain pending;Font/defaults/pools/model/UI/ODS are not ready. No broad file/library parity promotion."
+    }
+  }
+}

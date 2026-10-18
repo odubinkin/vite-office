@@ -1,0 +1,196 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4231f95a-b499-43df-b69d-ae3b29851892",
+    "capabilityId": "CAP-4231f95a-b499-43df-b69d-ae3b29851892",
+    "suite": "shared",
+    "subsystem": "border-color",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Border constructors and setters copy Color while the native const-reference getter remains stable.",
+      "Frame color reads return values and selector consensus copies output only on success.",
+      "Writer consumers and external numeric transports preserve original serialized color values."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task129 replaces represented primitive border colors with actual shared Tools Color values. SvxBorderLine copies optional native Color input and SetColor into its stable owned value, GetColor exposes the borrowed const value, clones own independent values and equality compares all represented Color channels. Svx frame Style reads Color by value and owns independent copies. FrameSelector GetVisibleColor restores the native bool/out-Color contract, copying only on consensus and leaving output unchanged on failure, including alpha-sensitive equality. Shared border page holds an owned Color; no numeric compatibility overload remains in the represented core. Writer callers use Color and actual JSON/UNO/XML/CSS/color-input boundaries explicitly convert signed32 or unsigned32 values; serialized schema is unchanged. Original width/style and incomplete prior responsibilities remain unchanged. Shading callbacks, ComplexColor/theme, unrepresented style APIs and full original QA remain unported, not certified. Existing provenance/history and browser IO/recovery deviations retained. Human explicitly authorizes shared and Writer fixes, ordinary JS arithmetic and Writer-only coverage exceptions. Full regression remains gated on actual UI/document plus same-model ODS readiness."
+    },
+    "capability": "Shared native Color ownership in represented borders",
+    "gaps": [
+      "ComplexColor/theme and 3D shading callbacks remain unported.",
+      "Real Calc document/UI/ODS readiness remains pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/border.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/borderline.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/framelink.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/frmsel.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterBorderPage.tsx",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/swtable.ts",
+          "marker": "Color"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/bordrhdl.ts",
+          "marker": "Color"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/native-border-page.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/boxitem.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/native-frame-selector.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svx/source/dialog/native-frame-style.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-box-render.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-cell-format-client.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-collapsing-border-paint.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-border-page.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-collapsing-border-item.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/native-table-border-common-state.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-box-border-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/docnode/native-table-border-common-state.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-collapsing-border-painter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-painter-frame-borrow.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/native-table-coverage-closure.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-box-frame-format.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-independent-column-insertion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/table/native-numeric-row-insertion.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-cell-box-roundtrip.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/native-row-cell-export-items.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Shared border Color ownership and Writer consumers (task129)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/editeng/borderline.hxx",
+          "marker": "GetColor"
+        },
+        {
+          "path": "editeng/source/items/borderline.cxx",
+          "marker": "SvxBorderLine::SvxBorderLine"
+        },
+        {
+          "path": "svx/source/dialog/frmsel.cxx",
+          "marker": "FrameSelector::GetVisibleColor"
+        }
+      ],
+      "tests": [
+        {
+          "path": "editeng/qa/items/borderline_test.cxx",
+          "marker": "SvxBorderLine"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/tools/color.hxx",
+          "marker": "Color"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "shared-border-color-values",
+    "scopeLimitations": [
+      "Task129 replaces represented primitive border colors with actual shared Tools Color values. SvxBorderLine copies optional native Color input and SetColor into its stable owned value, GetColor exposes the borrowed const value, clones own independent values and equality compares all represented Color channels. Svx frame Style reads Color by value and owns independent copies. FrameSelector GetVisibleColor restores the native bool/out-Color contract, copying only on consensus and leaving output unchanged on failure, including alpha-sensitive equality. Shared border page holds an owned Color; no numeric compatibility overload remains in the represented core. Writer callers use Color and actual JSON/UNO/XML/CSS/color-input boundaries explicitly convert signed32 or unsigned32 values; serialized schema is unchanged. Original width/style and incomplete prior responsibilities remain unchanged. Shading callbacks, ComplexColor/theme, unrepresented style APIs and full original QA remain unported, not certified. Existing provenance/history and browser IO/recovery deviations retained. Human explicitly authorizes shared and Writer fixes, ordinary JS arithmetic and Writer-only coverage exceptions. Full regression remains gated on actual UI/document plus same-model ODS readiness."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

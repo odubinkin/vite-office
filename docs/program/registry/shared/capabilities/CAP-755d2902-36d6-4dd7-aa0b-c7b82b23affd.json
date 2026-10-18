@@ -1,0 +1,118 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-755d2902-36d6-4dd7-aa0b-c7b82b23affd",
+    "capabilityId": "CAP-755d2902-36d6-4dd7-aa0b-c7b82b23affd",
+    "suite": "shared",
+    "subsystem": "notify",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "All five original broadcaster QA contracts are ported.",
+      "Native duplicate policy, copy constructors, live-slot dispatch and Dying-before-detachment are represented."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion."
+    },
+    "capability": "Native Sfx notification graph",
+    "gaps": [
+      "Native ABI, mutex concurrency, debug backtraces, undefined invalid indices/pointers and use after native destruction are outside the browser contract.",
+      "The native ostream diagnostic hint-ID formatter is not implemented; native consumers use GetId.",
+      "Full stylesheet pools, Calc document/UI and same-model ODS are not implemented by this task."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/inc/hint.ts",
+          "marker": "SfxHint"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
+          "marker": "SfxBroadcaster"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/lstner.ts",
+          "marker": "SfxListener"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/notify/native-sfx-notifications.test.ts",
+          "marker": "ports AddingListenersIncreasesCount"
+        },
+        {
+          "path": "apps/office/e2e/shared/sfx-notifications.spec.ts",
+          "marker": "preserves native duplicate delivery"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native shared notification graph (task170)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/svl/hint.hxx",
+          "marker": "SfxHintId"
+        },
+        {
+          "path": "svl/source/notify/SfxBroadcaster.cxx",
+          "marker": "SfxBroadcaster::Broadcast"
+        },
+        {
+          "path": "svl/source/notify/lstner.cxx",
+          "marker": "SfxListener::StartListening"
+        },
+        {
+          "path": "include/svl/lstner.hxx",
+          "marker": "DuplicateHandling"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "AddingListenersIncreasesCount"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "RemovingListenersDecreasesCount"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "HintsAreNotForwardedToRemovedListeners"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "SameListenerCanBeAddedMoreThanOnce"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "StoppingListeningAffectsOnlyFirstOfIdenticalListeners"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/SfxBroadcaster.hxx",
+          "marker": "SfxBroadcaster"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-sfx-notifications",
+    "scopeLimitations": [
+      "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion.",
+      "Task170 bounded acceptance:54 related scenarios/9files,187 Calc scenarios/76files, production build and1 actual Chromium Sfx graph scenario pass with all four reference links absent. Exact5 changed shared executable owners raw S399/B104/F57/L370 and all33Calc S4179/B2731/F821/L3727 have every counter positive100. Writer-only hints.ts coverage gaps remain exempt. Six pinned native blobs, all186 hint IDs, all5 original broadcaster QA contracts and3 emitted-runtime token identity proofs for Svt/Writer type-only changes are checked. TS7 plus all13 source gates pass. Full all-app run remains deferred until the minimum connected UI and ODS milestone, which is not reached.",
+      "Native private friend operations AddListener/RemoveListener are public host methods solely for cross-class TypeScript access; no friend registry or runtime forwarding bridge is added. C++ copy/move values map to ordinary JS copy construction/assignment with GC-owned identities."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

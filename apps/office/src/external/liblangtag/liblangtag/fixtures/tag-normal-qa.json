@@ -1,0 +1,274 @@
+{
+  "parse": [
+    {
+      "input": "*",
+      "valid": false
+    },
+    {
+      "input": "ja-*",
+      "valid": false
+    },
+    {
+      "input": "ja*",
+      "valid": false
+    },
+    {
+      "input": "en-GB-oed",
+      "valid": true
+    },
+    {
+      "input": "En-gb-OeD",
+      "valid": true
+    },
+    {
+      "input": "mn-Cyrl-MN",
+      "valid": true
+    },
+    {
+      "input": "MN-cYRL-mn",
+      "valid": true
+    },
+    {
+      "input": "mN-cYrL-Mn",
+      "valid": true
+    },
+    {
+      "input": "blahblahblah",
+      "valid": false
+    },
+    {
+      "input": "de-AT",
+      "valid": true
+    },
+    {
+      "input": "sr-Latn-RS",
+      "valid": true
+    },
+    {
+      "input": "es-419",
+      "valid": true
+    },
+    {
+      "input": "de-DE-1901-1901",
+      "valid": false
+    },
+    {
+      "input": "de-DE-1901-1996",
+      "valid": false
+    },
+    {
+      "input": "sl-nedis",
+      "valid": true
+    },
+    {
+      "input": "de-CH-1996",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-biske",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-biske-1994",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-njiva",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-njiva-1994",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-osojs",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-osojs-1994",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-solba",
+      "valid": true
+    },
+    {
+      "input": "sl-rozaj-solba-1994",
+      "valid": true
+    },
+    {
+      "input": "en-baku1926",
+      "valid": false
+    },
+    {
+      "input": "a-value",
+      "valid": false
+    },
+    {
+      "input": "de-a-value",
+      "valid": true
+    },
+    {
+      "input": "en-a-bbb-a-ccc",
+      "valid": false
+    },
+    {
+      "input": "tlh-a-b-foo",
+      "valid": false
+    },
+    {
+      "input": "sl-1994-rozaj-biske",
+      "valid": false
+    },
+    {
+      "input": "sl-rozaj-1994-biske",
+      "valid": false
+    },
+    {
+      "input": "sl-Latn-rozaj",
+      "valid": true
+    },
+    {
+      "input": "sl-IT-rozaj",
+      "valid": true
+    },
+    {
+      "input": "zh-cmn-u-ca-chinese",
+      "valid": false
+    },
+    {
+      "input": "i-default-u-ca-chinese",
+      "valid": false
+    },
+    {
+      "input": "ja-u-tz",
+      "valid": true
+    },
+    {
+      "input": "en-u-vt-0061",
+      "valid": true
+    },
+    {
+      "input": "en-u-vt-0061-0065",
+      "valid": true
+    },
+    {
+      "input": "en-u-vt-A0",
+      "valid": false
+    },
+    {
+      "input": "en-u-vt-CODEPOINTS",
+      "valid": false
+    },
+    {
+      "input": "en-u-vt-U060C",
+      "valid": false
+    },
+    {
+      "input": "en-u-vt-110000",
+      "valid": false
+    },
+    {
+      "input": "en-u-vt-10D40C",
+      "valid": true
+    }
+  ],
+  "canonical": [
+    {
+      "input": "zh-gan",
+      "output": "gan"
+    },
+    {
+      "input": "zh-yue",
+      "output": "yue"
+    },
+    {
+      "input": "zh-yue-Hant-HK",
+      "output": "yue-Hant-HK"
+    },
+    {
+      "input": "zh-cmn",
+      "output": "cmn"
+    },
+    {
+      "input": "en-Latn-US",
+      "output": "en-US"
+    },
+    {
+      "input": "art-lojban",
+      "output": "jbo"
+    },
+    {
+      "input": "iw",
+      "output": "he"
+    },
+    {
+      "input": "i-klingon",
+      "output": "tlh"
+    },
+    {
+      "input": "no-nyn",
+      "output": "nn"
+    },
+    {
+      "input": "ja-Latn-hepburn-heploc",
+      "output": "ja-Latn-alalc97"
+    },
+    {
+      "input": "zh-hakka",
+      "output": "hak"
+    },
+    {
+      "input": "en-b-warble-a-babble",
+      "output": "en-a-babble-b-warble"
+    },
+    {
+      "input": "hak-CN",
+      "output": "hak-CN"
+    },
+    {
+      "input": "en-BU",
+      "output": "en-MM"
+    },
+    {
+      "input": "sgn-BR",
+      "output": "bzs"
+    },
+    {
+      "input": "sh-Arab-AQ",
+      "output": "sr-Arab-AQ"
+    },
+    {
+      "input": "sh",
+      "output": "sr-Latn"
+    },
+    {
+      "input": "mo",
+      "output": "ro"
+    }
+  ],
+  "extlang": [
+    {
+      "input": "gan",
+      "output": "zh-gan"
+    },
+    {
+      "input": "cmn",
+      "output": "zh-cmn"
+    },
+    {
+      "input": "hak-CN",
+      "output": "zh-hak-CN"
+    },
+    {
+      "input": "sgn-BR",
+      "output": "sgn-bzs"
+    }
+  ],
+  "sourceSha256": "63560785318eb6b01108ae42c4192e60340b19e2d9a17179aa3acae2fa102f0d",
+  "source": "vendor/liblangtag-reference/tests/check-tag.c"
+}

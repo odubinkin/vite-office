@@ -2,328 +2,187 @@
  * @fileoverview Reimplements bounded paragraph-alignment, tab-stop, and line-spacing values from pinned `editeng/source/items/paraitem.cxx`.
  */
 
-import { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { getSystemDecimalSeparator } from "../../../unotools/source/misc/syslocale";
+import { SvxTabAdjust } from "../../inc/svxenum";
+import { SfxBoolItem } from "../../../svl/inc/eitem";
+import type { SfxItemPool } from "../../../svl/source/items/itempool";
 
-/** Pinned `SvxTabAdjust` order from `include/editeng/svxenum.hxx`. */
-export enum SvxTabAdjust {
-  Left,
-  Right,
-  Decimal,
-  Center,
-  Default,
-  End,
+/** Original const borrowed tab value; mutable-reference overloads are intentionally absent. */
+export interface SvxTabStopConstReference {
+  /** Original const position. @returns Twips. */
+  GetTabPos(): number;
+  /** Original const adjustment. @returns Adjustment. */
+  GetAdjustment(): SvxTabAdjust;
+  /** Original const decimal unit. @returns One UTF16 unit. */
+  GetDecimal(): string;
+  /** Original const fill unit. @returns One UTF16 unit. */
+  GetFill(): string;
+  /** Original const equality. @param other - Other value. @returns Equality. */
+  equals(other: SvxTabStopConstReference): boolean;
+  /** Original const inequality. @param other - Other value. @returns Difference. */
+  notEquals(other: SvxTabStopConstReference): boolean;
+  /** Original const ordering. @param other - Other value. @returns Position order. */
+  lessThan(other: SvxTabStopConstReference): boolean;
 }
-
-/** One positioned tab with its adjustment and leader characters. */
-export class SvxTabStop {
-  /** Creates a pinned Writer tab stop. @param position - Twip position. @param adjustment - Tab adjustment. @param decimal - Decimal separator. @param fill - Leader character. @returns Nothing. */
-  public constructor(
-    private readonly position: number,
-    private readonly adjustment: SvxTabAdjust = SvxTabAdjust.Left,
-    private readonly decimal = "\0",
-    private readonly fill = " ",
+/** Original tab value with independent copied fields; JS char values are single UTF16-unit strings. */
+export class SvxTabStop implements SvxTabStopConstReference {
+  private readonly position: [number] = [0];
+  private readonly adjustment: [SvxTabAdjust] = [SvxTabAdjust.Left];
+  private readonly decimal: [string] = ["\0"];
+  private readonly fill: [string] = [" "];
+  /** Original default/position/copy forms. Copy preserves a previously resolved decimal without querying the host again. @param args - Native arguments. @returns Value. */
+  constructor(
+    ...args:
+      | []
+      | [source: SvxTabStopConstReference]
+      | [position: number, adjustment?: SvxTabAdjust, decimal?: string, fill?: string]
   ) {
-    if (!Number.isInteger(position) || position < -2147483648 || position > 2147483647)
-      throw new Error("SvxTabStop position is invalid.");
-    if (
-      !Number.isInteger(adjustment) ||
-      adjustment < SvxTabAdjust.Left ||
-      adjustment >= SvxTabAdjust.End
-    )
-      throw new Error("SvxTabStop adjustment is invalid.");
-    if (decimal.length !== 1 || fill.length !== 1)
-      throw new Error("SvxTabStop characters must contain one character.");
+    if (typeof args[0] === "object") {
+      const source = args[0] as SvxTabStop;
+      this.position[0] = source.position[0];
+      this.adjustment[0] = source.adjustment[0];
+      this.decimal[0] = source.decimal[0];
+      this.fill[0] = source.fill[0];
+    } else {
+      const [position = 0, adjustment = SvxTabAdjust.Left, decimal = "\0", fill = " "] = args as [
+        number?,
+        SvxTabAdjust?,
+        string?,
+        string?,
+      ];
+      if (!Number.isInteger(position) || position < -2147483648 || position > 2147483647)
+        throw new Error("SvxTabStop position is invalid.");
+      if (!Number.isInteger(adjustment)) throw new Error("SvxTabStop adjustment is invalid.");
+      if (decimal.length !== 1 || fill.length !== 1)
+        throw new Error("SvxTabStop characters must contain one character.");
+      this.position[0] = position;
+      this.adjustment[0] = adjustment;
+      this.decimal[0] = decimal;
+      this.fill[0] = fill;
+      this.fillDecimal();
+    }
   }
-
-  /** Returns the tab position in twips. @returns Position. */
-  public GetTabPos(): number {
-    return this.position;
+  /** Original const position. @returns Twips. */
+  GetTabPos(): number;
+  /** Native nonconst-reference syntax binding, sharing the existing field. @param mutable - Selects the nonconst form. @returns Stable field cell. */
+  GetTabPos(mutable: true): [number];
+  /** Selects the original const/nonconst getter. @param mutable - Optional reference form. @returns Scalar or original field cell. */
+  GetTabPos(mutable?: true): number | [number] {
+    return mutable === true ? this.position : this.position[0];
   }
-  /** Returns the tab adjustment. @returns Adjustment. */
-  public GetAdjustment(): SvxTabAdjust {
-    return this.adjustment;
+  /** Original const adjustment. @returns Adjustment. */
+  GetAdjustment(): SvxTabAdjust;
+  /** Original mutable adjustment reference. @param mutable - Nonconst form. @returns Field cell. */
+  GetAdjustment(mutable: true): [SvxTabAdjust];
+  /** Original const/nonconst adjustment binding. @param mutable - Optional reference form. @returns Value or field. */
+  GetAdjustment(mutable?: true): SvxTabAdjust | [SvxTabAdjust] {
+    return mutable === true ? this.adjustment : this.adjustment[0];
   }
-  /** Returns the decimal separator. @returns Separator. */
-  public GetDecimal(): string {
-    return this.decimal;
+  /** Original const decimal char. @returns Unit. */
+  GetDecimal(): string;
+  /** Original mutable decimal reference. @param mutable - Nonconst form. @returns Field cell. */
+  GetDecimal(mutable: true): [string];
+  /** Original const/nonconst decimal binding; writing nul does not rerun fillDecimal. @param mutable - Optional reference form. @returns Unit or field. */
+  GetDecimal(mutable?: true): string | [string] {
+    return mutable === true ? this.decimal : this.decimal[0];
   }
-  /** Returns the leader character. @returns Fill. */
-  public GetFill(): string {
-    return this.fill;
+  /** Original const fill char. @returns Unit. */
+  GetFill(): string;
+  /** Original mutable fill reference. @param mutable - Nonconst form. @returns Field cell. */
+  GetFill(mutable: true): [string];
+  /** Original const/nonconst fill binding. @param mutable - Optional reference form. @returns Unit or field. */
+  GetFill(mutable?: true): string | [string] {
+    return mutable === true ? this.fill : this.fill[0];
   }
-  /** Compares all tab stop fields. @param other - Candidate. @returns Equality. */
-  public equals(other: SvxTabStop): boolean {
+  /** Original full field comparison. @param other - Other tab. @returns Equal value. */
+  equals(other: SvxTabStopConstReference): boolean {
+    const source = other as SvxTabStop;
     return (
-      this.position === other.position &&
-      this.adjustment === other.adjustment &&
-      this.decimal === other.decimal &&
-      this.fill === other.fill
+      this.position[0] === source.position[0] &&
+      this.adjustment[0] === source.adjustment[0] &&
+      this.decimal[0] === source.decimal[0] &&
+      this.fill[0] === source.fill[0]
     );
+  }
+  /** Original implicit memberwise assignment, preserving existing field identities and nonvirtual base-value copying. @param other - Actual const borrowed source. @returns Recipient. */
+  assign(other: SvxTabStopConstReference): this {
+    const source = other as SvxTabStop;
+    this.position[0] = source.position[0];
+    this.adjustment[0] = source.adjustment[0];
+    this.decimal[0] = source.decimal[0];
+    this.fill[0] = source.fill[0];
+    return this;
+  }
+  /** Original inequality. @param other - Other tab. @returns Different fields. */
+  notEquals(other: SvxTabStopConstReference): boolean {
+    return !SvxTabStop.prototype.equals.call(this, other);
+  }
+  /** Original position-only strict order over actual fields, without virtual getter dispatch. @param other - Other tab. @returns Ordered positions. */
+  lessThan(other: SvxTabStopConstReference): boolean {
+    return this.position[0] < (other as SvxTabStop).position[0];
+  }
+  /** Original constructor-only default decimal resolution. @returns Nothing. */
+  private fillDecimal(): void {
+    if (this.decimal[0] === "\0") this.decimal[0] = getSystemDecimalSeparator();
   }
 }
 
-/** Sorted tab stops with the pinned `SvxTabStopItem` item identity. */
-export class SvxTabStopItem extends SfxPoolItem {
-  private stops: SvxTabStop[] = [];
-  private defaultDistance = 0;
+/** Original Asian paragraph boolean value owner. */
+export class SvxScriptSpaceItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxScriptSpaceItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original copy-based Clone. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxScriptSpaceItem {
+    void pool;
+    return new SvxScriptSpaceItem(this);
+  }
+}
 
-  /** Creates ten default stops, or a counted Writer pool default. @param countOrWhich - Count for the four-argument form, otherwise WhichId. @param distance - Twip spacing. @param adjustment - Adjustment for generated stops. @param which - WhichId for the four-argument form. @returns Nothing. */
-  public constructor(
-    countOrWhich: number,
-    distance?: number,
-    adjustment?: SvxTabAdjust,
-    which?: number,
+/** Original Asian paragraph boolean value owner. */
+export class SvxHangingPunctuationItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */
+  constructor(
+    ...args: [value: boolean, which: number] | [source: Readonly<SvxHangingPunctuationItem>]
   ) {
-    super(which ?? countOrWhich);
-    const count = which === undefined ? 10 : countOrWhich;
-    const spacing = which === undefined ? 1134 : distance;
-    const align = which === undefined ? SvxTabAdjust.Default : adjustment;
-    if (
-      !Number.isInteger(count) ||
-      count < 0 ||
-      count > 65535 ||
-      !Number.isInteger(spacing) ||
-      (spacing as number) < 0 ||
-      align === undefined ||
-      align < SvxTabAdjust.Left ||
-      align >= SvxTabAdjust.End
-    )
-      throw new Error("SvxTabStopItem constructor is invalid.");
-    for (let index = 1; index <= count; index += 1)
-      this.stops.push(new SvxTabStop(index * (spacing as number), align));
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
   }
-
-  /** Creates an item from explicit stops. @param which - WhichId. @param stops - Tab stops. @param defaultDistance - Default spacing. @returns Item. */
-  public static FromStops(
-    which: number,
-    stops: readonly SvxTabStop[],
-    defaultDistance = 0,
-  ): SvxTabStopItem {
-    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, which);
-    item.SetDefaultDistance(defaultDistance);
-    for (const stop of stops) item.Insert(stop);
-    return item;
-  }
-
-  /** Restores the complete item value after a filter or Worker transfer. @param which - WhichId. @param value - Persisted record. @returns Item. */
-  public static FromValue(which: number, value: unknown): SvxTabStopItem {
-    if (typeof value !== "object" || value === null || Array.isArray(value))
-      throw new Error("SvxTabStopItem value is invalid.");
-    const record = value as Record<string, unknown>;
-    if (!Array.isArray(record.stops) || !Number.isInteger(record.defaultDistance))
-      throw new Error("SvxTabStopItem value is invalid.");
-    const stops = record.stops.map(
-      /** Restores one tab value. @param entry - Candidate tab record. @returns Tab stop. */
-      (entry): SvxTabStop => {
-        if (typeof entry !== "object" || entry === null || Array.isArray(entry))
-          throw new Error("SvxTabStopItem tab value is invalid.");
-        const tab = entry as Record<string, unknown>;
-        if (
-          typeof tab.position !== "number" ||
-          typeof tab.adjustment !== "number" ||
-          typeof tab.decimal !== "string" ||
-          typeof tab.fill !== "string"
-        )
-          throw new Error("SvxTabStopItem tab value is invalid.");
-        return new SvxTabStop(tab.position, tab.adjustment, tab.decimal, tab.fill);
-      },
-    );
-    return SvxTabStopItem.FromStops(which, stops, record.defaultDistance as number);
-  }
-
-  /** Returns the number of explicit stops. @returns Count. */
-  public Count(): number {
-    return this.stops.length;
-  }
-  /** Returns one stop. @param index - Sorted index. @returns Stop. */
-  public At(index: number): SvxTabStop {
-    const stop = this.stops[index];
-    if (stop === undefined) throw new Error("SvxTabStopItem index is invalid.");
-    return stop;
-  }
-  /** Returns a read-only stop snapshot. @returns Stops. */
-  public GetStops(): readonly SvxTabStop[] {
-    return [...this.stops];
-  }
-  /** Finds a stop by position. @param stop - Position or stop. @returns Index or pinned not-found value. */
-  public GetPos(stop: number | SvxTabStop): number {
-    const position = typeof stop === "number" ? stop : stop.GetTabPos();
-    const index = this.stops.findIndex(
-      /** Checks one position. @param entry - Candidate tab. @returns Whether the position matches. */
-      (entry) => entry.GetTabPos() === position,
-    );
-    return index < 0 ? 65535 : index;
-  }
-  /** Replaces a stop at the same position and keeps sorted order. @param stop - Tab stop. @returns Whether inserted. */
-  public Insert(stop: SvxTabStop): boolean {
-    const index = this.GetPos(stop);
-    if (index !== 65535) this.stops.splice(index, 1);
-    this.stops.push(stop);
-    this.stops.sort(
-      /** Orders two tabs by position. @param left - First tab. @param right - Second tab. @returns Position difference. */
-      (left, right) => left.GetTabPos() - right.GetTabPos(),
-    );
-    return true;
-  }
-  /** Removes a run of stops by sorted index. @param index - First index. @param length - Count. @returns Nothing. */
-  public Remove(index: number, length = 1): void {
-    this.stops.splice(index, length);
-  }
-  /** Sets spacing for tabs without an explicit stop. @param distance - Twips. @returns Nothing. */
-  public SetDefaultDistance(distance: number): void {
-    if (!Number.isInteger(distance) || distance < -2147483648 || distance > 2147483647)
-      throw new Error("SvxTabStopItem default distance is invalid.");
-    this.defaultDistance = distance;
-  }
-  /** Returns the default tab spacing. @returns Twips. */
-  public GetDefaultDistance(): number {
-    return this.defaultDistance;
-  }
-  /** Creates an independent item. @returns Clone. */
-  public Clone(): SvxTabStopItem {
-    return SvxTabStopItem.FromStops(this.Which(), this.stops, this.defaultDistance);
-  }
-  /** Compares item identity, spacing and every stop field. @param other - Candidate. @returns Equality. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxTabStopItem &&
-      other.Which() === this.Which() &&
-      other.defaultDistance === this.defaultDistance &&
-      other.Count() === this.Count() &&
-      this.stops.every(
-        /** Compares one sorted tab. @param stop - Local tab. @param index - Sorted index. @returns Equality. */
-        (stop, index) => stop.equals(other.At(index)),
-      )
-    );
-  }
-  /** Exposes the complete persistence-safe tab contract. @returns Tab record. */
-  public override QueryValue(): {
-    readonly defaultDistance: number;
-    readonly stops: readonly {
-      readonly position: number;
-      readonly adjustment: SvxTabAdjust;
-      readonly decimal: string;
-      readonly fill: string;
-    }[];
-  } {
-    return {
-      defaultDistance: this.defaultDistance,
-      stops: this.stops.map(
-        /** Encodes one tab. @param stop - Tab stop. @returns Tab record. */
-        (stop) => ({
-          position: stop.GetTabPos(),
-          adjustment: stop.GetAdjustment(),
-          decimal: stop.GetDecimal(),
-          fill: stop.GetFill(),
-        }),
-      ),
-    };
+  /** Original copy-based Clone. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxHangingPunctuationItem {
+    void pool;
+    return new SvxHangingPunctuationItem(this);
   }
 }
 
-/** Matches the pinned SvxAdjust enumeration order. */
-export enum SvxAdjust {
-  Left,
-  Right,
-  Block,
-  Center,
-  BlockLine,
-  ParaStart,
-  ParaEnd,
-  End,
+/** Original Asian paragraph boolean value owner. */
+export class SvxForbiddenRuleItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Selected native form. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxForbiddenRuleItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original copy-based Clone. @param pool - Unused pool. @returns Independent item. */
+  public override Clone(pool?: SfxItemPool): SvxForbiddenRuleItem {
+    void pool;
+    return new SvxForbiddenRuleItem(this);
+  }
 }
 
-/** Stores one paragraph adjustment item. */
-export class SvxAdjustItem extends SfxPoolItem {
-  /** Creates a paragraph adjustment item. @param adjust - Paragraph adjustment value. @param which - Item identity. @returns Nothing. */
+/** Original automatic paragraph writing-direction bool attribute. */
+export class SvxAutoFrameDirectionItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy constructors. @param args - Original arguments. @returns Item. */
   public constructor(
-    private readonly adjust: SvxAdjust,
-    which: number,
+    ...args: [enabled: boolean, which: number] | [source: Readonly<SvxAutoFrameDirectionItem>]
   ) {
-    super(which);
-    if (!Number.isInteger(adjust) || adjust < SvxAdjust.Left || adjust >= SvxAdjust.End)
-      throw new Error("SvxAdjustItem value is invalid.");
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
   }
-
-  /** Returns the paragraph adjustment value. @returns SvxAdjust value. */
-  public GetAdjust(): SvxAdjust {
-    return this.adjust;
-  }
-
-  /** Creates an independent adjustment item. @returns Cloned item. */
-  public Clone(): SvxAdjustItem {
-    return new SvxAdjustItem(this.adjust, this.Which());
-  }
-
-  /** Compares adjustment item identity and value. @param other - Candidate item. @returns True for an equal adjustment item. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxAdjustItem &&
-      other.Which() === this.Which() &&
-      other.adjust === this.adjust
-    );
-  }
-
-  /** Creates a persisted adjustment item record. @returns Item snapshot. */
-  public override QueryValue(): SvxAdjust {
-    return this.adjust;
-  }
-}
-
-/** Writer line-spacing modes corresponding to proportional, fixed, minimum, and extra leading. */
-export type SvxLineSpacingMode = "proportional" | "fixed" | "minimum" | "leading";
-
-/** Stores the Writer paragraph line-spacing rule in twips or percent. */
-export class SvxLineSpacingItem extends SfxPoolItem {
-  /** Creates line spacing. @param value - Percent or twips according to mode. @param which - Item identity. @param mode - Writer line-spacing rule. @param fontIndependent - ODF compatibility flag. @returns Nothing. */
-  public constructor(
-    private readonly value: number,
-    which: number,
-    private readonly mode: SvxLineSpacingMode = "proportional",
-    private readonly fontIndependent = false,
-  ) {
-    super(which);
-    if (!Number.isInteger(value) || value < 0)
-      throw new Error("SvxLineSpacingItem value is invalid.");
-  }
-  /** Returns the Writer rule. @returns Line-spacing mode. */
-  public GetMode(): SvxLineSpacingMode {
-    return this.mode;
-  }
-  /** Returns proportional line height. @returns Percent. */
-  public GetPropLineSpace(): number {
-    return this.mode === "proportional" ? this.value : 0;
-  }
-  /** Returns the rule's raw percent or twip value. @returns Stored value. */
-  public GetValue(): number {
-    return this.value;
-  }
-  /** Reports the imported font-independent setting. @returns ODF compatibility flag. */
-  public IsFontIndependent(): boolean {
-    return this.fontIndependent;
-  }
-  /** Creates an independent item. @returns Clone. */
-  public Clone(): SvxLineSpacingItem {
-    return new SvxLineSpacingItem(this.value, this.Which(), this.mode, this.fontIndependent);
-  }
-  /** Compares identity and value. @param other - Candidate. @returns Whether equal. */
-  public equals(other: SfxPoolItem): boolean {
-    return (
-      other instanceof SvxLineSpacingItem &&
-      other.Which() === this.Which() &&
-      other.value === this.value &&
-      other.mode === this.mode &&
-      other.fontIndependent === this.fontIndependent
-    );
-  }
-  /** Serializes line spacing compatibly with existing percentage records. @returns Percent or rule tuple. */
-  public override QueryValue(): number | readonly [number, number, number] {
-    return this.mode === "proportional" && !this.fontIndependent
-      ? this.value
-      : [
-          ["proportional", "fixed", "minimum", "leading"].indexOf(this.mode),
-          this.value,
-          Number(this.fontIndependent),
-        ];
+  /** Original independent concrete copy clone. @param pool - Unused pool. @returns Item. */
+  public override Clone(pool?: SfxItemPool): SvxAutoFrameDirectionItem {
+    void pool;
+    return new SvxAutoFrameDirectionItem(this);
   }
 }

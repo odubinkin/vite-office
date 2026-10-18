@@ -1,7 +1,7 @@
 /** @fileoverview Checks ODT alignment spellings and normal character values. */
 
 import { describe, expect, it } from "vitest";
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_PARATR_ADJUST } from "../../../inc/hintids";
 import { createWriterDocument } from "../../core/doc/doc";

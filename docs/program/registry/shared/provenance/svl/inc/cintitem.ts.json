@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/cintitem.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/cintitem.hxx",
+    "localSymbols": [
+      "CntUInt16Item",
+      "CntUInt32Item",
+      "CntInt32Item",
+      "CntByteItem"
+    ],
+    "upstreamSymbols": [
+      "CntUInt16Item",
+      "CntUInt32Item",
+      "CntInt32Item",
+      "CntByteItem"
+    ],
+    "preservedResponsibilities": [
+      "Task115 restores CntUInt16/32 mutable values, implicit copy/Clone, same-type payload equality ignoringWhich, hash support through existing o3tl64seed logical arithmetic, and native typed Any queries/updates using existing CPPU owners. UInt16 tries unsigned16 extraction then original legacy signed32 fallback and wraps; UInt32 signed32 projection/extraction preserves unsigned bits. Existing checked unsigned constructor/SetValue domains and plain signed32 browser transport remain explicit adaptations; invalid JS arguments are not native typed-domain claims. SfxUInt16/32 default factory, implicit copy and concrete Clone use actual shared bases; canonical cintitem/intitem headers reexport existing owners. ScIndentItem default0/Which131, implicit copy retainingWhich and value-based Clone restoring131 serve the real DocPool prerequisite. Native same-type equality ignoresWhich while hash includesWhich; retain original behavior. Existing signed16 implementation and other unported numeric families are unchanged and not certified by this scope. Original localized/metric presentation, diagnostic XML/JSON, native cache/assertion/invalid downcast/thread/lifetime/ABI/full document/config/storage/UI/ODS remain pending/excluded. No generic memory/refcount library, new native build/generator/sanitizer or fake provider/document. Existing metadata history/status preserved, not whole-module parity promotion. WholeCalc/complete affected shared raw100 and related actual consumers required; nextfull121, goalactive.",
+      "Task116 adds CntInt32Item normal scalar/copy/mutable/equality/hash/actual Any/Clone values and SfxInt32Item default factory/copy/Clone in existing shared SVL owners and canonical headers. Actual existing CPPU signed32 extraction handles integer Any families, including unsigned32 bit reinterpretation. Existing o3tl seed arithmetic is unchanged; its explicit scalar key binding is extended and independently tested for signed32 keys modulo unsigned32/64 seeds, not general std::hash/external stdlib/binary ABI certification. Degree100 is an erased shared tools signed32 hundredths-of-degree type alias over number; native strong_int construction/get and compiler unit identity are adapted, not a new generic wrapper/library or memory mechanism. SdrAngleItem actual SVX header/core value/copy/get/set/Clone retainsWhich and stores negative/multiple-turn values without normalization. Calc ScRotateValueItem requires an explicit angle; actual DocPool supplies0/Which135. Implicit copy retainsWhich, value-based Clone restores135. Ordinary initialized scalar constructor/SetValue signed32 bounds are explicit browser checks outside invalid native typed inputs. Original locale/metric presentation, diagnostic XML/JSON, native caches/assertions/invalid domains/ABI, other SVX/tool/numeric families and complete document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status preserved without broad parity promotion. No fake document/provider/new C++ build/generator/sanitizer/refcount engine. Goalactive, full121next.",
+      "Task139 adds actual CntByteItem unsigned8 storage with native scalar narrowing, implicit copy/Clone, concrete payload equality ignoring Which and original Which/value hash through existing o3tl. Original Any query/put uses signed8, preserving255/-1 and rejecting non-byte Any without mutation through existing CPPU. SfxByteItem zero defaults and SvxPaperBinItem printer-settings255/default factory and concrete copy clones share the single base; actual Calc159 owned-item defaults are tested. No duplicated numeric engine, refcount/weak lifecycle, ABI/native memory or localized presentation fake. Original CntByteItem numeric presentation and SvxPaperBinItem EditResId presentation remain unported, as do real DocPool/document/UI/ODS. Existing metadata history/classification/status and deliberate I/O/recovery differences retained without whole-module parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Task115 covers unsigned16/32 normal value contracts only. Explicit browser scalar bounds remain; original presentation/diagnostics/native caches/debug/ABI/other numeric families/full document/UI/ODS are not certified.",
+      "Task116 covers signed32/angle normal values and an erased primitive Degree100 unit only. Other original tool/numeric/SVX families, strong_int template operators/type identity, localized presentation/diagnostics/native caches/debug/ABI/full document/UI/ODS remain unverified or excluded.",
+      "Task139 does not implement localized or numeric presentation, native diagnostics/ABI/lifetime, ScDocumentPool/document/UI/ODS."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/items/native-unsigned-item.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-signed-item.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svl/inc/cintitem.ts",
+          "marker": "CntByteItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/cintitem.hxx",
+          "marker": "CntUInt16Item"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/cintitem.hxx",
+          "marker": "CntInt32Item"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/cintitem.hxx",
+          "marker": "CntByteItem"
+        }
+      ]
+    }
+  }
+}

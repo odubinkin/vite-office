@@ -1,5 +1,5 @@
 /** @fileoverview Ports bounded LTR numbering-tab selection from SwLineInfo and SwTextFormatter in txttab.cxx. */
-import { SvxTabAdjust } from "../../../../editeng/source/items/paraitem";
+import { SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 /** Detached native inputs for a label-alignment numbering tab in a horizontal LTR frame. */
 export interface SwNumberingTabSettings {
   readonly defaultDistance: number;

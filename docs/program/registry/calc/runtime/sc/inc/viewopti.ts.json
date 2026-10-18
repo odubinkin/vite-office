@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/viewopti.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "view-grid-options",
+    "capabilityIds": [
+      "CAP-fa57947b-531e-448f-b73b-6f9b86861f50"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/viewopti.ts",
+        "apps/office/src/sc/source/core/tool/viewopti.grid.test.ts",
+        "docs/program/calc-ui-readiness.md#Native Calc drawing-grid options (task186)"
+      ],
+      "justification": "Task186 ports the complete native ScGridOptions value responsibility over actual shared SvxOptionsGrid. Construction retains100/0/100/0,false/true/false;explicit SetDefaults first resets all base fields then uses real source measurement for1000metric/1270otherwise and divisions1. Equality reads all seven actual fields in source order. Base-copy construction binds the real nonvirtual copy operation rather than dispatching to hidden derived assignment. No duplicate grid storage/getters or fake view/document/color/configuration service. Full ScViewOptions,SvxGridItem,color settings and connected Calc document/UI/ODS remain pending;physical ownership uses JS GC.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/inc/viewopti.hxx",
+      "upstreamSymbols": [
+        "ScGridOptions"
+      ]
+    }
+  }
+}

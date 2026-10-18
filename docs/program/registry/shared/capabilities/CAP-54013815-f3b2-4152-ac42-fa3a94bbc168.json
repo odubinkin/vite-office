@@ -1,0 +1,109 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-54013815-f3b2-4152-ac42-fa3a94bbc168",
+    "capabilityId": "CAP-54013815-f3b2-4152-ac42-fa3a94bbc168",
+    "suite": "shared",
+    "subsystem": "shared-string",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original interning keeps exact original string identities and shared canonical uppercase identities.",
+      "Original two-pass purge and getCount/getCountIgnoreCase preserve held external value and internal empty semantics.",
+      "All four native SharedStringPool QA scenarios execute through actual shared values and actual prepared-locale uppercase; no full SvtSysLocale/CharClass/UNO initialization is claimed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task167 adds the original SharedStringPool owner over actual StringWithHash, OUString and SharedString values. One original-to-uppercase map also owns uppercase-to-uppercase canonical keys; preserve preexisting pointer identities, initial insertion ordering, static empty entry, original two-pass purge and both unit-test counts. std::unordered_map/set value equality binds to native JS exact logical UTF16 string keys, including embedded nul/surrogates and unequal native-hash collisions. Native hash buckets, iterators, mutex and unique_ptr allocation do not become browser libraries; synchronous object operations run to completion and JS GC owns the heap. Purge reads existing SAL value state and drops existing map-owned values; no new counter, WeakRef/finalizer, allocator, lifetime/type registry or memory manager is added. The constructor borrows the source-consumed uppercase operation contract; tests bind task166 actual uppercase to genuine prepared Locale state. This does not fabricate full CharClass, LanguageTag/system locale or UNO service construction. Native allocation failure/concurrency and actual Calc document/sheet/UI/ODS owners remain pending."
+    },
+    "capability": "Original shared string pool mapping and purge",
+    "gaps": [
+      "Full CharClass/LanguageTag/system locale/UNO service construction remains pending.",
+      "Native concurrent access/heap allocation failure and actual Calc document/UI/ODS owners remain pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/misc/sharedstringpool.ts",
+          "marker": "class SharedStringPool"
+        },
+        {
+          "path": "apps/office/src/svl/inc/sharedstringpool.ts",
+          "marker": "SharedStringPool"
+        },
+        {
+          "path": "apps/office/src/unotools/inc/charclass.ts",
+          "marker": "CharClassUppercaseReference"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/misc/native-sharedstringpool.test.ts",
+          "marker": "ports testSharedStringPool"
+        },
+        {
+          "path": "apps/office/e2e/shared/shared-string-pool.spec.ts",
+          "marker": "preserves original shared string mapping"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Shared string pool (task167)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/svl/sharedstringpool.hxx",
+          "marker": "SharedStringPool"
+        },
+        {
+          "path": "svl/source/misc/sharedstringpool.cxx",
+          "marker": "SharedStringPool::intern"
+        },
+        {
+          "path": "include/unotools/charclass.hxx",
+          "marker": "uppercase"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svl/qa/unit/svl.cxx",
+          "marker": "void Test::testSharedStringPool()"
+        },
+        {
+          "path": "svl/qa/unit/svl.cxx",
+          "marker": "void Test::testSharedStringPoolPurge()"
+        },
+        {
+          "path": "svl/qa/unit/svl.cxx",
+          "marker": "void Test::testSharedStringPoolPurgeBug1()"
+        },
+        {
+          "path": "svl/qa/unit/svl.cxx",
+          "marker": "void Test::testSharedStringPoolEmptyString()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/sharedstringpool.hxx",
+          "marker": "Storage for pool of shared strings"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "original-shared-string-pool",
+    "scopeLimitations": [
+      "Task167 adds the original SharedStringPool owner over actual StringWithHash, OUString and SharedString values. One original-to-uppercase map also owns uppercase-to-uppercase canonical keys; preserve preexisting pointer identities, initial insertion ordering, static empty entry, original two-pass purge and both unit-test counts. std::unordered_map/set value equality binds to native JS exact logical UTF16 string keys, including embedded nul/surrogates and unequal native-hash collisions. Native hash buckets, iterators, mutex and unique_ptr allocation do not become browser libraries; synchronous object operations run to completion and JS GC owns the heap. Purge reads existing SAL value state and drops existing map-owned values; no new counter, WeakRef/finalizer, allocator, lifetime/type registry or memory manager is added. The constructor borrows the source-consumed uppercase operation contract; tests bind task166 actual uppercase to genuine prepared Locale state. This does not fabricate full CharClass, LanguageTag/system locale or UNO service construction. Native allocation failure/concurrency and actual Calc document/sheet/UI/ODS owners remain pending.",
+      "Bounded task167 acceptance passes67 related tests/6files,187 Calc tests/76files, production build and1 actual Chromium shared pool scenario. Exact executable pool owner raw S83/B18/F16/L77 and33Calc S4179/B2731/F821/L3727 have every counter positive and100 coverage. All13 source gates,including43 module-boundary tests, pass. Eight native blobs are pinned; existing StringWithHash/hash function tokens and all30 guard function bodies remain unchanged. Native source links are absent during runtime checks and restored afterward. No native compilation, new lifetime engine or full CharClass/document/UI/ODS readiness is claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

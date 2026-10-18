@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-5be3a230-2daf-4359-aec8-db71a320a736",
+    "capabilityId": "CAP-5be3a230-2daf-4359-aec8-db71a320a736",
+    "suite": "shared",
+    "subsystem": "native-text-field-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "FieldItem copies real polymorphic data values and preserves explicit adoption/null/equality/hash delegation contracts.",
+      "Full URL and page/title/time/table stored values use native IDs/defaults/copy/assignment/get/set/Clone/equality semantics.",
+      "URL Name is copied but intentionally excluded from equality/hash exactly as source; real item-set change gate retains this result."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task160 ports actual SvxFieldData/SvxFieldItem and complete locale-independent URL/page/pages/page-title/time/document-title/table stored values. Real SfxPoolItem, Unicode, hash-combine, holder, XEditAttribute and ContentInfo are reused. Field copy/Clone retains dynamic type and independent values; explicit adopt=true only erases unique_ptr constructor syntax under JS GC. Native pointer/null/type/value equality and field hash delegation are retained. URL default/copy/assignment/get/set preserves all four Unicode strings and format, including stable const views/embedded nul/surrogates; Name is copied but omitted by native equality/hash. All17OffAPI field IDs are declared. Opaque process/compiler-specific std::type_index hash is bound to JS class reflection plus existing SAL hash; native numeric bits/RTTI binary identity are not reproduced or serialized. URL hashes retain source order and shared Unicode hashes. No new type/ownership/refcount/cache/deletion registry, native compiler/probe, core JSON or UI localization. UNO Create/XTextContent/property services/date-time formatting and other field families remain absent until genuine providers exist. Full EditTextObject/EditEngine/default pool/Calc document/connected UI/same-model ODS remain pending. Bounded acceptance passes53related tests/7files and187Calc tests/76files, production build and19related Writer browser scenarios. Exact2new shared executable owners raw S123/B37/F52/L117 and all33Calc owners S4179/B2731/F821/L3727 have every raw counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0, plus43boundary tests with both complete guard files unchanged. Native evidence pins13files and all17field IDs. All4source references are absent during tests/build/browser and restored exactly finally. Full engine/pool/document/connected UI/same-model ODS readiness and native type-index numeric ABI are not claimed."
+    },
+    "capability": "Native polymorphic text-field values",
+    "gaps": [
+      "Actual full EditEngine/text object/default pool/Calc document/connected UI/same-model ODS and unrepresented field families/UNO factory/formatting providers remain pending.",
+      "Opaque native type-hash numeric ABI, pointer/refcount/cache/lifetime and diagnostics are not reproduced."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/flditem.ts",
+          "marker": "SvxFieldData"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/flditem.ts",
+          "marker": "SvxFieldData"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/textfield/Type.ts",
+          "marker": "UNSPECIFIED"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-field-values.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native text-field values (task160)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/flditem.cxx",
+          "marker": "SvxFieldData"
+        },
+        {
+          "path": "include/editeng/flditem.hxx",
+          "marker": "SvxFieldData"
+        },
+        {
+          "path": "offapi/com/sun/star/text/textfield/Type.idl",
+          "marker": "UNSPECIFIED"
+        }
+      ],
+      "tests": [
+        {
+          "path": "editeng/qa/unit/core-test.cxx",
+          "marker": "testHyperlinkCopyPaste"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/editeng/flditem.hxx",
+          "marker": "This item stores a field"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-text-field-values",
+    "scopeLimitations": [
+      "Task160 ports actual SvxFieldData/SvxFieldItem and complete locale-independent URL/page/pages/page-title/time/document-title/table stored values. Real SfxPoolItem, Unicode, hash-combine, holder, XEditAttribute and ContentInfo are reused. Field copy/Clone retains dynamic type and independent values; explicit adopt=true only erases unique_ptr constructor syntax under JS GC. Native pointer/null/type/value equality and field hash delegation are retained. URL default/copy/assignment/get/set preserves all four Unicode strings and format, including stable const views/embedded nul/surrogates; Name is copied but omitted by native equality/hash. All17OffAPI field IDs are declared. Opaque process/compiler-specific std::type_index hash is bound to JS class reflection plus existing SAL hash; native numeric bits/RTTI binary identity are not reproduced or serialized. URL hashes retain source order and shared Unicode hashes. No new type/ownership/refcount/cache/deletion registry, native compiler/probe, core JSON or UI localization. UNO Create/XTextContent/property services/date-time formatting and other field families remain absent until genuine providers exist. Full EditTextObject/EditEngine/default pool/Calc document/connected UI/same-model ODS remain pending. Bounded acceptance passes53related tests/7files and187Calc tests/76files, production build and19related Writer browser scenarios. Exact2new shared executable owners raw S123/B37/F52/L117 and all33Calc owners S4179/B2731/F821/L3727 have every raw counter positive and S/B/F/L100; exact owner sets are checked. All13source gates/inventory pass with semanticViolationCount0, plus43boundary tests with both complete guard files unchanged. Native evidence pins13files and all17field IDs. All4source references are absent during tests/build/browser and restored exactly finally. Full engine/pool/document/connected UI/same-model ODS readiness and native type-index numeric ABI are not claimed.",
+      "Native type_index hash numeric values are runtime/compiler-specific and not a cross-language binary contract. JS class-name reflection plus existing SAL hash provides an opaque type hash with no identity registry; URL payload hash order remains literal source behavior.",
+      "Referenced upstream hyperlink copy/paste fixture establishes the parent field responsibility; complete Outliner/EditEngine copy/paste/UI rendering is not claimed ported."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

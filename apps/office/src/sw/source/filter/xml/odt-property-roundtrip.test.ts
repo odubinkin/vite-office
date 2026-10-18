@@ -1,16 +1,14 @@
 /** @fileoverview Verifies upstream-mapped Writer color and paragraph compatibility properties through ODT. */
 
+import { encodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
+import { createTabs, tabStops } from "../../../../../test/tab-item-fixtures";
 import { describe, expect, it } from "vitest";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import {
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -58,12 +56,12 @@ async function rewriteEntry(
 describe("Writer ODT mapped pooled properties", /** Groups symmetric property tests. @returns Nothing. */ () => {
   it("imports and round-trips signed tab positions in paragraph and inherited style properties", /** Preserves negative ODF positions and their alignment/leader choices across package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
-    const inherited = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+    const inherited = createTabs(RES_PARATR_TABSTOP, [
       new SvxTabStop(-360, SvxTabAdjust.Right, ".", "_"),
     ]);
     writer.GetDfltTextFormatColl().SetFormatAttr(inherited);
     writer.paragraphs[0]?.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      createTabs(RES_PARATR_TABSTOP, [
         new SvxTabStop(720, SvxTabAdjust.Decimal, ";", "."),
         new SvxTabStop(0, SvxTabAdjust.Left, ".", " "),
         new SvxTabStop(1440, SvxTabAdjust.Center, ".", "_"),
@@ -79,7 +77,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       'style:position="-1.27cm"',
     );
     const imported = await readOdtDocument(input, metadata);
-    const expected = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+    const expected = createTabs(RES_PARATR_TABSTOP, [
       new SvxTabStop(-720, SvxTabAdjust.Decimal, ";", "."),
       new SvxTabStop(0, SvxTabAdjust.Left, ",", " "),
       new SvxTabStop(1440, SvxTabAdjust.Center, ",", "_"),
@@ -271,7 +269,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
   });
   it("keeps tab leaf values independent from ignored descendant subtrees", /** Checks leaf lifecycle, native subtree skipping and sibling selection through direct/inherited package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
-    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
     let input = writeOdtDocument(writer, metadata);
@@ -294,7 +292,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
       for (const item of [direct, inherited])
         expect(
-          item.GetStops().map(
+          tabStops(item).map(
             /** Projects all tab fields after leaf dispatch. @param stop - Imported tab. @returns Retained fields. */
             (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
           ),
@@ -309,7 +307,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
 
   it("imports native MM100 tab measures and conversion failure through ODT", /** Checks native parse/failure/quantization before Writer conversion through direct and inherited package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
-    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
     const base = writeOdtDocument(writer, metadata);
@@ -439,7 +437,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
         for (const item of [direct, inherited]) {
           expect(
-            item.GetStops().map(
+            tabStops(item).map(
               /** Projects all retained tab fields. @param stop - Imported stop. @returns Comparable fields. */
               (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
             ),
@@ -454,7 +452,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
 
   it("imports native tab position and alignment defaults through direct and inherited ODT styles", /** Checks literal native initialization and recognized-only overrides through package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
-    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
     const base = writeOdtDocument(writer, metadata);
@@ -543,7 +541,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
         for (const item of [direct, inherited]) {
           expect(
-            item.GetStops().map(
+            tabStops(item).map(
               /** Projects all retained tab fields. @param stop - Imported stop. @returns Comparable fields. */
               (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
             ),
@@ -558,7 +556,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
 
   it("selects Default tab entries in XML source order before canonical sorting", /** Checks native first-Default exclusivity and later-Default omission across direct/style package cycles. @returns Completion after reimport. */ async () => {
     const writer = createWriterDocument();
-    const placeholder = SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
+    const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
     const base = writeOdtDocument(writer, metadata);
@@ -617,7 +615,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
           .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
         for (const item of [direct, inherited]) {
           expect(
-            item.GetStops().map(
+            tabStops(item).map(
               /** Projects all retained tab fields. @param stop - Imported stop. @returns Comparable fields. */
               (stop) => [stop.GetTabPos(), stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill()],
             ),
@@ -633,7 +631,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
   it("keeps upstream tab alignment and leader choices through ODT", /** Checks tab-stop type and leader serialization. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      createTabs(RES_PARATR_TABSTOP, [
         new SvxTabStop(360, SvxTabAdjust.Left),
         new SvxTabStop(720, SvxTabAdjust.Center, ".", "_"),
         new SvxTabStop(1080, SvxTabAdjust.Default),
@@ -645,7 +643,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const reopened = await readOdtDocument(bytes, metadata);
     const tabs = reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
     expect(
-      tabs.GetStops().map(
+      tabStops(tabs).map(
         /** Projects imported tab alignment. @param stop - Tab stop. @returns Adjustment. */
         (stop) => stop.GetAdjustment(),
       ),
@@ -700,7 +698,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
   });
   it("keeps an explicit empty tab sequence through ODT", /** Keeps a tab clear distinct from an inherited default. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
-    writer.paragraphs[0]?.SetAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, []));
+    writer.paragraphs[0]?.SetAttr(createTabs(RES_PARATR_TABSTOP, []));
     const bytes = writeOdtDocument(writer, metadata);
     expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain("<style:tab-stops/>");
     const reopened = await readOdtDocument(bytes, metadata);
@@ -711,7 +709,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
   it("round-trips multiple paragraph tab positions", /** Handles Writer formatting state.  @returns Callback result. */ async () => {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      createTabs(RES_PARATR_TABSTOP, [
         new SvxTabStop(720, SvxTabAdjust.Right),
         new SvxTabStop(1440, SvxTabAdjust.Decimal, ".", "."),
       ]),
@@ -724,8 +722,9 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     );
     const reopened = await readOdtDocument(bytes, metadata);
     expect(
-      (reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue()
-        .stops,
+      encodeSfxPoolItem(
+        reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
+      ).value.stops,
     ).toEqual([
       { position: 720, adjustment: SvxTabAdjust.Right, decimal: ",", fill: " " },
       { position: 1440, adjustment: SvxTabAdjust.Decimal, decimal: ".", fill: "." },
@@ -737,7 +736,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     if (paragraph === undefined) throw new Error("Writer paragraph is missing.");
     paragraph.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
     paragraph.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
-    paragraph.SetAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));
+    paragraph.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));
     paragraph.SetAttr(new SfxBoolItem(RES_KEEP, true));
     paragraph.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
     paragraph.ReplaceRange(
@@ -794,7 +793,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     heading.SetFormatAttr(new SfxStringItem(RES_CHRATR_COLOR, "auto"));
     heading.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
     const defaultStyle = writer.GetDfltTextFormatColl();
-    defaultStyle.SetFormatAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
+    defaultStyle.SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
     defaultStyle.SetFormatAttr(new SfxBoolItem(RES_KEEP, false));
     defaultStyle.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, true));
     const bytes = writeOdtDocument(writer, metadata);
@@ -863,12 +862,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     ).rejects.toThrow("paragraph line-number participation");
 
     const tabWriter = createWriterDocument();
-    tabWriter.paragraphs[0]?.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720)]),
-    );
+    tabWriter.paragraphs[0]?.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720)]));
     tabWriter
       .GetDfltTextFormatColl()
-      .SetFormatAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
+      .SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
     const tabBytes = writeOdtDocument(tabWriter, metadata);
     const multiTabOpened = await readOdtDocument(
       await rewriteEntry(
@@ -885,12 +882,12 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       metadata,
     );
     expect(
-      (multiTabOpened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem)
-        .GetStops()
-        .map(
-          /** Projects a restored tab. @param stop - Tab stop. @returns Twips. */
-          (stop) => stop.GetTabPos(),
-        ),
+      tabStops(
+        multiTabOpened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
+      ).map(
+        /** Projects a restored tab. @param stop - Tab stop. @returns Twips. */
+        (stop) => stop.GetTabPos(),
+      ),
     ).toEqual([720, 1134]);
     const ignoredTabChild = await readOdtDocument(
       await rewriteEntry(
@@ -907,9 +904,9 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       metadata,
     );
     expect(
-      (
-        ignoredTabChild.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem
-      ).GetStops(),
+      tabStops(
+        ignoredTabChild.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
+      ),
     ).toHaveLength(0);
 
     const textChildBytes = await rewriteEntry(

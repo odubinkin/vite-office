@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610140940-4FHXT6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T09:57:33.775Z",
+  "verdict": "pass",
+  "summary": "Task112 source8aa7354e9574 implements four native Calc bool attributes over canonical shared Bool operations; declared12focused gates and actual raw100 profiles pass.",
+  "evaluated_sha": "8aa7354e9574b30cac8f5c0960a926f100ab0760",
+  "blueprint_digest": "42d8c09d1768173bea01f6e030e8cc76f9be33e170d59ec5c414bd1bbab45936",
+  "findings": [
+    "WholeCalc155tests/53files/32owners S4030 B2666 F795 L3590 allrawpositive100; related shared67tests/8files Boolowner S19 B17 F9 L16 allrawpositive100. Existing request/dispatch/itemset/Writer consumers pass after one native Which-independent shared equality expectation migration; no Writer-only coverage repair. Actual3455Git-start hashes versus3459current/committed prove only20intentionalpaths changed; prior Writer/main integration preserved. Initial stale cycle111 snapshot audit failed and was corrected from actual task-start Git blobs, without code/test replay or guard weakening. All4source links absent for tests/restored,10native-source hashes reviewed, no Cpp/native memory experiment. Same-agent separate EVAL is not independent review. Native localization/presentation/caches/debug/ABI/invalid downcasts/fullDocPool/document/UI/ODS remain excluded or pending; goal active, next full121."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610140940-4FHXT6/README.md",
+    "output/playwright/task112-checks/exact-review.json",
+    "output/playwright/task112-checks/value-coverage-audit.json",
+    "output/playwright/task112-checks/baseline-correction.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

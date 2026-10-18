@@ -51,7 +51,7 @@ import {
 } from "../../../test/table-box-test-helpers";
 import { RES_BOX } from "../../inc/hintids";
 import { SvxBoxItem } from "../../../editeng/source/items/frmitems";
-import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
+import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createWriterDocumentSession } from "../composition/writer-module";

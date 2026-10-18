@@ -1,0 +1,190 @@
+---
+id: "202610152117-G4ZX6N"
+title: "Implement native style base and indexed pool model owners"
+result_summary: "Constructed actual core SfxStyleSheetBase/SfxStyleSheetBasePool and native hints using existing shared dependencies, preserving native defaults,graph/index/value/notification semantics and source quirks. Full derived styles/Calc document/UI/ODS remain pending."
+status: "DONE"
+priority: "med"
+owner: "CODER"
+revision: 12
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-10-15T21:18:50.651Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "ok"
+  updated_at: "2026-10-15T21:31:38.146Z"
+  updated_by: "CODER"
+  note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded provenance/inventory reruns, build-browser-portable.mjs, final-audit.mjs under output/playwright/task173-checks. Result: pass. Evidence:249related/23files,187Calc/76files; exact4measured shared raw S369/B174/F92/L331 and33Calc S4179/B2731/F821/L3727 every counter positive100;13source gates,production build,1actual style/pool Chromium and1Writer startup/load/edit. Eight pinned original files,47represented methods;actual core owners427lines plus iterator166 justify responsibility split. Scope: actual core style/pool/hint ownership,name/parent/follow/attributes/index/cache/notifications; preserve CALC146/150 and152..155, no fake owners or normal invalidated iterator result. Presentation/XML/UNO/XComponent/derived styles/Calc document/UI/ODS and full all-app run remain pending; GC owns physical lifetime."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-15T21:31:39.830Z"
+  updated_by: "EVALUATOR"
+  note: "Approved actual core style base/pool owner scope is implemented with reused shared dependencies and complete bounded evidence; same-agent evaluation, not independent review."
+  evaluated_sha: "559a1885d0d4419a47d1dd0a24d77d22ff19f5b4"
+  blueprint_digest: "bcb2c32d99aace9264709f677b611319bff7fe598fb9e81b03e224114106dce7"
+  evidence_refs:
+    - ".agentplane/tasks/202610152117-G4ZX6N/README.md"
+    - ".agentplane/tasks/202610152117-G4ZX6N/quality/20261015-213139830-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610152117-G4ZX6N/quality/20261015-213139830-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610152117-G4ZX6N/quality/20261015-213139830-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610152117-G4ZX6N/blueprint/resolved-snapshot.json"
+    - "output/playwright/task173-checks/final-verification.json"
+    - "output/playwright/task173-checks/native-audit.json"
+    - "output/playwright/task173-checks/source-gates.json"
+    - "output/playwright/task173-checks/build-browser-manifest.json"
+  findings:
+    - "Actual core pool eagerly owns actual index and creates actual styles;47represented native methods/hints/defaults/control flows are source-mapped. Name/parent/follow/copy/item sets/index/cache/notifications use original dependencies,with GC physical ownership and no fake provider."
+    - "249related,187Calc,13source gates,production build,1core Chromium and1Writer startup/load/edit pass; exact4shared/33Calc raw S/B/F/L sets100. Canonical style header exports real owners; responsibility split427+166lines exceeds500 without sharding classes."
+    - "CALC146/150 and152..155 are preserved. Nonempty CALC150 callback is tested only through factory exception before invalidated traversal advances. Core Clear covers actual non-UNO classes;presentation/XML/UNO/XComponent/derived styles remain explicitly absent. Broad parity flags remain false."
+commit:
+  hash: "87d284b585cdc4dd4a9532a8dcf7b22adba461a0"
+  message: "✅ G4ZX6N task: record actual core style owner acceptance"
+comments:
+  -
+    author: "CODER"
+    body: "Start: implement approved actual core style base/pool owners with reused shared dependencies and source-faithful notifications and edge cases."
+  -
+    author: "CODER"
+    body: "Verified: actual core style/pool owners pass249related/187Calc,strict shared/Calc100,13source gates,production build and core plus Writer Chromium; inventory and CALC152..155 recorded with explicit missing presentation/UNO/derived scope."
+events:
+  -
+    type: "status"
+    at: "2026-10-15T21:18:55.344Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: implement approved actual core style base/pool owners with reused shared dependencies and source-faithful notifications and edge cases."
+  -
+    type: "verify"
+    at: "2026-10-15T21:31:38.146Z"
+    author: "CODER"
+    state: "ok"
+    note: "Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded provenance/inventory reruns, build-browser-portable.mjs, final-audit.mjs under output/playwright/task173-checks. Result: pass. Evidence:249related/23files,187Calc/76files; exact4measured shared raw S369/B174/F92/L331 and33Calc S4179/B2731/F821/L3727 every counter positive100;13source gates,production build,1actual style/pool Chromium and1Writer startup/load/edit. Eight pinned original files,47represented methods;actual core owners427lines plus iterator166 justify responsibility split. Scope: actual core style/pool/hint ownership,name/parent/follow/attributes/index/cache/notifications; preserve CALC146/150 and152..155, no fake owners or normal invalidated iterator result. Presentation/XML/UNO/XComponent/derived styles/Calc document/UI/ODS and full all-app run remain pending; GC owns physical lifetime."
+  -
+    type: "status"
+    at: "2026-10-15T21:31:56.387Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual core style/pool owners pass249related/187Calc,strict shared/Calc100,13source gates,production build and core plus Writer Chromium; inventory and CALC152..155 recorded with explicit missing presentation/UNO/derived scope."
+doc_version: 3
+doc_updated_at: "2026-10-15T21:31:56.389Z"
+doc_updated_by: "CODER"
+description: "Task173: construct actual SfxStyleSheetBase and SfxStyleSheetBasePool core model owners, native hints and name/parent/follow/index/item-set contracts using existing Sfx graph, iterator, index and pool ranges. Explicitly leave presentation/UNO/derived SfxStyleSheet responsibilities pending rather than fake services; preserve source edge cases and GC ownership."
+sections:
+  Summary: "Construct actual core SfxStyleSheetBase and SfxStyleSheetBasePool owners required before derived Calc style pools, using the implemented shared graph/index/iterator/item-set contracts. Preserve original core defaults and notifications; omit presentation/UNO services explicitly rather than fake them."
+  Scope: "Task173: actual style base/pool core model and native style hints within svl/source/items, canonical header type references as needed, native source-derived core tests, actual shared Chromium and related Writer functions; shared runtime/provenance/capability registry and readiness/suspected-upstream journal. Maximum30 non-task paths. Keep model owners together where500-line budget permits; if split from existing iterator, use actual core-model responsibility boundary with provenance rationale. No SfxStyleSheet/ScStyleSheet fake subclass, native refcount/WeakImplHelper manager, presentation strings/UNO facade, all-app run or claimed whole-module parity."
+  Plan: "1. Audit pinned core base/pool/hint methods and existing source dependencies. 2. Implement actual name/family/mask/parent/follow/hidden/help/item-set core owners and indexed pool construction/create/make/search/reindex/insert/remove/add/copy/assignment/clear/destructor notifications; retain source bugs CALC146/150 and borrowed-copy semantics. Native unsupported presentation/XML/UNO/XComponent/derived style protocols remain absent and explicitly unimplemented. 3. Source-derived tests exercise actual owners, native change notification order, deferred rename, parent cycles/follow validation, owned/borrowed item-set copies, iterator cache and preserved pool-copy behavior; no substitute style/pool witnesses. 4. Strict changed shared and allCalc100, related Writer tests,13source gates, production build and actual Chromium. 5. Record honest inventory and native source audit, verify/commit/evaluate/close; whole UI/ODS goal remains active."
+  Verify Steps: "Run node output/playwright/task173-checks/native-audit.mjs for original style/hint/index/broadcaster source pins and method/default/control-flow evidence. Source-derived fixtures must use actual new style/pool owners and existing real metadata/item-set/index/iterator, preserving CALC146/150 and copy owner behavior; no native QA suite port claim without original fixtures. Run node output/playwright/task173-checks/portable.mjs for exact changed shared owner sets raw S/B/F/L100 and all33Calc100, related Writer functions, Writer-only coverage exemption. Run node output/playwright/task173-checks/source-gates.mjs for13standard gates, then build-browser-portable.mjs for production build and actual core style/pool Chromium. Native references absent during runtime/restored afterward. Record that no presentation/UNO/XComponent/derived style or full Calc document/UI/ODS readiness is claimed; no native memory probes. Full all-app run deferred by user until minimum UI/ODS milestone."
+  Verification: |-
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-15T21:31:38.146Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded provenance/inventory reruns, build-browser-portable.mjs, final-audit.mjs under output/playwright/task173-checks. Result: pass. Evidence:249related/23files,187Calc/76files; exact4measured shared raw S369/B174/F92/L331 and33Calc S4179/B2731/F821/L3727 every counter positive100;13source gates,production build,1actual style/pool Chromium and1Writer startup/load/edit. Eight pinned original files,47represented methods;actual core owners427lines plus iterator166 justify responsibility split. Scope: actual core style/pool/hint ownership,name/parent/follow/attributes/index/cache/notifications; preserve CALC146/150 and152..155, no fake owners or normal invalidated iterator result. Presentation/XML/UNO/XComponent/derived styles/Calc document/UI/ODS and full all-app run remain pending; GC owns physical lifetime.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T21:27:23.843Z, excerpt_hash=sha256:82776cb7342fc07bcbdcf11a24a93b56a98068a51141f9a998acef1f53a2321a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610152117-G4ZX6N/blueprint/resolved-snapshot.json
+    - old_digest: bcb2c32d99aace9264709f677b611319bff7fe598fb9e81b03e224114106dce7
+    - current_digest: bcb2c32d99aace9264709f677b611319bff7fe598fb9e81b03e224114106dce7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610152117-G4ZX6N
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610152117-G4ZX6N
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: "Revert only task173 source/docs/registry commits while preserving calc checkout, unrelated work/tasks, prior shared owners and native symlinks. Do not merge branches or rewrite history."
+  Findings: |-
+    - Observation: Initial source gates reached provenance before the new style-model runtime/provenance records were written; discovery correctly reported the new implementation as missing.
+      Impact: Provenance gate stopped; typecheck/lint/docs/size/dependency/tree gates passed and initial related functional/raw coverage was100.
+      Resolution: Complete the approved real-owner registry records with responsibility-split rationale and rerun provenance/inventory; no discovery bypass or broad parity promotion.
+extensions:
+  implementation_commit:
+    hash: "559a1885d0d4419a47d1dd0a24d77d22ff19f5b4"
+    message: "🔧 G4ZX6N core: implement native core style base and pool owners"
+id_source: "generated"
+---
+## Summary
+
+Construct actual core SfxStyleSheetBase and SfxStyleSheetBasePool owners required before derived Calc style pools, using the implemented shared graph/index/iterator/item-set contracts. Preserve original core defaults and notifications; omit presentation/UNO services explicitly rather than fake them.
+
+## Scope
+
+Task173: actual style base/pool core model and native style hints within svl/source/items, canonical header type references as needed, native source-derived core tests, actual shared Chromium and related Writer functions; shared runtime/provenance/capability registry and readiness/suspected-upstream journal. Maximum30 non-task paths. Keep model owners together where500-line budget permits; if split from existing iterator, use actual core-model responsibility boundary with provenance rationale. No SfxStyleSheet/ScStyleSheet fake subclass, native refcount/WeakImplHelper manager, presentation strings/UNO facade, all-app run or claimed whole-module parity.
+
+## Plan
+
+1. Audit pinned core base/pool/hint methods and existing source dependencies. 2. Implement actual name/family/mask/parent/follow/hidden/help/item-set core owners and indexed pool construction/create/make/search/reindex/insert/remove/add/copy/assignment/clear/destructor notifications; retain source bugs CALC146/150 and borrowed-copy semantics. Native unsupported presentation/XML/UNO/XComponent/derived style protocols remain absent and explicitly unimplemented. 3. Source-derived tests exercise actual owners, native change notification order, deferred rename, parent cycles/follow validation, owned/borrowed item-set copies, iterator cache and preserved pool-copy behavior; no substitute style/pool witnesses. 4. Strict changed shared and allCalc100, related Writer tests,13source gates, production build and actual Chromium. 5. Record honest inventory and native source audit, verify/commit/evaluate/close; whole UI/ODS goal remains active.
+
+## Verify Steps
+
+Run node output/playwright/task173-checks/native-audit.mjs for original style/hint/index/broadcaster source pins and method/default/control-flow evidence. Source-derived fixtures must use actual new style/pool owners and existing real metadata/item-set/index/iterator, preserving CALC146/150 and copy owner behavior; no native QA suite port claim without original fixtures. Run node output/playwright/task173-checks/portable.mjs for exact changed shared owner sets raw S/B/F/L100 and all33Calc100, related Writer functions, Writer-only coverage exemption. Run node output/playwright/task173-checks/source-gates.mjs for13standard gates, then build-browser-portable.mjs for production build and actual core style/pool Chromium. Native references absent during runtime/restored afterward. Record that no presentation/UNO/XComponent/derived style or full Calc document/UI/ODS readiness is claimed; no native memory probes. Full all-app run deferred by user until minimum UI/ODS milestone.
+
+## Verification
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-15T21:31:38.146Z — VERIFY — ok
+
+By: CODER
+
+Note: Command: native-audit.mjs, portable.mjs, source-gates.mjs with recorded provenance/inventory reruns, build-browser-portable.mjs, final-audit.mjs under output/playwright/task173-checks. Result: pass. Evidence:249related/23files,187Calc/76files; exact4measured shared raw S369/B174/F92/L331 and33Calc S4179/B2731/F821/L3727 every counter positive100;13source gates,production build,1actual style/pool Chromium and1Writer startup/load/edit. Eight pinned original files,47represented methods;actual core owners427lines plus iterator166 justify responsibility split. Scope: actual core style/pool/hint ownership,name/parent/follow/attributes/index/cache/notifications; preserve CALC146/150 and152..155, no fake owners or normal invalidated iterator result. Presentation/XML/UNO/XComponent/derived styles/Calc document/UI/ODS and full all-app run remain pending; GC owns physical lifetime.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-15T21:27:23.843Z, excerpt_hash=sha256:82776cb7342fc07bcbdcf11a24a93b56a98068a51141f9a998acef1f53a2321a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610152117-G4ZX6N/blueprint/resolved-snapshot.json
+- old_digest: bcb2c32d99aace9264709f677b611319bff7fe598fb9e81b03e224114106dce7
+- current_digest: bcb2c32d99aace9264709f677b611319bff7fe598fb9e81b03e224114106dce7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610152117-G4ZX6N
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610152117-G4ZX6N
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+Revert only task173 source/docs/registry commits while preserving calc checkout, unrelated work/tasks, prior shared owners and native symlinks. Do not merge branches or rewrite history.
+
+## Findings
+
+- Observation: Initial source gates reached provenance before the new style-model runtime/provenance records were written; discovery correctly reported the new implementation as missing.
+  Impact: Provenance gate stopped; typecheck/lint/docs/size/dependency/tree gates passed and initial related functional/raw coverage was100.
+  Resolution: Complete the approved real-owner registry records with responsibility-split rationale and rerun provenance/inventory; no discovery bypass or broad parity promotion.

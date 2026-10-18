@@ -1,22 +1,24 @@
 /**
  * @fileoverview Enforces the approved LibreOffice-shaped runtime module dependency graph for Vite Office.
  */
-
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import ts from "typescript";
-
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
+  "comphelper",
   "configmgr",
   "cppu",
   "cppuhelper",
   "cui",
+  "docmodel",
   "editeng",
   "external",
   "formula",
   "framework",
+  "i18nlangtag",
+  "i18npool",
   "i18nutil",
   "o3tl",
   "offapi",
@@ -38,34 +40,76 @@ const moduleNames = [
 ];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
+  // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
+  // Original attributelist.hxx/cxx also owns actual OUString values.
+  ["comphelper", new Set(["cppu", "sal", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
   // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
   ["cppuhelper", new Set(["cppu", "sal"])],
-  ["cui", new Set(["editeng", "svl", "svx"])],
-  ["editeng", new Set(["offapi", "svl", "svtools", "vcl"])],
+  ["cui", new Set(["editeng", "svl", "svx", "tools"])],
+  // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
+  // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
+  ["docmodel", new Set(["tools", "o3tl"])],
+  // Original xmlcnitm.hxx includes xmloff/xmlcnimp.hxx; Library_editeng links xo.
+  [
+    "editeng",
+    new Set([
+      // Original paraitem.cxx includes comphelper/extract.hxx; Library_editeng links comphelper.
+      "comphelper",
+      "docmodel",
+      "cppu",
+      // Original langitem.hxx uses i18nlangtag/lang.h language values.
+      "i18nlangtag",
+      // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.
+      "i18nutil",
+      // Original paraitem.cxx includes unotools/syslocale.hxx for numeric decimal defaults.
+      "unotools",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "svtools",
+      "tools",
+      "vcl",
+      "xmloff",
+    ]),
+  ],
   ["external", new Set()],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
   ["formula", new Set(["offapi", "sal", "svl"])],
   ["framework", new Set(["sfx2", "svl"])],
+  // Original lang.h strong_int/sal tags are erased into primitive numeric values.
+  // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
+  ["i18nlangtag", new Set(["sal", "udkapi"])],
+  // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
+  // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
+  ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   ["i18nutil", new Set(["cppu", "external", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
-  ["offapi", new Set(["sal"])],
-  ["package", new Set()],
+  // Original generated enum getters use actual CPPU static enum metadata.
+  ["offapi", new Set(["cppu", "sal"])],
+  // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
+  ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
-  ["sax", new Set()],
+  // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
+  ["sax", new Set(["sal", "udkapi"])],
   [
     "sc",
     new Set([
+      // Original Calc attrib.cxx exposes actual UNO Any member query/extraction.
+      "cppu",
       "cui",
       "editeng",
       "external",
       // Original Calc formularesult.hxx includes the shared formula error contracts.
       "formula",
       "framework",
+      // Library_sc.mk links i18nlangtag; global.cxx includes i18nlangtag/mslangid.hxx.
+      "i18nlangtag",
       "o3tl",
       "offapi",
       "package",
@@ -82,33 +126,61 @@ const allowedEdges = new Map([
     ]),
   ],
   ["sfx2", new Set(["svl"])],
-  ["svl", new Set(["sal"])],
-  ["svtools", new Set()],
-  ["svx", new Set(["editeng", "svl", "svtools", "vcl"])],
+  // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
+  // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
+  // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.
+  // Native grabbagitem.cxx consumes generated UDK beans PropertyValue.hpp.
+  // Original SharedStringPool borrows CharClass; Library_svl links utl.
+  ["svl", new Set(["comphelper", "cppu", "o3tl", "sal", "tools", "udkapi", "unotools"])],
+  // Original svtools/source/misc/unitconv.cxx uses Tools map/field units and o3tl conversions.
+  ["svtools", new Set(["tools", "o3tl"])],
+  // Original sdangitm.hxx includes tools/degree.hxx.
+  // Original rotmodit.cxx exposes Any and CellVertJustify2.
+  // Original pageitem.cxx clears the actual rtl OUString presentation output.
+  ["svx", new Set(["cppu", "editeng", "o3tl", "offapi", "sal", "svl", "svtools", "tools", "vcl"])],
   [
     "sw",
     new Set([
+      // Native Writer package/filter composition uses shared MIME constants and beans::PropertyValue (Library_sw/sdk_api).
+      "comphelper",
+      "udkapi",
+      // Original Library_sw links cppu; native property transport uses real Any values.
+      "cppu",
       "cui",
       "editeng",
       "framework",
       "o3tl",
       "offapi",
       "package",
+      // Native Writer font attributes and XML import use rtl/textenc.h identifiers.
+      "sal",
       "sfx2",
       "svl",
       "svx",
       "svtools",
       "tools",
+      // Native DocumentStylePoolManager includes shared fontdefs; Library_sw links utl.
+      "unotools",
       "vcl",
       "xmloff",
     ]),
   ],
-  ["vcl", new Set(["svl"])],
-  ["udkapi", new Set(["sal"])],
+  // Native vcl/Library_vcl.mk links SAL; font.hxx includes sal/types.h.
+  // Native Library_vcl.mk links utl and uses SDK API; GetDefaultFont consumes configured locale data.
+  ["vcl", new Set(["offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
+  // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
+  ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
-  ["unotools", new Set(["sal"])],
-  ["tools", new Set()],
-  ["xmloff", new Set(["editeng", "sax", "unotools"])],
+  // Original LocaleDataWrapper constructs LocaleData2; i18npool.component binds its actual producer.
+  // The browser field binding uses that producer and the original generated Locale triplet directly.
+  // Original Library_utl.mk links i18nlangtag; fontcfg.hxx uses LanguageTag.
+  // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
+  ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag"])],
+  // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
+  // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
+  ["tools", new Set(["o3tl", "cppu"])],
+  // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
+  ["xmloff", new Set(["o3tl", "offapi", "sal", "sax", "tools", "unotools"])],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
 ]);
@@ -148,6 +220,11 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
   if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
   if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (portablePath.startsWith("comphelper/inc/") || portablePath.startsWith("svl/inc/"))
+    return "upstream-mechanism";
+  if (portablePath.startsWith("docmodel/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("editeng/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("svx/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
@@ -156,6 +233,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("cppuhelper/inc/") || portablePath.startsWith("cppuhelper/source/"))
     return "upstream-mechanism";
   if (
+    portablePath.startsWith("i18nlangtag/inc/") ||
     portablePath.startsWith("i18nutil/inc/") ||
     portablePath.startsWith("udkapi/") ||
     portablePath.startsWith("offapi/com/")
@@ -322,6 +400,8 @@ function findCycle(graph) {
 }
 
 const originalSalO3tlBindings = new Map([
+  // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
+  ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
   ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],
@@ -441,6 +521,51 @@ export function findUnapprovedModuleCycle(graph, imports) {
   return findCycle(projection);
 }
 
+/** Collects value-capable module imports, excluding fully erased import/export type clauses. Named type-only specifiers are conservatively retained because verbatim-module emit can preserve their empty side-effect import. Owner allowlisting still inspects all declarations. @param source - Authored TypeScript source. @returns Potential runtime module specifiers. */
+export function getRuntimeImportSpecifiers(source) {
+  const result = new Set();
+  const parsed = ts.createSourceFile(
+    "source.ts",
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TS,
+  );
+  /** Selects value-capable imports/exports, side effects and dynamic imports; full type declarations/queries emit no module load. @param node - Current syntax node. @returns Nothing. */
+  function visitRuntimeImport(node) {
+    if (ts.isImportDeclaration(node) && ts.isStringLiteralLike(node.moduleSpecifier)) {
+      if (node.importClause === undefined || !node.importClause.isTypeOnly)
+        result.add(node.moduleSpecifier.text);
+    } else if (
+      ts.isExportDeclaration(node) &&
+      node.moduleSpecifier !== undefined &&
+      ts.isStringLiteralLike(node.moduleSpecifier) &&
+      !node.isTypeOnly
+    ) {
+      result.add(node.moduleSpecifier.text);
+    } else if (
+      ts.isImportEqualsDeclaration(node) &&
+      !node.isTypeOnly &&
+      ts.isExternalModuleReference(node.moduleReference) &&
+      node.moduleReference.expression !== undefined &&
+      ts.isStringLiteralLike(node.moduleReference.expression)
+    ) {
+      result.add(node.moduleReference.expression.text);
+    } else if (
+      ts.isCallExpression(node) &&
+      (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+        (ts.isIdentifier(node.expression) && node.expression.text === "require")) &&
+      node.arguments.length > 0 &&
+      ts.isStringLiteralLike(node.arguments[0])
+    ) {
+      result.add(node.arguments[0].text);
+    }
+    ts.forEachChild(node, visitRuntimeImport);
+  }
+  visitRuntimeImport(parsed);
+  return result;
+}
+
 const failures = [];
 const graph = new Map(
   moduleNames.map(
@@ -460,6 +585,7 @@ for (const sourceFile of runtimeSources) {
     continue;
   }
   const sourceText = fs.readFileSync(sourceFile, "utf8");
+  const runtimeImports = getRuntimeImportSpecifiers(sourceText);
   if (upstreamMechanismLayers.has(getRuntimeOwnershipLayer(relativeSource))) {
     for (const browserProjectionSymbol of [
       "WriterPresentationProjection",
@@ -514,7 +640,7 @@ for (const sourceFile of runtimeSources) {
     }
     if (sourceModule === undefined || targetModule === undefined || sourceModule === targetModule)
       continue;
-    addGraphEdge(graph, sourceModule, targetModule);
+    if (runtimeImports.has(imported.fileName)) addGraphEdge(graph, sourceModule, targetModule);
     if (
       (sourceModule === "sal" && targetModule === "o3tl") ||
       (sourceModule === "o3tl" && targetModule === "sal")

@@ -119,3 +119,19 @@ it("retains every object during self union and copies values into a distinct emp
   expect(source.front()).toBeUndefined();
   expect(source.back()).toBeUndefined();
 });
+
+it("preserves initializer duplicates and independent primitive copies and moves", /** Exercises actual original value constructors and source reuse. @returns Nothing. */ () => {
+  const source = new SortedVector<number>(
+    /** Orders numeric values. @param a - Left. @param b - Right. @returns Less. */ (a, b) => a < b,
+    [3, 1, 3, 2],
+  );
+  expect([...source]).toEqual([1, 2, 3, 3]);
+  const copy = SortedVector.copy(source);
+  const moved = SortedVector.move(source);
+  expect(source.empty()).toBe(true);
+  source.insert(9);
+  copy.clear();
+  expect([...moved]).toEqual([1, 2, 3, 3]);
+  expect([...source]).toEqual([9]);
+  expect(copy.empty()).toBe(true);
+});

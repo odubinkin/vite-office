@@ -1,4 +1,5 @@
 /** @fileoverview Literal native row counts, independent formats and top-border transfer without upstream execution. */
+import { Color } from "../../../../tools/inc/color";
 import { nativeRowFormatForTest } from "../../../../test/table-row-test-helpers";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
@@ -37,7 +38,7 @@ function fixture(borders: boolean) {
       item.SetAllDistances(40 + row + column);
       if (borders)
         for (const edge of [0, 1, 2, 3])
-          item.SetLine(new SvxBorderLine(0x102030 + row, 10 + edge), edge);
+          item.SetLine(new SvxBorderLine(new Color(0x102030 + row), 10 + edge), edge);
       box.SetFormat({ frameSize: size, ...(borders ? { box: item } : {}) });
       required(box.GetParagraphs()[0]).SetText("r" + row + "c" + column);
     }

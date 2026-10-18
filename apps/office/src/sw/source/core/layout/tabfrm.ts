@@ -4,7 +4,13 @@ import { SwTableNode } from "../docnode/node";
 import type { SwTable, SwTableBox, SwTableLine } from "../table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { LegacyModifyHint, BroadcastingModify, type SwModify } from "../../../inc/calbck";
+import {
+  LegacyModifyHint,
+  BroadcastingModify,
+  type SwModify,
+  SwClient,
+  SwIterator,
+} from "../../../inc/calbck";
 import { SwFlowFrame } from "./flowfrm";
 import { SwFrame, SwLayoutFrame, SwFrameType } from "./wsfrm";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -296,30 +302,27 @@ export class SwTabFrame extends SwLayoutFrame {
   /** Finds the original registered table predecessor or the first native master in its actual chain. @param firstMaster - Follow source first-master mode instead of immediate predecessor. @returns Original master or lost link. */
   public FindMaster(firstMaster = false): SwTabFrame | undefined {
     let result: SwTabFrame | undefined;
-    this.table.GetFrameFormat().ForAllListeners(
-      /** Scans only original registered table frame clients, in source order. @param client - Original native format client. @returns Whether the source search found its owner. */
-      (client) => {
-        if (!(client instanceof SwTabFrame)) return false;
-        if (firstMaster) {
-          if (!client.IsFollow()) {
-            for (
-              let next: SwTabFrame | undefined = client;
-              next !== undefined;
-              next = next.GetFollow()
-            ) {
-              if (next.GetFollow() === this) {
-                result = client;
-                return true;
-              }
+    writerClients0: for (const client of new SwIterator(SwClient, this.table.GetFrameFormat())) {
+      if (!(client instanceof SwTabFrame)) continue writerClients0;
+      if (firstMaster) {
+        if (!client.IsFollow()) {
+          for (
+            let next: SwTabFrame | undefined = client;
+            next !== undefined;
+            next = next.GetFollow()
+          ) {
+            if (next.GetFollow() === this) {
+              result = client;
+              break writerClients0;
             }
           }
-        } else if (client.GetFollow() === this) {
-          result = client;
-          return true;
         }
-        return false;
-      },
-    );
+      } else if (client.GetFollow() === this) {
+        result = client;
+        break writerClients0;
+      }
+      continue writerClients0;
+    }
     return result;
   }
   /** Releases original lowers and registration, then detaches flow neighbors without stitching. @returns Nothing. */

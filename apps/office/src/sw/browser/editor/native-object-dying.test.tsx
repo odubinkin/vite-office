@@ -19,7 +19,7 @@ it("native paragraph root death clears inherited font and updates mounted UI wit
     if (!node) throw Error("Missing original style node");
     node.ChgFormatColl(child);
     node.SetText("Original style text");
-    parent.SetFormatAttr(new SvxFontHeightItem(440, RES_CHRATR_FONTSIZE));
+    parent.SetFormatAttr(new SvxFontHeightItem(440, 100, RES_CHRATR_FONTSIZE));
     render(<WriterWorkbench isActive view={session.view} />);
     expect(session.viewStore.GetSnapshot().paragraphs[0]?.computedStyle.fontSizePt).toBe(22);
     const model = vi.spyOn(doc, "NotifyModelChange"),

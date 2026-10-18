@@ -1,7 +1,10 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
+import { createTabs } from "../../../../../test/tab-item-fixtures";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { createWriterNumFormat, getWriterNumFormatKind, SwNumRule } from "./number";
-
 import { describe, expect, it } from "vitest";
 import { encodeSfxItemSet, encodeSfxPoolItem } from "../../../browser/filter/xml/item-codec";
 import {
@@ -13,20 +16,12 @@ import {
 import { projectWriterTextRuns } from "../txtnode/ndtxt";
 import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
-
-import {
-  SvxAdjust,
-  SvxAdjustItem,
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxTextLeftMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontItalic,
   FontLineStyle,
-  FontWeight,
   SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
@@ -66,7 +61,8 @@ import { createWriterNumRule } from "./DocumentListsManager";
 import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwpHints } from "../txtnode/ndhints";
 import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
-
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Creates one canonical Writer fixture. @param id - Document identity. @returns Writer graph. */
 function createFixture(id = "writer-attrs"): WriterDocument {
   void id;
@@ -95,13 +91,42 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
   it("owns pool defaults and resolves collection inheritance through lazy node deltas" /** Verifies the canonical SwDoc → style → content-node item path. @returns Nothing; assertions inspect ownership and state. */, function resolvesWriterAttributes(): void {
     const writer = createFixture();
     const pool = writer.GetAttrPool();
-    const font = new SvxFontItem("Noto Serif", RES_CHRATR_FONT);
+    const font = new SvxFontItem(
+      FontFamily.FAMILY_DONTKNOW,
+      "Noto Serif",
+      "",
+      FontPitch.PITCH_DONTKNOW,
+      RTL_TEXTENCODING_DONTKNOW,
+      RES_CHRATR_FONT,
+    );
     expect(font.GetFamilyName()).toBe("Noto Serif");
     expect(font.Clone()).toEqual(font);
-    expect(font.equals(new SvxFontItem("Noto Serif", RES_CHRATR_FONT))).toBe(true);
-    expect(font.equals(new SvxFontItem("Noto Sans", RES_CHRATR_FONT))).toBe(false);
+    expect(
+      font.equals(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Noto Serif",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      font.equals(
+        new SvxFontItem(
+          FontFamily.FAMILY_DONTKNOW,
+          "Noto Sans",
+          "",
+          FontPitch.PITCH_DONTKNOW,
+          RTL_TEXTENCODING_DONTKNOW,
+          RES_CHRATR_FONT,
+        ),
+      ),
+    ).toBe(false);
     expect(encodeSfxPoolItem(font)).toEqual({
-      value: "Noto Serif",
+      value: font.QueryValue(),
       which: RES_CHRATR_FONT,
     });
     expect(pool.CreateItem(encodeSfxPoolItem(font))).toEqual(font);
@@ -115,8 +140,15 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false),
     );
     expect(
-      /** Rejects a blank font. @returns Invalid item. */ () => new SvxFontItem(" ", 1),
-    ).toThrow("invalid");
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        " ",
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        RTL_TEXTENCODING_DONTKNOW,
+        1,
+      ).GetFamilyName(),
+    ).toBe(" ");
     const defaultStyle = writer.GetDfltTextFormatColl();
     const heading = writer.GetTextFormatColl("heading-1");
     const headingBase = writer.GetTextFormatColl("heading");
@@ -427,9 +459,9 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const style = writer.GetDfltTextFormatColl();
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
-    style.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-    style.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
-    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
+    style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    style.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
     expect(style.GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);
@@ -634,9 +666,12 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const writer = createWriterDocument();
     const node = writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>;
     node.SetAttr(new SvxULSpaceItem(240, 120, RES_UL_SPACE, true));
-    node.SetAttr(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed", true));
+    const authoredSpacing = lineSpacingFixture(360, RES_PARATR_LINESPACING, "fixed");
+    authoredSpacing.SetInterLineSpace(72);
+    authoredSpacing.SetPropLineSpace(175);
+    node.SetAttr(authoredSpacing);
     node.SetAttr(
-      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+      createTabs(RES_PARATR_TABSTOP, [
         new SvxTabStop(720, SvxTabAdjust.Right),
         new SvxTabStop(1440, SvxTabAdjust.Decimal, ".", "."),
       ]),
@@ -644,16 +679,21 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const restored = decodeWriterDocument(encodeWriterDocument(writer))
       .paragraphs[0] as typeof node;
     expect(ulValues(restored.GetAttr(RES_UL_SPACE) as SvxULSpaceItem)).toEqual([240, 120, 1]);
-    expect((restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).QueryValue()).toEqual([
-      1, 360, 1,
-    ]);
-    expect((restored.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue()).toEqual({
-      defaultDistance: 0,
-      stops: [
-        { position: 720, adjustment: SvxTabAdjust.Right, decimal: "\0", fill: " " },
-        { position: 1440, adjustment: SvxTabAdjust.Decimal, decimal: ".", fill: "." },
-      ],
-    });
+    const spacing = restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+    expect(spacing.GetLineSpaceRule()).toBe(SvxLineSpaceRule.Fix);
+    expect(spacing.GetLineHeight()).toBe(360);
+    expect(spacing.GetPropLineSpace()).toBe(175);
+    expect(spacing.GetInterLineSpace()).toBe(72);
+    expect(spacing.GetInterLineSpaceRule()).toBe(authoredSpacing.GetInterLineSpaceRule());
+    expect(encodeSfxPoolItem(restored.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).value).toEqual(
+      {
+        defaultDistance: 0,
+        stops: [
+          { position: 720, adjustment: SvxTabAdjust.Right, decimal: ".", fill: " " },
+          { position: 1440, adjustment: SvxTabAdjust.Decimal, decimal: ".", fill: "." },
+        ],
+      },
+    );
     const pool = writer.GetAttrPool();
     expect(
       (pool.CreateItem({ which: RES_UL_SPACE, value: [240, 120] }) as SvxULSpaceItem).GetContext(),
@@ -666,7 +706,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(
       /** Rejects an invalid stored line mode. @returns Invalid item. */ () =>
         pool.CreateItem({ which: RES_PARATR_LINESPACING, value: [9, 100, 0] }),
-    ).toThrow("Stored Writer line-spacing mode is invalid");
+    ).toThrow("Stored Writer line-spacing mode or value is invalid");
   });
 
   it("round-trips page descriptor identities, follow links, and document settings", /** Verifies the current canonical document schema. @returns Nothing. */ () => {
@@ -727,4 +767,20 @@ function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefi
   if (item === undefined) return undefined;
   const values = [item.QueryValue(3), item.QueryValue(4)];
   return item.QueryValue(7) === true ? [...values, 1] : values;
+}
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
 }

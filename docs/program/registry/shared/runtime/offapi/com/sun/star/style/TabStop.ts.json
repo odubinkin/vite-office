@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/style/TabStop.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "canonical-tab-stops",
+    "capabilityIds": [
+      "CAP-e4baba87-a194-41f6-ae4e-6547add9bbb7"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/style/TabStop.ts",
+        "apps/office/src/editeng/source/items/native-tab-transport.test.ts",
+        "docs/program/calc-core.md#Canonical tab-stop boundary work (task156)"
+      ],
+      "justification": "Task156 is in progress. Actual TabStop long/enum/char/char and TabAlign five-value declarations plus generated enum sentinel now use existing shared CPPU static type/Any/Sequence owners. UTF16 chars are numeric units, generated default chars remain zero, native value copies and typed compound transport are independent. Sequence getAddress only erases the original C++ address-of an initialized Sequence object into its existing sole pointer cell; no new owner, allocation, counter algorithm or binary document representation is added. Full SvxTabStop/SvxTabStopItem, actual numeric-locale decimal resolution and Writer consumer migration remain pending within this same task. Read-only comparison found230same/55different decimal separators across285upstream locale resources versus current Intl, so unconditional Intl substitution is rejected. UI localization and ICU implementation are outside this work. Existing semantic statuses and deliberate I/O/recovery deviations remain unchanged; this partial type work does not certify pool/model/UI/ODS readiness.",
+      "knownViolations": [],
+      "localSymbols": [
+        "the_type",
+        "cppu_detail_getUnoType_TabStop",
+        "TabStop"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/style/TabStop.idl",
+      "upstreamSymbols": [
+        "TabStop",
+        "Position",
+        "Alignment",
+        "DecimalChar",
+        "FillChar"
+      ]
+    }
+  }
+}

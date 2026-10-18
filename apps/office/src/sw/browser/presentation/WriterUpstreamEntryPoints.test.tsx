@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
-import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { RES_PARATR_LINESPACING } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
@@ -69,7 +69,7 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
           .GetWrtShell()
           .GetActiveParagraph()
           .GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
-      ).GetValue(),
+      ).GetPropLineSpace(),
     ).toBe(115);
     fireEvent.click(screen.getByRole("button", { name: "Line Spacing" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Custom line spacing" }), {
@@ -82,7 +82,7 @@ describe("Writer upstream entry points", /** Groups command placement checks. @r
           .GetWrtShell()
           .GetActiveParagraph()
           .GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
-      ).GetValue(),
+      ).GetPropLineSpace(),
     ).toBe(175);
     fireEvent.click(screen.getByRole("button", { name: "Line Spacing" }));
     fireEvent.change(screen.getByRole("spinbutton", { name: "Custom line spacing" }), {

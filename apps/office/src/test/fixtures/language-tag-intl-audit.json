@@ -1,0 +1,269 @@
+{
+  "referenceCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": "i18nlangtag/qa/cppunit/test_languagetag.cxx",
+  "sourceSha256": "e5d34198baa0ef6898d5efa1d46d0b320d5cdd961b0b65091aff6c3897203201",
+  "scope": "29 string-constructed LanguageTag getBcp47 assertions in active testAllTags blocks. First case uses stored aBcp47. Numeric/Locale constructors, resets, fallback sequences and static validation overloads are separate contracts. Expectations are source assertions; no native binary was run.",
+  "cases": [
+    {
+      "input": "de-Latn-DE",
+      "upstream": "de-DE",
+      "valid": null,
+      "line": 53,
+      "constructor": "LanguageTag de_DE( u\"de-Latn-DE\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL_MESSAGE(\"Default script should be stripped after canonicalize.\", u\"de-DE\"_ustr, aBcp47 )",
+      "blockSha256": "55c402540969f3ad510aaa9ca57f745ab4103cadb987614a39f0eb7580a897b7"
+    },
+    {
+      "input": "i-klingon",
+      "upstream": "tlh",
+      "valid": true,
+      "line": 70,
+      "constructor": "LanguageTag klingon( u\"i-klingon\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( u\"tlh\"_ustr, klingon.getBcp47() )",
+      "blockSha256": "5d2040cb86bbe5e91cbe6c899430b6dbbc67531c28e46cafbcc7f58229006f7b"
+    },
+    {
+      "input": "sr-RS",
+      "upstream": "sr-RS",
+      "valid": true,
+      "line": 86,
+      "constructor": "LanguageTag sr_RS( s_sr_RS, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_sr_RS, sr_RS.getBcp47() )",
+      "blockSha256": "37f47f4bad9a44f3888042aac310b928fe7cc404e1dfc3cd40cc9ea930c4ae06"
+    },
+    {
+      "input": "sr-Latn-RS",
+      "upstream": "sr-Latn-RS",
+      "valid": true,
+      "line": 100,
+      "constructor": "LanguageTag sr_RS( s_sr_Latn_RS, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_sr_Latn_RS, sr_RS.getBcp47() )",
+      "blockSha256": "a619a4df4e31249a8f62a19fe3c91ad55e9fad29b1d0cb7e0d174b6993e52f1b"
+    },
+    {
+      "input": "sr-Latn-CS",
+      "upstream": "sr-Latn-CS",
+      "valid": true,
+      "line": 118,
+      "constructor": "LanguageTag sr_Latn_CS( s_sr_Latn_CS, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_sr_Latn_CS, sr_Latn_CS.getBcp47() )",
+      "blockSha256": "cc789c8b999b9a2d21d9f60b97ae054659e3a8a1736b65319e7c9ccf1d50cca6"
+    },
+    {
+      "input": "sh-RS",
+      "upstream": "sr-Latn-RS",
+      "valid": true,
+      "line": 148,
+      "constructor": "LanguageTag sh_RS( u\"sh-RS\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( u\"sr-Latn-RS\"_ustr, sh_RS.getBcp47() )",
+      "blockSha256": "5fd9ecad207baf06f88b41d28184230dd9921681b0feb810c3180c112a2cbd9d"
+    },
+    {
+      "input": "bs-Latn-BA",
+      "upstream": "bs-BA",
+      "valid": true,
+      "line": 179,
+      "constructor": "LanguageTag bs_Latn_BA( u\"bs-Latn-BA\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( u\"bs-BA\"_ustr, bs_Latn_BA.getBcp47() )",
+      "blockSha256": "4746d5ca8324f527b89685f0640a49b8090e92488fb767c3910397c31bc3056f"
+    },
+    {
+      "input": "ca-ES-valencia",
+      "upstream": "ca-ES-valencia",
+      "valid": true,
+      "line": 204,
+      "constructor": "LanguageTag ca_ES_valencia( s_ca_ES_valencia, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_ca_ES_valencia, ca_ES_valencia.getBcp47() )",
+      "blockSha256": "0f2c22fbcfdec57e2bbed2c952776c1e19ea8add127d29c43e25029b9385c1c7"
+    },
+    {
+      "input": "ca-valencia",
+      "upstream": "ca-valencia",
+      "valid": true,
+      "line": 230,
+      "constructor": "LanguageTag ca_valencia( s_ca_valencia, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_ca_valencia, ca_valencia.getBcp47() )",
+      "blockSha256": "2b8c57df499333bd9cb9bd4a98fc6c5b4e42dad2a6c34283d7562d0ccac2ea99"
+    },
+    {
+      "input": "ca-XV",
+      "upstream": "ca-ES-valencia",
+      "valid": true,
+      "line": 254,
+      "constructor": "LanguageTag ca_XV( u\"ca-XV\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_ca_ES_valencia, ca_XV.getBcp47() )",
+      "blockSha256": "58cb54f603e3aa34e6ac7fa1d86efdd4c771747726197a0960c496beda58de21"
+    },
+    {
+      "input": "de-DE",
+      "upstream": "de-DE",
+      "valid": true,
+      "line": 280,
+      "constructor": "LanguageTag de_DE( s_de_DE, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_de_DE, de_DE.getBcp47() )",
+      "blockSha256": "53b3e862b10940637142b6b442a99752ac47d551e54950411b478e760f606fea"
+    },
+    {
+      "input": "de",
+      "upstream": "de",
+      "valid": null,
+      "line": 324,
+      "constructor": "LanguageTag de( s_de, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_de, de.getBcp47() )",
+      "blockSha256": "4bdc81d5f5796d7a90db7644bdabad10097341b1dd0f9ed2fb88a4c5260e4c67"
+    },
+    {
+      "input": "de-1901",
+      "upstream": "de-1901",
+      "valid": true,
+      "line": 366,
+      "constructor": "LanguageTag de_1901( s_de_1901 )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_de_1901, de_1901.getBcp47() )",
+      "blockSha256": "e8a6e88a412198ea8d6dd46eb0c65f9ac64c479969bab7958ee6c1a1dc5416f1"
+    },
+    {
+      "input": "en-GB-oed",
+      "upstream": "en-GB-oxendict",
+      "valid": true,
+      "line": 390,
+      "constructor": "LanguageTag en_GB_oed( u\"en-GB-oed\"_ustr )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_en_GB_oxendict, en_GB_oed.getBcp47() )",
+      "blockSha256": "ba1acddd56ccdae3bbe8ccce5a3c8e4cff160527efe05e3cee7cdcc0d90c7efe"
+    },
+    {
+      "input": "en-GB-oxendict",
+      "upstream": "en-GB-oxendict",
+      "valid": true,
+      "line": 415,
+      "constructor": "LanguageTag en_GB_oxendict( s_en_GB_oxendict )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_en_GB_oxendict, en_GB_oxendict.getBcp47() )",
+      "blockSha256": "2d34e37721b4f6014ff7e7e315959912b14ca3f8f0951558e882ddb2f0deac1b"
+    },
+    {
+      "input": "es-ES-u-co-trad",
+      "upstream": "es-ES-u-co-trad",
+      "valid": true,
+      "line": 439,
+      "constructor": "LanguageTag es_ES_u_co_trad( s_es_ES_u_co_trad )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_es_ES_u_co_trad, es_ES_u_co_trad.getBcp47() )",
+      "blockSha256": "0492fd4ac4a12fb8ff0efd6e26c74dd13007eec4bf192a8d738e845e4dc33f03"
+    },
+    {
+      "input": "es-ES_tradnl",
+      "upstream": "es-ES-u-co-trad",
+      "valid": true,
+      "line": 465,
+      "constructor": "LanguageTag es_ES_tradnl( s_es_ES_tradnl )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_es_ES_u_co_trad, es_ES_tradnl.getBcp47() )",
+      "blockSha256": "893ae9d4a68d4264a53e44dcc7b6df8bfea64d8e9b291f7cefce0ddd208405b0"
+    },
+    {
+      "input": "zh-Hans-CN",
+      "upstream": "zh-CN",
+      "valid": true,
+      "line": 489,
+      "constructor": "LanguageTag zh_Hans_CN( u\"zh-Hans-CN\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( u\"zh-CN\"_ustr, zh_Hans_CN.getBcp47() )",
+      "blockSha256": "02baeb763a493b543e02095233dfc894a6a5ed79f29352802c95504ec4b71040"
+    },
+    {
+      "input": "zh-Hant-TW",
+      "upstream": "zh-TW",
+      "valid": true,
+      "line": 512,
+      "constructor": "LanguageTag zh_Hant_TW( u\"zh-Hant-TW\"_ustr, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( u\"zh-TW\"_ustr, zh_Hant_TW.getBcp47() )",
+      "blockSha256": "17752552745d12f3dd980f162c30680a0ba5b65c944e08ba68993d33aed335aa"
+    },
+    {
+      "input": "zh-SG",
+      "upstream": "zh-SG",
+      "valid": true,
+      "line": 537,
+      "constructor": "LanguageTag zh_SG( s_zh_SG, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_zh_SG, zh_SG.getBcp47() )",
+      "blockSha256": "cb3fca8d7e881d17438c9cafcf1481a89e6daf0e4b43e633cb2c11c29f3116e0"
+    },
+    {
+      "input": "zh-HK",
+      "upstream": "zh-HK",
+      "valid": true,
+      "line": 562,
+      "constructor": "LanguageTag zh_HK( s_zh_HK, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_zh_HK, zh_HK.getBcp47() )",
+      "blockSha256": "28b6f3c8dde13a8a2e4e580f780eee7fba91e9d6b59c2451b0b19794f1244c24"
+    },
+    {
+      "input": "es-419",
+      "upstream": "es-419",
+      "valid": null,
+      "line": 617,
+      "constructor": "LanguageTag es_419( s_es_419 )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_es_419, es_419.getBcp47() )",
+      "blockSha256": "b0b7bf4c15294f041641d57a111248071891b2f801e0420d1b74fa38984ca890"
+    },
+    {
+      "input": "qtz",
+      "upstream": "qtz",
+      "valid": null,
+      "line": 633,
+      "constructor": "LanguageTag qtz( s_qtz )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_qtz, qtz.getBcp47() )",
+      "blockSha256": "85f3a10332b7c0240946fa985f224eda31198f2aa98cacce854e2d10295a6ab6"
+    },
+    {
+      "input": "qty",
+      "upstream": "qty",
+      "valid": null,
+      "line": 645,
+      "constructor": "LanguageTag qty( s_qty )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_qty, qty.getBcp47() )",
+      "blockSha256": "ccac4f09d292a28e9aa111c460c881fe4a3c43f1ff1fb95bd874ac77a7b5d712"
+    },
+    {
+      "input": "x-comment",
+      "upstream": "x-comment",
+      "valid": null,
+      "line": 667,
+      "constructor": "LanguageTag xcomment( s_xcomment )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_xcomment, xcomment.getBcp47() )",
+      "blockSha256": "c7953c7961911d7ea2164fff2cc137071203eb7f76e2d41efc236f8a98635703"
+    },
+    {
+      "input": "x-foobar",
+      "upstream": "x-foobar",
+      "valid": null,
+      "line": 679,
+      "constructor": "LanguageTag xfoobar( s_xfoobar )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_xfoobar, xfoobar.getBcp47() )",
+      "blockSha256": "59bac7664ab6d66d38dfae03b2d9631d8a19ad20a9a02c8fb27549192f4e03cf"
+    },
+    {
+      "input": "*",
+      "upstream": "*",
+      "valid": null,
+      "line": 691,
+      "constructor": "LanguageTag joker( s_joker )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_joker, joker.getBcp47() )",
+      "blockSha256": "c7829432f64587195d0161d32de1347631af2edbccbf8686a770cbc83e0500cb"
+    },
+    {
+      "input": "C",
+      "upstream": "en-US",
+      "valid": null,
+      "line": 710,
+      "constructor": "LanguageTag aTag( u\"C\"_ustr )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( u\"en-US\"_ustr, aTag.getBcp47() )",
+      "blockSha256": "d3d2d0384af5eff6de4616ddb294096c00c394ef479aeea8cee01834ae132a23"
+    },
+    {
+      "input": "unreg-and-bad",
+      "upstream": "unreg-and-bad",
+      "valid": false,
+      "line": 764,
+      "constructor": "LanguageTag uab( s_uab, true )",
+      "assertion": "CPPUNIT_ASSERT_EQUAL( s_uab, uab.getBcp47() )",
+      "blockSha256": "efdd31e3f0ecdecdeee7995d8e7191d1ac1b7e1d6b9fc3ea02b71a6717c48295"
+    }
+  ]
+}

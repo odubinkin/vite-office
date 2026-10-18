@@ -1,9 +1,9 @@
 /** @fileoverview Verifies Writer script/language default-font selection. */
-
 import { describe, expect, it } from "vitest";
 import {
   getDefaultFont,
   getDefaultFontSelection,
+  getWriterDefaultFontType,
   getWriterDefaultFontLanguage,
   getWriterFontScript,
   type DefaultFontDevice,
@@ -11,7 +11,6 @@ import {
 import { SwDoc } from "./doc";
 import { RES_CHRATR_CJK_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
-
 describe("Writer default-font policy", /** Registers default-font tests. @returns Nothing. */ () => {
   it("classifies representative Western, CJK, and CTL languages", /** Verifies language-to-script mapping. @returns Nothing. */ () => {
     expect(getWriterFontScript("en-US")).toBe("western");
@@ -51,11 +50,23 @@ describe("Writer default-font policy", /** Registers default-font tests. @return
       (
         document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
       ).GetFamilyName(),
-    ).toBe("Noto Sans CJK");
+    ).toBe("Source Han Sans");
     expect(
       (
         document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
-      ).GetResolvedFamilyName(),
+      ).GetFamilyName(),
     ).toBe("Source Han Sans");
   });
+});
+
+it("maps original Writer text/heading/fixed roles to native default-font IDs", /** Checks all script slots against DocumentStylePoolManager. @returns Nothing. */ () => {
+  for (const [script, text, heading] of [
+    ["western", 2000, 2003],
+    ["cjk", 3000, 3003],
+    ["ctl", 4000, 4003],
+  ] as const) {
+    expect(getWriterDefaultFontType("text", script)).toBe(text);
+    expect(getWriterDefaultFontType("heading", script)).toBe(heading);
+    expect(getWriterDefaultFontType("fixed", script)).toBe(4);
+  }
 });

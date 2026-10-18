@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/frmitems.brush.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/frmitems.cxx",
+    "localSymbols": [
+      "SvxBrushItem",
+      "SvxGraphicPosition",
+      "BRUSH_GRAPHIC_VERSION",
+      "lcl_PercentToTransparency"
+    ],
+    "upstreamSymbols": [
+      "SvxBrushItem::QueryValue",
+      "SvxBrushItem::TransparencyToPercent",
+      "lcl_PercentToTransparency"
+    ],
+    "preservedResponsibilities": [
+      "Task147 ports original SvxBrushItem Which/Color/Color+ComplexColor/copy constructor family for reachable non-graphic GPOS_NONE values, actual transparent Calc ATTR_BACKGROUND148 default, full color/filter/complex/shading/graphic-percent value state, isUsed, copy/clone/equality/logical hash and supported typed scalar Any methods. Reuse shared Color/ComplexColor/Any/hash primitives; no native memory/move/instance manager. Mutable color borrowing, side-effecting complex getter, original0xfe percent scale, byte casts, RGB alpha preservation and failed graphic-percent extraction default0 are preserved. Full original ShadingPattern long constants and brush position/version declarations are represented without pretending they provide graphics. Real Graphic/GraphicObject constructors/positions/links/URL/filter loaders, XGraphic and XComplexColor transport remain unported; their known provider selectors explicitly returnfalse. No fake image/provider/security path or browser snapshot projection is introduced; inherited no-argument query remains undefined. UI-localized presentation is deferred per user direction. Broader native graphic behavior and complete Calc pool/document/connected UI/ODS remain pending, with deliberate I/O/recovery deviations retained."
+    ],
+    "omittedResponsibilities": [
+      "Actual graphics/interface/loading/security services and localized presentation are unported. No native binary hash/layout or full Calc pool/document/UI/ODS parity is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.brush.ts",
+          "marker": "SvxBrushItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxBrushItem::QueryValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/brushitem.hxx",
+          "marker": "getComplexColor"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/frmitems.brush.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Brush color constructor/value methods are separated from the existing726line frmitems.ts legacy owner so new code obeys the500line source limit. Canonical brushitem.hxx declarations remain in brushitem.ts and actual native source responsibility remains frmitems.cxx."
+    }
+  }
+}

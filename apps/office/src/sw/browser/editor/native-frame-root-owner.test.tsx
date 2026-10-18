@@ -1,4 +1,6 @@
 /** @fileoverview Checks original native Root and derived-format lifetime behind mounted Writer editing and history. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -35,14 +37,10 @@ it("mounted Writer edits and history retain the original native Root until view 
   expect(root.GetRegisteredIn()).toBe(format);
   expect(format.DerivedFrom()).toBe(parent);
   const frames: SwFrame[] = [];
-  node.ForAllListeners(
-    /** Reads actual mounted native clients. @param client - Original registered listener. @returns Continue. */ (
-      client,
-    ) => {
-      if (client instanceof SwFrame) frames.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, node)) {
+    if (client instanceof SwFrame) frames.push(client);
+    continue;
+  }
   expect(frames.length).toBeGreaterThan(0);
   for (const frame of frames) expect(frame.getRootFrame()).toBe(root);
   const element = screen

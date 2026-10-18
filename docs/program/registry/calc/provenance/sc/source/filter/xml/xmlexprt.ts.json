@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlexprt.cxx",
+    "localSymbols": [
+      "ScXMLExport"
+    ],
+    "upstreamSymbols": [
+      "ScXMLExport"
+    ],
+    "preservedResponsibilities": [
+      "Task204 exports the same actual document through ScHorizontalCellIterator,ScFormulaCell.GetFormula(ODFF),common RTL decimal output and shared ODF inline text encoding. Empty row/cell spans compress without materializing a grid;numeric/string/formula source and supported lazy result getters are reused."
+    ],
+    "omittedResponsibilities": [
+      "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+          "marker": "ScXMLExport"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "opens exported actual document bytes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport"
+        }
+      ]
+    }
+  }
+}

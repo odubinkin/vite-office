@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/awt/Size.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/awt/Size.idl",
+    "localSymbols": [
+      "Size",
+      "cppu_detail_getUnoType_Size"
+    ],
+    "upstreamSymbols": [
+      "Size",
+      "Width",
+      "Height"
+    ],
+    "preservedResponsibilities": [
+      "Task179 restores native SvxSizeItem stable tools Size value ownership,copy/default/Clone,payload-only equality,typed Size/width/height Any,integral conversions and llround metric scaling. Genuine awt Size IDL fields and normal CPPU type metadata reuse existing compound access,without a new allocator or binary format. Writer uses the same base and native derived member conversions,percentage/sync/type/clamps and deliberate nonmetric overrides. Preserve HEIGHT failed extraction success and Writer zero-on-failed-short-extraction behavior. Existing no-output browser dimension transport remains explicit;native Any calls do not bypass derived dispatch. Full localized presentation,XML diagnostics,native memory caches,unsafe integer domains,ScDocumentPool/document/UI/same-model ODS remain pending;no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Localized presentation,XML diagnostics,native binary ABI/memory caches and full Calc pool/document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/Size.ts",
+          "marker": "Size"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/awt/Size.idl",
+          "marker": "Size"
+        }
+      ]
+    }
+  }
+}

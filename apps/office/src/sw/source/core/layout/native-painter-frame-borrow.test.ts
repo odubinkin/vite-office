@@ -1,4 +1,7 @@
 /** @fileoverview Verifies source table border painting borrows the original native frame hierarchy. */
+import { SwClient, SwIterator } from "../../../inc/calbck";
+
+import { Color } from "../../../../tools/inc/color";
 import { afterEach, expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTabFrame, SwRowFrame, SwCellFrame } from "./tabfrm";
@@ -15,14 +18,10 @@ afterEach(
 /** Reads original native listener objects. @param format - Native format. @returns Actual clients. */
 function clients(format: SwModify) {
   const values: unknown[] = [];
-  format.ForAllListeners(
-    /** Visits original registered clients. @param client - Native client. @returns Continue. */ (
-      client,
-    ) => {
-      values.push(client);
-      return false;
-    },
-  );
+  writerClients0: for (const client of new SwIterator(SwClient, format)) {
+    values.push(client);
+    continue writerClients0;
+  }
   return values;
 }
 /** Owns one actual native table hierarchy for the painter call. @returns Original native owners. */
@@ -74,7 +73,7 @@ it("native painter reads the actual cell frame format rather than reconstructing
   const f = fixture(),
     format = f.doc.MakeTableBoxFormat(),
     box = f.cell.GetFormat().GetBox().Clone();
-  box.SetLine(new SvxBorderLine(0x123456, 40), 0);
+  box.SetLine(new SvxBorderLine(new Color(0x123456), 40), 0);
   format.SetFormatAttr(box);
   f.cell.RegisterToFormat(format);
   const painter = new SwTabFramePainter(f.frame),
@@ -85,7 +84,7 @@ it("native painter reads the actual cell frame format rather than reconstructing
       horizontal,
     ) => {
       if (horizontal && line.mnKey === 0 && line.mnStartPos === 0)
-        colors.push(line.maAttribute.GetColorPrim());
+        colors.push(line.maAttribute.GetColorPrim().toUInt32());
     },
   );
   expect(colors).toEqual([0x123456]);

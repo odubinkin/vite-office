@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts",
+    "status": "mapped",
+    "upstreamPath": "i18nlangtag/source/languagetag/languagetag.cxx",
+    "localSymbols": [
+      "Decision",
+      "LanguageTagConversionState",
+      "handleVendorVariant",
+      "convertToBcp47",
+      "convertLangToLocale",
+      "convertLocaleToBcp47",
+      "convertLangToBcp47",
+      "getBcp47"
+    ],
+    "upstreamSymbols": [
+      "handleVendorVariant",
+      "LanguageTagImpl::convertToBcp47",
+      "LanguageTagImpl::convertLangToLocale",
+      "LanguageTagImpl::convertLocaleToBcp47",
+      "LanguageTagImpl::convertLangToBcp47",
+      "LanguageTagImpl::getBcp47"
+    ],
+    "preservedResponsibilities": [
+      "Task192 implements six complete native private responsibilities:handleVendorVariant,raw Locale convertToBcp47,convertLangToLocale,convertLocaleToBcp47,convertLangToBcp47 and getBcp47. Actual Locale/OUString field owners retain borrowed object identity under assignment;native Decision/initialized flags,system-origin bit and raw numeric IDs are preserved. The total raw converter handles the native diagnostic empty output without a fake backend or ignored branch. Actual configured-font prepared binding reuses the common raw converter while resource/fallback order stays. This explicit private conversion-state interface is not a fabricated complete LanguageTagImpl/public LanguageTag/parser/registry service. No new ICU/compiler/ownership engine;full class/synchronization/canonicalization/registry/font/defaults/pool/model/UI/ODS remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Enclosing native LanguageTag/Impl constructors/copy/synchronization/canonicalization/parser/on-the-fly registry/public wrappers remain unrepresented here. Physical native buffer/refcount/cache/lifetime/diagnostic implementation is erased;actual value and borrowed field semantics are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts",
+          "marker": "LanguageTagConversionState"
+        },
+        {
+          "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.test.ts",
+          "marker": "resolves private SYSTEM fields once"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "handleVendorVariant"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLangToLocale"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLocaleToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::convertLangToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
+          "marker": "LanguageTagImpl::getBcp47"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Complete private Locale/ID/BCP47 value-transition group is isolated from existing structural extraction/ordered fallback projection,retaining the native private responsibility without a fake complete class."
+    }
+  }
+}

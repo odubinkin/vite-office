@@ -20,7 +20,49 @@ export interface SfxPoolItemSnapshot {
 
 /** Base value object stored by SfxItemPool and SfxItemSet. */
 export abstract class SfxPoolItem {
+  /** Original pointer/reference comparison order. Concrete JS class identity represents native ItemType; no ABI enum or lifetime state is required. @param item1 - First item or absent pointer. @param item2 - Second item or absent pointer. @returns Identity or equal Which, concrete type and payload. */
+  public static areSame(
+    item1: SfxPoolItem | null | undefined,
+    item2: SfxPoolItem | null | undefined,
+  ): boolean {
+    const left = item1 ?? null;
+    const right = item2 ?? null;
+    if (left === right) return true;
+    if (left === null || right === null) return false;
+    if (left.Which() !== right.Which()) return false;
+    if (left.constructor !== right.constructor) return false;
+    return left.equals(right);
+  }
+
   private shareable = true;
+  private m_bIsSetItem = false;
+  private m_bStaticDefault = false;
+  private m_bDynamicDefault = false;
+  /** Original logical static-default classification, without lifetime handling. @returns Whether a package-owned static default. */
+  public isStaticDefault(): boolean {
+    return this.m_bStaticDefault;
+  }
+  /** Original logical pool-dependent default classification. @returns Whether a dynamic default. */
+  public isDynamicDefault(): boolean {
+    return this.m_bDynamicDefault;
+  }
+  /** Original friend-only classification assignment; ordinary JS GC owns lifetime. @returns Nothing. */
+  protected setStaticDefault(): void {
+    this.m_bStaticDefault = true;
+  }
+  /** Original friend-only classification assignment; no refcount or disposal action. @returns Nothing. */
+  protected setDynamicDefault(): void {
+    this.m_bDynamicDefault = true;
+  }
+
+  /** Original classification flag for items containing an SfxItemSet. @returns Whether a set item. */
+  public isSetItem(): boolean {
+    return this.m_bIsSetItem;
+  }
+  /** Original protected set-item classification assignment; no lifetime action. @returns Nothing. */
+  protected setIsSetItem(): void {
+    this.m_bIsSetItem = true;
+  }
 
   /** Reports the native item-dependent sharing policy. @returns Whether pools may share this item. */
   public isShareable(): boolean {
@@ -50,11 +92,20 @@ export abstract class SfxPoolItem {
     this.which = which;
   }
 
-  /** Creates an independent item with the same type and value. @returns Cloned item, or null for a static state sentinel. */
-  public abstract Clone(): SfxPoolItem | null;
+  /** Creates an independent item with the same type and value. @param pool - Optional destination pool for concrete pool-bound values. @returns Cloned item, or null for a static state sentinel. */
+  public abstract Clone(pool?: import("./itempool").SfxItemPool): SfxPoolItem | null;
 
-  /** Compares item class, WhichId, and concrete value. @param other - Candidate item. @returns True for equal items. */
+  /** Compares the concrete payload under the subclass contract; areSame additionally checks WhichId and exact type. @param other - Candidate item. @returns True for equal items. */
   public abstract equals(other: SfxPoolItem): boolean;
+
+  /** Original no-op metric scaling for non-metric items. @param scale - Unused factor. @returns Nothing. */
+  public ScaleMetrics(scale: number): void {
+    void scale;
+  }
+  /** Original default for items without dimensional metrics. @returns False. */
+  public HasMetrics(): boolean {
+    return false;
+  }
 
   /** Original unsupported query default, represented by the existing browser no-payload boundary. Concrete item overrides retain their values. @returns No value. */
   public QueryValue(): unknown {

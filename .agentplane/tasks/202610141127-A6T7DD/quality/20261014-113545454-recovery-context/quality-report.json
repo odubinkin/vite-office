@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141127-A6T7DD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T11:35:45.454Z",
+  "verdict": "pass",
+  "summary": "Original frame direction and3Asian bool values use actual common items/Any; targeted raw100 passes. Same-agent evaluator, not independent review.",
+  "evaluated_sha": "8a7dbde40fa54765864ebace21ceabfa6fe80597",
+  "blueprint_digest": "2e09c866db0c63fcb222be70ec66a003db351566984251883b233f3ca20aef43",
+  "findings": [
+    "Calc164tests/shared38tests/28boundarytests and12gates pass; exactly36paths11changed25added,3562to3587sourcehashes,15nativepins. Initial import/lint/selection/metadata failures corrected without weakening assertions. CALC105 documented. Complete document/UI/ODS pending; goalactive until readiness then full/repair/pause."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141127-A6T7DD/README.md",
+    "output/playwright/task119-checks/exact-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

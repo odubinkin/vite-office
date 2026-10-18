@@ -1,6 +1,6 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
 import { SwFormatVertOrient } from "../../inc/fmtornt";
-import { importBoxProperties } from "../../../xmloff/source/style/bordrhdl";
+import { importBoxProperties } from "../../source/filter/xml/xmlimpit";
 import { RES_BOX } from "../../inc/hintids";
 
 import { SwInsertTableFlags } from "../../inc/itabenum";

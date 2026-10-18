@@ -144,7 +144,7 @@ it("numeric row Undo destroys inserted registrations and source claims are exclu
       expect(prior.IsDisposed()).toBe(true);
       const current = source.GetFrameFormat();
       expect(source.ClaimFrameFormat()).toBe(current);
-      expect(current.HasListeners()).toBe(true);
+      expect(current.HasWriterListeners()).toBe(true);
       expect(shell.Redo()).toBe(true);
       const fresh = table.GetTabLines().slice(1);
       for (const [index, row] of fresh.entries()) {
@@ -178,7 +178,7 @@ it("complete native table deletion releases original row and physical frame regi
     for (const [index, row] of rows.entries()) {
       expect(row.GetRegisteredIn()).toBeUndefined();
       expect(required(frames[index]).GetRegisteredIn()).toBeUndefined();
-      expect(required(formats[index]).HasListeners()).toBe(false);
+      expect(required(formats[index]).HasWriterListeners()).toBe(false);
       expect(required(formats[index]).IsDisposed()).toBe(true);
     }
     expect(doc.GetTables()).not.toContain(table);

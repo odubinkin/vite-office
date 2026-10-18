@@ -80,16 +80,17 @@ it.each([false, true])(
     client.RegisterToModify(f.node);
     const otherType = new OriginalFrame(f.node, f.root);
     frames.push(otherType);
-    const master = fragment(f, 0, 6),
-      another = fragment(f, 0, 6);
-    expect(f.node.getLayoutFrame()).toBe(master);
-    expect(f.node.getLayoutFrame(f.root)).toBe(master);
+    const earlier = fragment(f, 0, 6),
+      later = fragment(f, 0, 6);
+    // Native SwModify::Add inserts after the anchor; later qualifying clients precede earlier ones.
+    expect(f.node.getLayoutFrame()).toBe(later);
+    expect(f.node.getLayoutFrame(f.root)).toBe(later);
     expect(GetFrameOfModify(f.root, f.node, SwFrameType.None)).toBeUndefined();
-    expect(another.GetRegisteredIn()).toBe(f.node);
-    SwFrame.DestroyFrame(master);
-    expect(f.node.getLayoutFrame(f.root)).toBe(another);
-    expect(master.GetRegisteredIn()).toBeUndefined();
-    SwFrame.DestroyFrame(another);
+    expect(earlier.GetRegisteredIn()).toBe(f.node);
+    SwFrame.DestroyFrame(later);
+    expect(f.node.getLayoutFrame(f.root)).toBe(earlier);
+    expect(later.GetRegisteredIn()).toBeUndefined();
+    SwFrame.DestroyFrame(earlier);
     expect(f.node.getLayoutFrame()).toBeUndefined();
   },
 );

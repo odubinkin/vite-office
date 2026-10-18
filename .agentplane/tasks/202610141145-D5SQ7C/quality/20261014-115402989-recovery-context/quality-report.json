@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141145-D5SQ7C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T11:54:02.989Z",
+  "verdict": "pass",
+  "summary": "Native strikeout emphasis and common Any2Bool retain original contracts with actual shared owners/Writer reuse; targeted raw100 passes. Same-agent evaluator, not independent review.",
+  "evaluated_sha": "7649a5211bb6eebc106919f39a569fce62ea4810",
+  "blueprint_digest": "98b6766e0c6f4499db481be3a67165b43924314bcde71da2c998e8ec01a8d121",
+  "findings": [
+    "Calc166/shared227tests,28boundaries12gates pass;33exactpaths14changed19added,3606to3625sourcehashes17nativepins and originalGitHEAD9bc4455. Source behaviors/fallbacks/native unknown success preserved asCALC106. Initial type/branch/metadata errors retained and corrected; no threshold/assertion weakening. UI/ODS pending; no full at121."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141145-D5SQ7C/README.md",
+    "output/playwright/task121-checks/exact-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

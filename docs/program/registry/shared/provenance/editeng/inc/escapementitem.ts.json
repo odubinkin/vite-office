@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/inc/escapementitem.ts",
+    "status": "mapped",
+    "upstreamPath": "include/editeng/escapementitem.hxx",
+    "localSymbols": [
+      "DFLT_ESC_SUPER",
+      "DFLT_ESC_SUB",
+      "DFLT_ESC_PROP",
+      "MAX_ESC_POS",
+      "DFLT_ESC_AUTO_SUPER",
+      "DFLT_ESC_AUTO_SUB",
+      "SvxEscapementItem"
+    ],
+    "upstreamSymbols": [
+      "SvxEscapementItem",
+      "SetEscapement",
+      "MAX_ESC_POS"
+    ],
+    "preservedResponsibilities": [
+      "Task150 ports actual SvxEscapementItem Which/mode/explicit offset-height/copy constructors, factory0/100, independent Clone, payload equality excluding Which, native sign-mode getter, mode assignment and short/unsigned8 setters. Actual signed16 escapement, signed8 query projection of unsigned8 height and bool auto Any members retain byte selector/ignored twips and unknown untouched success. Numeric writes use existing real Any extraction and native offset\u00b114000/height1..100 ranges without mutation on rejection; direct value setters retain native narrowing without these property restrictions. Shared Any2Bool is reused for original bool-then-int32 conversion/failure fallback. Automatic on/off preserves proportional height and changes markers\u00b114000to\u00b113999 on disable, not ordinary33/-8; mode assignment instead selects marker/58 or off0/100. Native constants, complete4declaration SvxEscapement enum and3member IDs are represented. Actual eerdll0/100default at EE_CHAR_ESCAPEMENT4052 is directly tested from native solar/eeitem offsets without a dummy EditEngine pool. Existing textitem.ts451lines plus this full value owner exceeds500, requiring a documented responsibility split and canonical escapementitem.hxx reexport boundary. Real shared SfxPoolItem/Any/Any2Bool values and JS GC are reused, with no ownership manager, native type ABI, fake text engine or new unwrapped scalar query. Localized GetPresentation is deferred per user; real EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending. Existing semantic statuses and I/O/recovery deviations remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "UI-localized GetPresentation is deferred; native lifetime/assertion/debug/ABI facilities are not runtime owners. Actual full text engine/pool/document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/escapementitem.ts",
+          "marker": "SvxEscapementItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/escapementitem.hxx",
+          "marker": "SvxEscapementItem"
+        }
+      ]
+    }
+  }
+}

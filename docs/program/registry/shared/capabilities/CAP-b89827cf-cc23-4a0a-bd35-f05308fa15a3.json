@@ -1,0 +1,134 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b89827cf-cc23-4a0a-bd35-f05308fa15a3",
+    "capabilityId": "CAP-b89827cf-cc23-4a0a-bd35-f05308fa15a3",
+    "suite": "shared",
+    "subsystem": "indexed-style-sheets",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original vector/name/family index contracts preserve style identity, snapshots and live family views.",
+      "Original explicit reindex, predicates/nth/callback ordering and Clear partial slot visibility are preserved.",
+      "All9 native index QA scenarios are ported with original-style caller witnesses; full native stylesheet construction is not claimed.",
+      "CALC146 family-vector retention across Clear is preserved rather than corrected."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task168 implements the actual IndexedStyleSheets dependency created eagerly by SfxStyleSheetBasePool_Impl. Preserve vector identity/position order, name multimap indices, six family vectors, duplicate pointer guard, rebuild/name-change, predicates/count/nth search, callbacks and Clear ordering. Native OUString name equality binds to native JS logical UTF16 Map multivalue keys; no normalization or custom hash buckets. Duplicate-name range order is unspecified by the native unordered_multimap contract; ReturnFirst preserves cardinality and predicate selection without claiming a cross-stdlib particular duplicate. Native rtl::Reference/virtual callback boundaries use JS object references and erased borrowed name/family/callback contracts; no fake SfxStyleSheetBase/Pool or memory/refcount/weak/allocator engine is introduced. Native std::out_of_range and failed family assertions bind to host errors for these defined failure/precondition boundaries; invalid start iterators and dangling native pointers are not assigned invented results. Preserve source Clear omission of family-vector clearing (CALC146); explicit Reindex repairs indices only because upstream does so. Full styles/pool/document/connected UI/ODS remain pending."
+    },
+    "capability": "Native indexed style-sheet collection",
+    "gaps": [
+      "Full SfxStyleSheetBase/Pool/document/connected UI/same-model ODS remain pending.",
+      "Native unordered duplicate selection is not a portable ordering guarantee; no invalid iterator or dangling-pointer result is claimed."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/IndexedStyleSheets.ts",
+          "marker": "class IndexedStyleSheets"
+        },
+        {
+          "path": "apps/office/src/svl/inc/IndexedStyleSheets.ts",
+          "marker": "StyleSheetPredicate"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleSheetNameReference"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts",
+          "marker": "ports InstantiationWorks"
+        },
+        {
+          "path": "apps/office/e2e/shared/indexed-style-sheets.spec.ts",
+          "marker": "preserves native style name reindex"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Indexed named styles (task168)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-146"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/svl/IndexedStyleSheets.hxx",
+          "marker": "IndexedStyleSheets"
+        },
+        {
+          "path": "svl/source/items/IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheets::Reindex"
+        },
+        {
+          "path": "svl/source/items/style.cxx",
+          "marker": "mxIndexedStyleSheets(std::make_shared<svl::IndexedStyleSheets>())"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::InstantiationWorks"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::AddedStylesheetsCanBeFoundAndRetrievedByPosition"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::AddingSameStylesheetTwiceHasNoEffect"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::RemovedStyleSheetIsNotFound"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::RemovingStyleSheetWhichIsNotAvailableHasNoEffect"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::PositionCanBeQueriedByFamily"
+        },
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/IndexedStyleSheets.hxx",
+          "marker": "This class holds SfxStyleSheets"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-indexed-style-sheets",
+    "scopeLimitations": [
+      "Task168 implements the actual IndexedStyleSheets dependency created eagerly by SfxStyleSheetBasePool_Impl. Preserve vector identity/position order, name multimap indices, six family vectors, duplicate pointer guard, rebuild/name-change, predicates/count/nth search, callbacks and Clear ordering. Native OUString name equality binds to native JS logical UTF16 Map multivalue keys; no normalization or custom hash buckets. Duplicate-name range order is unspecified by the native unordered_multimap contract; ReturnFirst preserves cardinality and predicate selection without claiming a cross-stdlib particular duplicate. Native rtl::Reference/virtual callback boundaries use JS object references and erased borrowed name/family/callback contracts; no fake SfxStyleSheetBase/Pool or memory/refcount/weak/allocator engine is introduced. Native std::out_of_range and failed family assertions bind to host errors for these defined failure/precondition boundaries; invalid start iterators and dangling native pointers are not assigned invented results. Preserve source Clear omission of family-vector clearing (CALC146); explicit Reindex repairs indices only because upstream does so. Full styles/pool/document/connected UI/ODS remain pending.",
+      "Bounded task168 acceptance passes48 related tests/5files,187 Calc tests/76files,production build and1 actual Chromium shared index scenario. Exact1 new executable owner raw S106/B43/F21/L90 and all33Calc S4179/B2731/F821/L3727 have every counter positive100; all13 source gates including43 boundary cases pass. Seven native blobs are pinned and all9 original index QA contracts are checked. The preexisting style-family enum emitted JS is byte-identical after adding only an erased borrowed interface. Four native reference links are absent during execution/restored afterward. Full native stylesheet/pool construction,unordered duplicate selection beyond its contract and Calc document/UI/ODS readiness are not claimed."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

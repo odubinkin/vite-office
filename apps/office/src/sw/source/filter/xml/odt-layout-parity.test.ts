@@ -1,11 +1,13 @@
 /** @fileoverview Verifies ODT layout attributes used by LibreOffice Writer. */
+import { projectWriterLineSpacing } from "../../core/text/itrform2";
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Test fixture documents provide the first paragraph. */
 
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
-import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -146,7 +148,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     expect(exported).toContain('style:contextual-spacing="false"');
   });
 
-  it("imports and exports fixed, minimum, and extra line spacing", /** Checks upstream ODF line-spacing modes and font-independent round trips. @returns Nothing. */ () => {
+  it("imports and exports fixed, minimum, and extra line spacing", /** Checks upstream ODF line-spacing modes and ignores the Drawing-only font-independent flag. @returns Nothing. */ () => {
     const modes = [
       ['fo:line-height="0.25in"', "fixed", 360],
       ['style:line-height-at-least="0.3in"', "minimum", 432],
@@ -160,14 +162,17 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
         metadata,
       ).document;
       const line = source.paragraphs[0]!.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
-      expect(line.GetMode()).toBe(mode);
-      expect(line.GetValue()).toBe(value);
-      expect(line.IsFontIndependent()).toBe(true);
+      expect(projectWriterLineSpacing(line).mode).toBe(mode);
+      expect(projectWriterLineSpacing(line).value).toBe(value);
+      expect("IsFontIndependent" in line).toBe(false);
       const exported = exportContentXml(source);
       expect(exported).toContain(`${attribute.split("=")[0]}=`);
+      expect(exported).not.toContain("style:font-independent-line-spacing");
       const reopened = importWriterXml(styles(""), exported, metadata).document;
       expect(
-        (reopened.paragraphs[0]!.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetMode(),
+        projectWriterLineSpacing(
+          reopened.paragraphs[0]!.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+        ).mode,
       ).toBe(mode);
     }
   });

@@ -5,7 +5,7 @@ import { TableLineFormatChanged, TableBoxFormatChanged } from "../../../inc/hint
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { SwClient } from "../../../inc/calbck";
+import { SwClient, SwIterator } from "../../../inc/calbck";
 import {
   SwTableLineFormat,
   SwTableBoxFormat as SwNativeTableBoxFormat,
@@ -64,17 +64,13 @@ export class SwTableBox extends SwClient {
   public ClaimFrameFormat(): SwNativeTableBoxFormat {
     const original = this.GetFrameFormat();
     let shared = false;
-    original.ForAllListeners(
-      /** Finds another original native cell. @param client - Native listener. @returns Whether found. */ (
-        client,
-      ) => {
-        if (client instanceof SwTableBox && client !== this) {
-          shared = true;
-          return true;
-        }
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, original)) {
+      if (client instanceof SwTableBox && client !== this) {
+        shared = true;
+        break;
+      }
+      continue;
+    }
     if (!shared) return original;
     const copy = original.GetDoc().MakeTableBoxFormat();
     copy.LockModify();
@@ -85,15 +81,11 @@ export class SwTableBox extends SwClient {
     } finally {
       copy.UnlockModify();
     }
-    original.ForAllListeners(
-      /** Moves cell frames naming this original box before model registration. @param client - Original listener. @returns Continue flag. */ (
-        client,
-      ) => {
-        if (client instanceof SwCellFrame && client.GetTabBox() === this)
-          client.RegisterToFormat(copy);
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, original)) {
+      if (client instanceof SwCellFrame && client.GetTabBox() === this)
+        client.RegisterToFormat(copy);
+      continue;
+    }
     this.RegisterToModify(copy);
     return copy;
   }
@@ -183,17 +175,13 @@ export class SwTableLine extends SwClient {
   public ClaimFrameFormat(): SwTableLineFormat {
     const original = this.GetFrameFormat();
     let shared = false;
-    original.ForAllListeners(
-      /** Finds another original row client. @param client - Registered listener. @returns Whether found. */ (
-        client,
-      ) => {
-        if (client instanceof SwTableLine && client !== this) {
-          shared = true;
-          return true;
-        }
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, original)) {
+      if (client instanceof SwTableLine && client !== this) {
+        shared = true;
+        break;
+      }
+      continue;
+    }
     if (!shared) return original;
     const copy = original.GetDoc().MakeTableLineFormat();
     copy.LockModify();
@@ -202,14 +190,11 @@ export class SwTableLine extends SwClient {
     } finally {
       copy.UnlockModify();
     }
-    original.ForAllListeners(
-      /** Moves frame clients bound to this original row before the row registration. @param client - Original format listener. @returns Continue flag. */
-      (client) => {
-        if (client instanceof SwRowFrame && client.GetTabLine() === this)
-          client.RegisterToFormat(copy);
-        return false;
-      },
-    );
+    for (const client of new SwIterator(SwClient, original)) {
+      if (client instanceof SwRowFrame && client.GetTabLine() === this)
+        client.RegisterToFormat(copy);
+      continue;
+    }
     this.RegisterToModify(copy);
     return copy;
   }

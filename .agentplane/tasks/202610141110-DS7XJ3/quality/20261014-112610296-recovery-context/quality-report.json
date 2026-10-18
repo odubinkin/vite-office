@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610141110-DS7XJ3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-14T11:26:10.296Z",
+  "verdict": "pass",
+  "summary": "Original length and cell margin/orientation values reuse actual shared owners; all targeted checks pass. Same-agent evaluator, not independent review.",
+  "evaluated_sha": "b3db9b59addf82f426c7d0e12047ae4c52f59a72",
+  "blueprint_digest": "50a76b1c561a04f3b23e07c8feb4bd5ee370a087e60c26a7e08376c0565e9a0d",
+  "findings": [
+    "Exactly40paths17changed23added;3539to3562committedsource hashes;17nativepins; Calc163tests and shared232tests raw100;28boundaries and12gates pass. Initial failed checks retained and corrected. UI/ODS still pending; next full only on minimum readiness then repair/pause."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610141110-DS7XJ3/README.md",
+    "output/playwright/task118-checks/exact-review.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

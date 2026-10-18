@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/style.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/style.hxx",
+    "localSymbols": [
+      "SfxStyleFamily",
+      "SfxStyleSheetNameReference",
+      "SfxStyleSearchBits",
+      "SfxStyleSheetSearchReference",
+      "SfxStyleSheetBasePoolIndexReference",
+      "SfxStyleSheetBase",
+      "SfxStyleSheetBasePool",
+      "SfxStyleSheetIterator",
+      "SfxStyleSheetHint",
+      "SfxStyleSheetModifiedHint",
+      "SfxStyleSheetPoolHint",
+      "SfxStyleSheet",
+      "SfxStyleSheetPool"
+    ],
+    "upstreamSymbols": [
+      "SfxStyleFamily",
+      "SfxStyleSheetBase",
+      "GetName",
+      "GetFamily",
+      "SfxStyleSearchBits",
+      "SfxStyleSheetIterator",
+      "SfxStyleSheetBasePool",
+      "SfxStyleSheetHint",
+      "SfxStyleSheetModifiedHint",
+      "SfxStyleSheetPoolHint",
+      "SfxStyleSheet",
+      "SfxStyleSheetPool"
+    ],
+    "preservedResponsibilities": [
+      "Task158 implements original ContentInfo and XEditAttribute paragraph text/style/family/paragraph-set/ordered-character/spell-state values, destination-pool copies, payload equality and separate spelling equality. Native EE Which declarations (4021..4081, paragraph justification4037) and SfxStyleFamily values are canonical. Actual WrongList stored state, constructors/copy/queries and non-ContentNode insertion/deletion transformations preserve unsigned64 arithmetic and the original captured insertion loop bound. SfxItemSet.Set clears first and deep-copies effective SET-only declared-range intersections; Put supplies the real target pool to item Clone. SfxPoolItemHolder is only a logical pool/value association under JS GC; static/own dynamic defaults, request values, shareability and foreign nested-set copies retain their value contracts. Native allocation/refcount/cache/surrogate machinery and physical interned-pointer identity are deliberately erased. Existing OUString/SharedString/items/sets/pools are reused. NormalizeString awaits a real SharedStringPool/CharClass; ClearWrongs awaits real ContentNode; no fake provider, engine pool, text-object factory, UI localization, native compiler or memory probes. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. Bounded task acceptance passes194related tests/18files and187Calc tests/76files. Exact8changed/new shared executable owners (raw S543/B362/F118/L471) and all33Calc owners (S4179/B2731/F821/L3727) have every raw counter positive and S/B/F/L100. Type-only base Clone signature has identical emitted runtime proof. Production build and19related Writer browser scenarios pass with all4source references absent during execution/restored finally. Source gates and inventory are accepted separately from broad parity;19native source pins and all70evaluated EE declarations are retained. Full EditTextObject/EditEngine/Calc pool/document/connected UI/same-model ODS remain pending. No new native memory manager, pointer interning or UI localization.",
+      "Task168 adds the erased borrowed name/family methods consumed by IndexedStyleSheets, without claiming or constructing a full stylesheet class. Existing enum emitted runtime remains identical.",
+      "Task171 implements the complete native SfxStyleSheetIterator dependency of SfxStyleSheetBasePool: original search flags/default All, Used separation and predicate call order, all-family/family/predicate count/index/next paths, exact UTF16 name lookup, live index observations and cursor transitions. Reuses actual IndexedStyleSheets; erased borrowed native pool GetIndexedStyleSheets and style GetName/GetFamily/GetMask/IsUsed/IsHidden operations neither instantiate nor replace full style/pool owners. Native operator[] binds to at, vector bounds errors to RangeError and reference identities to GC-owned JS values. Preserve disabled visibility expression (CALC147), Find primary-position versus family Next mismatch (CALC148) and native fast-path uint16 narrowing (CALC149). No memory manager, C++ generator/probe, fake completed pool or broad module parity claim.",
+      "Task173 creates actual core SfxStyleSheetBase/SfxStyleSheetBasePool owners and native style hints, reusing SfxBroadcaster/Listener, IndexedStyleSheets, SfxStyleSheetIterator, registered SfxItemPool ranges and actual SfxItemSet. Preserve original field defaults, stable OUString members, name/parent/follow validation, nonvirtual child rename, optional reindex, mask/hidden/help/usage fields, owned versus borrowed set copy and by-value preview. Pool factories/search/cache/insertion/removal/reparent/copy/assignment/clear and derived/base Dying order follow the represented source. Native lifetime/WeakImplHelper allocation is erased under JS GC; bMySet remains solely for set-copy semantics and explicit destructor boundary, not a refcount manager. Core classes implement no UNO XComponent; component query/dispose extension, presentation/XML and derived SfxStyleSheet/ScStyleSheet remain absent rather than stubbed. Preserve CALC146/150 and core copy owner/creation/replacement quirks CALC152..154. Full document/connected UI/same-model ODS and whole-class/module parity are not claimed.",
+      "Task174 implements actual SfxStyleSheet/SfxStyleSheetPool and erased StyleSheetUser. TypeScript generic role mixins translate native SfxStyleSheetBase+SfxListener+SfxBroadcaster multiple inheritance: the original listener/broadcaster fields and every method/copy body are reused once on the actual style this, with exact emitted-token proof. Standalone native classes retain original constructor signatures and all operations; no owner proxy/backpointer,RTTI spoof,duplicate algorithm,WeakMap or lifetime/refcount framework is added. Derived parent validation/broadcast/rebind order, original-source forwarding, copy subobject order, usage/type flags and derived/broadcaster/listener/base destruction follow source. The pool overrides only name construction and preserves inherited base-copy slicing CALC156, removed-parent links CALC157, constructor-parent non-subscription CALC158 and reentrant lookup CALC159. JS instanceof single prototype chains are not a native dynamic_cast contract; original flags/static protocols provide represented role queries. Presentation/XML/UNO/XComponent/Sc styles/document/connected UI/ODS remain pending, with broad parity unverified.",
+      "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements."
+    ],
+    "omittedResponsibilities": [
+      "Actual full EditTextObject/engine/pool/model/UI/ODS and ContentNode-dependent ClearWrongs/SharedStringPool normalization remain pending. Native memory/cache/refcount mechanisms and physical pointer interning identity are erased under JS GC."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleFamily"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleSheetNameReference"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleSearchBits"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleSheetBasePool"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleSheetPool"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/style.hxx",
+          "marker": "SfxStyleFamily"
+        },
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleSearchBits"
+        }
+      ]
+    }
+  }
+}

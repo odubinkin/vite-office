@@ -18,7 +18,7 @@ it("destroying the original paragraph style parent updates mounted inherited fon
     if (!node) throw Error("Missing original style node");
     node.ChgFormatColl(child);
     node.SetText("Original style text");
-    parent.SetFormatAttr(new SvxFontHeightItem(440, RES_CHRATR_FONTSIZE));
+    parent.SetFormatAttr(new SvxFontHeightItem(440, 100, RES_CHRATR_FONTSIZE));
     render(<WriterWorkbench isActive view={session.view} />);
     expect(session.viewStore.GetSnapshot().paragraphs[0]?.computedStyle.fontSizePt).toBe(22);
     const model = vi.spyOn(doc, "NotifyModelChange"),

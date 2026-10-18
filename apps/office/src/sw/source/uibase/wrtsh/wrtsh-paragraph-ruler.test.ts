@@ -1,15 +1,14 @@
 /** @fileoverview Verifies Writer shell paragraph dialog and ruler command boundaries. */
+import { createTabs } from "../../../../../test/tab-item-fixtures";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+
 import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import {
-  SvxLineSpacingItem,
-  SvxTabAdjust,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
@@ -47,21 +46,13 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     setTestCursor(shell, "p-1", 0);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(
-          RES_PARATR_TABSTOP,
-          [new SvxTabStop(720, SvxTabAdjust.Right, ".", "_")],
-          1134,
-        ),
+        createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720, SvxTabAdjust.Right, ".", "_")], 1134),
       ),
     ).toBe(true);
     setTestCursor(shell, secondId, 0);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(
-          RES_PARATR_TABSTOP,
-          [new SvxTabStop(720, SvxTabAdjust.Decimal, ",", ".")],
-          1134,
-        ),
+        createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720, SvxTabAdjust.Decimal, ",", ".")], 1134),
       ),
     ).toBe(true);
     setTestSelection(shell, {
@@ -75,7 +66,6 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
       contextual: true,
       lineMode: "fixed" as const,
       lineValue: 240,
-      fontIndependent: true,
       tabStopsPt: [36, 72],
       keepWithNext: true,
       countLineNumbers: false,
@@ -107,7 +97,6 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
       contextual: false,
       lineMode: "proportional" as const,
       lineValue: 100,
-      fontIndependent: false,
       tabStopsPt: [36],
       keepWithNext: false,
       countLineNumbers: true,
@@ -120,12 +109,10 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     expect(shell.SetTabStopPositions([0])).toBe(false);
     expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(before);
     expect(shell.SetTabStopPositions([720])).toBe(true);
-    expect(shell.SetParagraphItems([new SvxLineSpacingItem(150, RES_PARATR_LINESPACING)])).toBe(
-      true,
-    );
+    expect(shell.SetParagraphItems([lineSpacingFixture(150, RES_PARATR_LINESPACING)])).toBe(true);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(
+        createTabs(
           RES_PARATR_TABSTOP,
           [new SvxTabStop(720, SvxTabAdjust.Right, ".", "_"), new SvxTabStop(1440)],
           1134,
@@ -184,3 +171,19 @@ describe("Writer paragraph dialog and ruler shell", /** Registers command-bounda
     expect(paragraph.GetParagraphRightMargin()).toBe(80);
   });
 });
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
+}

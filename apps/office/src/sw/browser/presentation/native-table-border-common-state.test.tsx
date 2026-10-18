@@ -1,4 +1,5 @@
 /** @fileoverview Checks native table-property input through the mounted workbench and owned dialog drafts. */
+import { Color } from "../../../tools/inc/color";
 import { cleanup, fireEvent, render, screen, act } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { selectMountedTableRow } from "../../../../test-support/table-mouse-dom";
@@ -15,7 +16,7 @@ import { RES_BOX } from "../../inc/hintids";
 import { SID_ATTR_BORDER_INNER } from "../../../svx/inc/svxids";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { TableParamToItemSet } from "../../source/uibase/shells/tabsh";
-import { exportBorderShorthand } from "../../../xmloff/source/style/bordrhdl";
+import { exportBorderShorthand } from "../../source/filter/xml/xmlexpit";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
@@ -46,7 +47,7 @@ function fixture() {
         box.SetDistance((row + 1) * 100 + edge * 10, edge);
         box.SetLine(
           new SvxBorderLine(
-            row === 0 ? (boxes.length === 0 ? 0x123456 : 0xabcdef) : 0x654321,
+            new Color(row === 0 ? (boxes.length === 0 ? 0x123456 : 0xabcdef) : 0x654321),
             row === 0 ? 20 : 40,
           ),
           edge,
@@ -171,7 +172,7 @@ for (const nativeInput of ["absent", "box-only", "mixed"] as const)
         ]),
         box = new SvxBoxItem(RES_BOX),
         info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
-      box.SetLine(new SvxBorderLine(0x13579b, 13), 0);
+      box.SetLine(new SvxBorderLine(new Color(0x13579b), 13), 0);
       for (const edge of [0, 1, 2, 3]) box.SetDistance(50 + edge * 20, edge);
       input.Put(box);
       info.SetDist(true);

@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1cf990df-c555-4f01-b2f0-867ec85a3b0b",
+    "capabilityId": "CAP-1cf990df-c555-4f01-b2f0-867ec85a3b0b",
+    "suite": "shared",
+    "subsystem": "text-escapement-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual escapement constructor/value/copy/mode family and typed member contracts preserve original defaults/ranges/casts.",
+      "Auto on/off preserves height and source marker-to-boundary transition; no fake font metric or text engine."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task150 ports actual SvxEscapementItem Which/mode/explicit offset-height/copy constructors, factory0/100, independent Clone, payload equality excluding Which, native sign-mode getter, mode assignment and short/unsigned8 setters. Actual signed16 escapement, signed8 query projection of unsigned8 height and bool auto Any members retain byte selector/ignored twips and unknown untouched success. Numeric writes use existing real Any extraction and native offset\u00b114000/height1..100 ranges without mutation on rejection; direct value setters retain native narrowing without these property restrictions. Shared Any2Bool is reused for original bool-then-int32 conversion/failure fallback. Automatic on/off preserves proportional height and changes markers\u00b114000to\u00b113999 on disable, not ordinary33/-8; mode assignment instead selects marker/58 or off0/100. Native constants, complete4declaration SvxEscapement enum and3member IDs are represented. Actual eerdll0/100default at EE_CHAR_ESCAPEMENT4052 is directly tested from native solar/eeitem offsets without a dummy EditEngine pool. Existing textitem.ts451lines plus this full value owner exceeds500, requiring a documented responsibility split and canonical escapementitem.hxx reexport boundary. Real shared SfxPoolItem/Any/Any2Bool values and JS GC are reused, with no ownership manager, native type ABI, fake text engine or new unwrapped scalar query. Localized GetPresentation is deferred per user; real EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending. Existing semantic statuses and I/O/recovery deviations remain unchanged."
+    },
+    "capability": "Native text escapement values for EditEngine pool defaults",
+    "gaps": [
+      "Localized presentation deferred; actual EditEngine/EditTextObject/Calc pool/document/UI/ODS pending."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/editeng/source/items/textitem.escapement.ts",
+          "marker": "SvxEscapementItem"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/escapementitem.ts",
+          "marker": "SvxEscapementItem"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/editeng/source/items/native-escapement.test.ts",
+          "marker": "it("
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-core.md",
+          "marker": "Native text escapement values for EditEngine defaults (task150)"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "editeng/source/items/textitem.cxx",
+          "marker": "SvxEscapementItem::QueryValue"
+        },
+        {
+          "path": "include/editeng/escapementitem.hxx",
+          "marker": "SvxEscapementItem"
+        },
+        {
+          "path": "editeng/source/editeng/eerdll.cxx",
+          "marker": "EE_CHAR_ESCAPEMENT"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/style/_CharacterProperties.java",
+          "marker": "CharEscapementHeight"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/README.md",
+          "marker": "Spreadsheet Application Code"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-text-escapement-values",
+    "scopeLimitations": [
+      "Task150 ports actual SvxEscapementItem Which/mode/explicit offset-height/copy constructors, factory0/100, independent Clone, payload equality excluding Which, native sign-mode getter, mode assignment and short/unsigned8 setters. Actual signed16 escapement, signed8 query projection of unsigned8 height and bool auto Any members retain byte selector/ignored twips and unknown untouched success. Numeric writes use existing real Any extraction and native offset\u00b114000/height1..100 ranges without mutation on rejection; direct value setters retain native narrowing without these property restrictions. Shared Any2Bool is reused for original bool-then-int32 conversion/failure fallback. Automatic on/off preserves proportional height and changes markers\u00b114000to\u00b113999 on disable, not ordinary33/-8; mode assignment instead selects marker/58 or off0/100. Native constants, complete4declaration SvxEscapement enum and3member IDs are represented. Actual eerdll0/100default at EE_CHAR_ESCAPEMENT4052 is directly tested from native solar/eeitem offsets without a dummy EditEngine pool. Existing textitem.ts451lines plus this full value owner exceeds500, requiring a documented responsibility split and canonical escapementitem.hxx reexport boundary. Real shared SfxPoolItem/Any/Any2Bool values and JS GC are reused, with no ownership manager, native type ABI, fake text engine or new unwrapped scalar query. Localized GetPresentation is deferred per user; real EditEngine/EditTextObject/ScPageHFItem/full Calc pool/model/connected UI/same-model ODS remain pending. Existing semantic statuses and I/O/recovery deviations remain unchanged.",
+      "Original CharacterProperties CharEscapementHeight generic QA is broader unported source context only; no native QA execution or whole UNO property/filter parity claim."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

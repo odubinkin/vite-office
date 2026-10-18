@@ -25,7 +25,8 @@
       "Font style-name, family, pitch, charset, and embedding metadata remain outside the bounded browser font item model."
     ],
     "preservedResponsibilities": [
-      "Collects Writer pool defaults and document font items into a deterministic document-wide XML font auto-style pool."
+      "Collects Writer pool defaults and document font items into a deterministic document-wide XML font auto-style pool.",
+      "Task135: Registers complete native font keys through Add then Find at the existing browser callback boundary; preserves native first-Add empty return. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlfonte.cxx",

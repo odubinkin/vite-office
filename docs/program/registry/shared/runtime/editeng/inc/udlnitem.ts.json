@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/udlnitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-text-line-values",
+    "capabilityIds": [
+      "CAP-4a9d2c31-fc36-4a82-acaa-0d56bfeb4d07"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/editeng/inc/udlnitem.ts",
+        "apps/office/src/editeng/source/items/native-text-line.test.ts",
+        "docs/program/calc-core.md#Shared native text-line values for Calc underline and overline (task145)"
+      ],
+      "justification": "Task145 replaces the incorrect scalar-only underline with original SvxTextLineItem enum/Color/ComplexColor value ownership and actual SvxUnderlineItem/SvxOverlineItem specializations. Reuse SfxEnumItem, Tools Color and docmodel ComplexColor; JS GC replaces native instance-manager/lifetime machinery. Defaults are NONE and COL_TRANSPARENT; independent copies retain all payloads; concrete-type/style/color/complex equality ignores Which. Native bool methods, unrestricted initialized enum value domain, signed16 style query, int32 style extraction, bool/Color/own-color member Any operations, alpha preservation and unknown-member untouched success are represented. Actual XComplexColor interface transport is explicitly unsupported (false), not a fabricated object/service; localized EditResId/GetColorString presentation remains unported. Existing browser no-argument style projection is retained as its established transfer boundary, without claiming full native transport. Canonical Tools FontLineStyle includes19LINESTYLE names and native size sentinel; all actual old enum users are migrated, with no duplicate enum or compatibility aliases. Real Calc underline104/overline105 defaults are witnessed without fabricating ScDocumentPool. Complete pool/document/connected UI/ODS and broader presentation/interface parity remain pending; intentional browser I/O/recovery choices preserved.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/editeng/udlnitem.hxx",
+      "upstreamSymbols": [
+        "SvxTextLineItem",
+        "GetLineStyle",
+        "setComplexColor"
+      ]
+    }
+  }
+}

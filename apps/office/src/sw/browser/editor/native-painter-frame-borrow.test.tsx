@@ -1,4 +1,6 @@
 /** @fileoverview Verifies main table rendering paints its already-owned original native hierarchy. */
+import { SwClient, SwIterator } from "../../inc/calbck";
+
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen } from "@testing-library/react";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -18,14 +20,10 @@ afterEach(
 /** Reads actual registered clients. @param format - Native owner. @returns Clients. */
 function clients(format: SwModify) {
   const values: unknown[] = [];
-  format.ForAllListeners(
-    /** Visits each original client. @param client - Native registration. @returns Continue. */ (
-      client,
-    ) => {
-      values.push(client);
-      return false;
-    },
-  );
+  for (const client of new SwIterator(SwClient, format)) {
+    values.push(client);
+    continue;
+  }
   return values;
 }
 /** Creates an actual native collapsing table under the production view. @returns Original session and table. */

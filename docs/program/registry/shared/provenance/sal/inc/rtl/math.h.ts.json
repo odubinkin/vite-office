@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/math.h.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/math.h",
+    "localSymbols": [
+      "rtl_math_ConversionStatus",
+      "rtl_math_stringToDouble",
+      "rtl_math_uStringToDouble",
+      "rtl_math_approxEqual"
+    ],
+    "upstreamSymbols": [
+      "rtl_math_stringToDouble",
+      "rtl_math_uStringToDouble",
+      "rtl_math_approxEqual"
+    ],
+    "preservedResponsibilities": [
+      "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim.",
+      "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Other RTL numeric APIs,formatting/unit overloads,physical ABI/NaN payload and complete Calc document/UI/same-model ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/math.h.ts",
+          "marker": "rtl_math_stringToDouble"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/math.h",
+          "marker": "rtl_math_stringToDouble"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/qa/rtl/math/test-rtl-math.cxx",
+          "marker": "test_stringToDouble_good"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/inc/rtl/math.h.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Canonical C math.h facade and declaration-only status owner avoid an eager facade/implementation import cycle in the TypeScript module graph."
+    }
+  }
+}

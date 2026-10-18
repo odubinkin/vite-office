@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/editeng/source/items/frmitems.shadow.ts",
+    "status": "mapped",
+    "upstreamPath": "editeng/source/items/frmitems.cxx",
+    "localSymbols": [
+      "SvxShadowItem",
+      "SvxShadowItemSide"
+    ],
+    "upstreamSymbols": [
+      "SvxShadowItem"
+    ],
+    "preservedResponsibilities": [
+      "Native shadow value and Any implementation in one responsibility shard; canonical shaditem/frmitems reexports borrow it.",
+      "Task136 adds the missing native SvxShadowItem pool dependency with owned Color values, gray100NONE defaults, original constructors/copy/clone/setters/equality/hash/side-space/metrics and complete supported typed Any query/put. Published ShadowFormat/ShadowLocation use existing CPPU normal metadata and ordinary scalar member cells, with no new allocator or lifetime engine. IsTransparent write omission, ignored extraction failures, signed short widths and checked transparency multiplication are preserved. Native final-class Query0 is always true, so its redundant left conjunct is source-folded while both actual query/extraction operations still execute. JS logical booleans represent valid IDL boolean values; binary boolean byte domains, native ABI, localized presentation/XML diagnostics, full DocPool/document/UI/ODS remain unverified. Existing metadata history/status/classification and conscious I/O/recovery deviations remain intact."
+    ],
+    "omittedResponsibilities": [
+      "Native localized presentation/XML diagnostics, binary ABI and complete Calc document/UI/ODS remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/items/frmitems.shadow.ts",
+          "marker": "SvxShadowItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/frmitems.cxx",
+          "marker": "SvxShadowItem"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/items/frmitems.shadow.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Independent native shadow responsibility split from the645line existing frame owner; canonical native header and original frame reexport borrow one class, with no duplicate shared implementation."
+    }
+  }
+}

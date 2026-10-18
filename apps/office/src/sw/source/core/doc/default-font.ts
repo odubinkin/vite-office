@@ -1,5 +1,7 @@
 /** @fileoverview Ports Writer's script/language default-font policy from DocumentStylePoolManager.cxx. */
 
+import { DefaultFontType } from "../../../../unotools/inc/fontdefs";
+
 /** Writer scripts addressed by the three default-font item slots. */
 export type WriterFontScript = "western" | "cjk" | "ctl";
 
@@ -53,7 +55,7 @@ export function getDefaultFont(
   language: string,
   script: WriterFontScript,
 ): string {
-  return getDefaultFontSelection(device, type, language, script).requestedFamily;
+  return getDefaultFontSelection(device, type, language, script).resolvedFamily;
 }
 
 /** Maps an IETF language tag to Writer's three script default slots. @param language - IETF language tag. @returns Writer script slot. */
@@ -72,4 +74,25 @@ export function getWriterDefaultFontLanguage(
   return getWriterFontScript(documentLocale) === script
     ? documentLocale
     : { cjk: "zh-CN", ctl: "ar-SA", western: "en-US" }[script];
+}
+
+/** Original DocumentStylePoolManager text/heading script roles and the single FIXED role applied to all scripts. @param type - Writer role. @param script - Script slot. @returns Native role ID. */
+export function getWriterDefaultFontType(
+  type: WriterDefaultFontType,
+  script: WriterFontScript,
+): DefaultFontType {
+  if (type === "fixed") return DefaultFontType.FIXED;
+  const types = {
+    text: {
+      western: DefaultFontType.LATIN_TEXT,
+      cjk: DefaultFontType.CJK_TEXT,
+      ctl: DefaultFontType.CTL_TEXT,
+    },
+    heading: {
+      western: DefaultFontType.LATIN_HEADING,
+      cjk: DefaultFontType.CJK_HEADING,
+      ctl: DefaultFontType.CTL_HEADING,
+    },
+  };
+  return types[type][script];
 }

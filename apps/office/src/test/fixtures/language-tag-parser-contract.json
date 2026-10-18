@@ -1,0 +1,298 @@
+{
+  "referenceCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "archives": [
+    {
+      "name": "liblangtag-0.6.8.tar.bz2",
+      "url": "https://dev-www.libreoffice.org/src/liblangtag-0.6.8.tar.bz2",
+      "sha256": "a96975b79ddd8fef6d9295c083fe3f1afa1a8898a57235d4069255ade44e5cf2"
+    },
+    {
+      "name": "language-subtag-registry-2026-06-14.tar.bz2",
+      "url": "https://dev-www.libreoffice.org/src/language-subtag-registry-2026-06-14.tar.bz2",
+      "sha256": "e74af13fd11fbcb24a5910d0f50e45d8505d86267bde2bb2d1d45aed966bc3bb"
+    }
+  ],
+  "scope": "Source-derived bundled liblangtag parser/canonicalization outcomes under valid pinned data,not executed native/library results or full LanguageTag/cache behavior. Selected counterexamples,not a representative compatibility rate. Stable selected records exist in shipped2023XML and updated2026registry. Native JS observations are executed separately.",
+  "sources": [
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/liblangtag/lt-tag.c",
+      "sha256": "0bae0965e8776975bed782436635fac9033df87fbc23dfadaaf5cc5f7e01a1b3"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/liblangtag/lt-lang-db.c",
+      "sha256": "0a5cbc161dfa24807f5c7a23f15f854ae000f2e4630f3b291f2f5209b6927019"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/liblangtag/lt-lang.c",
+      "sha256": "57e0bf7bf92566fc5ed3c434ca9f673b7cc857ea408e3e58146b084e3a047703"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/liblangtag/lt-ext-module.c",
+      "sha256": "4ce121b31b05782a2049f9acfe329b84ed7b706713daec475cbe9c5cde773f24"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/liblangtag/lt-extension.c",
+      "sha256": "9e3b2ea0e0b12714c4ef7d4e0da0a081a46cf4c1708a3ca92f79c530bb759b11"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/extensions/lt-ext-ldml-u.c",
+      "sha256": "69f19a66d67e5baca524e208e016a21a1caee4eda42b2d402ed38bfbf256ecfc"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/data/common/supplemental/supplementalMetadata.xml",
+      "sha256": "afe9446ac2bbd9de4aa3abf3d89c9212e953fe4c686dcd6adfb204abf06963c9"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/data/common/bcp47/calendar.xml",
+      "sha256": "2776290a96236951cdaec6bb843110ccba97fc4e7c9bf07988e026284916a637"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/data/reg2xml.c",
+      "sha256": "13225303e9f946e5e392d16300e02d701ff82db6ebafd51715b5f696e6786961"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/configure.ac",
+      "sha256": "ff4c41a004a655f3e98f6be204f85befa51b8a9491ecfd672420472e2a57c141"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/data/Makefile.am",
+      "sha256": "16e2cc124599c552525f59931c07f1b16770c4d5540f31a1b7a059d8cade3be8"
+    },
+    {
+      "path": "output/playwright/task193-checks/registry-source/data/language-subtag-registry",
+      "sha256": "be1fad86a99e3a932d07b80c9b3c271ec2381a5909ce22420144e5077ab0a43a"
+    },
+    {
+      "path": "output/playwright/task193-checks/liblangtag-source/liblangtag-0.6.8/liblangtag/lt-trie.c",
+      "sha256": "e40127dfa9d0640e55ea66eb5638625c7f31e72643c81bc3588dd97235932b3d"
+    }
+  ],
+  "registryDate": "2026-06-14",
+  "shippedXmlDate": "2023-10-16",
+  "registryRecordCounts": {
+    "language": 8276,
+    "extlang": 258,
+    "script": 225,
+    "region": 305,
+    "variant": 139,
+    "grandfathered": 26,
+    "redundant": 67
+  },
+  "registryRecords": [
+    {
+      "Type": ["language"],
+      "Subtag": ["en"],
+      "Suppress-Script": ["Latn"]
+    },
+    {
+      "Type": ["language"],
+      "Subtag": ["de"],
+      "Suppress-Script": ["Latn"]
+    },
+    {
+      "Type": ["language"],
+      "Subtag": ["cmn"],
+      "Macrolanguage": ["zh"]
+    },
+    {
+      "Type": ["language"],
+      "Subtag": ["qaa..qtz"],
+      "Scope": ["private-use"]
+    },
+    {
+      "Type": ["variant"],
+      "Subtag": ["1901"],
+      "Prefix": ["de"]
+    },
+    {
+      "Type": ["grandfathered"],
+      "Tag": ["i-default"]
+    },
+    {
+      "Type": ["grandfathered"],
+      "Tag": ["i-klingon"],
+      "Preferred-Value": ["tlh"]
+    },
+    {
+      "Type": ["language"],
+      "Subtag": ["den"],
+      "Scope": ["macrolanguage"]
+    }
+  ],
+  "languageAliases": [
+    {
+      "type": "i_klingon",
+      "replacement": "tlh",
+      "reason": "deprecated"
+    },
+    {
+      "type": "cmn",
+      "replacement": "zh",
+      "reason": "macrolanguage"
+    },
+    {
+      "type": "i_default",
+      "replacement": "en_x_i_default",
+      "reason": "legacy"
+    }
+  ],
+  "calendarTypes": [
+    "buddhist",
+    "chinese",
+    "coptic",
+    "dangi",
+    "ethioaa",
+    "ethiopic",
+    "gregory",
+    "hebrew",
+    "indian",
+    "islamic",
+    "islamic-umalqura",
+    "islamic-tbla",
+    "islamic-civil",
+    "islamic-rgsa",
+    "iso8601",
+    "japanese",
+    "persian",
+    "roc",
+    "islamicc"
+  ],
+  "cases": [
+    {
+      "input": "zz",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "unregistered-language"
+    },
+    {
+      "input": "en-Abcd",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "unregistered-script"
+    },
+    {
+      "input": "en-AB",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "unregistered-region"
+    },
+    {
+      "input": "en-abcde",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "unregistered-variant"
+    },
+    {
+      "input": "en-1901",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "variant-prefix"
+    },
+    {
+      "input": "de-1901",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "de-1901"
+      },
+      "reason": "variant-prefix-control"
+    },
+    {
+      "input": "den-1901",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "den-1901"
+      },
+      "reason": "variant-prefix-byte-match"
+    },
+    {
+      "input": "cmn-Hans-CN",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "cmn-Hans-CN"
+      },
+      "reason": "exclude-macrolanguage-alias"
+    },
+    {
+      "input": "en-x-FOO",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "en-x-FOO"
+      },
+      "reason": "preserve-private-spelling"
+    },
+    {
+      "input": "en-u-ca-foobar",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "unknown-unicode-calendar-type"
+    },
+    {
+      "input": "en-u-zz-foobar",
+      "sourceExpected": {
+        "valid": false,
+        "canonical": null
+      },
+      "reason": "unknown-unicode-key"
+    },
+    {
+      "input": "en-u-ca-islamicc",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "en-u-ca-islamicc"
+      },
+      "reason": "preserve-registered-calendar-spelling"
+    },
+    {
+      "input": "i-default",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "en-x-i-default"
+      },
+      "reason": "cldr-grandfathered-alias"
+    },
+    {
+      "input": "i-klingon",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "tlh"
+      },
+      "reason": "grandfathered-preferred"
+    },
+    {
+      "input": "de-Latn-DE",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "de-DE"
+      },
+      "reason": "suppress-script-retain-region"
+    },
+    {
+      "input": "qaa",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "qaa"
+      },
+      "reason": "private-language-range"
+    },
+    {
+      "input": "en\u0000-INVALID",
+      "sourceExpected": {
+        "valid": true,
+        "canonical": "en"
+      },
+      "reason": "c-string-boundary"
+    }
+  ]
+}

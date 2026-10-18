@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/hint.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/hint.hxx",
+    "localSymbols": [
+      "SfxHintId",
+      "SfxHint"
+    ],
+    "upstreamSymbols": [
+      "SfxHintId",
+      "SfxHint"
+    ],
+    "preservedResponsibilities": [
+      "Task170 restores pinned native Sfx notification contracts: full ordered hint IDs/default/copy/assignment values; repeated reciprocal listener vectors with Unexpected/Prevent/Allow; broadcaster slot reuse and adjacent-slot removal; initial Broadcast bound versus live Forward/visitor bounds; native copy construction; Dying before reciprocal detachment. JS references and explicit Dispose boundaries represent native object identity/destructors without allocator, weak or reference-count machinery. Invalid native assertion preconditions use host errors; no release-mode undefined behavior or post-destruction use is promised. Existing browser kind payloads are separately named erased types; Svt and Writer runtime bodies are unchanged. Full styles/pool/Calc document/UI/ODS remain pending; no broad semantic parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Native ABI, mutex concurrency, debug backtraces, undefined invalid indices/pointers and use after native destruction are outside the browser contract.",
+      "The native ostream diagnostic hint-ID formatter is not implemented; native consumers use GetId.",
+      "Full stylesheet pools, Calc document/UI and same-model ODS are not implemented by this task."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/hint.ts",
+          "marker": "SfxHint"
+        },
+        {
+          "path": "apps/office/src/svl/source/notify/native-sfx-notifications.test.ts",
+          "marker": "ports AddingListenersIncreasesCount"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/svl/hint.hxx",
+          "marker": "SfxHintId"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "AddingListenersIncreasesCount"
+        }
+      ]
+    }
+  }
+}

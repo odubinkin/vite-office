@@ -1,40 +1,104 @@
-/** @fileoverview Implements the bounded SfxListener contract from pinned `svl/source/notify/lstner.cxx`. */
+/** @fileoverview Native SfxListener vector registrations from pinned svl/source/notify/lstner.cxx. */
+import type { SfxHint } from "../../inc/hint";
+import type { SfxBroadcaster, SfxNotificationBase } from "./SfxBroadcaster";
 
-import { SfxBroadcaster, type SfxHint, type SfxListenerTarget } from "./SfxBroadcaster";
+/** Original duplicate subscription policy. Unexpected duplicates violate the native assertion precondition. */
+export enum DuplicateHandling {
+  Unexpected,
+  Prevent,
+  Allow,
+}
 
-/** Typed M:N listener that owns its reciprocal broadcaster registrations. */
-export abstract class SfxListener<Hint extends SfxHint> implements SfxListenerTarget<Hint> {
-  private readonly broadcasters = new Set<SfxBroadcaster<Hint>>();
-
-  /** Starts listening to one broadcaster. @param broadcaster - Source to attach. @returns Whether newly attached. */
-  public StartListening(broadcaster: SfxBroadcaster<Hint>): boolean {
-    if (this.broadcasters.has(broadcaster)) return false;
-    broadcaster.AddListener(this);
-    this.broadcasters.add(broadcaster);
-    return true;
+/** Applies the original SfxListener fields and algorithms to a native base subobject on the same JS identity. @param Base - Actual primary base. @returns Native role base constructor. */
+export function withSfxListener<TBase extends SfxNotificationBase>(Base: TBase) {
+  /** Original native role fields and algorithms, shared by standalone and multiple-inheritance owners. */
+  abstract class SfxListenerBase extends Base {
+    private maBCs: SfxBroadcaster[] = [];
+    /** Original copy-constructor initialization, reused by the root class and native multiple-inheritance owners. @param source - Copy source. @returns Nothing. */
+    protected CopyListenerFrom(source?: SfxListener): void {
+      if (source !== undefined) {
+        this.maBCs = [...source.maBCs];
+        for (let i = 0; i < this.maBCs.length; ++i)
+          (this.maBCs[i] as SfxBroadcaster).AddListener(this);
+      }
+    }
+    /** Starts a subscription with original duplicate handling. Public host methods represent the native friend declaration. @param broadcaster - Source. @param handling - Duplicate policy. @returns Nothing. */
+    public StartListening(
+      broadcaster: SfxBroadcaster,
+      handling = DuplicateHandling.Unexpected,
+    ): void {
+      const already = handling !== DuplicateHandling.Allow && this.IsListening(broadcaster);
+      if (already && handling === DuplicateHandling.Unexpected)
+        throw new Error("Unexpected duplicate listener");
+      if (!already || handling !== DuplicateHandling.Prevent) {
+        broadcaster.AddListener(this);
+        this.maBCs.push(broadcaster);
+      }
+    }
+    /** Ends the first or all matching native registrations. @param broadcaster - Source. @param removeAllDuplicates - Whether all matching entries are removed. @returns Nothing. */
+    public EndListening(broadcaster: SfxBroadcaster, removeAllDuplicates = false): void {
+      for (
+        let i = this.maBCs.indexOf(broadcaster);
+        i !== -1;
+        i = this.maBCs.indexOf(broadcaster, i)
+      ) {
+        broadcaster.RemoveListener(this);
+        this.maBCs.splice(i, 1);
+        if (!removeAllDuplicates) break;
+      }
+    }
+    /** Moves out the registration vector before reciprocal removals, matching the native destructor helper. @returns Nothing. */
+    public EndListeningAll(): void {
+      const previous = this.maBCs;
+      this.maBCs = [];
+      for (const broadcaster of previous) broadcaster.RemoveListener(this);
+    }
+    /** Removes every dying-source entry without reciprocal removal. @param broadcaster - Dying source. @returns Nothing. */
+    public RemoveBroadcaster_Impl(broadcaster: SfxBroadcaster): void {
+      this.maBCs = this.maBCs.filter(
+        /** Keeps other registrations. @param source - Registered source. @returns Whether retained. */
+        (source) => source !== broadcaster,
+      );
+    }
+    /** Original membership query. @param broadcaster - Source. @returns Whether registered. */
+    public IsListening(broadcaster: SfxBroadcaster): boolean {
+      return this.maBCs.includes(broadcaster);
+    }
+    /** Original sal_uInt16 count conversion. @returns Count modulo 65536. */
+    public GetBroadcasterCount(): number {
+      return this.maBCs.length & 0xffff;
+    }
+    /** Original indexed source access; valid index is a native precondition. @param index - Native uint16 index. @returns Source. */
+    public GetBroadcasterJOE(index: number): SfxBroadcaster {
+      return this.maBCs[index] as SfxBroadcaster;
+    }
+    /** Native base notification assertion. @param broadcaster - Source. @param _hint - Original hint. @returns Nothing. */
+    public Notify(broadcaster: SfxBroadcaster, _hint: SfxHint): void {
+      void _hint;
+      if (!this.IsListening(broadcaster))
+        throw new Error("SfxListener requires a registered broadcaster");
+    }
+    /** Original dynamic-type query. @returns False in the base class. */
+    public IsSdrView(): boolean {
+      return false;
+    }
+    /** Original dynamic-type query. @returns False in the base class. */
+    public IsSwXStyle(): boolean {
+      return false;
+    }
+    /** Explicit native listener destructor boundary. @returns Nothing. */
+    public Dispose(): void {
+      this.EndListeningAll();
+    }
   }
+  return SfxListenerBase;
+}
 
-  /** Ends one reciprocal registration. @param broadcaster - Source to detach. @returns Nothing. */
-  public EndListening(broadcaster: SfxBroadcaster<Hint>): void {
-    if (!this.broadcasters.delete(broadcaster)) return;
-    broadcaster.RemoveListener(this);
+/** Original standalone SfxListener class; the shared role implementation also supports native multiple inheritance. */
+export class SfxListener extends withSfxListener(Object) {
+  /** Original default/copy constructor. @param source - Optional copy. @returns Native owner. */
+  public constructor(source?: SfxListener) {
+    super();
+    this.CopyListenerFrom(source);
   }
-
-  /** Ends every current registration. @returns Nothing. */
-  public EndListeningAll(): void {
-    for (const broadcaster of [...this.broadcasters]) this.EndListening(broadcaster);
-  }
-
-  /** Detaches a broadcaster that already cleared its listener collection. @param broadcaster - Dying source. @returns Nothing. */
-  public BroadcasterDying(broadcaster: SfxBroadcaster<Hint>): void {
-    this.broadcasters.delete(broadcaster);
-  }
-
-  /** Reports whether any source remains registered. @returns True when listening. */
-  public HasBroadcaster(): boolean {
-    return this.broadcasters.size > 0;
-  }
-
-  /** Receives one typed hint. @param broadcaster - Emitting source. @param hint - Typed hint. @returns Nothing. */
-  public abstract Notify(broadcaster: SfxBroadcaster<Hint>, hint: Hint): void;
 }

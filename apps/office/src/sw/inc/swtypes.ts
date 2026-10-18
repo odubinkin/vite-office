@@ -31,3 +31,6 @@ export enum PrepareHint {
   Clear = 0,
   FixSizeChanged = 2,
 }
+
+/** Native minimum ordinary frame size in twips. */
+export const MINLAY = 23;

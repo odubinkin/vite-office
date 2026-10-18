@@ -1,4 +1,7 @@
 /** @fileoverview Verifies the canonical SwWrtShell cursor and browser-input intent boundary. */
+import { tabStops } from "../../../../../test/tab-item-fixtures";
+import { createTabs } from "../../../../../test/tab-item-fixtures";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
 import { describe, expect, it } from "vitest";
 
@@ -9,11 +12,8 @@ import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import {
-  SvxLineSpacingItem,
-  SvxTabStop,
-  SvxTabStopItem,
-} from "../../../../editeng/source/items/paraitem";
+import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
   RES_KEEP,
@@ -77,11 +77,11 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight).toBe(
       "#ffff00",
     );
-    expect(shell.SetParagraphItem(new SvxLineSpacingItem(150, RES_PARATR_LINESPACING))).toBe(true);
+    expect(shell.SetParagraphItem(lineSpacingFixture(150, RES_PARATR_LINESPACING))).toBe(true);
     expect(shell.SetParagraphItem(new SvxULSpaceItem(120, 240, RES_UL_SPACE, true))).toBe(true);
     expect(
       shell.SetParagraphItem(
-        SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
+        createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
       ),
     ).toBe(true);
     expect(shell.SetParagraphItem(new SfxBoolItem(RES_KEEP, true))).toBe(true);
@@ -90,7 +90,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(false);
     expect(shell.Redo()).toBe(true);
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
+      tabStops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).map(
         /** Projects a tab position. @param stop - Tab stop. @returns Twips. */
         (stop) => stop.GetTabPos(),
       ),
@@ -962,3 +962,19 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetFontSize(14)).toBe(false);
   });
 });
+
+/** Creates a fixture through the actual native state setters. @param value - Active value. @param which - Identity. @param mode - Active rule. @returns Native item. */
+function lineSpacingFixture(
+  value: number,
+  which: number,
+  mode: "proportional" | "fixed" | "minimum" | "leading" = "proportional",
+): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, which);
+  if (mode === "proportional") item.SetPropLineSpace(value);
+  else if (mode === "leading") item.SetInterLineSpace(value);
+  else {
+    item.SetLineHeight(value);
+    if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  }
+  return item;
+}

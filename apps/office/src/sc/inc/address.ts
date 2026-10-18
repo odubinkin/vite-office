@@ -1,7 +1,7 @@
 /** @fileoverview Calc address limits and reference flags from pinned sc/inc/address.hxx. Header-level exports share the original address owners with core/tool. */
 import type { SCCOL, SCROW, SCTAB } from "./types";
 import { ScAddress, ScRange } from "../source/core/tool/address";
-export { ScAddress, ScRange } from "../source/core/tool/address";
+export { ScAddress, ScRange, ScAddressDetails } from "../source/core/tool/address";
 
 /** Native size_t count/index, represented within JavaScript's exact integer domain. */
 export type SCSIZE = number;

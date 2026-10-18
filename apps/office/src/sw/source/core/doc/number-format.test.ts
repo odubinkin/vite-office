@@ -141,6 +141,7 @@ it("preserves native marker ownership through Worker v16 and legacy records", /*
   for (const format of legacy.numRules[0]?.formats ?? []) {
     delete (format as { bulletGlyph?: number }).bulletGlyph;
     delete (format as { bulletFontPresent?: boolean }).bulletFontPresent;
+    delete (format as { bulletFontMetadata?: unknown }).bulletFontMetadata;
     delete (format as { showSymbol?: boolean }).showSymbol;
   }
   const migrated = decodeWriterDocument(legacy).GetNumRuleTable()[0] as SwNumRule;

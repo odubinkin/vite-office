@@ -1,0 +1,68 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/items/style-model.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/items/style.cxx",
+    "localSymbols": [
+      "SfxStyleSheetHint",
+      "SfxStyleSheetModifiedHint",
+      "SfxStyleSheetPoolHint",
+      "SfxStyleSheetBase",
+      "SfxStyleSheetBasePool_Impl",
+      "StyleSheetDisposerFunctor",
+      "SfxStyleSheetBasePool"
+    ],
+    "upstreamSymbols": [
+      "SfxStyleSheetBase::SfxStyleSheetBase",
+      "SfxStyleSheetBase::SetName",
+      "SfxStyleSheetBase::SetParent",
+      "SfxStyleSheetBase::SetFollow",
+      "SfxStyleSheetBase::GetItemSet",
+      "SfxStyleSheetBasePool::Make",
+      "SfxStyleSheetBasePool::Remove",
+      "SfxStyleSheetBasePool::Add",
+      "SfxStyleSheetBasePool::Clear",
+      "SfxStyleSheetHint::SfxStyleSheetHint"
+    ],
+    "preservedResponsibilities": [
+      "Task173 creates actual core SfxStyleSheetBase/SfxStyleSheetBasePool owners and native style hints, reusing SfxBroadcaster/Listener, IndexedStyleSheets, SfxStyleSheetIterator, registered SfxItemPool ranges and actual SfxItemSet. Preserve original field defaults, stable OUString members, name/parent/follow validation, nonvirtual child rename, optional reindex, mask/hidden/help/usage fields, owned versus borrowed set copy and by-value preview. Pool factories/search/cache/insertion/removal/reparent/copy/assignment/clear and derived/base Dying order follow the represented source. Native lifetime/WeakImplHelper allocation is erased under JS GC; bMySet remains solely for set-copy semantics and explicit destructor boundary, not a refcount manager. Core classes implement no UNO XComponent; component query/dispose extension, presentation/XML and derived SfxStyleSheet/ScStyleSheet remain absent rather than stubbed. Preserve CALC146/150 and core copy owner/creation/replacement quirks CALC152..154. Full document/connected UI/same-model ODS and whole-class/module parity are not claimed.",
+      "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements."
+    ],
+    "omittedResponsibilities": [
+      "GetDescription/GetItemPresentation/XML diagnostics, UNO WeakImplHelper/XComponent query/dispose and SfxStyleSheet/SfxStyleSheetPool/SfxUnoStyleSheet/ScStyleSheet owners remain unimplemented. Core Clear is verified only for actual represented non-UNO core styles.",
+      "Native allocator/refcount/weak/physical pointer identity/destructor timing and undefined invalid iterator/lifetime outcomes are erased or excluded under JS GC; no new memory manager is implemented.",
+      "CALC150 nonempty destination mutation has no claimed native normal outcome. A throwing virtual copy factory exits before invalidated traversal advances; empty-copy/assignment behavior is preserved.",
+      "Fixtures are source-derived; original index/broadcaster QA is reused supporting context, not a claim of native full style-pool QA ports."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/items/style-model.ts",
+          "marker": "SfxStyleSheetBasePool"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-style-model.test.ts",
+          "marker": "constructs actual native styles"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/items/style.cxx",
+          "marker": "SfxStyleSheetBasePool::Make"
+        },
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleSheetBase"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/items/style-model.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original style.cxx core owner and hint responsibilities stay together in one427-line implementation; the already implemented iterator is166lines. Combining both would exceed the repository500-line TypeScript budget. This separates actual core-owner responsibility from iterator traversal without sharding classes, duplicating logic or introducing a temporary style/pool implementation."
+    }
+  }
+}

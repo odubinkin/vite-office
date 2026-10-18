@@ -1,5 +1,4 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
-
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
@@ -12,7 +11,6 @@ import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
 } from "../text/XMLLineNumberingImportContext";
-
 const ignoredStyleDefinitions = new Set([
   XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
@@ -25,6 +23,9 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   getFontFaceGeneric?(name: string): string | undefined;
+  getFontFaceProperties?(
+    name: string,
+  ): import("./XMLFontStylesContext").OdfFontFaceMetadata | undefined;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
   registerPageLayout(name: string, layout: OdfPageLayout): void;
 }
@@ -562,6 +563,15 @@ function importCharacterProperties(
     throw new Error(`Undefined ODF complex font face: ${complexFaceName}`);
   const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
   const fontFamilyGeneric = faceName === null ? undefined : target.getFontFaceGeneric?.(faceName);
+  const fontMetadata = faceName === null ? undefined : target.getFontFaceProperties?.(faceName),
+    asianMetadata =
+      asianFaceName === null ? undefined : target.getFontFaceProperties?.(asianFaceName),
+    complexMetadata =
+      complexFaceName === null ? undefined : target.getFontFaceProperties?.(complexFaceName),
+    asianGeneric = asianFaceName === null ? undefined : target.getFontFaceGeneric?.(asianFaceName),
+    complexGeneric =
+      complexFaceName === null ? undefined : target.getFontFaceGeneric?.(complexFaceName);
+
   let fontSizeTwips: number | undefined;
   if (fontSize !== null) {
     try {
@@ -576,6 +586,30 @@ function importCharacterProperties(
     ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
     ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
     ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
+    ...(fontMetadata === undefined
+      ? {}
+      : {
+          fontStyleName: fontMetadata.styleName,
+          fontPitch: fontMetadata.pitch,
+          fontCharSet: fontMetadata.charSet,
+        }),
+    ...(asianMetadata === undefined
+      ? {}
+      : {
+          fontStyleNameAsian: asianMetadata.styleName,
+          fontPitchAsian: asianMetadata.pitch,
+          fontCharSetAsian: asianMetadata.charSet,
+        }),
+    ...(complexMetadata === undefined
+      ? {}
+      : {
+          fontStyleNameComplex: complexMetadata.styleName,
+          fontPitchComplex: complexMetadata.pitch,
+          fontCharSetComplex: complexMetadata.charSet,
+        }),
+    ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
+    ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
+
     ...(asianFontFamily === undefined ? {} : { fontFamilyAsian: asianFontFamily }),
     ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),

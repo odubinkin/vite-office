@@ -1,4 +1,5 @@
 /** @fileoverview Checks native body-text cross deletion/survivor/history/force contracts from literal fixtures without upstream invocation. */
+import { FontWeight } from "../../../../tools/inc/fontenum";
 import { describe, expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { sw_GetJoinFlags, sw_JoinText } from "../../core/doc/docedt";
@@ -12,7 +13,7 @@ import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -33,8 +34,8 @@ function fixture(middleCount = 0, family = 54) {
   for (let index = 0; index < middleCount; index++)
     middle.push(doc.nodes.MakeTextNode("middle" + index));
   const last = doc.nodes.MakeTextNode("efgh");
-  first.SetAttr(new SvxWeightItem(FontWeight.NORMAL, 15));
-  last.SetAttr(new SvxWeightItem(FontWeight.BOLD, 15));
+  first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, 15));
+  last.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
   first.SetParagraphAlignment("center");
   last.SetParagraphAlignment("right");
   last.ChgFormatColl(doc.GetTextFormatColl("text-body"));
@@ -195,7 +196,7 @@ describe("native cross-node selected deletion", /** Registers literal structural
                   expect([
                     first.GetpSwAttrSet()?.GetItemIfSet(15, false)?.QueryValue(),
                     last.GetpSwAttrSet()?.GetItemIfSet(15, false)?.QueryValue(),
-                  ]).toEqual([FontWeight.NORMAL, FontWeight.BOLD]);
+                  ]).toEqual([FontWeight.WEIGHT_NORMAL, FontWeight.WEIGHT_BOLD]);
                   const a = { paragraphId: "p-1", offset: start },
                     b = { paragraphId: "p-" + (middleCount + 2), offset: end };
                   expect(getTestSelection(shell)).toEqual({
@@ -341,7 +342,7 @@ describe("native join flags and body-text kernel", /** Registers direct core and
     ) => {
       const { doc, first, last } = fixture();
       first.ResetAllAttr();
-      if (kind === "character") first.SetAttr(new SvxWeightItem(FontWeight.NORMAL, 15));
+      if (kind === "character") first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, 15));
       if (kind === "breaks") {
         first.SetAttr(new SwFormatPageDesc("first-page", 3));
         first.SetAttr(new SfxInt16Item(101, 1));

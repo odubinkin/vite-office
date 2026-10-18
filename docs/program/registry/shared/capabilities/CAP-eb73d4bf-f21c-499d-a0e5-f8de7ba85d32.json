@@ -1,0 +1,98 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-eb73d4bf-f21c-499d-a0e5-f8de7ba85d32",
+    "capabilityId": "CAP-eb73d4bf-f21c-499d-a0e5-f8de7ba85d32",
+    "suite": "shared",
+    "subsystem": "style-sheet-core-model",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual core style/pool owners connect the existing shared index,iterator,notification and item-set implementations.",
+      "Represented native defaults,rename/parent/follow/copy/index/cache/notification ordering and source quirks are preserved without a fake style/pool provider."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Task173 creates actual core SfxStyleSheetBase/SfxStyleSheetBasePool owners and native style hints, reusing SfxBroadcaster/Listener, IndexedStyleSheets, SfxStyleSheetIterator, registered SfxItemPool ranges and actual SfxItemSet. Preserve original field defaults, stable OUString members, name/parent/follow validation, nonvirtual child rename, optional reindex, mask/hidden/help/usage fields, owned versus borrowed set copy and by-value preview. Pool factories/search/cache/insertion/removal/reparent/copy/assignment/clear and derived/base Dying order follow the represented source. Native lifetime/WeakImplHelper allocation is erased under JS GC; bMySet remains solely for set-copy semantics and explicit destructor boundary, not a refcount manager. Core classes implement no UNO XComponent; component query/dispose extension, presentation/XML and derived SfxStyleSheet/ScStyleSheet remain absent rather than stubbed. Preserve CALC146/150 and core copy owner/creation/replacement quirks CALC152..154. Full document/connected UI/same-model ODS and whole-class/module parity are not claimed."
+    },
+    "capability": "Native core style base and indexed pool owners",
+    "gaps": [
+      "GetDescription/GetItemPresentation/XML diagnostics, UNO WeakImplHelper/XComponent query/dispose and SfxStyleSheet/SfxStyleSheetPool/SfxUnoStyleSheet/ScStyleSheet owners remain unimplemented. Core Clear is verified only for actual represented non-UNO core styles.",
+      "Native allocator/refcount/weak/physical pointer identity/destructor timing and undefined invalid iterator/lifetime outcomes are erased or excluded under JS GC; no new memory manager is implemented.",
+      "CALC150 nonempty destination mutation has no claimed native normal outcome. A throwing virtual copy factory exits before invalidated traversal advances; empty-copy/assignment behavior is preserved.",
+      "Fixtures are source-derived; original index/broadcaster QA is reused supporting context, not a claim of native full style-pool QA ports."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/style-model.ts",
+          "marker": "SfxStyleSheetBasePool"
+        },
+        {
+          "path": "apps/office/src/svl/inc/style.ts",
+          "marker": "SfxStyleSheetBasePool"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/svl/source/items/native-style-model.test.ts",
+          "marker": "constructs actual native styles"
+        },
+        {
+          "path": "apps/office/e2e/shared/style-model.spec.ts",
+          "marker": "uses actual native styles"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-ui-readiness.md",
+          "marker": "Native core style owners (task173)"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-152"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "svl/source/items/style.cxx",
+          "marker": "SfxStyleSheetBasePool::Make"
+        },
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleSheetBasePool"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+          "marker": "InstantiationWorks"
+        },
+        {
+          "path": "svl/qa/unit/notify/test_SfxBroadcaster.cxx",
+          "marker": "AddingListenersIncreasesCount"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/svl/style.hxx",
+          "marker": "SfxStyleSheetHint"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "native-core-style-model",
+    "scopeLimitations": [
+      "Task173 creates actual core SfxStyleSheetBase/SfxStyleSheetBasePool owners and native style hints, reusing SfxBroadcaster/Listener, IndexedStyleSheets, SfxStyleSheetIterator, registered SfxItemPool ranges and actual SfxItemSet. Preserve original field defaults, stable OUString members, name/parent/follow validation, nonvirtual child rename, optional reindex, mask/hidden/help/usage fields, owned versus borrowed set copy and by-value preview. Pool factories/search/cache/insertion/removal/reparent/copy/assignment/clear and derived/base Dying order follow the represented source. Native lifetime/WeakImplHelper allocation is erased under JS GC; bMySet remains solely for set-copy semantics and explicit destructor boundary, not a refcount manager. Core classes implement no UNO XComponent; component query/dispose extension, presentation/XML and derived SfxStyleSheet/ScStyleSheet remain absent rather than stubbed. Preserve CALC146/150 and core copy owner/creation/replacement quirks CALC152..154. Full document/connected UI/same-model ODS and whole-class/module parity are not claimed.",
+      "Task173 bounded acceptance passes249 related scenarios/23files,187Calc/76files,production build,1actual core style/pool Chromium scenario through canonical style header and1targeted Writer startup/load/edit. Exact4measured shared executable owners (new core owner,public header,existing iterator/index) raw S369/B174/F92/L331 and all33Calc S4179/B2731/F821/L3727 have every counter positive100;13source gates pass. Eight native blobs and47represented core methods are mapped. Native core owners/hints427lines plus existing iterator166lines justify one responsibility split without sharding classes. All4native links are absent during runtime/restored afterward. Preserve CALC146/150 and record CALC152..155; no normal invalidated native iterator result is claimed. Presentation/XML/UNO/XComponent/derived style/ScStyleSheet and Calc document/connected UI/ODS remain pending. No native compiler/probe,heap/refcount framework or full all-app run occurred; broad class/module parity flags stay false."
+    ],
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}
