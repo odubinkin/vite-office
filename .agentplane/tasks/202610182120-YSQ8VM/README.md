@@ -4,7 +4,7 @@ title: "Restore native Calc standard toolbar composition using shared Writer con
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "Verified complete native visible standardbar through shared Writer controls/icons:293 Calc tests and raw100percent four metrics,29related tests,10source/resource and2Writer freshness cases,4built-browser viewport/axe cases;all declared gates pass. Evidence in task verification.md;overall goal remains active."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T21:27:14.186Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed complete native visible Calc standardbar through actual shared Writer controls and icon vocabulary."
+  evaluated_sha: "42f8c03e9b9befcf6407c9b3b4aa3a339857f868"
+  blueprint_digest: "4ba338f8a5515a98439f1da0641a332afc88913d56ce90402ab4a1272967a8a7"
+  evidence_refs:
+    - ".agentplane/tasks/202610182120-YSQ8VM/README.md"
+    - ".agentplane/tasks/202610182120-YSQ8VM/quality/20261018-212714186-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610182120-YSQ8VM/quality/20261018-212714186-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610182120-YSQ8VM/quality/20261018-212714186-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610182120-YSQ8VM/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610182120-YSQ8VM/verification.md"
+    - ".agentplane/tasks/202610182120-YSQ8VM/browser.log"
+    - ".agentplane/tasks/202610182120-YSQ8VM/calc-coverage.log"
+  findings:
+    - "Implementation42f8c03e9 removes both presentation-owned omission layers,retains native visibility and browser save-policy deviations,and uses actual Sfx disabled state. Source XML independently confirms30commands;real Writer regression preserves11original icons and source order. All293Calc tests have raw100percent across four metrics;29related cases,10source cases,2freshness cases and4built-browser geometry/axe cases pass. Changed20paths stay within approved scope;generated resources and execution slots are unchanged."
 commit: null
 comments:
   -
