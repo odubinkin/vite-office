@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/source/font/FontVariation.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-variation-values",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-298abfa5-b2b1-4fe1-80ec-95748935318b",
+      "CAP-14d16c14-9c4b-4519-9251-dd42385b275e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/source/font/FontVariation.ts",
+        "apps/office/src/vcl/source/font/FontVariation.test.ts"
+      ],
+      "justification": "Task6AHF5X prerequisite for actual SvxFontVariationsItem and EditEngine default package used by Calc EditTextObject/ScDocumentPool. Native Variation zero defaults,copy,uint32/binary32 fields and IEEE equality plus complete VariationsFromString algorithm. Actual o3tl token/trim/toDouble and RTL character/decimal owners preserve order,duplicates,quoted4ASCII letter/digit/space tags,minimum7UTF16units,malformed token recovery and float narrowing. Redundant native size<6/value-empty tests are entailed by earlier source guards,not excluded coverage. No axis clamping,deduplication,JS trim,parseFloat or guessed font values. Serialization requires actual RTL float formatting;the full font-variation item,EditEngine pool,Calc document formatting,enabled UI and ODS integration remain unfinished. No broad capability parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Variation",
+        "VariationsFromString"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vcl/source/font/FontVariation.cxx",
+      "upstreamSymbols": [
+        "Variation",
+        "VariationsFromString"
+      ]
+    }
+  }
+}

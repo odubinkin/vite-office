@@ -167,7 +167,8 @@ const allowedEdges = new Map([
   ],
   // Native vcl/Library_vcl.mk links SAL; font.hxx includes sal/types.h.
   // Native Library_vcl.mk links utl and uses SDK API; GetDefaultFont consumes configured locale data.
-  ["vcl", new Set(["offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
+  // Original FontVariation.cxx includes o3tl/string_view.hxx for token/trim/decimal input.
+  ["vcl", new Set(["o3tl", "offapi", "sal", "svl", "tools", "unotools", "udkapi"])],
   // Original cppumaker normal UDK .hpp bindings use CPPU static enum/struct types and Any.
   ["udkapi", new Set(["sal", "cppu"])],
   // Original include/unotools/textsearch.hxx includes rtl/ustring.hxx; SearchParam owns OUString.
@@ -400,6 +401,8 @@ function findCycle(graph) {
 }
 
 const originalSalO3tlBindings = new Map([
+  // Original o3tl/string_view.hxx::toDouble calls rtl_math_uStringToDouble from rtl/math.h.
+  ["o3tl/inc/string_view.ts -> sal/inc/rtl/math.h.ts", ["rtl_math_uStringToDouble"]],
   // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
   ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],

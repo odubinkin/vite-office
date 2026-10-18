@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/vcl/inc/font/Feature.ts",
+    "status": "mapped",
+    "upstreamPath": "include/vcl/font/Feature.hxx",
+    "localSymbols": [
+      "featureCode"
+    ],
+    "upstreamSymbols": [
+      "featureCode"
+    ],
+    "preservedResponsibilities": [
+      "Task6AHF5X prerequisite for actual SvxFontVariationsItem and EditEngine default package used by Calc EditTextObject/ScDocumentPool. Inline native4signed-char OpenType tag packing,unsigned32 result;no general Feature discovery,localization or font-shaping provider is implemented. Serialization requires actual RTL float formatting;the full font-variation item,EditEngine pool,Calc document formatting,enabled UI and ODS integration remain unfinished. No broad capability parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Actual RTL float output formatting and VariationsToString,VariationAxis metadata and full Feature services are not represented. No native renderer or pool facade."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/inc/font/Feature.ts",
+          "marker": "featureCode"
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/FontVariation.test.ts",
+          "marker": "retains native aggregate defaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/vcl/font/Feature.hxx",
+          "marker": "featureCode"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native aggregate/public scalar narrowing and UTF16 borrowed views use typed arrays/JS accessors,Math.fround and garbage collection;native ABI/lifetime is not reproduced."
+    }
+  }
+}

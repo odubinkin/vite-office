@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/inc/font/Variation.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-variation-values",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-298abfa5-b2b1-4fe1-80ec-95748935318b",
+      "CAP-14d16c14-9c4b-4519-9251-dd42385b275e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/inc/font/Variation.ts",
+        "apps/office/src/vcl/source/font/FontVariation.test.ts"
+      ],
+      "justification": "Task6AHF5X prerequisite for actual SvxFontVariationsItem and EditEngine default package used by Calc EditTextObject/ScDocumentPool. Canonical declaration facade for actual Variation value and parser;VariationAxis metadata and VariationsToString are not exported until their genuine dependencies exist. Serialization requires actual RTL float formatting;the full font-variation item,EditEngine pool,Calc document formatting,enabled UI and ODS integration remain unfinished. No broad capability parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/vcl/font/Variation.hxx",
+      "upstreamSymbols": [
+        "Variation",
+        "VariationsFromString"
+      ]
+    }
+  }
+}
