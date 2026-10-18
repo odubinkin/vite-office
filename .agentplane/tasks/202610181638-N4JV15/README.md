@@ -1,10 +1,11 @@
 ---
 id: "202610181638-N4JV15"
 title: "Implement Calc native A1 formula input and output"
-status: "DOING"
+result_summary: "verified-202610181638-N4JV15"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T16:44:05.168Z"
+  updated_at: "2026-10-18T16:44:25.749Z"
   updated_by: "CODER"
-  note: "Native A1 scalar/local-reference input and output ready for UI; all Calc and touched shared coverage 100 percent. UI regression cycle task 1 of 10. Evidence moved from output to task evidence directory."
+  note: "verified-202610181638-N4JV15"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "d79712fda93c573a1ff61566f53cc9b5bec553ea"
   findings:
     - "Actual canonical tokens preserve relative/absolute references across native/ODFF serialization and propagate dependencies. All 239 Calc scenarios pass at 100 percent; touched shared compiler is 100 percent. No UI text rewrite, separate model, threshold changes or unrelated implementation."
-commit: null
+commit:
+  hash: "7b51d953921c07b098246f95de7be0c07fa089f2"
+  message: "🔎 N4JV15 task: preserve verification and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved native A1 Calc formula input and serialization on the existing document and token owners, then verify Calc and touched shared serializer."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610181638-N4JV15. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -73,8 +79,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native A1 scalar/local-reference input and output ready for UI; all Calc and touched shared coverage 100 percent. UI regression cycle task 1 of 10. Evidence moved from output to task evidence directory."
+  -
+    type: "verify"
+    at: "2026-10-18T16:44:25.749Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610181638-N4JV15"
+  -
+    type: "status"
+    at: "2026-10-18T16:44:25.885Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610181638-N4JV15. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T16:44:05.225Z"
+doc_updated_at: "2026-10-18T16:44:25.885Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI plan first core prerequisite: preserve existing token and document owners while adding upstream native A1 arithmetic/local-reference compilation and serialization alongside ODFF. All changes remain on calc in vite-office-calc; no merges. Follow with native cell entry, view/input owners, shared browser composition and ODS UI tasks."
 sections:
@@ -179,11 +198,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-18T16:44:25.749Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610181638-N4JV15
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:44:05.225Z, excerpt_hash=sha256:60a2330c3d6b67b9c66c19ec68a83c2512cbdcb5c5a22edb61fc07f35e82db0b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json
+    - old_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+    - current_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181638-N4JV15
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit 7b51d953921c07b098246f95de7be0c07fa089f2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "Implemented native/English OOO A1 and ODFF_A1 compilation/output over existing document/token/listener owners. Source: pinned sc/source/core/tool/compiler.cxx ConventionOOO_A1 and MakeOneRefStrImpl. Native scalar arithmetic symbols coincide with existing ODFF symbols; localized numeric/function-symbol services remain unsupported, as do ranges/cross-sheet/names/functions. Existing ODF deleted-reference output is unchanged. Initial tests exposed stale grammar rejection and test expectations that ignored InitAddress resetting absolute flags; corrected acceptance from source, with no production workaround. First task of new UI ten-task regression cycle; previous task204 milestone had an all-app checkpoint. No full-suite run needed this task. Doctor passes with existing managed-hook warning; no policy/tooling changes. No new or modified file exceeds 500 lines."
+extensions:
+  implementation_commit:
+    hash: "d79712fda93c573a1ff61566f53cc9b5bec553ea"
+    message: "🧮 N4JV15 code: add native Calc A1 formula convention"
 id_source: "generated"
 ---
 ## Summary
@@ -291,6 +344,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit d79712fda93c573a1ff61566f53cc9b5bec553ea
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T16:44:25.749Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610181638-N4JV15
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:44:05.225Z, excerpt_hash=sha256:60a2330c3d6b67b9c66c19ec68a83c2512cbdcb5c5a22edb61fc07f35e82db0b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json
+- old_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+- current_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181638-N4JV15
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit 7b51d953921c07b098246f95de7be0c07fa089f2
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
