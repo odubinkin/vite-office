@@ -4,7 +4,7 @@ title: "Serialize scalar Calc formulas through canonical compiler owners"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,28 @@ verification:
   updated_by: "CODER"
   note: "Passed215Calc/206related cases;49Calc/3shared owners strict raw100;build+5Chromium/DOM-free Worker scenarios;13source gates;8pinned-source and24path/hash audit. Core formula serialization complete;ODS/UI readiness unclaimed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T13:49:54.575Z"
+  updated_by: "EVALUATOR"
+  note: "Same-agent source review passes scalar ODFF serialization at c01a5ffd9013;24source hashes and25commit paths match final evidence. Minimal ODS/UI handoff is not yet claimed."
+  evaluated_sha: "c01a5ffd901369b8431049602efc3c4d0f4cc5ca"
+  blueprint_digest: "b73dc28e4bd8f471abdda2ac0e2b325ce1bd10bcab2e2253779a649a2c8219a6"
+  evidence_refs:
+    - ".agentplane/tasks/202610181334-NXE4RF/README.md"
+    - ".agentplane/tasks/202610181334-NXE4RF/quality/20261018-134954575-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181334-NXE4RF/quality/20261018-134954575-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181334-NXE4RF/quality/20261018-134954575-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181334-NXE4RF/blueprint/resolved-snapshot.json"
+    - "output/playwright/task202-checks/quality-source-audit.json"
+    - "output/playwright/task202-checks/final-audit.json"
+    - "output/playwright/task202-checks/source-audit.json"
+    - "output/playwright/task202-checks/source-gates.json"
+    - "output/playwright/task202-checks/value-coverage-audit.json"
+    - "output/playwright/task202-checks/build-browser-manifest.json"
+  findings:
+    - "Formula output uses real source-order tokens and Calc reference convention,with native grammar-state ownership and empty base virtual. Existing shared RPN bodies are byte-identical. English symbol entries are reused by scanning and output. RTL consumed decimal rules preserve signed zero,integer precision,rounding and exponent/max guards using native JS shortest decomposition plus exact integer arithmetic."
+    - "Whole Calc215cases/exact49owners and related206cases/exact3shared owners pass every raw S/B/F/L counter;build+5Chromium/DOM-free Worker scenarios and13gates pass with restored source links. Inventory remains partial/unverified and CALC-187 records precision behavior."
 commit: null
 comments:
   -

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610181334-NXE4RF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-18T13:49:54.575Z",
+  "verdict": "pass",
+  "summary": "Same-agent source review passes scalar ODFF serialization at c01a5ffd9013;24source hashes and25commit paths match final evidence. Minimal ODS/UI handoff is not yet claimed.",
+  "evaluated_sha": "c01a5ffd901369b8431049602efc3c4d0f4cc5ca",
+  "blueprint_digest": "b73dc28e4bd8f471abdda2ac0e2b325ce1bd10bcab2e2253779a649a2c8219a6",
+  "findings": [
+    "Formula output uses real source-order tokens and Calc reference convention,with native grammar-state ownership and empty base virtual. Existing shared RPN bodies are byte-identical. English symbol entries are reused by scanning and output. RTL consumed decimal rules preserve signed zero,integer precision,rounding and exponent/max guards using native JS shortest decomposition plus exact integer arithmetic.",
+    "Whole Calc215cases/exact49owners and related206cases/exact3shared owners pass every raw S/B/F/L counter;build+5Chromium/DOM-free Worker scenarios and13gates pass with restored source links. Inventory remains partial/unverified and CALC-187 records precision behavior."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610181334-NXE4RF/README.md",
+    "output/playwright/task202-checks/quality-source-audit.json",
+    "output/playwright/task202-checks/final-audit.json",
+    "output/playwright/task202-checks/source-audit.json",
+    "output/playwright/task202-checks/source-gates.json",
+    "output/playwright/task202-checks/value-coverage-audit.json",
+    "output/playwright/task202-checks/build-browser-manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "This is same-agent review,not independent. Other grammars,localized errors/full format modes,functions/names/external/range/matrix/rewrite services,ODS filters and UI remain unsupported. Native source/QA witnesses were not compiled or executed. Existing managed-hook warning persists;full all-app run waits for minimal ODS milestone."
+  ]
+}
