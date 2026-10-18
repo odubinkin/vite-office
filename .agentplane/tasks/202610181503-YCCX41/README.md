@@ -4,7 +4,7 @@ title: "Run minimal Calc ODS milestone full regression and pause"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -22,11 +22,16 @@ verification:
   updated_by: "CODER"
   note: "Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure."
   attempts: 0
-commit: null
+commit:
+  hash: "058019b9eca9b4ae5674c864316ea19010530dbd"
+  message: "✅ YCCX41 calc: verify milestone full regression checkpoint"
 comments:
   -
     author: "CODER"
     body: "Start:run the user-requested full all-app checkpoint after minimal same-model ODS readiness;classify Writer-only coverage exemption,then pause goal without starting UI."
+  -
+    author: "CODER"
+    body: "Start:attach the committed verification-only checkpoint058019b9eca9 as explicit review target;all verification and focused recovery evidence is complete."
 events:
   -
     type: "status"
@@ -41,8 +46,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure."
+  -
+    type: "status"
+    at: "2026-10-18T15:31:39.864Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DOING"
+    note: "Start:attach the committed verification-only checkpoint058019b9eca9 as explicit review target;all verification and focused recovery evidence is complete."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:30:28.204Z"
+doc_updated_at: "2026-10-18T15:31:39.864Z"
 doc_updated_by: "CODER"
 description: "Task205:user-requested all-app checkpoint after task204 minimal editable core/basic ODS readiness. Execute full office coverage,inventory,tooling,all browser projects and static checks with all5native references absent. Preserve Writer-only coverage exemption;fix applicable Calc/shared regressions if found. No UI implementation or language detour. After successful applicable checks pause the goal."
 sections:
