@@ -1,10 +1,11 @@
 ---
 id: "202610181658-SGE6BG"
 title: "Implement Calc grid input-line and sheet-tab browser presenters"
-status: "DOING"
+result_summary: "Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T17:17:43.432Z"
+  updated_at: "2026-10-18T17:18:07.754Z"
   updated_by: "CODER"
-  note: "PASS Calc92files245tests,100percent statements/branches/functions/lines on final code. Related Writer style-selector and shared toolbar+style tests11pass;new sharedstyle100percent. Actual browser fixture448cells,canonical D2=13.5 and shared32px/6pxcontrols. Typecheck,ESLint,Prettier,docs,dependencies,source-tree/provenance,Calc parity,file-size,doctor,routing pass. UI task4/10;full suite deferred per user. Production integration remains next work."
+  note: "Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage"
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "33273ac1cee9"
   findings:
     - "Reviewed ScGridWindow,ScInputWindow and ScTabControl against native composition and final Calc100percent evidence. Actual document and marks supply state;input/navigation remain controller-owned. Inline editor retains caret gestures and logical rows are distinct from physical browser scroll extent. Writer toolbar class string is preserved exactly in shared source;11related UI tests pass. Production app registration and command/workflow integration are explicitly not claimed."
-commit: null
+commit:
+  hash: "e8e6cb6fab790d54e5dad1a13c29b59eaaa2d0ae"
+  message: "🔎 SGE6BG task: preserve Calc presenter and shared styling review"
 comments:
   -
     author: "CODER"
     body: "Start: Build controlled Calc grid,input-line and sheet-tab React presenters against real ScViewData, forwarding commands to their owning controller without a second cell or edit model."
+  -
+    author: "CODER"
+    body: "Verified: Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS Calc92files245tests,100percent statements/branches/functions/lines on final code. Related Writer style-selector and shared toolbar+style tests11pass;new sharedstyle100percent. Actual browser fixture448cells,canonical D2=13.5 and shared32px/6pxcontrols. Typecheck,ESLint,Prettier,docs,dependencies,source-tree/provenance,Calc parity,file-size,doctor,routing pass. UI task4/10;full suite deferred per user. Production integration remains next work."
+  -
+    type: "verify"
+    at: "2026-10-18T17:18:07.754Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage"
+  -
+    type: "status"
+    at: "2026-10-18T17:18:07.893Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T17:17:43.482Z"
+doc_updated_at: "2026-10-18T17:18:07.894Z"
 doc_updated_by: "CODER"
 description: "Approved UI-first continuation on calc only. Implement real controlled React presenters corresponding to ScGridWindow,ScInputWindow and ScTabControl: sparse canonical cell rendering and headers,active/marked cell accessibility,keyboard/pointer intents,formula/name inputs,accept/cancel/function controls,and sheet-tab selection/add controls. Inputs are projections from existing ScDocument/ScViewData; transient edit state and commands remain controller-owned. No second cell model,no placeholder editing semantics,no new formatter/kernel service. Deliver tested presenters first,then connect production shell/commands and shared menus/file adapters in following tasks. Bound to3presenters,shared presentation types,their tests,and runtime/provenance/capability records. Task4/10 of UI regression cycle."
 sections:
@@ -111,6 +130,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-18T17:18:07.754Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T17:17:43.482Z, excerpt_hash=sha256:51e8914b7a4725be0a471f9a838c7832d6d2dc5fa986c9f0f44e06ad41e37ca3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181658-SGE6BG/blueprint/resolved-snapshot.json
+    - old_digest: b5dcd3def46b7c9eca837e02f0f78b1d1674a1432e171496f2d95a6e43a98564
+    - current_digest: b5dcd3def46b7c9eca837e02f0f78b1d1674a1432e171496f2d95a6e43a98564
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181658-SGE6BG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181658-SGE6BG --result verified-202610181658-SGE6BG --commit e8e6cb6fab790d54e5dad1a13c29b59eaaa2d0ae
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -121,6 +170,10 @@ sections:
     - Observation: During UI verification,raw full-sheet CSS height was clamped by Chromium to16777214pixels;inline input pointer events also bubbled into grid focus. Initial metadata used an unsupported aspect and insufficient provenance rationale.
       Impact: Naive full-domain pixel extent would make final rows inaccessible,while clicking the inline editor could steal caret focus. Registry validation rejected metadata before closure.
       Resolution: Viewport contract now separates native logical row indices from controller-supplied physical scroll offset/extent. Final-row rendering is tested without huge CSS offsets. Inline editor pointer/double-click gestures remain with editor. Metadata uses browser-input and explicit browser-only source rationale. Final Calc coverage100percent;shared Writer styling verified. Task scope is controlled presenters,not production Calc registration or completed UI.
+extensions:
+  implementation_commit:
+    hash: "33273ac1cee94c69c104c43d2ffed2adf8895952"
+    message: "🧮 SGE6BG ui: render Calc grid input line and sheet tabs in shared Writer style"
 id_source: "generated"
 ---
 ## Summary
@@ -170,6 +223,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181658-SGE6BG -m 🧩 SGE6BG task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T17:18:07.754Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc grid input-line and sheet-tab presenters share Writer styling and pass complete Calc coverage
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T17:17:43.482Z, excerpt_hash=sha256:51e8914b7a4725be0a471f9a838c7832d6d2dc5fa986c9f0f44e06ad41e37ca3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181658-SGE6BG/blueprint/resolved-snapshot.json
+- old_digest: b5dcd3def46b7c9eca837e02f0f78b1d1674a1432e171496f2d95a6e43a98564
+- current_digest: b5dcd3def46b7c9eca837e02f0f78b1d1674a1432e171496f2d95a6e43a98564
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181658-SGE6BG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181658-SGE6BG --result verified-202610181658-SGE6BG --commit e8e6cb6fab790d54e5dad1a13c29b59eaaa2d0ae
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
