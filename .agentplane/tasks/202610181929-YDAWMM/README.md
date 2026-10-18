@@ -1,10 +1,11 @@
 ---
 id: "202610181929-YDAWMM"
 title: "Correct shared office menu and Calc grid accessibility semantics"
-status: "DOING"
+result_summary: "Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T19:57:17.835Z"
+  updated_at: "2026-10-18T19:58:46.198Z"
   updated_by: "CODER"
-  note: "Calc271tests100percent;affected32files286tests and3runtime-renderers100percent;all6foundation/launcher/geometry cases pass with zero axe violations;full browser372passed and final2conditional-root-query repairs pass in3-case focused run. Types/build/style/module/source/registry/doctor/routing pass;see verification.md. Native owners,commands and visual style preserved."
+  note: "Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610181929-YDAWMM/browser-boundary-final.log"
   findings:
     - "Shared top triggers retain native HTML buttons and command/focus behavior while exposing menuitem semantics;title and grid/status structure now pass real axe. Calc271tests has100percent raw coverage;286focused cases cover every repaired broad-run failure and3affected renderers100percent. Complete browser run accounts for374cases after the2conditional-root query repairs;all6foundation/launcher/geometry cases and current built Calc GoToSheet pass. Source,type,build,style and registry gates pass."
-commit: null
+commit:
+  hash: "cf90142089d1eddcc3942ee15572d3b883ad7441"
+  message: "🧩 YDAWMM ui: correct shared menu and Calc grid accessibility semantics"
 comments:
   -
     author: "CODER"
     body: "Start: Repair shared menu/title and Calc grid header accessibility semantics exposed by full browser regression;preserve actual commands and styling and migrate related test roles without weakened gates."
+  -
+    author: "CODER"
+    body: "Verified: Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc271tests100percent;affected32files286tests and3runtime-renderers100percent;all6foundation/launcher/geometry cases pass with zero axe violations;full browser372passed and final2conditional-root-query repairs pass in3-case focused run. Types/build/style/module/source/registry/doctor/routing pass;see verification.md. Native owners,commands and visual style preserved."
+  -
+    type: "verify"
+    at: "2026-10-18T19:58:46.198Z"
+    author: "CODER"
+    state: "ok"
+    note: "Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass."
+  -
+    type: "status"
+    at: "2026-10-18T19:58:46.300Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T19:57:17.885Z"
+doc_updated_at: "2026-10-18T19:58:46.301Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal repair discovered by task10 full browser regression. Preserve exact Writer/Calc shared visual components and native command behavior while correcting actual ARIA semantics:top-level shared menubar triggers become menuitems,document title gains semantic h1,and Calc row/column/corner headers wrap native selection buttons in proper header elements. Migrate affected shared/Writer/Calc unit and E2E role queries to the correct existing controls without weakening assertions. No new core services or style differences. Up to230non-task paths because top-menu queries span existing tests. AllCalc100percent,touched shared/header/menu100percent,affected Writer/Calc menu/UI tests,source/registry/style/type/build gates and real full-foundation axe/geometry checks. Keep task10 pending until repair passes;full cadence application coverage is already running and must not be restarted or invalidated prematurely. Calc checkout/branch only,no merges/network."
 sections:
@@ -99,6 +118,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610181929-YDAWMM -m 🧩 YDAWMM task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T19:58:46.198Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T19:57:17.885Z, excerpt_hash=sha256:23e656c0012c1362e030a43dbb18296cb8b4a12c7869079bc5a6cc2348d3f731
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181929-YDAWMM/blueprint/resolved-snapshot.json
+    - old_digest: 9bd3047f67d6af18dd96da25a5b55b93729b451e08ad6552a58a570ab354c075
+    - current_digest: 9bd3047f67d6af18dd96da25a5b55b93729b451e08ad6552a58a570ab354c075
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181929-YDAWMM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181929-YDAWMM --result verified-202610181929-YDAWMM --commit 610ab19ae6610b1114e5815ab8a8285f6265ada9
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -196,6 +245,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181929-YDAWMM -m 🧩 YDAWMM task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T19:58:46.198Z — VERIFY — ok
+
+By: CODER
+
+Note: Shared Writer/Calc menu-title and Calc grid-status semantics now pass real axe without visual or native-command changes;Calc271tests100percent,affected286tests100percent,all374browser cases accounted for after focused query repair,and source/build gates pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T19:57:17.885Z, excerpt_hash=sha256:23e656c0012c1362e030a43dbb18296cb8b4a12c7869079bc5a6cc2348d3f731
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181929-YDAWMM/blueprint/resolved-snapshot.json
+- old_digest: 9bd3047f67d6af18dd96da25a5b55b93729b451e08ad6552a58a570ab354c075
+- current_digest: 9bd3047f67d6af18dd96da25a5b55b93729b451e08ad6552a58a570ab354c075
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181929-YDAWMM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181929-YDAWMM --result verified-202610181929-YDAWMM --commit 610ab19ae6610b1114e5815ab8a8285f6265ada9
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
