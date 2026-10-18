@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/patattr.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/patattr.cxx",
+    "localSymbols": [
+      "ScPatternAttr",
+      "CellAttributeHelper",
+      "CellAttributeHolder",
+      "aScPatternAttrSchema"
+    ],
+    "upstreamSymbols": [
+      "ScPatternAttr",
+      "CellAttributeHelper",
+      "CellAttributeHolder"
+    ],
+    "preservedResponsibilities": [
+      "TaskSKT4XD ports actual ScPatternAttr fixed100..155 SfxItemSet ownership,INVALID copying,unbound style names,conditional SET precedence,equality,direct mutation,key and selection-delta helpers plus CellAttributeHelper canonical registration and CellAttributeHolder copy/move/destruction. Real shared pool/itemset/value classes are reused. Holder counts preserve canonical identity/lifetime;GC replaces physical deletion. Native hash-prefilter/cache optimization is omitted while full equality and source name-group/last-hit ownership remain. Default helper implements only native unnamed pre-ScGlobal-initialization branch;initialized Standard resources,ScDocumentPool,ScStyleSheet,column/attrarray/document integration,VCL font/number/visible caches and formatting execution are unported. No fake font default or browser format store is introduced."
+    ],
+    "omittedResponsibilities": [
+      "ScGlobal initialized style defaults,style resolution,document pool/attribute-array integration,font/number/rendering caches,hash optimization and complete Calc formatting remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/patattr.ts",
+          "marker": "ScPatternAttr"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/patattr.test.ts",
+          "marker": "copies source deltas"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
+          "marker": "ScPatternAttr"
+        }
+      ]
+    }
+  }
+}

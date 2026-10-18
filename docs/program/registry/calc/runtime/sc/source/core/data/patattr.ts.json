@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/patattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "capabilityIds": [
+      "CAP-89b5c345-737e-48d7-98d5-62c5fe5b587e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/patattr.ts#ScPatternAttr",
+        "apps/office/src/sc/source/core/data/patattr.test.ts"
+      ],
+      "justification": "TaskSKT4XD ports actual ScPatternAttr fixed100..155 SfxItemSet ownership,INVALID copying,unbound style names,conditional SET precedence,equality,direct mutation,key and selection-delta helpers plus CellAttributeHelper canonical registration and CellAttributeHolder copy/move/destruction. Real shared pool/itemset/value classes are reused. Holder counts preserve canonical identity/lifetime;GC replaces physical deletion. Native hash-prefilter/cache optimization is omitted while full equality and source name-group/last-hit ownership remain. Default helper implements only native unnamed pre-ScGlobal-initialization branch;initialized Standard resources,ScDocumentPool,ScStyleSheet,column/attrarray/document integration,VCL font/number/visible caches and formatting execution are unported. No fake font default or browser format store is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScPatternAttr",
+        "CellAttributeHelper",
+        "CellAttributeHolder",
+        "aScPatternAttrSchema"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/data/patattr.cxx",
+      "upstreamSymbols": [
+        "ScPatternAttr",
+        "CellAttributeHelper",
+        "CellAttributeHolder"
+      ]
+    }
+  }
+}

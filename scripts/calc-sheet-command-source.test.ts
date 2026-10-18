@@ -174,3 +174,38 @@ it("retains all native visible standardbar commands after explicit browser save-
   expect(commands).toHaveLength(30);
   expect(visible).toEqual(commands);
 });
+
+it("pins native cell pattern schema,INVALID copying,conditional precedence and holder move/copy contracts", /** Reads the original owner contracts rather than reproducing browser implementation. @returns Nothing. */ () => {
+  const schema = source("sc/inc/scitems.hxx"),
+    pattern = source("sc/source/core/data/patattr.cxx"),
+    header = source("sc/inc/patattr.hxx");
+  expect(schema).toMatch(/ATTR_PATTERN_START\(100\)/);
+  expect(schema).toMatch(/ATTR_PATTERN_END\(155\)/);
+  expect(pattern).toContain("maLocalSfxItemSet(rHelper.GetPool(), aScPatternAttrSchema)");
+  expect(pattern).toContain("maLocalSfxItemSet.Put(*pItemSet, false)");
+  expect(pattern).toContain(
+    "pCondSet->GetItemState( nWhich, true, &pCondItem ) == SfxItemState::SET",
+  );
+  expect(pattern).toContain("mnRefCount(0)");
+  expect(pattern).toContain("SetPAKey(mnCurrentMaxKey++)");
+  expect(header).toContain("std::swap(mpScPatternAttr, rHolder.mpScPatternAttr)");
+  const assignment = pattern.slice(
+    pattern.indexOf("CellAttributeHolder& CellAttributeHolder::operator="),
+    pattern.indexOf("bool CellAttributeHolder::operator=="),
+  );
+  expect(assignment.indexOf("doUnregister")).toBeLessThan(
+    assignment.indexOf("rHolder.getScPatternAttr()"),
+  );
+  expect(assignment).not.toContain("this == &rHolder");
+});
+it("pins the actual cell-context formatting bar separately from text-context formatting", /** Checks upstream shell registration and toolbar composition. @returns Nothing. */ () => {
+  expect(source("sc/source/ui/view/cellsh.cxx")).toContain("RegisterObjectBar");
+  const format = source("sc/uiconfig/scalc/toolbar/formatobjectbar.xml"),
+    text = source("sc/uiconfig/scalc/toolbar/textobjectbar.xml");
+  for (const command of ["WrapText", "ToggleMergeCells", "NumberFormatPercent", "SetBorderStyle"])
+    expect(format).toContain(`.uno:${command}`);
+  expect(text).not.toContain(".uno:NumberFormatPercent");
+  expect(source("officecfg/registry/data/org/openoffice/Office/UI/CalcWindowState.xcu")).toMatch(
+    /private:resource\/toolbar\/formatobjectbar[\s\S]*?<value xml:lang="en-US">Formatting<\/value>/,
+  );
+});

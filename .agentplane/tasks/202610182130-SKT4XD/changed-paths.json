@@ -1,0 +1,15 @@
+[
+  "apps/office/src/sc/inc/scitems.ts",
+  "docs/program/registry/calc/provenance/sc/inc/scitems.ts.json",
+  "docs/program/registry/calc/runtime/sc/inc/scitems.ts.json",
+  "scripts/calc-sheet-command-source.test.ts",
+  "apps/office/src/sc/inc/patattr.ts",
+  "apps/office/src/sc/source/core/data/patattr.test.ts",
+  "apps/office/src/sc/source/core/data/patattr.ts",
+  "docs/program/calc-pattern-attributes.md",
+  "docs/program/registry/calc/capabilities/CAP-89b5c345-737e-48d7-98d5-62c5fe5b587e.json",
+  "docs/program/registry/calc/provenance/sc/inc/patattr.ts.json",
+  "docs/program/registry/calc/provenance/sc/source/core/data/patattr.ts.json",
+  "docs/program/registry/calc/runtime/sc/inc/patattr.ts.json",
+  "docs/program/registry/calc/runtime/sc/source/core/data/patattr.ts.json"
+]

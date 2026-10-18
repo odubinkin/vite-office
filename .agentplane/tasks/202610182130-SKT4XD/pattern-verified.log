@@ -1,0 +1,26 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+·····
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  04:34:29
+   Duration  2.68s (transform 1.27s, setup 163ms, import 1.39s, tests 7ms, environment 1.01s)
+
+ % Coverage report from istanbul
+------------|---------|----------|---------|---------|-------------------
+File        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------|---------|----------|---------|---------|-------------------
+All files   |     100 |    99.02 |     100 |     100 |                   
+ patattr.ts |     100 |    99.02 |     100 |     100 | 162               
+------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 161/161 )
+Branches     : 99.02% ( 102/103 )
+Functions    : 100% ( 36/36 )
+Lines        : 100% ( 134/134 )
+================================================================================
+ERROR: Coverage for branches (99.02%) does not meet global threshold (100%)
