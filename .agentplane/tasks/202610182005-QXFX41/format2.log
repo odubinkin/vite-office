@@ -1,0 +1,6 @@
+apps/office/src/sc/browser/presentation/ScGridWindow.tsx 80ms
+apps/office/src/sc/browser/presentation/calc-workbench.tsx 44ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-presenters.test.tsx 27ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx 37ms
+apps/office/src/sc/source/ui/app/inputhdl.test.ts 9ms
+scripts/calc-sheet-command-source.test.ts 12ms

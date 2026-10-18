@@ -1,0 +1,23 @@
+apps/office/src/sc/inc/global.ts 78ms (unchanged)
+apps/office/src/sc/source/ui/app/inputhdl.ts 9ms
+apps/office/src/sc/source/ui/inc/inputhdl.ts 1ms (unchanged)
+apps/office/src/sc/browser/composition/calc-module.tsx 20ms (unchanged)
+apps/office/src/sc/browser/controller/calc-view-controller.test.ts 26ms (unchanged)
+apps/office/src/sc/browser/controller/calc-view-controller.ts 39ms
+apps/office/src/sc/browser/editor/cell-input.ts 12ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-files.test.tsx 30ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx 36ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-presenters.test.tsx 33ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx 9ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-workbench.test.tsx 15ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-workbench.tsx 30ms
+apps/office/src/sc/browser/presentation/CalcFileDialog.tsx 2ms (unchanged)
+apps/office/src/sc/browser/presentation/ScGoToTabDlg.tsx 14ms (unchanged)
+apps/office/src/sc/browser/presentation/ScGridWindow.tsx 29ms (unchanged)
+apps/office/src/sc/browser/presentation/ScInputWindow.tsx 9ms (unchanged)
+apps/office/src/sc/browser/presentation/ScTabControl.tsx 7ms (unchanged)
+apps/office/src/sc/browser/workflows/calc-file-workflows.ts 7ms (unchanged)
+apps/office/src/sc/browser/workflows/calc-ods-io.test.ts 11ms (unchanged)
+apps/office/src/sc/browser/workflows/calc-ods-io.ts 9ms (unchanged)
+apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts 5ms (unchanged)
+apps/office/src/sc/sdi/scalc.ts 7ms
