@@ -1,10 +1,11 @@
 ---
 id: "202610181850-FKYDT8"
 title: "Connect Calc source sheet navigation and selection commands"
-status: "DOING"
+result_summary: "Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T18:57:57.576Z"
+  updated_at: "2026-10-18T18:58:17.762Z"
   updated_by: "CODER"
-  note: "AllCalc268tests100percent;related180shared/Writer tests and sharedmenu100percent;native source/default contract test,resource freshness,app/tools typecheck,build,style,module/source/registry gates,doctor/routing and production Chromium sheet commands pass. See verification.md and browser-review.json. Full all-app cadence at task10."
+  note: "Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610181850-FKYDT8/browser-review.json"
   findings:
     - "ScTabView uses pinned wrap=true and native partial/all-group rules;original numeric slots and deselect availability are source-backed. All268Calc tests have100percent raw coverage;180related shared/Writer cases prove100percent shared-menu coverage. Build,types,source/registry gates and production menu/keyboard state transitions pass without independent browser selection state."
-commit: null
+commit:
+  hash: "55ec1df2c259c708c054ea3c8b938980feab7222"
+  message: "🧩 FKYDT8 ui: connect native Calc sheet navigation and grouping slots"
 comments:
   -
     author: "CODER"
     body: "Start: Connect pinned native sheet navigation and grouping operations through existing Calc view/mark owners and shared Sfx UI;verify allCalc100percent and production behavior."
+  -
+    author: "CODER"
+    body: "Verified: Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "AllCalc268tests100percent;related180shared/Writer tests and sharedmenu100percent;native source/default contract test,resource freshness,app/tools typecheck,build,style,module/source/registry gates,doctor/routing and production Chromium sheet commands pass. See verification.md and browser-review.json. Full all-app cadence at task10."
+  -
+    type: "verify"
+    at: "2026-10-18T18:58:17.762Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass."
+  -
+    type: "status"
+    at: "2026-10-18T18:58:17.862Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T18:57:57.628Z"
+doc_updated_at: "2026-10-18T18:58:17.862Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal task9/10. Add native-shaped ScTabView sheet-selection/navigation operations over existing ScViewData and ScMarkData;connect source next/previous/extend and select-all/deselect sheet Sfx slots to production shared menus and keyboard routing. Preserve pinned WrapNextPrevSheetTab=true default and SetTabNo grouping semantics,per-sheet cursor and draft commit guards. Reuse real owners,no fake document or unsupported hidden-sheet services. Up to35 non-task files including source tests and registry/provenance evidence. AllCalc100percent and related shared/Writer checks;full all-app regression at task10. Only Calc checkout/branch, no merges/network."
 sections:
@@ -98,6 +117,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610181850-FKYDT8 -m 🧩 FKYDT8 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T18:58:17.762Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:57:57.628Z, excerpt_hash=sha256:5ba587491ad8312ba2603de03e8ebda16ab0aeca8549b004dc7d7ab6d0b8fa9f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181850-FKYDT8/blueprint/resolved-snapshot.json
+    - old_digest: 602fff15b4295c49995f8d0a8f2bc9f00955fe67afdbe878db802f1e913701c2
+    - current_digest: 602fff15b4295c49995f8d0a8f2bc9f00955fe67afdbe878db802f1e913701c2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181850-FKYDT8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181850-FKYDT8 --result verified-202610181850-FKYDT8 --commit 88ff3c6d3ae4b3c61238a19b9d6a086505f09303
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -183,6 +232,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181850-FKYDT8 -m 🧩 FKYDT8 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T18:58:17.762Z — VERIFY — ok
+
+By: CODER
+
+Note: Native ScTabView sheet navigation and grouping now drive Calc shared menus and keyboard through original Sfx slots;268Calc tests and raw100percent coverage plus180related cases,source gates and production browser state checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:57:57.628Z, excerpt_hash=sha256:5ba587491ad8312ba2603de03e8ebda16ab0aeca8549b004dc7d7ab6d0b8fa9f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181850-FKYDT8/blueprint/resolved-snapshot.json
+- old_digest: 602fff15b4295c49995f8d0a8f2bc9f00955fe67afdbe878db802f1e913701c2
+- current_digest: 602fff15b4295c49995f8d0a8f2bc9f00955fe67afdbe878db802f1e913701c2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181850-FKYDT8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181850-FKYDT8 --result verified-202610181850-FKYDT8 --commit 88ff3c6d3ae4b3c61238a19b9d6a086505f09303
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
