@@ -1,10 +1,11 @@
 ---
 id: "202610181643-YYAGKX"
 title: "Implement Calc source simple-number input scanner"
-status: "DOING"
+result_summary: "Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T16:49:13.827Z"
+  updated_at: "2026-10-18T16:49:30.123Z"
   updated_by: "CODER"
-  note: "PASS: Calc 90 files/241 tests; 5527 statements,3581 branches,1096 functions,4948 lines all100 percent on final const-object implementation. Related shared RTL and scanner5 tests pass. Typecheck,touched ESLint and Prettier,dependency boundaries,docs,source-tree,source-provenance,Calc parity,file-size,doctor and policy routing pass. Evidence in task evidence directory. Full all-app run deferred per user cadence (UI task2/10)."
+  note: "Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610181643-YYAGKX/evidence/parity.log"
   findings:
     - "All16 original testCSV numeric cases pass; boundary evidence covers native grouping,alternate decimals,spaces/NBSP,scientific flag,sign ordering,overflow/underflow and output-reference behavior. Final Calc coverage100 percent across90files/241tests. Typecheck,lint,format,provenance and scoped parity gates pass. No weakened thresholds or fake formatter."
-commit: null
+commit:
+  hash: "b943699ba4dd21aeae5dd2464869e4853600528c"
+  message: "🔎 YYAGKX task: record source scanner quality review"
 comments:
   -
     author: "CODER"
     body: "Start: Port pinned Unicode simple-number scanner with original grouping, decimal and scientific semantics, then verify all Calc coverage and related RTL behavior."
+  -
+    author: "CODER"
+    body: "Verified: Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: Calc 90 files/241 tests; 5527 statements,3581 branches,1096 functions,4948 lines all100 percent on final const-object implementation. Related shared RTL and scanner5 tests pass. Typecheck,touched ESLint and Prettier,dependency boundaries,docs,source-tree,source-provenance,Calc parity,file-size,doctor and policy routing pass. Evidence in task evidence directory. Full all-app run deferred per user cadence (UI task2/10)."
+  -
+    type: "verify"
+    at: "2026-10-18T16:49:30.123Z"
+    author: "CODER"
+    state: "ok"
+    note: "Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage"
+  -
+    type: "status"
+    at: "2026-10-18T16:49:30.254Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T16:49:13.880Z"
+doc_updated_at: "2026-10-18T16:49:30.254Z"
 doc_updated_by: "CODER"
 description: "Approved UI core prerequisite: port the Unicode ScStringUtil::parseSimpleNumber operation exactly from pinned sc/source/core/tool/stringutil.cxx, reusing existing RTL Unicode binary64 parsing and preserving decimal/group/alternative separators, scientific switch, trimming, grouping validation and output-reference semantics. No fake number formatter or browser parsing shortcut. This scanner feeds the upcoming native cell-entry path. Add exhaustive source cases and 100 percent Calc coverage, registry provenance and runtime records. Second task in Calc UI ten-task full-regression cycle."
 sections:
@@ -107,11 +126,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-18T16:49:30.123Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:49:13.880Z, excerpt_hash=sha256:0878be78a6497e1a4a4a72904186bad3d1927e40e84422a80358ea07d5b12873
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181643-YYAGKX/blueprint/resolved-snapshot.json
+    - old_digest: 332adf35be2fe8a645cc3f5e1d3ab321380164403bbad8d6ddce9754729bdf81
+    - current_digest: 332adf35be2fe8a645cc3f5e1d3ab321380164403bbad8d6ddce9754729bdf81
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181643-YYAGKX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181643-YYAGKX --result verified-202610181643-YYAGKX --commit b943699ba4dd21aeae5dd2464869e4853600528c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "Implemented original Unicode ScStringUtil::parseSimpleNumber only. All 16 original testCSV numeric cases and source-derived boundary cases pass. Native prechecks preserve output; RTL failure assigns output. Initial underflow acceptance expectation was corrected: actual shared RTL returns OutOfRange for 1e-999, so source scanner rejects. Namespace-like static helper uses the repository const-object convention (ScOptionsUtil) to satisfy no-extraneous-class without inventing instances or disabling lint. Exact source grouping checks and exponent handling remain unchanged. No copied upstream fixture, native build/probe, formatter facade, locale heuristic or Number conversion. UI cycle task2/10; broad regression deferred to task10. New files under500 lines; file-size gate passes with pre-existing candidates. Doctor passes with existing managed-shim warning. Next: native per-sheet cursor/view ownership and scalar input integration into a real editable browser view, then shared file/menu composition."
+extensions:
+  implementation_commit:
+    hash: "0ee0fdaea19aa416a0349840cf20d195586a01c2"
+    message: "🧮 YYAGKX code: port Calc Unicode simple number scanner"
 id_source: "generated"
 ---
 ## Summary
@@ -159,6 +212,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181643-YYAGKX -m 🧩 YYAGKX task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T16:49:30.123Z — VERIFY — ok
+
+By: CODER
+
+Note: Unicode simple-number scanner preserves native grouping and RTL conversion with complete Calc coverage
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:49:13.880Z, excerpt_hash=sha256:0878be78a6497e1a4a4a72904186bad3d1927e40e84422a80358ea07d5b12873
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181643-YYAGKX/blueprint/resolved-snapshot.json
+- old_digest: 332adf35be2fe8a645cc3f5e1d3ab321380164403bbad8d6ddce9754729bdf81
+- current_digest: 332adf35be2fe8a645cc3f5e1d3ab321380164403bbad8d6ddce9754729bdf81
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181643-YYAGKX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181643-YYAGKX --result verified-202610181643-YYAGKX --commit b943699ba4dd21aeae5dd2464869e4853600528c
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
