@@ -78,3 +78,24 @@ it("pins input modification rather than value equality as the native write and U
   expect(operation).toContain("std::make_unique<ScUndoEnterData>");
   expect(operation).not.toContain("equalsWithoutFormat");
 });
+
+it("pins native deep-token clones,formula copy and owning cell history boundaries", /** Source ownership remains explicit rather than a browser token/value snapshot model. @returns Nothing. */ () => {
+  const tokens = source("sc/source/core/tool/token.cxx"),
+    formula = source("sc/source/core/data/formulacell.cxx"),
+    cells = source("sc/source/core/data/cellvalue.cxx");
+  const clone = tokens.slice(
+    tokens.indexOf("std::unique_ptr<ScTokenArray> ScTokenArray::Clone() const"),
+    tokens.indexOf("ScTokenArray ScTokenArray::CloneValue() const"),
+  );
+  expect(clone).toContain("*pp = (*pp)->Clone()");
+  expect(clone).toContain("nIdx = j; break;");
+  expect(clone).toContain("*pp = p->pCode[ nIdx ]");
+  expect(formula).toContain("pCode = rCell.pCode->Clone().release()");
+  expect(formula).toContain("aResult( rCell.aResult )");
+  expect(formula).toContain("bDirty( rCell.bDirty )");
+  expect(formula).toContain("new ScFormulaCell(*this, rDocument, aPos)");
+  expect(formula).toContain("pCode->GetLen()");
+  expect(cells).toContain("maData = rCell.getFormula()->Clone()");
+  expect(cells).toContain("maData = aRefVal.getFormula()->Clone()");
+  expect(cells).toContain("rDoc.SetFormulaCell(rPos, getFormula()->Clone())");
+});

@@ -1,0 +1,4 @@
+apps/office/src/sc/source/core/tool/token.ts 74ms
+apps/office/src/sc/browser/editor/cell-input.ts 17ms (unchanged)
+apps/office/src/sc/source/core/data/cellvalue-owning-formula.test.ts 18ms
+apps/office/src/sc/source/core/tool/token-clone.test.ts 6ms

@@ -1,6 +1,6 @@
-/** @fileoverview Browser scalar input/display bindings. Action payloads borrow native token values through actual ScTokenArray copies;this is not a second workbook or a full number formatter. */
-import { ScFormulaCell } from "../../inc/formulacell";
-import { ScTokenArray } from "../../inc/tokenarray";
+/** @fileoverview Browser scalar input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
+import type { SharedStringConstReference } from "../../../svl/inc/sharedstring";
+import { ScCellValue } from "../../inc/cellvalue";
 import { FormulaError } from "../../../formula/inc/errorcodes";
 import type { ScDocument } from "../../inc/document";
 import type { ScAddress } from "../../inc/address";
@@ -27,53 +27,22 @@ type ScalarContent =
   | Readonly<{ kind: "empty" }>
   | Readonly<{ kind: "number"; value: number }>
   | Readonly<{ kind: "text"; value: string }>;
-/** Immutable history payload:source array structure is copied while native const token identities are shared. */
-export type CalcCellContent = ScalarContent | Readonly<{ kind: "formula"; code: ScTokenArray }>;
 /** User input retains source text only until compilation. */
 export type CalcCellInput = ScalarContent | Readonly<{ kind: "formula"; value: string }>;
-/** Captures real core content for one action,including code errors and forced-recalc flags. @param doc - Model. @param pos - Cell. @returns Native-valued payload. */
-export function captureCell(doc: ScDocument, pos: ScAddress): CalcCellContent {
-  const type = doc.GetCellType(pos);
-  if (type === CellType.CELLTYPE_FORMULA)
-    return {
-      kind: "formula",
-      code: new ScTokenArray((doc.GetFormulaCell(pos) as ScFormulaCell).GetCode()),
-    };
-  if (type === CellType.CELLTYPE_VALUE) return { kind: "number", value: doc.GetValue(pos) };
-  if (type === CellType.CELLTYPE_STRING) {
-    const value = doc.GetSharedString(pos);
-    try {
-      return { kind: "text", value: text(value.getString()) };
-    } finally {
-      value.dispose();
-    }
-  }
-  return { kind: "empty" };
+/** Captures one actual native owning cell value for history;caller releases it through clear. @param doc - Source model. @param pos - Source position. @returns Detached owned value. */
+export function captureCell(doc: ScDocument, pos: ScAddress): ScCellValue {
+  const value = new ScCellValue();
+  value.assign(doc, pos);
+  return value;
 }
-/** Adopts typed values through actual document setters. Formula history reuses native code,not serialized text. @param doc - Model. @param pos - Cell. @param content - Input or history content. @returns Nothing. */
-export function applyCell(
-  doc: ScDocument,
-  pos: ScAddress,
-  content: CalcCellContent | CalcCellInput,
-): void {
+/** Adopts transient parsed input through actual document setters. History commits through native ScCellValue. @param doc - Model. @param pos - Cell. @param content - Input or history content. @returns Nothing. */
+export function applyCell(doc: ScDocument, pos: ScAddress, content: CalcCellInput): void {
   if (content.kind === "empty") {
     doc.SetEmptyCell(pos);
     return;
   }
   if (content.kind === "number") {
     doc.SetValue(pos, content.value);
-    return;
-  }
-  if (content.kind === "formula" && "code" in content) {
-    doc.SetFormulaCell(
-      pos,
-      new ScFormulaCell(
-        doc,
-        pos,
-        new ScTokenArray(content.code),
-        FormulaGrammar.Grammar.GRAM_NATIVE,
-      ),
-    );
     return;
   }
   const value = unicode(content.value);
@@ -115,10 +84,10 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
       value.dispose();
     }
   }
-  const content = captureCell(doc, pos);
-  if (content.kind === "empty") return "";
-  if (content.kind === "number") return doubleToString(content.value);
-  const value = (content as Readonly<{ kind: "text"; value: string }>).value;
+  const content = doc.GetRefCellValue(pos);
+  if (content.getType() === CellType.CELLTYPE_NONE) return "";
+  if (content.getType() === CellType.CELLTYPE_VALUE) return doubleToString(content.getDouble());
+  const value = text((content.getSharedString() as SharedStringConstReference).getString());
   return parseCellInput(value).kind !== "text" || value.startsWith("'") ? "'" + value : value;
 }
 /** Projects scalar/formula results without evaluating on the browser side. @param doc - Model. @param pos - Cell. @returns Display value. */

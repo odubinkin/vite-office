@@ -24,26 +24,65 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private pNextTrack: ScFormulaCell | null = null;
   private bRunning = false;
   private readonly pCode: ScTokenArray;
-  private readonly aResult = new ScFormulaResult();
+  private readonly aResult: ScFormulaResult;
+  private readonly rDocument: ScDocument;
+  private readonly eTempGrammar: Grammar;
   private bDirty = true;
   readonly aPos: ScAddress;
-  /** Compiles numeric/local-reference source; insertion starts listening through the actual document. @param rDocument - Document. @param position - Position. @param formula - Formula source. @param grammar - ODFF grammar. @returns Cell. */
+  /** Compiles numeric/local-reference source. @param rDocument - Document. @param position - Cell. @param formula - Source or owned tokens. @param grammar - Source grammar. @returns Cell. */
   constructor(
-    private readonly rDocument: ScDocument,
+    rDocument: ScDocument,
     position: ScAddress,
     formula: OUStringConstReference | ScTokenArray,
     grammar: Grammar,
+  );
+  /** Original same-document,same-position copy-constructor subset used by Clone;relocation/foreign document reference services remain unsupported. @param source - Copied cell. @param rDocument - Original document. @param position - Original position. @returns Cell. */
+  constructor(source: ScFormulaCell, rDocument: ScDocument, position: ScAddress);
+  /** Binds native ordinary/copy constructor families for the current local-reference slice. @param documentOrCell - Document or source cell. @param positionOrDocument - Position or original document. @param formulaOrPosition - Formula or copied position. @param grammar - Ordinary input grammar. @returns Cell. */
+  constructor(
+    documentOrCell: ScDocument | ScFormulaCell,
+    positionOrDocument: ScAddress | ScDocument,
+    formulaOrPosition: OUStringConstReference | ScTokenArray | ScAddress,
+    grammar?: Grammar,
   ) {
     super();
-    this.aPos = new ScAddress(position);
-    const compiler = new ScCompiler(
-      rDocument,
-      this.aPos,
-      formula instanceof ScTokenArray ? formula : grammar,
-      grammar,
-    );
-    this.pCode = formula instanceof ScTokenArray ? formula : compiler.CompileString(formula);
-    compiler.CompileTokenArray();
+    if (documentOrCell instanceof ScFormulaCell) {
+      const source = documentOrCell,
+        doc = positionOrDocument as ScDocument,
+        pos = formulaOrPosition as ScAddress;
+      if (doc !== source.rDocument || !pos.equals(source.aPos))
+        throw new Error(
+          "Formula copy relocation and foreign-document services are not implemented",
+        );
+      this.rDocument = doc;
+      this.aPos = new ScAddress(pos);
+      this.eTempGrammar = source.eTempGrammar;
+      this.pCode = source.pCode.Clone();
+      this.aResult = new ScFormulaResult(source.aResult);
+      this.bDirty = source.bDirty;
+      if (this.pCode.GetCodeError() !== FormulaError.NONE && this.pCode.GetLen()) {
+        this.pCode.SetCodeError(FormulaError.NONE);
+        new ScCompiler(doc, this.aPos, this.pCode, this.eTempGrammar).CompileTokenArray();
+      }
+    } else {
+      this.rDocument = documentOrCell;
+      this.aPos = new ScAddress(positionOrDocument as ScAddress);
+      this.eTempGrammar = grammar as Grammar;
+      this.aResult = new ScFormulaResult();
+      const formula = formulaOrPosition as OUStringConstReference | ScTokenArray;
+      const compiler = new ScCompiler(
+        this.rDocument,
+        this.aPos,
+        formula instanceof ScTokenArray ? formula : this.eTempGrammar,
+        this.eTempGrammar,
+      );
+      this.pCode = formula instanceof ScTokenArray ? formula : compiler.CompileString(formula);
+      compiler.CompileTokenArray();
+    }
+  }
+  /** Original same-position Clone delegates to the native copy constructor without starting listeners. @returns Owned formula copy. */
+  Clone(): ScFormulaCell {
+    return new ScFormulaCell(this, this.rDocument, this.aPos);
   }
   /** Serializes real source-order tokens without evaluating the cell or caching a second formula model. @param grammar - Explicit serialization grammar. @returns Formula with native leading equals. */
   GetFormula(grammar: Grammar): OUString {
