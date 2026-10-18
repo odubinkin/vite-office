@@ -1,10 +1,11 @@
 ---
 id: "202610181411-WFPT6E"
 title: "Read and write basic ODS on the actual Calc document"
-status: "DOING"
+result_summary: "Basic scalar/simple-text/local-ODFF ODS milestone ready for separate UI task;no full ODF fidelity claim."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "output/playwright/task204-checks/value-coverage-audit.json"
   findings:
     - "Exact66committed paths and65source hashes verified;native source responsibilities/defaults,shared helper bodies,raw maps/coverage and Chromium/Worker manifests inspected. No alternate model or UI;unsupported rich/format/formula/cache services explicitly bounded."
-commit: null
+commit:
+  hash: "ca72d59c6fa8d8dc9379823e85b33dac85830e6c"
+  message: "📦 WFPT6E calc: bind basic ODS filters to actual document"
 comments:
   -
     author: "CODER"
     body: "Start: implement basic same-model ODS content filters through native Calc owners and shared ZIP/XML/manifest services;no UI or alternate document model."
+  -
+    author: "CODER"
+    body: "Verified:basic ODS same-model import/edit/save,strict Calc/shared coverage,source gates and seven Chromium/Worker cases;limited UI handoff ready,full regression checkpoint follows."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Confirmed after successful final-audit:65exact paths/hashes,13gates,7browser/Worker cases,16source pins,60Calc+5shared strict raw100owners. Final audit parser corrected;actual audit now passed. Basic content milestone ready;full all-app checkpoint next."
+  -
+    type: "status"
+    at: "2026-10-18T15:03:07.066Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:basic ODS same-model import/edit/save,strict Calc/shared coverage,source gates and seven Chromium/Worker cases;limited UI handoff ready,full regression checkpoint follows."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:02:40.725Z"
+doc_updated_at: "2026-10-18T15:03:07.067Z"
 doc_updated_by: "CODER"
 description: "Task204: implement Calc XML/package import/export of scalar cells and supported ODFF formulas on the actual ScDocument,using existing shared ZIP/manifest/SAX/XML services. Add necessary namespace-resolved formula-value binding and scalar ODF tokens to shared XML owners. Preserve native defaults,repeat and sparse semantics;no alternate document model,UI,locale or style-engine detour."
 sections:
