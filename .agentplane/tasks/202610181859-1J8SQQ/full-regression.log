@@ -21,3 +21,51 @@
  ❯ |shared| src/main.test.ts (2 tests | 2 failed) 8914ms
    × waits for prepared fonts with host locale fr-FR 8808ms
    × waits for prepared fonts with host locale undefined 106ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/main.test.ts > waits for prepared fonts with host locale fr-FR
+ FAIL  |shared| src/main.test.ts > waits for prepared fonts with host locale undefined
+AssertionError: expected "vi.fn()" to be called with arguments: [ [ 'writer-factory' ] ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+    [
+      "writer-factory",
++     {
++       "createWorkspace": [Function createWorkspace],
++       "suiteId": "calc",
++       "workspaceRetention": "dispose-on-unmount",
++     },
+    ],
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/main.test.ts:58:31
+     58|       ),
+     59|     );
+     60|     await import("./main");
+       |               ^
+     61|     expect(calls.prepare).toHaveBeenCalledWith(document, language ?? "…
+     62|     expect(calls.mount).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed | 986 passed (987)
+      Tests  2 failed | 16996 passed (16998)
+   Start at  02:05:49
+   Duration  1087.12s (transform 110.45s, setup 95.20s, import 730.78s, tests 501.33s, environment 500.78s)
+
+npm error Lifecycle script `test:coverage` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --coverage

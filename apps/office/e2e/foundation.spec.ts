@@ -245,17 +245,22 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(writerEditor).toHaveCSS("text-align", "left");
 
   await page.goto("/");
-  const calcLink = page.getByRole("link", { name: "Calc, Foundation only" });
+  const calcLink = page.getByRole("link", { name: "Calc" });
   await calcLink.focus();
   await expect(calcLink).toBeFocused();
   await calcLink.press("Enter");
   await expect(page).toHaveURL(/\/calc$/u);
-  await expect(page.getByRole("heading", { name: "Browser workbench foundation" })).toBeVisible();
-  await expect(page.getByText("Calc: Foundation only")).toBeVisible();
+  await expect(page.getByRole("region", { name: "Calc workspace" })).toBeVisible();
+  await expect(page.getByRole("toolbar", { name: "Calc standard toolbar" })).toBeVisible();
   await expect(page.locator("main#workspace")).toBeVisible();
   await expect(page.getByText("Vite Office")).toHaveCount(0);
   await expect(writerEditor).toHaveCount(0);
-  await expect(page.getByText("No editor features enabled")).toBeVisible();
+  const calcInput = page.getByRole("textbox", { name: "Input line" });
+  await calcInput.fill("42");
+  await calcInput.press("Enter");
+  await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("42");
+  await page.getByRole("button", { name: "Undo", exact: true }).click();
+  await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("");
 
   const accessibilityResults = await new AxeBuilder({ page }).analyze();
   expect(accessibilityResults.violations).toEqual([]);
