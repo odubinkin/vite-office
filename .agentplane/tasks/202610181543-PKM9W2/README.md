@@ -4,7 +4,7 @@ title: "Integrate writer and calc and synchronize all branches"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-18T16:27:55.933Z"
+  updated_by: "CODER"
+  note: "All project verification stages passed. Final complete application run: 973 files,16963 tests,100% lines/statements/functions/branches. Inventory:38 files,123 tests,100% coverage; tooling:59 tests; browser:374 pass. Formatting,lint,types,boundaries,resources,static,docs,size,source tree,provenance,invariants,parity,doctor and routing all pass. Remote back-merges pending final synchronization."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: execute user-approved writer/calc integration, complete full checks and synchronize the three clean project clones."
+  -
+    type: "verify"
+    at: "2026-10-18T16:27:55.933Z"
+    author: "CODER"
+    state: "ok"
+    note: "All project verification stages passed. Final complete application run: 973 files,16963 tests,100% lines/statements/functions/branches. Inventory:38 files,123 tests,100% coverage; tooling:59 tests; browser:374 pass. Formatting,lint,types,boundaries,resources,static,docs,size,source tree,provenance,invariants,parity,doctor and routing all pass. Remote back-merges pending final synchronization."
 doc_version: 3
-doc_updated_at: "2026-10-18T16:12:44.082Z"
+doc_updated_at: "2026-10-18T16:27:55.991Z"
 doc_updated_by: "CODER"
 description: "User-approved integration across vite-office, vite-office-writer and vite-office-calc: push source branches, merge into main, run full verification and fix discovered failures, publish main, back-merge and publish writer/calc, leave all checkouts clean on their requested branches."
 sections:
@@ -49,6 +55,36 @@ sections:
   Verify Steps: "Run npm run verify (all formatting, lint, types, boundaries, resources, tooling/unit/coverage/inventory, browser, static, documentation, provenance and parity checks); ap doctor; node .agentplane/policy/check-routing.mjs. Verify main contains original writer/calc tips. Verify each final branch equals its origin ref and contains final main; git status --short --untracked-files=all must be empty in all three clones."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-18T16:27:55.933Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All project verification stages passed. Final complete application run: 973 files,16963 tests,100% lines/statements/functions/branches. Inventory:38 files,123 tests,100% coverage; tooling:59 tests; browser:374 pass. Formatting,lint,types,boundaries,resources,static,docs,size,source tree,provenance,invariants,parity,doctor and routing all pass. Remote back-merges pending final synchronization.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:12:44.082Z, excerpt_hash=sha256:50baacb5df204b403161e7722ab35d030b4113869ea29c857800102734bb01e3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610181543-PKM9W2/blueprint/resolved-snapshot.json
+    - old_digest: a410fc6fea0aff227b8474e4379228008f9e08e333cc563ad96f4562f5f15eae
+    - current_digest: a410fc6fea0aff227b8474e4379228008f9e08e333cc563ad96f4562f5f15eae
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181543-PKM9W2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610181543-PKM9W2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve original tips main/writer eb7c59194 and calc 991d954b3 in task evidence. If needed, revert integration/fix commits through a separately approved task; never force push or reset user work."
   Findings: |-
@@ -84,6 +120,36 @@ Run npm run verify (all formatting, lint, types, boundaries, resources, tooling/
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-18T16:27:55.933Z — VERIFY — ok
+
+By: CODER
+
+Note: All project verification stages passed. Final complete application run: 973 files,16963 tests,100% lines/statements/functions/branches. Inventory:38 files,123 tests,100% coverage; tooling:59 tests; browser:374 pass. Formatting,lint,types,boundaries,resources,static,docs,size,source tree,provenance,invariants,parity,doctor and routing all pass. Remote back-merges pending final synchronization.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:12:44.082Z, excerpt_hash=sha256:50baacb5df204b403161e7722ab35d030b4113869ea29c857800102734bb01e3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610181543-PKM9W2/blueprint/resolved-snapshot.json
+- old_digest: a410fc6fea0aff227b8474e4379228008f9e08e333cc563ad96f4562f5f15eae
+- current_digest: a410fc6fea0aff227b8474e4379228008f9e08e333cc563ad96f4562f5f15eae
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181543-PKM9W2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610181543-PKM9W2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
