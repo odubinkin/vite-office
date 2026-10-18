@@ -7,6 +7,7 @@ import {
   type PointerEvent,
   type UIEvent,
 } from "react";
+import { ScInputMode } from "../../inc/global";
 import { ScAddress } from "../../inc/address";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 /** Logical visible rectangle and measured browser dimensions; this contains no cell data. */
@@ -32,7 +33,7 @@ export interface ScGridWindowProps {
   readonly idPrefix: string;
   readonly viewData: ScViewData;
   readonly viewport: CalcGridViewport;
-  readonly editing: boolean;
+  readonly inputMode: ScInputMode;
   readonly inputText: string;
   readonly getCell: (position: ScAddress) => CalcCellPresentation;
   readonly onSelect: (position: ScAddress, event: PointerEvent<HTMLDivElement>) => void;
@@ -56,7 +57,9 @@ function columnLabel(column: number): string {
 }
 /** Paints a bounded window of actual view-owned cells and emits platform input intents. @param props - Read-only view and controller bindings. @returns Accessible Calc grid. */
 export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
-  const { viewData, viewport, editing } = props;
+  const { viewData, viewport, inputMode } = props;
+  const editing =
+    inputMode === ScInputMode.SC_INPUT_TYPE || inputMode === ScInputMode.SC_INPUT_TABLE;
   const grid = useRef<HTMLDivElement>(null),
     input = useRef<HTMLInputElement>(null);
   const column = viewData.GetCurX(),
@@ -80,10 +83,14 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
   const activeVisible = columns.includes(column) && rows.includes(row);
   useLayoutEffect(
     /** Follows native table/inline input focus on editing transitions, without retaining edit content. @returns Nothing. */ () => {
-      if (editing) input.current?.focus();
-      else grid.current?.focus();
+      if (editing) {
+        const editor = input.current;
+        editor?.focus();
+        if (editor && inputMode === ScInputMode.SC_INPUT_TABLE)
+          editor.setSelectionRange(editor.value.length, editor.value.length);
+      } else if (inputMode === ScInputMode.SC_INPUT_NONE) grid.current?.focus();
     },
-    [editing, column, row],
+    [editing, inputMode, column, row],
   );
   return (
     <div

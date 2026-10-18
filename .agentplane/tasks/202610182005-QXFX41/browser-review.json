@@ -1,0 +1,26 @@
+{
+  "table": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"active\": \"Edit cell F10\",\n  \"caret\": 1,\n  \"draft\": \"72\",\n  \"cell\": \"\",\n  \"undo\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({active:document.activeElement?.getAttribute(\"aria-label\"),caret:document.activeElement?.selectionStart,draft:document.querySelector(\"[aria-label=\\\\\"Input line\\\\\"]\")?.value,address:document.querySelector(\"[aria-label=\\\\\"Name box\\\\\"]\")?.value,cell:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"F10\\\\\"]\")?.textContent,undo:document.querySelector(\"button[aria-label=\\\\\"Undo\\\\\"]\")?.disabled})');\n```"
+      }
+    ]
+  },
+  "typeCommit": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"active\": \"Spreadsheet\",\n  \"gridActive\": \"calc-0-6-9\",\n  \"cell\": \"72\",\n  \"undoDisabled\": false,\n  \"input\": \"\"\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({active:document.activeElement?.getAttribute(\"aria-label\"),gridActive:document.querySelector(\"[role=\\\\\"grid\\\\\"]\")?.getAttribute(\"aria-activedescendant\"),cell:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"F10\\\\\"]\")?.textContent,undoDisabled:document.querySelector(\"button[aria-label=\\\\\"Undo\\\\\"]\")?.disabled,input:document.querySelector(\"[aria-label=\\\\\"Input line\\\\\"]\")?.value})');\n```"
+      }
+    ]
+  },
+  "topCommitted": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"active\": \"Spreadsheet\",\n  \"cell\": \"42\",\n  \"undoDisabled\": false\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({active:document.activeElement?.getAttribute(\"aria-label\"),cell:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"F10\\\\\"]\")?.textContent,undoDisabled:document.querySelector(\"button[aria-label=\\\\\"Undo\\\\\"]\")?.disabled})');\n```"
+      }
+    ]
+  }
+}

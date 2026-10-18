@@ -1,4 +1,5 @@
 /** @fileoverview Real Calc model/view/history operations at the browser input boundary. */
+import { ScInputMode } from "../../inc/global";
 import { expect, it, vi } from "vitest";
 import { CalcViewController } from "./calc-view-controller";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
@@ -42,7 +43,7 @@ it("edits canonical scalars and formulas with real dependency updates and token-
   expect(c.CanRedo()).toBe(true);
   expect(c.Redo()).toBe(true);
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(15);
-  c.StartInput("table", "discard");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "discard");
   expect(c.CanUndo()).toBe(false);
   expect(c.CanRedo()).toBe(false);
   c.Cancel();
@@ -63,7 +64,7 @@ it("edits canonical scalars and formulas with real dependency updates and token-
   expect(cellPresentation(doc, c.Position())).toEqual({ text: "123", alignment: "left" });
   c.EnterString("");
   expect(c.Input()).toBe("");
-  c.StartInput("top");
+  c.StartInput(ScInputMode.SC_INPUT_TOP);
   c.ChangeInput("words");
   expect(c.Input()).toBe("words");
   expect(c.Commit()).toBe(true);
@@ -106,7 +107,7 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   expect(c.GoToAddress()).toBe(false);
   c.ChangeAddress("");
   expect(c.GoToAddress()).toBe(false);
-  c.StartInput("table", "a\nb");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "a\nb");
   expect(c.Commit()).toBe(false);
   const pos = c.Address();
   expect(c.Select(0, 0)).toBe(false);
@@ -116,7 +117,7 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   expect(c.Address()).toBe(pos);
   expect(doc.GetTableCount()).toBe(1);
   c.Cancel();
-  c.StartInput("table", "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "=SUM(A1)");
   expect(c.Commit()).toBe(false);
   c.Cancel();
   const refused = vi.spyOn(doc, "InsertTab").mockReturnValueOnce(false);

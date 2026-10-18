@@ -44,3 +44,21 @@ it("pins Go to Sheet one-based Nr and case-sensitive source filter behavior", /*
   for (const id of ["entry-mask", "treeview", "ok", "cancel", "help"])
     expect(ui).toContain(`id="${id}"`);
 });
+
+it("pins original four input modes,F2 slot and noncommitting mode toggle", /** Checks actual native declaration and shell routing guards. @returns Nothing. */ () => {
+  expect(source("sc/inc/global.hxx")).toMatch(
+    /enum ScInputMode\s*\{\s*SC_INPUT_NONE,\s*SC_INPUT_TYPE,[^\n]*\n\s*SC_INPUT_TABLE,[^\n]*\n\s*SC_INPUT_TOP/,
+  );
+  expect(source("sc/inc/sc.hrc")).toMatch(/#define SID_SETINPUTMODE\s+\(SID_KEYFUNC_START \+ 31\)/);
+  expect(source("sc/sdi/scalc.sdi")).toContain("SfxVoidItem SetInputMode SID_SETINPUTMODE");
+  expect(source("sc/source/ui/inc/inputhdl.hxx")).toContain("eMode != SC_INPUT_TYPE");
+  expect(source("sc/source/ui/app/inputhdl.cxx")).toMatch(
+    /eMode == SC_INPUT_TABLE\s*\? SC_INPUT_TYPE\s*: SC_INPUT_TABLE/,
+  );
+  expect(source("sc/source/ui/view/cellsh4.cxx")).toContain(
+    "!pHdl->IsInputMode() || pHdl->IsTopMode()",
+  );
+  expect(source("sc/source/ui/view/tabvwsh4.cxx")).toContain(
+    "bool bInPlace   = pScMod->IsEditMode()",
+  );
+});

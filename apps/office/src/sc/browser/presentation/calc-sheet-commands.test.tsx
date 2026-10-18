@@ -1,4 +1,5 @@
 /** @fileoverview Real Sfx sheet commands,source grouping rules and shared Calc menu/keyboard integration. */
+import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createCalcSession } from "../composition/calc-module";
@@ -39,14 +40,14 @@ it("uses source slots for native wrap,group extension and deselection without do
   expect(c.shell.GetContentGeneration()).toBe(generation);
   expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(history);
   expect(c.shell.IsModified()).toBe(dirty);
-  c.StartInput("top", "42");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "42");
   d.Execute(".uno:JumpToNextTable");
   expect(c.shell.GetDocument().GetValue(new ScAddress(4, 7, 0))).toBe(42);
   expect(c.viewData.GetTabNumber()).toBe(1);
-  c.StartInput("top", "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
   d.Execute(".uno:JumpToNextTable");
   expect(c.viewData.GetTabNumber()).toBe(1);
-  expect(c.mode).toBe("top");
+  expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
   expect(c.error).not.toBe("");
   c.Cancel();
   c.SelectNextTab(0);

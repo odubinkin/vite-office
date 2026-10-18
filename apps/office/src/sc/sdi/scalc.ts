@@ -9,6 +9,7 @@ export interface CalcCommandTarget {
   Redo(): boolean;
   EnterString(value: string, dontCommit?: boolean): boolean;
   Commit(): boolean;
+  SetInputMode(): boolean;
   SelectNextTab(direction: number, extend?: boolean): void;
   SelectAllTables(): void;
   DeselectAllTables(): void;
@@ -83,9 +84,16 @@ export const calcGoToSheetCommand = {
   slotId: 26042,
   label: "Go to Sheet",
 } as const;
+/** Native cell-edit-mode slot,from SID_KEYFUNC_START+31. */
+export const calcInputModeCommand = {
+  id: ".uno:SetInputMode",
+  slotId: 26552,
+  label: "Cell Edit Mode",
+} as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
 export const calcUserCommands = [
   ...calcEditCommands,
+  calcInputModeCommand,
   ...calcFileCommands,
   ...calcSheetNavigationCommands,
   calcSheetSelectionCommands[0],
@@ -108,6 +116,16 @@ export const calcUserCommands = [
 /** Builds actual Sfx slots using original numeric identities and request arguments. @returns Interface. */
 export function createCalcInterface(): SfxInterface<CalcCommandTarget> {
   return new SfxInterface<CalcCommandTarget>([
+    {
+      commandUrl: calcInputModeCommand.id,
+      slotId: calcInputModeCommand.slotId,
+      label: calcInputModeCommand.label,
+      shortcuts: ["F2"],
+      execute:
+        /** Applies the native mode transition through the active input owner. @param target - Active view binding. @returns Accepted. */ (
+          target,
+        ) => target.SetInputMode(),
+    },
     ...calcEditCommands.map(
       /** Binds original shared history slots to the active shell. @param resource - SDI resource. @returns Slot. */ (
         resource,

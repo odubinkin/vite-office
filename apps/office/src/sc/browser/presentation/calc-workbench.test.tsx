@@ -1,4 +1,5 @@
 /** @fileoverview Mounted production Calc workspace and real Sfx/model integration checks. */
+import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createCalcModuleFactory, createCalcSession } from "../composition/calc-module";
@@ -103,7 +104,7 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   fireEvent.focus(line);
   fireEvent.change(line, { target: { value: "=SUM(A1)" } });
   fireEvent.keyDown(line, { key: "Enter" });
-  expect(c.mode).toBe("top");
+  expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
   expect(screen.getByRole("alert")).toBeVisible();
   fireEvent.keyDown(line, { key: "a" });
   fireEvent.keyDown(line, { key: "Escape" });

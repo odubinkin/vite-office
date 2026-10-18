@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/inc/inputhdl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-input-mode",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/inc/inputhdl.ts",
+        "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
+        "apps/office/src/sc/source/ui/app/inputhdl.test.ts"
+      ],
+      "justification": "TaskQXFX41 ports original ScInputMode NONE0 TYPE1 TABLE2 TOP3 and bounded ScInputHandler mode predicates/toggle at native source boundaries. Browser scalar input shares one draft:TYPE arrows commit/move,TABLE and TOP keep caret navigation. Original SID_SETINPUTMODE26552 and F2 use the same shared-menu dispatcher;TYPE/TABLE toggles preserve draft/history,TOP commits before TABLE and rejected input retains mode/error. GetMode is a read-only browser projection of eMode,not an upstream method. EditEngine,protection,formula reference selection,autocomplete and VCL synchronization remain unported;no full native input parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/inc/inputhdl.hxx",
+      "upstreamSymbols": [
+        "ScInputHandler"
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Source Go to Sheet UI and asynchronous Sfx contract on real Calc document/view owners. */
+import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it } from "vitest";
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { createCalcSession } from "../composition/calc-module";
@@ -125,12 +126,12 @@ it("retains one-based Nr requests,typed UInt16 items,invalid-argument errors and
   expect(d.GetLastCommandError()?.error).toContain("unsigned16 Nr");
   await completed(d.ExecuteRequest(new SfxRequest(26042, [new SfxUInt16Item(26041, 2)])));
   expect(d.GetLastCommandError()?.error).toContain("unsigned16 Nr");
-  c.StartInput("top", "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "=SUM(A1)");
   await completed(d.Execute(".uno:JumpToTable"));
   expect(s.sheetWorkflows.dialogs.GetSnapshot()).toBeUndefined();
-  expect(c.mode).toBe("top");
+  expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
   c.Cancel();
-  c.StartInput("top", "42");
+  c.StartInput(ScInputMode.SC_INPUT_TOP, "42");
   const pending = d.Execute(".uno:JumpToTable");
   expect(c.shell.GetDocument().GetValue(new ScAddress())).toBe(42);
   expect(d.QueryState(".uno:JumpToTable").enabled).toBe(false);

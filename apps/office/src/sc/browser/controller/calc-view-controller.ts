@@ -1,4 +1,6 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScInputMode } from "../../inc/global";
+import { ScInputHandler } from "../../source/ui/inc/inputhdl";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScTabView } from "../../source/ui/inc/tabview";
 import { ScViewData } from "../../source/ui/inc/viewdata";
@@ -62,7 +64,11 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 export class CalcViewController {
   viewData: ScViewData;
   private readonly detachShell: () => void;
-  mode: "none" | "table" | "top" = "none";
+  readonly inputHandler = new ScInputHandler();
+  /** Exposes the canonical native input mode. @returns Mode. */
+  get mode(): ScInputMode {
+    return this.inputHandler.GetMode();
+  }
   inputText = "";
   addressText = "A1";
   error = "";
@@ -87,7 +93,7 @@ export class CalcViewController {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
           this.viewData = new ScViewData(shell.GetDocument());
           this.anchor = new ScAddress();
-          this.mode = "none";
+          this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
           this.inputText = "";
           this.addressText = "A1";
           this.error = "";
@@ -132,7 +138,7 @@ export class CalcViewController {
   }
   /** Reads source content for the formula/input line. @returns Editable input. */
   Input(): string {
-    return this.mode === "none"
+    return this.mode === ScInputMode.SC_INPUT_NONE
       ? cellInputText(this.shell.GetDocument(), this.Position())
       : this.inputText;
   }
@@ -178,12 +184,23 @@ export class CalcViewController {
     this.Changed();
   }
   /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Nothing. */
-  StartInput(mode: "table" | "top", replacement?: string): void {
+  StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): void {
     this.shell.EnsureOpen();
     this.inputText = replacement ?? this.Input();
-    this.mode = mode;
+    this.inputHandler.SetMode(mode);
     this.error = "";
     this.Changed();
+  }
+  /** Executes native SID_SETINPUTMODE:TOP commits first;TABLE/TYPE toggle without losing the draft. @returns Whether accepted. */
+  SetInputMode(): boolean {
+    this.shell.EnsureOpen();
+    if ((!this.inputHandler.IsInputMode() || this.inputHandler.IsTopMode()) && !this.Commit())
+      return false;
+    this.inputText = this.Input();
+    this.inputHandler.StartOrToggleEditMode();
+    this.error = "";
+    this.Changed();
+    return true;
   }
   /** Updates the input handler's sole draft. @param value - Draft. @returns Nothing. */
   ChangeInput(value: string): void {
@@ -193,14 +210,14 @@ export class CalcViewController {
   }
   /** Cancels without changing cells/history. @returns Nothing. */
   Cancel(): void {
-    this.mode = "none";
+    this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
     this.inputText = "";
     this.error = "";
     this.Changed();
   }
   /** Commits supported input atomically through real core setters and shared history. @returns Whether input was accepted. */
   Commit(): boolean {
-    if (this.mode === "none") return true;
+    if (this.mode === ScInputMode.SC_INPUT_NONE) return true;
     this.shell.EnsureOpen();
     try {
       const doc = this.shell.GetDocument(),
@@ -213,7 +230,7 @@ export class CalcViewController {
         this.shell.GetUndoManager().AddUndoAction(new CellChangeAction(pos, before, after));
         this.shell.SetDocumentModified();
       }
-      this.mode = "none";
+      this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
       this.inputText = "";
       this.error = "";
       this.Changed();
@@ -226,7 +243,7 @@ export class CalcViewController {
   }
   /** Handles the source EnterString slot payload. @param value - Input string. @param dontCommit - Retain the input-handler draft. @returns Accepted. */
   EnterString(value: string, dontCommit = false): boolean {
-    this.StartInput("table", value);
+    this.StartInput(ScInputMode.SC_INPUT_TABLE, value);
     return dontCommit || this.Commit();
   }
   /** Changes transient position text. @param value - Name-box draft. @returns Nothing. */
@@ -299,11 +316,17 @@ export class CalcViewController {
   }
   /** Queries actual action availability. @returns Can undo. */
   CanUndo(): boolean {
-    return this.mode === "none" && this.shell.GetUndoManager().GetUndoActionCount() > 0;
+    return (
+      this.mode === ScInputMode.SC_INPUT_NONE &&
+      this.shell.GetUndoManager().GetUndoActionCount() > 0
+    );
   }
   /** Queries actual redo availability. @returns Can redo. */
   CanRedo(): boolean {
-    return this.mode === "none" && this.shell.GetUndoManager().GetRedoActionCount() > 0;
+    return (
+      this.mode === ScInputMode.SC_INPUT_NONE &&
+      this.shell.GetUndoManager().GetRedoActionCount() > 0
+    );
   }
   /** Applies real shared Undo and returns the cursor to an edited cell when applicable. @returns Changed. */
   Undo(): boolean {
@@ -318,7 +341,7 @@ export class CalcViewController {
     const manager = this.shell.GetUndoManager(),
       action = redo ? manager.GetRedoAction() : manager.GetUndoAction();
     if (!(redo ? this.shell.Redo() : this.shell.Undo())) return false;
-    this.mode = "none";
+    this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
     const position =
       action instanceof CellChangeAction
         ? action.position

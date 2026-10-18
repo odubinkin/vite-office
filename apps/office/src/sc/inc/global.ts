@@ -30,3 +30,11 @@ export enum ScVObjMode {
   VOBJ_MODE_SHOW = 0,
   VOBJ_MODE_HIDE = 1,
 }
+
+/** Original input states from global.hxx;TYPE accepts text while TABLE/TOP own caret navigation. */
+export enum ScInputMode {
+  SC_INPUT_NONE = 0,
+  SC_INPUT_TYPE = 1,
+  SC_INPUT_TABLE = 2,
+  SC_INPUT_TOP = 3,
+}

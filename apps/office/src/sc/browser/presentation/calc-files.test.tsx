@@ -1,4 +1,5 @@
 /** @fileoverview Actual Calc file/menu/dialog integration over shared browser UI,IndexedDB and ODS owners. */
+import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
@@ -248,7 +249,7 @@ it("rejects failed source input or unavailable storage,and exposes source comman
   expect(
     /** Rejects an absent resource. @returns Resource. */ () => getCalcCommandResource("missing"),
   ).toThrow(/Unknown/);
-  c.StartInput("table", "=SUM(A1)");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "=SUM(A1)");
   expect(workflows.Show("open")).toBe(false);
   await expect(workflows.Flush()).rejects.toThrow();
   c.Cancel();

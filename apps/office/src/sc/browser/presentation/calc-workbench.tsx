@@ -1,4 +1,5 @@
 /** @fileoverview Production Calc workbench over canonical model/view/input owners,shared Sfx controls and Writer visual resources. */
+import { ScInputMode } from "../../inc/global";
 import {
   useEffect,
   useLayoutEffect,
@@ -127,6 +128,22 @@ export function CalcWorkbench({
   /** Routes one input key while retaining IME ownership until composition completes. @param event - Input key. @returns Nothing. */
   function inputKey(event: KeyboardEvent<HTMLInputElement>): void {
     if (event.nativeEvent.isComposing) return;
+    if (
+      controller.mode === ScInputMode.SC_INPUT_TYPE &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey &&
+      event.key.startsWith("Arrow")
+    ) {
+      event.preventDefault();
+      const dx = event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0;
+      const dy = event.key === "ArrowUp" ? -1 : event.key === "ArrowDown" ? 1 : 0;
+      if (controller.Commit()) {
+        controller.Select(view.GetCurX() + dx, view.GetCurY() + dy, event.shiftKey);
+        focusGrid();
+      }
+      return;
+    }
     if (event.key === "Escape") {
       event.preventDefault();
       controller.Cancel();
@@ -157,11 +174,6 @@ export function CalcWorkbench({
         .Execute(event.key.toLowerCase() === "y" || event.shiftKey ? ".uno:Redo" : ".uno:Undo");
       return;
     }
-    if (event.key === "F2") {
-      event.preventDefault();
-      controller.StartInput("table");
-      return;
-    }
     const moves: Readonly<Record<string, readonly [number, number]>> = {
       ArrowLeft: [-1, 0],
       ArrowRight: [1, 0],
@@ -182,7 +194,7 @@ export function CalcWorkbench({
     }
     if (!event.ctrlKey && !event.metaKey && !event.altKey && event.key.length === 1) {
       event.preventDefault();
-      controller.StartInput("table", event.key);
+      controller.StartInput(ScInputMode.SC_INPUT_TYPE, event.key);
     }
   }
   /** Handles the native input-line action composition. @param action - Available action. @returns Nothing. */
@@ -193,7 +205,7 @@ export function CalcWorkbench({
     }
     if (action === "accept" && controller.Commit()) focusGrid();
     if (action === "equals") {
-      controller.StartInput("top", "=");
+      controller.StartInput(ScInputMode.SC_INPUT_TOP, "=");
       (
         (root.current as HTMLElement).querySelector('[aria-label="Input line"]') as HTMLInputElement
       ).focus();
@@ -205,7 +217,19 @@ export function CalcWorkbench({
         /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
           event,
         ) => {
-          if (event.nativeEvent.isComposing || modal || !(event.ctrlKey || event.metaKey)) return;
+          if (event.nativeEvent.isComposing || modal) return;
+          if (
+            event.key === "F2" &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey &&
+            !event.shiftKey
+          ) {
+            event.preventDefault();
+            frame.GetDispatcher().Execute(".uno:SetInputMode");
+            return;
+          }
+          if (!(event.ctrlKey || event.metaKey)) return;
           const key = event.key.toLowerCase(),
             url =
               !event.altKey && !event.shiftKey && key === "pagedown"
@@ -278,9 +302,11 @@ export function CalcWorkbench({
         <ScInputWindow
           addressText={controller.addressText}
           inputText={controller.Input()}
-          editing={controller.mode !== "none"}
+          editing={controller.mode !== ScInputMode.SC_INPUT_NONE}
           enabledActions={
-            new Set<CalcInputAction>(controller.mode === "none" ? ["equals"] : ["cancel", "accept"])
+            new Set<CalcInputAction>(
+              controller.mode === ScInputMode.SC_INPUT_NONE ? ["equals"] : ["cancel", "accept"],
+            )
           }
           onAddressChange={
             /** Updates transient position text. @param value - Draft. @returns Nothing. */ (
@@ -307,7 +333,8 @@ export function CalcWorkbench({
             ) => controller.ChangeInput(value)
           }
           onInputFocus={
-            /** Enters formula-line mode. @returns Nothing. */ () => controller.StartInput("top")
+            /** Enters formula-line mode. @returns Nothing. */ () =>
+              controller.StartInput(ScInputMode.SC_INPUT_TOP)
           }
           onInputKeyDown={inputKey}
           onAction={inputAction}
@@ -316,7 +343,7 @@ export function CalcWorkbench({
           idPrefix="calc"
           viewData={view}
           viewport={controller.viewport}
-          editing={controller.mode === "table"}
+          inputMode={controller.mode}
           inputText={controller.inputText}
           getCell={
             /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
@@ -342,7 +369,7 @@ export function CalcWorkbench({
               pos,
             ) => {
               controller.Select(pos.Col(), pos.Row());
-              controller.StartInput("table");
+              controller.StartInput(ScInputMode.SC_INPUT_TABLE);
             }
           }
           onKeyDown={key}

@@ -1,4 +1,5 @@
 /** @fileoverview Calc presenters exercise actual document/view/mark owners and forward input to their controllers without retaining a cell or draft model. */
+import { ScInputMode } from "../../inc/global";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import { ScDocument } from "../../inc/document";
@@ -34,7 +35,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
       scrollTop: 0,
       scrollHeight: 1_000_000,
     },
-    editing: false,
+    inputMode: ScInputMode.SC_INPUT_NONE,
     inputText: "=A1+1",
     getCell: vi.fn(
       /** Formats actual numeric values supplied by the document. @param position - Native address. @returns Controlled presentation. */ (
@@ -91,7 +92,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
     ["column", 26],
     ["row", 4],
   ]);
-  rerender(<ScGridWindow {...props} editing />);
+  rerender(<ScGridWindow {...props} inputMode={ScInputMode.SC_INPUT_TABLE} />);
   const input = screen.getByRole("textbox", { name: "Edit cell AA5" });
   expect(input).toHaveFocus();
   fireEvent.pointerDown(input);
@@ -110,7 +111,7 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
     <ScGridWindow
       {...props}
       viewport={{ ...props.viewport, firstColumn: MAXCOL, firstRow: MAXROW }}
-      editing
+      inputMode={ScInputMode.SC_INPUT_TABLE}
     />,
   );
   expect(screen.getAllByRole("gridcell")).toHaveLength(1);

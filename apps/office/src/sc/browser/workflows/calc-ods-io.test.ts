@@ -1,4 +1,5 @@
 /** @fileoverview Real Calc ODS primary bytes,shared IndexedDB and autosave cadence/race integration. */
+import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
@@ -82,9 +83,9 @@ it("shares Writer naming/empty rules and stores actual ODS bytes before adopting
   const copy = await saveCalcAsBrowserCopy(shell, db, "Independent");
   expect(copy).not.toBe(id);
   expect(await openBrowserCalcDocument(shell, db, "absent")).toBe(false);
-  c.StartInput("table", "discard me");
+  c.StartInput(ScInputMode.SC_INPUT_TABLE, "discard me");
   expect(await openBrowserCalcDocument(shell, db, id)).toBe(true);
-  expect(c.mode).toBe("none");
+  expect(c.mode).toBe(ScInputMode.SC_INPUT_NONE);
   expect(c.Address()).toBe("A1");
   expect(shell.GetDocument().GetValue(new ScAddress(2, 0, 0))).toBe(6);
   expect(shell.GetUndoManager().GetUndoActionCount()).toBe(0);

@@ -63,7 +63,8 @@
       "ScGlobal",
       "CRFlags",
       "CellType",
-      "ScVObjMode"
+      "ScVObjMode",
+      "ScInputMode"
     ],
     "omittedResponsibilities": [
       "Other global.hxx declarations, document/compiler consumers and whole Calc parity remain unverified.",
@@ -74,7 +75,8 @@
       "Header boundary re-exports the original ScGlobal process-state owner; false initializer remains at core/data/global.",
       "Original UInt8 CRFlags names and values0/1/2/4/8/15; valid four-bit result mask in numerical compressed arrays.",
       "Original CellType names and declaration values0..4; exact unchanged native enum compilation.",
-      "Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next."
+      "Task114 adds actual SfxEnumItemInterface and SfxEnumItem logical value contracts in original SVL source/header owners. Native enum2int remains in comphelper extract.hxx responsibility, consuming actual existing CPPU Any and generated UNO TypeClass; ENUM payload is read directly, other accepted integer classes use original signed32 extraction. The enum interface then narrows to unsigned16. Explicit browser scalar transport accepts signed32 values. The template preserves full EnumT payload, copy/typed getters/setters, unsigned16 enum access, equality and Which-xor-u16 hash. Bool interface defaults are false and assignment is a no-op. Existing Bool item code and Writer users are reused unchanged. Calc ScVObjMode show0/hide1 and ScViewObjectModeItem value/copy/Clone/default-show use this shared template for DocPool chart170/object171/drawing172. Native same-type equality ignoresWhich while hash includesWhich; preserve this source contract, not a correction. Original native type assertions/invalid downcasts/general enum invalid-domain behavior, labels/localized presentation/XML diagnostics/native caches/thread/lifetime/ABI/full document/UI/ODS integration remain excluded or pending. No memory/refcount library, new C++ generator or compiled differential. Generic tests instantiate the actual template through a caller-owned TypeClass specialization; enum Any tests bootstrap real public native type descriptions, not fake services or providers. Existing status/history remains, without whole-module parity certification. Goal active; full121next.",
+      "TaskQXFX41 ports original ScInputMode NONE0 TYPE1 TABLE2 TOP3 and bounded ScInputHandler mode predicates/toggle at native source boundaries. Browser scalar input shares one draft:TYPE arrows commit/move,TABLE and TOP keep caret navigation. Original SID_SETINPUTMODE26552 and F2 use the same shared-menu dispatcher;TYPE/TABLE toggles preserve draft/history,TOP commits before TABLE and rejected input retains mode/error. GetMode is a read-only browser projection of eMode,not an upstream method. EditEngine,protection,formula reference selection,autocomplete and VCL synchronization remain unported;no full native input parity is claimed."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/global.hxx",
@@ -83,7 +85,8 @@
       "bThreadedGroupCalcInProgress",
       "CRFlags",
       "CellType",
-      "ScVObjMode"
+      "ScVObjMode",
+      "ScInputMode"
     ]
   }
 }
