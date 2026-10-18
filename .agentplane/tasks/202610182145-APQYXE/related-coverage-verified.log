@@ -1,0 +1,62 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+···················xxxxxxxxxxxxxxxxxxxxxxxx········
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 24 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 1
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 1000
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2003
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2002
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2004
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2000
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2001
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 4
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 2005
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 1001
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 5
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3000
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3001
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3002
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3003
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 3004
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 4000
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 4001
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 4002
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 4003
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > preserves source family/pitch/encoding defaults for role 4004
+ReferenceError: RTL_TEXTENCODING_DONTKNOW is not defined
+ ❯ getBrowserDefaultFontMetadata src/vcl/browser/default-font-metadata.ts:56:29
+     54|   }
+     55|   font.SetFontHeight(12);
+     56|   if (font.GetCharSet() === RTL_TEXTENCODING_DONTKNOW) font.SetCharSet…
+       |                             ^
+     57|   font.SetFamilyName(family);
+     58|   return font;
+ ❯ src/vcl/browser/default-font-metadata.test.ts:71:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/24]⎯
+
+ FAIL  |shared| src/vcl/browser/default-font-metadata.test.ts > retains absence until actual registered faces are prepared and returns independent Font values
+ReferenceError: RTL_TEXTENCODING_DONTKNOW is not defined
+ ❯ getBrowserDefaultFontMetadata src/vcl/browser/default-font-metadata.ts:56:29
+     54|   }
+     55|   font.SetFontHeight(12);
+     56|   if (font.GetCharSet() === RTL_TEXTENCODING_DONTKNOW) font.SetCharSet…
+       |                             ^
+     57|   font.SetFamilyName(family);
+     58|   return font;
+ ❯ src/vcl/browser/default-font-metadata.test.ts:102:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/24]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  24 failed | 27 passed (51)
+   Start at  04:49:42
+   Duration  5.57s (transform 3.47s, setup 558ms, import 4.18s, tests 54ms, environment 2.52s)
+

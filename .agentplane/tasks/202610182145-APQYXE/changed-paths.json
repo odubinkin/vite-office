@@ -1,0 +1,8 @@
+[
+  "docs/program/calc-pattern-attributes.md",
+  "apps/office/src/vcl/browser/default-font-metadata.test.ts",
+  "apps/office/src/vcl/browser/default-font-metadata.ts",
+  "docs/program/registry/shared/provenance/vcl/browser/default-font-metadata.ts.json",
+  "docs/program/registry/shared/runtime/vcl/browser/default-font-metadata.ts.json",
+  "scripts/default-font-metadata-source.test.ts"
+]
