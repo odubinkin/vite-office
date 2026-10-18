@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-318fcdc6-c54d-4669-ab37-0b550ac83495",
+    "capabilityId": "CAP-318fcdc6-c54d-4669-ab37-0b550ac83495",
+    "suite": "calc",
+    "subsystem": "spreadsheet-view-cursor",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Task4XSBZ5 implements the native document-bound ScViewData cursor subset, with actual borrowed ScDocument and ScMarkData. Per-sheet ScViewDataTable fields start at zero, old-cursor validity starts false, active pane starts SC_SPLIT_BOTTOMLEFT. SetTabNo keeps native ValidTab guard and lazily creates only the requested slot, independently of selected-sheet marks. Cursor accessors, old-cursor fallback/reset and absent-tab sentinel follow source. Coordinate setters retain caller validity preconditions rather than inventing clamping. JS GC replaces physical per-table ownership only; no cell data, document projection, allocator or window service is created. Header declarations are reexported from the TypeScript implementation as existing Calc boundaries do. Geometry,hidden/alternate sheet-view,zoom/window/configuration services are outside this cursor subset."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "JS manages physical view/table objects; actual native per-sheet cursor data and borrowed document/mark identity are retained without a cell-model projection."
+    },
+    "capability": "Document-bound per-sheet cursor and mark ownership",
+    "gaps": [
+      "Only document-bound visible-sheet cursor/mark operations are ported; full ScViewData construction, geometry, scroll-position calculations, zoom, windows, hidden and alternate sheet views, persistence and view commands remain outside this slice.",
+      "No full native module contract/behavior/default parity or upstream native QA run is certified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
+          "marker": "ScViewData::SetTabNo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/viewdata.hxx",
+          "marker": "class ScViewData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/jumbosheets-test.cxx",
+          "marker": "pViewShell->GetViewData().GetCurX()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/viewdata.hxx",
+          "marker": "GetCurX()"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/inc/viewdata.ts",
+          "marker": "ScViewData"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.ts",
+          "marker": "ScViewData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.test.ts",
+          "marker": "retains native per-sheet cursor state"
+        }
+      ],
+      "docs": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.ts",
+          "marker": "Native document-bound cursor/selection ownership"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "per-sheet-cursor-ownership",
+    "scopeLimitations": [
+      "Only document-bound visible-sheet cursor/mark operations are ported; full ScViewData construction, geometry, scroll-position calculations, zoom, windows, hidden and alternate sheet views, persistence and view commands remain outside this slice.",
+      "No full native module contract/behavior/default parity or upstream native QA run is certified.",
+      "Native jumbosheets cursor assertion is an upstream caller anchor only; local direct model tests are executed, not the native suite."
+    ]
+  }
+}

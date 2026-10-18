@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/viewdata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "spreadsheet-view-cursor",
+    "capabilityIds": [
+      "CAP-318fcdc6-c54d-4669-ab37-0b550ac83495"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/viewdata.ts",
+        "apps/office/src/sc/source/ui/view/viewdata.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx"
+      ],
+      "justification": "Task4XSBZ5 implements the native document-bound ScViewData cursor subset, with actual borrowed ScDocument and ScMarkData. Per-sheet ScViewDataTable fields start at zero, old-cursor validity starts false, active pane starts SC_SPLIT_BOTTOMLEFT. SetTabNo keeps native ValidTab guard and lazily creates only the requested slot, independently of selected-sheet marks. Cursor accessors, old-cursor fallback/reset and absent-tab sentinel follow source. Coordinate setters retain caller validity preconditions rather than inventing clamping. JS GC replaces physical per-table ownership only; no cell data, document projection, allocator or window service is created. Header declarations are reexported from the TypeScript implementation as existing Calc boundaries do. Geometry,hidden/alternate sheet-view,zoom/window/configuration services are outside this cursor subset.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScViewData",
+        "ScSplitPos"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/view/viewdata.cxx",
+      "upstreamSymbols": [
+        "ScViewData",
+        "ScViewDataTable"
+      ]
+    }
+  }
+}
