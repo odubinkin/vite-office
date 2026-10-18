@@ -4,7 +4,7 @@ title: "Connect Calc source sheet navigation and selection commands"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "AllCalc268tests100percent;related180shared/Writer tests and sharedmenu100percent;native source/default contract test,resource freshness,app/tools typecheck,build,style,module/source/registry gates,doctor/routing and production Chromium sheet commands pass. See verification.md and browser-review.json. Full all-app cadence at task10."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T18:58:11.022Z"
+  updated_by: "EVALUATOR"
+  note: "Source sheet navigation/grouping is connected to real Calc view/mark state and shared Sfx UI within approved task9 scope."
+  evaluated_sha: "55ec1df2c259c708c054ea3c8b938980feab7222"
+  blueprint_digest: "602fff15b4295c49995f8d0a8f2bc9f00955fe67afdbe878db802f1e913701c2"
+  evidence_refs:
+    - ".agentplane/tasks/202610181850-FKYDT8/README.md"
+    - ".agentplane/tasks/202610181850-FKYDT8/quality/20261018-185811022-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181850-FKYDT8/quality/20261018-185811022-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181850-FKYDT8/quality/20261018-185811022-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181850-FKYDT8/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181850-FKYDT8/verification.md"
+    - ".agentplane/tasks/202610181850-FKYDT8/calc-coverage.log"
+    - ".agentplane/tasks/202610181850-FKYDT8/browser-review.json"
+  findings:
+    - "ScTabView uses pinned wrap=true and native partial/all-group rules;original numeric slots and deselect availability are source-backed. All268Calc tests have100percent raw coverage;180related shared/Writer cases prove100percent shared-menu coverage. Build,types,source/registry gates and production menu/keyboard state transitions pass without independent browser selection state."
 commit: null
 comments:
   -
