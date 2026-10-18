@@ -1,10 +1,11 @@
 ---
 id: "202610182023-GBSSRW"
 title: "Use native owning cell values and formula clones for Calc Undo"
-status: "DOING"
+result_summary: "Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T20:33:05.205Z"
+  updated_at: "2026-10-18T20:34:15.207Z"
   updated_by: "CODER"
-  note: "Native ScCellValue and deep formula/token clone owners replace browser Undo snapshots. All284Calc cases raw100percent four metrics,127related cases,7source/tooling cases,types/build/style/source/inventory gates and built-browser formula restoration/recalculation pass. See verification.md;goal remains active."
+  note: "Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610182023-GBSSRW/browser-review.json"
   findings:
     - "Original code/RPN identity,formula cached-result/dirty/error-copy rules and native cell-value assign/commit ownership match the represented source slice. All284Calc cases raw100percent four metrics,127related cases,7source cases and final type/style/build/source/inventory gates pass. Built browser restores formulas and recalculates after redo truncation and Undo/Redo;final lint casts produce identical production bundle."
-commit: null
+commit:
+  hash: "030c2770ea3985ea954c41fbbb88a168a0858ce0"
+  message: "🧩 GBSSRW core: own Calc Undo values with native cell and formula clones"
 comments:
   -
     author: "CODER"
     body: "Start: Replace browser stored-cell snapshots with actual native cell/formula ownership and source deep-token clones."
+  -
+    author: "CODER"
+    body: "Verified: Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native ScCellValue and deep formula/token clone owners replace browser Undo snapshots. All284Calc cases raw100percent four metrics,127related cases,7source/tooling cases,types/build/style/source/inventory gates and built-browser formula restoration/recalculation pass. See verification.md;goal remains active."
+  -
+    type: "verify"
+    at: "2026-10-18T20:34:15.207Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass."
+  -
+    type: "status"
+    at: "2026-10-18T20:34:15.309Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T20:33:05.256Z"
+doc_updated_at: "2026-10-18T20:34:15.309Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI continuation task14. Port ScTokenArray deep Clone with source code/RPN alias rules and represented metadata. Add same-document same-position ScFormulaCell copy/Clone and native represented destruction lifecycle;unsupported reference relocation and external/name/group services remain explicit. Extend actual ScCellValue owning formula/copy/document assign/commit APIs for existing scalar cells. Replace browser CalcCellContent history snapshots with actual ScCellValue owners and dispose through existing SfxUndoAction lifecycle. Preserve original clone error reset/recompile behavior for current token slice,real subscriptions and history. Up to40non-task files including truthful source/provenance records. AllCalc100percent,related token/formula/undo/shared tests and source gates;next full task20;only calc checkout/branch."
 sections:
@@ -102,6 +121,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182023-GBSSRW -m 🧩 GBSSRW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T20:34:15.207Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:33:05.256Z, excerpt_hash=sha256:18f6cd8404fdee476c2413a29d68fa43928efc957addad53b43cdda878df1376
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182023-GBSSRW/blueprint/resolved-snapshot.json
+    - old_digest: 216dd20a391ccf01df46920af4ab31ab96ac2120dc94cd825d89da48edf23a2b
+    - current_digest: 216dd20a391ccf01df46920af4ab31ab96ac2120dc94cd825d89da48edf23a2b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182023-GBSSRW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182023-GBSSRW --result verified-202610182023-GBSSRW --commit 4cb17283e9a5312c0c39e410b3ba82e2ad553e66
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -191,6 +240,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182023-GBSSRW -m 🧩 GBSSRW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T20:34:15.207Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc Undo owns actual ScCellValue and deep formula/token clones;284Calc cases100percent coverage,127related cases and built-browser dependent formula restoration/recalculation pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:33:05.256Z, excerpt_hash=sha256:18f6cd8404fdee476c2413a29d68fa43928efc957addad53b43cdda878df1376
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182023-GBSSRW/blueprint/resolved-snapshot.json
+- old_digest: 216dd20a391ccf01df46920af4ab31ab96ac2120dc94cd825d89da48edf23a2b
+- current_digest: 216dd20a391ccf01df46920af4ab31ab96ac2120dc94cd825d89da48edf23a2b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182023-GBSSRW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182023-GBSSRW --result verified-202610182023-GBSSRW --commit 4cb17283e9a5312c0c39e410b3ba82e2ad553e66
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
