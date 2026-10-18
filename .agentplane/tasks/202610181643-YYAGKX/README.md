@@ -4,7 +4,7 @@ title: "Implement Calc source simple-number input scanner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,24 @@ verification:
   updated_by: "CODER"
   note: "PASS: Calc 90 files/241 tests; 5527 statements,3581 branches,1096 functions,4948 lines all100 percent on final const-object implementation. Related shared RTL and scanner5 tests pass. Typecheck,touched ESLint and Prettier,dependency boundaries,docs,source-tree,source-provenance,Calc parity,file-size,doctor and policy routing pass. Evidence in task evidence directory. Full all-app run deferred per user cadence (UI task2/10)."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T16:49:15.476Z"
+  updated_by: "EVALUATOR"
+  note: "Unicode simple-number scanner matches pinned source control flow and consumes actual shared RTL conversion."
+  evaluated_sha: "0ee0fdaea19aa416a0349840cf20d195586a01c2"
+  blueprint_digest: "332adf35be2fe8a645cc3f5e1d3ab321380164403bbad8d6ddce9754729bdf81"
+  evidence_refs:
+    - ".agentplane/tasks/202610181643-YYAGKX/README.md"
+    - ".agentplane/tasks/202610181643-YYAGKX/quality/20261018-164915476-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181643-YYAGKX/quality/20261018-164915476-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181643-YYAGKX/quality/20261018-164915476-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181643-YYAGKX/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181643-YYAGKX/evidence/calc-coverage.log"
+    - ".agentplane/tasks/202610181643-YYAGKX/evidence/related-rtl.log"
+    - ".agentplane/tasks/202610181643-YYAGKX/evidence/parity.log"
+  findings:
+    - "All16 original testCSV numeric cases pass; boundary evidence covers native grouping,alternate decimals,spaces/NBSP,scientific flag,sign ordering,overflow/underflow and output-reference behavior. Final Calc coverage100 percent across90files/241tests. Typecheck,lint,format,provenance and scoped parity gates pass. No weakened thresholds or fake formatter."
 commit: null
 comments:
   -
