@@ -1,10 +1,11 @@
 ---
 id: "202610181503-YCCX41"
 title: "Run minimal Calc ODS milestone full regression and pause"
-status: "DOING"
+result_summary: "Minimal core/basic ODS milestone verified. Full checkpoint complete with focused recovery;pause goal as requested."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -40,8 +41,8 @@ quality_review:
   findings:
     - "Reviewed committed checkpoint058019b9eca9 and actual logs/manifests:16952office pass then2assertions recovered;inventory123strict100,tooling failures recovered,Calc237strict100. All374browser/static pass. Every raw counter positive for404shared+60Calc. Frozen65source hashes and5references restored;task206DONE. No UI or second full replay."
 commit:
-  hash: "058019b9eca9b4ae5674c864316ea19010530dbd"
-  message: "✅ YCCX41 calc: verify milestone full regression checkpoint"
+  hash: "f157ea1e795b0f08597b69e008d292053eb68edf"
+  message: "📋 YCCX41 calc: bind committed checkpoint review target"
 comments:
   -
     author: "CODER"
@@ -49,6 +50,9 @@ comments:
   -
     author: "CODER"
     body: "Start:attach the committed verification-only checkpoint058019b9eca9 as explicit review target;all verification and focused recovery evidence is complete."
+  -
+    author: "CODER"
+    body: "Verified:full checkpoint and focused recovery complete;reviewedf157ea1e795b includes committed checkpoint058019b9eca9. Calc/shared raw100,374browser/static pass;only exempt Writer coverage gaps remain. Pause goal."
 events:
   -
     type: "status"
@@ -70,8 +74,15 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start:attach the committed verification-only checkpoint058019b9eca9 as explicit review target;all verification and focused recovery evidence is complete."
+  -
+    type: "status"
+    at: "2026-10-18T15:32:13.842Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified:full checkpoint and focused recovery complete;reviewedf157ea1e795b includes committed checkpoint058019b9eca9. Calc/shared raw100,374browser/static pass;only exempt Writer coverage gaps remain. Pause goal."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:31:39.864Z"
+doc_updated_at: "2026-10-18T15:32:13.843Z"
 doc_updated_by: "CODER"
 description: "Task205:user-requested all-app checkpoint after task204 minimal editable core/basic ODS readiness. Execute full office coverage,inventory,tooling,all browser projects and static checks with all5native references absent. Preserve Writer-only coverage exemption;fix applicable Calc/shared regressions if found. No UI implementation or language detour. After successful applicable checks pause the goal."
 sections:
