@@ -1,10 +1,11 @@
 ---
 id: "202610182120-YSQ8VM"
 title: "Restore native Calc standard toolbar composition using shared Writer controls and icons"
-status: "DOING"
+result_summary: "Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T21:26:30.851Z"
+  updated_at: "2026-10-18T21:27:25.205Z"
   updated_by: "CODER"
-  note: "Verified complete native visible standardbar through shared Writer controls/icons:293 Calc tests and raw100percent four metrics,29related tests,10source/resource and2Writer freshness cases,4built-browser viewport/axe cases;all declared gates pass. Evidence in task verification.md;overall goal remains active."
+  note: "Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610182120-YSQ8VM/calc-coverage.log"
   findings:
     - "Implementation42f8c03e9 removes both presentation-owned omission layers,retains native visibility and browser save-policy deviations,and uses actual Sfx disabled state. Source XML independently confirms30commands;real Writer regression preserves11original icons and source order. All293Calc tests have raw100percent across four metrics;29related cases,10source cases,2freshness cases and4built-browser geometry/axe cases pass. Changed20paths stay within approved scope;generated resources and execution slots are unchanged."
-commit: null
+commit:
+  hash: "42f8c03e9b9befcf6407c9b3b4aa3a339857f868"
+  message: "🧩 YSQ8VM ui: restore full source Calc standardbar with shared Writer controls and icons"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved native Calc standard toolbar composition through shared Writer controls and icons; preserve actual Sfx availability and save policy."
+  -
+    author: "CODER"
+    body: "Verified: Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified complete native visible standardbar through shared Writer controls/icons:293 Calc tests and raw100percent four metrics,29related tests,10source/resource and2Writer freshness cases,4built-browser viewport/axe cases;all declared gates pass. Evidence in task verification.md;overall goal remains active."
+  -
+    type: "verify"
+    at: "2026-10-18T21:27:25.205Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage."
+  -
+    type: "status"
+    at: "2026-10-18T21:27:25.296Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T21:26:30.901Z"
+doc_updated_at: "2026-10-18T21:27:25.296Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal task17: retain all pinned visible standardbar entries after explicit browser save-policy deviations; remove presentation-owned slot filtering; share actual Writer icon choices; unavailable source commands remain disabled through Sfx state. Preserve Writer rendering and source command identities. Work only in calc checkout/branch. No network, merges or fake kernel handlers."
 sections:
@@ -99,6 +118,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182120-YSQ8VM -m 🧩 YSQ8VM task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T21:27:25.205Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:26:30.901Z, excerpt_hash=sha256:a6d2f9b50c11c7ca890bcb716ac70eebd092d2a66b7d3ff12405b46efd73b5a2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182120-YSQ8VM/blueprint/resolved-snapshot.json
+    - old_digest: 4ba338f8a5515a98439f1da0641a332afc88913d56ce90402ab4a1272967a8a7
+    - current_digest: 4ba338f8a5515a98439f1da0641a332afc88913d56ce90402ab4a1272967a8a7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182120-YSQ8VM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182120-YSQ8VM --result verified-202610182120-YSQ8VM --commit b24dcbec6283857c2d31080caf5621262928649f
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -184,6 +233,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182120-YSQ8VM -m 🧩 YSQ8VM task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T21:27:25.205Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc standardbar retains all30pinned visible commands using the actual shared Writer controls and icon vocabulary;native bindings disable unported operations,source order and fixed button geometry are verified at both viewports with293Calc tests at raw100percent coverage.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:26:30.901Z, excerpt_hash=sha256:a6d2f9b50c11c7ca890bcb716ac70eebd092d2a66b7d3ff12405b46efd73b5a2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182120-YSQ8VM/blueprint/resolved-snapshot.json
+- old_digest: 4ba338f8a5515a98439f1da0641a332afc88913d56ce90402ab4a1272967a8a7
+- current_digest: 4ba338f8a5515a98439f1da0641a332afc88913d56ce90402ab4a1272967a8a7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182120-YSQ8VM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182120-YSQ8VM --result verified-202610182120-YSQ8VM --commit b24dcbec6283857c2d31080caf5621262928649f
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
