@@ -4,7 +4,7 @@ title: "Implement Calc native A1 formula input and output"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,28 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T16:43:23.659Z"
+  updated_at: "2026-10-18T16:44:05.168Z"
   updated_by: "CODER"
-  note: "PASS: Calc 89 files/239 tests, coverage 5461 statements/3514 branches/1095 functions/4897 lines, all 100%. Focused shared FormulaCompiler + native-token + Calc tests 100% (153 statements/104 branches/19 functions/139 lines). Typecheck, touched ESLint/Prettier, dependency boundaries, docs, source-tree/provenance, Calc parity, file sizes, doctor and policy routing passed. Logs output/calc-native-a1-*.log; no full regression per approved once-per-ten-task cadence."
+  note: "Native A1 scalar/local-reference input and output ready for UI; all Calc and touched shared coverage 100 percent. UI regression cycle task 1 of 10. Evidence moved from output to task evidence directory."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T16:44:04.474Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed native A1 compiler change against pinned ConventionOOO_A1 and actual Calc/shared coverage artifacts."
+  evaluated_sha: "d79712fda93c573a1ff61566f53cc9b5bec553ea"
+  blueprint_digest: "f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb"
+  evidence_refs:
+    - ".agentplane/tasks/202610181638-N4JV15/README.md"
+    - ".agentplane/tasks/202610181638-N4JV15/quality/20261018-164404474-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181638-N4JV15/quality/20261018-164404474-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181638-N4JV15/quality/20261018-164404474-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181638-N4JV15/evidence/calc-native-a1-coverage.log"
+    - ".agentplane/tasks/202610181638-N4JV15/evidence/calc-native-a1-shared.log"
+    - "d79712fda93c573a1ff61566f53cc9b5bec553ea"
+  findings:
+    - "Actual canonical tokens preserve relative/absolute references across native/ODFF serialization and propagate dependencies. All 239 Calc scenarios pass at 100 percent; touched shared compiler is 100 percent. No UI text rewrite, separate model, threshold changes or unrelated implementation."
 commit: null
 comments:
   -
@@ -43,8 +61,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "PASS: Calc 89 files/239 tests, coverage 5461 statements/3514 branches/1095 functions/4897 lines, all 100%. Focused shared FormulaCompiler + native-token + Calc tests 100% (153 statements/104 branches/19 functions/139 lines). Typecheck, touched ESLint/Prettier, dependency boundaries, docs, source-tree/provenance, Calc parity, file sizes, doctor and policy routing passed. Logs output/calc-native-a1-*.log; no full regression per approved once-per-ten-task cadence."
+  -
+    type: "verify"
+    at: "2026-10-18T16:43:43.686Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native A1 scalar/local-reference formulas compile and serialize through canonical owners; Calc and touched shared coverage are 100 percent. UI cycle task 1 of 10."
+  -
+    type: "verify"
+    at: "2026-10-18T16:44:05.168Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native A1 scalar/local-reference input and output ready for UI; all Calc and touched shared coverage 100 percent. UI regression cycle task 1 of 10. Evidence moved from output to task evidence directory."
 doc_version: 3
-doc_updated_at: "2026-10-18T16:43:23.711Z"
+doc_updated_at: "2026-10-18T16:44:05.225Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI plan first core prerequisite: preserve existing token and document owners while adding upstream native A1 arithmetic/local-reference compilation and serialization alongside ODFF. All changes remain on calc in vite-office-calc; no merges. Follow with native cell entry, view/input owners, shared browser composition and ODS UI tasks."
 sections:
@@ -87,6 +117,66 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-18T16:43:43.686Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native A1 scalar/local-reference formulas compile and serialize through canonical owners; Calc and touched shared coverage are 100 percent. UI cycle task 1 of 10.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:43:23.711Z, excerpt_hash=sha256:60a2330c3d6b67b9c66c19ec68a83c2512cbdcb5c5a22edb61fc07f35e82db0b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json
+    - old_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+    - current_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181638-N4JV15
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit d79712fda93c573a1ff61566f53cc9b5bec553ea
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T16:44:05.168Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native A1 scalar/local-reference input and output ready for UI; all Calc and touched shared coverage 100 percent. UI regression cycle task 1 of 10. Evidence moved from output to task evidence directory.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:43:43.745Z, excerpt_hash=sha256:60a2330c3d6b67b9c66c19ec68a83c2512cbdcb5c5a22edb61fc07f35e82db0b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json
+    - old_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+    - current_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181638-N4JV15
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit d79712fda93c573a1ff61566f53cc9b5bec553ea
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -146,6 +236,66 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-18T16:43:43.686Z — VERIFY — ok
+
+By: CODER
+
+Note: Native A1 scalar/local-reference formulas compile and serialize through canonical owners; Calc and touched shared coverage are 100 percent. UI cycle task 1 of 10.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:43:23.711Z, excerpt_hash=sha256:60a2330c3d6b67b9c66c19ec68a83c2512cbdcb5c5a22edb61fc07f35e82db0b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json
+- old_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+- current_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181638-N4JV15
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit d79712fda93c573a1ff61566f53cc9b5bec553ea
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T16:44:05.168Z — VERIFY — ok
+
+By: CODER
+
+Note: Native A1 scalar/local-reference input and output ready for UI; all Calc and touched shared coverage 100 percent. UI regression cycle task 1 of 10. Evidence moved from output to task evidence directory.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T16:43:43.745Z, excerpt_hash=sha256:60a2330c3d6b67b9c66c19ec68a83c2512cbdcb5c5a22edb61fc07f35e82db0b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181638-N4JV15/blueprint/resolved-snapshot.json
+- old_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+- current_digest: f4b1c06bf982a285c5b177e63fa929d04efca36d96c01d858932d8a264a0d0fb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181638-N4JV15
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181638-N4JV15 --result verified-202610181638-N4JV15 --commit d79712fda93c573a1ff61566f53cc9b5bec553ea
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
