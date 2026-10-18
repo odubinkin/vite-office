@@ -1,0 +1,366 @@
+[
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+    "sha256": "45381171af92eb586f6406bde2c40c0890c4a044faa7d58dfb1ce004f567ff23"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx",
+    "sha256": "cda5963dabc3af966dfe1641bb0bee2dad22e5b791e25d110d8d1a6c507e5a1d"
+  },
+  {
+    "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+    "sha256": "4cebdf04c152d99c737a8d5279f080c53631fe755ba915a0c85893c1dc213f20"
+  },
+  {
+    "path": "apps/office/e2e/writer-submenu-preselection.spec.ts",
+    "sha256": "de93c3fa772bfc3e60ba4151de15e3145b41d3f92cf1c592e74f78a1bbef5a32"
+  },
+  {
+    "path": "apps/office/e2e/writer-menu-alignment.spec.ts",
+    "sha256": "53295efc5092cf6f3e8027c5490186c4a82f6c7c7403b1b94f7ef28ac2b7a6aa"
+  },
+  {
+    "path": "apps/office/e2e/writer-odt-file.spec.ts",
+    "sha256": "93f54e1b9dbddd9edc261538aadf765dc3ec479519693a2fa805887daa260136"
+  },
+  {
+    "path": "apps/office/e2e/writer-root-menu-focus.spec.ts",
+    "sha256": "281b1b7bac13f23ed1564cef6e523f56dff76449ecb93db4fca2819dcc850819"
+  },
+  {
+    "path": "apps/office/e2e/writer-ruler-auto-first.spec.ts",
+    "sha256": "4119606ecae0c67fe3621c9d63df981facc6989839b3eb359bb44f5ff22bcc38"
+  },
+  {
+    "path": "apps/office/e2e/writer-named-style-history.spec.ts",
+    "sha256": "f7ab84ca002f95f8f1beececd1fe4ed584ada9f0619c159f7c0397d8967faac4"
+  },
+  {
+    "path": "apps/office/e2e/writer-auto-first-layout.spec.ts",
+    "sha256": "ff339914f95da2701d0a63b2caf8b6c3c036292a615a329858247596dd4dc0a5"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-none-numbering.spec.ts",
+    "sha256": "94e2f46b7e7464dd633821c46181b1a9b019102353a7e5094721dcae9d88feec"
+  },
+  {
+    "path": "apps/office/e2e/foundation.spec.ts",
+    "sha256": "70378a0edc5b26f572affdecbc6e3519d80d21ed606bbdd7f3cf9a2a34a0a6f3"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-clipboard-lists.spec.ts",
+    "sha256": "51782c62985ba91f36437f9ee05d129f82cbc522fd77ce49103e8e73060791ff"
+  },
+  {
+    "path": "apps/office/e2e/writer-table-ring-continue.spec.ts",
+    "sha256": "9bd2131c543eb69d33987352bcf7e51bc77d8ebf4664bfb4a22b4ad11cbda061"
+  },
+  {
+    "path": "apps/office/e2e/writer-style-redo.spec.ts",
+    "sha256": "005bd6a75209b21c42db85c4cb62a36a6bd9facf4ba366a91a765a27f616f22c"
+  },
+  {
+    "path": "apps/office/e2e/writer-submenu-keyboard.spec.ts",
+    "sha256": "66968fdaa6cc63f5736958a65f6e4494db969ee14b2170511cd3a1c3e1f8191f"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-attribute-portions.spec.ts",
+    "sha256": "99dcb01c65484ea285a3ebea74bef4f05de0057a7d59da58757008528f4a990c"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-internet-state-query.spec.ts",
+    "sha256": "a20a4ca8b95089810aece1efdb912fccf19708fc252df7f3b91d5f847ea61fcd"
+  },
+  {
+    "path": "apps/office/e2e/writer-responsive-sidebar.spec.ts",
+    "sha256": "0445a142485dc8218d1037f3c27dc8d410554a7133e9add9b2a0e64e56918db4"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-hyperlink-begin-edit.spec.ts",
+    "sha256": "abee85ee68eabdd7e27cd400a3bc9fd899e3b010cf80f7bd0fb9784082694045"
+  },
+  {
+    "path": "apps/office/e2e/writer-manual-first-layout.spec.ts",
+    "sha256": "70a02b18fea1c44647ae7c73674ace14588af9743ba36d752fd0d7fbaee45e4c"
+  },
+  {
+    "path": "apps/office/e2e/writer-menu-saved-focus.spec.ts",
+    "sha256": "75afc33ce60f06c6b0648a730b1a0400fefe4d134de05ff4aac5169f0d43b0a4"
+  },
+  {
+    "path": "apps/office/e2e/writer-style-selector.spec.ts",
+    "sha256": "68fce9bbcf43e8dc18db785e59834a539c596bc6ef6bc2a4f8f062e538c25fb5"
+  },
+  {
+    "path": "apps/office/e2e/writer-menu-document-focus.spec.ts",
+    "sha256": "9e82b83d2e7158a9c7f124dd4d9b6c4eee7b5070ce4ca32e37547a9d7bd1d4af"
+  },
+  {
+    "path": "apps/office/e2e/writer-table-row-lists.spec.ts",
+    "sha256": "035f9b46192c23568a71f6073634a6ce2556a2df3f11bef5a44a2394a52ccaf6"
+  },
+  {
+    "path": "apps/office/e2e/writer-counted-list-layout.spec.ts",
+    "sha256": "783d0bb36388183bdba177c7b142737c4bbbbdf79f4dadcf15b170b1fd6a94fd"
+  },
+  {
+    "path": "apps/office/e2e/writer-hyperlinks.spec.ts",
+    "sha256": "5f0dc5ed92192701f021347bed0ab7db6a4b4d5c9da088c763a1cd3424c8ac5a"
+  },
+  {
+    "path": "apps/office/e2e/writer-clipboard.spec.ts",
+    "sha256": "1aaf7930da58e77fd73e7d48139246798914f000b1d90f91095687969918eb93"
+  },
+  {
+    "path": "apps/office/e2e/writer-style-reset.spec.ts",
+    "sha256": "113eee7c0b9b8a7a704c96489863a1abf22f801d5e3b52edaf51489203a033c2"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-internet-edit-range.spec.ts",
+    "sha256": "8d81df4394b28b7f7d4981b3a3e029536d8406c55a5e0cebd96e2a0474c9cfe4"
+  },
+  {
+    "path": "apps/office/e2e/writer-selected-list-toggle.spec.ts",
+    "sha256": "60ed909c85d8b24902624814c768ccdf388770390a6cab17909c847325c3c8aa"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-menubar-document-key.spec.ts",
+    "sha256": "52f8dcf9f38af58ee2abe86e8872019acf0a84a5ddca6d79f85c635a71667655"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-menubar-auxclick.spec.ts",
+    "sha256": "c9a5a644cb7f11d1b6d09164a8774207ea632bcca374ae2ef335180b61eb9ed4"
+  },
+  {
+    "path": "apps/office/e2e/writer-uncounted-list-layout.spec.ts",
+    "sha256": "679d6d29c4b3fd688749a3e6ea38b94dce488b503ef8a08224b044d7bea7b14c"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-hyperlink-mixed-remove.spec.ts",
+    "sha256": "b3efdab5aa5c24a5ed14275f86789d2ad1b810a1e810a8658b7553d32e0d30ed"
+  },
+  {
+    "path": "apps/office/e2e/writer-style-selection.spec.ts",
+    "sha256": "0fbeab14c6bade73d0f234e5dd5e9511a98a0733b1d9787fb2b8898419baa3f2"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-list-context.spec.ts",
+    "sha256": "90f2e028f3fbb38a19696ac962b38b66d3020acb554fffd178980dd28f3dd1dc"
+  },
+  {
+    "path": "apps/office/e2e/writer-cell-paragraph-format.spec.ts",
+    "sha256": "ecc61d635b537bd9c8c87cd4310af45ea0a2267ec4556a93a1ff5dc838b039b7"
+  },
+  {
+    "path": "apps/office/e2e/writer-root-menu-boundary.spec.ts",
+    "sha256": "c03fe8e63061580bb46f91609bc5064c61e9bdf915dd62cc2403f43a6e69b566"
+  },
+  {
+    "path": "apps/office/e2e/writer-character-formatting.spec.ts",
+    "sha256": "5f44bd0c7ae483be5bc485e799abb7fa614c9a48086a5ba1eeb38071d1c80111"
+  },
+  {
+    "path": "apps/office/e2e/writer-print.spec.ts",
+    "sha256": "d588b15e513406ab4a85959dd76bd1164cd928bc0c21388655de75ecb8970296"
+  },
+  {
+    "path": "apps/office/e2e/writer-imported-table-lists.spec.ts",
+    "sha256": "4fbc7a9805858e528477ed19ef3096c761c16832ec38aebd92e3b946804a3fb0"
+  },
+  {
+    "path": "apps/office/e2e/writer-menu-key.spec.ts",
+    "sha256": "d98767ad9a0da45e0500b30205d4cc3f37504aa39ed36eed2927118a377b3ba0"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-outline-tab.spec.ts",
+    "sha256": "cd82f9791980b0109ff4110ac162a1b7867a4c2a53853fc0964cf05944a144ee"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-column-commands.spec.ts",
+    "sha256": "51920df0548e3baedc72f16d681dd071c1a00618d6e314bdfa408aa3cfbe13b5"
+  },
+  {
+    "path": "apps/office/e2e/writer-cell-list-enter.spec.ts",
+    "sha256": "f66c8e53eac1e4df01bce944ece50aead600fde7efe549a5c815ce06ff210329"
+  },
+  {
+    "path": "apps/office/e2e/writer-cut-paste.spec.ts",
+    "sha256": "68e443440b0f33cc9e9f3c8ac49569493858d40a6ced6b2b40044be5effe4285"
+  },
+  {
+    "path": "apps/office/e2e/writer-cell-list-level.spec.ts",
+    "sha256": "b3c9359fb0f797b12078cd3601a751597fd5094fbb19c80549ed78b94306becd"
+  },
+  {
+    "path": "apps/office/e2e/writer-ruler-indent-items.spec.ts",
+    "sha256": "bd9f7136e7a944fb2e21de35db8d10b0b29d94044d21219e3006f69060476f31"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-row-height-dialog.spec.ts",
+    "sha256": "9a3e794fe49f0f4fb3a4e24625375e37158f44d5b59f3d87ac41e71d431834fa"
+  },
+  {
+    "path": "apps/office/e2e/writer-document-key.spec.ts",
+    "sha256": "c659d5bf9673cff22ffaf180c89a204f4d8737d52c9c93f515024e2544f3080e"
+  },
+  {
+    "path": "apps/office/e2e/writer-lists.spec.ts",
+    "sha256": "9033c51bc8ed50fb847c5f67acb6961291c6440a37d3cb51eddefc09b39da79c"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-disabled-menubar.spec.ts",
+    "sha256": "924763500481f874a783f8c109e7c7cdf723fe8223d3f47123a067b63bde73fa"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-table-selection-commands.spec.ts",
+    "sha256": "9549592fe19ee7af92927f4d4fb6c505002d0eecf55ecf36eecdbdf01951cdda"
+  },
+  {
+    "path": "apps/office/e2e/writer-cell-list-continue.spec.ts",
+    "sha256": "fcae153f500b63ba2f6d484e6ed6441528bd3e75e8c70d2002ed2b1c97720352"
+  },
+  {
+    "path": "apps/office/e2e/writer-cell-list-backspace.spec.ts",
+    "sha256": "dde90a04db1284b35a4a0a34a9568fb99b9c31ed851505f2a08c1706f7fd71b7"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-row-commands.spec.ts",
+    "sha256": "c73887e8dd15ae9f7ff80e482c1871923c989ffc87774eb4f6ee4c028df9fc5a"
+  },
+  {
+    "path": "apps/office/e2e/writer-native-table-column-page.spec.ts",
+    "sha256": "0c8a59544b7933daa7ade500a7e790dcbac2e7046ad0b97383aea102aca79e3c"
+  },
+  {
+    "path": "apps/office/e2e/writer-sidebar-deck.spec.ts",
+    "sha256": "0916287acc5a4e1184b0cba45ad3faac7d96ab98cfd6ba7c901cc211f46be35f"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
+    "sha256": "0514f37e7be2f21fa2d31369a75849bccba06ebbafeca2aa6a2437904888e0c7"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-list-context.test.tsx",
+    "sha256": "a85c862b9a07625bdae91f2df3d2d0018f105f8109af4e99abfed1959d8a425e"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx",
+    "sha256": "4fb9d284c5eae71e24075b6ecf6da279a931b3f7e76aa8ff7d08f480b7eb1060"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx",
+    "sha256": "8f9ab21282bc506773f776e159d8a534821529f51a18b970ecb4d07320261f87"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx",
+    "sha256": "991577cfc47544e8bc77623feea580346a6211ebecd793e8fdeac9c2c8c2b824"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-table-selection.test.tsx",
+    "sha256": "88bb3c81f47967bf65386d1b557caae5395884e5cc8ff5c28c9991b496edef1c"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx",
+    "sha256": "6fcd83f3420e292cb8e2a4b17aa2c26d7845707e75b2c10bcaa13c28755ce348"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx",
+    "sha256": "dfbee9ef600feb2bad524c0006525e44af61f833bd6be1f48aca899b749aba3d"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-none-numbering.test.tsx",
+    "sha256": "190334d57528b9082bf97390eef5b28a6299afc2926b2bfd7915c6e1dd505a35"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx",
+    "sha256": "c9e07c23b9974d3779f1562bda775876e04e10799d1803b5f6ceea38c00691f2"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx",
+    "sha256": "1990e7dfdfcf6cca6d5263bf8ddc84ae8f1449ec9cc291cba88f017f255429ce"
+  },
+  {
+    "path": "apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx",
+    "sha256": "a2886558f48b4688f4d9800722d54c1ffd42791c465c30e67ff6724f89d236c6"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx",
+    "sha256": "63804709aa3716a9b6aef1795295c3a8eb4748a76d589c1c8315853a8e3a7a1b"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx",
+    "sha256": "159454f17e1d24c4f0cc7d23a2bfd33e5cf052dfdb720616f7b5c97f0b35c0a6"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx",
+    "sha256": "203f80c17f396402bfc8ac4bc40abc7a9de3c5269bdcdb0a7485d809c5822225"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx",
+    "sha256": "99e48046f587664eca25817c9917f8efdda80fb68786e5c2f0630f80bbe9832f"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx",
+    "sha256": "f0815d449d30af440a5f7629057110ef6f33a2125a37d359559770a40713c00e"
+  },
+  {
+    "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx",
+    "sha256": "09c7b60acfe30162249c22ef85852cb4af8f7da777b352c8129403b93a03cd8d"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
+    "sha256": "ca57d12452a33cdd66f2817c4db74bcbb62afedc03befccd305a7dbd64a5801c"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+    "sha256": "22ced4eb29466aa54a36f6f4df1650318a5d826fb79942b65890438d7e970534"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx",
+    "sha256": "bf2a4cd87ec586e24255314b5ba0a9998ad4d6aa850cabec1eaf349514c972b6"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx",
+    "sha256": "c0dec43d3f123217b3d8e545987d3f642baad109e6b18f4f36e5a0cad10b50f9"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx",
+    "sha256": "ff33cb5a173286b8ea57c1f86cce2d17eefa01948f91a7edd431e3cbd5606982"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx",
+    "sha256": "3cbcd2fc4c7ef0dd2ec621953229543781fb8629e200bea95614d05bd479c9b0"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx",
+    "sha256": "aced458598e056e1188ff21f46cd5ec52791e8ebaa3112c5f01c029573ca578e"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx",
+    "sha256": "c1436fc1ae4e3ed5fa3e4e9a72c7ae4f365dcfc695c89ab9daaf126515e3c1cd"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx",
+    "sha256": "7bfea065896b4b70745b3152bfbe86c8b815e2472918ec4d888fb179f4a7ff7b"
+  },
+  {
+    "path": "apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx",
+    "sha256": "58083f3b3c6c56c45b43ea55c186e14e51b7ee6dc9ae7834b91e5513b812b9d6"
+  },
+  {
+    "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+    "sha256": "4bc5bbed754580f7e95fb5fb69719640da1de3ae37fc53806f922125b2998724"
+  },
+  {
+    "path": "apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx",
+    "sha256": "ea26886e5b5b1219a0aab42fa3c9cbc17dfcf85cb2f0ec7744868192af60882d"
+  },
+  {
+    "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+    "sha256": "5925951b4350b392be37c963f1f6dbf692dbe39c881f580514f07f22940e5193"
+  },
+  {
+    "path": "apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx",
+    "sha256": "4481e1698dab48872af7181bc919169c9b54a1b38d9861effe76bde50870d01e"
+  }
+]

@@ -1,0 +1,2131 @@
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar.tsx
+@@ -496,6 +496,7 @@
+           return (
+             <div className="relative" key={menu.id}>
+               <button
++                role="menuitem"
+                 aria-controls={`${idPrefix}-${menu.id}-menu`}
+                 aria-expanded={openMenuIndex === index}
+                 aria-haspopup="menu"
+--- a/apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx
++++ b/apps/office/src/framework/browser/presentation/OfficeWorkspaceHeader.tsx
+@@ -40,6 +40,7 @@
+     <header className="relative z-50 shrink-0 border-b border-slate-200 bg-white">
+       <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
+         <div className="min-w-0">
++          <h1 className="m-0 text-sm font-bold leading-5">
+           {isEditingTitle ? (
+             <input
+               aria-label={titleLabel}
+@@ -79,6 +80,7 @@
+               {documentTitle}
+             </button>
+           )}
++          </h1>
+           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700">
+             {subtitle}
+           </p>
+--- a/apps/office/src/sc/browser/presentation/ScGridWindow.tsx
++++ b/apps/office/src/sc/browser/presentation/ScGridWindow.tsx
+@@ -121,42 +121,38 @@
+             height: viewport.rowHeight,
+           }}
+         >
+-          <button
+-            type="button"
+-            role="columnheader"
+-            aria-label="Select all cells"
+-            className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
+-            style={{ width: 48, height: viewport.rowHeight }}
+-            onClick={
++          <div role="columnheader"
++aria-label="Select all cells"
++className="sticky left-0 z-[11] border-b border-r border-slate-300 bg-slate-50"
++style={{ width: 48, height: viewport.rowHeight }}><button type="button"
++aria-label="Select all cells"
++onClick={
+               /** Routes the corner-header selection intent. @param event - Platform click. @returns Nothing. */ (
+                 event,
+               ) => props.onHeader("all", 0, event)
+-            }
+-          />
++            } className="block h-full w-full"><span className="sr-only">Select all cells</span></button></div>
+           {columns.map(
+             /** Renders one canonical column heading. @param col - Column coordinate. @returns Heading. */ (
+               col,
+             ) => (
+-              <button
+-                key={col}
+-                type="button"
+-                role="columnheader"
+-                aria-colindex={col + 2}
+-                aria-label={`Column ${columnLabel(col)}`}
+-                onClick={
+-                  /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
+-                    event,
+-                  ) => props.onHeader("column", col, event)
+-                }
+-                style={{
++              <div key={col}
++role="columnheader"
++aria-colindex={col + 2}
++aria-label={`Column ${columnLabel(col)}`}
++style={{
+                   left: 48 + col * viewport.columnWidth,
+                   width: viewport.columnWidth,
+                   height: viewport.rowHeight,
+                 }}
+-                className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
+-              >
++className="absolute top-0 border-b border-r border-slate-300 bg-slate-50 text-center font-normal"><button type="button"
++aria-label={`Column ${columnLabel(col)}`}
++onClick={
++                  /** Routes column selection with native modifiers intact. @param event - Platform click. @returns Nothing. */ (
++                    event,
++                  ) => props.onHeader("column", col, event)
++                } className="block h-full w-full">
+                 {columnLabel(col)}
+-              </button>
++              </button></div>
+             ),
+           )}
+         </div>
+@@ -174,21 +170,19 @@
+                 height: viewport.rowHeight,
+               }}
+             >
+-              <button
+-                type="button"
+-                role="rowheader"
+-                aria-colindex={1}
+-                aria-label={`Row ${r + 1}`}
+-                onClick={
++              <div role="rowheader"
++aria-colindex={1}
++aria-label={`Row ${r + 1}`}
++style={{ width: 48, height: viewport.rowHeight }}
++className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"><button type="button"
++aria-label={`Row ${r + 1}`}
++onClick={
+                   /** Routes row selection. @param event - Platform click. @returns Nothing. */ (
+                     event,
+                   ) => props.onHeader("row", r, event)
+-                }
+-                style={{ width: 48, height: viewport.rowHeight }}
+-                className="sticky left-0 z-[3] border-b border-r border-slate-300 bg-slate-50 text-center font-normal"
+-              >
++                } className="block h-full w-full">
+                 {r + 1}
+-              </button>
++              </button></div>
+               {columns.map(
+                 /** Paints one cell from the display contract, never from an application array. @param col - Column. @returns Cell or inline editor. */ (
+                   col,
+--- a/apps/office/e2e/writer-submenu-preselection.spec.ts
++++ b/apps/office/e2e/writer-submenu-preselection.spec.ts
+@@ -5,7 +5,7 @@
+   page,
+ }) => {
+   await page.goto("/writer");
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   const trigger = page.getByRole("menuitem", { name: "Text", exact: true });
+   await trigger.hover();
+   const popup = page.getByRole("menu", { name: "Text menu" });
+@@ -36,7 +36,7 @@
+   page,
+ }) => {
+   await page.goto("/writer");
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   const trigger = page.getByRole("menuitem", { name: "Text", exact: true });
+   await trigger.hover();
+   const popup = page.getByRole("menu", { name: "Text menu" });
+@@ -48,7 +48,7 @@
+   await expect(bold).toBeFocused();
+   await bold.press("Enter");
+   await expect(page.getByRole("menu")).toHaveCount(0);
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await trigger.focus();
+   await trigger.press("Enter");
+   await expect(bold).toBeFocused();
+--- a/apps/office/e2e/writer-menu-alignment.spec.ts
++++ b/apps/office/e2e/writer-menu-alignment.spec.ts
+@@ -5,7 +5,7 @@
+   page,
+ }) => {
+   await page.goto("/writer");
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   const paragraph = page.getByRole("menuitem", { name: "Paragraph…" });
+   const lists = page.getByRole("menuitem", { name: "Lists" });
+   const commandLabel = await paragraph.locator("span").nth(1).boundingBox();
+@@ -17,7 +17,7 @@
+   expect(commandX - rowX).toBeLessThanOrEqual(20);
+   await lists.hover();
+   await expect(page.getByRole("menuitemradio", { name: "No List" })).toBeVisible();
+-  await page.getByRole("button", { name: "View" }).hover();
++  await page.getByRole("menuitem", { name: "View" }).hover();
+   const sidebarX =
+     (
+       await page
+--- a/apps/office/e2e/writer-odt-file.spec.ts
++++ b/apps/office/e2e/writer-odt-file.spec.ts
+@@ -60,7 +60,7 @@
+   await expect(page.getByText("Browser ODT Fixture")).toBeVisible();
+ 
+   const downloadPromise = page.waitForEvent("download");
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await page.getByRole("menuitem", { name: "Export…" }).click();
+   await page.getByRole("button", { name: "Download ODT" }).click();
+   const download = await downloadPromise;
+@@ -75,7 +75,7 @@
+   expect(contentXml).toContain("<text:list-style");
+   expect(contentXml).toContain("<text:list-item>");
+ 
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await expect(page.getByRole("menuitem", { name: "Open Local Copy…" })).toHaveCount(0);
+   await expect(page.getByRole("menuitem", { name: "Save Local Copy" })).toHaveCount(0);
+   await expect(page.getByRole("menuitem", { name: "Export…" })).toBeVisible();
+@@ -115,7 +115,7 @@
+     expect(await fragment.getAttribute("data-writer-paragraph-id")).toBe(id);
+ 
+   const downloadPromise = page.waitForEvent("download");
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await page.getByRole("menuitem", { name: "Export…" }).click();
+   await page.getByRole("button", { name: "Download ODT" }).click();
+   const savedPath = await (await downloadPromise).path();
+@@ -157,7 +157,7 @@
+   await expect(cell).toHaveText("typed cell");
+ 
+   const pending = page.waitForEvent("download");
+-  await page.getByRole("button", { name: "File", exact: true }).click();
++  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Export…" }).click();
+   await page.getByRole("button", { name: "Download ODT" }).click();
+   const savedPath = await (await pending).path();
+--- a/apps/office/e2e/writer-root-menu-focus.spec.ts
++++ b/apps/office/e2e/writer-root-menu-focus.spec.ts
+@@ -5,7 +5,7 @@
+   page,
+ }) => {
+   await page.goto("/writer");
+-  const view = page.getByRole("button", { name: "View", exact: true });
++  const view = page.getByRole("menuitem", { name: "View", exact: true });
+   await view.click();
+   const popup = page.getByRole("menu", { name: "View menu" });
+   const first = page.getByRole("menuitemcheckbox", { name: "Status Bar", exact: true });
+@@ -25,7 +25,7 @@
+     page,
+   }) => {
+     await page.goto("/writer");
+-    const view = page.getByRole("button", { name: "View", exact: true });
++    const view = page.getByRole("menuitem", { name: "View", exact: true });
+     await view.focus();
+     await view.press(key);
+     const first = page.getByRole("menuitemcheckbox", { name: "Status Bar", exact: true });
+--- a/apps/office/e2e/writer-ruler-auto-first.spec.ts
++++ b/apps/office/e2e/writer-ruler-auto-first.spec.ts
+@@ -67,7 +67,7 @@
+     });
+     const openParagraph =
+       /** Opens the existing formatting controller through its upstream menu placement. @returns Completion. */ async () => {
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+         return page.getByRole("dialog", { name: "Paragraph", exact: true });
+       };
+--- a/apps/office/e2e/writer-named-style-history.spec.ts
++++ b/apps/office/e2e/writer-named-style-history.spec.ts
+@@ -85,7 +85,7 @@
+       };
+     await checkLayout(-12);
+     const openDialog = /** Opens the product paragraph draft. @returns Completion. */ async () => {
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+     };
+     const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+--- a/apps/office/e2e/writer-auto-first-layout.spec.ts
++++ b/apps/office/e2e/writer-auto-first-layout.spec.ts
+@@ -169,14 +169,14 @@
+         "left",
+         "152px",
+       );
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+       await expect(dialog.getByLabel("First line indent (pt)")).toHaveValue("18.35");
+       await expect(dialog.getByLabel("Automatic first-line indent")).toBeChecked();
+       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+       await checkLayout(automaticPoints);
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+       await dialog.getByLabel("Automatic first-line indent").uncheck();
+       await dialog.getByRole("button", { name: "OK", exact: true }).click();
+--- a/apps/office/e2e/writer-native-none-numbering.spec.ts
++++ b/apps/office/e2e/writer-native-none-numbering.spec.ts
+@@ -60,7 +60,7 @@
+     await expect(arabicEditor).toHaveAttribute("data-list-marker", "1");
+     /** Opens the real submenu through visible controls. @returns Completion. */
+     async function menu(): Promise<void> {
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).hover();
+     }
+     /** Closes the actual menu stack. @returns Completion. */
+--- a/apps/office/e2e/foundation.spec.ts
++++ b/apps/office/e2e/foundation.spec.ts
+@@ -32,11 +32,11 @@
+   await expect(writerMenuBar).toHaveCSS("overflow-x", "visible");
+   await page.getByRole("textbox", { name: "Writer document text" }).focus();
+   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();
+-  const fileMenuButton = page.getByRole("button", { name: "File" });
++  const fileMenuButton = page.getByRole("menuitem", { name: "File" });
+   await fileMenuButton.focus();
+   await fileMenuButton.press("ArrowRight");
+-  await expect(page.getByRole("button", { exact: true, name: "Edit" })).toBeFocused();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).press("ArrowDown");
++  await expect(page.getByRole("menuitem", { exact: true, name: "Edit" })).toBeFocused();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).press("ArrowDown");
+   const editPopup = page.getByRole("menu", { name: "Edit menu" });
+   const undoMenuItem = editPopup.getByRole("menuitem", { exact: true, name: "Undo" });
+   await expect(undoMenuItem).toBeDisabled();
+@@ -62,9 +62,9 @@
+   await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
+   await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
+   await expect(page.getByRole("textbox", { name: "Writer document text" })).toBeFocused();
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
+-  await page.getByRole("button", { name: "File" }).press("Escape");
++  await page.getByRole("menuitem", { name: "File" }).press("Escape");
+   await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).click();
+   await expect(page.getByRole("menuitem", { exact: true, name: "Hyperlink…" })).toBeVisible();
+   await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).press("Escape");
+@@ -90,7 +90,7 @@
+   await expect(
+     page.getByRole("complementary", { name: "Writer properties sidebar" }),
+   ).toBeVisible();
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   const sidebarMenuItem = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
+   await expect(sidebarMenuItem).toHaveAttribute("aria-checked", "true");
+   await sidebarMenuItem.click();
+@@ -98,14 +98,14 @@
+     0,
+   );
+   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   const hiddenSidebarMenuItem = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
+   await expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
+   await hiddenSidebarMenuItem.click();
+   await expect(
+     page.getByRole("complementary", { name: "Writer properties sidebar" }),
+   ).toBeVisible();
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
+   const rulersMenu = page.getByRole("menuitem", { name: "Rulers" });
+   await rulersMenu.focus();
+@@ -114,7 +114,7 @@
+   await expect(rulerMenuItem).toHaveAttribute("aria-checked", "true");
+   await rulerMenuItem.click();
+   await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   const hiddenRulersMenu = page.getByRole("menuitem", { name: "Rulers" });
+   await hiddenRulersMenu.focus();
+   await hiddenRulersMenu.press("ArrowRight");
+@@ -123,13 +123,13 @@
+   await hiddenRulerMenuItem.click();
+   await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
+   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   const statusBarMenuItem = page.getByRole("menuitemcheckbox", { name: "Status Bar" });
+   await expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
+   await statusBarMenuItem.click();
+   await expect(page.getByRole("status", { name: "Writer status bar" })).toHaveCount(0);
+   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   const hiddenStatusBarMenuItem = page.getByRole("menuitemcheckbox", { name: "Status Bar" });
+   await expect(hiddenStatusBarMenuItem).toHaveAttribute("aria-checked", "false");
+   await hiddenStatusBarMenuItem.click();
+@@ -143,7 +143,7 @@
+   await expect(writerEditor).not.toHaveAttribute("contenteditable");
+   await writerEditor.fill("A browser-authored paragraph.");
+   await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Select All" }).click();
+   await expect(
+     writerEditor.evaluate(
+@@ -162,12 +162,12 @@
+       .getByRole("toolbar", { name: "Writer standard toolbar" })
+       .getByRole("button", { name: "Copy" }),
+   ).toBeVisible();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Copy" }).click();
+   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+     "Document has unsaved changes.",
+   );
+-  await page.getByRole("button", { name: "Styles" }).click();
++  await page.getByRole("menuitem", { name: "Styles" }).click();
+   await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
+   await expect(writerEditor).toHaveCSS("font-size", "24px");
+   await expect(writerEditor).toHaveCSS("font-weight", "700");
+@@ -210,7 +210,7 @@
+   await trailingWriterParagraph.press("Backspace");
+   await expect(trailingWriterParagraph).toHaveCount(0);
+   await expect(writerEditor).toHaveText("A browser-authored paragraph.");
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Undo" }).click();
+   await expect(trailingWriterParagraph).toBeVisible();
+   await writerEditor.evaluate(
+@@ -234,13 +234,13 @@
+   await writerEditor.press("Delete");
+   await expect(trailingWriterParagraph).toHaveCount(0);
+   await expect(writerEditor).toHaveText("A browser-authored paragraph.");
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Undo" }).click();
+   await expect(trailingWriterParagraph).toBeVisible();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Undo" }).click();
+   await expect(trailingWriterParagraph).toHaveCount(0);
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Undo" }).click();
+   await expect(writerEditor).toHaveCSS("text-align", "left");
+ 
+--- a/apps/office/e2e/writer-native-clipboard-lists.spec.ts
++++ b/apps/office/e2e/writer-native-clipboard-lists.spec.ts
+@@ -30,7 +30,7 @@
+         const secondLabel = cell ? "Row 1 column 1 paragraph 2" : "Writer paragraph 2",
+           second = page.getByRole("textbox", { name: secondLabel });
+         await first.click();
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+         await page
+           .getByRole("menuitemradio", {
+--- a/apps/office/e2e/writer-table-ring-continue.spec.ts
++++ b/apps/office/e2e/writer-table-ring-continue.spec.ts
+@@ -34,14 +34,14 @@
+           second = page.getByRole("textbox", { name: "Row 2 column 2 paragraph 1", exact: true });
+         await neighbor.fill("Neighbor");
+         await previous.fill("Previous");
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+         await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
+         await first.fill("First");
+         await second.fill("Second");
+         if (initial === "different") {
+           await selectBrowserTableRow(page, "Table1", 2);
+-          await page.getByRole("button", { name: "Format", exact: true }).click();
++          await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+           await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+           await page
+             .getByRole("menuitemradio", {
+@@ -53,7 +53,7 @@
+         await selectBrowserTableRow(page, "Table1", 2);
+         const table = page.getByRole("table", { name: "Table1" });
+         await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+         const command = page.getByRole("menuitem", { name: "Add to List", exact: true });
+         await expect(command).toBeEnabled();
+@@ -148,14 +148,14 @@
+     rendered = page.getByRole("table", { name: "RestartRow" });
+   await first.click();
+   await selectBrowserTableRow(page, "RestartRow", 2);
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitemradio", { name: "Unordered List", exact: true }).click();
+   await expect(firstMarker).toHaveText("•");
+   await expect(secondMarker).toHaveText("•");
+   await selectBrowserTableRow(page, "RestartRow", 2);
+   await expect(rendered.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Add to List", exact: true }).click();
+   await expect(firstMarker).toHaveText("8.");
+--- a/apps/office/e2e/writer-style-redo.spec.ts
++++ b/apps/office/e2e/writer-style-redo.spec.ts
+@@ -116,7 +116,7 @@
+         fullPage: true,
+       });
+       const download = page.waitForEvent("download");
+-      await page.getByRole("button", { name: "File", exact: true }).click();
++      await page.getByRole("menuitem", { name: "File", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
+       await page.getByRole("button", { name: "Download ODT", exact: true }).click();
+       const path = await (await download).path();
+--- a/apps/office/e2e/writer-submenu-keyboard.spec.ts
++++ b/apps/office/e2e/writer-submenu-keyboard.spec.ts
+@@ -7,7 +7,7 @@
+   }) => {
+     await page.goto("/writer");
+     await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
+-    await page.getByRole("button", { name: "View", exact: true }).click();
++    await page.getByRole("menuitem", { name: "View", exact: true }).click();
+     const submenu = page.getByRole("menuitem", { name: "Rulers", exact: true });
+     await submenu.focus();
+     await submenu.press("ArrowRight");
+@@ -17,7 +17,7 @@
+     await command.press(key);
+     await expect(page.getByRole("menu")).toHaveCount(0);
+     await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
+-    await page.getByRole("button", { name: "View", exact: true }).click();
++    await page.getByRole("menuitem", { name: "View", exact: true }).click();
+     await submenu.focus();
+     await submenu.press("ArrowRight");
+     await expect(command).toHaveAttribute("aria-checked", "false");
+--- a/apps/office/e2e/writer-native-attribute-portions.spec.ts
++++ b/apps/office/e2e/writer-native-attribute-portions.spec.ts
+@@ -101,7 +101,7 @@
+     await expect(bodyEditor.locator("strong")).toHaveCount(2);
+     await expect(other).toHaveText("Neighbor");
+     const download = page.waitForEvent("download");
+-    await page.getByRole("button", { name: "File", exact: true }).click();
++    await page.getByRole("menuitem", { name: "File", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Export…" }).click();
+     await page.getByRole("button", { name: "Download ODT" }).click();
+     const path = await (await download).path();
+--- a/apps/office/e2e/writer-native-internet-state-query.spec.ts
++++ b/apps/office/e2e/writer-native-internet-state-query.spec.ts
+@@ -12,12 +12,12 @@
+   await page.getByRole("button", { name: "Apply", exact: true }).click();
+   await editor.focus();
+   await editor.press("End");
+-  await page.getByRole("button", { name: "Edit", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeDisabled();
+   await page.keyboard.press("Escape");
+   await editor.focus();
+   await editor.press("ArrowLeft");
+-  await page.getByRole("button", { name: "Edit", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
+   await expect(editor.locator('a[href="https://example.test/end"]')).toHaveText("abc");
+ });
+--- a/apps/office/e2e/writer-responsive-sidebar.spec.ts
++++ b/apps/office/e2e/writer-responsive-sidebar.spec.ts
+@@ -9,7 +9,7 @@
+ }) => {
+   await page.goto("/writer");
+   await page.setViewportSize({ width: 390, height: 240 });
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   const menu = page.getByRole("menu", { name: "Format menu" });
+   expect(
+     await menu.evaluate(
+@@ -67,13 +67,13 @@
+   await expect(sidebar).toBeVisible();
+   await expect(sidebar.getByRole("heading", { name: "Paragraph" })).toBeVisible();
+ 
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   const toggle = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
+   await expect(toggle).toHaveAttribute("aria-checked", "true");
+   await toggle.click();
+   await expect(sidebar).toHaveCount(0);
+ 
+-  await page.getByRole("button", { name: "View" }).click();
++  await page.getByRole("menuitem", { name: "View" }).click();
+   await expect(page.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveAttribute(
+     "aria-checked",
+     "false",
+@@ -108,7 +108,7 @@
+   ).toBe(true);
+ 
+   await page.setViewportSize({ width: 390, height: 340 });
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Paragraph…" }).click();
+   const panel = page.locator("[data-writer-modal-panel]");
+   await expect(panel).toBeVisible();
+--- a/apps/office/e2e/writer-native-hyperlink-begin-edit.spec.ts
++++ b/apps/office/e2e/writer-native-hyperlink-begin-edit.spec.ts
+@@ -54,14 +54,14 @@
+   await add(editor, 2, 5);
+   await add(editor, 5, 8);
+   await select(editor, 5);
+-  await page.getByRole("button", { name: "Edit", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+   const edit = page.getByRole("menuitem", { name: "Hyperlink…" });
+   await expect(edit).toBeEnabled();
+   await edit.click();
+   await expect(page.getByLabel("URL")).toHaveValue("https://example.test/same");
+   await page.getByRole("button", { name: "Cancel", exact: true }).click();
+   await expect(page.getByLabel("URL")).toHaveCount(0);
+-  await page.getByRole("button", { name: "Edit", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
+   await page.getByLabel("URL").fill("https://example.test/changed");
+   await page.getByRole("button", { name: "Apply", exact: true }).click();
+--- a/apps/office/e2e/writer-manual-first-layout.spec.ts
++++ b/apps/office/e2e/writer-manual-first-layout.spec.ts
+@@ -89,14 +89,14 @@
+       const firstMarker = ruler.getByRole("button", { name: "First line indent", exact: true });
+       await expect(firstMarker).toHaveCount(1);
+       const rawMarkerPosition = await firstMarker.getAttribute("style");
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+       await expect(dialog.getByLabel("First line indent (pt)")).toHaveValue(String(raw / 20));
+       await expect(dialog.getByLabel("Automatic first-line indent")).not.toBeChecked();
+       await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+       await checkLayout(wrappedPoints);
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+       // The existing authoring command admits signed16 values only. Choose
+       // a valid new draft; Undo must restore the complete imported raw item.
+--- a/apps/office/e2e/writer-menu-saved-focus.spec.ts
++++ b/apps/office/e2e/writer-menu-saved-focus.spec.ts
+@@ -7,7 +7,7 @@
+   await page.goto("/writer");
+   const editor = page.getByLabel("Writer document body", { exact: true });
+   await editor.focus();
+-  await page.getByRole("button", { name: "View", exact: true }).click();
++  await page.getByRole("menuitem", { name: "View", exact: true }).click();
+   await page.getByRole("menu", { name: "View menu" }).press("Escape");
+   await expect(editor).toBeFocused();
+   await page.keyboard.insertText("MenuFocusProof");
+@@ -20,17 +20,17 @@
+   await page.goto("/writer");
+   const editor = page.getByLabel("Writer document body", { exact: true });
+   await editor.focus();
+-  await page.getByRole("button", { name: "View", exact: true }).click();
++  await page.getByRole("menuitem", { name: "View", exact: true }).click();
+   await page.getByRole("menuitemcheckbox", { name: "Status Bar", exact: true }).click();
+   await expect(editor).toBeFocused();
+   await expect(page.getByRole("status", { name: "Writer status bar" })).toHaveCount(0);
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Text", exact: true }).hover();
+   const bold = page.getByRole("menuitemcheckbox", { name: "Bold", exact: true });
+   await bold.focus();
+   await bold.press("Enter");
+   await expect(editor).toBeFocused();
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Text", exact: true }).hover();
+   await expect(bold).toHaveAttribute("aria-checked", "true");
+ });
+@@ -51,7 +51,7 @@
+ }) => {
+   await page.goto("/writer");
+   await page.getByLabel("Writer document body", { exact: true }).focus();
+-  await page.getByRole("button", { name: "View", exact: true }).click();
++  await page.getByRole("menuitem", { name: "View", exact: true }).click();
+   const control = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+   await control.click();
+   await expect(control).toBeFocused();
+--- a/apps/office/e2e/writer-style-selector.spec.ts
++++ b/apps/office/e2e/writer-style-selector.spec.ts
+@@ -116,7 +116,7 @@
+     if (width === 1280)
+       await expect(page.locator("p").filter({ hasText: /^Owned child$/ })).toHaveCount(1);
+     const openDialog = /** Opens the product paragraph draft. @returns Completion. */ async () => {
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+     };
+     const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+--- a/apps/office/e2e/writer-menu-document-focus.spec.ts
++++ b/apps/office/e2e/writer-menu-document-focus.spec.ts
+@@ -10,7 +10,7 @@
+       (document.activeElement as HTMLElement).blur();
+     },
+   );
+-  const trigger = page.getByRole("button", { name: "View", exact: true });
++  const trigger = page.getByRole("menuitem", { name: "View", exact: true });
+   await trigger.focus();
+   await expect(page.getByRole("menu")).toHaveCount(0);
+   await trigger.press("Escape");
+@@ -26,7 +26,7 @@
+   await page.goto("/writer");
+   const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+   await owner.focus();
+-  const trigger = page.getByRole("button", { name: "View", exact: true });
++  const trigger = page.getByRole("menuitem", { name: "View", exact: true });
+   await trigger.focus();
+   await trigger.press("Escape");
+   await expect(owner).toBeFocused();
+--- a/apps/office/e2e/writer-table-row-lists.spec.ts
++++ b/apps/office/e2e/writer-table-row-lists.spec.ts
+@@ -25,7 +25,7 @@
+       await second.fill("Second");
+       await neighbor.fill("Neighbor");
+       await selectBrowserTableRow(page, "Table1", 1);
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+       await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
+       const expected = kind === "Ordered List" ? "numbered" : "bullet",
+@@ -46,7 +46,7 @@
+       await page.keyboard.press("Control+y");
+       await expect(first).toHaveAttribute("data-list-kind", expected);
+       await expect(second).toHaveAttribute("data-list-kind", expected);
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+       await expect(page.getByRole("menuitemradio", { name: kind, exact: true })).toHaveAttribute(
+         "aria-checked",
+@@ -61,7 +61,7 @@
+       await page.keyboard.press("Control+y");
+       await expect(first).toHaveAttribute("data-list-level", "1");
+       await expect(second).toHaveAttribute("data-list-level", "1");
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+       await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
+       await expect(first).toHaveAttribute("data-list-kind", "none");
+--- a/apps/office/e2e/writer-counted-list-layout.spec.ts
++++ b/apps/office/e2e/writer-counted-list-layout.spec.ts
+@@ -64,7 +64,7 @@
+     await expect(neighbor).toHaveText("NeighborProof");
+     if (cell) {
+       await paragraph.click();
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+       await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+     }
+@@ -85,7 +85,7 @@
+     // Native label-alignment activation resets cell direct margins; imported body margins remain.
+     await expect.poll(measure).toBeCloseTo(cell ? 24 : 88, 1);
+     await paragraph.click();
+-    await page.getByRole("button", { name: "Format", exact: true }).click();
++    await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+     const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+     await dialog.getByLabel("First line indent (pt)").fill("6");
+--- a/apps/office/e2e/writer-hyperlinks.spec.ts
++++ b/apps/office/e2e/writer-hyperlinks.spec.ts
+@@ -41,7 +41,7 @@
+     "https://example.test/first",
+   );
+ 
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
+   await page.getByLabel("URL").fill("https://example.test/updated");
+   await page.getByRole("button", { name: "Apply" }).click();
+@@ -51,7 +51,7 @@
+   );
+ 
+   const downloadPromise = page.waitForEvent("download");
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await page.getByRole("menuitem", { name: "Export…" }).click();
+   await page.getByRole("button", { name: "Download ODT" }).click();
+   const download = await downloadPromise;
+--- a/apps/office/e2e/writer-clipboard.spec.ts
++++ b/apps/office/e2e/writer-clipboard.spec.ts
+@@ -12,13 +12,13 @@
+   await page.goto("/writer");
+   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
+   await writerEditor.fill("Copied Writer heading");
+-  await page.getByRole("button", { name: "Styles" }).click();
++  await page.getByRole("menuitem", { name: "Styles" }).click();
+   await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
+   await page
+     .getByRole("toolbar", { name: "Writer formatting toolbar" })
+     .getByRole("button", { exact: true, name: "Center" })
+     .click();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Select All" }).click();
+   const clipboardPayload = await writerEditor.evaluate(
+     /**
+@@ -61,7 +61,7 @@
+   await page.goto("/writer");
+   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
+   await firstParagraph.fill("First item");
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Lists" }).click();
+   await page.getByRole("menuitemradio", { exact: true, name: "Ordered List" }).click();
+   await firstParagraph.evaluate(
+@@ -80,10 +80,10 @@
+   await firstParagraph.press("Enter");
+   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
+   await secondParagraph.fill("Second item");
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Lists" }).click();
+   await page.getByRole("menuitem", { exact: true, name: "Demote Outline Level" }).click();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Select All" }).click();
+   const clipboardPayload = await firstParagraph.evaluate(
+     /** Dispatches a native copy event and checks that a detached rich target parses nested ordered lists. @param element - Rendered Writer paragraph beneath the copy-event owner. @returns MIME data plus detached target counts for outer and nested list items. */
+--- a/apps/office/e2e/writer-style-reset.spec.ts
++++ b/apps/office/e2e/writer-style-reset.spec.ts
+@@ -152,7 +152,7 @@
+       fullPage: true,
+     });
+     const download = page.waitForEvent("download");
+-    await page.getByRole("button", { name: "File", exact: true }).click();
++    await page.getByRole("menuitem", { name: "File", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
+     await page.getByRole("button", { name: "Download ODT", exact: true }).click();
+     const path = await (await download).path();
+--- a/apps/office/e2e/writer-native-internet-edit-range.spec.ts
++++ b/apps/office/e2e/writer-native-internet-edit-range.spec.ts
+@@ -46,7 +46,7 @@
+   await add(editor, 3, 6);
+   await expect(editor).toHaveText("abcdef");
+   await select(editor, 1);
+-  await page.getByRole("button", { name: "Edit", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
+   await page.getByLabel("URL").fill("https://example.test/changed");
+   await page.getByRole("button", { name: "Apply", exact: true }).click();
+--- a/apps/office/e2e/writer-selected-list-toggle.spec.ts
++++ b/apps/office/e2e/writer-selected-list-toggle.spec.ts
+@@ -52,7 +52,7 @@
+           },
+           secondLabel,
+         );
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+         await page.getByRole("menuitemradio", { name: kind, exact: true }).click();
+         const expected = kind === "Ordered List" ? "numbered" : "bullet",
+@@ -70,7 +70,7 @@
+         await page.keyboard.press("Control+y");
+         await expect(first).toHaveAttribute("data-list-kind", expected);
+         await expect(second).toHaveAttribute("data-list-kind", expected);
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+         await expect(page.getByRole("menuitemradio", { name: kind, exact: true })).toHaveAttribute(
+           "aria-checked",
+--- a/apps/office/e2e/writer-native-menubar-document-key.spec.ts
++++ b/apps/office/e2e/writer-native-menubar-document-key.spec.ts
+@@ -14,7 +14,7 @@
+   await expect(page.getByRole("menu")).toHaveCount(0);
+   await expect(editor).toBeFocused();
+   await page.keyboard.press("F10");
+-  await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
++  await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
+ });
+ test("native menubar trigger Ctrl-F6 resets the Writer activation cycle", /** Checks no-popup deactivation and subsequent fresh native menu key. @param fixtures - Browser fixture. @returns Nothing. */ async ({
+   page,
+@@ -27,14 +27,14 @@
+   await page.keyboard.press("Control+F6");
+   await expect(editor).toBeFocused();
+   await page.keyboard.press("F10");
+-  await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
++  await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
+   await expect(page.getByRole("menu")).toHaveCount(0);
+ });
+ test("native child Ctrl-F6 closes only the Writer owning submenu", /** Checks nearest parent consumes input before Writer direct document routing. @param fixtures - Browser fixture. @returns Nothing. */ async ({
+   page,
+ }) => {
+   await page.goto("/writer");
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   const trigger = page.getByRole("menuitem", { name: "Text", exact: true });
+   await trigger.focus();
+   await trigger.press("ArrowRight");
+--- a/apps/office/e2e/writer-native-menubar-auxclick.spec.ts
++++ b/apps/office/e2e/writer-native-menubar-auxclick.spec.ts
+@@ -10,7 +10,7 @@
+         await page.setViewportSize({ width, height: 900 });
+         await page.goto("/writer");
+         const editor = page.getByLabel("Writer document body", { exact: true }),
+-          edit = page.getByRole("button", { name: "Edit", exact: true });
++          edit = page.getByRole("menuitem", { name: "Edit", exact: true });
+         await editor.focus();
+         await edit.click({ button });
+         const menu = page.getByRole("menu", { name: "Edit menu" }),
+--- a/apps/office/e2e/writer-uncounted-list-layout.spec.ts
++++ b/apps/office/e2e/writer-uncounted-list-layout.spec.ts
+@@ -23,7 +23,7 @@
+     });
+     await editor.click();
+     await page.keyboard.type("Geometry");
+-    await page.getByRole("button", { name: "Format", exact: true }).click();
++    await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+     await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+     const readGeometry =
+--- a/apps/office/e2e/writer-native-hyperlink-mixed-remove.spec.ts
++++ b/apps/office/e2e/writer-native-hyperlink-mixed-remove.spec.ts
+@@ -54,7 +54,7 @@
+   await add(editor, 0, 3, "https://example.test/a");
+   await add(editor, 5, 8, "https://example.test/b");
+   await select(editor, 0, 8);
+-  await page.getByRole("button", { name: "Edit", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeDisabled();
+   const fixtureId = "writer-native-mixed-fixture",
+     result = await build({
+--- a/apps/office/e2e/writer-style-selection.spec.ts
++++ b/apps/office/e2e/writer-style-selection.spec.ts
+@@ -122,7 +122,7 @@
+       fullPage: true,
+     });
+     const download = page.waitForEvent("download");
+-    await page.getByRole("button", { name: "File", exact: true }).click();
++    await page.getByRole("menuitem", { name: "File", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
+     await page.getByRole("button", { name: "Download ODT", exact: true }).click();
+     const path = await (await download).path();
+--- a/apps/office/e2e/writer-native-list-context.spec.ts
++++ b/apps/office/e2e/writer-native-list-context.spec.ts
+@@ -71,7 +71,7 @@
+     await expect(maximumEditor).toHaveAttribute("data-list-level", "9");
+     /** Opens the real submenu through visible controls. @returns Completion. */
+     async function menu(): Promise<void> {
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).hover();
+     }
+     /** Closes the actual menu stack. @returns Completion. */
+--- a/apps/office/e2e/writer-cell-paragraph-format.spec.ts
++++ b/apps/office/e2e/writer-cell-paragraph-format.spec.ts
+@@ -24,7 +24,7 @@
+     .getByRole("button", { name: "Center", exact: true })
+     .click();
+   await expect(cell).toHaveCSS("text-align", "center");
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+   const id = await cell.getAttribute("data-writer-paragraph-id"),
+@@ -44,7 +44,7 @@
+   await expect(neighbor).toHaveCSS("text-align", "left");
+   await expect(neighbor).toHaveAttribute("data-list-kind", "none");
+   const pending = page.waitForEvent("download");
+-  await page.getByRole("button", { name: "File", exact: true }).click();
++  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Export…" }).click();
+   await page.getByRole("button", { name: "Download ODT" }).click();
+   const path = await (await pending).path();
+--- a/apps/office/e2e/writer-root-menu-boundary.spec.ts
++++ b/apps/office/e2e/writer-root-menu-boundary.spec.ts
+@@ -8,7 +8,7 @@
+     await page.goto("/writer");
+     const editor = page.getByLabel("Writer document body", { exact: true });
+     await editor.focus();
+-    const view = page.getByRole("button", { name: "View", exact: true });
++    const view = page.getByRole("menuitem", { name: "View", exact: true });
+     await view.click();
+     await view.focus();
+     await view.press(key);
+@@ -35,9 +35,9 @@
+   const editor = page.getByLabel("Writer document body", { exact: true });
+   await editor.focus();
+   await page.keyboard.press("F10");
+-  const file = page.getByRole("button", { name: "File", exact: true });
++  const file = page.getByRole("menuitem", { name: "File", exact: true });
+   await file.press("End");
+-  const tools = page.getByRole("button", { name: "Tools", exact: true });
++  const tools = page.getByRole("menuitem", { name: "Tools", exact: true });
+   await expect(tools).toBeFocused();
+   await expect(page.getByRole("menu")).toHaveCount(0);
+   await tools.press("Home");
+--- a/apps/office/e2e/writer-character-formatting.spec.ts
++++ b/apps/office/e2e/writer-character-formatting.spec.ts
+@@ -47,7 +47,7 @@
+       selection.addRange(range);
+     },
+   );
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Text" }).click();
+   await page.getByRole("menuitemcheckbox", { name: "Italic" }).click();
+   await expect(writerEditor.locator("strong em")).toHaveText("Formatted Writer body");
+@@ -72,7 +72,7 @@
+   await expect(writerEditor.locator("strong em span")).toHaveCount(0);
+   await page.getByRole("button", { name: "Redo" }).click();
+   await expect(writerEditor.locator("strong em span")).toHaveCount(1);
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("menuitem", { name: "Select All" }).click();
+   const clipboardPayload = await writerEditor.evaluate(
+     /** Dispatches a native-shaped Copy event and reads the Writer-provided rich MIME value. @param element - Writer paragraph beneath the document-body Copy listener. @returns Sanitized browser Copy representations. */
+--- a/apps/office/e2e/writer-print.spec.ts
++++ b/apps/office/e2e/writer-print.spec.ts
+@@ -8,9 +8,9 @@
+   await page.goto("/writer");
+   const editor = page.getByRole("textbox", { name: "Writer document text" });
+   await editor.fill("Print proof");
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await expect(page.getByRole("menuitem", { name: "Print" })).toBeVisible();
+-  await page.getByRole("button", { name: "File" }).click();
++  await page.getByRole("menuitem", { name: "File" }).click();
+   await expect(
+     page.getByRole("toolbar", { name: "Writer standard toolbar" }).getByRole("button", {
+       name: "Print",
+--- a/apps/office/e2e/writer-imported-table-lists.spec.ts
++++ b/apps/office/e2e/writer-imported-table-lists.spec.ts
+@@ -78,7 +78,7 @@
+   await expect(secondMarker).toHaveText("11.");
+   await selectBrowserTableRow(page, "RestartRow", 2);
+   await expect(rendered.locator('[data-writer-editor-selected="true"]')).toHaveCount(2);
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Add to List", exact: true }).click();
+   await expect(firstMarker).toHaveText("2.");
+--- a/apps/office/e2e/writer-menu-key.spec.ts
++++ b/apps/office/e2e/writer-menu-key.spec.ts
+@@ -8,11 +8,11 @@
+   const editor = page.getByLabel("Writer document body", { exact: true });
+   await editor.focus();
+   await page.keyboard.press("F10");
+-  const first = page.getByRole("button", { name: "File", exact: true });
++  const first = page.getByRole("menuitem", { name: "File", exact: true });
+   await expect(first).toBeFocused();
+   await expect(page.getByRole("menu")).toHaveCount(0);
+   await first.press("ArrowRight");
+-  const edit = page.getByRole("button", { name: "Edit", exact: true });
++  const edit = page.getByRole("menuitem", { name: "Edit", exact: true });
+   await expect(edit).toBeFocused();
+   await expect(page.getByRole("menu")).toHaveCount(0);
+   await edit.press("ArrowDown");
+@@ -36,7 +36,7 @@
+   const owner = page.getByRole("combobox", { name: "Paragraph style", exact: true });
+   await owner.focus();
+   await page.keyboard.press("F10");
+-  await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
++  await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
+   await page.keyboard.press("F10");
+   await expect(owner).toBeFocused();
+ });
+--- a/apps/office/e2e/writer-native-outline-tab.spec.ts
++++ b/apps/office/e2e/writer-native-outline-tab.spec.ts
+@@ -55,7 +55,7 @@
+     await expect(heading).toHaveText("Heading");
+     await expect(heading).toHaveAttribute("data-style", "heading-3");
+     const download = page.waitForEvent("download");
+-    await page.getByRole("button", { name: "File", exact: true }).click();
++    await page.getByRole("menuitem", { name: "File", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Export…" }).click();
+     await page.getByRole("button", { name: "Download ODT" }).click();
+     const path = await (await download).path();
+--- a/apps/office/e2e/writer-native-column-commands.spec.ts
++++ b/apps/office/e2e/writer-native-column-commands.spec.ts
+@@ -15,7 +15,7 @@
+         before = await table.boundingBox();
+       if (before === null) throw new Error("Missing native table geometry");
+       for (const behind of [false, true]) {
+-        await page.getByRole("button", { name: "Table", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Insert", exact: true }).hover();
+         await page
+           .getByRole("menuitem", {
+--- a/apps/office/e2e/writer-cell-list-enter.spec.ts
++++ b/apps/office/e2e/writer-cell-list-enter.spec.ts
+@@ -18,7 +18,7 @@
+     tail = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 2", exact: true }),
+     neighbor = page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true });
+   await cell.click();
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+   await page
+--- a/apps/office/e2e/writer-cut-paste.spec.ts
++++ b/apps/office/e2e/writer-cut-paste.spec.ts
+@@ -42,10 +42,10 @@
+     },
+   );
+   await expect(writerEditor.locator("strong")).toHaveText("Pasted");
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await expect(page.getByRole("menuitem", { name: "Cut" })).toBeVisible();
+   await expect(page.getByRole("menuitem", { name: "Paste" })).toBeVisible();
+-  await page.getByRole("button", { exact: true, name: "Edit" }).click();
++  await page.getByRole("menuitem", { exact: true, name: "Edit" }).click();
+   await page.getByRole("button", { name: "Undo" }).click();
+   await expect(writerEditor).toHaveText("");
+   await page.getByRole("button", { name: "Redo" }).click();
+--- a/apps/office/e2e/writer-cell-list-level.spec.ts
++++ b/apps/office/e2e/writer-cell-list-level.spec.ts
+@@ -20,11 +20,11 @@
+     toolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+   await cell.click();
+   await page.keyboard.type("NestedCell");
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+   await expect(toolbar.getByRole("button", { name: "Decrease", exact: true })).toBeDisabled();
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   const demote = page.getByRole("menuitem", { name: "Demote Outline Level", exact: true });
+   await expect(demote).toBeEnabled();
+@@ -47,7 +47,7 @@
+   await toolbar.getByRole("button", { name: "Increase", exact: true }).click();
+   await expect(cell).toHaveAttribute("data-list-level", "1");
+   const pending = page.waitForEvent("download");
+-  await page.getByRole("button", { name: "File", exact: true }).click();
++  await page.getByRole("menuitem", { name: "File", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Export…" }).click();
+   await page.getByRole("button", { name: "Download ODT" }).click();
+   const path = await (await pending).path();
+--- a/apps/office/e2e/writer-ruler-indent-items.spec.ts
++++ b/apps/office/e2e/writer-ruler-indent-items.spec.ts
+@@ -113,7 +113,7 @@
+       await page.mouse.move(point.x + 20, point.y, { steps: 3 });
+       await page.mouse.up();
+       await assertAnchors(item.pixels);
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();
+       const dialog = page.getByRole("dialog", { name: "Paragraph", exact: true });
+       await expect(dialog.getByLabel("Automatic first-line indent")).toBeChecked();
+--- a/apps/office/e2e/writer-native-row-height-dialog.spec.ts
++++ b/apps/office/e2e/writer-native-row-height-dialog.spec.ts
+@@ -38,7 +38,7 @@
+       await editor.click({ position: { x: 8, y: 8 } });
+       /** Opens the source Table > Size > Row Height command. @returns Completion. */
+       async function open(): Promise<void> {
+-        await page.getByRole("button", { name: "Table", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Size", exact: true }).hover();
+         await page.getByRole("menuitem", { name: "Row Height…", exact: true }).click();
+       }
+--- a/apps/office/e2e/writer-document-key.spec.ts
++++ b/apps/office/e2e/writer-document-key.spec.ts
+@@ -10,9 +10,9 @@
+     await owner.focus();
+     if (origin === "root") {
+       await page.keyboard.press("F10");
+-      await expect(page.getByRole("button", { name: "File", exact: true })).toBeFocused();
++      await expect(page.getByRole("menuitem", { name: "File", exact: true })).toBeFocused();
+     } else if (origin === "child") {
+-      await page.getByRole("button", { name: "View", exact: true }).click();
++      await page.getByRole("menuitem", { name: "View", exact: true }).click();
+       const rulers = page.getByRole("menuitem", { name: "Rulers", exact: true });
+       await rulers.focus();
+       await rulers.press("ArrowRight");
+--- a/apps/office/e2e/writer-lists.spec.ts
++++ b/apps/office/e2e/writer-lists.spec.ts
+@@ -8,7 +8,7 @@
+   await page.goto("/writer");
+   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
+   await firstParagraph.fill("First list item");
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Lists" }).click();
+   await page.getByRole("menuitemradio", { exact: true, name: "Ordered List" }).click();
+   const firstProjectionId = await firstParagraph.getAttribute("data-writer-paragraph-id");
+@@ -40,13 +40,13 @@
+   await expect(
+     formattingToolbar.getByRole("button", { exact: true, name: "Decrease" }),
+   ).toBeDisabled();
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Lists" }).click();
+   await page.getByRole("menuitemradio", { exact: true, name: "Unordered List" }).click();
+   await expect(secondMarker).toHaveText("•");
+   await expect(secondParagraph).toHaveText("Second list item");
+   await expect(secondParagraph).toHaveAccessibleDescription("");
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Lists" }).click();
+   await page.getByRole("menuitem", { name: "Demote Outline Level" }).click();
+   await expect(secondParagraph).toHaveAttribute("data-list-level", "1");
+@@ -63,7 +63,7 @@
+     .getByRole("button", { exact: true, name: "Decrease" })
+     .click();
+   await expect(secondParagraph).toHaveAttribute("data-list-level", "0");
+-  await page.getByRole("button", { name: "Format" }).click();
++  await page.getByRole("menuitem", { name: "Format" }).click();
+   await page.getByRole("menuitem", { name: "Lists" }).click();
+   await page.getByRole("menuitemradio", { name: "No List" }).click();
+   await expect(secondMarker).toHaveCount(0);
+--- a/apps/office/e2e/writer-native-disabled-menubar.spec.ts
++++ b/apps/office/e2e/writer-native-disabled-menubar.spec.ts
+@@ -36,7 +36,7 @@
+       await expect(editor).toBeFocused();
+       await expect(editor).toHaveText("");
+       await page.keyboard.type("NativeMenus");
+-      await page.getByRole("button", { name: "Edit", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Edit", exact: true }).click();
+       await page.keyboard.press("Home");
+       const activeUndo = page.getByRole("menuitem", { name: "Undo", exact: true });
+       await expect(activeUndo).toBeEnabled();
+--- a/apps/office/e2e/writer-native-table-selection-commands.spec.ts
++++ b/apps/office/e2e/writer-native-table-selection-commands.spec.ts
+@@ -18,7 +18,7 @@
+         ["Select Column", 2],
+         ["Select Table", 4],
+       ] as const) {
+-        await page.getByRole("button", { name: "Table", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Select", exact: true }).hover();
+         await page.getByRole("menuitem", { name: label, exact: true }).click();
+         await expect(table.locator('[data-writer-editor-selected="true"]')).toHaveCount(count);
+--- a/apps/office/e2e/writer-cell-list-continue.spec.ts
++++ b/apps/office/e2e/writer-cell-list-continue.spec.ts
+@@ -20,7 +20,7 @@
+       const first = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true }),
+         second = page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true });
+       await first.fill("First");
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+       await expect(page.getByRole("menuitem", { name: "Add to List", exact: true })).toBeDisabled();
+       await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+@@ -28,11 +28,11 @@
+       await expect(page.locator('[data-writer-list-marker="' + firstId + '"]')).toHaveText("1.");
+       await second.fill("Second");
+       if (initial === "bullet") {
+-        await page.getByRole("button", { name: "Format", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+         await page.getByRole("menuitemradio", { name: "Unordered List", exact: true }).click();
+       }
+-      await page.getByRole("button", { name: "Format", exact: true }).click();
++      await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+       await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+       const continuation = page.getByRole("menuitem", { name: "Add to List", exact: true });
+       await expect(continuation).toBeEnabled();
+--- a/apps/office/e2e/writer-cell-list-backspace.spec.ts
++++ b/apps/office/e2e/writer-cell-list-backspace.spec.ts
+@@ -18,7 +18,7 @@
+     neighbor = page.getByRole("textbox", { name: "Row 1 column 2 paragraph 1", exact: true });
+   await cell.click();
+   await page.keyboard.type("Item");
+-  await page.getByRole("button", { name: "Format", exact: true }).click();
++  await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+   await page.getByRole("menuitem", { name: "Lists", exact: true }).click();
+   await page.getByRole("menuitemradio", { name: "Ordered List", exact: true }).click();
+   for (let i = 0; i < 4; i++) await cell.press("ArrowLeft");
+--- a/apps/office/e2e/writer-native-row-commands.spec.ts
++++ b/apps/office/e2e/writer-native-row-commands.spec.ts
+@@ -13,7 +13,7 @@
+       await page.keyboard.type("Original");
+       const table = page.getByRole("table", { name: "Table1" });
+       for (const behind of [false, true]) {
+-        await page.getByRole("button", { name: "Table", exact: true }).click();
++        await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+         await page.getByRole("menuitem", { name: "Insert", exact: true }).hover();
+         await page
+           .getByRole("menuitem", {
+--- a/apps/office/e2e/writer-native-table-column-page.spec.ts
++++ b/apps/office/e2e/writer-native-table-column-page.spec.ts
+@@ -160,7 +160,7 @@
+     await columns(page);
+     await expect(page.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
+     await page.getByRole("button", { name: "Cancel", exact: true }).click();
+-    await page.getByRole("button", { name: "Table", exact: true }).click();
++    await page.getByRole("menuitem", { name: "Table", exact: true }).click();
+     await page.getByRole("menuitem", { name: "Select", exact: true }).hover();
+     await page.getByRole("menuitem", { name: "Select Table", exact: true }).click();
+     await columns(page);
+--- a/apps/office/e2e/writer-sidebar-deck.spec.ts
++++ b/apps/office/e2e/writer-sidebar-deck.spec.ts
+@@ -19,7 +19,7 @@
+     await expect(paragraph).not.toBeVisible();
+     await expect(activation).toBeVisible();
+     await expect(activation).toHaveAttribute("aria-pressed", "false");
+-    await page.getByRole("button", { name: "View", exact: true }).click();
++    await page.getByRole("menuitem", { name: "View", exact: true }).click();
+     await expect(page.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveAttribute(
+       "aria-checked",
+       "true",
+--- a/apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx
++++ b/apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx
+@@ -393,7 +393,7 @@
+     placeWriterCaret(firstParagraph, 1);
+     fireEvent.keyDown(firstParagraph, { key: "Delete" });
+     expect(screen.getAllByRole("textbox")).toHaveLength(2);
+-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+     expect(window.getSelection()?.toString()).toContain("Before");
+     expect(window.getSelection()?.toString()).toContain("after");
+--- a/apps/office/src/sw/browser/editor/native-list-context.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-list-context.test.tsx
+@@ -68,7 +68,7 @@
+ }
+ /** Opens actual native Lists menu. @returns Nothing. */
+ function menu(): void {
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+ }
+ /** Assigns actual cross-paragraph browser selection and dispatches real selection capture. @param f - Mounted owners. @param boundary - Whether point targets boundary paragraph. @returns Nothing. */
+--- a/apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-table-selection-commands.test.tsx
+@@ -45,7 +45,7 @@
+         pos.Dispose();
+         doc.GetUndoManager().Clear();
+         render(<WriterWorkbench isActive view={session.view} />);
+-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+         fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+         const item = screen.getByRole("menuitem", { name: label });
+         expect(item).toBeEnabled();
+@@ -97,7 +97,7 @@
+           },
+         );
+         expect(element.querySelectorAll('[data-writer-editor-selected="true"]')).toHaveLength(0);
+-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+         fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+         expect(screen.getByRole("menuitem", { name: label })).toBeDisabled();
+       } finally {
+@@ -115,7 +115,7 @@
+     );
+     shell.SelectTableRow();
+     render(<WriterWorkbench isActive view={session.view} />);
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+     const submenu = required(
+       screen.getByRole("menuitem", { name: "Select Column" }).closest<HTMLElement>('[role="menu"]'),
+--- a/apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-independent-table-selection.test.tsx
+@@ -42,7 +42,7 @@
+     pos.Dispose();
+     doc.GetUndoManager().Clear();
+     render(<WriterWorkbench isActive view={session.view} />);
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Select Column" }));
+     const selected = [boxes[1], boxes[4], boxes[7]],
+--- a/apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-row-frame-size.test.tsx
+@@ -47,7 +47,7 @@
+       },
+     );
+     position2.Dispose();
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+     expect(screen.getByRole("spinbutton", { name: "Height (cm)" })).toHaveValue(1.59);
+--- a/apps/office/src/sw/browser/editor/native-table-selection.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-table-selection.test.tsx
+@@ -155,7 +155,7 @@
+ it("table properties use native selected rows and preserve other row geometry", /** Checks actual table selection behavior.  @returns Operation result. */ () => {
+   const f = fixture();
+   selectMountedTableRow("First", 2);
+-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+   const dialog = screen.getByRole("dialog", { name: "Row Height" });
+@@ -179,7 +179,7 @@
+       f.edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 1 } });
+     },
+   );
+-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+   const dialog = screen.getByRole("dialog", { name: "Row Height" });
+--- a/apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-cell-list-level.test.tsx
+@@ -55,7 +55,7 @@
+       toolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
+     expect(screen.getByRole("button", { name: "Decrease" })).toBeDisabled();
+     expect(owner.cell).toHaveAttribute("data-list-level", "0");
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+     const demote = screen.getByRole("menuitem", { name: "Demote Outline Level" });
+     expect(demote).toBeEnabled();
+--- a/apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-table-row-commands.test.tsx
+@@ -33,7 +33,7 @@
+         mark.Dispose();
+         doc.GetUndoManager().Clear();
+         render(<WriterWorkbench isActive view={session.view} />);
+-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+         fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Insert" }));
+         const command = screen.getByRole("menuitem", {
+           name: behind ? "Insert Rows Below" : "Insert Rows Above",
+--- a/apps/office/src/sw/browser/editor/native-none-numbering.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-none-numbering.test.tsx
+@@ -99,7 +99,7 @@
+   expect(f.first.IsInList()).toBe(true);
+   expect(f.first.GetNumRule()?.Get(0).GetNumberingType()).toBe(5);
+   focus(f.noneEditor);
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+   expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeDisabled();
+   expect(screen.getByRole("menuitem", { name: "Promote Outline Level" })).toBeDisabled();
+--- a/apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-table-column-commands.test.tsx
+@@ -39,7 +39,7 @@
+         render(<WriterWorkbench isActive view={session.view} />);
+         const element = screen.getByRole("table", { name: "Table1" }),
+           width = element.style.width;
+-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+         fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Insert" }));
+         fireEvent.click(
+           screen.getByRole("menuitem", {
+--- a/apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-independent-column-insertion.test.tsx
+@@ -45,7 +45,7 @@
+         render(<WriterWorkbench isActive view={session.view} />);
+         const element = screen.getByRole("table", { name: "Independent" }),
+           width = element.style.width;
+-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+         fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Insert" }));
+         fireEvent.click(
+           screen.getByRole("menuitem", {
+--- a/apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx
++++ b/apps/office/src/sw/browser/editor/native-numeric-row-insertion.test.tsx
+@@ -54,7 +54,7 @@
+         const element = screen.getByRole("table", { name: "NumericRows" }),
+           index = behind ? 2 : 0,
+           source = required(originals[behind ? 1 : 0]);
+-        fireEvent.click(screen.getByRole("button", { name: "Table" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+         fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Insert" }));
+         fireEvent.click(
+           screen.getByRole("menuitem", {
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar-document-focus.test.tsx
+@@ -62,7 +62,7 @@
+   return {
+     document: within(frame).getByRole("textbox", { name: `${id} document` }),
+     toolbar: within(frame).getByRole("textbox", { name: `${id} toolbar` }),
+-    trigger: within(frame).getByRole("button", { name: "Edit" }),
++    trigger: within(frame).getByRole("menuitem", { name: "Edit" }),
+     focusDocument,
+     execute,
+   };
+@@ -72,7 +72,7 @@
+   it("routes the actual Writer menu to its editing host and accepts input", /** Checks real view-client reference and editing boundary. @returns Nothing. */ function routesWriterClient(): void {
+     globalThis.history.replaceState(null, "", "/writer");
+     render(<Desktop modules={createOfficeModuleDescriptors([createWriterModuleFactory()])} />);
+-    const trigger = screen.getByRole("button", { name: "View" });
++    const trigger = screen.getByRole("menuitem", { name: "View" });
+     act(
+       /** Enters the menubar without a saved owner. @returns Nothing. */ () => {
+         (document.activeElement as HTMLElement).blur();
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar-submenu-preselection.test.tsx
+@@ -69,7 +69,7 @@
+       resolveArguments={/** Supplies no fixture arguments. @returns Undefined. */ () => undefined}
+     />,
+   );
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   return { ...mounted, execute, trigger: screen.getByRole("menuitem", { name: "Text" }) };
+ }
+ 
+@@ -172,7 +172,7 @@
+     popup.focus();
+     fireEvent.keyDown(popup, { key: "Enter" });
+     expect(screen.queryAllByRole("menu")).toHaveLength(0);
+-    expect(screen.getByRole("button", { name: "Format" })).toHaveFocus();
++    expect(screen.getByRole("menuitem", { name: "Format" })).toHaveFocus();
+     expect(fixture.execute).not.toHaveBeenCalled();
+   });
+ });
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx
+@@ -75,7 +75,7 @@
+     execute,
+     refresh: /** Changes placement identity without changing content. @returns Nothing. */ () =>
+       mounted.rerender(surface([...menus])),
+-    trigger: screen.getByRole("button", { name: "Format" }),
++    trigger: screen.getByRole("menuitem", { name: "Format" }),
+   };
+ }
+ 
+@@ -91,8 +91,8 @@
+ 
+   it("transfers pointer focus to a neighboring root without preselection", /** Checks pointer switching. @returns Nothing. */ function switchesPointerPopup(): void {
+     mountMenus();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+-    fireEvent.mouseEnter(screen.getByRole("button", { name: "Edit" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
++    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Edit" }));
+     expect(screen.getByRole("menu", { name: "Edit menu" })).toHaveFocus();
+     expect(screen.getByRole("menuitem", { name: "Delta" })).not.toHaveFocus();
+     expect(screen.queryByRole("menu", { name: "Format menu" })).not.toBeInTheDocument();
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar-keyboard-ownership.test.tsx
+@@ -75,7 +75,7 @@
+       }
+     />,
+   );
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   return { ...mounted, execute, arguments_ };
+ }
+ 
+@@ -113,7 +113,7 @@
+     fireEvent.keyDown(screen.getByRole("menuitem", { name: "root" }), { key: "Enter" });
+     expect(fixture.execute).toHaveBeenCalledTimes(1);
+     expect(fixture.execute).toHaveBeenLastCalledWith("root", fixture.arguments_);
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     openNestedMenu();
+     fireEvent.click(screen.getByRole("menuitem", { name: "Beta" }));
+     expect(fixture.execute).toHaveBeenCalledTimes(2);
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar-menu-key.test.tsx
+@@ -222,7 +222,7 @@
+     const editor = screen.getByLabelText("Writer document body");
+     editor.focus();
+     pressMenuKey();
+-    expect(screen.getByRole("button", { name: "File" })).toHaveFocus();
++    expect(screen.getByRole("menuitem", { name: "File" })).toHaveFocus();
+     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+     pressMenuKey();
+     expect(editor).toHaveFocus();
+--- a/apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx
++++ b/apps/office/src/framework/browser/presentation/CommandMenuBar.test.tsx
+@@ -82,7 +82,7 @@
+       .spyOn(root, "querySelectorAll")
+       .mockReturnValue([] as unknown as NodeListOf<Element>);
+     try {
+-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+       const trigger = screen.getByRole("menuitem", { name: "Numbering" });
+       fireEvent.keyDown(trigger, { key: "ArrowRight" });
+       expect(screen.getByRole("menu", { name: "Numbering menu" })).toBeVisible();
+@@ -105,7 +105,7 @@
+     const removeDocument = vi.spyOn(document, "removeEventListener");
+     const mounted = renderGeometryMenu();
+     try {
+-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+       const menu = screen.getByRole("menu", { name: "Format menu" });
+       expect(menu).toHaveStyle({
+         left: "158px",
+@@ -150,7 +150,7 @@
+     vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(224);
+     const mounted = renderGeometryMenu();
+     try {
+-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+       const trigger = screen.getByRole("menuitem", { name: "Numbering" });
+       fireEvent.keyDown(trigger, { key: "ArrowRight" });
+       const submenu = screen.getByRole("menu", { name: "Numbering menu" });
+@@ -209,7 +209,7 @@
+         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
+       />,
+     );
+-    expect(screen.getByRole("button", { name: "File" })).toBeVisible();
++    expect(screen.getByRole("menuitem", { name: "File" })).toBeVisible();
+   });
+ 
+   it("switches open top-level menus on hover", /** Verifies hover switching does not open a closed menubar. @returns Nothing. */ function switchesOpenMenusOnHover(): void {
+@@ -251,8 +251,8 @@
+         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
+       />,
+     );
+-    const file = screen.getByRole("button", { name: "File" });
+-    const edit = screen.getByRole("button", { name: "Edit" });
++    const file = screen.getByRole("menuitem", { name: "File" });
++    const edit = screen.getByRole("menuitem", { name: "Edit" });
+     fireEvent.mouseEnter(edit);
+     expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
+     fireEvent.click(file);
+@@ -315,13 +315,13 @@
+         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
+       />,
+     );
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const menuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+     expect(menuItem).toHaveAttribute("aria-checked", "true");
+     expect(menuItem.querySelector("[data-menu-checkmark]")).toHaveTextContent("✓");
+     expect(menuItem.querySelector("[data-menu-checkmark]")).not.toHaveClass("text-indigo-700");
+     fireEvent.click(menuItem);
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const uncheckedMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+     expect(uncheckedMenuItem).toHaveAttribute("aria-checked", "false");
+     expect(uncheckedMenuItem.querySelector("[data-menu-checkmark]")).toHaveTextContent("");
+@@ -330,7 +330,7 @@
+ 
+ it("focuses literal UNO menu identities without interpreting dots,colons or quotes as CSS selectors", /** Regression for the production Calc File/Edit crash. @returns Nothing. */ () => {
+   const mounted = renderGeometryMenu(".uno:PickList", '.uno:StyleApply?Style="Quoted"');
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   expect(screen.getByRole("menu", { name: "Format menu" })).toHaveFocus();
+   fireEvent.keyDown(screen.getByRole("menuitem", { name: "Numbering" }), { key: "ArrowRight" });
+   expect(screen.getByRole("menuitem", { name: "Apply" })).toHaveFocus();
+--- a/apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx
++++ b/apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx
+@@ -79,7 +79,7 @@
+       .mockImplementation(/** Stubs browser printing. @returns Nothing. */ () => undefined);
+     try {
+       render(<App />);
+-      fireEvent.click(screen.getByRole("button", { name: "File" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
+       fireEvent.click(screen.getByRole("menuitem", { name: "Print" }));
+       fireEvent.click(
+         within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole(
+@@ -100,7 +100,7 @@
+    */, function rendersWriterMenus(): void {
+     render(<App />);
+ 
+-    fireEvent.click(screen.getByRole("button", { name: "File" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
+     expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
+     const newMenuItem = screen.getByRole("menuitem", { name: "New Document" });
+     expect(newMenuItem).toBeEnabled();
+@@ -121,9 +121,9 @@
+     ).not.toBeInTheDocument();
+     expect(screen.queryByRole("menuitem", { name: "Open Local Copy…" })).not.toBeInTheDocument();
+     expect(screen.queryByRole("menuitem", { name: "Save Local Copy" })).not.toBeInTheDocument();
+-    fireEvent.click(screen.getByRole("button", { name: "File" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
+     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     expect(screen.getByRole("menu", { name: "View menu" })).toBeVisible();
+     const sidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+     expect(sidebarMenuItem).toHaveAttribute("aria-checked", "true");
+@@ -138,12 +138,12 @@
+     );
+     expect(screen.getByRole("document", { name: "Page 1" })).toBeVisible();
+     expect(screen.getByLabelText("Writer vertical ruler")).toBeVisible();
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const hiddenSidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+     expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
+     fireEvent.click(hiddenSidebarMenuItem);
+     expect(screen.getByRole("complementary", { name: "Writer properties sidebar" })).toBeVisible();
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     expect(screen.getByLabelText("Writer horizontal ruler")).toBeVisible();
+     const rulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
+     rulersMenu.focus();
+@@ -152,7 +152,7 @@
+     expect(rulerMenuItem).toHaveAttribute("aria-checked", "true");
+     fireEvent.click(rulerMenuItem);
+     expect(screen.queryByLabelText("Writer horizontal ruler")).not.toBeInTheDocument();
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const hiddenRulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
+     hiddenRulersMenu.focus();
+     fireEvent.keyDown(hiddenRulersMenu, { key: "ArrowRight" });
+@@ -160,37 +160,37 @@
+     expect(hiddenRulerMenuItem).toHaveAttribute("aria-checked", "false");
+     fireEvent.click(hiddenRulerMenuItem);
+     expect(screen.getByLabelText("Writer horizontal ruler")).toBeVisible();
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const statusBarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
+     expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
+     fireEvent.click(statusBarMenuItem);
+     expect(screen.queryByRole("status", { name: "Writer status bar" })).not.toBeInTheDocument();
+     expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const hiddenStatusBarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
+     expect(hiddenStatusBarMenuItem).toHaveAttribute("aria-checked", "false");
+     fireEvent.click(hiddenStatusBarMenuItem);
+     expect(screen.getByRole("status", { name: "Writer status bar" })).toBeVisible();
+-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
+     expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
+     expect(screen.getByRole("menuitem", { name: "Cut" })).toBeEnabled();
+     expect(screen.getByRole("menuitem", { name: "Paste" })).toBeEnabled();
+     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+     const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
+-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+     getSelection.mockRestore();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
+     expect(screen.getByRole("menuitem", { name: "Text" })).toBeEnabled();
+-    fireEvent.click(screen.getByRole("button", { name: "Styles" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Styles" }));
+     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
+     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
+     expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
+-    expect(screen.getByRole("button", { name: "Table" })).toBeInTheDocument();
+-    expect(screen.getByRole("button", { name: "Tools" })).toBeInTheDocument();
+-    expect(screen.queryByRole("button", { name: "Window" })).not.toBeInTheDocument();
++    expect(screen.getByRole("menuitem", { name: "Table" })).toBeInTheDocument();
++    expect(screen.getByRole("menuitem", { name: "Tools" })).toBeInTheDocument();
++    expect(screen.queryByRole("menuitem", { name: "Window" })).not.toBeInTheDocument();
+     expect(screen.queryByRole("button", { name: "Help" })).not.toBeInTheDocument();
+     expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
+   }, 30_000);
+@@ -199,7 +199,7 @@
+     render(<App />);
+     const page = screen.getByRole("document", { name: "Page 1" });
+     const originalWidth = page.style.width;
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Page Style…" }));
+     expect(screen.getByRole("dialog", { name: "Page Style" })).toBeVisible();
+     await act(
+@@ -213,7 +213,7 @@
+     );
+     expect(page.style.width).toBe(originalWidth);
+ 
+-    const formatButton = screen.getByRole("button", { name: "Format" });
++    const formatButton = screen.getByRole("menuitem", { name: "Format" });
+     if (formatButton.getAttribute("aria-expanded") !== "true") fireEvent.click(formatButton);
+     await act(
+       /** Reopens Page Style. @returns A fulfilled act promise. */ async () => {
+@@ -252,7 +252,7 @@
+         expect(paragraph.style.marginInlineStart).not.toBe(""),
+     );
+ 
+-    fireEvent.click(screen.getByRole("button", { name: "View" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "View" }));
+     const rulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
+     rulersMenu.focus();
+     fireEvent.keyDown(rulersMenu, { key: "ArrowRight" });
+@@ -275,7 +275,7 @@
+       const editor = screen.getByRole("textbox", { name: "Writer document text" });
+       enterWriterParagraphText(editor, "Copied Writer body");
+       selectWriterParagraphText(editor);
+-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+       const copyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
+       await act(
+         /** Requests native Copy from the Writer Edit menu. @returns A fulfilled React act promise. */
+@@ -290,7 +290,7 @@
+       expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
+       writeText.mockRejectedValueOnce(new Error("Denied"));
+       selectWriterParagraphText(editor);
+-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+       const rejectedCopyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
+       await act(
+         /** Requests a rejected native copy that must surface deterministic status feedback. @returns A fulfilled React act promise. */
+@@ -335,11 +335,11 @@
+           { name: "Center" },
+         ),
+       );
+-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+       selectWriterParagraphText(editor);
+       fireEvent.change(screen.getByLabelText("Font name"), { target: { value: "Noto Serif" } });
+-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+       selectWriterParagraphText(editor);
+       await act(
+@@ -385,7 +385,7 @@
+       selection.removeAllRanges();
+       selection.addRange(selectedRange);
+       document.dispatchEvent(new Event("selectionchange"));
+-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+       await act(
+         /** Executes the menu Cut command after preparing one same-paragraph selection. @returns A fulfilled React act promise. */
+         async function cutsSelectedWriterText(): Promise<void> {
+@@ -428,7 +428,7 @@
+       selection.removeAllRanges();
+       selection.addRange(replaceRange);
+       document.dispatchEvent(new Event("selectionchange"));
+-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++      fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+       await act(
+         /** Replaces a same-paragraph selection through the Edit Paste command. @returns A fulfilled React act promise. */
+         async function pastesOverSelection(): Promise<void> {
+@@ -514,7 +514,7 @@
+         { name: "Center" },
+       ),
+     );
+-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+     const setData = vi.fn();
+     fireEvent.copy(documentBody, {
+@@ -534,8 +534,8 @@
+ 
+   it("implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics" /** Verifies the primary menu keyboard and dismissal interactions. @returns Nothing. */, function navigatesWriterMenus(): void {
+     render(<App />);
+-    const file = screen.getByRole("button", { name: "File" });
+-    const edit = screen.getByRole("button", { name: "Edit" });
++    const file = screen.getByRole("menuitem", { name: "File" });
++    const edit = screen.getByRole("menuitem", { name: "Edit" });
+     file.focus();
+     fireEvent.keyDown(file, { key: "ArrowRight" });
+     expect(edit).toHaveFocus();
+@@ -567,7 +567,7 @@
+     expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveFocus();
+     expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
+ 
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     const text = screen.getByRole("menuitem", { name: "Text" });
+     text.focus();
+     fireEvent.keyDown(text, { key: "ArrowRight" });
+@@ -588,16 +588,16 @@
+     vi.useFakeTimers();
+     try {
+       render(<App />);
+-      const file = screen.getByRole("button", { name: "File" });
++      const file = screen.getByRole("menuitem", { name: "File" });
+       file.focus();
+       fireEvent.keyDown(file, { key: "ArrowLeft" });
+-      expect(screen.getByRole("button", { name: "Tools" })).toHaveFocus();
+-      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Home" });
++      expect(screen.getByRole("menuitem", { name: "Tools" })).toHaveFocus();
++      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Tools" }), { key: "Home" });
+       expect(file).toHaveFocus();
+       fireEvent.keyDown(file, { key: "End" });
+-      expect(screen.getByRole("button", { name: "Tools" })).toHaveFocus();
+-      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Escape" });
+-      fireEvent.keyDown(screen.getByRole("button", { name: "Tools" }), { key: "Tab" });
++      expect(screen.getByRole("menuitem", { name: "Tools" })).toHaveFocus();
++      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Tools" }), { key: "Escape" });
++      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Tools" }), { key: "Tab" });
+ 
+       fireEvent.click(file);
+       const firstFileItem = screen.getByRole("menuitem", { name: "New Document" });
+@@ -655,7 +655,7 @@
+       fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: " " });
+       expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
+ 
+-      const view = screen.getByRole("button", { name: "View" });
++      const view = screen.getByRole("menuitem", { name: "View" });
+       fireEvent.keyDown(view, { key: "ArrowUp" });
+       const firstViewItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
+       expect(firstViewItem).toHaveFocus();
+@@ -667,7 +667,7 @@
+       expect(screen.getByRole("menu", { name: "Insert menu" })).toBeVisible();
+       fireEvent.keyDown(screen.getByRole("menuitem", { name: "Hyperlink…" }), { key: "Escape" });
+ 
+-      const format = screen.getByRole("button", { name: "Format" });
++      const format = screen.getByRole("menuitem", { name: "Format" });
+       fireEvent.keyDown(format, { key: "ArrowDown" });
+       const lists = screen.getByRole("menuitem", { name: "Lists" });
+       fireEvent.mouseLeave(lists.parentElement as HTMLElement);
+--- a/apps/office/src/sw/browser/presentation/writer-view.test.tsx
++++ b/apps/office/src/sw/browser/presentation/writer-view.test.tsx
+@@ -86,7 +86,7 @@
+ 
+ /** Opens the upstream Format menu placement for the paragraph dialog. @returns Nothing. */
+ function openParagraphDialog(): void {
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
+ }
+ 
+@@ -212,7 +212,7 @@
+       target: { value: "3" },
+     });
+     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+     fireEvent.change(screen.getByRole("spinbutton", { name: "Height (cm)" }), {
+--- a/apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx
++++ b/apps/office/src/sw/browser/presentation/WriterUpstreamEntryPoints.test.tsx
+@@ -22,7 +22,7 @@
+     const table = session.docShell.GetDoc().GetTables()[0];
+     expect(table?.GetTabLines()).toHaveLength(2);
+     expect(table?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(3);
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Table Properties…" }));
+     expect(screen.getByRole("dialog", { name: "Table Properties" })).toBeInTheDocument();
+     fireEvent.click(
+@@ -30,15 +30,15 @@
+         name: "Cancel",
+       }),
+     );
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     expect(screen.getByRole("menuitem", { name: "Table…" })).toBeDisabled();
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     act(
+       /** Leaves the table before opening native body insertion. @returns Nothing. */ () => {
+         session.view.GetWrtShell().FocusNode(session.docShell.GetDoc().paragraphs[0] as SwTextNode);
+       },
+     );
+-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Table…" }));
+     expect(screen.getByRole("dialog", { name: "Insert Table" })).toBeInTheDocument();
+     fireEvent.click(
+@@ -46,13 +46,13 @@
+         name: "Cancel",
+       }),
+     );
+-    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Tools" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Line Numbering…" }));
+     const dialog = screen.getByRole("dialog", { name: "Line Numbering" });
+     fireEvent.click(within(dialog).getByRole("checkbox", { name: "Show numbering" }));
+     fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+     expect(session.docShell.GetDoc().GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
+-    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Tools" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Line Numbering…" }));
+     fireEvent.click(
+       within(screen.getByRole("dialog", { name: "Line Numbering" })).getByRole("button", {
+--- a/apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx
++++ b/apps/office/src/sw/browser/presentation/native-row-height-dialog.test.tsx
+@@ -9,7 +9,7 @@
+ afterEach(cleanup);
+ /** Opens the generated source menu, retaining native selection. @returns Nothing. */
+ function open(): void {
+-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Size" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Row Height…" }));
+ }
+--- a/apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx
++++ b/apps/office/src/sw/browser/presentation/writer-view-document-key.test.tsx
+@@ -82,7 +82,7 @@
+       fixture.owner.focus();
+       if (origin === "root") pressDocumentKey({ key: "F10", ctrlKey: false });
+       else {
+-        fireEvent.click(fixture.frame.getByRole("button", { name: "View" }));
++        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "View" }));
+         if (origin === "child")
+           fireEvent.keyDown(fixture.frame.getByRole("menuitem", { name: "Rulers" }), {
+             key: "ArrowRight",
+@@ -95,7 +95,7 @@
+       expect(execute).not.toHaveBeenCalled();
+       expect(fixture.frame.getByLabelText("Writer horizontal ruler")).toBeInTheDocument();
+       pressDocumentKey({ key: "F10", ctrlKey: false });
+-      expect(fixture.frame.getByRole("button", { name: "File" })).toHaveFocus();
++      expect(fixture.frame.getByRole("menuitem", { name: "File" })).toHaveFocus();
+       pressDocumentKey({ key: "F10", ctrlKey: false });
+       expect(fixture.editor).toHaveFocus();
+     });
+@@ -172,7 +172,7 @@
+     it(`keeps the ${kind} modal's focus and resumes after cancellation`, /** Checks every existing modal eligibility owner. @returns Nothing. */ function preservesModalFocus(): void {
+       const fixture = mountFrame();
+       if (kind === "paragraph" || kind === "page") {
+-        fireEvent.click(fixture.frame.getByRole("button", { name: "Format" }));
++        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "Format" }));
+         fireEvent.click(
+           fixture.frame.getByRole("menuitem", {
+             name: kind === "paragraph" ? /Paragraph/ : /Page Style/,
+@@ -199,7 +199,7 @@
+           },
+         );
+       } else if (kind === "line") {
+-        fireEvent.click(fixture.frame.getByRole("button", { name: "Tools" }));
++        fireEvent.click(fixture.frame.getByRole("menuitem", { name: "Tools" }));
+         fireEvent.click(fixture.frame.getByRole("menuitem", { name: /Line Numbering/ }));
+       } else
+         act(
+--- a/apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx
++++ b/apps/office/src/sw/browser/presentation/native-table-column-page.test.tsx
+@@ -151,7 +151,7 @@
+   fireEvent.click(screen.getByRole("tab", { name: "Columns" }));
+   expect(screen.getByRole("checkbox", { name: "Adapt table width" })).toBeDisabled();
+   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+-  fireEvent.click(screen.getByRole("button", { name: "Table" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Table" }));
+   fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Select" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Select Table" }));
+   fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+--- a/apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx
++++ b/apps/office/src/sw/browser/presentation/current-dialog-baseline.test.tsx
+@@ -85,7 +85,7 @@
+ it("current paragraph heading closes the actual native request without changing history", /** Checks a newly added chrome callback. @returns Nothing. */ () => {
+   const owner = session();
+   render(<WriterWorkbench isActive services={owner.services} view={owner.view} />);
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
+   const dialog = screen.getByRole("dialog", { name: "Paragraph" });
+   fireEvent.click(within(dialog).getByRole("button", { name: "Close" }));
+--- a/apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx
++++ b/apps/office/src/sw/browser/presentation/writer-view-auto-first-layout.test.tsx
+@@ -244,7 +244,7 @@
+       "24pt",
+     );
+     expect(screen.queryByRole("button", { name: "First line indent" })).toBeNull();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.click(screen.getByRole("menuitem", { name: "Paragraph…" }));
+     expect(screen.getByLabelText("First line indent (pt)")).toHaveValue(18.35);
+     fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
+--- a/apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx
++++ b/apps/office/src/sw/browser/presentation/writer-view-ruler-auto-first.test.tsx
+@@ -73,7 +73,7 @@
+ 
+ /** Opens the existing paragraph request and toggles its automatic checkbox. @returns Nothing. */
+ function toggleDialog() {
+-  fireEvent.click(screen.getByRole("button", { name: "Format" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: /Paragraph/ }));
+   fireEvent.click(screen.getByLabelText("Automatic first-line indent"));
+ }
+--- a/apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx
++++ b/apps/office/src/sw/browser/presentation/writer-view-sidebar-deck.test.tsx
+@@ -41,7 +41,7 @@
+     expect(session.view.IsSidebarVisible()).toBe(true);
+     const activation = within(sidebar).getByRole("button", { name: "Properties" });
+     expect(activation).toHaveAttribute("aria-pressed", "false");
+-    fireEvent.click(frame.getByRole("button", { name: "View" }));
++    fireEvent.click(frame.getByRole("menuitem", { name: "View" }));
+     expect(frame.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveAttribute(
+       "aria-checked",
+       "true",
+--- a/apps/office/src/framework/browser/app/desktop.test.tsx
++++ b/apps/office/src/framework/browser/app/desktop.test.tsx
+@@ -62,7 +62,7 @@
+ 
+ /** Invokes one Writer File menu command by its accessible label. @param name - Visible command label. @returns A promise fulfilled after asynchronous command state settles. */
+ async function invokeWriterFileCommand(name: string): Promise<void> {
+-  fireEvent.click(screen.getByRole("button", { name: "File" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
+   fireEvent.click(screen.getByRole("menuitem", { name }));
+   await act(
+     /** Flushes state scheduled by asynchronous File commands. @returns A fulfilled React act promise. */
+@@ -205,7 +205,7 @@
+       "true",
+     );
+     selectWriterParagraphText(editor);
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
+     fireEvent.click(screen.getByRole("menuitemcheckbox", { name: "Italic" }));
+     expect(editor.querySelector("strong em")).toHaveTextContent("Body");
+@@ -265,7 +265,7 @@
+           caption: "Caption",
+           footnote: "Footnote",
+         };
+-        fireEvent.click(screen.getByRole("button", { name: "Styles" }));
++        fireEvent.click(screen.getByRole("menuitem", { name: "Styles" }));
+         fireEvent.click(screen.getByRole("menuitemradio", { name: names[style] }));
+         expect(
+           Array.from((styleSelect as HTMLSelectElement).options).map(
+@@ -300,7 +300,7 @@
+     expect(screen.queryByRole("button", { name: "Remove paragraph 1" })).not.toBeInTheDocument();
+     expect(screen.queryByRole("button", { name: "Move paragraph 1 up" })).not.toBeInTheDocument();
+     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+     expect(screen.getByRole("menuitemradio", { name: "No List" })).toHaveAttribute(
+       "aria-checked",
+@@ -319,7 +319,7 @@
+     expect(paragraph.textContent).not.toContain("•");
+     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
+     expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+     fireEvent.click(screen.getByRole("menuitemradio", { name: "Unordered List" }));
+     expect(screen.queryByTestId(`writer-list-marker-${paragraphId}`)).not.toBeInTheDocument();
+@@ -327,7 +327,7 @@
+     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
+     expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("1.");
+     expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+     expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
+     fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
+@@ -335,12 +335,12 @@
+     expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "36pt" });
+     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Decrease" }));
+     expect(paragraph).toHaveAttribute("data-list-level", "0");
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+     expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
+     fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
+     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
+-    fireEvent.click(screen.getByRole("button", { name: "Format" }));
++    fireEvent.click(screen.getByRole("menuitem", { name: "Format" }));
+     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
+     fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
+     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
+--- a/apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx
++++ b/apps/office/src/sc/browser/presentation/calc-goto-sheet.test.tsx
+@@ -17,7 +17,7 @@
+ }
+ /** Opens the actual source menu placement. @returns Nothing. */
+ function open() {
+-  fireEvent.click(screen.getByRole("button", { name: "Sheet" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Sheet" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Navigate" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Go to Sheet…" }));
+ }
+--- a/apps/office/src/sc/browser/presentation/calc-files.test.tsx
++++ b/apps/office/src/sc/browser/presentation/calc-files.test.tsx
+@@ -54,7 +54,7 @@
+       sheetWorkflows={session.sheetWorkflows}
+     />,
+   );
+-  fireEvent.click(screen.getByRole("button", { name: "File" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: /Save As/ }));
+   expect(screen.getByRole("dialog", { name: "Save As" })).toBeVisible();
+   expect(screen.getByRole("grid").parentElement).toHaveAttribute("inert");
+@@ -97,7 +97,7 @@
+   expect(screen.getByRole("dialog", { name: "Save As" })).toBeVisible();
+   fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+   expect(screen.getByRole("grid")).toHaveFocus();
+-  fireEvent.click(screen.getByRole("button", { name: "File" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
+   expect(screen.getByRole("button", { name: "Download ODS" })).toBeVisible();
+   fireEvent.click(screen.getByRole("button", { name: "Close" }));
+--- a/apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx
++++ b/apps/office/src/sc/browser/presentation/calc-sheet-commands.test.tsx
+@@ -66,7 +66,7 @@
+       sheetWorkflows={s.sheetWorkflows}
+     />,
+   );
+-  fireEvent.click(screen.getByRole("button", { name: "Sheet" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Sheet" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Navigate" }));
+   expect(screen.getByRole("menuitem", { name: "To Next Sheet" })).toHaveAttribute(
+     "aria-keyshortcuts",
+@@ -74,12 +74,12 @@
+   );
+   fireEvent.click(screen.getByRole("menuitem", { name: "To Next Sheet" }));
+   expect(screen.getByRole("tab", { name: "Sheet2" })).toHaveAttribute("aria-current", "page");
+-  fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Select to Previous Sheet" }));
+   expect(screen.getByRole("tab", { name: "Sheet2" })).toHaveAttribute("aria-selected", "true");
+   expect(screen.getByRole("tab", { name: "Sheet1" })).toHaveAttribute("aria-selected", "true");
+-  fireEvent.click(screen.getByRole("button", { name: "Edit" }));
++  fireEvent.click(screen.getByRole("menuitem", { name: "Edit" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Select" }));
+   fireEvent.click(screen.getByRole("menuitem", { name: "Select All Sheets" }));
+   expect(screen.getAllByRole("tab", { selected: true })).toHaveLength(3);

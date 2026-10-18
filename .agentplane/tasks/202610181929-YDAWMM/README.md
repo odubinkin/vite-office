@@ -4,7 +4,7 @@ title: "Correct shared office menu and Calc grid accessibility semantics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Repair shared menu/title and Calc grid header accessibility semantics exposed by full browser regression;preserve actual commands and styling and migrate related test roles without weakened gates."
 doc_version: 3
-doc_updated_at: "2026-10-18T19:29:33.147Z"
+doc_updated_at: "2026-10-18T19:33:57.787Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI goal repair discovered by task10 full browser regression. Preserve exact Writer/Calc shared visual components and native command behavior while correcting actual ARIA semantics:top-level shared menubar triggers become menuitems,document title gains semantic h1,and Calc row/column/corner headers wrap native selection buttons in proper header elements. Migrate affected shared/Writer/Calc unit and E2E role queries to the correct existing controls without weakening assertions. No new core services or style differences. Up to230non-task paths because top-menu queries span existing tests. AllCalc100percent,touched shared/header/menu100percent,affected Writer/Calc menu/UI tests,source/registry/style/type/build gates and real full-foundation axe/geometry checks. Keep task10 pending until repair passes;full cadence application coverage is already running and must not be restarted or invalidated prematurely. Calc checkout/branch only,no merges/network."
 sections:
@@ -55,7 +55,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Actual axe evidence from task10 foundation and shared launcher identifies aria-allowed-role on button grid headers,aria-required-children on shared menubar triggers,empty-table-header at the corner,and missing h1. Prepared accessibility.patch and SHA256 path manifest cover shared menu/title markup,three Calc header variants and91initial semantic query migrations;no runtime/test sources have been changed for this leaf. Insert/Help,dynamic menu helpers,leaf/root menuitem scoping and actual header selection tests still require individual migration/review. Wait for task10 final application coverage session71940/PID26563 before applying the prepared source patch;it remains live. Original full E2E374cases is terminal369passed5stale-expectation failures;repaired geometry passes3viewports,while foundation and launcher reveal the real accessibility defects. Both tasks remain open until semantic repair,Calc/shared100percent and actual axe/browser gates pass. Original UI goal remains active."
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +88,5 @@ Repair actual accessibility defects exposed by task10 axe checks using proper sh
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Actual axe evidence from task10 foundation and shared launcher identifies aria-allowed-role on button grid headers,aria-required-children on shared menubar triggers,empty-table-header at the corner,and missing h1. Prepared accessibility.patch and SHA256 path manifest cover shared menu/title markup,three Calc header variants and91initial semantic query migrations;no runtime/test sources have been changed for this leaf. Insert/Help,dynamic menu helpers,leaf/root menuitem scoping and actual header selection tests still require individual migration/review. Wait for task10 final application coverage session71940/PID26563 before applying the prepared source patch;it remains live. Original full E2E374cases is terminal369passed5stale-expectation failures;repaired geometry passes3viewports,while foundation and launcher reveal the real accessibility defects. Both tasks remain open until semantic repair,Calc/shared100percent and actual axe/browser gates pass. Original UI goal remains active.
