@@ -1,0 +1,48 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- tabview3.test calc-sheet-commands.test calc-view-controller.test calc-workbench.test ui-resources.test
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts tabview3.test calc-sheet-commands.test calc-view-controller.test calc-workbench.test ui-resources.test
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |calc| src/sc/browser/presentation/calc-sheet-commands.test.tsx (2 tests | 1 failed) 994ms
+   × uses source slots for native wrap,group extension and deselection without document history changes 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-sheet-commands.test.tsx > uses source slots for native wrap,group extension and deselection without document history changes
+AssertionError: expected undefined to be 26543 // Object.is equality
+
+- Expected:
+26543
+
++ Received:
+undefined
+
+ ❯ src/sc/browser/presentation/calc-sheet-commands.test.tsx:19:59
+     17|     history = c.shell.GetUndoManager().GetUndoActionCount(),
+     18|     dirty = c.shell.IsModified();
+     19|   expect(d.QueryDispatch(".uno:JumpToNextTable")?.slotId).toBe(26543);
+       |                                                           ^
+     20|   expect(d.QueryDispatch(".uno:JumpToPrevTable")?.slotId).toBe(26544);
+     21|   expect(d.QueryDispatch(".uno:JumpToNextTableSel")?.slotId).toBe(2656…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 10 passed (11)
+   Start at  01:54:15
+   Duration  8.91s (transform 4.42s, setup 806ms, import 6.69s, tests 6.28s, environment 3.27s)
+
+npm error Lifecycle script `test:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts tabview3.test calc-sheet-commands.test calc-view-controller.test calc-workbench.test ui-resources.test

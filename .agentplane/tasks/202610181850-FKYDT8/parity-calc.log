@@ -1,0 +1,18 @@
+
+> vite-office@0.1.0 inventory:parity:calc
+> tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc
+
+/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:535
+    throw new Error(`Source provenance ${field} for ${localPath} must contain non-empty strings.`);
+          ^
+
+Error: Source provenance localSymbols for apps/office/src/sc/source/ui/inc/tabview.ts must contain non-empty strings.
+    at requireNonEmptyStringArray (/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:535:11)
+    at parseSourceProvenanceEntry (/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:242:21)
+    at Array.map (<anonymous>)
+    at parseSourceProvenanceManifest (/Users/odubinkin/Projects/vite-office-calc/scripts/check-source-provenance.ts:124:32)
+    at parseInventoryRegistry (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-validation.ts:106:22)
+    at runRegistryCli (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:63:18)
+    at async <anonymous> (/Users/odubinkin/Projects/vite-office-calc/scripts/libreoffice-inventory/registry-cli.ts:89:3)
+
+Node.js v24.13.1
