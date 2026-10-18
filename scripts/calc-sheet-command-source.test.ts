@@ -62,3 +62,19 @@ it("pins original four input modes,F2 slot and noncommitting mode toggle", /** C
     "bool bInPlace   = pScMod->IsEditMode()",
   );
 });
+
+it("pins input modification rather than value equality as the native write and Undo guard", /** Reads original flag lifecycle and operation history after actual input. @returns Nothing. */ () => {
+  const input = source("sc/source/ui/app/inputhdl.cxx"),
+    header = source("sc/source/ui/inc/inputhdl.hxx");
+  expect(input).toMatch(/bModified\( false \)/);
+  expect(header).toContain("SetModified()       { bModified = true; }");
+  expect(input).toContain("if (bSetModified)\n        bModified = true;");
+  expect(input).toContain("bool bOldMod = bModified;");
+  expect(input).toContain("if (bOldMod && !bProtected && !bForget)");
+  expect(input.slice(input.indexOf("void ScInputHandler::CancelHandler()"))).toContain(
+    "bModified = false;",
+  );
+  const operation = source("sc/source/ui/operation/SetNormalStringOperation.cxx");
+  expect(operation).toContain("std::make_unique<ScUndoEnterData>");
+  expect(operation).not.toContain("equalsWithoutFormat");
+});

@@ -1,0 +1,26 @@
+{
+  "noEditUndo": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"cell\": \"\",\n  \"undoDisabled\": true,\n  \"redoDisabled\": false\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({cell:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,undoDisabled:document.querySelector(\"button[aria-label=\\\\\"Undo\\\\\"]\")?.disabled,redoDisabled:document.querySelector(\"button[aria-label=\\\\\"Redo\\\\\"]\")?.disabled})');\n```"
+      }
+    ]
+  },
+  "sameValueFirstUndo": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"cell\": \"42\",\n  \"undoDisabled\": false\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({cell:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,undoDisabled:document.querySelector(\"button[aria-label=\\\\\"Undo\\\\\"]\")?.disabled})');\n```"
+      }
+    ]
+  },
+  "sameValueSecondUndo": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\n  \"cell\": \"\",\n  \"undoDisabled\": true\n}\n### Ran Playwright code\n```js\nawait page.evaluate('() => ({cell:document.querySelector(\"[role=\\\\\"gridcell\\\\\"][aria-label=\\\\\"A1\\\\\"]\")?.textContent,undoDisabled:document.querySelector(\"button[aria-label=\\\\\"Undo\\\\\"]\")?.disabled})');\n```"
+      }
+    ]
+  }
+}

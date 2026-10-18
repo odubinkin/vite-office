@@ -29,3 +29,21 @@ it("preserves native NONE TYPE TABLE TOP values and predicates", /** Covers the 
     ScInputMode.SC_INPUT_TOP,
   ]).toEqual([0, 1, 2, 3]);
 });
+
+it("keeps native modification independent of caret mode and resets only at input lifecycle boundaries", /** SetModified is sticky across all native modes until accepted or cancelled input. @returns Nothing. */ () => {
+  const input = new ScInputHandler();
+  expect(input.IsModified()).toBe(false);
+  input.SetModified();
+  for (const mode of [
+    ScInputMode.SC_INPUT_TABLE,
+    ScInputMode.SC_INPUT_TYPE,
+    ScInputMode.SC_INPUT_TOP,
+    ScInputMode.SC_INPUT_NONE,
+  ]) {
+    input.SetMode(mode);
+    input.StartOrToggleEditMode();
+    expect(input.IsModified()).toBe(true);
+  }
+  input.ResetModified();
+  expect(input.IsModified()).toBe(false);
+});

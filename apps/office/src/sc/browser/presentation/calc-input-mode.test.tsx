@@ -115,3 +115,33 @@ it("routes scalar TYPE arrows to cell movement while modifiers and TABLE retain 
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TYPE);
   s.Close();
 });
+
+it("keeps inspection out of Undo and records changed-and-reverted input through production controls", /** Actual events distinguish unmodified F2 inspection from an edited draft with the same final value. @returns Nothing. */ () => {
+  const s = fixture(),
+    c = s.controller;
+  const grid = screen.getByRole("grid");
+  fireEvent.keyDown(grid, { key: "4" });
+  let input = screen.getByRole("textbox", { name: "Edit cell A1" });
+  fireEvent.change(input, { target: { value: "42" } });
+  fireEvent.keyDown(input, { key: "Enter" });
+  const generation = c.shell.GetContentGeneration();
+  fireEvent.doubleClick(screen.getByRole("gridcell", { name: "A1" }));
+  input = screen.getByRole("textbox", { name: "Edit cell A1" });
+  fireEvent.keyDown(input, { key: "F2" });
+  fireEvent.keyDown(input, { key: "Enter" });
+  expect(c.shell.GetContentGeneration()).toBe(generation);
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  fireEvent.doubleClick(screen.getByRole("gridcell", { name: "A1" }));
+  input = screen.getByRole("textbox", { name: "Edit cell A1" });
+  fireEvent.change(input, { target: { value: "43" } });
+  fireEvent.change(input, { target: { value: "42" } });
+  fireEvent.keyDown(input, { key: "Enter" });
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(2);
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("42");
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("");
+  expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+  expect(c.inputHandler.IsModified()).toBe(false);
+  s.Close();
+});

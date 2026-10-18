@@ -10,7 +10,8 @@
     "maturity": "implemented",
     "assertions": [
       "Task0V5WR6 connects the production Calc route to actual ScDocument,ScViewData and ScDocShell owners through shared SfxObjectShell,SfxUndoManager,SfxInterface,SfxViewFrame,dispatcher and command bindings. Controlled React presenters reuse Writer toolbar styles,Tailwind,Lucide and global fonts. The supported slice includes plain scalar/native local-A1 input,recalculation,cancel,selection,name-box navigation,sheet append/switch,typed token-valued undo/redo and bounded browser viewport projection. Compiled formula adoption retains code errors in history;sheet deletion ends formula subscriptions and renumbers source cells. One real model owns cells;browser state contains transient input/geometry only. This is a bounded editable workspace,not full Calc/native parity.",
-      "TaskQXFX41 ports original ScInputMode NONE0 TYPE1 TABLE2 TOP3 and bounded ScInputHandler mode predicates/toggle at native source boundaries. Browser scalar input shares one draft:TYPE arrows commit/move,TABLE and TOP keep caret navigation. Original SID_SETINPUTMODE26552 and F2 use the same shared-menu dispatcher;TYPE/TABLE toggles preserve draft/history,TOP commits before TABLE and rejected input retains mode/error. GetMode is a read-only browser projection of eMode,not an upstream method. EditEngine,protection,formula reference selection,autocomplete and VCL synchronization remain unported;no full native input parity is claimed."
+      "TaskQXFX41 ports original ScInputMode NONE0 TYPE1 TABLE2 TOP3 and bounded ScInputHandler mode predicates/toggle at native source boundaries. Browser scalar input shares one draft:TYPE arrows commit/move,TABLE and TOP keep caret navigation. Original SID_SETINPUTMODE26552 and F2 use the same shared-menu dispatcher;TYPE/TABLE toggles preserve draft/history,TOP commits before TABLE and rejected input retains mode/error. GetMode is a read-only browser projection of eMode,not an upstream method. EditEngine,protection,formula reference selection,autocomplete and VCL synchronization remain unported;no full native input parity is claimed.",
+      "TaskEJ2ZC1 replaces browser JSON equality gating with native input bModified lifecycle. Constructor false and source SetModified mark actual input;F2,focus and caret-only mode changes preserve the flag without writes. Accepted input uses native EnterHandler2 bOldMod guard;explicit replacement or changed-and-reverted text creates actual Undo even when final values are equal,as native SetNormalStringOperation does. Cancel,accepted input,history and model replacement reset modification;rejected drafts retain it. IsModified/ResetModified are explicit browser read/lifecycle projections of native private flag operations,not full upstream handlers. EditEngine,validation/autocorrect,format services and complete input/undo operation ownership remain unported."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -95,6 +96,10 @@
         {
           "path": "apps/office/src/sc/browser/presentation/calc-input-mode.test.tsx",
           "marker": "native F2"
+        },
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-input-modification.test.ts",
+          "marker": "native modified-flag gating"
         }
       ],
       "docs": [

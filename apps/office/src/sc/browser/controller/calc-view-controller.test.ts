@@ -31,7 +31,7 @@ it("edits canonical scalars and formulas with real dependency updates and token-
   expect(c.Input()).toBe("2");
   expect(c.shell.IsModified()).toBe(true);
   expect(c.EnterString("2")).toBe(true);
-  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(2);
   c.Select(1, 0);
   expect(c.EnterString("=A1*3")).toBe(true);
   expect(doc.GetValue(c.Position())).toBe(6);

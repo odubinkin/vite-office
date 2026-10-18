@@ -94,6 +94,7 @@ export class CalcViewController {
           this.viewData = new ScViewData(shell.GetDocument());
           this.anchor = new ScAddress();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
+          this.inputHandler.ResetModified();
           this.inputText = "";
           this.addressText = "A1";
           this.error = "";
@@ -188,6 +189,7 @@ export class CalcViewController {
     this.shell.EnsureOpen();
     this.inputText = replacement ?? this.Input();
     this.inputHandler.SetMode(mode);
+    if (replacement !== undefined) this.inputHandler.SetModified();
     this.error = "";
     this.Changed();
   }
@@ -205,12 +207,14 @@ export class CalcViewController {
   /** Updates the input handler's sole draft. @param value - Draft. @returns Nothing. */
   ChangeInput(value: string): void {
     this.inputText = value;
+    this.inputHandler.SetModified();
     this.error = "";
     this.Changed();
   }
   /** Cancels without changing cells/history. @returns Nothing. */
   Cancel(): void {
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
+    this.inputHandler.ResetModified();
     this.inputText = "";
     this.error = "";
     this.Changed();
@@ -220,17 +224,18 @@ export class CalcViewController {
     if (this.mode === ScInputMode.SC_INPUT_NONE) return true;
     this.shell.EnsureOpen();
     try {
-      const doc = this.shell.GetDocument(),
-        pos = this.Position(),
-        before = captureCell(doc, pos),
-        content = parseCellInput(this.inputText);
-      if (JSON.stringify(before) !== JSON.stringify(content)) {
+      if (this.inputHandler.IsModified()) {
+        const doc = this.shell.GetDocument(),
+          pos = this.Position(),
+          before = captureCell(doc, pos),
+          content = parseCellInput(this.inputText);
         applyCell(doc, pos, content);
         const after = captureCell(doc, pos);
         this.shell.GetUndoManager().AddUndoAction(new CellChangeAction(pos, before, after));
         this.shell.SetDocumentModified();
       }
       this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
+      this.inputHandler.ResetModified();
       this.inputText = "";
       this.error = "";
       this.Changed();
@@ -342,6 +347,7 @@ export class CalcViewController {
       action = redo ? manager.GetRedoAction() : manager.GetUndoAction();
     if (!(redo ? this.shell.Redo() : this.shell.Undo())) return false;
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
+    this.inputHandler.ResetModified();
     const position =
       action instanceof CellChangeAction
         ? action.position

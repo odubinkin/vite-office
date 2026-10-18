@@ -3,6 +3,19 @@ import { ScInputMode } from "../../../inc/global";
 /** Native mode owner used by the active scalar input binding. */
 export class ScInputHandler {
   private eMode = ScInputMode.SC_INPUT_NONE;
+  private bModified = false;
+  /** Original inputhdl.hxx SetModified marks actual input changes,independent of final value equality. @returns Nothing. */
+  SetModified(): void {
+    this.bModified = true;
+  }
+  /** Browser read boundary for the native EnterHandler2 bOldMod guard;not an upstream public method. @returns Whether input changed. */
+  IsModified(): boolean {
+    return this.bModified;
+  }
+  /** Browser lifecycle boundary for native EnterHandler2,CancelHandler and input-state replacement resets;not a complete native handler. @returns Nothing. */
+  ResetModified(): void {
+    this.bModified = false;
+  }
   /** Reads the current native mode. @returns Input mode. */
   GetMode(): ScInputMode {
     return this.eMode;
