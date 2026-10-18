@@ -1,10 +1,11 @@
 ---
 id: "202610182130-SKT4XD"
 title: "Port Calc native cell pattern ownership and item-set contracts for formatting"
-status: "DOING"
+result_summary: "Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T21:39:52.835Z"
+  updated_at: "2026-10-18T21:40:52.077Z"
   updated_by: "CODER"
-  note: "Verified native Calc pattern/helper/holder prerequisite:298Calc tests at raw100percent S/B/F/L,76relatedSVL cases,12source/resource and2Writer freshness cases,alldeclaredtypes/build/style/source/provenance/scopedgates pass. Exact evidence and omitted native services recorded in verification.md. No UI parity or new enabled formatting slots claimed."
+  note: "Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - "docs/program/calc-pattern-attributes.md"
   findings:
     - "Implementation98a921b25 preserves fixed100..155 schema,PutSet(false) INVALID state,style-name snapshots,pool/parent equality,conditional SET precedence,canonical registration identity and native holder release/copy/move order. Original self-copy clearing is explicitly pinned rather than silently normalized. Tests use actual shared Sfx values. All298Calc cases have raw100percent across four metrics;76relatedSVL cases,12source/resource and2freshness cases plus declared types/build/gates pass.13non-task paths remain within approved scope;no fake document/font/default/UI handlers were introduced."
-commit: null
+commit:
+  hash: "98a921b25bf7c7c1cdd4656429562aabe6b5c136"
+  message: "🧩 SKT4XD core: port native Calc pattern itemset and canonical holder ownership"
 comments:
   -
     author: "CODER"
     body: "Start: implement source-owned Calc pattern itemsets and canonical helper/holder lifecycle as the required formatting prerequisite;no fake document pool or defaults."
+  -
+    author: "CODER"
+    body: "Verified: Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified native Calc pattern/helper/holder prerequisite:298Calc tests at raw100percent S/B/F/L,76relatedSVL cases,12source/resource and2Writer freshness cases,alldeclaredtypes/build/style/source/provenance/scopedgates pass. Exact evidence and omitted native services recorded in verification.md. No UI parity or new enabled formatting slots claimed."
+  -
+    type: "verify"
+    at: "2026-10-18T21:40:52.077Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending."
+  -
+    type: "status"
+    at: "2026-10-18T21:40:52.175Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T21:39:52.888Z"
+doc_updated_at: "2026-10-18T21:40:52.176Z"
 doc_updated_by: "CODER"
 description: "Approved UI goal task18: implement actual CellAttributeHelper,CellAttributeHolder and ScPatternAttr data/ownership subset at native patattr boundaries over existing shared SfxItemPool/SfxItemSet. Preserve 100..155 schema,INVALID selection states,copy/style-name/conditional precedence,key and holder semantics. No fabricated document pool,font defaults,style sheet,rendering or enabled formatting slots. Correct source formatting resource audit:cell context uses formatobjectbar,not textobjectbar. Work only calc checkout/branch;no network."
 sections:
@@ -99,6 +118,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182130-SKT4XD -m 🧩 SKT4XD task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T21:40:52.077Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:39:52.888Z, excerpt_hash=sha256:eaab8bbbfcfbe4719872407d53dab48d99892da54aed204e137a8a72031a737c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182130-SKT4XD/blueprint/resolved-snapshot.json
+    - old_digest: 978c7d2e68b1f84e0779f4e0d1c2ec8d634f617902f65c6f3ebe96e7600a1b2d
+    - current_digest: 978c7d2e68b1f84e0779f4e0d1c2ec8d634f617902f65c6f3ebe96e7600a1b2d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182130-SKT4XD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182130-SKT4XD --result verified-202610182130-SKT4XD --commit cffb94e317acd7f2521bac65213bb79cec7b652a
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -181,6 +230,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182130-SKT4XD -m 🧩 SKT4XD task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T21:40:52.077Z — VERIFY — ok
+
+By: CODER
+
+Note: Native Calc pattern itemsets and canonical helper/holder ownership are implemented at original source boundaries over actual shared Sfx values;298Calc cases retain raw100percent coverage and76relatedSVL cases pass. Formatting document integration remains explicitly pending.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T21:39:52.888Z, excerpt_hash=sha256:eaab8bbbfcfbe4719872407d53dab48d99892da54aed204e137a8a72031a737c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182130-SKT4XD/blueprint/resolved-snapshot.json
+- old_digest: 978c7d2e68b1f84e0779f4e0d1c2ec8d634f617902f65c6f3ebe96e7600a1b2d
+- current_digest: 978c7d2e68b1f84e0779f4e0d1c2ec8d634f617902f65c6f3ebe96e7600a1b2d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182130-SKT4XD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182130-SKT4XD --result verified-202610182130-SKT4XD --commit cffb94e317acd7f2521bac65213bb79cec7b652a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
