@@ -4,7 +4,7 @@ title: "Project pinned Calc menu and toolbar resources through shared UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "AllCalc264tests100percent;related Writer10tests and shared100percent;5 tooling tests;source freshness,build,typechecks,style,source/registry gates,doctor/routing and real production Chromium11menus plus file dialogs pass. See task verification.md and logs;favicon404 is unrelated to menu execution."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T18:48:58.836Z"
+  updated_by: "EVALUATOR"
+  note: "Approved task8 source resource projection is implemented and verified on calc without widening native execution claims."
+  evaluated_sha: "84d0d8c44a3d30f6fcd398f44906a36b2ffbfa8a"
+  blueprint_digest: "4cd670685667c21a25a28c097ba20da1da19a763d12e569851166c814099553e"
+  evidence_refs:
+    - ".agentplane/tasks/202610181835-905DK4/README.md"
+    - ".agentplane/tasks/202610181835-905DK4/quality/20261018-184858836-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181835-905DK4/quality/20261018-184858836-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181835-905DK4/quality/20261018-184858836-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181835-905DK4/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181835-905DK4/verification.md"
+    - ".agentplane/tasks/202610181835-905DK4/calc-coverage.log"
+    - ".agentplane/tasks/202610181835-905DK4/browser-review.json"
+  findings:
+    - "Actual Writer pure resource/catalog implementation is shared and Writer generation remains byte-identical;Calc original menus and shortcut notation are source-generated. All264Calc tests have100percent raw coverage,related Writer/shared10tests have100percent touched coverage,and5tooling tests plus production11menu/file-dialog checks pass. Unsupported operations remain disabled through real Sfx availability."
 commit: null
 comments:
   -
