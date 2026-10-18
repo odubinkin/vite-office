@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610181650-4XSBZ5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-18T16:55:51.111Z",
+  "verdict": "pass",
+  "summary": "Reviewed cursor-only ScViewData subset against actual native field initializers and methods.",
+  "evaluated_sha": "917312f9e613c2651720dffe3c33c84d4c0af6f3",
+  "blueprint_digest": "2dc15f43619e61a152ccafec953a3e435a5f7d14f514640e040f894866c1159f",
+  "findings": [
+    "Canonical document and ScMarkData identities,selection independence,per-sheet lazy cursor ownership,old-cursor validity and sentinels match represented source. All242Calc tests pass with100percent coverage. No data grid projection,no fake geometry/window service,no threshold or policy weakening."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610181650-4XSBZ5/README.md",
+    ".agentplane/tasks/202610181650-4XSBZ5/evidence/calc-coverage.log",
+    ".agentplane/tasks/202610181650-4XSBZ5/evidence/parity.log",
+    "917312f9e613"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Native full ScViewData constructor/services,geometry,scrolling,hidden/alternate sheet views and UI commands are outside this cursor slice. Native QA source is a reference anchor only."
+  ]
+}

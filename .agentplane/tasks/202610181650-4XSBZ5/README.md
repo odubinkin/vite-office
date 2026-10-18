@@ -4,7 +4,7 @@ title: "Implement Calc per-sheet cursor and selection view owner"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,24 @@ verification:
   updated_by: "CODER"
   note: "PASS: Calc91files/242tests;5573statements,3603branches,1116functions,4989lines all100percent. Final source typecheck,ESLint,Prettier,docs,dependency boundaries,source-tree,source-provenance,Calc parity,file-size,doctor and routing pass. Related ScMarkData and document/formula tests included in Calc gate. Evidence under task/evidence. Full all-app run deferred per user cadence (UI task3/10)."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T16:55:51.111Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed cursor-only ScViewData subset against actual native field initializers and methods."
+  evaluated_sha: "917312f9e613c2651720dffe3c33c84d4c0af6f3"
+  blueprint_digest: "2dc15f43619e61a152ccafec953a3e435a5f7d14f514640e040f894866c1159f"
+  evidence_refs:
+    - ".agentplane/tasks/202610181650-4XSBZ5/README.md"
+    - ".agentplane/tasks/202610181650-4XSBZ5/quality/20261018-165551111-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181650-4XSBZ5/quality/20261018-165551111-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181650-4XSBZ5/quality/20261018-165551111-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181650-4XSBZ5/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181650-4XSBZ5/evidence/calc-coverage.log"
+    - ".agentplane/tasks/202610181650-4XSBZ5/evidence/parity.log"
+    - "917312f9e613"
+  findings:
+    - "Canonical document and ScMarkData identities,selection independence,per-sheet lazy cursor ownership,old-cursor validity and sentinels match represented source. All242Calc tests pass with100percent coverage. No data grid projection,no fake geometry/window service,no threshold or policy weakening."
 commit: null
 comments:
   -
