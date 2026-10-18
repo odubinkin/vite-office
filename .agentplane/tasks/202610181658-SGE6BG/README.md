@@ -4,7 +4,7 @@ title: "Implement Calc grid input-line and sheet-tab browser presenters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -24,6 +24,26 @@ verification:
   updated_by: "CODER"
   note: "PASS Calc92files245tests,100percent statements/branches/functions/lines on final code. Related Writer style-selector and shared toolbar+style tests11pass;new sharedstyle100percent. Actual browser fixture448cells,canonical D2=13.5 and shared32px/6pxcontrols. Typecheck,ESLint,Prettier,docs,dependencies,source-tree/provenance,Calc parity,file-size,doctor,routing pass. UI task4/10;full suite deferred per user. Production integration remains next work."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-18T17:17:59.807Z"
+  updated_by: "EVALUATOR"
+  note: "Controlled Calc presenters preserve canonical model/view ownership and use shared Writer visual controls."
+  evaluated_sha: "33273ac1cee94c69c104c43d2ffed2adf8895952"
+  blueprint_digest: "b5dcd3def46b7c9eca837e02f0f78b1d1674a1432e171496f2d95a6e43a98564"
+  evidence_refs:
+    - ".agentplane/tasks/202610181658-SGE6BG/README.md"
+    - ".agentplane/tasks/202610181658-SGE6BG/quality/20261018-171759807-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610181658-SGE6BG/quality/20261018-171759807-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610181658-SGE6BG/quality/20261018-171759807-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610181658-SGE6BG/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610181658-SGE6BG/evidence/calc-coverage.log"
+    - ".agentplane/tasks/202610181658-SGE6BG/evidence/related-ui.log"
+    - ".agentplane/tasks/202610181658-SGE6BG/evidence/browser-review.json"
+    - ".agentplane/tasks/202610181658-SGE6BG/evidence/parity.log"
+    - "33273ac1cee9"
+  findings:
+    - "Reviewed ScGridWindow,ScInputWindow and ScTabControl against native composition and final Calc100percent evidence. Actual document and marks supply state;input/navigation remain controller-owned. Inline editor retains caret gestures and logical rows are distinct from physical browser scroll extent. Writer toolbar class string is preserved exactly in shared source;11related UI tests pass. Production app registration and command/workflow integration are explicitly not claimed."
 commit: null
 comments:
   -
