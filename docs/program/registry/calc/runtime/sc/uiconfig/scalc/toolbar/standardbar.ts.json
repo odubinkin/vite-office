@@ -20,7 +20,7 @@
         "apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx",
         "scripts/office-ui-command-catalog.test.ts"
       ],
-      "justification": "Task905DK4 projects pinned Calc menu hierarchy, source command labels, dialog suffixes, default accelerators and Properties toggle flags through deterministic generated resources. The actual Writer parser and command-catalog helpers are shared; Writer output remains byte-identical. Shared React menu and toolbar presenters retain original command identities. Unsupported native operations remain disabled through missing Sfx slots. Standardbar retains only registered visible operations in native order. Explicit Writer browser autosave/open/no-recovery policy dispositions remain auditable. Complete native command execution and formatting behavior are not claimed.",
+      "justification": "Projects every pinned visible standardbar command after explicit Writer browser save-policy dispositions; normalizes separators without filtering missing slots. Shared Sfx bindings keep unavailable native operations disabled; source order and visibility remain intact. Native command execution beyond the current kernel slice remains unported.",
       "knownViolations": [],
       "localSymbols": [
         "calcStandardBarItems"

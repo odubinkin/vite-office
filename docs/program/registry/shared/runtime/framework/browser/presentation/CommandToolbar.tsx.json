@@ -20,7 +20,7 @@
       "evidence": [
         "apps/office/src/framework/browser/presentation/CommandToolbar.tsx#CommandToolbarItems"
       ],
-      "justification": "Projects generated toolbar placements through frame-owned Sfx command state and dispatch.",
+      "justification": "Projects source toolbar placements through actual Sfx bindings and dispatch; unavailable source commands remain visible and disabled. Shared fixed-size icon buttons and separator rendering serve Writer and Calc.",
       "knownViolations": [],
       "localSymbols": [
         "CommandButton",

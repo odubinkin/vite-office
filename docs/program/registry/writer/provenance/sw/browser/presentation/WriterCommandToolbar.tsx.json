@@ -19,7 +19,7 @@
     "status": "local-only",
     "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
     "responsibilities": [
-      "Renders the implemented Writer commands in a compact standard-toolbar presentation."
+      "Renders Writer source standard-toolbar placements through shared command controls and shared office icon vocabulary,retaining existing Writer icons and Insert Table control."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

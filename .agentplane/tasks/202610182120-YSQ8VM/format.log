@@ -1,0 +1,7 @@
+apps/office/src/framework/browser/presentation/CommandToolbar.tsx 43ms (unchanged)
+apps/office/src/framework/browser/presentation/CommandToolbar.test.tsx 15ms
+apps/office/src/framework/browser/presentation/office-command-icons.ts 4ms
+apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx 4ms (unchanged)
+apps/office/src/sc/browser/presentation/calc-workbench.tsx 27ms (unchanged)
+apps/office/src/sc/uiconfig/scalc/toolbar/standardbar.ts 3ms (unchanged)
+apps/office/src/sc/uiconfig/scalc/ui-resources.test.tsx 10ms

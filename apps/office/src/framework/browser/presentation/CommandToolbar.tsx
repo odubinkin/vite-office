@@ -29,7 +29,7 @@ export interface CommandButtonProps extends BrowserCommandSurfaceProps {
   readonly icon?: CommandIcon;
 }
 
-/** Renders one command whose execution and state both come from the active Sfx frame. @param props - Command control inputs. @returns Accessible command button or null for an inactive resource. */
+/** Renders one command whose execution and state both come from the active Sfx frame. @param props - Command control inputs. @returns Accessible command button retaining unavailable source placements. */
 export function CommandButton({
   commandId,
   commandSource,
@@ -38,10 +38,8 @@ export function CommandButton({
   getCommandResource,
   icon: Icon,
   resolveArguments,
-}: CommandButtonProps): React.JSX.Element | null {
+}: CommandButtonProps): React.JSX.Element {
   const presentation = useBrowserCommandPresentation(commandSource, commandId, getCommandResource);
-  const command = commandSource.QueryCommand(commandId);
-  if (command === undefined) return null;
   const resource = presentation.resource;
   const pressed = resource.semantics === "action" ? undefined : presentation.checked;
   return (
@@ -51,7 +49,7 @@ export function CommandButton({
       aria-pressed={pressed}
       className={
         className ??
-        "grid size-9 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
+        "grid size-9 shrink-0 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
       }
       data-active={pressed}
       disabled={!presentation.enabled}

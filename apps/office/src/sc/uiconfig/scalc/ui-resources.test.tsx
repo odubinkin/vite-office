@@ -1,5 +1,5 @@
 /** @fileoverview Production Calc resource hierarchy and shared Writer menu/toolbar contracts. */
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { createCalcSession } from "../../browser/composition/calc-module";
 import { CalcWorkbench } from "../../browser/presentation/calc-workbench";
@@ -48,12 +48,97 @@ it("opens every source top menu with unavailable operations disabled and shared 
   }
   expect(getCalcCommandResource(".uno:About").label).toContain("Vite Office");
   expect(getCalcCommandResource(".uno:Bold").semantics).toBe("check");
-  expect(calcStandardBarItems).toEqual([
-    { kind: "command", commandId: ".uno:OpenFromCalc" },
-    { kind: "separator" },
-    { kind: "command", commandId: ".uno:Undo" },
-    { kind: "command", commandId: ".uno:Redo" },
-  ]);
+  cleanup();
+  session.Close();
+});
+
+it("retains the complete visible source standardbar with disabled missing slots and SVG icons", /** Verifies the actual production resource,bindings and shared buttons. @returns Nothing. */ () => {
+  const session = createCalcSession();
+  render(
+    <CalcWorkbench
+      controller={session.controller}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  const toolbar = within(screen.getByRole("toolbar", { name: "Calc standard toolbar" }));
+  const ids = [
+    "OpenFromCalc",
+    "ExportDirectToPDF",
+    "Print",
+    "PrintPreview",
+    "Cut",
+    "Copy",
+    "Paste",
+    "FormatPaintbrush",
+    "ResetAttributes",
+    "Undo",
+    "Redo",
+    "SearchDialog",
+    "SpellDialog",
+    "RowOperations",
+    "ColumnOperations",
+    "DataSort",
+    "SortAscending",
+    "SortDescending",
+    "DataFilterAutoFilter",
+    "InsertGraphic",
+    "InsertObjectChart",
+    "DataDataPilotRun",
+    "CharmapControl",
+    "HyperlinkDialog",
+    "InsertAnnotation",
+    "EditHeaderAndFooter",
+    "DefinePrintArea",
+    "FreezePanes",
+    "SplitWindow",
+    "InsertDraw",
+  ].map(
+    /** Restores original UNO identity. @param id - Source name. @returns Command URL. */ (id) =>
+      `.uno:${id}`,
+  );
+  expect(
+    calcStandardBarItems
+      .filter(
+        /** Selects real command placements. @param item - Placement. @returns Whether command. */ (
+          item,
+        ) => item.kind === "command",
+      )
+      .map(
+        /** Reads original command identity. @param item - Placement. @returns Command URL. */ (
+          item,
+        ) => item.commandId,
+      ),
+  ).toEqual(ids);
+  const buttons = toolbar.getAllByRole("button");
+  expect(
+    buttons.map(
+      /** Reads actual accessible label. @param button - Shared control. @returns Label. */ (
+        button,
+      ) => button.getAttribute("aria-label"),
+    ),
+  ).toEqual(
+    ids.map(
+      /** Reads source English label. @param id - Source command. @returns Label. */ (id) =>
+        getCalcCommandResource(id).label,
+    ),
+  );
+  buttons.forEach(
+    /** Requires an actual icon and live availability. @param button - Shared control. @param index - Source position. @returns Nothing. */ (
+      button,
+      index,
+    ) => {
+      expect(button.querySelector("svg")).not.toBeNull();
+      expect(button).toHaveClass("size-9", "shrink-0");
+      if (index === 0) expect(button).toBeEnabled();
+      else expect(button).toBeDisabled();
+    },
+  );
+  fireEvent.click(toolbar.getByRole("button", { name: "Cut" }));
+  expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+  fireEvent.click(toolbar.getByRole("button", { name: "Open" }));
+  expect(screen.getByRole("dialog")).toBeVisible();
   cleanup();
   session.Close();
 });

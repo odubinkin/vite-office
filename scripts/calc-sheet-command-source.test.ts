@@ -143,3 +143,34 @@ it("pins complete sheet-tab popup resource and source selection/formula admissio
   expect(input).toContain("mbEditingExistingContent = !cTyped && !aStr.isEmpty()");
   expect(input).toContain("(!mbEditingExistingContent && (rStr[0] == '+' || rStr[0] == '-'))");
 });
+
+it("retains all native visible standardbar commands after explicit browser save-policy removal", /** Checks actual XML composition independently of generated surface projection. @returns Nothing. */ () => {
+  const native = source("sc/uiconfig/scalc/toolbar/standardbar.xml");
+  const commands = [...native.matchAll(/<toolbar:toolbaritem\s+([^>]+)\/>/g)]
+    .filter(
+      /** Honors explicit native hidden controls. @param match - Source item. @returns Whether visible. */ (
+        match,
+      ) => !match[1]?.includes('toolbar:visible="false"'),
+    )
+    .map(
+      /** Reads original identity. @param match - Source attributes. @returns UNO URL. */ (match) =>
+        match[1]?.match(/xlink:href="([^"]+)"/)?.[1],
+    )
+    .filter(
+      /** Applies the established primary-document/autosave deviations. @param url - Source command. @returns Whether retained. */ (
+        url,
+      ) => url !== ".uno:AddDirect" && url !== ".uno:Save",
+    );
+  const visible = calcResources.surfaces.standardbar
+    .filter(
+      /** Reads generated visibility. @param node - Resource. @returns Whether visible command. */ (
+        node,
+      ) => node.kind === "command" && !("visible" in node && node.visible === false),
+    )
+    .map(
+      /** Reads source URL. @param node - Generated node. @returns Command URL. */ (node) =>
+        "commandUrl" in node ? node.commandUrl : undefined,
+    );
+  expect(commands).toHaveLength(30);
+  expect(visible).toEqual(commands);
+});

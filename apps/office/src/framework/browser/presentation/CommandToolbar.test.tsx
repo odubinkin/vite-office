@@ -15,12 +15,15 @@ const definition = {
 /** Creates a deterministic Sfx-shaped command source. @returns Mock command source. */
 function createCommandSource(): BrowserCommandSource {
   const controllerState = { checked: true, enabled: true };
+  const unavailableState = { enabled: false };
   return {
     CreateControllerItem:
-      /** Creates one static controller item. @returns Test controller item. */ () => ({
+      /** Creates a bindings item including native unavailable state. @param commandId - Source command. @returns Controller item. */ (
+        commandId,
+      ) => ({
         Dispose: /** Releases no test resources. @returns Nothing. */ () => undefined,
         GetState: /** Returns checked enabled state. @returns Command state. */ () =>
-          controllerState,
+          commandId === definition.id ? controllerState : unavailableState,
         Subscribe: /** Registers no invalidation in a static fixture. @returns Cleanup. */ () =>
           /** Cleans up no test resources. @returns Nothing. */ () =>
             undefined,
@@ -49,7 +52,7 @@ const TestIcon: CommandIcon =
   );
 
 describe("CommandToolbar", /** Groups generic toolbar behavior. @returns Nothing. */ function defineCommandToolbarTests(): void {
-  it("omits unresolved commands and dispatches a resolved label button", /** Verifies resolution and dispatch. @returns Nothing. */ function dispatchesResolvedButton(): void {
+  it("retains unresolved source commands disabled and dispatches a resolved label button", /** Verifies resolution and dispatch. @returns Nothing. */ function dispatchesResolvedButton(): void {
     const commandSource = createCommandSource();
     const { rerender } = render(
       <CommandButton
@@ -64,7 +67,9 @@ describe("CommandToolbar", /** Groups generic toolbar behavior. @returns Nothing
         resolveArguments={/** Resolves no arguments. @returns Undefined. */ () => undefined}
       />,
     );
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Missing" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Missing" }));
+    expect(commandSource.Execute).not.toHaveBeenCalled();
 
     rerender(
       <CommandButton

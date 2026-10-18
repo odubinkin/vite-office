@@ -14,7 +14,7 @@
     "localPath": "apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
     "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
     "responsibilities": [
-      "Projects generated toolbar placements through frame-owned Sfx command state and dispatch."
+      "Projects source toolbar placements through actual Sfx bindings and dispatch; unavailable source commands remain visible and disabled. Shared fixed-size icon buttons and separator rendering serve Writer and Calc."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

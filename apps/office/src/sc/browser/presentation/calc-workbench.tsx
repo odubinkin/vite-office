@@ -10,7 +10,7 @@ import {
   useSyncExternalStore,
   type KeyboardEvent,
 } from "react";
-import { Undo2, Redo2, FolderOpen } from "lucide-react";
+import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import { CalcViewController } from "../controller/calc-view-controller";
 import { cellPresentation } from "../editor/cell-input";
 import {
@@ -298,13 +298,7 @@ export function CalcWorkbench({
             <CommandToolbarItems
               commandSource={source}
               items={calcStandardBarItems}
-              icons={
-                new Map([
-                  [".uno:OpenFromCalc", FolderOpen],
-                  [".uno:Undo", Undo2],
-                  [".uno:Redo", Redo2],
-                ])
-              }
+              icons={officeCommandIcons}
               getCommandResource={getCalcCommandResource}
               resolveArguments={
                 /** Current standard slots need no arguments. @returns Nothing. */ () => undefined
