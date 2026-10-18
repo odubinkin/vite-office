@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar native-context-menu WriterMenuBar.test WriterPageLayout.test calc-files.test calc-presenters.test writer-view-document-key.test native-hyperlink-begin-edit.test native-numeric-row-insertion.test native-table-column-commands.test native-table-row-commands.test native-independent-column-insertion.test native-internet-edit-range.test native-internet-state-query.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.include=src/sc/browser/presentation/ScGridWindow.tsx --coverage.reportsDirectory=coverage/office-accessibility
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage CommandMenuBar native-menubar native-disabled-menubar native-empty-menubar native-context-menu WriterMenuBar.test WriterPageLayout.test calc-files.test calc-presenters.test writer-view-document-key.test native-hyperlink-begin-edit.test native-numeric-row-insertion.test native-table-column-commands.test native-table-row-commands.test native-independent-column-insertion.test native-internet-edit-range.test native-internet-state-query.test --coverage.include=src/framework/browser/presentation/CommandMenuBar.tsx --coverage.include=src/framework/browser/presentation/OfficeWorkspaceHeader.tsx --coverage.include=src/sc/browser/presentation/ScGridWindow.tsx --coverage.reportsDirectory=coverage/office-accessibility
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  32 passed (32)
+      Tests  286 passed (286)
+   Start at  02:49:40
+   Duration  96.85s (transform 33.46s, setup 7.99s, import 56.62s, tests 75.90s, environment 43.81s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 306/306 )
+Branches     : 100% ( 273/273 )
+Functions    : 100% ( 74/74 )
+Lines        : 100% ( 272/272 )
+================================================================================

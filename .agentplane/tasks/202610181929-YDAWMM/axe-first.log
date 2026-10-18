@@ -1,0 +1,121 @@
+[WebServer] (node:38640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 2 workers
+
+(node:38643) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:38644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session (3.5s)
+(node:38660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [shared] › apps/office/e2e/shared/launcher.spec.ts:21:1 › shared launcher handles unknown application routes (439ms)
+  ✘  1 [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome (30.3s)
+
+
+  1) [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('menubar', { name: 'Writer menu bar' }).getByRole('button', { name: 'Insert', exact: true })
+
+
+      66 |   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
+      67 |   await page.getByRole("menuitem", { name: "File" }).press("Escape");
+    > 68 |   await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).click();
+         |                                                                            ^
+      69 |   await expect(page.getByRole("menuitem", { exact: true, name: "Hyperlink…" })).toBeVisible();
+      70 |   await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).press("Escape");
+      71 |   await expect(writerMenuBar.getByRole("button")).toHaveText([
+        at verifyStaticFoundation (/Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/foundation.spec.ts:68:76)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/foundation-Writer-menu-key-ef90b-cessible-application-chrome-writer/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 37
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure role attribute has an appropriate value for the element",
+    +     "help": "ARIA role should be appropriate for the element",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-allowed-role?application=playwright",
+    +     "id": "aria-allowed-role",
+    +     "impact": "minor",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": Array [
+    +               "status",
+    +             ],
+    +             "id": "aria-allowed-role",
+    +             "impact": "minor",
+    +             "message": "ARIA role status is not allowed for given element",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   ARIA role status is not allowed for given element",
+    +         "html": "<footer role=\"status\" aria-label=\"Calc status bar\" class=\"flex shrink-0 items-center gap-5 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300\"><span>Sheet 1 of 1</span><span>A1</span><span class=\"ml-auto\">Ready</span></footer>",
+    +         "impact": "minor",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "footer",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.aria",
+    +       "best-practice",
+    +     ],
+    +   },
+    + ]
+
+      16 |   await expect(page.getByRole("region", { name: "Calc workspace" })).toBeVisible();
+      17 |   await expect(page.getByRole("region", { name: "Writer workspace" })).toHaveCount(0);
+    > 18 |   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+         |                                                                 ^
+      19 | });
+      20 |
+      21 | test("shared launcher handles unknown application routes", /** Checks the fallback route. @param fixtures - Browser fixtures. @param fixtures.page - Isolated page. @returns Completion of fallback assertions. */ async ({
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/launcher.spec.ts:18:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-launcher-shared-lau-301fe-lc-without-a-Writer-session-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [writer] › apps/office/e2e/foundation.spec.ts:8:1 › Writer menu keyboard navigation and accessible application chrome 
+    [shared] › apps/office/e2e/shared/launcher.spec.ts:6:1 › shared launcher routes to Calc without a Writer session 
+  1 passed (32.5s)
