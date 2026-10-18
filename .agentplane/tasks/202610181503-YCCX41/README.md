@@ -4,7 +4,7 @@ title: "Run minimal Calc ODS milestone full regression and pause"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-18T15:30:28.146Z"
+  updated_by: "CODER"
+  note: "Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start:run the user-requested full all-app checkpoint after minimal same-model ODS readiness;classify Writer-only coverage exemption,then pause goal without starting UI."
+  -
+    type: "verify"
+    at: "2026-10-18T15:30:28.146Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure."
 doc_version: 3
-doc_updated_at: "2026-10-18T15:29:42.862Z"
+doc_updated_at: "2026-10-18T15:30:28.204Z"
 doc_updated_by: "CODER"
 description: "Task205:user-requested all-app checkpoint after task204 minimal editable core/basic ODS readiness. Execute full office coverage,inventory,tooling,all browser projects and static checks with all5native references absent. Preserve Writer-only coverage exemption;fix applicable Calc/shared regressions if found. No UI implementation or language detour. After successful applicable checks pause the goal."
 sections:
@@ -53,6 +59,39 @@ sections:
     Command:node output/playwright/task205-checks/final-audit.mjs. Result:pass. Evidence:all404shared and60Calc raw executable owners have every counter positive;5Writer files contain36uncovered raw counters,explicitly exempt and unchanged. Task20465source hashes stable. Exact5reference symlinks restored. Initial failed reports remain unaltered;successful focused recovery cited separately;the16952passing cases were not replayed unnecessarily.
     Command:ap doctor and node .agentplane/policy/check-routing.mjs. Result:pass. Evidence:final-gates.json;existing managed-hook warning only. Scope:task checkpoint and routing,not policy modifications.
     Outcome:minimum core is ready for a separate UI task restricted to scalar cell editing,existing arithmetic/local references and basic same-model ODS content. Arbitrary ODS fidelity/full formulas/styles/rich text remain outside this milestone. No UI work begins. Following quality review/closure,the existing goal will be paused as explicitly requested.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-18T15:30:28.146Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T15:29:42.862Z, excerpt_hash=sha256:5afde93728a1f8a947f0200a24371a270a98c0080a8541892aec19cb83635ed3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181503-YCCX41/blueprint/resolved-snapshot.json
+    - old_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+    - current_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181503-YCCX41
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610181503-YCCX41
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "No production changes planned. Revert only task205 evidence if needed;restore all5reference symlinks in finally. Preserve all prior Calc/Writer work;no merge."
   Findings: |-
     User explicitly requested full run at minimum readiness,then goal pause,and separately confirmed UI must not be implemented here. Task204 source ca72d59c6fa8/close584100e09d29 reached content-only scalar/local-formula ODS milestone. Standing authorization covers this checkpoint. Deferred language task197 and unrelated active Writer tasks remain untouched.
@@ -99,6 +138,39 @@ Command:task206 focused recovery scripts and final-audit. Result:pass. Evidence:
 Command:node output/playwright/task205-checks/final-audit.mjs. Result:pass. Evidence:all404shared and60Calc raw executable owners have every counter positive;5Writer files contain36uncovered raw counters,explicitly exempt and unchanged. Task20465source hashes stable. Exact5reference symlinks restored. Initial failed reports remain unaltered;successful focused recovery cited separately;the16952passing cases were not replayed unnecessarily.
 Command:ap doctor and node .agentplane/policy/check-routing.mjs. Result:pass. Evidence:final-gates.json;existing managed-hook warning only. Scope:task checkpoint and routing,not policy modifications.
 Outcome:minimum core is ready for a separate UI task restricted to scalar cell editing,existing arithmetic/local references and basic same-model ODS content. Arbitrary ODS fidelity/full formulas/styles/rich text remain outside this milestone. No UI work begins. Following quality review/closure,the existing goal will be paused as explicitly requested.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-18T15:30:28.146Z — VERIFY — ok
+
+By: CODER
+
+Note: Full checkpoint executed once:16952office pass/2stale assertions recovered in task206;inventory/tooling failures recovered with focused reruns. All374browser cases/static pass. Every raw counter positive for404shared+60Calc;only5Writer coverage gaps explicitly exempt. Final Calc237cases/raw100;13gates and5restored references. No UI;pause goal after closure.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T15:29:42.862Z, excerpt_hash=sha256:5afde93728a1f8a947f0200a24371a270a98c0080a8541892aec19cb83635ed3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181503-YCCX41/blueprint/resolved-snapshot.json
+- old_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+- current_digest: 8c45fb710134d3240bccfbd28695f2936c44c567adc5bce8a6c7ce3a95dc19bd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181503-YCCX41
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610181503-YCCX41
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
