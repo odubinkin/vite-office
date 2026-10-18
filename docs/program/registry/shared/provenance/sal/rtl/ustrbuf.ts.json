@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/ustrbuf.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/ustrbuf.cxx",
+    "localSymbols": [
+      "rtl_uStringbuffer_newFromStr_WithLength",
+      "rtl_uStringBuffer_refReturn",
+      "rtl_uStringBuffer_makeStringAndClear",
+      "rtl_uStringbuffer_newFromStringBuffer",
+      "rtl_uStringbuffer_ensureCapacity",
+      "rtl_uStringbuffer_insert",
+      "rtl_uStringbuffer_insertUtf32",
+      "rtl_uStringbuffer_insert_ascii",
+      "rtl_uStringbuffer_remove"
+    ],
+    "upstreamSymbols": [
+      "rtl_uStringbuffer_newFromStr_WithLength",
+      "rtl_uStringBuffer_refReturn",
+      "rtl_uStringBuffer_makeStringAndClear",
+      "rtl_uStringbuffer_newFromStringBuffer",
+      "rtl_uStringbuffer_ensureCapacity",
+      "rtl_uStringbuffer_insert",
+      "rtl_uStringbuffer_insertUtf32",
+      "rtl_uStringbuffer_insert_ascii",
+      "rtl_uStringbuffer_remove"
+    ],
+    "preservedResponsibilities": [
+      "TaskRJ5DY8 implements actual Unicode stringbuffer template/C/header responsibilities on existing rtl_uString allocator/ref owners:16extra constructor units,copy capacity=max(request,length),growth=max(minimum,2*(length+1)),ordered checks,UTF16/ASCII/UTF32 insertion,overlap-safe native tail movement,null-source initialized-gap retention,remove clamp,acquired same-data return and no-copy makeStringAndClear transfer/reset/reuse. Native returns_nonnull requires initialized nonnull data for transfer;null-held transfer is outside the original public contract and not given a fake result. Original full normal/ASanUBSan SAL/CPPU graph objects are verified and reused,with complete initialized logical-unit/capacity/ref/identity observations and original assertions. No spare uninitialized-memory,invalid alias insertion or ABI/lifetime certification. Full OUStringBuffer/math-buffer append,VCL serializer,item/pool/model/UI integration remain pending;no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Original SDT logging,byte-buffer/other template overloads,full C++ OUStringBuffer,uninitialized native spare memory,invalid alias insertion,physical native ABI/lifetime and full consumers are not certified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/ustrbuf.ts",
+          "marker": "rtl_uStringbuffer_newFromStr_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/stringbuffer.test.ts",
+          "marker": "matches all original logical units"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/ustrbuf.cxx",
+          "marker": "rtl_uStringbuffer_newFromStr_WithLength"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/ustrbuf.h",
+          "marker": "SAL_RETURNS_NONNULL"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual existing SAL allocation/ref fields are reused;native std::copy/backward are typed-array operations and native bad_alloc uses existing RangeError convention. No new lifetime/provider engine."
+    }
+  }
+}

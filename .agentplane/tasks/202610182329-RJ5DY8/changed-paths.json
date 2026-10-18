@@ -1,0 +1,15 @@
+[
+  "apps/office/src/sal/rtl/strtmpl.ts",
+  "docs/program/calc-pattern-attributes.md",
+  "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json",
+  "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json",
+  "apps/office/src/sal/inc/rtl/ustrbuf.h.ts",
+  "apps/office/src/sal/rtl/native-stringbuffer-cases.json",
+  "apps/office/src/sal/rtl/stringbuffer.test.ts",
+  "apps/office/src/sal/rtl/ustrbuf.ts",
+  "docs/program/registry/shared/provenance/sal/inc/rtl/ustrbuf.h.ts.json",
+  "docs/program/registry/shared/provenance/sal/rtl/ustrbuf.ts.json",
+  "docs/program/registry/shared/runtime/sal/inc/rtl/ustrbuf.h.ts.json",
+  "docs/program/registry/shared/runtime/sal/rtl/ustrbuf.ts.json",
+  "scripts/rtl-stringbuffer-native-probe.mjs"
+]

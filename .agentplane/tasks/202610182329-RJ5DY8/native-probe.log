@@ -1,0 +1,15 @@
+file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-stringbuffer-native-probe.mjs:169
+    throw new Error(
+          ^
+
+Error: Original buffer observations failed:values:
+vendor/libreoffice-reference/sal/rtl/ustrbuf.cxx:59:5: runtime error: null pointer returned from function declared to never return null
+vendor/libreoffice-reference/include/rtl/ustrbuf.h:197:64: note: returns_nonnull attribute specified here
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior vendor/libreoffice-reference/sal/rtl/ustrbuf.cxx:59:5 
+
+    at file:///Users/odubinkin/Projects/vite-office-calc/scripts/rtl-stringbuffer-native-probe.mjs:169:11
+    at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.1

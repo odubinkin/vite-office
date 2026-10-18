@@ -1,0 +1,437 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "state": "captured",
+  "sourceCount": 346,
+  "commands": [
+    {
+      "tool": "clang++",
+      "argv": [
+        "-std=c++20",
+        "-O1",
+        "-DMACOSX",
+        "-DUNX",
+        "-DLIBO_INTERNAL_ONLY",
+        "-DU_STATIC_IMPLEMENTATION",
+        "-Ioutput/playwright/task39-native-types/headers",
+        "-Ioutput/playwright/task39-native-types/generated",
+        "-Ivendor/libreoffice-reference/include",
+        "-Ivendor/libreoffice-reference/cppu/inc",
+        "-Ivendor/libreoffice-reference/i18nutil/source/utility",
+        "-Ioutput/playwright/icu-case-native/icu/source/common",
+        "-Ioutput/playwright/mdds-native/boost_1_91_0",
+        "-Ivendor/libreoffice-reference/cppu/source/typelib",
+        "-DCPPU_DLLIMPLEMENTATION",
+        "output/playwright/rtl-stringbuffer-native/driver.cpp",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_string.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_ustring.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_strbuf.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_ustrbuf.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_math.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_hash.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_strimp.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_alloc_arena.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_alloc_cache.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_alloc_fini.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_alloc_global.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_byteseq.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_uri.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_crc.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_locale.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_cmdargs.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_rtl_rtl_process.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_converter.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertsimple.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_handleundefinedunicodetotextchar.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_tcvtutf8.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_tencinfo.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_textcvt.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_textenc.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_unichars.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_context.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertbig5hkscs.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_converteuctw.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertgb18030.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertisciidevangari.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertiso2022cn.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertiso2022jp.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertiso2022kr.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_convertsinglebytetobmpunicode.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_tables.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_tcvtbyte.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_tcvtmb.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_textenc_tcvtutf7.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_file.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_file_error_transl.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_file_misc.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_file_path_helper.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_file_stat.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_file_url.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_tempfile.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_thread.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_nlsupport.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_osxlocale.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_mutex.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_process.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_memory.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_interlck.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_time.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_readwrite_helper.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_security.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_process_impl.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_salinit.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_socket.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_soffice.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_all_filepath.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_all_threadshared.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_all_mutexshared.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_all_log.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_all_debugbase.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_all_compat.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_uunxapi.mm.o",
+        "output/playwright/rtl-float-format-native/normal/sal_osl_unx_system.mm.o",
+        "output/playwright/rtl-float-format-native/normal/cppu_source_typelib_static_types.cxx.o",
+        "output/playwright/rtl-float-format-native/normal/cppu_source_typelib_typelib.cxx.o",
+        "-framework",
+        "CoreFoundation",
+        "-framework",
+        "Foundation",
+        "-pthread",
+        "-lz",
+        "-Wl,-dead_strip",
+        "-o",
+        "output/playwright/rtl-stringbuffer-native/normal-caller"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "clang++",
+      "argv": [
+        "-std=c++20",
+        "-O1",
+        "-DMACOSX",
+        "-DUNX",
+        "-DLIBO_INTERNAL_ONLY",
+        "-DU_STATIC_IMPLEMENTATION",
+        "-Ioutput/playwright/task39-native-types/headers",
+        "-Ioutput/playwright/task39-native-types/generated",
+        "-Ivendor/libreoffice-reference/include",
+        "-Ivendor/libreoffice-reference/cppu/inc",
+        "-Ivendor/libreoffice-reference/i18nutil/source/utility",
+        "-Ioutput/playwright/icu-case-native/icu/source/common",
+        "-Ioutput/playwright/mdds-native/boost_1_91_0",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-g",
+        "-Ivendor/libreoffice-reference/cppu/source/typelib",
+        "-DCPPU_DLLIMPLEMENTATION",
+        "output/playwright/rtl-stringbuffer-native/driver.cpp",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_string.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_ustring.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_strbuf.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_ustrbuf.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_math.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_hash.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_strimp.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_alloc_arena.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_alloc_cache.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_alloc_fini.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_alloc_global.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_byteseq.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_uri.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_crc.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_locale.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_cmdargs.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_rtl_rtl_process.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_converter.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertsimple.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_handleundefinedunicodetotextchar.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_tcvtutf8.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_tencinfo.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_textcvt.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_textenc.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_unichars.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_context.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertbig5hkscs.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_converteuctw.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertgb18030.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertisciidevangari.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertiso2022cn.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertiso2022jp.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertiso2022kr.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_convertsinglebytetobmpunicode.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_tables.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_tcvtbyte.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_tcvtmb.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_textenc_tcvtutf7.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_file.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_file_error_transl.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_file_misc.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_file_path_helper.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_file_stat.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_file_url.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_tempfile.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_thread.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_nlsupport.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_osxlocale.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_mutex.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_process.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_memory.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_interlck.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_time.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_readwrite_helper.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_security.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_process_impl.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_salinit.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_socket.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_soffice.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_all_filepath.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_all_threadshared.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_all_mutexshared.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_all_log.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_all_debugbase.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_all_compat.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_uunxapi.mm.o",
+        "output/playwright/rtl-float-format-native/asan/sal_osl_unx_system.mm.o",
+        "output/playwright/rtl-float-format-native/asan/cppu_source_typelib_static_types.cxx.o",
+        "output/playwright/rtl-float-format-native/asan/cppu_source_typelib_typelib.cxx.o",
+        "-framework",
+        "CoreFoundation",
+        "-framework",
+        "Foundation",
+        "-pthread",
+        "-lz",
+        "-Wl,-dead_strip",
+        "-o",
+        "output/playwright/rtl-stringbuffer-native/asan-caller"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "values"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/asan-caller",
+      "argv": [
+        "values"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "overflow"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/asan-caller",
+      "argv": [
+        "overflow"
+      ],
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "0"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "1"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "2"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "3"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "4"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "5"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "6"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "7"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "8"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "9"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "10"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "11"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "12"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "13"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "14"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "15"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "16"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "17"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "18"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "19"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "tool": "output/playwright/rtl-stringbuffer-native/normal-caller",
+      "argv": [
+        "20"
+      ],
+      "exitCode": null,
+      "signal": "SIGABRT"
+    }
+  ],
+  "configurations": {
+    "config_typesizes.h": "47be1fcf314ff055c18f094b3f9acc0d3400053de91547354c8905630c80d9a9",
+    "config_global.h": "cfec9707d79e551d69bcbae3e907cf43e9fe1277c5740d06028a56d85bc36cf2",
+    "config_options.h": "af49ff08d7c23fe47b8cee9ee911bbcb75badbb96824eb7aa3c6d670538aad7f",
+    "config_fuzzers.h": "139df7b81f05c2909f04a8d5de404bfc0ffbfbfe920ee607e4e455bd548a3c4a",
+    "config_features.h": "298ffd9495914487f1ce600b2c389232c928341d48e07e197a5f2157cf8ded03",
+    "config_folders.h": "2dab3846a40ca1e3ed0ad8278cebfcf48873901d955ffa4c3058dd5584731330",
+    "config_probes.h": "8ab9a959a312f675fd59c6dda1e788c59cdbbc5b36779b008d3b7fc654614fe1",
+    "config_locales.h": "f969583c21ae145fab8a9b1fe20626252e3c95a1995a48e953cc58953de3579b"
+  },
+  "generatedHashes": {
+    "output/playwright/task39-native-types/sourceprovider-parser.cxx": "f16ded5e1e319db4db196d3ece145423e408e5f31cd51f57fb35ccfc6a31842f",
+    "output/playwright/task39-native-types/sourceprovider-scanner.cxx": "eff2e9e35b38fb1435c2549c9f2df91b894a771a5cb51240869379b1f4556ee1",
+    "output/playwright/task39-native-types/headers/sourceprovider-parser.hxx": "59408f7b5c6cd1885a768e6c10cbc7b601f714bc9cb884a2bdf062be7b99309f",
+    "output/playwright/task39-native-types/generated/com/sun/star/lang/Locale.hdl": "bd1692d8560860ec7a9c53d3fd6feeb88e23e749cbcddffe0f0e0a1eeda6d683",
+    "output/playwright/task39-native-types/generated/com/sun/star/lang/Locale.hpp": "81fe7a38730fb03049063dafd3fb99417c793d57c0f5e77b24fb35b2b37f14e8",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/Exception.hdl": "e5ad1c158db626eec246aa658b9129fe0b1e989a94c23b55555ca94640414b47",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/Exception.hpp": "3d97ac2644bd4f683c992938714ef18ace983f3d09364a8724412cb2e1932ccb",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/RuntimeException.hdl": "90349a52c30ebc60b5dde4662fd42b9507949aa8c761d63b51cfa8aa8ffac215",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/RuntimeException.hpp": "bbd88a1c4e1edcdfbaa3f83ca8cd71d869274ddbde25bab43af5178422318293",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/XInterface.hdl": "9521908b3d3b1195aa73625683dfa583929a5b43f499211e419a48a9bf39dd10",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/XInterface.hpp": "40361cdccdb829602c8444368d04bd4332ef184af15c191f44e55a8f27f8606a",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/TypeClass.hdl": "5b2ba67236cfe594afecb9ce10865fdd19766f0383057b95ca48ba171b46cf55",
+    "output/playwright/task39-native-types/generated/com/sun/star/uno/TypeClass.hpp": "42c223199c734b8c0709c82abc4c54048ca3f594aac830d450ec5ebdea9c4254"
+  }
+}
