@@ -1,10 +1,11 @@
 ---
 id: "202610181835-905DK4"
 title: "Project pinned Calc menu and toolbar resources through shared UI"
-status: "DOING"
+result_summary: "Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T18:48:31.814Z"
+  updated_at: "2026-10-18T18:49:05.864Z"
   updated_by: "CODER"
-  note: "AllCalc264tests100percent;related Writer10tests and shared100percent;5 tooling tests;source freshness,build,typechecks,style,source/registry gates,doctor/routing and real production Chromium11menus plus file dialogs pass. See task verification.md and logs;favicon404 is unrelated to menu execution."
+  note: "Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - ".agentplane/tasks/202610181835-905DK4/browser-review.json"
   findings:
     - "Actual Writer pure resource/catalog implementation is shared and Writer generation remains byte-identical;Calc original menus and shortcut notation are source-generated. All264Calc tests have100percent raw coverage,related Writer/shared10tests have100percent touched coverage,and5tooling tests plus production11menu/file-dialog checks pass. Unsupported operations remain disabled through real Sfx availability."
-commit: null
+commit:
+  hash: "84d0d8c44a3d30f6fcd398f44906a36b2ffbfa8a"
+  message: "🧩 905DK4 ui: share Writer resource tooling and native Calc menu captions"
 comments:
   -
     author: "CODER"
     body: "Start: Generate source-backed Calc UI resource projections with shared Writer tooling and presenters;verify source closure,unsupported states and browser menus without core facades."
+  -
+    author: "CODER"
+    body: "Verified: Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "AllCalc264tests100percent;related Writer10tests and shared100percent;5 tooling tests;source freshness,build,typechecks,style,source/registry gates,doctor/routing and real production Chromium11menus plus file dialogs pass. See task verification.md and logs;favicon404 is unrelated to menu execution."
+  -
+    type: "verify"
+    at: "2026-10-18T18:49:05.864Z"
+    author: "CODER"
+    state: "ok"
+    note: "Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass."
+  -
+    type: "status"
+    at: "2026-10-18T18:49:05.962Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T18:48:31.867Z"
+doc_updated_at: "2026-10-18T18:49:05.963Z"
 doc_updated_by: "CODER"
 description: "Approved UI plan task8/10. Replace handwritten Calc menu/shortcut/toolbar resources with deterministic generated projections of pinned LibreOffice XML,XCU and accelerator catalogs. Reuse/extract the existing Writer resource parser/catalog tooling into suite-neutral scripts;preserve Writer generated output byte-for-byte. Render original Calc menu hierarchy/order/labels through shared CommandMenuBar,including disabled unsupported commands rather than fake execution. Preserve Writer browser-save/recovery deviations explicitly. Keep supported standardbar controls through shared CommandToolbarItems in native order;record all source surfaces and exclusions. Source-backed catalog regeneration,closure and browser checks plus allCalc100% and affected Writer/tooling tests. Up to45non-task files including generated resource,tooling and runtime/provenance/capability records. No new core services,network,merges or other checkouts."
 sections:
@@ -98,6 +117,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610181835-905DK4 -m 🧩 905DK4 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T18:49:05.864Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:48:31.867Z, excerpt_hash=sha256:90c79c0179350e3f78aa141002df2cd91939e0070a129d944234bde7bcf0367f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181835-905DK4/blueprint/resolved-snapshot.json
+    - old_digest: 4cd670685667c21a25a28c097ba20da1da19a763d12e569851166c814099553e
+    - current_digest: 4cd670685667c21a25a28c097ba20da1da19a763d12e569851166c814099553e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610181835-905DK4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610181835-905DK4 --result verified-202610181835-905DK4 --commit fb1c12c1374ae7eb59cdcba8be80b0bdd7092c14
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -183,6 +232,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610181835-905DK4 -m 🧩 905DK4 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T18:49:05.864Z — VERIFY — ok
+
+By: CODER
+
+Note: Shared Writer catalog and resource tooling now generate Calc native menus and preferred shortcut captions;all264Calc tests and raw100percent coverage,related Writer/shared coverage,source gates and production browser review pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T18:48:31.867Z, excerpt_hash=sha256:90c79c0179350e3f78aa141002df2cd91939e0070a129d944234bde7bcf0367f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610181835-905DK4/blueprint/resolved-snapshot.json
+- old_digest: 4cd670685667c21a25a28c097ba20da1da19a763d12e569851166c814099553e
+- current_digest: 4cd670685667c21a25a28c097ba20da1da19a763d12e569851166c814099553e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610181835-905DK4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610181835-905DK4 --result verified-202610181835-905DK4 --commit fb1c12c1374ae7eb59cdcba8be80b0bdd7092c14
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
