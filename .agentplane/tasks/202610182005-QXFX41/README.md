@@ -1,10 +1,11 @@
 ---
 id: "202610182005-QXFX41"
 title: "Implement native Calc cell input mode transitions and F2 command"
-status: "DOING"
+result_summary: "Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T20:12:38.313Z"
+  updated_at: "2026-10-18T20:13:25.642Z"
   updated_by: "CODER"
-  note: "Native input modes and original F2 slot pass275Calc cases with raw100percent four metrics,110related menu cases,source contracts,types/build/style/source/inventory gates and built-browser caret,draft,commit/history review. Original UI goal remains active;see verification.md."
+  note: "Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610182005-QXFX41/inventory-final.log"
   findings:
     - "All275Calc cases pass with raw100percent coverage across four metrics;110related shared/Writer menu cases,source contracts,types/build/style/source/inventory and real production browser review pass. Native mode values,toggle and TOP commit guard match pinned sources;shared controls remain reused."
-commit: null
+commit:
+  hash: "5066126c7d434831cc579fa210a064e6fd98c4be"
+  message: "🧩 QXFX41 ui: preserve native Calc input modes and F2 draft transitions"
 comments:
   -
     author: "CODER"
     body: "Start: Implement source-backed Calc input mode owner and original F2 command under existing approved UI scope."
+  -
+    author: "CODER"
+    body: "Verified: Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native input modes and original F2 slot pass275Calc cases with raw100percent four metrics,110related menu cases,source contracts,types/build/style/source/inventory gates and built-browser caret,draft,commit/history review. Original UI goal remains active;see verification.md."
+  -
+    type: "verify"
+    at: "2026-10-18T20:13:25.642Z"
+    author: "CODER"
+    state: "ok"
+    note: "Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass."
+  -
+    type: "status"
+    at: "2026-10-18T20:13:25.743Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T20:12:38.364Z"
+doc_updated_at: "2026-10-18T20:13:25.743Z"
 doc_updated_by: "CODER"
 description: "Approved Calc UI continuation task12. Port native ScInputMode enum and bounded ScInputHandler mode owner at source paths;preserve NONE/TYPE/TABLE/TOP semantics and F2 toggle without committing TYPE/TABLE drafts. Bind original SetInputMode slot26552 and shared menu/accelerator,route direct typing and scalar cursor keys according to source shell contract,retain real model/undo/file behavior. Add source-backed and user-facing regression tests,allCalc100percent and related tests. Up to35non-task paths including truthful runtime/provenance records. No network,merges or full suite before task20."
 sections:
@@ -102,6 +121,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182005-QXFX41 -m 🧩 QXFX41 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T20:13:25.642Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:12:38.364Z, excerpt_hash=sha256:f0eef3ee7f0bff3380991eedef366a88aef1cb0889afc2043d8e9075bb8729d6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182005-QXFX41/blueprint/resolved-snapshot.json
+    - old_digest: df99142ec7b3817c9f4062749b2b7d82c5ea9b7e9ba06aa1eeab3666947835c0
+    - current_digest: df99142ec7b3817c9f4062749b2b7d82c5ea9b7e9ba06aa1eeab3666947835c0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182005-QXFX41
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182005-QXFX41 --result verified-202610182005-QXFX41 --commit 107526ea78acaa9fb93594fb0c1de6995ab4e55d
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -194,6 +243,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182005-QXFX41 -m 🧩 QXFX41 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T20:13:25.642Z — VERIFY — ok
+
+By: CODER
+
+Note: Native Calc input modes and original F2 slot preserve drafts and source cursor behavior;275Calc tests with100percent coverage,110related tests and built-browser review pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:12:38.364Z, excerpt_hash=sha256:f0eef3ee7f0bff3380991eedef366a88aef1cb0889afc2043d8e9075bb8729d6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182005-QXFX41/blueprint/resolved-snapshot.json
+- old_digest: df99142ec7b3817c9f4062749b2b7d82c5ea9b7e9ba06aa1eeab3666947835c0
+- current_digest: df99142ec7b3817c9f4062749b2b7d82c5ea9b7e9ba06aa1eeab3666947835c0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182005-QXFX41
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182005-QXFX41 --result verified-202610182005-QXFX41 --commit 107526ea78acaa9fb93594fb0c1de6995ab4e55d
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
