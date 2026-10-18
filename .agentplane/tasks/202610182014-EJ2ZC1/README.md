@@ -1,10 +1,11 @@
 ---
 id: "202610182014-EJ2ZC1"
 title: "Match native Calc input modification and undo trigger semantics"
-status: "DOING"
+result_summary: "Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-18T20:19:53.553Z"
+  updated_at: "2026-10-18T20:20:26.438Z"
   updated_by: "CODER"
-  note: "Native modification flag now gates writes and Undo instead of JSON equality. All280Calc cases raw100percent four metrics,110related menu cases,6source/tooling cases,types/build/style/source/inventory and built-browser no-edit versus same-value Undo review pass;see verification.md."
+  note: "Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - ".agentplane/tasks/202610182014-EJ2ZC1/browser-review.json"
   findings:
     - "Source constructor default,SetModified,DataChanged,EnterHandler2 and operation Undo establish actual behavior. All280Calc cases raw100percent four metrics,110related cases,6tooling/source cases and build/type/style/source/inventory gates pass. Real built browser distinguishes no-edit inspection from same-value input with actual Undo controls."
-commit: null
+commit:
+  hash: "a8210c1d13af5cb22e9f8e9d844ed0dcdf1bff24"
+  message: "🧩 EJ2ZC1 ui: follow native Calc input modification and Undo guards"
 comments:
   -
     author: "CODER"
     body: "Start: Replace browser JSON equality with source modification flag lifecycle and actual input-triggered history."
+  -
+    author: "CODER"
+    body: "Verified: Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native modification flag now gates writes and Undo instead of JSON equality. All280Calc cases raw100percent four metrics,110related menu cases,6source/tooling cases,types/build/style/source/inventory and built-browser no-edit versus same-value Undo review pass;see verification.md."
+  -
+    type: "verify"
+    at: "2026-10-18T20:20:26.438Z"
+    author: "CODER"
+    state: "ok"
+    note: "Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass."
+  -
+    type: "status"
+    at: "2026-10-18T20:20:26.537Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-18T20:19:53.622Z"
+doc_updated_at: "2026-10-18T20:20:26.538Z"
 doc_updated_by: "CODER"
 description: "Approved UI continuation task13. Replace browser JSON cell comparison with native ScInputHandler bModified default and modification lifecycle. F2/focus/caret-only input does not write;actual edits and explicit EnterString do write and create real history even when values match. Preserve modification through TYPE/TABLE/TOP toggles;reset after accepted input,cancel and document replacement;retain rejected draft. Port only actual flag lifecycle at source owner and browser platform boundary;no full EditEngine or operation services claimed. AllCalc100percent,related source/shared tests and standard gates. Up to24non-task files;full regression next task20;calc checkout/branch only."
 sections:
@@ -102,6 +121,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610182014-EJ2ZC1 -m 🧩 EJ2ZC1 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-18T20:20:26.438Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:19:53.622Z, excerpt_hash=sha256:7c55337f0c462a3f82b1d0ef77c73ed694334278cf75497e6b013015b11dc4bb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182014-EJ2ZC1/blueprint/resolved-snapshot.json
+    - old_digest: cbe2708bdf75b58e88486dfb33c3e94704941f6334cad9ea0105aa19c69c67ce
+    - current_digest: cbe2708bdf75b58e88486dfb33c3e94704941f6334cad9ea0105aa19c69c67ce
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610182014-EJ2ZC1
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610182014-EJ2ZC1 --result verified-202610182014-EJ2ZC1 --commit d67603e9d1093addbdd6e10ca520448426208e96
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -191,6 +240,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610182014-EJ2ZC1 -m 🧩 EJ2ZC1 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-18T20:20:26.438Z — VERIFY — ok
+
+By: CODER
+
+Note: Calc now uses native input modification guards for writes and Undo;280Calc cases100percent coverage,110related cases and real browser no-edit and same-value history checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-18T20:19:53.622Z, excerpt_hash=sha256:7c55337f0c462a3f82b1d0ef77c73ed694334278cf75497e6b013015b11dc4bb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610182014-EJ2ZC1/blueprint/resolved-snapshot.json
+- old_digest: cbe2708bdf75b58e88486dfb33c3e94704941f6334cad9ea0105aa19c69c67ce
+- current_digest: cbe2708bdf75b58e88486dfb33c3e94704941f6334cad9ea0105aa19c69c67ce
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610182014-EJ2ZC1
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610182014-EJ2ZC1 --result verified-202610182014-EJ2ZC1 --commit d67603e9d1093addbdd6e10ca520448426208e96
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
