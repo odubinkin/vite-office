@@ -1,10 +1,11 @@
 ---
 id: "202610181353-EGPAKC"
 title: "Add canonical row-major cell traversal for ODS export"
-status: "DOING"
+result_summary: "Implemented native ScHorizontalCellIterator over real const block cursors with sparse row jumps,inclusive windows and stable borrowed cell views. Added native GetCellStore and allocated-column clamp;factored shared Calc toRefCell conversion into its native owner for direct reads and traversal. Inventory/provenance/readiness and CALC-188 updated. ODS filters remain the next core task;UI remains separate and full all-app verification waits for the agreed minimum core/ODS milestone."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
   findings:
     - "ScHorizontalCellIterator retains source vector/block cursor ordering,empty-block skip and sparse-row jumps,stable borrowed maCurCell and original constructor clamp. Native GetCellStore/ClampToAllocatedColumns/toRefCell reuse the actual typed stores and views;no copied grid,heap scheduler or shared mdds algorithm change."
     - "217Calc cases and exact50owners pass every raw S/B/F/L counter100;175related tests,build+6Chromium/DOM-free Worker scenarios and13source gates pass. Native source evidence covers8files;all5source links restored. Invalid SetTab allocation-domain rejection is explicit and journaled CALC-188;no native UB or physical memory manager is emulated."
-commit: null
+commit:
+  hash: "ad5b8b30581969a44178a5e2c6d5cfe85e89e30c"
+  message: "🧮 EGPAKC calc: traverse actual cells in native row-major order"
 comments:
   -
     author: "CODER"
     body: "Start: add actual row-major typed-block traversal for same-model ODS export,reusing native column views and shared mdds without a second grid or UI."
+  -
+    author: "CODER"
+    body: "Verified: actual row-major cell traversal passes217Calc cases/exact50owners raw100,175related tests,build+6Chromium/Worker scenarios,13gates,8pinned source checks and same-agent review."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed217Calc cases/exact50owners raw100;175related cases;build+6Chromium/DOM-free Worker scenarios;13source gates;8pinned native sources and23path/hash closure. Actual typed row-major traversal complete;ODS filters/UI readiness unclaimed."
+  -
+    type: "status"
+    at: "2026-10-18T14:07:11.350Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: actual row-major cell traversal passes217Calc cases/exact50owners raw100,175related tests,build+6Chromium/Worker scenarios,13gates,8pinned source checks and same-agent review."
 doc_version: 3
-doc_updated_at: "2026-10-18T14:05:36.011Z"
+doc_updated_at: "2026-10-18T14:07:11.351Z"
 doc_updated_by: "CODER"
 description: "Task203: implement actual ScHorizontalCellIterator over existing typed column blocks and borrowed cell views, preserving native row-major state/skip behavior and sheet reset. Reuse native GetCellStore and allocated-column bounds;no copied grid or UI. This is the direct core traversal consumed by minimal same-model ODS export."
 sections:
