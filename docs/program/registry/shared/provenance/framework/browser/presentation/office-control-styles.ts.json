@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/framework/browser/presentation/office-control-styles.ts",
+    "rationale": "These shared React/Tailwind control style strings are browser presentation resources extracted from the existing Writer toolbar. They have no corresponding native C++ implementation owner; they preserve the browser visual system for Writer and Calc.",
+    "responsibilities": [
+      "Preserves the exact existing Writer command-button styling for both applications and provides matching text-field styling."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Shared browser control styles keep Writer and Calc in one visual system."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/framework/browser/presentation/office-control-styles.ts",
+          "marker": "officeToolbarButtonClassName"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+          "marker": "officeToolbarButtonClassName"
+        }
+      ]
+    }
+  }
+}

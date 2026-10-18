@@ -1,4 +1,5 @@
 /** @fileoverview Renders Writer text and numbering toolbar resources through shared command descriptors. */
+import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
 import {
   AlignCenter,
   AlignJustify,
@@ -82,7 +83,7 @@ export function WriterFormattingToolbar({
       placements: typeof writerTextObjectBarItems,
     ) => (
       <CommandToolbarItems
-        buttonClassName="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-sm font-bold text-slate-700 transition hover:border-indigo-400 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:border-indigo-700 data-[active=true]:bg-indigo-700 data-[active=true]:text-white"
+        buttonClassName={officeToolbarButtonClassName}
         commandSource={commandSource}
         getButtonContent={getWriterButtonContent}
         getCommandResource={getCommandResource}

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/framework/browser/presentation/office-control-styles.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0101",
+      "CAP-80c7cd5d-a6df-4631-80c7-c63423899de6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/framework/browser/presentation/office-control-styles.ts",
+        "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+        "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx"
+      ],
+      "justification": "Extracts the existing Writer formatting toolbar button class string unchanged for shared Writer/Calc controls;adds a companion input field using the existing Writer slate/indigo palette. No native document behavior changes.",
+      "knownViolations": [],
+      "localSymbols": [
+        "officeToolbarButtonClassName",
+        "officeTextInputClassName"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}
