@@ -1,0 +1,23 @@
+[
+  "apps/office/src/sal/inc/rtl/textcvt.h.ts",
+  "apps/office/src/sal/textenc/convertsimple.hxx.ts",
+  "apps/office/src/sal/textenc/convertsimple.ts",
+  "apps/office/src/sal/textenc/native-singlebyte-cases.json",
+  "apps/office/src/sal/textenc/singlebyte.test.ts",
+  "apps/office/src/sal/textenc/tenchelp.ts",
+  "apps/office/src/sal/textenc/textenc.ts",
+  "apps/office/src/sal/textenc/unichars.hxx.ts",
+  "docs/program/registry/shared/provenance/sal/inc/rtl/textcvt.h.ts.json",
+  "docs/program/registry/shared/provenance/sal/textenc/convertsimple.hxx.ts.json",
+  "docs/program/registry/shared/provenance/sal/textenc/convertsimple.ts.json",
+  "docs/program/registry/shared/provenance/sal/textenc/tenchelp.ts.json",
+  "docs/program/registry/shared/provenance/sal/textenc/textenc.ts.json",
+  "docs/program/registry/shared/provenance/sal/textenc/unichars.hxx.ts.json",
+  "docs/program/registry/shared/runtime/sal/inc/rtl/textcvt.h.ts.json",
+  "docs/program/registry/shared/runtime/sal/textenc/convertsimple.hxx.ts.json",
+  "docs/program/registry/shared/runtime/sal/textenc/convertsimple.ts.json",
+  "docs/program/registry/shared/runtime/sal/textenc/tenchelp.ts.json",
+  "docs/program/registry/shared/runtime/sal/textenc/textenc.ts.json",
+  "docs/program/registry/shared/runtime/sal/textenc/unichars.hxx.ts.json",
+  "scripts/rtl-singlebyte-native-probe.mjs"
+]

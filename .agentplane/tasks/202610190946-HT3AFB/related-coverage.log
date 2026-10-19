@@ -1,0 +1,26 @@
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage --coverage.include=src/sal/textenc/*.ts --coverage.include=src/sal/inc/rtl/textcvt.h.ts --coverage.reportsDirectory=coverage/task28-singlebyte src/sal/textenc/singlebyte.test.ts
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  16:55:08
+   Duration  12.50s (transform 2.67s, setup 1.03s, import 2.71s, tests 4.82s, environment 3.44s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 67/67 )
+Branches     : 100% ( 22/22 )
+Functions    : 100% ( 2/2 )
+Lines        : 100% ( 65/65 )
+================================================================================
