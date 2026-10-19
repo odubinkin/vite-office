@@ -1,10 +1,11 @@
 ---
 id: "202610191007-6DD2P4"
 title: "Implement shared native popup pointer admission and submenu timers"
-status: "DOING"
+result_summary: "Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T10:33:11.202Z"
+  updated_at: "2026-10-19T10:34:06.405Z"
   updated_by: "CODER"
-  note: "Original pinned pointer/timer/default source audit passes;actual shared renderer and new pointer owner raw100 S337 B284 F78 L302 with20files191cases. WholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Expanded related UI cases accounted across951passes and repaired native-chain10case replay;all21targeted browser cases accounted,plus final4case visual/disabled acceptance and four persisted screenshots. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. Nineteen intentional non-task paths,no guard or threshold weakening;full regression30."
+  note: "Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next."
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,16 @@ quality_review:
     - "Entire new pointer module and full touched shared renderer raw100 S337 B284 F78 L302;20files191cases pass. WholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Related expanded951passes and repaired10case native-chain replay account for all952cases without claiming one clean952case command. Final overflow type-only option repair passes all4cases and final app types."
     - "All21targeted browser cases are accounted across initial17passes and clean10case affected-spec replay;separate4case real disabled-item/visual runs pass for Writer/Calc1280/390. Four actual screenshots inspected and persisted. Style/accelerators remain shared;original command state and core-unimplemented disabled actions are preserved."
     - "Exactly19intentional non-task paths,including exhaustive registration of moved DOM highlight mutation. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. No validator,threshold,timeout,policy,source ledger,network,other checkout or merge changes. Existing hook/bundle warnings remain."
-commit: null
+commit:
+  hash: "a2a56060ded00d6f47c68551ea856c47a5852500"
+  message: "🧩 6DD2P4 ui: share original popup pointer admission and timers"
 comments:
   -
     author: "CODER"
     body: "Start:implement shared original popup pointer movement admission and150ms submenu timer behavior without changing resource or command ownership."
+  -
+    author: "CODER"
+    body: "Verified: Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original pinned pointer/timer/default source audit passes;actual shared renderer and new pointer owner raw100 S337 B284 F78 L302 with20files191cases. WholeCalc111files299cases raw100 S6823 B4390 F1410 L6112. Expanded related UI cases accounted across951passes and repaired native-chain10case replay;all21targeted browser cases accounted,plus final4case visual/disabled acceptance and four persisted screenshots. Types/build/static/style/docs/size/tree/dependencies/provenance/scopedinventories/doctor/routing pass. Nineteen intentional non-task paths,no guard or threshold weakening;full regression30."
+  -
+    type: "verify"
+    at: "2026-10-19T10:34:06.405Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next."
+  -
+    type: "status"
+    at: "2026-10-19T10:34:06.560Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T10:33:11.281Z"
+doc_updated_at: "2026-10-19T10:34:06.561Z"
 doc_updated_by: "CODER"
 description: "Task29 of approved Calc UI goal:replace immediate popup mouseenter/leave opening with source-shaped real mouse movement admission,first-move suppression,150ms highlight/submenu-close timers and mounted popup cleanup in the existing shared Writer/Calc CommandMenuBar. Preserve actual resource/command/focus owners and native disabled-item highlight behavior;no separate Calc menu or visual stack. Mouse enter alone must not open a submenu;keyboard/click remain immediate,hover opens without item preselection. Follow original MenuFloatingWindow ChangeHighlightItem/MouseMove/HighlightChanged/SubmenuClose ordering and preserve suspected source quirks in canonical ledger if found. Root menubar first-move/mnemonics and full platform MouseSettings are separate pending responsibilities. Verify source anchors and complete new/shared component raw100,related menu/Writer/Calc tests and wholeCalc100,browser actual movement/timing/focus,types/build/static/style/docs/provenance/inventories/doctor/routing. Only calc checkout/branch,offline,no merge;full all-app regression30."
 sections:
@@ -125,6 +144,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610191007-6DD2P4 -m 🧩 6DD2P4 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T10:34:06.405Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T10:33:11.281Z, excerpt_hash=sha256:8651f1a38df4f194d76943e9b3680c294cd63f4f24281f224f38c24740454bdb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191007-6DD2P4/blueprint/resolved-snapshot.json
+    - old_digest: f36cf1407d8b6f5e45e22677dbb54455d239888469b85e6d522cd46d4c47fecb
+    - current_digest: f36cf1407d8b6f5e45e22677dbb54455d239888469b85e6d522cd46d4c47fecb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191007-6DD2P4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191007-6DD2P4 --result verified-202610191007-6DD2P4 --commit 525e7f0c09be4bc68cf0c0b0ae7906c3183eed83
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -204,6 +253,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610191007-6DD2P4 -m 🧩 6DD2P4 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T10:34:06.405Z — VERIFY — ok
+
+By: CODER
+
+Note: Implemented shared Writer/Calc popup pointer first-move admission and native150ms submenu timers,retained matching children,cancelled close on reentry and preserved original focus/resource/command owners. New/full touched menu scopes and wholeCalc raw100;real desktop/mobile browser and persisted visual evidence pass. Broader native UI/core parity remains pending;full regression30 next.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T10:33:11.281Z, excerpt_hash=sha256:8651f1a38df4f194d76943e9b3680c294cd63f4f24281f224f38c24740454bdb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191007-6DD2P4/blueprint/resolved-snapshot.json
+- old_digest: f36cf1407d8b6f5e45e22677dbb54455d239888469b85e6d522cd46d4c47fecb
+- current_digest: f36cf1407d8b6f5e45e22677dbb54455d239888469b85e6d522cd46d4c47fecb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191007-6DD2P4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191007-6DD2P4 --result verified-202610191007-6DD2P4 --commit 525e7f0c09be4bc68cf0c0b0ae7906c3183eed83
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
