@@ -34,8 +34,10 @@
       "--config",
       "apps/office/playwright.config.ts",
       "--project",
-      "calc"
+      "calc",
+      "--workers",
+      "1"
     ],
-    "exitCode": 1
+    "exitCode": 0
   }
 ]

@@ -1,0 +1,217 @@
+[
+  {
+    "check": "format-final",
+    "command": [
+      "npx",
+      "prettier",
+      "--check",
+      "apps/office/e2e/calc/font-size.spec.ts",
+      "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "apps/office/src/sc/inc/global.ts",
+      "apps/office/src/sc/source/core/data/docpool.test.ts",
+      "apps/office/src/sc/source/core/data/docpool.ts",
+      "apps/office/src/sc/source/core/data/global.ts",
+      "apps/office/src/sc/source/core/data/table.ts",
+      "apps/office/src/sc/source/filter/xml/ods.test.ts",
+      "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+      "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+      "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "apps/office/src/sc/source/ui/view/viewdata.ts",
+      "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "docs/program/calc-ui-readiness.md",
+      "docs/program/calc-upstream-suspected-issues.md",
+      "docs/program/registry/calc/capabilities/CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5.json",
+      "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+      "docs/program/registry/calc/provenance/sc/browser/presentation/ScGridWindow.tsx.json",
+      "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+      "docs/program/registry/calc/provenance/sc/inc/global.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/core/data/docpool.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/core/data/global.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlexprt.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlimprt.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlrowi.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyli.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/ui/undo/undoblk3.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/ui/view/formatsh.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/ui/view/viewdata.ts.json",
+      "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+      "docs/program/registry/calc/runtime/sc/browser/presentation/ScGridWindow.tsx.json",
+      "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+      "docs/program/registry/calc/runtime/sc/inc/global.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/core/data/docpool.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/core/data/global.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlexprt.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlimprt.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlrowi.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyli.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/ui/undo/undoblk3.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/ui/view/formatsh.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/ui/view/viewdata.ts.json",
+      "docs/program/registry/shared/provenance/xmloff/source/core/xmltoken.ts.json",
+      "docs/program/registry/shared/runtime/xmloff/source/core/xmltoken.ts.json",
+      "apps/office/src/sc/browser/presentation/row-geometry.ts",
+      "apps/office/src/sc/inc/rowheightcontext.ts",
+      "apps/office/src/sc/source/core/data/column2.ts",
+      "apps/office/src/sc/source/core/data/rowheight.test.ts",
+      "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+      "apps/office/src/sc/source/core/data/table1.ts",
+      "apps/office/src/sc/source/ui/view/viewfun2.ts",
+      "docs/program/registry/calc/provenance/sc/browser/presentation/row-geometry.ts.json",
+      "docs/program/registry/calc/provenance/sc/inc/rowheightcontext.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/core/data/column2.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/core/data/rowheightcontext.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/core/data/table1.ts.json",
+      "docs/program/registry/calc/provenance/sc/source/ui/view/viewfun2.ts.json",
+      "docs/program/registry/calc/runtime/sc/browser/presentation/row-geometry.ts.json",
+      "docs/program/registry/calc/runtime/sc/inc/rowheightcontext.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/core/data/column2.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/core/data/rowheightcontext.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/core/data/table1.ts.json",
+      "docs/program/registry/calc/runtime/sc/source/ui/view/viewfun2.ts.json"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "lint-final",
+    "command": [
+      "npx",
+      "eslint",
+      "apps/office/e2e/calc/font-size.spec.ts",
+      "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "apps/office/src/sc/inc/global.ts",
+      "apps/office/src/sc/source/core/data/docpool.test.ts",
+      "apps/office/src/sc/source/core/data/docpool.ts",
+      "apps/office/src/sc/source/core/data/global.ts",
+      "apps/office/src/sc/source/core/data/table.ts",
+      "apps/office/src/sc/source/filter/xml/ods.test.ts",
+      "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+      "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+      "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "apps/office/src/sc/source/ui/view/viewdata.ts",
+      "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "apps/office/src/sc/browser/presentation/row-geometry.ts",
+      "apps/office/src/sc/inc/rowheightcontext.ts",
+      "apps/office/src/sc/source/core/data/column2.ts",
+      "apps/office/src/sc/source/core/data/rowheight.test.ts",
+      "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+      "apps/office/src/sc/source/core/data/table1.ts",
+      "apps/office/src/sc/source/ui/view/viewfun2.ts",
+      "--max-warnings",
+      "0"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "docs-final",
+    "command": [
+      "npm",
+      "run",
+      "check:docs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "size-final",
+    "command": [
+      "npm",
+      "run",
+      "check:file-size"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "dependencies-final",
+    "command": [
+      "npm",
+      "run",
+      "check:dependencies"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "provenance-final",
+    "command": [
+      "npm",
+      "run",
+      "check:source-provenance"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "tree-final",
+    "command": [
+      "npm",
+      "run",
+      "check:source-tree"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "resources-final",
+    "command": [
+      "npm",
+      "run",
+      "check:calc-resources"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "inventory-calc-final",
+    "command": [
+      "npm",
+      "run",
+      "inventory:parity:calc"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "inventory-shared-final",
+    "command": [
+      "npm",
+      "run",
+      "inventory:parity:shared"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "doctor-final",
+    "command": [
+      "ap",
+      "doctor"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "routing-final",
+    "command": [
+      "node",
+      ".agentplane/policy/check-routing.mjs"
+    ],
+    "exitCode": 0
+  },
+  {
+    "check": "diff-final",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0
+  }
+]

@@ -98,7 +98,7 @@
     },
     {
       "path": "apps/office/src/sc/source/core/data/table.ts",
-      "sha256": "cd72cb6a6aa6a8181a88467e7bdb9e238a89aebe85ab00e9ee8064c880b88ae6"
+      "sha256": "0d9f390842db6c1447d8f564c214b0b3d876b6325a3d822af15d92dc37bfccf8"
     },
     {
       "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
@@ -150,7 +150,7 @@
     },
     {
       "path": "apps/office/src/sc/source/core/data/rowheight.test.ts",
-      "sha256": "725c759c73a3dad5aab9037350f9c94948d5c2c56a2d37a0cd03add575bd1b38"
+      "sha256": "5b399ef7fbe085d1af7c9b2834cd57f742dcec78fbc0850947dfadea97bbbae6"
     },
     {
       "path": "apps/office/src/sc/source/core/data/rowheightcontext.ts",
@@ -168,8 +168,38 @@
   "limitations": [
     "Device startup InitTextHeight and physical font metrics unported",
     "Only plain unwrapped unrotated uniform script-height standard layout represented",
-    "Drawing,hidden rows,merged/rich/script-dependent layout and height dialogs unported",
+    "Drawing,hidden rows,merged/rich/mixed-script text and script-dependent device layout and height dialogs unported",
     "Extreme native float-to-UInt16 conversion not certified",
     "Cross-selected-sheet accumulation preserved as CALC-196"
+  ],
+  "builtAssets": [
+    {
+      "path": "apps/office/dist/assets/index-BMXlFbJM.js",
+      "sha256": "ccfe3bc98644e60b88ad0a1d7966ff2d8ebafeaa3d18365cd2d056ac882b2f28"
+    },
+    {
+      "path": "apps/office/dist/assets/index-CJgyuOvj.css",
+      "sha256": "1cd7ee6e15281b82a434e40c693d0ac8d13fb5a3f509de0a8ba1bc6140e445cf"
+    },
+    {
+      "path": "apps/office/dist/assets/odt-worker-CDax3Fvw.js",
+      "sha256": "7e45d0021fd551af812c996ec140cfb236aafe9dec556ab7b9ea92e47e4c4468"
+    },
+    {
+      "path": "apps/office/dist/index.html",
+      "sha256": "695b37858d88d24657c4707d5afb6a86affaa47b2e586393b4761e0c2c756071"
+    }
+  ],
+  "visual": [
+    {
+      "path": ".agentplane/tasks/202610191401-GKVVR7/evidence/visual/font-size-1280.png",
+      "sha256": "797444cebadbbb639988b7bebfb71f4d040b6fedaa9cd91eb6cdfdc137f54b96",
+      "review": "Actual desktop/mobile screenshot inspected;24pt glyphs fit vertically. Existing horizontal cell overflow remains unported."
+    },
+    {
+      "path": ".agentplane/tasks/202610191401-GKVVR7/evidence/visual/font-size-390.png",
+      "sha256": "dcfffbd3b5298dcd7f469e37efdbdb024887d4bd977d1132cffd9f231f38e9ae",
+      "review": "Actual desktop/mobile screenshot inspected;24pt glyphs fit vertically. Existing horizontal cell overflow remains unported."
+    }
   ]
 }
