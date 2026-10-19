@@ -1,10 +1,11 @@
 ---
 id: "202610190012-CMHQFZ"
 title: "Implement native OUStringBuffer ownership and construction contracts"
-status: "DOING"
+result_summary: "Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T00:24:26.543Z"
+  updated_at: "2026-10-19T00:25:46.072Z"
   updated_by: "CODER"
-  note: "Original fundamental OUStringBuffer and shared stringutils owners match2119genuine normal/ASanUBSan observations and11source assertions;real concat overflow and initialized setLength semantics verified. Entire changed scope/raw100 S265 B162 F71 L235,wholeCalc299/raw100 and all declared gates pass.18paths,goalactive,nextfull30."
+  note: "Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage."
   attempts: 0
 quality_review:
   state: "pass"
@@ -43,11 +44,16 @@ quality_review:
     - "Canonical317line buffer owner and original stringutils helpers preserve native capacities,copy/self-copy,move/self-move,borrowed addresses and units,scalar overload typing,real concat insertion,copy versus no-acquire ownership transfer and destructor. OUString literal validation reuses the actual shared trait with unchanged ownership/error contracts. No JS string builder or synthetic pool/provider."
     - "2119original header observation records and11assertions agree under genuine complete69normal+69ASanUBSan SAL/CPPU graphs,346source hashes and138actual object hashes. Real concat overflow uses128valid views over32MiB backing;only initialized native storage is observed and source setLength zero-fill comment is not promoted into invented behavior."
     - "WholeCalc299/raw100 andrelated21files57cases/raw100 S265 B162 F71 L235 pass with old genuine SAL/SVL/CPPU fixtures. Types/build/static/style/docs/size/tree/dependency/provenance/scopedinventories/doctor/routing pass.18intentional non-task paths in clean implementation539824172157;no validators,thresholds,policy or other checkouts changed."
-commit: null
+commit:
+  hash: "539824172157f9fee0b046069fcf0b297d2e03b9"
+  message: "🧩 CMHQFZ core: port native OUStringBuffer ownership and construction"
 comments:
   -
     author: "CODER"
     body: "Start:implement real OUStringBuffer lifetime/construction/mutation bindings over actual C ownership and verify genuine initialized native states."
+  -
+    author: "CODER"
+    body: "Verified: Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -62,8 +68,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Original fundamental OUStringBuffer and shared stringutils owners match2119genuine normal/ASanUBSan observations and11source assertions;real concat overflow and initialized setLength semantics verified. Entire changed scope/raw100 S265 B162 F71 L235,wholeCalc299/raw100 and all declared gates pass.18paths,goalactive,nextfull30."
+  -
+    type: "verify"
+    at: "2026-10-19T00:25:46.072Z"
+    author: "CODER"
+    state: "ok"
+    note: "Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage."
+  -
+    type: "status"
+    at: "2026-10-19T00:25:46.163Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T00:24:26.595Z"
+doc_updated_at: "2026-10-19T00:25:46.164Z"
 doc_updated_by: "CODER"
 description: "Task26 of approved Calc goal:port actual OUStringBuffer fundamental constructors/copy/move assignment/lifetime,capacity and borrowed access,known-length UTF16/ASCII literal/concat/number append and insert,native float/double/integer type bindings,mutation/truncate,copy and ownership transfer. Reuse genuine SAL buffers,OUString,StringConcat and numeric C owners. Add actual stringutils length/const-literal helpers and reuse literal guard in OUString;native double macro25. VCL tag encoding/serializer remains pending actual text conversion dependency. Only calc branch/checkout,offline,no merge."
 sections:
@@ -121,6 +140,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610190012-CMHQFZ -m 🧩 CMHQFZ task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T00:25:46.072Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T00:24:26.595Z, excerpt_hash=sha256:b155444a0ff43fb86e34ca5f22e375e01e64096fc9af18a7d966106e21ea0409
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190012-CMHQFZ/blueprint/resolved-snapshot.json
+    - old_digest: 3de1f16be7c602aa35dc5d41a617330aa9b385cda15aa46e8f597b0cb2c736e9
+    - current_digest: 3de1f16be7c602aa35dc5d41a617330aa9b385cda15aa46e8f597b0cb2c736e9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610190012-CMHQFZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610190012-CMHQFZ --result verified-202610190012-CMHQFZ --commit 164671608a4f531ae56823f97f21e8ac33c02d30
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -198,6 +247,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610190012-CMHQFZ -m 🧩 CMHQFZ task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T00:25:46.072Z — VERIFY — ok
+
+By: CODER
+
+Note: Original OUStringBuffer fundamental ownership and mutation now match2119genuine source observations and11assertions with100percent complete changed-owner and Calc coverage.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T00:24:26.595Z, excerpt_hash=sha256:b155444a0ff43fb86e34ca5f22e375e01e64096fc9af18a7d966106e21ea0409
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610190012-CMHQFZ/blueprint/resolved-snapshot.json
+- old_digest: 3de1f16be7c602aa35dc5d41a617330aa9b385cda15aa46e8f597b0cb2c736e9
+- current_digest: 3de1f16be7c602aa35dc5d41a617330aa9b385cda15aa46e8f597b0cb2c736e9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610190012-CMHQFZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610190012-CMHQFZ --result verified-202610190012-CMHQFZ --commit 164671608a4f531ae56823f97f21e8ac33c02d30
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
