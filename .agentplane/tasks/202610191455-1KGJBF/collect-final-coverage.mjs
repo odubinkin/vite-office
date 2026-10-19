@@ -13,7 +13,7 @@ const calc=JSON.parse(calcRaw), related=JSON.parse(relatedRaw);
 fs.writeFileSync(base+'related-coverage-final.json.gz',zlib.gzipSync(relatedRaw));
 const expected={...JSON.parse(fs.readFileSync(base+'calc-coverage-final2-summary.json')).sourceHashes,...JSON.parse(fs.readFileSync(base+'related-source-hashes.json'))};
 for(const [path,hash]of Object.entries(expected))if(sha(fs.readFileSync(path))!==hash)throw Error('Stale raw coverage '+path);
-const paths=[...new Set([...cp.execFileSync('git',['diff','--name-only','--','apps/office/src'],{encoding:'utf8'}).trim().split('\n'),...cp.execFileSync('git',['ls-files','--others','--exclude-standard','apps/office/src'],{encoding:'utf8'}).trim().split('\n')])].filter(path=>path&&!path.includes('.test.')&&/\.tsx?$/.test(path));
+const paths=(fs.existsSync(base+'implementation-paths.json') ? JSON.parse(fs.readFileSync(base+'implementation-paths.json')) : [...new Set([...cp.execFileSync('git',['diff','--name-only','--','apps/office/src'],{encoding:'utf8'}).trim().split('\n'),...cp.execFileSync('git',['ls-files','--others','--exclude-standard','apps/office/src'],{encoding:'utf8'}).trim().split('\n')])]).filter(path=>path.startsWith('apps/office/src/')&&!path.includes('.test.')&&/\.tsx?$/.test(path));
 const all={...calc,...related}, owned={}, typeOnly=[];
 for(const path of paths){
  const key=Object.keys(all).find(file=>file.endsWith('/'+path));
