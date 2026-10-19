@@ -1,0 +1,25 @@
+{
+  "evaluatedSha": "6b204b104af0d81d3904ceefc60398ed51a93e49",
+  "branch": "calc",
+  "changedPaths": 72,
+  "rawCounters": {
+    "S": 7507,
+    "B": 4745,
+    "F": 1512
+  },
+  "changedExecutableOwners": 20,
+  "pureBarrels": [
+    "apps/office/src/sc/inc/rowheightcontext.ts"
+  ],
+  "sourceBuildVisualHashes": "all match",
+  "finalGates": 17,
+  "coverageExclusionsAdded": 0,
+  "wholeGoalComplete": false,
+  "findings": [
+    "Actual native row storage and flag owners are reused;no second row/cell model.",
+    "Source literal/minimum/margin/pixel/manual/context-order contracts have pinned source and managed regression evidence.",
+    "Complete native column domain excludes the unused default tail and has a real16384-column regression.",
+    "Original UI and accessibility assertions pass serially;initial parallel timeout is preserved as diagnostic history.",
+    "Mixed-script/device/rich/advanced layout,horizontal overflow and standalone height dialogs remain explicit unfinished goal scope."
+  ]
+}

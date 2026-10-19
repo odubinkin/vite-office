@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202610191401-GKVVR7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-19T14:51:57.131Z",
+  "verdict": "pass",
+  "summary": "Approved standard automatic-row-height leaf satisfies its source,UI,persistence and verification contract at6b204b104af0;complete Calc UI/core goal remains active.",
+  "evaluated_sha": "6b204b104af0d81d3904ceefc60398ed51a93e49",
+  "blueprint_digest": "8dc16ed00d85368478bc174a78feb05ab0bba78f859544231e9208c45c8ff226",
+  "findings": [
+    "Raw whole Calc counters are all positive;complete changed owners100%,all source/build/visual hashes match,and all final gates pass. Real full-column,manual/pixel/context-order,history,ODS and desktop/mobile last-row cases cover the bounded behavior. No exclusions,thresholds or UI assertions were weakened."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610191401-GKVVR7/README.md",
+    ".agentplane/tasks/202610191401-GKVVR7/evidence/review.json",
+    ".agentplane/tasks/202610191401-GKVVR7/evidence/verification-text.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Physical device initialization,mixed-script/rich/advanced layout,horizontal overflow and height dialogs remain explicit later work;no broad native parity certificate is issued."
+  ]
+}

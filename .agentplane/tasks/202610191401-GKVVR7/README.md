@@ -4,7 +4,7 @@ title: "Connect native standard automatic row heights to Calc font UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-19T14:50:46.957Z"
+  updated_by: "CODER"
+  note: "Implementation6b204b104af0 verified:116Calc files336cases,raw S7507/B4745/F1512/L6725 all100%,20complete changed executable owners all100%;8shared files27cases and3tooling files91cases pass. Fresh types/build/static and all17Calc browser cases pass serially with unchanged assertions/timeouts;desktop/mobile final images inspected. All declared metadata gates pass with scoped semantic violations0. Evidence:task evidence/verification-text.md,coverage-summary.json,final-checks.json,metadata-checks.json and source-audit.json. Task35;full regression next task40;advanced device/mixed-script layout,horizontal overflow and height dialogs remain outside this leaf."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T14:51:57.131Z"
+  updated_by: "EVALUATOR"
+  note: "Approved standard automatic-row-height leaf satisfies its source,UI,persistence and verification contract at6b204b104af0;complete Calc UI/core goal remains active."
+  evaluated_sha: "6b204b104af0d81d3904ceefc60398ed51a93e49"
+  blueprint_digest: "8dc16ed00d85368478bc174a78feb05ab0bba78f859544231e9208c45c8ff226"
+  evidence_refs:
+    - ".agentplane/tasks/202610191401-GKVVR7/README.md"
+    - ".agentplane/tasks/202610191401-GKVVR7/quality/20261019-145157131-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191401-GKVVR7/quality/20261019-145157131-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191401-GKVVR7/quality/20261019-145157131-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191401-GKVVR7/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191401-GKVVR7/evidence/review.json"
+    - ".agentplane/tasks/202610191401-GKVVR7/evidence/verification-text.md"
+  findings:
+    - "Raw whole Calc counters are all positive;complete changed owners100%,all source/build/visual hashes match,and all final gates pass. Real full-column,manual/pixel/context-order,history,ODS and desktop/mobile last-row cases cover the bounded behavior. No exclusions,thresholds or UI assertions were weakened."
 commit: null
 comments:
   -
@@ -35,8 +52,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Continue user-authorized UI work by replacing fixed-row painting with real source standard automatic row heights after point-size changes and history;preserve genuine model,default and ODS owners."
+  -
+    type: "verify"
+    at: "2026-10-19T14:50:46.957Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implementation6b204b104af0 verified:116Calc files336cases,raw S7507/B4745/F1512/L6725 all100%,20complete changed executable owners all100%;8shared files27cases and3tooling files91cases pass. Fresh types/build/static and all17Calc browser cases pass serially with unchanged assertions/timeouts;desktop/mobile final images inspected. All declared metadata gates pass with scoped semantic violations0. Evidence:task evidence/verification-text.md,coverage-summary.json,final-checks.json,metadata-checks.json and source-audit.json. Task35;full regression next task40;advanced device/mixed-script layout,horizontal overflow and height dialogs remain outside this leaf."
 doc_version: 3
-doc_updated_at: "2026-10-19T14:48:33.358Z"
+doc_updated_at: "2026-10-19T14:50:47.047Z"
 doc_updated_by: "CODER"
 description: "Iteration35: remove fixed-row clipping for the currently supported plain unwrapped font-height UI by connecting genuine row height/flag storage and the original standard attribute-height algorithm to model,view,undo and ODS. Use the actual existing segment/compressed-array owners and source defaults. Preserve unsupported script-aware/rich/rotated services explicitly. Keep all changes in this checkout on calc;next broad regression is40."
 sections:
@@ -57,6 +80,39 @@ sections:
     - Command: root types,fresh build,static-build check,explicit changed-path ESLint/Prettier,JSDoc,size,tree,dependencies,provenance,Calc resources,scoped Calc/shared inventories,doctor,routing and `git diff --check`. Result: pass. Evidence: `evidence/final-checks.json`,`evidence/metadata-checks.json` and corresponding logs. Scope:72intentional non-task paths(27application/test,43canonical registry,2docs);889provenance modules and888runtime sources/3896relative imports/128cross-module edges;both scoped semantic violation counts0. Existing bundle-size/hook-readiness notices remain.
 
     Pinned upstream HEAD is9bc445578031fecf56086729d8e4940c77e14d65;source hashes and invariant checks are recorded. CALC-195/196 preserve source field-width and selected-sheet accumulation behavior. This is the current plain attribute-only standard layout slice. Physical device startup metrics,script scanning/mixed-script text,rich/wrapped/rotated/merged/hidden/drawing layout,foreign unsupported layout properties and standalone manual/optimal-height dialogs remain unverified or unported. Unsupported represented attribute profiles decline adjustment;no fake output device,script scanner or second row/cell model is supplied. Writer primary-save/open,visible-content/two-word naming and no-recovery deviations remain. This leaf is task35;last broad regression was task30,next task40. The complete Calc UI/core goal remains active.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-19T14:50:46.957Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implementation6b204b104af0 verified:116Calc files336cases,raw S7507/B4745/F1512/L6725 all100%,20complete changed executable owners all100%;8shared files27cases and3tooling files91cases pass. Fresh types/build/static and all17Calc browser cases pass serially with unchanged assertions/timeouts;desktop/mobile final images inspected. All declared metadata gates pass with scoped semantic violations0. Evidence:task evidence/verification-text.md,coverage-summary.json,final-checks.json,metadata-checks.json and source-audit.json. Task35;full regression next task40;advanced device/mixed-script layout,horizontal overflow and height dialogs remain outside this leaf.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T14:48:33.358Z, excerpt_hash=sha256:13e32513fd379072c4e90fd2eb64a2aec62bcf74d27ccff662cbb9748f59117a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191401-GKVVR7/blueprint/resolved-snapshot.json
+    - old_digest: 8dc16ed00d85368478bc174a78feb05ab0bba78f859544231e9208c45c8ff226
+    - current_digest: 8dc16ed00d85368478bc174a78feb05ab0bba78f859544231e9208c45c8ff226
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191401-GKVVR7
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610191401-GKVVR7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's explicit source/inventory commit if acceptance fails. Retain task evidence,prior point-size UI and user-owned branch/merge decisions;do not reset other active tasks."
   Findings: |-
     Task35 keeps approved local Calc UI scope and verification criteria. The independent ODS test fixture initially omitted the text namespace; corrected. Adding row geometry initially retriggered cursor reveal during free user scrolling; a real mounted regression caught it, and reveal now depends on cursor/actual cursor-row height rather than every revision. Native row segments retain a pixel offset for partially visible first rows so the final row fits at the physical scroll limit. The legacy overscroll assertion expected the old uniform-height first-row clamp; it now checks that the final row is present with a valid within-row offset. ODF export reuses the existing twip-to-XML converter and native row-property names. Exact RowHeightContext declaration/constructor evidence and an empty local-symbol list for its pure re-export repaired initial registry diagnostics. Source audit literal matching was corrected to the actual preprocessor definition. CALC-195/196 record source-width and shared-context suspicions without claiming compiled native reproduction. No coverage exclusions or thresholds changed. Last full regression task30,next task40; broad parity remains unverified.
@@ -92,6 +148,39 @@ Run whole Calc test:coverage:calc with raw S/B/F/L100 and no new exclusions;coll
 - Command: root types,fresh build,static-build check,explicit changed-path ESLint/Prettier,JSDoc,size,tree,dependencies,provenance,Calc resources,scoped Calc/shared inventories,doctor,routing and `git diff --check`. Result: pass. Evidence: `evidence/final-checks.json`,`evidence/metadata-checks.json` and corresponding logs. Scope:72intentional non-task paths(27application/test,43canonical registry,2docs);889provenance modules and888runtime sources/3896relative imports/128cross-module edges;both scoped semantic violation counts0. Existing bundle-size/hook-readiness notices remain.
 
 Pinned upstream HEAD is9bc445578031fecf56086729d8e4940c77e14d65;source hashes and invariant checks are recorded. CALC-195/196 preserve source field-width and selected-sheet accumulation behavior. This is the current plain attribute-only standard layout slice. Physical device startup metrics,script scanning/mixed-script text,rich/wrapped/rotated/merged/hidden/drawing layout,foreign unsupported layout properties and standalone manual/optimal-height dialogs remain unverified or unported. Unsupported represented attribute profiles decline adjustment;no fake output device,script scanner or second row/cell model is supplied. Writer primary-save/open,visible-content/two-word naming and no-recovery deviations remain. This leaf is task35;last broad regression was task30,next task40. The complete Calc UI/core goal remains active.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-19T14:50:46.957Z — VERIFY — ok
+
+By: CODER
+
+Note: Implementation6b204b104af0 verified:116Calc files336cases,raw S7507/B4745/F1512/L6725 all100%,20complete changed executable owners all100%;8shared files27cases and3tooling files91cases pass. Fresh types/build/static and all17Calc browser cases pass serially with unchanged assertions/timeouts;desktop/mobile final images inspected. All declared metadata gates pass with scoped semantic violations0. Evidence:task evidence/verification-text.md,coverage-summary.json,final-checks.json,metadata-checks.json and source-audit.json. Task35;full regression next task40;advanced device/mixed-script layout,horizontal overflow and height dialogs remain outside this leaf.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T14:48:33.358Z, excerpt_hash=sha256:13e32513fd379072c4e90fd2eb64a2aec62bcf74d27ccff662cbb9748f59117a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191401-GKVVR7/blueprint/resolved-snapshot.json
+- old_digest: 8dc16ed00d85368478bc174a78feb05ab0bba78f859544231e9208c45c8ff226
+- current_digest: 8dc16ed00d85368478bc174a78feb05ab0bba78f859544231e9208c45c8ff226
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191401-GKVVR7
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610191401-GKVVR7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
