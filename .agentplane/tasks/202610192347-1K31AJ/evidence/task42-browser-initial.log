@@ -1,0 +1,12 @@
+[WebServer] (node:78204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:78208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [calc] › apps/office/e2e/calc/overline.spec.ts:29:3 › native Overline menu and ODS reopen at 1280px (12.5s)
+  ✓  2 [calc] › apps/office/e2e/calc/overline.spec.ts:29:3 › native Overline menu and ODS reopen at 390px (11.6s)
+  ✓  3 [calc] › apps/office/e2e/calc/overline.spec.ts:106:1 › preserves native Overline item metadata,history and ODS in a DOM-free Worker (710ms)
+
+  3 passed (26.7s)

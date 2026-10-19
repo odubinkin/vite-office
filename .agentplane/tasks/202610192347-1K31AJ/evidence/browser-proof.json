@@ -1,0 +1,25 @@
+{
+  "result": "pass",
+  "initialOverlineCases": 3,
+  "finalRebuiltCalcCases": 6,
+  "widths": [
+    1280,
+    390
+  ],
+  "actualPageAndDOMFreeWorker": true,
+  "uncaughtExceptions": 0,
+  "visualReview": "Inspected retained1280/390 original overline UI reopens:shared Writer menu/toolbar style retained and actual line appears above cell text. These images precede removal of one redundant native precondition guard;the final rebuilt6case suite confirms unchanged actual painting/history/reopen behavior.",
+  "screenshots": [
+    {
+      "path": ".agentplane/tasks/202610192347-1K31AJ/evidence/overline-reopened-1280.png",
+      "sha256": "c78638c95216024c1aa7b78bd068145a5b90a2d65e3aa89604a1c935e5d9c004"
+    },
+    {
+      "path": ".agentplane/tasks/202610192347-1K31AJ/evidence/overline-reopened-390.png",
+      "sha256": "4074a6029937a107800f4c8aa21a769f86eef65e98eec5afc695f3b7f6bdb113"
+    }
+  ],
+  "sharedPopupReconciliation": "Initial related test still selected Overline as a disabled sample. Switched disabled-row assertion to the actual unsupported Strikethrough;retains pointer ownership and disabled-row coverage.",
+  "finalSharedBrowserCases": 8,
+  "uniqueFinalBrowserCases": 14
+}

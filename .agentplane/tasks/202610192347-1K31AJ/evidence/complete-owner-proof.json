@@ -1,0 +1,29 @@
+{
+  "result": "pass",
+  "calcFiles": 128,
+  "calcCases": 390,
+  "sharedFiles": 12,
+  "sharedCases": 58,
+  "completeExecutableOwners": 7,
+  "owners": [
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx",
+    "apps/office/src/sc/sdi/scalc.ts",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "apps/office/src/sc/source/ui/view/formatsh.ts",
+    "apps/office/src/sfx2/source/control/bindings.ts",
+    "apps/office/src/xmloff/source/core/xmltoken.ts"
+  ],
+  "allRawCountsPositive": true,
+  "allSourceHashesCurrent": true,
+  "sourceHashes": {
+    "apps/office/src/sc/browser/controller/calc-view-controller.ts": "de3f9f7021db0f9ecdbfe329038736eaa580e0a69620c691094988b9f050783b",
+    "apps/office/src/sc/browser/presentation/ScCellText.tsx": "8870444cdcfad2c046ce4f697d07314466afde5b5b55644a32cad409f9279c8f",
+    "apps/office/src/sc/sdi/scalc.ts": "3c6a48106098679d7e08c0596d9863418e6dcfbe6311f66c2c41ce47e6bee255",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "69d2be2c6d19fd6f087e2c94ef9da9a00241b4429e12935e81c79c85a1640f37",
+    "apps/office/src/sc/source/ui/view/formatsh.ts": "d8a0a6b44731c47e8236947e382fa5f9a986bebc81f9585780271f2617106be3",
+    "apps/office/src/sfx2/source/control/bindings.ts": "c47246de322c49d6fd6730a108f0c825c7c47a287352a5cc54cb151041d45463",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "2aa6eca36c2826d975832a59428e2aa6552be16a77dcaa252f57e98e653e178f"
+  },
+  "coverageReduction": false
+}
