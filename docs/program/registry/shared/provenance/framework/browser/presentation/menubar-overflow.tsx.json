@@ -8,13 +8,23 @@
         {
           "path": "apps/office/src/framework/browser/presentation/menubar-overflow.tsx",
           "marker": "MenuBarOverflow"
+        },
+        {
+          "path": "apps/office/src/framework/browser/presentation/CommandMenuBar-root-focus.test.tsx",
+          "marker": "admitsRootMotion"
+        },
+        {
+          "path": "apps/office/e2e/shared/menubar-pointer.spec.ts",
+          "marker": "root pointer admission"
         }
       ]
     },
     "localPath": "apps/office/src/framework/browser/presentation/menubar-overflow.tsx",
     "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
     "responsibilities": [
-      "TaskWN0H8T measures actual browser trigger geometry and projects the trailing hidden root menus into the native MenuBarWindow::ImplCreatePopup parent-popup shape. Original command trees and submenu identities are retained;shared React menu state/dispatch/focus ownership remains unchanged. This does not certify complete native VCL parity."
+      "TaskWN0H8T measures actual browser trigger geometry and projects the trailing hidden root menus into the native MenuBarWindow::ImplCreatePopup parent-popup shape. Original command trees and submenu identities are retained;shared React menu state/dispatch/focus ownership remains unchanged. This does not certify complete native VCL parity.",
+      "Task1V60C3 applies MenuBarWindow constructor/ImplCreatePopup first-motion reset and MouseMove ordering to the actual shared root menubar. Enter-only input does not switch roots; closed motion updates rollover without consuming admission, leave clears rollover, floating popup events stay with their native window owner, and first active motion is ignored before valid neighboring-root switching. Native Paint priority highlights the active root, otherwise rollover; shared Writer geometry/colors remain. Browser DOM movement has no portable native IsSynthetic marker; full platform event synthesis, mnemonic/theme/window parity remains unverified.",
+      "Task1V60C3 also retains native highlighted-item ownership independently of root-popup existence: keyboard/focus activation paints the selected root,and admitted pointer movement in that state updates selection without creating a popup. F10 alone does not reset the existing first-motion flag;only actual popup creation does. This does not implement the pending native mouse-button-down contract."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

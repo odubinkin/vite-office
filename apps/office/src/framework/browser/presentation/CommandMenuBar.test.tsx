@@ -256,9 +256,9 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
     fireEvent.mouseEnter(edit);
     expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
     fireEvent.click(file);
-    fireEvent.mouseEnter(file);
+    fireEvent.mouseMove(file);
     expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
-    fireEvent.mouseEnter(edit);
+    fireEvent.mouseMove(edit);
     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
   });

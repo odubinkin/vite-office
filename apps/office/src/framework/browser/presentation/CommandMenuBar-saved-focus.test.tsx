@@ -176,7 +176,8 @@ describe("saved menu focus", /** Groups focus ownership and dispatch ordering. @
     const fixture = mountSavedFocusMenu();
     fixture.owner.focus();
     fireEvent.click(fixture.trigger);
-    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Second" }));
+    fireEvent.mouseMove(screen.getByRole("menuitem", { name: "Second" }));
+    fireEvent.mouseMove(screen.getByRole("menuitem", { name: "Second" }));
     fireEvent.keyDown(screen.getByRole("menu", { name: "Second menu" }), {
       key: "ArrowLeft",
     });

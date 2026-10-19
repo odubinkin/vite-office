@@ -5,7 +5,7 @@ import type { CommandMenuPlacement } from "./CommandMenuBar";
 export const MENUBAR_OVERFLOW_ID = "office-hidden-menus";
 /** Actual Writer trigger geometry shared by measured labels and rendered controls. */
 export const menuBarTriggerClassName =
-  "rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100";
+  "rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100";
 /** Projects hidden trailing roots without copying command state or changing their original submenu identities. @param props - Original resources,labels and actual menu renderer. @returns Measured menubar. */
 export function MenuBarOverflow({
   menus,

@@ -1,0 +1,180 @@
+[WebServer] (node:32479) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:32484) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 1280px (7.2s)
+(node:32714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 390px (7.6s)
+(node:32967) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 1280px (7.0s)
+(node:32981) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 390px (7.0s)
+
+
+  1) [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 1280px 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+    Expected: "true"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+        14 × locator resolved to <button tabindex="-1" type="button" role="menuitem" aria-label="File" aria-haspopup="menu" aria-expanded="false" aria-controls="writer-picklist-menu" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100">File</button>
+           - unexpected value "null"
+
+
+      74 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+      75 |       await edit.hover();
+    > 76 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+         |                          ^
+      77 |       await page.mouse.move(
+      78 |         (rect as NonNullable<typeof rect>).x + 10,
+      79 |         (rect as NonNullable<typeof rect>).y + 10,
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-pointer.spec.ts:76:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-wri-016b6-pointer-admission-at-1280px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-pointer-wri-016b6-pointer-admission-at-1280px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-wri-016b6-pointer-admission-at-1280px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-pointer-wri-016b6-pointer-admission-at-1280px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 390px 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+    Expected: "true"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+        14 × locator resolved to <button tabindex="-1" type="button" role="menuitem" aria-label="File" aria-haspopup="menu" aria-expanded="false" aria-controls="writer-picklist-menu" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100">File</button>
+           - unexpected value "null"
+
+
+      74 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+      75 |       await edit.hover();
+    > 76 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+         |                          ^
+      77 |       await page.mouse.move(
+      78 |         (rect as NonNullable<typeof rect>).x + 10,
+      79 |         (rect as NonNullable<typeof rect>).y + 10,
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-pointer.spec.ts:76:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-wri-a23d5--pointer-admission-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-pointer-wri-a23d5--pointer-admission-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-wri-a23d5--pointer-admission-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-pointer-wri-a23d5--pointer-admission-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 1280px 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+    Expected: "true"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+        14 × locator resolved to <button tabindex="-1" type="button" role="menuitem" aria-label="File" aria-haspopup="menu" aria-expanded="false" aria-controls="calc-menu-.uno:PickList-menu" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100">File</button>
+           - unexpected value "null"
+
+
+      74 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+      75 |       await edit.hover();
+    > 76 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+         |                          ^
+      77 |       await page.mouse.move(
+      78 |         (rect as NonNullable<typeof rect>).x + 10,
+      79 |         (rect as NonNullable<typeof rect>).y + 10,
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-pointer.spec.ts:76:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-1280px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-1280px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-1280px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-1280px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 390px 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+    Expected: "true"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" with timeout 5000ms
+      - waiting for getByRole('menubar').getByRole('menuitem', { name: 'File', exact: true })
+        14 × locator resolved to <button tabindex="-1" type="button" role="menuitem" aria-label="File" aria-haspopup="menu" aria-expanded="false" aria-controls="calc-menu-.uno:PickList-menu" class="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 data-[menubar-highlighted]:bg-slate-100">File</button>
+           - unexpected value "null"
+
+
+      74 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+      75 |       await edit.hover();
+    > 76 |       await expect(file).toHaveAttribute("data-menubar-highlighted", "true");
+         |                          ^
+      77 |       await page.mouse.move(
+      78 |         (rect as NonNullable<typeof rect>).x + 10,
+      79 |         (rect as NonNullable<typeof rect>).y + 10,
+        at /Users/odubinkin/Projects/vite-office-calc/apps/office/e2e/shared/menubar-pointer.spec.ts:76:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-390px-shared/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-390px-shared/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-390px-shared/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/shared-menubar-pointer-calc-root-pointer-admission-at-390px-shared/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 1280px 
+    [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › writer root pointer admission at 390px 
+    [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 1280px 
+    [shared] › apps/office/e2e/shared/menubar-pointer.spec.ts:5:5 › calc root pointer admission at 390px 

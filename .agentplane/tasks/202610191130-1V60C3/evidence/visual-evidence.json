@@ -1,0 +1,29 @@
+{
+  "images": [
+    {
+      "path": ".agentplane/tasks/202610191130-1V60C3/evidence/visual/task31-menubar-writer-1280.png",
+      "sha256": "4489e5f6ec6f72986e12cd3ecf4903616b536da3ae960ea96c5f5e7622bab5de",
+      "suite": "writer",
+      "width": 1280
+    },
+    {
+      "path": ".agentplane/tasks/202610191130-1V60C3/evidence/visual/task31-menubar-writer-390.png",
+      "sha256": "b7e45fc72eba98af1735697dc62f9a33535bf886d1fbeedd9a7f1e29ce6f1260",
+      "suite": "writer",
+      "width": 390
+    },
+    {
+      "path": ".agentplane/tasks/202610191130-1V60C3/evidence/visual/task31-menubar-calc-1280.png",
+      "sha256": "8b1661b891fec9e52079c79210dc65dcd84048e3f7bc5d98355cb6a8a78e7763",
+      "suite": "calc",
+      "width": 1280
+    },
+    {
+      "path": ".agentplane/tasks/202610191130-1V60C3/evidence/visual/task31-menubar-calc-390.png",
+      "sha256": "983399ef912ad8fb4232172befe4ed507f851b835beca9db52b592359d62327f",
+      "suite": "calc",
+      "width": 390
+    }
+  ],
+  "inspection": "All four screenshots inspected. Both applications use identical Writer root trigger typography,padding,rounded slate highlight and popup border/shadow/accelerator style. Active Edit root remains highlighted; narrow layout retains original overflow parent. Calc long native Edit entries scroll within viewport. This bounded visual check does not claim full upstream theme or UI parity."
+}

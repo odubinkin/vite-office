@@ -101,6 +101,9 @@ function CommandMenuBarContent({
   const [openMenuIndex, setOpenMenuIndex] = useState<number>();
   const [openSubmenuPath, setOpenSubmenuPath] = useState<readonly string[]>([]);
   const [activeTriggerIndex, setActiveTriggerIndex] = useState(0);
+  const [rolloverIndex, setRolloverIndex] = useState<number>();
+  const [highlightedIndex, setHighlightedIndex] = useState<number>();
+  const ignoreFirstMove = useRef(true);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const typeahead = useRef("");
@@ -146,6 +149,7 @@ function CommandMenuBarContent({
     pendingSubmenuFocus.current = undefined;
     setOpenSubmenuPath([]);
     setOpenMenuIndex(undefined);
+    setHighlightedIndex(undefined);
     if (restoreFocus) {
       if (previousFocus?.isConnected === true) previousFocus.focus();
       else if (defaultToDocument && focusDocument !== undefined) focusDocument();
@@ -184,9 +188,11 @@ function CommandMenuBarContent({
   /** Opens one popup with origin-specific preselection. @param index - Menu index. @param preSelectFirst - Whether keyboard opening requests its first item. @returns Nothing. */
   function openMenu(index: number, preSelectFirst = false): void {
     if (openMenuIndex === index) return;
+    ignoreFirstMove.current = true;
     saveFocus(document.activeElement);
     menuActive.current = true;
     setActiveTriggerIndex(index);
+    setHighlightedIndex(index);
     pendingSubmenuFocus.current = undefined;
     setOpenSubmenuPath([]);
     pendingMenuPreselection.current = preSelectFirst;
@@ -258,6 +264,7 @@ function CommandMenuBarContent({
           saveFocus(document.activeElement);
           menuActive.current = true;
           setActiveTriggerIndex(0);
+          setHighlightedIndex(0);
           first.focus();
         }
       }
@@ -300,6 +307,7 @@ function CommandMenuBarContent({
             ? menus.length - 1
             : (index + (event.key === "ArrowRight" ? 1 : -1) + menus.length) % menus.length;
       setActiveTriggerIndex(next);
+      setHighlightedIndex(next);
       triggerRefs.current[next]?.focus();
       if (openMenuIndex !== undefined) openMenu(next, true);
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -535,6 +543,43 @@ function CommandMenuBarContent({
           if (!event.currentTarget.contains(event.relatedTarget)) menuActive.current = true;
         }
       }
+      onMouseMove={
+        /** Applies MenuBarWindow motion admission independently of its floating popup windows. @param event - Actual menubar motion. @returns Nothing. */ (
+          event,
+        ) => {
+          const target = event.target as HTMLElement;
+          if (target.closest('[role="menu"]') !== null) return;
+          const index = triggerRefs.current.indexOf(target.closest('[role="menuitem"]'));
+          setRolloverIndex(index < 0 ? undefined : index);
+          if (highlightedIndex === undefined) return;
+          if (ignoreFirstMove.current) {
+            ignoreFirstMove.current = false;
+            return;
+          }
+          if (index >= 0 && index !== highlightedIndex) {
+            if (openMenuIndex === undefined) {
+              setHighlightedIndex(index);
+              setActiveTriggerIndex(index);
+              (triggerRefs.current[index] as HTMLButtonElement).focus();
+            } else openMenu(index);
+          }
+        }
+      }
+      onMouseOut={
+        /** Clears rollover only when leaving the native menubar window,including entry into a floating popup. @param event - Pointer window transition. @returns Nothing. */ (
+          event,
+        ) => {
+          if ((event.target as HTMLElement).closest('[role="menu"]') !== null) return;
+          const next = event.relatedTarget;
+          if (
+            next instanceof Element &&
+            event.currentTarget.contains(next) &&
+            next.closest('[role="menu"]') === null
+          )
+            return;
+          setRolloverIndex(undefined);
+        }
+      }
       ref={rootRef}
       role="menubar"
     >
@@ -552,18 +597,25 @@ function CommandMenuBarContent({
                 aria-expanded={openMenuIndex === index}
                 aria-haspopup="menu"
                 className={menuBarTriggerClassName}
+                data-menubar-rollover={rolloverIndex === index ? "true" : undefined}
+                data-menubar-highlighted={
+                  (
+                    highlightedIndex === undefined
+                      ? rolloverIndex === index
+                      : highlightedIndex === index
+                  )
+                    ? "true"
+                    : undefined
+                }
                 aria-label={label}
                 onClick={
                   /** Toggles this top-level menu. @returns Nothing. */ () =>
                     openMenuIndex === index ? closeMenu() : openMenu(index)
                 }
                 onFocus={
-                  /** Activates this trigger for roving tabindex. @returns Nothing. */ () =>
-                    setActiveTriggerIndex(index)
-                }
-                onMouseEnter={
-                  /** Switches to a neighboring menu after the menubar has been opened. @returns Nothing. */ () => {
-                    if (openMenuIndex !== undefined && openMenuIndex !== index) openMenu(index);
+                  /** Activates this trigger for roving tabindex and native focus highlight. @returns Nothing. */ () => {
+                    setActiveTriggerIndex(index);
+                    setHighlightedIndex(index);
                   }
                 }
                 onKeyDown={

@@ -18,7 +18,10 @@ test("menu commands and submenus align their labels", /** Checks rendered label 
   expect(commandX - rowX).toBeLessThanOrEqual(20);
   await hoverBrowserMenuItem(page, lists);
   await expect(page.getByRole("menuitemradio", { name: "No List" })).toBeVisible();
-  await page.getByRole("menuitem", { name: "View" }).hover();
+  await hoverBrowserMenuItem(
+    page,
+    page.getByRole("menubar").getByRole("menuitem", { name: "View", exact: true }),
+  );
   const sidebarX =
     (
       await page
