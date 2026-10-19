@@ -1,0 +1,91 @@
+{
+  "reason": "Recover space for the required full regression using reversible verified gzip preservation of old generated native observations;no source or canonical task evidence removed.",
+  "files": [
+    {
+      "original": "output/playwright/task40-iterator-native/driver.points",
+      "archive": "output/playwright/task40-iterator-native/driver.points.task40-preserved.gz",
+      "originalBytes": 587202560,
+      "compressedBytes": 19722525,
+      "sha256": "7b2e353a0f225d0c3f4a46234043e4837070f715c979d6934c3d15858bf8ff25",
+      "mode": 33188,
+      "mtime": "2026-10-11T15:20:44.756Z"
+    },
+    {
+      "original": "output/playwright/task40-iterator-native/driver-asan.points",
+      "archive": "output/playwright/task40-iterator-native/driver-asan.points.task40-preserved.gz",
+      "originalBytes": 587202560,
+      "compressedBytes": 19722525,
+      "sha256": "7b2e353a0f225d0c3f4a46234043e4837070f715c979d6934c3d15858bf8ff25",
+      "mode": 33188,
+      "mtime": "2026-10-11T15:20:47.587Z"
+    },
+    {
+      "original": "output/playwright/casefolding-native/driver.points",
+      "archive": "output/playwright/casefolding-native/driver.points.task40-preserved.gz",
+      "originalBytes": 401080320,
+      "compressedBytes": 25310295,
+      "sha256": "ada7cc2ef68d4b9d40720242c3ae0879f6e140da69ed69be2a74e712cc432fc2",
+      "mode": 33188,
+      "mtime": "2026-10-11T12:12:11.485Z"
+    },
+    {
+      "original": "output/playwright/casefolding-native/driver-asan.points",
+      "archive": "output/playwright/casefolding-native/driver-asan.points.task40-preserved.gz",
+      "originalBytes": 401080320,
+      "compressedBytes": 25310295,
+      "sha256": "ada7cc2ef68d4b9d40720242c3ae0879f6e140da69ed69be2a74e712cc432fc2",
+      "mode": 33188,
+      "mtime": "2026-10-11T12:12:17.454Z"
+    },
+    {
+      "original": "output/playwright/casefolding-native/driver.conditions",
+      "archive": "output/playwright/casefolding-native/driver.conditions.task40-preserved.gz",
+      "originalBytes": 83066880,
+      "compressedBytes": 429675,
+      "sha256": "b64fa1b99f17377f29f07cdc6ce54a65886fecef3d4ebb78465b31fa8ef07155",
+      "mode": 33188,
+      "mtime": "2026-10-11T12:12:28.666Z"
+    },
+    {
+      "original": "output/playwright/casefolding-native/driver-asan.conditions",
+      "archive": "output/playwright/casefolding-native/driver-asan.conditions.task40-preserved.gz",
+      "originalBytes": 83066880,
+      "compressedBytes": 429675,
+      "sha256": "b64fa1b99f17377f29f07cdc6ce54a65886fecef3d4ebb78465b31fa8ef07155",
+      "mode": 33188,
+      "mtime": "2026-10-11T12:12:35.122Z"
+    },
+    {
+      "original": "output/playwright/casefolding-native/driver.tails",
+      "archive": "output/playwright/casefolding-native/driver.tails.task40-preserved.gz",
+      "originalBytes": 37748736,
+      "compressedBytes": 36712,
+      "sha256": "d4d77915154843d612e41c6a72645b31766b8f0d9d53c4980d8b31bacb90c8f3",
+      "mode": 33188,
+      "mtime": "2026-10-11T12:12:23.814Z"
+    },
+    {
+      "original": "output/playwright/casefolding-native/driver-asan.tails",
+      "archive": "output/playwright/casefolding-native/driver-asan.tails.task40-preserved.gz",
+      "originalBytes": 37748736,
+      "compressedBytes": 36712,
+      "sha256": "d4d77915154843d612e41c6a72645b31766b8f0d9d53c4980d8b31bacb90c8f3",
+      "mode": 33188,
+      "mtime": "2026-10-11T12:12:24.302Z"
+    },
+    {
+      "original": "output/playwright/mdds-native/container-output.jsonl",
+      "archive": "output/playwright/mdds-native/container-output.jsonl.task40-preserved.gz",
+      "originalBytes": 230584763,
+      "compressedBytes": 4082332,
+      "sha256": "1ac555e7088298dce9c4c44b092fca1457e90f7adeb08a6a5840e161f883e4f8",
+      "mode": 33188,
+      "mtime": "2026-10-10T02:08:54.375Z"
+    }
+  ],
+  "incompleteAttempt": {
+    "path": "apps/office/coverage/task40-all/.tmp",
+    "files": 137,
+    "reason": "Own terminal ENOSPC attempt;no final report or test result exists. Incomplete temporary coverage chunks are reproducible and ineligible as acceptance evidence."
+  }
+}
