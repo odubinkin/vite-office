@@ -1,0 +1,803 @@
+[
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "kind": "statement",
+    "id": "93",
+    "location": {
+      "start": {
+        "line": 204,
+        "column": 24
+      },
+      "end": {
+        "line": 204,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/controller/calc-view-controller.ts",
+    "kind": "branch",
+    "id": "18",
+    "index": 0,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 204,
+          "column": 4
+        },
+        "end": {
+          "line": 204,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 204,
+            "column": 4
+          },
+          "end": {
+            "line": 204,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+    "kind": "branch",
+    "id": "14",
+    "index": 0,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 280,
+          "column": 26
+        },
+        "end": {
+          "line": 282,
+          "column": null
+        }
+      },
+      "type": "cond-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 281,
+            "column": 30
+          },
+          "end": {
+            "line": 281,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 282,
+            "column": 30
+          },
+          "end": {
+            "line": 282,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "statement",
+    "id": "15",
+    "location": {
+      "start": {
+        "line": 175,
+        "column": 25
+      },
+      "end": {
+        "line": 175,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "statement",
+    "id": "19",
+    "location": {
+      "start": {
+        "line": 179,
+        "column": 12
+      },
+      "end": {
+        "line": 185,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "statement",
+    "id": "20",
+    "location": {
+      "start": {
+        "line": 185,
+        "column": 14
+      },
+      "end": {
+        "line": 185,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "statement",
+    "id": "21",
+    "location": {
+      "start": {
+        "line": 186,
+        "column": 12
+      },
+      "end": {
+        "line": 186,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "function",
+    "id": "5",
+    "location": {
+      "name": "(anonymous_5)",
+      "decl": {
+        "start": {
+          "line": 175,
+          "column": 15
+        },
+        "end": {
+          "line": 175,
+          "column": 25
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 175,
+          "column": 25
+        },
+        "end": {
+          "line": 175,
+          "column": null
+        }
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "9",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 178,
+          "column": 12
+        },
+        "end": {
+          "line": 178,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 178,
+            "column": 12
+          },
+          "end": {
+            "line": 178,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "10",
+    "index": 0,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 179,
+          "column": 12
+        },
+        "end": {
+          "line": 185,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 179,
+            "column": 12
+          },
+          "end": {
+            "line": 185,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "10",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 179,
+          "column": 12
+        },
+        "end": {
+          "line": 185,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 179,
+            "column": 12
+          },
+          "end": {
+            "line": 185,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "11",
+    "index": 0,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 180,
+          "column": 14
+        },
+        "end": {
+          "line": 183,
+          "column": null
+        }
+      },
+      "type": "binary-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 180,
+            "column": 14
+          },
+          "end": {
+            "line": 180,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 181,
+            "column": 14
+          },
+          "end": {
+            "line": 181,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 182,
+            "column": 14
+          },
+          "end": {
+            "line": 182,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 183,
+            "column": 14
+          },
+          "end": {
+            "line": 183,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "11",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 180,
+          "column": 14
+        },
+        "end": {
+          "line": 183,
+          "column": null
+        }
+      },
+      "type": "binary-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 180,
+            "column": 14
+          },
+          "end": {
+            "line": 180,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 181,
+            "column": 14
+          },
+          "end": {
+            "line": 181,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 182,
+            "column": 14
+          },
+          "end": {
+            "line": 182,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 183,
+            "column": 14
+          },
+          "end": {
+            "line": 183,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "11",
+    "index": 2,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 180,
+          "column": 14
+        },
+        "end": {
+          "line": 183,
+          "column": null
+        }
+      },
+      "type": "binary-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 180,
+            "column": 14
+          },
+          "end": {
+            "line": 180,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 181,
+            "column": 14
+          },
+          "end": {
+            "line": 181,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 182,
+            "column": 14
+          },
+          "end": {
+            "line": 182,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 183,
+            "column": 14
+          },
+          "end": {
+            "line": 183,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/sdi/scalc.ts",
+    "kind": "branch",
+    "id": "11",
+    "index": 3,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 180,
+          "column": 14
+        },
+        "end": {
+          "line": 183,
+          "column": null
+        }
+      },
+      "type": "binary-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 180,
+            "column": 14
+          },
+          "end": {
+            "line": 180,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 181,
+            "column": 14
+          },
+          "end": {
+            "line": 181,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 182,
+            "column": 14
+          },
+          "end": {
+            "line": 182,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 183,
+            "column": 14
+          },
+          "end": {
+            "line": 183,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "statement",
+    "id": "57",
+    "location": {
+      "start": {
+        "line": 138,
+        "column": 8
+      },
+      "end": {
+        "line": 138,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "statement",
+    "id": "58",
+    "location": {
+      "start": {
+        "line": 139,
+        "column": 8
+      },
+      "end": {
+        "line": 139,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "statement",
+    "id": "72",
+    "location": {
+      "start": {
+        "line": 158,
+        "column": 15
+      },
+      "end": {
+        "line": 158,
+        "column": null
+      }
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "branch",
+    "id": "2",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 82,
+          "column": 6
+        },
+        "end": {
+          "line": 82,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 82,
+            "column": 6
+          },
+          "end": {
+            "line": 82,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "branch",
+    "id": "9",
+    "index": 0,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 137,
+          "column": 6
+        },
+        "end": {
+          "line": 140,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 137,
+            "column": 6
+          },
+          "end": {
+            "line": 140,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "branch",
+    "id": "11",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 155,
+          "column": 8
+        },
+        "end": {
+          "line": 158,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 155,
+            "column": 8
+          },
+          "end": {
+            "line": 158,
+            "column": null
+          }
+        },
+        {
+          "start": {
+            "line": 158,
+            "column": 15
+          },
+          "end": {
+            "line": 158,
+            "column": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/xmlstyle.ts",
+    "kind": "branch",
+    "id": "13",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 161,
+          "column": 8
+        },
+        "end": {
+          "line": 161,
+          "column": null
+        }
+      },
+      "type": "if",
+      "locations": [
+        {
+          "start": {
+            "line": 161,
+            "column": 8
+          },
+          "end": {
+            "line": 161,
+            "column": null
+          }
+        },
+        {
+          "start": {},
+          "end": {}
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/formatsh.ts",
+    "kind": "branch",
+    "id": "16",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 121,
+          "column": 29
+        },
+        "end": {
+          "line": 121,
+          "column": 88
+        }
+      },
+      "type": "cond-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 121,
+            "column": 37
+          },
+          "end": {
+            "line": 121,
+            "column": 64
+          }
+        },
+        {
+          "start": {
+            "line": 121,
+            "column": 64
+          },
+          "end": {
+            "line": 121,
+            "column": 88
+          }
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/ui/view/formatsh.ts",
+    "kind": "branch",
+    "id": "17",
+    "index": 1,
+    "location": {
+      "loc": {
+        "start": {
+          "line": 125,
+          "column": 9
+        },
+        "end": {
+          "line": 125,
+          "column": null
+        }
+      },
+      "type": "binary-expr",
+      "locations": [
+        {
+          "start": {
+            "line": 125,
+            "column": 9
+          },
+          "end": {
+            "line": 125,
+            "column": 16
+          }
+        },
+        {
+          "start": {
+            "line": 125,
+            "column": 16
+          },
+          "end": {
+            "line": 125,
+            "column": null
+          }
+        }
+      ]
+    }
+  }
+]
