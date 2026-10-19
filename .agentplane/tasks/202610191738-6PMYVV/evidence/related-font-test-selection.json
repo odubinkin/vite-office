@@ -53,6 +53,7 @@
   "src/sw/source/core/attr/native-paragraph-first-line-indent.test.ts",
   "src/sw/source/core/attr/native-paragraph-right-margin.test.ts",
   "src/sw/source/core/attr/native-paragraph-text-left-margin.test.ts",
+  "src/sw/source/core/crsr/native-marked-list-cursor.test.ts",
   "src/sw/source/core/doc/automatic-style-handles.test.ts",
   "src/sw/source/core/doc/item-codec.test.ts",
   "src/sw/source/core/doc/native-font-family-state.test.ts",
