@@ -145,7 +145,7 @@ it("rejects unsupported cell services and malformed structure explicitly", /** E
   for (const xml of [
     "<unknown/>",
     independent("").replace("document-content", "document-styles"),
-    independent("").replace("<office:body>", "<office:styles/> <office:body>"),
+    independent("").replace("<office:body>", "<office:settings/> <office:body>"),
     independent("")
       .replace("<office:spreadsheet>", "<office:text>")
       .replace("</office:spreadsheet>", "</office:text>"),

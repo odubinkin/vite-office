@@ -66,6 +66,8 @@ class XMLTableStyleContext extends ScXMLImportContext {
       attributes,
       /** Retains actual importer diagnostics. @param name - Unsupported property. @returns Nothing. */
       (name) => this.owner.unsupported(name),
+      /** Resolves genuine shared font declarations. @param name - Font reference. @returns Native font. */
+      (name) => this.owner.GetFontFace(name),
     );
     return new SvXMLIgnoreContext(true);
   }

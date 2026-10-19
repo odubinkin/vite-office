@@ -1,11 +1,14 @@
 /** @fileoverview Consumed Calc SDI slots from scalc.sdi,sc.hrc,sfxsids.hrc and solar.hrc; no local command IDs are invented. */
 import { FontLineStyle } from "../../tools/inc/fontenum";
+import { SvxFontItem } from "../../editeng/inc/fontitem";
 import type { CalcCharacterFormat } from "../source/ui/view/formatsh";
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
 import { SfxInterface } from "../../sfx2/source/control/objface";
 import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 /** Command owner contract corresponding to the active Calc input/view shell. */
 export interface CalcCommandTarget {
+  GetFontFamily(): string | undefined;
+  SetFontFamily(font: SvxFontItem): boolean;
   GetCharacterState(format: CalcCharacterFormat): boolean | undefined;
   SetCharacterFormat(format: CalcCharacterFormat, enabled?: boolean): boolean;
   GetUnderlineStyle(): FontLineStyle | undefined;
@@ -137,6 +140,7 @@ export const calcUnderlineCommands = [
 ] as const;
 /** User-visible implemented command inventory;hidden input slots remain dispatcher operations. */
 export const calcUserCommands = [
+  { id: ".uno:CharFontName", slotId: 10007, label: "Font Name" },
   { id: ".uno:FontHeight", slotId: 10015, label: "Font Size" },
   ...calcCharacterCommands,
   ...calcUnderlineCommands,
@@ -155,19 +159,21 @@ export const calcUserCommands = [
     capabilityId:
       "format" in item || "line" in item
         ? ("CAP-c13ec941-1af7-4a09-810f-df267da27388" as const)
-        : item.id === ".uno:FontHeight"
-          ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
-          : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
-            ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
-            : item.id === ".uno:JumpToTable"
-              ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
-              : "direction" in item ||
-                  item.id === ".uno:TableSelectAll" ||
-                  item.id === ".uno:TableDeselectAll"
-                ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
-                : "kind" in item
-                  ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
-                  : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
+        : item.id === ".uno:CharFontName"
+          ? ("CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681" as const)
+          : item.id === ".uno:FontHeight"
+            ? ("CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5" as const)
+            : item.id === ".uno:SelectRow" || item.id === ".uno:SelectColumn"
+              ? ("CAP-2b8ae010-1d2b-4ede-8b94-8643c65d7c9f" as const)
+              : item.id === ".uno:JumpToTable"
+                ? ("CAP-8e01c4d7-b3fb-41da-9f65-0689a89e1256" as const)
+                : "direction" in item ||
+                    item.id === ".uno:TableSelectAll" ||
+                    item.id === ".uno:TableDeselectAll"
+                  ? ("CAP-3315316f-31e4-478e-b359-0cd714f0db20" as const)
+                  : "kind" in item
+                    ? ("CAP-6d21e904-65a9-4c25-96af-7d47dcce9f50" as const)
+                    : ("CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86" as const),
   }),
 );
 /** Builds actual Sfx slots using original numeric identities and request arguments. @param resolveShortcuts - Optional host configuration projection; native slot handlers remain unchanged. @returns Interface. */
@@ -175,6 +181,42 @@ export function createCalcInterface(
   resolveShortcuts?: (command: string) => readonly string[] | undefined,
 ): SfxInterface<CalcCommandTarget> {
   const definitions: SfxSlotDefinition<CalcCommandTarget>[] = [
+    {
+      commandUrl: ".uno:CharFontName",
+      slotId: 10007,
+      label: "Font Name",
+      getState:
+        /** Reads uniform native font state from the active view. @param target - Original callback input. @returns Current native font state. */ (
+          target,
+        ) => {
+          const value = target.GetFontFamily();
+          return { enabled: true, value, mixed: value === undefined };
+        },
+      execute:
+        /** Validates the complete font item before invoking the Calc command. @param target - Original callback input. @param request - Original callback input. @returns Whether formatting changed. */ (
+          target,
+          request,
+        ) => {
+          const args = (
+            request
+              .GetArgs()
+              .find(
+                /** Finds the real structured Sfx request payload. @param item - Original callback input. @returns Operation result. */ (
+                  item,
+                ) => item instanceof SfxUnoAnyItem,
+              ) as SfxUnoAnyItem | undefined
+          )?.GetValue();
+          if (args === undefined) return false;
+          if (
+            typeof args !== "object" ||
+            args === null ||
+            !("fontFamily" in args) ||
+            !(args.fontFamily instanceof SvxFontItem)
+          )
+            throw new TypeError("CharFontName requires a complete SvxFontItem");
+          return target.SetFontFamily(args.fontFamily);
+        },
+    },
     ...calcUnderlineCommands.map(
       /** Binds source variant commands without importing another module's shortcuts. @param resource - Native slot. @returns Slot. */
       (resource) => ({

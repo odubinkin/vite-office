@@ -2,9 +2,18 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import {
+  setFontItem,
+  setCharacterItems,
+  createCharacterFormatItems,
+  createFontHeightItems,
+  createCharacterColorItems,
+} from "./ndhints-font";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
+  RES_CHRATR_FONT,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_INETFMT,
   WRITER_CHARACTER_WHICH_RANGES,
@@ -421,35 +430,12 @@ export class SwpHints {
     return owned;
   }
 
-  /** Builds native hints for newly inserted text without constructing a run projection. @param length - Inserted text length. @param attributes - Effective inserted character state. @param inherited - Node/style items used to retain only direct deltas. @param hyperlink - Optional inserted hyperlink. @returns Independent native hint fragment. */
-  public createTextHints(
-    length: number,
-    attributes: WriterCharacterAttributes,
-    inherited: SfxItemSet,
-    hyperlink?: WriterHyperlink,
-  ): SwpHints {
-    if (!Number.isInteger(length) || length < 0)
-      throw new Error("Writer hint text length is invalid.");
-    if (length === 0) return new SwpHints(this.pool);
-    const hints: RangedTextAttr[] = [];
-    const format = createSwFormatAutoFormat(
-      this.pool,
-      attributes,
-      this.projectInherited(inherited),
-    );
-    if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttrEnd(format, 0, length));
-    const normalizedHyperlink = normalizeWriterHyperlink(hyperlink);
-    if (normalizedHyperlink !== undefined)
-      hints.push(new SwTextINetFormat(new SwFormatINetFormat(normalizedHyperlink), 0, length));
-    return new SwpHints(this.pool, hints);
-  }
-
   /** Inserts ordinary text through owned native coordinates or an explicitly formatted fragment. @param textLength - Original text length. @param offset - Insertion offset. @param insertedLength - Inserted text length. @param attributes - Optional explicit character state. @param inherited - Node/style items. @param hyperlink - Optional explicit inserted hyperlink. @param mode - Native insertion flags. @returns Updated owned or explicit-fragment hints. */
   public insertText(
     textLength: number,
     offset: number,
     insertedLength: number,
-    attributes: WriterCharacterAttributes | undefined,
+    attributes: SfxItemSet | undefined,
     inherited: SfxItemSet,
     hyperlink?: WriterHyperlink,
     mode = SwInsertFlags.DEFAULT,
@@ -469,7 +455,7 @@ export class SwpHints {
           return clipHintOutsideRange(hint, offset, end);
         },
       );
-      const inserted = this.createTextHints(insertedLength, attributes, inherited).takeOwned(
+      const inserted = this.createItemHints(insertedLength, attributes, inherited).takeOwned(
         offset,
       );
       this.assignOwned([...retained, ...inserted]);
@@ -479,14 +465,30 @@ export class SwpHints {
       textLength,
       offset,
       offset,
-      this.createTextHints(
-        insertedLength,
-        attributes ?? this.projectInherited(inherited),
-        inherited,
-        hyperlink,
-      ),
+      this.createItemHints(insertedLength, attributes ?? inherited, inherited, hyperlink),
       insertedLength,
     );
+  }
+
+  /** Builds insertion hints from complete native items without a browser attribute projection. @param length - Inserted UTF16 length. @param attributes - Actual character items. @param inherited - Effective node/style items. @param hyperlink - Optional explicit link. @returns Independent native hints. */
+  public createItemHints(
+    length: number,
+    attributes: SfxItemSet,
+    inherited: SfxItemSet,
+    hyperlink?: WriterHyperlink,
+  ): SwpHints {
+    if (!Number.isInteger(length) || length < 0)
+      throw new Error("Writer hint text length is invalid.");
+    const hints = new SwpHints(this.pool);
+    if (length === 0) return hints;
+    const direct = new SfxItemSet(this.pool, WRITER_CHARACTER_WHICH_RANGES);
+    for (const item of attributes.entries())
+      if (!item.equals(inherited.Get(item.Which()))) direct.Put(item);
+    if (direct.Count() !== 0) hints.Insert(MakeTextAttr(this.pool.GetDoc(), direct, 0, length));
+    const link = normalizeWriterHyperlink(hyperlink);
+    if (link !== undefined)
+      hints.Insert(new SwTextINetFormat(new SwFormatINetFormat(link), 0, length));
+    return hints;
   }
 
   /** Updates actual supported attributes after ordinary text insertion or erasure. @param textLength - Original node length. @param offset - Change position. @param length - Nonnegative change length. @param negative - Whether text is removed. @returns This owned container. */
@@ -533,22 +535,17 @@ export class SwpHints {
   ): SwpHints {
     const attributes = this.collectCharacterSegments(textLength, start, end, inherited);
     const nextValue = !attributes.every(
-      /** Reads the requested effective format. @param segment - Effective native segment. @returns Whether the format is enabled. */ (
+      /** Reads the current effective state without changing its native items. @param segment - Original span. @returns Enabled state. */ (
         segment,
       ) => segment.attributes[format],
     );
-    return this.replaceCharacterRange(
+    return setCharacterItems(
+      this,
+      this.pool,
       textLength,
       start,
       end,
-      attributes.map(
-        /** Applies the toggled property. @param segment - Effective native segment. @returns Updated segment. */ (
-          segment,
-        ) => ({
-          ...segment,
-          attributes: { ...segment.attributes, [format]: nextValue },
-        }),
-      ),
+      createCharacterFormatItems(format, nextValue),
       inherited,
     );
   }
@@ -558,23 +555,15 @@ export class SwpHints {
     textLength: number,
     start: number,
     end: number,
-    family: string,
+    family: string | SvxFontItem,
     inherited: SfxItemSet,
   ): SwpHints {
-    return this.replaceCharacterRange(
-      textLength,
-      start,
-      end,
-      this.collectCharacterSegments(textLength, start, end, inherited).map(
-        /** Applies the requested family. @param segment - Effective native segment. @returns Updated segment. */ (
-          segment,
-        ) => ({
-          ...segment,
-          attributes: { ...segment.attributes, fontFamily: family },
-        }),
-      ),
-      inherited,
-    );
+    const item =
+      family instanceof SvxFontItem
+        ? family
+        : new SvxFontItem(inherited.Get(RES_CHRATR_FONT) as SvxFontItem);
+    if (typeof family === "string") item.SetFamilyName(family);
+    return setFontItem(this, this.pool, textLength, start, end, item, inherited);
   }
 
   /** Applies one font height over a native hint range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param fontSizeTwips - Requested height in twips. @param inherited - Node/style items. @returns Updated independent hints. */
@@ -585,18 +574,13 @@ export class SwpHints {
     fontSizeTwips: number,
     inherited: SfxItemSet,
   ): SwpHints {
-    return this.replaceCharacterRange(
+    return setCharacterItems(
+      this,
+      this.pool,
       textLength,
       start,
       end,
-      this.collectCharacterSegments(textLength, start, end, inherited).map(
-        /** Applies the requested height. @param segment - Effective native segment. @returns Updated segment. */ (
-          segment,
-        ) => ({
-          ...segment,
-          attributes: { ...segment.attributes, fontSizeTwips },
-        }),
-      ),
+      createFontHeightItems(fontSizeTwips),
       inherited,
     );
   }
@@ -610,18 +594,13 @@ export class SwpHints {
     value: string,
     inherited: SfxItemSet,
   ): SwpHints {
-    return this.replaceCharacterRange(
+    return setCharacterItems(
+      this,
+      this.pool,
       textLength,
       start,
       end,
-      this.collectCharacterSegments(textLength, start, end, inherited).map(
-        /** Handles Writer formatting state. @param segment - Input value. @returns Callback result. */ (
-          segment,
-        ) => ({
-          ...segment,
-          attributes: { ...segment.attributes, [property]: value },
-        }),
-      ),
+      createCharacterColorItems(property, value),
       inherited,
     );
   }
@@ -885,32 +864,6 @@ export class SwpHints {
       if (end <= hint.end) return hint;
     }
     return undefined;
-  }
-
-  /** Replaces only auto-format hints over one range with native item segments. @param textLength - Complete text length. @param start - Inclusive start. @param end - Exclusive end. @param segments - Replacement effective item segments. @param inherited - Node/style items. @returns Updated independent hints. */
-  private replaceCharacterRange(
-    textLength: number,
-    start: number,
-    end: number,
-    segments: readonly CharacterSegment[],
-    inherited: SfxItemSet,
-  ): SwpHints {
-    assertTextRange(textLength, start, end);
-    const retained = this.hintsByStart.flatMap(
-      /** Retains non-format hints and auto-format portions outside the range. @param hint - Existing native hint. @returns Retained clones. */ (
-        hint,
-      ) => {
-        if (!(hint.format instanceof SwFormatAutoFormat)) return [hint.clone()];
-        return clipHintOutsideRange(hint, start, end);
-      },
-    );
-    const inheritedAttributes = this.projectInherited(inherited);
-    for (const segment of segments) {
-      const format = createSwFormatAutoFormat(this.pool, segment.attributes, inheritedAttributes);
-      if (format.GetStyleHandle().Count() > 0)
-        retained.push(new SwTextAttrEnd(format, segment.start, segment.end));
-    }
-    return new SwpHints(this.pool, retained);
   }
 }
 

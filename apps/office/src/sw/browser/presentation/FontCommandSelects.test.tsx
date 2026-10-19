@@ -12,6 +12,7 @@ import { createBrowserCommandSource } from "../../../framework/browser/presentat
 import { createWriterDocumentSession } from "../../../sw/browser/composition/writer-module";
 import { getWriterCommandResource } from "../../../sw/uiconfig/swriter/writer-command-resources";
 import { FontList } from "../../../vcl/browser/font-list";
+import { createBrowserFontItem } from "../../../svx/browser/tbxctrls/font-item";
 /** Actual frame/controller ports used by the original Writer font widgets. */
 type ControlPorts = BrowserCommandSurfaceProps &
   Readonly<{ commandId: string; getCommandResource: typeof getWriterCommandResource }>;
@@ -112,7 +113,7 @@ it("dispatches Writer family and nonstandard sizes through real bindings and pre
     });
     expect(execute).toHaveBeenLastCalledWith(".uno:CharFontName", {
       from: "shared",
-      fontFamily: "Liberation Sans",
+      fontFamily: createBrowserFontItem("Liberation Sans"),
     });
     expect(session.view.GetViewFrame().GetBindings().QueryState(".uno:CharFontName").value).toBe(
       "Liberation Sans",

@@ -1,4 +1,7 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import type { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
+import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import {
   SvxWeightItem,
@@ -29,6 +32,12 @@ import {
   XMLColorTransparentPropHdl,
   XMLIsTransparentPropHdl,
 } from "../../../../xmloff/source/style/xmlbahdl";
+/** Font-name entries from the shared paragraph-extension mapper chained by native Calc. */
+const fonts = [
+  [XMLToken.STYLE_FONT_NAME, "style:font-name", 100],
+  [XMLToken.STYLE_FONT_NAME_ASIAN, "style:font-name-asian", 111],
+  [XMLToken.STYLE_FONT_NAME_COMPLEX, "style:font-name-complex", 116],
+] as const;
 /** Existing native script height properties. */
 const heights = [
   [XMLToken.FO_FONT_SIZE, "fo:font-size", 101],
@@ -66,10 +75,28 @@ const lines = [
   ],
 ] as const;
 /** Consumed direct item identities for native automatic-style registration. */
-export const cellTextWhichIds = [101, 112, 117, 102, 113, 118, 103, 114, 119, 104] as const;
-/** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @returns XML attributes. */
-export function exportCellTextProperties(pattern: ScPatternAttr): string {
+export const cellTextWhichIds = [
+  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104,
+] as const;
+/** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
+export function exportCellTextProperties(
+  pattern: ScPatternAttr,
+  fontPool: XMLFontAutoStylePool,
+): string {
   let result = "";
+  for (const [, name, which] of fonts) {
+    if (pattern.GetItemSet().GetItemState(which, false) !== SfxItemState.SET) continue;
+    const item = pattern.GetItem(which) as SvxFontItem;
+    const values = [
+      item.GetFamilyName(),
+      item.GetStyleName(),
+      item.GetFamily(),
+      item.GetPitch(),
+      item.GetCharSet(),
+    ] as const;
+    fontPool.Add(...values);
+    result += ` ${name}="${escapeXml(fontPool.Find(...values))}"`;
+  }
   for (const [, name, which] of heights)
     if (pattern.GetItemSet().GetItemState(which, false) === SfxItemState.SET)
       result += ` ${name}="${(pattern.GetItem(which) as SvxFontHeightItem).GetHeight() / 20}pt"`;
@@ -97,14 +124,20 @@ export function exportCellTextProperties(pattern: ScPatternAttr): string {
     value.dispose();
   }
 }
-/** Imports directly into real items,with independent script values and source underline multi-property merge. @param pattern - Actual destination. @param attributes - Shared SAX attributes. @param unsupported - Actual importer diagnostic callback. @returns Nothing. */
+/** Imports directly into real items,with independent script values and source underline multi-property merge. @param pattern - Actual destination. @param attributes - Shared SAX attributes. @param unsupported - Actual importer diagnostic callback. @param findFont - Shared declaration lookup. @returns Nothing. */
 export function importCellTextProperties(
   pattern: ScPatternAttr,
   attributes: FastAttributeList,
   unsupported: (name: string) => void,
+  findFont: (name: string) => SvxFontItem | undefined,
 ): void {
   attributes.assertOnly(
     [
+      ...fonts.map(
+        /** Selects the source font-reference token. @param entry - Mapping. @returns Token. */ ([
+          token,
+        ]) => token,
+      ),
       ...heights.map(
         /** Selects original height token. @param pair - Property. @returns Token. */
         ([token]) => token,
@@ -121,6 +154,18 @@ export function importCellTextProperties(
     ],
     "Calc text properties",
   );
+  for (const [token, , which] of fonts) {
+    const name = attributes.get(token);
+    if (name === null) continue;
+    const declared = findFont(name);
+    if (!declared) {
+      unsupported("missing font declaration");
+      continue;
+    }
+    const item = new SvxFontItem(declared);
+    item.SetWhich(which);
+    pattern.ItemSetPut(item);
+  }
   const converter = new SvXMLUnitConverter("twip");
   for (const [token, , which] of heights) {
     const source = attributes.get(token);

@@ -1,4 +1,41 @@
 /** @fileoverview Browser counterpart of LibreOffice `svtools/ctrltool.hxx` FontList. */
+import { text } from "../../i18nlangtag/source/isolang/isolang.tables";
+import { Font } from "../source/font/font";
+import { GetEnglishSearchFontName } from "../../unotools/source/misc/fontdefs";
+import { RTL_TEXTENCODING_SYMBOL } from "../../sal/inc/rtl/textenc";
+
+/** Original aStarSymbolRecodeTable input names; only converter availability is needed by makeMissing. */
+const symbolRecodeNames = new Set([
+  "starbats",
+  "starmath",
+  "symbol",
+  "standardsymbols",
+  "standardsymbolsl",
+  "monotypesorts",
+  "zapfdingbats",
+  "itczapfdingbats",
+  "dingbats",
+  "webdings",
+  "wingdings",
+  "wingdings2",
+  "wingdings3",
+  "mtextra",
+]);
+
+/** Browser font-list metadata boundary matching FontList::Get's missing-metric branch. Local Font Access exposes names,not native family/pitch metrics,so their native unknown values are retained. @param name - Selected original family spelling. @returns Complete represented VCL font value. */
+export function getBrowserFont(name: string): Font {
+  const font = new Font();
+  font.SetFamilyName(name);
+  const units = new Uint16Array(name.length);
+  for (let i = 0; i < name.length; ++i) units[i] = name.charCodeAt(i);
+  const searchName = GetEnglishSearchFontName(units);
+  try {
+    if (symbolRecodeNames.has(text(searchName))) font.SetCharSet(RTL_TEXTENCODING_SYMBOL);
+  } finally {
+    searchName.dispose();
+  }
+  return font;
+}
 
 export const FALLBACK_FONT_FAMILIES = [
   "Liberation Serif",

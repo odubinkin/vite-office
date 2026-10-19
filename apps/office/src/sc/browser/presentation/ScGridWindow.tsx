@@ -20,6 +20,8 @@ import {
 import { FontLineStyle } from "../../../tools/inc/fontenum";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { ATTR_FONT_HEIGHT } from "../../inc/scitems";
+import type { SvxFontItem } from "../../../editeng/inc/fontitem";
+import { ScCellText } from "./ScCellText";
 import { ScAddress } from "../../inc/address";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 /** Logical visible rectangle and measured browser dimensions; this contains no cell data. */
@@ -273,6 +275,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       }
                       className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
+                        fontFamily: (pattern.GetItem(100) as SvxFontItem).GetFamilyName(),
                         textAlign: cell.alignment,
                         fontWeight: [400, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900][weight],
                         fontStyle: ["normal", "oblique", "italic"][posture],
@@ -305,7 +308,7 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           className="absolute inset-0 h-full w-full border-0 bg-white px-1 text-left outline-none"
                         />
                       ) : (
-                        cell.text
+                        <ScCellText text={cell.text} pattern={pattern} />
                       )}
                     </div>
                   );

@@ -4,7 +4,7 @@ title: "Connect Calc font-family UI with native script attributes and ODS font d
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-19T19:48:00.461Z"
+  updated_by: "CODER"
+  note: "Passed: Calc120files353cases raw S/B/F/L100; related271files11822cases raw100; all37 changed executable owners100 with current source hashes; fresh build and19 Chromium Calc cases including ODS page/Worker; inspected1280/390; types,lint,format,source,resources,registries,48 boundary-tooling cases,static,doctor,routing,diff pass. See README Verification and final raw evidence. Full all-app next task40."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: connect native font-family UI and real ODS font values using shared Writer controls and pinned consumed script semantics in the calc branch."
+  -
+    type: "verify"
+    at: "2026-10-19T19:48:00.461Z"
+    author: "CODER"
+    state: "ok"
+    note: "Passed: Calc120files353cases raw S/B/F/L100; related271files11822cases raw100; all37 changed executable owners100 with current source hashes; fresh build and19 Chromium Calc cases including ODS page/Worker; inspected1280/390; types,lint,format,source,resources,registries,48 boundary-tooling cases,static,doctor,routing,diff pass. See README Verification and final raw evidence. Full all-app next task40."
 doc_version: 3
-doc_updated_at: "2026-10-19T19:24:03.219Z"
+doc_updated_at: "2026-10-19T19:48:00.520Z"
 doc_updated_by: "CODER"
 description: "Task37: connect the existing shared Writer font-family widget to real Calc script-specific SvxFontItem attributes,source selection scripts,attribute-only history,cell painting and native ODS declarations. Reuse shared Writer font/ODF owners;correct simplified common selection metadata where required by source. Port only consumed pinned ICU script/block and native script-selection paths needed for this concrete UI action,using existing local ICU78.3 sources/data;no approximate Unicode regex classifier or shadow workbook model. All changes stay in calc checkout/branch with no network or merges."
 sections:
@@ -44,7 +50,61 @@ sections:
   Scope: "Core and browser font-family state/application,consumed native script classification/selection,real native font item metadata and ODS font declarations/import/export. Reuse and if necessary correct shared Writer/browser font modules. Include related tests,canonical provenance/runtime/capability/readiness records and task evidence. Up to180non-task paths. Current plain/scalar Calc selection and device-independent rendering remain the active core slice;do not fabricate rich-edit,device font metrics,full UNO services,named cell styles or embedded-font support. Existing primary-save/no-recovery policy remains. Only calc checkout/branch;no network or branch operations."
   Plan: "Connect the real shared Writer FontNameSelect and Sfx CharFontName10007 slot to native Calc font items and original selection-script semantics. Preserve source defaults and all represented font family/style/family-enum/pitch/charset metadata;do not apply all scripts indiscriminately. Reuse XMLFontAutoStylePool/XMLFontStylesContext for real ODS font declarations and direct three-script item properties,including styled empty cells and attribute-only history. Correct shared Writer/browser font selection or declaration helpers when needed under the explicit user authorization. Port only actually consumed native ICU78.3 script/block properties and i18nutil/script-selection paths using the existing pinned local sources and original data/algorithms;no guessed Unicode ranges,host-version classification or unrelated full service/constructor programme. Keep shared Writer visual/interaction controls and existing primary-save/no-recovery deviations. Stay exclusively in this calc checkout/branch;no network,new branch,worktree or merge. Budget180non-task paths including canonical registry/source/readiness records. Verify whole Calc and complete changed executable application-owner raw S/B/F/L100 with no new exclusions;related shared/Writer/font/ICU tests and native/source evidence;actual ODS reopen and independent declarations;fresh1280/390browser interaction,types/build/static/style/source/dependency/registry/doctor/routing checks,recorded verification/evaluator and clean commits. Full all-app suite next task40;task37does not run it."
   Verify Steps: "Run npm run test:coverage:calc with nonempty raw S/B/F/L100 and complete changed executable application-owner100 without exclusions or weakened thresholds. Exercise actual shared font selector,uniform/mixed state,native script masks for Latin/Asian/Complex/weak/empty/mixed UTF16 input,retained independent font metadata,invalid arguments,failed input,no-op,grouped-sheet/range/full-axis selection,undo/redo and cell CSS. Verify genuine ODS bytes and repeated reopen plus independently authored font-face and three-script property XML;source pool name allocation/declaration order and default/direct item state. Verify consumed ICU property/script logic against pinned local78.3 sources and native evidence where compiled,with explicit source hashes and no host-version regex substitution. Run related Writer/shared/font/ICU tests and source-matched complete owner coverage. Fresh build and real browser cases at1280/390 using the actual Writer control;root/app types,changed-path lint/format,JSDoc,size/source-tree/provenance/dependencies/resources,affected Calc/shared/Writer inventories,static smoke,doctor/routing/diff. Record raw evidence,quality review and clean calc state. Full all-app regression next task40."
-  Verification: "In progress;task acceptance pending. Whole Calc passes120files353cases with nonempty raw S/B/F/L100:7768statements,4873branches,1559functions,6967lines across99covered owners. Exact source hashes and compressed raw evidence are retained in evidence/calc-font-ui-coverage-proof.json. The source-native block/script/uncached editing-class replay matches all1114112Unicode codepoints;its constrained dispatcher/bootstrap and service limitations are explicit. Root/app types pass;focused actual Writer/font/script/UI cases pass;exact-boundary tooling passes48cases2files. Final related complete changed-owner100,interleaved Writer metadata behavior,browser/build/static/resource/inventory/style/source checks and evaluator/clean commits remain required. No broad native/full UI parity or completed goal is claimed. Full all-app run next task40."
+  Verification: |-
+    Command: npm run test:coverage:calc -- --coverage.reportsDirectory=coverage/task37-calc-styles --coverage.reporter=json --coverage.reporter=text
+    Result: pass.
+    Evidence:120files/353cases;raw S7771/B4877/F1559/L6970 all100;99 Calc owner hashes.
+    Scope: complete Calc application gate;actual shared font selector,script masks,full font values,history,CSS and real ODS.
+
+    Command: node .agentplane/tasks/202610191738-6PMYVV/run-related-font-coverage.mjs
+    Result: pass.
+    Evidence:271files/11822cases;raw S2438/B1439/F472/L2240 all100;25 measured non-Calc owners.
+    Scope: related Writer/shared/native-script/ODF owners. Full changed executable owner coverage37owners S3395/B1925/F642/L3112 all100,source-matched in evidence/changed-font-owner-coverage.json.
+
+    Command: npm run typecheck; npm run build; npx playwright test --config apps/office/playwright.config.ts --project calc --workers=1
+    Result: pass.
+    Evidence: fresh static build;19 browser cases;inspected1280/390 screenshots;ODS page and Worker pass.
+    Scope: root/tools/app types,real shared controls,actual browser history and native package import/export.
+
+    Command: changed-path ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run check:calc-resources; npm run check:writer-resources; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run inventory:parity:writer; node scripts/check-static-build.mjs; npx vitest run scripts/check-font-script-boundaries.test.ts scripts/check-module-boundaries.test.ts; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check
+    Result: pass.
+    Evidence: retained accept-check logs,lint/format logs and native compiled evidence;48 boundary-tooling cases pass.
+    Scope: changed code/contracts/resources/registries/source provenance and local repository health.
+
+    Full all-app tests: deferred by explicit user cadence to task40;last full task30. All source-required scoped gates pass. Overall UI delivery remains active;named/master style application,embedded fonts,device metrics and full native service/layout parity are unverified.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-19T19:48:00.461Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Passed: Calc120files353cases raw S/B/F/L100; related271files11822cases raw100; all37 changed executable owners100 with current source hashes; fresh build and19 Chromium Calc cases including ODS page/Worker; inspected1280/390; types,lint,format,source,resources,registries,48 boundary-tooling cases,static,doctor,routing,diff pass. See README Verification and final raw evidence. Full all-app next task40.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T19:47:53.719Z, excerpt_hash=sha256:f42906141669d870ff8de5a486f8e1a3f20bbd4f45259326d8641d27669ccbad
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json
+    - old_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+    - current_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191738-6PMYVV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610191738-6PMYVV
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation commit using the repository-approved task lifecycle;retain task/raw evidence. Preserve earlier Calc/Writer shared controls and primary ODS behavior. Do not reset the branch or alter unrelated active tasks."
   Findings: |-
     Inspection confirms source ScFormatShell uses GetSelectionScriptType for font-family application,while font-height applies all scripts. ScViewFunc falls back to ScGlobal::GetDefaultScriptType only when content yields NONE. Current Calc importer ignores font-face-decls and exporter emits no declarations,so native ODS font ownership is a concrete UI prerequisite. Actual pinned ICU78.3 source/archive and prior compiled probes exist inside this repository;no network or outside-repo source access is necessary. Avoid reopening unrelated full native constructor/factory chains. Full all-app cadence remains task30then40.
@@ -90,6 +150,18 @@ sections:
     - Acceptance caution: The earlier Calc100 raw proof is a preserved snapshot. Subsequent source-preserving lint changes to the styles-root callback and shared VCL font rendering changed covered source hashes. Refresh the final Calc proof after the implementation settles. Final complete shared/Writer owner100,browser1280/390/build/static/resources/inventories/style/source/evaluator and clean implementation/closure commits remain pending. Task37 stays DOING and the UI goal remains active. Full all-app cadence remains task40.
 
     - Related second batch completed:253files11671cases pass;raw coverage rises to S2425/2447,B1410/1445,F466/472,L2231/2249. This remains below the required100and is not acceptance. Evidence related-font-coverage-second.json.gz,related-font-coverage-second.log,related-font-remaining.json. The latter records exact remaining functions/branch locations for focused continuation. No runner remains live. Finish these specific shared/Writer coverage gaps,then final Calc refresh and browser/source/quality checks;do not rerun the broad batch unchanged or declare the task complete.
+
+    - Observation: Final related coverage passes271files/11822cases with raw S2438/B1439/F472/L2240 all100. The complete changed-owner proof passes37 executable owners at S3395/B1925/F642/L3112 all100; the two remaining source owners are an erased partial IDL interface and a pure Writer re-export. Raw gzip evidence is hash-checked and every covered source hash matches the current file.
+      Impact: Full native font values survive actual selected/pending Writer items,typing,paste,inheritance and retained history;the unused lossy browser createTextHints path is removed. The last uncovered marked-label manager lookup is tested explicitly at the optional manager boundary. The Writer public wrapper has no declared implementation symbols;shared VCL owns the actual function.
+      Resolution: Accepted current Calc proof is evidence/calc-font-styles-proof.json;related proof is evidence/related-font-final-proof.json;complete changed-owner proof is evidence/changed-font-owner-coverage.json. Earlier final and initial Calc snapshots are historical and superseded.
+
+    - Observation: The first fresh browser batch passed18cases but failed the existing native ODS fixture because newly read styles.xml contained recognized office:styles/master-styles scopes. Pinned ScXMLDocContext_Impl explicitly recognizes these tokens. The current bounded importer now diagnoses their unported contents through its existing unsupported-metadata boundary rather than treating them as unknown document structure. An old rejection case now uses the still-unported settings scope;independent styles-stream font declarations coexist with two explicit unsupported-style diagnostics.
+      Impact: Existing scalar import no longer regresses when native files contain those style scopes;named/master style application remains unported and is not silently claimed. Fonts from styles.xml still reach actual cell items.
+      Resolution: Targeted20ODS cases pass;refreshed whole Calc120files/353cases pass at raw S7771/B4877/F1559/L6970 all100. Fresh production build and all19 serial Chromium Calc cases pass,including actual ODS bytes in page and Worker. Final screenshots at1280/390 were inspected. Initial failure log is retained separately;no retries,timeout changes or test exclusions were introduced.
+
+    - Observation: Root/tools/app types,changed-path ESLint/Prettier,dependencies,JSDoc,size,source-tree/provenance,Calc/Writer resources,scoped Calc/shared/Writer inventories,static build,48 boundary-tooling cases,doctor,routing and diff checks pass. The143non-task paths remain within the approved180-path budget. No network,other checkouts,branch changes or merges were used.
+      Impact: The font UI slice is reviewable;full device metrics,formatted-cell caches/UNO factory,rich layout,embedded fonts,named styles and full Writer/Calc parity remain outside the verified slice. Registry parity flags remain unverified. Existing Vite chunk-size and older managed-shim readiness notices remain informational.
+      Resolution: Record acceptance and commit only intentional task paths on calc. Continue feasible formatting UI actions;next full all-app regression remains task40 under the user's cadence. Overall UI goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -110,7 +182,60 @@ Run npm run test:coverage:calc with nonempty raw S/B/F/L100 and complete changed
 
 ## Verification
 
-In progress;task acceptance pending. Whole Calc passes120files353cases with nonempty raw S/B/F/L100:7768statements,4873branches,1559functions,6967lines across99covered owners. Exact source hashes and compressed raw evidence are retained in evidence/calc-font-ui-coverage-proof.json. The source-native block/script/uncached editing-class replay matches all1114112Unicode codepoints;its constrained dispatcher/bootstrap and service limitations are explicit. Root/app types pass;focused actual Writer/font/script/UI cases pass;exact-boundary tooling passes48cases2files. Final related complete changed-owner100,interleaved Writer metadata behavior,browser/build/static/resource/inventory/style/source checks and evaluator/clean commits remain required. No broad native/full UI parity or completed goal is claimed. Full all-app run next task40.
+Command: npm run test:coverage:calc -- --coverage.reportsDirectory=coverage/task37-calc-styles --coverage.reporter=json --coverage.reporter=text
+Result: pass.
+Evidence:120files/353cases;raw S7771/B4877/F1559/L6970 all100;99 Calc owner hashes.
+Scope: complete Calc application gate;actual shared font selector,script masks,full font values,history,CSS and real ODS.
+
+Command: node .agentplane/tasks/202610191738-6PMYVV/run-related-font-coverage.mjs
+Result: pass.
+Evidence:271files/11822cases;raw S2438/B1439/F472/L2240 all100;25 measured non-Calc owners.
+Scope: related Writer/shared/native-script/ODF owners. Full changed executable owner coverage37owners S3395/B1925/F642/L3112 all100,source-matched in evidence/changed-font-owner-coverage.json.
+
+Command: npm run typecheck; npm run build; npx playwright test --config apps/office/playwright.config.ts --project calc --workers=1
+Result: pass.
+Evidence: fresh static build;19 browser cases;inspected1280/390 screenshots;ODS page and Worker pass.
+Scope: root/tools/app types,real shared controls,actual browser history and native package import/export.
+
+Command: changed-path ESLint/Prettier; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run check:calc-resources; npm run check:writer-resources; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run inventory:parity:writer; node scripts/check-static-build.mjs; npx vitest run scripts/check-font-script-boundaries.test.ts scripts/check-module-boundaries.test.ts; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check
+Result: pass.
+Evidence: retained accept-check logs,lint/format logs and native compiled evidence;48 boundary-tooling cases pass.
+Scope: changed code/contracts/resources/registries/source provenance and local repository health.
+
+Full all-app tests: deferred by explicit user cadence to task40;last full task30. All source-required scoped gates pass. Overall UI delivery remains active;named/master style application,embedded fonts,device metrics and full native service/layout parity are unverified.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-19T19:48:00.461Z — VERIFY — ok
+
+By: CODER
+
+Note: Passed: Calc120files353cases raw S/B/F/L100; related271files11822cases raw100; all37 changed executable owners100 with current source hashes; fresh build and19 Chromium Calc cases including ODS page/Worker; inspected1280/390; types,lint,format,source,resources,registries,48 boundary-tooling cases,static,doctor,routing,diff pass. See README Verification and final raw evidence. Full all-app next task40.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T19:47:53.719Z, excerpt_hash=sha256:f42906141669d870ff8de5a486f8e1a3f20bbd4f45259326d8641d27669ccbad
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191738-6PMYVV/blueprint/resolved-snapshot.json
+- old_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+- current_digest: 0dec3b0f44fb7a06bdfdc3e74738827e16ad098a7463f46bf9935f2b0f1894fe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191738-6PMYVV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610191738-6PMYVV
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
@@ -161,3 +286,15 @@ Inspection confirms source ScFormatShell uses GetSelectionScriptType for font-fa
 - Acceptance caution: The earlier Calc100 raw proof is a preserved snapshot. Subsequent source-preserving lint changes to the styles-root callback and shared VCL font rendering changed covered source hashes. Refresh the final Calc proof after the implementation settles. Final complete shared/Writer owner100,browser1280/390/build/static/resources/inventories/style/source/evaluator and clean implementation/closure commits remain pending. Task37 stays DOING and the UI goal remains active. Full all-app cadence remains task40.
 
 - Related second batch completed:253files11671cases pass;raw coverage rises to S2425/2447,B1410/1445,F466/472,L2231/2249. This remains below the required100and is not acceptance. Evidence related-font-coverage-second.json.gz,related-font-coverage-second.log,related-font-remaining.json. The latter records exact remaining functions/branch locations for focused continuation. No runner remains live. Finish these specific shared/Writer coverage gaps,then final Calc refresh and browser/source/quality checks;do not rerun the broad batch unchanged or declare the task complete.
+
+- Observation: Final related coverage passes271files/11822cases with raw S2438/B1439/F472/L2240 all100. The complete changed-owner proof passes37 executable owners at S3395/B1925/F642/L3112 all100; the two remaining source owners are an erased partial IDL interface and a pure Writer re-export. Raw gzip evidence is hash-checked and every covered source hash matches the current file.
+  Impact: Full native font values survive actual selected/pending Writer items,typing,paste,inheritance and retained history;the unused lossy browser createTextHints path is removed. The last uncovered marked-label manager lookup is tested explicitly at the optional manager boundary. The Writer public wrapper has no declared implementation symbols;shared VCL owns the actual function.
+  Resolution: Accepted current Calc proof is evidence/calc-font-styles-proof.json;related proof is evidence/related-font-final-proof.json;complete changed-owner proof is evidence/changed-font-owner-coverage.json. Earlier final and initial Calc snapshots are historical and superseded.
+
+- Observation: The first fresh browser batch passed18cases but failed the existing native ODS fixture because newly read styles.xml contained recognized office:styles/master-styles scopes. Pinned ScXMLDocContext_Impl explicitly recognizes these tokens. The current bounded importer now diagnoses their unported contents through its existing unsupported-metadata boundary rather than treating them as unknown document structure. An old rejection case now uses the still-unported settings scope;independent styles-stream font declarations coexist with two explicit unsupported-style diagnostics.
+  Impact: Existing scalar import no longer regresses when native files contain those style scopes;named/master style application remains unported and is not silently claimed. Fonts from styles.xml still reach actual cell items.
+  Resolution: Targeted20ODS cases pass;refreshed whole Calc120files/353cases pass at raw S7771/B4877/F1559/L6970 all100. Fresh production build and all19 serial Chromium Calc cases pass,including actual ODS bytes in page and Worker. Final screenshots at1280/390 were inspected. Initial failure log is retained separately;no retries,timeout changes or test exclusions were introduced.
+
+- Observation: Root/tools/app types,changed-path ESLint/Prettier,dependencies,JSDoc,size,source-tree/provenance,Calc/Writer resources,scoped Calc/shared/Writer inventories,static build,48 boundary-tooling cases,doctor,routing and diff checks pass. The143non-task paths remain within the approved180-path budget. No network,other checkouts,branch changes or merges were used.
+  Impact: The font UI slice is reviewable;full device metrics,formatted-cell caches/UNO factory,rich layout,embedded fonts,named styles and full Writer/Calc parity remain outside the verified slice. Registry parity flags remain unverified. Existing Vite chunk-size and older managed-shim readiness notices remain informational.
+  Resolution: Record acceptance and commit only intentional task paths on calc. Continue feasible formatting UI actions;next full all-app regression remains task40 under the user's cadence. Overall UI goal remains active.

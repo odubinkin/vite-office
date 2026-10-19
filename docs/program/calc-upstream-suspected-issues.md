@@ -2883,3 +2883,41 @@ the same native color handler behavior rather than introduce a format-specific s
 - Observation: the general no-argument underline slot copies the effective `SvxUnderlineItem` before changing its line style. The variant slots construct a fresh item, so selecting or toggling a variant resets color/complex-color state to native item defaults.
 - Managed implementation: `sc/source/ui/view/formatsh.ts`, `SetCharacterFormat` and `SetUnderlineStyle`, preserves this distinction. The shared Format menu uses the native Single/Double slots and source numeric identities.
 - Evidence: `calc-character-format.test.tsx` tests an actual colored native item, visible menu dispatch, reset alpha, exact style state and undo. These are source-based managed checks, not compiled LibreOffice comparison evidence.
+
+
+## CALC-200: the initial break-iterator scalar cache treats U+0000 differently
+
+Status: pinned source inspection; compiled source reproduction is still pending in task37.
+
+`BreakIteratorImpl::getScriptClass` in
+`i18npool/source/breakiterator/breakiteratorImpl.cxx` initializes its function-static
+`lastChar` to zero and `nRet` to WEAK, and recomputes only when the requested character
+changes. Therefore an initial U+0000 request returns WEAK without consulting
+`i18nutil::GetScriptClass`. After a different character has been requested, a U+0000 request
+recomputes through `i18nutil/source/utility/scriptclass.cxx`; its compatibility table maps
+BASIC_LATIN to LATIN and does not list U+0000 among the special WEAK characters.
+The resulting classification depends on the preceding scalar-cache history.
+
+Decision: preserve the original cache initialization and update logic when porting the
+consumed break-iterator script methods. Do not silently initialize a different sentinel or
+remove the cache merely to obtain uniform null-character behavior. The source byte identities
+are retained in task37's `font-script-source-baseline.json`; this observation is not a claim
+of compiled full LibreOffice service parity.
+
+## CALC-201: grouped-sheet script selection does not enumerate every selected sheet
+
+Status: pinned source inspection, retained by the current simple-mark browser binding.
+
+`ScMarkData::FillRangeListWithMarks` in `sc/source/core/data/markdata.cxx` explicitly
+contains `TODO: for multiple selected tables enter multiple ranges !!!`. Its simple-mark
+branch appends `aMarkRange` once. `ScViewFunc::GetSelectionScriptType` calls this method
+without extending the resulting ranges to all grouped sheets, and
+`ScDocument::GetRangeScriptType` in `documen6.cxx` reads each range's start sheet.
+
+Consequently, applying a family to grouped sheets can choose script attributes from one
+sheet even when another selected sheet contains a different script. Attribute application
+still affects the grouped sheets. This can leave a different script's font unchanged there.
+
+Decision: retain the source distinction between script aggregation and grouped attribute
+application. Do not silently union every selected sheet's scripts in the browser binding.
+This observation does not certify full native multi-mark or formatted-cell cache behavior.

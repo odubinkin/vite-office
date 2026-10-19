@@ -1,5 +1,7 @@
 /** @fileoverview ScFormatShell consumed font-height state/application over original document patterns, simple marks and attribute undo. Full native format slots,script selection,dialogs and device-dependent row layout remain unported. */
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import {
   SvxWeightItem,
   SvxPostureItem,
@@ -24,6 +26,41 @@ export type CalcCharacterFormat = "bold" | "italic" | "underline";
 const formatIds = { bold: [102, 113, 118], italic: [103, 114, 119], underline: [104] } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  /** Maps selected source script flags to the real Calc font Which identities. @param script - Selection flags. @returns Which identities. */
+  private FontIds(script: SvtScriptType): number[] {
+    return (
+      [
+        [SvtScriptType.LATIN, 100],
+        [SvtScriptType.ASIAN, 111],
+        [SvtScriptType.COMPLEX, 116],
+      ] as const
+    )
+      .filter(
+        /** Selects only native Which identities named by the script flags. @param entry - Original callback input. @returns Operation result. */ ([
+          flag,
+        ]) => (script & flag) !== 0,
+      )
+      .map(
+        /** Projects the represented native value. @param entry - Original callback input. @returns Operation result. */ ([
+          ,
+          which,
+        ]) => which,
+      );
+  }
+  /** Reads effective native font equality across the selected scripts and attribute runs. @param script - Source selection flags. @returns Uniform family or mixed. */
+  GetFontFamily(script: SvtScriptType): string | undefined {
+    return (this.SelectionItem(this.FontIds(script)) as SvxFontItem | undefined)?.GetFamilyName();
+  }
+  /** Copies the full toolbox item to selected native scripts and actual attribute history. @param font - Complete source font item. @param script - Source selection flags. @returns Whether changed. */
+  SetFontFamily(font: SvxFontItem, script: SvtScriptType): boolean {
+    const delta = new ScPatternAttr(this.shell.GetDocument().getCellAttributeHelper());
+    for (const which of this.FontIds(script)) {
+      const item = font.Clone();
+      item.SetWhich(which);
+      delta.ItemSetPut(item);
+    }
+    return this.ApplySelectionPattern(delta);
+  }
   /** Borrows actual current semantic view/document owners. @param viewData - View. @param shell - Shell. @returns Format owner. */
   constructor(
     private readonly viewData: ScViewData,

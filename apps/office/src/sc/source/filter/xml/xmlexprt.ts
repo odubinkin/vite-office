@@ -1,4 +1,6 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { cellTextWhichIds, exportCellTextProperties } from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -26,6 +28,7 @@ export interface ScXMLExportOptions {
 }
 /** Native spreadsheet content traversal plus consumed automatic font-height styles. Other styles/objects remain unported. */
 export class ScXMLExport {
+  private fontPool = new XMLFontAutoStylePool();
   private readonly styles = new Map<string, string>();
   private readonly rowStyles = new Map<string, string>();
   /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
@@ -43,7 +46,7 @@ export class ScXMLExport {
       )
     )
       return "";
-    const key = exportCellTextProperties(pattern);
+    const key = exportCellTextProperties(pattern, this.fontPool);
     let name = this.styles.get(key);
     if (name === undefined) {
       name = `ce${this.styles.size + 1}`;
@@ -53,6 +56,17 @@ export class ScXMLExport {
   }
   /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @returns ODF content. */
   exportContent(): string {
+    this.fontPool = new XMLFontAutoStylePool();
+    for (const which of [100, 111, 116]) {
+      const font = this.document.GetPool().GetUserOrPoolDefaultItem(which) as SvxFontItem;
+      this.fontPool.Add(
+        font.GetFamilyName(),
+        font.GetStyleName(),
+        font.GetFamily(),
+        font.GetPitch(),
+        font.GetCharSet(),
+      );
+    }
     this.styles.clear();
     this.rowStyles.clear();
     let body = "";
@@ -146,7 +160,7 @@ export class ScXMLExport {
       const [height, optimal] = key.split(",");
       automatic += `<style:style style:name="${name}" style:family="table-row"><style:table-row-properties style:row-height="${new SvXMLUnitConverter("twip").convertMeasureToXML(Number(height))}" style:use-optimal-row-height="${optimal}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" office:version="1.3"><office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }
   /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param attribute - Escaped generated style attribute. @returns Cell XML. */
   private exportCell(cell: ScRefCellValue, attribute: string): string {

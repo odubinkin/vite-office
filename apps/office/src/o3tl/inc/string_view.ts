@@ -2,6 +2,37 @@
 import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";
 import { SAL_MIN_INT32, SAL_MAX_INT32 } from "../../sal/inc/types";
 import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";
+import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../../sal/inc/rtl/character";
+
+/** Original UTF16 codepoint iterator; caller keeps every requested step inside the view. @param string - Logical UTF16 view. @param indexUtf16 - Mutable code-unit position. @param incrementCodePoints - Signed number of codepoints. @returns Codepoint after negative steps and before positive steps. */
+export function iterateCodePoints(
+  string: Uint16Array,
+  indexUtf16: [number],
+  incrementCodePoints = 1,
+): number {
+  let n = indexUtf16[0];
+  if (n < 0 || n > string.length) throw new Error("assert(n <= string.length())");
+  while (incrementCodePoints < 0) {
+    if (n === 0) throw new Error("assert(n > 0)");
+    const cu = string[--n] as number;
+    if (isLowSurrogate(cu) && n !== 0 && isHighSurrogate(string[n - 1] as number)) --n;
+    ++incrementCodePoints;
+  }
+  if (n >= string.length) throw new Error("assert(n < string.length())");
+  const cu = string[n] as number;
+  const cp =
+    isHighSurrogate(cu) && string.length - n >= 2 && isLowSurrogate(string[n + 1] as number)
+      ? combineSurrogates(cu, string[n + 1] as number)
+      : cu;
+  while (incrementCodePoints > 0) {
+    if (n >= string.length) throw new Error("assert(n < string.length())");
+    const unit = string[n++] as number;
+    if (isHighSurrogate(unit) && n !== string.length && isLowSurrogate(string[n] as number)) ++n;
+    --incrementCodePoints;
+  }
+  indexUtf16[0] = n;
+  return cp;
+}
 
 /** Original size_t-position UTF16 getToken overload;minus one erases npos only after the final token. @param str - Borrowed view. @param delimiter - Native char16 delimiter. @param position - In/out position,valid0..length on entry. @returns Borrowed token. */
 export function getToken(str: Uint16Array, delimiter: number, position: [number]): Uint16Array {

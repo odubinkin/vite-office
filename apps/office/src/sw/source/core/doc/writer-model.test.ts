@@ -548,11 +548,15 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     const pool = writer.GetAttrPool();
     const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
     const empty = new SwpHints(pool);
-    expect(empty.createTextHints(0, plain, inherited).Count()).toBe(0);
+    expect(
+      empty
+        .createItemHints(0, new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES), inherited)
+        .Count(),
+    ).toBe(0);
     expect(
       throwing(
         /** Creates a negative-length hint fragment. @returns Invalid fragment. */ () =>
-          empty.createTextHints(-1, plain, inherited),
+          empty.createItemHints(-1, new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES), inherited),
       ),
     ).toThrow("length is invalid");
 

@@ -1,8 +1,9 @@
 /** @fileoverview Native static language script classification and configured fallback resolution consumed by Calc defaults; on-the-fly LanguageTag registration remains unsupported. */
 import { getRealLanguage } from "./mslangid";
+import * as I18nScriptType from "../../../offapi/com/sun/star/i18n/ScriptType";
 import { LANGUAGE_NONE, LANGUAGE_SYSTEM, LanguageType, primary } from "../../inc/lang";
 /** Native css::i18n::ScriptType scalar values. */
-export const ScriptType = { WEAK: 0, LATIN: 1, ASIAN: 2, COMPLEX: 3 } as const;
+export const ScriptType = I18nScriptType;
 const complexLanguages = new Set([
   0x0c50, // LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA
   0x0850, // LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA

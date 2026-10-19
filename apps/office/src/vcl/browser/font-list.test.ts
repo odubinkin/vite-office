@@ -1,6 +1,17 @@
 /** @fileoverview Verifies browser FontList enumeration and fallback semantics. */
 import { describe, expect, it } from "vitest";
-import { FALLBACK_FONT_FAMILIES, FontList } from "./font-list";
+import { FALLBACK_FONT_FAMILIES, FontList, getBrowserFont } from "./font-list";
+import { RTL_TEXTENCODING_SYMBOL, RTL_TEXTENCODING_DONTKNOW } from "../../sal/inc/rtl/textenc";
+
+it("retains native missing-metric values and original symbol-recode availability", /** Known uninstalled symbol names use SYMBOL while regular missing metrics stay unknown. @returns Nothing. */ () => {
+  for (const name of ["Symbol", "Wingdings 2", "StarBats"]) {
+    const font = getBrowserFont(name);
+    expect(font.GetFamilyName()).toBe(name);
+    expect(font.GetCharSet()).toBe(RTL_TEXTENCODING_SYMBOL);
+    expect([font.GetFamilyType(), font.GetPitch(), font.GetStyleName()]).toEqual([0, 0, ""]);
+  }
+  expect(getBrowserFont("Unknown Face").GetCharSet()).toBe(RTL_TEXTENCODING_DONTKNOW);
+});
 
 describe("FontList", /** Registers browser font-list tests. @returns Nothing. */ () => {
   it("deduplicates and sorts local families", /** Verifies device enumeration. @returns Completion. */ async () => {

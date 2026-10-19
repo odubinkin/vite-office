@@ -2,19 +2,21 @@
 
 ## Current UI delivery priority
 
-Task 36 (`202610191455-1KGJBF`) connects the shared Bold/Italic/Underline controls and
-native Format/Text Single/Double Underline slots to actual cell attributes, grouped-sheet
-and full-axis selections, attribute-only undo and same-model ODS. General underline retains
-its color; variant slots reset it with a fresh source item. Shared resource generation resolves
-module/global and primary/secondary key precedence, selects the established suite browser
-unxwnt-plus-Meta adaptation and binds the same configuration to Calc dispatch and menus.
+Task 37 (`202610191738-6PMYVV`) connects the actual shared Writer font-family selector to
+Calc's native CharFontName slot, independent Latin/Asian/Complex font items, selection state,
+attribute history and ODS declarations. Shared and Writer operations retain all five font
+fields through selection, pending input, typing and paste. The browser font fallback renderer
+now belongs to shared VCL. Pinned ICU78.3 data and consumed script algorithms replace host
+Unicode assumptions; their compiled scalar witness covers every Unicode codepoint.
 
-The full Calc gate passes 117 files / 345 cases at raw S/B/F/L 100%; hashes for all 96 covered
-Calc owners are retained in task evidence. Related Writer/ODF and Worker checks pass 156 files /
-6,767 cases. All 29 changed executable application owners have raw S/B/F/L 100%. The fresh
-production build passes 17 serial browser cases, with additional pressed-state checks and
-inspected screenshots at widths 1280 and 390. This bounded character-format slice is verified;
-font-family, other feasible formatting actions and wider UI delivery remain pending.
+The current Calc gate passes 120 files / 353 cases at raw S/B/F/L 100%; related modules pass
+271 files / 11,822 cases with all 37 changed executable owners covered at 100%. The fresh
+build passes 19 browser cases, including real ODS import in page and Worker. Shared font
+controls and inspected screenshots cover widths 1280 and 390. Final raw evidence and source
+hashes are retained in the task. Font-family joins the existing shared
+font-size, Bold/Italic/Underline controls and native underline variants. Further feasible
+formatting actions and wider UI delivery remain pending. Named/master style application,
+embedded fonts, full device metrics and rich cell layout remain explicitly unported.
 
 Explicit user direction (task33):connect every UI action already supported by the current
 Calc kernel,with fonts,styles and formatting as priority. Reuse the actual Writer browser
@@ -53,9 +55,8 @@ fallback consumers. The LanguageTag value/state owner remains pending.
 
 ## Current conclusion
 
-The current actual frame registers16user-visible generated command identities out of463source
-resource identities. This is an implementation inventory,not a completion percentage. The fresh
-session audit in task34 records all registrations and default enabled states;empty history and a
+The generated command inventory is an implementation inventory,not a completion percentage.
+Session tests record registrations and default enabled states;empty history and a
 single selected sheet legitimately disable Undo,Redo and Deselect All Sheets.
 
 | UI action group | Current path | Next concrete work |

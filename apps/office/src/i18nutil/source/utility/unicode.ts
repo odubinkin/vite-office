@@ -1,0 +1,171 @@
+/** @fileoverview Original unicode::getScriptClassFromUScriptCode switch;remaining unicode utility methods are unported. */
+import { UScriptCode } from "../../../external/icu/source/common/unicode/uscript";
+import * as ScriptType from "../../../offapi/com/sun/star/i18n/ScriptType";
+/** Original stateless unicode utility owner for consumed script classification. */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original static unicode utility owner.
+export class unicode {
+  /** Maps every original script identity to the native editing class. @param eScript - Native UScriptCode. @returns ScriptType. */
+  static getScriptClassFromUScriptCode(eScript: UScriptCode): number {
+    switch (eScript) {
+      case UScriptCode.USCRIPT_INVALID_CODE:
+      case UScriptCode.USCRIPT_COMMON:
+      case UScriptCode.USCRIPT_INHERITED:
+      case UScriptCode.USCRIPT_UNWRITTEN_LANGUAGES:
+      case UScriptCode.USCRIPT_UNKNOWN:
+      case UScriptCode.USCRIPT_MATHEMATICAL_NOTATION:
+      case UScriptCode.USCRIPT_SYMBOLS:
+      case UScriptCode.USCRIPT_CODE_LIMIT:
+        return ScriptType.WEAK;
+
+      case UScriptCode.USCRIPT_ARMENIAN:
+      case UScriptCode.USCRIPT_CHEROKEE:
+      case UScriptCode.USCRIPT_COPTIC:
+      case UScriptCode.USCRIPT_CYRILLIC:
+      case UScriptCode.USCRIPT_GEORGIAN:
+      case UScriptCode.USCRIPT_GOTHIC:
+      case UScriptCode.USCRIPT_GREEK:
+      case UScriptCode.USCRIPT_LATIN:
+      case UScriptCode.USCRIPT_OGHAM:
+      case UScriptCode.USCRIPT_OLD_ITALIC:
+      case UScriptCode.USCRIPT_RUNIC:
+      case UScriptCode.USCRIPT_CANADIAN_ABORIGINAL:
+      case UScriptCode.USCRIPT_BRAILLE:
+      case UScriptCode.USCRIPT_CYPRIOT:
+      case UScriptCode.USCRIPT_OSMANYA:
+      case UScriptCode.USCRIPT_SHAVIAN:
+      case UScriptCode.USCRIPT_KATAKANA_OR_HIRAGANA:
+      case UScriptCode.USCRIPT_GLAGOLITIC:
+      case UScriptCode.USCRIPT_CIRTH:
+      case UScriptCode.USCRIPT_OLD_CHURCH_SLAVONIC_CYRILLIC:
+      case UScriptCode.USCRIPT_OLD_HUNGARIAN:
+      case UScriptCode.USCRIPT_LATIN_FRAKTUR:
+      case UScriptCode.USCRIPT_LATIN_GAELIC:
+        return ScriptType.LATIN;
+
+      case UScriptCode.USCRIPT_BOPOMOFO:
+      case UScriptCode.USCRIPT_HAN:
+      case UScriptCode.USCRIPT_HANGUL:
+      case UScriptCode.USCRIPT_HIRAGANA:
+      case UScriptCode.USCRIPT_KATAKANA:
+      case UScriptCode.USCRIPT_YI:
+      case UScriptCode.USCRIPT_SIMPLIFIED_HAN:
+      case UScriptCode.USCRIPT_TRADITIONAL_HAN:
+      case UScriptCode.USCRIPT_JAPANESE:
+      case UScriptCode.USCRIPT_KOREAN:
+      case UScriptCode.USCRIPT_TANGUT:
+      case UScriptCode.USCRIPT_KHITAN_SMALL_SCRIPT:
+        return ScriptType.ASIAN;
+
+      case UScriptCode.USCRIPT_ARABIC:
+      case UScriptCode.USCRIPT_BENGALI:
+      case UScriptCode.USCRIPT_DESERET:
+      case UScriptCode.USCRIPT_DEVANAGARI:
+      case UScriptCode.USCRIPT_ETHIOPIC:
+      case UScriptCode.USCRIPT_GUJARATI:
+      case UScriptCode.USCRIPT_GURMUKHI:
+      case UScriptCode.USCRIPT_HEBREW:
+      case UScriptCode.USCRIPT_KANNADA:
+      case UScriptCode.USCRIPT_KHMER:
+      case UScriptCode.USCRIPT_LAO:
+      case UScriptCode.USCRIPT_MALAYALAM:
+      case UScriptCode.USCRIPT_MONGOLIAN:
+      case UScriptCode.USCRIPT_MYANMAR:
+      case UScriptCode.USCRIPT_ORIYA:
+      case UScriptCode.USCRIPT_SINHALA:
+      case UScriptCode.USCRIPT_SYRIAC:
+      case UScriptCode.USCRIPT_TAMIL:
+      case UScriptCode.USCRIPT_TELUGU:
+      case UScriptCode.USCRIPT_THAANA:
+      case UScriptCode.USCRIPT_THAI:
+      case UScriptCode.USCRIPT_TIBETAN:
+      case UScriptCode.USCRIPT_TAGALOG:
+      case UScriptCode.USCRIPT_HANUNOO:
+      case UScriptCode.USCRIPT_BUHID:
+      case UScriptCode.USCRIPT_TAGBANWA:
+      case UScriptCode.USCRIPT_LIMBU:
+      case UScriptCode.USCRIPT_LINEAR_B:
+      case UScriptCode.USCRIPT_TAI_LE:
+      case UScriptCode.USCRIPT_UGARITIC:
+      case UScriptCode.USCRIPT_BUGINESE:
+      case UScriptCode.USCRIPT_KHAROSHTHI:
+      case UScriptCode.USCRIPT_SYLOTI_NAGRI:
+      case UScriptCode.USCRIPT_NEW_TAI_LUE:
+      case UScriptCode.USCRIPT_TIFINAGH:
+      case UScriptCode.USCRIPT_OLD_PERSIAN:
+      case UScriptCode.USCRIPT_BALINESE:
+      case UScriptCode.USCRIPT_BATAK:
+      case UScriptCode.USCRIPT_BLISSYMBOLS:
+      case UScriptCode.USCRIPT_BRAHMI:
+      case UScriptCode.USCRIPT_CHAM:
+      case UScriptCode.USCRIPT_DEMOTIC_EGYPTIAN:
+      case UScriptCode.USCRIPT_HIERATIC_EGYPTIAN:
+      case UScriptCode.USCRIPT_EGYPTIAN_HIEROGLYPHS:
+      case UScriptCode.USCRIPT_KHUTSURI:
+      case UScriptCode.USCRIPT_PAHAWH_HMONG:
+      case UScriptCode.USCRIPT_HARAPPAN_INDUS:
+      case UScriptCode.USCRIPT_JAVANESE:
+      case UScriptCode.USCRIPT_KAYAH_LI:
+      case UScriptCode.USCRIPT_LEPCHA:
+      case UScriptCode.USCRIPT_LINEAR_A:
+      case UScriptCode.USCRIPT_MANDAEAN:
+      case UScriptCode.USCRIPT_MAYAN_HIEROGLYPHS:
+      case UScriptCode.USCRIPT_MEROITIC:
+      case UScriptCode.USCRIPT_NKO:
+      case UScriptCode.USCRIPT_ORKHON:
+      case UScriptCode.USCRIPT_OLD_PERMIC:
+      case UScriptCode.USCRIPT_PHAGS_PA:
+      case UScriptCode.USCRIPT_PHOENICIAN:
+      case UScriptCode.USCRIPT_PHONETIC_POLLARD:
+      case UScriptCode.USCRIPT_RONGORONGO:
+      case UScriptCode.USCRIPT_SARATI:
+      case UScriptCode.USCRIPT_ESTRANGELO_SYRIAC:
+      case UScriptCode.USCRIPT_WESTERN_SYRIAC:
+      case UScriptCode.USCRIPT_EASTERN_SYRIAC:
+      case UScriptCode.USCRIPT_TENGWAR:
+      case UScriptCode.USCRIPT_VAI:
+      case UScriptCode.USCRIPT_VISIBLE_SPEECH:
+      case UScriptCode.USCRIPT_CUNEIFORM:
+      case UScriptCode.USCRIPT_CARIAN:
+      case UScriptCode.USCRIPT_LANNA:
+      case UScriptCode.USCRIPT_LYCIAN:
+      case UScriptCode.USCRIPT_LYDIAN:
+      case UScriptCode.USCRIPT_OL_CHIKI:
+      case UScriptCode.USCRIPT_REJANG:
+      case UScriptCode.USCRIPT_SAURASHTRA:
+      case UScriptCode.USCRIPT_SIGN_WRITING:
+      case UScriptCode.USCRIPT_SUNDANESE:
+      case UScriptCode.USCRIPT_MOON:
+      case UScriptCode.USCRIPT_MEITEI_MAYEK:
+      case UScriptCode.USCRIPT_IMPERIAL_ARAMAIC:
+      case UScriptCode.USCRIPT_AVESTAN:
+      case UScriptCode.USCRIPT_CHAKMA:
+      case UScriptCode.USCRIPT_KAITHI:
+      case UScriptCode.USCRIPT_MANICHAEAN:
+      case UScriptCode.USCRIPT_INSCRIPTIONAL_PAHLAVI:
+      case UScriptCode.USCRIPT_PSALTER_PAHLAVI:
+      case UScriptCode.USCRIPT_BOOK_PAHLAVI:
+      case UScriptCode.USCRIPT_INSCRIPTIONAL_PARTHIAN:
+      case UScriptCode.USCRIPT_SAMARITAN:
+      case UScriptCode.USCRIPT_TAI_VIET:
+      case UScriptCode.USCRIPT_BAMUM:
+      case UScriptCode.USCRIPT_LISU:
+      case UScriptCode.USCRIPT_NAKHI_GEBA:
+      case UScriptCode.USCRIPT_OLD_SOUTH_ARABIAN:
+      case UScriptCode.USCRIPT_BASSA_VAH:
+      case UScriptCode.USCRIPT_DUPLOYAN_SHORTAND:
+      case UScriptCode.USCRIPT_ELBASAN:
+      case UScriptCode.USCRIPT_GRANTHA:
+      case UScriptCode.USCRIPT_KPELLE:
+      case UScriptCode.USCRIPT_LOMA:
+      case UScriptCode.USCRIPT_MENDE:
+      case UScriptCode.USCRIPT_MEROITIC_CURSIVE:
+      case UScriptCode.USCRIPT_OLD_NORTH_ARABIAN:
+      case UScriptCode.USCRIPT_NABATAEAN:
+      case UScriptCode.USCRIPT_PALMYRENE:
+      case UScriptCode.USCRIPT_SINDHI:
+      case UScriptCode.USCRIPT_WARANG_CITI:
+      default: // anything new is going to be pretty wild
+        return ScriptType.COMPLEX;
+    }
+  }
+}

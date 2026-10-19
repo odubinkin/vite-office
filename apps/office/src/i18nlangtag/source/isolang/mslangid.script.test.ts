@@ -1,5 +1,8 @@
 /** @fileoverview Original static script exceptions,primary categories and configured fallback resolution for native font defaults. */
 import { expect, it } from "vitest";
+it("retains the published ScriptType values rather than conflating weak with an empty mask", /** Pins the actual original ScriptType.idl integer contract. @returns Nothing. */ () => {
+  expect([S.LATIN, S.ASIAN, S.COMPLEX, S.WEAK]).toEqual([1, 2, 3, 4]);
+});
 import {
   ScriptType as S,
   getScriptType,

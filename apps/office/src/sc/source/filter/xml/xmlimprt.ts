@@ -1,4 +1,13 @@
 /** @fileoverview Calc scalar,cell-font and row-geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { FontPitch } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import {
+  XMLFontStylesContext,
+  type OdfFontFaceMetadata,
+  type OdfEmbeddedFont,
+} from "../../../../xmloff/source/style/XMLFontStylesContext";
+import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 import type { ScTable } from "../../../inc/table";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
 import { XMLTableStylesContext } from "./xmlstyli";
@@ -26,6 +35,39 @@ export interface ScXMLImportOptions extends OdfXmlParseOptions {
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   readonly docImport: ScDocumentImport;
   private cells = 0;
+  private readonly fontFaces = new Map<string, SvxFontItem>();
+  /** Registers original five-field font declarations through the common context. @param name - Reference name. @param family - Family names. @param generic - Family class. @param metadata - Native remaining fields. @returns Nothing. */
+  registerFontFace(
+    name: string,
+    family: string,
+    generic: string | undefined,
+    metadata?: OdfFontFaceMetadata,
+  ): void {
+    this.fontFaces.set(
+      name,
+      new SvxFontItem(
+        getFontFamilyFromGeneric(generic),
+        family,
+        metadata?.styleName ?? "",
+        metadata?.pitch ?? FontPitch.PITCH_DONTKNOW,
+        metadata?.charSet ?? RTL_TEXTENCODING_UTF8,
+        0,
+      ),
+    );
+  }
+  /** Diagnoses the currently unported embedded-font package resource path. @param font - Original shared declaration. @returns Nothing. */
+  registerEmbeddedFont(font: OdfEmbeddedFont): void {
+    void font;
+    this.unsupported("embedded font resources are not preserved");
+  }
+  /** Borrows one actual declared font item. @param name - ODF reference. @returns Font or absent. */
+  GetFontFace(name: string): SvxFontItem | undefined {
+    return this.fontFaces.get(name);
+  }
+  /** Creates the original shared declaration context with the XML UTF8 encoding. @returns Font declarations. */
+  CreateFontDeclsContext(): XMLFontStylesContext {
+    return new XMLFontStylesContext(this, RTL_TEXTENCODING_UTF8);
+  }
   private readonly autoStyles = new Map<string, CellAttributeHolder>();
   private body = false;
   private readonly rowStyles = new Map<
@@ -119,6 +161,25 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     void attributes;
     throw new Error("ODS unknown document root");
   }
+  /** Imports font declarations from the native styles stream before cell content. Named styles remain diagnosed by the existing context. @param xml - Styles stream. @returns Nothing. */
+  importStyles(xml: string): void {
+    parseOdfXmlStream(
+      xml,
+      {
+        /** Requires the original styles root. @param element - Token. @returns Document context. */
+        createFastContext: (element: XMLToken): SvXMLImportContext => {
+          if (element !== XMLToken.OFFICE_DOCUMENT_STYLES)
+            throw new Error("ODS document-styles expected");
+          return new ScXMLDocContext_Impl(this);
+        },
+        /** Rejects an unrelated styles root. @returns Never. */
+        createUnknownContext(): never {
+          throw new Error("ODS unknown styles root");
+        },
+      },
+      this.options,
+    );
+  }
   /** Parses directly into the real document with native normal recalculation disabled during import. @param xml - Content. @returns Nothing. */
   importContent(xml: string): void {
     if (this.document.GetTableCount()) throw new Error("ODS import requires a fresh document");
@@ -139,6 +200,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
       for (const holder of this.autoStyles.values()) holder.Dispose();
       this.autoStyles.clear();
       this.rowStyles.clear();
+      this.fontFaces.clear();
     }
   }
   /** Marks the unique spreadsheet body. @returns Context. */
@@ -162,7 +224,11 @@ class ScXMLDocContext_Impl extends ScXMLImportContext {
       return new SvXMLIgnoreContext(true);
     }
     if (element === XMLToken.OFFICE_AUTOMATIC_STYLES) return new XMLTableStylesContext(this.owner);
-    if (element === XMLToken.OFFICE_FONT_FACE_DECLS) return new SvXMLIgnoreContext(true);
+    if (element === XMLToken.OFFICE_FONT_FACE_DECLS) return this.owner.CreateFontDeclsContext();
+    if (element === XMLToken.OFFICE_STYLES || element === XMLToken.OFFICE_MASTER_STYLES) {
+      this.owner.unsupported("named and master styles are not preserved");
+      return new SvXMLIgnoreContext(true);
+    }
     throw new Error("ODS document feature is not implemented");
   }
 }

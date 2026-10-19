@@ -1,5 +1,5 @@
 /** @fileoverview Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx. */
-
+import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -248,7 +248,7 @@ export function CreateWriterFontUndo(
   paragraph: SwTextNode,
   start: number,
   end: number,
-  family: string,
+  family: string | SvxFontItem,
   before: SwUndoCursorState,
   after: SwUndoCursorState,
 ): SwUndoAttr | undefined {

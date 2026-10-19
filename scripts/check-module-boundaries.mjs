@@ -193,6 +193,26 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // Original mslangid.cxx uses css::i18n::ScriptType from the published API.
+  [
+    "i18nlangtag/source/isolang/mslangid.script.ts",
+    new Set(["offapi/com/sun/star/i18n/ScriptType.ts"]),
+  ],
+  // Original BreakIteratorImpl includes o3tl/string_view.hxx and the generated i18n ScriptType.hpp.
+  [
+    "i18npool/source/breakiterator/breakiteratorImpl.ts",
+    new Set(["o3tl/inc/string_view.ts", "offapi/com/sun/star/i18n/ScriptType.ts"]),
+  ],
+  // Browser composition borrows the actual producer for the consumed XBreakIterator port.
+  // Native documen6.cxx obtains it via BreakIterator::create;that unported UNO factory is not copied into ScDocument.
+  [
+    "sc/browser/controller/calc-selection-script.ts",
+    new Set(["i18npool/source/breakiterator/breakiteratorImpl.ts"]),
+  ],
+  [
+    "sc/browser/presentation/ScCellText.tsx",
+    new Set(["i18npool/source/breakiterator/breakiteratorImpl.ts"]),
+  ],
   ["sax/source/tools/converter.ts", new Set(["o3tl/inc/numeric.ts"])],
   ["xmloff/source/style/weighhdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
   [
@@ -437,6 +457,11 @@ function findCycle(graph) {
 }
 
 const originalSalO3tlBindings = new Map([
+  // Original o3tl/string_view.hxx::iterateCodePoints calls exactly these rtl/character.hxx helpers.
+  [
+    "o3tl/inc/string_view.ts -> sal/inc/rtl/character.ts",
+    ["isHighSurrogate", "isLowSurrogate", "combineSurrogates"],
+  ],
   // Original o3tl/string_view.hxx::toDouble calls rtl_math_uStringToDouble from rtl/math.h.
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/math.h.ts", ["rtl_math_uStringToDouble"]],
   // Original unit_conversion.hxx uses these exact SAL signed64 bounds.

@@ -206,9 +206,9 @@ it("renders native formatting placements with the bound shared font-size control
   ).toEqual(labels);
   const fonts = within(bar).getAllByRole("combobox");
   expect(fonts).toHaveLength(2);
-  expect(fontsRequested).not.toHaveBeenCalled();
-  expect(fonts[0]).toBeDisabled();
-  expect(fonts[0]).toHaveValue("");
+  expect(fontsRequested).toHaveBeenCalled();
+  expect(fonts[0]).toBeEnabled();
+  expect(fonts[0]).toHaveValue(session.controller.GetFontFamily());
   expect(fonts[1]).toBeEnabled();
   expect(fonts[1]).toHaveValue("10");
   for (const button of within(bar).getAllByRole("button")) {

@@ -1,6 +1,8 @@
 /** @fileoverview Actual Writer font-family/point-size widgets shared with Calc;the frame supplies selected value,availability and acceptance ports. */
 import { useEffect, useState } from "react";
 import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
+import { createBrowserFontItem } from "./font-item";
+import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 /** Device-backed font selector. @param props - Command surface properties. @returns Selector. */
 export function FontNameSelect({
   value,
@@ -14,7 +16,7 @@ export function FontNameSelect({
   readonly value: unknown;
   readonly enabled: boolean;
   readonly label: string;
-  readonly onSelect: (value: string) => void;
+  readonly onSelect: (value: SvxFontItem) => void;
   readonly embeddedFontFamilies?: readonly string[];
   readonly fontAvailability?: Readonly<Record<string, boolean>>;
   readonly unavailableFontMessage?: string;
@@ -52,7 +54,7 @@ export function FontNameSelect({
           /** Applies the selected font. @param event - Select change. @returns Nothing. */ (
             event,
           ) => {
-            onSelect(event.target.value);
+            onSelect(createBrowserFontItem(event.target.value));
           }
         }
         style={{ fontFamily: selected }}

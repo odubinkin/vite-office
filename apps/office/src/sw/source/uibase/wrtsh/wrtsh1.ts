@@ -661,7 +661,7 @@ export class SwWrtShell extends SwFEShell {
   }
 
   /** Applies a font family. @param fontFamily - Selected family. @returns Whether document content changed. */
-  public SetFontFamily(fontFamily: string): boolean {
+  public SetFontFamily(fontFamily: string | SvxFontItem): boolean {
     return this.textShell.SetFontFamily(fontFamily);
   }
 

@@ -70,8 +70,8 @@ for (const viewport of [
             ),
         ),
     ).toEqual(labels);
-    await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).toBeDisabled();
-    await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).toHaveValue("");
+    await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).toBeEnabled();
+    await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).not.toHaveValue("");
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toBeEnabled();
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue("10");
     for (let index = 0; index < 31; index++) {

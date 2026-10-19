@@ -1,0 +1,39 @@
+/** @fileoverview Original ICU78.3 Unicode property-vector,script and block scalar algorithms over the actual frozen data. Remaining character APIs are unported. */
+import {
+  propsVectorsTrie,
+  propsVectors,
+  propsVectorsColumns,
+  scriptExtensions,
+  block_trie,
+} from "./uchar_props_data";
+import { UTRIE2_GET16 } from "./utrie2.h";
+import { ucptrie_get } from "./ucptrie";
+import { UScriptCode } from "./unicode/uscript";
+import type { UBlockCode } from "./unicode/uchar";
+/** Original property-vector lookup;nonnegative column is a native precondition. @param c - UChar32. @param column - Property column. @returns Unsigned properties. */
+export function u_getUnicodeProperties(c: number, column: number): number {
+  if (column >= propsVectorsColumns) return 0;
+  const index = UTRIE2_GET16(propsVectorsTrie, c);
+  return propsVectors[index + column] as number;
+}
+/** Original status-aware script lookup and Script_Extensions handling. @param c - UChar32. @param error - Mutable UErrorCode or null. @returns Script identity. */
+export function uscript_getScript(c: number, error: [number] | null): UScriptCode {
+  c |= 0;
+  if (error === null || error[0] > 0) return UScriptCode.USCRIPT_INVALID_CODE;
+  if (c >>> 0 > 0x10ffff) {
+    error[0] = 1;
+    return UScriptCode.USCRIPT_INVALID_CODE;
+  }
+  const scriptX = u_getUnicodeProperties(c, 0) & 0xfff,
+    codeOrIndex = scriptX & 0x3ff;
+  if (scriptX < 0x400) return codeOrIndex as UScriptCode;
+  if (scriptX < 0x800) return UScriptCode.USCRIPT_COMMON;
+  if (scriptX < 0xc00) return UScriptCode.USCRIPT_INHERITED;
+  return scriptExtensions[codeOrIndex] as UScriptCode;
+}
+/** Original small block trie uses code points shifted by four unless out of range. @param c - UChar32. @returns Native block identity. */
+export function ublock_getCode(c: number): UBlockCode {
+  let c4 = c >>> 0;
+  if (c4 <= 0x10ffff) c4 >>>= 4;
+  return ucptrie_get(block_trie, c4 | 0) as UBlockCode;
+}

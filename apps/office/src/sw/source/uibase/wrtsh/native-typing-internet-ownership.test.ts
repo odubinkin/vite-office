@@ -309,15 +309,9 @@ describe("native typed internet item ownership", /** Registers real history and 
   });
   it("keeps a zero-length explicit item update inert", /** Checks the source-owned map no-op boundary. @returns Nothing. */ function zeroCase(): void {
     const owner = fixture();
-    expect(
-      owner.map.insertText(
-        8,
-        3,
-        0,
-        { bold: true, italic: false, underline: false },
-        owner.node.GetSwAttrSet(),
-      ),
-    ).toBe(owner.map);
+    expect(owner.map.insertText(8, 3, 0, bold(owner.doc), owner.node.GetSwAttrSet())).toBe(
+      owner.map,
+    );
     check(owner);
     expect(owner.attr.end).toBe(6);
   });
