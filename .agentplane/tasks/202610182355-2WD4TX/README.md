@@ -4,7 +4,7 @@ title: "Implement native RTL general Unicode number formatting and buffer insert
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,27 @@ verification:
   updated_by: "CODER"
   note: "Full8format Unicode formatter and real replace/insert owners match122765genuine normal/ASanUBSan states plus37026prior float buffers;actual upstream negative-F overflow separately reproduced and bounded honestly. Entire changed scope/raw100,wholeCalc299/raw100,formula32 and all declared gates pass.15paths,goalactive,nextfull30."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T00:07:56.388Z"
+  updated_by: "EVALUATOR"
+  note: "Complete RTL Unicode formatting and actual replacement/insertion contracts meet the approved bounded source scope with100percent changed-module and Calc coverage."
+  evaluated_sha: "d6ca1e55634ce53464c92f752b8137ed99b6c0d7"
+  blueprint_digest: "0ca74aceb9ccb99938ee0e33b8638e0ef08349b52bd9bb0070e766d3c4272ba8"
+  evidence_refs:
+    - ".agentplane/tasks/202610182355-2WD4TX/README.md"
+    - ".agentplane/tasks/202610182355-2WD4TX/quality/20261019-000756388-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610182355-2WD4TX/quality/20261019-000756388-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610182355-2WD4TX/quality/20261019-000756388-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610182355-2WD4TX/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610182355-2WD4TX/verification.md"
+    - ".agentplane/tasks/202610182355-2WD4TX/native-build-summary.json"
+    - ".agentplane/tasks/202610182355-2WD4TX/native-isolated-stack-overflow.log"
+    - ".agentplane/tasks/202610182355-2WD4TX/coverage-summary.json"
+  findings:
+    - "All8native formats and actual enum/28bit sentinel values follow pinned source;pre-round selection,half-up integer rounding,grouping,erase,exponent widths and Dragonbox ignored-zero scale are represented in one existing numeric owner. C facade uses actual SAL allocation/buffer/ref ownership,no synthetic provider."
+    - "122765genuine normal/ASanUBSan states and37026prior float buffers pass on verified138actual objects/346original sources. Native negative-F stack-allocation bug is independently reproduced as expected SIGABRT/ASan,retained with exact input and conservatively excluded from returned-output observations without sanitizer weakening."
+    - "WholeCalc299/raw100,related16files41cases/raw100 S287 B297 F12 L252,formula32,types/finalbuild/static/style/docs/dependencies/provenance/scopedinventories/doctor/routing pass.15intentional paths,clean implementation commit d6ca1e55634c,no validators or thresholds changed."
 commit: null
 comments:
   -
