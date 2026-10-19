@@ -5,6 +5,7 @@
   "apps/office/src/sfx2/source/doc/objsh.ts",
   "apps/office/src/svx/browser/tbxctrls/ColorControl.tsx",
   "apps/office/src/svx/browser/tbxctrls/ColorSelect.tsx",
+  "apps/office/src/svx/browser/tbxctrls/color-item.ts",
   "apps/office/src/svx/inc/xdef.ts",
   "apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
   "apps/office/src/sw/source/uibase/app/docsh.ts",

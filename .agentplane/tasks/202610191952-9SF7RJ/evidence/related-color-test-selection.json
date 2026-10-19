@@ -201,6 +201,7 @@
   "src/sw/source/filter/xml/odt-worker-runtime.test.ts",
   "src/sw/source/filter/xml/xmltbli-default-cell.test.ts",
   "src/sw/source/uibase/app/docsh.test.ts",
+  "src/sw/source/uibase/app/docst.test.ts",
   "src/sw/source/uibase/docvw/native-context-menu.test.ts",
   "src/sw/source/uibase/docvw/native-headline-selection.test.ts",
   "src/sw/source/uibase/docvw/native-list-backspace.test.ts",
