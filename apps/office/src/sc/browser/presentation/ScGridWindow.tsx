@@ -12,6 +12,12 @@ import {
   type UIEvent,
 } from "react";
 import { ScInputMode } from "../../inc/global";
+import {
+  SvxWeightItem,
+  SvxPostureItem,
+  SvxUnderlineItem,
+} from "../../../editeng/source/items/textitem";
+import { FontLineStyle } from "../../../tools/inc/fontenum";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { ATTR_FONT_HEIGHT } from "../../inc/scitems";
 import { ScAddress } from "../../inc/address";
@@ -233,6 +239,12 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                 ) => {
                   const position = new ScAddress(col, r, tab),
                     cell = props.getCell(position);
+                  const pattern = document.GetPattern(position) as ScPatternAttr;
+                  const weight = (pattern.GetItem(102) as SvxWeightItem).GetWeight();
+                  const posture = (pattern.GetItem(103) as SvxPostureItem).GetPosture();
+                  const lineItem = pattern.GetItem(104) as SvxUnderlineItem;
+                  const underline = lineItem.GetLineStyle(),
+                    lineColor = lineItem.GetColor();
                   const active = column === col && row === r;
                   const selected = active || viewData.GetMarkData().IsCellMarked(col, r);
                   return (
@@ -262,6 +274,16 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
                         textAlign: cell.alignment,
+                        fontWeight: [400, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900][weight],
+                        fontStyle: ["normal", "oblique", "italic"][posture],
+                        textDecorationColor:
+                          lineColor.GetAlpha() === 255
+                            ? `rgb(${lineColor.GetRed()}, ${lineColor.GetGreen()}, ${lineColor.GetBlue()})`
+                            : "currentColor",
+                        textDecorationStyle:
+                          underline === FontLineStyle.LINESTYLE_DOUBLE ? "double" : "solid",
+                        textDecorationLine:
+                          underline === FontLineStyle.LINESTYLE_NONE ? "none" : "underline",
                         fontSize: `${((document.GetPattern(position) as ScPatternAttr).GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight() / 20}pt`,
                         left: 48 + col * viewport.columnWidth,
                         width: viewport.columnWidth,

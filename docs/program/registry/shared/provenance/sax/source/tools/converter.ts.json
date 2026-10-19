@@ -40,6 +40,14 @@
         {
           "path": "apps/office/src/sax/source/tools/converter-double.test.ts",
           "marker": "reads ODS scalar numbers"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -97,7 +105,8 @@
     "preservedResponsibilities": [
       "Owns native UTF-8-view measure parsing, supported unit ratios for Twip/MM100 targets, nullable failure, signed rounding and configurable int32 bounds; 95 compiled-native differential cases and focused source-derived assertions cover the implemented contract.",
       "For the existing LABEL_ALIGNMENT mode and LISTTAB/SPACE/NOTHING separators, source-owned xmlnumi parsing now retains zero defaults and MM100 fields with native Converter grammar/failure and SHRT bounds. The MM100 import port now carries both independent native geometry groups; the earlier legacy-to-alignment Twip emulation is removed. Writer numbering property conversion follows unosett.cxx signed MM100/Twip ratios; export projects native MM100 and delegates CM serialization to XML/SAX. ODF 1.3 XML emits explicit label-alignment mode and retains standard command geometry; indents are nonzero-only and tab position is exported only for LISTTAB with a positive value. Context/core assertions and eleven literal common/automatic ODT cases plus both default command marker families verify native quantization, conditional XML and manual reopen state. Full numbering/UNO, legacy position mode/property ownership, NEWLINE extensions, other XML units/versions, defaults and wider obligations remain unverified; no whole-module promotion.",
-      "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim."
+      "Task184 implements the pinned RTL decimal lexer and normalized-to-original offset map with JS Number only for a recognized decimal prefix. Preserve ASCII space/tab,sign,group separators,legacy INF/NAN,partial exponent,no-conversion,status and rounded legacy DBL_MAX behavior. Typed-array views adapt native pointer ranges without allocation/refcount simulation. Native QA and independent binary64 ties/subnormal boundaries verify represented values;NaN payload/physical ABI and other RTL numeric APIs are not claimed. SAX read overloads delegate this single shared owner;no numeric writer/unit overload or complete Calc document/UI/ODS claim.",
+      "Task1KGJBF connects native Calc Bold/Italic/Underline slots through the actual shared Writer command controls to real script-specific weight/posture and underline items,selection state,attribute undo and cell painting. Shared xmloff weight/posture/underline/color handlers retain actual Any,source maps,failed conversion,merge order and consumed unit-converter contracts. Writer text filters now preserve native independent script scalars,font metadata and exact underline style/color instead of browser booleans;automatic-style keys include every represented field,and insertion fragments retain actual native items. Original Writer underline-color ContextFilter suppression is retained. Shared literal underline Worker transport preserves style and packed alpha/color using the real pool;unported complex interface state rejects rather than silently flattening. Native source full constructors,UNO property-set/service/factory graph,complex color XML/Worker transport,rich-text editing,script/device layout,named Calc styles and complete UI/filter parity remain unverified. Source-based managed tests are not a compiled native parity certificate;intentional browser primary-save/open/no-recovery policy remains. Bounded managed verification is recorded in task1KGJBF;no broad parity flags are promoted."
     ],
     "status": "mapped",
     "upstreamPath": "sax/source/tools/converter.cxx",

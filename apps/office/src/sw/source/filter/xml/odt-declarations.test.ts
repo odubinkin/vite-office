@@ -8,6 +8,7 @@ import {
   type OdfXmlDiagnostic,
 } from "../../../../xmloff/source/core/xmlimp";
 import { getXMLToken, ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { exportContentXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 import { RES_BREAK } from "../../../inc/hintids";
@@ -135,17 +136,16 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
     );
     expect((automatic?.GetAttr(RES_PAGEDESC) as SwFormatPageDesc).GetNumOffset()).toBe(2);
   });
-  it("rejects underline colors that diverge from the font color", /** Keeps the bounded underline palette semantically honest. @returns Nothing. */ () => {
-    expect(
-      /** Imports an unsupported explicit underline color. @returns Never. */ () =>
-        importWriterXml(
-          styles(
-            '<style:style style:name="T1" style:family="text"><style:text-properties style:text-underline-color="#abcdef"/></style:style>',
-          ),
-          content("<text:p>Sample</text:p>"),
-          { title: "fixture" },
-        ),
-    ).toThrow("Unsupported ODF underline color");
+  it("preserves independent underline color through native items and XML export", /** Applies the source text style instead of rejecting its explicit palette. @returns Nothing. */ () => {
+    const imported = importWriterXml(
+      styles(
+        '<style:style style:name="T1" style:family="text"><style:text-properties style:text-underline-style="solid" style:text-underline-color="#abcdef"/></style:style>',
+      ),
+      content('<text:p><text:span text:style-name="T1">Sample</text:span></text:p>'),
+      { title: "fixture" },
+    ).document;
+    expect(imported.paragraphs[0]?.GetText()).toBe("Sample");
+    expect(exportContentXml(imported)).toContain('style:text-underline-color="#abcdef"');
   });
 
   it("does not generalize metadata suppression to other ignored subtrees", /** Checks default ignore policy retains diagnostics. @returns Nothing. */ () => {

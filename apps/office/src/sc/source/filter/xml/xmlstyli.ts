@@ -1,4 +1,5 @@
 /** @fileoverview Consumed XMLTableStylesContext cell-font and row-geometry automatic styles; named styles,parent inheritance and remaining format properties stay explicit unsupported metadata. */
+import { importCellTextProperties } from "./xmlstyle";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
 import {
@@ -9,8 +10,6 @@ import {
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { ScPatternAttr } from "../../../inc/patattr";
-import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
-import { ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT } from "../../../inc/scitems";
 /** Actual cell automatic style pool context, sharing the existing XML context chain. */
 export class XMLTableStylesContext extends ScXMLImportContext {
   /** Binds original importer. @param owner - Importer. @returns Context. */
@@ -62,30 +61,12 @@ class XMLTableStyleContext extends ScXMLImportContext {
       this.owner.unsupported("cell style properties");
       return new SvXMLIgnoreContext(true);
     }
-    const pairs = [
-      [XMLToken.FO_FONT_SIZE, ATTR_FONT_HEIGHT],
-      [XMLToken.STYLE_FONT_SIZE_ASIAN, ATTR_CJK_FONT_HEIGHT],
-      [XMLToken.STYLE_FONT_SIZE_COMPLEX, ATTR_CTL_FONT_HEIGHT],
-    ] as const;
-    attributes.assertOnly(
-      pairs.map(
-        /** Returns consumed property token. @param pair - Token and item identity. @returns Token. */ ([
-          token,
-        ]) => token,
-      ),
-      "Calc font height",
+    importCellTextProperties(
+      this.pattern,
+      attributes,
+      /** Retains actual importer diagnostics. @param name - Unsupported property. @returns Nothing. */
+      (name) => this.owner.unsupported(name),
     );
-    const converter = new SvXMLUnitConverter("twip");
-    for (const [token, which] of pairs) {
-      const value = attributes.get(token);
-      if (value === null) continue;
-      const height = converter.convertMeasureToCore(value, 0, 0xffffffff);
-      if (height === null || height <= 0) {
-        this.owner.unsupported("relative or invalid cell font height");
-        continue;
-      }
-      this.pattern.ItemSetPut(new SvxFontHeightItem(height, 100, which));
-    }
     return new SvXMLIgnoreContext(true);
   }
   /** Transfers the style into the importer's real pattern pool. @returns Nothing. */

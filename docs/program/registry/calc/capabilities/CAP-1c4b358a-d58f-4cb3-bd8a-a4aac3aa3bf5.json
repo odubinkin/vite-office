@@ -83,9 +83,10 @@
     "aspect": "command-state",
     "atomicOperation": "calc-font-height-ui",
     "scopeLimitations": [
-      "Font family application,named cell styles,remaining formatting actions and automatic row-height layout remain pending.",
-      "Only normal simple selections and the consumed character prefix100..124 are supported;full native formatting and foreign style inheritance/script-aware painting remain unverified.",
-      "Native QA is a source contract reference,not an executed parity certificate;user-default style export and full native pool configuration remain unverified."
+      "Font family application,named cell styles and remaining formatting actions remain pending.",
+      "Standard automatic row heights are represented for uniform-script unwrapped/unrotated cells. Device startup metrics,script-specific/rich/wrapped/rotated/merged layout,hidden/drawing rows and standalone height dialogs remain unported.",
+      "Original contiguous pool prefix100..143 is supported;remaining cell/page defaults and full native formatting/foreign style inheritance remain unverified.",
+      "Native QA references are source contracts,not an executed broad parity certificate."
     ]
   }
 }

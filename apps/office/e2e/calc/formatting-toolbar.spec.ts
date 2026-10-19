@@ -76,7 +76,8 @@ for (const viewport of [
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue("10");
     for (let index = 0; index < 31; index++) {
       const button = bar.getByRole("button").nth(index);
-      await expect(button).toBeDisabled();
+      if (index < 3) await expect(button).toBeEnabled();
+      else await expect(button).toBeDisabled();
       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
       else await expect(button.locator("svg")).toHaveCount(1);
       expect((await button.boundingBox())?.width).toBe(32);
@@ -95,6 +96,32 @@ for (const viewport of [
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("9");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await expect(page.getByRole("gridcell", { name: "A1", exact: true })).toHaveText("9");
+    await bar.getByRole("button", { name: "Bold", exact: true }).click();
+    const cell = page.getByRole("gridcell", { name: "A1", exact: true });
+    await expect(cell).toHaveCSS("font-weight", "700");
+    await expect(bar.getByRole("button", { name: "Bold", exact: true })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await page.getByRole("grid").focus();
+    await page.keyboard.press("Control+i");
+    await expect(cell).toHaveCSS("font-style", "italic");
+    await page.getByRole("menuitem", { name: "Format", exact: true }).click();
+    await page.getByRole("menuitem", { name: "Text", exact: true }).click();
+    await page.getByRole("menuitemcheckbox", { name: "Double Underline", exact: true }).click();
+    await expect(cell).toHaveCSS("text-decoration-style", "double");
+    await page.getByRole("button", { name: "Undo", exact: true }).click();
+    await expect(cell).toHaveCSS("text-decoration-line", "none");
+    await page.getByRole("button", { name: "Redo", exact: true }).click();
+    await expect(cell).toHaveCSS("text-decoration-style", "double");
+    await expect(bar.getByRole("button", { name: "Underline", exact: true })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await page.screenshot({
+      animations: "disabled",
+      path: test.info().outputPath(`calc-character-formatting-${viewport.width}.png`),
+    });
     expect(errors).toEqual([]);
   });
 }

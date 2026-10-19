@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { cellTextWhichIds, exportCellTextProperties } from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
@@ -18,8 +19,6 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
-import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
-import { ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT } from "../../../inc/scitems";
 /** Browser export bounds/cancellation over the native content traversal. */
 export interface ScXMLExportOptions {
   readonly isCancelled?: () => boolean;
@@ -36,7 +35,7 @@ export class ScXMLExport {
   ) {}
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
   private styleName(pattern: ScPatternAttr): string {
-    const ids = [ATTR_FONT_HEIGHT, ATTR_CJK_FONT_HEIGHT, ATTR_CTL_FONT_HEIGHT];
+    const ids = cellTextWhichIds;
     if (
       !ids.some(
         /** Tests genuine direct item state. @param which - Identity. @returns Set. */ (which) =>
@@ -44,12 +43,7 @@ export class ScXMLExport {
       )
     )
       return "";
-    const key = ids
-      .map(
-        /** Reads original effective twips. @param which - Identity. @returns Twips. */ (which) =>
-          (pattern.GetItem(which) as SvxFontHeightItem).GetHeight(),
-      )
-      .join(",");
+    const key = exportCellTextProperties(pattern);
     let name = this.styles.get(key);
     if (name === undefined) {
       name = `ce${this.styles.size + 1}`;
@@ -146,8 +140,7 @@ export class ScXMLExport {
     }
     let automatic = "";
     for (const [key, name] of this.styles) {
-      const heights = key.split(",").map(Number);
-      automatic += `<style:style style:name="${name}" style:family="table-cell"><style:text-properties fo:font-size="${(heights[0] as number) / 20}pt" style:font-size-asian="${(heights[1] as number) / 20}pt" style:font-size-complex="${(heights[2] as number) / 20}pt"/></style:style>`;
+      automatic += `<style:style style:name="${name}" style:family="table-cell"><style:text-properties${key}/></style:style>`;
     }
     for (const [key, name] of this.rowStyles) {
       const [height, optimal] = key.split(",");

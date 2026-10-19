@@ -349,7 +349,9 @@ const commands = Object.fromEntries(
           ? findEnglishLabelProperty(spec.commandUrl, "PopupLabel", genericCommands, writerCommands)
           : undefined;
       const shortcuts =
-        spec.browserLabel === undefined ? findShortcuts(spec.commandUrl, accelerators) : [];
+        spec.browserLabel === undefined
+          ? findShortcuts(spec.commandUrl, accelerators, "com.sun.star.text.TextDocument")
+          : [];
       const placements = resourcePaths.filter(
         /** Detects a command placement in an upstream resource. @param _path - Resource path. @param index - Resource index. @returns Whether placed. */ (
           _,

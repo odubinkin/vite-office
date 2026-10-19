@@ -1,6 +1,16 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import {
+  SvxFontItem,
+  SvxFontHeightItem,
+  SvxWeightItem,
+  SvxPostureItem,
+  SvxUnderlineItem,
+} from "../../../../editeng/source/items/textitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
+import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 
 import { SwXMLTableLines } from "./xmltble";
@@ -19,14 +29,8 @@ import {
   type SvxLRSpaceItem,
   type SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
-import {
-  SvxFontItem,
-  SvxFontHeightItem,
-  SvxPostureItem,
-  SvxUnderlineItem,
-  SvxWeightItem,
-} from "../../../../editeng/source/items/textitem";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { SfxUInt16Item } from "../../../../svl/source/items/intitem";
@@ -34,7 +38,6 @@ import type { SwNumRule } from "../../core/doc/number";
 import { SvxXMLNumRuleExport } from "../../../../xmloff/source/style/xmlnume";
 import type { SwNumRuleItem } from "../../core/para/paratr";
 import { exportParagraphStyleNumberingAttributes } from "../../../../xmloff/source/style/styleexp";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   escapeXml,
@@ -51,6 +54,8 @@ import {
   type XMLTextListRuleSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
+  RES_TXTATR_AUTOFMT,
+  RES_TXTATR_INETFMT,
   RES_CHRATR_CJK_POSTURE,
   RES_BREAK,
   RES_PAGEDESC,
@@ -104,12 +109,13 @@ import { SwXNumberingRules } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
+import { GetTextAttrMode } from "../../../inc/swtypes";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
 import { createWriterFontAutoStylePool, registerWriterFontFace } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
-import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
@@ -529,14 +535,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
           },
         }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
-    runs: projectWriterTextRuns(node).map(
-      /** Projects one canonical direct-format run. @param run - Writer run. @returns Neutral run. */
-      (run) => ({
-        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
-        properties: { ...run.attributes },
-        text: run.text,
-      }),
-    ),
+    runs: projectXmlTextRuns(node),
     style: node.GetParagraphStyle(),
     styleName: getWriterOdfStyleName(node.GetParagraphStyle()),
   };
@@ -613,131 +612,6 @@ function assertSupportedItems(
   );
   if (unsupported !== undefined)
     throw new Error(`ODT export does not support WhichId ${unsupported.Which()} on ${owner}.`);
-}
-
-/** Projects synchronized character items to ODF properties. @param set - Optional Writer item set. @param inherited - Whether parent sets participate. @returns Properties when at least one direct item exists. */
-function getCharacterProperties(
-  set: SfxItemSet | undefined,
-  inherited: boolean,
-): Partial<OdfCharacterProperties> | undefined {
-  if (set === undefined) return undefined;
-  const weightIds = [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT];
-  const postureIds = [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE];
-  const directWeight = weightIds.some(
-    /** Detects a direct script weight. @param which - Weight WhichId. @returns Whether set. */
-    (which) => set.GetItemIfSet(which, false) !== undefined,
-  );
-  const directPosture = postureIds.some(
-    /** Detects a direct script posture. @param which - Posture WhichId. @returns Whether set. */
-    (which) => set.GetItemIfSet(which, false) !== undefined,
-  );
-  const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
-  const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
-  const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
-  const fontSizeIds = [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE];
-  const directFontSize = fontSizeIds.some(
-    /** Detects a direct script font size. @param which - Font-size WhichId. @returns Whether set. */ (
-      which,
-    ) => set.GetItemIfSet(which, false) !== undefined,
-  );
-  const explicitFontSize = fontSizeIds.some(
-    /** Detects an explicitly set script font size in the selected inheritance chain. @param which - Font-size WhichId. @returns Whether set. */ (
-      which,
-    ) => set.GetItemIfSet(which, inherited) !== undefined,
-  );
-  const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
-  const asianFont = set.GetItemIfSet(RES_CHRATR_CJK_FONT, inherited);
-  const complexFont = set.GetItemIfSet(RES_CHRATR_CTL_FONT, inherited);
-  if (
-    !inherited &&
-    !directWeight &&
-    !directPosture &&
-    !directUnderline &&
-    !directFontSize &&
-    color === undefined &&
-    highlight === undefined &&
-    font === undefined &&
-    asianFont === undefined &&
-    complexFont === undefined
-  )
-    return undefined;
-  const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
-  const asianWeight = set.Get(RES_CHRATR_CJK_WEIGHT, inherited);
-  const complexWeight = set.Get(RES_CHRATR_CTL_WEIGHT, inherited);
-  const posture = set.Get(RES_CHRATR_POSTURE, inherited);
-  const asianPosture = set.Get(RES_CHRATR_CJK_POSTURE, inherited);
-  const complexPosture = set.Get(RES_CHRATR_CTL_POSTURE, inherited);
-  const underline = set.Get(RES_CHRATR_UNDERLINE, inherited);
-  const fontSize = set.Get(RES_CHRATR_FONTSIZE, inherited);
-  const asianFontSize = set.Get(RES_CHRATR_CJK_FONTSIZE, inherited);
-  const complexFontSize = set.Get(RES_CHRATR_CTL_FONTSIZE, inherited);
-  if (
-    !(weight instanceof SvxWeightItem) ||
-    !(asianWeight instanceof SvxWeightItem) ||
-    !(complexWeight instanceof SvxWeightItem) ||
-    !(posture instanceof SvxPostureItem) ||
-    !(asianPosture instanceof SvxPostureItem) ||
-    !(complexPosture instanceof SvxPostureItem) ||
-    !(underline instanceof SvxUnderlineItem) ||
-    (color !== undefined && !(color instanceof SfxStringItem)) ||
-    (highlight !== undefined && !(highlight instanceof SfxStringItem)) ||
-    !(fontSize instanceof SvxFontHeightItem) ||
-    !(asianFontSize instanceof SvxFontHeightItem) ||
-    !(complexFontSize instanceof SvxFontHeightItem)
-  )
-    throw new Error("ODT character item is invalid.");
-  if (
-    weight.GetBoolValue() !== asianWeight.GetBoolValue() ||
-    weight.GetBoolValue() !== complexWeight.GetBoolValue() ||
-    posture.GetBoolValue() !== asianPosture.GetBoolValue() ||
-    posture.GetBoolValue() !== complexPosture.GetBoolValue() ||
-    fontSize.GetHeight() !== asianFontSize.GetHeight() ||
-    fontSize.GetHeight() !== complexFontSize.GetHeight()
-  )
-    throw new Error("ODT export does not support script-specific character formatting.");
-  const fontFamilyGeneric =
-      font instanceof SvxFontItem ? getFontFamilyGeneric(font.GetFamily()) : undefined,
-    asianGeneric =
-      asianFont instanceof SvxFontItem ? getFontFamilyGeneric(asianFont.GetFamily()) : undefined,
-    complexGeneric =
-      complexFont instanceof SvxFontItem
-        ? getFontFamilyGeneric(complexFont.GetFamily())
-        : undefined;
-  return {
-    ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
-    ...(font instanceof SvxFontItem
-      ? {
-          fontFamily: font.GetFamilyName(),
-          fontStyleName: font.GetStyleName(),
-          fontPitch: font.GetPitch(),
-          fontCharSet: font.GetCharSet(),
-          ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
-        }
-      : {}),
-    ...(asianFont instanceof SvxFontItem
-      ? {
-          fontFamilyAsian: asianFont.GetFamilyName(),
-          fontStyleNameAsian: asianFont.GetStyleName(),
-          fontPitchAsian: asianFont.GetPitch(),
-          fontCharSetAsian: asianFont.GetCharSet(),
-          ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
-        }
-      : {}),
-    ...(complexFont instanceof SvxFontItem
-      ? {
-          fontFamilyComplex: complexFont.GetFamilyName(),
-          fontStyleNameComplex: complexFont.GetStyleName(),
-          fontPitchComplex: complexFont.GetPitch(),
-          fontCharSetComplex: complexFont.GetCharSet(),
-          ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
-        }
-      : {}),
-    ...(explicitFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
-    ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
-    ...(inherited || directWeight ? { bold: weight.GetBoolValue() } : {}),
-    ...(inherited || directPosture ? { italic: posture.GetBoolValue() } : {}),
-    ...(inherited || directUnderline ? { underline: underline.GetBoolValue() } : {}),
-  };
 }
 
 /** Projects direct paragraph items to ODF properties. @param set - Optional item set. @returns Properties when present. */
@@ -885,4 +759,179 @@ function exportAlignment(alignment: OdfParagraphAlignment): string {
   if (alignment === "left") return "start";
   if (alignment === "right") return "end";
   return alignment;
+}
+
+/** Enumerates actual native hint boundaries without merging through browser booleans. @param node - Canonical text owner. @returns Source item-based XML runs. */
+function projectXmlTextRuns(node: SwTextNode): XMLTextParagraphSource["runs"] {
+  const boundaries = new Set([0, node.Len()]);
+  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+    boundaries.add(hint.GetStart());
+    boundaries.add(hint.end);
+  }
+  const ordered = [...boundaries].sort(
+    /** Orders UTF16 source positions. @param a - First. @param b - Second. @returns Ordering. */ (
+      a,
+      b,
+    ) => a - b,
+  );
+  return ordered.slice(0, -1).map(
+    /** Reads the native items and independent hyperlink for one source segment. @param start - Segment start. @param index - Boundary index. @returns XML run. */ (
+      start,
+      index,
+    ) => {
+      const end = ordered[index + 1] as number;
+      const items = new SfxItemSet(node.GetSwAttrSet());
+      const auto = node.GetTextAttrAt(start, RES_TXTATR_AUTOFMT, GetTextAttrMode.Default);
+      if (auto?.format instanceof SwFormatAutoFormat) items.PutSet(auto.format.GetStyleHandle());
+      const link = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
+      return {
+        text: node.GetText().slice(start, end),
+        properties: getCharacterProperties(items, true) as OdfCharacterProperties,
+        ...(link?.format instanceof SwFormatINetFormat
+          ? { hyperlink: link.format.GetHyperlink() }
+          : {}),
+      };
+    },
+  );
+}
+
+/** Projects independent native character items to ODF properties. @param set - Optional Writer item set. @param inherited - Whether parent sets participate. @returns Properties when at least one direct item exists. */
+export function getCharacterProperties(
+  set: SfxItemSet | undefined,
+  inherited: boolean,
+): Partial<OdfCharacterProperties> | undefined {
+  if (set === undefined) return undefined;
+  const weightIds = [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT];
+  const postureIds = [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE];
+  const directWeight = weightIds.some(
+    /** Detects a direct script weight. @param which - Weight WhichId. @returns Whether set. */
+    (which) => set.GetItemIfSet(which, false) !== undefined,
+  );
+  const directPosture = postureIds.some(
+    /** Detects a direct script posture. @param which - Posture WhichId. @returns Whether set. */
+    (which) => set.GetItemIfSet(which, false) !== undefined,
+  );
+  const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
+  const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
+  const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
+  const fontSizeIds = [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE];
+  const directFontSize = fontSizeIds.some(
+    /** Detects a direct script font size. @param which - Font-size WhichId. @returns Whether set. */ (
+      which,
+    ) => set.GetItemIfSet(which, false) !== undefined,
+  );
+  const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
+  const asianFont = set.GetItemIfSet(RES_CHRATR_CJK_FONT, inherited);
+  const complexFont = set.GetItemIfSet(RES_CHRATR_CTL_FONT, inherited);
+  if (
+    !inherited &&
+    !directWeight &&
+    !directPosture &&
+    !directUnderline &&
+    !directFontSize &&
+    color === undefined &&
+    highlight === undefined &&
+    font === undefined &&
+    asianFont === undefined &&
+    complexFont === undefined
+  )
+    return undefined;
+  const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
+  const asianWeight = set.Get(RES_CHRATR_CJK_WEIGHT, inherited);
+  const complexWeight = set.Get(RES_CHRATR_CTL_WEIGHT, inherited);
+  const posture = set.Get(RES_CHRATR_POSTURE, inherited);
+  const asianPosture = set.Get(RES_CHRATR_CJK_POSTURE, inherited);
+  const complexPosture = set.Get(RES_CHRATR_CTL_POSTURE, inherited);
+  const underline = set.Get(RES_CHRATR_UNDERLINE, inherited);
+  const fontSize = set.Get(RES_CHRATR_FONTSIZE, inherited);
+  const asianFontSize = set.Get(RES_CHRATR_CJK_FONTSIZE, inherited);
+  const complexFontSize = set.Get(RES_CHRATR_CTL_FONTSIZE, inherited);
+  if (
+    !(weight instanceof SvxWeightItem) ||
+    !(asianWeight instanceof SvxWeightItem) ||
+    !(complexWeight instanceof SvxWeightItem) ||
+    !(posture instanceof SvxPostureItem) ||
+    !(asianPosture instanceof SvxPostureItem) ||
+    !(complexPosture instanceof SvxPostureItem) ||
+    !(underline instanceof SvxUnderlineItem) ||
+    (color !== undefined && !(color instanceof SfxStringItem)) ||
+    (highlight !== undefined && !(highlight instanceof SfxStringItem)) ||
+    !(fontSize instanceof SvxFontHeightItem) ||
+    !(asianFontSize instanceof SvxFontHeightItem) ||
+    !(complexFontSize instanceof SvxFontHeightItem)
+  )
+    throw new Error("ODT character item is invalid.");
+  const fontFamilyGeneric =
+      font instanceof SvxFontItem ? getFontFamilyGeneric(font.GetFamily()) : undefined,
+    asianGeneric =
+      asianFont instanceof SvxFontItem ? getFontFamilyGeneric(asianFont.GetFamily()) : undefined,
+    complexGeneric =
+      complexFont instanceof SvxFontItem
+        ? getFontFamilyGeneric(complexFont.GetFamily())
+        : undefined;
+  return {
+    ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
+    ...(font instanceof SvxFontItem
+      ? {
+          fontFamily: font.GetFamilyName(),
+          fontStyleName: font.GetStyleName(),
+          fontPitch: font.GetPitch(),
+          fontCharSet: font.GetCharSet(),
+          ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
+        }
+      : {}),
+    ...(asianFont instanceof SvxFontItem
+      ? {
+          fontFamilyAsian: asianFont.GetFamilyName(),
+          fontStyleNameAsian: asianFont.GetStyleName(),
+          fontPitchAsian: asianFont.GetPitch(),
+          fontCharSetAsian: asianFont.GetCharSet(),
+          ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
+        }
+      : {}),
+    ...(complexFont instanceof SvxFontItem
+      ? {
+          fontFamilyComplex: complexFont.GetFamilyName(),
+          fontStyleNameComplex: complexFont.GetStyleName(),
+          fontPitchComplex: complexFont.GetPitch(),
+          fontCharSetComplex: complexFont.GetCharSet(),
+          ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
+        }
+      : {}),
+    ...(set.GetItemIfSet(RES_CHRATR_FONTSIZE, inherited) !== undefined
+      ? { fontSizeTwips: fontSize.GetHeight() }
+      : {}),
+    ...(set.GetItemIfSet(RES_CHRATR_CJK_FONTSIZE, inherited) !== undefined
+      ? { fontSizeTwipsAsian: asianFontSize.GetHeight() }
+      : {}),
+    ...(set.GetItemIfSet(RES_CHRATR_CTL_FONTSIZE, inherited) !== undefined
+      ? { fontSizeTwipsComplex: complexFontSize.GetHeight() }
+      : {}),
+    ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
+    ...(inherited || set.GetItemIfSet(RES_CHRATR_WEIGHT, false) !== undefined
+      ? { fontWeight: ConvertFontWeight(weight.GetValue(), "FontWeight") }
+      : {}),
+    ...(inherited || set.GetItemIfSet(RES_CHRATR_CJK_WEIGHT, false) !== undefined
+      ? { fontWeightAsian: ConvertFontWeight(asianWeight.GetValue(), "FontWeight") }
+      : {}),
+    ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_WEIGHT, false) !== undefined
+      ? { fontWeightComplex: ConvertFontWeight(complexWeight.GetValue(), "FontWeight") }
+      : {}),
+    ...(inherited || set.GetItemIfSet(RES_CHRATR_POSTURE, false) !== undefined
+      ? { fontPosture: ConvertFontSlant(posture.GetValue(), "FontItalic") }
+      : {}),
+    ...(inherited || set.GetItemIfSet(RES_CHRATR_CJK_POSTURE, false) !== undefined
+      ? { fontPostureAsian: ConvertFontSlant(asianPosture.GetValue(), "FontItalic") }
+      : {}),
+    ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_POSTURE, false) !== undefined
+      ? { fontPostureComplex: ConvertFontSlant(complexPosture.GetValue(), "FontItalic") }
+      : {}),
+    ...(inherited || directUnderline
+      ? {
+          underlineStyle: underline.GetLineStyle(),
+          underlineColor: underline.GetColor().toUInt32() & 0xffffff,
+          underlineHasColor: underline.GetColor().GetAlpha() === 255,
+        }
+      : {}),
+  };
 }

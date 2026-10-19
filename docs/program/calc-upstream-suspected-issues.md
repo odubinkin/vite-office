@@ -2842,3 +2842,44 @@ Decision: preserve shared context ordering in
 [AdjustBlockHeight](../../apps/office/src/sc/source/ui/view/viewfun2.ts) and exercise it with real
 selected sheets in [rowheight.test.ts](../../apps/office/src/sc/source/core/data/rowheight.test.ts).
 Do not add an independent per-sheet reset as an unrequested upstream fix.
+
+## CALC-197: empty signed numeric input can become a valid minimum font weight
+
+Status: pinned source inspection and managed logical reproduction; no compiled native reproduction.
+
+The signed UTF16 [SAX number converter](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L689)
+checks complete consumption after an optional minus and digit scan, then clamps the RTL result.
+Empty input, whitespace-only input and a bare minus can therefore succeed with the supplied lower
+bound. The original [font-weight handler](../../vendor/libreoffice-reference/xmloff/source/style/weighhdl.cxx#L72)
+uses bounds 100..900, so these inputs become THIN. Its DONTKNOW weight exports as `0`, which
+reimports through the same clamp as THIN rather than DONTKNOW.
+
+Decision: preserve the source parser, clamping and handler map. Managed witnesses are in
+[converter-number.test.ts](../../apps/office/src/sax/source/tools/converter-number.test.ts) and
+[character-hdl.test.ts](../../apps/office/src/xmloff/source/style/character-hdl.test.ts).
+Do not add a digit-presence check or special-case the DONTKNOW roundtrip without an upstream change.
+
+## CALC-198: RGB import validates shape but propagates invalid hex digits as signed bits
+
+Status: pinned source inspection and managed port; compiled native reproduction remains pending.
+
+The [SAX color converter](../../vendor/libreoffice-reference/sax/source/tools/converter.cxx#L640)
+requires seven characters and a leading hash, but does not reject invalid hexadecimal digits.
+[convertToHex](../../vendor/libreoffice-reference/include/o3tl/numeric.hxx#L27) returns -1 for
+an invalid character and combines paired results with signed shifts and bitwise OR. The color
+converter similarly combines RGB pairs and returns success. Thus a shape-valid invalid color can
+produce negative color bits instead of a failed conversion. Invalid shape leaves its output untouched.
+
+Decision: retain this source behavior in the shared
+[converter](../../apps/office/src/sax/source/tools/converter.ts) and consumed signed32
+[numeric helper](../../apps/office/src/o3tl/inc/numeric.ts). Both document filters must consume
+the same native color handler behavior rather than introduce a format-specific strict regular expression.
+
+
+## CALC-199: underline variant slots reset line color while the general toggle preserves it
+
+- Status: source behavior retained; no upstream correction inferred.
+- Pinned source: `sc/source/ui/view/formatsh.cxx`, `ScFormatShell::ExecuteAttr`, cases `SID_ATTR_CHAR_UNDERLINE` and `SID_ULINE_VAL_SINGLE/DOUBLE/DOTTED` (around lines730–786).
+- Observation: the general no-argument underline slot copies the effective `SvxUnderlineItem` before changing its line style. The variant slots construct a fresh item, so selecting or toggling a variant resets color/complex-color state to native item defaults.
+- Managed implementation: `sc/source/ui/view/formatsh.ts`, `SetCharacterFormat` and `SetUnderlineStyle`, preserves this distinction. The shared Format menu uses the native Single/Double slots and source numeric identities.
+- Evidence: `calc-character-format.test.tsx` tests an actual colored native item, visible menu dispatch, reset alpha, exact style state and undo. These are source-based managed checks, not compiled LibreOffice comparison evidence.

@@ -7,7 +7,12 @@ import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
-import { SwFormatAutoFormat } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { SfxItemSet as NativeItemSet } from "../../../../svl/source/items/itemset";
+import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import { SwTextINetFormat } from "./txtatr2";
+import { normalizeWriterHyperlink, SwFormatINetFormat } from "./fmtatr2";
 
 /** Validates the existing text-node range contract at the source-owned responsibility split. @param node - Actual paragraph. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
 export function AssertTextNodeRange(node: SwTextNode, start: number, end: number): void {
@@ -105,12 +110,29 @@ export function CreateTextNodeFragment(
   attributes: SfxItemSet,
   hyperlink?: WriterHyperlink,
 ): SwTextFragment {
-  const hints = new SwpHints(node.GetDoc().GetAttrPool()).createTextHints(
-    text.length,
-    projectWriterCharacterAttributes(attributes),
-    node.GetSwAttrSet(),
-    hyperlink,
-  );
+  const pool = node.GetDoc().GetAttrPool(),
+    hints = new SwpHints(pool);
+  if (text.length !== 0) {
+    const direct = new NativeItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
+    for (const item of attributes.entries())
+      if (!item.equals(node.GetSwAttrSet().Get(item.Which()))) direct.Put(item);
+    if (direct.Count() !== 0)
+      hints.Insert(
+        new SwTextAttrEnd(
+          new SwFormatAutoFormat(
+            node
+              .GetDoc()
+              .GetIStyleAccess()
+              .getAutomaticStyle(direct, SwAutoStyleFamily.AUTO_STYLE_CHAR),
+          ),
+          0,
+          text.length,
+        ),
+      );
+    const link = normalizeWriterHyperlink(hyperlink);
+    if (link !== undefined)
+      hints.Insert(new SwTextINetFormat(new SwFormatINetFormat(link), 0, text.length));
+  }
   return { text, hints };
 }
 

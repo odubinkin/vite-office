@@ -418,7 +418,6 @@ it("diagnoses unsupported style families,inheritance,properties,relative sizes a
       "relative or invalid cell font height",
       "cell style/number format",
       "cell range overflow",
-      "fo:font-weight",
     ]),
   );
   expect(
@@ -498,5 +497,48 @@ it("diagnoses unsupported row-style children and invalid properties without manu
     ]),
   );
   expect((doc.FetchTable(0) as ScTable).GetRowHeight(0)).toBe(256);
+  doc.DisposeAttributes();
+});
+
+it("retains source item defaults and diagnostics when character conversions fail", /** Independent malformed properties exercise shared handler failure contracts. @returns Nothing. */ () => {
+  const names: string[] = [];
+  const doc = load(
+    fontStyles(
+      `<style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-style="invalid" fo:font-weight="heavy" style:text-underline-style="invalid" style:text-underline-color="invalid"/></style:style>`,
+      `<table:table-row><table:table-cell table:style-name="ce"/></table:table-row>`,
+    ),
+    {
+      onDiagnostic:
+        /** Collects native diagnostics. @param diagnostic - Source error. @returns Nothing. */ (
+          diagnostic,
+        ) => {
+          names.push(diagnostic.name);
+        },
+    },
+  );
+  expect(
+    names.filter(
+      /** Counts actual conversion failures. @param name - Error. @returns Match. */ (name) =>
+        name === "invalid cell character property",
+    ),
+  ).toHaveLength(2);
+  expect(names).toContain("invalid cell underline property");
+  const pattern = doc.GetPattern(new ScAddress()) as ScPatternAttr;
+  expect(pattern.GetItem(102).equals(doc.GetPool().GetUserOrPoolDefaultItem(102))).toBe(true);
+  expect(pattern.GetItem(103).equals(doc.GetPool().GetUserOrPoolDefaultItem(103))).toBe(true);
+  doc.DisposeAttributes();
+});
+
+it("omits an unrepresentable native posture on export without replacing it with a boolean", /** Checks the original handler's unsupported enum outcome. @returns Completion. */ async () => {
+  const { ScPatternAttr } = await import("../../../inc/patattr"),
+    { SvxPostureItem } = await import("../../../../editeng/source/items/textitem"),
+    { FontItalic } = await import("../../../../tools/inc/fontenum");
+  const doc = load(independent("<table:table-row><table:table-cell/></table:table-row>"));
+  const delta = new ScPatternAttr(doc.getCellAttributeHelper());
+  delta.ItemSetPut(new SvxPostureItem(FontItalic.ITALIC_DONTKNOW, 103));
+  doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, delta);
+  delta.Dispose();
+  const xml = await new ZipFile(writeOdsDocument(doc)).readTextEntry("content.xml");
+  expect(xml).not.toContain("fo:font-style=");
   doc.DisposeAttributes();
 });

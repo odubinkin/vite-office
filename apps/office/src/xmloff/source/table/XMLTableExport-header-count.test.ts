@@ -9,7 +9,7 @@ it("exports all ordinary cells when a legacy repeat flag omits the numeric heade
       runs: [
         {
           text: "Original & preserved",
-          properties: { bold: false, italic: false, underline: false },
+          properties: { fontWeight: 100, fontPosture: 0, underlineStyle: 0 },
         },
       ],
     },

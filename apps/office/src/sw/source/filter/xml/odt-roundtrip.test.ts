@@ -892,17 +892,23 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       "</office:automatic-styles>",
       '<style:style style:name="T9" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style></office:automatic-styles>',
     );
-    for (const [attribute, value, message] of [
-      ["fo:font-weight", "heavy", "font weight"],
-      ["fo:font-style", "oblique", "font style"],
-      ["style:text-underline-style", "wave", "underline style"],
-      ["style:text-underline-width", "bold", "underline width"],
+    for (const [attribute, value, canonical] of [
+      ["fo:font-weight", "heavy", 'fo:font-weight="normal"'],
+      ["fo:font-style", "oblique", 'fo:font-style="oblique"'],
+      ["style:text-underline-style", "wave", 'style:text-underline-style="wave"'],
+      ["style:text-underline-width", "bold", 'style:text-underline-width="bold"'],
     ] as const) {
-      const changed = styledContent.replace('fo:font-weight="bold"', `${attribute}="${value}"`);
-      expect(
-        /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-        () => importWriterXml(styles, changed, metadata(), meta),
-      ).toThrow(message);
+      const changed = styledContent
+        .replace('fo:font-weight="bold"', `${attribute}="${value}"`)
+        .replace("</text:p>", '<text:span text:style-name="T9">x</text:span></text:p>');
+      const imported = importWriterXml(styles, changed, metadata(), meta).document;
+      expect(imported.paragraphs[0]?.GetText()).toBe("x");
+      if (value === "heavy") {
+        expect(
+          (imported.paragraphs[0]?.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight(),
+        ).toBe(FontWeight.WEIGHT_NORMAL);
+        expect(exportContentXml(imported)).not.toContain('fo:font-weight="heavy"');
+      } else expect(exportContentXml(imported)).toContain(canonical);
     }
     const unknown = styledContent.replace(
       'fo:font-weight="bold"',
@@ -916,24 +922,21 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       'fo:font-weight="bold" style:font-weight-asian="normal"',
     );
     expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => importWriterXml(styles, mismatchedScript, metadata(), meta),
-    ).toThrow("script-specific ODF font weight");
+      importWriterXml(styles, mismatchedScript, metadata(), meta).document.paragraphs,
+    ).toHaveLength(1);
     const mismatchedComplexWeight = styledContent.replace(
       'fo:font-weight="bold"',
       'fo:font-weight="bold" style:font-weight-complex="normal"',
     );
     expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => importWriterXml(styles, mismatchedComplexWeight, metadata(), meta),
-    ).toThrow("script-specific ODF font weight");
+      importWriterXml(styles, mismatchedComplexWeight, metadata(), meta).document.paragraphs,
+    ).toHaveLength(1);
     const mismatchedPosture = styledContent.replace(
       'fo:font-weight="bold"',
       'fo:font-weight="bold" fo:font-style="italic" style:font-style-complex="normal"',
     );
     expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => importWriterXml(styles, mismatchedPosture, metadata(), meta),
-    ).toThrow("script-specific ODF font style");
+      importWriterXml(styles, mismatchedPosture, metadata(), meta).document.paragraphs,
+    ).toHaveLength(1);
   });
 });

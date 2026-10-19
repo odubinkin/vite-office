@@ -136,3 +136,11 @@ it("retains the original block start for subsequent shift extension after an axi
   expect(c.viewData.GetMarkData().GetMarkArea()).toEqual(new ScRange(4, 0, 0, 6, 9, 0));
   s.Close();
 });
+
+it("keeps platform Space keys in nested text inputs outside grid selection ownership", /** A generic shortcut cannot select rows or columns while typing. @returns Nothing. */ () => {
+  const s = mountSelection();
+  const input = screen.getByRole("textbox", { name: "Input line" });
+  fireEvent.keyDown(input, { key: "\u00a0", code: "Space", ctrlKey: true });
+  expect(s.controller.viewData.GetMarkData().IsMarked()).toBe(false);
+  s.Close();
+});

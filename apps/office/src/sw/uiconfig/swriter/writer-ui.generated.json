@@ -623,7 +623,7 @@
       ],
       "semantics": "action",
       "showsDialog": true,
-      "shortcuts": ["Ctrl+O", "Meta+O", "OPEN"],
+      "shortcuts": ["OPEN"],
       "slotId": 5501
     },
     ".uno:PageDialog": {

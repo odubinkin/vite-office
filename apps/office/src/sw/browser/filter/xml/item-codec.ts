@@ -2,6 +2,11 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import {
+  encodeTextLineItem,
+  decodeTextLineItem,
+} from "../../../../editeng/browser/text-line-item-codec";
+import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -113,6 +118,7 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
+  if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
   const value =
     item instanceof SvxAdjustItem
       ? encodeAdjustment(item)
@@ -181,7 +187,7 @@ export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[
 
 /** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
 export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
-  return pool.CreateItem(snapshot);
+  return decodeTextLineItem(pool, snapshot) ?? pool.CreateItem(snapshot);
 }
 
 /** Restores direct deltas into an existing set. @param set - Destination set. @param snapshots - Current-schema records. @returns Nothing. */

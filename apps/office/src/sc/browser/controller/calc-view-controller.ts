@@ -1,7 +1,9 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { FontLineStyle } from "../../../tools/inc/fontenum";
 import type { ScTable } from "../../inc/table";
 import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
 import { ScUndoSelectionAttr } from "../../source/ui/undo/undoblk3";
+import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
 import type { ScCellValue } from "../../inc/cellvalue";
 import { ScInputMode } from "../../inc/global";
@@ -191,6 +193,33 @@ export class CalcViewController {
     ScFormatShell.ValidateFontSize(points);
     if (!this.Commit()) return false;
     const changed = new ScFormatShell(this.viewData, this.shell).SetFontSize(points);
+    this.Changed();
+    return changed;
+  }
+  /** Reads real selected character state. @param format - Native operation. @returns Uniform state or mixed. */
+  GetCharacterState(format: CalcCharacterFormat): boolean | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetCharacterState(format);
+  }
+  /** Publishes the native selected line style. @returns Style or mixed. */
+  GetUnderlineStyle(): FontLineStyle | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetUnderlineStyle();
+  }
+  /** Commits input before the source underline variant command. @param style - Requested line. @returns Changed. */
+  SetUnderlineStyle(
+    style: FontLineStyle.LINESTYLE_SINGLE | FontLineStyle.LINESTYLE_DOUBLE,
+  ): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetUnderlineStyle(style);
+    this.Changed();
+    return changed;
+  }
+  /** Commits input before native whole-cell character formatting. @param format - Native operation. @param enabled - Optional explicit value. @returns Changed. */
+  SetCharacterFormat(format: CalcCharacterFormat, enabled?: boolean): boolean {
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetCharacterFormat(
+      format,
+      enabled,
+    );
     this.Changed();
     return changed;
   }

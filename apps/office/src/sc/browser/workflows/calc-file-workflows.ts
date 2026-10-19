@@ -15,6 +15,8 @@ import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
+import { normalizeCommandShortcut } from "../../../framework/browser/accelerators/keymapping";
+import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { writeOdsDocument } from "../../source/filter/xml/xmlwrap";
 import type { CalcViewController } from "../controller/calc-view-controller";
 import { calcFileCommands } from "../../sdi/scalc";
@@ -40,7 +42,7 @@ export class CalcFileWorkflows {
             commandUrl: item.id,
             slotId: item.slotId,
             label: item.label,
-            shortcuts: item.shortcuts,
+            shortcuts: getCalcCommandResource(item.id).shortcuts.map(normalizeCommandShortcut),
             getState:
               /** Pending media disable conflicting file commands. @param target - Workflows. @returns State. */ (
                 target: CalcFileWorkflows,

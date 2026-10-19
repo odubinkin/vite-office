@@ -1,5 +1,7 @@
 /** @fileoverview Lazy production Calc module with one document/controller/frame ownership chain per mounted workspace. */
 /* eslint-disable react-refresh/only-export-components -- The private workspace host belongs to the exported lazy module factory. */
+import generated from "../../uiconfig/scalc/calc-ui.generated.json" with { type: "json" };
+import { normalizeCommandShortcut } from "../../../framework/browser/accelerators/keymapping";
 import { useEffect, useState } from "react";
 import type { BrowserDocumentStore } from "../../../framework/browser/storage/document-store";
 import { createCalcDocumentStore, createCalcAutosave } from "../workflows/calc-ods-io";
@@ -24,7 +26,16 @@ export function createCalcSession(
     fileWorkflows = new CalcFileWorkflows(controller, store, autosave),
     sheetWorkflows = new CalcSheetWorkflows(controller);
   frame.SetActiveView(controller, [
-    createSfxShell(controller, createCalcInterface()),
+    createSfxShell(
+      controller,
+      createCalcInterface(
+        /** Supplies the same pinned configuration to dispatch and menu presentation. @param command - Slot URL. @returns Configured shortcuts or native hidden-slot fallback. */
+        (command) =>
+          (generated.commands as Readonly<Record<string, { shortcuts: readonly string[] }>>)[
+            command
+          ]?.shortcuts.map(normalizeCommandShortcut),
+      ),
+    ),
     fileWorkflows.GetShell(),
     sheetWorkflows.GetShell(),
   ]);

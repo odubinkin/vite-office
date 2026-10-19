@@ -1,7 +1,11 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 
-import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import { ConvertFontSlant, ConvertFontWeight } from "../../../../vcl/inc/unohelp";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { MID_TL_COLOR, MID_TL_HASCOLOR } from "../../../../editeng/inc/memberids";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { getCharacterProperties } from "./xmlexp";
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 import {
   SvxIndentValue,
@@ -14,7 +18,6 @@ import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/in
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
 import {
-  FontLineStyle,
   SvxFontItem,
   SvxFontHeightItem,
   SvxPostureItem,
@@ -27,10 +30,6 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { applyNamedParagraphStyles } from "./xmlimp-named-styles";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import {
-  createWriterCharacterItemSet,
-  projectWriterCharacterAttributes,
-} from "../../core/txtnode/txatbase";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   FastAttributeList,
@@ -73,6 +72,7 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import {
+  WRITER_CHARACTER_WHICH_RANGES,
   RES_CHRATR_CJK_POSTURE,
   RES_BREAK,
   RES_CHRATR_CJK_FONT,
@@ -497,6 +497,9 @@ class SwXMLImport
         properties,
         /** Applies a direct paragraph item. @param item - Pooled item. @returns Set result. */
         (item) => node.SetAttr(item),
+        /** Preserves unmentioned native composite fields. @param which - Identity. @returns Effective item. */ (
+          which,
+        ) => node.GetAttr(which),
       );
     return new SwXMLParagraphTarget(node);
   }
@@ -579,7 +582,7 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
   /** Reads actual inherited character state after style and automatic items have been applied. @returns Effective supported properties. */
   public getInheritedProperties(): OdfCharacterProperties {
     const items = this.node.GetSwAttrSet();
-    return projectWriterCharacterAttributes(items, items);
+    return getCharacterProperties(items, true) as OdfCharacterProperties;
   }
 
   /** Registers one collapsed bookmark at the current paragraph offset. @param name - ODF name. @returns Nothing. */
@@ -618,6 +621,19 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
     properties: OdfCharacterProperties,
     hyperlink?: OdfHyperlink,
   ): void {
+    const nativeItems = new SfxItemSet(
+      this.node.GetDoc().GetAttrPool(),
+      WRITER_CHARACTER_WHICH_RANGES,
+    );
+    putCharacterProperties(
+      properties,
+      /** Stores actual converted source items. @param item - Item. @returns Set result. */ (
+        item,
+      ) => nativeItems.Put(item),
+      /** Resolves inherited composite fields. @param which - Identity. @returns Effective item. */ (
+        which,
+      ) => this.node.GetAttr(which),
+    );
     const position = new SwPosition(this.node, this.node.Len(), "redline");
     try {
       this.node
@@ -625,11 +641,7 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
         .GetDocumentContentOperationsManager()
         .InsertTextFragment(
           position,
-          this.node.CreateTextFragmentFromText(
-            text,
-            createWriterCharacterItemSet(this.node.GetDoc().GetAttrPool(), properties),
-            hyperlink,
-          ),
+          this.node.CreateTextFragmentFromText(text, nativeItems, hyperlink),
         );
     } finally {
       position.Dispose();
@@ -790,75 +802,77 @@ class XMLTitleContext extends SvXMLImportContext {
   }
 }
 
-/** Converts ODF character deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
+/** Converts ODF character deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @param inherited - Reads untouched native composite fields. @returns Nothing. */
 function putCharacterProperties(
   properties: Partial<OdfCharacterProperties>,
   put: (item: SfxPoolItem) => unknown,
+  inherited: (which: number) => SfxPoolItem,
 ): void {
   if (properties.color !== undefined) put(new SfxStringItem(RES_CHRATR_COLOR, properties.color));
-  if (properties.fontFamily !== undefined)
-    put(
-      new SvxFontItem(
-        getFontFamilyFromGeneric(properties.fontFamilyGeneric),
-        properties.fontFamily,
-        properties.fontStyleName ?? "",
-        properties.fontPitch ?? FontPitch.PITCH_DONTKNOW,
-        properties.fontCharSet ?? RTL_TEXTENCODING_DONTKNOW,
-        RES_CHRATR_FONT,
-      ),
-    );
-  const asianFamily = properties.fontFamilyAsian ?? properties.fontFamily;
-  if (asianFamily !== undefined)
-    put(
-      new SvxFontItem(
-        getFontFamilyFromGeneric(properties.fontFamilyGenericAsian),
-        asianFamily,
-        properties.fontStyleNameAsian ?? "",
-        properties.fontPitchAsian ?? FontPitch.PITCH_DONTKNOW,
-        properties.fontCharSetAsian ?? RTL_TEXTENCODING_DONTKNOW,
-        RES_CHRATR_CJK_FONT,
-      ),
-    );
-  const complexFamily = properties.fontFamilyComplex ?? properties.fontFamily;
-  if (complexFamily !== undefined)
-    put(
-      new SvxFontItem(
-        getFontFamilyFromGeneric(properties.fontFamilyGenericComplex),
-        complexFamily,
-        properties.fontStyleNameComplex ?? "",
-        properties.fontPitchComplex ?? FontPitch.PITCH_DONTKNOW,
-        properties.fontCharSetComplex ?? RTL_TEXTENCODING_DONTKNOW,
-        RES_CHRATR_CTL_FONT,
-      ),
-    );
-  if (properties.fontSizeTwips !== undefined)
-    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      put(new SvxFontHeightItem(properties.fontSizeTwips, 100, which));
+  for (const [suffix, which] of [
+    ["", RES_CHRATR_FONT],
+    ["Asian", RES_CHRATR_CJK_FONT],
+    ["Complex", RES_CHRATR_CTL_FONT],
+  ] as const) {
+    const family = properties[`fontFamily${suffix}`];
+    if (family !== undefined)
+      put(
+        new SvxFontItem(
+          getFontFamilyFromGeneric(properties[`fontFamilyGeneric${suffix}`]),
+          family,
+          properties[`fontStyleName${suffix}`] ?? "",
+          properties[`fontPitch${suffix}`] ?? FontPitch.PITCH_DONTKNOW,
+          properties[`fontCharSet${suffix}`] ?? RTL_TEXTENCODING_DONTKNOW,
+          which,
+        ),
+      );
+  }
+  for (const [key, which] of [
+    ["fontSizeTwips", RES_CHRATR_FONTSIZE],
+    ["fontSizeTwipsAsian", RES_CHRATR_CJK_FONTSIZE],
+    ["fontSizeTwipsComplex", RES_CHRATR_CTL_FONTSIZE],
+  ] as const)
+    if (properties[key] !== undefined) put(new SvxFontHeightItem(properties[key], 100, which));
   if (properties.highlight !== undefined)
     put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, properties.highlight));
-  if (properties.bold !== undefined)
-    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      put(
-        new SvxWeightItem(
-          properties.bold ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL,
-          which,
-        ),
-      );
-  if (properties.italic !== undefined)
-    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      put(
-        new SvxPostureItem(
-          properties.italic ? FontItalic.ITALIC_NORMAL : FontItalic.ITALIC_NONE,
-          which,
-        ),
-      );
-  if (properties.underline !== undefined)
-    put(
-      new SvxUnderlineItem(
-        properties.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
-        RES_CHRATR_UNDERLINE,
-      ),
-    );
+  for (const [key, which] of [
+    ["fontWeight", RES_CHRATR_WEIGHT],
+    ["fontWeightAsian", RES_CHRATR_CJK_WEIGHT],
+    ["fontWeightComplex", RES_CHRATR_CTL_WEIGHT],
+  ] as const) {
+    const value = properties[key];
+    if (value !== undefined) put(new SvxWeightItem(ConvertFontWeight(value, "float"), which));
+  }
+  for (const [key, which] of [
+    ["fontPosture", RES_CHRATR_POSTURE],
+    ["fontPostureAsian", RES_CHRATR_CJK_POSTURE],
+    ["fontPostureComplex", RES_CHRATR_CTL_POSTURE],
+  ] as const) {
+    const value = properties[key];
+    if (value !== undefined) put(new SvxPostureItem(ConvertFontSlant(value, "FontSlant"), which));
+  }
+  if (
+    properties.underlineStyle !== undefined ||
+    properties.underlineColor !== undefined ||
+    properties.underlineHasColor !== undefined
+  ) {
+    const line = new SvxUnderlineItem(inherited(RES_CHRATR_UNDERLINE) as SvxUnderlineItem);
+    if (properties.underlineStyle !== undefined) line.SetLineStyle(properties.underlineStyle);
+    const value = new Any();
+    try {
+      if (properties.underlineColor !== undefined) {
+        value.insert([properties.underlineColor], "sal_Int32");
+        line.PutValue(value, MID_TL_COLOR);
+      }
+      if (properties.underlineHasColor !== undefined) {
+        value.insert([properties.underlineHasColor], "bool");
+        line.PutValue(value, MID_TL_HASCOLOR);
+      }
+    } finally {
+      value.dispose();
+    }
+    put(line);
+  }
 }
 
 /** Converts ODF paragraph deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @param inherited - Effective items for untouched composite fields. @returns Nothing. */

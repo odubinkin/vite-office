@@ -80,7 +80,7 @@
     ".uno:AddField": {
       "label": "Add Field",
       "showsDialog": true,
-      "shortcuts": ["Alt+F8"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:AddName": {
@@ -254,7 +254,7 @@
     ".uno:BringToFront": {
       "label": "Bring to Front",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+ADD", "Meta+Shift+ADD"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:Calculate": {
@@ -502,25 +502,25 @@
     ".uno:CommonAlignHorizontalCenter": {
       "label": "Centered",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+E", "Meta+E"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:CommonAlignJustified": {
       "label": "Justified",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+J", "Meta+J"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:CommonAlignLeft": {
       "label": "Left",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+L", "Meta+L"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:CommonAlignRight": {
       "label": "Right",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+R", "Meta+R"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:CommonAlignTop": {
@@ -568,7 +568,7 @@
     ".uno:ControlProperties": {
       "label": "Control Properties",
       "showsDialog": true,
-      "shortcuts": ["Alt+Enter", "F4"],
+      "shortcuts": [],
       "semantics": "check"
     },
     ".uno:ConvertFormulaToValue": {
@@ -735,7 +735,7 @@
       "showsDialog": true,
       "popupLabel": "Clear Contents",
       "popupShowsDialog": true,
-      "shortcuts": ["DELETE", "BACKSPACE"],
+      "shortcuts": ["BACKSPACE"],
       "semantics": "action"
     },
     ".uno:DeleteAllNotes": {
@@ -797,7 +797,7 @@
     ".uno:DesignerDialog": {
       "label": "Styles",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["F11"],
       "semantics": "action"
     },
     ".uno:DevelopmentToolsDockingWindow": {
@@ -869,7 +869,7 @@
     ".uno:EnterGroup": {
       "label": "Enter Group",
       "showsDialog": false,
-      "shortcuts": ["F3"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:ErrorCellStyles": {
@@ -977,7 +977,7 @@
     ".uno:FontDialog": {
       "label": "Character",
       "showsDialog": true,
-      "shortcuts": [],
+      "shortcuts": ["Alt+C"],
       "semantics": "action"
     },
     ".uno:FontHeight": {
@@ -1021,7 +1021,7 @@
     ".uno:FormatGroup": {
       "label": "Group",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+G", "Meta+Shift+G"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:FormatLine": {
@@ -1039,7 +1039,7 @@
     ".uno:FormatUngroup": {
       "label": "Ungroup",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Alt+Shift+G", "Meta+Alt+Shift+G"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:FormattedField": {
@@ -1087,7 +1087,7 @@
     ".uno:FullScreen": {
       "label": "Full Screen",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+J", "Meta+Shift+J"],
       "semantics": "action"
     },
     ".uno:FunctionBox": {
@@ -1159,7 +1159,7 @@
     ".uno:Grow": {
       "label": "Increase",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+BRACKETRIGHT", "Meta+BRACKETRIGHT"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:HandleDuplicateRecords": {
@@ -1291,7 +1291,7 @@
       "showsDialog": false,
       "popupLabel": "Insert Comment",
       "popupShowsDialog": false,
-      "shortcuts": ["Ctrl+Alt+C", "Meta+Alt+C"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertCalcTable": {
@@ -1317,7 +1317,7 @@
     ".uno:InsertColumnBreak": {
       "label": "Insert Column Break",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+Enter", "Meta+Shift+Enter"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertColumnsAfter": {
@@ -1389,7 +1389,7 @@
     ".uno:InsertHardHyphen": {
       "label": "Insert Non-breaking Hyphen",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+SUBTRACT", "Meta+Shift+SUBTRACT"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertLRM": {
@@ -1407,13 +1407,13 @@
     ".uno:InsertNarrowNobreakSpace": {
       "label": "Insert Narrow No-break Space",
       "showsDialog": false,
-      "shortcuts": ["Alt+Shift+SPACE"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertNonBreakingSpace": {
       "label": "Insert No-break Space",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+SPACE", "Meta+Shift+SPACE"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertObject": {
@@ -1489,7 +1489,7 @@
     ".uno:InsertSoftHyphen": {
       "label": "Insert Soft Hyphen",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+SUBTRACT", "Meta+SUBTRACT"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:InsertSparkline": {
@@ -1513,7 +1513,7 @@
     ".uno:InsertZWSP": {
       "label": "Insert Zero-width Space",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+DIVIDE", "Meta+DIVIDE"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:Italic": {
@@ -1525,7 +1525,7 @@
     ".uno:JumpToNextTable": {
       "label": "To Next Sheet",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+PAGEDOWN", "Meta+PAGEDOWN"],
+      "shortcuts": ["Ctrl+TAB", "Meta+TAB", "Ctrl+PAGEDOWN", "Meta+PAGEDOWN"],
       "semantics": "action"
     },
     ".uno:JumpToNextTableSel": {
@@ -1537,7 +1537,7 @@
     ".uno:JumpToPrevTable": {
       "label": "To Previous Sheet",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+PAGEUP", "Meta+PAGEUP"],
+      "shortcuts": ["Ctrl+Shift+TAB", "Meta+Shift+TAB", "Ctrl+PAGEUP", "Meta+PAGEUP"],
       "semantics": "action"
     },
     ".uno:JumpToPrevTableSel": {
@@ -1556,7 +1556,7 @@
     ".uno:LeaveGroup": {
       "label": "Exit Group",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+F3", "Meta+F3"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:Line": { "label": "Line", "showsDialog": false, "shortcuts": [], "semantics": "action" },
@@ -1641,7 +1641,7 @@
     ".uno:Navigator": {
       "label": "Navigator",
       "showsDialog": false,
-      "shortcuts": ["F5", "Ctrl+Shift+F5", "Meta+Shift+F5"],
+      "shortcuts": ["F5"],
       "semantics": "check"
     },
     ".uno:NeutralCellStyles": {
@@ -1677,13 +1677,13 @@
     ".uno:NumberFormatCurrency": {
       "label": "Currency",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+4", "Meta+Shift+4"],
       "semantics": "action"
     },
     ".uno:NumberFormatDate": {
       "label": "Date",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+3", "Meta+Shift+3"],
       "semantics": "action"
     },
     ".uno:NumberFormatDecDecimals": {
@@ -1695,7 +1695,7 @@
     ".uno:NumberFormatDecimal": {
       "label": "Number",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+1", "Meta+Shift+1"],
       "semantics": "action"
     },
     ".uno:NumberFormatIncDecimals": {
@@ -1707,19 +1707,19 @@
     ".uno:NumberFormatPercent": {
       "label": "Percent",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+5", "Meta+Shift+5"],
       "semantics": "action"
     },
     ".uno:NumberFormatScientific": {
       "label": "Scientific",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+2", "Meta+Shift+2"],
       "semantics": "action"
     },
     ".uno:NumberFormatStandard": {
       "label": "General",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+Shift+6", "Meta+Shift+6"],
       "semantics": "action"
     },
     ".uno:NumberFormatThousands": {
@@ -1809,7 +1809,7 @@
     ".uno:OptionsTreeDialog": {
       "label": "Options",
       "showsDialog": true,
-      "shortcuts": [],
+      "shortcuts": ["Alt+F12"],
       "semantics": "action"
     },
     ".uno:OriginalSize": {
@@ -1847,13 +1847,13 @@
     ".uno:ParaLeftToRight": {
       "label": "Left-To-Right",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+A", "Meta+Shift+A"],
+      "shortcuts": [],
       "semantics": "check"
     },
     ".uno:ParaRightToLeft": {
       "label": "Right-To-Left",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+D", "Meta+Shift+D"],
+      "shortcuts": [],
       "semantics": "check"
     },
     ".uno:ParagraphDialog": {
@@ -2069,7 +2069,7 @@
     ".uno:ResetAttributes": {
       "label": "Clear",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+M", "Meta+M"],
       "semantics": "action"
     },
     ".uno:RowHeight": {
@@ -2137,13 +2137,13 @@
     ".uno:SearchDialog": {
       "label": "Find and Replace",
       "showsDialog": true,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+H", "Meta+H"],
       "semantics": "check"
     },
     ".uno:SelectAll": {
       "label": "Select All",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+A", "Meta+A"],
+      "shortcuts": ["Ctrl+Shift+SPACE", "Meta+Shift+SPACE", "Ctrl+A", "Meta+A"],
       "semantics": "action"
     },
     ".uno:SelectArrayFormula": {
@@ -2155,7 +2155,7 @@
     ".uno:SelectColumn": {
       "label": "Select Column",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+SPACE", "Meta+SPACE"],
       "semantics": "action"
     },
     ".uno:SelectDB": {
@@ -2233,7 +2233,7 @@
     ".uno:SendToBack": {
       "label": "Send to Back",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+SUBTRACT", "Meta+Shift+SUBTRACT"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:SendViaBluetooth": {
@@ -2411,7 +2411,7 @@
     ".uno:Shrink": {
       "label": "Decrease",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+BRACKETLEFT", "Meta+BRACKETLEFT"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:Shuffle": {
@@ -2441,7 +2441,7 @@
     ".uno:SmallCaps": {
       "label": "Small capitals",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+K", "Meta+Shift+K"],
+      "shortcuts": [],
       "semantics": "check"
     },
     ".uno:SolverDialog": {
@@ -2471,7 +2471,7 @@
     ".uno:SpellDialog": {
       "label": "Spelling",
       "showsDialog": true,
-      "shortcuts": [],
+      "shortcuts": ["F7"],
       "semantics": "action"
     },
     ".uno:SpellOnline": {
@@ -2525,19 +2525,19 @@
     ".uno:StyleNewByExample": {
       "label": "New Style from Selection",
       "showsDialog": false,
-      "shortcuts": ["Shift+F11"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:StyleUpdateByExample": {
       "label": "Update",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+F11", "Meta+Shift+F11"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:SubScript": {
       "label": "Subscript",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+Shift+B", "Meta+Shift+B", "Ctrl+NUMBERSIGN", "Meta+NUMBERSIGN"],
+      "shortcuts": ["Ctrl+Shift+B", "Meta+Shift+B"],
       "semantics": "check"
     },
     ".uno:SuperScript": {
@@ -2639,7 +2639,7 @@
     ".uno:ToggleFormula": {
       "label": "Show Formulas",
       "showsDialog": false,
-      "shortcuts": [],
+      "shortcuts": ["Ctrl+QUOTELEFT", "Meta+QUOTELEFT"],
       "semantics": "action"
     },
     ".uno:ToggleMergeCells": {
@@ -2651,7 +2651,7 @@
     ".uno:ToggleObjectBezierMode": {
       "label": "Toggle Point Edit Mode",
       "showsDialog": false,
-      "shortcuts": ["F8"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:ToggleRelative": {
@@ -2681,7 +2681,7 @@
     ".uno:TransformDialog": {
       "label": "Position and Size",
       "showsDialog": true,
-      "shortcuts": ["F4"],
+      "shortcuts": [],
       "semantics": "action"
     },
     ".uno:TwainSelect": {
@@ -2711,7 +2711,7 @@
     ".uno:UnderlineDouble": {
       "label": "Double Underline",
       "showsDialog": false,
-      "shortcuts": ["Ctrl+D", "Meta+D"],
+      "shortcuts": [],
       "semantics": "check"
     },
     ".uno:UnderlineSingle": {

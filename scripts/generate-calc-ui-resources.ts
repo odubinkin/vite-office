@@ -114,7 +114,11 @@ const commands = Object.fromEntries(
                   popupLabel: stripMnemonic(popupLabel),
                   popupShowsDialog: popupLabel.endsWith("..."),
                 }),
-            shortcuts: findShortcuts(url, texts[catalogPaths[2]] as string),
+            shortcuts: findShortcuts(
+              url,
+              texts[catalogPaths[2]] as string,
+              "com.sun.star.sheet.SpreadsheetDocument",
+            ),
             semantics: (findCommandPropertyBits(url, ...catalogs) & 8) !== 0 ? "check" : "action",
           },
         ];

@@ -11,7 +11,7 @@ import {
   type XMLTextParagraphSource,
 } from "./txtparae";
 
-const plain: OdfCharacterProperties = { bold: false, italic: false, underline: false };
+const plain: OdfCharacterProperties = { fontWeight: 100, fontPosture: 0, underlineStyle: 0 };
 
 it("exports script-only font face references independently", /** Preserves a complex-script override without manufacturing a Latin name. @returns Nothing. */ () => {
   const faceName =
@@ -31,7 +31,14 @@ it("exports script-only font face references independently", /** Preserves a com
 /** Creates a reiterable test source. @param paragraphs - Paragraph fixtures. @returns Export source. */
 function source(paragraphs: readonly XMLTextParagraphSource[]): XMLTextExportSource {
   return {
-    paragraphs: /** Iterates fixtures. @returns Paragraph iterator. */ () => paragraphs.values(),
+    paragraphs:
+      /** Iterates fixtures with the test model's explicit native baseline. @returns Paragraph iterator. */ () =>
+        paragraphs
+          .map(
+            /** Supplies the source model baseline independently of shared xmloff. @param paragraph - Fixture. @returns Model view. */
+            (paragraph) => ({ inheritedProperties: plain, ...paragraph }),
+          )
+          .values(),
   };
 }
 
@@ -79,18 +86,18 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
           alignment: "left",
           runs: [
             { properties: plain, text: "A & < > \" '" },
-            { properties: { ...plain, bold: true }, text: " B" },
+            { properties: { ...plain, fontWeight: 150 }, text: " B" },
           ],
           style: "default",
         },
         {
           alignment: "right",
-          runs: [{ properties: { ...plain, italic: true }, text: "x  y\t\n" }],
+          runs: [{ properties: { ...plain, fontPosture: 2 }, text: "x  y\t\n" }],
           style: "heading-1",
         },
         {
           alignment: "left",
-          runs: [{ properties: { ...plain, bold: true }, text: "reuse" }],
+          runs: [{ properties: { ...plain, fontWeight: 150 }, text: "reuse" }],
           style: "title",
           styleName: "Title",
         },

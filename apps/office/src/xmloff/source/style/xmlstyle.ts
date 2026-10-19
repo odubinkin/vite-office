@@ -1,4 +1,5 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
+import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
@@ -489,12 +490,14 @@ function importCharacterProperties(
 ): Partial<OdfCharacterProperties> {
   attributes.assertOnly(
     [
-      XMLToken.FO_FONT_WEIGHT,
+      ...textCharacterPropertyTokens,
       XMLToken.STYLE_FONT_NAME,
       XMLToken.STYLE_FONT_NAME_ASIAN,
       XMLToken.STYLE_FONT_NAME_COMPLEX,
       XMLToken.FO_FONT_FAMILY,
       XMLToken.FO_FONT_SIZE,
+      XMLToken.STYLE_FONT_SIZE_ASIAN,
+      XMLToken.STYLE_FONT_SIZE_COMPLEX,
       XMLToken.FO_FONT_STYLE,
       XMLToken.STYLE_TEXT_UNDERLINE_STYLE,
       XMLToken.STYLE_TEXT_UNDERLINE_WIDTH,
@@ -509,48 +512,21 @@ function importCharacterProperties(
     ],
     "text properties",
   );
-  const weight = attributes.get(XMLToken.FO_FONT_WEIGHT);
   const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
   const asianFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_ASIAN);
   const complexFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_COMPLEX);
   const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const fontSize = attributes.get(XMLToken.FO_FONT_SIZE);
-  const posture = attributes.get(XMLToken.FO_FONT_STYLE);
-  const underline = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_STYLE);
-  const underlineWidth = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_WIDTH);
-  const underlineColor = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_COLOR);
   const color = attributes.get(XMLToken.FO_COLOR);
   const useWindowColor = importOptionalBoolean(
     attributes.get(XMLToken.STYLE_USE_WINDOW_FONT_COLOR),
     "automatic font color",
   );
   const highlight = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
-  if (weight !== null && weight !== "normal" && weight !== "bold")
-    throw new Error(`Unsupported ODF font weight: ${weight}`);
-  if (posture !== null && posture !== "normal" && posture !== "italic")
-    throw new Error(`Unsupported ODF font style: ${posture}`);
-  if (underline !== null && underline !== "none" && underline !== "solid")
-    throw new Error(`Unsupported ODF underline style: ${underline}`);
-  if (underlineWidth !== null && underlineWidth !== "auto")
-    throw new Error(`Unsupported ODF underline width: ${underlineWidth}`);
-  if (underlineColor !== null && underlineColor !== "font-color")
-    throw new Error(`Unsupported ODF underline color: ${underlineColor}`);
   if (color !== null && !isOdfColor(color, false))
     throw new Error(`Unsupported ODF font color: ${color}`);
   if (highlight !== null && !isOdfColor(highlight, true))
     throw new Error(`Unsupported ODF highlight color: ${highlight}`);
-  assertAgreement(
-    "font weight",
-    weight,
-    attributes.get(XMLToken.STYLE_FONT_WEIGHT_ASIAN),
-    attributes.get(XMLToken.STYLE_FONT_WEIGHT_COMPLEX),
-  );
-  assertAgreement(
-    "font style",
-    posture,
-    attributes.get(XMLToken.STYLE_FONT_STYLE_ASIAN),
-    attributes.get(XMLToken.STYLE_FONT_STYLE_COMPLEX),
-  );
   const declaredFontFamily = faceName === null ? undefined : target.getFontFace(faceName);
   if (faceName !== null && declaredFontFamily === undefined)
     throw new Error(`Undefined ODF font face: ${faceName}`);
@@ -614,9 +590,9 @@ function importCharacterProperties(
     ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
     ...(highlight === null ? {} : { highlight }),
-    ...(weight === null ? {} : { bold: weight === "bold" }),
-    ...(posture === null ? {} : { italic: posture === "italic" }),
-    ...(underline === null ? {} : { underline: underline === "solid" }),
+    ...importTextCharacterProperties(attributes),
+    ...importScriptHeight(attributes, XMLToken.STYLE_FONT_SIZE_ASIAN, "fontSizeTwipsAsian"),
+    ...importScriptHeight(attributes, XMLToken.STYLE_FONT_SIZE_COMPLEX, "fontSizeTwipsComplex"),
   };
 }
 
@@ -633,14 +609,20 @@ function isOdfColor(value: string, allowTransparent: boolean): boolean {
   return /^#[0-9a-f]{6}$/iu.test(value) || (allowTransparent && value === "transparent");
 }
 
-/** Rejects script-specific divergence. @param property - Property label. @param western - Western value. @param asian - Asian value. @param complex - Complex value. @returns Nothing. */
-function assertAgreement(
-  property: string,
-  western: string | null,
-  asian: string | null,
-  complex: string | null,
-): void {
-  for (const value of [asian, complex])
-    if (value !== null && western !== value)
-      throw new Error(`Unsupported script-specific ODF ${property}.`);
+/** Imports one independent script font height. @param attributes - Source attributes. @param token - Height token. @param property - Destination field. @returns Present valid height. */
+function importScriptHeight(
+  attributes: FastAttributeList,
+  token: XMLToken,
+  property: "fontSizeTwipsAsian" | "fontSizeTwipsComplex",
+): Partial<OdfCharacterProperties> {
+  const text = attributes.get(token);
+  if (text === null) return {};
+  try {
+    const height = importOdfLength(text, false, "font size");
+    if (height > 0) return { [property]: height };
+  } catch {
+    /* Invalid native property conversion leaves the property absent. */
+  }
+  console.warn(`Unsupported ODF font size ignored: ${text}`);
+  return {};
 }

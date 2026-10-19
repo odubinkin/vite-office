@@ -79,7 +79,7 @@ it("retains the created leaf reference in its own family and container", /** Che
   leaf?.endFastElement(XMLToken.STYLE_STYLE);
   expect(named.FindStyleChildContext("text", "Shared")?.GetDefinition()).toEqual({
     family: "text",
-    properties: { bold: true },
+    properties: { fontWeight: 150 },
   });
   const paragraph = named.createFastChildContext(
     XMLToken.STYLE_STYLE,
@@ -121,6 +121,32 @@ it("publishes paragraph defaults only from a common style container", /** Checks
   }
   expect(consumer.registerDefaultStyle).toHaveBeenCalledWith({
     family: "paragraph",
-    properties: { italic: true },
+    properties: { fontPosture: 2 },
   });
+});
+
+it("ignores a zero independent script height without creating a direct size", /** Preserves the native failed-property outcome and diagnostic. @returns Nothing. */ () => {
+  const warn = vi
+    .spyOn(console, "warn")
+    .mockImplementation(
+      /** Captures the expected failed conversion diagnostic. @returns Nothing. */ () => undefined,
+    );
+  try {
+    const named = new XMLStylesContext(target());
+    const leaf = named.createFastChildContext(
+      XMLToken.STYLE_STYLE,
+      attributes({ name: "Zero", family: "text" }),
+    );
+    leaf?.createFastChildContext(
+      XMLToken.STYLE_TEXT_PROPERTIES,
+      attributes({ "font-size-asian": "0pt" }),
+    );
+    leaf?.endFastElement(XMLToken.STYLE_STYLE);
+    const definition = named.GetStyleDefinitions("text").get("Zero");
+    expect(definition).toMatchObject({ family: "text" });
+    expect(definition?.properties?.fontSizeTwipsAsian).toBeUndefined();
+    expect(warn).toHaveBeenCalledWith("Unsupported ODF font size ignored: 0pt");
+  } finally {
+    warn.mockRestore();
+  }
 });

@@ -71,7 +71,7 @@ it("executes native menu actions and document accelerators from grid and formula
   fireEvent.click(screen.getByRole("menuitem", { name: "Navigate" }));
   expect(screen.getByRole("menuitem", { name: "To Next Sheet" })).toHaveAttribute(
     "aria-keyshortcuts",
-    "Ctrl+PAGEDOWN",
+    "Ctrl+TAB",
   );
   fireEvent.click(screen.getByRole("menuitem", { name: "To Next Sheet" }));
   expect(screen.getByRole("tab", { name: "Sheet2" })).toHaveAttribute("aria-current", "page");
@@ -87,6 +87,12 @@ it("executes native menu actions and document accelerators from grid and formula
   fireEvent.keyDown(screen.getByRole("grid"), { key: "PageDown", ctrlKey: true });
   expect(c.viewData.GetTabNumber()).toBe(1);
   expect(screen.getAllByRole("tab", { selected: true })).toHaveLength(1);
+  fireEvent.keyDown(screen.getByRole("grid"), { key: "Tab", ctrlKey: true });
+  expect(c.viewData.GetTabNumber()).toBe(2);
+  fireEvent.keyDown(screen.getByRole("grid"), { key: "Tab", ctrlKey: true, shiftKey: true });
+  expect(c.viewData.GetTabNumber()).toBe(1);
+  fireEvent.keyDown(screen.getByRole("grid"), { key: "Control", ctrlKey: true });
+  expect(c.viewData.GetTabNumber()).toBe(1);
   const line = screen.getByRole("textbox", { name: "Input line" });
   fireEvent.focus(line);
   fireEvent.change(line, { target: { value: "9" } });

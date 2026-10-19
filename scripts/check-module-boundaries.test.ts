@@ -5,6 +5,7 @@ import {
   getRuntimeImportSpecifiers,
   isOriginalSalO3tlImport,
   isForbiddenModuleEdge,
+  isOriginalCharacterValueImport,
   isForbiddenDomainVclImport,
   getProtectedBrowserGlobalReferences,
   getProtectedOwnershipReferences,
@@ -921,4 +922,55 @@ it("admits only original pure document-pool VCL dependencies while retaining dom
   expect(isForbiddenModuleEdge("vcl", "i18nlangtag")).toBe(false);
   expect(isForbiddenModuleEdge("tools", "sc")).toBe(true);
   expect(isForbiddenModuleEdge("i18nlangtag", "vcl")).toBe(true);
+});
+
+it("admits only pinned character-handler value imports without widening module or browser permissions", /** Checks the exact new source edges and nearby forbidden imports. @returns Nothing. */ () => {
+  const any = "cppu/inc/com/sun/star/uno/Any.ts";
+  expect(
+    isOriginalCharacterValueImport(
+      "xmloff/source/style/weighhdl.ts",
+      "cppu/inc/com/sun/star/uno/Any",
+    ),
+  ).toBe(true);
+  expect(isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/numeric")).toBe(
+    true,
+  );
+  for (const name of ["weighhdl", "postuhdl", "undlihdl", "xmlbahdl"])
+    expect(isOriginalCharacterValueImport(`xmloff/source/style/${name}.ts`, any)).toBe(true);
+  expect(isOriginalCharacterValueImport("xmloff/source/text/txtprmap.ts", any)).toBe(true);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/postuhdl.ts", "vcl/inc/unohelp.ts"),
+  ).toBe(true);
+  expect(
+    isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/numeric.ts"),
+  ).toBe(true);
+  expect(isOriginalCharacterValueImport("sax/source/tools/other.ts", "o3tl/inc/numeric.ts")).toBe(
+    false,
+  );
+  expect(
+    isOriginalCharacterValueImport("sax/source/tools/converter.ts", "o3tl/inc/unit_conversion.ts"),
+  ).toBe(false);
+  expect(isOriginalCharacterValueImport("xmloff/source/style/other.ts", any)).toBe(false);
+  expect(
+    isOriginalCharacterValueImport(
+      "xmloff/source/style/postuhdl.ts",
+      "cppu/inc/typelib/typedescription.ts",
+    ),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/weighhdl.ts", "vcl/inc/unohelp.ts"),
+  ).toBe(false);
+  expect(
+    isOriginalCharacterValueImport("xmloff/source/style/postuhdl.ts", "vcl/browser/font-list.ts"),
+  ).toBe(false);
+  expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(true);
+  expect(isForbiddenModuleEdge("xmloff", "vcl")).toBe(true);
+  expect(isForbiddenModuleEdge("sax", "o3tl")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "xmloff/source/style/postuhdl.ts",
+      "vcl/browser/font-list.ts",
+      "../../../vcl/browser/font-list",
+    ),
+  ).toMatch(/browser adapters/u);
 });

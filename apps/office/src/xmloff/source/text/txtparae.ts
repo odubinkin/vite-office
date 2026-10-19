@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
+import { exportTextCharacterProperties } from "./txtprmap";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
@@ -852,7 +853,7 @@ function exportAlignment(alignment: OdfParagraphAlignment): string {
 
 /** Returns the effective paragraph character baseline. @param paragraph - Neutral paragraph. @returns Complete inherited properties. */
 function paragraphInheritedProperties(paragraph: XMLTextParagraphSource): OdfCharacterProperties {
-  return paragraph.inheritedProperties ?? { bold: false, italic: false, underline: false };
+  return paragraph.inheritedProperties ?? {};
 }
 
 /** Compares complete character properties. @param left - First properties. @param right - Second properties. @returns Whether equal. */
@@ -860,58 +861,30 @@ function equalCharacterProperties(
   left: OdfCharacterProperties,
   right: OdfCharacterProperties,
 ): boolean {
-  return (
-    left.bold === right.bold &&
-    left.color === right.color &&
-    left.italic === right.italic &&
-    left.underline === right.underline &&
-    left.fontFamily === right.fontFamily &&
-    left.fontSizeTwips === right.fontSizeTwips &&
-    left.highlight === right.highlight
-  );
+  return characterPropertiesKey(left) === characterPropertiesKey(right);
 }
 
-/** Creates a stable style-deduplication key. @param properties - Character properties. @returns Key. */
+/** Creates a stable key from all represented native property values. @param properties - Properties. @returns Internal key. */
 function characterPropertiesKey(properties: OdfCharacterProperties): string {
-  return `${Number(properties.bold)}${Number(properties.italic)}${Number(properties.underline)}|${encodeURIComponent(properties.fontFamily ?? "")}|${properties.fontSizeTwips ?? ""}|${encodeURIComponent(properties.color ?? "")}|${encodeURIComponent(properties.highlight ?? "")}`;
+  return partialCharacterPropertiesKey(properties);
 }
-/** Creates a three-state character key for automatic paragraph styles. @param properties - Optional direct deltas. @returns Stable key. */
+/** Preserves absent properties and every independent script/font/color field. @param properties - Direct properties. @returns Internal key. */
 function partialCharacterPropertiesKey(properties?: Partial<OdfCharacterProperties>): string {
-  return `${[properties?.bold, properties?.italic, properties?.underline]
-    .map(
-      /** Encodes undefined, false, or true. @param value - Direct property. @returns One key character. */
-      (value) => (value === undefined ? "-" : Number(value).toString()),
-    )
-    .join(
-      "",
-    )}|${encodeURIComponent(properties?.fontFamily ?? "")}|${properties?.fontSizeTwips ?? ""}|${encodeURIComponent(properties?.color ?? "")}|${encodeURIComponent(properties?.highlight ?? "")}`;
+  const value = properties ?? {};
+  return JSON.stringify(
+    Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map(
+          /** Reads a represented property in stable order. @param key - Property name. @returns Entry. */
+          (key) => [key, value[key as keyof OdfCharacterProperties]],
+        ),
+    ),
+  );
 }
-/** Restores properties from an internal key. @param key - Three-bit key. @returns Character properties. */
+/** Reads only keys produced internally by this export pass. @param key - Internal key. @returns Properties. */
 function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterProperties> {
-  const decode =
-    /** Decodes one three-state property. @param value - Key character. @returns Direct property. */
-    (value: string | undefined): boolean | undefined =>
-      value === "-" || value === undefined ? undefined : value === "1";
-  /** Five pipe-delimited fields emitted by both internal key encoders. */
-  type KeyFields = [string, string, string, string, string];
-  const [flags, encodedFont, fontSize, encodedColor, encodedHighlight] = key.split(
-    "|",
-  ) as KeyFields;
-  const bold = decode(flags[0]);
-  const italic = decode(flags[1]);
-  const underline = decode(flags[2]);
-  const fontFamily = decodeURIComponent(encodedFont);
-  const color = decodeURIComponent(encodedColor);
-  const highlight = decodeURIComponent(encodedHighlight);
-  return {
-    ...(bold === undefined ? {} : { bold }),
-    ...(italic === undefined ? {} : { italic }),
-    ...(underline === undefined ? {} : { underline }),
-    ...(fontFamily.length === 0 ? {} : { fontFamily }),
-    ...(fontSize.length === 0 ? {} : { fontSizeTwips: Number(fontSize) }),
-    ...(color.length === 0 ? {} : { color }),
-    ...(highlight.length === 0 ? {} : { highlight }),
-  };
+  return JSON.parse(key) as Partial<OdfCharacterProperties>;
 }
 
 /** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
@@ -931,15 +904,11 @@ export function exportCharacterAttributes(
       ? ""
       : fontFaceName === undefined
         ? ` fo:font-family="${escapeXml(properties.fontFamily)}"`
-        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily, properties.fontFamilyGeneric, properties.fontStyleName, properties.fontPitch, properties.fontCharSet))}" style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian ?? properties.fontFamily, properties.fontFamilyGenericAsian, properties.fontStyleNameAsian, properties.fontPitchAsian, properties.fontCharSetAsian))}" style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex ?? properties.fontFamily, properties.fontFamilyGenericComplex, properties.fontStyleNameComplex, properties.fontPitchComplex, properties.fontCharSetComplex))}"`,
-    properties.fontFamily === undefined &&
-    properties.fontFamilyAsian !== undefined &&
-    fontFaceName !== undefined
+        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily, properties.fontFamilyGeneric, properties.fontStyleName, properties.fontPitch, properties.fontCharSet))}"`,
+    properties.fontFamilyAsian !== undefined && fontFaceName !== undefined
       ? ` style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian, properties.fontFamilyGenericAsian, properties.fontStyleNameAsian, properties.fontPitchAsian, properties.fontCharSetAsian))}"`
       : "",
-    properties.fontFamily === undefined &&
-    properties.fontFamilyComplex !== undefined &&
-    fontFaceName !== undefined
+    properties.fontFamilyComplex !== undefined && fontFaceName !== undefined
       ? ` style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex, properties.fontFamilyGenericComplex, properties.fontStyleNameComplex, properties.fontPitchComplex, properties.fontCharSetComplex))}"`
       : "",
     properties.fontSizeTwips === undefined
@@ -948,15 +917,13 @@ export function exportCharacterAttributes(
     properties.highlight === undefined
       ? ""
       : ` fo:background-color="${escapeXml(properties.highlight)}"`,
-    properties.bold === undefined
+    properties.fontSizeTwipsAsian === undefined
       ? ""
-      : ` fo:font-weight="${properties.bold ? "bold" : "normal"}" style:font-weight-asian="${properties.bold ? "bold" : "normal"}" style:font-weight-complex="${properties.bold ? "bold" : "normal"}"`,
-    properties.italic === undefined
+      : ` style:font-size-asian="${properties.fontSizeTwipsAsian / 20}pt"`,
+    properties.fontSizeTwipsComplex === undefined
       ? ""
-      : ` fo:font-style="${properties.italic ? "italic" : "normal"}" style:font-style-asian="${properties.italic ? "italic" : "normal"}" style:font-style-complex="${properties.italic ? "italic" : "normal"}"`,
-    properties.underline === undefined
-      ? ""
-      : ` style:text-underline-style="${properties.underline ? "solid" : "none"}"${properties.underline ? ' style:text-underline-width="auto"' : ""}`,
+      : ` style:font-size-complex="${properties.fontSizeTwipsComplex / 20}pt"`,
+    exportTextCharacterProperties(properties),
   ].join("");
 }
 

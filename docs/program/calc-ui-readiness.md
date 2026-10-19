@@ -2,6 +2,20 @@
 
 ## Current UI delivery priority
 
+Task 36 (`202610191455-1KGJBF`) connects the shared Bold/Italic/Underline controls and
+native Format/Text Single/Double Underline slots to actual cell attributes, grouped-sheet
+and full-axis selections, attribute-only undo and same-model ODS. General underline retains
+its color; variant slots reset it with a fresh source item. Shared resource generation resolves
+module/global and primary/secondary key precedence, selects the established suite browser
+unxwnt-plus-Meta adaptation and binds the same configuration to Calc dispatch and menus.
+
+The full Calc gate passes 117 files / 345 cases at raw S/B/F/L 100%; hashes for all 96 covered
+Calc owners are retained in task evidence. Related Writer/ODF and Worker checks pass 156 files /
+6,767 cases. All 29 changed executable application owners have raw S/B/F/L 100%. The fresh
+production build passes 17 serial browser cases, with additional pressed-state checks and
+inspected screenshots at widths 1280 and 390. This bounded character-format slice is verified;
+font-family, other feasible formatting actions and wider UI delivery remain pending.
+
 Explicit user direction (task33):connect every UI action already supported by the current
 Calc kernel,with fonts,styles and formatting as priority. Reuse the actual Writer browser
 components and shared command bindings. New core work must close a concrete visible action
@@ -863,3 +877,27 @@ process minimum,script scanning,wrapped/rich/rotated/merged layout,drawing/hidde
 standalone manual/optimal-height dialogs remain unported. Unequal script-height attribute profiles decline adjustment. Mixed-script text,unsupported foreign
 layout properties and device measurements remain unverified;this is not full text-layout parity. Full UI/core parity remains unverified.
 Next UI delivery remains row-height actions and shared Writer font/format controls.
+
+## Character controls and shared ODF transport (task36, verification in progress)
+
+The shared Writer toolbar now dispatches Calc Bold10009, Italic10008 and Underline10014 to
+real ScFormatShell attributes and the existing selection-attribute history. Script values remain
+on the actual native items; React reads those items for cell painting and command state.
+The current in-progress task also removes lossy boolean character-property handoffs from shared
+xmloff and Writer ODT filters under the user's explicit authorization. Separate Latin/CJK/CTL
+weights, postures, absolute heights and font metadata survive the represented XML path, as do
+native underline styles and literal colors. Original transparent-color handlers, SAX signed color
+conversion, source attribute merge order and Writer ContextFilter suppression are retained.
+Writer insertion/export reads actual item values. Its Worker adapter now uses one shared literal
+underline record and actual pool factories, retaining packed alpha/color; unported complex interface
+state rejects instead of silently flattening.
+
+Initial whole Calc regression passes 338 cases in117 files, but raw coverage is not yet100.
+Ten consumed shared owners are measured at raw S/B/F/L100 in task36 evidence. Neither result
+certifies all changed Writer owners or complete native filter/UI parity. Visible underline variants,
+module-specific accelerator projection, comprehensive changed-owner coverage, browser checks
+and final static/registry acceptance remain pending. Writer's bounded absolute-height grammar,
+full property-set/factory graph, complex colors, broader browser-shaped editing helpers, rich/script
+layout, Calc named styles and other feasible UI actions remain further work. These limitations are
+unported responsibilities, not additional intentional deviations from upstream. Task36 is still active;
+last full all-app regression was task30, next is task40.

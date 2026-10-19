@@ -1,5 +1,7 @@
 /** @fileoverview Shared pinned XCU command label and accelerator projection used by Writer and Calc generators. */
 
+import { SaxesParser } from "saxes";
+
 /** Finds the pinned English command label. @param commandUrl - UNO command URL. @param catalogs - XCU command catalogs. @returns Localized label. */
 export function findEnglishLabel(commandUrl: string, ...catalogs: readonly string[]): string {
   const label = findEnglishLabelProperty(commandUrl, "Label", ...catalogs);
@@ -29,14 +31,93 @@ export function findEnglishLabelProperty(
   return undefined;
 }
 
-/** Finds default shortcuts for one command. @param commandUrl - UNO command URL. @param catalog - Accelerator XCU. @returns Browser-normalized shortcuts. */
-export function findShortcuts(commandUrl: string, catalog: string): readonly string[] {
+/** Parsed default accelerator scopes, shared by all commands in one generator run. */
+const acceleratorCatalogs = new Map<string, Map<string, Map<string, string>>>();
+/** Reads XCU hierarchy and localized command values without mixing module scopes. @param catalog - Pinned XML. @returns Scope/key/command maps in source order. */
+function acceleratorScopes(catalog: string): Map<string, Map<string, string>> {
+  const cached = acceleratorCatalogs.get(catalog);
+  if (cached) return cached;
+  const scopes = new Map<string, Map<string, string>>();
+  const stack: {
+    name: string;
+    identity: string | undefined;
+    language: string | undefined;
+    installation: string | undefined;
+    text: string;
+  }[] = [];
+  const parser = new SaxesParser({ xmlns: false });
+  parser.on(
+    "opentag",
+    /** Tracks the actual XCU hierarchy. @param tag - XML start. @returns Nothing. */ (tag) => {
+      stack.push({
+        name: tag.name,
+        identity: tag.attributes["oor:name"],
+        language: tag.attributes["xml:lang"],
+        installation: tag.attributes["install:module"],
+        text: "",
+      });
+    },
+  );
+  parser.on(
+    "text",
+    /** Retains decoded value text. @param text - XML text. @returns Nothing. */ (text) => {
+      const current = stack.at(-1);
+      if (current) current.text += text;
+    },
+  );
+  parser.on(
+    "closetag",
+    /** Projects only English Command values under source key nodes. @returns Nothing. */ () => {
+      const current = stack.pop();
+      if (
+        current?.name !== "value" ||
+        current.language !== "en-US" ||
+        (current.installation !== undefined && current.installation !== "unxwnt") ||
+        stack.at(-1)?.identity !== "Command"
+      )
+        return;
+      const path = stack
+        .filter(
+          /** Selects native configuration nodes. @param node - Element. @returns Whether node. */ (
+            node,
+          ) => node.name === "node",
+        )
+        .map(
+          /** Reads source identity. @param node - Element. @returns Name. */ (node) =>
+            node.identity as string,
+        );
+      const key = path.pop() as string,
+        scope = path.join("/");
+      let entries = scopes.get(scope);
+      if (!entries) {
+        entries = new Map();
+        scopes.set(scope, entries);
+      }
+      const command = current.text.trim();
+      if (command.length > 0) entries.set(key, command);
+      else entries.delete(key);
+    },
+  );
+  parser.write(catalog).close();
+  acceleratorCatalogs.set(catalog, scopes);
+  return scopes;
+}
+/** Finds effective module/global default bindings with native module-first and primary-before-secondary key precedence. @param commandUrl - UNO command URL. @param catalog - Accelerator XCU. @param module - Native module identity. @returns Browser-normalized shortcuts from the unxwnt installation with the shared Writer Meta alias, preserving source order within each scope. */
+export function findShortcuts(
+  commandUrl: string,
+  catalog: string,
+  module: string,
+): readonly string[] {
+  const scopes = acceleratorScopes(catalog),
+    bindings = new Map<string, string>();
+  for (const scope of [`Modules/${module}`, "Global"])
+    for (const layer of ["PrimaryKeys", "SecondaryKeys"])
+      for (const [key, command] of scopes.get(`${layer}/${scope}`) ?? [])
+        if (!bindings.has(key)) bindings.set(key, command);
   const shortcuts = new Set<string>();
-  for (const match of catalog.matchAll(
-    /<node oor:name="([^"]+)"[^>]*>\s*<prop oor:name="Command">([\s\S]*?)<\/prop>\s*<\/node>/g,
-  )) {
-    if (!match[2]?.includes(`<value xml:lang="en-US">${commandUrl}</value>`)) continue;
-    const shortcut = convertShortcut(match[1] as string);
+  for (const [key, command] of bindings) {
+    if (command !== commandUrl) continue;
+    const shortcut = convertShortcut(key);
     shortcuts.add(shortcut);
     if (shortcut.startsWith("Ctrl+")) shortcuts.add(`Meta+${shortcut.slice(5)}`);
   }

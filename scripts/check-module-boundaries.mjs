@@ -188,6 +188,28 @@ const allowedEdges = new Map([
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],
 ]);
+/** Exact native value imports needed by the consumed SAX/xmloff character-property owners.
+ * converter.cxx includes o3tl/numeric.hxx; original xo handlers use Any and postuhdl.cxx uses vcl/unohelp.hxx.
+ * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
+ */
+const originalCharacterValueImports = new Map([
+  ["sax/source/tools/converter.ts", new Set(["o3tl/inc/numeric.ts"])],
+  ["xmloff/source/style/weighhdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  [
+    "xmloff/source/style/postuhdl.ts",
+    new Set(["cppu/inc/com/sun/star/uno/Any.ts", "vcl/inc/unohelp.ts"]),
+  ],
+  ["xmloff/source/style/undlihdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  ["xmloff/source/style/xmlbahdl.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+  ["xmloff/source/text/txtprmap.ts", new Set(["cppu/inc/com/sun/star/uno/Any.ts"])],
+]);
+/** Matches only source-backed value-owner imports,leaving general module/browser/cycle guards unchanged. @param relativeSource - Importing source path. @param relativeTarget - Imported source path. @returns Whether this exact edge is original. */
+export function isOriginalCharacterValueImport(relativeSource, relativeTarget) {
+  const source = relativeSource.split(path.sep).join("/"),
+    target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") + ".ts";
+  return originalCharacterValueImports.get(source)?.has(target) ?? false;
+}
+
 /** Reports whether a native module edge is outside the explicit allowlist. @param sourceModule - Importing owner. @param targetModule - Imported owner. @returns Forbidden flag. */
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
@@ -686,7 +708,10 @@ for (const sourceFile of runtimeSources) {
       );
       continue;
     }
-    if (isForbiddenModuleEdge(sourceModule, targetModule))
+    if (
+      isForbiddenModuleEdge(sourceModule, targetModule) &&
+      !isOriginalCharacterValueImport(relativeSource, relativeTarget)
+    )
       failures.push(
         `${displayPath(sourceFile)}: non-allowlisted module edge ${sourceModule} -> ${targetModule}`,
       );

@@ -58,10 +58,11 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
     scriptSpecificCharacter
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    const scriptXml = exportStylesXml(scriptSpecificCharacter);
+    expect(scriptXml).toContain('fo:font-weight="bold"');
     expect(
-      /** Exports an unsupported script-specific default. @returns Styles XML when validation unexpectedly succeeds. */ () =>
-        exportStylesXml(scriptSpecificCharacter),
-    ).toThrow("script-specific character formatting");
+      scriptSpecificCharacter.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetWeight(),
+    ).toBe(FontWeight.WEIGHT_BOLD);
     const styleItem = createWriterDocument();
     styleItem.GetTextFormatColl("heading-1").SetFormatAttr(new SwNumRuleItem("Rule"));
     expect(

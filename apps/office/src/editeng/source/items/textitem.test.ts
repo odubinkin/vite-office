@@ -1,13 +1,14 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
+import { Color } from "../../../tools/inc/color";
+import { encodeSfxPoolItem, decodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../sw/browser/filter/xml/writer-document-codec";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
-import { RES_CHRATR_FONT } from "../../../sw/inc/hintids";
+import { RES_CHRATR_FONT, RES_CHRATR_UNDERLINE } from "../../../sw/inc/hintids";
 import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SvxLineSpacingItem } from "../../inc/lspcitem";
 import {
@@ -189,9 +190,20 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     ).toBe(true);
     expect(single.equals(new SfxInt16Item(underlineWhich, 1))).toBe(false);
     expect(encodeSfxPoolItem(single)).toEqual({
-      value: FontLineStyle.LINESTYLE_SINGLE,
+      value: { kind: "svx-text-line", style: FontLineStyle.LINESTYLE_SINGLE, color: 0xffffffff },
       which: underlineWhich,
     });
+    single.SetColor(new Color(0x123456));
+    const doc = createWriterDocument();
+    const native = new SvxUnderlineItem(single.GetLineStyle(), RES_CHRATR_UNDERLINE);
+    native.SetColor(single.GetColor());
+    const restored = decodeSfxPoolItem(
+      doc.GetAttrPool(),
+      structuredClone(encodeSfxPoolItem(native)),
+    );
+    expect(restored).not.toBe(native);
+    expect(restored.equals(native)).toBe(true);
+    doc.Dispose();
     for (const value of [-1, 19, 2147483647])
       expect(new SvxUnderlineItem(value as FontLineStyle, underlineWhich).GetLineStyle()).toBe(
         value,

@@ -1,4 +1,5 @@
 /** @fileoverview Production Calc workbench over canonical model/view/input owners,shared Sfx controls and Writer visual resources. */
+import { getBrowserShortcut } from "../../../framework/browser/accelerators/keymapping";
 import type { ScTable } from "../../inc/table";
 import { rowAtPixel, rowPixels } from "./row-geometry";
 import { ScInputMode } from "../../inc/global";
@@ -256,7 +257,7 @@ export function CalcWorkbench({
         /** Routes file and sheet accelerators through active Sfx slots from any source input. @param event - Platform key. @returns Nothing. */ (
           event,
         ) => {
-          if (event.nativeEvent.isComposing || modal) return;
+          if (event.defaultPrevented || event.nativeEvent.isComposing || modal) return;
           if (
             event.key === "F2" &&
             !event.ctrlKey &&
@@ -268,21 +269,17 @@ export function CalcWorkbench({
             frame.GetDispatcher().Execute(".uno:SetInputMode");
             return;
           }
-          if (!(event.ctrlKey || event.metaKey)) return;
-          const key = event.key.toLowerCase(),
-            url =
-              !event.altKey && !event.shiftKey && key === "pagedown"
-                ? ".uno:JumpToNextTable"
-                : !event.altKey && !event.shiftKey && key === "pageup"
-                  ? ".uno:JumpToPrevTable"
-                  : key === "o"
-                    ? ".uno:OpenFromCalc"
-                    : key === "s" && event.shiftKey
-                      ? ".uno:SaveAs"
-                      : undefined;
-          if (url) {
+          // The native grid handler owns platform-specific row/column Space selection.
+          if (!(event.ctrlKey || event.metaKey) || event.code === "Space" || event.key === " ")
+            return;
+          const shortcut = getBrowserShortcut(event);
+          const command =
+            shortcut === undefined
+              ? undefined
+              : frame.GetDispatcher().FindCommandByShortcut(shortcut);
+          if (command) {
             event.preventDefault();
-            frame.GetDispatcher().Execute(url);
+            source.Execute(command.command.id);
           }
         }
       }

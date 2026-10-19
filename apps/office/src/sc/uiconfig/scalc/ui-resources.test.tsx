@@ -212,7 +212,9 @@ it("renders native formatting placements with the bound shared font-size control
   expect(fonts[1]).toBeEnabled();
   expect(fonts[1]).toHaveValue("10");
   for (const button of within(bar).getAllByRole("button")) {
-    expect(button).toBeDisabled();
+    if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
+      expect(button).toBeEnabled();
+    else expect(button).toBeDisabled();
     expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
       expect(button).toHaveTextContent(/B|I|U/);

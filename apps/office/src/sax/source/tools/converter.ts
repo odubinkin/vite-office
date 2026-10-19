@@ -1,5 +1,7 @@
 /** @fileoverview Implements the existing measure targets from pinned sax/source/tools/converter.cxx. */
 
+import { convertToHex } from "../../../o3tl/inc/numeric";
+import { rtl_ustr_toInt64_WithLength } from "../../../sal/inc/rtl/ustring.h";
 import {
   rtl_math_ConversionStatus,
   rtl_math_stringToDouble,
@@ -16,6 +18,32 @@ const measureRatios = {
 
 /** Owns SAX scalar conversion without document or XML-context policy. */
 export const Converter = {
+  convertColor,
+  /** Native UTF16 signed32 number conversion through the original length-bounded signed64 parser,clamp and complete-consumption test. Byte-string overloads remain unported. @param output - Always initialized scalar output. @param input - UTF16 view. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Native success. */
+  convertNumber(output: [number], input: string, min = -2147483648, max = 2147483647): boolean {
+    output[0] = 0;
+    let position = 0;
+    while (position < input.length && input.charCodeAt(position) <= 32) position++;
+    const start = position;
+    if (position < input.length && input[position] === "-") position++;
+    while (
+      position < input.length &&
+      input.charCodeAt(position) >= 48 &&
+      input.charCodeAt(position) <= 57
+    )
+      position++;
+    const units = new Uint16Array(position - start);
+    for (let index = 0; index < units.length; index++)
+      units[index] = input.charCodeAt(start + index);
+    let value = rtl_ustr_toInt64_WithLength(units, 10, units.length);
+    const lower = BigInt(min | 0),
+      upper = BigInt(max | 0);
+    if (value < lower) value = lower;
+    else if (value > upper) value = upper;
+    const valid = position === input.length && value >= lower && value <= upper;
+    if (valid) output[0] = Number(value) | 0;
+    return valid;
+  },
   /** Reads the native UTF16/byte string-view overload; success depends on status, not complete consumption. @param output - Value slot, always written. @param input - Borrowed string view. @param rest - Optional unconsumed suffix slot. @returns Whether RTL reports Ok. */
   convertDouble(
     output: [number],
@@ -104,3 +132,20 @@ export const Converter = {
     return Math.trunc(amount) || 0;
   },
 };
+
+/** Original UTF16 color import overload. @param output - Destination retained on invalid shape. @param input - XML color. @returns Source success. */
+function convertColor(output: [number], input: string): boolean;
+/** Original color export overload; appends to the output buffer. @param output - Buffer. @param input - Signed32 color. @returns Nothing. */
+function convertColor(output: [string], input: number): void;
+/** Native shape-only validation and signed hex error propagation; original RGB byte export. @param output - Native output slot/buffer. @param input - XML text or color. @returns Import success or nothing for export. */
+function convertColor(output: [number] | [string], input: string | number): boolean | void {
+  if (typeof input === "number") {
+    (output as [string])[0] += "#" + (input & 0xffffff).toString(16).padStart(6, "0");
+    return;
+  }
+  if (input.length !== 7 || input[0] !== "#") return false;
+  let color = convertToHex(input.charCodeAt(1), input.charCodeAt(2));
+  color = (color << 8) | convertToHex(input.charCodeAt(3), input.charCodeAt(4));
+  (output as [number])[0] = (color << 8) | convertToHex(input.charCodeAt(5), input.charCodeAt(6));
+  return true;
+}
