@@ -4,7 +4,7 @@ title: "Connect native standard automatic row heights to Calc font UI"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Continue user-authorized UI work by replacing fixed-row painting with real source standard automatic row heights after point-size changes and history;preserve genuine model,default and ODS owners."
 doc_version: 3
-doc_updated_at: "2026-10-19T14:05:50.296Z"
+doc_updated_at: "2026-10-19T14:32:42.026Z"
 doc_updated_by: "CODER"
 description: "Iteration35: remove fixed-row clipping for the currently supported plain unwrapped font-height UI by connecting genuine row height/flag storage and the original standard attribute-height algorithm to model,view,undo and ODS. Use the actual existing segment/compressed-array owners and source defaults. Preserve unsupported script-aware/rich/rotated services explicitly. Keep all changes in this checkout on calc;next broad regression is40."
 sections:
@@ -53,7 +53,7 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's explicit source/inventory commit if acceptance fails. Retain task evidence,prior point-size UI and user-owned branch/merge decisions;do not reset other active tasks."
-  Findings: ""
+  Findings: "Task35 keeps approved local Calc UI scope and verification criteria. The independent ODS test fixture initially omitted the text namespace; corrected. Adding row geometry initially retriggered cursor reveal during free user scrolling; a real mounted regression caught it, and reveal now depends on cursor/actual cursor-row height rather than every revision. Native row segments retain a pixel offset for partially visible first rows so the final row fits at the physical scroll limit. The legacy overscroll assertion expected the old uniform-height first-row clamp; it now checks that the final row is present with a valid within-row offset. ODF export reuses the existing twip-to-XML converter and native row-property names. Exact RowHeightContext declaration/constructor evidence and an empty local-symbol list for its pure re-export repaired initial registry diagnostics. Source audit literal matching was corrected to the actual preprocessor definition. CALC-195/196 record source-width and shared-context suspicions without claiming compiled native reproduction. No coverage exclusions or thresholds changed. Last full regression task30,next task40; broad parity remains unverified."
 id_source: "generated"
 ---
 ## Summary
@@ -85,3 +85,5 @@ Run whole Calc test:coverage:calc with raw S/B/F/L100 and no new exclusions;coll
 Revert only this task's explicit source/inventory commit if acceptance fails. Retain task evidence,prior point-size UI and user-owned branch/merge decisions;do not reset other active tasks.
 
 ## Findings
+
+Task35 keeps approved local Calc UI scope and verification criteria. The independent ODS test fixture initially omitted the text namespace; corrected. Adding row geometry initially retriggered cursor reveal during free user scrolling; a real mounted regression caught it, and reveal now depends on cursor/actual cursor-row height rather than every revision. Native row segments retain a pixel offset for partially visible first rows so the final row fits at the physical scroll limit. The legacy overscroll assertion expected the old uniform-height first-row clamp; it now checks that the final row is present with a valid within-row offset. ODF export reuses the existing twip-to-XML converter and native row-property names. Exact RowHeightContext declaration/constructor evidence and an empty local-symbol list for its pure re-export repaired initial registry diagnostics. Source audit literal matching was corrected to the actual preprocessor definition. CALC-195/196 record source-width and shared-context suspicions without claiming compiled native reproduction. No coverage exclusions or thresholds changed. Last full regression task30,next task40; broad parity remains unverified.

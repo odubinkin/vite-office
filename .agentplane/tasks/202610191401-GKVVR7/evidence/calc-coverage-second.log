@@ -1,0 +1,43 @@
+
+> vite-office@0.1.0 test:coverage:calc
+> npm run test:coverage:calc --workspace @vite-office/office --
+
+
+> @vite-office/office@0.1.0 test:coverage:calc
+> vitest run --config vitest.calc.config.ts --coverage
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  116 passed (116)
+      Tests  335 passed (335)
+   Start at  21:21:02
+   Duration  237.23s (transform 82.43s, setup 28.24s, import 146.51s, tests 98.19s, environment 148.17s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |    99.93 |     100 |     100 |                   
+ source/core/data  |     100 |    99.94 |     100 |     100 |                   
+  table1.ts        |     100 |    96.15 |     100 |     100 | 46                
+ source/filter/xml |     100 |    99.21 |     100 |     100 |                   
+  xmlstyli.ts      |     100 |    93.33 |     100 |     100 | 123,127           
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 7505/7505 )
+Branches     : 99.93% ( 4740/4743 )
+Functions    : 100% ( 1512/1512 )
+Lines        : 100% ( 6724/6724 )
+================================================================================
+ERROR: Coverage for branches (99.93%) does not meet global threshold (100%)
+npm error Lifecycle script `test:coverage:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts --coverage

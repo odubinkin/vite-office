@@ -1,0 +1,175 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "method": "Pinned source inspection plus actual managed model tests; no compiled native parity claim.",
+  "assertions": {
+    "standardLiteral": true,
+    "correction": true,
+    "nativeHeightStorage": true,
+    "sharedContext": true,
+    "rowProperties": true,
+    "boolLiterals": true
+  },
+  "files": [
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
+      "sha256": "9e46fdcb1c09fa97dac89a38a540f37e268fe2d4add9e80f77c17f24e3dc7f62"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+      "sha256": "4973cc317e940243590f4633d78737a45acdc7fa0fa4d5f7dbb16b975cb44903"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+      "sha256": "c72ca245c9e9500ee11df0cb3072fc70f713a88f1912ac819c09d22cdda17e33"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/global.cxx",
+      "sha256": "8f526d76fb84c65e5c5a78976443bdeee01303876f15beff30220dc2a8a3c2c5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
+      "sha256": "ea469ccfb95f9f7669c2e81137d73de0b6ea9777db228e52286995de52f90327"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/core/data/rowheightcontext.cxx",
+      "sha256": "88a8b07d65bd05359809457883507fe59436bc948919ab50d4d3eb1045bf7888"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/inc/rowheightcontext.hxx",
+      "sha256": "2026b55c53691c473c2de94780a8c32852fb84e84a9213ac1b191cb87f4e3ea4"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/view/viewfun2.cxx",
+      "sha256": "968a78b88231a441aec8593b96e54b5a405524bdcf88eac1cd5a9cdcbca3cab4"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/ui/inc/viewdata.hxx",
+      "sha256": "e3cff44848201a10114d75e3f63799c80235cf93b7f46dc1ccdd22aee4deed04"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+      "sha256": "6a190cb7817269fe24d9a1ff65f35697e54cac7ac573446c56e18c2b190698df"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sax/source/tools/converter.cxx",
+      "sha256": "03d4b8f571c9770fcbfa7503d8307c3f4dae0f6e481ee5c7ed6805a3daa19b12"
+    }
+  ],
+  "local": [
+    {
+      "path": "apps/office/e2e/calc/font-size.spec.ts",
+      "sha256": "2714a584c114bf2595dfb0ac50766c37becd76e6c7ae92f81237a263673871fd"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+      "sha256": "8d19f58ee93e818e1ed0cd709da10809c7b083a6ed83a1b8534b44d2a5124332"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "ebaedc24ef82cd0b755db04756f86fdabb7457ab20cce756df009b25a54e666d"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScGridWindow.tsx",
+      "sha256": "9d459dcd41626691fb8626aa4dba8cfd9746cf88459da58f9dcd235cf2c4997f"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-presenters.test.tsx",
+      "sha256": "200da22cd4ddf9cfbaab9e46ba61394bbb89228e0f257ac25cf7c1e6afb303b7"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "a5a1b801967112be6e7662762803da43a562025bd0eaf791c7675d364feeca27"
+    },
+    {
+      "path": "apps/office/src/sc/inc/global.ts",
+      "sha256": "293995c756568a16b366ad495e74aa25c726da6d8a0b63cc48f888f8104597f4"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/docpool.test.ts",
+      "sha256": "0bc56fba331eb38f941f1381e335ad2b7ba0a827e4e6084a2f5ca655172aa72d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/docpool.ts",
+      "sha256": "b9b9afb6e26d1c85244a5c957feb1646f90339fa06ee01731f855f2826dc88eb"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/global.ts",
+      "sha256": "b6fd4a15fcf271ded86a74070b284c271ebd62ab80aa5f1c831b07c37e9f53bb"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "cd72cb6a6aa6a8181a88467e7bdb9e238a89aebe85ab00e9ee8064c880b88ae6"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+      "sha256": "7983fe8525cc5b210ccb54cf93bc908832bf4adca8593569076e2c688addeec3"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "0419ffba452bc232b3b8ef70892507f2075b16666a05f5d466ccf937714d193d"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "sha256": "e564dd857f03aaa3e48935523d3d68d96d6695dc562308e274e2ae1f4083a6a8"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlrowi.ts",
+      "sha256": "ed087e6bccc9050cfc1038c9ee820cf9773338656d1768698f420833ab9e7fe0"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "52452ac5b5d458d497e95314895597b0a7caa56936a7174a878f94d2e9f3976b"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+      "sha256": "c0024543c27ceb324c32572235f5099438fd877c91db97861fc1fc197c084c6d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/formatsh.ts",
+      "sha256": "dc985519abfb0b8d91c07180ca0fab12546cd101027b0dfb49153efe86653a21"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewdata.ts",
+      "sha256": "5088dd2a8dcac2bf0e60eb59ce7f8c182ce68eb244e7fc48fd4155891f16a883"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "4f4509c42dd0223e05cb31a5e8be24b06e1d04691d0c04b4a07b2aed882b3a3c"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/row-geometry.ts",
+      "sha256": "63e5a0877b14b1b3587813a5719b73d0973ba4a26d245d7800a0c60a33f0e04f"
+    },
+    {
+      "path": "apps/office/src/sc/inc/rowheightcontext.ts",
+      "sha256": "0aec278e498cd12664e156223fa1553a03ffa82504246853a4c64d8f5df06674"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column2.ts",
+      "sha256": "42bab2d6fca29aa50b8dcccce33d7097d9846ed08f15ba076999e54ebb5e8b60"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/rowheight.test.ts",
+      "sha256": "725c759c73a3dad5aab9037350f9c94948d5c2c56a2d37a0cd03add575bd1b38"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/rowheightcontext.ts",
+      "sha256": "836d524c5f7e345b8edc70c3610e63b2c5d15266332810b55ae1988e6838743e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table1.ts",
+      "sha256": "ac35f927c5a57a09607423a213cae3f677519b31dda00879816670df853b084d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfun2.ts",
+      "sha256": "e68e550e89638b96452035ffb12e86364020b3b79a06aff2909c8f59a108830b"
+    }
+  ],
+  "limitations": [
+    "Device startup InitTextHeight and physical font metrics unported",
+    "Only plain unwrapped unrotated uniform script-height standard layout represented",
+    "Drawing,hidden rows,merged/rich/script-dependent layout and height dialogs unported",
+    "Extreme native float-to-UInt16 conversion not certified",
+    "Cross-selected-sheet accumulation preserved as CALC-196"
+  ]
+}

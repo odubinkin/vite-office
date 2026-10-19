@@ -1,0 +1,48 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- rowheight.test.ts ods.test.ts calc-workbench.test.tsx
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts rowheight.test.ts ods.test.ts calc-workbench.test.tsx
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |calc| src/sc/browser/presentation/calc-workbench.test.tsx (3 tests | 1 failed) 13466ms
+   × keeps canonical selection,sheet ownership,failed drafts and physical scrolling independent 1793ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-workbench.test.tsx > keeps canonical selection,sheet ownership,failed drafts and physical scrolling independent
+AssertionError: expected 932.3401745395647 to be 500000 // Object.is equality
+
+- Expected
++ Received
+
+- 500000
++ 932.3401745395647
+
+ ❯ src/sc/browser/presentation/calc-workbench.test.tsx:95:26
+     93|   grid.scrollTop = 500000;
+     94|   fireEvent.scroll(grid);
+     95|   expect(grid.scrollTop).toBe(500000);
+       |                          ^
+     96|   expect(c.Address()).toBe("AA1000");
+     97|   fireEvent(window, new Event("resize"));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 24 passed (25)
+   Start at  21:19:54
+   Duration  25.18s (transform 13.69s, setup 1.39s, import 19.16s, tests 13.89s, environment 6.68s)
+
+npm error Lifecycle script `test:calc` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office-calc/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.calc.config.ts rowheight.test.ts ods.test.ts calc-workbench.test.tsx
