@@ -1,10 +1,11 @@
 ---
 id: "202610191146-5W55E9"
 title: "Implement original single-byte Unicode-to-text conversion and undefined-character contracts"
-status: "DOING"
+result_summary: "Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T12:02:59.844Z"
+  updated_at: "2026-10-19T12:04:26.857Z"
   updated_by: "CODER"
-  note: "Whole original reverse converter and real undefined/classifier dependencies ported;genuine native normal/sanitized outputs agree.21files58related cases and111files299Calc cases pass with strict raw100 S/B/F/L;one source-proven unreachable guard annotation disclosed.26intentional paths,all declared gates pass. Native findings CALC192/193 preserved. Next work prioritizes supported UI actions."
+  note: "Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610191146-5W55E9/evidence/unreachable-replacement-proof.json"
   findings:
     - "Original reverse lookup/replacement data,full converter,undefined handling and fixed classifiers are preserved in original owners.346source hashes138original objects and five modes agree across real normal/ASanUBSan graphs.21files58related tests and111files299Calc tests pass. Strict raw100metrics cover all executable owners with exactly one disclosed mathematically unreachable defensive guard annotation backed by all48ASCII replacement aggregates;reachable second-range zero handling is independently exercised with a valid native caller descriptor.26non-task paths within35;no runtime provider or threshold/validator weakening. CALC192/193 preserve native suspicious behavior."
-commit: null
+commit:
+  hash: "7e6722dec324610bba8f8710ffc82df7cd26e6cb"
+  message: "🧩 5W55E9 rtl: preserve whole native reverse byte conversion"
 comments:
   -
     author: "CODER"
     body: "Start: implement original whole reverse converter and real undefined/classifier dependencies with differential native evidence in calc only."
+  -
+    author: "CODER"
+    body: "Verified: Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Whole original reverse converter and real undefined/classifier dependencies ported;genuine native normal/sanitized outputs agree.21files58related cases and111files299Calc cases pass with strict raw100 S/B/F/L;one source-proven unreachable guard annotation disclosed.26intentional paths,all declared gates pass. Native findings CALC192/193 preserved. Next work prioritizes supported UI actions."
+  -
+    type: "verify"
+    at: "2026-10-19T12:04:26.857Z"
+    author: "CODER"
+    state: "ok"
+    note: "Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40."
+  -
+    type: "status"
+    at: "2026-10-19T12:04:27.041Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T12:02:59.921Z"
+doc_updated_at: "2026-10-19T12:04:27.042Z"
 doc_updated_by: "CODER"
 description: "Task32 of approved Calc goal:complete original convertsimple Unicode-to-byte responsibility needed by genuine converter descriptors and downstream OUString/font attributes. Port full native reverse lookup/replacement tables/binary searches,convertUnicodeToChar,whole handleUndefinedUnicodeToTextChar plus private helpers,actual unichars predicates and Unicode-to-text flags. Keep original ordering,UTF16 pointer consumption,undefined/private/capacity behavior and suspicious table contents. Reuse existing byte data/character predicates,typed borrowed buffers and scalar pointer-output cells;no host codec,partial reverse stub or fabricated registry. Genuine unchanged native69normal+69ASanUBSan dependency graph differential observations;entire changed/new owners and wholeCalc raw100,related RTL/VCL tests;types/build/static/style/docs/tree/provenance/scoped inventories/doctor/routing. Log new upstream suspicions while preserving behavior. Up to35non-task paths including source/tests/native evidence and truthful registry evidence. Onlycalc/offline/no merge. Lastfull30,next40."
 sections:
@@ -113,6 +132,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610191146-5W55E9 -m 🧩 5W55E9 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T12:04:26.857Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T12:02:59.921Z, excerpt_hash=sha256:b3cc4fd040effe3cdecb693e23ba3b95090eb718c88b180678abfcfb700f708f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191146-5W55E9/blueprint/resolved-snapshot.json
+    - old_digest: 0ce6a6d96cd406d69095232fd9c21c9c6f7f1089c622ff8223afa074cb10aaf1
+    - current_digest: 0ce6a6d96cd406d69095232fd9c21c9c6f7f1089c622ff8223afa074cb10aaf1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191146-5W55E9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191146-5W55E9 --result verified-202610191146-5W55E9 --commit d62ce979e8c256a228aa2f628315b39c129575ff
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -184,6 +233,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610191146-5W55E9 -m 🧩 5W55E9 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T12:04:26.857Z — VERIFY — ok
+
+By: CODER
+
+Note: Completed whole original reverse byte conversion and real undefined/classifier dependencies;564697native cases agree,58related and299Calc tests pass,strict100coverage with one source-proven unreachable guard disclosed;CALC192/193 preserved. Task32,next work UI priority,next full40.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T12:02:59.921Z, excerpt_hash=sha256:b3cc4fd040effe3cdecb693e23ba3b95090eb718c88b180678abfcfb700f708f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191146-5W55E9/blueprint/resolved-snapshot.json
+- old_digest: 0ce6a6d96cd406d69095232fd9c21c9c6f7f1089c622ff8223afa074cb10aaf1
+- current_digest: 0ce6a6d96cd406d69095232fd9c21c9c6f7f1089c622ff8223afa074cb10aaf1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191146-5W55E9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191146-5W55E9 --result verified-202610191146-5W55E9 --commit d62ce979e8c256a228aa2f628315b39c129575ff
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
