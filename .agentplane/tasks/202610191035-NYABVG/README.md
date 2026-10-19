@@ -4,7 +4,7 @@ title: "Run task30 full regression and resolve Calc/shared regressions"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,32 @@ verification:
   updated_by: "CODER"
   note: "Full17088app cases accounted across original and43case repaired-input replay;identical runtime bytes/maps and unedited actual counter merge pass strict100 S47447 B30584 F9478 L43116. WholeCalc299cases raw100;inventory123cases raw100 serialized;tooling119pass;all388browser cases accounted with exact-case replay,0skips/flaky. Existing assertions/deadlines/skips preserved in21modified tests;22test/support paths only. Types/build/static/style/docs/tree/deps/provenance/resources/scopedinventories/doctor/routing pass. Root-cache lint78old ignored scratch errors retained separately;unchanged full tracked-source lint and current deltas pass with exact scope proof. No runtime/threshold/validator change;next full40."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T11:28:36.496Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed150f6b16bc31:task30full checkpoint meets app/Calc/inventory coverage and all-case/browser accounting with source-backed test-input repairs only;limitations are explicit."
+  evaluated_sha: "150f6b16bc310ff9d6f32cc025b4d703106e3687"
+  blueprint_digest: "120e798f3b7e37092281840aaa6bdc6c2b28d335f3dc25fedf4f38ff57757dad"
+  evidence_refs:
+    - ".agentplane/tasks/202610191035-NYABVG/README.md"
+    - ".agentplane/tasks/202610191035-NYABVG/quality/20261019-112836496-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191035-NYABVG/quality/20261019-112836496-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191035-NYABVG/quality/20261019-112836496-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191035-NYABVG/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191035-NYABVG/verification.md"
+    - ".agentplane/tasks/202610191035-NYABVG/app-reconciliation.json"
+    - ".agentplane/tasks/202610191035-NYABVG/app-merged-coverage-summary.json"
+    - ".agentplane/tasks/202610191035-NYABVG/calc-coverage-summary.json"
+    - ".agentplane/tasks/202610191035-NYABVG/inventory-coverage-summary.json"
+    - ".agentplane/tasks/202610191035-NYABVG/browser-reconciliation.json"
+    - ".agentplane/tasks/202610191035-NYABVG/test-delta-proof.json"
+    - ".agentplane/tasks/202610191035-NYABVG/clean-lint-scope.json"
+  findings:
+    - "All17088application cases accounted across original17062passes and exact affected43case replay resolving all26old menu-input failures. All727instrumentation maps and runtime bytes match;unedited actual Istanbul counter union independently passes100 S47447 B30584 F9478 L43116 with0skips. Neither initial failing full invocation nor strict partial-profile exit1 is relabeled as one clean full run."
+    - "WholeCalc111files299cases raw100;complete serialized inventory38files123cases raw100;full tooling14files119cases pass. Concurrent inventory deadline diagnostics are preserved and resolve with the identical complete command after load ends;no timeout/skip/threshold/config change."
+    - "All388Chromium cases accounted across387full-run passes and successful exact390x600dialog replay using actual More. Production asset hashes stay unchanged. Existing assertion text and timeout/skip calls are exactly preserved across21tests;22intentional test/support paths only,no app/kernel/resource or upstream-ledger change."
+    - "Types/build/static/format/changed lint/docs/size/tree/dependencies/provenance/resources/all scopedinventories/doctor/routing pass. Raw root-cache npm lint failure78old ignored scratch errors remains explicit. Same unchanged npm lint passes4833path byte-identical CI-source projection with exact original eligibility for2323authored files;all22current deltas pass original rules. No source criterion or lint severity/validator weakened,original output retained,only derived copy removed."
 commit: null
 comments:
   -
