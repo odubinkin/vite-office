@@ -2,3 +2,40 @@
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
       Coverage enabled with istanbul
 
+ ❯ |writer| src/editeng/source/items/textitem.test.ts (6 tests | 1 failed) 19ms
+     × preserves FontLineStyle ordering and underline identity 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/editeng/source/items/textitem.test.ts > EditEngine character items > preserves FontLineStyle ordering and underline identity
+AssertionError: expected { which: 103, value: { …(3) } } to deeply equal { value: 1, which: 103 }
+
+- Expected
++ Received
+
+  {
+-   "value": 1,
++   "value": {
++     "color": 4294967295,
++     "kind": "svx-text-line",
++     "style": 1,
++   },
+    "which": 103,
+  }
+
+ ❯ src/editeng/source/items/textitem.test.ts:191:39
+    189|     ).toBe(true);
+    190|     expect(single.equals(new SfxInt16Item(underlineWhich, 1))).toBe(fa…
+    191|     expect(encodeSfxPoolItem(single)).toEqual({
+       |                                       ^
+    192|       value: FontLineStyle.LINESTYLE_SINGLE,
+    193|       which: underlineWhich,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 153 passed (154)
+      Tests  1 failed | 6751 passed (6752)
+   Start at  00:12:22
+   Duration  78.44s (transform 12.32s, setup 11.10s, import 45.73s, tests 20.83s, environment 61.66s)
+
