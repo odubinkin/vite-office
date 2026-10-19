@@ -1,10 +1,11 @@
 ---
 id: "202610191035-NYABVG"
 title: "Run task30 full regression and resolve Calc/shared regressions"
-status: "DOING"
+result_summary: "Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T11:27:57.539Z"
+  updated_at: "2026-10-19T11:28:58.995Z"
   updated_by: "CODER"
-  note: "Full17088app cases accounted across original and43case repaired-input replay;identical runtime bytes/maps and unedited actual counter merge pass strict100 S47447 B30584 F9478 L43116. WholeCalc299cases raw100;inventory123cases raw100 serialized;tooling119pass;all388browser cases accounted with exact-case replay,0skips/flaky. Existing assertions/deadlines/skips preserved in21modified tests;22test/support paths only. Types/build/static/style/docs/tree/deps/provenance/resources/scopedinventories/doctor/routing pass. Root-cache lint78old ignored scratch errors retained separately;unchanged full tracked-source lint and current deltas pass with exact scope proof. No runtime/threshold/validator change;next full40."
+  note: "Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active."
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
     - "WholeCalc111files299cases raw100;complete serialized inventory38files123cases raw100;full tooling14files119cases pass. Concurrent inventory deadline diagnostics are preserved and resolve with the identical complete command after load ends;no timeout/skip/threshold/config change."
     - "All388Chromium cases accounted across387full-run passes and successful exact390x600dialog replay using actual More. Production asset hashes stay unchanged. Existing assertion text and timeout/skip calls are exactly preserved across21tests;22intentional test/support paths only,no app/kernel/resource or upstream-ledger change."
     - "Types/build/static/format/changed lint/docs/size/tree/dependencies/provenance/resources/all scopedinventories/doctor/routing pass. Raw root-cache npm lint failure78old ignored scratch errors remains explicit. Same unchanged npm lint passes4833path byte-identical CI-source projection with exact original eligibility for2323authored files;all22current deltas pass original rules. No source criterion or lint severity/validator weakened,original output retained,only derived copy removed."
-commit: null
+commit:
+  hash: "150f6b16bc310ff9d6f32cc025b4d703106e3687"
+  message: "🧩 NYABVG test: verify full checkpoint and native menu input routes"
 comments:
   -
     author: "CODER"
     body: "Start:run the approved task30 complete regression checkpoint,retain raw evidence and resolve only actual Calc/shared regressions or source-backed dependent test inputs."
+  -
+    author: "CODER"
+    body: "Verified: Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full17088app cases accounted across original and43case repaired-input replay;identical runtime bytes/maps and unedited actual counter merge pass strict100 S47447 B30584 F9478 L43116. WholeCalc299cases raw100;inventory123cases raw100 serialized;tooling119pass;all388browser cases accounted with exact-case replay,0skips/flaky. Existing assertions/deadlines/skips preserved in21modified tests;22test/support paths only. Types/build/static/style/docs/tree/deps/provenance/resources/scopedinventories/doctor/routing pass. Root-cache lint78old ignored scratch errors retained separately;unchanged full tracked-source lint and current deltas pass with exact scope proof. No runtime/threshold/validator change;next full40."
+  -
+    type: "verify"
+    at: "2026-10-19T11:28:58.995Z"
+    author: "CODER"
+    state: "ok"
+    note: "Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active."
+  -
+    type: "status"
+    at: "2026-10-19T11:28:59.132Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T11:27:57.618Z"
+doc_updated_at: "2026-10-19T11:28:59.133Z"
 doc_updated_by: "CODER"
 description: "Task30 of the approved Calc UI/core goal:perform the once-per-ten-task complete regression after task20. Run complete office raw100coverage,complete inventory and tooling tests,all Chromium projects,types/build/static/style/docs/dependencies/provenance/source-tree/resource/inventory/doctor/routing checks. Resolve actual in-scope Calc/shared regressions and source-backed dependent test input migrations without weakening tests,coverage thresholds,timeouts or validators. Preserve original LibreOffice logic/defaults and append newly suspected source defects to canonical ledger without fixing source behavior. Up to35non-task source/test/registry paths if required by actual failures;no new feature expansion. Only vite-office-calc branchcalc,offline,no merge. Next full cadence40 after this checkpoint;overall goal remains active."
 sections:
@@ -132,6 +151,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610191035-NYABVG -m 🧩 NYABVG task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T11:28:58.995Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T11:27:57.618Z, excerpt_hash=sha256:520ad3cdbf1151965db4ee0fc7b1d2a4d04e414198330f457b9762ea7de9e1c1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191035-NYABVG/blueprint/resolved-snapshot.json
+    - old_digest: 120e798f3b7e37092281840aaa6bdc6c2b28d335f3dc25fedf4f38ff57757dad
+    - current_digest: 120e798f3b7e37092281840aaa6bdc6c2b28d335f3dc25fedf4f38ff57757dad
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191035-NYABVG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191035-NYABVG --result verified-202610191035-NYABVG --commit 14cdaec0cce69720d710ab5c062ce44112b3cec1
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -215,6 +264,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610191035-NYABVG -m 🧩 NYABVG task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T11:28:58.995Z — VERIFY — ok
+
+By: CODER
+
+Note: Completed task30full regression:all17088app and388browser cases accounted with bounded source-backed input replays;strict unchanged-runtime/map coverage100,wholeCalc299cases100,inventory123cases100,tooling119pass. Preserved assertions/deadlines,changed22test/support paths only. Root ignored-output lint limitation recorded alongside unchanged clean-source and delta lint passes. Next full40;broader UI/core goal remains active.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T11:27:57.618Z, excerpt_hash=sha256:520ad3cdbf1151965db4ee0fc7b1d2a4d04e414198330f457b9762ea7de9e1c1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191035-NYABVG/blueprint/resolved-snapshot.json
+- old_digest: 120e798f3b7e37092281840aaa6bdc6c2b28d335f3dc25fedf4f38ff57757dad
+- current_digest: 120e798f3b7e37092281840aaa6bdc6c2b28d335f3dc25fedf4f38ff57757dad
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191035-NYABVG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191035-NYABVG --result verified-202610191035-NYABVG --commit 14cdaec0cce69720d710ab5c062ce44112b3cec1
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
