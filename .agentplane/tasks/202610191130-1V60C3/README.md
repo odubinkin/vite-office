@@ -1,10 +1,11 @@
 ---
 id: "202610191130-1V60C3"
 title: "Implement native shared menubar pointer rollover and first-move admission"
-status: "DOING"
+result_summary: "Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T11:42:47.870Z"
+  updated_at: "2026-10-19T11:43:58.909Z"
   updated_by: "CODER"
-  note: "Source-backed common root menubar motion/highlight lifetime implemented;20files196related tests and111files299Calc tests pass with raw100 S/B/F/L;25browser cases pass at1280/390;all declared deterministic checks pass. See task verification.md and evidence. Full native GUI/platform and broader goal remain unverified;next full40."
+  note: "Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40."
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - ".agentplane/tasks/202610191130-1V60C3/evidence/browser-final.log"
   findings:
     - "Actual common Writer/Calc component owns constructor/creation first-move lifetime,separate rollover/highlight and floating-window filtering;no duplicate presenter or fabricated command state. Source Paint priority and unopened keyboard selection are represented. Existing assertions remain and fixture migrations use actual movement. Complete two-owner raw coverage100,wholeCalc100 and final25browser cases pass.11non-task paths remain within approved20."
-commit: null
+commit:
+  hash: "681b1333a4a8426395d1b9a8c0521129426336a0"
+  message: "🧩 1V60C3 menu: align shared native root pointer admission"
 comments:
   -
     author: "CODER"
     body: "Start:implement shared source-shaped root menubar motion,rollover and per-popup first-move suppression with exact source-backed browser tests."
+  -
+    author: "CODER"
+    body: "Verified: Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Source-backed common root menubar motion/highlight lifetime implemented;20files196related tests and111files299Calc tests pass with raw100 S/B/F/L;25browser cases pass at1280/390;all declared deterministic checks pass. See task verification.md and evidence. Full native GUI/platform and broader goal remain unverified;next full40."
+  -
+    type: "verify"
+    at: "2026-10-19T11:43:58.909Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40."
+  -
+    type: "status"
+    at: "2026-10-19T11:43:59.056Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T11:42:47.948Z"
+doc_updated_at: "2026-10-19T11:43:59.057Z"
 doc_updated_by: "CODER"
 description: "Task31 of approved Calc UI goal:port MenuBarWindow root pointer MouseMove/leave/rollover/first-move ordering into existing shared Writer/Calc CommandMenuBar. Ignore enter-only events and floating-child motion;closed-bar movement highlights without opening or consuming first-move flag;active-bar movement updates rollover then suppresses first motion after every root popup creation;later valid changed roots open immediately. Leave clears rollover without opening/consuming the flag. Preserve current resource/focus/keyboard/click/overflow ownership and shared Writer visual classes. Add source-backed logical rollover/active root styling. No duplicate Calc menu or fake defaults. Bound root-only scope;popup timers remain existing shared owner,mnemonics/platform rendering and full UI/core parity pending. WholeCalc100,entire changed shared owners100,related menu tests and real desktop/mobile Writer/Calc browser checks;types/build/static/style/docs/tree/provenance/inventories/doctor/routing. Only calc/offline,no merge;next full40."
 sections:
@@ -115,6 +134,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane commit 202610191130-1V60C3 -m 🧩 1V60C3 task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-19T11:43:58.909Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T11:42:47.948Z, excerpt_hash=sha256:53742632ec0bac447ea4a1b9941ba8ce9d909a86887a62c1ff81fda67c8670ed
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191130-1V60C3/blueprint/resolved-snapshot.json
+    - old_digest: 76b6a80ebd68458abbabcb6036637b8f22ba6c40275986b8f859ec503e201be8
+    - current_digest: 76b6a80ebd68458abbabcb6036637b8f22ba6c40275986b8f859ec503e201be8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191130-1V60C3
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191130-1V60C3 --result verified-202610191130-1V60C3 --commit 7a48717dea245822c37a730ffd461647e96e4a68
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -188,6 +237,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202610191130-1V60C3 -m 🧩 1V60C3 task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-19T11:43:58.909Z — VERIFY — ok
+
+By: CODER
+
+Note: Implemented native shared Writer/Calc root pointer rollover,first-motion admission,keyboard-only highlight and original Paint priority;196related and299Calc cases raw100coverage plus25browser cases pass;task31,next full40.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T11:42:47.948Z, excerpt_hash=sha256:53742632ec0bac447ea4a1b9941ba8ce9d909a86887a62c1ff81fda67c8670ed
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191130-1V60C3/blueprint/resolved-snapshot.json
+- old_digest: 76b6a80ebd68458abbabcb6036637b8f22ba6c40275986b8f859ec503e201be8
+- current_digest: 76b6a80ebd68458abbabcb6036637b8f22ba6c40275986b8f859ec503e201be8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191130-1V60C3
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191130-1V60C3 --result verified-202610191130-1V60C3 --commit 7a48717dea245822c37a730ffd461647e96e4a68
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
