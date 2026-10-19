@@ -1,0 +1,51 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ❯ |calc| src/sc/browser/presentation/calc-alignment.test.tsx (3 tests | 2 failed) 560ms
+   × reuses shared buttons and Format menu with original toggle/explicit behavior,numeric defaults and native history 549ms
+   × formats actual grouped full-axis sparse patterns and retains unrelated items and undo selection 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-alignment.test.tsx > reuses shared buttons and Format menu with original toggle/explicit behavior,numeric defaults and native history
+Error: expect(element).toHaveAttribute("aria-pressed", "true") // element.getAttribute("aria-pressed") === "true"
+
+Expected the element to have attribute:
+  aria-pressed="true"
+Received:
+  null
+ ❯ src/sc/browser/presentation/calc-alignment.test.tsx:47:18
+     45|     fireEvent.click(left);
+     46|     expect(alignment(session)).toEqual([H.Left, V.Standard]);
+     47|     expect(left).toHaveAttribute("aria-pressed", "true");
+       |                  ^
+     48|     expect(a1).toHaveStyle({ textAlign: "left" });
+     49|     fireEvent.click(left);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |calc| src/sc/browser/presentation/calc-alignment.test.tsx > formats actual grouped full-axis sparse patterns and retains unrelated items and undo selection
+AssertionError: expected 1 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 1
+
+ ❯ src/sc/browser/presentation/calc-alignment.test.tsx:126:75
+    124|     expect(c.SetAlignment("horizontal", H.Right, false)).toBe(true);
+    125|     for (const tab of [0, 1]) {
+    126|       expect((doc.FetchTable(tab) as ScTable).GetAllocatedColumnsCount…
+       |                                                                           ^
+    127|       expect(alignment(session, doc.MaxCol(), 7, tab)[0]).toBe(H.Right…
+    128|       expect(alignment(session, 0, 6, tab)[0]).toBe(H.Standard);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  04:11:58
+   Duration  2.42s (transform 1.12s, setup 69ms, import 1.41s, tests 560ms, environment 299ms)
+
