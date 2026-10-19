@@ -1,0 +1,38 @@
+{
+  "runtimeFiles": 1114,
+  "unchangedRuntimeFiles": 1114,
+  "changedTrackedInputs": [
+    "apps/office/e2e/shared/popup-pointer.spec.ts",
+    "apps/office/test-projects.ts",
+    "scripts/native-tools-ownership.test.ts",
+    "scripts/test-projects.test.ts"
+  ],
+  "initial": {
+    "command": "npx playwright test --config apps/office/playwright.config.ts",
+    "total": 402,
+    "passed": 400,
+    "failed": 2,
+    "failedCases": [
+      "calc popup pointer ownership at 1280px",
+      "calc popup pointer ownership at 390px"
+    ]
+  },
+  "fresh": {
+    "command": "npx playwright test --config apps/office/playwright.config.ts --project shared --workers=2 apps/office/e2e/shared/popup-pointer.spec.ts",
+    "passed": 4,
+    "suites": [
+      "writer",
+      "calc"
+    ],
+    "widths": [
+      1280,
+      390
+    ],
+    "productionChanges": false
+  },
+  "reconciled": {
+    "totalDistinct": 402,
+    "passedDistinct": 402
+  },
+  "visualInspection": "Calc native submenu highlight retained over disabled Overline; enabled Bold and Writer menu styling verified at1280/390. All browser commands terminal before source snapshot."
+}

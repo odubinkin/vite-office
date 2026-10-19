@@ -4,7 +4,7 @@ title: "Validate integrated Calc and Writer UI at the task40 regression checkpoi
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: execute the authorized task40 full integrated regression checkpoint,repair proven native/UI contract regressions without weakening gates,and retain current-source raw100/browser evidence;calc checkout only."
 doc_version: 3
-doc_updated_at: "2026-10-19T21:48:31.064Z"
+doc_updated_at: "2026-10-19T22:14:42.597Z"
 doc_updated_by: "CODER"
 description: "Task40 of the active authorized Calc UI goal:execute the full all-application regression cadence after tasks31-39,repair source-backed regressions in the integrated Calc/shared/Writer UI and contracts,retain current-source raw100 evidence and fresh all-project browser checks. Only vite-office-calc branch calc;next full checkpoint50."
 sections:
@@ -54,6 +54,12 @@ sections:
     Full application and inventory attempts are terminal ENOSPC failures;the application stopped writing temporary coverage chunk137 and produced no final report or test result. These attempts are not accepted evidence and will be repeated sequentially after space recovery. Nine old generated observation inputs/outputs were reversibly gzip-preserved with exact decompressed SHA256 and unchanged-source stat verification before removing the uncompressed duplicates;manifest cache-compaction.json records restoration paths/hashes. Own failed incomplete coverage chunks are discarded as ineligible temporary output. No source or canonical task evidence is removed.
 
     The full tooling run passes126cases and fails2:an old native-tools test still forbids sc->tools although the current source-backed guard permits the real Calc dependency;and actual shared-project discovery exposes one Writer integration test editeng/browser/text-line-item-codec.test.ts importing real Writer document/Which identities. Correct the source expectation and assign that existing test to the established writerIntegrationTests list,retaining all cases and actual discovery/coverage rules. Pinned patattr.cxx includes tools/fract.hxx and tools/UnitConversion.hxx. No runtime application behavior change is required by these failures.
+
+    The second complete Istanbul invocation also terminated ENOSPC after863temporary chunks;no final JSON/raw report was produced and none of those incomplete chunks are accepted. Full1040file discovery is now executed in sequential100file batches with unchanged coverage includes,excludes,provider and four100thresholds. Each batch preserves test-result/raw JSON and logs,checks exact discovered-file equality and unchanged source digests,then removes only its own derived coverage directory. Intermediate coverage-only threshold exits are expected;only a nonempty source/map-compatible aggregate with all1040files and S/B/F/L100 is eligible acceptance. Source maps are compared exactly before Istanbul merging. This preserves the full checkpoint criteria rather than accepting a partial run.
+
+    The complete browser invocation passed400of402cases;both failures were old Calc disabled-Bold expectations. The repaired shared pointer test now requires enabled Bold for both applications and explicitly verifies the native hover highlight over disabled Calc Overline. A fresh4case run passes Writer/Calc at1280/390;all1114runtime source hashes are unchanged,and browser-reconciliation.json accounts for all402distinct cases. Fresh Calc screenshots were visually inspected. No browser or application runtime repair was needed.
+
+    Final root format checking is repeated with both existing .prettierignore and .gitignore via CLI,as already done for generated-output lint ownership. The plain repeat was terminated while traversing generated reports. This applies existing repository artifact boundaries and leaves all tracked authored source within the same checks;no repository ignore file,format rule,lint rule,test inclusion or coverage threshold is changed.
 id_source: "generated"
 ---
 ## Summary
@@ -89,3 +95,9 @@ Initial global lint reports78errors exclusively in old generated output/playwrig
 Full application and inventory attempts are terminal ENOSPC failures;the application stopped writing temporary coverage chunk137 and produced no final report or test result. These attempts are not accepted evidence and will be repeated sequentially after space recovery. Nine old generated observation inputs/outputs were reversibly gzip-preserved with exact decompressed SHA256 and unchanged-source stat verification before removing the uncompressed duplicates;manifest cache-compaction.json records restoration paths/hashes. Own failed incomplete coverage chunks are discarded as ineligible temporary output. No source or canonical task evidence is removed.
 
 The full tooling run passes126cases and fails2:an old native-tools test still forbids sc->tools although the current source-backed guard permits the real Calc dependency;and actual shared-project discovery exposes one Writer integration test editeng/browser/text-line-item-codec.test.ts importing real Writer document/Which identities. Correct the source expectation and assign that existing test to the established writerIntegrationTests list,retaining all cases and actual discovery/coverage rules. Pinned patattr.cxx includes tools/fract.hxx and tools/UnitConversion.hxx. No runtime application behavior change is required by these failures.
+
+The second complete Istanbul invocation also terminated ENOSPC after863temporary chunks;no final JSON/raw report was produced and none of those incomplete chunks are accepted. Full1040file discovery is now executed in sequential100file batches with unchanged coverage includes,excludes,provider and four100thresholds. Each batch preserves test-result/raw JSON and logs,checks exact discovered-file equality and unchanged source digests,then removes only its own derived coverage directory. Intermediate coverage-only threshold exits are expected;only a nonempty source/map-compatible aggregate with all1040files and S/B/F/L100 is eligible acceptance. Source maps are compared exactly before Istanbul merging. This preserves the full checkpoint criteria rather than accepting a partial run.
+
+The complete browser invocation passed400of402cases;both failures were old Calc disabled-Bold expectations. The repaired shared pointer test now requires enabled Bold for both applications and explicitly verifies the native hover highlight over disabled Calc Overline. A fresh4case run passes Writer/Calc at1280/390;all1114runtime source hashes are unchanged,and browser-reconciliation.json accounts for all402distinct cases. Fresh Calc screenshots were visually inspected. No browser or application runtime repair was needed.
+
+Final root format checking is repeated with both existing .prettierignore and .gitignore via CLI,as already done for generated-output lint ownership. The plain repeat was terminated while traversing generated reports. This applies existing repository artifact boundaries and leaves all tracked authored source within the same checks;no repository ignore file,format rule,lint rule,test inclusion or coverage threshold is changed.
