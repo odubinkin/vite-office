@@ -1,10 +1,11 @@
 ---
 id: "202610191240-WP2DC4"
 title: "Connect Calc font-size UI to native cell attributes and ODS persistence"
-status: "DOING"
+result_summary: "Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T13:51:52.492Z"
+  updated_at: "2026-10-19T13:53:23.155Z"
   updated_by: "CODER"
-  note: "Shared Calc FontHeight UI applies genuine three-script cell attributes with selection/group state,real undo and same-model ODS/autosave.326Calc+33shared cases raw100;20complete executable app owners raw100;91related tooling and17browser cases pass. All final gates pass. Native row layout and remaining UI remain pending;task34,nextfull40."
+  note: "Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40."
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610191240-WP2DC4/evidence/browser-calc-final.log"
   findings:
     - "The source-backed100..124pool and canonical row runs avoid a browser formatting map or fake defaults. Three-script font-height deltas,normal ranges/groups,mixed state,history and real primary ODS persistence are tested.326Calc cases raw100 plus33shared cases raw100 cover20complete executable changed app owners;17real browser and91related tooling cases pass. Pure DocPool/VCL dependency admission is exact-owner/exact-target,with browser/reverse negatives retained;no threshold/exclusion relaxation. The79path footprint comprises34code/test/tooling,43canonical records and2docs for this same user-authorized vertical slice. Native broad parity is not claimed. Final screenshots confirm fixed-row clipping,so row-height/overflow is the next UI priority."
-commit: null
+commit:
+  hash: "433c4103e96153d9f123c38824bdc82d020866ad"
+  message: "🧩 WP2DC4 calc: connect shared font-size UI to cell attributes"
 comments:
   -
     author: "CODER"
     body: "Start: User authorized all currently feasible Calc UI actions; implement end-to-end shared font-size control with original attribute storage/defaults and no unrelated kernel prerequisites."
+  -
+    author: "CODER"
+    body: "Verified: Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Shared Calc FontHeight UI applies genuine three-script cell attributes with selection/group state,real undo and same-model ODS/autosave.326Calc+33shared cases raw100;20complete executable app owners raw100;91related tooling and17browser cases pass. All final gates pass. Native row layout and remaining UI remain pending;task34,nextfull40."
+  -
+    type: "verify"
+    at: "2026-10-19T13:53:23.155Z"
+    author: "CODER"
+    state: "ok"
+    note: "Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40."
+  -
+    type: "status"
+    at: "2026-10-19T13:53:23.265Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40.. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T13:51:52.553Z"
+doc_updated_at: "2026-10-19T13:53:23.266Z"
 doc_updated_by: "CODER"
 description: "Iteration34: deliver the existing shared Writer font-size selector as a working Calc action. Implement the consumed upstream cell attribute storage/pool contracts, real selection application and readback, undo/redo, grid rendering, and ODS/autosave persistence. Preserve original font-height defaults and three-script application. Keep unsupported family/style actions disabled until their own concrete dependencies are present. Work only in this checkout on calc; no full suite before iteration40."
 sections:
@@ -107,6 +126,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-19T13:53:23.155Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T13:51:52.553Z, excerpt_hash=sha256:f306b7ff6b73beac79a61a6b09870a8f16189bd2a4534a76eae96ac2c662f2ef
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191240-WP2DC4/blueprint/resolved-snapshot.json
+    - old_digest: 76fce8d1cce93d9342d2c95d2f9e60c8a0f58d28846d26b547ad2db1e0f8115e
+    - current_digest: 76fce8d1cce93d9342d2c95d2f9e60c8a0f58d28846d26b547ad2db1e0f8115e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610191240-WP2DC4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610191240-WP2DC4 --result verified-202610191240-WP2DC4 --commit 4801774137d1dc6c86f81ff4e795fdfcf720ea92
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -166,6 +215,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T13:53:23.155Z — VERIFY — ok
+
+By: CODER
+
+Note: Connected shared Writer font-size selector to actual Calc three-script cell attributes,mixed selection state,real undo/redo and ODS/autosave;326Calc and33shared cases raw100,17browser and91tooling cases pass. Fixed-row large-font clipping is the next UI priority. Task34,nextfull40.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T13:51:52.553Z, excerpt_hash=sha256:f306b7ff6b73beac79a61a6b09870a8f16189bd2a4534a76eae96ac2c662f2ef
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610191240-WP2DC4/blueprint/resolved-snapshot.json
+- old_digest: 76fce8d1cce93d9342d2c95d2f9e60c8a0f58d28846d26b547ad2db1e0f8115e
+- current_digest: 76fce8d1cce93d9342d2c95d2f9e60c8a0f58d28846d26b547ad2db1e0f8115e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610191240-WP2DC4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610191240-WP2DC4 --result verified-202610191240-WP2DC4 --commit 4801774137d1dc6c86f81ff4e795fdfcf720ea92
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
