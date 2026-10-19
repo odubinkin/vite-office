@@ -1,10 +1,11 @@
 ---
 id: "202610192106-5G2DBD"
 title: "Connect Calc alignment controls to native items and ODS properties"
-status: "DOING"
+result_summary: "verified-202610192106-5G2DBD"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-19T21:35:18.906Z"
+  updated_at: "2026-10-19T21:36:06.238Z"
   updated_by: "CODER"
-  note: "Calc125files372cases raw S8123/B5113/F1601/L7284 all100;fresh related26files213cases raw S551/B306/F79/L519 all100,reconciling original467file8582case graph after only3Writer test expectation updates. All11changed executable owners current-hash100. Fresh23browser cases and1280/390visual geometry passed. All declared static/source/resource/inventory gates passed;all-app next40."
+  note: "verified-202610192106-5G2DBD"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - ".agentplane/tasks/202610192106-5G2DBD/evidence/alignment-source-baseline.json"
   findings:
     - "Actual shared Writer command controls preserve original seven toolbar toggles and explicit menu operations over native129/132items,sparse/grouped/full-axis selections and history. Common checkability follows live boolean/INVALID state rather than only resource flags,matching pinned Sfx toolbox and menu manager. Native ODS handlers use original typed Any,source/repeat merge and lexical/default semantics. Calc372cases and all11changed executable owners have source-matched raw S/B/F/L100. Fresh23browser cases verify1280/390physical text geometry,menu/keyboard/history and page/Worker ODS. Initial467file8582case related graph found9stale Writer expectations;all3modified Writer test files pass in the fresh26file213case run with all4complete shared owners raw100,unchanged production hashes and no removed test cases. All declared type/lint/docs/source/resource/inventory/static gates pass;46non-task paths remain within80approved."
-commit: null
+commit:
+  hash: "752b8b0f09ade9f47a154a08078884b157b0c2b2"
+  message: "🧩 5G2DBD calc: record native alignment verification and quality"
 comments:
   -
     author: "CODER"
     body: "Start: implement the authorized native alignment toolbar/menu and ODS slice,using shared Writer controls,original item/history ownership and scoped raw100 checks;calc checkout only."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610192106-5G2DBD. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Calc125files372cases raw S8123/B5113/F1601/L7284 all100;fresh related26files213cases raw S551/B306/F79/L519 all100,reconciling original467file8582case graph after only3Writer test expectation updates. All11changed executable owners current-hash100. Fresh23browser cases and1280/390visual geometry passed. All declared static/source/resource/inventory gates passed;all-app next40."
+  -
+    type: "verify"
+    at: "2026-10-19T21:36:06.238Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610192106-5G2DBD"
+  -
+    type: "status"
+    at: "2026-10-19T21:36:06.368Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610192106-5G2DBD. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-19T21:35:18.960Z"
+doc_updated_at: "2026-10-19T21:36:06.369Z"
 doc_updated_by: "CODER"
 description: "Task39 of the authorized Calc UI goal:actual shared Writer command buttons and Format menu use original horizontal/vertical alignment slots,toggle versus explicit semantics,native selection/history and ODS property handlers. Work only vite-office-calc on calc. Full Calc and changed executable owner raw100,related tests,fresh1280/390browser evidence;next all-app task40."
 sections:
@@ -112,6 +131,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-19T21:36:06.238Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610192106-5G2DBD
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T21:35:18.960Z, excerpt_hash=sha256:c3c7b91ed2a38729453f1d8761b808f784df415035ec2a084b77ec286419b00d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192106-5G2DBD/blueprint/resolved-snapshot.json
+    - old_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+    - current_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610192106-5G2DBD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610192106-5G2DBD --result verified-202610192106-5G2DBD --commit 752b8b0f09ade9f47a154a08078884b157b0c2b2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only intentional task39 implementation commits if necessary;preserve task evidence and unrelated active tasks. No merge/reset or save/recovery-policy changes."
   Findings: |-
@@ -124,6 +173,10 @@ sections:
     Verification observations:focused native/ODS/UI checks pass. Third full Calc run passes125files372cases with S8123/B5114of5115/F1601/L7284;one redundant consumer failure guard remains unreachable because real SvxVerJustifyItem.QueryValue always maps to supported signed32 CellVertJustify2 values. The consumer now relies on that original typed precondition while the property handler retains its failed-Any branches,which are tested directly. Final Calc raw run is pending. Earlier two full runs found a stale unsupported-paragraph expectation and then an unknown graphic-properties test fixture;the actual unported known row-property group now retains the diagnostic coverage,with17focused ODS cases green. Root types found an exact-optional fixture issue,corrected by omitting the absent checked property. No gates weakened,no exclusions or thresholds changed. Current source inventories,boundaries,docs,size/tree,provenance,resources,doctor/routing passed before the final typed-precondition refinement. Full all-app next task40.
 
     Final acceptance:Calc372cases and23fresh browser cases pass. Related initial graph8582cases found9stale Writer expectations;all modified Writer test files pass in the fresh213case focused run with4complete shared owners raw100. All11changed executable owners are measured100 with current source hashes. Source native formats preserve original toolbar toggling versus explicit menu semantics and typed ODS merged properties. Fresh screenshot geometry is visually inspected. Under80approved non-task paths,no scope expansion,no network/merge/other checkout. All-app next task40. Initial and intermediate failures/raw coverage remain retained;final-proof files are authoritative. No native full-module parity promotion.
+extensions:
+  implementation_commit:
+    hash: "40360f375e1c7d79e671d6dd8890b192f98da659"
+    message: "📐 5G2DBD calc: connect native alignment controls and ODS properties"
 id_source: "generated"
 ---
 ## Summary
@@ -183,6 +236,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-19T21:36:06.238Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610192106-5G2DBD
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-19T21:35:18.960Z, excerpt_hash=sha256:c3c7b91ed2a38729453f1d8761b808f784df415035ec2a084b77ec286419b00d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610192106-5G2DBD/blueprint/resolved-snapshot.json
+- old_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+- current_digest: b646472afc7430bc6f7dc7558986f214d5f13a35737bcbeff5b538a3e46b940c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610192106-5G2DBD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610192106-5G2DBD --result verified-202610192106-5G2DBD --commit 752b8b0f09ade9f47a154a08078884b157b0c2b2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
