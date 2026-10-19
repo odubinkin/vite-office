@@ -19,6 +19,7 @@ const measureRatios = {
 /** Owns SAX scalar conversion without document or XML-context policy. */
 export const Converter = {
   convertColor,
+  convertBool,
   /** Native UTF16 signed32 number conversion through the original length-bounded signed64 parser,clamp and complete-consumption test. Byte-string overloads remain unported. @param output - Always initialized scalar output. @param input - UTF16 view. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Native success. */
   convertNumber(output: [number], input: string, min = -2147483648, max = 2147483647): boolean {
     output[0] = 0;
@@ -132,6 +133,20 @@ export const Converter = {
     return Math.trunc(amount) || 0;
   },
 };
+
+/** Original boolean string-view parsing and buffer-append overloads. JS strings erase native byte/UTF16 view distinctions. @param output - Bool output or string buffer. @param input - Native selected input. @returns Success for parsing,or nothing for append. */
+function convertBool(output: [boolean], input: string): boolean;
+/** Original boolean buffer append overload. @param output - Existing buffer. @param input - Native bool. @returns Nothing. */
+function convertBool(output: [string], input: boolean): void;
+/** Implements the selected native lexical overload. @param output - Typed scalar or buffer. @param input - Selected native input. @returns Parsing success or nothing. */
+function convertBool(output: [boolean] | [string], input: string | boolean): boolean | void {
+  if (typeof input === "boolean") {
+    (output as [string])[0] += input ? "true" : "false";
+    return;
+  }
+  (output as [boolean])[0] = input === "true";
+  return (output as [boolean])[0] || input === "false";
+}
 
 /** Original UTF16 color import overload. @param output - Destination retained on invalid shape. @param input - XML color. @returns Source success. */
 function convertColor(output: [number], input: string): boolean;

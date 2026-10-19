@@ -13,9 +13,9 @@ it("registers the original contiguous character prefix with source slot IDs and 
     10007, 10015, 10009, 10008, 10014, 11568, 10013, 10012, 10010, 10017, 10020, 10887, 10888,
     10891, 10890, 10889, 10892, 10893, 10896, 10895, 10894, 10899, 0, 10011, 10920, 10931, 0, 0,
     10903, 11571, 11569, 10460, 11572, 11570, 10229, 10577, 10578, 10949, 10944, 10230, 11015,
-    11013, 11014, 10228,
+    11013, 11014, 10228, 0, 0, 10085, 0, 10001,
   ];
-  for (let i = 0; i < 44; i++) {
+  for (let i = 0; i < 49; i++) {
     const which = i + 100;
     expect(a.GetPoolDefaultItem(which)).toBe(b.GetPoolDefaultItem(which));
     expect(a.GetPoolDefaultItem(which).Which()).toBe(which);
@@ -29,9 +29,9 @@ it("registers the original contiguous character prefix with source slot IDs and 
   expect((a.GetPoolDefaultItem(111) as SvxFontItem).GetFamilyName()).not.toBe("");
   expect((a.GetPoolDefaultItem(116) as SvxFontItem).GetFamilyName()).not.toBe("");
   expect(a.IsInRange(99)).toBe(false);
-  expect(a.IsInRange(144)).toBe(false);
+  expect(a.IsInRange(149)).toBe(false);
   expect(
     /** Rejects an unported pool identity rather than inventing a default. @returns Never. */ () =>
-      a.GetPoolDefaultItem(144),
+      a.GetPoolDefaultItem(149),
   ).toThrow();
 });

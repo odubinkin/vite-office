@@ -5,6 +5,55 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import {
+  Color,
+  COL_AUTO,
+  COL_TRANSPARENT,
+  COL_WHITE,
+  COL_BLACK,
+} from "../../../../tools/inc/color";
+import { ComplexColor, ColorType } from "../../../../docmodel/inc/color/ComplexColor";
+/** Original automatic-font color modes from patattr.hxx,co-located with the represented native owner. */
+export enum ScAutoFontColorMode {
+  Raw,
+  Print,
+  Display,
+  IgnoreFont,
+  IgnoreBack,
+  IgnoreAll,
+}
+/** Borrowed values/presence from the native ambient configuration/view read sites. No ScModule,LOKit or SfxViewShell service is emulated by this binding. */
+export interface ScPatternColorEnvironment {
+  readonly isKitActive: boolean;
+  readonly hasCurrentView: boolean;
+  readonly currentCalcViewDocumentColor: Readonly<Color> | undefined;
+  readonly documentColor: Readonly<Color>;
+  readonly systemTextColor: Readonly<Color>;
+  readonly rawSystemTextColor: Readonly<Color>;
+}
+/** Original lcl_populateresult conditional/table/direct precedence. Native final Get returns a reference,so its pointer result cannot be null under the item-pool precondition. @param which - Source color or brush identity. @param source - Actual base set. @param conditional - Optional conditional set. @param table - Optional table style. @returns Effective native item. */
+function populateColorResult(
+  which: number,
+  source: SfxItemSet,
+  conditional: SfxItemSet | undefined,
+  table: SfxItemSet | undefined,
+): SfxPoolItem {
+  let item = conditional?.GetItemIfSet(which);
+  if (item === undefined && table !== undefined) {
+    const direct = source.GetItemIfSet(which, false);
+    if (
+      source.GetItemState(which, false) === SfxItemState.SET &&
+      !(direct as SfxPoolItem).equals(source.GetPool().GetUserOrPoolDefaultItem(which))
+    ) {
+      if (which === 109 && (source.Get(109) as SvxColorItem).getColor().equals(COL_BLACK))
+        item = table.GetItemIfSet(which);
+      else item = source.Get(which);
+    } else item = table.GetItemIfSet(which);
+  }
+  return item ?? source.Get(which);
+}
 /** Original fixed cell-pattern schema,independent of the source set or pool ranges. */
 export const aScPatternAttrSchema: WhichRangesContainer = [[ATTR_PATTERN_START, ATTR_PATTERN_END]];
 /** Original C++ friendship over logical pattern registration fields;no public mutation API is invented. */
@@ -87,6 +136,60 @@ export class CellAttributeHelper {
 }
 /** Original cell-pattern data owner over actual shared itemsets;style-sheet and rendering services are intentionally absent. */
 export class ScPatternAttr {
+  /** Original fillColor value algorithm with explicit borrowed ambient read-site values. Conditional/table lookup and raw/print/display modes retain source ordering. @param result - Destination complex value. @param itemSet - Actual cell items. @param mode - Original color mode. @param conditional - Optional conditional items. @param table - Optional table-style items. @param backConfig - Optional cached document color. @param textConfig - Optional cached font color. @param environment - Borrowed native configuration/view values. @returns Nothing. */
+  static fillColor(
+    result: ComplexColor,
+    itemSet: SfxItemSet,
+    mode: ScAutoFontColorMode,
+    conditional: SfxItemSet | undefined,
+    table: SfxItemSet | undefined,
+    backConfig: Readonly<Color> | undefined,
+    textConfig: Readonly<Color> | undefined,
+    environment: ScPatternColorEnvironment,
+  ): void {
+    const item = populateColorResult(109, itemSet, conditional, table) as SvxColorItem,
+      color = new Color(item.GetValue()),
+      complex = new ComplexColor();
+    complex.assign(item.getComplexColor());
+    if (complex.getType() === ColorType.Unused) complex.setColor(color);
+    if (
+      (color.equals(COL_AUTO) && mode !== ScAutoFontColorMode.Raw) ||
+      mode === ScAutoFontColorMode.IgnoreFont ||
+      mode === ScAutoFontColorMode.IgnoreAll
+    ) {
+      const brush = populateColorResult(148, itemSet, conditional, table) as SvxBrushItem,
+        back = new Color(brush.GetColor());
+      if (
+        back.equals(COL_TRANSPARENT) ||
+        mode === ScAutoFontColorMode.IgnoreBack ||
+        mode === ScAutoFontColorMode.IgnoreAll
+      ) {
+        if (!environment.isKitActive) {
+          if (mode === ScAutoFontColorMode.Print) back.assign(COL_WHITE);
+          else if (backConfig !== undefined) back.assign(backConfig);
+          else back.assign(environment.documentColor);
+        } else if (environment.currentCalcViewDocumentColor !== undefined)
+          back.assign(
+            mode === ScAutoFontColorMode.Print
+              ? COL_WHITE
+              : environment.currentCalcViewDocumentColor,
+          );
+      }
+      const systemText = new Color();
+      if (mode === ScAutoFontColorMode.Print) systemText.assign(COL_BLACK);
+      else if (textConfig !== undefined) {
+        systemText.assign(textConfig);
+        if (environment.rawSystemTextColor.equals(COL_AUTO)) {
+          if (back.IsDark() && systemText.IsDark()) systemText.assign(COL_WHITE);
+          else systemText.assign(COL_BLACK);
+        }
+      } else systemText.assign(environment.systemTextColor);
+      if (environment.hasCurrentView) color.assign(back.IsDark() ? COL_WHITE : COL_BLACK);
+      else color.assign(systemText);
+    }
+    complex.setFinalColor(color);
+    result.assign(complex);
+  }
   private readonly maLocalSfxItemSet: SfxItemSet;
   private readonly pCellAttributeHelper: CellAttributeHelper;
   private moName: OUString | null;

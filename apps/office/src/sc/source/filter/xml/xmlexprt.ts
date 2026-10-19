@@ -1,7 +1,7 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
-import { cellTextWhichIds, exportCellTextProperties } from "./xmlstyle";
+import { cellTextWhichIds, exportCellTextProperties, exportCellProperties } from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
@@ -46,7 +46,9 @@ export class ScXMLExport {
       )
     )
       return "";
-    const key = exportCellTextProperties(pattern, this.fontPool);
+    const text = exportCellTextProperties(pattern, this.fontPool),
+      cell = exportCellProperties(pattern),
+      key = `${text ? `<style:text-properties${text}/>` : ""}${cell ? `<style:table-cell-properties${cell}/>` : ""}`;
     let name = this.styles.get(key);
     if (name === undefined) {
       name = `ce${this.styles.size + 1}`;
@@ -154,7 +156,7 @@ export class ScXMLExport {
     }
     let automatic = "";
     for (const [key, name] of this.styles) {
-      automatic += `<style:style style:name="${name}" style:family="table-cell"><style:text-properties${key}/></style:style>`;
+      automatic += `<style:style style:name="${name}" style:family="table-cell">${key}</style:style>`;
     }
     for (const [key, name] of this.rowStyles) {
       const [height, optimal] = key.split(",");

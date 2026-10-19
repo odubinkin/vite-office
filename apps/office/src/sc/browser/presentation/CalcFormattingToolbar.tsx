@@ -2,6 +2,8 @@
 import { CommandSelectControl } from "../../../framework/browser/presentation/CommandSelectControl";
 import { CommandToolbarItems } from "../../../framework/browser/presentation/CommandToolbar";
 import { FontNameSelect, FontSizeSelect } from "../../../svx/browser/tbxctrls/FontSelects";
+import { ColorSelect } from "../../../svx/browser/tbxctrls/ColorSelect";
+import type { SfxObjectShell } from "../../../sfx2/source/doc/objsh";
 import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
 import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import { getOfficeFormattingButtonContent } from "../../../framework/browser/presentation/office-formatting-content";
@@ -12,7 +14,8 @@ import { calcFormatObjectBarItems } from "../../uiconfig/scalc/toolbar/formatobj
 export function CalcFormattingToolbar({
   commandSource,
   resolveArguments,
-}: BrowserCommandSurfaceProps): React.JSX.Element {
+  objectShell,
+}: BrowserCommandSurfaceProps & { readonly objectShell: SfxObjectShell }): React.JSX.Element {
   return (
     <CommandToolbarItems
       commandSource={commandSource}
@@ -26,6 +29,35 @@ export function CalcFormattingToolbar({
         /** Uses the exact shared Writer font controls for source font placements. @param item - Generated special placement. @returns Bound selector. */ (
           item,
         ) => {
+          if (item.kind === "color-select")
+            return (
+              <CommandSelectControl
+                commandId={item.commandId}
+                commandSource={commandSource}
+                getCommandResource={getCalcCommandResource}
+                resolveArguments={resolveArguments}
+                argumentName="color"
+                key={item.commandId}
+              >
+                {
+                  /** Supplies actual native color state and dispatch ports. @param binding - Sfx binding. @returns Shared palette. */ (
+                    binding,
+                  ) => (
+                    <ColorSelect
+                      {...binding}
+                      objectShell={objectShell}
+                      slotId={item.commandId === ".uno:Color" ? 10017 : 10186}
+                      label={item.label}
+                      onApply={
+                        /** Dispatches the original no-argument recent-color branch. @returns Nothing. */ () => {
+                          commandSource.Execute(item.commandId);
+                        }
+                      }
+                    />
+                  )
+                }
+              </CommandSelectControl>
+            );
           return (
             <CommandSelectControl
               commandId={item.commandId}

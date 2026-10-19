@@ -393,6 +393,7 @@ export class SwDocShell extends SfxObjectShell {
     this.modelClient.Dispose();
     this.document.Dispose();
     this.notifications.DisposeModify();
+    this.Dispose();
   }
 
   /** Publishes direct object-shell modified transitions. @param modified - Next flag. @param contentChanged - Whether the browser race generation advances. @returns Whether state changed. */

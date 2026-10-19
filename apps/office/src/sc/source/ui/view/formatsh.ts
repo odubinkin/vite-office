@@ -1,6 +1,9 @@
 /** @fileoverview ScFormatShell consumed font-height state/application over original document patterns, simple marks and attribute undo. Full native format slots,script selection,dialogs and device-dependent row layout remain unported. */
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { COL_TRANSPARENT } from "../../../../tools/inc/color";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import {
   SvxWeightItem,
@@ -22,10 +25,50 @@ import type { ScViewData } from "../inc/viewdata";
 import type { ScDocShell } from "../docshell/docsh";
 /** Consumed source character slots; browser code carries no attribute values. */
 export type CalcCharacterFormat = "bold" | "italic" | "underline";
+/** Consumed original color slots and cell item identities. */
+export type CalcColorKind = "font" | "background";
+/** Original slot identities from editids.hrc and svxids.hrc. */
+export const calcColorSlots = { font: 10017, background: 10186 } as const;
 /** Native three-script Which identities for weight/posture and source shared underline. */
 const formatIds = { bold: [102, 113, 118], italic: [103, 114, 119], underline: [104] } as const;
 /** Source format owner for the consumed simple-selection font-height command. */
 export class ScFormatShell {
+  /** Gets actual uniform font-color or source background-color state. @param kind - Source slot kind. @returns Native state or mixed. */
+  GetColor(kind: CalcColorKind): SvxColorItem | undefined {
+    const item = this.SelectionItem([kind === "font" ? 109 : 148]);
+    if (item === undefined) return undefined;
+    if (kind === "font") return (item as SvxColorItem).Clone();
+    return new SvxColorItem((item as SvxBrushItem).GetColor(), calcColorSlots.background);
+  }
+  /** Applies the source argument or recent-color branch,retaining unrelated brush metadata. @param kind - Source slot kind. @param color - Optional original toolbox item. @returns Changed. */
+  SetColor(kind: CalcColorKind, color?: SvxColorItem): boolean {
+    const which = kind === "font" ? 109 : 148,
+      doc = this.shell.GetDocument(),
+      old = this.SelectionItem([which]) ?? doc.GetPool().GetUserOrPoolDefaultItem(which),
+      item = (old as SvxColorItem | SvxBrushItem).Clone();
+    if (color === undefined) {
+      const recent = this.shell.GetRecentColor(calcColorSlots[kind]);
+      try {
+        const value = recent?.getComplexColor().getFinalColor() ?? COL_TRANSPARENT;
+        if (kind === "font") (item as SvxColorItem).setColor(value);
+        else (item as SvxBrushItem).SetColor(value);
+      } finally {
+        recent?.Dispose();
+      }
+    } else if (kind === "font") {
+      const replacement = color.Clone();
+      replacement.SetWhich(109);
+      const delta = new ScPatternAttr(doc.getCellAttributeHelper());
+      delta.ItemSetPut(replacement);
+      return this.ApplySelectionPattern(delta, false);
+    } else {
+      (item as SvxBrushItem).SetColor(color.GetValue());
+      (item as SvxBrushItem).setComplexColor(color.getComplexColor());
+    }
+    const delta = new ScPatternAttr(doc.getCellAttributeHelper());
+    delta.ItemSetPut(item);
+    return this.ApplySelectionPattern(delta, false);
+  }
   /** Maps selected source script flags to the real Calc font Which identities. @param script - Selection flags. @returns Which identities. */
   private FontIds(script: SvtScriptType): number[] {
     return (
@@ -189,8 +232,8 @@ export class ScFormatShell {
     }
     return this.ApplySelectionPattern(delta);
   }
-  /** Shared native ApplySelectionPattern responsibility with original attribute snapshot/history ownership. @param delta - Owned native pattern. @returns Whether changed. */
-  private ApplySelectionPattern(delta: ScPatternAttr): boolean {
+  /** Shared native ApplySelectionPattern responsibility with original attribute snapshot/history ownership. @param delta - Owned native pattern. @param adjustBlockHeight - Source ApplyAttr flag,disabled for color commands. @returns Whether changed. */
+  private ApplySelectionPattern(delta: ScPatternAttr, adjustBlockHeight = true): boolean {
     const doc = this.shell.GetDocument(),
       marks = this.viewData.GetMarkData(),
       range = this.AttributeRange(),
@@ -217,7 +260,7 @@ export class ScFormatShell {
           delta,
         ) || changed;
     if (changed) {
-      AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
+      if (adjustBlockHeight) AdjustBlockHeight(doc, marks, range.aStart.Row(), range.aEnd.Row());
       this.shell
         .GetUndoManager()
         .AddUndoAction(new ScUndoSelectionAttr(this.shell, marks, range, undo, delta));

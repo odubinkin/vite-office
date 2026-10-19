@@ -2921,3 +2921,68 @@ still affects the grouped sheets. This can leave a different script's font uncha
 Decision: retain the source distinction between script aggregation and grouped attribute
 application. Do not silently union every selected sheet's scripts in the browser binding.
 This observation does not certify full native multi-mark or formatted-cell cache behavior.
+
+## CALC-202: invalid background color can still apply an opaque transparency property
+
+Status: source-composition candidate; a compiled whole-native-import reproduction is pending.
+
+The cell map in `sc/source/filter/xml/xmlstyle.cxx` maps the same
+`fo:background-color` attribute to both `CellBackColor` and
+`IsCellBackgroundTransparent`. `XMLColorTransparentPropHdl::importXML` in
+`xmloff/source/style/xmlbahdl.cxx` reports a failed RGB conversion for a value such as
+`invalid`, whereas `XMLIsTransparentPropHdl::importXML` always succeeds and reports
+false for every value other than the exact `transparent` token. The separate bool property
+therefore remains admissible even when its accompanying RGB property is rejected.
+
+`sc/inc/CommonProperties.hxx` and `cellsuno.cxx` bind these properties to the real brush's
+`MID_BACK_COLOR` and `MID_GRAPHIC_TRANSPARENT`. The latter branch of
+`SvxBrushItem::PutValue` sets alpha to 255 for false. Over the transparent-white pool default
+in `sc/source/core/data/docpool.cxx`, applying only this successful property yields opaque
+white. Task38's consumed mapper reproduces this result with an invalid-color diagnostic.
+Native property-list ordering and the complete UNO import transaction still require a
+whole-native witness before this is described as a confirmed LibreOffice import bug.
+
+Decision: retain the two independent source handlers and native brush writes. Do not turn
+their merged attribute into an atomic browser validator that suppresses the successful bool
+property merely because RGB parsing failed. The regression uses independently authored XML
+in `ods-native-colors.test.ts`; it does not certify the complete native importer.
+
+## CALC-203: parameterless color commands retain the previous complex-color identity
+
+Status: pinned source inspection and consumed-item regression; complete native theme rendering
+has not been reproduced.
+
+In `sc/source/ui/view/formatsh.cxx`, the no-argument `SID_ATTR_CHAR_COLOR` and
+`SID_BACKGROUND_COLOR` branches obtain the recent `NamedColor`'s resolved final color,
+copy the selected font-color item or brush, and replace only its plain color. The native
+setters in `include/editeng/colritem.hxx` and `include/editeng/brushitem.hxx` do not replace
+the owned complex-color value. In contrast, the background argument branch explicitly
+copies `rNewColorItem.getComplexColor()` as well.
+
+Thus a parameterless background action can apply the RGB value of a recent Accent5 color
+while retaining the selected brush's Accent3 identity and transformations. A later theme
+re-resolution could therefore behave differently from the argument-bearing action even
+when the currently resolved RGB values agree. This is a suspected inconsistency rather
+than a claim about the complete native renderer.
+
+Decision: preserve the source branch distinction. Task38's actual native brush/history
+regression in `calc-color.test.tsx` checks retained shading/graphic transparency, replacement
+of complex metadata on an explicit argument, retention of the old theme identity on a
+recent-color action, and restoration through the real attribute undo document.
+
+## CALC-204: an active view overrides the configured automatic-font comparison color
+
+Status: pinned `ScPatternAttr::fillColor` inspection and consumed value regression.
+
+In `sc/source/core/data/patattr.cxx`, the automatic/ignore-font branch computes
+`aSysTextColor` from the supplied cached font color or configuration. Its final
+`SfxViewShell::Current()` branch nevertheless chooses plain white or black from background
+brightness whenever any current view exists. The computed system color is used only when
+there is no current view. This also distinguishes Print behavior on a dark background:
+with a current view the result is white; without one it is the earlier plain-black print
+color. The browser binding supplies actual current-view presence and configuration colors
+as borrowed values; it does not emulate those unported services.
+
+Decision: retain the original branch ordering rather than always using configuration or
+always forcing black for Print. Literal current-view/no-view and cached configuration cases
+are retained in `patattr.test.ts`; full native view-service execution remains unverified.

@@ -399,7 +399,7 @@ it("imports real script-specific automatic font heights and preserves styled emp
 it("diagnoses unsupported style families,inheritance,properties,relative sizes and missing references while retaining supported heights", /** Invalid metadata never becomes a successful invented format. @returns Nothing. */ () => {
   const names: string[] = [];
   const xml = fontStyles(
-    `<style:style style:name="p" style:family="paragraph"/><style:default-style style:family="table-cell"/><style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="8pt"/></style:style><style:style style:name="ce" style:family="table-cell" style:parent-style-name="Base"><style:table-cell-properties/><style:text-properties fo:font-size="0pt" style:font-size-asian="120%" style:font-size-complex="16pt" fo:font-weight="bold"/></style:style>`,
+    `<style:style style:name="p" style:family="paragraph"/><style:default-style style:family="table-cell"/><style:style style:name="ce" style:family="table-cell"><style:text-properties fo:font-size="8pt"/></style:style><style:style style:name="ce" style:family="table-cell" style:parent-style-name="Base"><style:paragraph-properties/><style:text-properties fo:font-size="0pt" style:font-size-asian="120%" style:font-size-complex="16pt" fo:font-weight="bold"/></style:style>`,
     `<table:table-row><table:table-cell table:style-name="ce"/><table:table-cell table:style-name="missing"/><table:covered-table-cell table:style-name="ce"/></table:table-row><table:table-row table:number-rows-repeated="1048577"><table:table-cell table:style-name="ce" table:number-columns-repeated="16385"/></table:table-row><table:table-row><table:table-cell table:style-name="ce"/></table:table-row>`,
   );
   const doc = load(xml, {

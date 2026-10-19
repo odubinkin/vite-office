@@ -2,7 +2,9 @@
 import type { ScTable } from "../../inc/table";
 import { rowPixels } from "./row-geometry";
 import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
-import type { ScPatternAttr } from "../../inc/patattr";
+import { ScPatternAttr } from "../../inc/patattr";
+import { ScAutoFontColorMode } from "../../source/core/data/patattr";
+import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
 import {
   useLayoutEffect,
   useRef,
@@ -22,6 +24,9 @@ import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { ATTR_FONT_HEIGHT } from "../../inc/scitems";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { ScCellText } from "./ScCellText";
+import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { COL_AUTO, COL_BLACK, COL_WHITE } from "../../../tools/inc/color";
+import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress } from "../../inc/address";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 /** Logical visible rectangle and measured browser dimensions; this contains no cell data. */
@@ -249,6 +254,24 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     lineColor = lineItem.GetColor();
                   const active = column === col && row === r;
                   const selected = active || viewData.GetMarkData().IsCellMarked(col, r);
+                  const fontColor = new ComplexColor();
+                  ScPatternAttr.fillColor(
+                    fontColor,
+                    pattern.GetItemSet(),
+                    ScAutoFontColorMode.Display,
+                    undefined,
+                    undefined,
+                    COL_WHITE,
+                    COL_BLACK,
+                    {
+                      isKitActive: false,
+                      hasCurrentView: true,
+                      currentCalcViewDocumentColor: undefined,
+                      documentColor: COL_WHITE,
+                      systemTextColor: COL_BLACK,
+                      rawSystemTextColor: COL_AUTO,
+                    },
+                  );
                   return (
                     <div
                       key={col}
@@ -275,6 +298,11 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                       }
                       className={`absolute top-0 min-w-0 overflow-hidden whitespace-nowrap border-b border-r border-slate-200 px-1 ${active ? "z-[2] outline outline-2 -outline-offset-2 outline-indigo-700" : ""} ${selected ? "bg-indigo-50" : "bg-white"}`}
                       style={{
+                        color: browserColor(fontColor.getFinalColor()),
+                        backgroundColor:
+                          (pattern.GetItem(148) as SvxBrushItem).GetColor().GetAlpha() === 0
+                            ? undefined
+                            : browserColor((pattern.GetItem(148) as SvxBrushItem).GetColor()),
                         fontFamily: (pattern.GetItem(100) as SvxFontItem).GetFamilyName(),
                         textAlign: cell.alignment,
                         fontWeight: [400, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900][weight],

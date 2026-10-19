@@ -12,7 +12,6 @@ import {
   type SfxMediumOperationState,
 } from "../../../../sfx2/source/doc/docfile";
 import { SfxUndoManager } from "../../../../svl/source/undo/undo";
-import { SfxBroadcaster } from "../../../../svl/source/notify/SfxBroadcaster";
 import { SfxListener } from "../../../../svl/source/notify/lstner";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScDocument } from "../../../inc/document";
@@ -43,7 +42,6 @@ class ShellSubscriber extends SfxListener {
 export class ScDocShell extends SfxObjectShell {
   static readonly ODS_MEDIA_TYPE = ODS_MIMETYPE;
   private readonly undo = new SfxUndoManager<ScDocShell>();
-  private readonly notifications = new SfxBroadcaster();
   private openRequest = 0;
   /** Creates an untitled shell or adopts an existing model. @param document - Actual model. @returns Shell. */
   constructor(private document: ScDocument = new ScDocument()) {
@@ -64,12 +62,12 @@ export class ScDocShell extends SfxObjectShell {
   /** Adapts actual Sfx notification registrations to a browser subscriber. @param listener - Invalidation. @returns Cleanup. */
   Subscribe(listener: () => void): () => void {
     const subscriber = new ShellSubscriber(listener);
-    subscriber.StartListening(this.notifications);
+    subscriber.StartListening(this);
     return /** Ends reciprocal source registration. @returns Nothing. */ () => subscriber.Dispose();
   }
   /** Publishes changed shell state through the native broadcaster. @returns Nothing. */
   private Changed(): void {
-    this.notifications.Broadcast(new SfxHint(SfxHintId.DocChanged));
+    this.Broadcast(new SfxHint(SfxHintId.DocChanged));
   }
   /** Marks a committed model edit and advances the persistence race generation. @returns Nothing. */
   SetDocumentModified(): void {
@@ -301,6 +299,6 @@ export class ScDocShell extends SfxObjectShell {
     this.openRequest++;
     this.DisposeDocument(this.document);
     this.undo.Clear();
-    this.notifications.Dispose();
+    this.Dispose();
   }
 }

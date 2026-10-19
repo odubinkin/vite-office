@@ -316,6 +316,7 @@ export function CalcWorkbench({
           }
           formattingToolbar={
             <CalcFormattingToolbar
+              objectShell={controller.shell}
               commandSource={source}
               resolveArguments={resolveCalcCommandArguments}
             />

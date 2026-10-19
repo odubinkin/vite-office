@@ -7,6 +7,7 @@ import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import {
   createOdtFilterDocument,
+  createInlineOdtFilterService,
   type OdtFilterService,
 } from "../../filter/xml/odt-filter-service";
 import { SwDocShell } from "./docsh";
@@ -18,6 +19,35 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("forwards the retained default-font device through a real ODT open", /** Observes the real filter boundary while actual package serialization/import executes. @returns Completion. */ async () => {
+    const device: DefaultFontDevice = {
+        getDefaultFont: /** Supplies the platform device family. @returns Family. */ () =>
+          "Device Face",
+      },
+      filter = createInlineOdtFilterService(),
+      imported = vi.spyOn(filter, "Import"),
+      metadata = createDocument({ id: "device-open", suiteId: "writer", title: "Device Open" }),
+      shell = new SwDocShell(
+        new SwDoc({ defaultFontDevice: device, locale: "ja-JP" }),
+        metadata,
+        { kind: "untitled", name: "Device Open" },
+        filter,
+      );
+    try {
+      const bytes = await shell.SerializeOdt();
+      await shell.Open(bytes, metadata);
+      expect(imported.mock.calls[0]?.[2]?.defaultFontDevice).toBe(device);
+      expect(shell.GetDefaultFontDevice()).toBe(device);
+      expect(
+        (
+          shell.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
+        ).GetFamilyName(),
+      ).toBe("Device Face");
+    } finally {
+      shell.Close();
+      imported.mockRestore();
+    }
+  });
   it("uses default modified and save acknowledgements for the current generation", /** Checks the Writer overrides without explicit parameters. @returns Nothing. */ () => {
     /** Exposes existing protected lifecycle operations for their default contract. */
     class DefaultShell extends SwDocShell {
@@ -132,6 +162,7 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
     unsubscribe();
     shell.Close();
     shell.Close();
+    expect(shell.GetWrtShell()).toBeUndefined();
     expect(
       /** Runs the test callback. @returns Test callback result. */ () =>
         shell.RenameDocument("After close"),

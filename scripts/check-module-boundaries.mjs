@@ -193,6 +193,29 @@ const allowedEdges = new Map([
  * Library_xo links cppu/vcl. Neighboring files and browser adapters receive no additional permission.
  */
 const originalCharacterValueImports = new Map([
+  // patattr.cxx::fillColor owns and returns actual model::ComplexColor values.
+  ["sc/source/core/data/patattr.ts", new Set(["docmodel/inc/color/ComplexColor.ts"])],
+  ["sc/browser/presentation/ScGridWindow.tsx", new Set(["docmodel/inc/color/ComplexColor.ts"])],
+  // Original sfx2/namedcolor.hxx owns Color/OUString and the docmodel theme/transformation value conversion.
+  [
+    "sfx2/inc/namedcolor.ts",
+    new Set([
+      "tools/inc/color.ts",
+      "sal/inc/rtl/ustring.ts",
+      "docmodel/inc/color/ComplexColor.ts",
+      "docmodel/inc/color/Transformation.ts",
+      "docmodel/inc/theme/ThemeColorType.ts",
+    ]),
+  ],
+  // The browser binding of ToolboxButtonColorUpdater borrows actual Sfx owners;JS names use the existing UTF16 bridge.
+  [
+    "svx/browser/tbxctrls/ColorSelect.tsx",
+    new Set([
+      "sfx2/source/doc/objsh.ts",
+      "sfx2/inc/namedcolor.ts",
+      "i18nlangtag/source/isolang/isolang.tables.ts",
+    ]),
+  ],
   // Original mslangid.cxx uses css::i18n::ScriptType from the published API.
   [
     "i18nlangtag/source/isolang/mslangid.script.ts",

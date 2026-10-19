@@ -18,7 +18,7 @@ export interface ToolbarCommandResource {
 export type CommandToolbarPlacement =
   | Readonly<{ commandId: string; kind: "command" }>
   | Readonly<{ kind: "separator" }>
-  | Readonly<{ kind: "command-select" | "font-select" | "font-size-select" }>;
+  | Readonly<{ kind: "command-select" | "font-select" | "font-size-select" | "color-select" }>;
 
 /** Inputs for one bindings-backed command button. */
 export interface CommandButtonProps extends BrowserCommandSurfaceProps {

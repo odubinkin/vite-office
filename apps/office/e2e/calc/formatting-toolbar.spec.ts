@@ -64,10 +64,16 @@ for (const viewport of [
           /** Reads actual resource order. @param nodes - Rendered controls. @returns Labels. */ (
             nodes,
           ) =>
-            nodes.map(
-              /** Reads native command label. @param node - Control. @returns Label. */ (node) =>
-                node.getAttribute("aria-label"),
-            ),
+            nodes
+              .filter(
+                /** Keeps actual toolbar placements outside palette dropdowns. @param node - Rendered node. @returns Whether a toolbar placement. */ (
+                  node,
+                ) => !node.closest("[data-office-palette]"),
+              )
+              .map(
+                /** Reads native command label. @param node - Control. @returns Label. */ (node) =>
+                  node.getAttribute("aria-label"),
+              ),
         ),
     ).toEqual(labels);
     await expect(bar.getByRole("combobox", { name: "Font Name", exact: true })).toBeEnabled();
@@ -76,9 +82,10 @@ for (const viewport of [
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue("10");
     for (let index = 0; index < 31; index++) {
       const button = bar.getByRole("button").nth(index);
-      if (index < 3) await expect(button).toBeEnabled();
+      if (index < 5) await expect(button).toBeEnabled();
       else await expect(button).toBeDisabled();
       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
+      else if (index === 3 || index === 4) await expect(button).toHaveText(index === 3 ? "A" : "▨");
       else await expect(button.locator("svg")).toHaveCount(1);
       expect((await button.boundingBox())?.width).toBe(32);
     }

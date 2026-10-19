@@ -161,7 +161,11 @@ it("renders native formatting placements with the bound shared font-size control
     />,
   );
   const bar = screen.getByRole("toolbar", { name: "Calc formatting toolbar" }),
-    controls = bar.querySelectorAll("button,select");
+    controls = [...bar.querySelectorAll("button,select")].filter(
+      /** Palette contents belong to the dropdown rather than the toolbar placement order. @param control - Rendered control. @returns Whether a top-level toolbar control. */ (
+        control,
+      ) => !control.closest("[data-office-palette]"),
+    );
   const labels = [
     "Font Name",
     "Font Size",
@@ -204,20 +208,37 @@ it("renders native formatting placements with the bound shared font-size control
       ) => control.getAttribute("aria-label"),
     ),
   ).toEqual(labels);
-  const fonts = within(bar).getAllByRole("combobox");
+  const fonts = controls.filter(
+    /** Selects font placements outside palette dropdowns. @param control - Top-level control. @returns Whether a selector. */ (
+      control,
+    ) => control.tagName === "SELECT",
+  );
   expect(fonts).toHaveLength(2);
   expect(fontsRequested).toHaveBeenCalled();
   expect(fonts[0]).toBeEnabled();
   expect(fonts[0]).toHaveValue(session.controller.GetFontFamily());
   expect(fonts[1]).toBeEnabled();
   expect(fonts[1]).toHaveValue("10");
-  for (const button of within(bar).getAllByRole("button")) {
-    if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
+  for (const button of controls.filter(
+    /** Selects actual toolbar buttons rather than palette choices. @param control - Top-level control. @returns Whether a button. */ (
+      control,
+    ) => control.tagName === "BUTTON",
+  )) {
+    const color = ["Font Color", "Background Color"].includes(
+      button.getAttribute("aria-label") as string,
+    );
+    if (
+      ["Bold", "Italic", "Underline", "Font Color", "Background Color"].includes(
+        button.getAttribute("aria-label") as string,
+      )
+    )
       expect(button).toBeEnabled();
     else expect(button).toBeDisabled();
-    expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
+    if (color) expect(button).toHaveClass("h-8", "w-8", "rounded-l", "bg-white");
+    else expect(button).toHaveClass("size-8", "rounded-md", "bg-white");
     if (["Bold", "Italic", "Underline"].includes(button.getAttribute("aria-label") as string))
       expect(button).toHaveTextContent(/B|I|U/);
+    else if (color) expect(button).toHaveTextContent(/A|▨/);
     else expect(button.querySelector("svg")).not.toBeNull();
   }
   expect(session.controller.shell.GetUndoManager().GetUndoActionCount()).toBe(0);

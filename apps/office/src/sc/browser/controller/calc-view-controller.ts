@@ -1,6 +1,8 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
 import { FontLineStyle } from "../../../tools/inc/fontenum";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
+import { SvxColorItem } from "../../../editeng/inc/colritem";
+import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import type { ScTable } from "../../inc/table";
 import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
@@ -43,6 +45,19 @@ class InsertSheetAction extends SfxUndoAction<ScDocShell> {
 }
 /** Transient platform state and input routing;the live workbook is always the shell's real ScDocument. */
 export class CalcViewController {
+  /** Reads genuine source color state. @param kind - Native slot kind. @returns Native item or mixed. */
+  GetColor(kind: CalcColorKind): SvxColorItem | undefined {
+    return new ScFormatShell(this.viewData, this.shell).GetColor(kind);
+  }
+  /** Commits input before source color execution. @param kind - Native slot kind. @param color - Full optional toolbox item. @returns Changed. */
+  SetColor(kind: CalcColorKind, color?: SvxColorItem): boolean {
+    if (color !== undefined && !(color instanceof SvxColorItem))
+      throw new TypeError("Color requires SvxColorItem");
+    if (!this.Commit()) return false;
+    const changed = new ScFormatShell(this.viewData, this.shell).SetColor(kind, color);
+    this.Changed();
+    return changed;
+  }
   /** Reads the effective native font for source-selected scripts. @returns Uniform family or mixed. */
   GetFontFamily(): string | undefined {
     return new ScFormatShell(this.viewData, this.shell).GetFontFamily(

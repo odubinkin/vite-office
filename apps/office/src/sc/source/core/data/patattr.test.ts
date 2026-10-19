@@ -2,12 +2,287 @@
 import { expect, it } from "vitest";
 import { CellAttributeHelper, CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
 import { aScPatternAttrSchema } from "./patattr";
+import { ScAutoFontColorMode, type ScPatternColorEnvironment } from "./patattr";
+import { ScDocument } from "../../../inc/document";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
+import {
+  Color,
+  COL_AUTO,
+  COL_BLACK,
+  COL_WHITE,
+  COL_TRANSPARENT,
+} from "../../../../tools/inc/color";
 import { ATTR_PATTERN_START, ATTR_PATTERN_END, ATTR_PROTECTION } from "../../../inc/scitems";
 import { ScProtectionAttr } from "../../../inc/attrib";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+/** Runs actual native itemsets and the consumed ambient read-site binding. @param mode - Source mode. @param font - Stored font color. @param background - Stored brush color. @param changes - Borrowed environment changes. @param back - Cached document color. @param textColor - Cached system font color. @returns Independent result. */
+function resolveAutoColor(
+  mode: ScAutoFontColorMode,
+  font: Readonly<Color>,
+  background: Readonly<Color>,
+  changes: Partial<ScPatternColorEnvironment> = {},
+  back?: Readonly<Color>,
+  textColor?: Readonly<Color>,
+): ComplexColor {
+  const doc = new ScDocument(),
+    items = new SfxItemSet(doc.GetPool(), [[100, 148]]),
+    result = new ComplexColor();
+  try {
+    items.Put(new SvxColorItem(font, 109));
+    items.Put(new SvxBrushItem(background, 148));
+    ScPatternAttr.fillColor(result, items, mode, undefined, undefined, back, textColor, {
+      isKitActive: false,
+      hasCurrentView: true,
+      currentCalcViewDocumentColor: undefined,
+      documentColor: COL_WHITE,
+      systemTextColor: COL_BLACK,
+      rawSystemTextColor: COL_AUTO,
+      ...changes,
+    });
+    return result;
+  } finally {
+    items.ClearItem();
+    doc.DisposeAttributes();
+  }
+}
+it("retains original automatic-font raw,print,display and ignore-mode colors", /** Expected values are independent literal source cases. @returns Nothing. */ () => {
+  const red = new Color(0xff0000),
+    mode = ScAutoFontColorMode;
+  expect(resolveAutoColor(mode.Raw, COL_AUTO, COL_BLACK).getFinalColor().toUInt32()).toBe(
+    0xffffffff,
+  );
+  expect(resolveAutoColor(mode.Display, red, COL_WHITE).getFinalColor().toUInt32()).toBe(0xff0000);
+  expect(resolveAutoColor(mode.Display, COL_AUTO, COL_BLACK).getFinalColor().toUInt32()).toBe(
+    0xffffff,
+  );
+  expect(resolveAutoColor(mode.Print, COL_AUTO, COL_BLACK).getFinalColor().toUInt32()).toBe(
+    0xffffff,
+  );
+  expect(resolveAutoColor(mode.Print, COL_AUTO, COL_TRANSPARENT).getFinalColor().toUInt32()).toBe(
+    0,
+  );
+  expect(resolveAutoColor(mode.IgnoreFont, red, COL_WHITE).getFinalColor().toUInt32()).toBe(0);
+  expect(resolveAutoColor(mode.IgnoreBack, COL_AUTO, COL_BLACK).getFinalColor().toUInt32()).toBe(0);
+  expect(resolveAutoColor(mode.IgnoreAll, red, COL_BLACK).getFinalColor().toUInt32()).toBe(0);
+  expect(
+    resolveAutoColor(mode.Display, COL_AUTO, COL_TRANSPARENT, { documentColor: COL_BLACK })
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0xffffff);
+  expect(
+    resolveAutoColor(mode.Display, COL_AUTO, COL_TRANSPARENT, {}, COL_BLACK)
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0xffffff);
+});
+it("retains source current-view,configuration-cache and kit read-site distinctions", /** Does not emulate native configuration services. @returns Nothing. */ () => {
+  const mode = ScAutoFontColorMode,
+    red = new Color(0xff0000);
+  expect(
+    resolveAutoColor(mode.Display, COL_AUTO, COL_WHITE, {
+      hasCurrentView: false,
+      systemTextColor: red,
+    })
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0xff0000);
+  expect(
+    resolveAutoColor(mode.Print, COL_AUTO, COL_BLACK, { hasCurrentView: false })
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0);
+  expect(
+    resolveAutoColor(
+      mode.Display,
+      COL_AUTO,
+      COL_BLACK,
+      { hasCurrentView: false },
+      undefined,
+      COL_BLACK,
+    )
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0xffffff);
+  expect(
+    resolveAutoColor(
+      mode.Display,
+      COL_AUTO,
+      COL_BLACK,
+      { hasCurrentView: false },
+      undefined,
+      COL_WHITE,
+    )
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0);
+  expect(
+    resolveAutoColor(
+      mode.Display,
+      COL_AUTO,
+      COL_WHITE,
+      { hasCurrentView: false, rawSystemTextColor: red },
+      undefined,
+      red,
+    )
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0xff0000);
+  expect(
+    resolveAutoColor(mode.Display, COL_AUTO, COL_WHITE, {}, undefined, red)
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0);
+  expect(
+    resolveAutoColor(mode.Display, COL_AUTO, COL_TRANSPARENT, {
+      isKitActive: true,
+      currentCalcViewDocumentColor: COL_BLACK,
+    })
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0xffffff);
+  expect(
+    resolveAutoColor(mode.Print, COL_AUTO, COL_TRANSPARENT, {
+      isKitActive: true,
+      currentCalcViewDocumentColor: COL_BLACK,
+    })
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0);
+  expect(
+    resolveAutoColor(mode.Display, COL_AUTO, COL_TRANSPARENT, { isKitActive: true })
+      .getFinalColor()
+      .toUInt32(),
+  ).toBe(0);
+});
+it("uses original conditional/table/direct precedence including the direct-black table exception", /** All values belong to actual native itemsets and pools. @returns Nothing. */ () => {
+  const doc = new ScDocument(),
+    base = new SfxItemSet(doc.GetPool(), [[100, 148]]),
+    table = new SfxItemSet(doc.GetPool(), [[100, 148]]),
+    conditional = new SfxItemSet(doc.GetPool(), [[100, 148]]),
+    result = new ComplexColor(),
+    environment: ScPatternColorEnvironment = {
+      isKitActive: false,
+      hasCurrentView: true,
+      currentCalcViewDocumentColor: undefined,
+      documentColor: COL_WHITE,
+      systemTextColor: COL_BLACK,
+      rawSystemTextColor: COL_AUTO,
+    };
+  try {
+    table.Put(new SvxColorItem(new Color(0x123456), 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      undefined,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0x123456);
+    base.Put(new SvxColorItem(COL_AUTO, 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      undefined,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0x123456);
+    base.Put(new SvxColorItem(COL_BLACK, 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      undefined,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0x123456);
+    base.Put(new SvxColorItem(new Color(0xabcdef), 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      undefined,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0xabcdef);
+    conditional.Put(new SvxColorItem(new Color(0x778899), 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      conditional,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0x778899);
+    conditional.ClearItem(109);
+    table.ClearItem(109);
+    table.Put(new SvxBrushItem(COL_BLACK, 148));
+    base.Put(new SvxColorItem(COL_AUTO, 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      conditional,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0xffffff);
+    base.Put(new SvxBrushItem(COL_WHITE, 148));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      conditional,
+      table,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getFinalColor().toUInt32()).toBe(0);
+    const complex = new ComplexColor();
+    complex.setThemeColor(4);
+    base.Put(new SvxColorItem(new Color(0x223344), complex, 109));
+    ScPatternAttr.fillColor(
+      result,
+      base,
+      ScAutoFontColorMode.Display,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      environment,
+    );
+    expect(result.getThemeColorType()).toBe(4);
+    expect(result.getFinalColor().toUInt32()).toBe(0x223344);
+  } finally {
+    conditional.ClearItem();
+    table.ClearItem();
+    base.ClearItem();
+    doc.DisposeAttributes();
+  }
+});
 /** Builds a real known-length native UTF16 value,including embedded zero and surrogate pairs. @param text - Test fixture. @returns Native string. */
 function u(text: string): OUString {
   const units = new Uint16Array(text.length);

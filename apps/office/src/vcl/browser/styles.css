@@ -329,7 +329,7 @@ body:has([aria-label="Writer workspace"]) {
 }
 
 @media (max-height: 550px) {
-  [data-writer-palette] {
+  [data-office-palette] {
     top: auto;
     bottom: 100%;
   }

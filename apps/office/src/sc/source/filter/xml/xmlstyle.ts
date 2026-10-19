@@ -1,5 +1,9 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { Color, insertColor, extractColor } from "../../../../tools/inc/color";
+import { MID_BACK_COLOR, MID_GRAPHIC_TRANSPARENT } from "../../../../editeng/inc/memberids";
 import type { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
 import type { ScPatternAttr } from "../../../inc/patattr";
@@ -31,6 +35,8 @@ import {
 import {
   XMLColorTransparentPropHdl,
   XMLIsTransparentPropHdl,
+  XMLColorAutoPropHdl,
+  XMLIsAutoColorPropHdl,
 } from "../../../../xmloff/source/style/xmlbahdl";
 /** Font-name entries from the shared paragraph-extension mapper chained by native Calc. */
 const fonts = [
@@ -51,6 +57,11 @@ const unitConverter = new SvXMLUnitConverter("twip"),
 /** Original transparent color handlers shared with Writer. */
 const lineColor = new XMLColorTransparentPropHdl("font-color"),
   lineHasColor = new XMLIsTransparentPropHdl("font-color", false);
+/** Native merged font and cell-background property handlers. */
+const colorAuto = new XMLColorAutoPropHdl(),
+  isColorAuto = new XMLIsAutoColorPropHdl(),
+  backgroundColor = new XMLColorTransparentPropHdl(),
+  backgroundTransparent = new XMLIsTransparentPropHdl();
 /** Actual source weight/posture property-to-item associations. */
 const characters = [
   [XMLToken.FO_FONT_WEIGHT, "fo:font-weight", 102, weight, MID_WEIGHT],
@@ -76,7 +87,7 @@ const lines = [
 ] as const;
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
-  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104,
+  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 109, 148,
 ] as const;
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
@@ -84,6 +95,18 @@ export function exportCellTextProperties(
   fontPool: XMLFontAutoStylePool,
 ): string {
   let result = "";
+  if (pattern.GetItemSet().GetItemState(109, false) === SfxItemState.SET) {
+    const value = new Any(),
+      output: [string] = [""];
+    try {
+      insertColor(value, (pattern.GetItem(109) as SvxColorItem).GetValue());
+      if (colorAuto.exportXML(output, value, unitConverter)) result += ` fo:color="${output[0]}"`;
+      if (isColorAuto.exportXML(output, value, unitConverter))
+        result += ` style:use-window-font-color="${output[0]}"`;
+    } finally {
+      value.dispose();
+    }
+  }
   for (const [, name, which] of fonts) {
     if (pattern.GetItemSet().GetItemState(which, false) !== SfxItemState.SET) continue;
     const item = pattern.GetItem(which) as SvxFontItem;
@@ -151,9 +174,38 @@ export function importCellTextProperties(
         ([token]) => token,
       ),
       XMLToken.STYLE_TEXT_UNDERLINE_COLOR,
+      XMLToken.FO_COLOR,
+      XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
     ],
     "Calc text properties",
   );
+  const fontColor = (pattern.GetItem(109) as SvxColorItem).Clone(),
+    fontValue = new Any();
+  let hasFontColor = false;
+  try {
+    // Native property merging starts without an inherited AUTO sentinel; an explicit AUTO wins every later RGB entry.
+    for (const [token, source] of attributes) {
+      if (token === XMLToken.FO_COLOR) {
+        if (colorAuto.importXML(source, fontValue, unitConverter)) hasFontColor = true;
+        else {
+          const prior: [number] = [0];
+          if (!fontValue.extract(prior, "sal_Int32") || prior[0] !== -1)
+            unsupported("invalid cell font color");
+        }
+      }
+      if (token === XMLToken.STYLE_USE_WINDOW_FONT_COLOR) {
+        isColorAuto.importXML(source, fontValue, unitConverter);
+        hasFontColor = true;
+      }
+    }
+    const color = new Color();
+    if (hasFontColor && extractColor(fontValue, color)) {
+      fontColor.setColor(color);
+      pattern.ItemSetPut(fontColor);
+    }
+  } finally {
+    fontValue.dispose();
+  }
   for (const [token, , which] of fonts) {
     const name = attributes.get(token);
     if (name === null) continue;
@@ -210,6 +262,45 @@ export function importCellTextProperties(
       }
     }
     if (applied) pattern.ItemSetPut(line);
+  } finally {
+    value.dispose();
+  }
+}
+
+/** Emits the original table-cell background property group. @param pattern - Native pattern. @returns Cell-property attributes. */
+export function exportCellProperties(pattern: ScPatternAttr): string {
+  if (pattern.GetItemSet().GetItemState(148, false) !== SfxItemState.SET) return "";
+  const brush = pattern.GetItem(148) as SvxBrushItem,
+    value = new Any(),
+    output: [string] = [""];
+  try {
+    brush.QueryValue(value, MID_GRAPHIC_TRANSPARENT);
+    backgroundTransparent.exportXML(output, value, unitConverter);
+    brush.QueryValue(value, MID_BACK_COLOR);
+    backgroundColor.exportXML(output, value, unitConverter);
+    return ` fo:background-color="${output[0]}"`;
+  } finally {
+    value.dispose();
+  }
+}
+/** Imports original background color and transparency as separate merged properties. @param pattern - Actual item destination. @param attributes - SAX attributes. @param unsupported - Diagnostic port. @returns Nothing. */
+export function importCellProperties(
+  pattern: ScPatternAttr,
+  attributes: FastAttributeList,
+  unsupported: (name: string) => void,
+): void {
+  attributes.assertOnly([XMLToken.FO_BACKGROUND_COLOR], "Calc cell properties");
+  const source = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
+  if (source === null) return;
+  const brush = (pattern.GetItem(148) as SvxBrushItem).Clone(),
+    value = new Any();
+  try {
+    if (backgroundColor.importXML(source, value, unitConverter))
+      brush.PutValue(value, MID_BACK_COLOR);
+    else if (source !== "transparent") unsupported("invalid cell background color");
+    backgroundTransparent.importXML(source, value, unitConverter);
+    brush.PutValue(value, MID_GRAPHIC_TRANSPARENT);
+    pattern.ItemSetPut(brush);
   } finally {
     value.dispose();
   }

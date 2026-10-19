@@ -1,4 +1,4 @@
-/** @fileoverview Consumed ScDocumentPool character-item package (ATTR_FONT..ATTR_MARGIN); remaining cell/page defaults and native pool services are unported. */
+/** @fileoverview Consumed ScDocumentPool cell-item package (ATTR_FONT..ATTR_BACKGROUND); remaining cell/page defaults and native pool services are unported. */
 import {
   SfxItemPool,
   ItemInfoPackage,
@@ -19,6 +19,10 @@ import {
   SvxCharReliefItem,
 } from "../../../../editeng/source/items/textitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { ScMergeAttr, ScMergeFlagAttr } from "./attrib";
+import { ScGlobal } from "./global";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import {
   SvxCrossedOutItem,
@@ -33,7 +37,7 @@ import {
   FontEmphasisMark,
 } from "../../../../tools/inc/fontenum";
 import { FontRelief } from "../../../../vcl/inc/fntstyle";
-import { COL_AUTO } from "../../../../tools/inc/color";
+import { COL_AUTO, COL_TRANSPARENT } from "../../../../tools/inc/color";
 import { LANGUAGE_DONTKNOW, LANGUAGE_SYSTEM } from "../../../../i18nlangtag/inc/lang";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import {
@@ -139,6 +143,11 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
       [new SvxLineItem(141), 11013, 0],
       [new SvxLineItem(142), 11014, 0],
       [new SvxMarginItem(143), 10228, 0],
+      [new ScMergeAttr(), 0, 0],
+      [new ScMergeFlagAttr(), 0, 0],
+      [new SfxUInt32Item(146, 0), 10085, 0],
+      [new SvxLanguageItem(ScGlobal.eLnge, 147), 0, 0],
+      [new SvxBrushItem(COL_TRANSPARENT, 148), 10001, 1],
     ];
     this.maItemInfos = values.map(
       /** Constructs native static metadata. @param value - Item, slot and flags. @returns Entry. */ ([
@@ -163,7 +172,7 @@ class ItemInfoPackageScDocument extends ItemInfoPackage {
   }
 }
 let packageScDocument: ItemInfoPackageScDocument | undefined;
-/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous cell prefix through margins. */
+/** Original named pool construction over real Sfx metadata and item defaults. This slice exports the contiguous cell prefix through background. */
 export class ScDocumentPool extends SfxItemPool {
   /** Registers the shared original cell-attribute prefix. @returns Pool. */
   constructor() {

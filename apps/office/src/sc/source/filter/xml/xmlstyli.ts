@@ -1,5 +1,5 @@
 /** @fileoverview Consumed XMLTableStylesContext cell-font and row-geometry automatic styles; named styles,parent inheritance and remaining format properties stay explicit unsupported metadata. */
-import { importCellTextProperties } from "./xmlstyle";
+import { importCellTextProperties, importCellProperties } from "./xmlstyle";
 import { ScXMLImportContext } from "./importcontext";
 import type { ScXMLImport } from "./xmlimprt";
 import {
@@ -57,6 +57,16 @@ class XMLTableStyleContext extends ScXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext {
+    if (element === XMLToken.STYLE_TABLE_CELL_PROPERTIES) {
+      importCellProperties(
+        this.pattern,
+        attributes,
+        /** Retains actual importer diagnostics. @param name - Unsupported property. @returns Nothing. */ (
+          name,
+        ) => this.owner.unsupported(name),
+      );
+      return new XMLTableStylePropertyContext(this.owner);
+    }
     if (element !== XMLToken.STYLE_TEXT_PROPERTIES) {
       this.owner.unsupported("cell style properties");
       return new SvXMLIgnoreContext(true);
@@ -69,11 +79,41 @@ class XMLTableStyleContext extends ScXMLImportContext {
       /** Resolves genuine shared font declarations. @param name - Font reference. @returns Native font. */
       (name) => this.owner.GetFontFace(name),
     );
-    return new SvXMLIgnoreContext(true);
+    return new XMLTableStylePropertyContext(this.owner);
   }
   /** Transfers the style into the importer's real pattern pool. @returns Nothing. */
   override endFastElement(): void {
     this.owner.AddAutoStyle(this.name, this.pattern);
+  }
+}
+
+/** Keeps unsupported property subtrees explicit while the consumed scalar property group is imported. */
+class XMLTableStylePropertyContext extends ScXMLImportContext {
+  /** Binds the real importer's diagnostic boundary. @param owner - Import owner. @returns Context. */
+  constructor(private readonly owner: ScXMLImport) {
+    super(owner);
+  }
+  /** Diagnoses known but unported nested style properties. @param element - Child token. @param attributes - Actual attributes. @returns Ignored diagnosed subtree. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    void element;
+    void attributes;
+    this.owner.unsupported("cell style property subtree");
+    return new SvXMLIgnoreContext(true);
+  }
+  /** Diagnoses extension properties rather than silently dropping their content. @param namespaceURI - Original namespace. @param localName - Child name. @param attributes - Actual attributes. @returns Ignored diagnosed subtree. */
+  override createUnknownChildContext(
+    namespaceURI: string,
+    localName: string,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    void namespaceURI;
+    void localName;
+    void attributes;
+    this.owner.unsupported("cell style property subtree");
+    return new SvXMLIgnoreContext(true);
   }
 }
 
