@@ -4,7 +4,7 @@ title: "Connect Calc font-size UI to native cell attributes and ODS persistence"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,26 @@ verification:
   updated_by: "CODER"
   note: "Shared Calc FontHeight UI applies genuine three-script cell attributes with selection/group state,real undo and same-model ODS/autosave.326Calc+33shared cases raw100;20complete executable app owners raw100;91related tooling and17browser cases pass. All final gates pass. Native row layout and remaining UI remain pending;task34,nextfull40."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-19T13:53:05.406Z"
+  updated_by: "EVALUATOR"
+  note: "Reviewed433c4103e961: bounded shared Calc font-size UI uses genuine attribute,undo and ODS owners;full native row layout and remaining UI remain explicit follow-up work."
+  evaluated_sha: "433c4103e96153d9f123c38824bdc82d020866ad"
+  blueprint_digest: "76fce8d1cce93d9342d2c95d2f9e60c8a0f58d28846d26b547ad2db1e0f8115e"
+  evidence_refs:
+    - ".agentplane/tasks/202610191240-WP2DC4/README.md"
+    - ".agentplane/tasks/202610191240-WP2DC4/quality/20261019-135305406-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610191240-WP2DC4/quality/20261019-135305406-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610191240-WP2DC4/quality/20261019-135305406-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610191240-WP2DC4/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610191240-WP2DC4/verification.md"
+    - ".agentplane/tasks/202610191240-WP2DC4/evidence/changed-owner-coverage-final.json"
+    - ".agentplane/tasks/202610191240-WP2DC4/evidence/static-checks-final.json"
+    - ".agentplane/tasks/202610191240-WP2DC4/evidence/source-audit.json"
+    - ".agentplane/tasks/202610191240-WP2DC4/evidence/browser-calc-final.log"
+  findings:
+    - "The source-backed100..124pool and canonical row runs avoid a browser formatting map or fake defaults. Three-script font-height deltas,normal ranges/groups,mixed state,history and real primary ODS persistence are tested.326Calc cases raw100 plus33shared cases raw100 cover20complete executable changed app owners;17real browser and91related tooling cases pass. Pure DocPool/VCL dependency admission is exact-owner/exact-target,with browser/reverse negatives retained;no threshold/exclusion relaxation. The79path footprint comprises34code/test/tooling,43canonical records and2docs for this same user-authorized vertical slice. Native broad parity is not claimed. Final screenshots confirm fixed-row clipping,so row-height/overflow is the next UI priority."
 commit: null
 comments:
   -
