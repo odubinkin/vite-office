@@ -5,7 +5,8 @@
     "SID_ULINE_VAL_SINGLE/DOUBLE use fresh items and exact-style toggle; SID_ATTR_CHAR_UNDERLINE copies its effective item.",
     "Native slots11196/11197 derive SID_SVX_START10000+1196/+1197.",
     "AcceleratorExecute checks module before global; XCUBasedAcceleratorConfiguration::getCommandByKeyEvent checks primary before secondary.",
-    "Browser generation projects pinned English default bindings only;document/custom configuration services remain unported."
+    "Browser generation projects pinned English default bindings only;document/custom configuration services remain unported.",
+    "Generator explicitly selects unxwnt install:module values before the established suite Ctrl/Meta alias;macosx-only MOD3 values cannot become bare Tab. Full native OS-specific accelerator services remain unported."
   ],
   "sources": [
     {
