@@ -1,0 +1,16 @@
+JSON report written to /Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-font-boundary-results.json
+ % Coverage report from istanbul
+-------------|---------|----------|---------|---------|-------------------
+File         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------|---------|----------|---------|---------|-------------------
+All files    |     100 |    94.73 |     100 |     100 |                   
+ xmlfonte.ts |     100 |    94.73 |     100 |     100 | 35                
+-------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 30/30 )
+Branches     : 94.73% ( 18/19 )
+Functions    : 100% ( 3/3 )
+Lines        : 100% ( 26/26 )
+================================================================================
+ERROR: Coverage for branches (94.73%) does not meet global threshold (100%)

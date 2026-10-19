@@ -1,0 +1,29 @@
+[
+  {
+    "file": "sw/qa/extras/odfimport/data/feature_text.odt",
+    "counts": {
+      "style:font-size-asian": 6,
+      "style:font-size-complex": 4
+    },
+    "diagnostics": 75,
+    "supportedFontAttributeDiagnostics": []
+  },
+  {
+    "file": "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt",
+    "counts": {
+      "style:font-size-asian": 6,
+      "style:font-size-complex": 4
+    },
+    "diagnostics": 70,
+    "supportedFontAttributeDiagnostics": []
+  },
+  {
+    "file": "sw/qa/extras/odfimport/data/tdf94882.odt",
+    "counts": {
+      "style:font-size-asian": 6,
+      "style:font-size-complex": 4
+    },
+    "diagnostics": 82,
+    "supportedFontAttributeDiagnostics": []
+  }
+]
